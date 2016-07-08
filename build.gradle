@@ -1,0 +1,39 @@
+plugins {
+    id "java"
+    id "application"
+    id "com.github.johnrengelman.shadow" version "1.2.3"
+}
+
+sourceCompatibility = 1.8
+
+project.ext {
+    configPath = "$rootProject.projectDir/config/"
+    dropwizardVersion = "1.0.0-rc3"
+    flywayVersion = "3.2.1"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
+	compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+	compile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
+    	compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: "1.0.0-rc2-1"
+	compile group: "com.smoketurner", name: "dropwizard-swagger", version: "1.0.0-rc2-1"
+
+    compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
+
+    testCompile "junit:junit:4.12"
+    compile 'org.mockito:mockito-core:2.0.54-beta'
+	// https://mvnrepository.com/artifact/org.hamcrest/hamcrest-junit
+	compile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+	
+}
+
+mainClassName = "gov.ca.cwds.rest.ApiApplication"
+
+run {
+    args "server", configPath + "api.yml"
+}
