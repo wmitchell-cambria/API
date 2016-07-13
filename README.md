@@ -2,6 +2,10 @@
 
 The CWDS API provides RESTful services for the CWDS Modules.
 
+## Wiki
+
+The development team is actively using the [Github Wiki](https://github.com/ca-cwds/API/wiki).  
+
 ## Configuration
 
 ## Installation
@@ -9,8 +13,6 @@ The CWDS API provides RESTful services for the CWDS Modules.
 ### Prerequisites
 
 ### Using Docker
-
-### Database Initialization
 
 ## Development Environment
 
