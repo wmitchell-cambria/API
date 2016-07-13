@@ -17,9 +17,14 @@ repositories {
 }
 
 jar {
-	manifest {
-	attributes 'Main-Class': 'gov.ca.cwds.rest.ApiApplication' 
-	} 
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes("Main-Class": "gov.ca.cwds.rest.ApiApplication" )
+    }
 }
 
 dependencies {
