@@ -16,6 +16,12 @@ repositories {
     mavenCentral()
 }
 
+jar {
+	manifest {
+	attributes 'Main-Class': 'gov.ca.cwds.rest.ApiApplication' 
+	} 
+}
+
 dependencies {
 	compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
