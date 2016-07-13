@@ -1,6 +1,7 @@
 FROM vinodtaborda/centos:java8u91
 RUN mkdir /opt/cws-api
-ADD ./ /opt/cws-api
+ADD config/api.yml /opt/cws-api/api.yml
+ADD build/libs/api.jar /opt/cws-api/api.jar
 EXPOSE 8080
 WORKDIR /opt/cws-api
-CMD ["./gradlew", "run"]
+CMD ["java", "-jar", "api.jar","server","api.yml"]
