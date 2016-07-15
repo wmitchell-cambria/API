@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import gov.ca.cwds.rest.core.MediaType;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import org.junit.Before;
@@ -29,5 +30,10 @@ public class ApplicationResourceTest {
 	@Test
 	public void applicationGetReturnsCorrectName() {
 		assertThat(resources.client().target("/application").request().get().readEntity(String.class), is(equalTo(APP_NAME)));
+	}
+	
+	@Test
+	public void applicationGetReturnsV1JsonContentType() {
+		assertThat(resources.client().target("/application").request().get().getMediaType().toString(), is(equalTo(MediaType.APPLICATION_JSON_V1)));
 	}
 }
