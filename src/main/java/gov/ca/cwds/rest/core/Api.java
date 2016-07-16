@@ -1,5 +1,11 @@
 package gov.ca.cwds.rest.core;
 
+
+/**
+ * Constants defining the resources in our RESTful API.
+ * 
+ * @author CDWS API Team
+ */
 public class Api {
 	
     /**
