@@ -45,6 +45,11 @@ public class ReferralResourceImplTest {
 	public void referralSummaryGetReturns404WhenNotFound() {
 		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().get().getStatus(), is(equalTo(404)));
 	}
+	
+	@Test
+	public void referralSummaryGetReturnsCorrectMessageWhenNotFound() {
+		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().get().readEntity(String.class), is(equalTo("ReferralSummary not found")));
+	}
 
 	@Test
 	public void applicationGetReturnsV1JsonContentType() {
