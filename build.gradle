@@ -9,6 +9,7 @@ sourceCompatibility = 1.8
 project.ext {
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.0.0-rc3"
+	metricsVersion = "3.1.0"
     flywayVersion = "3.2.1"
 }
 
@@ -31,6 +32,7 @@ dependencies {
 	compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
+	compile group: "io.dropwizard.metrics", name: "metrics-core", version: metricsVersion
     	compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: "1.0.0-rc2-1"
 	compile group: "com.smoketurner", name: "dropwizard-swagger", version: "1.0.0-rc2-1"
 
