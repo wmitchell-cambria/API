@@ -1,4 +1,4 @@
 applicationName: CWDS API
 
 swagger:
-  resourcePackage: gov.ca.cwds.api.resources
+  resourcePackage: gov.ca.cwds.rest.resources
