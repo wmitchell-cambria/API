@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest;
 
 import gov.ca.cwds.rest.resources.ApplicationResource;
+import gov.ca.cwds.rest.resources.ReferralResource;
+import gov.ca.cwds.rest.resources.ReferralResourceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
@@ -57,6 +59,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
         LOGGER.info("Registering ApplicationResource");
         final ApplicationResource applicationResource = new ApplicationResource(configuration.getApplicationName());
         environment.jersey().register(applicationResource);
+        
+        LOGGER.info("Registering ReferralResource");
+        final ReferralResource referralResource = new ReferralResourceImpl();
+        environment.jersey().register(referralResource);
+        
     }
     
     private void configureCors(Environment environment) {
