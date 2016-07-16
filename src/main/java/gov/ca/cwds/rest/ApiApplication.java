@@ -3,6 +3,8 @@ package gov.ca.cwds.rest;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
+import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.services.ReferralServiceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
@@ -61,7 +63,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         environment.jersey().register(applicationResource);
         
         LOGGER.info("Registering ReferralResource");
-        final ReferralResource referralResource = new ReferralResourceImpl();
+        final ReferralService referralService = new ReferralServiceImpl();
+        final ReferralResource referralResource = new ReferralResourceImpl(referralService);
         environment.jersey().register(referralResource);
         
     }
