@@ -5,6 +5,9 @@ import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.MediaType;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,7 +21,7 @@ import javax.ws.rs.core.Response;
  * 
  * @author CWDS API Team
  */
-@Api(REFERRAL)
+@Api(value = REFERRAL, consumes = MediaType.APPLICATION_JSON_V1, produces = MediaType.APPLICATION_JSON_V1)
 @Path(REFERRAL)
 @Produces(MediaType.APPLICATION_JSON_V1)
 public interface ReferralResource {
@@ -32,6 +35,8 @@ public interface ReferralResource {
 	 */
 	@GET
 	@Path("/{id}/summary")
+	@ApiOperation(value = "Find ReferralSummary by Referral id", response = ReferralSummary.class)
+	@ApiResponses(value = { @ApiResponse(code = 404, message = "ReferralSummary not found") })
 	public Response getReferralSummary(@PathParam("id") String id);
 
 }
