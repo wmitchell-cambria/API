@@ -30,7 +30,7 @@ public class ReferralResourceImpl implements ReferralResource {
 		if( referralSummary != null ) {
 			return Response.ok(referralSummary).build();
 		} else {
-			return Response.status(Response.Status.NOT_FOUND).build();
+			return Response.status(Response.Status.NOT_FOUND).entity("ReferralSummary not found").build();
 		}
 	}
 
