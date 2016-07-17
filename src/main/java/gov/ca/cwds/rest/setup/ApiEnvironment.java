@@ -23,10 +23,12 @@ import io.dropwizard.setup.Environment;
  * @author CWDS API Team
  */
 public class ApiEnvironment {
-	public Environment environment;
+	private Environment environment;
+	private ServiceEnvironment serviceEnvironment;
 
 	public ApiEnvironment(Environment environment) {
 		this.environment = environment;
+		this.serviceEnvironment = new ServiceEnvironment();
 	}
 
 	/**
@@ -125,5 +127,14 @@ public class ApiEnvironment {
 	 */
 	public MutableServletContextHandler getAdminContext() {
 		return environment.getAdminContext();
+	}
+	
+	/**
+	 * Get the {@link ServiceEnvironment}
+	 * 
+	 * @return The {@link ServiceEnvironment} for this application
+	 */
+	public ServiceEnvironment services() {
+		return this.serviceEnvironment;
 	}
 }
