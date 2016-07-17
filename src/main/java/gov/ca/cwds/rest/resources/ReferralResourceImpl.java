@@ -25,7 +25,7 @@ public class ReferralResourceImpl implements ReferralResource {
 	}
 	
 	@Override
-	public Response getReferralSummary(String id) {
+	public Response getReferralSummary(String id, String acceptHeader) {
 		ReferralSummary referralSummary = referralService.findReferralSummary(id);
 		if( referralSummary != null ) {
 			return Response.ok(referralSummary).build();
@@ -33,5 +33,4 @@ public class ReferralResourceImpl implements ReferralResource {
 			return Response.status(Response.Status.NOT_FOUND).entity("ReferralSummary not found").build();
 		}
 	}
-
 }

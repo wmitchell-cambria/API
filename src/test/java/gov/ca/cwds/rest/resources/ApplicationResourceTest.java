@@ -1,15 +1,14 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.core.MediaType;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import gov.ca.cwds.rest.core.Api;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.equalTo;
 
 public class ApplicationResourceTest {
 	private static final String APP_NAME = "my app";
@@ -34,6 +33,6 @@ public class ApplicationResourceTest {
 	
 	@Test
 	public void applicationGetReturnsV1JsonContentType() {
-		assertThat(resources.client().target("/application").request().get().getMediaType().toString(), is(equalTo(MediaType.APPLICATION_JSON_V1)));
+		assertThat(resources.client().target("/application").request().get().getMediaType().toString(), is(equalTo(Api.MEDIA_TYPE_JSON_V1)));
 	}
 }
