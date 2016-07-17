@@ -21,13 +21,21 @@ public class Api {
      */
     public final static String RESOURCE_REFERRAL = "referral";
 
+    /**
+     * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1}.
+     */
     public final static String MEDIA_TYPE_JSON_V1 = "application/gov.ca.cwds.rest-v1+json";
-    
+
+    /**
+     * A {@code String} constant representing {@value #MEDIA_TYPE_NOOP}.
+     */
+    public final static String MEDIA_TYPE_NOOP = "application/gov.ca.cwds.rest-noop+json";
+
 	/**
 	 *  The enum containing media types for each of the API versions. 
 	 */
 	public enum Version {
-		JSON_VERSION_1(MEDIA_TYPE_JSON_V1);
+		JSON_VERSION_1(MEDIA_TYPE_JSON_V1), VERSION_NOOP(MEDIA_TYPE_NOOP);
 		
 	    /**
 	     * A {@code String} constant representing {@value #VERSION_1} media type.
