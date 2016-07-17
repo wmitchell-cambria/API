@@ -10,12 +10,12 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class ApplicationResourceTest {
+public class ApplicationResourceImplTest {
 	private static final String APP_NAME = "my app";
 	
 	@ClassRule
 	public static final ResourceTestRule resources = ResourceTestRule.builder()
-			.addResource(new ApplicationResource(APP_NAME)).build();
+			.addResource(new ApplicationResourceImpl(APP_NAME)).build();
 
 	@Before
 	public void setup() {
