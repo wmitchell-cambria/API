@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import gov.ca.cwds.rest.api.ApiResponse;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
@@ -28,9 +29,12 @@ public class ReferralResourceImpl extends BaseVersionedResource<ReferralService>
 		ReferralService referralService = super.versionedService(Api.Version.findByMediaType(acceptHeader));
 		ReferralSummary referralSummary = referralService.findReferralSummary(id);
 		if( referralSummary != null ) {
-			return Response.ok(referralSummary).build();
+			ApiResponse apiResponse = new ApiResponse(true);
+			apiResponse.addData("referralSummary", referralSummary);
+			return Response.ok(apiResponse).build();
 		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity("ReferralSummary not found").build();
+			ApiResponse apiResponse = new ApiResponse(false);
+			return Response.status(Response.Status.NOT_FOUND).entity(apiResponse).build();
 		}
 	}
 }

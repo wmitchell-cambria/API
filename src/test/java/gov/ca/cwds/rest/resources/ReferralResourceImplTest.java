@@ -3,8 +3,10 @@ package gov.ca.cwds.rest.resources;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gov.ca.cwds.rest.api.ApiResponse;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
@@ -53,15 +55,29 @@ public class ReferralResourceImplTest {
 	public void referralSummaryGetReturns464WhenVersionNotSupport() {
 		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
 	}
+
+	@Test
+	public void referralSummaryGetReturnsCorrectStatusWhenNotFound() {
+		ApiResponse apiResponse = resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ApiResponse.class);
+		assertThat(apiResponse.getSuccess(), is(equalTo("false")));
+	}
+	@Test
+	public void referralSummaryGetReturnsCorrectStatusWhenFound() {
+		ApiResponse apiResponse = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ApiResponse.class);
+		assertThat(apiResponse.getSuccess(), is(equalTo("true")));
+	}
 	
 	@Test
-	public void referralSummaryGetReturnsCorrectMessageWhenNotFound() {
-		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(String.class), is(equalTo("ReferralSummary not found")));
+	public void referralSummaryGeHasNullDataWhenNotFound() {
+		ApiResponse apiResponse = resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ApiResponse.class);
+		assertThat(apiResponse.getData(), is(equalTo(null)));
 	}
 
 	@Test
-	public void applicationGetReturnsV1JsonContentType() {
-		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getMediaType().toString(), is(equalTo(Api.Version.JSON_VERSION_1.getMediaType())));
+	public void referralSummaryGeHasHasReferralSummaryWhenFound() {
+		ApiResponse apiResponse = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ApiResponse.class);
+		Object referral = apiResponse.getData().get("referralSummary");
+		assertThat(referral, is(notNullValue()));
 	}
 	
 	private ReferralSummary createReferralSummary() {
