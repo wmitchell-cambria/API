@@ -7,7 +7,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.services.ReferralServiceImpl;
+import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.util.Date;
@@ -24,36 +25,43 @@ public class ReferralResourceImplTest {
 	private static final String FOUND_RESOURCE = "/referral/" + ID_FOUND + "/summary";
 	private static final String NOT_FOUND_RESOURCE = "/referral/" + ID_NOT_FOUND + "/summary";
 	
-	private static final ReferralServiceImpl referralService = mock(ReferralServiceImpl.class);
+	private static final ReferralService referralService = mock(ReferralService.class);
+	private static final ServiceEnvironment serviceEnvironment = mock(ServiceEnvironment.class);
 	
 	@ClassRule
 	public static final ResourceTestRule resources = ResourceTestRule.builder()
-			.addResource(new ReferralResourceImpl(referralService)).build();
+			.addResource(new ReferralResourceImpl(serviceEnvironment)).build();
 
 	@Before
 	public void setup() {
 		when(referralService.findReferralSummary(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.findReferralSummary(ID_FOUND)).thenReturn(createReferralSummary());
+		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1)).thenReturn(referralService);
 	}
 
 	@Test
 	public void referralSummaryGetReturns200WhenFound() {
-		assertThat(resources.client().target(FOUND_RESOURCE).request().get().getStatus(), is(equalTo(200)));
+		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(200)));
 	}
 
 	@Test
 	public void referralSummaryGetReturns404WhenNotFound() {
-		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().get().getStatus(), is(equalTo(404)));
+		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
+	}
+	
+	@Test
+	public void referralSummaryGetReturns464WhenVersionNotSupport() {
+		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
 	}
 	
 	@Test
 	public void referralSummaryGetReturnsCorrectMessageWhenNotFound() {
-		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().get().readEntity(String.class), is(equalTo("ReferralSummary not found")));
+		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(String.class), is(equalTo("ReferralSummary not found")));
 	}
 
 	@Test
 	public void applicationGetReturnsV1JsonContentType() {
-		assertThat(resources.client().target(FOUND_RESOURCE).request().get().getMediaType().toString(), is(equalTo(Api.Version.JSON_VERSION_1.getMediaType())));
+		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getMediaType().toString(), is(equalTo(Api.Version.JSON_VERSION_1.getMediaType())));
 	}
 	
 	private ReferralSummary createReferralSummary() {

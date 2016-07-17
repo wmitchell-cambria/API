@@ -57,5 +57,19 @@ public class Api {
 		public String getMediaType() {
 			return mediaType;
 		}
+		
+		/**
+		 * Find the version based on a given mediaType
+		 * 
+		 * @param mediaType The mediaType of the version being sought
+		 * 
+		 * @return	The version with the given mediaType, null if not found
+		 */
+		public static Version findByMediaType(String mediaType) {
+		    for(Version v : values()) {
+		        if(v.mediaType.equals(mediaType)) return v;
+		    }
+		    return null; 
+		}
 	}
 }

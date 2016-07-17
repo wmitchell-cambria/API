@@ -1,11 +1,13 @@
 package gov.ca.cwds.rest;
 
+import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
+import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
@@ -49,29 +51,38 @@ public class ApiApplication extends Application<ApiConfiguration> {
     @Override
     public void run(final ApiConfiguration configuration, final Environment environment) throws Exception {
         LOGGER.info("Application name: {}", configuration.getApplicationName());
-
+        ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
+        
+        //NOTE : Services must be registered before Resources can be
+        LOGGER.info("Registering Application Service");
+        registerServices(configuration, apiEnvironment);
+        
         LOGGER.info("Registering Application Resources");
-        registerResources(configuration, environment);
+        registerResources(configuration, apiEnvironment);
 
         LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
-        configureCors(environment);
+        configureCors(apiEnvironment);
         
     }
     
-    private void registerResources(final ApiConfiguration configuration, final Environment environment) {
+    private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
+    	final ReferralService referralService = new ReferralServiceImpl();
+    	apiEnvironment.services().register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
+    }
+    
+    private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
         LOGGER.info("Registering ApplicationResource");
         final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
-        environment.jersey().register(applicationResource);
+        apiEnvironment.jersey().register(applicationResource);
         
         LOGGER.info("Registering ReferralResource");
-        final ReferralService referralService = new ReferralServiceImpl();
-        final ReferralResource referralResource = new ReferralResourceImpl(referralService);
-        environment.jersey().register(referralResource);
-        
+        final ReferralResource referralResource = new ReferralResourceImpl(apiEnvironment.services());
+        apiEnvironment.jersey().register(referralResource);
     }
     
-    private void configureCors(Environment environment) {
-        FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+    private void configureCors(ApiEnvironment apiEnvironment) {
+        FilterRegistration.Dynamic filter = apiEnvironment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
         filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");

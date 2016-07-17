@@ -1,7 +1,9 @@
 package gov.ca.cwds.rest.resources;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
+import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
 
 import javax.ws.rs.core.Response;
 
@@ -13,18 +15,17 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  */
-public class ReferralResourceImpl implements ReferralResource {
+public class ReferralResourceImpl extends BaseVersionedResource<ReferralService> implements ReferralResource {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferralResourceImpl.class);
 	
-	private ReferralService referralService;
-	
-	public ReferralResourceImpl(ReferralService referralService) {
-		this.referralService = referralService;
+	public ReferralResourceImpl(ServiceEnvironment serviceEnvironment) {
+		super(serviceEnvironment, ReferralService.class);
 	}
 	
 	@Override
 	public Response getReferralSummary(String id, String acceptHeader) {
+		ReferralService referralService = super.versionedService(Api.Version.findByMediaType(acceptHeader));
 		ReferralSummary referralSummary = referralService.findReferralSummary(id);
 		if( referralSummary != null ) {
 			return Response.ok(referralSummary).build();

@@ -37,6 +37,7 @@ public interface ReferralResource {
 	@GET
 	@Path("/{id}/summary")
 	@ApiOperation(value = "Find ReferralSummary by Referral id", response = ReferralSummary.class)
-	@ApiResponses(value = { @ApiResponse(code = 404, message = "ReferralSummary not found") })
+	@ApiResponses(value = { @ApiResponse(code = 404, message = "ReferralSummary not found"),
+							@ApiResponse(code = 406, message = "Accept Header/Version not supported")})
 	public Response getReferralSummary(@PathParam("id") String id, @HeaderParam("Accept") String acceptHeader);
 }
