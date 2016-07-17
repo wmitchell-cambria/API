@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest;
 
 import gov.ca.cwds.rest.resources.ApplicationResource;
+import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
 import gov.ca.cwds.rest.services.ReferralService;
@@ -59,7 +60,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     private void registerResources(final ApiConfiguration configuration, final Environment environment) {
         LOGGER.info("Registering ApplicationResource");
-        final ApplicationResource applicationResource = new ApplicationResource(configuration.getApplicationName());
+        final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
         environment.jersey().register(applicationResource);
         
         LOGGER.info("Registering ReferralResource");

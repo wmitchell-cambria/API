@@ -12,18 +12,19 @@ import javax.ws.rs.Produces;
 @Api(RESOURCE_APPLICATION)
 @Path(RESOURCE_APPLICATION)
 @Produces(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-public class ApplicationResource {
-	
-	private String applicationName;
-	
-	public ApplicationResource(String applicationName) {
-		this.applicationName = applicationName;
-		
-	}
+/**
+ * A resource providing a basic information about the CWDS API
+ * 
+ * @author CWDS API Team
+ */
+public interface ApplicationResource {
 	
 	@ApiOperation("Get the application name")
 	@GET
-	public String getApplicationName() {
-		return applicationName;
-	}
+	/**
+	 * Get the name of the API
+	 * 
+	 * @return The name of the API
+	 */
+	public String getApplicationName();
 }

@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.services.ReferralService;
 
 import javax.ws.rs.core.Response;
@@ -10,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link Referral} delegating work to {@link ReferralService}
+ * Implementation of {@link ReferralResource} delegating work to {@link ReferralService}
  * 
  * @author CWDS API Team
  */
