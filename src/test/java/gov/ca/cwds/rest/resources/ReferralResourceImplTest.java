@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.core.MediaType;
+import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
@@ -53,7 +53,7 @@ public class ReferralResourceImplTest {
 
 	@Test
 	public void applicationGetReturnsV1JsonContentType() {
-		assertThat(resources.client().target(FOUND_RESOURCE).request().get().getMediaType().toString(), is(equalTo(MediaType.APPLICATION_JSON_V1)));
+		assertThat(resources.client().target(FOUND_RESOURCE).request().get().getMediaType().toString(), is(equalTo(Api.Version.JSON_VERSION_1.getMediaType())));
 	}
 	
 	private ReferralSummary createReferralSummary() {
