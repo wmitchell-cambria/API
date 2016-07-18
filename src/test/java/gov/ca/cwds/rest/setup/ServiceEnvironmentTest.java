@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.setup;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
@@ -29,7 +30,14 @@ public class ServiceEnvironmentTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Illegal Superclass");
          
-        Service fakeService = new Service() {};
+        Service<Referral> fakeService = new Service<Referral>() {
+
+			@Override
+			public Referral find(String id) {
+				return null;
+			}
+        	
+		};
         
     	serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, fakeService);
 	}

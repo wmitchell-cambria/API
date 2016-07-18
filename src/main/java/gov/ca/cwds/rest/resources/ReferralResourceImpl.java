@@ -38,8 +38,14 @@ public class ReferralResourceImpl extends BaseVersionedResource<ReferralService>
 	 * @see gov.ca.cwds.rest.resources.ReferralResource#getReferral(long)
 	 */
 	@Override
-	public Response getReferral(String id, String acceptHeader) {
-		return Response.status(Response.Status.NO_CONTENT).build();
+	public Response get(String id, String acceptHeader) {
+		ReferralService referralService = super.versionedService(acceptHeader);
+		Referral referral = referralService.find(id);
+		if( referral != null ) {
+			return Response.ok(referral).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+		}
 	}
 
 	/* (non-Javadoc)

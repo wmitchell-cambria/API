@@ -5,6 +5,15 @@ package gov.ca.cwds.rest.services;
  * 
  * @author CWDS API Team 
  */
-public interface Service {
+public interface Service<T> {
+	
+	/**
+	 * Find object by id
+	 * 
+	 * @param id	The id of the object to find.
+	 * 
+	 * @return	The found object, null otherwise
+	 */
+	public T find(String id);
 
 }
