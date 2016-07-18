@@ -22,12 +22,12 @@ public class Api {
     public final static String RESOURCE_REFERRAL = "referral";
 
     /**
-     * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1}.
+     * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1} media type.
      */
     public final static String MEDIA_TYPE_JSON_V1 = "application/gov.ca.cwds.rest-v1+json";
 
     /**
-     * A {@code String} constant representing {@value #MEDIA_TYPE_NOOP}.
+     * A {@code String} constant representing {@value #MEDIA_TYPE_NOOP} media type.
      */
     public final static String MEDIA_TYPE_NOOP = "application/gov.ca.cwds.rest-noop+json";
 
