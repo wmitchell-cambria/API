@@ -4,18 +4,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.eq;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.util.Date;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.client.Entity;
 
 import org.junit.Before;
@@ -39,6 +42,9 @@ public class ReferralResourceImplTest {
 	private static final ReferralService referralService = mock(ReferralService.class);
 	private static final ServiceEnvironment serviceEnvironment = mock(ServiceEnvironment.class);
 	
+	private static final Referral nonUniqueReferral = createNonUniqueReferral();
+	private static final Referral uniqueReferral = createUniqueReferral();
+	
 	@ClassRule
 	public static final ResourceTestRule resources = ResourceTestRule.builder()
 			.addResource(new ReferralResourceImpl(serviceEnvironment)).build();
@@ -48,11 +54,13 @@ public class ReferralResourceImplTest {
 		when(referralService.findReferralSummary(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.findReferralSummary(ID_FOUND)).thenReturn(createReferralSummary());
 		when(referralService.find(ID_NOT_FOUND)).thenReturn(null);
-		when(referralService.find(ID_FOUND)).thenReturn(createReferral());
+		when(referralService.find(ID_FOUND)).thenReturn(nonUniqueReferral);
 		when(referralService.delete(ID_NOT_FOUND)).thenReturn(null);
-		when(referralService.delete(ID_FOUND)).thenReturn(createReferral());
-		when(referralService.create(any(Referral.class))).thenReturn(createReferral());
-		when(referralService.update(any(Referral.class))).thenReturn(createReferral());
+		when(referralService.delete(ID_FOUND)).thenReturn(nonUniqueReferral);
+		when(referralService.create(eq(uniqueReferral))).thenReturn(nonUniqueReferral);
+		when(referralService.create(eq(nonUniqueReferral))).thenThrow(new ServiceException(new EntityExistsException()));
+		when(referralService.update(eq(uniqueReferral))).thenThrow(new ServiceException(new EntityNotFoundException()));
+		when(referralService.update(eq(nonUniqueReferral))).thenReturn(nonUniqueReferral);
 		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
 	}
 
@@ -142,24 +150,23 @@ public class ReferralResourceImplTest {
 	@Test
 	public void createReturns201WhenCreated() {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(201)));
+				.post(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(201)));
 	}
 
 	@Test
 	public void createReturnsLocationHeaderWhenCreated() {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getHeaders().get("Location"),is(notNullValue()));
+				.post(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getHeaders().get("Location"),is(notNullValue()));
 	}
 	
 	@Test
 	public void createReturns406WhenVersionNotSupport() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION").post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION").post(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
 	}
 
 	@Test
 	public void createReturns409WhenNonUnique() {
-		//TODO : figure out how to test this.
-		//assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(nonUniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
 	}
 
 	/*
@@ -168,32 +175,31 @@ public class ReferralResourceImplTest {
 	@Test
 	public void updateReturns204WhenUpdated() {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.put(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(204)));
+				.put(Entity.entity(nonUniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(204)));
 	}
 
 	@Test
 	public void updateReturns406WhenVersionNotSupport() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION").put(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION").put(Entity.entity(nonUniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
 	}
 
 	@Test
 	public void updateReturns404WhenNotFound() {
-		//TODO : figure out how to test this.
-		//assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(404)));
 	}
 	
 	/*
 	 * Helpers
 	 */
-	private ReferralSummary createReferralSummary() {
+	private static ReferralSummary createReferralSummary() {
 		return new ReferralSummary(ID_FOUND, "some name", new Date());
 	}
 	
-	private Referral createReferral() {
+	private static Referral createNonUniqueReferral() {
 		return new Referral(ID_FOUND, "some name", new Date());
 	}
 	
-	private Referral createNewReferral() {
+	private static Referral createUniqueReferral() {
 		return new Referral(null, "some name", new Date());
 	}
 }
