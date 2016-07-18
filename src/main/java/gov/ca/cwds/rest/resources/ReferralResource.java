@@ -118,14 +118,13 @@ public interface ReferralResource {
 	@ApiOperation(value = "Create a referral", 
 					response = Referral.class, 
 					code = 201, 
-					produces = gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, 
 					responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
 	@ApiResponses(value = {
-			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
 			@ApiResponse(code = 409, message = "Conflict - already exists") })
-	public Response createReferral(
-			@ApiParam(required = true, value = "Object to be created") Referral referral);
+	public Response create(
+			@ApiParam(required = true, value = "Object to be created") Referral referral,
+			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 	
 	 /**
 	 * Update a {@link Referral}
