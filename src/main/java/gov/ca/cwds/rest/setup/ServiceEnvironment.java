@@ -55,16 +55,19 @@ public class ServiceEnvironment {
 	 * @param version  The {@link Api.Version} this service is implemented under
 	 * @return
 	 */
-	public <T extends Service> Service getService(Class<T> clazz, Api.Version version) {
+	public <T extends Service> Service getService(Class<T> clazz, String mediaType) {
 		Service service = null;
 		
 		Map<Api.Version, Service> specificServiceMap = services.get(clazz);
 		if( specificServiceMap == null ) {
 			LOGGER.warn("Unable to find services tracked for {}", clazz.getName());
 		} else {
-			service = specificServiceMap.get(version);
+			Api.Version version = Api.Version.findByMediaType(mediaType);
+			if( version != null ) {
+				service = specificServiceMap.get(version);
+			}
 			if( service == null ) {
-				LOGGER.warn("Unable to find service tracked for {} - {}", clazz.getName(), version.getMediaType());
+				LOGGER.warn("Unable to find service tracked for {} - {}", clazz.getName(), mediaType);
 			}
 		}
 		

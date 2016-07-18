@@ -1,8 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.ApiResponse;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 
@@ -26,15 +25,47 @@ public class ReferralResourceImpl extends BaseVersionedResource<ReferralService>
 	
 	@Override
 	public Response getReferralSummary(String id, String acceptHeader) {
-		ReferralService referralService = super.versionedService(Api.Version.findByMediaType(acceptHeader));
+		ReferralService referralService = super.versionedService(acceptHeader);
 		ReferralSummary referralSummary = referralService.findReferralSummary(id);
 		if( referralSummary != null ) {
-			ApiResponse apiResponse = new ApiResponse(true);
-			apiResponse.addData("referralSummary", referralSummary);
-			return Response.ok(apiResponse).build();
+			return Response.ok(referralSummary).build();
 		} else {
-			ApiResponse apiResponse = new ApiResponse(false);
-			return Response.status(Response.Status.NOT_FOUND).entity(apiResponse).build();
+			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.resources.ReferralResource#getReferral(long)
+	 */
+	@Override
+	public Response getReferral(String id, String acceptHeader) {
+		return Response.status(Response.Status.NO_CONTENT).build();
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.resources.ReferralResource#deleteReferral(long)
+	 */
+	@Override
+	public Response deleteReferral(String id, String acceptHeader) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.resources.ReferralResource#createReferral(gov.ca.cwds.rest.api.persistence.Referral)
+	 */
+	@Override
+	public Response createReferral(Referral referral) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.resources.ReferralResource#putReferral(gov.ca.cwds.rest.api.persistence.Referral)
+	 */
+	@Override
+	public Response putReferral(Referral referral) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
