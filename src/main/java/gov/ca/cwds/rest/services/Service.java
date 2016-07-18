@@ -16,4 +16,13 @@ public interface Service<T> {
 	 */
 	public T find(String id);
 
+	/**
+	 * Delete object by id
+	 * 
+	 * @param id	The id of the object to delete.
+	 * 
+	 * @return	The deleted object, null if not found
+	 */
+	public T delete(String id);
+
 }
