@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
+import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
@@ -23,9 +24,12 @@ public class ReferralResourceImplTest {
 	private static final String ID_NOT_FOUND = "-1";
 	private static final String ID_FOUND = "1";
 	
-	private static final String FOUND_RESOURCE = "/referral/" + ID_FOUND + "/summary";
-	private static final String NOT_FOUND_RESOURCE = "/referral/" + ID_NOT_FOUND + "/summary";
-	
+	private static final String SUMMARY_FOUND_RESOURCE = "/referral/" + ID_FOUND + "/summary";
+	private static final String SUMMARY_NOT_FOUND_RESOURCE = "/referral/" + ID_NOT_FOUND + "/summary";
+
+	private static final String FOUND_RESOURCE = "/referral/" + ID_FOUND ;
+	private static final String NOT_FOUND_RESOURCE = "/referral/" + ID_NOT_FOUND;
+
 	private static final ReferralService referralService = mock(ReferralService.class);
 	private static final ServiceEnvironment serviceEnvironment = mock(ServiceEnvironment.class);
 	
@@ -37,32 +41,60 @@ public class ReferralResourceImplTest {
 	public void setup() {
 		when(referralService.findReferralSummary(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.findReferralSummary(ID_FOUND)).thenReturn(createReferralSummary());
+		when(referralService.find(ID_NOT_FOUND)).thenReturn(null);
+		when(referralService.find(ID_FOUND)).thenReturn(createReferral());
 		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
 	}
 
 	@Test
-	public void referralSummaryGetReturns200WhenFound() {
+	public void getReferralSummaryReturns200WhenFound() {
+		assertThat(resources.client().target(SUMMARY_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(200)));
+	}
+
+	@Test
+	public void getReferralSummaryReturns404WhenNotFound() {
+		assertThat(resources.client().target(SUMMARY_NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
+	}
+	
+	@Test
+	public void getReferralSummaryReturns406WhenVersionNotSupport() {
+		assertThat(resources.client().target(SUMMARY_NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
+	}
+
+	@Test
+	public void getReferralSummaryHasReferralSummaryWhenFound() {
+		ReferralSummary referralSummary = resources.client().target(SUMMARY_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ReferralSummary.class);
+		assertThat(referralSummary, is(notNullValue()));
+	}
+	
+	@Test
+	public void getReturns200WhenFound() {
 		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(200)));
 	}
 
 	@Test
-	public void referralSummaryGetReturns404WhenNotFound() {
+	public void getReturns404WhenNotFound() {
 		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
 	}
 	
 	@Test
-	public void referralSummaryGetReturns406WhenVersionNotSupport() {
+	public void getReturns406WhenVersionNotSupport() {
 		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
 	}
 
 	@Test
-	public void referralSummaryGetHasReferralSummaryWhenFound() {
+	public void getHasReferralSummaryWhenFound() {
 		ReferralSummary referralSummary = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ReferralSummary.class);
 		assertThat(referralSummary, is(notNullValue()));
 	}
 	
+	
 	private ReferralSummary createReferralSummary() {
 		return new ReferralSummary(ID_FOUND, "some name", new Date());
+	}
+	
+	private Referral createReferral() {
+		return new Referral(ID_FOUND, "some name", new Date());
 	}
 
 }

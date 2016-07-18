@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
+import gov.ca.cwds.rest.api.persistence.Referral;
 
 import java.util.Date;
 
@@ -19,7 +20,24 @@ public class ReferralServiceImpl implements ReferralService {
 
 	@Override
 	public ReferralSummary findReferralSummary(String id) {
-		return new ReferralSummary(id, "Test Referral Name", new Date());
+		if( "1".equals(id) ) {
+			return null;
+		} else {
+			return new ReferralSummary(id, "Test Referral Name", new Date());
+		}
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.Service#find(java.lang.String)
+	 */
+	@Override
+	public Referral find(String id) {
+		if( "1".equals(id) ) {
+			return null;
+		} else {
+			return new Referral(id, "Test Referral Name", new Date());
+		}
+	}
+
+	
 }

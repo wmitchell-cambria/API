@@ -76,7 +76,7 @@ public interface ReferralResource {
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
-	public Response getReferral(
+	public Response get(
 			@PathParam("id") @ApiParam(required = true, value = "id of object to get") String id,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 

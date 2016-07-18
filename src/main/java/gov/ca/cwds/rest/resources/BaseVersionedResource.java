@@ -10,6 +10,7 @@ import gov.ca.cwds.rest.setup.ServiceEnvironment;
  *
  * @param <T>	The Service subinterface the versioned resource delegates to
  */
+@SuppressWarnings("rawtypes")
 public abstract class BaseVersionedResource<T extends Service> {
 	private ServiceEnvironment serviceEnvironment;
 	private Class<T> clazz;
