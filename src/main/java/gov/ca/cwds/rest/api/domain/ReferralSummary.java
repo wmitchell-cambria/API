@@ -1,6 +1,11 @@
 package gov.ca.cwds.rest.api.domain;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -8,6 +13,7 @@ import java.util.Date;
 *
 * @author  CWDS API Team
 */
+@ApiModel
 public class ReferralSummary {
 
 	private String id;
@@ -21,7 +27,8 @@ public class ReferralSummary {
 	 * @param referralName	The name of the summarized referral
 	 * @param receivedDate	The date the summarized referral was received
 	 */
-	public ReferralSummary(String id, String referralName, Date receivedDate) {
+	@JsonCreator
+	public ReferralSummary(@JsonProperty("id")String id, @JsonProperty("referralName")String referralName, @JsonProperty("receivedDate")Date receivedDate) {
 		super();
 		this.id = id;
 		this.referralName = referralName;

@@ -39,12 +39,12 @@ public class ServiceEnvironmentTest {
 		ReferralService referralService = new ReferralServiceImpl();
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		
-		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1), is(equalTo(referralService)));
+		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType()), is(equalTo(referralService)));
 	}
 	
 	@Test
 	public void checkNoServiceReturnedOnNonTrackedService() {
-		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1), is(equalTo(null)));
+		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType()), is(equalTo(null)));
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class ServiceEnvironmentTest {
 		ReferralService referralService = new ReferralServiceImpl();
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		
-		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.VERSION_NOOP), is(equalTo(null)));
+		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.VERSION_NOOP.getMediaType()), is(equalTo(null)));
 	}
 
 }

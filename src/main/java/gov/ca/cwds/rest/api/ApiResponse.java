@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @author CWDS API Team
  */
+@ApiModel
 public class ApiResponse {
 	
 	private boolean success;

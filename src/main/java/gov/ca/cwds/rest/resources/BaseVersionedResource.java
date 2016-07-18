@@ -28,12 +28,12 @@ public abstract class BaseVersionedResource<T extends Service> {
 	/**
 	 * Get the implementation of the service for the given {@link Api.Version}
 	 * 
-	 * @param version	The {@link Api.Version}
-	 * @return	The implementation of the {@link Service} based on the given {@link Api.Version}
+	 * @param version	The mediaType
+	 * @return	The implementation of the {@link Service} based on the given mediaType
 	 */
 	@SuppressWarnings("unchecked")
-	protected T versionedService(Api.Version version) {
-		return (T)serviceEnvironment.getService(clazz, version);
+	protected T versionedService(String mediaType) {
+		return (T)serviceEnvironment.getService(clazz, mediaType);
 	}
 
 }
