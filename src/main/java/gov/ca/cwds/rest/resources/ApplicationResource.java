@@ -15,7 +15,7 @@ import javax.ws.rs.Produces;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_APPLICATION )
+@Api(value = RESOURCE_APPLICATION)
 @Path(RESOURCE_APPLICATION)
 @Produces(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
 @Consumes(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)

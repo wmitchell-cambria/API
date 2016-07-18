@@ -126,7 +126,7 @@ public interface ReferralResource {
 			@ApiParam(required = true, value = "Object to be created") Referral referral,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 	
-	 /**
+	/**
 	 * Update a {@link Referral}
 	 *
 	 * @param referral The {@link Referral}
