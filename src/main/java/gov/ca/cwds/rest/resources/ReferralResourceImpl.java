@@ -106,7 +106,7 @@ public class ReferralResourceImpl extends BaseVersionedResource<ReferralService>
 	            URI referralUri = ub.
 	                    path(referral.getId()).
 	                    build();
-			return Response.status(Response.Status.NO_CONTENT).header("Location", referralUri.toASCIIString()).build();
+			return Response.status(Response.Status.CREATED).header("Location", referralUri.toASCIIString()).build();
 		} catch (ServiceException e) {
 			if( e.getCause() instanceof EntityExistsException ) {
 				return Response.status(Response.Status.CONFLICT).entity(null).build();

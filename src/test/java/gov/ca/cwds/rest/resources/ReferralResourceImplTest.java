@@ -74,6 +74,18 @@ public class ReferralResourceImplTest {
 		assertThat(resources.client().target(SUMMARY_NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
 	}
 
+	@Test
+	public void getReferralSummaryReturnsNonNullEntity() {
+		Object entity = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getEntity();
+		assertThat(entity, is(notNullValue()));
+	}
+	
+	@Test
+	public void getReferralSummaryReturnsReferralSummary() {
+		ReferralSummary referralSummary = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ReferralSummary.class);
+		assertThat(referralSummary.getId(), is(equalTo("1")));
+	}
+
 	/*
 	 * get Tests
 	 */
@@ -94,10 +106,17 @@ public class ReferralResourceImplTest {
 	}
 
 	@Test
-	public void getHasReferralWhenFound() {
-		Referral referral = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(Referral.class);
-		assertThat(referral, is(notNullValue()));
+	public void getReturnsNonNullEntity() {
+		Object entity = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getEntity();
+		assertThat(entity, is(notNullValue()));
 	}
+	
+	@Test
+	public void getReturnsReferral() {
+		Referral referral = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(Referral.class);
+		assertThat(referral.getId(), is(equalTo("1")));
+	}
+
 	
 	/*
 	 * delete Tests
@@ -121,9 +140,9 @@ public class ReferralResourceImplTest {
 	 * create Tests
 	 */
 	@Test
-	public void createReturns204WhenCreated() {
+	public void createReturns201WhenCreated() {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(204)));
+				.post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(201)));
 	}
 
 	@Test
@@ -162,6 +181,7 @@ public class ReferralResourceImplTest {
 		//TODO : figure out how to test this.
 		//assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
 	}
+	
 	/*
 	 * Helpers
 	 */
