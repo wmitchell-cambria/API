@@ -33,4 +33,13 @@ public interface Service<T> {
 	 * @return	The created object with a newly populated id
 	 */
 	public T create(T object);
+	
+	/**
+	 * Update object 
+	 * 
+	 * @param object	The object to be updated
+	 * 
+	 * @return	The updated object
+	 */
+	public T update(T object);
 }

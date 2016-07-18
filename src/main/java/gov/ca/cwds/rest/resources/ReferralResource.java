@@ -135,15 +135,14 @@ public interface ReferralResource {
 	 *
 	 * @return {@link Response} with the {@link Referral}
 	 */
-	 @PUT
-	 @UnitOfWork
-	 @ApiOperation(value = "Update a referral", 
-	 			response = Referral.class,
-	 			produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-	 @ApiResponses(value = { @ApiResponse(code = 204, message = "updated"),
-	 @ApiResponse(code = 404, message = "not found"),
-	 @ApiResponse(code = 406, message =
-	 "Accept Header/Version not supported")})
-	 public Response putReferral(@ApiParam(required=true,
-	 value="the referral") Referral referral) ;
+	@PUT
+	@UnitOfWork
+	@ApiOperation(value = "Update a referral", response = Referral.class, produces = gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "updated"),
+			@ApiResponse(code = 404, message = "not found"),
+			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
+	public Response update(
+			@ApiParam(required = true, value = "the referral") Referral referral,
+			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 }
