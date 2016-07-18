@@ -1,4 +1,4 @@
-FROM cwds/java:v1
+FROM cwds/java:jdk8u91
 RUN mkdir /opt/cws-api
 ADD config/api.yml /opt/cws-api/api.yml
 ADD build/libs/api.jar /opt/cws-api/api.jar
