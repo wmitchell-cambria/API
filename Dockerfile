@@ -1,4 +1,4 @@
-FROM vinodtaborda/centos:java8u91
+FROM cwds/java
 RUN mkdir /opt/cws-api
 ADD config/api.yml /opt/cws-api/api.yml
 ADD build/libs/api.jar /opt/cws-api/api.jar
