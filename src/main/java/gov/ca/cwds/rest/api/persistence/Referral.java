@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @ApiModel
 public class Referral {
 
@@ -18,7 +21,8 @@ public class Referral {
 	 * @param referralName	The name of the summarized referral
 	 * @param receivedDate	The date the summarized referral was received
 	 */
-	public Referral(String id, String referralName, Date receivedDate) {
+	@JsonCreator
+	public Referral(@JsonProperty("id")String id, @JsonProperty("referralName")String referralName, @JsonProperty("receivedDate")Date receivedDate) {
 		super();
 		this.id = id;
 		this.referralName = referralName;

@@ -25,4 +25,12 @@ public interface Service<T> {
 	 */
 	public T delete(String id);
 
+	/**
+	 * Create object 
+	 * 
+	 * @param object	The object to be created
+	 * 
+	 * @return	The created object with a newly populated id
+	 */
+	public T create(T object);
 }

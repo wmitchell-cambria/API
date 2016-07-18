@@ -4,6 +4,9 @@ import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 
 import java.util.HashMap;
+import java.util.UUID;
+
+import javax.persistence.EntityExistsException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,5 +45,22 @@ public class ReferralServiceImpl implements ReferralService {
 		return dummyData.remove(id);
 	}
 
-	
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.Service#create(java.lang.Object)
+	 */
+	@Override
+	public Referral create(Referral object) {
+		Referral referral = dummyData.get(object.getId()) ;
+		if( referral != null ) {
+			try {
+				
+			} catch ( EntityExistsException e ) {
+				throw new ServiceException("not unique",e);
+			}
+		}
+		String id = UUID.randomUUID().toString();
+		Referral created = new Referral(id, object.getReferralName(), object.getReceivedDate());
+		dummyData.put(id, created);
+		return created;
+	}
 }

@@ -41,6 +41,12 @@ public class ServiceEnvironmentTest {
 			public Referral delete(String id) {
 				return null;
 			}
+
+			@Override
+			public Referral create(Referral object) {
+				return null;
+			}
+			
 		};
         
     	serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, fakeService);
