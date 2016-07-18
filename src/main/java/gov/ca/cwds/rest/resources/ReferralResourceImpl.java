@@ -52,9 +52,14 @@ public class ReferralResourceImpl extends BaseVersionedResource<ReferralService>
 	 * @see gov.ca.cwds.rest.resources.ReferralResource#deleteReferral(long)
 	 */
 	@Override
-	public Response deleteReferral(String id, String acceptHeader) {
-		// TODO Auto-generated method stub
-		return null;
+	public Response delete(String id, String acceptHeader) {
+		ReferralService referralService = super.versionedService(acceptHeader);
+		Referral referral = referralService.delete(id);
+		if( referral != null ) {
+			return Response.ok().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+		}
 	}
 
 	/* (non-Javadoc)

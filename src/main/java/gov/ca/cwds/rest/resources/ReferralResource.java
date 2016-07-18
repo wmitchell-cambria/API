@@ -98,7 +98,7 @@ public interface ReferralResource {
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
-	public Response deleteReferral(
+	public Response delete(
 			@PathParam("id") @ApiParam(required = true, value = "id of object to delete") String id,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 

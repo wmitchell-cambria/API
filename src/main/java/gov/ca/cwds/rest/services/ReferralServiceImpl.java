@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.services;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 
-import java.util.Date;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +17,16 @@ public class ReferralServiceImpl implements ReferralService {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReferralServiceImpl.class);
-
+	
+	HashMap<String, Referral> dummyData = new HashMap<String, Referral>();
+	
 	@Override
 	public ReferralSummary findReferralSummary(String id) {
-		if( "1".equals(id) ) {
-			return null;
-		} else {
-			return new ReferralSummary(id, "Test Referral Name", new Date());
+		Referral referral = dummyData.get(id);
+		if( referral != null ) {
+			return new ReferralSummary(referral.getId(), referral.getReferralName(), referral.getReceivedDate());
 		}
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -32,11 +34,12 @@ public class ReferralServiceImpl implements ReferralService {
 	 */
 	@Override
 	public Referral find(String id) {
-		if( "1".equals(id) ) {
-			return null;
-		} else {
-			return new Referral(id, "Test Referral Name", new Date());
-		}
+		return dummyData.get(id);
+	}
+
+	@Override
+	public Referral delete(String id) {
+		return dummyData.remove(id);
 	}
 
 	

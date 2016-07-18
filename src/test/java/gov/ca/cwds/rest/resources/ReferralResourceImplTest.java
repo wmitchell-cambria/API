@@ -43,9 +43,14 @@ public class ReferralResourceImplTest {
 		when(referralService.findReferralSummary(ID_FOUND)).thenReturn(createReferralSummary());
 		when(referralService.find(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.find(ID_FOUND)).thenReturn(createReferral());
+		when(referralService.delete(ID_NOT_FOUND)).thenReturn(null);
+		when(referralService.delete(ID_FOUND)).thenReturn(createReferral());
 		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
 	}
 
+	/*
+	 * getReferralSummary Tests
+	 */
 	@Test
 	public void getReferralSummaryReturns200WhenFound() {
 		assertThat(resources.client().target(SUMMARY_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(200)));
@@ -61,12 +66,10 @@ public class ReferralResourceImplTest {
 		assertThat(resources.client().target(SUMMARY_NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
 	}
 
-	@Test
-	public void getReferralSummaryHasReferralSummaryWhenFound() {
-		ReferralSummary referralSummary = resources.client().target(SUMMARY_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ReferralSummary.class);
-		assertThat(referralSummary, is(notNullValue()));
-	}
-	
+	/*
+	 * get Tests
+	 */
+
 	@Test
 	public void getReturns200WhenFound() {
 		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(200)));
@@ -88,6 +91,34 @@ public class ReferralResourceImplTest {
 		assertThat(referralSummary, is(notNullValue()));
 	}
 	
+	/*
+	 * delete Tests
+	 */
+	@Test
+	public void deleteReturns200WhenDeleted() {
+		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).delete().getStatus(), is(equalTo(200)));
+	}
+
+	@Test
+	public void deleteReturns404WhenNotFound() {
+		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
+	}
+	
+	@Test
+	public void deleteReturns406WhenVersionNotSupport() {
+		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(), is(equalTo(406)));
+	}
+
+	@Test
+	public void deleteHasReferralSummaryWhenFound() {
+		ReferralSummary referralSummary = resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(ReferralSummary.class);
+		assertThat(referralSummary, is(notNullValue()));
+	}
+	
+	
+	/*
+	 * Helpers
+	 */
 	
 	private ReferralSummary createReferralSummary() {
 		return new ReferralSummary(ID_FOUND, "some name", new Date());
@@ -96,5 +127,6 @@ public class ReferralResourceImplTest {
 	private Referral createReferral() {
 		return new Referral(ID_FOUND, "some name", new Date());
 	}
+
 
 }
