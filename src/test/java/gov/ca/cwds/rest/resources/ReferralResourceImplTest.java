@@ -35,7 +35,7 @@ public class ReferralResourceImplTest {
 
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND ;
 	private static final String NOT_FOUND_RESOURCE = ROOT_RESOURCE + ID_NOT_FOUND;
-
+	
 	private static final ReferralService referralService = mock(ReferralService.class);
 	private static final ServiceEnvironment serviceEnvironment = mock(ServiceEnvironment.class);
 	
@@ -52,9 +52,8 @@ public class ReferralResourceImplTest {
 		when(referralService.delete(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.delete(ID_FOUND)).thenReturn(createReferral());
 		when(referralService.create(any(Referral.class))).thenReturn(createReferral());
-		
+		when(referralService.update(any(Referral.class))).thenReturn(createReferral());
 		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
-		
 	}
 
 	/*
@@ -138,6 +137,31 @@ public class ReferralResourceImplTest {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION").post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
 	}
 
+	@Test
+	public void createReturns409WhenNonUnique() {
+		//TODO : figure out how to test this.
+		//assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
+	}
+
+	/*
+	 * update Tests
+	 */
+	@Test
+	public void updateReturns204WhenUpdated() {
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.put(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(),is(equalTo(204)));
+	}
+
+	@Test
+	public void updateReturns406WhenVersionNotSupport() {
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION").put(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
+	}
+
+	@Test
+	public void updateReturns404WhenNotFound() {
+		//TODO : figure out how to test this.
+		//assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(createNewReferral(), Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
+	}
 	/*
 	 * Helpers
 	 */
@@ -152,6 +176,4 @@ public class ReferralResourceImplTest {
 	private Referral createNewReferral() {
 		return new Referral(null, "some name", new Date());
 	}
-
-
 }

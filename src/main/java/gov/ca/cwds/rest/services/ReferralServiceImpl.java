@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,4 +64,24 @@ public class ReferralServiceImpl implements ReferralService {
 		dummyData.put(id, created);
 		return created;
 	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.Service#update(java.lang.Object)
+	 */
+	@Override
+	public Referral update(Referral object) {
+		Referral referral = dummyData.get(object.getId()) ;
+		if( referral == null ) {
+			try {
+				
+			} catch ( EntityNotFoundException e ) {
+				throw new ServiceException("not found",e);
+			}
+		}
+		Referral updated = new Referral(referral.getId(), object.getReferralName(), object.getReceivedDate());
+		dummyData.put(updated.getId(), updated);
+		return updated;
+	}
+	
+	
 }

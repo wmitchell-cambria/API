@@ -46,6 +46,11 @@ public class ServiceEnvironmentTest {
 			public Referral create(Referral object) {
 				return null;
 			}
+
+			@Override
+			public Referral update(Referral object) {
+				return null;
+			}
 			
 		};
         
