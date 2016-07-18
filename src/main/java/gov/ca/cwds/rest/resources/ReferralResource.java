@@ -50,7 +50,7 @@ public interface ReferralResource {
 	@GET
 	@UnitOfWork
 	@Path("/{id}/summary")
-	@ApiOperation(value = "Find ReferralSummary by Referral id", response = ReferralSummary.class, protocols = "https")
+	@ApiOperation(value = "Find ReferralSummary by Referral id", response = ReferralSummary.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "ReferralSummary not found"),
 			@ApiResponse(code = 406, message = "Content Type not supported") })
@@ -72,7 +72,7 @@ public interface ReferralResource {
 	@GET
 	@UnitOfWork
 	@Path("/{id}")
-	@ApiOperation(value = "Find by id", response = Referral.class, protocols = "https")
+	@ApiOperation(value = "Find by id", response = Referral.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
@@ -94,7 +94,7 @@ public interface ReferralResource {
 	@DELETE
 	@UnitOfWork
 	@Path("/{id}")
-	@ApiOperation(value = "Delete a referral", protocols = "https", code = HttpStatus.SC_NO_CONTENT)
+	@ApiOperation(value = "Delete a referral", code = HttpStatus.SC_NO_CONTENT)
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
