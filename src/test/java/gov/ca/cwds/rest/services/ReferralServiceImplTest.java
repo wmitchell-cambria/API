@@ -1,9 +1,12 @@
 package gov.ca.cwds.rest.services;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import gov.ca.cwds.rest.api.domain.ReferralSummary;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import java.util.Date;
+
+import gov.ca.cwds.rest.api.persistence.Referral;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,19 +14,39 @@ import org.junit.Test;
 public class ReferralServiceImplTest {
 	private static ReferralService referralService;
 	
+	private CrudsService<Referral> crudsService;
+	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
-		referralService = new ReferralServiceImpl();
+		crudsService = mock(CrudsService.class);
+		referralService = new ReferralServiceImpl(crudsService);
 	}
 
-	//TODO : ReferralService is currently a stub - will implement and test later.
-//	@Test
-//	public void findReferralSummaryReturnsSummaryWithCorrectId() {
-//		
-//		
-//		ReferralSummary returnedSummary = referralService.findReferralSummary("myid");
-//		
-//		assertThat(returnedSummary.getId(), is(equalTo("myid")));
-//	}
+	@Test
+	public void findDelegatesToCrudsService() {
+		referralService.find("1");
+		verify(crudsService, times(1)).find("1");
 
+	}
+	
+	@Test
+	public void deleteDelegatesToCrudsService() {
+		referralService.delete("1");
+		verify(crudsService, times(1)).delete("1");
+	}
+	
+	@Test
+	public void createDelegatesToCrudsService() {
+		Referral toCreate = new Referral("1", "name", new Date());
+		referralService.create(toCreate);
+		verify(crudsService, times(1)).create(toCreate);
+	}
+	
+	@Test
+	public void updateDelegatesToCrudsService() {
+		Referral toUpdate = new Referral("1", "name", new Date());
+		referralService.update(toUpdate);
+		verify(crudsService, times(1)).update(toUpdate);
+	}
 }

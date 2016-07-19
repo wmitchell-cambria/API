@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  */
-public class ReferralResourceImpl extends BaseVersionedResource<ReferralService> implements ReferralResource {
+public class ReferralResourceImpl extends BaseResource<ReferralService> implements ReferralResource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferralResourceImpl.class);
 	
 	@Context

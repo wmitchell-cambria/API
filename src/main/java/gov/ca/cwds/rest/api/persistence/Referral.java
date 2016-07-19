@@ -8,9 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ApiModel
-public class Referral implements PersistentObject {
+public class Referral extends PersistentObject {
 
-	private String id;
 	private String referralName;
 	private Date receivedDate;
 
@@ -23,23 +22,13 @@ public class Referral implements PersistentObject {
 	 */
 	@JsonCreator
 	public Referral(@JsonProperty("id")String id, @JsonProperty("referralName")String referralName, @JsonProperty("receivedDate")Date receivedDate) {
-		super();
-		this.id = id;
+		super(id);
 		this.referralName = referralName;
 		this.receivedDate = receivedDate;
 	}
 
 	/**
-	 * Get the id of the summarized referral.
-	 * 
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * Get the name of the summarized referral.
+	 * Get the name of the referral.
 	 *
 	 * @return the referralName
 	 */
@@ -48,7 +37,7 @@ public class Referral implements PersistentObject {
 	}
 
 	/**
-	 * Get the date the summarized referral was received.
+	 * Get the date the referral was received.
 	 *  
 	 * @return the receivedDate
 	 */
@@ -63,7 +52,7 @@ public class Referral implements PersistentObject {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
 		result = prime * result
 				+ ((receivedDate == null) ? 0 : receivedDate.hashCode());
 		result = prime * result
@@ -83,10 +72,10 @@ public class Referral implements PersistentObject {
 		if (getClass() != obj.getClass())
 			return false;
 		Referral other = (Referral) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (getId() == null) {
+			if (other.getId() != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!getId().equals(other.getId()))
 			return false;
 		if (receivedDate == null) {
 			if (other.receivedDate != null)
@@ -100,7 +89,16 @@ public class Referral implements PersistentObject {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#copy(java.lang.String, java.lang.Object)
+	 */
+	@Override	
+	public PersistentObject copy(String id, Object from) {
+		if(! (from instanceof Referral)) {
+			throw new IllegalArgumentException(from.getClass() + " not of type " + Referral.class);
+		}
+		Referral fromCasted = (Referral)from;
+		return new Referral(id, fromCasted.getReferralName(), fromCasted.getReceivedDate());
+	}
 }

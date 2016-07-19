@@ -8,9 +8,9 @@ import gov.ca.cwds.rest.setup.ServiceEnvironment;
  * 
  * @author CWDS API Team
  *
- * @param <T>	The Service subinterface the versioned resource delegates to
+ * @param <T>	The {@link Service} the resource delegates to
  */
-public abstract class BaseVersionedResource<T extends Service> {
+public abstract class BaseResource<T extends Service> {
 	private ServiceEnvironment serviceEnvironment;
 	private Class<T> clazz;
 	
@@ -20,7 +20,7 @@ public abstract class BaseVersionedResource<T extends Service> {
 	 * @param serviceEnvironment The {@link ServiceEnvironment} for this resource
 	 * @param clazz	The Service interface the versioned resource delegates to
 	 */
-	public BaseVersionedResource(ServiceEnvironment serviceEnvironment, Class<T> clazz) {
+	public BaseResource(ServiceEnvironment serviceEnvironment, Class<T> clazz) {
 		this.serviceEnvironment = serviceEnvironment;
 		this.clazz = clazz;
 	}

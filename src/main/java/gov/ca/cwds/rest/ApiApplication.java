@@ -1,10 +1,15 @@
 package gov.ca.cwds.rest;
 
+import gov.ca.cwds.rest.api.persistence.CrudsDao;
+import gov.ca.cwds.rest.api.persistence.CrudsDaoImpl;
+import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.CrudsServiceImpl;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
@@ -17,6 +22,7 @@ import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -67,7 +73,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	final ReferralService referralService = new ReferralServiceImpl();
+    	HashMap<String, Referral> dummyReferralData = new HashMap<String, Referral>();
+    	final CrudsDao<Referral> referralCrudsDao = new CrudsDaoImpl<Referral>(dummyReferralData);
+    	final CrudsService<Referral> crudsService = new CrudsServiceImpl<Referral>(referralCrudsDao);
+    			
+    	final ReferralService referralService = new ReferralServiceImpl(crudsService);
     	apiEnvironment.services().register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
     }
     
