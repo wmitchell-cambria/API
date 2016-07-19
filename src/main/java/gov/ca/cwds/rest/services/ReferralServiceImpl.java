@@ -54,7 +54,7 @@ public class ReferralServiceImpl implements ReferralService {
 		Referral referral = dummyData.get(object.getId()) ;
 		if( referral != null ) {
 			try {
-				
+				throw new EntityExistsException();
 			} catch ( EntityExistsException e ) {
 				throw new ServiceException("not unique",e);
 			}
