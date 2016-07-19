@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ApiModel
-public class Referral {
+public class Referral implements PersistentObject {
 
 	private String id;
 	private String referralName;
