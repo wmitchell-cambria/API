@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("rawtypes")
 public class ServiceEnvironment {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceEnvironment.class);
 	
