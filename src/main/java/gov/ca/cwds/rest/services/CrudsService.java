@@ -3,11 +3,13 @@ package gov.ca.cwds.rest.services;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
+ * Interface for business {@link Service} which perform CRUDS operations
+ * 
  * @author CWDS API Team
  *
  * @param <T>	The {@link PersistentObject} the service implements CRUDS for
  */
-public interface CrudsService<T> extends Service {
+public interface CrudsService<T extends PersistentObject> extends Service {
 	/**
 	 * Find object by id
 	 * 

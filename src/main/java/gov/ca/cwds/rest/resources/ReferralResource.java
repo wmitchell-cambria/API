@@ -30,7 +30,7 @@ import org.apache.http.HttpStatus;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_REFERRAL)
+@Api(value = RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
 @Path(RESOURCE_REFERRAL)
 @Produces(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
 @Consumes(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)

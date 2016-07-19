@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.setup;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -58,8 +59,10 @@ public class ServiceEnvironmentTest {
 	}
 	
 	@Test
-	public void checkCorrectServiceReturned() {;
-		ReferralService referralService = new ReferralServiceImpl();
+	public void checkCorrectServiceReturned() {
+		@SuppressWarnings("unchecked")
+		CrudsService<Referral> crudsService = mock(CrudsService.class);
+		ReferralService referralService = new ReferralServiceImpl(crudsService);
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		
 		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType()), is(equalTo(referralService)));
@@ -72,7 +75,9 @@ public class ServiceEnvironmentTest {
 	
 	@Test
 	public void checkNoServiceReturnedCorrectlyOnBadImplementationClass() {
-		ReferralService referralService = new ReferralServiceImpl();
+		@SuppressWarnings("unchecked")
+		CrudsService<Referral> crudsService = mock(CrudsService.class);
+		ReferralService referralService = new ReferralServiceImpl(crudsService);
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		
 		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.VERSION_NOOP.getMediaType()), is(equalTo(null)));

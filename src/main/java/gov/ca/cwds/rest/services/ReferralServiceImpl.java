@@ -3,12 +3,6 @@ package gov.ca.cwds.rest.services;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,17 +11,25 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CDWS API Team
  */
-//TODO : this class is currently a stub - push the stub down to the DAO to finish the implementation.
 public class ReferralServiceImpl implements ReferralService {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReferralServiceImpl.class);
 	
-	HashMap<String, Referral> dummyData = new HashMap<String, Referral>();
+	private CrudsService<Referral> crudsService;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param crudsService	The {@link CrudsService} used by this service
+	 */
+	public ReferralServiceImpl(CrudsService<Referral> crudsService) {
+		this.crudsService = crudsService;
+	}
 	
 	@Override
 	public ReferralSummary findReferralSummary(String id) {
-		Referral referral = dummyData.get(id);
+		Referral referral = this.find(id);
 		if( referral != null ) {
 			return new ReferralSummary(referral.getId(), referral.getReferralName(), referral.getReceivedDate());
 		}
@@ -35,54 +37,36 @@ public class ReferralServiceImpl implements ReferralService {
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.services.Service#find(java.lang.String)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
 	 */
 	@Override
 	public Referral find(String id) {
-		return dummyData.get(id);
-	}
-
-	@Override
-	public Referral delete(String id) {
-		return dummyData.remove(id);
+		return (Referral)crudsService.find(id);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.services.Service#create(java.lang.Object)
+	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
+	 */
+	@Override
+	public Referral delete(String id) {
+		return (Referral)crudsService.delete(id);
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.persistence.PersistentObject)
 	 */
 	@Override
 	public Referral create(Referral object) {
-		Referral referral = dummyData.get(object.getId()) ;
-		if( referral != null ) {
-			try {
-				throw new EntityExistsException();
-			} catch ( EntityExistsException e ) {
-				throw new ServiceException("not unique",e);
-			}
-		}
-		String id = UUID.randomUUID().toString();
-		Referral created = new Referral(id, object.getReferralName(), object.getReceivedDate());
-		dummyData.put(id, created);
-		return created;
+		return (Referral)crudsService.create(object);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.services.Service#update(java.lang.Object)
+	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.persistence.PersistentObject)
 	 */
 	@Override
 	public Referral update(Referral object) {
-		Referral referral = dummyData.get(object.getId()) ;
-		if( referral == null ) {
-			try {
-				
-			} catch ( EntityNotFoundException e ) {
-				throw new ServiceException("not found",e);
-			}
-		}
-		Referral updated = new Referral(referral.getId(), object.getReferralName(), object.getReceivedDate());
-		dummyData.put(updated.getId(), updated);
-		return updated;
+		return (Referral)crudsService.update(object);
 	}
-	
+
 	
 }
