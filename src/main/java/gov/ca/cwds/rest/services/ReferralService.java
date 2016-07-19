@@ -9,7 +9,7 @@ import gov.ca.cwds.rest.api.persistence.Referral;
  * 
  * @author CWDS API Team
  */
-public interface ReferralService extends Service<Referral> {
+public interface ReferralService extends CrudsService<Referral> {
 
 	/**
 	 * Finds a {@link ReferralSummary} based on the given id.
