@@ -5,9 +5,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
-import gov.ca.cwds.rest.services.Service;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,7 +30,7 @@ public class ServiceEnvironmentTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Illegal Superclass");
          
-        Service<Referral> fakeService = new Service<Referral>() {
+        CrudsService<Referral> fakeService = new CrudsService<Referral>() {
 
 			@Override
 			public Referral find(String id) {
