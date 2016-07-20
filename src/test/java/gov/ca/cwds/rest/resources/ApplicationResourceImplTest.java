@@ -23,16 +23,16 @@ public class ApplicationResourceImplTest {
 
 	@Test
 	public void applicationGetReturns200() {
-		assertThat(resources.client().target("/application").request().get().getStatus(), is(equalTo(200)));
+		assertThat(resources.client().target("/application").request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(200)));
 	}
 
 	@Test
 	public void applicationGetReturnsCorrectName() {
-		assertThat(resources.client().target("/application").request().get().readEntity(String.class), is(equalTo(APP_NAME)));
+		assertThat(resources.client().target("/application").request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(String.class), is(equalTo(APP_NAME)));
 	}
 	
 	@Test
 	public void applicationGetReturnsV1JsonContentType() {
-		assertThat(resources.client().target("/application").request().get().getMediaType().toString(), is(equalTo(Api.MEDIA_TYPE_JSON_V1)));
+		assertThat(resources.client().target("/application").request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getMediaType().toString(), is(equalTo(Api.MEDIA_TYPE_JSON_V1)));
 	}
 }

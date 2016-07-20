@@ -8,7 +8,7 @@ import gov.ca.cwds.rest.setup.ServiceEnvironment;
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link Service} the resource delegates to
+ * @param <T>	The {@link Service} interface the resource delegates to.  NOTE : this should be an interface because we store versions of the implementations based on {@link Api.Version}
  */
 public abstract class BaseResource<T extends Service> {
 	private ServiceEnvironment serviceEnvironment;

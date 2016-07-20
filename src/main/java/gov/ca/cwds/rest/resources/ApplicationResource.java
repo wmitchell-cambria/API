@@ -1,13 +1,8 @@
 package gov.ca.cwds.rest.resources;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_APPLICATION;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 
 
 /**
@@ -15,11 +10,7 @@ import javax.ws.rs.Produces;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_APPLICATION)
-@Path(RESOURCE_APPLICATION)
-@Produces(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-@Consumes(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-public interface ApplicationResource {
+public interface ApplicationResource extends Resource {
 	
 	@ApiOperation("Get the application name")
 	@GET

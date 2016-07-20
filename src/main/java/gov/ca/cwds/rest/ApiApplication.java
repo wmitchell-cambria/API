@@ -6,6 +6,8 @@ import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
+import gov.ca.cwds.rest.resources.CrudsResource;
+import gov.ca.cwds.rest.resources.CrudsResourceImpl;
 import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -87,7 +89,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         apiEnvironment.jersey().register(applicationResource);
         
         LOGGER.info("Registering ReferralResource");
-        final ReferralResource referralResource = new ReferralResourceImpl(apiEnvironment.services());
+        CrudsResource<Referral> referralCrudsResource = new CrudsResourceImpl<Referral, ReferralService>(apiEnvironment.services(), ReferralService.class);
+        final ReferralResource referralResource = new ReferralResourceImpl(apiEnvironment.services(), referralCrudsResource);
         apiEnvironment.jersey().register(referralResource);
     }
     
