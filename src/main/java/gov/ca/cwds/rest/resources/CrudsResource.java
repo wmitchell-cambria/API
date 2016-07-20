@@ -24,10 +24,6 @@ import javax.ws.rs.core.UriInfo;
  *
  * @param <T>	The {@link PersistentObject} the CRUDS endpoints work on
  */
-//@Api(value = RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)    - done in final implementation class
-//@Path(RESOURCE_REFERRAL)            - - done in final implementation class                                                                            
-//@Produces(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)   - done in Resource
-//@Consumes(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)   - done in Resource
 public interface CrudsResource<T extends PersistentObject> extends Resource {
 	
 	/**

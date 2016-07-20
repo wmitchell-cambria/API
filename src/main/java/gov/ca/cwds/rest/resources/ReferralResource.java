@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
  * @author CWDS API Team
  */
 @Api(value = RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-@Path(RESOURCE_REFERRAL)
+@Path(value =  RESOURCE_REFERRAL)
 public interface ReferralResource {
 
 	/**
