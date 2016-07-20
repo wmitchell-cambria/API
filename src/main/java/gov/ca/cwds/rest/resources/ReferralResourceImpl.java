@@ -3,16 +3,13 @@ package gov.ca.cwds.rest.resources;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.services.ReferralService;
-import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ResponseHeader;
 
-import java.net.URI;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.http.HttpStatus;
@@ -24,14 +21,17 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  */
-public class ReferralResourceImpl extends BaseResource<ReferralService> implements ReferralResource {
+@Api(value = gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)  
+@Path(value = gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL)          
+public class ReferralResourceImpl extends BaseResource<ReferralService> implements ReferralResource, CrudsResource<Referral> {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferralResourceImpl.class);
 	
-	@Context
-    UriInfo uriInfo;
+	private CrudsResource<Referral> crudsResource;
 	
-	public ReferralResourceImpl(ServiceEnvironment serviceEnvironment) {
+	public ReferralResourceImpl(ServiceEnvironment serviceEnvironment, CrudsResource<Referral> crudsResource) {
 		super(serviceEnvironment, ReferralService.class);
+		this.crudsResource = crudsResource;
 	}
 	
 	@Override
@@ -51,93 +51,38 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.ReferralResource#getReferral(long)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
 	@Override
+	@ApiOperation(value = "Find Referral by id", response = Referral.class)
 	public Response get(String id, String acceptHeader) {
-		ReferralService referralService = super.versionedService(acceptHeader);
-		if(referralService == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		Referral referral = referralService.find(id);
-		if( referral != null ) {
-			return Response.ok(referral).build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
-		}
+		return crudsResource.get(id, acceptHeader);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.ReferralResource#deleteReferral(long)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
+	@ApiOperation(value = "Delete Referral", code = HttpStatus.SC_NO_CONTENT)
 	@Override
 	public Response delete(String id, String acceptHeader) {
-		ReferralService referralService = super.versionedService(acceptHeader);
-		if(referralService == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		Referral referral = referralService.delete(id);
-		if( referral != null ) {
-			return Response.ok().build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
-		}
+		return crudsResource.delete(id, acceptHeader);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.ReferralResource#createReferral(gov.ca.cwds.rest.api.persistence.Referral)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String)
 	 */
 	@Override
-	public Response create(Referral referral, String acceptHeader) {
-		ReferralService referralService = super.versionedService(acceptHeader);
-		if(referralService == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		try {
-			referral = referralService.create(referral);
-			
-			 UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-	            URI referralUri = ub.
-	                    path(referral.getId()).
-	                    build();
-			return Response.status(Response.Status.CREATED).header("Location", referralUri.toASCIIString()).build();
-		} catch (ServiceException e) {
-			if( e.getCause() instanceof EntityExistsException ) {
-				return Response.status(Response.Status.CONFLICT).entity(null).build();
-			} else {
-				LOGGER.error("Unable to handle request", e);
-				return Response.status(HttpStatus.SC_SERVICE_UNAVAILABLE).entity(null).build();
-			}
-		}
+	@ApiOperation(value = "Update Referral", code = 204, response = Referral.class)
+	public Response update(Referral persistentObject, String acceptHeader) {
+		return crudsResource.update(persistentObject, acceptHeader);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.ReferralResource#putReferral(gov.ca.cwds.rest.api.persistence.Referral)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String, javax.ws.rs.core.UriInfo)
 	 */
 	@Override
-	public Response update(Referral referral, String acceptHeader) {
-		ReferralService referralService = super.versionedService(acceptHeader);
-		if(referralService == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		try {
-			referral = referralService.update(referral);
-			return Response.status(Response.Status.NO_CONTENT).build();
-		} catch (ServiceException e) {
-			if( e.getCause() instanceof EntityNotFoundException ) {
-				return Response.status(Response.Status.NOT_FOUND).entity(null).build();
-			} else {
-				LOGGER.error("Unable to handle request", e);
-				return Response.status(HttpStatus.SC_SERVICE_UNAVAILABLE).entity(null).build();
-			}
-		}
+	@ApiOperation(value = "Create Referral", response = Referral.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
+	public Response create(Referral persistentObject, String acceptHeader, UriInfo uriInfo) {
+		return crudsResource.create(persistentObject, acceptHeader, uriInfo);
 	}
 }

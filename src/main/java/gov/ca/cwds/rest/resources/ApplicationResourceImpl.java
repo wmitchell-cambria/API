@@ -1,11 +1,18 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.RESOURCE_APPLICATION;
+import io.swagger.annotations.Api;
+
+import javax.ws.rs.Path;
+
 
 /**
  * Implementation of {@link ApplicationResource}.
  * 
  * @author CWDS API Team
  */
+@Api(value = RESOURCE_APPLICATION, hidden=true)
+@Path(RESOURCE_APPLICATION)
 public class ApplicationResourceImpl implements ApplicationResource {
 
 	private String applicationName;
