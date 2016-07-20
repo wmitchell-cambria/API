@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  */
-@Api(value = gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)  
-@Path(value = gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL)          
 public class ReferralResourceImpl extends BaseResource<ReferralService> implements ReferralResource, CrudsResource<Referral> {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferralResourceImpl.class);
