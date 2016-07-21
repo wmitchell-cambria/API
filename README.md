@@ -25,7 +25,7 @@ The development team is actively using the [Github Wiki](https://github.com/ca-c
 
 ### Database Initialization
 
-### Database Seeding 
+### Database Seeding  
 
 Use your favorite database tool to execute the SQL files in src/main/resources/db/seeds.
 
