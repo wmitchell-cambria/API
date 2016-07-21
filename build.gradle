@@ -1,9 +1,9 @@
-apply from: 'cobertura.gradle'
 plugins {
     id "java"
     id "application"
     id "com.github.johnrengelman.shadow" version "1.2.3"
 }
+apply from: 'cobertura.gradle'
 
 sourceCompatibility = 1.8
 
