@@ -1,3 +1,4 @@
+apply from: 'cobertura.gradle'
 plugins {
     id "java"
     id "application"
