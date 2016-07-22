@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.persistence.CrudsDao;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;

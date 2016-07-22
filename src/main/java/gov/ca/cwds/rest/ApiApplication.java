@@ -1,10 +1,10 @@
 package gov.ca.cwds.rest;
 
-import gov.ca.cwds.rest.api.persistence.CrudsDao;
-import gov.ca.cwds.rest.api.persistence.CrudsDaoImpl;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.api.persistence.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.CrudsResource;
