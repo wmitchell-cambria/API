@@ -33,7 +33,7 @@ public interface ReferralResource {
 	 *            The id of the summarized {@link Referral}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link ApiVersion}
+	 *            corresponds to a value in {@link gov.ca.cwds.rest.core.Api.Version}
 	 * 
 	 * @return {@link Response} with the summarized {@link Referral}
 	 */

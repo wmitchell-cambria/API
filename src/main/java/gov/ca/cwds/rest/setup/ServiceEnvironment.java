@@ -33,8 +33,10 @@ public class ServiceEnvironment {
 	 * @param clazz		The common superclass/interface the {@link Service} should be registered as
 	 * @param version	The {@link Api.Version} this service is implemented under
 	 * @param service	The {@link Service} implementation which implements the given {@link Api.Version}
+	 * 
+	 * @param <T>	The type of {@link Service} being registered
 	 */
-	public <T extends Service, S extends Service> void register(Class<T> clazz, Api.Version version, Service service ) {
+	public <T extends Service> void register(Class<T> clazz, Api.Version version, Service service ) {
 		if( !clazz.isAssignableFrom(service.getClass())) {
 			LOGGER.warn("{} is not assignalbeFrom from {}", clazz.getName(), service.getClass().getName());
 			throw new IllegalArgumentException("Illegal Superclass and service combination");
@@ -53,8 +55,11 @@ public class ServiceEnvironment {
 	 * Get the {@link Service} implementation by {@link Api.Version}
 	 * 
 	 * @param clazz   The common superclass/interface the {@link Service} was registered under
-	 * @param version  The {@link Api.Version} this service is implemented under
-	 * @return
+	 * @param mediaType  The mediaType of the {@link Api.Version} requested
+	 * 
+	 * @return	The corresponding {@link Service} implementation
+	 * 
+	 * @param <T>	The type of {@link Service} being requested
 	 */
 	public <T extends Service> Service getService(Class<T> clazz, String mediaType) {
 		Service service = null;
