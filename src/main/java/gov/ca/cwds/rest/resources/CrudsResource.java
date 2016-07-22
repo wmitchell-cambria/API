@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.core.Api;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -33,7 +34,7 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	 *            The id of the {@link PersistentObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link ApiVersion}
+	 *            corresponds to a value in {@link Api.Version}
 	 * 
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
@@ -54,7 +55,7 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	 *            The id of the {@link PersistentObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link ApiVersion}
+	 *            corresponds to a value in {@link Api.Version}
 	 * 
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
@@ -71,11 +72,12 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	/**
 	 * Create a {@link PersistentObject}
 	 * 
-	 * @param referral
+	 * @param persistentObject
 	 *            The {@link PersistentObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link ApiVersion}
+	 *            corresponds to a value in {@link Api.Version}
+	 * @param uriInfo	The {@link UriInfo}           
 	 * 
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
@@ -92,8 +94,8 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	/**
 	 * Update a {@link PersistentObject}
 	 *
-	 * @param referral The {@link PersistentObject}
-	 * @param acceptHeader The accept header. Used to determine version of API, corresponds to a value in {@link ApiVersion}
+	 * @param persistentObject The {@link PersistentObject}
+	 * @param acceptHeader The accept header. Used to determine version of API, corresponds to a value in {@link Api.Version}
 	 *
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  *
- * @param <T>
+ * @param <T>	The {@link PersistentObject} the service performs CRUDs operations on
  */
 public class CrudsServiceImpl<T extends PersistentObject> implements CrudsService<T> {
 	@SuppressWarnings("unused")

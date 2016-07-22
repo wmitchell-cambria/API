@@ -23,9 +23,9 @@ public class StaffPerson extends PersistentObject {
 	 * 
 	 * @param id
 	 *            The id of the Staff Person
-	 * @param firstname
+	 * @param firstName
 	 *            The first name
-	 * @param lastname
+	 * @param lastName
 	 *            The last name
 	 * 
 	 * @param middleInitial

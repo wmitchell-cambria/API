@@ -28,7 +28,7 @@ public abstract class BaseResource<T extends Service> {
 	/**
 	 * Get the implementation of the service for the given {@link Api.Version}
 	 * 
-	 * @param version	The mediaType
+	 * @param mediaType	The mediaType of the version being requested
 	 * @return	The implementation of the {@link Service} based on the given mediaType
 	 */
 	@SuppressWarnings("unchecked")
