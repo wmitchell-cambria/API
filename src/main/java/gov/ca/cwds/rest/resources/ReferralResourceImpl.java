@@ -4,11 +4,9 @@ import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.Referral;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 

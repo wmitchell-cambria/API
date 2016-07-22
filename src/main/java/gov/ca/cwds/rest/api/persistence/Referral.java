@@ -7,6 +7,11 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * {@link PersistentObject} representing a Referral
+ * 
+ * @author CWDS API Team
+ */
 @ApiModel
 public class Referral extends PersistentObject {
 
@@ -14,14 +19,19 @@ public class Referral extends PersistentObject {
 	private Date receivedDate;
 
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
-	 * @param id	The id of the summarized referral
-	 * @param referralName	The name of the summarized referral
-	 * @param receivedDate	The date the summarized referral was received
+	 * @param id
+	 *            The id of the referral
+	 * @param referralName
+	 *            The name of the referral
+	 * @param receivedDate
+	 *            The date the referral was received
 	 */
 	@JsonCreator
-	public Referral(@JsonProperty("id")String id, @JsonProperty("referralName")String referralName, @JsonProperty("receivedDate")Date receivedDate) {
+	public Referral(@JsonProperty("id") String id,
+			@JsonProperty("referralName") String referralName,
+			@JsonProperty("receivedDate") Date receivedDate) {
 		super(id);
 		this.referralName = referralName;
 		this.receivedDate = receivedDate;
@@ -38,14 +48,16 @@ public class Referral extends PersistentObject {
 
 	/**
 	 * Get the date the referral was received.
-	 *  
+	 * 
 	 * @return the receivedDate
 	 */
 	public Date getReceivedDate() {
 		return receivedDate;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -60,7 +72,9 @@ public class Referral extends PersistentObject {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -90,15 +104,21 @@ public class Referral extends PersistentObject {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#copy(java.lang.String, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.ca.cwds.rest.api.persistence.PersistentObject#copy(java.lang.String,
+	 * java.lang.Object)
 	 */
-	@Override	
+	@Override
 	public PersistentObject copy(String id, Object from) {
-		if(! (from instanceof Referral)) {
-			throw new IllegalArgumentException(from.getClass() + " not of type " + Referral.class);
+		if (!(from instanceof Referral)) {
+			throw new IllegalArgumentException(from.getClass()
+					+ " not of type " + Referral.class);
 		}
-		Referral fromCasted = (Referral)from;
-		return new Referral(id, fromCasted.getReferralName(), fromCasted.getReceivedDate());
+		Referral fromCasted = (Referral) from;
+		return new Referral(id, fromCasted.getReferralName(),
+				fromCasted.getReceivedDate());
 	}
 }
