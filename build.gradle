@@ -53,7 +53,7 @@ run {
 }
 
 cobertura {
-	coverageFormats = ['xml']
+	coverageFormats = ['xml', 'html']
 	coverageIgnoreTrivial = true
 	coverageIgnores = ['org.slf4j.Logger.*']
 	coverageReportDir = new File("$buildDir/reports/cobertura")
