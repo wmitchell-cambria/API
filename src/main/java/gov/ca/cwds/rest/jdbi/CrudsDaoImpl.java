@@ -1,4 +1,6 @@
-package gov.ca.cwds.rest.api.persistence;
+package gov.ca.cwds.rest.jdbi;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 import java.util.HashMap;
 import java.util.UUID;

@@ -1,4 +1,6 @@
-package gov.ca.cwds.rest.api.persistence;
+package gov.ca.cwds.rest.jdbi;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;

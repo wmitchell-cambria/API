@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.persistence;
+package gov.ca.cwds.rest.jdbi;
 
 /**
  * Marker for DAOs
