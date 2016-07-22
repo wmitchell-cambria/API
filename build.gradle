@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "application"
     id "com.github.johnrengelman.shadow" version "1.2.3"
+	id 'net.saliman.cobertura' version '2.3.2'
 }
 
 sourceCompatibility = 1.8
@@ -49,4 +50,11 @@ mainClassName = "gov.ca.cwds.rest.ApiApplication"
 
 run {
     args "server", configPath + "api.yml"
+}
+
+cobertura {
+	coverageFormats = ['xml']
+	coverageIgnoreTrivial = true
+	coverageIgnores = ['org.slf4j.Logger.*']
+	coverageReportDir = new File("$buildDir/reports/cobertura")
 }
