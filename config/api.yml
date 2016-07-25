@@ -2,3 +2,4 @@ applicationName: CWDS API
 
 swagger:
   resourcePackage: gov.ca.cwds.rest.resources
+  title: CWDS API
