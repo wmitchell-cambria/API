@@ -30,22 +30,6 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 		this.crudsResource = crudsResource;
 	}
 	
-	@Override
-	public Response getReferralSummary(String id, String acceptHeader) {
-		ReferralService referralService = super.versionedService(acceptHeader);
-		if(referralService == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		ReferralSummary referralSummary = referralService.findReferralSummary(id);
-		if( referralSummary != null ) {
-			return Response.ok(referralSummary).build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
@@ -80,5 +64,21 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	@ApiOperation(value = "Create Referral", response = Referral.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
 	public Response create(Referral persistentObject, String acceptHeader, UriInfo uriInfo) {
 		return crudsResource.create(persistentObject, acceptHeader, uriInfo);
+	}
+	
+	@Override
+	public Response getReferralSummary(String id, String acceptHeader) {
+		ReferralService referralService = super.versionedService(acceptHeader);
+		if(referralService == null) {
+			//TODO : Test this
+			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
+			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
+		}
+		ReferralSummary referralSummary = referralService.findReferralSummary(id);
+		if( referralSummary != null ) {
+			return Response.ok(referralSummary).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+		}
 	}
 }
