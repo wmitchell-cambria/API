@@ -105,6 +105,6 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 			@ApiResponse(code = 404, message = "not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
 	public Response update(
-			@ApiParam(required = true, value = "the referral") T persistentObject,
+			@ApiParam(required = true, value = "the object to be updated") T persistentObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 }
