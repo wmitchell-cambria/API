@@ -13,6 +13,11 @@ import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of {@link StaffPersonResource} delegating work to {@link StaffPersonService}
+ * 
+ * @author CWDS API Team
+ */
 public class StaffPersonResourceImpl extends BaseResource<StaffPersonService>
 		implements StaffPersonResource, CrudsResource<StaffPerson> {
 
