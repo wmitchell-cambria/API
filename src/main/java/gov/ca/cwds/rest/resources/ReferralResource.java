@@ -47,6 +47,4 @@ public interface ReferralResource {
 	public Response getReferralSummary(
 			@PathParam("id") @ApiParam(required = true, value = "the id") String id,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
-
-
 }
