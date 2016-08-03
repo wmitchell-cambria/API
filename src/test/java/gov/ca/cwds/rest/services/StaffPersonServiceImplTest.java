@@ -35,14 +35,14 @@ public class StaffPersonServiceImplTest {
 	
 	@Test
 	public void createDelegatesToCrudsService() {
-		StaffPerson toCreate = new StaffPerson("1", "Joe", "Caseworker", "A");
+		StaffPerson toCreate = new StaffPerson();
 		staffPersonService.create(toCreate);
 		verify(crudsService, times(1)).create(toCreate);
 	}
 	
 	@Test
 	public void updateDelegatesToCrudsService() {
-		StaffPerson toUpdate = new StaffPerson("1", "Joe", "Caseworker", "A");
+		StaffPerson toUpdate = new StaffPerson();
 		staffPersonService.update(toUpdate);
 		verify(crudsService, times(1)).update(toUpdate);
 	}

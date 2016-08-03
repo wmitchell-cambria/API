@@ -61,7 +61,7 @@ public class StaffPersonResourceImplTest {
 
 	@Test
 	public void createDelegatestoCrudsResource() {
-		StaffPerson toCreate = new StaffPerson("1", "name", "lastname", "I");
+		StaffPerson toCreate = new StaffPerson();
 		resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		verify(crudsResource, times(1)).create(any(StaffPerson.class), any(String.class), any(UriInfo.class) );
 	}
@@ -69,7 +69,7 @@ public class StaffPersonResourceImplTest {
 	
 	@Test
 	public void updateDelegatestoCrudsResource() {
-		StaffPerson toCreate = new StaffPerson("1", "name", "lastname", "I");
+		StaffPerson toCreate = new StaffPerson();
 		resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		verify(crudsResource, times(1)).update(any(StaffPerson.class), any(String.class));
 	}
@@ -78,6 +78,8 @@ public class StaffPersonResourceImplTest {
 	 * Helpers
 	 */
 	private static StaffPerson createStaffPersonForVerify() {
-		return new StaffPerson(ID_VERIFY, "some name", "lastname", "middleinitial");
+		StaffPerson toVerify = mock(StaffPerson.class);
+		when(toVerify.getId()).thenReturn(ID_VERIFY);
+		return toVerify;
 	}
 }	

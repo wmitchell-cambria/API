@@ -103,22 +103,4 @@ public class Referral extends PersistentObject {
 			return false;
 		return true;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.ca.cwds.rest.api.persistence.PersistentObject#copy(java.lang.String,
-	 * java.lang.Object)
-	 */
-	@Override
-	public PersistentObject copy(String id, Object from) {
-		if (!(from instanceof Referral)) {
-			throw new IllegalArgumentException(from.getClass()
-					+ " not of type " + Referral.class);
-		}
-		Referral fromCasted = (Referral) from;
-		return new Referral(id, fromCasted.getReferralName(),
-				fromCasted.getReceivedDate());
-	}
 }
