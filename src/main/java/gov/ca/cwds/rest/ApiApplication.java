@@ -5,6 +5,7 @@ import gov.ca.cwds.rest.api.persistence.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.StaffPersonDao;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.CrudsResource;
@@ -23,13 +24,16 @@ import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.flyway.FlywayBundle;
+import io.dropwizard.flyway.FlywayFactory;
+import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 
 import java.util.EnumSet;
-import java.util.HashMap;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -41,10 +45,37 @@ import org.slf4j.LoggerFactory;
 public class ApiApplication extends Application<ApiConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
+    
+    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class) {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+            return configuration.getDataSourceFactory();
+        }
+    };
+    
+    private final FlywayBundle<ApiConfiguration> flywayBundle = new FlywayBundle<ApiConfiguration>() {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+            return configuration.getDataSourceFactory();
+        }
+
+        @Override
+        public FlywayFactory getFlywayFactory(ApiConfiguration configuration) {
+            return configuration.getFlywayFactory();
+        }
+    };
+    
+    private final SwaggerBundle<ApiConfiguration> swaggerBundle = new SwaggerBundle<ApiConfiguration>() {
+        @Override
+        protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ApiConfiguration configuration) {
+            return configuration.swaggerBundleConfiguration;
+        }
+    };
+    
     public static void main(final String[] args) throws Exception {
         new ApiApplication().run(args);
     }
-
+    
     @Override
     public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
         // Enable variable substitution with environment variables
@@ -53,12 +84,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
                         new EnvironmentVariableSubstitutor()
                 )
         );
-        bootstrap.addBundle(new SwaggerBundle<ApiConfiguration>() {
-            @Override
-            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ApiConfiguration configuration) {
-                return configuration.swaggerBundleConfiguration;
-            }
-        });
+        bootstrap.addBundle(swaggerBundle);
+        bootstrap.addBundle(flywayBundle);
+        bootstrap.addBundle(hibernateBundle);
     }
     
     @Override
@@ -80,9 +108,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	HashMap<String, Referral> dummyReferralData = new HashMap<String, Referral>();
-    	LOGGER.info("Dummy Data setup for {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	final CrudsDao<Referral> referralCrudsDao = new CrudsDaoImpl<Referral>(dummyReferralData);
+    	final CrudsDao<Referral> referralCrudsDao = new CrudsDaoImpl<Referral>(hibernateBundle.getSessionFactory());
     	LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
     	final CrudsService<Referral> referralCrudsService = new CrudsServiceImpl<Referral>(referralCrudsDao);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());	    	
@@ -91,11 +117,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	HashMap<String, StaffPerson> dummyStaffPersonData = new HashMap<String, StaffPerson>();
-    	LOGGER.info("Dummy Data setup for {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final CrudsDao<StaffPerson> staffPersonCrudsDao = new CrudsDaoImpl<StaffPerson>(dummyStaffPersonData);
+    	final StaffPersonDao staffPersonDao = new StaffPersonDao(hibernateBundle.getSessionFactory());   //Generics.getTypeParameter(staffPersonCrudsDao.getClass())
     	LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final CrudsService<StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<StaffPerson>(staffPersonCrudsDao);
+    	final CrudsService<StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<StaffPerson>(staffPersonDao);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());		
     	final StaffPersonService staffPersonService = new StaffPersonServiceImpl(staffPersonCrudsService);
     	apiEnvironment.services().register(StaffPersonService.class, Api.Version.JSON_VERSION_1, staffPersonService);
