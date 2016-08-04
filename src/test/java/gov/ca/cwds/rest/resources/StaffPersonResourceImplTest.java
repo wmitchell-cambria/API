@@ -5,7 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.StaffPersonService;
 import gov.ca.cwds.rest.services.StaffPersonServiceImpl;

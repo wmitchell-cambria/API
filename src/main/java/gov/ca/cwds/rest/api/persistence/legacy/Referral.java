@@ -1,5 +1,6 @@
-package gov.ca.cwds.rest.api.persistence;
+package gov.ca.cwds.rest.api.persistence.legacy;
 
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @ApiModel
 public class Referral extends PersistentObject {
 
+	private String id;
 	private String referralName;
 	private Date receivedDate;
 
@@ -32,11 +34,26 @@ public class Referral extends PersistentObject {
 	public Referral(@JsonProperty("id") String id,
 			@JsonProperty("referralName") String referralName,
 			@JsonProperty("receivedDate") Date receivedDate) {
-		super(id);
+		this.id = id;
 		this.referralName = referralName;
 		this.receivedDate = receivedDate;
 	}
+	
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
+	 */
+	@Override
+	public String getPrimaryKey() {
+		return getId();
+	}
 
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	
 	/**
 	 * Get the name of the referral.
 	 *

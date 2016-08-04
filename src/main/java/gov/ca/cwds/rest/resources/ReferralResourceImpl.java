@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.swagger.annotations.ApiOperation;

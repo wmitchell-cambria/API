@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.jdbi;
 
 import org.hibernate.SessionFactory;
 
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 
 public class StaffPersonDao extends CrudsDaoImpl<StaffPerson> {
 

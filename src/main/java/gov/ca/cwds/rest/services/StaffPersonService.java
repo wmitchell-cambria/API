@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 
 /**
  * This business service provides transactional methods for manipulating

@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.services;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 
 import org.junit.Before;
 import org.junit.Test;

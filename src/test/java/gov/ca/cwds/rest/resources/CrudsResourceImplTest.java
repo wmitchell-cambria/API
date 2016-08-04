@@ -7,8 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
@@ -53,10 +52,6 @@ public class CrudsResourceImplTest {
 	
 	@Before
 	public void setup() {
-		when(referralService.findReferralSummary(ID_NOT_FOUND))
-				.thenReturn(null);
-		when(referralService.findReferralSummary(ID_FOUND)).thenReturn(
-				createReferralSummary());
 		when(referralService.find(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.find(ID_FOUND)).thenReturn(nonUniqueReferral);
 		when(referralService.delete(ID_NOT_FOUND)).thenReturn(null);
@@ -242,10 +237,6 @@ public class CrudsResourceImplTest {
 	/*
 	 * Helpers
 	 */
-	private static ReferralSummary createReferralSummary() {
-		return new ReferralSummary(ID_FOUND, "some name", new Date());
-	}
-
 	private static Referral createNonUniqueReferral() {
 		return new Referral(ID_FOUND, "some name", new Date());
 	}

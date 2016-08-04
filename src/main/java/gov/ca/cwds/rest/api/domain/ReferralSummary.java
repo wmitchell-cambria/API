@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
