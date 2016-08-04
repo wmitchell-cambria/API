@@ -1,12 +1,17 @@
-package gov.ca.cwds.rest.api.persistence;
+package gov.ca.cwds.rest.api.persistence.legacy;
 
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * {@link PersistentObject} representing a StaffPerson
@@ -18,6 +23,9 @@ import javax.persistence.Table;
 @ApiModel
 public class StaffPerson extends PersistentObject {
 
+	@Id
+	@Column(name = "IDENTIFIER")
+	private String id;
 	@Column(name = "END_DT")
 	private Date endDate;
 	@Column(name = "FIRST_NM")
@@ -64,42 +72,36 @@ public class StaffPerson extends PersistentObject {
 	private String emailAddress;
 
 	public StaffPerson() {
-		super(null);
+		super();
 	}
+	
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 * @param endDate
-	 * @param firstName
-	 * @param jobTitle
-	 * @param lastName
-	 * @param middleInitial
-	 * @param namePrefix
-	 * @param phoneNumber
-	 * @param phoneExt
-	 * @param startDate
-	 * @param sufxTldsc
-	 * @param tlcmtrInd
-	 * @param lastUpdatedId
-	 * @param lastUpdatedTime
-	 * @param fkcwsOfft
-	 * @param avlocDsc
-	 * @param ssrsWkrid
-	 * @param countySpfcd
-	 * @param dutyWorkerInd
-	 * @param fkcwsaddrt
-	 * @param emailAddress
-	 */
-	public StaffPerson(String id, Date endDate, String firstName,
-			String jobTitle, String lastName, String middleInitial,
-			String namePrefix, long phoneNumber, int phoneExt, Date startDate,
-			String sufxTldsc, String tlcmtrInd, String lastUpdatedId,
-			Date lastUpdatedTime, String fkcwsOfft, String avlocDsc,
-			String ssrsWkrid, String countySpfcd, String dutyWorkerInd,
-			String fkcwsaddrt, String emailAddress) {
-		super(id);
+
+	@JsonCreator
+	public StaffPerson(
+			@JsonProperty("id") String id, 
+			@JsonProperty("endDate") Date endDate, 
+			@JsonProperty("firstName") String firstName,
+			@JsonProperty("jobTitle") String jobTitle, 
+			@JsonProperty("lastName") String lastName, 
+			@JsonProperty("middleInitial") String middleInitial,
+			@JsonProperty("namePrefix") String namePrefix, 
+			@JsonProperty("phoneNumber") long phoneNumber, 
+			@JsonProperty("phoneExt") int phoneExt, 
+			@JsonProperty("startDate") Date startDate,
+			@JsonProperty("sufxTldsc") String sufxTldsc, 
+			@JsonProperty("tlcmtrInd") String tlcmtrInd, 
+			@JsonProperty("lastUpdatedId") String lastUpdatedId,
+			@JsonProperty("lastUpdatedTime") Date lastUpdatedTime, 
+			@JsonProperty("fkcwsOfft") String fkcwsOfft, 
+			@JsonProperty("avlocDsc") String avlocDsc,
+			@JsonProperty("ssrsWkrid") String ssrsWkrid, 
+			@JsonProperty("countySpfcd") String countySpfcd, 
+			@JsonProperty("dutyWorkerInd") String dutyWorkerInd,
+			@JsonProperty("fkcwsaddrt") String fkcwsaddrt, 
+			@JsonProperty("emailAddress") String emailAddress) {
+		super();
+		this.id = id;
 		this.endDate = endDate;
 		this.firstName = firstName;
 		this.jobTitle = jobTitle;
@@ -120,6 +122,21 @@ public class StaffPerson extends PersistentObject {
 		this.dutyWorkerInd = dutyWorkerInd;
 		this.fkcwsaddrt = fkcwsaddrt;
 		this.emailAddress = emailAddress;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
+	 */
+	@Override
+	public String getPrimaryKey() {
+		return getId();
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
 	}
 
 	/**

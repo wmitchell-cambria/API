@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ReferralService;

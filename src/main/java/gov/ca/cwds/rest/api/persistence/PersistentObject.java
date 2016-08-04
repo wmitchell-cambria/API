@@ -1,34 +1,27 @@
 package gov.ca.cwds.rest.api.persistence;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
- * Base class for objects in the persistence layer
+ * Base class for objects in the persistence layer.
  * 
  * @author CWDS API Team 
  */
 @MappedSuperclass
-public class PersistentObject {
+public abstract class PersistentObject {
 	
-	@Id
-	@Column(name = "IDENTIFIER")
-	private String id;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param id The id of the object
+	/*
+	 * There are no common elements across every persistent objects
 	 */
-	public PersistentObject(String id) {
-		this.id = id;
+
+	 protected PersistentObject() {
 	}
-	
+
 	/**
-	 * @return the id
+	 * @return the primaryKey
 	 */
-	public String getId() {
-		return id;
-	}
+	@JsonIgnore
+	public abstract String getPrimaryKey() ;
 }

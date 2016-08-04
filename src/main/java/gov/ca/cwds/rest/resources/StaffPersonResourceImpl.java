@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.services.StaffPersonService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.swagger.annotations.ApiOperation;

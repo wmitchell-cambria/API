@@ -98,7 +98,7 @@ public final class CrudsResourceImpl<T extends PersistentObject, S extends Servi
 			
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 	        URI referralUri = ub.
-	                    path(persistentObject.getId()).
+	                    path(persistentObject.getPrimaryKey()).
 	                    build();
 			return Response.status(Response.Status.CREATED).header("Location", referralUri.toASCIIString()).build();
 		} catch (ServiceException e) {
