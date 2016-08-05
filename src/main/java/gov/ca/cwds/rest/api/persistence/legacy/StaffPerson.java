@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,6 +28,7 @@ public class StaffPerson extends PersistentObject {
 	@Id
 	@Column(name = "IDENTIFIER")
 	private String id;
+	@Type(type = "date")
 	@Column(name = "END_DT")
 	private Date endDate;
 	@Column(name = "FIRST_NM")
@@ -43,6 +46,7 @@ public class StaffPerson extends PersistentObject {
 	private long phoneNumber;
 	@Column(name = "TEL_EXT_NO")
 	private int phoneExt;
+	@Type(type = "date")
 	@Column(name = "START_DT")
 	private Date startDate;
 	@Column(name = "SUFX_TLDSC")
@@ -50,9 +54,9 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "TLCMTR_IND")
 	private String tlcmtrInd;
 
-	//
 	@Column(name = "LST_UPD_ID")
 	private String lastUpdatedId;
+	@Type(type = "timestamp")
 	@Column(name = "LST_UPD_TS")
 	private Date lastUpdatedTime;
 
