@@ -101,10 +101,14 @@ public class ApiApplication extends Application<ApiConfiguration> {
         LOGGER.info("Registering Application Resources");
         registerResources(configuration, apiEnvironment);
 
+        LOGGER.info("Registering Health Checks");
+        registerHealthChecks(apiEnvironment);
+        
         LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
         configureCors(apiEnvironment);
-        
     }
+    
+    private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
     
     private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
