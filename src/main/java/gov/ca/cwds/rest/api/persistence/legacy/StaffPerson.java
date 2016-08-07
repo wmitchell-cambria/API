@@ -1,18 +1,28 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -24,55 +34,130 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(schema = "CWSINT", name = "STFPERST")
 @ApiModel
 public class StaffPerson extends PersistentObject {
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
+	private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
 	@Id
 	@Column(name = "IDENTIFIER")
+	@NotEmpty
+	@Length(min=3, max=3, message="length must be 3")
 	private String id;
+	
 	@Type(type = "date")
 	@Column(name = "END_DT")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
+	@JsonProperty(value="endDate")
 	private Date endDate;
+	
+	@Transient
+	@NotNull
+	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
+	private String endDateCooked;
+	
 	@Column(name = "FIRST_NM")
+	@NotEmpty
+	@Length(min=1, max=20)
 	private String firstName;
+	
 	@Column(name = "JOB_TL_DSC")
+	@NotEmpty
+	@Length(min=1, max=30)
 	private String jobTitle;
+	
 	@Column(name = "LAST_NM")
+	@NotEmpty
+	@Length(min=1, max=25)
 	private String lastName;
+	
+	@NotEmpty
+	@Length(min=1, max=1, message="length must be 1")
 	@Column(name = "MID_INI_NM")
 	private String middleInitial;
-
+	
 	@Column(name = "NMPRFX_DSC")
+	@NotEmpty
+	@Length(min=1, max=6)
 	private String namePrefix;
+	
 	@Column(name = "PHONE_NO")
-	private long phoneNumber;
+	@NotNull
+	private BigDecimal phoneNumber;
+	
 	@Column(name = "TEL_EXT_NO")
+	@NotNull
 	private int phoneExt;
+
 	@Type(type = "date")
 	@Column(name = "START_DT")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
+	@JsonProperty(value="startDate")
 	private Date startDate;
+	
+	@Transient
+	@NotNull
+	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
+	private String startDateCooked;
+	
 	@Column(name = "SUFX_TLDSC")
+	@NotEmpty
+	@Length(min=1, max=4)
 	private String sufxTldsc;
+	
 	@Column(name = "TLCMTR_IND")
+	@NotEmpty
+	@Length(min=1, max=1, message="length must be 1")
+	@OneOf(value = {"Y", "N"}, ignoreCase = true, ignoreWhitespace = true)
 	private String tlcmtrInd;
 
 	@Column(name = "LST_UPD_ID")
 	private String lastUpdatedId;
+	
 	@Type(type = "timestamp")
 	@Column(name = "LST_UPD_TS")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
 	private Date lastUpdatedTime;
+	
+	@Transient
+	@NotNull
+	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT)
+	private String lastUpdatedTimeCooked;
+	
 
 	@Column(name = "FKCWS_OFFT")
+	@NotEmpty
+	@Length(min=1, max=10)
 	private String fkcwsOfft;
+	
 	@Column(name = "AVLOC_DSC")
+	@NotEmpty
+	@Length(min=1, max=160)
 	private String avlocDsc;
+
 	@Column(name = "SSRS_WKRID")
+	@NotEmpty
+	@Length(min=1, max=4)
 	private String ssrsWkrid;
+	
 	@Column(name = "CNTY_SPFCD")
+	@NotEmpty
+	@Length(min=1, max=2)
 	private String countySpfcd;
+	
 	@Column(name = "DTYWKR_IND")
+	@NotEmpty
+	@Length(min=1, max=1, message="length must be 1")
+	@OneOf(value = {"Y", "N"}, ignoreCase = true, ignoreWhitespace = true)
 	private String dutyWorkerInd;
+	
 	@Column(name = "FKCWSADDRT")
+	@NotEmpty
+	@Length(min=1, max=10)
 	private String fkcwsaddrt;
+	
 	@Column(name = "EMAIL_ADDR")
+	@Length(min=1, max=50)
+	//NOTE : The legacy system doesn't seem to enforce valid email addresses
+	//@Email
 	private String emailAddress;
 
 	public StaffPerson() {
@@ -84,19 +169,19 @@ public class StaffPerson extends PersistentObject {
 	@JsonCreator
 	public StaffPerson(
 			@JsonProperty("id") String id, 
-			@JsonProperty("endDate") Date endDate, 
+			@JsonProperty("endDate") String endDateCooked, 
 			@JsonProperty("firstName") String firstName,
 			@JsonProperty("jobTitle") String jobTitle, 
 			@JsonProperty("lastName") String lastName, 
 			@JsonProperty("middleInitial") String middleInitial,
 			@JsonProperty("namePrefix") String namePrefix, 
-			@JsonProperty("phoneNumber") long phoneNumber, 
+			@JsonProperty("phoneNumber") BigDecimal phoneNumber, 
 			@JsonProperty("phoneExt") int phoneExt, 
-			@JsonProperty("startDate") Date startDate,
+			@JsonProperty("startDate") String startDateCooked,
 			@JsonProperty("sufxTldsc") String sufxTldsc, 
 			@JsonProperty("tlcmtrInd") String tlcmtrInd, 
 			@JsonProperty("lastUpdatedId") String lastUpdatedId,
-			@JsonProperty("lastUpdatedTime") Date lastUpdatedTime, 
+			@JsonProperty("lastUpdatedTime") String lastUpdatedTimeCooked, 
 			@JsonProperty("fkcwsOfft") String fkcwsOfft, 
 			@JsonProperty("avlocDsc") String avlocDsc,
 			@JsonProperty("ssrsWkrid") String ssrsWkrid, 
@@ -105,8 +190,9 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("fkcwsaddrt") String fkcwsaddrt, 
 			@JsonProperty("emailAddress") String emailAddress) {
 		super();
+		DateFormat df = new SimpleDateFormat(DATE_FORMAT);
 		this.id = id;
-		this.endDate = endDate;
+		
 		this.firstName = firstName;
 		this.jobTitle = jobTitle;
 		this.lastName = lastName;
@@ -114,11 +200,19 @@ public class StaffPerson extends PersistentObject {
 		this.namePrefix = namePrefix;
 		this.phoneNumber = phoneNumber;
 		this.phoneExt = phoneExt;
-		this.startDate = startDate;
+		this.endDateCooked = endDateCooked;
+		//we are validating this.startDate so we can swallow this ParseException - should never happen
+		try { this.endDate = df.parse(endDateCooked); } catch (ParseException e) {}
+
+		this.startDateCooked = startDateCooked;
+		//we are validating this.startDate so we can swallow this ParseException - should never happen
+		try { this.startDate = df.parse(startDateCooked); } catch (ParseException e) {}
 		this.sufxTldsc = sufxTldsc;
 		this.tlcmtrInd = tlcmtrInd;
 		this.lastUpdatedId = lastUpdatedId;
-		this.lastUpdatedTime = lastUpdatedTime;
+		this.lastUpdatedTimeCooked = lastUpdatedTimeCooked;
+		//we are validating this.startDate so we can swallow this ParseException - should never happen
+		try { this.lastUpdatedTime = df.parse(lastUpdatedTimeCooked); } catch (ParseException e) {}
 		this.fkcwsOfft = fkcwsOfft;
 		this.avlocDsc = avlocDsc;
 		this.ssrsWkrid = ssrsWkrid;
@@ -188,7 +282,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the phoneNumber
 	 */
-	public long getPhoneNumber() {
+	public BigDecimal getPhoneNumber() {
 		return phoneNumber;
 	}
 
@@ -200,7 +294,7 @@ public class StaffPerson extends PersistentObject {
 	}
 
 	/**
-	 * @return the startDate
+	 * @return the startDateCooked
 	 */
 	public Date getStartDate() {
 		return startDate;
