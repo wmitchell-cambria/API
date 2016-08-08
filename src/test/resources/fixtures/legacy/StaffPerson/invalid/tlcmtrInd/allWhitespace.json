@@ -17,7 +17,7 @@
   "avlocDsc": "abc",
   "ssrsWkrid": "def",
   "countySpfcd": "99",
-  "dutyWorkerInd": "N",
+  "dutyWorkerInd": false,
   "fkcwsaddrt": "3XPCP92b24",
   "emailAddress": "john.doe@anyco.com"
 }
