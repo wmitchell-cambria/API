@@ -404,7 +404,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -412,7 +412,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -420,7 +420,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
@@ -428,43 +428,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/allWhitespace.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd must be one of [Y, N]"), is(greaterThanOrEqualTo(0)));
-	}
-	
-	@Test
-	public void failsWhenTlcmtrIndTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/tooLong.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd length must be 1"), is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void succeedsWhenTlcmtrIndIsY() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/tlcmtrInd/Y.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
-	}
-	
-	@Test
-	public void succeedsWhenTlcmtrIndIsN() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/tlcmtrInd/N.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
-	}
-
-	@Test
-	public void succeedsWhenTlcmtrIndIsSmallY() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/tlcmtrInd/smallY.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
-	}
-	
-	@Test
-	public void succeedsWhenTlcmtrIndIsSmallN() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/tlcmtrInd/smallN.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
+		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -677,7 +641,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -685,7 +649,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -693,7 +657,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
@@ -701,45 +665,9 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/allWhitespace.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd must be one of [Y, N]"), is(greaterThanOrEqualTo(0)));
-	}
-	
-	@Test
-	public void failsWhenDutyWorkerIndTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/tooLong.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd length must be 1"), is(greaterThanOrEqualTo(0)));
-	}
-	
-	@Test
-	public void succeedsWhenDutyWorkerIndIsY() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/dutyWorkerInd/Y.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
-	}
-	
-	@Test
-	public void succeedsWhenDutyWorkerIndIsN() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/dutyWorkerInd/N.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
-	@Test
-	public void succeedsWhenDutyWorkerIndIsSmallY() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/dutyWorkerInd/smallY.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
-	}
-	
-	@Test
-	public void succeedsWhenDutyWorkerIndIsSmallN() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/dutyWorkerInd/smallN.json"), StaffPerson.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(204)));
-	}
-	
 	/*
 	 * fkcwsaddrt tests 
 	 */	
@@ -801,14 +729,14 @@ public class StaffPersonTest {
 				22,
 				"2001-01-02",
 				"sufx",
-				"Y",
+				true,
 				"q38",
 				"2016-08-07-16.41.49.214",
 				"MIZN02k11B",
 				"abc",
 				"def",
 				"99",
-				"N",
+				false,
 				"3XPCP92b24",
 				"john.doe@anyco.com"
 				);

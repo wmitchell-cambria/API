@@ -1,12 +1,10 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -102,12 +100,13 @@ public class StaffPerson extends PersistentObject {
 	@Length(min=1, max=4)
 	private String sufxTldsc;
 	
-	@Column(name = "TLCMTR_IND")
-	@NotEmpty
-	@Length(min=1, max=1, message="length must be 1")
-	@OneOf(value = {"Y", "N"}, ignoreCase = true, ignoreWhitespace = true)
-	private String tlcmtrInd;
+	@NotNull
+	@Transient
+	private Boolean tlcmtrInd;
 
+	@Column(name = "TLCMTR_IND")
+	private String tlcmtrIndPersistable;
+	
 	@Column(name = "LST_UPD_ID")
 	@NotEmpty
 	@Length(min=1, max=3)
@@ -143,11 +142,12 @@ public class StaffPerson extends PersistentObject {
 	@Length(min=1, max=2)
 	private String countySpfcd;
 	
+	@NotNull
+	@Transient
+	private Boolean dutyWorkerInd;
+
 	@Column(name = "DTYWKR_IND")
-	@NotEmpty
-	@Length(min=1, max=1, message="length must be 1")
-	@OneOf(value = {"Y", "N"}, ignoreCase = true, ignoreWhitespace = true)
-	private String dutyWorkerInd;
+	private String dutyWorkerIndPersistable;
 	
 	@Column(name = "FKCWSADDRT")
 	@NotEmpty
@@ -177,14 +177,14 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("phoneExt") int phoneExt, 
 			@JsonProperty("startDate") String startDate,
 			@JsonProperty("sufxTldsc") String sufxTldsc, 
-			@JsonProperty("tlcmtrInd") String tlcmtrInd, 
+			@JsonProperty("tlcmtrInd") Boolean tlcmtrInd, 
 			@JsonProperty("lastUpdatedId") String lastUpdatedId,
 			@JsonProperty("lastUpdatedTime") String lastUpdatedTime, 
 			@JsonProperty("fkcwsOfft") String fkcwsOfft, 
 			@JsonProperty("avlocDsc") String avlocDsc,
 			@JsonProperty("ssrsWkrid") String ssrsWkrid, 
 			@JsonProperty("countySpfcd") String countySpfcd, 
-			@JsonProperty("dutyWorkerInd") String dutyWorkerInd,
+			@JsonProperty("dutyWorkerInd") Boolean dutyWorkerInd,
 			@JsonProperty("fkcwsaddrt") String fkcwsaddrt, 
 			@JsonProperty("emailAddress") String emailAddress) {
 		super();
@@ -209,6 +209,7 @@ public class StaffPerson extends PersistentObject {
 		try { this.startDatePersistable = dateFormat.parse(startDate); } catch (Throwable e) {}
 		this.sufxTldsc = sufxTldsc;
 		this.tlcmtrInd = tlcmtrInd;
+		this.tlcmtrIndPersistable = persistableBoolean(tlcmtrInd);
 		this.lastUpdatedId = lastUpdatedId;
 		this.lastUpdatedTime = lastUpdatedTime;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
@@ -218,6 +219,7 @@ public class StaffPerson extends PersistentObject {
 		this.ssrsWkrid = ssrsWkrid;
 		this.countySpfcd = countySpfcd;
 		this.dutyWorkerInd = dutyWorkerInd;
+		this.dutyWorkerIndPersistable = persistableBoolean(dutyWorkerInd);
 		this.fkcwsaddrt = fkcwsaddrt;
 		this.emailAddress = emailAddress;
 	}
@@ -310,8 +312,8 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the tlcmtrInd
 	 */
-	public String getTlcmtrInd() {
-		return tlcmtrInd;
+	public Boolean getTlcmtrInd() {
+		return super.cookedBoolean(tlcmtrInd, tlcmtrIndPersistable);
 	}
 
 	/**
@@ -359,8 +361,8 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the dutyWorkerInd
 	 */
-	public String getDutyWorkerInd() {
-		return dutyWorkerInd;
+	public Boolean getDutyWorkerInd() {
+		return super.cookedBoolean(dutyWorkerInd, dutyWorkerIndPersistable);
 	}
 
 	/**

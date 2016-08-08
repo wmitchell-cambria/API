@@ -10,14 +10,14 @@
   "phoneExt": 22,
   "startDate": "2001-01-02",
   "sufxTldsc": "toolong",
-  "tlcmtrInd": "Y",
+  "tlcmtrInd": true,
   "lastUpdatedId": "q38",
   "lastUpdatedTime": "2016-08-07-16.41.49.214",
   "fkcwsOfft": "MIZN02k11B",
   "avlocDsc": "abc",
   "ssrsWkrid": "def",
   "countySpfcd": "99",
-  "dutyWorkerInd": "N",
+  "dutyWorkerInd": false,
   "fkcwsaddrt": "3XPCP92b24",
   "emailAddress": "john.doe@anyco.com"
 }

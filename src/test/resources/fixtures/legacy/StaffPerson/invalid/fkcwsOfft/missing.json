@@ -10,13 +10,13 @@
   "phoneExt": 22,
   "startDate": "2001-01-02",
   "sufxTldsc": "sufx",
-  "tlcmtrInd": "Y",
+  "tlcmtrInd": true,
   "lastUpdatedId": "q38",
   "lastUpdatedTime": "2016-08-07-16.41.49.214",
   "avlocDsc": "abc",
   "ssrsWkrid": "def",
   "countySpfcd": "99",
-  "dutyWorkerInd": "N",
+  "dutyWorkerInd": false,
   "fkcwsaddrt": "3XPCP92b24",
   "emailAddress": "john.doe@anyco.com"
 }
