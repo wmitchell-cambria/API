@@ -29,8 +29,8 @@ public @interface Date {
     
     Class<? extends Payload>[] payload() default {};
     
-    /**
-     * The set of valid values.
-     */
     String format() default "MM/dd/yyyy";
+
+    boolean required() default true;
+
 }
