@@ -43,15 +43,15 @@ public class StaffPerson extends PersistentObject {
 	@Length(min=3, max=3, message="length must be 3")
 	private String id;
 	
-	@Type(type = "date")
-	@Column(name = "END_DT")
+	@Transient
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="endDate")
-	private Date endDate;
-	
-	@Transient
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
-	private String endDateCooked;
+	private String endDate;
+
+	@Type(type = "date")
+	@Column(name = "END_DT")
+	private Date endDatePersistable;
 	
 	@Column(name = "FIRST_NM")
 	@NotEmpty
@@ -83,19 +83,18 @@ public class StaffPerson extends PersistentObject {
 	private BigDecimal phoneNumber;
 	
 	@Column(name = "TEL_EXT_NO")
-	@NotNull
-	private int phoneExt;
+	private int phoneExt = 0;
 
 	@Type(type = "date")
 	@Column(name = "START_DT")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
-	@JsonProperty(value="startDate")
-	private Date startDate;
+	private Date startDatePersistable;
 	
 	@Transient
 	@NotNull
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
-	private String startDateCooked;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
+	@JsonProperty(value="startDate")
+	private String startDate;
 	
 	@Column(name = "SUFX_TLDSC")
 	@NotEmpty
@@ -113,15 +112,15 @@ public class StaffPerson extends PersistentObject {
 	@Length(min=1, max=3)
 	private String lastUpdatedId;
 	
-	@Type(type = "timestamp")
-	@Column(name = "LST_UPD_TS")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
-	private Date lastUpdatedTime;
-	
 	@Transient
 	@NotNull
-	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT)
-	private String lastUpdatedTimeCooked;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
+	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=true)
+	private String lastUpdatedTime;
+	
+	@Type(type = "timestamp")
+	@Column(name = "LST_UPD_TS")	
+	private Date lastUpdatedTimePersistable;
 	
 	@Column(name = "FKCWS_OFFT")
 	@NotEmpty
@@ -167,7 +166,7 @@ public class StaffPerson extends PersistentObject {
 	@JsonCreator
 	public StaffPerson(
 			@JsonProperty("id") String id, 
-			@JsonProperty("endDate") String endDateCooked, 
+			@JsonProperty("endDate") String endDate, 
 			@JsonProperty("firstName") String firstName,
 			@JsonProperty("jobTitle") String jobTitle, 
 			@JsonProperty("lastName") String lastName, 
@@ -175,11 +174,11 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("namePrefix") String namePrefix, 
 			@JsonProperty("phoneNumber") BigDecimal phoneNumber, 
 			@JsonProperty("phoneExt") int phoneExt, 
-			@JsonProperty("startDate") String startDateCooked,
+			@JsonProperty("startDate") String startDate,
 			@JsonProperty("sufxTldsc") String sufxTldsc, 
 			@JsonProperty("tlcmtrInd") String tlcmtrInd, 
 			@JsonProperty("lastUpdatedId") String lastUpdatedId,
-			@JsonProperty("lastUpdatedTime") String lastUpdatedTimeCooked, 
+			@JsonProperty("lastUpdatedTime") String lastUpdatedTime, 
 			@JsonProperty("fkcwsOfft") String fkcwsOfft, 
 			@JsonProperty("avlocDsc") String avlocDsc,
 			@JsonProperty("ssrsWkrid") String ssrsWkrid, 
@@ -198,20 +197,19 @@ public class StaffPerson extends PersistentObject {
 		this.namePrefix = namePrefix;
 		this.phoneNumber = phoneNumber;
 		this.phoneExt = phoneExt;
-		this.endDateCooked = endDateCooked;
+		this.endDate = endDate;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		
-		try { this.endDate = df.parse(endDateCooked); } catch (Throwable e) {}
+		try { this.endDatePersistable = df.parse(endDate); } catch (Throwable e) {}
 
-		this.startDateCooked = startDateCooked;
+		this.startDate = startDate;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.startDate = df.parse(startDateCooked); } catch (Throwable e) {}
+		try { this.startDatePersistable = df.parse(startDate); } catch (Throwable e) {}
 		this.sufxTldsc = sufxTldsc;
 		this.tlcmtrInd = tlcmtrInd;
 		this.lastUpdatedId = lastUpdatedId;
-		this.lastUpdatedTimeCooked = lastUpdatedTimeCooked;
+		this.lastUpdatedTime = lastUpdatedTime;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.lastUpdatedTime = df.parse(lastUpdatedTimeCooked); } catch (ParseException e) {}
+		try { this.lastUpdatedTimePersistable = df.parse(lastUpdatedTime); } catch (Throwable e) {}
 		this.fkcwsOfft = fkcwsOfft;
 		this.avlocDsc = avlocDsc;
 		this.ssrsWkrid = ssrsWkrid;
@@ -260,7 +258,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the endDate
 	 */
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
@@ -293,12 +291,12 @@ public class StaffPerson extends PersistentObject {
 	}
 
 	/**
-	 * @return the startDateCooked
+	 * @return the startDate
 	 */
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
-
+	
 	/**
 	 * @return the sufxTldsc
 	 */
@@ -323,7 +321,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastUpdatedTime
 	 */
-	public Date getLastUpdatedTime() {
+	public String getLastUpdatedTime() {
 		return lastUpdatedTime;
 	}
 
@@ -395,8 +393,6 @@ public class StaffPerson extends PersistentObject {
 				+ ((emailAddress == null) ? 0 : emailAddress.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
-				+ ((endDateCooked == null) ? 0 : endDateCooked.hashCode());
-		result = prime * result
 				+ ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result
 				+ ((fkcwsOfft == null) ? 0 : fkcwsOfft.hashCode());
@@ -411,10 +407,6 @@ public class StaffPerson extends PersistentObject {
 				+ ((lastUpdatedId == null) ? 0 : lastUpdatedId.hashCode());
 		result = prime * result
 				+ ((lastUpdatedTime == null) ? 0 : lastUpdatedTime.hashCode());
-		result = prime
-				* result
-				+ ((lastUpdatedTimeCooked == null) ? 0 : lastUpdatedTimeCooked
-						.hashCode());
 		result = prime * result
 				+ ((middleInitial == null) ? 0 : middleInitial.hashCode());
 		result = prime * result
@@ -426,8 +418,6 @@ public class StaffPerson extends PersistentObject {
 				+ ((ssrsWkrid == null) ? 0 : ssrsWkrid.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
-		result = prime * result
-				+ ((startDateCooked == null) ? 0 : startDateCooked.hashCode());
 		result = prime * result
 				+ ((sufxTldsc == null) ? 0 : sufxTldsc.hashCode());
 		result = prime * result
@@ -474,11 +464,6 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!endDate.equals(other.endDate))
 			return false;
-		if (endDateCooked == null) {
-			if (other.endDateCooked != null)
-				return false;
-		} else if (!endDateCooked.equals(other.endDateCooked))
-			return false;
 		if (firstName == null) {
 			if (other.firstName != null)
 				return false;
@@ -519,11 +504,6 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!lastUpdatedTime.equals(other.lastUpdatedTime))
 			return false;
-		if (lastUpdatedTimeCooked == null) {
-			if (other.lastUpdatedTimeCooked != null)
-				return false;
-		} else if (!lastUpdatedTimeCooked.equals(other.lastUpdatedTimeCooked))
-			return false;
 		if (middleInitial == null) {
 			if (other.middleInitial != null)
 				return false;
@@ -551,10 +531,10 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!startDate.equals(other.startDate))
 			return false;
-		if (startDateCooked == null) {
-			if (other.startDateCooked != null)
+		if (startDate == null) {
+			if (other.startDate != null)
 				return false;
-		} else if (!startDateCooked.equals(other.startDateCooked))
+		} else if (!startDate.equals(other.startDate))
 			return false;
 		if (sufxTldsc == null) {
 			if (other.sufxTldsc != null)
