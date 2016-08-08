@@ -24,6 +24,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Strings;
 
 /**
  * {@link PersistentObject} representing a StaffPerson
@@ -261,7 +262,7 @@ public class StaffPerson extends PersistentObject {
 	 * @return the endDate
 	 */
 	public String getEndDate() {
-		return endDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(endDatePersistable)) : "";
+		return !Strings.isNullOrEmpty(endDate) ? endDate : endDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(endDatePersistable)) : "";
 	}
 
 	/**
@@ -296,7 +297,7 @@ public class StaffPerson extends PersistentObject {
 	 * @return the startDate
 	 */
 	public String getStartDate() {
-		return startDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(startDatePersistable)) : "";
+		return !Strings.isNullOrEmpty(startDate) ? startDate : startDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(startDatePersistable)) : "";
 	}
 	
 	/**
@@ -324,7 +325,7 @@ public class StaffPerson extends PersistentObject {
 	 * @return the lastUpdatedTime
 	 */
 	public String getLastUpdatedTime() {
-		return lastUpdatedTimePersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
+		return !Strings.isNullOrEmpty(lastUpdatedTime) ? lastUpdatedTime : lastUpdatedTimePersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
 	}
 
 	/**

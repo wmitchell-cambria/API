@@ -27,7 +27,7 @@ public class DateValidator implements ConstraintValidator<Date, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         DateFormat df = new SimpleDateFormat(format);
-        if( required ||  !Strings.isNullOrEmpty(value) ) {
+        if( required || !Strings.isNullOrEmpty(value)) {
         	try {
 				df.parse(value);
 			} catch (ParseException e) {
