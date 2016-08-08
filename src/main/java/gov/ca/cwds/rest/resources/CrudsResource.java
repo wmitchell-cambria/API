@@ -84,6 +84,7 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	@POST
 	@UnitOfWork
 	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
 			@ApiResponse(code = 409, message = "Conflict - already exists"),
 			@ApiResponse(code = 422, message = "Unable to process entity")
@@ -104,6 +105,7 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	@PUT
 	@UnitOfWork
 	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 404, message = "not found"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
 			@ApiResponse(code = 422, message = "Unable to process entity")
