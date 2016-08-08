@@ -10,6 +10,8 @@ import javax.validation.ConstraintValidatorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 public class DateValidator implements ConstraintValidator<Date, String> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DateValidator.class);
 	
@@ -25,7 +27,7 @@ public class DateValidator implements ConstraintValidator<Date, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         DateFormat df = new SimpleDateFormat(format);
-        if( required ||  value != null) {
+        if( required ||  !Strings.isNullOrEmpty(value) ) {
         	try {
 				df.parse(value);
 			} catch (ParseException e) {

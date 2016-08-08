@@ -187,7 +187,9 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("fkcwsaddrt") String fkcwsaddrt, 
 			@JsonProperty("emailAddress") String emailAddress) {
 		super();
-		DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		DateFormat timestampFormat = new SimpleDateFormat(TIMESTAMP_FORMAT);
+		
 		this.id = id;
 		
 		this.firstName = firstName;
@@ -199,17 +201,17 @@ public class StaffPerson extends PersistentObject {
 		this.phoneExt = phoneExt;
 		this.endDate = endDate;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.endDatePersistable = df.parse(endDate); } catch (Throwable e) {}
+		try { this.endDatePersistable = dateFormat.parse(endDate); } catch (Throwable e) {}
 
 		this.startDate = startDate;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.startDatePersistable = df.parse(startDate); } catch (Throwable e) {}
+		try { this.startDatePersistable = dateFormat.parse(startDate); } catch (Throwable e) {}
 		this.sufxTldsc = sufxTldsc;
 		this.tlcmtrInd = tlcmtrInd;
 		this.lastUpdatedId = lastUpdatedId;
 		this.lastUpdatedTime = lastUpdatedTime;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.lastUpdatedTimePersistable = df.parse(lastUpdatedTime); } catch (Throwable e) {}
+		try { this.lastUpdatedTimePersistable = timestampFormat.parse(lastUpdatedTime); } catch (Throwable e) {}
 		this.fkcwsOfft = fkcwsOfft;
 		this.avlocDsc = avlocDsc;
 		this.ssrsWkrid = ssrsWkrid;
@@ -259,7 +261,7 @@ public class StaffPerson extends PersistentObject {
 	 * @return the endDate
 	 */
 	public String getEndDate() {
-		return endDate;
+		return endDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(endDatePersistable)) : "";
 	}
 
 	/**
@@ -294,7 +296,7 @@ public class StaffPerson extends PersistentObject {
 	 * @return the startDate
 	 */
 	public String getStartDate() {
-		return startDate;
+		return startDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(startDatePersistable)) : "";
 	}
 	
 	/**
@@ -322,7 +324,7 @@ public class StaffPerson extends PersistentObject {
 	 * @return the lastUpdatedTime
 	 */
 	public String getLastUpdatedTime() {
-		return lastUpdatedTime;
+		return lastUpdatedTimePersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
 	}
 
 	/**

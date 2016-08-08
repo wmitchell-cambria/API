@@ -118,6 +118,20 @@ public class StaffPersonTest {
 	 * endDate tests
 	 */
 	@Test
+	public void successWhenEndDateEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/endDate/empty.json"), StaffPerson.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void successWhenEndDateNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/endDate/null.json"), StaffPerson.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
 	public void failsWhenEndDateWrongFormat() throws Exception {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/endDate/wrongFormat.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
