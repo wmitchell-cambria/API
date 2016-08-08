@@ -342,7 +342,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/startDate/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("startDate may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("startDate must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -350,7 +350,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/startDate/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("startDate may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("startDate must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -475,7 +475,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/lastUpdatedTime/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -483,7 +483,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/lastUpdatedTime/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
