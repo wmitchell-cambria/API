@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.api.persistence.legacy;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -34,8 +35,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(schema = "CWSINT", name = "STFPERST")
 @ApiModel
 public class StaffPerson extends PersistentObject {
-	private static final String DATE_FORMAT = "yyyy-MM-dd";
-	private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
+	protected static final String DATE_FORMAT = "yyyy-MM-dd";
+	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
 	@Id
 	@Column(name = "IDENTIFIER")
@@ -164,8 +165,6 @@ public class StaffPerson extends PersistentObject {
 		super();
 	}
 	
-
-
 	@JsonCreator
 	public StaffPerson(
 			@JsonProperty("id") String id, 
@@ -376,4 +375,199 @@ public class StaffPerson extends PersistentObject {
 	public String getEmailAddress() {
 		return emailAddress;
 	}
+
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((avlocDsc == null) ? 0 : avlocDsc.hashCode());
+		result = prime * result
+				+ ((countySpfcd == null) ? 0 : countySpfcd.hashCode());
+		result = prime * result
+				+ ((dutyWorkerInd == null) ? 0 : dutyWorkerInd.hashCode());
+		result = prime * result
+				+ ((emailAddress == null) ? 0 : emailAddress.hashCode());
+		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result
+				+ ((endDateCooked == null) ? 0 : endDateCooked.hashCode());
+		result = prime * result
+				+ ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result
+				+ ((fkcwsOfft == null) ? 0 : fkcwsOfft.hashCode());
+		result = prime * result
+				+ ((fkcwsaddrt == null) ? 0 : fkcwsaddrt.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((jobTitle == null) ? 0 : jobTitle.hashCode());
+		result = prime * result
+				+ ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result
+				+ ((lastUpdatedId == null) ? 0 : lastUpdatedId.hashCode());
+		result = prime * result
+				+ ((lastUpdatedTime == null) ? 0 : lastUpdatedTime.hashCode());
+		result = prime
+				* result
+				+ ((lastUpdatedTimeCooked == null) ? 0 : lastUpdatedTimeCooked
+						.hashCode());
+		result = prime * result
+				+ ((middleInitial == null) ? 0 : middleInitial.hashCode());
+		result = prime * result
+				+ ((namePrefix == null) ? 0 : namePrefix.hashCode());
+		result = prime * result + phoneExt;
+		result = prime * result
+				+ ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result
+				+ ((ssrsWkrid == null) ? 0 : ssrsWkrid.hashCode());
+		result = prime * result
+				+ ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result
+				+ ((startDateCooked == null) ? 0 : startDateCooked.hashCode());
+		result = prime * result
+				+ ((sufxTldsc == null) ? 0 : sufxTldsc.hashCode());
+		result = prime * result
+				+ ((tlcmtrInd == null) ? 0 : tlcmtrInd.hashCode());
+		return result;
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StaffPerson other = (StaffPerson) obj;
+		if (avlocDsc == null) {
+			if (other.avlocDsc != null)
+				return false;
+		} else if (!avlocDsc.equals(other.avlocDsc))
+			return false;
+		if (countySpfcd == null) {
+			if (other.countySpfcd != null)
+				return false;
+		} else if (!countySpfcd.equals(other.countySpfcd))
+			return false;
+		if (dutyWorkerInd == null) {
+			if (other.dutyWorkerInd != null)
+				return false;
+		} else if (!dutyWorkerInd.equals(other.dutyWorkerInd))
+			return false;
+		if (emailAddress == null) {
+			if (other.emailAddress != null)
+				return false;
+		} else if (!emailAddress.equals(other.emailAddress))
+			return false;
+		if (endDate == null) {
+			if (other.endDate != null)
+				return false;
+		} else if (!endDate.equals(other.endDate))
+			return false;
+		if (endDateCooked == null) {
+			if (other.endDateCooked != null)
+				return false;
+		} else if (!endDateCooked.equals(other.endDateCooked))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (fkcwsOfft == null) {
+			if (other.fkcwsOfft != null)
+				return false;
+		} else if (!fkcwsOfft.equals(other.fkcwsOfft))
+			return false;
+		if (fkcwsaddrt == null) {
+			if (other.fkcwsaddrt != null)
+				return false;
+		} else if (!fkcwsaddrt.equals(other.fkcwsaddrt))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (jobTitle == null) {
+			if (other.jobTitle != null)
+				return false;
+		} else if (!jobTitle.equals(other.jobTitle))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (lastUpdatedId == null) {
+			if (other.lastUpdatedId != null)
+				return false;
+		} else if (!lastUpdatedId.equals(other.lastUpdatedId))
+			return false;
+		if (lastUpdatedTime == null) {
+			if (other.lastUpdatedTime != null)
+				return false;
+		} else if (!lastUpdatedTime.equals(other.lastUpdatedTime))
+			return false;
+		if (lastUpdatedTimeCooked == null) {
+			if (other.lastUpdatedTimeCooked != null)
+				return false;
+		} else if (!lastUpdatedTimeCooked.equals(other.lastUpdatedTimeCooked))
+			return false;
+		if (middleInitial == null) {
+			if (other.middleInitial != null)
+				return false;
+		} else if (!middleInitial.equals(other.middleInitial))
+			return false;
+		if (namePrefix == null) {
+			if (other.namePrefix != null)
+				return false;
+		} else if (!namePrefix.equals(other.namePrefix))
+			return false;
+		if (phoneExt != other.phoneExt)
+			return false;
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null)
+				return false;
+		} else if (!phoneNumber.equals(other.phoneNumber))
+			return false;
+		if (ssrsWkrid == null) {
+			if (other.ssrsWkrid != null)
+				return false;
+		} else if (!ssrsWkrid.equals(other.ssrsWkrid))
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		if (startDateCooked == null) {
+			if (other.startDateCooked != null)
+				return false;
+		} else if (!startDateCooked.equals(other.startDateCooked))
+			return false;
+		if (sufxTldsc == null) {
+			if (other.sufxTldsc != null)
+				return false;
+		} else if (!sufxTldsc.equals(other.sufxTldsc))
+			return false;
+		if (tlcmtrInd == null) {
+			if (other.tlcmtrInd != null)
+				return false;
+		} else if (!tlcmtrInd.equals(other.tlcmtrInd))
+			return false;
+		return true;
+	}
+	
+	
 }
