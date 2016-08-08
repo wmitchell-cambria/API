@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.persistence.legacy;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -51,8 +50,7 @@ public class StaffPerson extends PersistentObject {
 	private Date endDate;
 	
 	@Transient
-	@NotNull
-	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
+	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
 	private String endDateCooked;
 	
 	@Column(name = "FIRST_NM")
@@ -111,6 +109,8 @@ public class StaffPerson extends PersistentObject {
 	private String tlcmtrInd;
 
 	@Column(name = "LST_UPD_ID")
+	@NotEmpty
+	@Length(min=1, max=3)
 	private String lastUpdatedId;
 	
 	@Type(type = "timestamp")
@@ -123,7 +123,6 @@ public class StaffPerson extends PersistentObject {
 	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT)
 	private String lastUpdatedTimeCooked;
 	
-
 	@Column(name = "FKCWS_OFFT")
 	@NotEmpty
 	@Length(min=1, max=10)
@@ -201,11 +200,12 @@ public class StaffPerson extends PersistentObject {
 		this.phoneExt = phoneExt;
 		this.endDateCooked = endDateCooked;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.endDate = df.parse(endDateCooked); } catch (ParseException e) {}
+		
+		try { this.endDate = df.parse(endDateCooked); } catch (Throwable e) {}
 
 		this.startDateCooked = startDateCooked;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.startDate = df.parse(startDateCooked); } catch (ParseException e) {}
+		try { this.startDate = df.parse(startDateCooked); } catch (Throwable e) {}
 		this.sufxTldsc = sufxTldsc;
 		this.tlcmtrInd = tlcmtrInd;
 		this.lastUpdatedId = lastUpdatedId;

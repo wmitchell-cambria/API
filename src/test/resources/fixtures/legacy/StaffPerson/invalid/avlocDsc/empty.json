@@ -1,0 +1,23 @@
+{
+  "id": "ABC",
+  "endDate": "2016-08-07",
+  "firstName": "John",
+  "jobTitle": "CEO",
+  "lastName": "Doe",
+  "middleInitial": "C",
+  "namePrefix": "Mr",
+  "phoneNumber": 9165551212,
+  "phoneExt": 22,
+  "startDate": "2001-01-02",
+  "sufxTldsc": "sufx",
+  "tlcmtrInd": "Y",
+  "lastUpdatedId": "q38",
+  "lastUpdatedTime": "2016-08-07-16.41.49.214",
+  "fkcwsOfft": "MIZN02k11B",
+  "avlocDsc": "",
+  "ssrsWkrid": "def",
+  "countySpfcd": "99",
+  "dutyWorkerInd": "N",
+  "fkcwsaddrt": "3XPCP92b24",
+  "emailAddress": "john.doe@anyco.com"
+}
