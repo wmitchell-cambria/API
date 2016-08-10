@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.api.persistence.legacy;
 
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -40,7 +41,7 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "IDENTIFIER")
 	@NotEmpty
 	@Length(min=3, max=3, message="length must be 3")
-	private String id;
+ 	private String id;
 	
 	@Transient
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
@@ -98,7 +99,7 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "SUFX_TLDSC")
 	@NotEmpty
 	@Length(min=1, max=4)
-	private String sufxTldsc;
+	private String nameSuffix;
 	
 	@NotNull
 	@Transient
@@ -176,7 +177,7 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("phoneNumber") BigDecimal phoneNumber, 
 			@JsonProperty("phoneExt") int phoneExt, 
 			@JsonProperty("startDate") String startDate,
-			@JsonProperty("sufxTldsc") String sufxTldsc, 
+			@JsonProperty("nameSuffix") String nameSuffix, 
 			@JsonProperty("tlcmtrInd") Boolean tlcmtrInd, 
 			@JsonProperty("lastUpdatedId") String lastUpdatedId,
 			@JsonProperty("lastUpdatedTime") String lastUpdatedTime, 
@@ -207,7 +208,7 @@ public class StaffPerson extends PersistentObject {
 		this.startDate = startDate;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
 		try { this.startDatePersistable = dateFormat.parse(startDate); } catch (Throwable e) {}
-		this.sufxTldsc = sufxTldsc;
+		this.nameSuffix = nameSuffix;
 		this.tlcmtrInd = tlcmtrInd;
 		this.tlcmtrIndPersistable = persistableBoolean(tlcmtrInd);
 		this.lastUpdatedId = lastUpdatedId;
@@ -235,6 +236,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the id
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be 3", example="abc")
 	public String getId() {
 		return id;
 	}
@@ -242,6 +244,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the firstName
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 20", example="John")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -249,6 +252,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastName
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 25", example="Smith")
 	public String getLastName() {
 		return lastName;
 	}
@@ -256,6 +260,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the middleInitial
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be 1", example="Q")
 	public String getMiddleInitial() {
 		return middleInitial;
 	}
@@ -263,6 +268,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the endDate
 	 */
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22")
 	public String getEndDate() {
 		return !Strings.isNullOrEmpty(endDate) ? endDate : endDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(endDatePersistable)) : "";
 	}
@@ -270,6 +276,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the jobTitle
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 30", example="Case Worker")
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -277,6 +284,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the namePrefix
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 6", example="MR.")
 	public String getNamePrefix() {
 		return namePrefix;
 	}
@@ -284,6 +292,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the phoneNumber
 	 */
+	@ApiModelProperty(required=true, readOnly=false, example="9165551212")
 	public BigDecimal getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -291,6 +300,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the phoneExt
 	 */
+	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public int getPhoneExt() {
 		return phoneExt;
 	}
@@ -298,20 +308,23 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the startDate
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="1963-11-22")
 	public String getStartDate() {
 		return !Strings.isNullOrEmpty(startDate) ? startDate : startDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(startDatePersistable)) : "";
 	}
 	
 	/**
-	 * @return the sufxTldsc
+	 * @return the nameSuffix
 	 */
-	public String getSufxTldsc() {
-		return sufxTldsc;
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 4", example="SR.")
+	public String getNameSuffix() {
+		return nameSuffix;
 	}
 
 	/**
 	 * @return the tlcmtrInd
 	 */
+	@ApiModelProperty(required=true, readOnly=false)
 	public Boolean getTlcmtrInd() {
 		return super.cookedBoolean(tlcmtrInd, tlcmtrIndPersistable);
 	}
@@ -319,6 +332,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastUpdatedId
 	 */
+	@ApiModelProperty(readOnly=true, value="remove this from view of client, generated at business layer")
 	public String getLastUpdatedId() {
 		return lastUpdatedId;
 	}
@@ -326,6 +340,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastUpdatedTime
 	 */
+	@ApiModelProperty(required=true, readOnly=true, value="remove from view of user", example="1963-11-22")
 	public String getLastUpdatedTime() {
 		return !Strings.isNullOrEmpty(lastUpdatedTime) ? lastUpdatedTime : lastUpdatedTimePersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
 	}
@@ -333,6 +348,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the fkcwsOfft
 	 */
+	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
 	public String getFkcwsOfft() {
 		return fkcwsOfft;
 	}
@@ -340,6 +356,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the avlocDsc
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 160", example="some free form text")
 	public String getAvlocDsc() {
 		return avlocDsc;
 	}
@@ -347,6 +364,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the ssrsWkrid
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 4", example="9021")
 	public String getSsrsWkrid() {
 		return ssrsWkrid;
 	}
@@ -354,6 +372,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the countySpfcd
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 2", example="13")
 	public String getCountySpfcd() {
 		return countySpfcd;
 	}
@@ -361,6 +380,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the dutyWorkerInd
 	 */
+	@ApiModelProperty(required=true, readOnly=false)
 	public Boolean getDutyWorkerInd() {
 		return super.cookedBoolean(dutyWorkerInd, dutyWorkerIndPersistable);
 	}
@@ -368,6 +388,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the fkcwsaddrt
 	 */
+	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWSADDRT", example="ghi")
 	public String getFkcwsaddrt() {
 		return fkcwsaddrt;
 	}
@@ -375,6 +396,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the emailAddress
 	 */
+	@ApiModelProperty(required=false, readOnly=false, value="must be valid email", example="john.q.smith@somedomain.com")
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -424,7 +446,7 @@ public class StaffPerson extends PersistentObject {
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result
-				+ ((sufxTldsc == null) ? 0 : sufxTldsc.hashCode());
+				+ ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
 		result = prime * result
 				+ ((tlcmtrInd == null) ? 0 : tlcmtrInd.hashCode());
 		return result;
@@ -541,10 +563,10 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!startDate.equals(other.startDate))
 			return false;
-		if (sufxTldsc == null) {
-			if (other.sufxTldsc != null)
+		if (nameSuffix == null) {
+			if (other.nameSuffix != null)
 				return false;
-		} else if (!sufxTldsc.equals(other.sufxTldsc))
+		} else if (!nameSuffix.equals(other.nameSuffix))
 			return false;
 		if (tlcmtrInd == null) {
 			if (other.tlcmtrInd != null)

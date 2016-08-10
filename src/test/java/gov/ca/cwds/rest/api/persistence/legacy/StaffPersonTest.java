@@ -362,38 +362,38 @@ public class StaffPersonTest {
 	}
 	
 	/*
-	 * sufxTldsc tests 
+	 * nameSuffix tests 
 	 */	
 	@Test
-	public void failsWhenSufxTldscMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/sufxTldsc/missing.json"), StaffPerson.class);
+	public void failsWhenNameSuffixMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/nameSuffix/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("sufxTldsc may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("nameSuffix may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenSufxTldscEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/sufxTldsc/empty.json"), StaffPerson.class);
+	public void failsWhenNameSuffixEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/nameSuffix/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("sufxTldsc may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("nameSuffix may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenSufxTldscNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/sufxTldsc/null.json"), StaffPerson.class);
+	public void failsWhenNameSuffixNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/nameSuffix/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("sufxTldsc may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("nameSuffix may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenSufxTldscTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/sufxTldsc/tooLong.json"), StaffPerson.class);
+	public void failsWhenNameSuffixTooLong() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/nameSuffix/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("sufxTldsc length must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("nameSuffix length must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
