@@ -8,7 +8,7 @@
   "namePrefix": "Mr",
   "phoneExt": 22,
   "startDate": "2001-01-02",
-  "sufxTldsc": "sufx",
+  "nameSuffix": "sufx",
   "tlcmtrInd": true,
   "lastUpdatedId": "q38",
   "lastUpdatedTime": "2016-08-07-16.41.49.214",
