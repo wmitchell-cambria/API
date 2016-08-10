@@ -11,7 +11,7 @@ project.ext {
     dropwizardVersion = "1.0.0-rc4"
 	dropwizardFlywayVersion = "1.0.0-rc3-2"
 	metricsVersion = "3.1.0"
-	dropwizardSwaggerVersion = "1.0.0-rc4-2"
+	dropwizardSwaggerVersion = "1.0.0-1"
 	mainclass = "gov.ca.cwds.rest.ApiApplication" 
 }
 
@@ -42,7 +42,6 @@ dependencies {
 
     testCompile "junit:junit:4.12"
     compile 'org.mockito:mockito-core:2.0.54-beta'
-	// https://mvnrepository.com/artifact/org.hamcrest/hamcrest-junit
 	compile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
 	
 }
