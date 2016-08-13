@@ -103,7 +103,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/id/tooShort.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("id length must be 3"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("id size must be 3"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/id/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("id length must be 3"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("id size must be 3"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -171,7 +171,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/firstName/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("firstName length must be between 1 and 20"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("firstName size must be between 1 and 20"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -206,7 +206,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/jobTitle/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("jobTitle length must be between 1 and 30"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("jobTitle size must be between 1 and 30"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -241,7 +241,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/lastName/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastName length must be between 1 and 25"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("lastName size must be between 1 and 25"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	
@@ -277,7 +277,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/middleInitial/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("middleInitial length must be 1"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("middleInitial size must be 1"), is(greaterThanOrEqualTo(0)));
 	}
 
 	/*
@@ -312,7 +312,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/namePrefix/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("namePrefix length must be between 1 and 6"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("namePrefix size must be between 1 and 6"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -393,7 +393,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/nameSuffix/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("nameSuffix length must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("nameSuffix size must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -490,7 +490,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/lastUpdatedId/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedId length must be between 1 and 3"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("lastUpdatedId size must be between 1 and 3"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -525,7 +525,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsOfft/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsOfft length must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("fkcwsOfft size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -560,7 +560,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/avlocDsc/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("avlocDsc length must be between 1 and 160"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("avlocDsc size must be between 1 and 160"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -595,7 +595,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsWkrid/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("ssrsWkrid length must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("ssrsWkrid size must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -630,7 +630,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countySpfcd/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("countySpfcd length must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("countySpfcd size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -700,7 +700,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsaddrt/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsaddrt length must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("fkcwsaddrt size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -711,7 +711,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/emailAddress/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("emailAddress length must be between 1 and 50"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("emailAddress size must be between 1 and 50"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*

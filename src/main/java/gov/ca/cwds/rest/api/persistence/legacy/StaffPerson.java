@@ -1,9 +1,5 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,15 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link PersistentObject} representing a StaffPerson
@@ -40,7 +40,7 @@ public class StaffPerson extends PersistentObject {
 	@Id
 	@Column(name = "IDENTIFIER")
 	@NotEmpty
-	@Length(min=3, max=3, message="length must be 3")
+	@Size(min=3, max=3, message="size must be 3")
  	private String id;
 	
 	@Transient
@@ -55,27 +55,28 @@ public class StaffPerson extends PersistentObject {
 	
 	@Column(name = "FIRST_NM")
 	@NotEmpty
-	@Length(min=1, max=20)
+    @Size(min=1, max=20)
+	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 20", example="John")
 	private String firstName;
 	
 	@Column(name = "JOB_TL_DSC")
 	@NotEmpty
-	@Length(min=1, max=30)
+	@Size(min=1, max=30)
 	private String jobTitle;
 	
 	@Column(name = "LAST_NM")
 	@NotEmpty
-	@Length(min=1, max=25)
+	@Size(min=1, max=25)
 	private String lastName;
 	
 	@NotEmpty
-	@Length(min=1, max=1, message="length must be 1")
+	@Size(min=1, max=1, message="size must be 1")
 	@Column(name = "MID_INI_NM")
 	private String middleInitial;
 	
 	@Column(name = "NMPRFX_DSC")
 	@NotEmpty
-	@Length(min=1, max=6)
+	@Size(min=1, max=6)
 	private String namePrefix;
 	
 	@Column(name = "PHONE_NO")
@@ -98,7 +99,7 @@ public class StaffPerson extends PersistentObject {
 	
 	@Column(name = "SUFX_TLDSC")
 	@NotEmpty
-	@Length(min=1, max=4)
+	@Size(min=1, max=4)
 	private String nameSuffix;
 	
 	@NotNull
@@ -110,7 +111,7 @@ public class StaffPerson extends PersistentObject {
 	
 	@Column(name = "LST_UPD_ID")
 	@NotEmpty
-	@Length(min=1, max=3)
+	@Size(min=1, max=3)
 	private String lastUpdatedId;
 	
 	@Transient
@@ -125,22 +126,22 @@ public class StaffPerson extends PersistentObject {
 	
 	@Column(name = "FKCWS_OFFT")
 	@NotEmpty
-	@Length(min=1, max=10)
+	@Size(min=1, max=10)
 	private String fkcwsOfft;
 	
 	@Column(name = "AVLOC_DSC")
 	@NotEmpty
-	@Length(min=1, max=160)
+	@Size(min=1, max=160)
 	private String avlocDsc;
 
 	@Column(name = "SSRS_WKRID")
 	@NotEmpty
-	@Length(min=1, max=4)
+	@Size(min=1, max=4)
 	private String ssrsWkrid;
 	
 	@Column(name = "CNTY_SPFCD")
 	@NotEmpty
-	@Length(min=1, max=2)
+	@Size(min=1, max=2)
 	private String countySpfcd;
 	
 	@NotNull
@@ -152,11 +153,11 @@ public class StaffPerson extends PersistentObject {
 	
 	@Column(name = "FKCWSADDRT")
 	@NotEmpty
-	@Length(min=1, max=10)
+	@Size(min=1, max=10)
 	private String fkcwsaddrt;
 	
 	@Column(name = "EMAIL_ADDR")
-	@Length(min=1, max=50)
+	@Size(min=1, max=50)
 	//NOTE : The legacy system doesn't seem to enforce valid email addresses
 	//@Email
 	private String emailAddress;
@@ -244,7 +245,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the firstName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 20", example="John")
 	public String getFirstName() {
 		return firstName;
 	}
