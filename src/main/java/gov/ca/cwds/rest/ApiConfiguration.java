@@ -1,13 +1,12 @@
 package gov.ca.cwds.rest;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.flyway.FlywayFactory;
-import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.flyway.FlywayFactory;
 
 public class ApiConfiguration extends Configuration {
     /**
@@ -16,8 +15,8 @@ public class ApiConfiguration extends Configuration {
     @NotEmpty
     private String applicationName;
 
-    @JsonProperty("swagger")
-    public SwaggerBundleConfiguration swaggerBundleConfiguration;
+//    @JsonProperty("swagger")
+//    public SwaggerBundleConfiguration swaggerBundleConfiguration;
     
     private DataSourceFactory dataSourceFactory;
 
