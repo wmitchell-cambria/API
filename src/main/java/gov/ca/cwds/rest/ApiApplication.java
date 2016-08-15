@@ -109,11 +109,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
         configureCors(apiEnvironment);
         
-        BeanConfig config = new BeanConfig();
-        config.setTitle("Swagger sample app");
-        config.setVersion("1.0.0");
-        config.setResourcePackage("gov.ca.cwds.rest.resources");
-        config.setScan(true);
+        LOGGER.info("Configuring SWAGGER");
+        configureSwagger(configuration);
     }
     
     private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
@@ -139,10 +136,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	
     }
     
-    private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
-     	apiEnvironment.jersey().register(new ApiListingResource());
-    	
-    	
+    private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {    	
         LOGGER.info("Registering ApplicationResource");
         final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
         apiEnvironment.jersey().register(applicationResource);
@@ -156,6 +150,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
         CrudsResource<StaffPerson> staffPersonCrudsResource = new CrudsResourceImpl<StaffPerson, StaffPersonService>(apiEnvironment.services(), StaffPersonService.class);
         final StaffPersonResource staffPersonResource = new StaffPersonResourceImpl(apiEnvironment.services(), staffPersonCrudsResource);
         apiEnvironment.jersey().register(staffPersonResource);
+        
+        LOGGER.info("Registering Swagger ApiListingResource");
+     	apiEnvironment.jersey().register(new ApiListingResource());
     }
     
     private void configureCors(ApiEnvironment apiEnvironment) {
@@ -166,5 +163,13 @@ public class ApiApplication extends Application<ApiConfiguration> {
         filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
         filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,X-Auth-Token");
         filter.setInitParameter("allowCredentials", "true");
+    }
+    
+    private void configureSwagger(final ApiConfiguration apiConfiguration) {
+        BeanConfig config = new BeanConfig();
+        config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
+        config.setDescription(apiConfiguration.getSwaggerConfiguration().getDescription());
+        config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
+        config.setScan(true);
     }
 }
