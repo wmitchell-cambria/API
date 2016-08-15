@@ -23,3 +23,19 @@ flywayFactory:
   sqlMigrationPrefix: v
   locations:
     - db/migrations
+    
+logging:
+  level: WARN
+  loggers:
+    io.dropwizard: INFO
+    io.swagger: DEBUG
+  appenders:
+    - type: console   
+    
+server:
+  applicationConnectors:
+  - type: http 
+    port: 8080
+  adminConnectors:
+  - type: http
+    port: 8081
