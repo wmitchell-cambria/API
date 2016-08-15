@@ -33,6 +33,9 @@ jar {
 dependencies {
 	compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+	compile group: "io.dropwizard", name: "dropwizard-views", version: dropwizardVersion
+	compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
+	compile group: 'io.dropwizard', name: 'dropwizard-assets', version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
 	compile group: "io.dropwizard.metrics", name: "metrics-core", version: metricsVersion
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
