@@ -1,6 +1,8 @@
 applicationName: CWDS API
 
 swagger:
+  templateName: swagger.mustache
+  assetsPath: /static
   resourcePackage: gov.ca.cwds.rest.resources
   title: CWDS API
   description: Definition of the CWDS API

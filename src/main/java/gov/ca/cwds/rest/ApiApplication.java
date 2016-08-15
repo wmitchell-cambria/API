@@ -9,6 +9,9 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
@@ -23,6 +26,7 @@ import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
 import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.resources.StaffPersonResourceImpl;
+import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.CrudsServiceImpl;
 import gov.ca.cwds.rest.services.ReferralService;
@@ -31,6 +35,7 @@ import gov.ca.cwds.rest.services.StaffPersonService;
 import gov.ca.cwds.rest.services.StaffPersonServiceImpl;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -39,6 +44,7 @@ import io.dropwizard.flyway.FlywayFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 //import io.federecio.dropwizard.swagger.SwaggerBundle;
 //import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import io.swagger.jaxrs.config.BeanConfig;
@@ -67,13 +73,6 @@ public class ApiApplication extends Application<ApiConfiguration> {
         }
     };
     
-//    private final SwaggerBundle<ApiConfiguration> swaggerBundle = new SwaggerBundle<ApiConfiguration>() {
-//        @Override
-//        protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ApiConfiguration configuration) {
-//            return configuration.swaggerBundleConfiguration;
-//        }
-//    };
-    
     public static void main(final String[] args) throws Exception {
         new ApiApplication().run(args);
     }
@@ -86,7 +85,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
                         new EnvironmentVariableSubstitutor()
                 )
         );
-//        bootstrap.addBundle(swaggerBundle);
+        bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
         bootstrap.addBundle(flywayBundle);
         bootstrap.addBundle(hibernateBundle);
     }
@@ -110,7 +109,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
         configureCors(apiEnvironment);
         
         LOGGER.info("Configuring SWAGGER");
-        configureSwagger(configuration);
+        configureSwagger(configuration, environment);
     }
     
     private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
@@ -151,11 +150,15 @@ public class ApiApplication extends Application<ApiConfiguration> {
         final StaffPersonResource staffPersonResource = new StaffPersonResourceImpl(apiEnvironment.services(), staffPersonCrudsResource);
         apiEnvironment.jersey().register(staffPersonResource);
         
-        LOGGER.info("Registering Swagger ApiListingResource");
+        LOGGER.info("Registering ApiListingResource");
      	apiEnvironment.jersey().register(new ApiListingResource());
+     	
+        LOGGER.info("Registering SwaggerResource");
+        final SwaggerResource swaggerResource = new SwaggerResource(configuration.getSwaggerConfiguration());
+     	apiEnvironment.jersey().register(swaggerResource);
     }
     
-    private void configureCors(ApiEnvironment apiEnvironment) {
+    private void configureCors(final ApiEnvironment apiEnvironment) {
         FilterRegistration.Dynamic filter = apiEnvironment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
@@ -165,11 +168,15 @@ public class ApiApplication extends Application<ApiConfiguration> {
         filter.setInitParameter("allowCredentials", "true");
     }
     
-    private void configureSwagger(final ApiConfiguration apiConfiguration) {
+    private void configureSwagger(final ApiConfiguration apiConfiguration, final Environment environment) {
         BeanConfig config = new BeanConfig();
         config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
         config.setDescription(apiConfiguration.getSwaggerConfiguration().getDescription());
         config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
         config.setScan(true);
+        
+        new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(), apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger").run(environment);
+        environment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        environment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     }
 }
