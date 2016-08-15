@@ -1,5 +1,10 @@
 applicationName: CWDS API
 
+swagger:
+  resourcePackage: gov.ca.cwds.rest.resources
+  title: CWDS API
+  description: Definition of the CWDS API
+
 dataSourceFactory:
   driverClass: com.ibm.db2.jcc.DB2Driver
   user: ${DB_USER}

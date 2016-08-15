@@ -15,8 +15,7 @@ public class ApiConfiguration extends Configuration {
     @NotEmpty
     private String applicationName;
 
-//    @JsonProperty("swagger")
-//    public SwaggerBundleConfiguration swaggerBundleConfiguration;
+    private SwaggerConfiguration swaggerConfiguration;
     
     private DataSourceFactory dataSourceFactory;
 
@@ -51,6 +50,18 @@ public class ApiConfiguration extends Configuration {
     public void setFlywayFactory(FlywayFactory flywayFactory) {
         this.flywayFactory = flywayFactory;
     }
+
+    @JsonProperty(value="swagger")
+	public SwaggerConfiguration getSwaggerConfiguration() {
+		return swaggerConfiguration;
+	}
+
+    @JsonProperty
+	public void setSwaggerConfiguration(SwaggerConfiguration swaggerConfiguration) {
+		this.swaggerConfiguration = swaggerConfiguration;
+	}
+    
+    
 
 
 }
