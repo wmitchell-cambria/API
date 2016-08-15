@@ -1,5 +1,14 @@
 package gov.ca.cwds.rest;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
@@ -30,17 +39,10 @@ import io.dropwizard.flyway.FlywayFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.federecio.dropwizard.swagger.SwaggerBundle;
-import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import io.federecio.dropwizard.swagger.SwaggerBundle;
+//import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
+import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.ApiListingResource;
 
 public class ApiApplication extends Application<ApiConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
@@ -65,12 +67,12 @@ public class ApiApplication extends Application<ApiConfiguration> {
         }
     };
     
-    private final SwaggerBundle<ApiConfiguration> swaggerBundle = new SwaggerBundle<ApiConfiguration>() {
-        @Override
-        protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ApiConfiguration configuration) {
-            return configuration.swaggerBundleConfiguration;
-        }
-    };
+//    private final SwaggerBundle<ApiConfiguration> swaggerBundle = new SwaggerBundle<ApiConfiguration>() {
+//        @Override
+//        protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ApiConfiguration configuration) {
+//            return configuration.swaggerBundleConfiguration;
+//        }
+//    };
     
     public static void main(final String[] args) throws Exception {
         new ApiApplication().run(args);
@@ -84,7 +86,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
                         new EnvironmentVariableSubstitutor()
                 )
         );
-        bootstrap.addBundle(swaggerBundle);
+//        bootstrap.addBundle(swaggerBundle);
         bootstrap.addBundle(flywayBundle);
         bootstrap.addBundle(hibernateBundle);
     }
@@ -106,6 +108,12 @@ public class ApiApplication extends Application<ApiConfiguration> {
         
         LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
         configureCors(apiEnvironment);
+        
+        BeanConfig config = new BeanConfig();
+        config.setTitle("Swagger sample app");
+        config.setVersion("1.0.0");
+        config.setResourcePackage("gov.ca.cwds.rest.resources");
+        config.setScan(true);
     }
     
     private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
@@ -132,6 +140,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     }
     
     private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
+     	apiEnvironment.jersey().register(new ApiListingResource());
+    	
+    	
         LOGGER.info("Registering ApplicationResource");
         final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
         apiEnvironment.jersey().register(applicationResource);
