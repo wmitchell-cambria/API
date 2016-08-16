@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class StaffPersonTest {
 
-	private static final String ROOT_RESOURCE = "/staffperson/";
+	private static final String ROOT_RESOURCE = "/staffpersons/";
 	
 	private static final StaffPersonResourceImpl mockedStaffPersonResource = mock(StaffPersonResourceImpl.class);
 
