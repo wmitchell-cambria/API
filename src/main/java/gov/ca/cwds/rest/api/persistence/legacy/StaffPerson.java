@@ -56,7 +56,6 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "FIRST_NM")
 	@NotEmpty
     @Size(min=1, max=20)
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 20", example="John")
 	private String firstName;
 	
 	@Column(name = "JOB_TL_DSC")
@@ -237,7 +236,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the id
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be 3", example="abc")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="abc")
 	public String getId() {
 		return id;
 	}
@@ -245,6 +244,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the firstName
 	 */
+	@ApiModelProperty(required=true, readOnly=false, value="", example="John")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -252,7 +252,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 25", example="Smith")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Smith")
 	public String getLastName() {
 		return lastName;
 	}
@@ -260,7 +260,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the middleInitial
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be 1", example="Q")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getMiddleInitial() {
 		return middleInitial;
 	}
@@ -276,7 +276,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the jobTitle
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 30", example="Case Worker")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Case Worker")
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -284,7 +284,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the namePrefix
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 6", example="MR.")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="MR.")
 	public String getNamePrefix() {
 		return namePrefix;
 	}
@@ -316,7 +316,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the nameSuffix
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 4", example="SR.")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="SR.")
 	public String getNameSuffix() {
 		return nameSuffix;
 	}
@@ -356,7 +356,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the avlocDsc
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 160", example="some free form text")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="some free form text")
 	public String getAvlocDsc() {
 		return avlocDsc;
 	}
@@ -364,7 +364,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the ssrsWkrid
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 4", example="9021")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="9021")
 	public String getSsrsWkrid() {
 		return ssrsWkrid;
 	}
@@ -372,7 +372,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the countySpfcd
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="Length must be between 1 and 2", example="13")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="13")
 	public String getCountySpfcd() {
 		return countySpfcd;
 	}
@@ -396,7 +396,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the emailAddress
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="must be valid email", example="john.q.smith@somedomain.com")
+	@ApiModelProperty(required=false, readOnly=false, value="", example="john.q.smith@somedomain.com")
 	public String getEmailAddress() {
 		return emailAddress;
 	}

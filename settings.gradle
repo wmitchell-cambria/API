@@ -18,11 +18,6 @@ include 'services:webservice'
 
 rootProject.name = 'api'
 
-
-/*include ':dropwizard-swagger'
-project(':dropwizard-swagger').projectDir = new File(settingsDir, '../dropwizard-swagger/')*/
-
-
-include ':swagger-project'
+/*include ':swagger-project'
 include ':swagger-project:swagger-jersey2-jaxrs'
-project(':swagger-project').projectDir = new File(settingsDir, '../swagger-core/')
+project(':swagger-project').projectDir = new File(settingsDir, '../swagger-core/')*/
