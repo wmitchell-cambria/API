@@ -32,7 +32,7 @@ public class ReferralResourceImplTest {
 	private static final String ID_FOUND = "1";
 	private static final String ID_VERIFY = "verify";
 	
-	private static final String ROOT_RESOURCE = "/referral/";
+	private static final String ROOT_RESOURCE = "/referrals/";
 	private static final String SUMMARY_RESOURCE = "/summary";
 	
 	private static final String SUMMARY_FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND + SUMMARY_RESOURCE;
