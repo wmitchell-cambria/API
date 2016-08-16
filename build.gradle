@@ -39,6 +39,8 @@ dependencies {
 	compile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
 	compile group: "io.dropwizard.metrics", name: "metrics-core", version: metricsVersion
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
+       
+    compile fileTree(dir: 'lib', include: ['*.jar'])
     
    	//compile project(':swagger-project:swagger-jersey2-jaxrs')
 	compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: '1.5.9'
