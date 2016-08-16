@@ -37,7 +37,7 @@ public class StaffPersonResourceImplTest {
 	private static final String ID_FOUND = "1";
 	private static final String ID_VERIFY = "ABC";
 	
-	private static final String ROOT_RESOURCE = "/staffperson/";
+	private static final String ROOT_RESOURCE = "/staffpersons/";
 	
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND ;
 	private static final String VERIFY_RESOURCE = ROOT_RESOURCE + ID_VERIFY ;

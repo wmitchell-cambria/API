@@ -34,7 +34,7 @@ public class CrudsResourceImplTest {
 	private static final String ID_NOT_FOUND = "-1";
 	private static final String ID_FOUND = "1";
 
-	private static final String ROOT_RESOURCE = "/referral/";
+	private static final String ROOT_RESOURCE = "/referrals/";
 
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND;
 	private static final String NOT_FOUND_RESOURCE = ROOT_RESOURCE
