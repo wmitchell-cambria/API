@@ -46,6 +46,7 @@ public class StaffPerson extends PersistentObject {
 	@Transient
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="endDate")
+	@Type(type = "date")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
 	private String endDate;
 
@@ -268,7 +269,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the endDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22")
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22", dataType="Date")
 	public String getEndDate() {
 		return !Strings.isNullOrEmpty(endDate) ? endDate : endDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(endDatePersistable)) : "";
 	}
@@ -332,7 +333,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastUpdatedId
 	 */
-	@ApiModelProperty(readOnly=true, value="remove this from view of client, generated at business layer")
+	@ApiModelProperty(readOnly=true, value="remove this from view of client, generated at business layer", example="tob")
 	public String getLastUpdatedId() {
 		return lastUpdatedId;
 	}
@@ -340,7 +341,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastUpdatedTime
 	 */
-	@ApiModelProperty(required=true, readOnly=true, value="remove from view of user", example="1963-11-22")
+	@ApiModelProperty(required=true, readOnly=true, value="remove from view of user", example="1963-11-22-13.51.39.247")
 	public String getLastUpdatedTime() {
 		return !Strings.isNullOrEmpty(lastUpdatedTime) ? lastUpdatedTime : lastUpdatedTimePersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
 	}
