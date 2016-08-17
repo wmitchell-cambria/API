@@ -17,6 +17,7 @@ import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.ReferralDao;
 import gov.ca.cwds.rest.jdbi.StaffPersonDao;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
@@ -54,7 +55,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
     
-    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class) {
+    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -116,9 +117,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	final CrudsDao<Referral> referralCrudsDao = new CrudsDaoImpl<Referral>(hibernateBundle.getSessionFactory());
+    	final ReferralDao referralDao = new ReferralDao(hibernateBundle.getSessionFactory());
     	LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	final CrudsService<Referral> referralCrudsService = new CrudsServiceImpl<Referral>(referralCrudsDao);
+    	final CrudsService<Referral> referralCrudsService = new CrudsServiceImpl<Referral>(referralDao);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());	    	
     	final ReferralService referralService = new ReferralServiceImpl(referralCrudsService);
     	apiEnvironment.services().register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);

@@ -25,8 +25,8 @@ public class CrudsServiceImplTest {
 	private CrudsServiceImpl<Referral> crudsServiceImpl;
 	private CrudsDao<Referral> crudsDao;
 	
-	private Referral nonExistentReferralToUpdate = new Referral("notexists","name", new Date());
-	private Referral existintReferralToCreate = new Referral("exists","name", new Date());
+	private Referral nonExistentReferralToUpdate = new Referral("notexists","name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+	private Referral existintReferralToCreate = new Referral("exists","name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 	@SuppressWarnings("unchecked")
 	@Before
@@ -52,14 +52,14 @@ public class CrudsServiceImplTest {
 
 	@Test
 	public void createDelegatesToDao() {
-		Referral toCreate = new Referral("1", "name", new Date());
+		Referral toCreate = new Referral("1", "name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		crudsServiceImpl.create(toCreate);
 		verify(crudsDao, times(1)).create(toCreate);
 	}
 
 	@Test
 	public void createThrowsServiceExceptionWhenExists() {
-		Referral toCreate = new Referral("1", "name", new Date());
+		Referral toCreate = new Referral("1", "name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		crudsServiceImpl.create(toCreate);
 		verify(crudsDao, times(1)).create(toCreate);
 	}
