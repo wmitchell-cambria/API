@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -8,22 +9,30 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import io.dropwizard.jackson.Jackson;
 
+import java.io.IOException;
 import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class ReferralServiceImplTest {
 	private static ReferralService referralService;
+	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private CrudsService<Referral> crudsService;
 	
-	private Referral FOUND_REFERRAL = new Referral("found", "name", new Date());
+	private Referral FOUND_REFERRAL; 
 	
 	@SuppressWarnings("unchecked")
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
+		FOUND_REFERRAL = MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/validNonUnique.json"), Referral.class);
 		crudsService = mock(CrudsService.class);
 		
 		when(crudsService.find(FOUND_REFERRAL.getId())).thenReturn(FOUND_REFERRAL);
@@ -56,14 +65,14 @@ public class ReferralServiceImplTest {
 	
 	@Test
 	public void createDelegatesToCrudsService() {
-		Referral toCreate = new Referral("1", "name", new Date());
+		Referral toCreate = new Referral();
 		referralService.create(toCreate);
 		verify(crudsService, times(1)).create(toCreate);
 	}
 	
 	@Test
 	public void updateDelegatesToCrudsService() {
-		Referral toUpdate = new Referral("1", "name", new Date());
+		Referral toUpdate = new Referral();
 		referralService.update(toUpdate);
 		verify(crudsService, times(1)).update(toUpdate);
 	}
