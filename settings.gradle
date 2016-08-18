@@ -17,3 +17,7 @@ include 'services:webservice'
 */
 
 rootProject.name = 'api'
+
+/*include ':swagger-project'
+include ':swagger-project:swagger-jersey2-jaxrs'
+project(':swagger-project').projectDir = new File(settingsDir, '../swagger-core/')*/

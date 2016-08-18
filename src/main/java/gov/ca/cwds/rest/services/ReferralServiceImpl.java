@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
