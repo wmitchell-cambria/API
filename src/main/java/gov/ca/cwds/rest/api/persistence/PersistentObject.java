@@ -1,30 +1,47 @@
 package gov.ca.cwds.rest.api.persistence;
 
+import javax.persistence.MappedSuperclass;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
- * Base class for objects in the persistence layer
+ * Base class for objects in the persistence layer.
  * 
  * @author CWDS API Team 
  */
+@MappedSuperclass
 public abstract class PersistentObject {
-	private String id;
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param id The id of the object
+	/*
+	 * There are no common elements across every persistent objects
 	 */
-	public PersistentObject(String id) {
-		this.id = id;
+
+	 protected PersistentObject() {
 	}
 
 	/**
-	 * @return the id
+	 * @return the primaryKey
 	 */
-	public String getId() {
-		return id;
+	@JsonIgnore
+	public abstract String getPrimaryKey() ;
+	
+	protected Boolean cookedBoolean(Boolean transientBoolean, String persistableBoolean) {
+		if( transientBoolean != null ) {
+			return transientBoolean;
+		}
+		if( "N".equalsIgnoreCase(persistableBoolean)) {
+			return Boolean.FALSE;
+		}
+		if( "Y".equalsIgnoreCase(persistableBoolean)) {
+			return Boolean.TRUE;
+		}
+		return null;
 	}
 	
-	//TODO : make abstract with a copy method while things are stubbed.  Once the real db implementation is
-	//       done we may not need it.
-	public abstract PersistentObject copy(String id, Object from);
+	protected String persistableBoolean(Boolean transientBoolean) {
+		if( transientBoolean != null ) {
+			return Boolean.TRUE.equals(transientBoolean) ? "Y" : "N";
+		}
+		return "";
+	}
 }

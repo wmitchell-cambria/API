@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL;
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

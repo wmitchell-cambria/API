@@ -84,8 +84,11 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	@POST
 	@UnitOfWork
 	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
-			@ApiResponse(code = 409, message = "Conflict - already exists") })
+			@ApiResponse(code = 409, message = "Conflict - already exists"),
+			@ApiResponse(code = 422, message = "Unable to process entity")
+	})
 	public Response create(
 			@ApiParam(required = true, value = "Object to be created") T persistentObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader,
@@ -102,8 +105,11 @@ public interface CrudsResource<T extends PersistentObject> extends Resource {
 	@PUT
 	@UnitOfWork
 	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 404, message = "not found"),
-			@ApiResponse(code = 406, message = "Accept Header/Version not supported") })
+			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
+			@ApiResponse(code = 422, message = "Unable to process entity")
+	})
 	public Response update(
 			@ApiParam(required = true, value = "the object to be updated") T persistentObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);

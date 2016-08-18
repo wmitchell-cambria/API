@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 
 /**
  * This business service provides transactional methods for manipulating

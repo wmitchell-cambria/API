@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_STAFF_PERSON;
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import io.swagger.annotations.Api;
 
 import javax.ws.rs.Path;

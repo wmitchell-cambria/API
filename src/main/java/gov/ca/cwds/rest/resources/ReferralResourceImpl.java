@@ -1,12 +1,13 @@
 package gov.ca.cwds.rest.resources;
 
 import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 
+import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -53,7 +54,7 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	 */
 	@Override
 	@ApiOperation(value = "Update Referral", code = 204, response = Referral.class)
-	public Response update(Referral persistentObject, String acceptHeader) {
+	public Response update(@Valid Referral persistentObject, String acceptHeader) {
 		return crudsResource.update(persistentObject, acceptHeader);
 	}
 
@@ -62,7 +63,7 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	 */
 	@Override
 	@ApiOperation(value = "Create Referral", response = Referral.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
-	public Response create(Referral persistentObject, String acceptHeader, UriInfo uriInfo) {
+	public Response create(@Valid Referral persistentObject, String acceptHeader, UriInfo uriInfo) {
 		return crudsResource.create(persistentObject, acceptHeader, uriInfo);
 	}
 	
