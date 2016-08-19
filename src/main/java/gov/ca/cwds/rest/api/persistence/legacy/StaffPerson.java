@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.persistence.legacy;
+ package gov.ca.cwds.rest.api.persistence.legacy;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -104,10 +104,10 @@ public class StaffPerson extends PersistentObject {
 	
 	@NotNull
 	@Transient
-	private Boolean tlcmtrInd;
+	private Boolean telecommuterIndicator;
 
 	@Column(name = "TLCMTR_IND")
-	private String tlcmtrIndPersistable;
+	private String telecommuterIndicatorPersistable;
 	
 	@Column(name = "LST_UPD_ID")
 	@NotEmpty
@@ -127,34 +127,34 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "FKCWS_OFFT")
 	@NotEmpty
 	@Size(min=1, max=10)
-	private String fkcwsOfft;
+	private String cwsOffice;
 	
 	@Column(name = "AVLOC_DSC")
 	@NotEmpty
 	@Size(min=1, max=160)
-	private String avlocDsc;
+	private String availabilityAndLocationDescription;
 
 	@Column(name = "SSRS_WKRID")
 	@NotEmpty
 	@Size(min=1, max=4)
-	private String ssrsWkrid;
+	private String ssrsLicensingWorkerId;
 	
 	@Column(name = "CNTY_SPFCD")
 	@NotEmpty
 	@Size(min=1, max=2)
-	private String countySpfcd;
+	private String countyCode;
 	
 	@NotNull
 	@Transient
-	private Boolean dutyWorkerInd;
+	private Boolean dutyWorkerIndicator;
 
 	@Column(name = "DTYWKR_IND")
-	private String dutyWorkerIndPersistable;
+	private String dutyWorkerIndicatorPersistable;
 	
 	@Column(name = "FKCWSADDRT")
 	@NotEmpty
 	@Size(min=1, max=10)
-	private String fkcwsaddrt;
+	private String cwsOfficeAddress;
 	
 	@Column(name = "EMAIL_ADDR")
 	@Size(min=1, max=50)
@@ -179,15 +179,15 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("phoneExt") int phoneExt, 
 			@JsonProperty("startDate") String startDate,
 			@JsonProperty("nameSuffix") String nameSuffix, 
-			@JsonProperty("tlcmtrInd") Boolean tlcmtrInd, 
+			@JsonProperty("telecommuterIndicator") Boolean telecommuterIndicator, 
 			@JsonProperty("lastUpdatedId") String lastUpdatedId,
 			@JsonProperty("lastUpdatedTime") String lastUpdatedTime, 
-			@JsonProperty("fkcwsOfft") String fkcwsOfft, 
-			@JsonProperty("avlocDsc") String avlocDsc,
-			@JsonProperty("ssrsWkrid") String ssrsWkrid, 
-			@JsonProperty("countySpfcd") String countySpfcd, 
-			@JsonProperty("dutyWorkerInd") Boolean dutyWorkerInd,
-			@JsonProperty("fkcwsaddrt") String fkcwsaddrt, 
+			@JsonProperty("cwsOffice") String cwsOffice, 
+			@JsonProperty("availabilityAndLocationDescription") String availabilityAndLocationDescription,
+			@JsonProperty("ssrsLicensingWorkerId") String ssrsLicensingWorkerId, 
+			@JsonProperty("countyCode") String countyCode, 
+			@JsonProperty("dutyWorkerIndicator") Boolean dutyWorkerIndicator,
+			@JsonProperty("cwsOfficeAddress") String cwsOfficeAddress, 
 			@JsonProperty("emailAddress") String emailAddress) {
 		super();
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -210,19 +210,19 @@ public class StaffPerson extends PersistentObject {
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
 		try { this.startDatePersistable = dateFormat.parse(startDate); } catch (Throwable e) {}
 		this.nameSuffix = nameSuffix;
-		this.tlcmtrInd = tlcmtrInd;
-		this.tlcmtrIndPersistable = persistableBoolean(tlcmtrInd);
+		this.telecommuterIndicator = telecommuterIndicator;
+		this.telecommuterIndicatorPersistable = persistableBoolean(telecommuterIndicator);
 		this.lastUpdatedId = lastUpdatedId;
 		this.lastUpdatedTime = lastUpdatedTime;
 		//we are validating this.startDate so we can swallow this ParseException - should never happen
 		try { this.lastUpdatedTimePersistable = timestampFormat.parse(lastUpdatedTime); } catch (Throwable e) {}
-		this.fkcwsOfft = fkcwsOfft;
-		this.avlocDsc = avlocDsc;
-		this.ssrsWkrid = ssrsWkrid;
-		this.countySpfcd = countySpfcd;
-		this.dutyWorkerInd = dutyWorkerInd;
-		this.dutyWorkerIndPersistable = persistableBoolean(dutyWorkerInd);
-		this.fkcwsaddrt = fkcwsaddrt;
+		this.cwsOffice = cwsOffice;
+		this.availabilityAndLocationDescription = availabilityAndLocationDescription;
+		this.ssrsLicensingWorkerId = ssrsLicensingWorkerId;
+		this.countyCode = countyCode;
+		this.dutyWorkerIndicator = dutyWorkerIndicator;
+		this.dutyWorkerIndicatorPersistable = persistableBoolean(dutyWorkerIndicator);
+		this.cwsOfficeAddress = cwsOfficeAddress;
 		this.emailAddress = emailAddress;
 	}
 
@@ -323,11 +323,11 @@ public class StaffPerson extends PersistentObject {
 	}
 
 	/**
-	 * @return the tlcmtrInd
+	 * @return the telecommuterIndicator
 	 */
 	@ApiModelProperty(required=true, readOnly=false)
-	public Boolean getTlcmtrInd() {
-		return super.cookedBoolean(tlcmtrInd, tlcmtrIndPersistable);
+	public Boolean getTelecommuterIndicator() {
+		return super.cookedBoolean(telecommuterIndicator, telecommuterIndicatorPersistable);
 	}
 
 	/**
@@ -347,51 +347,51 @@ public class StaffPerson extends PersistentObject {
 	}
 
 	/**
-	 * @return the fkcwsOfft
+	 * @return the cwsOffice
 	 */
 	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
-	public String getFkcwsOfft() {
-		return fkcwsOfft;
+	public String getCwsOffice() {
+		return cwsOffice;
 	}
 
 	/**
-	 * @return the avlocDsc
+	 * @return the availabilityAndLocationDescription
 	 */
 	@ApiModelProperty(required=true, readOnly=false, value="", example="some free form text")
-	public String getAvlocDsc() {
-		return avlocDsc;
+	public String getAvailabilityAndLocationDescription() {
+		return availabilityAndLocationDescription;
 	}
 
 	/**
-	 * @return the ssrsWkrid
+	 * @return the ssrsLicensingWorkerId
 	 */
 	@ApiModelProperty(required=true, readOnly=false, value="", example="9021")
-	public String getSsrsWkrid() {
-		return ssrsWkrid;
+	public String getSsrsLicensingWorkerId() {
+		return ssrsLicensingWorkerId;
 	}
 
 	/**
-	 * @return the countySpfcd
+	 * @return the countyCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="13")
-	public String getCountySpfcd() {
-		return countySpfcd;
+	@ApiModelProperty(required=true, readOnly=false, value="", example="99")
+	public String getCountyCode() {
+		return countyCode;
 	}
 
 	/**
-	 * @return the dutyWorkerInd
+	 * @return the dutyWorkerIndicator
 	 */
 	@ApiModelProperty(required=true, readOnly=false)
-	public Boolean getDutyWorkerInd() {
-		return super.cookedBoolean(dutyWorkerInd, dutyWorkerIndPersistable);
+	public Boolean getDutyWorkerIndicator() {
+		return super.cookedBoolean(dutyWorkerIndicator, dutyWorkerIndicatorPersistable);
 	}
 
 	/**
-	 * @return the fkcwsaddrt
+	 * @return the cwsOfficeAddress
 	 */
 	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWSADDRT", example="ghi")
-	public String getFkcwsaddrt() {
-		return fkcwsaddrt;
+	public String getCwsOfficeAddress() {
+		return cwsOfficeAddress;
 	}
 
 	/**
@@ -412,20 +412,20 @@ public class StaffPerson extends PersistentObject {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((avlocDsc == null) ? 0 : avlocDsc.hashCode());
+				+ ((availabilityAndLocationDescription == null) ? 0 : availabilityAndLocationDescription.hashCode());
 		result = prime * result
-				+ ((countySpfcd == null) ? 0 : countySpfcd.hashCode());
+				+ ((countyCode == null) ? 0 : countyCode.hashCode());
 		result = prime * result
-				+ ((dutyWorkerInd == null) ? 0 : dutyWorkerInd.hashCode());
+				+ ((dutyWorkerIndicator == null) ? 0 : dutyWorkerIndicator.hashCode());
 		result = prime * result
 				+ ((emailAddress == null) ? 0 : emailAddress.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
 				+ ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result
-				+ ((fkcwsOfft == null) ? 0 : fkcwsOfft.hashCode());
+				+ ((cwsOffice == null) ? 0 : cwsOffice.hashCode());
 		result = prime * result
-				+ ((fkcwsaddrt == null) ? 0 : fkcwsaddrt.hashCode());
+				+ ((cwsOfficeAddress == null) ? 0 : cwsOfficeAddress.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((jobTitle == null) ? 0 : jobTitle.hashCode());
@@ -443,13 +443,13 @@ public class StaffPerson extends PersistentObject {
 		result = prime * result
 				+ ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		result = prime * result
-				+ ((ssrsWkrid == null) ? 0 : ssrsWkrid.hashCode());
+				+ ((ssrsLicensingWorkerId == null) ? 0 : ssrsLicensingWorkerId.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result
 				+ ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
 		result = prime * result
-				+ ((tlcmtrInd == null) ? 0 : tlcmtrInd.hashCode());
+				+ ((telecommuterIndicator == null) ? 0 : telecommuterIndicator.hashCode());
 		return result;
 	}
 
@@ -467,20 +467,20 @@ public class StaffPerson extends PersistentObject {
 		if (getClass() != obj.getClass())
 			return false;
 		StaffPerson other = (StaffPerson) obj;
-		if (avlocDsc == null) {
-			if (other.avlocDsc != null)
+		if (availabilityAndLocationDescription == null) {
+			if (other.availabilityAndLocationDescription != null)
 				return false;
-		} else if (!avlocDsc.equals(other.avlocDsc))
+		} else if (!availabilityAndLocationDescription.equals(other.availabilityAndLocationDescription))
 			return false;
-		if (countySpfcd == null) {
-			if (other.countySpfcd != null)
+		if (countyCode == null) {
+			if (other.countyCode != null)
 				return false;
-		} else if (!countySpfcd.equals(other.countySpfcd))
+		} else if (!countyCode.equals(other.countyCode))
 			return false;
-		if (dutyWorkerInd == null) {
-			if (other.dutyWorkerInd != null)
+		if (dutyWorkerIndicator == null) {
+			if (other.dutyWorkerIndicator != null)
 				return false;
-		} else if (!dutyWorkerInd.equals(other.dutyWorkerInd))
+		} else if (!dutyWorkerIndicator.equals(other.dutyWorkerIndicator))
 			return false;
 		if (emailAddress == null) {
 			if (other.emailAddress != null)
@@ -497,15 +497,15 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!firstName.equals(other.firstName))
 			return false;
-		if (fkcwsOfft == null) {
-			if (other.fkcwsOfft != null)
+		if (cwsOffice == null) {
+			if (other.cwsOffice != null)
 				return false;
-		} else if (!fkcwsOfft.equals(other.fkcwsOfft))
+		} else if (!cwsOffice.equals(other.cwsOffice))
 			return false;
-		if (fkcwsaddrt == null) {
-			if (other.fkcwsaddrt != null)
+		if (cwsOfficeAddress == null) {
+			if (other.cwsOfficeAddress != null)
 				return false;
-		} else if (!fkcwsaddrt.equals(other.fkcwsaddrt))
+		} else if (!cwsOfficeAddress.equals(other.cwsOfficeAddress))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -549,10 +549,10 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!phoneNumber.equals(other.phoneNumber))
 			return false;
-		if (ssrsWkrid == null) {
-			if (other.ssrsWkrid != null)
+		if (ssrsLicensingWorkerId == null) {
+			if (other.ssrsLicensingWorkerId != null)
 				return false;
-		} else if (!ssrsWkrid.equals(other.ssrsWkrid))
+		} else if (!ssrsLicensingWorkerId.equals(other.ssrsLicensingWorkerId))
 			return false;
 		if (startDate == null) {
 			if (other.startDate != null)
@@ -569,10 +569,10 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!nameSuffix.equals(other.nameSuffix))
 			return false;
-		if (tlcmtrInd == null) {
-			if (other.tlcmtrInd != null)
+		if (telecommuterIndicator == null) {
+			if (other.telecommuterIndicator != null)
 				return false;
-		} else if (!tlcmtrInd.equals(other.tlcmtrInd))
+		} else if (!telecommuterIndicator.equals(other.telecommuterIndicator))
 			return false;
 		return true;
 	}

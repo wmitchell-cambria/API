@@ -32,7 +32,7 @@ logging:
   level: WARN
   loggers:
     io.dropwizard: INFO
-    io.swagger: DEBUG
+    io.swagger: WARN
   appenders:
     - type: console   
     
