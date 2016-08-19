@@ -397,38 +397,38 @@ public class StaffPersonTest {
 	}
 	
 	/*
-	 * tlcmtrInd tests 
+	 * telecommuterIndicator tests 
 	 */	
 	@Test
-	public void failsWhenTlcmtrIndMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/missing.json"), StaffPerson.class);
+	public void failsWhenTelecommuterIndicatorMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/telecommuterIndicator/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenTlcmtrIndEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/empty.json"), StaffPerson.class);
+	public void failsWhenTelecommuterIndicatorEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/telecommuterIndicator/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenTlcmtrIndNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/null.json"), StaffPerson.class);
+	public void failsWhenTelecommuterIndicatorNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/telecommuterIndicator/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenTlcmtrIndAllWhitespace() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/tlcmtrInd/allWhitespace.json"), StaffPerson.class);
+	public void failsWhenTelecommuterIndicatorAllWhitespace() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/telecommuterIndicator/allWhitespace.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("tlcmtrInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -494,213 +494,213 @@ public class StaffPersonTest {
 	}
 	
 	/*
-	 * fkcwsOfft tests 
+	 * cwsOffice tests 
 	 */	
 	@Test
-	public void failsWhenFkcwsOfftMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsOfft/missing.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOffice/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsOfft may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOffice may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenFkcwsOfftEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsOfft/empty.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOffice/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsOfft may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOffice may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenFkcwsOfftNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsOfft/null.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOffice/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsOfft may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOffice may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenFkcwsOfftTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsOfft/tooLong.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeTooLong() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOffice/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsOfft size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOffice size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
-	 * avlocDsc tests 
+	 * availabilityAndLocationDescription tests 
 	 */	
 	@Test
-	public void failsWhenAvlocDscMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/avlocDsc/missing.json"), StaffPerson.class);
+	public void failsWhenAvailabilityAndLocationDescriptionMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/availabilityAndLocationDescription/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("avlocDsc may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("availabilityAndLocationDescription may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenAvlocDscEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/avlocDsc/empty.json"), StaffPerson.class);
+	public void failsWhenAvailabilityAndLocationDescriptionEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/availabilityAndLocationDescription/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("avlocDsc may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("availabilityAndLocationDescription may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenAvlocDscNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/avlocDsc/null.json"), StaffPerson.class);
+	public void failsWhenAvailabilityAndLocationDescriptionNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/availabilityAndLocationDescription/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("avlocDsc may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("availabilityAndLocationDescription may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenAvlocDscTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/avlocDsc/tooLong.json"), StaffPerson.class);
+	public void failsWhenAvailabilityAndLocationDescriptionTooLong() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/availabilityAndLocationDescription/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("avlocDsc size must be between 1 and 160"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("availabilityAndLocationDescription size must be between 1 and 160"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
-	 * ssrsWkrid tests 
+	 * ssrsLicensingWorkerId tests 
 	 */	
 	@Test
-	public void failsWhenSsrsWkridMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsWkrid/missing.json"), StaffPerson.class);
+	public void failsWhenSsrsLicensingWorkerIdMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsLicensingWorkerId/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("ssrsWkrid may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenSsrsWkridEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsWkrid/empty.json"), StaffPerson.class);
+	public void failsWhenSsrsLicensingWorkerIdEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsLicensingWorkerId/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("ssrsWkrid may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenSsrsWkridNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsWkrid/null.json"), StaffPerson.class);
+	public void failsWhenSsrsLicensingWorkerIdNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsLicensingWorkerId/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("ssrsWkrid may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenSsrsWkridTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsWkrid/tooLong.json"), StaffPerson.class);
+	public void failsWhenSsrsLicensingWorkerIdTooLong() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/ssrsLicensingWorkerId/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("ssrsWkrid size must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId size must be between 1 and 4"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
-	 * countySpfcd tests 
+	 * countyCode tests 
 	 */	
 	@Test
 	public void failsWhenCountySpfcdMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countySpfcd/missing.json"), StaffPerson.class);
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countyCode/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("countySpfcd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("countyCode may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenCountySpfcdEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countySpfcd/empty.json"), StaffPerson.class);
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countyCode/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("countySpfcd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("countyCode may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenCountySpfcdNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countySpfcd/null.json"), StaffPerson.class);
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countyCode/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("countySpfcd may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("countyCode may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
 	public void failsWhenCountySpfcdTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countySpfcd/tooLong.json"), StaffPerson.class);
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/countyCode/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("countySpfcd size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("countyCode size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
-	 * dutyWorkerInd tests 
+	 * dutyWorkerIndicator tests 
 	 */	
 	@Test
-	public void failsWhenDutyWorkerIndMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/missing.json"), StaffPerson.class);
+	public void failsWhenDutyWokerIndicatorMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerIndicator/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenDutyWorkerIndEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/empty.json"), StaffPerson.class);
+	public void failsWhenDutyWokerIndicatorEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerIndicator/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenDutyWorkerIndNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/null.json"), StaffPerson.class);
+	public void failsWhenDutyWokerIndicatorNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerIndicator/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenDutyWorkerIndAllWhitespace() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerInd/allWhitespace.json"), StaffPerson.class);
+	public void failsWhenDutyWokerIndicatorAllWhitespace() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/dutyWorkerIndicator/allWhitespace.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("dutyWorkerInd may not be null"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 
 	/*
-	 * fkcwsaddrt tests 
+	 * cwsOfficeAddress tests 
 	 */	
 	@Test
-	public void failsWhenFkcwsaddrtMissing() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsaddrt/missing.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeAddressMissing() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOfficeAddress/missing.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsaddrt may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenFkcwsaddrtEmpty() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsaddrt/empty.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeAddressEmpty() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOfficeAddress/empty.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsaddrt may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
-	public void failsWhenFkcwsaddrtNull() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsaddrt/null.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeAddressNull() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOfficeAddress/null.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsaddrt may not be empty"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	@Test
-	public void failsWhenFkcwsaddrtTooLong() throws Exception {
-		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/fkcwsaddrt/tooLong.json"), StaffPerson.class);
+	public void failsWhenCwsOfficeAddressTooLong() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/cwsOfficeAddress/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("fkcwsaddrt size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
