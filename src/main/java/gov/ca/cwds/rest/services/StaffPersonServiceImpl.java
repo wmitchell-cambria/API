@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.persistence.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

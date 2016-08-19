@@ -19,12 +19,17 @@ public class Api {
     /**
      * A {@code String} constant representing {@value #RESOURCE_REFERRAL} api.
      */
-    public final static String RESOURCE_REFERRAL = "referral";
+    public final static String RESOURCE_REFERRAL = "referrals";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api.
      */
-    public final static String RESOURCE_STAFF_PERSON = "staffperson";
+    public final static String RESOURCE_STAFF_PERSON = "staffpersons";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api.
+     */
+    public final static String RESOURCE_ALLEGATION = "allegations";
 
     /**
      * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1} media type.
