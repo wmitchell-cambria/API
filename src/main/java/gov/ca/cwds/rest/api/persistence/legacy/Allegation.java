@@ -12,7 +12,6 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -35,12 +34,13 @@ public class Allegation extends PersistentObject {
 	@Id
 	@Column(name = "IDENTIFIER")
 	@NotEmpty
-	@Size(min = 1, max = 10, message = "Size must be 10")
+	@Size(min = 1, max = 10, message = "Size must be between 1 and 10")
 	private String id;
 
 	@Transient
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
 	@JsonProperty(value = "abuseEndDate")
+	@Type(type = "date")
 	@gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
 	private String abuseEndDate;
 
@@ -60,7 +60,6 @@ public class Allegation extends PersistentObject {
 
 	@Column(name = "ABUSE_FREQ")
 	@NotNull
-	/* @Size(min = 1, max = 4) */
 	private Integer abuseFrequency;
 
 	@Column(name = "LST_UPD_ID")
@@ -90,12 +89,10 @@ public class Allegation extends PersistentObject {
 
 	@Column(name = "ALG_DSPC")
 	@NotNull
-	/* @Size(min = 1, max = 4) */
 	private Integer allegationDispositionType;
 
 	@Column(name = "ALG_TPC")
 	@NotNull
-	/* @Size(min = 1, max = 4) */
 	private Integer allegationType;
 
 	@Column(name = "DISPSN_DSC")
@@ -144,7 +141,7 @@ public class Allegation extends PersistentObject {
 
 	@Column(name = "CNTY_SPFCD")
 	@NotEmpty
-	@Size(min = 1, max = 2)
+	@Size(min = 1, max = 2, message = "Size must be between 1 and 2")
 	private String countySpecificCode;
 
 	@Column(name = "ZIPPY_IND")
@@ -153,7 +150,6 @@ public class Allegation extends PersistentObject {
 	private String zippyCrestedInd;
 
 	@Column(name = "PLC_FCLC")
-	/* @Size(min = 1, max = 4, message = "Size must be 1") */
 	private Integer placementFacilityType;
 
 	public Allegation() {
@@ -247,7 +243,7 @@ public class Allegation extends PersistentObject {
 		return id;
 	}
 
-	@ApiModelProperty(required = true, readOnly = false, value = "Size must be between 1 and 4", example = "1")
+	@ApiModelProperty(required = true, readOnly = false, example = "1")
 	public Integer getAbuseFrequency() {
 		return abuseFrequency;
 	}
@@ -366,7 +362,7 @@ public class Allegation extends PersistentObject {
 	/**
 	 * @return the fkClient0
 	 */
-	@ApiModelProperty(required = true, readOnly = true, value = "Size must be between 1 and 10", example = "xydvd")
+	@ApiModelProperty(required = true, readOnly = true, value = "Size must be between 0 and 10", example = "xydvd")
 	public String getFkClient0() {
 		return fkClient0;
 	}

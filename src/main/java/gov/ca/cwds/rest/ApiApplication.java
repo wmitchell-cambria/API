@@ -12,13 +12,17 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.jdbi.AllegationDao;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 import gov.ca.cwds.rest.jdbi.ReferralDao;
 import gov.ca.cwds.rest.jdbi.StaffPersonDao;
+import gov.ca.cwds.rest.resources.AllegationResource;
+import gov.ca.cwds.rest.resources.AllegationResourceImpl;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.CrudsResource;
@@ -28,6 +32,8 @@ import gov.ca.cwds.rest.resources.ReferralResourceImpl;
 import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.resources.StaffPersonResourceImpl;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.services.AllegationService;
+import gov.ca.cwds.rest.services.AllegationServiceImpl;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.CrudsServiceImpl;
 import gov.ca.cwds.rest.services.ReferralService;
@@ -55,7 +61,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
     
-    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class) {
+    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -134,6 +140,19 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	apiEnvironment.services().register(StaffPersonService.class, Api.Version.JSON_VERSION_1, staffPersonService);
     	LOGGER.info("StaffPersonService:{} for {} of {}", StaffPersonServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
+				AllegationService.class.getName());
+		final AllegationDao allegationDao = new AllegationDao(hibernateBundle.getSessionFactory()); // Generics.getTypeParameter(allegationCrudsDao.getClass())
+		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
+				AllegationService.class.getName());
+		final CrudsService<Allegation> allegationCrudsService = new CrudsServiceImpl<Allegation>(allegationDao);
+		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), AllegationService.class.getName());
+		final AllegationService allegationService = new AllegationServiceImpl(allegationCrudsService);
+		apiEnvironment.services().register(AllegationService.class, Api.Version.JSON_VERSION_1, allegationService);
+		LOGGER.info("AllegationService:{} for {} of {}", AllegationServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), AllegationService.class.getName());
+    	
     }
     
     private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {    	
@@ -157,6 +176,13 @@ public class ApiApplication extends Application<ApiConfiguration> {
         LOGGER.info("Registering SwaggerResource");
         final SwaggerResource swaggerResource = new SwaggerResource(configuration.getSwaggerConfiguration());
      	apiEnvironment.jersey().register(swaggerResource);
+     	
+     	LOGGER.info("Registering AllegationResource");
+		CrudsResource<Allegation> allegationCrudsResource = new CrudsResourceImpl<Allegation, AllegationService>(
+				apiEnvironment.services(), AllegationService.class);
+		final AllegationResource allegationResource = new AllegationResourceImpl(apiEnvironment.services(),
+				allegationCrudsResource);
+		apiEnvironment.jersey().register(allegationResource);
     }
     
     private void configureCors(final ApiEnvironment apiEnvironment) {
