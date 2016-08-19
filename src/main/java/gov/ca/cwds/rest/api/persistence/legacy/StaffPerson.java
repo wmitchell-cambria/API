@@ -237,7 +237,7 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the id
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="abc")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Aaeae9r0F4")
 	public String getId() {
 		return id;
 	}

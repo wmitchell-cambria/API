@@ -1,0 +1,22 @@
+{
+  "id": "Aaeae9r0F4",
+  "abuseEndDate": "1999-07-15",
+  "abuseFrequency": 2,
+  "abuseFrequencyPeriodCode": "M",
+  "abuseLocationDescription": "Barber Shop",
+  "abuseStartDate": "1999-07-15",
+  "allegationDispositionType": 0,
+  "dispositionDescription": "Fremont",
+  "dispositionDate": "",
+  "injuryHarmDetailIndVar": "N",
+  "nonProtectingParentCode": "N",
+  "staffPersonAddedInd": "N",
+  "lastUpdatedId": "0F4",
+  "lastUpdatedTime": "1999-07-15-17.06.29.208",
+  "fkClientT": "AHooKwN0F4",
+  "fkClient0": "MKPFcB90F4",
+  "fkReferralT": "8mu1E710F4",
+  "countySpecificCode": "19",
+  "zippyCrestedInd": "N",
+  "placementFacilityType": 6574
+}

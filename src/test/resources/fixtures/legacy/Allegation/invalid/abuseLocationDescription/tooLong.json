@@ -1,0 +1,23 @@
+{
+  "id": "Aaeae9r0F4",
+  "abuseEndDate": "1999-07-15",
+  "abuseFrequency": 2,
+  "abuseFrequencyPeriodCode": "M",
+  "abuseLocationDescription": "Dr. Victoria Vesna is an artist, professor and chair of the department of Design | Media Arts at the UCLA School of the Arts. Her work can be defined as experimental research that resides in between disciplines and technologies. She explores how communication technologies affect collective behavior and how perceptions of identity shift in relation to scientific innovation. Victoria has exhibited her work in 16 solo exhibitions, over 70 group shows, published 20 papers and gave over 100 invited talks in the last twenty five years",
+  "abuseStartDate": "1999-07-15",
+  "allegationDispositionType": 0,
+  "allegationType": 2180,
+  "dispositionDescription": "Fremont",
+  "dispositionDate": "",
+  "injuryHarmDetailIndVar": "N",
+  "nonProtectingParentCode": "N",
+  "staffPersonAddedInd": "N",
+  "lastUpdatedId": "0F4",
+  "lastUpdatedTime": "1999-07-15-17.06.29.208",
+  "fkClientT": "AHooKwN0F4",
+  "fkClient0": "MKPFcB90F4",
+  "fkReferralT": "8mu1E710F4",
+  "countySpecificCode": "19",
+  "zippyCrestedInd": "N",
+  "placementFacilityType": 6574
+}
