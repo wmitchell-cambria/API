@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import gov.ca.cwds.rest.api.persistence.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
@@ -19,7 +19,7 @@ public class ReferralSummary {
 
 	private String id;
 	private String referralName;
-	private Date receivedDate;
+	private String receivedDate;
 
 	/**
 	 * Constructor 
@@ -29,7 +29,7 @@ public class ReferralSummary {
 	 * @param receivedDate	The date the summarized referral was received
 	 */
 	@JsonCreator
-	public ReferralSummary(@JsonProperty("id")String id, @JsonProperty("referralName")String referralName, @JsonProperty("receivedDate")Date receivedDate) {
+	public ReferralSummary(@JsonProperty("id")String id, @JsonProperty("referralName")String referralName, @JsonProperty("receivedDate")String receivedDate) {
 		super();
 		this.id = id;
 		this.referralName = referralName;
@@ -59,7 +59,7 @@ public class ReferralSummary {
 	 *  
 	 * @return the receivedDate
 	 */
-	public Date getReceivedDate() {
+	public String getReceivedDate() {
 		return receivedDate;
 	}
 	

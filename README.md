@@ -6,11 +6,21 @@ The CWDS API provides RESTful services for the CWDS Modules.
 
 The development team is actively using the [Github Wiki](https://github.com/ca-cwds/API/wiki).  
 
-## Configuration 
+## Configuration
+
+The CWDS API requires the following environment variables:
+
+- DB_USER -- the database username
+- DB_PASSWORD -- the database password
+- DB_JDBC_URL -- the database URL in Java Database Connectivity format
+
+Further configuration options are available in the file config/api.yml.
 
 ## Installation
 
 ### Prerequisites
+
+1.  DB2 10.x
 
 ### Using Docker
 
