@@ -36,7 +36,7 @@ public class StaffPersonResourceImpl extends BaseResource<StaffPersonService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Find Referral by id", response = StaffPerson.class)
+	@ApiOperation(value = "Find StaffPerson by id", response = StaffPerson.class)
 	public Response get(String id, String acceptHeader) {
 		return crudsResource.get(id, acceptHeader);
 	}

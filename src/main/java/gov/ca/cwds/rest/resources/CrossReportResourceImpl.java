@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.resources;
-
-import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
-import gov.ca.cwds.rest.services.AllegationService;
+import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
+import gov.ca.cwds.rest.services.CrossReportService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
@@ -15,20 +14,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link AllegationResource} delegating work to {@link AllegationResource}
+ * Implementation of {@link CrossReportResource} delegating work to {@link CrossReportService}
  * 
  * @author CWDS API Team
  */
-public class AllegationResourceImpl extends BaseResource<AllegationService>
-		implements AllegationResource, CrudsResource<Allegation> {
+public class CrossReportResourceImpl extends BaseResource<CrossReportService>
+		implements CrossReportResource, CrudsResource<CrossReport> {
 
 	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(AllegationResourceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CrossReportResourceImpl.class);
 	
-	private CrudsResource<Allegation> crudsResource;
+	private CrudsResource<CrossReport> crudsResource;
 	
-	public AllegationResourceImpl(ServiceEnvironment serviceEnvironment, CrudsResource<Allegation> crudsResource) {
-		super(serviceEnvironment, AllegationService.class);
+	public CrossReportResourceImpl(ServiceEnvironment serviceEnvironment, CrudsResource<CrossReport> crudsResource) {
+		super(serviceEnvironment, CrossReportService.class);
 		this.crudsResource = crudsResource;
 	}
 	
@@ -36,7 +35,7 @@ public class AllegationResourceImpl extends BaseResource<AllegationService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Find Allegation by id", response = Allegation.class)
+	@ApiOperation(value = "Find CrossReport by id", response = CrossReport.class)
 	public Response get(String id, String acceptHeader) {
 		return crudsResource.get(id, acceptHeader);
 	}
@@ -44,7 +43,7 @@ public class AllegationResourceImpl extends BaseResource<AllegationService>
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
-	@ApiOperation(value = "Delete Allegation", code = HttpStatus.SC_NO_CONTENT)
+	@ApiOperation(value = "Delete CrossReport", code = HttpStatus.SC_NO_CONTENT)
 	@Override
 	public Response delete(String id, String acceptHeader) {
 		return crudsResource.delete(id, acceptHeader);
@@ -54,8 +53,8 @@ public class AllegationResourceImpl extends BaseResource<AllegationService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Update Allegation", code = 204, response = Allegation.class)
-	public Response update(@Valid Allegation persistentObject, String acceptHeader) {
+	@ApiOperation(value = "Update CrossReport", code = 204, response = CrossReport.class)
+	public Response update(@Valid CrossReport persistentObject, String acceptHeader) {
 		return crudsResource.update(persistentObject, acceptHeader);
 	}
 
@@ -63,8 +62,8 @@ public class AllegationResourceImpl extends BaseResource<AllegationService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String, javax.ws.rs.core.UriInfo)
 	 */
 	@Override
-	@ApiOperation(value = "Create Allegation", response = Allegation.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
-	public Response create(@Valid Allegation persistentObject, String acceptHeader, UriInfo uriInfo) {
+	@ApiOperation(value = "Create CrossReport", response = CrossReport.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
+	public Response create(@Valid CrossReport persistentObject, String acceptHeader, UriInfo uriInfo) {
 		return crudsResource.create(persistentObject, acceptHeader, uriInfo);
 	}
 }
