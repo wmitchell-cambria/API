@@ -13,31 +13,48 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
+import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
+import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 import gov.ca.cwds.rest.jdbi.legacy.AllegationDao;
+import gov.ca.cwds.rest.jdbi.legacy.CrossReportDao;
+import gov.ca.cwds.rest.jdbi.legacy.ReferralClientDao;
 import gov.ca.cwds.rest.jdbi.legacy.ReferralDao;
+import gov.ca.cwds.rest.jdbi.legacy.ReporterDao;
 import gov.ca.cwds.rest.jdbi.legacy.StaffPersonDao;
 import gov.ca.cwds.rest.resources.AllegationResource;
 import gov.ca.cwds.rest.resources.AllegationResourceImpl;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
+import gov.ca.cwds.rest.resources.CrossReportResource;
+import gov.ca.cwds.rest.resources.CrossReportResourceImpl;
 import gov.ca.cwds.rest.resources.CrudsResource;
 import gov.ca.cwds.rest.resources.CrudsResourceImpl;
+import gov.ca.cwds.rest.resources.ReferralClientResource;
+import gov.ca.cwds.rest.resources.ReferralClientResourceImpl;
 import gov.ca.cwds.rest.resources.ReferralResource;
 import gov.ca.cwds.rest.resources.ReferralResourceImpl;
+import gov.ca.cwds.rest.resources.ReporterResource;
+import gov.ca.cwds.rest.resources.ReporterResourceImpl;
 import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.resources.StaffPersonResourceImpl;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.AllegationService;
 import gov.ca.cwds.rest.services.AllegationServiceImpl;
+import gov.ca.cwds.rest.services.CrossReportService;
+import gov.ca.cwds.rest.services.CrossReportServiceImpl;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.CrudsServiceImpl;
+import gov.ca.cwds.rest.services.ReferralClientService;
+import gov.ca.cwds.rest.services.ReferralClientServiceImpl;
 import gov.ca.cwds.rest.services.ReferralService;
 import gov.ca.cwds.rest.services.ReferralServiceImpl;
+import gov.ca.cwds.rest.services.ReporterService;
+import gov.ca.cwds.rest.services.ReporterServiceImpl;
 import gov.ca.cwds.rest.services.StaffPersonService;
 import gov.ca.cwds.rest.services.StaffPersonServiceImpl;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
@@ -61,7 +78,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
     
-    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class) {
+    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class, Reporter.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -132,7 +149,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final StaffPersonDao staffPersonDao = new StaffPersonDao(hibernateBundle.getSessionFactory());   //Generics.getTypeParameter(staffPersonCrudsDao.getClass())
+    	final StaffPersonDao staffPersonDao = new StaffPersonDao(hibernateBundle.getSessionFactory());   
     	LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	final CrudsService<StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<StaffPerson>(staffPersonDao);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());		
@@ -142,7 +159,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				AllegationService.class.getName());
-		final AllegationDao allegationDao = new AllegationDao(hibernateBundle.getSessionFactory()); // Generics.getTypeParameter(allegationCrudsDao.getClass())
+		final AllegationDao allegationDao = new AllegationDao(hibernateBundle.getSessionFactory()); 
 		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
 				AllegationService.class.getName());
 		final CrudsService<Allegation> allegationCrudsService = new CrudsServiceImpl<Allegation>(allegationDao);
@@ -152,7 +169,45 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		apiEnvironment.services().register(AllegationService.class, Api.Version.JSON_VERSION_1, allegationService);
 		LOGGER.info("AllegationService:{} for {} of {}", AllegationServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), AllegationService.class.getName());
-    	
+		
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
+				ReporterService.class.getName());
+		final ReporterDao reporterDao = new ReporterDao(hibernateBundle.getSessionFactory()); 
+		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
+				ReporterService.class.getName());
+		final CrudsService<Reporter> reporterCrudsService = new CrudsServiceImpl<Reporter>(reporterDao);
+		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), ReporterService.class.getName());
+		final ReporterService reporterService = new ReporterServiceImpl(reporterCrudsService);
+		apiEnvironment.services().register(ReporterService.class, Api.Version.JSON_VERSION_1, reporterService);
+		LOGGER.info("ReporterService:{} for {} of {}", ReporterServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), ReporterService.class.getName());
+
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
+				CrossReportService.class.getName());
+		final CrossReportDao crossReportDao = new CrossReportDao(hibernateBundle.getSessionFactory()); 
+		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
+				CrossReportService.class.getName());
+		final CrudsService<CrossReport> crossReportCrudsService = new CrudsServiceImpl<CrossReport>(crossReportDao);
+		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), CrossReportService.class.getName());
+		final CrossReportService crossReportService = new CrossReportServiceImpl(crossReportCrudsService);
+		apiEnvironment.services().register(CrossReportService.class, Api.Version.JSON_VERSION_1, crossReportService);
+		LOGGER.info("CrossReportService:{} for {} of {}", CrossReportServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), CrossReportService.class.getName());
+		
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
+				ReferralClientService.class.getName());
+		final ReferralClientDao referralClientDao = new ReferralClientDao(hibernateBundle.getSessionFactory()); 
+		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
+				ReferralClientService.class.getName());
+		final CrudsService<ReferralClient> referralClientCrudsService = new CrudsServiceImpl<ReferralClient>(referralClientDao);
+		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), ReferralClientService.class.getName());
+		final ReferralClientService referralClientService = new ReferralClientServiceImpl(referralClientCrudsService);
+		apiEnvironment.services().register(ReferralClientService.class, Api.Version.JSON_VERSION_1, referralClientService);
+		LOGGER.info("ReferralClientService:{} for {} of {}", ReferralClientServiceImpl.class.getName(),
+				Api.Version.JSON_VERSION_1.getMediaType(), ReferralClientService.class.getName());
     }
     
     private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {    	
@@ -169,6 +224,21 @@ public class ApiApplication extends Application<ApiConfiguration> {
         CrudsResource<StaffPerson> staffPersonCrudsResource = new CrudsResourceImpl<StaffPerson, StaffPersonService>(apiEnvironment.services(), StaffPersonService.class);
         final StaffPersonResource staffPersonResource = new StaffPersonResourceImpl(apiEnvironment.services(), staffPersonCrudsResource);
         apiEnvironment.jersey().register(staffPersonResource);
+        
+        LOGGER.info("Registering CrossReportResource");
+        CrudsResource<CrossReport> crossReportCrudsResource = new CrudsResourceImpl<CrossReport, CrossReportService>(apiEnvironment.services(), CrossReportService.class);
+        final CrossReportResource crossReportResource = new CrossReportResourceImpl(apiEnvironment.services(), crossReportCrudsResource);
+        apiEnvironment.jersey().register(crossReportResource);
+        
+        LOGGER.info("Registering ReferralClientResource");
+        CrudsResource<ReferralClient> referralClientCrudsResource = new CrudsResourceImpl<ReferralClient, ReferralClientService>(apiEnvironment.services(), ReferralClientService.class);
+        final ReferralClientResource referralClientResource = new ReferralClientResourceImpl(apiEnvironment.services(), referralClientCrudsResource);
+        apiEnvironment.jersey().register(referralClientResource);
+        
+        LOGGER.info("Registering ReporterResource");
+        CrudsResource<Reporter> reporterCrudsResource = new CrudsResourceImpl<Reporter, ReporterService>(apiEnvironment.services(), ReporterService.class);
+        final ReporterResource reporterResource = new ReporterResourceImpl(apiEnvironment.services(), reporterCrudsResource);
+        apiEnvironment.jersey().register(reporterResource);
         
         LOGGER.info("Registering ApiListingResource");
      	apiEnvironment.jersey().register(new ApiListingResource());
