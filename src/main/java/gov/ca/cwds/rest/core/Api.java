@@ -27,9 +27,24 @@ public class Api {
     public final static String RESOURCE_STAFF_PERSON = "staffpersons";
     
     /**
-     * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api.
+     * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
      */
     public final static String RESOURCE_ALLEGATION = "allegations";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_REPORTER} api.
+     */
+    public final static String RESOURCE_REPORTER = "reporters";
+
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} api.
+     */
+    public final static String RESOURCE_REFERRAL_CLIENT = "referralclients";
+
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api.
+     */
+    public final static String RESOURCE_CROSS_REPORT = "crossreports";
 
     /**
      * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1} media type.

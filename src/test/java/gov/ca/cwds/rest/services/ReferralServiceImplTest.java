@@ -8,18 +8,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import io.dropwizard.jackson.Jackson;
-
-import java.io.IOException;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import io.dropwizard.jackson.Jackson;
 
 public class ReferralServiceImplTest {
 	private static ReferralService referralService;
