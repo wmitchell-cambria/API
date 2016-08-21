@@ -131,6 +131,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
         LOGGER.info("Application name: {}", configuration.getApplicationName());
         ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
         
+        LOGGER.info("Preparing DAOs");
+        setupDaos(configuration);
+        
         //NOTE : Services must be registered before Resources can be
         LOGGER.info("Registering Application Service");
         registerServices(configuration, apiEnvironment);
