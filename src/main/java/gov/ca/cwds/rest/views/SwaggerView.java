@@ -22,5 +22,8 @@ public class SwaggerView extends View {
 		return swaggerConfiguration.getTitle();
 	}
 
+	public String getJsonUrl() {
+		return swaggerConfiguration.getJsonUrl();
+	}
 
 }
