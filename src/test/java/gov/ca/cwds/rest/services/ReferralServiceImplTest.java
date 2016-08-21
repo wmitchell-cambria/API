@@ -1,9 +1,6 @@
 package gov.ca.cwds.rest.services;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,16 +33,6 @@ public class ReferralServiceImplTest {
 		referralService = new ReferralServiceImpl(crudsService);
 	}
 	
-	@Test 
-	public void findReferralSummaryReturnsCorrectObjectOnSuccess() {
-		assertThat(referralService.findReferralSummary(FOUND_REFERRAL.getId()).getId(), is(equalTo(FOUND_REFERRAL.getId())));
-	}
-
-	@Test 
-	public void findReferralSummaryReturnsNullOnNotFound() {
-		assertThat(referralService.findReferralSummary("notfound"), is(equalTo(null)));
-	}
-
 	@Test
 	public void findDelegatesToCrudsService() {
 		referralService.find("1");

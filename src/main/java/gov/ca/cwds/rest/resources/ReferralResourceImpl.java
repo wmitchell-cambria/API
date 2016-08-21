@@ -1,12 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.services.ReferralService;
-import gov.ca.cwds.rest.setup.ServiceEnvironment;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ResponseHeader;
-
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -14,6 +7,12 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ResponseHeader;
 
 /**
  * Implementation of {@link ReferralResource} delegating work to {@link ReferralService}
@@ -65,21 +64,5 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	@ApiOperation(value = "Create Referral", response = Referral.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
 	public Response create(@Valid Referral persistentObject, String acceptHeader, UriInfo uriInfo) {
 		return crudsResource.create(persistentObject, acceptHeader, uriInfo);
-	}
-	
-	@Override
-	public Response getReferralSummary(String id, String acceptHeader) {
-		ReferralService referralService = super.versionedService(acceptHeader);
-		if(referralService == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		ReferralSummary referralSummary = referralService.findReferralSummary(id);
-		if( referralSummary != null ) {
-			return Response.ok(referralSummary).build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
-		}
 	}
 }
