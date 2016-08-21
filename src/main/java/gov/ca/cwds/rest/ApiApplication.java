@@ -7,7 +7,6 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,7 +152,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
     
-    @SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setupDaos(final ApiConfiguration configuration) {
     	if( debug ) {
     		LOGGER.warn("Setting up HashMap DAOs");
