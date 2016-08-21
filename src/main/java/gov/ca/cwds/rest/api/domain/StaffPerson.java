@@ -25,6 +25,7 @@ public class StaffPerson extends DomainObject {
 
 	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC")
  	private String id;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
@@ -34,66 +35,83 @@ public class StaffPerson extends DomainObject {
 
 	@NotEmpty
     @Size(min=1, max=20)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="John")
 	private String firstName;
 	
 	@NotEmpty
 	@Size(min=1, max=30)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Case Worker")
 	private String jobTitle;
 	
 	@NotEmpty
 	@Size(min=1, max=25)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Smith")
 	private String lastName;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	private String middleInitial;
 	
 	@NotEmpty
 	@Size(min=1, max=6)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="MR.")
 	private String namePrefix;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false, example="9165551212")
 	private BigDecimal phoneNumber;
 	
+	@ApiModelProperty(required=true, readOnly=false, example="123")
 	private int phoneExt = 0;
 
 	@NotNull
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="startDate")
+	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="1963-11-22")
 	private String startDate;
 	
 	@NotEmpty
 	@Size(min=1, max=4)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="SR.")
 	private String nameSuffix;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean telecommuterIndicator;
 
 	@NotEmpty
 	@Size(min=1, max=10)
+	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
 	private String cwsOffice;
 	
 	@NotEmpty
 	@Size(min=1, max=160)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="some free form text")
 	private String availabilityAndLocationDescription;
 
 	@NotEmpty
 	@Size(min=1, max=4)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="9021")
 	private String ssrsLicensingWorkerId;
 	
 	@NotEmpty
 	@Size(min=1, max=2)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="99")
 	private String countyCode;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean dutyWorkerIndicator;
 
 	@NotEmpty
 	@Size(min=1, max=10)
+	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWSADDRT", example="ghi")
 	private String cwsOfficeAddress;
 	
 	@Size(min=1, max=50)
+	@ApiModelProperty(required=false, readOnly=false, value="", example="john.q.smith@somedomain.com")
 	//NOTE : The legacy system doesn't seem to enforce valid email addresses
 	//@Email
 	private String emailAddress;
@@ -166,7 +184,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the id
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Aaeae9r0F4")
 	public String getId() {
 		return id;
 	}
@@ -174,7 +191,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the firstName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="John")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -182,7 +198,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the lastName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Smith")
 	public String getLastName() {
 		return lastName;
 	}
@@ -190,7 +205,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the middleInitial
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getMiddleInitial() {
 		return middleInitial;
 	}
@@ -206,7 +220,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the jobTitle
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Case Worker")
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -214,7 +227,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the namePrefix
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="MR.")
 	public String getNamePrefix() {
 		return namePrefix;
 	}
@@ -222,7 +234,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the phoneNumber
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="9165551212")
 	public BigDecimal getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -230,7 +241,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the phoneExt
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public int getPhoneExt() {
 		return phoneExt;
 	}
@@ -238,7 +248,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the startDate
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="1963-11-22")
 	public String getStartDate() {
 		return startDate;
 	}
@@ -246,7 +255,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the nameSuffix
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="SR.")
 	public String getNameSuffix() {
 		return nameSuffix;
 	}
@@ -254,7 +262,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the telecommuterIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false)
 	public Boolean getTelecommuterIndicator() {
 		return telecommuterIndicator;
 	}
@@ -262,7 +269,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the cwsOffice
 	 */
-	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
 	public String getCwsOffice() {
 		return cwsOffice;
 	}
@@ -270,7 +276,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the availabilityAndLocationDescription
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="some free form text")
 	public String getAvailabilityAndLocationDescription() {
 		return availabilityAndLocationDescription;
 	}
@@ -278,7 +283,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the ssrsLicensingWorkerId
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="9021")
 	public String getSsrsLicensingWorkerId() {
 		return ssrsLicensingWorkerId;
 	}
@@ -286,7 +290,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the countyCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="99")
 	public String getCountyCode() {
 		return countyCode;
 	}
@@ -294,7 +297,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the dutyWorkerIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false)
 	public Boolean getDutyWorkerIndicator() {
 		return dutyWorkerIndicator;
 	}
@@ -302,7 +304,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the cwsOfficeAddress
 	 */
-	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWSADDRT", example="ghi")
 	public String getCwsOfficeAddress() {
 		return cwsOfficeAddress;
 	}
@@ -310,7 +311,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the emailAddress
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="john.q.smith@somedomain.com")
 	public String getEmailAddress() {
 		return emailAddress;
 	}
