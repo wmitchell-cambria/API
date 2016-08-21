@@ -60,15 +60,15 @@ public class ReferralServiceImplTest {
 	}
 	
 	@Test
-	public void createDelegatesToCrudsService() {
-		Referral toCreate = new Referral();
+	public void createDelegatesToCrudsService() throws Exception {
+		Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class);
 		referralService.create(toCreate);
 		verify(crudsService, times(1)).create(toCreate);
 	}
 	
 	@Test
-	public void updateDelegatesToCrudsService() {
-		Referral toUpdate = new Referral();
+	public void updateDelegatesToCrudsService() throws Exception {
+		Referral toUpdate = MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class);
 		referralService.update(toUpdate);
 		verify(crudsService, times(1)).update(toUpdate);
 	}

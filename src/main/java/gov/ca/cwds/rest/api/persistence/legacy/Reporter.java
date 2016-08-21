@@ -19,8 +19,10 @@ public class Reporter extends PersistentObject {
  	private String id;
  	
 	@JsonCreator
-	public Reporter(@JsonProperty("id") String id) {
-		super();
+	public Reporter(@JsonProperty("id") String id,			
+			@JsonProperty("lastUpdatedId") String lastUpdatedId,
+			@JsonProperty("lastUpdatedTime") String lastUpdatedTime) {
+		super(lastUpdatedId, lastUpdatedTime);
 		this.id = id;
 	}
 

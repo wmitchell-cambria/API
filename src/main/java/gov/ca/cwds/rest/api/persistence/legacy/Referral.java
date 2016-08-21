@@ -1,9 +1,5 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,13 +13,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link PersistentObject} representing a Referral
@@ -226,20 +225,6 @@ public class Referral extends PersistentObject {
 	@Size(min=1, max=1, message="size must be 1")
 	private String unfoundedSeriesCode;
 
-	@Column(name = "LST_UPD_ID")
-	@NotEmpty
-	@Size(min=1, max=3)	
-	private String lastUpdateId;
-	
-	@Transient
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
-	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=true)
-	private String lastUpdateTimeStamp;
-	
-	@Type(type = "timestamp")
-	@Column(name = "LST_UPD_TS")	
-	private Date lastUpdateTimeStampPersistable;
-
 	@Column(name = "FKREFERL_T")
 	@Size(max=10)	
 	private String foreignKeyFromReferral;
@@ -325,11 +310,6 @@ public class Referral extends PersistentObject {
 	@Column(name = "ORIGCLS_DT")
 	private Date originalClosureDatePersistable;
 		
-	public Referral() {
-		super();
-	}
-
-	
 	/**
 	 * @param id
 	 * @param additionalInfoIncludedCode
@@ -434,7 +414,7 @@ public class Referral extends PersistentObject {
 			@JsonProperty("limitedAccessDate") String limitedAccessDate,
 			@JsonProperty("limitedAccessDesc") String limitedAccessDesc, 
 			@JsonProperty("originalClosureDate") String originalClosureDate) {
-		super();
+		super(lastUpdateId, lastUpdateTimeStamp);
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 		DateFormat timestampFormat = new SimpleDateFormat(TIMESTAMP_FORMAT);
 		
@@ -477,9 +457,6 @@ public class Referral extends PersistentObject {
 		this.specificsIncludedCode = specificsIncludedCode;
 		this.sufficientInformationCode = sufficientInformationCode;
 		this.unfoundedSeriesCode = unfoundedSeriesCode;
-		this.lastUpdateId = lastUpdateId;
-		this.lastUpdateTimeStamp = lastUpdateTimeStamp;
-		try { this.lastUpdateTimeStampPersistable = timestampFormat.parse(lastUpdateTimeStamp); } catch (Throwable e) {}
 		this.foreignKeyFromReferral = foreignKeyFromReferral;
 		this.fkAddrsT = fkAddrsT;
 		this.fkStaffPerso = fkStaffPerso;
@@ -774,22 +751,6 @@ public class Referral extends PersistentObject {
 	}
 
 	/**
-	 * @return the lastUpdateId
-	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
-	public String getLastUpdateId() {
-		return lastUpdateId;
-	}
-
-	/**
-	 * @return the lastUpdateTimeStamp
-	 */
-	@ApiModelProperty(required=false, readOnly=true, example="2015-11-22")
-	public String getLastUpdateTimeStamp() {
-		return !Strings.isNullOrEmpty(lastUpdateTimeStamp) ? lastUpdateTimeStamp : lastUpdateTimeStampPersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdateTimeStampPersistable)) : "";
-	}
-
-	/**
 	 * @return the foreignKeyFromReferral
 	 */
 	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
@@ -1005,12 +966,6 @@ public class Referral extends PersistentObject {
 				+ ((homelessIndicator == null) ? 0 : homelessIndicator
 						.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result
-				+ ((lastUpdateId == null) ? 0 : lastUpdateId.hashCode());
-		result = prime
-				* result
-				+ ((lastUpdateTimeStamp == null) ? 0 : lastUpdateTimeStamp
-						.hashCode());
 		result = prime
 				* result
 				+ ((legalDefinitionCode == null) ? 0 : legalDefinitionCode
@@ -1293,20 +1248,6 @@ public class Referral extends PersistentObject {
 				return false;
 			}
 		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		if (lastUpdateId == null) {
-			if (other.lastUpdateId != null) {
-				return false;
-			}
-		} else if (!lastUpdateId.equals(other.lastUpdateId)) {
-			return false;
-		}
-		if (lastUpdateTimeStamp == null) {
-			if (other.lastUpdateTimeStamp != null) {
-				return false;
-			}
-		} else if (!lastUpdateTimeStamp.equals(other.lastUpdateTimeStamp)) {
 			return false;
 		}
 		if (legalDefinitionCode == null) {

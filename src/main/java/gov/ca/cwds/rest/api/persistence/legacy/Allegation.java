@@ -29,7 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Allegation extends PersistentObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
-	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
 	@Id
 	@Column(name = "IDENTIFIER")
@@ -61,21 +60,6 @@ public class Allegation extends PersistentObject {
 	@Column(name = "ABUSE_FREQ")
 	@NotNull
 	private Integer abuseFrequency;
-
-	@Column(name = "LST_UPD_ID")
-	@NotEmpty
-	@Size(min = 1, max = 3)
-	private String lastUpdatedId;
-
-	@Transient
-	@NotNull
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIMESTAMP_FORMAT)
-	@gov.ca.cwds.rest.validation.Date(format = TIMESTAMP_FORMAT, required = true)
-	private String lastUpdatedTime;
-
-	@Type(type = "timestamp")
-	@Column(name = "LST_UPD_TS")
-	private Date lastUpdatedTimePersistable;
 
 	@Column(name = "ABUSE_PDCD")
 	@NotEmpty
@@ -152,10 +136,6 @@ public class Allegation extends PersistentObject {
 	@Column(name = "PLC_FCLC")
 	private Integer placementFacilityType;
 
-	public Allegation() {
-		super();
-	}
-
 	@JsonCreator
 	public Allegation(@JsonProperty("id") String id, @JsonProperty("abuseEndDate") String abuseEndDate,
 			@JsonProperty("abuseFrequency") Integer abuseFrequency,
@@ -175,9 +155,8 @@ public class Allegation extends PersistentObject {
 			@JsonProperty("countySpecificCode") String countySpecificCode,
 			@JsonProperty("zippyCrestedInd") String zippyCrestedInd,
 			@JsonProperty("placementFacilityType") Integer placementFacilityType) {
-		super();
+		super(lastUpdatedId, lastUpdatedTime);
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-		DateFormat timestampFormat = new SimpleDateFormat(TIMESTAMP_FORMAT);
 
 		this.id = id;
 		this.abuseFrequency = abuseFrequency;
@@ -186,13 +165,7 @@ public class Allegation extends PersistentObject {
 			this.abuseEndDatePersistable = dateFormat.parse(abuseEndDate);
 		} catch (Throwable e) {
 		}
-		this.lastUpdatedId = lastUpdatedId;
-		this.lastUpdatedTime = lastUpdatedTime;
 
-		try {
-			this.lastUpdatedTimePersistable = timestampFormat.parse(lastUpdatedTime);
-		} catch (Throwable e) {
-		}
 		this.abuseStartDate = abuseStartDate;
 
 		try {
@@ -336,21 +309,6 @@ public class Allegation extends PersistentObject {
 		return staffPersonAddedInd;
 	}
 
-	@ApiModelProperty(readOnly = true, value = "remove this from view of client, generated at business layer")
-	public String getLastUpdatedId() {
-		return lastUpdatedId;
-	}
-
-	/**
-	 * @return the lastUpdatedTime
-	 */
-	@ApiModelProperty(required = true, readOnly = true, value = "remove from view of user", example = "1963-11-22")
-	public String getLastUpdatedTime() {
-		return !Strings.isNullOrEmpty(lastUpdatedTime) ? lastUpdatedTime
-				: lastUpdatedTimePersistable != null
-						? ((new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
-	}
-
 	/**
 	 * @return the fkClientT
 	 */
@@ -405,8 +363,6 @@ public class Allegation extends PersistentObject {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((abuseFrequency == null) ? 0 : abuseFrequency.hashCode());
-		result = prime * result + ((lastUpdatedId == null) ? 0 : lastUpdatedId.hashCode());
-		result = prime * result + ((lastUpdatedTime == null) ? 0 : lastUpdatedTime.hashCode());
 		result = prime * result + ((abuseStartDate == null) ? 0 : abuseStartDate.hashCode());
 		result = prime * result + ((allegationDispositionType == null) ? 0 : allegationDispositionType.hashCode());
 		result = prime * result + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
@@ -493,16 +449,6 @@ public class Allegation extends PersistentObject {
 			if (other.zippyCrestedInd != null)
 				return false;
 		} else if (!zippyCrestedInd.equals(other.zippyCrestedInd))
-			return false;
-		if (lastUpdatedId == null) {
-			if (other.lastUpdatedId != null)
-				return false;
-		} else if (!lastUpdatedId.equals(other.lastUpdatedId))
-			return false;
-		if (lastUpdatedTime == null) {
-			if (other.lastUpdatedTime != null)
-				return false;
-		} else if (!lastUpdatedTime.equals(other.lastUpdatedTime))
 			return false;
 		return true;
 	}

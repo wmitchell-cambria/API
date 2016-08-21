@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -7,10 +8,14 @@ import static org.mockito.Mockito.verify;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
+import io.dropwizard.jackson.Jackson;
 
 public class CrossReportServiceImplTest {
 	private static CrossReportService crossReportService;
+	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private CrudsService<CrossReport> crudsService;
 	
@@ -35,15 +40,15 @@ public class CrossReportServiceImplTest {
 	}
 	
 	@Test
-	public void createDelegatesToCrudsService() {
-		CrossReport toCreate = new CrossReport("aa");
+	public void createDelegatesToCrudsService() throws Exception {
+		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 		crossReportService.create(toCreate);
 		verify(crudsService, times(1)).create(toCreate);
 	}
 	
 	@Test
-	public void updateDelegatesToCrudsService() {
-		CrossReport toUpdate = new CrossReport("aa");
+	public void updateDelegatesToCrudsService() throws Exception {
+		CrossReport toUpdate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 		crossReportService.update(toUpdate);
 		verify(crudsService, times(1)).update(toUpdate);
 	}
