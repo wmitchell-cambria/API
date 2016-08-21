@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.persistence.legacy;
+package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,8 +53,10 @@ public class AllegationTest {
 
 	@Test
 	public void deserializesFromJSON() throws Exception {
-		assertThat(MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/valid.json"), Allegation.class),
-				is(equalTo(validAllegation())));
+		Allegation deserialized = MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/valid.json"), Allegation.class);
+		Allegation valid = validAllegation();
+		assertThat(deserialized,
+				is(equalTo(valid)));
 	}
 
 	/*
@@ -438,7 +440,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be empty"),
+		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -450,7 +452,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be empty"),
+		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -462,19 +464,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be empty"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenInjuryHarmDetailIndVarTooLong() throws Exception {
-		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndVar/tooLong.json"), Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar Size must be 1"),
+		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -540,7 +530,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be empty"),
+		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -552,7 +542,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be empty"),
+		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -564,115 +554,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be empty"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenStaffPersonAddedIndTooLong() throws Exception {
-		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedInd/tooLong.json"), Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd Size must be 1"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	/*
-	 * lastUpdatedId tests
-	 */
-	@Test
-	public void failsWhenLastUpdatedIdMissing() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/lastUpdatedId/missing.json"),
-				Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenLastUpdatedIdEmpty() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/lastUpdatedId/empty.json"),
-				Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenLastUpdatedIdNull() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/lastUpdatedId/null.json"),
-				Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenLastUpdatedIdTooLong() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/lastUpdatedId/tooLong.json"),
-				Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("lastUpdatedId size must be between 1 and 3"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	/*
-	 * lastUpdatedTime tests
-	 */
-	@Test
-	public void failsWhenLastUpdatedTimeMissing() throws Exception {
-		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/lastUpdatedTime/missing.json"), Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(
-				response.readEntity(String.class)
-						.indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenLastUpdatedTimeNull() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/lastUpdatedTime/null.json"),
-				Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(
-				response.readEntity(String.class)
-						.indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenLastUpdatedTimeWrongFormat() throws Exception {
-		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/lastUpdatedTime/wrongFormat.json"), Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(
-				response.readEntity(String.class)
-						.indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
+		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -855,7 +737,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be empty"),
+		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -867,7 +749,7 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be empty"),
+		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -879,26 +761,11 @@ public class AllegationTest {
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be empty"),
-				is(greaterThanOrEqualTo(0)));
-	}
-
-	@Test
-	public void failsWhenZippyCrestedIndTooLong() throws Exception {
-		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/zippyCrestedInd/tooLong.json"), Allegation.class);
-		Response response = resources.client().target(ROOT_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd Size must be 1"),
+		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	private Allegation validAllegation() {
-		return new Allegation("Aaeae9r0F4", "1999-07-15", 2, "M", "Barber Shop", "1999-07-15", 0, 2180, "Fremont", "",
-				"N", "N", "N", "0F4", "1999-07-15-17.06.29.208", "AHooKwN0F4", "MKPFcB90F4", "8mu1E710F4", "19", "N",
-				6574);
+		return new Allegation("Aaeae9r0F4", "1999-07-15", 2, "M", "Barber Shop", "1999-07-15", 0, 2180, "Fremont", "", false, "N", false, "AHooKwN0F4", "MKPFcB90F4", "8mu1E710F4", "19", false, 6574);
 	}
-
 }

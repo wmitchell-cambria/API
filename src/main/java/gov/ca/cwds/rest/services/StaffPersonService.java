@@ -8,4 +8,4 @@ import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
  * 
  * @author CWDS API Team
  */
-public interface StaffPersonService extends CrudsService<StaffPerson> {}
+public interface StaffPersonService extends CrudsService<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson> {}

@@ -10,7 +10,7 @@ public class CrossReportServiceImpl implements CrossReportService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CrossReportServiceImpl.class);
 
-	private CrudsService<CrossReport> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crudsService;
 
 	/**
 	 * Constructor
@@ -18,7 +18,7 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public CrossReportServiceImpl(CrudsService<CrossReport> crudsService) {
+	public CrossReportServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -28,8 +28,8 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
 	 */
 	@Override
-	public CrossReport find(String id) {
-		return (CrossReport) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.CrossReport find(String id) {
+		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.find(id);
 	}
 
 	/*
@@ -38,29 +38,25 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
 	 */
 	@Override
-	public CrossReport delete(String id) {
-		return (CrossReport) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.CrossReport delete(String id) {
+		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.delete(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public CrossReport create(CrossReport object) {
-		return (CrossReport) crudsService.create(object);
+	public String create(gov.ca.cwds.rest.api.domain.CrossReport object) {
+		return crudsService.create(object);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public CrossReport update(CrossReport object) {
-		return (CrossReport) crudsService.update(object);
+	public String update(gov.ca.cwds.rest.api.domain.CrossReport object) {
+		return crudsService.update(object);
 	}
+
+
 }

@@ -31,25 +31,25 @@ public class ServiceEnvironmentTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Illegal Superclass");
          
-        CrudsService<Referral> fakeService = new CrudsService<Referral>() {
+        CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> fakeService = new CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral>() {
 
 			@Override
-			public Referral find(String id) {
+			public gov.ca.cwds.rest.api.domain.Referral find(String id) {
 				return null;
 			}
 
 			@Override
-			public Referral delete(String id) {
+			public gov.ca.cwds.rest.api.domain.Referral delete(String id) {
 				return null;
 			}
 
 			@Override
-			public Referral create(Referral object) {
+			public String create(gov.ca.cwds.rest.api.domain.Referral object) {
 				return null;
 			}
 
 			@Override
-			public Referral update(Referral object) {
+			public String update(gov.ca.cwds.rest.api.domain.Referral object) {
 				return null;
 			}
 			
@@ -61,7 +61,7 @@ public class ServiceEnvironmentTest {
 	@Test
 	public void checkCorrectServiceReturned() {
 		@SuppressWarnings("unchecked")
-		CrudsService<Referral> crudsService = mock(CrudsService.class);
+		CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService = mock(CrudsService.class);
 		ReferralService referralService = new ReferralServiceImpl(crudsService);
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		
@@ -76,7 +76,7 @@ public class ServiceEnvironmentTest {
 	@Test
 	public void checkNoServiceReturnedCorrectlyOnBadImplementationClass() {
 		@SuppressWarnings("unchecked")
-		CrudsService<Referral> crudsService = mock(CrudsService.class);
+		CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService = mock(CrudsService.class);
 		ReferralService referralService = new ReferralServiceImpl(crudsService);
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		

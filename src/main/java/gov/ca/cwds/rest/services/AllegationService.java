@@ -9,4 +9,4 @@ import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
  * 
  * @author CWDS API Team
  */
-public interface AllegationService extends CrudsService<Allegation> {}
+public interface AllegationService extends CrudsService<gov.ca.cwds.rest.api.domain.Allegation, Allegation> {}

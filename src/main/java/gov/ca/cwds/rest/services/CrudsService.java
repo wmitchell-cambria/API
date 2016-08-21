@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
@@ -7,9 +8,12 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link PersistentObject} the service implements CRUDS for
+ * @param <T>	The {@link DomainObject} the service implements CRUDS for
+ * @param <P> The {@link PersistentObject} the service performs CRUDs operations on
+ * 
  */
-public interface CrudsService<T extends PersistentObject> extends Service {
+public interface CrudsService<T extends DomainObject, P extends PersistentObject> extends Service {
+	
 	/**
 	 * Find object by id
 	 * 
@@ -36,9 +40,9 @@ public interface CrudsService<T extends PersistentObject> extends Service {
 	 * @param object
 	 *            The object to be created
 	 * 
-	 * @return The created object with a newly populated id
+	 * @return The id of the newly created object
 	 */
-	public T create(T object);
+	public String create(T object);
 
 	/**
 	 * Update object
@@ -46,7 +50,7 @@ public interface CrudsService<T extends PersistentObject> extends Service {
 	 * @param object
 	 *            The object to be updated
 	 * 
-	 * @return The updated object
+	 * @return The id of the updated object
 	 */
-	public T update(T object);
+	public String update(T object);
 }

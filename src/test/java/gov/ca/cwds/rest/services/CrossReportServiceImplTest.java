@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
+import gov.ca.cwds.rest.api.domain.CrossReport;
 import io.dropwizard.jackson.Jackson;
 
 public class CrossReportServiceImplTest {
 	private static CrossReportService crossReportService;
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
-	private CrudsService<CrossReport> crudsService;
+	private CrudsService<CrossReport, gov.ca.cwds.rest.api.persistence.legacy.CrossReport> crudsService;
 	
 	@SuppressWarnings("unchecked")
 	@Before

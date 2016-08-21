@@ -15,7 +15,7 @@ public class ReferralServiceImpl implements ReferralService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReferralServiceImpl.class);
 
-	private CrudsService<Referral> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService;
 
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public ReferralServiceImpl(CrudsService<Referral> crudsService) {
+	public ReferralServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -33,8 +33,8 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
 	 */
 	@Override
-	public Referral find(String id) {
-		return (Referral) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.Referral find(String id) {
+		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.find(id);
 	}
 
 	/*
@@ -43,30 +43,23 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
 	 */
 	@Override
-	public Referral delete(String id) {
-		return (Referral) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.Referral delete(String id) {
+		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.delete(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Referral create(Referral object) {
-		return (Referral) crudsService.create(object);
+	public String create(gov.ca.cwds.rest.api.domain.Referral object) {
+		return crudsService.create(object);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Referral update(Referral object) {
-		return (Referral) crudsService.update(object);
+	public String update(gov.ca.cwds.rest.api.domain.Referral object) {
+		return crudsService.update(object);
 	}
-
 }

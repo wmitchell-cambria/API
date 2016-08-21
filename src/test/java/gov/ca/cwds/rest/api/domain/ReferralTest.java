@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.persistence.legacy;
+package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -55,7 +55,9 @@ public class ReferralTest {
     
     @Test
     public void deserializesFromJSON() throws Exception {
-        assertThat(MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class), is(equalTo(validReferral())));
+        Referral deserialized = MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class);
+        Referral valid = validReferral();
+    	assertThat(deserialized, is(equalTo(valid)));
     }
     
 	/*
@@ -145,28 +147,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/anonymousReporter/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenAnonymousReporterNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/anonymousReporter/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenAnonymousReporterEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/anonymousReporter/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenAnonymousReporterTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/anonymousReporter/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("anonymousReporter may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -177,28 +172,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/applicationForPetition/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenApplicationForPetitionNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/applicationForPetition/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenApplicationForPetitionEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/applicationForPetition/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenApplicationForPetitionTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/applicationForPetition/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("applicationForPetition may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -343,28 +331,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcement/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcement/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcement/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcement/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("filedSuspectedChildAbuseReporttoLawEnforcement may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -375,28 +356,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyAwarenessIndicator/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenFamilyAwarenessIndicatorNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyAwarenessIndicator/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenFamilyAwarenessIndicatorEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyAwarenessIndicator/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenFamilyAwarenessIndicatorTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyAwarenessIndicator/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("familyAwarenessIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -457,28 +431,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/legalRightsNoticeIndicator/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLegalRightsNoticeIndicatorNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/legalRightsNoticeIndicator/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLegalRightsNoticeIndicatorEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/legalRightsNoticeIndicator/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenLegalRightsNoticeIndicatorTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/legalRightsNoticeIndicator/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("legalRightsNoticeIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -815,63 +782,6 @@ public class ReferralTest {
 	}
 	
 	/*
-	* lastUpdateId Tests
-	*/
-	@Test
-	public void failsWhenLastUpdateIdMissing() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/missing.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenLastUpdateIdNull() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/null.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenLastUpdateIdEmpty() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/empty.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenLastUpdateIdTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId size must be between 1 and 3"), is(greaterThanOrEqualTo(0)));
-	}
-	
-	/*
-	* lastUpdateTimeStamp Tests
-	*/
-	@Test
-	public void failsWhenLastUpdateTimeStampMissing() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateTimeStamp/missing.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenLastUpdateTimeStampNull() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateTimeStamp/null.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenLastUpdateTimeStampWrongFormat() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateTimeStamp/wrongFormat.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
-	}
-	
-	/*
 	* foreignKeyFromReferral Tests
 	*/
 	@Test
@@ -976,28 +886,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/specialProjectReferralIndicator/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenSpecialProjectReferralIndicatorNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/specialProjectReferralIndicator/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenSpecialProjectReferralIndicatorEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/specialProjectReferralIndicator/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenSpecialProjectReferralIndicatorTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/specialProjectReferralIndicator/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("specialProjectReferralIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -1008,28 +911,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/zippyCreatedIndicator/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenZippyCreatedIndicatorNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/zippyCreatedIndicator/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenZippyCreatedIndicatorEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/zippyCreatedIndicator/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenZippyCreatedIndicatorTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/zippyCreatedIndicator/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("zippyCreatedIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -1040,28 +936,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/homelessIndicator/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenHomelessIndicatorNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/homelessIndicator/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenHomelessIndicatorEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/homelessIndicator/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenHomelessIndicatorTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/homelessIndicator/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("homelessIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -1072,28 +961,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyRefusedServicesIndicator/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenFamilyRefusedServicesIndicatorNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyRefusedServicesIndicator/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenFamilyRefusedServicesIndicatorEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyRefusedServicesIndicator/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator may not be empty"), is(greaterThanOrEqualTo(0)));
-	}
-	@Test
-	public void failsWhenFamilyRefusedServicesIndicatorTooLong() throws Exception {
-	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/familyRefusedServicesIndicator/tooLong.json"), Referral.class);
-	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator size must be 1"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("familyRefusedServicesIndicator may not be null"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -1175,8 +1057,8 @@ public class ReferralTest {
     private Referral validReferral() {
     	return new Referral("DEF",
 		    		 "A",
-		    		 "N",
-		    		 "N",
+		    		 false,
+		    		 false,
 		    		 "A3CDEOm0Ab",
 		    		 new Short((short)122),
 		    		 "A",
@@ -1186,11 +1068,11 @@ public class ReferralTest {
 		    		 "abcdefg",
 		    		 "A3B7sSC0Ab",
 		    		 "efghijk",
-		    		 "N",
-		    		 "N",
+		    		 false,
+		    		 false,
 		    		 new Short((short)1118),
 		    		 "A",
-		    		 "N",
+		    		 false,
 		    		 "N",
 		    		 "2000-01-31",
 		    		 "Verification (R3)                  ",
@@ -1206,17 +1088,15 @@ public class ReferralTest {
 		    		 "A",
 		    		 "A",
 		    		 "A",
-		    		 "0Ab",
-		    		 "2016-08-07-16.41.49.214",
 		    		 "sdfghj",
 		    		 "kjhgfdl",
 		    		 "0Ab",
 		    		 "0Ab",
 		    		 "51",
-		    		 "N",
-		    		 "N",
-		    		 "N",
-		    		 "N",
+		    		 false,
+		    		 false,
+		    		 false,
+		    		 false,
 		    		 "2000-05-05",
 		    		 "C",
 		    		 new Short((short)1234),

@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
+import gov.ca.cwds.rest.api.domain.Reporter;
 import io.dropwizard.jackson.Jackson;
 
 public class ReporterServiceImplTest {
 	private static ReporterService reportService;
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
-	private CrudsService<Reporter> crudsService;
+	private CrudsService<Reporter, gov.ca.cwds.rest.api.persistence.legacy.Reporter> crudsService;
 	
 	@SuppressWarnings("unchecked")
 	@Before

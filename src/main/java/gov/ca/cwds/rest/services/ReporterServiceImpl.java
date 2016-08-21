@@ -10,7 +10,7 @@ public class ReporterServiceImpl implements ReporterService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReporterServiceImpl.class);
 
-	private CrudsService<Reporter> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> crudsService;
 
 	/**
 	 * Constructor
@@ -18,7 +18,7 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public ReporterServiceImpl(CrudsService<Reporter> crudsService) {
+	public ReporterServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -28,8 +28,8 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
 	 */
 	@Override
-	public Reporter find(String id) {
-		return (Reporter) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.Reporter find(String id) {
+		return (gov.ca.cwds.rest.api.domain.Reporter) crudsService.find(id);
 	}
 
 	/*
@@ -38,29 +38,23 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
 	 */
 	@Override
-	public Reporter delete(String id) {
-		return (Reporter) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.Reporter delete(String id) {
+		return (gov.ca.cwds.rest.api.domain.Reporter) crudsService.delete(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Reporter create(Reporter object) {
-		return (Reporter) crudsService.create(object);
+	public String create(gov.ca.cwds.rest.api.domain.Reporter object) {
+		return crudsService.create(object);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Reporter update(Reporter object) {
-		return (Reporter) crudsService.update(object);
+	public String update(gov.ca.cwds.rest.api.domain.Reporter object) {
+		return crudsService.update(object);
 	}
 }

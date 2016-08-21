@@ -1,10 +1,4 @@
 package gov.ca.cwds.rest.resources;
-import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
-import gov.ca.cwds.rest.services.CrossReportService;
-import gov.ca.cwds.rest.setup.ServiceEnvironment;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ResponseHeader;
-
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -12,6 +6,12 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.domain.CrossReport;
+import gov.ca.cwds.rest.services.CrossReportService;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ResponseHeader;
 
 /**
  * Implementation of {@link CrossReportResource} delegating work to {@link CrossReportService}

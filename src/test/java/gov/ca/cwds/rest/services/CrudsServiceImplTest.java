@@ -4,6 +4,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.eq;
+
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -13,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 
 public class CrudsServiceImplTest {
@@ -21,19 +23,29 @@ public class CrudsServiceImplTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	private CrudsServiceImpl<Referral> crudsServiceImpl;
-	private CrudsDao<Referral> crudsDao;
+	private CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsServiceImpl;
+	private CrudsDao<gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsDao;
 	
-	private Referral nonExistentReferralToUpdate = new Referral("notexists","name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-	private Referral existintReferralToCreate = new Referral("exists","name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+	
+	private gov.ca.cwds.rest.api.domain.StaffPerson nonExistentStaffPersonToUpdate = new gov.ca.cwds.rest.api.domain.StaffPerson("notexists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson nonExistingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(nonExistentStaffPersonToUpdate, "ABC");
+	
+	private gov.ca.cwds.rest.api.domain.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.StaffPerson("exists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson existingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(existingStaffPersonToCreate, "ABC");
+	 
+	private gov.ca.cwds.rest.api.domain.StaffPerson toCreate = new gov.ca.cwds.rest.api.domain.StaffPerson("create","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson toCreatePersistent = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(toCreate, "ABC");
 
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
 		crudsDao = mock(CrudsDao.class);
-		when(crudsDao.create(existintReferralToCreate)).thenThrow(new EntityExistsException());
-		when(crudsDao.update(nonExistentReferralToUpdate)).thenThrow(new EntityNotFoundException());
-		crudsServiceImpl = new CrudsServiceImpl<>(crudsDao);
+		when(crudsDao.create(existingPersistentStaffPerson)).thenThrow(new EntityExistsException());
+		when(crudsDao.update(nonExistingPersistentStaffPerson)).thenThrow(new EntityNotFoundException());
+		when(crudsDao.create(eq(toCreatePersistent))).thenReturn(toCreatePersistent);
+		when(crudsDao.find("1")).thenReturn(toCreatePersistent);
+		when(crudsDao.delete("1")).thenReturn(toCreatePersistent);
+		crudsServiceImpl = new CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson>(crudsDao, StaffPerson.class, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson.class);
 	}
 
 	@Test
@@ -51,28 +63,26 @@ public class CrudsServiceImplTest {
 
 	@Test
 	public void createDelegatesToDao() {
-		Referral toCreate = new Referral("1", "name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		crudsServiceImpl.create(toCreate);
-		verify(crudsDao, times(1)).create(toCreate);
+		verify(crudsDao, times(1)).create(toCreatePersistent);
 	}
 
 	@Test
 	public void createThrowsServiceExceptionWhenExists() {
-		Referral toCreate = new Referral("1", "name", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-		crudsServiceImpl.create(toCreate);
-		verify(crudsDao, times(1)).create(toCreate);
+		thrown.expect(ServiceException.class);
+		crudsServiceImpl.create(existingStaffPersonToCreate);
 	}
 
 	
 	@Test
 	public void updateDelegatesToDao() {
-		thrown.expect(ServiceException.class);
-		crudsServiceImpl.create(existintReferralToCreate);
+		crudsServiceImpl.create(toCreate);
+		verify(crudsDao, times(1)).create(toCreatePersistent);
 	}
 
 	@Test
 	public void updateThrowsServiceExceptionWhenNotFound() {
 		thrown.expect(ServiceException.class);
-		crudsServiceImpl.update(nonExistentReferralToUpdate);
+		crudsServiceImpl.update(nonExistentStaffPersonToUpdate);
 	}
 }

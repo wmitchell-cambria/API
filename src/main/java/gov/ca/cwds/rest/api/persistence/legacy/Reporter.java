@@ -3,29 +3,19 @@ package gov.ca.cwds.rest.api.persistence.legacy;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.swagger.annotations.ApiModelProperty;
 
 public class Reporter extends PersistentObject {
 
 	@Id
 	@Column(name = "IDENTIFIER")
-	@NotEmpty
  	private String id;
  	
-	@JsonCreator
-	public Reporter(@JsonProperty("id") String id,			
-			@JsonProperty("lastUpdatedId") String lastUpdatedId,
-			@JsonProperty("lastUpdatedTime") String lastUpdatedTime) {
-		super(lastUpdatedId, lastUpdatedTime);
-		this.id = id;
+	public Reporter(gov.ca.cwds.rest.api.domain.Reporter reporter, String lastUpdatedId) {
+		super(lastUpdatedId);
+		this.id = reporter.getId();
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
 	 */
@@ -33,11 +23,10 @@ public class Reporter extends PersistentObject {
 	public String getPrimaryKey() {
 		return getId();
 	}
-	
+
 	/**
 	 * @return the id
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Aaeae9r0F4")
 	public String getId() {
 		return id;
 	}

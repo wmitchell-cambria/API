@@ -1,11 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.Service;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.setup.ServiceEnvironment;
-
 import java.net.URI;
 
 import javax.persistence.EntityExistsException;
@@ -18,15 +12,22 @@ import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.Service;
+import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
+
 /**
  * An implementation of the {@link CrudsResource}
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link PersistentObject} to perform CRUDS on
+ * @param <T>	The {@link DomainObject} to perform CRUDS on
  * @param <S>	The root {@link Service} interface that will handle the CRUDS from a business layer.  We want the root interface because have different implementations of the interfaces for each version of the API. 
  */
-public final class CrudsResourceImpl<T extends PersistentObject, S extends Service> extends BaseResource<S> implements CrudsResource<T> {
+public final class CrudsResourceImpl<T extends DomainObject, S extends Service> extends BaseResource<S> implements CrudsResource<T> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrudsResourceImpl.class);
 	
 	/**
@@ -42,18 +43,19 @@ public final class CrudsResourceImpl<T extends PersistentObject, S extends Servi
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Response get(String id, String acceptHeader) {
 		@SuppressWarnings("unchecked")
-		CrudsService<T> service = (CrudsService<T>)super.versionedService(acceptHeader);
+		CrudsService service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
 			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
-		T persistentObject = (T)service.find(id);
-		if( persistentObject != null ) {
-			return Response.ok(persistentObject).build();
+		T domainObject = (T)service.find(id);
+		if( domainObject != null ) {
+			return Response.ok(domainObject).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
 		}
@@ -62,43 +64,43 @@ public final class CrudsResourceImpl<T extends PersistentObject, S extends Servi
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Response delete(String id, String acceptHeader) {
 		@SuppressWarnings("unchecked")
-		CrudsService<T> service = (CrudsService<T>)super.versionedService(acceptHeader);
+		CrudsService service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
 			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
-		T persistentObject = (T)service.delete(id);
-		if( persistentObject != null ) {
+		T domainObject = (T)service.delete(id);
+		if( domainObject != null ) {
 			return Response.ok().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
 		}
 	}
-	
-	
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String, javax.ws.rs.core.UriInfo)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo)
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Response create(T persistentObject, String acceptHeader, UriInfo uriInfo) {
+	public Response create(T domainObject, String acceptHeader, UriInfo uriInfo) {
 		@SuppressWarnings("unchecked")
-		CrudsService<T>  service = (CrudsService<T> )super.versionedService(acceptHeader);
+		CrudsService service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
 			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
 		try {
-			persistentObject = (T)service.create(persistentObject);
+			String id = service.create(domainObject);
 			
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 	        URI referralUri = ub.
-	                    path(persistentObject.getPrimaryKey()).
+	                    path(id).
 	                    build();
 			return Response.status(Response.Status.CREATED).header("Location", referralUri.toASCIIString()).build();
 		} catch (ServiceException e) {
@@ -112,19 +114,20 @@ public final class CrudsResourceImpl<T extends PersistentObject, S extends Servi
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String)
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Response update(T persistentObject, String acceptHeader) {
+	public Response update(T domainObject, String acceptHeader) {
 		@SuppressWarnings("unchecked")
-		CrudsService<T>  service = (CrudsService<T> )super.versionedService(acceptHeader);
+		CrudsService  service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
 			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
 		try {
-			persistentObject = (T)service.update(persistentObject);
+			String id = service.update(domainObject);
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} catch (ServiceException e) {
 			if( e.getCause() instanceof EntityNotFoundException ) {
