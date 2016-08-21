@@ -2,15 +2,13 @@ package gov.ca.cwds.rest.api.persistence.legacy;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.ReferralResourceImpl;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
@@ -21,6 +19,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.resources.ReferralResourceImpl;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ReferralTest {
 
@@ -819,28 +822,28 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateId may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLastUpdateIdNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateId may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLastUpdateIdEmpty() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/empty.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateId may not be empty"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId may not be empty"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLastUpdateIdTooLong() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateId/tooLong.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateId size must be between 1 and 3"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedId size must be between 1 and 3"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*
@@ -851,21 +854,21 @@ public class ReferralTest {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateTimeStamp/missing.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateTimeStamp must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLastUpdateTimeStampNull() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateTimeStamp/null.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateTimeStamp must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
 	}
 	@Test
 	public void failsWhenLastUpdateTimeStampWrongFormat() throws Exception {
 	    Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/lastUpdateTimeStamp/wrongFormat.json"), Referral.class);
 	    Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 	    assertThat(response.getStatus(), is(equalTo(422)));
-	    assertThat(response.readEntity(String.class).indexOf("lastUpdateTimeStamp must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
+	    assertThat(response.readEntity(String.class).indexOf("lastUpdatedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*

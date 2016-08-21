@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -7,10 +8,14 @@ import static org.mockito.Mockito.verify;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
+import io.dropwizard.jackson.Jackson;
 
 public class AllegationServiceImplTest {
 	private static AllegationService allegationService;
+	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
 	private CrudsService<Allegation> crudsService;
 
@@ -35,15 +40,15 @@ public class AllegationServiceImplTest {
 	}
 
 	@Test
-	public void createDelegatesToCrudsService() {
-		Allegation toCreate = new Allegation();
+	public void createDelegatesToCrudsService() throws Exception {
+		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/valid.json"), Allegation.class);
 		allegationService.create(toCreate);
 		verify(crudsService, times(1)).create(toCreate);
 	}
 
 	@Test
-	public void updateDelegatesToCrudsService() {
-		Allegation toUpdate = new Allegation();
+	public void updateDelegatesToCrudsService() throws Exception {
+		Allegation toUpdate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/valid.json"), Allegation.class);
 		allegationService.update(toUpdate);
 		verify(crudsService, times(1)).update(toUpdate);
 	}

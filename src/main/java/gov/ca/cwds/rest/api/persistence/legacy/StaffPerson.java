@@ -35,7 +35,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class StaffPerson extends PersistentObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
-	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
 	@Id
 	@Column(name = "IDENTIFIER")
@@ -109,21 +108,6 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "TLCMTR_IND")
 	private String telecommuterIndicatorPersistable;
 	
-	@Column(name = "LST_UPD_ID")
-	@NotEmpty
-	@Size(min=1, max=3)
-	private String lastUpdatedId;
-	
-	@Transient
-	@NotNull
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
-	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=true)
-	private String lastUpdatedTime;
-	
-	@Type(type = "timestamp")
-	@Column(name = "LST_UPD_TS")	
-	private Date lastUpdatedTimePersistable;
-	
 	@Column(name = "FKCWS_OFFT")
 	@NotEmpty
 	@Size(min=1, max=10)
@@ -162,10 +146,6 @@ public class StaffPerson extends PersistentObject {
 	//@Email
 	private String emailAddress;
 
-	public StaffPerson() {
-		super();
-	}
-	
 	@JsonCreator
 	public StaffPerson(
 			@JsonProperty("id") String id, 
@@ -189,9 +169,8 @@ public class StaffPerson extends PersistentObject {
 			@JsonProperty("dutyWorkerIndicator") Boolean dutyWorkerIndicator,
 			@JsonProperty("cwsOfficeAddress") String cwsOfficeAddress, 
 			@JsonProperty("emailAddress") String emailAddress) {
-		super();
+		super(lastUpdatedId, lastUpdatedTime);
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-		DateFormat timestampFormat = new SimpleDateFormat(TIMESTAMP_FORMAT);
 		
 		this.id = id;
 		
@@ -212,10 +191,7 @@ public class StaffPerson extends PersistentObject {
 		this.nameSuffix = nameSuffix;
 		this.telecommuterIndicator = telecommuterIndicator;
 		this.telecommuterIndicatorPersistable = persistableBoolean(telecommuterIndicator);
-		this.lastUpdatedId = lastUpdatedId;
-		this.lastUpdatedTime = lastUpdatedTime;
-		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.lastUpdatedTimePersistable = timestampFormat.parse(lastUpdatedTime); } catch (Throwable e) {}
+
 		this.cwsOffice = cwsOffice;
 		this.availabilityAndLocationDescription = availabilityAndLocationDescription;
 		this.ssrsLicensingWorkerId = ssrsLicensingWorkerId;
@@ -331,22 +307,6 @@ public class StaffPerson extends PersistentObject {
 	}
 
 	/**
-	 * @return the lastUpdatedId
-	 */
-	@ApiModelProperty(readOnly=true, value="remove this from view of client, generated at business layer", example="tob")
-	public String getLastUpdatedId() {
-		return lastUpdatedId;
-	}
-
-	/**
-	 * @return the lastUpdatedTime
-	 */
-	@ApiModelProperty(required=true, readOnly=true, value="remove from view of user", example="1963-11-22-13.51.39.247")
-	public String getLastUpdatedTime() {
-		return !Strings.isNullOrEmpty(lastUpdatedTime) ? lastUpdatedTime : lastUpdatedTimePersistable != null ? ( (new SimpleDateFormat(TIMESTAMP_FORMAT)).format(lastUpdatedTimePersistable)) : "";
-	}
-
-	/**
 	 * @return the cwsOffice
 	 */
 	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
@@ -431,10 +391,6 @@ public class StaffPerson extends PersistentObject {
 				+ ((jobTitle == null) ? 0 : jobTitle.hashCode());
 		result = prime * result
 				+ ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result
-				+ ((lastUpdatedId == null) ? 0 : lastUpdatedId.hashCode());
-		result = prime * result
-				+ ((lastUpdatedTime == null) ? 0 : lastUpdatedTime.hashCode());
 		result = prime * result
 				+ ((middleInitial == null) ? 0 : middleInitial.hashCode());
 		result = prime * result
@@ -521,16 +477,6 @@ public class StaffPerson extends PersistentObject {
 			if (other.lastName != null)
 				return false;
 		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (lastUpdatedId == null) {
-			if (other.lastUpdatedId != null)
-				return false;
-		} else if (!lastUpdatedId.equals(other.lastUpdatedId))
-			return false;
-		if (lastUpdatedTime == null) {
-			if (other.lastUpdatedTime != null)
-				return false;
-		} else if (!lastUpdatedTime.equals(other.lastUpdatedTime))
 			return false;
 		if (middleInitial == null) {
 			if (other.middleInitial != null)

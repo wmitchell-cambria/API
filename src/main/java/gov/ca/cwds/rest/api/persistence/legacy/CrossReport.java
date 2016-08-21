@@ -19,8 +19,10 @@ public class CrossReport extends PersistentObject {
  	private String id;
  	
 	@JsonCreator
-	public CrossReport(@JsonProperty("id") String id) {
-		super();
+	public CrossReport(@JsonProperty("id") String id,			
+			@JsonProperty("lastUpdatedId") String lastUpdatedId,
+			@JsonProperty("lastUpdatedTime") String lastUpdatedTime) {
+		super(lastUpdatedId, lastUpdatedTime);
 		this.id = id;
 	}
 

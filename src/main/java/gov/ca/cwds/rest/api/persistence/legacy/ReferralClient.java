@@ -19,8 +19,10 @@ public class ReferralClient extends PersistentObject {
  	private String id;
 	
 	@JsonCreator
-	public ReferralClient(@JsonProperty("id") String id) {
-		super();
+	public ReferralClient(@JsonProperty("id") String id,			
+			@JsonProperty("lastUpdatedId") String lastUpdatedId,
+			@JsonProperty("lastUpdatedTime") String lastUpdatedTime) {
+		super(lastUpdatedId, lastUpdatedTime);
 		this.id = id;
 	}
 

@@ -1,15 +1,21 @@
 package gov.ca.cwds.rest.services;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
+import io.dropwizard.jackson.Jackson;
+
 public class StaffPersonServiceImplTest {
 	private static StaffPersonService staffPersonService;
+	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private CrudsService<StaffPerson> crudsService;
 	
@@ -34,15 +40,15 @@ public class StaffPersonServiceImplTest {
 	}
 	
 	@Test
-	public void createDelegatesToCrudsService() {
-		StaffPerson toCreate = new StaffPerson();
+	public void createDelegatesToCrudsService() throws Exception {
+		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 		staffPersonService.create(toCreate);
 		verify(crudsService, times(1)).create(toCreate);
 	}
 	
 	@Test
-	public void updateDelegatesToCrudsService() {
-		StaffPerson toUpdate = new StaffPerson();
+	public void updateDelegatesToCrudsService() throws Exception {
+		StaffPerson toUpdate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 		staffPersonService.update(toUpdate);
 		verify(crudsService, times(1)).update(toUpdate);
 	}
