@@ -11,8 +11,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
@@ -187,58 +185,6 @@ public class Referral extends PersistentObject {
 	@Column(name = "ORIGCLS_DT")
 	private Date originalClosureDate;
 		
-	/**
-	 * @param id
-	 * @param additionalInfoIncludedCode
-	 * @param anonymousReporter
-	 * @param applicationForPetition
-	 * @param approvalNumber
-	 * @param approvalStatusType
-	 * @param caretakersPerpetratorCode
-	 * @param closureDate
-	 * @param communicationMethodType
-	 * @param currentLocationOfChildren
-	 * @param drmsAllegationDescriptionDoc
-	 * @param drmsErReferralDoc
-	 * @param drmsInvestigationDoc
-	 * @param filedSuspectedChildAbuseReporttoLawEnforcement
-	 * @param familyAwarenessIndicator
-	 * @param govtEntityType
-	 * @param legalDefinitionCode
-	 * @param legalRightsNoticeIndicator
-	 * @param limitedAccessCode
-	 * @param mandatedCrossReportReceivedDate
-	 * @param referralName
-	 * @param openAdequateCaseCode
-	 * @param receivedDate
-	 * @param receivedTime
-	 * @param referralResponseType
-	 * @param referredToResourceType
-	 * @param responseDeterminationDate
-	 * @param responseDeterminationTime
-	 * @param responseRationaleText
-	 * @param screenerNoteText
-	 * @param specificsIncludedCode
-	 * @param sufficientInformationCode
-	 * @param unfoundedSeriesCode
-	 * @param lastUpdateTimeStamp
-	 * @param foreignKeyFromReferral
-	 * @param fkAddrsT
-	 * @param fkStaffPerso
-	 * @param foreignKeyStaffPerson
-	 * @param countySpecificCode
-	 * @param specialProjectReferralIndicator
-	 * @param zippyCreatedIndicator
-	 * @param homelessIndicator
-	 * @param familyRefusedServicesIndicator
-	 * @param firstEvaluatedOutApprovalDate
-	 * @param responsibleAgencyCode
-	 * @param limitedAccessGovtAgencyType
-	 * @param limitedAccessDate
-	 * @param limitedAccessDesc
-	 * @param originalClosureDate
-	 */
-	@JsonCreator
 	public Referral(gov.ca.cwds.rest.api.domain.Referral referral, String lastUpdatedId) {
 		super(lastUpdatedId);
 		try {
