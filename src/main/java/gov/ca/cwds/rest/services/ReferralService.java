@@ -8,4 +8,4 @@ import gov.ca.cwds.rest.api.persistence.legacy.Referral;
  * 
  * @author CWDS API Team
  */
-public interface ReferralService extends CrudsService<Referral> {}
+public interface ReferralService extends CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> {}

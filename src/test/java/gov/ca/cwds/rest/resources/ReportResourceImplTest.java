@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
+import gov.ca.cwds.rest.api.domain.Reporter;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReporterService;
 import gov.ca.cwds.rest.services.ReporterServiceImpl;

@@ -1,12 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import gov.ca.cwds.rest.core.Api;
-import io.dropwizard.hibernate.UnitOfWork;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -18,14 +11,22 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.core.Api;
+import io.dropwizard.hibernate.UnitOfWork;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
- * Interface for Resources which provide CRUDS endpoints.
+ * Interface for Resources which provide CRUDS endpoints.  The implementation of this is not meant to be exposed as an actual endpoint though.  It is meant to be delegated to by an exposed resource.
  *  
  * @author CWDS API Team
  *
- * @param <T>	The {@link PersistentObject} the CRUDS endpoints work on
+ * @param <T>	The {@link DomainObject} the CRUDS endpoints work on
  */
-public interface CrudsResource<T extends PersistentObject> extends Resource {
+public interface CrudsResource<T extends DomainObject> extends Resource {
 	
 	/**
 	 * Gets a {@link PersistentObject} based on the given id.

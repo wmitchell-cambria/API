@@ -15,7 +15,7 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(StaffPersonServiceImpl.class);
 
-	private CrudsService<StaffPerson> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson> crudsService;
 
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public StaffPersonServiceImpl(CrudsService<StaffPerson> crudsService) {
+	public StaffPersonServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -33,8 +33,8 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
 	 */
 	@Override
-	public StaffPerson find(String id) {
-		return (StaffPerson) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.StaffPerson find(String id) {
+		return (gov.ca.cwds.rest.api.domain.StaffPerson) crudsService.find(id);
 	}
 
 	/*
@@ -43,29 +43,23 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
 	 */
 	@Override
-	public StaffPerson delete(String id) {
-		return (StaffPerson) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.StaffPerson delete(String id) {
+		return (gov.ca.cwds.rest.api.domain.StaffPerson) crudsService.delete(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public StaffPerson create(StaffPerson object) {
-		return (StaffPerson) crudsService.create(object);
+	public String create(gov.ca.cwds.rest.api.domain.StaffPerson object) {
+		return crudsService.create(object);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.
-	 * persistence.PersistentObject)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public StaffPerson update(StaffPerson object) {
-		return (StaffPerson) crudsService.update(object);
+	public String update(gov.ca.cwds.rest.api.domain.StaffPerson object) {
+		return crudsService.update(object);
 	}
 }

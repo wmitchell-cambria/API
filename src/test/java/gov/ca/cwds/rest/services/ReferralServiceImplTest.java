@@ -11,14 +11,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import gov.ca.cwds.rest.api.domain.Referral;
 import io.dropwizard.jackson.Jackson;
 
 public class ReferralServiceImplTest {
 	private static ReferralService referralService;
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
-	private CrudsService<Referral> crudsService;
+	private CrudsService<Referral, gov.ca.cwds.rest.api.persistence.legacy.Referral> crudsService;
 	
 	private Referral FOUND_REFERRAL; 
 	

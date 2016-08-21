@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
+import gov.ca.cwds.rest.api.domain.ReferralClient;
 import io.dropwizard.jackson.Jackson;
 
 public class ReferralClientServiceImplTest {
 	private static ReferralClientService referralClient;
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
-	private CrudsService<ReferralClient> crudsService;
+	private CrudsService<ReferralClient, gov.ca.cwds.rest.api.persistence.legacy.ReferralClient> crudsService;
 	
 	@SuppressWarnings("unchecked")
 	@Before

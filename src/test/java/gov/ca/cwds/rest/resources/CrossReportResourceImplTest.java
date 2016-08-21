@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
+import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.CrossReportService;
 import gov.ca.cwds.rest.services.CrossReportServiceImpl;

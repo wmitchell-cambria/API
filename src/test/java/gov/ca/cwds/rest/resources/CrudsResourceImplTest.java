@@ -8,17 +8,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.services.ReferralService;
-import gov.ca.cwds.rest.services.ReferralServiceImpl;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.setup.ServiceEnvironment;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -32,9 +23,16 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.rest.api.domain.Referral;
+import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.services.ReferralServiceImpl;
+import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class CrudsResourceImplTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -71,13 +69,13 @@ public class CrudsResourceImplTest {
 		when(referralService.delete(ID_NOT_FOUND)).thenReturn(null);
 		when(referralService.delete(ID_FOUND)).thenReturn(nonUniqueReferral);
 		when(referralService.create(eq(uniqueReferral))).thenReturn(
-				nonUniqueReferral);
+				nonUniqueReferral.getId());
 		when(referralService.create(eq(nonUniqueReferral))).thenThrow(
 				new ServiceException(new EntityExistsException()));
 		when(referralService.update(eq(uniqueReferral))).thenThrow(
 				new ServiceException(new EntityNotFoundException()));
 		when(referralService.update(eq(nonUniqueReferral))).thenReturn(
-				nonUniqueReferral);
+				nonUniqueReferral.getId());
 		when(
 				serviceEnvironment.getService(ReferralService.class,
 						Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(

@@ -1,29 +1,21 @@
  package gov.ca.cwds.rest.api.persistence.legacy;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Strings;
-
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link PersistentObject} representing a StaffPerson
@@ -32,54 +24,34 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Entity
 @Table(schema = "CWSINT", name = "STFPERST")
-@ApiModel
 public class StaffPerson extends PersistentObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	@Id
 	@Column(name = "IDENTIFIER")
-	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
  	private String id;
 	
-	@Transient
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
-	@JsonProperty(value="endDate")
-	@Type(type = "date")
-	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
-	private String endDate;
-
 	@Type(type = "date")
 	@Column(name = "END_DT")
-	private Date endDatePersistable;
+	private Date endDate;
 	
 	@Column(name = "FIRST_NM")
-	@NotEmpty
-    @Size(min=1, max=20)
 	private String firstName;
 	
 	@Column(name = "JOB_TL_DSC")
-	@NotEmpty
-	@Size(min=1, max=30)
 	private String jobTitle;
 	
 	@Column(name = "LAST_NM")
-	@NotEmpty
-	@Size(min=1, max=25)
 	private String lastName;
 	
 	@NotEmpty
-	@Size(min=1, max=1, message="size must be 1")
-	@Column(name = "MID_INI_NM")
 	private String middleInitial;
 	
 	@Column(name = "NMPRFX_DSC")
-	@NotEmpty
-	@Size(min=1, max=6)
 	private String namePrefix;
 	
 	@Column(name = "PHONE_NO")
-	@NotNull
 	private BigDecimal phoneNumber;
 	
 	@Column(name = "TEL_EXT_NO")
@@ -87,121 +59,63 @@ public class StaffPerson extends PersistentObject {
 
 	@Type(type = "date")
 	@Column(name = "START_DT")
-	private Date startDatePersistable;
-	
-	@Transient
-	@NotNull
-	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
-	@JsonProperty(value="startDate")
-	private String startDate;
+	private Date startDate;
 	
 	@Column(name = "SUFX_TLDSC")
-	@NotEmpty
-	@Size(min=1, max=4)
 	private String nameSuffix;
 	
-	@NotNull
-	@Transient
-	private Boolean telecommuterIndicator;
-
 	@Column(name = "TLCMTR_IND")
-	private String telecommuterIndicatorPersistable;
+	private String telecommuterIndicator;
 	
 	@Column(name = "FKCWS_OFFT")
-	@NotEmpty
-	@Size(min=1, max=10)
 	private String cwsOffice;
 	
 	@Column(name = "AVLOC_DSC")
-	@NotEmpty
-	@Size(min=1, max=160)
 	private String availabilityAndLocationDescription;
 
 	@Column(name = "SSRS_WKRID")
-	@NotEmpty
-	@Size(min=1, max=4)
 	private String ssrsLicensingWorkerId;
 	
 	@Column(name = "CNTY_SPFCD")
-	@NotEmpty
-	@Size(min=1, max=2)
 	private String countyCode;
 	
-	@NotNull
-	@Transient
-	private Boolean dutyWorkerIndicator;
-
 	@Column(name = "DTYWKR_IND")
-	private String dutyWorkerIndicatorPersistable;
+	private String dutyWorkerIndicator;
 	
 	@Column(name = "FKCWSADDRT")
-	@NotEmpty
-	@Size(min=1, max=10)
 	private String cwsOfficeAddress;
 	
 	@Column(name = "EMAIL_ADDR")
-	@Size(min=1, max=50)
-	//NOTE : The legacy system doesn't seem to enforce valid email addresses
-	//@Email
 	private String emailAddress;
 
-	@JsonCreator
-	public StaffPerson(
-			@JsonProperty("id") String id, 
-			@JsonProperty("endDate") String endDate, 
-			@JsonProperty("firstName") String firstName,
-			@JsonProperty("jobTitle") String jobTitle, 
-			@JsonProperty("lastName") String lastName, 
-			@JsonProperty("middleInitial") String middleInitial,
-			@JsonProperty("namePrefix") String namePrefix, 
-			@JsonProperty("phoneNumber") BigDecimal phoneNumber, 
-			@JsonProperty("phoneExt") int phoneExt, 
-			@JsonProperty("startDate") String startDate,
-			@JsonProperty("nameSuffix") String nameSuffix, 
-			@JsonProperty("telecommuterIndicator") Boolean telecommuterIndicator, 
-			@JsonProperty("lastUpdatedId") String lastUpdatedId,
-			@JsonProperty("lastUpdatedTime") String lastUpdatedTime, 
-			@JsonProperty("cwsOffice") String cwsOffice, 
-			@JsonProperty("availabilityAndLocationDescription") String availabilityAndLocationDescription,
-			@JsonProperty("ssrsLicensingWorkerId") String ssrsLicensingWorkerId, 
-			@JsonProperty("countyCode") String countyCode, 
-			@JsonProperty("dutyWorkerIndicator") Boolean dutyWorkerIndicator,
-			@JsonProperty("cwsOfficeAddress") String cwsOfficeAddress, 
-			@JsonProperty("emailAddress") String emailAddress) {
-		super(lastUpdatedId, lastUpdatedTime);
-		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	public StaffPerson(gov.ca.cwds.rest.api.domain.StaffPerson staffPerson, String lastUpdatedId) {
+		super(lastUpdatedId);
 		
-		this.id = id;
-		
-		this.firstName = firstName;
-		this.jobTitle = jobTitle;
-		this.lastName = lastName;
-		this.middleInitial = middleInitial;
-		this.namePrefix = namePrefix;
-		this.phoneNumber = phoneNumber;
-		this.phoneExt = phoneExt;
-		this.endDate = endDate;
-		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.endDatePersistable = dateFormat.parse(endDate); } catch (Throwable e) {}
-
-		this.startDate = startDate;
-		//we are validating this.startDate so we can swallow this ParseException - should never happen
-		try { this.startDatePersistable = dateFormat.parse(startDate); } catch (Throwable e) {}
-		this.nameSuffix = nameSuffix;
-		this.telecommuterIndicator = telecommuterIndicator;
-		this.telecommuterIndicatorPersistable = persistableBoolean(telecommuterIndicator);
-
-		this.cwsOffice = cwsOffice;
-		this.availabilityAndLocationDescription = availabilityAndLocationDescription;
-		this.ssrsLicensingWorkerId = ssrsLicensingWorkerId;
-		this.countyCode = countyCode;
-		this.dutyWorkerIndicator = dutyWorkerIndicator;
-		this.dutyWorkerIndicatorPersistable = persistableBoolean(dutyWorkerIndicator);
-		this.cwsOfficeAddress = cwsOfficeAddress;
-		this.emailAddress = emailAddress;
+		try {
+			this.id = staffPerson.getId();
+			this.firstName = staffPerson.getFirstName();
+			this.jobTitle = staffPerson.getJobTitle();
+			this.lastName = staffPerson.getLastName();
+			this.middleInitial = staffPerson.getMiddleInitial();
+			this.namePrefix = staffPerson.getNamePrefix();
+			this.phoneNumber = staffPerson.getPhoneNumber();
+			this.phoneExt = staffPerson.getPhoneExt();
+			this.endDate = DomainObject.uncookDateString(staffPerson.getEndDate());
+			this.startDate = DomainObject.uncookDateString(staffPerson.getStartDate());
+			this.nameSuffix = staffPerson.getNameSuffix();
+			this.telecommuterIndicator = DomainObject.cookBoolean(staffPerson.getTelecommuterIndicator());
+			this.cwsOffice = staffPerson.getCwsOffice();
+			this.availabilityAndLocationDescription = staffPerson.getAvailabilityAndLocationDescription();
+			this.ssrsLicensingWorkerId = staffPerson.getSsrsLicensingWorkerId();
+			this.countyCode = staffPerson.getCountyCode();
+			this.dutyWorkerIndicator = DomainObject.cookBoolean(staffPerson.getDutyWorkerIndicator());
+			this.cwsOfficeAddress = staffPerson.getCwsOfficeAddress();
+			this.emailAddress = staffPerson.getEmailAddress();
+		} catch (ParseException e) {
+			throw new PersistenceException(e);
+		}
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
 	 */
@@ -209,11 +123,10 @@ public class StaffPerson extends PersistentObject {
 	public String getPrimaryKey() {
 		return getId();
 	}
-
+	
 	/**
 	 * @return the id
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Aaeae9r0F4")
 	public String getId() {
 		return id;
 	}
@@ -221,7 +134,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the firstName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="John")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -229,7 +141,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the lastName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Smith")
 	public String getLastName() {
 		return lastName;
 	}
@@ -237,7 +148,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the middleInitial
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getMiddleInitial() {
 		return middleInitial;
 	}
@@ -245,15 +155,13 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the endDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22", dataType="Date")
-	public String getEndDate() {
-		return !Strings.isNullOrEmpty(endDate) ? endDate : endDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(endDatePersistable)) : "";
+	public Date getEndDate() {
+		return endDate;
 	}
 
 	/**
 	 * @return the jobTitle
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Case Worker")
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -261,7 +169,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the namePrefix
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="MR.")
 	public String getNamePrefix() {
 		return namePrefix;
 	}
@@ -269,7 +176,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the phoneNumber
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="9165551212")
 	public BigDecimal getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -277,7 +183,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the phoneExt
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public int getPhoneExt() {
 		return phoneExt;
 	}
@@ -285,15 +190,13 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the startDate
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="1963-11-22")
-	public String getStartDate() {
-		return !Strings.isNullOrEmpty(startDate) ? startDate : startDatePersistable != null ? ( (new SimpleDateFormat(DATE_FORMAT)).format(startDatePersistable)) : "";
+	public Date getStartDate() {
+		return startDate;
 	}
 	
 	/**
 	 * @return the nameSuffix
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="SR.")
 	public String getNameSuffix() {
 		return nameSuffix;
 	}
@@ -301,15 +204,13 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the telecommuterIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false)
-	public Boolean getTelecommuterIndicator() {
-		return super.cookedBoolean(telecommuterIndicator, telecommuterIndicatorPersistable);
+	public String getTelecommuterIndicator() {
+		return telecommuterIndicator;
 	}
 
 	/**
 	 * @return the cwsOffice
 	 */
-	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
 	public String getCwsOffice() {
 		return cwsOffice;
 	}
@@ -317,7 +218,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the availabilityAndLocationDescription
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="some free form text")
 	public String getAvailabilityAndLocationDescription() {
 		return availabilityAndLocationDescription;
 	}
@@ -325,7 +225,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the ssrsLicensingWorkerId
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="9021")
 	public String getSsrsLicensingWorkerId() {
 		return ssrsLicensingWorkerId;
 	}
@@ -333,7 +232,6 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the countyCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="99")
 	public String getCountyCode() {
 		return countyCode;
 	}
@@ -341,15 +239,13 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the dutyWorkerIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false)
-	public Boolean getDutyWorkerIndicator() {
-		return super.cookedBoolean(dutyWorkerIndicator, dutyWorkerIndicatorPersistable);
+	public String getDutyWorkerIndicator() {
+		return dutyWorkerIndicator;
 	}
 
 	/**
 	 * @return the cwsOfficeAddress
 	 */
-	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWSADDRT", example="ghi")
 	public String getCwsOfficeAddress() {
 		return cwsOfficeAddress;
 	}
@@ -357,12 +253,9 @@ public class StaffPerson extends PersistentObject {
 	/**
 	 * @return the emailAddress
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="john.q.smith@somedomain.com")
 	public String getEmailAddress() {
 		return emailAddress;
 	}
-
-
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -373,43 +266,26 @@ public class StaffPerson extends PersistentObject {
 		int result = 1;
 		result = prime * result
 				+ ((availabilityAndLocationDescription == null) ? 0 : availabilityAndLocationDescription.hashCode());
-		result = prime * result
-				+ ((countyCode == null) ? 0 : countyCode.hashCode());
-		result = prime * result
-				+ ((dutyWorkerIndicator == null) ? 0 : dutyWorkerIndicator.hashCode());
-		result = prime * result
-				+ ((emailAddress == null) ? 0 : emailAddress.hashCode());
+		result = prime * result + ((countyCode == null) ? 0 : countyCode.hashCode());
+		result = prime * result + ((cwsOffice == null) ? 0 : cwsOffice.hashCode());
+		result = prime * result + ((cwsOfficeAddress == null) ? 0 : cwsOfficeAddress.hashCode());
+		result = prime * result + ((dutyWorkerIndicator == null) ? 0 : dutyWorkerIndicator.hashCode());
+		result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-		result = prime * result
-				+ ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result
-				+ ((cwsOffice == null) ? 0 : cwsOffice.hashCode());
-		result = prime * result
-				+ ((cwsOfficeAddress == null) ? 0 : cwsOfficeAddress.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result
-				+ ((jobTitle == null) ? 0 : jobTitle.hashCode());
-		result = prime * result
-				+ ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result
-				+ ((middleInitial == null) ? 0 : middleInitial.hashCode());
-		result = prime * result
-				+ ((namePrefix == null) ? 0 : namePrefix.hashCode());
+		result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((middleInitial == null) ? 0 : middleInitial.hashCode());
+		result = prime * result + ((namePrefix == null) ? 0 : namePrefix.hashCode());
+		result = prime * result + ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
 		result = prime * result + phoneExt;
-		result = prime * result
-				+ ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-		result = prime * result
-				+ ((ssrsLicensingWorkerId == null) ? 0 : ssrsLicensingWorkerId.hashCode());
-		result = prime * result
-				+ ((startDate == null) ? 0 : startDate.hashCode());
-		result = prime * result
-				+ ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
-		result = prime * result
-				+ ((telecommuterIndicator == null) ? 0 : telecommuterIndicator.hashCode());
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result + ((ssrsLicensingWorkerId == null) ? 0 : ssrsLicensingWorkerId.hashCode());
+		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((telecommuterIndicator == null) ? 0 : telecommuterIndicator.hashCode());
 		return result;
 	}
-
-
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -433,6 +309,16 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!countyCode.equals(other.countyCode))
 			return false;
+		if (cwsOffice == null) {
+			if (other.cwsOffice != null)
+				return false;
+		} else if (!cwsOffice.equals(other.cwsOffice))
+			return false;
+		if (cwsOfficeAddress == null) {
+			if (other.cwsOfficeAddress != null)
+				return false;
+		} else if (!cwsOfficeAddress.equals(other.cwsOfficeAddress))
+			return false;
 		if (dutyWorkerIndicator == null) {
 			if (other.dutyWorkerIndicator != null)
 				return false;
@@ -452,16 +338,6 @@ public class StaffPerson extends PersistentObject {
 			if (other.firstName != null)
 				return false;
 		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (cwsOffice == null) {
-			if (other.cwsOffice != null)
-				return false;
-		} else if (!cwsOffice.equals(other.cwsOffice))
-			return false;
-		if (cwsOfficeAddress == null) {
-			if (other.cwsOfficeAddress != null)
-				return false;
-		} else if (!cwsOfficeAddress.equals(other.cwsOfficeAddress))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -488,6 +364,11 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!namePrefix.equals(other.namePrefix))
 			return false;
+		if (nameSuffix == null) {
+			if (other.nameSuffix != null)
+				return false;
+		} else if (!nameSuffix.equals(other.nameSuffix))
+			return false;
 		if (phoneExt != other.phoneExt)
 			return false;
 		if (phoneNumber == null) {
@@ -505,23 +386,11 @@ public class StaffPerson extends PersistentObject {
 				return false;
 		} else if (!startDate.equals(other.startDate))
 			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
-		if (nameSuffix == null) {
-			if (other.nameSuffix != null)
-				return false;
-		} else if (!nameSuffix.equals(other.nameSuffix))
-			return false;
 		if (telecommuterIndicator == null) {
 			if (other.telecommuterIndicator != null)
 				return false;
 		} else if (!telecommuterIndicator.equals(other.telecommuterIndicator))
 			return false;
 		return true;
-	}
-	
-	
+	}	
 }

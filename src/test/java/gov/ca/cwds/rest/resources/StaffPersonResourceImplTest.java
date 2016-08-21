@@ -10,13 +10,6 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.services.StaffPersonService;
-import gov.ca.cwds.rest.services.StaffPersonServiceImpl;
-import gov.ca.cwds.rest.setup.ServiceEnvironment;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.UriInfo;
@@ -27,6 +20,14 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.rest.api.domain.StaffPerson;
+import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.services.StaffPersonService;
+import gov.ca.cwds.rest.services.StaffPersonServiceImpl;
+import gov.ca.cwds.rest.setup.ServiceEnvironment;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * HTTP Status codes are tested in {@link CrudsResourceImplTest}

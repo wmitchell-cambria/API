@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
+import gov.ca.cwds.rest.api.domain.ReferralClient;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.ReferralClientService;
 import gov.ca.cwds.rest.services.ReferralClientServiceImpl;
