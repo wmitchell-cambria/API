@@ -30,8 +30,8 @@ public class ApiConfiguration extends Configuration {
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
-    
-    @JsonProperty
+
+	@JsonProperty
     public DataSourceFactory getDataSourceFactory() {
         return dataSourceFactory;
     }

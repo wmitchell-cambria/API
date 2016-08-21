@@ -1,11 +1,13 @@
 package gov.ca.cwds.rest;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +21,8 @@ import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
 import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.HashMapDaoImpl;
 import gov.ca.cwds.rest.jdbi.legacy.AllegationDao;
 import gov.ca.cwds.rest.jdbi.legacy.CrossReportDao;
 import gov.ca.cwds.rest.jdbi.legacy.ReferralClientDao;
@@ -69,20 +72,23 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-//import io.federecio.dropwizard.swagger.SwaggerBundle;
-//import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 
 public class ApiApplication extends Application<ApiConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
+    @SuppressWarnings("rawtypes")
+	private HashMap<Class, CrudsDao> daos = new HashMap<Class, CrudsDao>();
 
+    private static final boolean debug = "true".equals(System.getenv("debug"));
     
     private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class, Reporter.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
             return configuration.getDataSourceFactory();
         }
+        
+        
     };
     
     private final FlywayBundle<ApiConfiguration> flywayBundle = new FlywayBundle<ApiConfiguration>() {
@@ -110,8 +116,14 @@ public class ApiApplication extends Application<ApiConfiguration> {
                 )
         );
         bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
-        bootstrap.addBundle(flywayBundle);
-        bootstrap.addBundle(hibernateBundle);
+
+        if(!debug) {
+        	LOGGER.info("Loading database bundles");
+        	bootstrap.addBundle(flywayBundle);
+        	bootstrap.addBundle(hibernateBundle);
+        } else {
+        	LOGGER.warn("DEBUG is on so not loading database bundles");
+        }
     }
     
     @Override
@@ -138,20 +150,40 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
     
-    private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
+    @SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	private void setupDaos(final ApiConfiguration configuration) {
+    	if( debug ) {
+    		LOGGER.warn("Setting up HashMap DAOs");
+    		daos.put(Referral.class, new HashMapDaoImpl<>(new HashMap()));
+    		daos.put(StaffPerson.class, new HashMapDaoImpl<>(new HashMap()));
+    		daos.put(Allegation.class, new HashMapDaoImpl<>(new HashMap()));
+    		daos.put(CrossReport.class, new HashMapDaoImpl<>(new HashMap()));
+    		daos.put(ReferralClient.class, new HashMapDaoImpl<>(new HashMap()));
+    		daos.put(Reporter.class, new HashMapDaoImpl<>(new HashMap()));
+    	} else {
+    		LOGGER.info("Setting up production DAOs");
+    		daos.put(Referral.class, new ReferralDao(hibernateBundle.getSessionFactory()));
+    		daos.put(StaffPerson.class, new StaffPersonDao(hibernateBundle.getSessionFactory()));
+    		daos.put(Allegation.class, new AllegationDao(hibernateBundle.getSessionFactory()));
+    		daos.put(CrossReport.class, new CrossReportDao(hibernateBundle.getSessionFactory()));
+    		daos.put(ReferralClient.class, new ReferralClientDao(hibernateBundle.getSessionFactory()));
+    		daos.put(Reporter.class, new ReporterDao(hibernateBundle.getSessionFactory()));
+
+    	}
+    }
+    
+    @SuppressWarnings("unchecked")
+	private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	final ReferralDao referralDao = new ReferralDao(hibernateBundle.getSessionFactory());
-    	LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	final CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> referralCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Referral, Referral>(referralDao, gov.ca.cwds.rest.api.domain.Referral.class, Referral.class);
+    	
+    	final CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> referralCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Referral, Referral>(daos.get(Referral.class), gov.ca.cwds.rest.api.domain.Referral.class, Referral.class);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());	    	
     	final ReferralService referralService = new ReferralServiceImpl(referralCrudsService);
     	apiEnvironment.services().register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
     	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final StaffPersonDao staffPersonDao = new StaffPersonDao(hibernateBundle.getSessionFactory());   
-    	LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final CrudsService<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson>(staffPersonDao, gov.ca.cwds.rest.api.domain.StaffPerson.class, StaffPerson.class);
+    	final CrudsService<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson>(daos.get(StaffPerson.class), gov.ca.cwds.rest.api.domain.StaffPerson.class, StaffPerson.class);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());		
     	final StaffPersonService staffPersonService = new StaffPersonServiceImpl(staffPersonCrudsService);
     	apiEnvironment.services().register(StaffPersonService.class, Api.Version.JSON_VERSION_1, staffPersonService);
@@ -159,10 +191,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				AllegationService.class.getName());
-		final AllegationDao allegationDao = new AllegationDao(hibernateBundle.getSessionFactory()); 
-		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
-				AllegationService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.Allegation, Allegation> allegationCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Allegation, Allegation>(allegationDao, gov.ca.cwds.rest.api.domain.Allegation.class, Allegation.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.Allegation, Allegation> allegationCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Allegation, Allegation>(daos.get(Allegation.class), gov.ca.cwds.rest.api.domain.Allegation.class, Allegation.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), AllegationService.class.getName());
 		final AllegationService allegationService = new AllegationServiceImpl(allegationCrudsService);
@@ -172,10 +201,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				ReporterService.class.getName());
-		final ReporterDao reporterDao = new ReporterDao(hibernateBundle.getSessionFactory()); 
-		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
-				ReporterService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> reporterCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Reporter, Reporter>(reporterDao, gov.ca.cwds.rest.api.domain.Reporter.class, Reporter.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> reporterCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Reporter, Reporter>(daos.get(Reporter.class), gov.ca.cwds.rest.api.domain.Reporter.class, Reporter.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), ReporterService.class.getName());
 		final ReporterService reporterService = new ReporterServiceImpl(reporterCrudsService);
@@ -185,10 +211,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				CrossReportService.class.getName());
-		final CrossReportDao crossReportDao = new CrossReportDao(hibernateBundle.getSessionFactory()); 
-		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
-				CrossReportService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crossReportCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport>(crossReportDao, gov.ca.cwds.rest.api.domain.CrossReport.class, CrossReport.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crossReportCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport>(daos.get(CrossReport.class), gov.ca.cwds.rest.api.domain.CrossReport.class, CrossReport.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), CrossReportService.class.getName());
 		final CrossReportService crossReportService = new CrossReportServiceImpl(crossReportCrudsService);
@@ -198,10 +221,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				ReferralClientService.class.getName());
-		final ReferralClientDao referralClientDao = new ReferralClientDao(hibernateBundle.getSessionFactory()); 
-		LOGGER.info("DAO:{} for {} of {}", CrudsDaoImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(),
-				ReferralClientService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient> referralClientCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient>(referralClientDao, gov.ca.cwds.rest.api.domain.ReferralClient.class, ReferralClient.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient> referralClientCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient>(daos.get(ReferralClient.class), gov.ca.cwds.rest.api.domain.ReferralClient.class, ReferralClient.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), ReferralClientService.class.getName());
 		final ReferralClientService referralClientService = new ReferralClientServiceImpl(referralClientCrudsService);
