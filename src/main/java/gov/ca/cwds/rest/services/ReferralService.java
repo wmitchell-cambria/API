@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.domain.ReferralSummary;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 
 /**
@@ -9,15 +8,4 @@ import gov.ca.cwds.rest.api.persistence.legacy.Referral;
  * 
  * @author CWDS API Team
  */
-public interface ReferralService extends CrudsService<Referral> {
-
-	/**
-	 * Finds a {@link ReferralSummary} based on the given id.
-	 * 
-	 * @param id
-	 *            The id of the {@link Referral} to be summarized
-	 * 
-	 * @return The {@link ReferralSummary} if found, null if not found.
-	 */
-	public ReferralSummary findReferralSummary(String id);
-}
+public interface ReferralService extends CrudsService<Referral> {}

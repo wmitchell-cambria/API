@@ -1,10 +1,9 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.domain.ReferralSummary;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 
 /**
  * Implementation of {@link ReferralService} backed by a DAO layer.
@@ -26,16 +25,6 @@ public class ReferralServiceImpl implements ReferralService {
 	 */
 	public ReferralServiceImpl(CrudsService<Referral> crudsService) {
 		this.crudsService = crudsService;
-	}
-
-	@Override
-	public ReferralSummary findReferralSummary(String id) {
-		Referral referral = this.find(id);
-		if (referral != null) {
-			return new ReferralSummary(referral.getId(),
-					referral.getReferralName(), referral.getReceivedDate());
-		}
-		return null;
 	}
 
 	/*
