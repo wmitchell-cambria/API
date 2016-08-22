@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -29,7 +28,6 @@ public class StaffPerson extends PersistentObject {
 
 	@Id
 	@Column(name = "IDENTIFIER")
-	@Size(min=3, max=3, message="size must be 3")
  	private String id;
 	
 	@Type(type = "date")
