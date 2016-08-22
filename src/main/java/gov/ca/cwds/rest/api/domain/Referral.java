@@ -19,8 +19,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 public class Referral extends DomainObject {
-	protected static final String DATE_FORMAT = "yyyy-MM-dd";
-	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
 	@NotEmpty
 	@Size(min=1, max=10)
