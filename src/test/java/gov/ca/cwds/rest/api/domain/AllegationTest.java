@@ -218,7 +218,68 @@ public class AllegationTest {
 		assertThat(response.readEntity(String.class).indexOf("abuseFrequencyPeriodCode Size must be 1"),
 				is(greaterThanOrEqualTo(0)));
 	}
+	
+	@Test
+	public void failsWhenAbuseFrequencyPeriodCodeNotValidValue() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/invalid/abuseFrequencyPeriodCode/notValidValue.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("abuseFrequencyPeriodCode must be one of [D, M, W, Y]"),
+				is(greaterThanOrEqualTo(0)));
+	}
+	
+	@Test
+	public void succeedsWhenAbuseFrequencyPeriodCodeisD() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/abuseFrequencyPeriodCode/D.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
 
+	@Test
+	public void succeedsWhenAbuseFrequencyPeriodCodeisM() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/abuseFrequencyPeriodCode/M.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void succeedsWhenAbuseFrequencyPeriodCodeisW() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/abuseFrequencyPeriodCode/W.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void succeedsWhenAbuseFrequencyPeriodCodeisY() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/abuseFrequencyPeriodCode/Y.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void succeedsWhenAbuseFrequencyPeriodCodeIsLowerCase() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/abuseFrequencyPeriodCode/lowerCase.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
 	/*
 	 * abuseLocationDescription tests
 	 */

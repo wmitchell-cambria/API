@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -40,6 +41,8 @@ public class Allegation extends DomainObject {
 
 	@NotEmpty
 	@Size(min = 1, max = 1, message = "Size must be 1")
+	@OneOf(value = {"D", "M", "W", "Y"}, ignoreCase = true, ignoreWhitespace = true)
+	@ApiModelProperty(required = true, readOnly = false, value = "Size must be 1", example = "D", allowableValues="D,M,W,Y")
 	private String abuseFrequencyPeriodCode;
 
 	@NotEmpty
@@ -151,7 +154,6 @@ public class Allegation extends DomainObject {
 	/**
 	 * @return the abuseFrequencyPeriodCode
 	 */
-	@ApiModelProperty(required = true, readOnly = false, value = "Size must be 1", example = "D,M,W,Y")
 	public String getAbuseFrequencyPeriodCode() {
 		return abuseFrequencyPeriodCode;
 	}
