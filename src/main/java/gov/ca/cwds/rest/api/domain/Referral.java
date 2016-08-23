@@ -26,10 +26,10 @@ import io.swagger.annotations.ApiModelProperty;
 @InjectLinks(
         { 
         	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) } ),
-        	@InjectLink(value="/{resource}/{id}", rel="fkAddrsT", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkAddrsT}"), @Binding(name="resource", value=Api.RESOURCE_ADDRESS) } ),
-        	@InjectLink(value="/{resource}/{id}", rel="foreignKeyFromReferral", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.foreignKeyFromReferral}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.foreignKeyFromReferral }" ),
-        	@InjectLink(value="/{resource}/{id}", rel="fkStaffPerso", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkStaffPerso}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) }, condition="${not empty instance.fkStaffPerso }" ),
-        	@InjectLink(value="/{resource}/{id}", rel="foreignKeyStaffPerson", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.foreignKeyStaffPerson}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="allegesAbuseOccurredAtAddressId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.allegesAbuseOccurredAtAddressId}"), @Binding(name="resource", value=Api.RESOURCE_ADDRESS) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="linkToPrimaryReferralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.linkToPrimaryReferralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.linkToPrimaryReferralId }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="firstResponseDeterminedByStaffPersonId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.firstResponseDeterminedByStaffPersonId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) }, condition="${not empty instance.firstResponseDeterminedByStaffPersonId }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="primaryContactStaffPersonId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.primaryContactStaffPersonId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
         })
 public class Referral extends DomainObject {
 
@@ -42,10 +42,10 @@ public class Referral extends DomainObject {
 	private String additionalInfoIncludedCode;
 	
 	@NotNull
-	private Boolean anonymousReporter;
+	private Boolean anonymousReporterIndicator;
 	
 	@NotNull
-	private Boolean applicationForPetition;
+	private Boolean applicationForPetitionIndicator;
 	
 	@Size(max=10)	
 	private String approvalNumber;
@@ -78,7 +78,7 @@ public class Referral extends DomainObject {
 	private String drmsInvestigationDoc;
 
 	@NotNull	
-	private Boolean filedSuspectedChildAbuseReporttoLawEnforcement;
+	private Boolean filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 	
 	@NotNull	
 	private Boolean familyAwarenessIndicator;
@@ -155,17 +155,17 @@ public class Referral extends DomainObject {
 	private String unfoundedSeriesCode;
 
 	@Size(max=10)	
-	private String foreignKeyFromReferral;
+	private String linkToPrimaryReferralId;
 
 	@Size(max=10)	
-	private String fkAddrsT;
+	private String allegesAbuseOccurredAtAddressId;
 
 	@Size(max=3)	
-	private String fkStaffPerso;
+	private String firstResponseDeterminedByStaffPersonId;
 
 	@NotEmpty
 	@Size(min=1, max=3)	
-	private String foreignKeyStaffPerson;
+	private String primaryContactStaffPersonId;
 
 	@NotEmpty
 	@Size(min=1, max=2)	
@@ -210,8 +210,8 @@ public class Referral extends DomainObject {
 	/**
 	 * @param id
 	 * @param additionalInfoIncludedCode
-	 * @param anonymousReporter
-	 * @param applicationForPetition
+	 * @param anonymousReporterIndicator
+	 * @param applicationForPetitionIndicator
 	 * @param approvalNumber
 	 * @param approvalStatusType
 	 * @param caretakersPerpetratorCode
@@ -221,7 +221,7 @@ public class Referral extends DomainObject {
 	 * @param drmsAllegationDescriptionDoc
 	 * @param drmsErReferralDoc
 	 * @param drmsInvestigationDoc
-	 * @param filedSuspectedChildAbuseReporttoLawEnforcement
+	 * @param filedSuspectedChildAbuseReporttoLawEnforcementIndicator
 	 * @param familyAwarenessIndicator
 	 * @param govtEntityType
 	 * @param legalDefinitionCode
@@ -241,10 +241,10 @@ public class Referral extends DomainObject {
 	 * @param specificsIncludedCode
 	 * @param sufficientInformationCode
 	 * @param unfoundedSeriesCode
-	 * @param foreignKeyFromReferral
-	 * @param fkAddrsT
-	 * @param fkStaffPerso
-	 * @param foreignKeyStaffPerson
+	 * @param linkToPrimaryReferralId
+	 * @param allegesAbuseOccurredAtAddressId
+	 * @param firstResponseDeterminedByStaffPersonId
+	 * @param primaryContactStaffPersonId
 	 * @param countySpecificCode
 	 * @param specialProjectReferralIndicator
 	 * @param zippyCreatedIndicator
@@ -261,8 +261,8 @@ public class Referral extends DomainObject {
 	public Referral(
 			@JsonProperty("id") String id, 
 			@JsonProperty("additionalInfoIncludedCode") String additionalInfoIncludedCode,
-			@JsonProperty("anonymousReporter") Boolean anonymousReporter, 
-			@JsonProperty("applicationForPetition") Boolean applicationForPetition,
+			@JsonProperty("anonymousReporterIndicator") Boolean anonymousReporterIndicator, 
+			@JsonProperty("applicationForPetitionIndicator") Boolean applicationForPetitionIndicator,
 			@JsonProperty("approvalNumber") String approvalNumber, 
 			@JsonProperty("approvalStatusType") Short approvalStatusType,
 			@JsonProperty("caretakersPerpetratorCode") String caretakersPerpetratorCode, 
@@ -272,7 +272,7 @@ public class Referral extends DomainObject {
 			@JsonProperty("drmsAllegationDescriptionDoc") String drmsAllegationDescriptionDoc,
 			@JsonProperty("drmsErReferralDoc") String drmsErReferralDoc,
 			@JsonProperty("drmsInvestigationDoc") String drmsInvestigationDoc,
-			@JsonProperty("filedSuspectedChildAbuseReporttoLawEnforcement") Boolean filedSuspectedChildAbuseReporttoLawEnforcement,
+			@JsonProperty("filedSuspectedChildAbuseReporttoLawEnforcementIndicator") Boolean filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
 			@JsonProperty("familyAwarenessIndicator") Boolean familyAwarenessIndicator, 
 			@JsonProperty("govtEntityType") Short govtEntityType,
 			@JsonProperty("legalDefinitionCode") String legalDefinitionCode, 
@@ -292,10 +292,10 @@ public class Referral extends DomainObject {
 			@JsonProperty("specificsIncludedCode") String specificsIncludedCode,
 			@JsonProperty("sufficientInformationCode") String sufficientInformationCode, 
 			@JsonProperty("unfoundedSeriesCode") String unfoundedSeriesCode,
-			@JsonProperty("foreignKeyFromReferral") String foreignKeyFromReferral,
-			@JsonProperty("fkAddrsT") String fkAddrsT,
-			@JsonProperty("fkStaffPerso") String fkStaffPerso, 
-			@JsonProperty("foreignKeyStaffPerson") String foreignKeyStaffPerson,
+			@JsonProperty("linkToPrimaryReferralId") String linkToPrimaryReferralId,
+			@JsonProperty("allegesAbuseOccurredAtAddressId") String allegesAbuseOccurredAtAddressId,
+			@JsonProperty("firstResponseDeterminedByStaffPersonId") String firstResponseDeterminedByStaffPersonId, 
+			@JsonProperty("primaryContactStaffPersonId") String primaryContactStaffPersonId,
 			@JsonProperty("countySpecificCode") String countySpecificCode, 
 			@JsonProperty("specialProjectReferralIndicator") Boolean specialProjectReferralIndicator,
 			@JsonProperty("zippyCreatedIndicator") Boolean zippyCreatedIndicator, 
@@ -310,8 +310,8 @@ public class Referral extends DomainObject {
 		super();
 		this.id = id;
 		this.additionalInfoIncludedCode = additionalInfoIncludedCode;
-		this.anonymousReporter = anonymousReporter;
-		this.applicationForPetition = applicationForPetition;
+		this.anonymousReporterIndicator = anonymousReporterIndicator;
+		this.applicationForPetitionIndicator = applicationForPetitionIndicator;
 		this.approvalNumber = approvalNumber;
 		this.approvalStatusType = approvalStatusType;
 		this.caretakersPerpetratorCode = caretakersPerpetratorCode;
@@ -321,7 +321,7 @@ public class Referral extends DomainObject {
 		this.drmsAllegationDescriptionDoc = drmsAllegationDescriptionDoc;
 		this.drmsErReferralDoc = drmsErReferralDoc;
 		this.drmsInvestigationDoc = drmsInvestigationDoc;
-		this.filedSuspectedChildAbuseReporttoLawEnforcement = filedSuspectedChildAbuseReporttoLawEnforcement;
+		this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 		this.familyAwarenessIndicator = familyAwarenessIndicator;
 		this.govtEntityType = govtEntityType;
 		this.legalDefinitionCode = legalDefinitionCode;
@@ -341,10 +341,10 @@ public class Referral extends DomainObject {
 		this.specificsIncludedCode = specificsIncludedCode;
 		this.sufficientInformationCode = sufficientInformationCode;
 		this.unfoundedSeriesCode = unfoundedSeriesCode;
-		this.foreignKeyFromReferral = foreignKeyFromReferral;
-		this.fkAddrsT = fkAddrsT;
-		this.fkStaffPerso = fkStaffPerso;
-		this.foreignKeyStaffPerson = foreignKeyStaffPerson;
+		this.linkToPrimaryReferralId = linkToPrimaryReferralId;
+		this.allegesAbuseOccurredAtAddressId = allegesAbuseOccurredAtAddressId;
+		this.firstResponseDeterminedByStaffPersonId = firstResponseDeterminedByStaffPersonId;
+		this.primaryContactStaffPersonId = primaryContactStaffPersonId;
 		this.countySpecificCode = countySpecificCode;
 		this.specialProjectReferralIndicator = specialProjectReferralIndicator;
 		this.zippyCreatedIndicator = zippyCreatedIndicator;
@@ -362,8 +362,8 @@ public class Referral extends DomainObject {
 		super();
 		this.id = persistedReferral.getId();
 		this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
-		this.anonymousReporter = DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporter());
-		this.applicationForPetition = DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetition());
+		this.anonymousReporterIndicator = DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporterIndicator());
+		this.applicationForPetitionIndicator = DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetitionIndicator());
 		this.approvalNumber = persistedReferral.getApprovalNumber();
 		this.approvalStatusType = persistedReferral.getApprovalStatusType();
 		this.caretakersPerpetratorCode =  persistedReferral.getCaretakersPerpetratorCode();
@@ -373,7 +373,7 @@ public class Referral extends DomainObject {
 		this.drmsAllegationDescriptionDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
 		this.drmsErReferralDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
 		this.drmsInvestigationDoc = persistedReferral.getDrmsInvestigationDoc();
-		this.filedSuspectedChildAbuseReporttoLawEnforcement = DomainObject.uncookBooleanString(persistedReferral.getFiledSuspectedChildAbuseReporttoLawEnforcement());
+		this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = DomainObject.uncookBooleanString(persistedReferral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
 		this.familyAwarenessIndicator = DomainObject.uncookBooleanString(persistedReferral.getFamilyAwarenessIndicator());
 		this.govtEntityType = persistedReferral.getGovtEntityType();
 		this.legalDefinitionCode = persistedReferral.getLegalDefinitionCode();
@@ -393,10 +393,10 @@ public class Referral extends DomainObject {
 		this.specificsIncludedCode = persistedReferral.getSpecificsIncludedCode();
 		this.sufficientInformationCode = persistedReferral.getSpecificsIncludedCode();
 		this.unfoundedSeriesCode = persistedReferral.getUnfoundedSeriesCode();
-		this.foreignKeyFromReferral = persistedReferral.getForeignKeyFromReferral();
-		this.fkAddrsT = persistedReferral.getFkAddrsT();
-		this.fkStaffPerso = persistedReferral.getFkStaffPerso();
-		this.foreignKeyStaffPerson = persistedReferral.getForeignKeyStaffPerson();
+		this.linkToPrimaryReferralId = persistedReferral.getLinkToPrimaryReferralId();
+		this.allegesAbuseOccurredAtAddressId = persistedReferral.getAllegesAbuseOccurredAtAddressId();
+		this.firstResponseDeterminedByStaffPersonId = persistedReferral.getFirstResponseDeterminedByStaffPersonId();
+		this.primaryContactStaffPersonId = persistedReferral.getPrimaryContactStaffPersonId();
 		this.countySpecificCode = persistedReferral.getCountySpecificCode();
 		this.specialProjectReferralIndicator = DomainObject.uncookBooleanString(persistedReferral.getSpecialProjectReferralIndicator());
 		this.zippyCreatedIndicator = DomainObject.uncookBooleanString(persistedReferral.getZippyCreatedIndicator());
@@ -429,19 +429,19 @@ public class Referral extends DomainObject {
 	}
 
 	/**
-	 * @return the anonymousReporter
+	 * @return the anonymousReporterIndicator
 	 */
 	@ApiModelProperty(required=true, readOnly=false, value="", example="N")
-	public Boolean getAnonymousReporter() {
-		return anonymousReporter;
+	public Boolean getAnonymousReporterIndicator() {
+		return anonymousReporterIndicator;
 	}
 
 	/**
-	 * @return the applicationForPetition
+	 * @return the applicationForPetitionIndicator
 	 */
 	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
-	public Boolean getApplicationForPetition() {
-		return applicationForPetition;
+	public Boolean getApplicationForPetitionIndicator() {
+		return applicationForPetitionIndicator;
 	}
 
 	/**
@@ -517,11 +517,11 @@ public class Referral extends DomainObject {
 	}
 
 	/**
-	 * @return the filedSuspectedChildAbuseReporttoLawEnforcement
+	 * @return the filedSuspectedChildAbuseReporttoLawEnforcementIndicator
 	 */
 	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
-	public Boolean getFiledSuspectedChildAbuseReporttoLawEnforcement() {
-		return filedSuspectedChildAbuseReporttoLawEnforcement;
+	public Boolean getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator() {
+		return filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 	}
 
 	/**
@@ -676,35 +676,35 @@ public class Referral extends DomainObject {
 	}
 
 	/**
-	 * @return the foreignKeyFromReferral
+	 * @return the linkToPrimaryReferralId
 	 */
 	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
-	public String getForeignKeyFromReferral() {
-		return foreignKeyFromReferral;
+	public String getLinkToPrimaryReferralId() {
+		return linkToPrimaryReferralId;
 	}
 
 	/**
-	 * @return the fkAddrsT
+	 * @return the allegesAbuseOccurredAtAddressId
 	 */
 	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
-	public String getFkAddrsT() {
-		return fkAddrsT;
+	public String getAllegesAbuseOccurredAtAddressId() {
+		return allegesAbuseOccurredAtAddressId;
 	}
 
 	/**
-	 * @return the fkStaffPerso
+	 * @return the firstResponseDeterminedByStaffPersonId
 	 */
 	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
-	public String getFkStaffPerso() {
-		return fkStaffPerso;
+	public String getFirstResponseDeterminedByStaffPersonId() {
+		return firstResponseDeterminedByStaffPersonId;
 	}
 
 	/**
-	 * @return the foreignKeyStaffPerson
+	 * @return the primaryContactStaffPersonId
 	 */
 	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
-	public String getForeignKeyStaffPerson() {
-		return foreignKeyStaffPerson;
+	public String getPrimaryContactStaffPersonId() {
+		return primaryContactStaffPersonId;
 	}
 
 	/**
@@ -809,12 +809,12 @@ public class Referral extends DomainObject {
 						: additionalInfoIncludedCode.hashCode());
 		result = prime
 				* result
-				+ ((anonymousReporter == null) ? 0 : anonymousReporter
+				+ ((anonymousReporterIndicator == null) ? 0 : anonymousReporterIndicator
 						.hashCode());
 		result = prime
 				* result
-				+ ((applicationForPetition == null) ? 0
-						: applicationForPetition.hashCode());
+				+ ((applicationForPetitionIndicator == null) ? 0
+						: applicationForPetitionIndicator.hashCode());
 		result = prime * result
 				+ ((approvalNumber == null) ? 0 : approvalNumber.hashCode());
 		result = prime
@@ -861,24 +861,24 @@ public class Referral extends DomainObject {
 						: familyRefusedServicesIndicator.hashCode());
 		result = prime
 				* result
-				+ ((filedSuspectedChildAbuseReporttoLawEnforcement == null) ? 0
-						: filedSuspectedChildAbuseReporttoLawEnforcement
+				+ ((filedSuspectedChildAbuseReporttoLawEnforcementIndicator == null) ? 0
+						: filedSuspectedChildAbuseReporttoLawEnforcementIndicator
 								.hashCode());
 		result = prime
 				* result
 				+ ((firstEvaluatedOutApprovalDate == null) ? 0
 						: firstEvaluatedOutApprovalDate.hashCode());
 		result = prime * result
-				+ ((fkAddrsT == null) ? 0 : fkAddrsT.hashCode());
+				+ ((allegesAbuseOccurredAtAddressId == null) ? 0 : allegesAbuseOccurredAtAddressId.hashCode());
 		result = prime * result
-				+ ((fkStaffPerso == null) ? 0 : fkStaffPerso.hashCode());
+				+ ((firstResponseDeterminedByStaffPersonId == null) ? 0 : firstResponseDeterminedByStaffPersonId.hashCode());
 		result = prime
 				* result
-				+ ((foreignKeyFromReferral == null) ? 0
-						: foreignKeyFromReferral.hashCode());
+				+ ((linkToPrimaryReferralId == null) ? 0
+						: linkToPrimaryReferralId.hashCode());
 		result = prime
 				* result
-				+ ((foreignKeyStaffPerson == null) ? 0 : foreignKeyStaffPerson
+				+ ((primaryContactStaffPersonId == null) ? 0 : primaryContactStaffPersonId
 						.hashCode());
 		result = prime * result
 				+ ((govtEntityType == null) ? 0 : govtEntityType.hashCode());
@@ -1002,18 +1002,18 @@ public class Referral extends DomainObject {
 				.equals(other.additionalInfoIncludedCode)) {
 			return false;
 		}
-		if (anonymousReporter == null) {
-			if (other.anonymousReporter != null) {
+		if (anonymousReporterIndicator == null) {
+			if (other.anonymousReporterIndicator != null) {
 				return false;
 			}
-		} else if (!anonymousReporter.equals(other.anonymousReporter)) {
+		} else if (!anonymousReporterIndicator.equals(other.anonymousReporterIndicator)) {
 			return false;
 		}
-		if (applicationForPetition == null) {
-			if (other.applicationForPetition != null) {
+		if (applicationForPetitionIndicator == null) {
+			if (other.applicationForPetitionIndicator != null) {
 				return false;
 			}
-		} else if (!applicationForPetition.equals(other.applicationForPetition)) {
+		} else if (!applicationForPetitionIndicator.equals(other.applicationForPetitionIndicator)) {
 			return false;
 		}
 		if (approvalNumber == null) {
@@ -1106,12 +1106,12 @@ public class Referral extends DomainObject {
 				.equals(other.familyRefusedServicesIndicator)) {
 			return false;
 		}
-		if (filedSuspectedChildAbuseReporttoLawEnforcement == null) {
-			if (other.filedSuspectedChildAbuseReporttoLawEnforcement != null) {
+		if (filedSuspectedChildAbuseReporttoLawEnforcementIndicator == null) {
+			if (other.filedSuspectedChildAbuseReporttoLawEnforcementIndicator != null) {
 				return false;
 			}
-		} else if (!filedSuspectedChildAbuseReporttoLawEnforcement
-				.equals(other.filedSuspectedChildAbuseReporttoLawEnforcement)) {
+		} else if (!filedSuspectedChildAbuseReporttoLawEnforcementIndicator
+				.equals(other.filedSuspectedChildAbuseReporttoLawEnforcementIndicator)) {
 			return false;
 		}
 		if (firstEvaluatedOutApprovalDate == null) {
@@ -1122,32 +1122,32 @@ public class Referral extends DomainObject {
 				.equals(other.firstEvaluatedOutApprovalDate)) {
 			return false;
 		}
-		if (fkAddrsT == null) {
-			if (other.fkAddrsT != null) {
+		if (allegesAbuseOccurredAtAddressId == null) {
+			if (other.allegesAbuseOccurredAtAddressId != null) {
 				return false;
 			}
-		} else if (!fkAddrsT.equals(other.fkAddrsT)) {
+		} else if (!allegesAbuseOccurredAtAddressId.equals(other.allegesAbuseOccurredAtAddressId)) {
 			return false;
 		}
-		if (fkStaffPerso == null) {
-			if (other.fkStaffPerso != null) {
+		if (firstResponseDeterminedByStaffPersonId == null) {
+			if (other.firstResponseDeterminedByStaffPersonId != null) {
 				return false;
 			}
-		} else if (!fkStaffPerso.equals(other.fkStaffPerso)) {
+		} else if (!firstResponseDeterminedByStaffPersonId.equals(other.firstResponseDeterminedByStaffPersonId)) {
 			return false;
 		}
-		if (foreignKeyFromReferral == null) {
-			if (other.foreignKeyFromReferral != null) {
+		if (linkToPrimaryReferralId == null) {
+			if (other.linkToPrimaryReferralId != null) {
 				return false;
 			}
-		} else if (!foreignKeyFromReferral.equals(other.foreignKeyFromReferral)) {
+		} else if (!linkToPrimaryReferralId.equals(other.linkToPrimaryReferralId)) {
 			return false;
 		}
-		if (foreignKeyStaffPerson == null) {
-			if (other.foreignKeyStaffPerson != null) {
+		if (primaryContactStaffPersonId == null) {
+			if (other.primaryContactStaffPersonId != null) {
 				return false;
 			}
-		} else if (!foreignKeyStaffPerson.equals(other.foreignKeyStaffPerson)) {
+		} else if (!primaryContactStaffPersonId.equals(other.primaryContactStaffPersonId)) {
 			return false;
 		}
 		if (govtEntityType == null) {
