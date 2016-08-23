@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.junit.After;
@@ -51,10 +53,14 @@ public class StaffPersonResourceImplTest {
 	@ClassRule
 	public static final ResourceTestRule resources = ResourceTestRule.builder()
 			.addResource(new StaffPersonResourceImpl(serviceEnvironment, crudsResource)).build();
+	
+	private StaffPerson valid;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
+		valid = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 		when(serviceEnvironment.getService(StaffPersonService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(staffPersonService);
+		when(crudsResource.get( eq(valid.getId()), eq(Api.Version.JSON_VERSION_1.getMediaType()))).thenReturn(Response.ok(valid).build());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -62,7 +68,7 @@ public class StaffPersonResourceImplTest {
 	public void tearDown() {
 		reset(crudsResource);
 	}
-
+	
 	/*
 	 *  delegation check tests
 	 */

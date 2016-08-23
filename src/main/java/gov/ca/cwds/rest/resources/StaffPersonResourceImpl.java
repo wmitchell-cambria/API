@@ -5,6 +5,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.http.HttpStatus;
+import org.glassfish.jersey.server.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class StaffPersonResourceImpl extends BaseResource<StaffPersonService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Find StaffPerson by id", response = StaffPerson.class)
+	@ApiOperation(value = "Find StaffPerson by id", response = StaffPerson.class, responseHeaders = @ResponseHeader(name = "Link", description = "Hypermedia links to contained objects", response = Uri.class))
 	public Response get(String id, String acceptHeader) {
 		return crudsResource.get(id, acceptHeader);
 	}

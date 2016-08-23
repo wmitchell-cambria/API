@@ -3,12 +3,17 @@ package gov.ca.cwds.rest.api.domain;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.core.Api;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,8 +24,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
+@InjectLinks(
+        { 
+        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_ALLEGATION) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="fkClient0", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkClient0}"), @Binding(name="resource", value=Api.RESOURCE_CLIENT) }, condition="${not empty instance.fkClient0 }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="fkClientT", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkClientT}"), @Binding(name="resource", value=Api.RESOURCE_CLIENT) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="fkReferralT", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkReferralT}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) } )
+        })
 public class Allegation extends DomainObject {
-	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	@NotEmpty
 	@Size(min = 1, max = 10, message = "Size must be between 1 and 10")
@@ -119,8 +130,6 @@ public class Allegation extends DomainObject {
 		this.abuseFrequency = abuseFrequency;
 		this.abuseEndDate = abuseEndDate;
 		this.abuseStartDate = abuseStartDate;
-		this.abuseEndDate = abuseEndDate;
-		this.abuseFrequency = abuseFrequency;
 		this.abuseFrequencyPeriodCode = abuseFrequencyPeriodCode;
 		this.abuseLocationDescription = abuseLocationDescription;
 		this.allegationDispositionType = allegationDispositionType;
@@ -136,6 +145,28 @@ public class Allegation extends DomainObject {
 		this.countySpecificCode = countySpecificCode;
 		this.zippyCrestedInd = zippyCrestedInd;
 		this.placementFacilityType = placementFacilityType;
+	}
+	
+	public Allegation(gov.ca.cwds.rest.api.persistence.legacy.Allegation persistedAllegation) {
+		this.id = persistedAllegation.getId();
+		this.abuseFrequency = persistedAllegation.getAbuseFrequency();
+		this.abuseEndDate = DomainObject.cookDate(persistedAllegation.getAbuseEndDate());
+		this.abuseStartDate = DomainObject.cookDate(persistedAllegation.getAbuseStartDate());
+		this.abuseFrequencyPeriodCode = persistedAllegation.getAbuseFrequencyPeriodCode();
+		this.abuseLocationDescription = persistedAllegation.getAbuseLocationDescription();
+		this.allegationDispositionType = persistedAllegation.getAllegationDispositionType();
+		this.allegationType = persistedAllegation.getAllegationType();
+		this.dispositionDescription = persistedAllegation.getDispositionDescription();
+		this.dispositionDate = DomainObject.cookDate(persistedAllegation.getDispositionDate());
+		this.injuryHarmDetailIndVar = DomainObject.uncookBooleanString(persistedAllegation.getInjuryHarmDetailIndVar());
+		this.nonProtectingParentCode = persistedAllegation.getNonProtectingParentCode();
+		this.staffPersonAddedInd = DomainObject.uncookBooleanString(persistedAllegation.getStaffPersonAddedInd());
+		this.fkClientT = persistedAllegation.getFkClientT();
+		this.fkClient0 = persistedAllegation.getFkClient0();
+		this.fkReferralT = persistedAllegation.getFkReferralT();
+		this.countySpecificCode = persistedAllegation.getCountySpecificCode();
+		this.zippyCrestedInd = DomainObject.uncookBooleanString(persistedAllegation.getZippyCrestedInd());
+		this.placementFacilityType = persistedAllegation.getPlacementFacilityType();
 	}
 
 	/**

@@ -97,8 +97,8 @@ public class Allegation extends PersistentObject {
 			this.injuryHarmDetailIndVar = DomainObject.cookBoolean(allegation.getInjuryHarmDetailIndVar());
 			this.nonProtectingParentCode = allegation.getNonProtectingParentCode();
 			this.staffPersonAddedInd = DomainObject.cookBoolean(allegation.getStaffPersonAddedInd());
-			this.fkClientT = allegation.getFkClient0();
-			this.fkClient0 = allegation.getFkClientT();
+			this.fkClientT = allegation.getFkClientT();
+			this.fkClient0 = allegation.getFkClient0();
 			this.fkReferralT = allegation.getFkReferralT();
 			this.countySpecificCode = allegation.getCountySpecificCode();
 			this.zippyCrestedInd = DomainObject.cookBoolean(allegation.getZippyCrestedInd());

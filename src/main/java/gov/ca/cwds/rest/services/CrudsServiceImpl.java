@@ -108,12 +108,12 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 			for( Constructor found : domainObjectClass.getConstructors()) {
 				Class[] params = found.getParameterTypes();
 				if( params.length == 1 && params[0].equals(persistentObjectClass)) {
-					persistentObjectConstructor = found;
+					domainObjectConstructor = found;
 					break;
 				}
 			}
 		}
-		return persistentObjectConstructor;
+		return domainObjectConstructor;
 	}
 	
 	private T constructDomainObject(P object) {

@@ -16,7 +16,7 @@ public class DomainObject {
 		return Boolean.TRUE.equals(uncookedoolean) ? "Y" : "N";
 	}
 	
-	public static Boolean uncookBoolean(String cookedBoolean) {
+	public static Boolean uncookBooleanString(String cookedBoolean) {
 		if( "N".equalsIgnoreCase(cookedBoolean) ) {
 			return Boolean.FALSE;
 		}
@@ -27,8 +27,13 @@ public class DomainObject {
 		
 	}
 	
-	public static String cookDateString(Date date) {
+	public static String cookDate(Date date) {
 		DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+		return df.format(date);
+	}
+	
+	public static String cookTimestamp(Date date) {
+		DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
 		return df.format(date);
 	}
 	

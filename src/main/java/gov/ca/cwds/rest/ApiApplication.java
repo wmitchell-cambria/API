@@ -7,6 +7,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,6 +128,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     @Override
     public void run(final ApiConfiguration configuration, final Environment environment) throws Exception {
+    	environment.jersey().getResourceConfig().packages(getClass().getPackage().getName()).register(DeclarativeLinkingFeature.class);
+    	
+    	
         LOGGER.info("Application name: {}", configuration.getApplicationName());
         ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
         

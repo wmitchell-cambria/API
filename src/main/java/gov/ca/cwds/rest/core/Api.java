@@ -10,21 +10,11 @@ package gov.ca.cwds.rest.core;
  * @author CDWS API Team
  */
 public class Api {
-	
-    /**
-     * A {@code String} constant representing {@value #RESOURCE_APPLICATION} api.
-     */
-    public final static String RESOURCE_APPLICATION = "application";
 
     /**
-     * A {@code String} constant representing {@value #RESOURCE_REFERRAL} api.
+     * A {@code String} constant representing {@value #RESOURCE_ADDRESS} api.
      */
-    public final static String RESOURCE_REFERRAL = "referrals";
-    
-    /**
-     * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api.
-     */
-    public final static String RESOURCE_STAFF_PERSON = "staffpersons";
+    public final static String RESOURCE_ADDRESS = "addresses";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
@@ -32,20 +22,50 @@ public class Api {
     public final static String RESOURCE_ALLEGATION = "allegations";
     
     /**
-     * A {@code String} constant representing {@value #RESOURCE_REPORTER} api.
+     * A {@code String} constant representing {@value #RESOURCE_APPLICATION} api.
      */
-    public final static String RESOURCE_REPORTER = "reporters";
+    public final static String RESOURCE_APPLICATION = "application";
 
     /**
-     * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} api.
+     * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
      */
-    public final static String RESOURCE_REFERRAL_CLIENT = "referralclients";
+    public final static String RESOURCE_CLIENT = "clients";
 
     /**
      * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api.
      */
     public final static String RESOURCE_CROSS_REPORT = "crossreports";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_CWS_OFFICE} api.
+     */
+    public final static String RESOURCE_CWS_OFFICE = "cwsOffice";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_CWS_OFFICE_ADDESS} api.
+     */
+    public final static String RESOURCE_CWS_OFFICE_ADDESS = "cwsOfficeAddresses";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_REFERRAL} api.
+     */
+    public final static String RESOURCE_REFERRAL = "referrals";
 
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} api.
+     */
+    public final static String RESOURCE_REFERRAL_CLIENT = "referralclients";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_REPORTER} api.
+     */
+    public final static String RESOURCE_REPORTER = "reporters";
+    
+    /**
+     * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api.
+     */
+    public final static String RESOURCE_STAFF_PERSON = "staffpersons";
+    
     /**
      * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1} media type.
      */

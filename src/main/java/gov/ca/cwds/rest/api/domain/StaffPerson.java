@@ -5,12 +5,17 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -20,9 +25,17 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
+@InjectLinks(
+        { 
+        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="cwsOffice", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.cwsOffice}"), @Binding(name="resource", value=Api.RESOURCE_CWS_OFFICE) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="cwsofficeAddress", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.cwsOfficeAddress}"), @Binding(name="resource", value=Api.RESOURCE_CWS_OFFICE_ADDESS) } )
+        })
 public class StaffPerson extends DomainObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
+
+	
 	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
 	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC")
@@ -159,26 +172,26 @@ public class StaffPerson extends DomainObject {
 		this.emailAddress = emailAddress;
 	}
 	
-	public StaffPerson(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistentObject) {
-		this.id = persistentObject.getId();
-		this.firstName = persistentObject.getFirstName();
-		this.jobTitle = persistentObject.getJobTitle();
-		this.lastName = persistentObject.getLastName();
-		this.middleInitial = persistentObject.getMiddleInitial();
-		this.namePrefix = persistentObject.getNamePrefix();
-		this.phoneNumber = persistentObject.getPhoneNumber();
-		this.phoneExt = persistentObject.getPhoneExt();
-		this.endDate = DomainObject.cookDateString(persistentObject.getEndDate());
-		this.startDate = DomainObject.cookDateString(persistentObject.getStartDate());
-		this.nameSuffix = persistentObject.getNameSuffix();
-		this.telecommuterIndicator = DomainObject.uncookBoolean(persistentObject.getTelecommuterIndicator());
-		this.cwsOffice = persistentObject.getCwsOffice();
-		this.availabilityAndLocationDescription = persistentObject.getAvailabilityAndLocationDescription();
-		this.ssrsLicensingWorkerId = persistentObject.getSsrsLicensingWorkerId();
-		this.countyCode = persistentObject.getCountyCode();
-		this.dutyWorkerIndicator = DomainObject.uncookBoolean(persistentObject.getDutyWorkerIndicator());
-		this.cwsOfficeAddress = persistentObject.getCwsOfficeAddress();
-		this.emailAddress = persistentObject.getEmailAddress();
+	public StaffPerson(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistedStaffPerson) {
+		this.id = persistedStaffPerson.getId();
+		this.firstName = persistedStaffPerson.getFirstName();
+		this.jobTitle = persistedStaffPerson.getJobTitle();
+		this.lastName = persistedStaffPerson.getLastName();
+		this.middleInitial = persistedStaffPerson.getMiddleInitial();
+		this.namePrefix = persistedStaffPerson.getNamePrefix();
+		this.phoneNumber = persistedStaffPerson.getPhoneNumber();
+		this.phoneExt = persistedStaffPerson.getPhoneExt();
+		this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
+		this.startDate = DomainObject.cookDate(persistedStaffPerson.getStartDate());
+		this.nameSuffix = persistedStaffPerson.getNameSuffix();
+		this.telecommuterIndicator = DomainObject.uncookBooleanString(persistedStaffPerson.getTelecommuterIndicator());
+		this.cwsOffice = persistedStaffPerson.getCwsOffice();
+		this.availabilityAndLocationDescription = persistedStaffPerson.getAvailabilityAndLocationDescription();
+		this.ssrsLicensingWorkerId = persistedStaffPerson.getSsrsLicensingWorkerId();
+		this.countyCode = persistedStaffPerson.getCountyCode();
+		this.dutyWorkerIndicator = DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
+		this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
+		this.emailAddress = persistedStaffPerson.getEmailAddress();
 	}
 
 	/**
