@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.core.Api;
+import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -95,6 +96,8 @@ public class Referral extends DomainObject {
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@OneOf(value = {"S", "R", "N"}, ignoreCase = true, ignoreWhitespace = true)
+	@ApiModelProperty(required = true, readOnly = false, value = "Size must be 1", example = "S", allowableValues="S,R,N")
 	private String limitedAccessCode;
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
@@ -190,6 +193,8 @@ public class Referral extends DomainObject {
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@OneOf(value = {"C", "P", "O", "A", "S", "I", "K", "M"}, ignoreCase = true, ignoreWhitespace = true)
+	@ApiModelProperty(required = true, readOnly = false, value = "Size must be 1", example = "C", allowableValues="C,P,O,A,S,I,K,M")
 	private String responsibleAgencyCode;
 	
 	private Short limitedAccessGovtAgencyType;

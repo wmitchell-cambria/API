@@ -586,7 +586,31 @@ public class ReferralTest {
         assertThat(response.getStatus(), is(equalTo(422)));
         assertThat(response.readEntity(String.class).indexOf("limitedAccessCode size must be 1"), is(greaterThanOrEqualTo(0)));
     }
-
+    @Test
+    public void failsWhenLimitedAccessCodeNotValidValue() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/notValidValue.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(422)));
+        assertThat(response.readEntity(String.class).indexOf("limitedAccessCode must be one of [S, R, N]"), is(greaterThanOrEqualTo(0)));
+    }
+    @Test
+    public void successWhenLimitedAccessCodeIsS() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/S.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenLimitedAccessCodeIsR() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/R.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenLimitedAccessCodeIsN() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/N.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
     /*
     * mandatedCrossReportReceivedDate Tests
     */
@@ -1262,6 +1286,61 @@ public class ReferralTest {
         Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
         assertThat(response.getStatus(), is(equalTo(422)));
         assertThat(response.readEntity(String.class).indexOf("responsibleAgencyCode size must be 1"), is(greaterThanOrEqualTo(0)));
+    }
+    @Test
+    public void failsWhenResponsibleAgencyCodeNotValidValue() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/notValidValue.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(422)));
+        assertThat(response.readEntity(String.class).indexOf("responsibleAgencyCode must be one of [C, P, O, A, S, I, K, M]"), is(greaterThanOrEqualTo(0)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsC() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/C.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsP() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/P.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsO() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/O.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsA() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/A.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsS() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/S.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsI() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/I.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsK() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/K.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
+    }
+    @Test
+    public void successWhenResponsibleAgencyCodeIsM() throws Exception {
+        Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/M.json"), Referral.class);
+        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+        assertThat(response.getStatus(), is(equalTo(204)));
     }
 
     /*
