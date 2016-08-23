@@ -33,10 +33,10 @@ public class Referral extends PersistentObject {
 	private String additionalInfoIncludedCode;
 	
 	@Column(name = "ANRPTR_IND")
-	private String anonymousReporter;
+	private String anonymousReporterIndicator;
 	
 	@Column(name = "PETAPL_IND")
-	private String applicationForPetition;
+	private String applicationForPetitionIndicator;
 	
 	@Column(name = "APRVL_NO")
 	private String approvalNumber;
@@ -69,7 +69,7 @@ public class Referral extends PersistentObject {
 	private String drmsInvestigationDoc;
 
 	@Column(name = "XRPT_LWIND")
-	private String filedSuspectedChildAbuseReporttoLawEnforcement;
+	private String filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 	
 	@Column(name = "FMY_AW_IND")
 	private String familyAwarenessIndicator;
@@ -137,16 +137,16 @@ public class Referral extends PersistentObject {
 	private String unfoundedSeriesCode;
 
 	@Column(name = "FKREFERL_T")
-	private String foreignKeyFromReferral;
+	private String linkToPrimaryReferralId;
 
 	@Column(name = "FKADDRS_T")
-	private String fkAddrsT;
+	private String allegesAbuseOccurredAtAddressId;
 
 	@Column(name = "FKSTFPERS0")
-	private String fkStaffPerso;
+	private String firstResponseDeterminedByStaffPersonId;
 
 	@Column(name = "FKSTFPERST")
-	private String foreignKeyStaffPerson;
+	private String primaryContactStaffPersonId;
 
 	@Column(name = "CNTY_SPFCD")
 	private String countySpecificCode;
@@ -190,8 +190,8 @@ public class Referral extends PersistentObject {
 		try {
 			this.id = referral.getId();
 			this.additionalInfoIncludedCode = referral.getAdditionalInfoIncludedCode();
-			this.anonymousReporter = DomainObject.cookBoolean(referral.getAnonymousReporter());
-			this.applicationForPetition = DomainObject.cookBoolean(referral.getApplicationForPetition());
+			this.anonymousReporterIndicator = DomainObject.cookBoolean(referral.getAnonymousReporterIndicator());
+			this.applicationForPetitionIndicator = DomainObject.cookBoolean(referral.getApplicationForPetitionIndicator());
 			this.approvalNumber = referral.getApprovalNumber();
 			this.approvalStatusType = referral.getApprovalStatusType();
 			this.caretakersPerpetratorCode = referral.getCaretakersPerpetratorCode();
@@ -201,7 +201,7 @@ public class Referral extends PersistentObject {
 			this.drmsAllegationDescriptionDoc = referral.getDrmsAllegationDescriptionDoc();
 			this.drmsErReferralDoc = referral.getDrmsErReferralDoc();
 			this.drmsInvestigationDoc = referral.getDrmsInvestigationDoc();
-			this.filedSuspectedChildAbuseReporttoLawEnforcement = DomainObject.cookBoolean(referral.getFiledSuspectedChildAbuseReporttoLawEnforcement());
+			this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = DomainObject.cookBoolean(referral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
 			this.familyAwarenessIndicator = DomainObject.cookBoolean(referral.getFamilyAwarenessIndicator());
 			this.govtEntityType = referral.getGovtEntityType();
 			this.legalDefinitionCode = referral.getLegalDefinitionCode();
@@ -221,10 +221,10 @@ public class Referral extends PersistentObject {
 			this.specificsIncludedCode = referral.getSpecificsIncludedCode();
 			this.sufficientInformationCode = referral.getSufficientInformationCode();
 			this.unfoundedSeriesCode = referral.getUnfoundedSeriesCode();
-			this.foreignKeyFromReferral = referral.getForeignKeyFromReferral();
-			this.fkAddrsT = referral.getFkAddrsT();
-			this.fkStaffPerso = referral.getFkStaffPerso();
-			this.foreignKeyStaffPerson = referral.getForeignKeyStaffPerson();
+			this.linkToPrimaryReferralId = referral.getLinkToPrimaryReferralId();
+			this.allegesAbuseOccurredAtAddressId = referral.getAllegesAbuseOccurredAtAddressId();
+			this.firstResponseDeterminedByStaffPersonId = referral.getFirstResponseDeterminedByStaffPersonId();
+			this.primaryContactStaffPersonId = referral.getPrimaryContactStaffPersonId();
 			this.countySpecificCode = referral.getCountySpecificCode();
 			this.specialProjectReferralIndicator = DomainObject.cookBoolean(referral.getSpecialProjectReferralIndicator());
 			this.zippyCreatedIndicator = DomainObject.cookBoolean(referral.getZippyCreatedIndicator());
@@ -264,17 +264,17 @@ public class Referral extends PersistentObject {
 	}
 
 	/**
-	 * @return the anonymousReporter
+	 * @return the anonymousReporterIndicator
 	 */
-	public String getAnonymousReporter() {
-		return anonymousReporter;
+	public String getAnonymousReporterIndicator() {
+		return anonymousReporterIndicator;
 	}
 
 	/**
-	 * @return the applicationForPetition
+	 * @return the applicationForPetitionIndicator
 	 */
-	public String getApplicationForPetition() {
-		return applicationForPetition;
+	public String getApplicationForPetitionIndicator() {
+		return applicationForPetitionIndicator;
 	}
 
 	/**
@@ -341,10 +341,10 @@ public class Referral extends PersistentObject {
 	}
 
 	/**
-	 * @return the filedSuspectedChildAbuseReporttoLawEnforcement
+	 * @return the filedSuspectedChildAbuseReporttoLawEnforcementIndicator
 	 */
-	public String getFiledSuspectedChildAbuseReporttoLawEnforcement() {
-		return filedSuspectedChildAbuseReporttoLawEnforcement;
+	public String getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator() {
+		return filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 	}
 
 	/**
@@ -481,31 +481,31 @@ public class Referral extends PersistentObject {
 	}
 
 	/**
-	 * @return the foreignKeyFromReferral
+	 * @return the linkToPrimaryReferralId
 	 */
-	public String getForeignKeyFromReferral() {
-		return foreignKeyFromReferral;
+	public String getLinkToPrimaryReferralId() {
+		return linkToPrimaryReferralId;
 	}
 
 	/**
-	 * @return the fkAddrsT
+	 * @return the allegesAbuseOccurredAtAddressId
 	 */
-	public String getFkAddrsT() {
-		return fkAddrsT;
+	public String getAllegesAbuseOccurredAtAddressId() {
+		return allegesAbuseOccurredAtAddressId;
 	}
 
 	/**
-	 * @return the fkStaffPerso
+	 * @return the firstResponseDeterminedByStaffPersonId
 	 */
-	public String getFkStaffPerso() {
-		return fkStaffPerso;
+	public String getFirstResponseDeterminedByStaffPersonId() {
+		return firstResponseDeterminedByStaffPersonId;
 	}
 
 	/**
-	 * @return the foreignKeyStaffPerson
+	 * @return the primaryContactStaffPersonId
 	 */
-	public String getForeignKeyStaffPerson() {
-		return foreignKeyStaffPerson;
+	public String getPrimaryContactStaffPersonId() {
+		return primaryContactStaffPersonId;
 	}
 
 	/**

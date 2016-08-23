@@ -1,18 +1,18 @@
 {
   "id": "DEF",
   "additionalInfoIncludedCode": "A",
-  "anonymousReporter": false,
-  "applicationForPetition": false,
+  "anonymousReporterIndicator": false,
+  "applicationForPetitionIndicator": false,
   "approvalNumber": "A3CDEOm0Ab",
   "approvalStatusType": 122,
   "caretakersPerpetratorCode": "A",
-  "closureDate": "2016-03-03",
+  "closureDate": "2000-03-03",
   "communicationMethodType": 409,
   "currentLocationOfChildren": "current",
   "drmsAllegationDescriptionDoc": "abcdefg",
   "drmsErReferralDoc": "A3B7sSC0Ab",
   "drmsInvestigationDoc": "efghijk",
-  "filedSuspectedChildAbuseReporttoLawEnforcement": false,
+  "filedSuspectedChildAbuseReporttoLawEnforcementIndicator": false,
   "familyAwarenessIndicator": false,
   "govtEntityType": 1118,
   "legalDefinitionCode": "A",
@@ -32,12 +32,10 @@
   "specificsIncludedCode": "A",
   "sufficientInformationCode": "A",
   "unfoundedSeriesCode": "A",
-  
-  
-  "foreignKeyFromReferral": "sdfghj",
-  "fkAddrsT": "kjhgfdl",
-  "fkStaffPerso": "0Ab",
-  "foreignKeyStaffPerson": "0Ab",
+  "linkToPrimaryReferralId": "sdfghj",
+  "allegesAbuseOccurredAtAddressId": "kjhgfdl",
+  "firstResponseDeterminedByStaffPersonId": "0Ab",
+  "primaryContactStaffPersonId": "0Ab",
   "countySpecificCode": "51",
   "specialProjectReferralIndicator": false,
   "zippyCreatedIndicator": false,
@@ -48,5 +46,5 @@
   "limitedAccessGovtAgencyType": 1234,
   "limitedAccessDate": "2000-05-05",
   "limitedAccessDesc": "thjkl",
-  "originalClosureDate": "05/05/2016"
+  "originalClosureDate": "08/08/2010"
 }
