@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.jdbi;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;

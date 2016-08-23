@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.Service;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -46,7 +45,6 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Response get(String id, String acceptHeader) {
-		@SuppressWarnings("unchecked")
 		CrudsService service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
@@ -67,7 +65,6 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Response delete(String id, String acceptHeader) {
-		@SuppressWarnings("unchecked")
 		CrudsService service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
@@ -88,7 +85,6 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Response create(T domainObject, String acceptHeader, UriInfo uriInfo) {
-		@SuppressWarnings("unchecked")
 		CrudsService service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
@@ -119,7 +115,6 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Response update(T domainObject, String acceptHeader) {
-		@SuppressWarnings("unchecked")
 		CrudsService  service = (CrudsService)super.versionedService(acceptHeader);
 		if(service == null) {
 			//TODO : Test this
@@ -127,7 +122,7 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
 		try {
-			String id = service.update(domainObject);
+			service.update(domainObject);
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} catch (ServiceException e) {
 			if( e.getCause() instanceof EntityNotFoundException ) {

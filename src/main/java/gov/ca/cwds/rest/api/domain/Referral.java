@@ -3,12 +3,17 @@ package gov.ca.cwds.rest.api.domain;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import org.glassfish.jersey.linking.InjectLink.Style;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -18,6 +23,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
+@InjectLinks(
+        { 
+        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="fkAddrsT", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkAddrsT}"), @Binding(name="resource", value=Api.RESOURCE_ADDRESS) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="foreignKeyFromReferral", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.foreignKeyFromReferral}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.foreignKeyFromReferral }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="fkStaffPerso", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.fkStaffPerso}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) }, condition="${not empty instance.fkStaffPerso }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="foreignKeyStaffPerson", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.foreignKeyStaffPerson}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
+        })
 public class Referral extends DomainObject {
 
 	@NotEmpty
@@ -104,6 +117,7 @@ public class Referral extends DomainObject {
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
 	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=true)
+	@ApiModelProperty(required=false, readOnly=true, example="2015-11-22-04.33.33.3333")
 	private String receivedTime;
 		
 	@NotNull
@@ -119,6 +133,7 @@ public class Referral extends DomainObject {
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
 	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=true, example="2015-11-22-04.33.33.3333")
 	private String responseDeterminationTime;
 		
 	@Size(max=10)	
@@ -342,6 +357,60 @@ public class Referral extends DomainObject {
 		this.limitedAccessDesc = limitedAccessDesc;
 		this.originalClosureDate = originalClosureDate;
 	}
+	
+	public Referral(gov.ca.cwds.rest.api.persistence.legacy.Referral persistedReferral) {
+		super();
+		this.id = persistedReferral.getId();
+		this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
+		this.anonymousReporter = DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporter());
+		this.applicationForPetition = DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetition());
+		this.approvalNumber = persistedReferral.getApprovalNumber();
+		this.approvalStatusType = persistedReferral.getApprovalStatusType();
+		this.caretakersPerpetratorCode =  persistedReferral.getCaretakersPerpetratorCode();
+		this.closureDate = DomainObject.cookDate(persistedReferral.getClosureDate());
+		this.communicationMethodType = persistedReferral.getCommunicationMethodType();
+		this.currentLocationOfChildren = persistedReferral.getCurrentLocationOfChildren();
+		this.drmsAllegationDescriptionDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
+		this.drmsErReferralDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
+		this.drmsInvestigationDoc = persistedReferral.getDrmsInvestigationDoc();
+		this.filedSuspectedChildAbuseReporttoLawEnforcement = DomainObject.uncookBooleanString(persistedReferral.getFiledSuspectedChildAbuseReporttoLawEnforcement());
+		this.familyAwarenessIndicator = DomainObject.uncookBooleanString(persistedReferral.getFamilyAwarenessIndicator());
+		this.govtEntityType = persistedReferral.getGovtEntityType();
+		this.legalDefinitionCode = persistedReferral.getLegalDefinitionCode();
+		this.legalRightsNoticeIndicator = DomainObject.uncookBooleanString(persistedReferral.getLegalRightsNoticeIndicator());
+		this.limitedAccessCode = persistedReferral.getLimitedAccessCode();
+		this.mandatedCrossReportReceivedDate = DomainObject.cookDate(persistedReferral.getMandatedCrossReportReceivedDate());
+		this.referralName = persistedReferral.getReferralName();
+		this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
+		this.receivedDate = DomainObject.cookDate(persistedReferral.getReceivedDate());
+		this.receivedTime = DomainObject.cookTimestamp(persistedReferral.getReceivedTime());
+		this.referralResponseType = persistedReferral.getReferralResponseType();
+		this.referredToResourceType = persistedReferral.getReferredToResourceType();
+		this.responseDeterminationDate = DomainObject.cookDate(persistedReferral.getResponseDeterminationDate());
+		this.responseDeterminationTime = DomainObject.cookTimestamp(persistedReferral.getResponseDeterminationTime());
+		this.responseRationaleText = persistedReferral.getResponseRationaleText();
+		this.screenerNoteText = persistedReferral.getScreenerNoteText();
+		this.specificsIncludedCode = persistedReferral.getSpecificsIncludedCode();
+		this.sufficientInformationCode = persistedReferral.getSpecificsIncludedCode();
+		this.unfoundedSeriesCode = persistedReferral.getUnfoundedSeriesCode();
+		this.foreignKeyFromReferral = persistedReferral.getForeignKeyFromReferral();
+		this.fkAddrsT = persistedReferral.getFkAddrsT();
+		this.fkStaffPerso = persistedReferral.getFkStaffPerso();
+		this.foreignKeyStaffPerson = persistedReferral.getForeignKeyStaffPerson();
+		this.countySpecificCode = persistedReferral.getCountySpecificCode();
+		this.specialProjectReferralIndicator = DomainObject.uncookBooleanString(persistedReferral.getSpecialProjectReferralIndicator());
+		this.zippyCreatedIndicator = DomainObject.uncookBooleanString(persistedReferral.getZippyCreatedIndicator());
+		this.homelessIndicator = DomainObject.uncookBooleanString(persistedReferral.getHomelessIndicator());
+		this.familyRefusedServicesIndicator = DomainObject.uncookBooleanString(persistedReferral.getFamilyRefusedServicesIndicator());
+		this.firstEvaluatedOutApprovalDate = DomainObject.cookDate(persistedReferral.getFirstEvaluatedOutApprovalDate());
+		this.responsibleAgencyCode = persistedReferral.getResponsibleAgencyCode();
+		this.limitedAccessGovtAgencyType = persistedReferral.getLimitedAccessGovtAgencyType();
+		this.limitedAccessDate = DomainObject.cookDate(persistedReferral.getLimitedAccessDate());
+		this.limitedAccessDesc = persistedReferral.getLimitedAccessDesc();
+		this.originalClosureDate = DomainObject.cookDate(persistedReferral.getOriginalClosureDate());
+		
+	
+	}
 
 	/**
 	 * @return the id
@@ -530,7 +599,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the receivedTime
 	 */
-	@ApiModelProperty(required=false, readOnly=true, example="2015-11-22")
 	public String getReceivedTime() {
 		return receivedTime;
 	}
@@ -562,7 +630,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the responseDeterminationTime
 	 */
-	@ApiModelProperty(required=false, readOnly=true, example="2015-11-22")
 	public String getResponseDeterminationTime() {
 		return responseDeterminationTime;
 	}
