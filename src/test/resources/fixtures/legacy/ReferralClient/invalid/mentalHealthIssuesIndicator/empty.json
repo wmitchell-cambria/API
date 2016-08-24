@@ -13,7 +13,7 @@
   "ageNumber": 12,
   "agePeriodCode": "M",
   "countySpecificCode": "AB",
-  "mentalHealthIssuesIndicator": false,
+  "mentalHealthIssuesIndicator": "",
   "alcoholIndicator": false,
   "drugIndicator": false
 }

@@ -11,7 +11,7 @@
   "clientId": "abc",
   "dispositionClosureDescription": "description abc",
   "ageNumber": 12,
-  "agePeriodCode": "M",
+  "agePeriodCode": "12",
   "countySpecificCode": "AB",
   "mentalHealthIssuesIndicator": false,
   "alcoholIndicator": false,

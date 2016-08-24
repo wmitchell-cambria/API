@@ -1,10 +1,19 @@
 package gov.ca.cwds.rest.api.domain;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import org.glassfish.jersey.linking.InjectLink.Style;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,17 +23,111 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
+@InjectLinks(
+        { 
+        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.referralId }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="clientId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.clientId}"), @Binding(name="resource", value=Api.RESOURCE_CLIENT) }, condition="${not empty instance.clientId }" ),
+        })
 public class ReferralClient extends DomainObject {
-
-	@NotEmpty
- 	private String id;
 	
+	@NotEmpty
+	@Size(min=1, max=10)
+	private String id;
+
+    @Size(max=10)
+    private String approvalNumber;
+
+    @NotNull
+    private Short approvalStatusType;
+
+    @NotNull
+    private Short dispositionClosureReasonType;
+
+    @NotEmpty
+    @Size(min=1, max=1, message="size must be 1")
+    private String dispositionCode;
+
+    @gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
+    @JsonProperty(value="dispositionDate")
+    private String dispositionDate;
+
+    @NotNull
+    private Boolean selfReportedIndicator;
+
+    @NotNull
+    private Boolean staffPersonAddedIndicator;
+
+    @NotEmpty
+    @Size(min=1, max=10)
+    private String referralId;
+
+    @NotEmpty
+    @Size(min=1, max=10)
+    private String clientId;
+
+    @NotEmpty
+    @Size(min=1, max=254)
+    private String dispositionClosureDescription;
+
+    @NotNull
+    private Short ageNumber;
+
+    @NotEmpty
+    @Size(min=1, max=1, message="size must be 1")
+    private String agePeriodCode;
+
+    @NotEmpty
+    @Size(min=1, max=2)
+    private String countySpecificCode;
+
+    private Boolean mentalHealthIssuesIndicator;
+
+    private Boolean alcoholIndicator;
+
+    private Boolean drugIndicator;
+
+
 	@JsonCreator
-	public ReferralClient(@JsonProperty("id") String id) {
+	public ReferralClient(
+            @JsonProperty("id") String id,
+            @JsonProperty("approvalNumber") String approvalNumber,
+            @JsonProperty("approvalStatusType") Short approvalStatusType,
+            @JsonProperty("dispositionClosureReasonType") Short dispositionClosureReasonType,
+            @JsonProperty("dispositionCode") String dispositionCode,
+            @JsonProperty("dispositionDate") String dispositionDate,
+            @JsonProperty("selfReportedIndicator") Boolean selfReportedIndicator,
+            @JsonProperty("staffPersonAddedIndicator") Boolean staffPersonAddedIndicator,
+            @JsonProperty("referralId") String referralId,
+            @JsonProperty("clientId") String clientId,
+            @JsonProperty("dispositionClosureDescription") String dispositionClosureDescription,
+            @JsonProperty("ageNumber") Short ageNumber,
+            @JsonProperty("agePeriodCode") String agePeriodCode,
+            @JsonProperty("countySpecificCode") String countySpecificCode,
+            @JsonProperty("mentalHealthIssuesIndicator") Boolean mentalHealthIssuesIndicator,
+            @JsonProperty("alcoholIndicator") Boolean alcoholIndicator,
+            @JsonProperty("drugIndicator") Boolean drugIndicator) {
 		super();
 		this.id = id;
+		this.approvalNumber = approvalNumber;
+		this.approvalStatusType = approvalStatusType;
+		this.dispositionClosureReasonType = dispositionClosureReasonType;
+		this.dispositionCode = dispositionCode;
+		this.dispositionDate = dispositionDate;
+		this.selfReportedIndicator = selfReportedIndicator;
+		this.staffPersonAddedIndicator = staffPersonAddedIndicator;
+		this.referralId = referralId;
+		this.clientId = clientId;
+		this.dispositionClosureDescription = dispositionClosureDescription;
+		this.ageNumber = ageNumber;
+		this.agePeriodCode = agePeriodCode;
+		this.countySpecificCode = countySpecificCode;
+		this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
+		this.alcoholIndicator = alcoholIndicator;
+		this.drugIndicator = drugIndicator;
 	}
-
+	
 	/**
 	 * @return the id
 	 */
@@ -32,4 +135,283 @@ public class ReferralClient extends DomainObject {
 	public String getId() {
 		return id;
 	}
+    /**
+     * @return the approvalNumber
+     */
+    @ApiModelProperty(required=false, readOnly=false, value="", example="A123")
+    public String getApprovalNumber() {
+        return approvalNumber;
+    }
+    
+    /**
+     * @return the approvalStatusType
+     */
+    @ApiModelProperty(required=true, readOnly=false, example="123")
+    public Short getApprovalStatusType() {
+        return approvalStatusType;
+    }
+    
+    /**
+     * @return the dispositionClosureReasonType
+     */
+    @ApiModelProperty(required=true, readOnly=false, example="123")
+    public Short getDispositionClosureReasonType() {
+        return dispositionClosureReasonType;
+    }
+    
+    /**
+     * @return the dispositionCode
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="A")
+    public String getDispositionCode() {
+        return dispositionCode;
+    }
+    
+    /**
+     * @return the dispositionDate
+     */
+    @ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01", dataType="Date")
+    public String getDispositionDate() {
+        return dispositionDate;
+    }
+    
+    /**
+     * @return the selfReportedInd
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
+    public Boolean getSelfReportedIndicator() {
+        return selfReportedIndicator;
+    }
+    
+    /**
+     * @return the staffPersonAddedInd
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
+    public Boolean getStaffPersonAddedIndicator() {
+        return staffPersonAddedIndicator;
+    }
+    
+    /**
+     * @return the referralId
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
+    public String getReferralId() {
+        return referralId;
+    }
+    
+    /**
+     * @return the clientId
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
+    public String getClientId() {
+        return clientId;
+    }
+    
+    /**
+     * @return the dispositionClosureDescription
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="description abc")
+    public String getDispositionClosureDescription() {
+        return dispositionClosureDescription;
+    }
+    
+    /**
+     * @return the ageNumber
+     */
+    @ApiModelProperty(required=true, readOnly=false, example="12")
+    public Short getAgeNumber() {
+        return ageNumber;
+    }
+    
+    /**
+     * @return the agePeriodCode
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="size must be 1", example="A")
+    public String getAgePeriodCode() {
+        return agePeriodCode;
+    }
+    
+    /**
+     * @return the countySpecificCode
+     */
+    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
+    public String getCountySpecificCode() {
+        return countySpecificCode;
+    }
+    
+    /**
+     * @return the mentalHealthIssuesInd
+     */
+    @ApiModelProperty(required=false, readOnly=false, example="true")
+    public Boolean getMentalHealthIssuesIndicator() {
+        return mentalHealthIssuesIndicator;
+    }
+    
+    /**
+     * @return the alcoholInd
+     */
+    @ApiModelProperty(required=false, readOnly=false, example="true")
+    public Boolean getAlcoholIndicator() {
+        return alcoholIndicator;
+    }
+    
+    /**
+     * @return the drugInd
+     */
+    @ApiModelProperty(required=false, readOnly=false, example="true")
+    public Boolean getDrugIndicator() {
+        return drugIndicator;
+    }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result 
+				+ ((ageNumber == null) ? 0 : ageNumber.hashCode());
+		result = prime * result
+				+ ((agePeriodCode == null) ? 0 : agePeriodCode.hashCode());
+		result = prime * result
+				+ ((alcoholIndicator == null) ? 0 : alcoholIndicator.hashCode());
+		result = prime * result
+				+ ((approvalNumber == null) ? 0 : approvalNumber.hashCode());
+		result = prime
+				* result
+				+ ((approvalStatusType == null) ? 0 : approvalStatusType
+						.hashCode());
+		result = prime
+				* result
+				+ ((countySpecificCode == null) ? 0 : countySpecificCode
+						.hashCode());
+		result = prime
+				* result
+				+ ((dispositionClosureDescription == null) ? 0
+						: dispositionClosureDescription.hashCode());
+		result = prime
+				* result
+				+ ((dispositionClosureReasonType == null) ? 0
+						: dispositionClosureReasonType.hashCode());
+		result = prime * result
+				+ ((dispositionCode == null) ? 0 : dispositionCode.hashCode());
+		result = prime * result
+				+ ((dispositionDate == null) ? 0 : dispositionDate.hashCode());
+		result = prime * result + ((drugIndicator == null) ? 0 : drugIndicator.hashCode());
+		result = prime * result
+				+ ((clientId == null) ? 0 : clientId.hashCode());
+		result = prime * result
+				+ ((referralId == null) ? 0 : referralId.hashCode());
+		result = prime
+				* result
+				+ ((mentalHealthIssuesIndicator == null) ? 0 : mentalHealthIssuesIndicator
+						.hashCode());
+		result = prime * result
+				+ ((selfReportedIndicator == null) ? 0 : selfReportedIndicator.hashCode());
+		result = prime
+				* result
+				+ ((staffPersonAddedIndicator == null) ? 0 : staffPersonAddedIndicator
+						.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReferralClient other = (ReferralClient) obj;
+		if (ageNumber == null) {
+			if (other.ageNumber != null)
+				return false;
+		} else if (!ageNumber.equals(other.ageNumber))
+			return false;
+		if (agePeriodCode == null) {
+			if (other.agePeriodCode != null)
+				return false;
+		} else if (!agePeriodCode.equals(other.agePeriodCode))
+			return false;
+		if (alcoholIndicator == null) {
+			if (other.alcoholIndicator != null)
+				return false;
+		} else if (!alcoholIndicator.equals(other.alcoholIndicator))
+			return false;
+		if (approvalNumber == null) {
+			if (other.approvalNumber != null)
+				return false;
+		} else if (!approvalNumber.equals(other.approvalNumber))
+			return false;
+		if (approvalStatusType == null) {
+			if (other.approvalStatusType != null)
+				return false;
+		} else if (!approvalStatusType.equals(other.approvalStatusType))
+			return false;
+		if (countySpecificCode == null) {
+			if (other.countySpecificCode != null)
+				return false;
+		} else if (!countySpecificCode.equals(other.countySpecificCode))
+			return false;
+		if (dispositionClosureDescription == null) {
+			if (other.dispositionClosureDescription != null)
+				return false;
+		} else if (!dispositionClosureDescription
+				.equals(other.dispositionClosureDescription))
+			return false;
+		if (dispositionClosureReasonType == null) {
+			if (other.dispositionClosureReasonType != null)
+				return false;
+		} else if (!dispositionClosureReasonType
+				.equals(other.dispositionClosureReasonType))
+			return false;
+		if (dispositionCode == null) {
+			if (other.dispositionCode != null)
+				return false;
+		} else if (!dispositionCode.equals(other.dispositionCode))
+			return false;
+		if (dispositionDate == null) {
+			if (other.dispositionDate != null)
+				return false;
+		} else if (!dispositionDate.equals(other.dispositionDate))
+			return false;
+		if (drugIndicator == null) {
+			if (other.drugIndicator != null)
+				return false;
+		} else if (!drugIndicator.equals(other.drugIndicator))
+			return false;
+		if (clientId == null) {
+			if (other.clientId != null)
+				return false;
+		} else if (!clientId.equals(other.clientId))
+			return false;
+		if (referralId == null) {
+			if (other.referralId != null)
+				return false;
+		} else if (!referralId.equals(other.referralId))
+			return false;
+		if (mentalHealthIssuesIndicator == null) {
+			if (other.mentalHealthIssuesIndicator != null)
+				return false;
+		} else if (!mentalHealthIssuesIndicator.equals(other.mentalHealthIssuesIndicator))
+			return false;
+		if (selfReportedIndicator == null) {
+			if (other.selfReportedIndicator != null)
+				return false;
+		} else if (!selfReportedIndicator.equals(other.selfReportedIndicator))
+			return false;
+		if (staffPersonAddedIndicator == null) {
+			if (other.staffPersonAddedIndicator != null)
+				return false;
+		} else if (!staffPersonAddedIndicator.equals(other.staffPersonAddedIndicator))
+			return false;
+		return true;
+	}
+
 }
+

@@ -5,7 +5,7 @@
   "dispositionClosureReasonType": 123,
   "dispositionCode": "A",
   "dispositionDate": "2000-01-01",
-  "selfReportedIndicator": false,
+  "selfReportedIndicator": " ",
   "staffPersonAddedIndicator": false,
   "referralId": "abc",
   "clientId": "abc",

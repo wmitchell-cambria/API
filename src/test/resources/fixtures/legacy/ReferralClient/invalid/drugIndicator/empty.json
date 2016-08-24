@@ -15,5 +15,5 @@
   "countySpecificCode": "AB",
   "mentalHealthIssuesIndicator": false,
   "alcoholIndicator": false,
-  "drugIndicator": false
+  "drugIndicator": ""
 }

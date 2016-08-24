@@ -8,7 +8,7 @@
   "selfReportedIndicator": false,
   "staffPersonAddedIndicator": false,
   "referralId": "abc",
-  "clientId": "abc",
+  "clientId": "12345678901",
   "dispositionClosureDescription": "description abc",
   "ageNumber": 12,
   "agePeriodCode": "M",
