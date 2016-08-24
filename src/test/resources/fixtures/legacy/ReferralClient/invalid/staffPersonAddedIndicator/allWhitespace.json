@@ -6,7 +6,7 @@
   "dispositionCode": "A",
   "dispositionDate": "2000-01-01",
   "selfReportedIndicator": false,
-  "staffPersonAddedIndicator": false,
+  "staffPersonAddedIndicator": " ",
   "referralId": "abc",
   "clientId": "abc",
   "dispositionClosureDescription": "description abc",

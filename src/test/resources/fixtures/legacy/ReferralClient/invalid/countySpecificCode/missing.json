@@ -12,7 +12,6 @@
   "dispositionClosureDescription": "description abc",
   "ageNumber": 12,
   "agePeriodCode": "M",
-  "countySpecificCode": "AB",
   "mentalHealthIssuesIndicator": false,
   "alcoholIndicator": false,
   "drugIndicator": false

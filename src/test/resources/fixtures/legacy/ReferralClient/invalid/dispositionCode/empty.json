@@ -3,7 +3,7 @@
   "approvalNumber": "A123",
   "approvalStatusType": 123,
   "dispositionClosureReasonType": 123,
-  "dispositionCode": "A",
+  "dispositionCode": "",
   "dispositionDate": "2000-01-01",
   "selfReportedIndicator": false,
   "staffPersonAddedIndicator": false,

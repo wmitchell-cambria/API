@@ -10,7 +10,7 @@
   "referralId": "abc",
   "clientId": "abc",
   "dispositionClosureDescription": "description abc",
-  "ageNumber": 12,
+  "ageNumber": null,
   "agePeriodCode": "M",
   "countySpecificCode": "AB",
   "mentalHealthIssuesIndicator": false,
