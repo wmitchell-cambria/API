@@ -12,8 +12,12 @@ public class DomainObject {
 	public DomainObject() {
 	}
 	
-	public static String cookBoolean(Boolean uncookedoolean) {
-		return Boolean.TRUE.equals(uncookedoolean) ? "Y" : "N";
+	public static String cookBoolean(Boolean uncookedBoolean) {
+		if( uncookedBoolean != null ) {
+			return Boolean.TRUE.equals(uncookedBoolean) ? "Y" : "N";	
+		}
+		return null;
+		
 	}
 	
 	public static Boolean uncookBooleanString(String cookedBoolean) {
@@ -23,28 +27,45 @@ public class DomainObject {
 		if( "Y".equalsIgnoreCase(cookedBoolean) ) {
 			return Boolean.TRUE;
 		}
-		return null;
+		throw new DomainException(new ParseException("Unable to generate boolean", 0));
 		
 	}
 	
 	public static String cookDate(Date date) {
-		DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-		return df.format(date);
+		if( date != null ) {
+			DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+			return df.format(date);
+		}
+		return null;
 	}
 	
 	public static String cookTimestamp(Date date) {
-		DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-		return df.format(date);
+		if(date != null) {
+			DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+			return df.format(date);
+		}
+		return null;
 	}
 	
-	public static Date uncookDateString(String date) throws ParseException {
-		DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-		return df.parse(date);
+	public static Date uncookDateString(String date) {
+		if( date != null ) {
+			try {
+				DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+				return df.parse(date);
+			} catch (Exception e) {
+				throw new DomainException(e);
+			}
+		}
+		return null;
 	}
 
-	public static Date uncookTimestampString(String timestamp) throws ParseException {
-		DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-		return df.parse(timestamp);
+	public static Date uncookTimestampString(String timestamp) {
+	    try {
+			DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+			return df.parse(timestamp);
+		} catch (Exception e) {
+			throw new DomainException(e);
+		}
 	}
 	
 }
