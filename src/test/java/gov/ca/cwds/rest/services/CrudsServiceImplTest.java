@@ -1,6 +1,10 @@
 package gov.ca.cwds.rest.services;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -9,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.client.Entity;
 
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -19,6 +24,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.StaffPerson;
+import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import io.dropwizard.jackson.Jackson;
 
@@ -65,11 +71,9 @@ public class CrudsServiceImplTest {
 
 	}
 	
-	@Test
-	public void findThrowsEntityNotFoundWhenNotFound() {
-        thrown.expect(ServiceException.class);
-        thrown.expectCause(Is.isA(EntityNotFoundException.class));
+	public void findReturnsNullWhenNotFound() {
 		crudsServiceImpl.find("null");
+		assertThat(crudsServiceImpl.find("null"), is(nullValue()));
 	}
 
 	@Test

@@ -30,10 +30,6 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	 */
 	@Override
 	public T find(String id) {
-		T entity = get(id);
-		if( entity == null )  {
-			throw new EntityNotFoundException();
-		}
 		return get(id);
 	}
 

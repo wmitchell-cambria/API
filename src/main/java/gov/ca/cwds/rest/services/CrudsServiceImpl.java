@@ -41,13 +41,11 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public T find(String id) {
-		try {
-			P object = crudsDao.find(id);
+		P object = crudsDao.find(id);
+		if( object != null ) {
 			return constructDomainObject(object);
-		} catch (EntityNotFoundException e) {
-			LOGGER.info("id:{} not found", id);
-			throw new ServiceException(e);
-		}
+		} 
+		return null;
 	}
 
 	@Override
