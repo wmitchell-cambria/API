@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.domain.DomainException;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
@@ -142,7 +142,7 @@ public class Reporter extends PersistentObject {
             this.lawEnforcementId = reporter.getLawEnforcementId();
             this.zipSuffixNumber = reporter.getZipSuffixNumber();
             this.countySpecificCode = reporter.getCountySpecificCode();
-        } catch (ParseException e) {
+        } catch (DomainException e) {
             throw new PersistenceException(e);
         }
 	}
