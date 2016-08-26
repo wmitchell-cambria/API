@@ -41,7 +41,8 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public T find(String id) {
-		return constructDomainObject(crudsDao.find(id));
+		P object = crudsDao.find(id);
+		return constructDomainObject(object);
 	}
 
 	@Override

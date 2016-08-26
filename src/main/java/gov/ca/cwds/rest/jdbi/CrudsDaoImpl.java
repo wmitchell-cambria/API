@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.jdbi;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.dropwizard.hibernate.AbstractDAO;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,10 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	 */
 	@Override
 	public T find(String id) {
+		T entity = get(id);
+		if( entity == null )  {
+			throw new EntityNotFoundException();
+		}
 		return get(id);
 	}
 
@@ -39,6 +45,8 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 		T object = find(id);
 		if( object != null ) {
 			currentSession().delete(object);
+		} else {
+			throw new EntityNotFoundException();
 		}
 		return object;
 	}

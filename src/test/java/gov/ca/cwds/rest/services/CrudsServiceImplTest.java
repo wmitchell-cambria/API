@@ -1,15 +1,15 @@
 package gov.ca.cwds.rest.services;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.eq;
-
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,6 +44,7 @@ public class CrudsServiceImplTest {
 		when(crudsDao.update(nonExistingPersistentStaffPerson)).thenThrow(new EntityNotFoundException());
 		when(crudsDao.create(eq(toCreatePersistent))).thenReturn(toCreatePersistent);
 		when(crudsDao.find("1")).thenReturn(toCreatePersistent);
+		when(crudsDao.find("null")).thenReturn(null);
 		when(crudsDao.delete("1")).thenReturn(toCreatePersistent);
 		crudsServiceImpl = new CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson>(crudsDao, StaffPerson.class, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson.class);
 	}
@@ -53,6 +54,13 @@ public class CrudsServiceImplTest {
 		crudsServiceImpl.find("1");
 		verify(crudsDao, times(1)).find("1");
 
+	}
+	
+	@Test
+	public void findThrowsEntityNotFoundWhenNotFound() {
+        thrown.expect(ServiceException.class);
+        thrown.expectCause(Is.isA(EntityNotFoundException.class));
+		crudsServiceImpl.find("null");
 	}
 
 	@Test
