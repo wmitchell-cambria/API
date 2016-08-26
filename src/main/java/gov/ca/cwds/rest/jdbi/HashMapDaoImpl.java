@@ -33,11 +33,7 @@ public final class HashMapDaoImpl<T extends PersistentObject> implements CrudsDa
 	 */
 	@Override
 	public T find(String id) {
-		T object = dummyData.get(id);
-		if(object == null) {
-			throw new EntityNotFoundException();
-		}
-		return object;
+		return dummyData.get(id);
 	}
 
 	/* (non-Javadoc)
