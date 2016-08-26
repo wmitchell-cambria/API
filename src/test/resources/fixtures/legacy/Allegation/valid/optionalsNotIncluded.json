@@ -6,13 +6,13 @@
   "allegationDispositionType": 0,
   "allegationType": 2180,
   "dispositionDescription": "                          ",
-  "injuryHarmDetailIndVar": false,
+  "injuryHarmDetailIndicator": false,
   "nonProtectingParentCode": "N",
-  "staffPersonAddedInd": false,
+  "staffPersonAddedIndicator": false,
   
   
   "fkClientT": "AHooKwN0F4",
   "fkReferralT": "8mu1E710F4",
   "countySpecificCode": "19",
-  "zippyCrestedInd": false
+  "zippyCrestedIndicator": false
 }

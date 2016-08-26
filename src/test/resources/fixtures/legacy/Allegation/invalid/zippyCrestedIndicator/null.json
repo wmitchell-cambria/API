@@ -5,6 +5,7 @@
   "abuseFrequencyPeriodCode": "M",
   "abuseLocationDescription": "Barber Shop",
   "abuseStartDate": "1999-07-15",
+  "allegationDispositionType": 0,
   "allegationType": 2180,
   "dispositionDescription": "Fremont",
   "dispositionDate": "",
@@ -17,6 +18,6 @@
   "fkClient0": "MKPFcB90F4",
   "fkReferralT": "8mu1E710F4",
   "countySpecificCode": "19",
-  "zippyCrestedIndicator": false,
+  "zippyCrestedIndicator": null,
   "placementFacilityType": 6574
 }
