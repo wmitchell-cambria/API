@@ -23,7 +23,7 @@
   "streetNumber": "123",
   "suffixTitleDescription": "AB",
   "zipNumber": 12345,
-  "referralId": "DEF",
+  "referralId": "12345678901",
   "lawEnforcementId": "DEF",
   "zipSuffixNumber": 1234,
   "countySpecificCode": "AB"

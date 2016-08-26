@@ -67,6 +67,11 @@ public class Api {
     public final static String RESOURCE_STAFF_PERSON = "staffpersons";
     
     /**
+    * A {@code String} constant representing {@value #RESOURCE_LAW_ENFORCEMENT} api.
+    */
+    public final static String RESOURCE_LAW_ENFORCEMENT = "lawEnforcements";
+   
+    /**
      * A {@code String} constant representing {@value #MEDIA_TYPE_JSON_V1} media type.
      */
     public final static String MEDIA_TYPE_JSON_V1 = "application/gov.ca.cwds.rest-v1+json";

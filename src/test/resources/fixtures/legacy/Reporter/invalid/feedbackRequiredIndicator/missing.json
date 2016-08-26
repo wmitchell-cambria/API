@@ -8,7 +8,6 @@
   "drmsMandatedRprtrFeedback": "ABC123",
   "employerName": "DEF",
   "feedbackDate": "2000-01-01",
-  "feedbackRequiredIndicator": false,
   "firstName": "John",
   "lastName": "Smith",
   "mandatedReporterIndicator": false,

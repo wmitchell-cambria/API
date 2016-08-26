@@ -11,7 +11,7 @@
   "feedbackRequiredIndicator": false,
   "firstName": "John",
   "lastName": "Smith",
-  "mandatedReporterIndicator": false,
+  "mandatedReporterIndicator": "",
   "messagePhoneExtensionNumber": 123,
   "messagePhoneNumber": 1234567,
   "middleInitialName": "A",

@@ -1,6 +1,6 @@
 {
   "id": "ABC123",
-  "badgeNumber": "A123",
+  "badgeNumber": null,
   "cityName": "ABC",
   "colltrClientRptrReltnshpType": 12,
   "communicationMethodType": 34,

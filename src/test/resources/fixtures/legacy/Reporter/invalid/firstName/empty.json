@@ -9,7 +9,7 @@
   "employerName": "DEF",
   "feedbackDate": "2000-01-01",
   "feedbackRequiredIndicator": false,
-  "firstName": "John",
+  "firstName": "",
   "lastName": "Smith",
   "mandatedReporterIndicator": false,
   "messagePhoneExtensionNumber": 123,

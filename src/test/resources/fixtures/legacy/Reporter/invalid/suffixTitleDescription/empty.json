@@ -21,7 +21,7 @@
   "stateCodeType": 1234,
   "streetName": "ABC STREET",
   "streetNumber": "123",
-  "suffixTitleDescription": "AB",
+  "suffixTitleDescription": "",
   "zipNumber": 12345,
   "referralId": "DEF",
   "lawEnforcementId": "DEF",

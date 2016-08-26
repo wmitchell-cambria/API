@@ -3,7 +3,7 @@
   "badgeNumber": "A123",
   "cityName": "ABC",
   "colltrClientRptrReltnshpType": 12,
-  "communicationMethodType": 34,
+  "communicationMethodType": null,
   "confidentialWaiverIndicator": false,
   "drmsMandatedRprtrFeedback": "ABC123",
   "employerName": "DEF",
