@@ -1,7 +1,6 @@
  package gov.ca.cwds.rest.api.persistence.legacy;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,8 +10,8 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import gov.ca.cwds.rest.api.domain.DomainException;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
@@ -43,7 +42,7 @@ public class StaffPerson extends PersistentObject {
 	@Column(name = "LAST_NM")
 	private String lastName;
 	
-	@NotEmpty
+	@Column(name = "MID_INI_NM")
 	private String middleInitial;
 	
 	@Column(name = "NMPRFX_DSC")
@@ -85,7 +84,22 @@ public class StaffPerson extends PersistentObject {
 	
 	@Column(name = "EMAIL_ADDR")
 	private String emailAddress;
+	
+	/**
+	 * Default constructor 
+	 * 
+	 * Required for Hibernate
+	 */
+	public StaffPerson() {
+		super();
+	}
 
+	/**
+	 * Constructor 
+	 * 
+	 * @param staffPerson The domain objec to construct this object from 
+	 * @param lastUpdatedId  the id of the last person to update this object
+	 */
 	public StaffPerson(gov.ca.cwds.rest.api.domain.StaffPerson staffPerson, String lastUpdatedId) {
 		super(lastUpdatedId);
 		
@@ -109,7 +123,7 @@ public class StaffPerson extends PersistentObject {
 			this.dutyWorkerIndicator = DomainObject.cookBoolean(staffPerson.getDutyWorkerIndicator());
 			this.cwsOfficeAddress = staffPerson.getCwsOfficeAddress();
 			this.emailAddress = staffPerson.getEmailAddress();
-		} catch (ParseException e) {
+		} catch (DomainException e) {
 			throw new PersistenceException(e);
 		}
 	}

@@ -23,10 +23,21 @@ public abstract class PersistentObject {
 	@Column(name = "LST_UPD_TS")	
 	private Date lastUpdatedTime;
 	
-	/*
-	 * There are no common elements across every persistent objects
-	 */
 
+	/**
+	 * Default constructor 
+	 * 
+	 * Required for Hibernate
+	 */
+	protected PersistentObject() {
+		
+	}
+
+	/**
+	 * Constructor 
+	 * 
+	 * @param lastUpdatedId  the id of the last person to update this object
+	 */
 	protected PersistentObject(String lastUpdatedId) {
 		this.lastUpdatedId = lastUpdatedId;
 		this.lastUpdatedTime = new Date();
