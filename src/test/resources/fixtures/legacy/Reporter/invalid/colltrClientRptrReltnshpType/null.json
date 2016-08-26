@@ -2,7 +2,7 @@
   "id": "ABC123",
   "badgeNumber": "A123",
   "cityName": "ABC",
-  "colltrClientRptrReltnshpType": 12,
+  "colltrClientRptrReltnshpType": null,
   "communicationMethodType": 34,
   "confidentialWaiverIndicator": false,
   "drmsMandatedRprtrFeedback": "ABC123",

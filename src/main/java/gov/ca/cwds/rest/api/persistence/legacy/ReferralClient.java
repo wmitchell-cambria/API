@@ -20,7 +20,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @Entity
-@Table(schema = "CWSINT", name = "CLIENT_T")
+@Table(schema = "CWSINT", name = "REFR_CLT")
 
 public class ReferralClient extends PersistentObject {
 

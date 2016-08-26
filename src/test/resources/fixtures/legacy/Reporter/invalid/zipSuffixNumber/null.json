@@ -25,6 +25,6 @@
   "zipNumber": 12345,
   "referralId": "DEF",
   "lawEnforcementId": "DEF",
-  "zipSuffixNumber": 1234,
+  "zipSuffixNumber": null,
   "countySpecificCode": "AB"
 }
