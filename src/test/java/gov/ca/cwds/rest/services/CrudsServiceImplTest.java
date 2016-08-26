@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -15,14 +16,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
+import io.dropwizard.jackson.Jackson;
 
 public class CrudsServiceImplTest {
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
+	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+	
 	private CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsServiceImpl;
 	private CrudsDao<gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsDao;
 	
@@ -33,24 +39,27 @@ public class CrudsServiceImplTest {
 	private gov.ca.cwds.rest.api.domain.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.StaffPerson("exists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson existingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(existingStaffPersonToCreate, "ABC");
 	 
-	private gov.ca.cwds.rest.api.domain.StaffPerson toCreate = new gov.ca.cwds.rest.api.domain.StaffPerson("create","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
-	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson toCreatePersistent = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(toCreate, "ABC");
+	private gov.ca.cwds.rest.api.domain.StaffPerson toCreate;
+	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson toCreatePersistent;
 
 	@SuppressWarnings("unchecked")
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		crudsDao = mock(CrudsDao.class);
+		toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
+		toCreatePersistent = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(toCreate, "ABC");
+		
 		when(crudsDao.create(existingPersistentStaffPerson)).thenThrow(new EntityExistsException());
 		when(crudsDao.update(nonExistingPersistentStaffPerson)).thenThrow(new EntityNotFoundException());
 		when(crudsDao.create(eq(toCreatePersistent))).thenReturn(toCreatePersistent);
 		when(crudsDao.find("1")).thenReturn(toCreatePersistent);
-		when(crudsDao.find("null")).thenReturn(null);
+		when(crudsDao.find("null")).thenThrow(new EntityNotFoundException());
 		when(crudsDao.delete("1")).thenReturn(toCreatePersistent);
 		crudsServiceImpl = new CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson>(crudsDao, StaffPerson.class, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson.class);
 	}
 
 	@Test
-	public void findDelegatesToDao() {
+	public void findDelegatesToDao() throws Exception {
 		crudsServiceImpl.find("1");
 		verify(crudsDao, times(1)).find("1");
 

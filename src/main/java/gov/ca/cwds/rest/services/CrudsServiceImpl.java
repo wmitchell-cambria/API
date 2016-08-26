@@ -24,7 +24,7 @@ import gov.ca.cwds.rest.jdbi.CrudsDao;
  *            
  */
 public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject> implements CrudsService<T, P> {
-	@SuppressWarnings("unused")
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrudsServiceImpl.class);
 
 	private CrudsDao<P> crudsDao;
@@ -41,8 +41,13 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public T find(String id) {
-		P object = crudsDao.find(id);
-		return constructDomainObject(object);
+		try {
+			P object = crudsDao.find(id);
+			return constructDomainObject(object);
+		} catch (EntityNotFoundException e) {
+			LOGGER.info("id:{} not found", id);
+			throw new ServiceException(e);
+		}
 	}
 
 	@Override
@@ -57,6 +62,7 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 			persistentObject = crudsDao.create(persistentObject);
 			return persistentObject.getPrimaryKey();
 		} catch (EntityExistsException e) {
+			LOGGER.info("object already exists {}", object);
 			throw new ServiceException(e);
 		} 
 	}
@@ -68,6 +74,7 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 			persistentObject = crudsDao.update(persistentObject);
 			return persistentObject.getPrimaryKey();
 		} catch (EntityNotFoundException e) {
+			LOGGER.info("object not found : {}", object);
 			throw new ServiceException(e);
 		}
 	}
