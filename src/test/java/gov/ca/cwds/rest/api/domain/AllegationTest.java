@@ -496,36 +496,36 @@ public class AllegationTest {
 	@Test
 	public void failsWhenInjuryHarmDetailIndVarMissing() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndVar/missing.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndicator/missing.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenInjuryHarmDetailIndVarNull() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndVar/null.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndicator/null.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenInjuryHarmDetailIndVarEmpty() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndVar/empty.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/injuryHarmDetailIndicator/empty.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndVar may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("injuryHarmDetailIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -579,6 +579,68 @@ public class AllegationTest {
 		assertThat(response.readEntity(String.class).indexOf("nonProtectingParentCode Size must be 1"),
 				is(greaterThanOrEqualTo(0)));
 	}
+	
+	@Test
+	public void failsWhenNonProtectingParentCodeNotValidValue() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/invalid/nonProtectingParentCode/notValidValue.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("nonProtectingParentCode must be one of [U, P, Y, N]"),
+				is(greaterThanOrEqualTo(0)));
+	}
+	
+	@Test
+	public void succeedsWhenNonProtectingParentCodeisU() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/U.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+
+	@Test
+	public void succeedsWhenNonProtectingParentCodeisP() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/P.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void succeedsWhenNonProtectingParentCodeisY() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/Y.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void succeedsWhenNonProtectingParentCodeisN() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/N.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
+	
+	@Test
+	public void succeedsWhenNonProtectingParentCodeIsLowerCase() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/lowerCase.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}
 
 	/*
 	 * staffPersonAddedInd tests
@@ -586,36 +648,36 @@ public class AllegationTest {
 	@Test
 	public void failsWhenStaffPersonAddedIndMissing() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedInd/missing.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedIndicator/missing.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenStaffPersonAddedIndNull() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedInd/null.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedIndicator/null.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenStaffPersonAddedIndEmpty() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedInd/empty.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/staffPersonAddedIndicator/empty.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedInd may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -793,36 +855,36 @@ public class AllegationTest {
 	@Test
 	public void failsWhenZippyCrestedIndMissing() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
-				fixture("fixtures/legacy/Allegation/invalid/zippyCrestedInd/missing.json"), Allegation.class);
+				fixture("fixtures/legacy/Allegation/invalid/zippyCrestedIndicator/missing.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("zippyCrestedIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenZippyCrestedIndNull() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/zippyCrestedInd/null.json"),
+		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/zippyCrestedIndicator/null.json"),
 				Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("zippyCrestedIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
 	@Test
 	public void failsWhenZippyCrestedIndEmpty() throws Exception {
-		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/zippyCrestedInd/empty.json"),
+		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/zippyCrestedIndicator/empty.json"),
 				Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("zippyCrestedInd may not be null"),
+		assertThat(response.readEntity(String.class).indexOf("zippyCrestedIndicator may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 

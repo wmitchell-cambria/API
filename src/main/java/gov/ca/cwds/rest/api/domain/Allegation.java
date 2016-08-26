@@ -76,14 +76,16 @@ public class Allegation extends DomainObject {
 	private String dispositionDate;
 
 	@NotNull
-	private Boolean injuryHarmDetailIndVar;
+	private Boolean injuryHarmDetailIndicator;
 
 	@NotEmpty
 	@Size(min = 1, max = 1, message = "Size must be 1")
+	@OneOf(value = {"U", "P", "Y", "N"}, ignoreCase = true, ignoreWhitespace = true)
+	@ApiModelProperty(required = true, readOnly = false, value = "Default value is U", example = "U", allowableValues="U,P,Y,N")
 	private String nonProtectingParentCode;
 
 	@NotNull
-	private Boolean staffPersonAddedInd;
+	private Boolean staffPersonAddedIndicator;
 
 	@NotEmpty
 	@Size(min = 1, max = 10)
@@ -101,7 +103,7 @@ public class Allegation extends DomainObject {
 	private String countySpecificCode;
 
 	@NotNull
-	private Boolean zippyCrestedInd;
+	private Boolean zippyCrestedIndicator;
 
 	private Integer placementFacilityType;
 
@@ -116,14 +118,14 @@ public class Allegation extends DomainObject {
 			@JsonProperty("allegationType") Integer allegationType,
 			@JsonProperty("dispositionDescription") String dispositionDescription,
 			@JsonProperty("dispositionDate") String dispositionDate,
-			@JsonProperty("injuryHarmDetailIndVar") Boolean injuryHarmDetailIndVar,
+			@JsonProperty("injuryHarmDetailIndicator") Boolean injuryHarmDetailIndicator,
 			@JsonProperty("nonProtectingParentCode") String nonProtectingParentCode,
-			@JsonProperty("staffPersonAddedInd") Boolean staffPersonAddedInd,
+			@JsonProperty("staffPersonAddedIndicator") Boolean staffPersonAddedIndicator,
 			@JsonProperty("fkClientT") String fkClientT,
 			@JsonProperty("fkClient0") String fkClient0, 
 			@JsonProperty("fkReferralT") String fkReferralT,
 			@JsonProperty("countySpecificCode") String countySpecificCode,
-			@JsonProperty("zippyCrestedInd") Boolean zippyCrestedInd,
+			@JsonProperty("zippyCrestedIndicator") Boolean zippyCrestedIndicator,
 			@JsonProperty("placementFacilityType") Integer placementFacilityType) {
 		super();
 		this.id = id;
@@ -136,14 +138,14 @@ public class Allegation extends DomainObject {
 		this.allegationType = allegationType;
 		this.dispositionDescription = dispositionDescription;
 		this.dispositionDate = dispositionDate;
-		this.injuryHarmDetailIndVar = injuryHarmDetailIndVar;
+		this.injuryHarmDetailIndicator = injuryHarmDetailIndicator;
 		this.nonProtectingParentCode = nonProtectingParentCode;
-		this.staffPersonAddedInd = staffPersonAddedInd;
+		this.staffPersonAddedIndicator = staffPersonAddedIndicator;
 		this.fkClientT = fkClientT;
 		this.fkClient0 = fkClient0;
 		this.fkReferralT = fkReferralT;
 		this.countySpecificCode = countySpecificCode;
-		this.zippyCrestedInd = zippyCrestedInd;
+		this.zippyCrestedIndicator = zippyCrestedIndicator;
 		this.placementFacilityType = placementFacilityType;
 	}
 	
@@ -158,14 +160,14 @@ public class Allegation extends DomainObject {
 		this.allegationType = persistedAllegation.getAllegationType();
 		this.dispositionDescription = persistedAllegation.getDispositionDescription();
 		this.dispositionDate = DomainObject.cookDate(persistedAllegation.getDispositionDate());
-		this.injuryHarmDetailIndVar = DomainObject.uncookBooleanString(persistedAllegation.getInjuryHarmDetailIndVar());
+		this.injuryHarmDetailIndicator = DomainObject.uncookBooleanString(persistedAllegation.getInjuryHarmDetailIndicator());
 		this.nonProtectingParentCode = persistedAllegation.getNonProtectingParentCode();
-		this.staffPersonAddedInd = DomainObject.uncookBooleanString(persistedAllegation.getStaffPersonAddedInd());
+		this.staffPersonAddedIndicator = DomainObject.uncookBooleanString(persistedAllegation.getStaffPersonAddedIndicator());
 		this.fkClientT = persistedAllegation.getFkClientT();
 		this.fkClient0 = persistedAllegation.getFkClient0();
 		this.fkReferralT = persistedAllegation.getFkReferralT();
 		this.countySpecificCode = persistedAllegation.getCountySpecificCode();
-		this.zippyCrestedInd = DomainObject.uncookBooleanString(persistedAllegation.getZippyCrestedInd());
+		this.zippyCrestedIndicator = DomainObject.uncookBooleanString(persistedAllegation.getZippyCrestedIndicator());
 		this.placementFacilityType = persistedAllegation.getPlacementFacilityType();
 	}
 
@@ -240,17 +242,16 @@ public class Allegation extends DomainObject {
 	}
 
 	/**
-	 * @return the injuryHarmDetailIndVar
+	 * @return the injuryHarmDetailIndicator
 	 */
 	@ApiModelProperty(required = true, readOnly = false, example = "true")
-	public Boolean getInjuryHarmDetailIndVar() {
-		return injuryHarmDetailIndVar;
+	public Boolean getInjuryHarmDetailIndicator() {
+		return injuryHarmDetailIndicator;
 	}
 
 	/**
 	 * @return the nonProtectingParentCode
 	 */
-	@ApiModelProperty(required = true, readOnly = false, value = "U", example = "U")
 	public String getNonProtectingParentCode() {
 		return nonProtectingParentCode;
 	}
@@ -259,8 +260,8 @@ public class Allegation extends DomainObject {
 	 * @return the staffPersonAddedInd
 	 */
 	@ApiModelProperty(required = true, readOnly = false, example = "true")
-	public Boolean getStaffPersonAddedInd() {
-		return staffPersonAddedInd;
+	public Boolean getStaffPersonAddedIndicator() {
+		return staffPersonAddedIndicator;
 	}
 
 	/**
@@ -299,8 +300,8 @@ public class Allegation extends DomainObject {
 	 * @return the zippyCrestedInd
 	 */
 	@ApiModelProperty(required = true, readOnly = false, example = "true")
-	public Boolean getZippyCrestedInd() {
-		return zippyCrestedInd;
+	public Boolean getZippyCrestedIndicator() {
+		return zippyCrestedIndicator;
 	}
 
 	/**
@@ -332,11 +333,11 @@ public class Allegation extends DomainObject {
 		result = prime * result + ((fkClientT == null) ? 0 : fkClientT.hashCode());
 		result = prime * result + ((fkReferralT == null) ? 0 : fkReferralT.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((injuryHarmDetailIndVar == null) ? 0 : injuryHarmDetailIndVar.hashCode());
+		result = prime * result + ((injuryHarmDetailIndicator == null) ? 0 : injuryHarmDetailIndicator.hashCode());
 		result = prime * result + ((nonProtectingParentCode == null) ? 0 : nonProtectingParentCode.hashCode());
 		result = prime * result + ((placementFacilityType == null) ? 0 : placementFacilityType.hashCode());
-		result = prime * result + ((staffPersonAddedInd == null) ? 0 : staffPersonAddedInd.hashCode());
-		result = prime * result + ((zippyCrestedInd == null) ? 0 : zippyCrestedInd.hashCode());
+		result = prime * result + ((staffPersonAddedIndicator == null) ? 0 : staffPersonAddedIndicator.hashCode());
+		result = prime * result + ((zippyCrestedIndicator == null) ? 0 : zippyCrestedIndicator.hashCode());
 		return result;
 	}
 
@@ -422,10 +423,10 @@ public class Allegation extends DomainObject {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (injuryHarmDetailIndVar == null) {
-			if (other.injuryHarmDetailIndVar != null)
+		if (injuryHarmDetailIndicator == null) {
+			if (other.injuryHarmDetailIndicator != null)
 				return false;
-		} else if (!injuryHarmDetailIndVar.equals(other.injuryHarmDetailIndVar))
+		} else if (!injuryHarmDetailIndicator.equals(other.injuryHarmDetailIndicator))
 			return false;
 		if (nonProtectingParentCode == null) {
 			if (other.nonProtectingParentCode != null)
@@ -437,15 +438,15 @@ public class Allegation extends DomainObject {
 				return false;
 		} else if (!placementFacilityType.equals(other.placementFacilityType))
 			return false;
-		if (staffPersonAddedInd == null) {
-			if (other.staffPersonAddedInd != null)
+		if (staffPersonAddedIndicator == null) {
+			if (other.staffPersonAddedIndicator != null)
 				return false;
-		} else if (!staffPersonAddedInd.equals(other.staffPersonAddedInd))
+		} else if (!staffPersonAddedIndicator.equals(other.staffPersonAddedIndicator))
 			return false;
-		if (zippyCrestedInd == null) {
-			if (other.zippyCrestedInd != null)
+		if (zippyCrestedIndicator == null) {
+			if (other.zippyCrestedIndicator != null)
 				return false;
-		} else if (!zippyCrestedInd.equals(other.zippyCrestedInd))
+		} else if (!zippyCrestedIndicator.equals(other.zippyCrestedIndicator))
 			return false;
 		return true;
 	}

@@ -5,10 +5,11 @@
   "abuseFrequencyPeriodCode": "M",
   "abuseLocationDescription": "Barber Shop",
   "abuseStartDate": "1999-07-15",
+  "allegationDispositionType": 0,
   "allegationType": 2180,
   "dispositionDescription": "Fremont",
   "dispositionDate": "",
-  "injuryHarmDetailIndicator": false,
+  "injuryHarmDetailIndicator": null,
   "nonProtectingParentCode": "N",
   "staffPersonAddedIndicator": false,
   

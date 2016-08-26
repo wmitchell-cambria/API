@@ -54,13 +54,13 @@ public class Allegation extends PersistentObject {
 	private Date dispositionDate;
 
 	@Column(name = "IJHM_DET_B")
-	private String injuryHarmDetailIndVar;
+	private String injuryHarmDetailIndicator;
 
 	@Column(name = "NON_PRT_CD")
 	private String nonProtectingParentCode;
 
 	@Column(name = "STFADD_IND")
-	private String staffPersonAddedInd;
+	private String staffPersonAddedIndicator;
 
 	@Column(name = "FKCLIENT_T")
 	private String fkClientT;
@@ -75,7 +75,7 @@ public class Allegation extends PersistentObject {
 	private String countySpecificCode;
 
 	@Column(name = "ZIPPY_IND")
-	private String zippyCrestedInd;
+	private String zippyCrestedIndicator;
 
 	@Column(name = "PLC_FCLC")
 	private Integer placementFacilityType;
@@ -94,14 +94,14 @@ public class Allegation extends PersistentObject {
 			this.allegationType = allegation.getAllegationType();
 			this.dispositionDescription = allegation.getDispositionDescription();
 			this.dispositionDate = DomainObject.uncookDateString(allegation.getDispositionDate());
-			this.injuryHarmDetailIndVar = DomainObject.cookBoolean(allegation.getInjuryHarmDetailIndVar());
+			this.injuryHarmDetailIndicator = DomainObject.cookBoolean(allegation.getInjuryHarmDetailIndicator());
 			this.nonProtectingParentCode = allegation.getNonProtectingParentCode();
-			this.staffPersonAddedInd = DomainObject.cookBoolean(allegation.getStaffPersonAddedInd());
+			this.staffPersonAddedIndicator = DomainObject.cookBoolean(allegation.getStaffPersonAddedIndicator());
 			this.fkClientT = allegation.getFkClientT();
 			this.fkClient0 = allegation.getFkClient0();
 			this.fkReferralT = allegation.getFkReferralT();
 			this.countySpecificCode = allegation.getCountySpecificCode();
-			this.zippyCrestedInd = DomainObject.cookBoolean(allegation.getZippyCrestedInd());
+			this.zippyCrestedIndicator = DomainObject.cookBoolean(allegation.getZippyCrestedIndicator());
 			this.placementFacilityType = allegation.getPlacementFacilityType();
 		} catch (ParseException e) {
 			throw new PersistenceException(e);
@@ -189,8 +189,8 @@ public class Allegation extends PersistentObject {
 	/**
 	 * @return the injuryHarmDetailIndVar
 	 */
-	public String getInjuryHarmDetailIndVar() {
-		return injuryHarmDetailIndVar;
+	public String getInjuryHarmDetailIndicator() {
+		return injuryHarmDetailIndicator;
 	}
 
 	/**
@@ -203,8 +203,8 @@ public class Allegation extends PersistentObject {
 	/**
 	 * @return the staffPersonAddedInd
 	 */
-	public String getStaffPersonAddedInd() {
-		return staffPersonAddedInd;
+	public String getStaffPersonAddedIndicator() {
+		return staffPersonAddedIndicator;
 	}
 
 	/**
@@ -236,10 +236,10 @@ public class Allegation extends PersistentObject {
 	}
 
 	/**
-	 * @return the zippyCrestedInd
+	 * @return the zippyCrestedIndicator
 	 */
-	public String getZippyCrestedInd() {
-		return zippyCrestedInd;
+	public String getZippyCrestedIndicator() {
+		return zippyCrestedIndicator;
 	}
 
 	/**

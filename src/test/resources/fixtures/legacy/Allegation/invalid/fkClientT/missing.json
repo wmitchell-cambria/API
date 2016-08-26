@@ -9,14 +9,14 @@
   "allegationType": 2180,
   "dispositionDescription": "Fremont",
   "dispositionDate": "",
-  "injuryHarmDetailIndVar": false,
+  "injuryHarmDetailIndicator": false,
   "nonProtectingParentCode": "N",
-  "staffPersonAddedInd": false,
+  "staffPersonAddedIndicator": false,
   
   
   "fkClient0": "MKPFcB90F4",
   "fkReferralT": "8mu1E710F4",
   "countySpecificCode": "19",
-  "zippyCrestedInd": false,
+  "zippyCrestedIndicator": false,
   "placementFacilityType": 6574
 }
