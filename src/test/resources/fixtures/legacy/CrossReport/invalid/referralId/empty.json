@@ -1,4 +1,5 @@
 {
+  "id": "ABC",
   "thirdId": "ABC123",
   "crossReportMethodType": 123,
   "filedOutOfStateIndicator": false,
@@ -10,7 +11,7 @@
   "informDate": "2000-01-01",
   "recipientPositionTitleDesc": "ABC23",
   "referenceNumber": "DE123",
-  "referralId": "DEF",
+  "referralId": "",
   "lawEnforcementId": "GHJ",
   "staffPersonId": "AD",
   "description": "ABC DESC",
