@@ -1,7 +1,8 @@
 {
+  "id": "ABC",
   "thirdId": "ABC123",
   "crossReportMethodType": 123,
-  "filedOutOfStateIndicator": false,
+  "filedOutOfStateIndicator": null,
   "governmentOrgCrossRptIndicatorVar": false,
   "informTime": "2000-01-01.33.33.3333",
   "recipientBadgeNumber": "AB123",

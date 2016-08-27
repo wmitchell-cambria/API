@@ -1,4 +1,5 @@
 {
+  "id": "ABC",
   "thirdId": "ABC123",
   "crossReportMethodType": 123,
   "filedOutOfStateIndicator": false,
@@ -18,6 +19,6 @@
   "outstateLawEnforcementAddr": "ABC STREET",
   "countySpecificCode": "AB",
   "lawEnforcementIndicator": false,
-  "outStateLawEnforcementIndicator": false,
+  "outStateLawEnforcementIndicator": " ",
   "satisfyCrossReportIndicator": false
 }
