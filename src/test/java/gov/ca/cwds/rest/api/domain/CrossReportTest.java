@@ -676,7 +676,7 @@ public class CrossReportTest {
     		 	 new Short((short)123),
     		 	 false,
     		 	 false,
-    		     "2016-08-07-16.41.49.214",
+    		     "2000-01-01-16.41.49.214",
     		     "AB123",
     		      234,
     		      new BigDecimal(1234567),
