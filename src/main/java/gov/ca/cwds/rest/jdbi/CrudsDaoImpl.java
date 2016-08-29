@@ -27,7 +27,6 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	/**
 	 * 
 	 * @param sessionFactory	the session factory
-	 * @param clazz				the {@link PersistentObject} class
 	 */
 	public CrudsDaoImpl(SessionFactory sessionFactory) {
 		super(sessionFactory);

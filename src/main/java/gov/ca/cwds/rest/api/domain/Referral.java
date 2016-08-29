@@ -212,56 +212,6 @@ public class Referral extends DomainObject {
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
 	private String originalClosureDate;
 
-	/**
-	 * @param id
-	 * @param additionalInfoIncludedCode
-	 * @param anonymousReporterIndicator
-	 * @param applicationForPetitionIndicator
-	 * @param approvalNumber
-	 * @param approvalStatusType
-	 * @param caretakersPerpetratorCode
-	 * @param closureDate
-	 * @param communicationMethodType
-	 * @param currentLocationOfChildren
-	 * @param drmsAllegationDescriptionDoc
-	 * @param drmsErReferralDoc
-	 * @param drmsInvestigationDoc
-	 * @param filedSuspectedChildAbuseReporttoLawEnforcementIndicator
-	 * @param familyAwarenessIndicator
-	 * @param govtEntityType
-	 * @param legalDefinitionCode
-	 * @param legalRightsNoticeIndicator
-	 * @param limitedAccessCode
-	 * @param mandatedCrossReportReceivedDate
-	 * @param referralName
-	 * @param openAdequateCaseCode
-	 * @param receivedDate
-	 * @param receivedTime
-	 * @param referralResponseType
-	 * @param referredToResourceType
-	 * @param responseDeterminationDate
-	 * @param responseDeterminationTime
-	 * @param responseRationaleText
-	 * @param screenerNoteText
-	 * @param specificsIncludedCode
-	 * @param sufficientInformationCode
-	 * @param unfoundedSeriesCode
-	 * @param linkToPrimaryReferralId
-	 * @param allegesAbuseOccurredAtAddressId
-	 * @param firstResponseDeterminedByStaffPersonId
-	 * @param primaryContactStaffPersonId
-	 * @param countySpecificCode
-	 * @param specialProjectReferralIndicator
-	 * @param zippyCreatedIndicator
-	 * @param homelessIndicator
-	 * @param familyRefusedServicesIndicator
-	 * @param firstEvaluatedOutApprovalDate
-	 * @param responsibleAgencyCode
-	 * @param limitedAccessGovtAgencyType
-	 * @param limitedAccessDate
-	 * @param limitedAccessDesc
-	 * @param originalClosureDate
-	 */
 	@JsonCreator
 	public Referral(
 			@JsonProperty("id") String id, 
