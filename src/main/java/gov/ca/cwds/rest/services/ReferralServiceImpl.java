@@ -40,10 +40,10 @@ public class ReferralServiceImpl implements ReferralService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
+	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Referral delete(String id) {
+	public gov.ca.cwds.rest.api.domain.Referral delete(Serializable id) {
 		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.delete(id);
 	}
 
@@ -51,7 +51,7 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String create(gov.ca.cwds.rest.api.domain.Referral object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.Referral object) {
 		return crudsService.create(object);
 	}
 

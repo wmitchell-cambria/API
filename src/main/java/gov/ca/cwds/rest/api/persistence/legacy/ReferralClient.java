@@ -112,9 +112,8 @@ public class ReferralClient extends PersistentObject {
 	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
 	 */
 	@Override
-	public String getPrimaryKey() {
-		//TODO : what to do with this
-		return null;
+	public Serializable getPrimaryKey() {
+		return new PrimaryKey(this.referralId, this.clientId);
 	}
 	
     /**
@@ -241,6 +240,14 @@ public class ReferralClient extends PersistentObject {
     		this.referralId = referralId;
     		this.clientId = clientId;
     	}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "referralId=" + referralId.trim() + ",clientId=" + clientId.trim() ;
+		}
 
 		/* (non-Javadoc)
 		 * @see java.lang.Object#hashCode()

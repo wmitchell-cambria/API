@@ -130,8 +130,8 @@ public class ReferralClient extends DomainObject {
 		this.dispositionDate = DomainObject.cookDate(persistedReferralClient.getDispositionDate());
 		this.selfReportedIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getSelfReportedIndicator());
 		this.staffPersonAddedIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getStaffPersonAddedIndicator());
-		this.referralId = persistedReferralClient.getReferralId();
-		this.clientId = persistedReferralClient.getClientId();
+		this.referralId = persistedReferralClient.getReferralId().trim();
+		this.clientId = persistedReferralClient.getClientId().trim();
 		this.dispositionClosureDescription = persistedReferralClient.getDispositionClosureDescription();
 		this.ageNumber = persistedReferralClient.getAgeNumber();
 		this.agePeriodCode = persistedReferralClient.getAgePeriodCode();

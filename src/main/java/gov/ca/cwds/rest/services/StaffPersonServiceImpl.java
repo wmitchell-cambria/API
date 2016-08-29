@@ -40,10 +40,10 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
+	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.StaffPerson delete(String id) {
+	public gov.ca.cwds.rest.api.domain.StaffPerson delete(Serializable id) {
 		return (gov.ca.cwds.rest.api.domain.StaffPerson) crudsService.delete(id);
 	}
 
@@ -51,7 +51,7 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String create(gov.ca.cwds.rest.api.domain.StaffPerson object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.StaffPerson object) {
 		return crudsService.create(object);
 	}
 

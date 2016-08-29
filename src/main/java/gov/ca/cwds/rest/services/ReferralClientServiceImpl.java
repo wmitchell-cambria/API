@@ -53,18 +53,36 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
+	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.ReferralClient delete(String id) {
-		return (gov.ca.cwds.rest.api.domain.ReferralClient) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.ReferralClient delete(Serializable primaryKey) {
+		//TODO : extract this stuff to common area
+		if( !(primaryKey instanceof String) ) {
+			throw new ServiceException("Unable to read primarykey as string");
+		}
+		String primaryKeyString = (String)primaryKey;
+		String referralId = null;
+		String clientId = null;
+		
+		for( String keyValueString: primaryKeyString.split(",")) {
+			String[] keyValuePair = keyValueString.split("=");
+			String key = keyValuePair[0];
+			if( "referralId".equals(key) ) {
+				referralId = keyValuePair[1];
+			} else if( "clientId".equals(key) ) { 
+				clientId = keyValuePair[1];
+			}
+		}
+		ReferralClient.PrimaryKey primaryKeyObject = new ReferralClient.PrimaryKey(referralId, clientId);
+		return (gov.ca.cwds.rest.api.domain.ReferralClient) crudsService.delete(primaryKeyObject);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String create(gov.ca.cwds.rest.api.domain.ReferralClient object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.ReferralClient object) {
 		return crudsService.create(object);
 	}
 
