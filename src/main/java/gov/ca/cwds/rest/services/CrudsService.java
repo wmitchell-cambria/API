@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
@@ -15,14 +17,14 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 public interface CrudsService<T extends DomainObject, P extends PersistentObject> extends Service {
 	
 	/**
-	 * Find object by id
+	 * Find object by primaryKey
 	 * 
-	 * @param id
-	 *            The id of the object to find.
+	 * @param primaryKey
+	 *            The primaryKey of the object to find.
 	 * 
 	 * @return The found object, null otherwise
 	 */
-	public T find(String id);
+	public T find(Serializable primaryKey);
 
 	/**
 	 * Delete object by id

@@ -564,7 +564,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the limitedAccessCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getLimitedAccessCode() {
 		return limitedAccessCode;
 	}
@@ -763,7 +762,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the responsibleAgencyCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getResponsibleAgencyCode() {
 		return responsibleAgencyCode;
 	}

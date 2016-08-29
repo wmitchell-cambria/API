@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,15 +24,15 @@ public class CrossReportServiceImpl implements CrossReportService {
 		this.crudsService = crudsService;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.CrossReport find(String id) {
-		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.CrossReport find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.find(primaryKey);
 	}
+	
+	
 
 	/*
 	 * (non-Javadoc)

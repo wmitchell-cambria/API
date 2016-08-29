@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.services;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.eq;
@@ -13,9 +12,7 @@ import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import javax.ws.rs.client.Entity;
 
-import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,7 +21,6 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import io.dropwizard.jackson.Jackson;
 
@@ -82,6 +78,12 @@ public class CrudsServiceImplTest {
 		verify(crudsDao, times(1)).delete("1");
 	}
 
+	@Test
+	public void deleteReturnsNullWhenNotFound() {
+		crudsServiceImpl.delete("null");
+		assertThat(crudsServiceImpl.delete("null"), is(nullValue()));
+	}
+	
 	@Test
 	public void createDelegatesToDao() {
 		crudsServiceImpl.create(toCreate);

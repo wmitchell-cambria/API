@@ -1,10 +1,12 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
@@ -13,6 +15,7 @@ import org.hibernate.annotations.Type;
 import gov.ca.cwds.rest.api.domain.DomainException;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient.PrimaryKey;
 
 /**
  * {@link PersistentObject} representing a ReferralClient
@@ -21,12 +24,16 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  */
 @Entity
 @Table(schema = "CWSINT", name = "REFR_CLT")
-
+@IdClass(PrimaryKey.class)
 public class ReferralClient extends PersistentObject {
 
 	@Id
-	@Column(name = "IDENTIFIER")
- 	private String id;	
+    @Column(name = "FKREFERL_T")
+    private String referralId;
+
+	@Id
+    @Column(name = "FKCLIENT_T")
+    private String clientId;
 
     @Column(name = "APRVL_NO")
     private String approvalNumber;
@@ -52,16 +59,11 @@ public class ReferralClient extends PersistentObject {
     @Column(name = "STFADD_IND")
     private String staffPersonAddedIndicator;
 
-    @Column(name = "FKREFERL_T")
-    private String referralId;
-
-    @Column(name = "FKCLIENT_T")
-    private String clientId;
-
     @Column(name = "DSP_CLSDSC")
     private String dispositionClosureDescription;
 
     @Type(type = "short")//???
+    @Column(name = "RFCL_AGENO")
     private Short ageNumber;
 
     @Column(name = "AGE_PRD_CD")
@@ -79,10 +81,13 @@ public class ReferralClient extends PersistentObject {
     @Column(name = "DRUG_IND")
     private String drugIndicator;
 
+    public ReferralClient() {}
+    
 	public ReferralClient(gov.ca.cwds.rest.api.domain.ReferralClient referralClient, String lastUpdatedId) {
 		super(lastUpdatedId);		
 		try{
-			this.id = referralClient.getId();
+			this.referralId = referralClient.getReferralId();
+			this.clientId = referralClient.getClientId();
 			this.approvalNumber = referralClient.getApprovalNumber();
 			this.approvalStatusType = referralClient.getApprovalStatusType();
 			this.dispositionClosureReasonType = referralClient.getDispositionClosureReasonType();
@@ -90,8 +95,6 @@ public class ReferralClient extends PersistentObject {
 			this.dispositionDate = DomainObject.uncookDateString(referralClient.getDispositionDate());
 			this.selfReportedIndicator = DomainObject.cookBoolean(referralClient.getSelfReportedIndicator() );
 			this.staffPersonAddedIndicator = DomainObject.cookBoolean(referralClient.getStaffPersonAddedIndicator() );
-			this.referralId = referralClient.getReferralId();
-			this.clientId = referralClient.getClientId();
 			this.dispositionClosureDescription = referralClient.getDispositionClosureDescription();
 			this.ageNumber = referralClient.getAgeNumber();
 			this.agePeriodCode = referralClient.getAgePeriodCode();
@@ -110,15 +113,10 @@ public class ReferralClient extends PersistentObject {
 	 */
 	@Override
 	public String getPrimaryKey() {
-		return getId();
+		//TODO : what to do with this
+		return null;
 	}
 	
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
     /**
      * @return the approvalNumber
      */
@@ -229,6 +227,57 @@ public class ReferralClient extends PersistentObject {
      */
     public String getDrugIndicator() {
         return drugIndicator;
+    }
+    
+    public static class PrimaryKey implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String referralId;
+    	private String clientId;
+    	
+    	public PrimaryKey() {
+    	}
+    	
+    	public PrimaryKey(String referralId, String clientId) {
+    		this.referralId = referralId;
+    		this.clientId = clientId;
+    	}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+			result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
+			return result;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			PrimaryKey other = (PrimaryKey) obj;
+			if (clientId == null) {
+				if (other.clientId != null)
+					return false;
+			} else if (!clientId.equals(other.clientId))
+				return false;
+			if (referralId == null) {
+				if (other.referralId != null)
+					return false;
+			} else if (!referralId.equals(other.referralId))
+				return false;
+			return true;
+		}
     }
 
 }

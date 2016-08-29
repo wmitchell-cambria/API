@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -40,8 +41,8 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 	}
 
 	@Override
-	public T find(String id) {
-		P object = crudsDao.find(id);
+	public T find(Serializable primaryKey) {
+		P object = crudsDao.find(primaryKey);
 		if( object != null ) {
 			return constructDomainObject(object);
 		} 
@@ -50,7 +51,11 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public T delete(String id) {
-		return constructDomainObject(crudsDao.delete(id));
+		P object = crudsDao.delete(id);
+		if( object != null ) {
+			return constructDomainObject(object);
+		}
+		return null;
 	}
 
 	@Override

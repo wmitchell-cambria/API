@@ -15,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+//@RunWith(PowerMockRunner.class)
 public class DomainObjectTest {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
@@ -57,6 +58,11 @@ public class DomainObjectTest {
     @Test
     public void uncookBooleanStringReturnsFalseOnSmallY() throws Exception {
     	assertThat(DomainObject.uncookBooleanString("y"), is(equalTo(Boolean.TRUE)));
+    }
+    
+    @Test
+    public void uncookBooleanstringReturnsNullOnNull() throws Exception {
+    	assertThat(DomainObject.uncookBooleanString(null), is(nullValue()));
     }
 
     @Test

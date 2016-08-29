@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.jdbi;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
  * Interface for {@link Dao} which provide CRUDS operations
@@ -16,12 +18,12 @@ public interface CrudsDao<T extends PersistentObject> extends Dao {
 	/**
 	 * Find {@link PersistentObject} by id
 	 * 
-	 * @param id
-	 *            The id of the {@link PersistentObject} to find.
+	 * @param primaryKey
+	 *            The primaryKey for this {@link PersistentObject}
 	 * 
 	 * @return The found object, null otherwise
 	 */
-	public T find(String id);
+	public T find(Serializable primaryKey);
 
 	/**
 	 * Delete {@link PersistentObject} by id

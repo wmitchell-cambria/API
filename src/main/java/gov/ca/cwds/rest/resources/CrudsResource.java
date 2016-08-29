@@ -24,10 +24,10 @@ import io.swagger.annotations.ApiResponses;
  *  
  * @author CWDS API Team
  *
- * @param <T>	The {@link DomainObject} the CRUDS endpoints work on
+ * @param <T>	The {@link DomainObject} which represents a {@link PersistentObject} the CRUDS endpoints work on
  */
 public interface CrudsResource<T extends DomainObject> extends Resource {
-	
+
 	/**
 	 * Gets a {@link PersistentObject} based on the given id.
 	 * 
@@ -73,14 +73,14 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	/**
 	 * Create a {@link PersistentObject}
 	 * 
-	 * @param persistentObject
-	 *            The {@link PersistentObject}
+	 * @param domainObject
+	 *            The {@link DomainObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
 	 *            corresponds to a value in {@link Api.Version}
 	 * @param uriInfo	The {@link UriInfo}           
 	 * 
-	 * @return {@link Response} with the {@link PersistentObject}
+	 * @return {@link Response} with a {@link DomainObject} representing an associated {@link PersistentObject}
 	 */
 	@POST
 	@UnitOfWork
@@ -91,17 +91,17 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 			@ApiResponse(code = 422, message = "Unable to process entity")
 	})
 	public Response create(
-			@ApiParam(required = true, value = "Object to be created") T persistentObject,
+			@ApiParam(required = true, value = "Object to be created") T domainObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader,
 			@Context UriInfo uriInfo);
 	
 	/**
 	 * Update a {@link PersistentObject}
 	 *
-	 * @param persistentObject The {@link PersistentObject}
+	 * @param domainObject The {@link DomainObject}
 	 * @param acceptHeader The accept header. Used to determine version of API, corresponds to a value in {@link Api.Version}
 	 *
-	 * @return {@link Response} with the {@link PersistentObject}
+	 * @return {@link Response} with a {@link DomainObject} representing an associated {@link PersistentObject}
 	 */
 	@PUT
 	@UnitOfWork
@@ -112,6 +112,6 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 			@ApiResponse(code = 422, message = "Unable to process entity")
 	})
 	public Response update(
-			@ApiParam(required = true, value = "the object to be updated") T persistentObject,
+			@ApiParam(required = true, value = "the object to be updated") T domainObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
 }

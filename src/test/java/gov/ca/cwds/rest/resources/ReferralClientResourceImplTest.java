@@ -11,6 +11,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.text.MessageFormat;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.UriInfo;
 
@@ -36,7 +38,7 @@ public class ReferralClientResourceImplTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private static final String ID_FOUND = "1";
-	private static final String ID_VERIFY = "DEF";
+	private static final String ID_VERIFY = "referralId=abc,clientId=abc";
 	
 	private static final String ROOT_RESOURCE = "/referralclients/";
 	
@@ -70,7 +72,8 @@ public class ReferralClientResourceImplTest {
 	public void getDelegatestoCrudsResource() throws Exception {
 		ReferralClient toVerify = MAPPER.readValue(fixture("fixtures/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
 		resources.client().target(VERIFY_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get();
-		verify(crudsResource, times(1)).get(toVerify.getId(), Api.MEDIA_TYPE_JSON_V1);
+		String id = MessageFormat.format("referralId={0},clientId={1}", toVerify.getReferralId(), toVerify.getClientId());
+		verify(crudsResource, times(1)).get(id, Api.MEDIA_TYPE_JSON_V1);
 	}
 
 	@Test
@@ -96,14 +99,14 @@ public class ReferralClientResourceImplTest {
 	
 	@Test
 	public void createValidatesReferralClient() throws Exception {
-		ReferralClient toCreate = MAPPER.readValue(fixture("fixtures/legacy/ReferralClient/invalid/id/missing.json"), ReferralClient.class);
+		ReferralClient toCreate = MAPPER.readValue(fixture("fixtures/legacy/ReferralClient/invalid/ageNumber/missing.json"), ReferralClient.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 
 	
 	@Test
 	public void updateValidatesReferralClient() throws Exception {
-		ReferralClient toCreate = MAPPER.readValue(fixture("fixtures/legacy/ReferralClient/invalid/id/missing.json"), ReferralClient.class);
+		ReferralClient toCreate = MAPPER.readValue(fixture("fixtures/legacy/ReferralClient/invalid/ageNumber/missing.json"), ReferralClient.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 }	
