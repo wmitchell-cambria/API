@@ -33,7 +33,7 @@ public interface CrudsDao<T extends PersistentObject> extends Dao {
 	 * 
 	 * @return The deleted {@link PersistentObject}, null if not found
 	 */
-	public T delete(String id);
+	public T delete(Serializable id);
 
 	/**
 	 * Create {@link PersistentObject}

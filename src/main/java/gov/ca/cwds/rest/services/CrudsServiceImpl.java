@@ -50,7 +50,7 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 	}
 
 	@Override
-	public T delete(String id) {
+	public T delete(Serializable id) {
 		P object = crudsDao.delete(id);
 		if( object != null ) {
 			return constructDomainObject(object);
@@ -59,7 +59,7 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 	}
 
 	@Override
-	public String create(T object) {
+	public Serializable create(T object) {
 		try {
 			P persistentObject = constructPersistentObject(object);
 			persistentObject = crudsDao.create(persistentObject);
@@ -75,7 +75,7 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 		try {
 			P persistentObject = constructPersistentObject(object);
 			persistentObject = crudsDao.update(persistentObject);
-			return persistentObject.getPrimaryKey();
+			return persistentObject.getPrimaryKey().toString();
 		} catch (EntityNotFoundException e) {
 			LOGGER.info("object not found : {}", object);
 			throw new ServiceException(e);

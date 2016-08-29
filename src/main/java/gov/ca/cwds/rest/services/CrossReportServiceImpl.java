@@ -37,10 +37,10 @@ public class CrossReportServiceImpl implements CrossReportService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.lang.String)
+	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.CrossReport delete(String id) {
+	public gov.ca.cwds.rest.api.domain.CrossReport delete(Serializable id) {
 		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.delete(id);
 	}
 
@@ -48,7 +48,7 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String create(gov.ca.cwds.rest.api.domain.CrossReport object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.CrossReport object) {
 		return crudsService.create(object);
 	}
 

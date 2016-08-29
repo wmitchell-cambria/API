@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.persistence;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -60,6 +61,6 @@ public abstract class PersistentObject {
 	/**
 	 * @return the primaryKey
 	 */
-	public abstract String getPrimaryKey() ;
+	public abstract Serializable getPrimaryKey() ;
 
 }

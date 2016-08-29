@@ -34,7 +34,7 @@ public interface CrudsService<T extends DomainObject, P extends PersistentObject
 	 * 
 	 * @return The deleted object, null if not found
 	 */
-	public T delete(String id);
+	public T delete(Serializable id);
 
 	/**
 	 * Create object
@@ -42,9 +42,9 @@ public interface CrudsService<T extends DomainObject, P extends PersistentObject
 	 * @param object
 	 *            The object to be created
 	 * 
-	 * @return The id of the newly created object
+	 * @return The primaryKey of the newly created object
 	 */
-	public String create(T object);
+	public Serializable create(T object);
 
 	/**
 	 * Update object

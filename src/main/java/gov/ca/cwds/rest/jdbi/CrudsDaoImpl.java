@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.jdbi;
 
 import java.io.Serializable;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.SessionFactory;
@@ -37,14 +38,16 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	 */
 	@Override
 	public T find(Serializable primaryKey) {
-		return get(primaryKey);
+		T object = get(primaryKey);
+		currentSession().clear();
+		return object;
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#delete(java.lang.String)
+	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#delete(java.io.Serializable)
 	 */
 	@Override
-	public T delete(String id) {
+	public T delete(Serializable id) {
 		T object = find(id);
 		if( object != null ) {
 			currentSession().delete(object);
@@ -59,6 +62,10 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	 */
 	@Override
 	public T create(T object) {
+		T databaseObject = find(object.getPrimaryKey());
+		if( databaseObject != null ) {
+			throw new EntityExistsException();
+		}
 		return persist(object);
 	}
 
@@ -67,6 +74,11 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	 */
 	@Override
 	public T update(T object) {
+		T databaseObject = find(object.getPrimaryKey());
+		if( databaseObject == null ) {
+			throw new EntityNotFoundException();
+		}
+		currentSession().clear();
 		return persist(object);
 	}
 }

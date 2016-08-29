@@ -39,8 +39,10 @@ public class ReferralClientServiceImplTest {
 	
 	@Test
 	public void deleteDelegatesToCrudsService() {
-		referralClient.delete("1");
-		verify(crudsService, times(1)).delete("1");
+		gov.ca.cwds.rest.api.persistence.legacy.ReferralClient.PrimaryKey pk = new gov.ca.cwds.rest.api.persistence.legacy.ReferralClient.PrimaryKey("abc", "abc");
+		String pkString = MessageFormat.format("referralId={0},clientId={1}", "abc", "abc");
+		referralClient.delete(pkString);
+		verify(crudsService, times(1)).delete(pk);
 	}
 	
 	@Test

@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.EntityExistsException;
@@ -92,11 +93,11 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
 		try {
-			String id = service.create(domainObject);
+			Serializable primaryKey = service.create(domainObject);
 			
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 	        URI referralUri = ub.
-	                    path(id).
+	                    path(primaryKey.toString()).
 	                    build();
 			return Response.status(Response.Status.CREATED).header("Location", referralUri.toASCIIString()).build();
 		} catch (ServiceException e) {

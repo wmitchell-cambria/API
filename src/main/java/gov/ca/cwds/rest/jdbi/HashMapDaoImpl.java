@@ -38,10 +38,10 @@ public final class HashMapDaoImpl<T extends PersistentObject> implements CrudsDa
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#delete(java.lang.String)
+	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#delete(java.io.Serializable)
 	 */
 	@Override
-	public T delete(String id) {
+	public T delete(Serializable id) {
 		return dummyData.remove(id);
 	}
 
@@ -54,7 +54,7 @@ public final class HashMapDaoImpl<T extends PersistentObject> implements CrudsDa
 		if( existing != null ) {
 			throw new EntityExistsException();
 		}
-		dummyData.put(object.getPrimaryKey(), object);
+		dummyData.put(object.getPrimaryKey().toString(), object);
 		return object;
 	}
 
@@ -67,7 +67,7 @@ public final class HashMapDaoImpl<T extends PersistentObject> implements CrudsDa
 		if( existing == null ) {
 			throw new EntityNotFoundException();
 		}
-		dummyData.put(object.getPrimaryKey(), object);
+		dummyData.put(object.getPrimaryKey().toString(), object);
 		return object;
 	}
 }

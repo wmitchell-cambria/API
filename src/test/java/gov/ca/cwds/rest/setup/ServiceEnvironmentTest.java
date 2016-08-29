@@ -42,7 +42,7 @@ public class ServiceEnvironmentTest {
 			}
 
 			@Override
-			public gov.ca.cwds.rest.api.domain.Referral delete(String id) {
+			public gov.ca.cwds.rest.api.domain.Referral delete(Serializable id) {
 				return null;
 			}
 
