@@ -36,7 +36,7 @@ public class ReportResourceImplTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private static final String ID_FOUND = "1";
-	private static final String ID_VERIFY = "ABC123";
+	private static final String ID_VERIFY = "DEF";
 	
 	private static final String ROOT_RESOURCE = "/reporters/";
 	
@@ -70,7 +70,7 @@ public class ReportResourceImplTest {
 	public void getDelegatestoCrudsResource() throws Exception {
 		Reporter toVerify = MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/valid.json"), Reporter.class);
 		resources.client().target(VERIFY_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get();
-		verify(crudsResource, times(1)).get(toVerify.getId(), Api.MEDIA_TYPE_JSON_V1);
+		verify(crudsResource, times(1)).get(toVerify.getReferralId(), Api.MEDIA_TYPE_JSON_V1);
 	}
 
 	@Test
@@ -96,13 +96,13 @@ public class ReportResourceImplTest {
 	
 	@Test
 	public void createValidatesReporter() throws Exception {
-		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/id/missing.json"), Reporter.class);
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/referralId/missing.json"), Reporter.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 
 	@Test
 	public void updateValidatesReporter() throws Exception {
-		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/id/missing.json"), Reporter.class);
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/referralId/missing.json"), Reporter.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 }	

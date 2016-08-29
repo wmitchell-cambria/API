@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.domain.DomainException;
@@ -25,8 +26,8 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 public class Reporter extends PersistentObject {
 
 	@Id
-    @Column(name = "IDENTIFIER")
-    private String id;
+    @Column(name = "FKREFERL_T")
+    private String referralId;
 
     @Column(name = "RPTR_BDGNO")
     private String badgeNumber;
@@ -98,9 +99,6 @@ public class Reporter extends PersistentObject {
     @Column(name = "RPTR_ZIPNO")
     private int zipNumber = 0;
 
-    @Column(name = "FKREFERL_T")
-    private String referralId;
-
     @Column(name = "FKLAW_ENFT")
     private String lawEnforcementId;
 
@@ -110,11 +108,17 @@ public class Reporter extends PersistentObject {
     @Column(name = "CNTY_SPFCD")
     private String countySpecificCode;
 
+    /*
+     * Constructor - needed for hibernate
+     */
+	public Reporter() {
+		super();
+	}
+
 	public Reporter(gov.ca.cwds.rest.api.domain.Reporter reporter, String lastUpdatedId) {
 		super(lastUpdatedId);
 		
         try {
-            this.id = reporter.getId();
             this.badgeNumber = reporter.getBadgeNumber();
             this.cityName = reporter.getCityName();
             this.colltrClientRptrReltnshpType = reporter.getColltrClientRptrReltnshpType();
@@ -152,28 +156,21 @@ public class Reporter extends PersistentObject {
 	 */
 	@Override
 	public String getPrimaryKey() {
-		return getId();
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
+		return getReferralId();
 	}
 
 	/**
 	 * @return the badgeNumber
 	 */
 	public String getBadgeNumber() {
-		return badgeNumber;
+		return StringUtils.trimToEmpty(badgeNumber);
 	}
 
 	/**
 	 * @return the cityName
 	 */
 	public String getCityName() {
-		return cityName;
+		return StringUtils.trimToEmpty(cityName);
 	}
 
 	/**
@@ -194,21 +191,21 @@ public class Reporter extends PersistentObject {
 	 * @return the confidentialWaiverIndicator
 	 */
 	public String getConfidentialWaiverIndicator() {
-		return confidentialWaiverIndicator;
+		return StringUtils.trimToEmpty(confidentialWaiverIndicator);
 	}
 
 	/**
 	 * @return the drmsMandatedRprtrFeedback
 	 */
 	public String getDrmsMandatedRprtrFeedback() {
-		return drmsMandatedRprtrFeedback;
+		return StringUtils.trimToEmpty(drmsMandatedRprtrFeedback);
 	}
 
 	/**
 	 * @return the employerName
 	 */
 	public String getEmployerName() {
-		return employerName;
+		return StringUtils.trimToEmpty(employerName);
 	}
 
 	/**
@@ -222,28 +219,28 @@ public class Reporter extends PersistentObject {
 	 * @return the feedbackRequiredIndicator
 	 */
 	public String getFeedbackRequiredIndicator() {
-		return feedbackRequiredIndicator;
+		return StringUtils.trimToEmpty(feedbackRequiredIndicator);
 	}
 
 	/**
 	 * @return the firstName
 	 */
 	public String getFirstName() {
-		return firstName;
+		return StringUtils.trimToEmpty(firstName);
 	}
 
 	/**
 	 * @return the lastName
 	 */
 	public String getLastName() {
-		return lastName;
+		return StringUtils.trimToEmpty(lastName);
 	}
 
 	/**
 	 * @return the mandatedReporterIndicator
 	 */
 	public String getMandatedReporterIndicator() {
-		return mandatedReporterIndicator;
+		return StringUtils.trimToEmpty(mandatedReporterIndicator);
 	}
 
 	/**
@@ -264,14 +261,14 @@ public class Reporter extends PersistentObject {
 	 * @return the middleInitialName
 	 */
 	public String getMiddleInitialName() {
-		return middleInitialName;
+		return StringUtils.trimToEmpty(middleInitialName);
 	}
 
 	/**
 	 * @return the namePrefixDescription
 	 */
 	public String getNamePrefixDescription() {
-		return namePrefixDescription;
+		return StringUtils.trimToEmpty(namePrefixDescription);
 	}
 
 	/**
@@ -299,21 +296,21 @@ public class Reporter extends PersistentObject {
 	 * @return the streetName
 	 */
 	public String getStreetName() {
-		return streetName;
+		return StringUtils.trimToEmpty(streetName);
 	}
 
 	/**
 	 * @return the streetNumber
 	 */
 	public String getStreetNumber() {
-		return streetNumber;
+		return StringUtils.trimToEmpty(streetNumber);
 	}
 
 	/**
 	 * @return the suffixTitleDescription
 	 */
 	public String getSuffixTitleDescription() {
-		return suffixTitleDescription;
+		return StringUtils.trimToEmpty(suffixTitleDescription);
 	}
 
 	/**
@@ -327,14 +324,14 @@ public class Reporter extends PersistentObject {
 	 * @return the referralId
 	 */
 	public String getReferralId() {
-		return referralId;
+		return StringUtils.trimToEmpty(referralId);
 	}
 
 	/**
 	 * @return the lawEnforcementId
 	 */
 	public String getLawEnforcementId() {
-		return lawEnforcementId;
+		return StringUtils.trimToEmpty(lawEnforcementId);
 	}
 
 	/**
@@ -348,7 +345,7 @@ public class Reporter extends PersistentObject {
 	 * @return the countySpecificCode
 	 */
 	public String getCountySpecificCode() {
-		return countySpecificCode;
+		return StringUtils.trimToEmpty(countySpecificCode);
 	}
 
 	/* (non-Javadoc)
@@ -392,7 +389,6 @@ public class Reporter extends PersistentObject {
 						: feedbackRequiredIndicator.hashCode());
 		result = prime * result
 				+ ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime
@@ -509,11 +505,6 @@ public class Reporter extends PersistentObject {
 			if (other.firstName != null)
 				return false;
 		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)

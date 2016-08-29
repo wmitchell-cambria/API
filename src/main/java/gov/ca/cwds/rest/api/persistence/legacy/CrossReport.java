@@ -24,7 +24,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 @Table(schema = "CWSINT", name = "CRSS_RPT")
 
 public class CrossReport extends PersistentObject {
-
+//referral and thrid_id
 	@Id
     @Column(name = "IDENTIFIER")
     private String id;

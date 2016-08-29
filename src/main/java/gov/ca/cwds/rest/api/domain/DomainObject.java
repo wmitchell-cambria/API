@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DomainObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
@@ -25,7 +27,7 @@ public class DomainObject {
 			return Boolean.FALSE;
 		} if( "Y".equalsIgnoreCase(cookedBoolean) ) {
 			return Boolean.TRUE;
-		} else if( cookedBoolean == null ) {
+		} else if( StringUtils.trimToNull(cookedBoolean) == null ) {
 			return null;
 		}
 		throw new DomainException(new ParseException("Unable to generate boolean", 0));

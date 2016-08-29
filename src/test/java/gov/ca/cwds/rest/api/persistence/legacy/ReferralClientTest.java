@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.nullValue;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 public class ReferralClientTest {
@@ -31,6 +32,7 @@ public class ReferralClientTest {
 	private Boolean drugIndicator = Boolean.FALSE;
 
 	private String lastUpdatedId = "h";
+
 	/*
 	 * Constructor test
 	 */
@@ -62,7 +64,7 @@ public class ReferralClientTest {
 		assertThat(persistent.getAgePeriodCode(), is(equalTo(agePeriodCode)));
 		assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
 		assertThat(persistent.getMentalHealthIssuesIndicator(), is(equalTo("Y")));
-		assertThat(persistent.getAlcoholIndicator(), is(nullValue()));
+		assertThat(StringUtils.trimToNull(persistent.getAlcoholIndicator()), is(nullValue()));
 		assertThat(persistent.getDrugIndicator(), is(equalTo("N")));
 		assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
 	}

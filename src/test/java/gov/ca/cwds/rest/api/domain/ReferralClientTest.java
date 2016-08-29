@@ -106,10 +106,10 @@ public class ReferralClientTest {
 		assertThat(totest.getDispositionDate(), is(equalTo(df.format(persistent.getDispositionDate()))));
 		assertThat(totest.getSelfReportedIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getSelfReportedIndicator()))));
 		assertThat(totest.getStaffPersonAddedIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getStaffPersonAddedIndicator()))));
-		assertThat(totest.getDispositionClosureDescription(), is(equalTo(dispositionClosureDescription)));
-		assertThat(totest.getAgeNumber(), is(equalTo(ageNumber)));
-		assertThat(totest.getAgePeriodCode(), is(equalTo(agePeriodCode)));
-		assertThat(totest.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+		assertThat(totest.getDispositionClosureDescription(), is(equalTo(persistent.getDispositionClosureDescription())));
+		assertThat(totest.getAgeNumber(), is(equalTo(persistent.getAgeNumber())));
+		assertThat(totest.getAgePeriodCode(), is(equalTo(persistent.getAgePeriodCode())));
+		assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
 		assertThat(totest.getMentalHealthIssuesIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getMentalHealthIssuesIndicator()))));
 		assertThat(totest.getAlcoholIndicator(), is(nullValue()));
 		assertThat(totest.getDrugIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getDrugIndicator()))));
@@ -158,10 +158,6 @@ public class ReferralClientTest {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
 	}
-
-	/*
-	 * ID Tests
-	 */
 
 	/*
 	 * approvalNumber Tests
