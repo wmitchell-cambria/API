@@ -74,7 +74,7 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 		}
 		T domainObject = (T)service.delete(id);
 		if( domainObject != null ) {
-			return Response.ok().build();
+			return Response.status(Response.Status.OK).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
 		}

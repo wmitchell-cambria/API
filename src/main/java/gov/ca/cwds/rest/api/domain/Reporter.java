@@ -7,8 +7,8 @@ import javax.validation.constraints.Size;
 
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,17 +27,17 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 @InjectLinks(
         { 
-            @InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
-            @InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.referralId }" ),
-            @InjectLink(value="/{resource}/{id}", rel="lawEnforcementId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.lawEnforcementId}"), @Binding(name="resource", value=Api.RESOURCE_LAW_ENFORCEMENT) } )
+            @InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
+            @InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }),
+            @InjectLink(value="/{resource}/{id}", rel="lawEnforcementId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.lawEnforcementId}"), @Binding(name="resource", value=Api.RESOURCE_LAW_ENFORCEMENT) }, condition="${not empty instance.lawEnforcementId }"  )
         })
 public class Reporter extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=10)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
-    private String id;
-
+    @ApiModelProperty(required=true, readOnly=true, value="", example="ABC123")
+    private String referralId;
+    
     @NotEmpty
     @Size(min=1, max=6)
     @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
@@ -139,11 +139,6 @@ public class Reporter extends DomainObject {
     @ApiModelProperty(required=true, readOnly=false, example="1234")
     private int zipNumber = 0;
 
-    @NotEmpty
-    @Size(min=1, max=10)
-    @ApiModelProperty(required=true, readOnly=true, value="", example="ABC123")
-    private String referralId;
-
     @Size(max=10)
     @ApiModelProperty(required=false, readOnly=true, value="", example="ABC123")
     private String lawEnforcementId;
@@ -158,7 +153,7 @@ public class Reporter extends DomainObject {
     private String countySpecificCode;
 
 	public Reporter(gov.ca.cwds.rest.api.persistence.legacy.Reporter persistedReporter) {
-        this.id = persistedReporter.getId();
+        this.referralId = persistedReporter.getReferralId();
         this.badgeNumber = persistedReporter.getBadgeNumber();
         this.cityName = persistedReporter.getCityName();
         this.colltrClientRptrReltnshpType = persistedReporter.getColltrClientRptrReltnshpType();
@@ -182,7 +177,6 @@ public class Reporter extends DomainObject {
         this.streetNumber = persistedReporter.getStreetNumber();
         this.suffixTitleDescription = persistedReporter.getSuffixTitleDescription();
         this.zipNumber = persistedReporter.getZipNumber();
-        this.referralId = persistedReporter.getReferralId();
         this.lawEnforcementId = persistedReporter.getLawEnforcementId();
         this.zipSuffixNumber = persistedReporter.getZipSuffixNumber();
         this.countySpecificCode = persistedReporter.getCountySpecificCode();
@@ -190,7 +184,6 @@ public class Reporter extends DomainObject {
 
 	@JsonCreator
 	public Reporter(
-            @JsonProperty("id") String id,
             @JsonProperty("badgeNumber") String badgeNumber,
             @JsonProperty("cityName") String cityName,
             @JsonProperty("colltrClientRptrReltnshpType") Short colltrClientRptrReltnshpType,
@@ -219,7 +212,6 @@ public class Reporter extends DomainObject {
             @JsonProperty("zipSuffixNumber") Short zipSuffixNumber,
             @JsonProperty("countySpecificCode") String countySpecificCode) {
 		super();
-		this.id = id;
 		this.badgeNumber = badgeNumber;
 		this.cityName = cityName;
 		this.colltrClientRptrReltnshpType = colltrClientRptrReltnshpType;
@@ -247,20 +239,6 @@ public class Reporter extends DomainObject {
 		this.lawEnforcementId = lawEnforcementId;
 		this.zipSuffixNumber = zipSuffixNumber;
 		this.countySpecificCode = countySpecificCode;
-	}
-
-//	/**
-//	 * @return the dateFormat
-//	 */
-//	public static String getDateFormat() {
-//		return DATE_FORMAT;
-//	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
 	}
 
 	/**
@@ -493,7 +471,6 @@ public class Reporter extends DomainObject {
 						: feedbackRequiredIndicator.hashCode());
 		result = prime * result
 				+ ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime
@@ -610,11 +587,6 @@ public class Reporter extends DomainObject {
 			if (other.firstName != null)
 				return false;
 		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)

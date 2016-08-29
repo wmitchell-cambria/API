@@ -50,9 +50,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 		T object = find(id);
 		if( object != null ) {
 			currentSession().delete(object);
-		} else {
-			throw new EntityNotFoundException();
-		}
+		} 
 		return object;
 	}
 

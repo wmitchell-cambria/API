@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.domain.DomainException;
@@ -113,14 +114,14 @@ public class ReferralClient extends PersistentObject {
 	 */
 	@Override
 	public Serializable getPrimaryKey() {
-		return new PrimaryKey(this.referralId, this.clientId);
+		return new PrimaryKey(this.getReferralId(), this.getClientId());
 	}
 	
     /**
      * @return the approvalNumber
      */
     public String getApprovalNumber() {
-        return approvalNumber;
+        return StringUtils.trimToEmpty(approvalNumber);
     }
     
     /**
@@ -141,7 +142,7 @@ public class ReferralClient extends PersistentObject {
      * @return the dispositionCode
      */
     public String getDispositionCode() {
-        return dispositionCode;
+        return StringUtils.trimToEmpty(dispositionCode);
     }
     
     /**
@@ -155,35 +156,35 @@ public class ReferralClient extends PersistentObject {
      * @return the selfReportedIndicator
      */
     public String getSelfReportedIndicator() {
-        return selfReportedIndicator;
+        return StringUtils.trimToEmpty(selfReportedIndicator);
     }
     
     /**
      * @return the staffPersonAddedIndicator
      */
     public String getStaffPersonAddedIndicator() {
-        return staffPersonAddedIndicator;
+        return StringUtils.trimToEmpty(staffPersonAddedIndicator);
     }
     
     /**
      * @return the referralId
      */
     public String getReferralId() {
-        return referralId;
+        return StringUtils.trimToEmpty(referralId);
     }
     
     /**
      * @return the clientId
      */
     public String getClientId() {
-        return clientId;
+        return StringUtils.trimToEmpty(clientId);
     }
     
     /**
      * @return the dispositionClosureDescription
      */
     public String getDispositionClosureDescription() {
-        return dispositionClosureDescription;
+        return StringUtils.trimToEmpty(dispositionClosureDescription);
     }
     
     /**
@@ -197,35 +198,35 @@ public class ReferralClient extends PersistentObject {
      * @return the agePeriodCode
      */
     public String getAgePeriodCode() {
-        return agePeriodCode;
+        return StringUtils.trimToEmpty(agePeriodCode);
     }
     
     /**
      * @return the countySpecificCode
      */
     public String getCountySpecificCode() {
-        return countySpecificCode;
+        return StringUtils.trimToEmpty(countySpecificCode);
     }
     
     /**
      * @return the mentalHealthIssuesIndicator
      */
     public String getMentalHealthIssuesIndicator() {
-        return mentalHealthIssuesIndicator;
+        return StringUtils.trimToEmpty(mentalHealthIssuesIndicator);
     }
     
     /**
      * @return the alcoholIndicator
      */
     public String getAlcoholIndicator() {
-        return alcoholIndicator;
+        return StringUtils.trimToEmpty(alcoholIndicator);
     }
     
     /**
      * @return the drugIndicator
      */
     public String getDrugIndicator() {
-        return drugIndicator;
+        return StringUtils.trimToEmpty(drugIndicator);
     }
     
     public static class PrimaryKey implements Serializable {

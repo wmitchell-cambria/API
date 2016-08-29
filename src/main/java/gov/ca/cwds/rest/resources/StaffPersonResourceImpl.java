@@ -45,7 +45,7 @@ public class StaffPersonResourceImpl extends BaseResource<StaffPersonService>
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
-	@ApiOperation(value = "Delete StaffPerson", code = HttpStatus.SC_NO_CONTENT)
+	@ApiOperation(value = "Delete StaffPerson", code = HttpStatus.SC_OK)
 	@Override
 	public Response delete(String id, String acceptHeader) {
 		return crudsResource.delete(id, acceptHeader);

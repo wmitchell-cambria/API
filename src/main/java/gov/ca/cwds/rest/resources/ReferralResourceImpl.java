@@ -43,7 +43,7 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
-	@ApiOperation(value = "Delete Referral", code = HttpStatus.SC_NO_CONTENT)
+	@ApiOperation(value = "Delete Referral", code = HttpStatus.SC_OK, response = Object.class)
 	@Override
 	public Response delete(String id, String acceptHeader) {
 		return crudsResource.delete(id, acceptHeader);
@@ -53,7 +53,7 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Update Referral", code = 204, response = Referral.class)
+	@ApiOperation(value = "Update Referral", code = HttpStatus.SC_NO_CONTENT, response = Object.class)
 	public Response update(@Valid Referral object, String acceptHeader) {
 		return crudsResource.update(object, acceptHeader);
 	}
@@ -62,7 +62,7 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo)
 	 */
 	@Override
-	@ApiOperation(value = "Create Referral", response = Referral.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
+	@ApiOperation(value = "Create Referral", response = Referral.class, code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
 	public Response create(@Valid Referral object, String acceptHeader, UriInfo uriInfo) {
 		return crudsResource.create(object, acceptHeader, uriInfo);
 	}

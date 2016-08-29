@@ -43,7 +43,7 @@ public class CrossReportResourceImpl extends BaseResource<CrossReportService>
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
-	@ApiOperation(value = "Delete CrossReport", code = HttpStatus.SC_NO_CONTENT)
+	@ApiOperation(value = "Delete CrossReport", code = HttpStatus.SC_OK, response = Object.class)
 	@Override
 	public Response delete(String id, String acceptHeader) {
 		return crudsResource.delete(id, acceptHeader);
@@ -53,7 +53,7 @@ public class CrossReportResourceImpl extends BaseResource<CrossReportService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Update CrossReport", code = 204, response = CrossReport.class)
+	@ApiOperation(value = "Update CrossReport", code = HttpStatus.SC_NO_CONTENT, response = Object.class)
 	public Response update(@Valid CrossReport object, String acceptHeader) {
 		return crudsResource.update(object, acceptHeader);
 	}
@@ -62,7 +62,7 @@ public class CrossReportResourceImpl extends BaseResource<CrossReportService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo)
 	 */
 	@Override
-	@ApiOperation(value = "Create CrossReport", response = CrossReport.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
+	@ApiOperation(value = "Create CrossReport", response = CrossReport.class, code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
 	public Response create(@Valid CrossReport object, String acceptHeader, UriInfo uriInfo) {
 		return crudsResource.create(object, acceptHeader, uriInfo);
 	}
