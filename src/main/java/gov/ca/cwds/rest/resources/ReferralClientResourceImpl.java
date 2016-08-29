@@ -44,7 +44,7 @@ public class ReferralClientResourceImpl extends BaseResource<ReferralClientServi
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
-	@ApiOperation(value = "Delete ReferralClient", code = HttpStatus.SC_OK)
+	@ApiOperation(value = "Delete ReferralClient by composite id of referralId and clientId", code = HttpStatus.SC_OK)
 	@Override
 	public Response delete(@ApiParam(required = true, allowMultiple=true, value = "ReferralClient has a composite key of referralId and clientId", example="referralId=abcdefgh,clientId=td89slaz") String id, String acceptHeader) {
 		return crudsResource.delete(id, acceptHeader);

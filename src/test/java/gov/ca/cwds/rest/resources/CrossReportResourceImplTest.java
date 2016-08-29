@@ -11,6 +11,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.text.MessageFormat;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.UriInfo;
 
@@ -36,7 +38,7 @@ public class CrossReportResourceImplTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private static final String ID_FOUND = "1";
-	private static final String ID_VERIFY = "ABC";
+	private static final String ID_VERIFY = "referralId=DEF,thirdId=ABC123";
 	
 	private static final String ROOT_RESOURCE = "/crossreports/";
 	
@@ -70,7 +72,8 @@ public class CrossReportResourceImplTest {
 	public void getDelegatestoCrudsResource() throws Exception {
 		CrossReport toVerify = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 		resources.client().target(VERIFY_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get();
-		verify(crudsResource, times(1)).get(toVerify.getId(), Api.MEDIA_TYPE_JSON_V1);
+		String id = MessageFormat.format("referralId={0},thirdId={1}", toVerify.getReferralId(), toVerify.getThirdId());
+		verify(crudsResource, times(1)).get(id, Api.MEDIA_TYPE_JSON_V1);
 
 	}
 
@@ -97,14 +100,14 @@ public class CrossReportResourceImplTest {
 	
 	@Test
 	public void createValidatesCrossReport() throws Exception {
-		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/id/missing.json"), CrossReport.class);
+		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/referralId/missing.json"), CrossReport.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 
 	
 	@Test
 	public void updateValidatesCrossReport() throws Exception {
-		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/id/missing.json"), CrossReport.class);
+		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/referralId/missing.json"), CrossReport.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 }	

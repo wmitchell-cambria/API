@@ -38,10 +38,100 @@ public class CrossReportTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private CrossReport validCrossReport = validCrossReport();
 
+	private String referralId = "a";
+	private String thirdId = "b";
+    private Short crossReportMethodType = 1;
+    private Boolean filedOutOfStateIndicator = Boolean.TRUE;
+    private Boolean governmentOrgCrossRptIndicatorVar = Boolean.FALSE;
+    private String informTime = "1970-01-01-16.41.49.000";
+    private String recipientBadgeNumber = "d";
+    private int recipientPhoneExtensionNumber = 2;
+    private BigDecimal recipientPhoneNumber = new BigDecimal(3);
+    private String informDate = "1973-11-22";
+    private String recipientPositionTitleDesc = "e";
+    private String referenceNumber = "f";
+    private String lawEnforcementId = "g";
+    private String staffPersonId = "h";
+    private String description = "i";
+    private String recipientName = "j";
+    private String outstateLawEnforcementAddr = "k";
+    private String countySpecificCode = "l";
+    private Boolean lawEnforcementIndicator = Boolean.TRUE;
+    private Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
+    private Boolean satisfyCrossReportIndicator = Boolean.TRUE;
+    
 	@Before
 	public void setup() {
 		when(mockedCrossReportResource.create(eq(validCrossReport), eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 	}
+	
+	/*
+	 * Constructor Tests
+	 */
+	@Test
+	public void persistentObjectConstructorTest() throws Exception {
+		CrossReport domain = new CrossReport(thirdId, crossReportMethodType, filedOutOfStateIndicator,
+				governmentOrgCrossRptIndicatorVar, informTime, recipientBadgeNumber, recipientPhoneExtensionNumber,
+				recipientPhoneNumber, informDate, recipientPositionTitleDesc, referenceNumber, referralId,
+				lawEnforcementId, staffPersonId, description, recipientName, outstateLawEnforcementAddr,
+				countySpecificCode, lawEnforcementIndicator, outStateLawEnforcementIndicator,
+				satisfyCrossReportIndicator);
+		gov.ca.cwds.rest.api.persistence.legacy.CrossReport persistent = new gov.ca.cwds.rest.api.persistence.legacy.CrossReport(domain, "lastUpdatedId");
+		
+		CrossReport totest = new CrossReport(persistent);
+		assertThat(totest.getReferralId(), is(equalTo(referralId)));
+		assertThat(totest.getThirdId(), is(equalTo(thirdId)));
+		assertThat(totest.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
+		assertThat(totest.getFiledOutOfStateIndicator(), is(equalTo(filedOutOfStateIndicator)));
+		assertThat(totest.getGovernmentOrgCrossRptIndicatorVar(), is(equalTo(governmentOrgCrossRptIndicatorVar)));
+		assertThat(totest.getInformTime(), is(equalTo(informTime)));
+		assertThat(totest.getRecipientBadgeNumber(), is(equalTo(recipientBadgeNumber)));
+		assertThat(totest.getRecipientPhoneExtensionNumber(), is(equalTo(recipientPhoneExtensionNumber)));
+		assertThat(totest.getInformDate(), is(equalTo(informDate)));
+		assertThat(totest.getRecipientPositionTitleDesc(), is(equalTo(recipientPositionTitleDesc)));
+		assertThat(totest.getReferenceNumber(), is(equalTo(referenceNumber)));
+		assertThat(totest.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
+		assertThat(totest.getStaffPersonId(), is(equalTo(staffPersonId)));
+		assertThat(totest.getDescription(), is(equalTo(description)));
+		assertThat(totest.getRecipientName(), is(equalTo(recipientName)));
+		assertThat(totest.getOutstateLawEnforcementAddr(), is(equalTo(outstateLawEnforcementAddr)));
+		assertThat(totest.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+		assertThat(totest.getLawEnforcementIndicator(), is(equalTo(lawEnforcementIndicator)));
+		assertThat(totest.getOutStateLawEnforcementIndicator(), is(equalTo(outStateLawEnforcementIndicator)));
+		assertThat(totest.getSatisfyCrossReportIndicator(), is(equalTo(satisfyCrossReportIndicator)));
+	}
+
+	@Test
+	public void jsonCreatorConstructorTest() throws Exception {
+		CrossReport domain = new CrossReport(thirdId, crossReportMethodType, filedOutOfStateIndicator,
+				governmentOrgCrossRptIndicatorVar, informTime, recipientBadgeNumber, recipientPhoneExtensionNumber,
+				recipientPhoneNumber, informDate, recipientPositionTitleDesc, referenceNumber, referralId,
+				lawEnforcementId, staffPersonId, description, recipientName, outstateLawEnforcementAddr,
+				countySpecificCode, lawEnforcementIndicator, outStateLawEnforcementIndicator,
+				satisfyCrossReportIndicator);
+		
+		assertThat(domain.getReferralId(), is(equalTo(referralId)));
+		assertThat(domain.getThirdId(), is(equalTo(thirdId)));
+		assertThat(domain.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
+		assertThat(domain.getFiledOutOfStateIndicator(), is(equalTo(filedOutOfStateIndicator)));
+		assertThat(domain.getGovernmentOrgCrossRptIndicatorVar(), is(equalTo(governmentOrgCrossRptIndicatorVar)));
+		assertThat(domain.getInformTime(), is(equalTo(informTime)));
+		assertThat(domain.getRecipientBadgeNumber(), is(equalTo(recipientBadgeNumber)));
+		assertThat(domain.getRecipientPhoneExtensionNumber(), is(equalTo(recipientPhoneExtensionNumber)));
+		assertThat(domain.getInformDate(), is(equalTo(informDate)));
+		assertThat(domain.getRecipientPositionTitleDesc(), is(equalTo(recipientPositionTitleDesc)));
+		assertThat(domain.getReferenceNumber(), is(equalTo(referenceNumber)));
+		assertThat(domain.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
+		assertThat(domain.getStaffPersonId(), is(equalTo(staffPersonId)));
+		assertThat(domain.getDescription(), is(equalTo(description)));
+		assertThat(domain.getRecipientName(), is(equalTo(recipientName)));
+		assertThat(domain.getOutstateLawEnforcementAddr(), is(equalTo(outstateLawEnforcementAddr)));
+		assertThat(domain.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+		assertThat(domain.getLawEnforcementIndicator(), is(equalTo(lawEnforcementIndicator)));
+		assertThat(domain.getOutStateLawEnforcementIndicator(), is(equalTo(outStateLawEnforcementIndicator)));
+		assertThat(domain.getSatisfyCrossReportIndicator(), is(equalTo(satisfyCrossReportIndicator)));
+	}
+
 	
     @Test
     public void serializesToJSON() throws Exception {
@@ -62,9 +152,6 @@ public class CrossReportTest {
 	@Test
 	public void successfulWithValid() throws Exception {
 		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
-		System.out.println(toCreate.getInformDate());
-		System.out.println(toCreate.getInformTime());
-//		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
 	}
 
@@ -73,38 +160,6 @@ public class CrossReportTest {
 		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/optionalsNotIncluded.json"), CrossReport.class);
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
 	}
-    /*
-    * id Tests
-    */
-    @Test
-    public void failsWhenIdMissing() throws Exception {
-        CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/id/missing.json"), CrossReport.class);
-        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-        assertThat(response.getStatus(), is(equalTo(422)));
-        assertThat(response.readEntity(String.class).indexOf("id may not be empty"), is(greaterThanOrEqualTo(0)));
-    }
-    @Test
-    public void failsWhenIdNull() throws Exception {
-        CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/id/null.json"), CrossReport.class);
-        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-        assertThat(response.getStatus(), is(equalTo(422)));
-        assertThat(response.readEntity(String.class).indexOf("id may not be empty"), is(greaterThanOrEqualTo(0)));
-    }
-    @Test
-    public void failsWhenIdEmpty() throws Exception {
-        CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/id/empty.json"), CrossReport.class);
-        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-        assertThat(response.getStatus(), is(equalTo(422)));
-        assertThat(response.readEntity(String.class).indexOf("id may not be empty"), is(greaterThanOrEqualTo(0)));
-    }
-    @Test
-    public void failsWhenIdTooLong() throws Exception {
-        CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/id/tooLong.json"), CrossReport.class);
-        Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-        assertThat(response.getStatus(), is(equalTo(422)));
-        assertThat(response.readEntity(String.class).indexOf("id size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
-    }
-
     /*
     * thirdId Tests
     */
@@ -671,7 +726,7 @@ public class CrossReportTest {
 	 * Utils
 	 */
     private CrossReport validCrossReport() {
-    	return new CrossReport("ABC", 
+    	return new CrossReport(
     			"ABC123",
     		 	 new Short((short)123),
     		 	 false,
