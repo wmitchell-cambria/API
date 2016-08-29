@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +29,12 @@ public class AllegationServiceImpl implements AllegationService {
 		this.crudsService = crudsService;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Allegation find(String id) {
-		return (gov.ca.cwds.rest.api.domain.Allegation) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.Allegation find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.Allegation) crudsService.find(primaryKey);
 	}
 
 	/*

@@ -25,16 +25,12 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 @InjectLinks(
         { 
-        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="referralId=${instance.referralId},clientId=${instance.clientId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
         	@InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.referralId }" ),
         	@InjectLink(value="/{resource}/{id}", rel="clientId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.clientId}"), @Binding(name="resource", value=Api.RESOURCE_CLIENT) }, condition="${not empty instance.clientId }" ),
         })
 public class ReferralClient extends DomainObject {
 	
-	@NotEmpty
-	@Size(min=1, max=10)
-	private String id;
-
     @Size(max=10)
     private String approvalNumber;
 
@@ -91,7 +87,6 @@ public class ReferralClient extends DomainObject {
 
 	@JsonCreator
 	public ReferralClient(
-            @JsonProperty("id") String id,
             @JsonProperty("approvalNumber") String approvalNumber,
             @JsonProperty("approvalStatusType") Short approvalStatusType,
             @JsonProperty("dispositionClosureReasonType") Short dispositionClosureReasonType,
@@ -109,7 +104,6 @@ public class ReferralClient extends DomainObject {
             @JsonProperty("alcoholIndicator") Boolean alcoholIndicator,
             @JsonProperty("drugIndicator") Boolean drugIndicator) {
 		super();
-		this.id = id;
 		this.approvalNumber = approvalNumber;
 		this.approvalStatusType = approvalStatusType;
 		this.dispositionClosureReasonType = dispositionClosureReasonType;
@@ -128,13 +122,25 @@ public class ReferralClient extends DomainObject {
 		this.drugIndicator = drugIndicator;
 	}
 	
-	/**
-	 * @return the id
-	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Aaeae9r0F4")
-	public String getId() {
-		return id;
+	public ReferralClient(gov.ca.cwds.rest.api.persistence.legacy.ReferralClient persistedReferralClient) {
+		this.approvalNumber = persistedReferralClient.getApprovalNumber();
+		this.approvalStatusType = persistedReferralClient.getApprovalStatusType();
+		this.dispositionClosureReasonType = persistedReferralClient.getDispositionClosureReasonType();
+		this.dispositionCode = persistedReferralClient.getDispositionCode();
+		this.dispositionDate = DomainObject.cookDate(persistedReferralClient.getDispositionDate());
+		this.selfReportedIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getSelfReportedIndicator());
+		this.staffPersonAddedIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getStaffPersonAddedIndicator());
+		this.referralId = persistedReferralClient.getReferralId();
+		this.clientId = persistedReferralClient.getClientId();
+		this.dispositionClosureDescription = persistedReferralClient.getDispositionClosureDescription();
+		this.ageNumber = persistedReferralClient.getAgeNumber();
+		this.agePeriodCode = persistedReferralClient.getAgePeriodCode();
+		this.countySpecificCode = persistedReferralClient.getCountySpecificCode();
+		this.mentalHealthIssuesIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getMentalHealthIssuesIndicator());
+		this.alcoholIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getAlcoholIndicator());
+		this.drugIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getDrugIndicator());
 	}
+	
     /**
      * @return the approvalNumber
      */

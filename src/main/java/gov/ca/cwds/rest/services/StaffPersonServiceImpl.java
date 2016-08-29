@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
+import java.io.Serializable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 
 /**
  * Implementation of {@link StaffPersonService} backed by a DAO layer.
@@ -27,14 +29,12 @@ public class StaffPersonServiceImpl implements StaffPersonService {
 		this.crudsService = crudsService;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.StaffPerson find(String id) {
-		return (gov.ca.cwds.rest.api.domain.StaffPerson) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.StaffPerson find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.StaffPerson) crudsService.find(primaryKey);
 	}
 
 	/*

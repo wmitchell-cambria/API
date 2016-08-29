@@ -23,9 +23,10 @@ public class DomainObject {
 	public static Boolean uncookBooleanString(String cookedBoolean) {
 		if( "N".equalsIgnoreCase(cookedBoolean) ) {
 			return Boolean.FALSE;
-		}
-		if( "Y".equalsIgnoreCase(cookedBoolean) ) {
+		} if( "Y".equalsIgnoreCase(cookedBoolean) ) {
 			return Boolean.TRUE;
+		} else if( cookedBoolean == null ) {
+			return null;
 		}
 		throw new DomainException(new ParseException("Unable to generate boolean", 0));
 		
@@ -60,12 +61,15 @@ public class DomainObject {
 	}
 
 	public static Date uncookTimestampString(String timestamp) {
-	    try {
-			DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-			return df.parse(timestamp);
-		} catch (Exception e) {
-			throw new DomainException(e);
+		if( timestamp != null ) {
+			try {
+				DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+				return df.parse(timestamp);
+			} catch (Exception e) {
+				throw new DomainException(e);
+			}
 		}
+		return null;
 	}
 	
 }

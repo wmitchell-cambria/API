@@ -1,13 +1,15 @@
 package gov.ca.cwds.rest.jdbi;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.dropwizard.hibernate.AbstractDAO;
+import java.io.Serializable;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import io.dropwizard.hibernate.AbstractDAO;
 
 /**
  * An implementation of {@link CrudsDao}.  Class is final and is expected that other {@link Dao} will contain this implementation and delegate.
@@ -21,16 +23,21 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CrudsDaoImpl.class);
 	
+	/**
+	 * 
+	 * @param sessionFactory	the session factory
+	 * @param clazz				the {@link PersistentObject} class
+	 */
 	public CrudsDaoImpl(SessionFactory sessionFactory) {
 		super(sessionFactory);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#find(java.lang.String)
+	 * @see gov.ca.cwds.rest.jdbi.CrudsDao#find(java.io.Serializable)
 	 */
 	@Override
-	public T find(String id) {
-		return get(id);
+	public T find(Serializable primaryKey) {
+		return get(primaryKey);
 	}
 
 	/* (non-Javadoc)

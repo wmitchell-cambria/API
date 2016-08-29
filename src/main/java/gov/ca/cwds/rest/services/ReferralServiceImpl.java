@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +29,12 @@ public class ReferralServiceImpl implements ReferralService {
 		this.crudsService = crudsService;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Referral find(String id) {
-		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.Referral find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.find(primaryKey);
 	}
 
 	/*

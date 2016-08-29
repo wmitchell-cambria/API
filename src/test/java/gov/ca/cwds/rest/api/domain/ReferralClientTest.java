@@ -475,7 +475,6 @@ public class ReferralClientTest {
 	 */
     private ReferralClient validReferralClient() {
     	return new ReferralClient(
-    			  "DEF",
                   "A123",
     			  new Short ((short) 123),
     			  new Short ((short) 123),

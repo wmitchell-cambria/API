@@ -4,16 +4,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.ReferralService;
-import gov.ca.cwds.rest.services.ReferralServiceImpl;
+
+import java.io.Serializable;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
+import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ReferralService;
+import gov.ca.cwds.rest.services.ReferralServiceImpl;
 
 public class ServiceEnvironmentTest {
 	private ServiceEnvironment serviceEnvironment;
@@ -34,7 +37,7 @@ public class ServiceEnvironmentTest {
         CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> fakeService = new CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral>() {
 
 			@Override
-			public gov.ca.cwds.rest.api.domain.Referral find(String id) {
+			public gov.ca.cwds.rest.api.domain.Referral find(Serializable primaryKey) {
 				return null;
 			}
 

@@ -56,9 +56,10 @@ public abstract class PersistentObject {
 	public Date getLastUpdatedTime() {
 		return lastUpdatedTime;
 	}
-	
+
 	/**
 	 * @return the primaryKey
 	 */
 	public abstract String getPrimaryKey() ;
+
 }

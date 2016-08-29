@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.jdbi;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import javax.persistence.EntityExistsException;
@@ -29,11 +30,11 @@ public final class HashMapDaoImpl<T extends PersistentObject> implements CrudsDa
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#find(java.lang.String)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public T find(String id) {
-		return dummyData.get(id);
+	public T find(Serializable primaryKey) {
+		return dummyData.get(primaryKey);
 	}
 
 	/* (non-Javadoc)

@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,15 +23,31 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	public ReferralClientServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient> crudsService) {
 		this.crudsService = crudsService;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.lang.String)
+	
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.ReferralClient find(String id) {
-		return (gov.ca.cwds.rest.api.domain.ReferralClient) crudsService.find(id);
+	public gov.ca.cwds.rest.api.domain.ReferralClient find(Serializable primaryKey) {
+		//TODO : extract this stuff to common area
+		if( !(primaryKey instanceof String) ) {
+			throw new ServiceException("Unable to read primarykey as string");
+		}
+		String primaryKeyString = (String)primaryKey;
+		String referralId = null;
+		String clientId = null;
+		
+		for( String keyValueString: primaryKeyString.split(",")) {
+			String[] keyValuePair = keyValueString.split("=");
+			String key = keyValuePair[0];
+			if( "referralId".equals(key) ) {
+				referralId = keyValuePair[1];
+			} else if( "clientId".equals(key) ) { 
+				clientId = keyValuePair[1];
+			}
+		}
+		ReferralClient.PrimaryKey primaryKeyObject = new ReferralClient.PrimaryKey(referralId, clientId);
+		return (gov.ca.cwds.rest.api.domain.ReferralClient) crudsService.find(primaryKeyObject);
 	}
 
 	/*

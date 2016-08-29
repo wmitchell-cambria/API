@@ -50,20 +50,20 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String)
 	 */
 	@Override
 	@ApiOperation(value = "Update Referral", code = 204, response = Referral.class)
-	public Response update(@Valid Referral persistentObject, String acceptHeader) {
-		return crudsResource.update(persistentObject, acceptHeader);
+	public Response update(@Valid Referral object, String acceptHeader) {
+		return crudsResource.update(object, acceptHeader);
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.persistence.PersistentObject, java.lang.String, javax.ws.rs.core.UriInfo)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo)
 	 */
 	@Override
 	@ApiOperation(value = "Create Referral", response = Referral.class, code = 201, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
-	public Response create(@Valid Referral persistentObject, String acceptHeader, UriInfo uriInfo) {
-		return crudsResource.create(persistentObject, acceptHeader, uriInfo);
+	public Response create(@Valid Referral object, String acceptHeader, UriInfo uriInfo) {
+		return crudsResource.create(object, acceptHeader, uriInfo);
 	}
 }
