@@ -1,19 +1,23 @@
 package gov.ca.cwds.rest.api.persistence.legacy;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.domain.DomainException;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.persistence.legacy.CrossReport.PrimaryKey;
 
 /**
  * {@link PersistentObject} representing a CrossReport
@@ -22,13 +26,13 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  */
 @Entity
 @Table(schema = "CWSINT", name = "CRSS_RPT")
-
+@IdClass(PrimaryKey.class)
 public class CrossReport extends PersistentObject {
-//referral and thrid_id
 	@Id
-    @Column(name = "IDENTIFIER")
-    private String id;
-
+    @Column(name = "FKREFERL_T")
+    private String referralId;
+	
+	@Id
     @Column(name = "THIRD_ID")
     private String thirdId;
 
@@ -65,9 +69,6 @@ public class CrossReport extends PersistentObject {
     @Column(name = "REFERNC_NO")
     private String referenceNumber;
 
-    @Column(name = "FKREFERL_T")
-    private String referralId;
-
     @Column(name = "FKLAW_ENFT")
     private String lawEnforcementId;
 
@@ -95,12 +96,16 @@ public class CrossReport extends PersistentObject {
     @Column(name = "SXRPT_IND")
     private String satisfyCrossReportIndicator;
 
+    /*
+     * Constructor - needed for Hibernate
+     */
+    public CrossReport() {}
 	
 	public CrossReport(gov.ca.cwds.rest.api.domain.CrossReport crossReport, String lastUpdatedId) {
 		super(lastUpdatedId);
         try {
-            this.id = crossReport.getId();
-            this.thirdId = crossReport.getThirdId();
+            this.referralId = crossReport.getReferralId();
+        	this.thirdId = crossReport.getThirdId();
             this.crossReportMethodType = crossReport.getCrossReportMethodType();
             this.filedOutOfStateIndicator = DomainObject.cookBoolean(crossReport.getFiledOutOfStateIndicator());
             this.governmentOrgCrossRptIndicatorVar = DomainObject.cookBoolean(crossReport.getGovernmentOrgCrossRptIndicatorVar());
@@ -111,7 +116,6 @@ public class CrossReport extends PersistentObject {
             this.informDate = DomainObject.uncookDateString(crossReport.getInformDate());
             this.recipientPositionTitleDesc = crossReport.getRecipientPositionTitleDesc();
             this.referenceNumber = crossReport.getReferenceNumber();
-            this.referralId = crossReport.getReferralId();
             this.lawEnforcementId = crossReport.getLawEnforcementId();
             this.staffPersonId = crossReport.getStaffPersonId();
             this.description = crossReport.getDescription();
@@ -130,22 +134,15 @@ public class CrossReport extends PersistentObject {
 	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
 	 */
 	@Override
-	public String getPrimaryKey() {
-		return getId();
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
+	public Serializable getPrimaryKey() {
+		return new PrimaryKey(this.getReferralId(), this.getThirdId());
 	}
 
 	/**
 	 * @return the thirdId
 	 */
 	public String getThirdId() {
-		return thirdId;
+		return StringUtils.trimToEmpty(thirdId);
 	}
 
 	/**
@@ -159,14 +156,14 @@ public class CrossReport extends PersistentObject {
 	 * @return the filedOutOfStateIndicator
 	 */
 	public String getFiledOutOfStateIndicator() {
-		return filedOutOfStateIndicator;
+		return StringUtils.trimToEmpty(filedOutOfStateIndicator);
 	}
 
 	/**
 	 * @return the governmentOrgCrossRptIndicatorVar
 	 */
 	public String getGovernmentOrgCrossRptIndicatorVar() {
-		return governmentOrgCrossRptIndicatorVar;
+		return StringUtils.trimToEmpty(governmentOrgCrossRptIndicatorVar);
 	}
 
 	/**
@@ -180,7 +177,7 @@ public class CrossReport extends PersistentObject {
 	 * @return the recipientBadgeNumber
 	 */
 	public String getRecipientBadgeNumber() {
-		return recipientBadgeNumber;
+		return StringUtils.trimToEmpty(recipientBadgeNumber);
 	}
 
 	/**
@@ -208,84 +205,84 @@ public class CrossReport extends PersistentObject {
 	 * @return the recipientPositionTitleDesc
 	 */
 	public String getRecipientPositionTitleDesc() {
-		return recipientPositionTitleDesc;
+		return StringUtils.trimToEmpty(recipientPositionTitleDesc);
 	}
 
 	/**
 	 * @return the referenceNumber
 	 */
 	public String getReferenceNumber() {
-		return referenceNumber;
+		return StringUtils.trimToEmpty(referenceNumber);
 	}
 
 	/**
 	 * @return the referralId
 	 */
 	public String getReferralId() {
-		return referralId;
+		return StringUtils.trimToEmpty(referralId);
 	}
 
 	/**
 	 * @return the lawEnforcementId
 	 */
 	public String getLawEnforcementId() {
-		return lawEnforcementId;
+		return StringUtils.trimToEmpty(lawEnforcementId);
 	}
 
 	/**
 	 * @return the staffPersonId
 	 */
 	public String getStaffPersonId() {
-		return staffPersonId;
+		return StringUtils.trimToEmpty(staffPersonId);
 	}
 
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description;
+		return StringUtils.trimToEmpty(description);
 	}
 
 	/**
 	 * @return the recipientName
 	 */
 	public String getRecipientName() {
-		return recipientName;
+		return StringUtils.trimToEmpty(recipientName);
 	}
 
 	/**
 	 * @return the outstateLawEnforcementAddr
 	 */
 	public String getOutstateLawEnforcementAddr() {
-		return outstateLawEnforcementAddr;
+		return StringUtils.trimToEmpty(outstateLawEnforcementAddr);
 	}
 
 	/**
 	 * @return the countySpecificCode
 	 */
 	public String getCountySpecificCode() {
-		return countySpecificCode;
+		return StringUtils.trimToEmpty(countySpecificCode);
 	}
 
 	/**
 	 * @return the lawEnforcementIndicator
 	 */
 	public String getLawEnforcementIndicator() {
-		return lawEnforcementIndicator;
+		return StringUtils.trimToEmpty(lawEnforcementIndicator);
 	}
 
 	/**
 	 * @return the outStateLawEnforcementIndicator
 	 */
 	public String getOutStateLawEnforcementIndicator() {
-		return outStateLawEnforcementIndicator;
+		return StringUtils.trimToEmpty(outStateLawEnforcementIndicator);
 	}
 
 	/**
 	 * @return the satisfyCrossReportIndicator
 	 */
 	public String getSatisfyCrossReportIndicator() {
-		return satisfyCrossReportIndicator;
+		return StringUtils.trimToEmpty(satisfyCrossReportIndicator);
 	}
 
 	/* (non-Javadoc)
@@ -313,7 +310,6 @@ public class CrossReport extends PersistentObject {
 				* result
 				+ ((governmentOrgCrossRptIndicatorVar == null) ? 0
 						: governmentOrgCrossRptIndicatorVar.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((informDate == null) ? 0 : informDate.hashCode());
 		result = prime * result
@@ -401,11 +397,6 @@ public class CrossReport extends PersistentObject {
 		} else if (!governmentOrgCrossRptIndicatorVar
 				.equals(other.governmentOrgCrossRptIndicatorVar))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
 		if (informDate == null) {
 			if (other.informDate != null)
 				return false;
@@ -490,5 +481,63 @@ public class CrossReport extends PersistentObject {
 			return false;
 		return true;
 	}
+	
+    public static class PrimaryKey implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String referralId;
+    	private String thirdId;
+    	
+    	public PrimaryKey() {
+    	}
+    	
+    	public PrimaryKey(String referralId, String thirdId) {
+    		this.referralId = referralId;
+    		this.thirdId = thirdId;
+    	}
 
+		/* (non-Javadoc)
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
+			result = prime * result + ((thirdId == null) ? 0 : thirdId.hashCode());
+			return result;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			PrimaryKey other = (PrimaryKey) obj;
+			if (referralId == null) {
+				if (other.referralId != null)
+					return false;
+			} else if (!referralId.equals(other.referralId))
+				return false;
+			if (thirdId == null) {
+				if (other.thirdId != null)
+					return false;
+			} else if (!thirdId.equals(other.thirdId))
+				return false;
+			return true;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "referralId=" + referralId.trim() + ",thirdId=" + thirdId.trim() ;
+		}
+    }
 }

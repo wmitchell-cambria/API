@@ -11,6 +11,7 @@ import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.services.CrossReportService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ResponseHeader;
 
 /**
@@ -35,17 +36,17 @@ public class CrossReportResourceImpl extends BaseResource<CrossReportService>
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
 	 */
 	@Override
-	@ApiOperation(value = "Find CrossReport by id", response = CrossReport.class)
-	public Response get(String id, String acceptHeader) {
+	@ApiOperation(value = "Find CrossReport by composite id of referralId and thirdId", response = CrossReport.class)
+	public Response get(@ApiParam(required = true, allowMultiple=true, value = "CrossReport has a composite key of referralId and thirdId", example="referralId=abcdefgh,thirdId=td89slaz") String id, String acceptHeader) {
 		return crudsResource.get(id, acceptHeader);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
 	 */
-	@ApiOperation(value = "Delete CrossReport", code = HttpStatus.SC_OK, response = Object.class)
+	@ApiOperation(value = "Delete CrossReport by composite id of referralId and thirdId", code = HttpStatus.SC_OK, response = Object.class)
 	@Override
-	public Response delete(String id, String acceptHeader) {
+	public Response delete(@ApiParam(required = true, allowMultiple=true, value = "CrossReport has a composite key of referralId and thirdId", example="referralId=abcdefgh,thirdId=td89slaz") String id, String acceptHeader) {
 		return crudsResource.delete(id, acceptHeader);
 	}
 

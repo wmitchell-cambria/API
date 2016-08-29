@@ -5,6 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.text.MessageFormat;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,15 +30,19 @@ public class CrossReportServiceImplTest {
 
 	@Test
 	public void findDelegatesToCrudsService() {
-		crossReportService.find("1");
-		verify(crudsService, times(1)).find("1");
+		gov.ca.cwds.rest.api.persistence.legacy.CrossReport.PrimaryKey pk = new gov.ca.cwds.rest.api.persistence.legacy.CrossReport.PrimaryKey("abc", "abc");
+		String pkString = MessageFormat.format("referralId={0},thirdId={1}", "abc", "abc");
+		crossReportService.find(pkString);
+		verify(crudsService, times(1)).find(pk);
 
 	}
 	
 	@Test
 	public void deleteDelegatesToCrudsService() {
-		crossReportService.delete("1");
-		verify(crudsService, times(1)).delete("1");
+		gov.ca.cwds.rest.api.persistence.legacy.CrossReport.PrimaryKey pk = new gov.ca.cwds.rest.api.persistence.legacy.CrossReport.PrimaryKey("abc", "abc");
+		String pkString = MessageFormat.format("referralId={0},thirdId={1}", "abc", "abc");
+		crossReportService.delete(pkString);
+		verify(crudsService, times(1)).delete(pk);
 	}
 	
 	@Test

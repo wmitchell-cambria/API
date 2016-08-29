@@ -27,17 +27,12 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 @InjectLinks(
         { 
-        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.id}"), @Binding(name="resource", value=Api.RESOURCE_CROSS_REPORT) } ),
+        	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="referralId=${instance.referralId},thirdId=${instance.thirdId}"), @Binding(name="resource", value=Api.RESOURCE_CROSS_REPORT) } ),
         	@InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.referralId }" ),
-        	@InjectLink(value="/{resource}/{id}", rel="staffPersonId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.staffPersonId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) }, condition="${not empty instance.firstResponseDeterminedByStaffPersonId }" ),
+        	@InjectLink(value="/{resource}/{id}", rel="staffPersonId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.staffPersonId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) }, condition="${not empty instance.staffPersonId }" ),
             @InjectLink(value="/{resource}/{id}", rel="lawEnforcementId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.lawEnforcementId}"), @Binding(name="resource", value=Api.RESOURCE_LAW_ENFORCEMENT) } )
         })
 public class CrossReport extends DomainObject {
-    @NotEmpty
-    @Size(min=1, max=10)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
-    private String id;
-
     @NotEmpty
     @Size(min=1, max=10)
     @ApiModelProperty(required=true, readOnly=true, value="", example="ABC123")
@@ -101,7 +96,7 @@ public class CrossReport extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=3)
-    @ApiModelProperty(required=true, readOnly=true, value="", example="")
+    @ApiModelProperty(required=true, readOnly=true, value="", example="ABC")
     private String staffPersonId;
 
     @NotEmpty
@@ -121,7 +116,7 @@ public class CrossReport extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=2)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
     private String countySpecificCode;
 
     @NotNull
@@ -138,7 +133,6 @@ public class CrossReport extends DomainObject {
 
     @JsonCreator
 	public CrossReport(
-            @JsonProperty("id") String id,
             @JsonProperty("thirdId") String thirdId,
             @JsonProperty("crossReportMethodType") Short crossReportMethodType,
             @JsonProperty("filedOutOfStateIndicator") Boolean filedOutOfStateIndicator,
@@ -161,7 +155,6 @@ public class CrossReport extends DomainObject {
             @JsonProperty("outStateLawEnforcementIndicator") Boolean outStateLawEnforcementIndicator,
             @JsonProperty("satisfyCrossReportIndicator") Boolean satisfyCrossReportIndicator ) {
 		super();
-		this.id = id;
 		this.thirdId = thirdId;
 		this.crossReportMethodType = crossReportMethodType;
 		this.filedOutOfStateIndicator = filedOutOfStateIndicator;
@@ -186,7 +179,7 @@ public class CrossReport extends DomainObject {
 	}
 
 	public CrossReport(gov.ca.cwds.rest.api.persistence.legacy.CrossReport persistedCrossReport) {
-        this.id = persistedCrossReport.getId();
+		this.referralId = persistedCrossReport.getReferralId();
         this.thirdId = persistedCrossReport.getThirdId();
         this.crossReportMethodType = persistedCrossReport.getCrossReportMethodType();
         this.filedOutOfStateIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getFiledOutOfStateIndicator());
@@ -198,7 +191,6 @@ public class CrossReport extends DomainObject {
         this.informDate = DomainObject.cookDate(persistedCrossReport.getInformDate());
         this.recipientPositionTitleDesc = persistedCrossReport.getRecipientPositionTitleDesc();
         this.referenceNumber = persistedCrossReport.getReferenceNumber();
-        this.referralId = persistedCrossReport.getReferralId();
         this.lawEnforcementId = persistedCrossReport.getLawEnforcementId();
         this.staffPersonId = persistedCrossReport.getStaffPersonId();
         this.description = persistedCrossReport.getDescription();
@@ -208,13 +200,6 @@ public class CrossReport extends DomainObject {
         this.lawEnforcementIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getLawEnforcementIndicator());
         this.outStateLawEnforcementIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getOutStateLawEnforcementIndicator());
         this.satisfyCrossReportIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getSatisfyCrossReportIndicator());
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
 	}
 
 	/**
@@ -389,7 +374,6 @@ public class CrossReport extends DomainObject {
 				* result
 				+ ((governmentOrgCrossRptIndicatorVar == null) ? 0
 						: governmentOrgCrossRptIndicatorVar.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((informDate == null) ? 0 : informDate.hashCode());
 		result = prime * result
@@ -476,11 +460,6 @@ public class CrossReport extends DomainObject {
 				return false;
 		} else if (!governmentOrgCrossRptIndicatorVar
 				.equals(other.governmentOrgCrossRptIndicatorVar))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (informDate == null) {
 			if (other.informDate != null)
