@@ -53,8 +53,9 @@ public class CrossReport extends PersistentObject {
     @Column(name = "RCPT_BDGNO")
     private String recipientBadgeNumber;
 
+    @Type(type = "integer")
     @Column(name = "RCPT_EXTNO")
-    private int recipientPhoneExtensionNumber = 0;
+    private Integer recipientPhoneExtensionNumber;
 
     @Column(name = "RCPT_TELNO")
     private BigDecimal recipientPhoneNumber;
@@ -96,16 +97,27 @@ public class CrossReport extends PersistentObject {
     @Column(name = "SXRPT_IND")
     private String satisfyCrossReportIndicator;
 
-    /*
-     * Constructor - needed for Hibernate
-     */
-    public CrossReport() {}
-	
-	public CrossReport(gov.ca.cwds.rest.api.domain.CrossReport crossReport, String lastUpdatedId) {
-		super(lastUpdatedId);
+
+	/**
+	 * Default constructor 
+	 * 
+	 * Required for Hibernate
+	 */
+	public CrossReport() {
+		super();
+	}
+
+	/**
+	 * Constructor 
+	 * 
+	 * @param crossReport The domain object to construct this object from 
+	 * @param lastUpdatedId  the id of the last person to update this object
+	 */
+    public CrossReport(gov.ca.cwds.rest.api.domain.CrossReport crossReport, String lastUpdatedId) {
+        super(lastUpdatedId);
         try {
             this.referralId = crossReport.getReferralId();
-        	this.thirdId = crossReport.getThirdId();
+            this.thirdId = crossReport.getThirdId();
             this.crossReportMethodType = crossReport.getCrossReportMethodType();
             this.filedOutOfStateIndicator = DomainObject.cookBoolean(crossReport.getFiledOutOfStateIndicator());
             this.governmentOrgCrossRptIndicatorVar = DomainObject.cookBoolean(crossReport.getGovernmentOrgCrossRptIndicatorVar());
@@ -125,9 +137,9 @@ public class CrossReport extends PersistentObject {
             this.lawEnforcementIndicator = DomainObject.cookBoolean(crossReport.getLawEnforcementIndicator());
             this.outStateLawEnforcementIndicator = DomainObject.cookBoolean(crossReport.getOutStateLawEnforcementIndicator());
             this.satisfyCrossReportIndicator = DomainObject.cookBoolean(crossReport.getSatisfyCrossReportIndicator());
-        } catch (DomainException e) {
-            throw new PersistenceException(e);
-        }
+		} catch (DomainException e) {
+			throw new PersistenceException(e);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -137,153 +149,153 @@ public class CrossReport extends PersistentObject {
 	public Serializable getPrimaryKey() {
 		return new PrimaryKey(this.getReferralId(), this.getThirdId());
 	}
-
-	/**
-	 * @return the thirdId
-	 */
-	public String getThirdId() {
-		return StringUtils.trimToEmpty(thirdId);
-	}
-
-	/**
-	 * @return the crossReportMethodType
-	 */
-	public Short getCrossReportMethodType() {
-		return crossReportMethodType;
-	}
-
-	/**
-	 * @return the filedOutOfStateIndicator
-	 */
-	public String getFiledOutOfStateIndicator() {
-		return StringUtils.trimToEmpty(filedOutOfStateIndicator);
-	}
-
-	/**
-	 * @return the governmentOrgCrossRptIndicatorVar
-	 */
-	public String getGovernmentOrgCrossRptIndicatorVar() {
-		return StringUtils.trimToEmpty(governmentOrgCrossRptIndicatorVar);
-	}
-
-	/**
-	 * @return the informTime
-	 */
-	public Date getInformTime() {
-		return informTime;
-	}
-
-	/**
-	 * @return the recipientBadgeNumber
-	 */
-	public String getRecipientBadgeNumber() {
-		return StringUtils.trimToEmpty(recipientBadgeNumber);
-	}
-
-	/**
-	 * @return the recipientPhoneExtensionNumber
-	 */
-	public int getRecipientPhoneExtensionNumber() {
-		return recipientPhoneExtensionNumber;
-	}
-
-	/**
-	 * @return the recipientPhoneNumber
-	 */
-	public BigDecimal getRecipientPhoneNumber() {
-		return recipientPhoneNumber;
-	}
-
-	/**
-	 * @return the informDate
-	 */
-	public Date getInformDate() {
-		return informDate;
-	}
-
-	/**
-	 * @return the recipientPositionTitleDesc
-	 */
-	public String getRecipientPositionTitleDesc() {
-		return StringUtils.trimToEmpty(recipientPositionTitleDesc);
-	}
-
-	/**
-	 * @return the referenceNumber
-	 */
-	public String getReferenceNumber() {
-		return StringUtils.trimToEmpty(referenceNumber);
-	}
-
-	/**
-	 * @return the referralId
-	 */
-	public String getReferralId() {
-		return StringUtils.trimToEmpty(referralId);
-	}
-
-	/**
-	 * @return the lawEnforcementId
-	 */
-	public String getLawEnforcementId() {
-		return StringUtils.trimToEmpty(lawEnforcementId);
-	}
-
-	/**
-	 * @return the staffPersonId
-	 */
-	public String getStaffPersonId() {
-		return StringUtils.trimToEmpty(staffPersonId);
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return StringUtils.trimToEmpty(description);
-	}
-
-	/**
-	 * @return the recipientName
-	 */
-	public String getRecipientName() {
-		return StringUtils.trimToEmpty(recipientName);
-	}
-
-	/**
-	 * @return the outstateLawEnforcementAddr
-	 */
-	public String getOutstateLawEnforcementAddr() {
-		return StringUtils.trimToEmpty(outstateLawEnforcementAddr);
-	}
-
-	/**
-	 * @return the countySpecificCode
-	 */
-	public String getCountySpecificCode() {
-		return StringUtils.trimToEmpty(countySpecificCode);
-	}
-
-	/**
-	 * @return the lawEnforcementIndicator
-	 */
-	public String getLawEnforcementIndicator() {
-		return StringUtils.trimToEmpty(lawEnforcementIndicator);
-	}
-
-	/**
-	 * @return the outStateLawEnforcementIndicator
-	 */
-	public String getOutStateLawEnforcementIndicator() {
-		return StringUtils.trimToEmpty(outStateLawEnforcementIndicator);
-	}
-
-	/**
-	 * @return the satisfyCrossReportIndicator
-	 */
-	public String getSatisfyCrossReportIndicator() {
-		return StringUtils.trimToEmpty(satisfyCrossReportIndicator);
-	}
+	
+    /**
+     * @return the thirdId
+     */
+    public String getThirdId() {
+        return StringUtils.trimToEmpty(thirdId);
+    }
+    
+    /**
+     * @return the crossReportMethodType
+     */
+    public Short getCrossReportMethodType() {
+        return crossReportMethodType;
+    }
+    
+    /**
+     * @return the filedOutOfStateIndicator
+     */
+    public String getFiledOutOfStateIndicator() {
+        return StringUtils.trimToEmpty(filedOutOfStateIndicator);
+    }
+    
+    /**
+     * @return the governmentOrgCrossRptIndicatorVar
+     */
+    public String getGovernmentOrgCrossRptIndicatorVar() {
+        return StringUtils.trimToEmpty(governmentOrgCrossRptIndicatorVar);
+    }
+    
+    /**
+     * @return the informTime
+     */
+    public Date getInformTime() {
+        return informTime;
+    }
+    
+    /**
+     * @return the recipientBadgeNumber
+     */
+    public String getRecipientBadgeNumber() {
+        return StringUtils.trimToEmpty(recipientBadgeNumber);
+    }
+    
+    /**
+     * @return the recipientPhoneExtensionNumber
+     */
+    public Integer getRecipientPhoneExtensionNumber() {
+        return recipientPhoneExtensionNumber;
+    }
+    
+    /**
+     * @return the recipientPhoneNumber
+     */
+    public BigDecimal getRecipientPhoneNumber() {
+        return recipientPhoneNumber;
+    }
+    
+    /**
+     * @return the informDate
+     */
+    public Date getInformDate() {
+        return informDate;
+    }
+    
+    /**
+     * @return the recipientPositionTitleDesc
+     */
+    public String getRecipientPositionTitleDesc() {
+        return StringUtils.trimToEmpty(recipientPositionTitleDesc);
+    }
+    
+    /**
+     * @return the referenceNumber
+     */
+    public String getReferenceNumber() {
+        return StringUtils.trimToEmpty(referenceNumber);
+    }
+    
+    /**
+     * @return the referralId
+     */
+    public String getReferralId() {
+        return StringUtils.trimToEmpty(referralId);
+    }
+    
+    /**
+     * @return the lawEnforcementId
+     */
+    public String getLawEnforcementId() {
+        return StringUtils.trimToEmpty(lawEnforcementId);
+    }
+    
+    /**
+     * @return the staffPersonId
+     */
+    public String getStaffPersonId() {
+        return StringUtils.trimToEmpty(staffPersonId);
+    }
+    
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return StringUtils.trimToEmpty(description);
+    }
+    
+    /**
+     * @return the recipientName
+     */
+    public String getRecipientName() {
+        return StringUtils.trimToEmpty(recipientName);
+    }
+    
+    /**
+     * @return the outstateLawEnforcementAddr
+     */
+    public String getOutstateLawEnforcementAddr() {
+        return StringUtils.trimToEmpty(outstateLawEnforcementAddr);
+    }
+    
+    /**
+     * @return the countySpecificCode
+     */
+    public String getCountySpecificCode() {
+        return StringUtils.trimToEmpty(countySpecificCode);
+    }
+    
+    /**
+     * @return the lawEnforcementIndicator
+     */
+    public String getLawEnforcementIndicator() {
+        return StringUtils.trimToEmpty(lawEnforcementIndicator);
+    }
+    
+    /**
+     * @return the outStateLawEnforcementIndicator
+     */
+    public String getOutStateLawEnforcementIndicator() {
+        return StringUtils.trimToEmpty(outStateLawEnforcementIndicator);
+    }
+    
+    /**
+     * @return the satisfyCrossReportIndicator
+     */
+    public String getSatisfyCrossReportIndicator() {
+        return StringUtils.trimToEmpty(satisfyCrossReportIndicator);
+    }
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -335,7 +347,10 @@ public class CrossReport extends PersistentObject {
 						.hashCode());
 		result = prime * result
 				+ ((recipientName == null) ? 0 : recipientName.hashCode());
-		result = prime * result + recipientPhoneExtensionNumber;
+		result = prime
+				* result
+				+ ((recipientPhoneExtensionNumber == null) ? 0
+						: recipientPhoneExtensionNumber.hashCode());
 		result = prime
 				* result
 				+ ((recipientPhoneNumber == null) ? 0 : recipientPhoneNumber
@@ -440,7 +455,11 @@ public class CrossReport extends PersistentObject {
 				return false;
 		} else if (!recipientName.equals(other.recipientName))
 			return false;
-		if (recipientPhoneExtensionNumber != other.recipientPhoneExtensionNumber)
+		if (recipientPhoneExtensionNumber == null) {
+			if (other.recipientPhoneExtensionNumber != null)
+				return false;
+		} else if (!recipientPhoneExtensionNumber
+				.equals(other.recipientPhoneExtensionNumber))
 			return false;
 		if (recipientPhoneNumber == null) {
 			if (other.recipientPhoneNumber != null)

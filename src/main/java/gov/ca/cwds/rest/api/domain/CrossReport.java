@@ -61,8 +61,9 @@ public class CrossReport extends DomainObject {
     @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
     private String recipientBadgeNumber;
 
+    @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
-    private int recipientPhoneExtensionNumber = 0;
+    private Integer recipientPhoneExtensionNumber;
 
     @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
@@ -139,7 +140,7 @@ public class CrossReport extends DomainObject {
             @JsonProperty("governmentOrgCrossRptIndicatorVar") Boolean governmentOrgCrossRptIndicatorVar,
             @JsonProperty("informTime") String informTime,
             @JsonProperty("recipientBadgeNumber") String recipientBadgeNumber,
-            @JsonProperty("recipientPhoneExtensionNumber") int recipientPhoneExtensionNumber,
+            @JsonProperty("recipientPhoneExtensionNumber") Integer recipientPhoneExtensionNumber,
             @JsonProperty("recipientPhoneNumber") BigDecimal recipientPhoneNumber,
             @JsonProperty("informDate") String informDate,
             @JsonProperty("recipientPositionTitleDesc") String recipientPositionTitleDesc,
@@ -153,30 +154,30 @@ public class CrossReport extends DomainObject {
             @JsonProperty("countySpecificCode") String countySpecificCode,
             @JsonProperty("lawEnforcementIndicator") Boolean lawEnforcementIndicator,
             @JsonProperty("outStateLawEnforcementIndicator") Boolean outStateLawEnforcementIndicator,
-            @JsonProperty("satisfyCrossReportIndicator") Boolean satisfyCrossReportIndicator ) {
-		super();
-		this.thirdId = thirdId;
-		this.crossReportMethodType = crossReportMethodType;
-		this.filedOutOfStateIndicator = filedOutOfStateIndicator;
-		this.governmentOrgCrossRptIndicatorVar = governmentOrgCrossRptIndicatorVar;
-		this.informTime = informTime;
-		this.recipientBadgeNumber = recipientBadgeNumber;
-		this.recipientPhoneExtensionNumber = recipientPhoneExtensionNumber;
-		this.recipientPhoneNumber = recipientPhoneNumber;
-		this.informDate = informDate;
-		this.recipientPositionTitleDesc = recipientPositionTitleDesc;
-		this.referenceNumber = referenceNumber;
-		this.referralId = referralId;
-		this.lawEnforcementId = lawEnforcementId;
-		this.staffPersonId = staffPersonId;
-		this.description = description;
-		this.recipientName = recipientName;
-		this.outstateLawEnforcementAddr = outstateLawEnforcementAddr;
-		this.countySpecificCode = countySpecificCode;
-		this.lawEnforcementIndicator = lawEnforcementIndicator;
-		this.outStateLawEnforcementIndicator = outStateLawEnforcementIndicator;
-		this.satisfyCrossReportIndicator = satisfyCrossReportIndicator;
-	}
+            @JsonProperty("satisfyCrossReportIndicator") Boolean satisfyCrossReportIndicator) {
+        super();
+        this.thirdId = thirdId;
+        this.crossReportMethodType = crossReportMethodType;
+        this.filedOutOfStateIndicator = filedOutOfStateIndicator;
+        this.governmentOrgCrossRptIndicatorVar = governmentOrgCrossRptIndicatorVar;
+        this.informTime = informTime;
+        this.recipientBadgeNumber = recipientBadgeNumber;
+        this.recipientPhoneExtensionNumber = recipientPhoneExtensionNumber;
+        this.recipientPhoneNumber = recipientPhoneNumber;
+        this.informDate = informDate;
+        this.recipientPositionTitleDesc = recipientPositionTitleDesc;
+        this.referenceNumber = referenceNumber;
+        this.referralId = referralId;
+        this.lawEnforcementId = lawEnforcementId;
+        this.staffPersonId = staffPersonId;
+        this.description = description;
+        this.recipientName = recipientName;
+        this.outstateLawEnforcementAddr = outstateLawEnforcementAddr;
+        this.countySpecificCode = countySpecificCode;
+        this.lawEnforcementIndicator = lawEnforcementIndicator;
+        this.outStateLawEnforcementIndicator = outStateLawEnforcementIndicator;
+        this.satisfyCrossReportIndicator = satisfyCrossReportIndicator;
+    }
 
 	public CrossReport(gov.ca.cwds.rest.api.persistence.legacy.CrossReport persistedCrossReport) {
 		this.referralId = persistedCrossReport.getReferralId();
@@ -200,154 +201,154 @@ public class CrossReport extends DomainObject {
         this.lawEnforcementIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getLawEnforcementIndicator());
         this.outStateLawEnforcementIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getOutStateLawEnforcementIndicator());
         this.satisfyCrossReportIndicator = DomainObject.uncookBooleanString(persistedCrossReport.getSatisfyCrossReportIndicator());
-	}
+    }
 
-	/**
-	 * @return the thirdId
-	 */
-	public String getThirdId() {
-		return thirdId;
-	}
-
-	/**
-	 * @return the crossReportMethodType
-	 */
-	public Short getCrossReportMethodType() {
-		return crossReportMethodType;
-	}
-
-	/**
-	 * @return the filedOutOfStateIndicator
-	 */
-	public Boolean getFiledOutOfStateIndicator() {
-		return filedOutOfStateIndicator;
-	}
-
-	/**
-	 * @return the governmentOrgCrossRptIndicatorVar
-	 */
-	public Boolean getGovernmentOrgCrossRptIndicatorVar() {
-		return governmentOrgCrossRptIndicatorVar;
-	}
-
-	/**
-	 * @return the informTime
-	 */
-	public String getInformTime() {
-		return informTime;
-	}
-
-	/**
-	 * @return the recipientBadgeNumber
-	 */
-	public String getRecipientBadgeNumber() {
-		return recipientBadgeNumber;
-	}
-
-	/**
-	 * @return the recipientPhoneExtensionNumber
-	 */
-	public int getRecipientPhoneExtensionNumber() {
-		return recipientPhoneExtensionNumber;
-	}
-
-	/**
-	 * @return the recipientPhoneNumber
-	 */
-	public BigDecimal getRecipientPhoneNumber() {
-		return recipientPhoneNumber;
-	}
-
-	/**
-	 * @return the informDate
-	 */
-	public String getInformDate() {
-		return informDate;
-	}
-
-	/**
-	 * @return the recipientPositionTitleDesc
-	 */
-	public String getRecipientPositionTitleDesc() {
-		return recipientPositionTitleDesc;
-	}
-
-	/**
-	 * @return the referenceNumber
-	 */
-	public String getReferenceNumber() {
-		return referenceNumber;
-	}
-
-	/**
-	 * @return the referralId
-	 */
-	public String getReferralId() {
-		return referralId;
-	}
-
-	/**
-	 * @return the lawEnforcementId
-	 */
-	public String getLawEnforcementId() {
-		return lawEnforcementId;
-	}
-
-	/**
-	 * @return the staffPersonId
-	 */
-	public String getStaffPersonId() {
-		return staffPersonId;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @return the recipientName
-	 */
-	public String getRecipientName() {
-		return recipientName;
-	}
-
-	/**
-	 * @return the outstateLawEnforcementAddr
-	 */
-	public String getOutstateLawEnforcementAddr() {
-		return outstateLawEnforcementAddr;
-	}
-
-	/**
-	 * @return the countySpecificCode
-	 */
-	public String getCountySpecificCode() {
-		return countySpecificCode;
-	}
-
-	/**
-	 * @return the lawEnforcementIndicator
-	 */
-	public Boolean getLawEnforcementIndicator() {
-		return lawEnforcementIndicator;
-	}
-
-	/**
-	 * @return the outStateLawEnforcementIndicator
-	 */
-	public Boolean getOutStateLawEnforcementIndicator() {
-		return outStateLawEnforcementIndicator;
-	}
-
-	/**
-	 * @return the satisfyCrossReportIndicator
-	 */
-	public Boolean getSatisfyCrossReportIndicator() {
-		return satisfyCrossReportIndicator;
-	}
+    /**
+     * @return the thirdId
+     */
+    public String getThirdId() {
+        return thirdId;
+    }
+    
+    /**
+     * @return the crossReportMethodType
+     */
+    public Short getCrossReportMethodType() {
+        return crossReportMethodType;
+    }
+    
+    /**
+     * @return the filedOutOfStateIndicator
+     */
+    public Boolean getFiledOutOfStateIndicator() {
+        return filedOutOfStateIndicator;
+    }
+    
+    /**
+     * @return the governmentOrgCrossRptIndicatorVar
+     */
+    public Boolean getGovernmentOrgCrossRptIndicatorVar() {
+        return governmentOrgCrossRptIndicatorVar;
+    }
+    
+    /**
+     * @return the informTime
+     */
+    public String getInformTime() {
+        return informTime;
+    }
+    
+    /**
+     * @return the recipientBadgeNumber
+     */
+    public String getRecipientBadgeNumber() {
+        return recipientBadgeNumber;
+    }
+    
+    /**
+     * @return the recipientPhoneExtensionNumber
+     */
+    public Integer getRecipientPhoneExtensionNumber() {
+        return recipientPhoneExtensionNumber;
+    }
+    
+    /**
+     * @return the recipientPhoneNumber
+     */
+    public BigDecimal getRecipientPhoneNumber() {
+        return recipientPhoneNumber;
+    }
+    
+    /**
+     * @return the informDate
+     */
+    public String getInformDate() {
+        return informDate;
+    }
+    
+    /**
+     * @return the recipientPositionTitleDesc
+     */
+    public String getRecipientPositionTitleDesc() {
+        return recipientPositionTitleDesc;
+    }
+    
+    /**
+     * @return the referenceNumber
+     */
+    public String getReferenceNumber() {
+        return referenceNumber;
+    }
+    
+    /**
+     * @return the referralId
+     */
+    public String getReferralId() {
+        return referralId;
+    }
+    
+    /**
+     * @return the lawEnforcementId
+     */
+    public String getLawEnforcementId() {
+        return lawEnforcementId;
+    }
+    
+    /**
+     * @return the staffPersonId
+     */
+    public String getStaffPersonId() {
+        return staffPersonId;
+    }
+    
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+    
+    /**
+     * @return the recipientName
+     */
+    public String getRecipientName() {
+        return recipientName;
+    }
+    
+    /**
+     * @return the outstateLawEnforcementAddr
+     */
+    public String getOutstateLawEnforcementAddr() {
+        return outstateLawEnforcementAddr;
+    }
+    
+    /**
+     * @return the countySpecificCode
+     */
+    public String getCountySpecificCode() {
+        return countySpecificCode;
+    }
+    
+    /**
+     * @return the lawEnforcementIndicator
+     */
+    public Boolean getLawEnforcementIndicator() {
+        return lawEnforcementIndicator;
+    }
+    
+    /**
+     * @return the outStateLawEnforcementIndicator
+     */
+    public Boolean getOutStateLawEnforcementIndicator() {
+        return outStateLawEnforcementIndicator;
+    }
+    
+    /**
+     * @return the satisfyCrossReportIndicator
+     */
+    public Boolean getSatisfyCrossReportIndicator() {
+        return satisfyCrossReportIndicator;
+    }
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -399,7 +400,10 @@ public class CrossReport extends DomainObject {
 						.hashCode());
 		result = prime * result
 				+ ((recipientName == null) ? 0 : recipientName.hashCode());
-		result = prime * result + recipientPhoneExtensionNumber;
+		result = prime
+				* result
+				+ ((recipientPhoneExtensionNumber == null) ? 0
+						: recipientPhoneExtensionNumber.hashCode());
 		result = prime
 				* result
 				+ ((recipientPhoneNumber == null) ? 0 : recipientPhoneNumber
@@ -504,7 +508,11 @@ public class CrossReport extends DomainObject {
 				return false;
 		} else if (!recipientName.equals(other.recipientName))
 			return false;
-		if (recipientPhoneExtensionNumber != other.recipientPhoneExtensionNumber)
+		if (recipientPhoneExtensionNumber == null) {
+			if (other.recipientPhoneExtensionNumber != null)
+				return false;
+		} else if (!recipientPhoneExtensionNumber
+				.equals(other.recipientPhoneExtensionNumber))
 			return false;
 		if (recipientPhoneNumber == null) {
 			if (other.recipientPhoneNumber != null)
