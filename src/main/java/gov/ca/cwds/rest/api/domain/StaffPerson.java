@@ -44,6 +44,7 @@ public class StaffPerson extends DomainObject {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="endDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22")
 	private String endDate;
 
 	@NotEmpty
@@ -225,7 +226,6 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the endDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22", dataType="Date")
 	public String getEndDate() {
 		return endDate;
 	}
