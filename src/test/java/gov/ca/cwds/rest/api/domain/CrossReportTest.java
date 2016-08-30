@@ -13,6 +13,8 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
@@ -38,6 +40,8 @@ public class CrossReportTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private CrossReport validCrossReport = validCrossReport();
 
+    private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
 	private String referralId = "a";
 	private String thirdId = "b";
     private Short crossReportMethodType = 1;
@@ -79,26 +83,26 @@ public class CrossReportTest {
 		gov.ca.cwds.rest.api.persistence.legacy.CrossReport persistent = new gov.ca.cwds.rest.api.persistence.legacy.CrossReport(domain, "lastUpdatedId");
 		
 		CrossReport totest = new CrossReport(persistent);
-		assertThat(totest.getReferralId(), is(equalTo(referralId)));
-		assertThat(totest.getThirdId(), is(equalTo(thirdId)));
-		assertThat(totest.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
-		assertThat(totest.getFiledOutOfStateIndicator(), is(equalTo(filedOutOfStateIndicator)));
-		assertThat(totest.getGovernmentOrgCrossRptIndicatorVar(), is(equalTo(governmentOrgCrossRptIndicatorVar)));
-		assertThat(totest.getInformTime(), is(equalTo(informTime)));
-		assertThat(totest.getRecipientBadgeNumber(), is(equalTo(recipientBadgeNumber)));
-		assertThat(totest.getRecipientPhoneExtensionNumber(), is(equalTo(recipientPhoneExtensionNumber)));
-		assertThat(totest.getInformDate(), is(equalTo(informDate)));
-		assertThat(totest.getRecipientPositionTitleDesc(), is(equalTo(recipientPositionTitleDesc)));
-		assertThat(totest.getReferenceNumber(), is(equalTo(referenceNumber)));
-		assertThat(totest.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
-		assertThat(totest.getStaffPersonId(), is(equalTo(staffPersonId)));
-		assertThat(totest.getDescription(), is(equalTo(description)));
-		assertThat(totest.getRecipientName(), is(equalTo(recipientName)));
-		assertThat(totest.getOutstateLawEnforcementAddr(), is(equalTo(outstateLawEnforcementAddr)));
-		assertThat(totest.getCountySpecificCode(), is(equalTo(countySpecificCode)));
-		assertThat(totest.getLawEnforcementIndicator(), is(equalTo(lawEnforcementIndicator)));
-		assertThat(totest.getOutStateLawEnforcementIndicator(), is(equalTo(outStateLawEnforcementIndicator)));
-		assertThat(totest.getSatisfyCrossReportIndicator(), is(equalTo(satisfyCrossReportIndicator)));
+		assertThat(totest.getReferralId(), is(equalTo(persistent.getReferralId())));
+		assertThat(totest.getThirdId(), is(equalTo(persistent.getThirdId())));
+		assertThat(totest.getCrossReportMethodType(), is(equalTo(persistent.getCrossReportMethodType())));
+		assertThat(totest.getFiledOutOfStateIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getFiledOutOfStateIndicator()))));
+		assertThat(totest.getGovernmentOrgCrossRptIndicatorVar(), is(equalTo(DomainObject.uncookBooleanString(persistent.getGovernmentOrgCrossRptIndicatorVar()))));
+		assertThat(totest.getInformTime(), is(equalTo(tf.format(persistent.getInformTime()))));
+		assertThat(totest.getRecipientBadgeNumber(), is(equalTo(persistent.getRecipientBadgeNumber())));
+		assertThat(totest.getRecipientPhoneExtensionNumber(), is(equalTo(persistent.getRecipientPhoneExtensionNumber())));
+		assertThat(totest.getInformDate(), is(equalTo(df.format(persistent.getInformDate()))));
+		assertThat(totest.getRecipientPositionTitleDesc(), is(equalTo(persistent.getRecipientPositionTitleDesc())));
+		assertThat(totest.getReferenceNumber(), is(equalTo(persistent.getReferenceNumber())));
+		assertThat(totest.getLawEnforcementId(), is(equalTo(persistent.getLawEnforcementId())));
+		assertThat(totest.getStaffPersonId(), is(equalTo(persistent.getStaffPersonId())));
+		assertThat(totest.getDescription(), is(equalTo(persistent.getDescription())));
+		assertThat(totest.getRecipientName(), is(equalTo(persistent.getRecipientName())));
+		assertThat(totest.getOutstateLawEnforcementAddr(), is(equalTo(persistent.getOutstateLawEnforcementAddr())));
+		assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
+		assertThat(totest.getLawEnforcementIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getLawEnforcementIndicator()))));
+		assertThat(totest.getOutStateLawEnforcementIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getOutStateLawEnforcementIndicator()))));
+		assertThat(totest.getSatisfyCrossReportIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getSatisfyCrossReportIndicator()))));
 	}
 
 	@Test
@@ -132,7 +136,6 @@ public class CrossReportTest {
 		assertThat(domain.getSatisfyCrossReportIndicator(), is(equalTo(satisfyCrossReportIndicator)));
 	}
 
-	
     @Test
     public void serializesToJSON() throws Exception {
         final String expected = MAPPER.writeValueAsString(

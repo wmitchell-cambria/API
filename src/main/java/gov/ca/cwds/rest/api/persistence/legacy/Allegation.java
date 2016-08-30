@@ -79,6 +79,11 @@ public class Allegation extends PersistentObject {
 
 	@Column(name = "PLC_FCLC")
 	private Integer placementFacilityType;
+	
+	/*
+	 * Constructor - needed by Hibernate
+	 */
+	public Allegation() {}
 
 	public Allegation(gov.ca.cwds.rest.api.domain.Allegation allegation, String lastUpdatedId) {
 		super(lastUpdatedId);

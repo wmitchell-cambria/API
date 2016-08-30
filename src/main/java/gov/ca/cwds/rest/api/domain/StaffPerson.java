@@ -34,8 +34,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class StaffPerson extends DomainObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
-
-	
 	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
 	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC")

@@ -184,6 +184,11 @@ public class Referral extends PersistentObject {
 	@Type(type = "date")
 	@Column(name = "ORIGCLS_DT")
 	private Date originalClosureDate;
+	
+	/*
+	 * Constructor - needed for Hibernate
+	 */
+	public Referral() {}
 		
 	public Referral(gov.ca.cwds.rest.api.domain.Referral referral, String lastUpdatedId) {
 		super(lastUpdatedId);
@@ -582,6 +587,6 @@ public class Referral extends PersistentObject {
 	 * @return the originalClosureDate
 	 */
 	public Date getOriginalClosureDate() {
-		return closureDate;
+		return originalClosureDate;
 	}
 }
