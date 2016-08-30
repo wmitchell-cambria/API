@@ -2,17 +2,17 @@ package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.StaffPersonResourceImpl;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
@@ -23,6 +23,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.resources.StaffPersonResourceImpl;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class StaffPersonTest {
 
@@ -37,10 +42,91 @@ public class StaffPersonTest {
 	
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private StaffPerson validStaffPerson = validStaffPerson();
+    
+    private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+ 	private String id = "a";
+	private String endDate = "1973-11-22";
+	private String firstName = "b";
+	private String jobTitle = "c";
+	private String lastName = "d";
+	private String middleInitial = "e";
+	private String namePrefix = "f";
+	private BigDecimal phoneNumber = new BigDecimal(1);
+	private int phoneExt = 0;
+	private String startDate = "2006-09-12";
+	private String nameSuffix = "g";
+	private Boolean telecommuterIndicator = Boolean.TRUE;
+	private String cwsOffice = "h";
+	private String availabilityAndLocationDescription = "i";
+	private String ssrsLicensingWorkerId = "j";
+	private String countyCode = "k";
+	private Boolean dutyWorkerIndicator = Boolean.FALSE;
+	private String cwsOfficeAddress = "l";
+	private String emailAddress = "m";
 
 	@Before
 	public void setup() {
 		when(mockedStaffPersonResource.create(eq(validStaffPerson), eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+	}
+	
+	/*
+	 * Constructor Tests
+	 */
+	@Test
+	public void persistentObjectConstructorTest() throws Exception {
+		StaffPerson domain = new StaffPerson(id, endDate, firstName, jobTitle, lastName, middleInitial, namePrefix,
+				phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator, cwsOffice,
+				availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator,
+				cwsOfficeAddress, emailAddress);
+		gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistent = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(domain, "lastUpdatedId");
+		
+		StaffPerson totest = new StaffPerson(persistent);
+		assertThat(totest.getId(), is(equalTo(persistent.getId())));
+		assertThat(totest.getEndDate(), is(equalTo(df.format(persistent.getEndDate()))));
+		assertThat(totest.getFirstName(), is(equalTo(persistent.getFirstName())));
+		assertThat(totest.getJobTitle(), is(equalTo(persistent.getJobTitle())));
+		assertThat(totest.getLastName(), is(equalTo(persistent.getLastName())));
+		assertThat(totest.getMiddleInitial(), is(equalTo(persistent.getMiddleInitial())));
+		assertThat(totest.getNamePrefix(), is(equalTo(persistent.getNamePrefix())));
+		assertThat(totest.getPhoneNumber(), is(equalTo(persistent.getPhoneNumber())));
+		assertThat(totest.getPhoneExt(), is(equalTo(persistent.getPhoneExt())));
+		assertThat(totest.getStartDate(), is(equalTo(df.format(persistent.getStartDate()))));
+		assertThat(totest.getNameSuffix(), is(equalTo(persistent.getNameSuffix())));
+		assertThat(totest.getTelecommuterIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getTelecommuterIndicator()))));
+		assertThat(totest.getCwsOffice(), is(equalTo(persistent.getCwsOffice())));
+		assertThat(totest.getAvailabilityAndLocationDescription(), is(equalTo(persistent.getAvailabilityAndLocationDescription())));
+		assertThat(totest.getSsrsLicensingWorkerId(), is(equalTo(persistent.getSsrsLicensingWorkerId())));
+		assertThat(totest.getCountyCode(), is(equalTo(persistent.getCountyCode())));
+		assertThat(totest.getDutyWorkerIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getDutyWorkerIndicator()))));
+		assertThat(totest.getCwsOfficeAddress(), is(equalTo(persistent.getCwsOfficeAddress())));
+		assertThat(totest.getEmailAddress(), is(equalTo(persistent.getEmailAddress())));
+	}
+
+	@Test
+	public void jsonCreatorConstructorTest() throws Exception {
+		StaffPerson domain = new StaffPerson(id, endDate, firstName, jobTitle, lastName, middleInitial, namePrefix,
+				phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator, cwsOffice,
+				availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator,
+				cwsOfficeAddress, emailAddress);
+		assertThat(domain.getId(), is(equalTo(id)));
+		assertThat(domain.getEndDate(), is(equalTo(endDate)));
+		assertThat(domain.getFirstName(), is(equalTo(firstName)));
+		assertThat(domain.getJobTitle(), is(equalTo(jobTitle)));
+		assertThat(domain.getLastName(), is(equalTo(lastName)));
+		assertThat(domain.getMiddleInitial(), is(equalTo(middleInitial)));
+		assertThat(domain.getNamePrefix(), is(equalTo(namePrefix)));
+		assertThat(domain.getPhoneNumber(), is(equalTo(phoneNumber)));
+		assertThat(domain.getPhoneExt(), is(equalTo(phoneExt)));
+		assertThat(domain.getStartDate(), is(equalTo(startDate)));
+		assertThat(domain.getNameSuffix(), is(equalTo(nameSuffix)));
+		assertThat(domain.getTelecommuterIndicator(), is(equalTo(telecommuterIndicator)));
+		assertThat(domain.getCwsOffice(), is(equalTo(cwsOffice)));
+		assertThat(domain.getAvailabilityAndLocationDescription(), is(equalTo(availabilityAndLocationDescription)));
+		assertThat(domain.getSsrsLicensingWorkerId(), is(equalTo(ssrsLicensingWorkerId)));
+		assertThat(domain.getCountyCode(), is(equalTo(countyCode)));
+		assertThat(domain.getDutyWorkerIndicator(), is(equalTo(dutyWorkerIndicator)));
+		assertThat(domain.getCwsOfficeAddress(), is(equalTo(cwsOfficeAddress)));
+		assertThat(domain.getEmailAddress(), is(equalTo(emailAddress)));
 	}
 	
     @Test

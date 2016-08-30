@@ -10,6 +10,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -37,6 +40,27 @@ public class AllegationTest {
 
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	private Allegation validAllegation = validAllegation();
+	
+	private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	private String id = "a";
+	private String abuseEndDate = "1973-11-22";
+	private String abuseStartDate = "2006-09-12";
+	private Integer abuseFrequency = 1;
+	private String abuseFrequencyPeriodCode = "b";
+	private String abuseLocationDescription = "c";
+	private Integer allegationDispositionType= 2;
+	private Integer allegationType = 3;
+	private String dispositionDescription = "d";
+	private String dispositionDate = "1963-11-22";
+	private Boolean injuryHarmDetailIndicator = Boolean.TRUE;
+	private String nonProtectingParentCode = "e";
+	private Boolean staffPersonAddedIndicator = Boolean.FALSE;
+	private String fkClientT = "f";
+	private String fkClient0 = "g";
+	private String fkReferralT = "h";
+	private String countySpecificCode = "i";
+	private Boolean zippyCrestedIndicator = Boolean.TRUE;
+	private Integer placementFacilityType = 4;
 
 	@Before
 	public void setup() {
@@ -44,6 +68,68 @@ public class AllegationTest {
 				any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 	}
 
+	/*
+	 * Constructor Tests
+	 */
+	@Test
+	public void persistentObjectConstructorTest() throws Exception {
+		Allegation domain = new Allegation(id, abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
+				abuseLocationDescription, abuseStartDate, allegationDispositionType, allegationType,
+				dispositionDescription, dispositionDate, injuryHarmDetailIndicator, nonProtectingParentCode,
+				staffPersonAddedIndicator, fkClientT, fkClient0, fkReferralT, countySpecificCode, zippyCrestedIndicator,
+				placementFacilityType);
+		gov.ca.cwds.rest.api.persistence.legacy.Allegation persistent = new gov.ca.cwds.rest.api.persistence.legacy.Allegation(domain, "lastUpdatedId");
+		
+		Allegation totest = new Allegation(persistent);
+		assertThat(totest.getId(), is(equalTo(persistent.getId())));
+		assertThat(totest.getAbuseEndDate(), is(equalTo(df.format(persistent.getAbuseEndDate()))));
+		assertThat(totest.getAbuseStartDate(), is(equalTo(df.format(persistent.getAbuseStartDate()))));
+		assertThat(totest.getAbuseFrequency(), is(equalTo(persistent.getAbuseFrequency())));
+		assertThat(totest.getAbuseFrequencyPeriodCode(), is(equalTo(persistent.getAbuseFrequencyPeriodCode())));
+		assertThat(totest.getAbuseLocationDescription(), is(equalTo(persistent.getAbuseLocationDescription())));
+		assertThat(totest.getAllegationDispositionType(), is(equalTo(persistent.getAllegationDispositionType())));
+		assertThat(totest.getAllegationType(), is(equalTo(persistent.getAllegationType())));
+		assertThat(totest.getDispositionDescription(), is(equalTo(persistent.getDispositionDescription())));
+		assertThat(totest.getDispositionDate(), is(equalTo(df.format(persistent.getDispositionDate()))));
+		assertThat(totest.getInjuryHarmDetailIndicator(), is(equalTo(Boolean.TRUE)));
+		assertThat(totest.getNonProtectingParentCode(), is(equalTo(persistent.getNonProtectingParentCode())));
+		assertThat(totest.getStaffPersonAddedIndicator(), is(equalTo(Boolean.FALSE)));
+		assertThat(totest.getFkClient0(), is(equalTo(persistent.getFkClient0())));
+		assertThat(totest.getFkClientT(), is(equalTo(persistent.getFkClientT())));
+		assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
+		assertThat(totest.getZippyCrestedIndicator(), is(equalTo(Boolean.TRUE)));
+		assertThat(totest.getPlacementFacilityType(), is(equalTo(persistent.getPlacementFacilityType())));
+	}
+
+	@Test
+	public void jsonCreatorConstructorTest() throws Exception {
+		Allegation domain = new Allegation(id, abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
+				abuseLocationDescription, abuseStartDate, allegationDispositionType, allegationType,
+				dispositionDescription, dispositionDate, injuryHarmDetailIndicator, nonProtectingParentCode,
+				staffPersonAddedIndicator, fkClientT, fkClient0, fkReferralT, countySpecificCode, zippyCrestedIndicator,
+				placementFacilityType);
+		assertThat(domain.getId(), is(equalTo(id)));
+		assertThat(domain.getAbuseEndDate(), is(equalTo(abuseEndDate)));
+		assertThat(domain.getAbuseStartDate(), is(equalTo(abuseStartDate)));
+		assertThat(domain.getAbuseFrequency(), is(equalTo(abuseFrequency)));
+		assertThat(domain.getAbuseFrequencyPeriodCode(), is(equalTo(abuseFrequencyPeriodCode)));
+		assertThat(domain.getAbuseLocationDescription(), is(equalTo(abuseLocationDescription)));
+		assertThat(domain.getAllegationDispositionType(), is(equalTo(allegationDispositionType)));
+		assertThat(domain.getAllegationType(), is(equalTo(allegationType)));
+		assertThat(domain.getDispositionDescription(), is(equalTo(dispositionDescription)));
+		assertThat(domain.getDispositionDate(), is(equalTo(dispositionDate)));
+		assertThat(domain.getInjuryHarmDetailIndicator(), is(equalTo(injuryHarmDetailIndicator)));
+		assertThat(domain.getNonProtectingParentCode(), is(equalTo(nonProtectingParentCode)));
+		assertThat(domain.getStaffPersonAddedIndicator(), is(equalTo(staffPersonAddedIndicator)));
+		assertThat(domain.getFkClient0(), is(equalTo(fkClient0)));
+		assertThat(domain.getFkClientT(), is(equalTo(fkClientT)));
+		assertThat(domain.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+		assertThat(domain.getZippyCrestedIndicator(), is(equalTo(zippyCrestedIndicator)));
+		assertThat(domain.getPlacementFacilityType(), is(equalTo(placementFacilityType)));
+	}
+
+	
+	
 	@Test
 	public void serializesToJSON() throws Exception {
 		final String expected = MAPPER.writeValueAsString(

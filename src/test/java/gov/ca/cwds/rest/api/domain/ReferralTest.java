@@ -10,6 +10,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -38,13 +41,199 @@ public class ReferralTest {
 	
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private Referral validReferral = validReferral();
+    
+    private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+	private String id = "a";
+	private String additionalInfoIncludedCode = "b";
+	private Boolean anonymousReporterIndicator = Boolean.TRUE;
+	private Boolean applicationForPetitionIndicator = Boolean.FALSE;
+	private String approvalNumber = "c";
+	private Short approvalStatusType = 1;
+	private String caretakersPerpetratorCode = "d";
+	private String closureDate = "1991-06-06";
+	private Short communicationMethodType = 2;
+	private String currentLocationOfChildren = "e";
+	private String drmsAllegationDescriptionDoc = "f";
+	private String drmsErReferralDoc = "g";
+	private String drmsInvestigationDoc = "h";
+	private Boolean filedSuspectedChildAbuseReporttoLawEnforcementIndicator = Boolean.TRUE;
+	private Boolean familyAwarenessIndicator = Boolean.FALSE;
+	private Short govtEntityType = 3;
+	private String legalDefinitionCode  = "i";
+	private Boolean legalRightsNoticeIndicator = Boolean.FALSE;
+	private String limitedAccessCode = "j";
+	private String mandatedCrossReportReceivedDate = "2001-01-01";
+	private String referralName = "k";
+	private String openAdequateCaseCode = "l";
+	private String receivedDate = "2010-06-30";
+	private String receivedTime = "1970-01-01-16.41.49.000";
+	private Short referralResponseType = 4;
+	private Short referredToResourceType = 5;
+	private String responseDeterminationDate = "1985-09-04";
+	private String responseDeterminationTime = "1971-01-01-16.41.49.000";
+	private String responseRationaleText = "m";
+	private String screenerNoteText = "n";
+	private String specificsIncludedCode = "o";
+	private String sufficientInformationCode = "p";
+	private String unfoundedSeriesCode = "q";
+	private String linkToPrimaryReferralId = "r";
+	private String allegesAbuseOccurredAtAddressId = "s";
+	private String firstResponseDeterminedByStaffPersonId = "t";
+	private String primaryContactStaffPersonId = "u";
+	private String countySpecificCode = "v";
+	private Boolean specialProjectReferralIndicator = Boolean.TRUE;
+	private Boolean zippyCreatedIndicator = Boolean.FALSE;
+	private Boolean homelessIndicator = Boolean.TRUE;
+	private Boolean familyRefusedServicesIndicator = Boolean.FALSE;
+	private String firstEvaluatedOutApprovalDate = "1995-07-31";
+	private String responsibleAgencyCode = "w";
+	private Short limitedAccessGovtAgencyType = 6;
+	private String limitedAccessDate = "2001-01-01";
+	private String limitedAccessDesc ="x";
+	private String originalClosureDate = "1946-02-09";
 
 	@Before
 	public void setup() {
 		when(mockedReferralResource.create(eq(validReferral), eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 	}
 	
+	/*
+	 * Constructor Tests
+	 */
+	@Test
+	public void persistentObjectConstructorTest() throws Exception {
+		Referral domain = new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
+				applicationForPetitionIndicator, approvalNumber, approvalStatusType, caretakersPerpetratorCode,
+				closureDate, communicationMethodType, currentLocationOfChildren, drmsAllegationDescriptionDoc,
+				drmsErReferralDoc, drmsInvestigationDoc, filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
+				familyAwarenessIndicator, govtEntityType, legalDefinitionCode, legalRightsNoticeIndicator,
+				limitedAccessCode, mandatedCrossReportReceivedDate, referralName, openAdequateCaseCode,
+				receivedDate, receivedTime, referralResponseType, referredToResourceType,
+				responseDeterminationDate, responseDeterminationTime, responseRationaleText, screenerNoteText,
+				specificsIncludedCode, sufficientInformationCode, unfoundedSeriesCode, linkToPrimaryReferralId,
+				allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, primaryContactStaffPersonId,
+				countySpecificCode, specialProjectReferralIndicator, zippyCreatedIndicator, homelessIndicator,
+				familyRefusedServicesIndicator, firstEvaluatedOutApprovalDate, responsibleAgencyCode,
+				limitedAccessGovtAgencyType, limitedAccessDate, limitedAccessDesc, originalClosureDate);
+		gov.ca.cwds.rest.api.persistence.legacy.Referral persistent = new gov.ca.cwds.rest.api.persistence.legacy.Referral(domain, "lastUpdatedId");
+		
+		Referral totest = new Referral(persistent);
+		assertThat(totest.getId(), is(equalTo(persistent.getId())));
+		assertThat(totest.getAdditionalInfoIncludedCode(), is(equalTo(persistent.getAdditionalInfoIncludedCode())));
+		assertThat(totest.getAnonymousReporterIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getAnonymousReporterIndicator()))));
+		assertThat(totest.getApplicationForPetitionIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getApplicationForPetitionIndicator()))));
+		assertThat(totest.getApprovalNumber(), is(equalTo(persistent.getApprovalNumber())));
+		assertThat(totest.getApprovalStatusType(), is(equalTo(persistent.getApprovalStatusType())));
+		assertThat(totest.getCaretakersPerpetratorCode(), is(equalTo(persistent.getCaretakersPerpetratorCode())));
+		assertThat(totest.getClosureDate(), is(equalTo(df.format(persistent.getClosureDate()))));
+		assertThat(totest.getCommunicationMethodType(), is(equalTo(persistent.getCommunicationMethodType())));
+		assertThat(totest.getCurrentLocationOfChildren(), is(equalTo(persistent.getCurrentLocationOfChildren())));
+		assertThat(totest.getDrmsAllegationDescriptionDoc(), is(equalTo(persistent.getDrmsAllegationDescriptionDoc())));
+		assertThat(totest.getDrmsErReferralDoc(), is(equalTo(persistent.getDrmsErReferralDoc())));
+		assertThat(totest.getDrmsInvestigationDoc(), is(equalTo(persistent.getDrmsInvestigationDoc())));
+		assertThat(totest.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator()))));
+		assertThat(totest.getFamilyAwarenessIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getFamilyAwarenessIndicator()))));
+		assertThat(totest.getGovtEntityType(), is(equalTo(persistent.getGovtEntityType())));
+		assertThat(totest.getLegalDefinitionCode(), is(equalTo(persistent.getLegalDefinitionCode())));
+		assertThat(totest.getLegalRightsNoticeIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getLegalRightsNoticeIndicator()))));
+		assertThat(totest.getLimitedAccessCode(), is(equalTo(persistent.getLimitedAccessCode())));
+		assertThat(totest.getMandatedCrossReportReceivedDate(), is(equalTo(df.format(persistent.getMandatedCrossReportReceivedDate()))));
+		assertThat(totest.getReferralName(), is(equalTo(persistent.getReferralName())));
+		assertThat(totest.getOpenAdequateCaseCode(), is(equalTo(persistent.getOpenAdequateCaseCode())));
+		assertThat(totest.getReceivedDate(), is(equalTo(df.format(persistent.getReceivedDate()))));
+		assertThat(totest.getReceivedTime(), is(equalTo(tf.format(persistent.getReceivedTime()))));
+		assertThat(totest.getReferralResponseType(), is(equalTo(persistent.getReferralResponseType())));
+		assertThat(totest.getReferredToResourceType(), is(equalTo(persistent.getReferredToResourceType())));
+		assertThat(totest.getResponseDeterminationDate(), is(equalTo(df.format(persistent.getResponseDeterminationDate()))));
+		assertThat(totest.getResponseDeterminationTime(), is(equalTo(tf.format(persistent.getResponseDeterminationTime()))));
+		assertThat(totest.getResponseRationaleText(), is(equalTo(persistent.getResponseRationaleText())));
+		assertThat(totest.getScreenerNoteText(), is(equalTo(persistent.getScreenerNoteText())));
+		assertThat(totest.getSpecificsIncludedCode(), is(equalTo(persistent.getSpecificsIncludedCode())));
+		assertThat(totest.getSufficientInformationCode(), is(equalTo(persistent.getSpecificsIncludedCode())));
+		assertThat(totest.getUnfoundedSeriesCode(), is(equalTo(persistent.getUnfoundedSeriesCode())));
+		assertThat(totest.getLinkToPrimaryReferralId(), is(equalTo(persistent.getLinkToPrimaryReferralId())));
+		assertThat(totest.getAllegesAbuseOccurredAtAddressId(), is(equalTo(persistent.getAllegesAbuseOccurredAtAddressId())));
+		assertThat(totest.getFirstResponseDeterminedByStaffPersonId(), is(equalTo(persistent.getFirstResponseDeterminedByStaffPersonId())));
+		assertThat(totest.getPrimaryContactStaffPersonId(), is(equalTo(persistent.getPrimaryContactStaffPersonId())));
+		assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
+		assertThat(totest.getSpecialProjectReferralIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getSpecialProjectReferralIndicator()))));
+		assertThat(totest.getZippyCreatedIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getZippyCreatedIndicator()))));
+		assertThat(totest.getHomelessIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getHomelessIndicator()))));
+		assertThat(totest.getFamilyRefusedServicesIndicator(), is(equalTo(DomainObject.uncookBooleanString(persistent.getFamilyRefusedServicesIndicator()))));
+		assertThat(totest.getFirstEvaluatedOutApprovalDate(), is(equalTo(df.format(persistent.getFirstEvaluatedOutApprovalDate()))));
+		assertThat(totest.getResponsibleAgencyCode(), is(equalTo(persistent.getResponsibleAgencyCode())));
+		assertThat(totest.getLimitedAccessGovtAgencyType(), is(equalTo(persistent.getLimitedAccessGovtAgencyType())));
+		assertThat(totest.getLimitedAccessDate(), is(equalTo(df.format(persistent.getLimitedAccessDate()))));
+		assertThat(totest.getLimitedAccessDesc(), is(equalTo(persistent.getLimitedAccessDesc())));
+		assertThat(totest.getOriginalClosureDate(), is(equalTo(df.format(persistent.getOriginalClosureDate()))));
+	}
 
+	@Test
+	public void jsonCreatorConstructorTest() throws Exception {
+		Referral domain = new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
+				applicationForPetitionIndicator, approvalNumber, approvalStatusType, caretakersPerpetratorCode,
+				closureDate, communicationMethodType, currentLocationOfChildren, drmsAllegationDescriptionDoc,
+				drmsErReferralDoc, drmsInvestigationDoc, filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
+				familyAwarenessIndicator, govtEntityType, legalDefinitionCode, legalRightsNoticeIndicator,
+				limitedAccessCode, mandatedCrossReportReceivedDate, referralName, openAdequateCaseCode,
+				receivedDate, receivedTime, referralResponseType, referredToResourceType,
+				responseDeterminationDate, responseDeterminationTime, responseRationaleText, screenerNoteText,
+				specificsIncludedCode, sufficientInformationCode, unfoundedSeriesCode, linkToPrimaryReferralId,
+				allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, primaryContactStaffPersonId,
+				countySpecificCode, specialProjectReferralIndicator, zippyCreatedIndicator, homelessIndicator,
+				familyRefusedServicesIndicator, firstEvaluatedOutApprovalDate, responsibleAgencyCode,
+				limitedAccessGovtAgencyType, limitedAccessDate, limitedAccessDesc, originalClosureDate);
+		assertThat(domain.getId(), is(equalTo(id)));
+		assertThat(domain.getAdditionalInfoIncludedCode(), is(equalTo(additionalInfoIncludedCode)));
+		assertThat(domain.getAnonymousReporterIndicator(), is(equalTo(anonymousReporterIndicator)));
+		assertThat(domain.getApplicationForPetitionIndicator(), is(equalTo(applicationForPetitionIndicator)));
+		assertThat(domain.getApprovalNumber(), is(equalTo(approvalNumber)));
+		assertThat(domain.getApprovalStatusType(), is(equalTo(approvalStatusType)));
+		assertThat(domain.getCaretakersPerpetratorCode(), is(equalTo(caretakersPerpetratorCode)));
+		assertThat(domain.getClosureDate(), is(equalTo(closureDate)));
+		assertThat(domain.getCommunicationMethodType(), is(equalTo(communicationMethodType)));
+		assertThat(domain.getCurrentLocationOfChildren(), is(equalTo(currentLocationOfChildren)));
+		assertThat(domain.getDrmsAllegationDescriptionDoc(), is(equalTo(drmsAllegationDescriptionDoc)));
+		assertThat(domain.getDrmsErReferralDoc(), is(equalTo(drmsErReferralDoc)));
+		assertThat(domain.getDrmsInvestigationDoc(), is(equalTo(drmsInvestigationDoc)));
+		assertThat(domain.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator(), is(equalTo(filedSuspectedChildAbuseReporttoLawEnforcementIndicator)));
+		assertThat(domain.getFamilyAwarenessIndicator(), is(equalTo(familyAwarenessIndicator)));
+		assertThat(domain.getGovtEntityType(), is(equalTo(govtEntityType)));
+		assertThat(domain.getLegalDefinitionCode(), is(equalTo(legalDefinitionCode)));
+		assertThat(domain.getLegalRightsNoticeIndicator(), is(equalTo(legalRightsNoticeIndicator)));
+		assertThat(domain.getLimitedAccessCode(), is(equalTo(limitedAccessCode)));
+		assertThat(domain.getMandatedCrossReportReceivedDate(), is(equalTo(mandatedCrossReportReceivedDate)));
+		assertThat(domain.getReferralName(), is(equalTo(referralName)));
+		assertThat(domain.getOpenAdequateCaseCode(), is(equalTo(openAdequateCaseCode)));
+		assertThat(domain.getReceivedDate(), is(equalTo(receivedDate)));
+		assertThat(domain.getReceivedTime(), is(equalTo(receivedTime)));
+		assertThat(domain.getReferralResponseType(), is(equalTo(referralResponseType)));
+		assertThat(domain.getReferredToResourceType(), is(equalTo(referredToResourceType)));
+		assertThat(domain.getResponseDeterminationDate(), is(equalTo(responseDeterminationDate)));
+		assertThat(domain.getResponseDeterminationTime(), is(equalTo(responseDeterminationTime)));
+		assertThat(domain.getResponseRationaleText(), is(equalTo(responseRationaleText)));
+		assertThat(domain.getScreenerNoteText(), is(equalTo(screenerNoteText)));
+		assertThat(domain.getSpecificsIncludedCode(), is(equalTo(specificsIncludedCode)));
+		assertThat(domain.getSufficientInformationCode(), is(equalTo(sufficientInformationCode)));
+		assertThat(domain.getUnfoundedSeriesCode(), is(equalTo(unfoundedSeriesCode)));
+		assertThat(domain.getLinkToPrimaryReferralId(), is(equalTo(linkToPrimaryReferralId)));
+		assertThat(domain.getAllegesAbuseOccurredAtAddressId(), is(equalTo(allegesAbuseOccurredAtAddressId)));
+		assertThat(domain.getFirstResponseDeterminedByStaffPersonId(), is(equalTo(firstResponseDeterminedByStaffPersonId)));
+		assertThat(domain.getPrimaryContactStaffPersonId(), is(equalTo(primaryContactStaffPersonId)));
+		assertThat(domain.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+		assertThat(domain.getSpecialProjectReferralIndicator(), is(equalTo(specialProjectReferralIndicator)));
+		assertThat(domain.getZippyCreatedIndicator(), is(equalTo(zippyCreatedIndicator)));
+		assertThat(domain.getHomelessIndicator(), is(equalTo(homelessIndicator)));
+		assertThat(domain.getFamilyRefusedServicesIndicator(), is(equalTo(familyRefusedServicesIndicator)));
+		assertThat(domain.getFirstEvaluatedOutApprovalDate(), is(equalTo(firstEvaluatedOutApprovalDate)));
+		assertThat(domain.getResponsibleAgencyCode(), is(equalTo(responsibleAgencyCode)));
+		assertThat(domain.getLimitedAccessGovtAgencyType(), is(equalTo(limitedAccessGovtAgencyType)));
+		assertThat(domain.getLimitedAccessDate(), is(equalTo(limitedAccessDate)));
+		assertThat(domain.getLimitedAccessDesc(), is(equalTo(limitedAccessDesc)));
+		assertThat(domain.getOriginalClosureDate(), is(equalTo(originalClosureDate)));
+	}
+	
 	@Test
     public void serializesToJSON() throws Exception {
         final String expected = MAPPER.writeValueAsString(

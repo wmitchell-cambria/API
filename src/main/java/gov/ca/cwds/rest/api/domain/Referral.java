@@ -5,8 +5,8 @@ import javax.validation.constraints.Size;
 
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -326,7 +326,7 @@ public class Referral extends DomainObject {
 		this.communicationMethodType = persistedReferral.getCommunicationMethodType();
 		this.currentLocationOfChildren = persistedReferral.getCurrentLocationOfChildren();
 		this.drmsAllegationDescriptionDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
-		this.drmsErReferralDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
+		this.drmsErReferralDoc = persistedReferral.getDrmsErReferralDoc();
 		this.drmsInvestigationDoc = persistedReferral.getDrmsInvestigationDoc();
 		this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = DomainObject.uncookBooleanString(persistedReferral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
 		this.familyAwarenessIndicator = DomainObject.uncookBooleanString(persistedReferral.getFamilyAwarenessIndicator());
