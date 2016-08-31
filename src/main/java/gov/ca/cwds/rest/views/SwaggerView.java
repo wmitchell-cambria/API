@@ -8,10 +8,12 @@ import io.dropwizard.views.View;
 public class SwaggerView extends View {
 
 	SwaggerConfiguration swaggerConfiguration;
+	String swaggerJsonUrl;
 	
-	public SwaggerView(SwaggerConfiguration swaggerConfiguration) {
+	public SwaggerView(SwaggerConfiguration swaggerConfiguration, String swaggerJsonUrl) {
 		super(swaggerConfiguration.getTemplateName(), Charsets.UTF_8);
 		this.swaggerConfiguration = swaggerConfiguration;
+		this.swaggerJsonUrl = swaggerJsonUrl;
 	}
 
 	public String getAssetsPath() {
@@ -23,7 +25,7 @@ public class SwaggerView extends View {
 	}
 
 	public String getJsonUrl() {
-		return swaggerConfiguration.getJsonUrl();
+		return swaggerJsonUrl;
 	}
 
 }
