@@ -32,7 +32,6 @@ import io.swagger.annotations.ApiModelProperty;
         	@InjectLink(value="/{resource}/{id}", rel="cwsofficeAddress", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.cwsOfficeAddress}"), @Binding(name="resource", value=Api.RESOURCE_CWS_OFFICE_ADDESS) } )
         })
 public class StaffPerson extends DomainObject {
-	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
@@ -95,7 +94,7 @@ public class StaffPerson extends DomainObject {
 
 	@NotEmpty
 	@Size(min=1, max=10)
-	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWS_OFFT", example="def")
+	@ApiModelProperty(required=true, readOnly=false, value="IDENTIFIER of CWS_OFFT", example="def")
 	private String cwsOffice;
 	
 	@NotEmpty
@@ -119,7 +118,7 @@ public class StaffPerson extends DomainObject {
 
 	@NotEmpty
 	@Size(min=1, max=10)
-	@ApiModelProperty(required=true, readOnly=true, value="IDENTIFIER of CWSADDRT", example="ghi")
+	@ApiModelProperty(required=true, readOnly=false, value="IDENTIFIER of CWSADDRT", example="ghi")
 	private String cwsOfficeAddress;
 	
 	@Size(min=1, max=50)
