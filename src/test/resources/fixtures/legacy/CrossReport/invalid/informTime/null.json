@@ -1,10 +1,9 @@
 {
-
   "thirdId": "ABC123",
   "crossReportMethodType": 123,
   "filedOutOfStateIndicator": false,
   "governmentOrgCrossRptIndicatorVar": false,
-  "informTime": "",
+  "informTime": null,
   "recipientBadgeNumber": "AB123",
   "recipientPhoneExtensionNumber": 234,
   "recipientPhoneNumber": 1234567,
