@@ -32,56 +32,72 @@ import io.swagger.annotations.ApiModelProperty;
 public class ReferralClient extends DomainObject {
 	
     @Size(max=10)
+    @ApiModelProperty(required=false, readOnly=false, value="", example="A123")
     private String approvalNumber;
 
     @NotNull
+    @ApiModelProperty(required=true, readOnly=false, example="123")
     private Short approvalStatusType;
 
     @NotNull
+    @ApiModelProperty(required=true, readOnly=false, example="123")
     private Short dispositionClosureReasonType;
 
     @NotEmpty
     @Size(min=1, max=1, message="size must be 1")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="A")
     private String dispositionCode;
 
     @gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
     @JsonProperty(value="dispositionDate")
+    @ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01", dataType="Date")
     private String dispositionDate;
 
     @NotNull
+    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
     private Boolean selfReportedIndicator;
 
     @NotNull
+    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
     private Boolean staffPersonAddedIndicator;
 
     @NotEmpty
     @Size(min=1, max=10)
+    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
     private String referralId;
 
     @NotEmpty
     @Size(min=1, max=10)
+    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
     private String clientId;
 
     @NotEmpty
     @Size(min=1, max=254)
+    @ApiModelProperty(required=true, readOnly=false, value="", example="description abc")
     private String dispositionClosureDescription;
 
     @NotNull
+    @ApiModelProperty(required=true, readOnly=false, example="12")
     private Short ageNumber;
 
     @NotEmpty
     @Size(min=1, max=1, message="size must be 1")
+    @ApiModelProperty(required=true, readOnly=false, value="size must be 1", example="A")
     private String agePeriodCode;
 
     @NotEmpty
     @Size(min=1, max=2)
+    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
     private String countySpecificCode;
 
+    @ApiModelProperty(required=false, readOnly=false, example="true")
     private Boolean mentalHealthIssuesIndicator;
 
+    @ApiModelProperty(required=false, readOnly=false, example="true")
     private Boolean alcoholIndicator;
 
+    @ApiModelProperty(required=false, readOnly=false, example="true")
     private Boolean drugIndicator;
 
 
@@ -144,7 +160,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the approvalNumber
      */
-    @ApiModelProperty(required=false, readOnly=false, value="", example="A123")
     public String getApprovalNumber() {
         return approvalNumber;
     }
@@ -152,7 +167,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the approvalStatusType
      */
-    @ApiModelProperty(required=true, readOnly=false, example="123")
     public Short getApprovalStatusType() {
         return approvalStatusType;
     }
@@ -160,7 +174,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the dispositionClosureReasonType
      */
-    @ApiModelProperty(required=true, readOnly=false, example="123")
     public Short getDispositionClosureReasonType() {
         return dispositionClosureReasonType;
     }
@@ -168,7 +181,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the dispositionCode
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="A")
     public String getDispositionCode() {
         return dispositionCode;
     }
@@ -176,7 +188,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the dispositionDate
      */
-    @ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01", dataType="Date")
     public String getDispositionDate() {
         return dispositionDate;
     }
@@ -184,7 +195,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the selfReportedInd
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
     public Boolean getSelfReportedIndicator() {
         return selfReportedIndicator;
     }
@@ -192,7 +202,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the staffPersonAddedInd
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
     public Boolean getStaffPersonAddedIndicator() {
         return staffPersonAddedIndicator;
     }
@@ -200,7 +209,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the referralId
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
     public String getReferralId() {
         return referralId;
     }
@@ -208,7 +216,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the clientId
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
     public String getClientId() {
         return clientId;
     }
@@ -216,7 +223,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the dispositionClosureDescription
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="description abc")
     public String getDispositionClosureDescription() {
         return dispositionClosureDescription;
     }
@@ -224,7 +230,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the ageNumber
      */
-    @ApiModelProperty(required=true, readOnly=false, example="12")
     public Short getAgeNumber() {
         return ageNumber;
     }
@@ -232,7 +237,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the agePeriodCode
      */
-    @ApiModelProperty(required=true, readOnly=false, value="size must be 1", example="A")
     public String getAgePeriodCode() {
         return agePeriodCode;
     }
@@ -240,7 +244,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the countySpecificCode
      */
-    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
     public String getCountySpecificCode() {
         return countySpecificCode;
     }
@@ -248,7 +251,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the mentalHealthIssuesInd
      */
-    @ApiModelProperty(required=false, readOnly=false, example="true")
     public Boolean getMentalHealthIssuesIndicator() {
         return mentalHealthIssuesIndicator;
     }
@@ -256,7 +258,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the alcoholInd
      */
-    @ApiModelProperty(required=false, readOnly=false, example="true")
     public Boolean getAlcoholIndicator() {
         return alcoholIndicator;
     }
@@ -264,7 +265,6 @@ public class ReferralClient extends DomainObject {
     /**
      * @return the drugInd
      */
-    @ApiModelProperty(required=false, readOnly=false, example="true")
     public Boolean getDrugIndicator() {
         return drugIndicator;
     }
