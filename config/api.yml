@@ -6,7 +6,6 @@ swagger:
   resourcePackage: gov.ca.cwds.rest.resources
   title: CWDS API
   description: Definition of the CWDS API
-  jsonUrl: http://localhost:8080/swagger.json
   
 dataSourceFactory:
   driverClass: com.ibm.db2.jcc.DB2Driver
