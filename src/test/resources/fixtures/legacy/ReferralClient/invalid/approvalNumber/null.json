@@ -1,6 +1,5 @@
 {
-
-  "approvalNumber": "",
+  "approvalNumber": null,
   "approvalStatusType": 123,
   "dispositionClosureReasonType": 123,
   "dispositionCode": "A",

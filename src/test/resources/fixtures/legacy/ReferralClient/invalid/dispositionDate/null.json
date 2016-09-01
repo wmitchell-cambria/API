@@ -1,10 +1,9 @@
 {
-
   "approvalNumber": "A123",
   "approvalStatusType": 123,
   "dispositionClosureReasonType": 123,
   "dispositionCode": "A",
-  "dispositionDate": "",
+  "dispositionDate": null,
   "selfReportedIndicator": false,
   "staffPersonAddedIndicator": false,
   "referralId": "abc",
