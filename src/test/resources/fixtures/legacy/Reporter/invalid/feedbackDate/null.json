@@ -1,5 +1,4 @@
 {
-
   "badgeNumber": "A123",
   "cityName": "ABC",
   "colltrClientRptrReltnshpType": 12,
@@ -7,7 +6,7 @@
   "confidentialWaiverIndicator": false,
   "drmsMandatedRprtrFeedback": "ABC123",
   "employerName": "DEF",
-  "feedbackDate": "",
+  "feedbackDate": null,
   "feedbackRequiredIndicator": false,
   "firstName": "John",
   "lastName": "Smith",

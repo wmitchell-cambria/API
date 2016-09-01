@@ -52,7 +52,7 @@ public class ReporterTest {
 	}
 
 	@Test
-	public void domainReferralClientLastUpdateConstructorTest() throws Exception {
+	public void domainReporterLastUpdateConstructorTest() throws Exception {
 		gov.ca.cwds.rest.api.domain.Reporter domain = new gov.ca.cwds.rest.api.domain.Reporter(badgeNumber, cityName,
 				colltrClientRptrReltnshpType, communicationMethodType, confidentialWaiverIndicator,
 				drmsMandatedRprtrFeedback, employerName, feedbackDate, feedbackRequiredIndicator, firstName, lastName,
@@ -80,7 +80,6 @@ public class ReporterTest {
 		assertThat(persistent.getMiddleInitialName(), is(equalTo(middleInitialName)));
 		assertThat(persistent.getNamePrefixDescription(), is(equalTo(namePrefixDescription)));
 		assertThat(persistent.getPrimaryPhoneNumber(), is(equalTo(primaryPhoneNumber)));
-		assertThat(persistent.getMessagePhoneNumber(), is(equalTo(messagePhoneNumber)));
 		assertThat(persistent.getPrimaryPhoneExtensionNumber(), is(equalTo(primaryPhoneExtensionNumber)));
 		assertThat(persistent.getStateCodeType(), is(equalTo(stateCodeType)));
 		assertThat(persistent.getStreetName(), is(equalTo(streetName)));
@@ -90,5 +89,6 @@ public class ReporterTest {
 		assertThat(persistent.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
 		assertThat(persistent.getZipSuffixNumber(), is(equalTo(zipSuffixNumber)));
 		assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+		assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
 	}
 }

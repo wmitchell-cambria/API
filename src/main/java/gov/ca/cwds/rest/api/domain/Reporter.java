@@ -28,14 +28,14 @@ import io.swagger.annotations.ApiModelProperty;
 @InjectLinks(
         { 
             @InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
-            @InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }),
-            @InjectLink(value="/{resource}/{id}", rel="lawEnforcementId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.lawEnforcementId}"), @Binding(name="resource", value=Api.RESOURCE_LAW_ENFORCEMENT) }, condition="${not empty instance.lawEnforcementId }"  )
+            @InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.referralId }"),
+            @InjectLink(value="/{resource}/{id}", rel="lawEnforcementId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.lawEnforcementId}"), @Binding(name="resource", value=Api.RESOURCE_LAW_ENFORCEMENT) })
         })
 public class Reporter extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=10)
-    @ApiModelProperty(required=true, readOnly=true, value="", example="ABC123")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
     private String referralId;
     
     @NotEmpty
@@ -93,8 +93,9 @@ public class Reporter extends DomainObject {
     @ApiModelProperty(required=true, readOnly=false)
     private Boolean mandatedReporterIndicator;
 
+    @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
-    private int messagePhoneExtensionNumber = 0;
+    private Integer messagePhoneExtensionNumber;
 
     @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
@@ -114,8 +115,9 @@ public class Reporter extends DomainObject {
     @ApiModelProperty(required=true, readOnly=false, example="1234")
     private BigDecimal primaryPhoneNumber;
 
+    @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
-    private int primaryPhoneExtensionNumber = 0;
+    private Integer primaryPhoneExtensionNumber;
 
     @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
@@ -133,14 +135,15 @@ public class Reporter extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=4)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="A1")
     private String suffixTitleDescription;
 
+    @NotNull
     @ApiModelProperty(required=true, readOnly=false, example="1234")
-    private int zipNumber = 0;
+    private Integer zipNumber;
 
     @Size(max=10)
-    @ApiModelProperty(required=false, readOnly=true, value="", example="ABC123")
+    @ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
     private String lawEnforcementId;
 
     @NotNull
@@ -149,11 +152,11 @@ public class Reporter extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=2)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="A1")
     private String countySpecificCode;
 
 	public Reporter(gov.ca.cwds.rest.api.persistence.legacy.Reporter persistedReporter) {
-        this.referralId = persistedReporter.getReferralId();
+        this.referralId = persistedReporter.getReferralId().trim();
         this.badgeNumber = persistedReporter.getBadgeNumber();
         this.cityName = persistedReporter.getCityName();
         this.colltrClientRptrReltnshpType = persistedReporter.getColltrClientRptrReltnshpType();
@@ -177,10 +180,10 @@ public class Reporter extends DomainObject {
         this.streetNumber = persistedReporter.getStreetNumber();
         this.suffixTitleDescription = persistedReporter.getSuffixTitleDescription();
         this.zipNumber = persistedReporter.getZipNumber();
-        this.lawEnforcementId = persistedReporter.getLawEnforcementId();
+        this.lawEnforcementId = persistedReporter.getLawEnforcementId().trim();
         this.zipSuffixNumber = persistedReporter.getZipSuffixNumber();
         this.countySpecificCode = persistedReporter.getCountySpecificCode();
-	}
+    }
 
 	@JsonCreator
 	public Reporter(
@@ -196,17 +199,17 @@ public class Reporter extends DomainObject {
             @JsonProperty("firstName") String firstName,
             @JsonProperty("lastName") String lastName,
             @JsonProperty("mandatedReporterIndicator") Boolean mandatedReporterIndicator,
-            @JsonProperty("messagePhoneExtensionNumber") int messagePhoneExtensionNumber,
+            @JsonProperty("messagePhoneExtensionNumber") Integer messagePhoneExtensionNumber,
             @JsonProperty("messagePhoneNumber") BigDecimal messagePhoneNumber,
             @JsonProperty("middleInitialName") String middleInitialName,
             @JsonProperty("namePrefixDescription") String namePrefixDescription,
             @JsonProperty("primaryPhoneNumber") BigDecimal primaryPhoneNumber,
-            @JsonProperty("primaryPhoneExtensionNumber") int primaryPhoneExtensionNumber,
+            @JsonProperty("primaryPhoneExtensionNumber") Integer primaryPhoneExtensionNumber,
             @JsonProperty("stateCodeType") Short stateCodeType,
             @JsonProperty("streetName") String streetName,
             @JsonProperty("streetNumber") String streetNumber,
             @JsonProperty("suffixTitleDescription") String suffixTitleDescription,
-            @JsonProperty("zipNumber") int zipNumber,
+            @JsonProperty("zipNumber") Integer zipNumber,
             @JsonProperty("referralId") String referralId,
             @JsonProperty("lawEnforcementId") String lawEnforcementId,
             @JsonProperty("zipSuffixNumber") Short zipSuffixNumber,
@@ -328,7 +331,7 @@ public class Reporter extends DomainObject {
 	/**
 	 * @return the messagePhoneExtensionNumber
 	 */
-	public int getMessagePhoneExtensionNumber() {
+	public Integer getMessagePhoneExtensionNumber() {
 		return messagePhoneExtensionNumber;
 	}
 
@@ -363,7 +366,7 @@ public class Reporter extends DomainObject {
 	/**
 	 * @return the primaryPhoneExtensionNumber
 	 */
-	public int getPrimaryPhoneExtensionNumber() {
+	public Integer getPrimaryPhoneExtensionNumber() {
 		return primaryPhoneExtensionNumber;
 	}
 
@@ -398,7 +401,7 @@ public class Reporter extends DomainObject {
 	/**
 	 * @return the zipNumber
 	 */
-	public int getZipNumber() {
+	public Integer getZipNumber() {
 		return zipNumber;
 	}
 
@@ -480,7 +483,10 @@ public class Reporter extends DomainObject {
 				* result
 				+ ((mandatedReporterIndicator == null) ? 0
 						: mandatedReporterIndicator.hashCode());
-		result = prime * result + messagePhoneExtensionNumber;
+		result = prime
+				* result
+				+ ((messagePhoneExtensionNumber == null) ? 0
+						: messagePhoneExtensionNumber.hashCode());
 		result = prime
 				* result
 				+ ((messagePhoneNumber == null) ? 0 : messagePhoneNumber
@@ -493,7 +499,10 @@ public class Reporter extends DomainObject {
 				* result
 				+ ((namePrefixDescription == null) ? 0 : namePrefixDescription
 						.hashCode());
-		result = prime * result + primaryPhoneExtensionNumber;
+		result = prime
+				* result
+				+ ((primaryPhoneExtensionNumber == null) ? 0
+						: primaryPhoneExtensionNumber.hashCode());
 		result = prime
 				* result
 				+ ((primaryPhoneNumber == null) ? 0 : primaryPhoneNumber
@@ -510,7 +519,8 @@ public class Reporter extends DomainObject {
 				* result
 				+ ((suffixTitleDescription == null) ? 0
 						: suffixTitleDescription.hashCode());
-		result = prime * result + zipNumber;
+		result = prime * result
+				+ ((zipNumber == null) ? 0 : zipNumber.hashCode());
 		result = prime * result
 				+ ((zipSuffixNumber == null) ? 0 : zipSuffixNumber.hashCode());
 		return result;
@@ -604,7 +614,11 @@ public class Reporter extends DomainObject {
 		} else if (!mandatedReporterIndicator
 				.equals(other.mandatedReporterIndicator))
 			return false;
-		if (messagePhoneExtensionNumber != other.messagePhoneExtensionNumber)
+		if (messagePhoneExtensionNumber == null) {
+			if (other.messagePhoneExtensionNumber != null)
+				return false;
+		} else if (!messagePhoneExtensionNumber
+				.equals(other.messagePhoneExtensionNumber))
 			return false;
 		if (messagePhoneNumber == null) {
 			if (other.messagePhoneNumber != null)
@@ -621,7 +635,11 @@ public class Reporter extends DomainObject {
 				return false;
 		} else if (!namePrefixDescription.equals(other.namePrefixDescription))
 			return false;
-		if (primaryPhoneExtensionNumber != other.primaryPhoneExtensionNumber)
+		if (primaryPhoneExtensionNumber == null) {
+			if (other.primaryPhoneExtensionNumber != null)
+				return false;
+		} else if (!primaryPhoneExtensionNumber
+				.equals(other.primaryPhoneExtensionNumber))
 			return false;
 		if (primaryPhoneNumber == null) {
 			if (other.primaryPhoneNumber != null)
@@ -653,7 +671,10 @@ public class Reporter extends DomainObject {
 				return false;
 		} else if (!suffixTitleDescription.equals(other.suffixTitleDescription))
 			return false;
-		if (zipNumber != other.zipNumber)
+		if (zipNumber == null) {
+			if (other.zipNumber != null)
+				return false;
+		} else if (!zipNumber.equals(other.zipNumber))
 			return false;
 		if (zipSuffixNumber == null) {
 			if (other.zipSuffixNumber != null)

@@ -11,7 +11,6 @@
   "firstName": "John",
   "lastName": "Smith",
   "mandatedReporterIndicator": false,
-  "messagePhoneExtensionNumber": 123,
   "messagePhoneNumber": 1234567,
   "middleInitialName": "A",
   "namePrefixDescription": "ABC123",
@@ -25,5 +24,5 @@
   "referralId": "DEF",
   "lawEnforcementId": "DEF",
   "zipSuffixNumber": 1234,
-  "countySpecificCode": ""
+  "countySpecificCode": "AB"
 }

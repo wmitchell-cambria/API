@@ -1,11 +1,10 @@
 {
-
   "badgeNumber": "A123",
   "cityName": "ABC",
   "colltrClientRptrReltnshpType": 12,
   "communicationMethodType": 34,
   "confidentialWaiverIndicator": false,
-  "drmsMandatedRprtrFeedback": "",
+  "drmsMandatedRprtrFeedback": null,
   "employerName": "DEF",
   "feedbackDate": "2000-01-01",
   "feedbackRequiredIndicator": false,

@@ -62,6 +62,7 @@ public class ReferralTest {
 	private String limitedAccessDate = "2001-01-01";
 	private String limitedAccessDesc ="x";
 	private String originalClosureDate = "1946-02-09";
+	private String lastUpdatedId = "z";
 
 	/*
 	 * Constructor test
@@ -72,7 +73,7 @@ public class ReferralTest {
 	}
 
 	@Test
-	public void domainCrossReportLastUpdateConstructorTest() throws Exception {
+	public void domainReferralLastUpdateConstructorTest() throws Exception {
 		gov.ca.cwds.rest.api.domain.Referral domain = new gov.ca.cwds.rest.api.domain.Referral(id,
 				additionalInfoIncludedCode, anonymousReporterIndicator, applicationForPetitionIndicator, approvalNumber,
 				approvalStatusType, caretakersPerpetratorCode, closureDate, communicationMethodType,
@@ -136,5 +137,6 @@ public class ReferralTest {
 		assertThat(persistent.getLimitedAccessDate(), is(equalTo(df.parse(limitedAccessDate))));
 		assertThat(persistent.getLimitedAccessDesc(), is(equalTo(limitedAccessDesc)));
 		assertThat(persistent.getOriginalClosureDate(), is(equalTo(df.parse(originalClosureDate))));
+		assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
 	}
 }

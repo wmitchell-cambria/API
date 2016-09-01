@@ -35,9 +35,11 @@ public class Reporter extends PersistentObject {
     @Column(name = "RPTR_CTYNM")
     private String cityName;
 
+    @Type(type = "short")
     @Column(name = "COL_RELC")
     private Short colltrClientRptrReltnshpType;
 
+    @Type(type = "short")
     @Column(name = "CMM_MTHC")
     private Short communicationMethodType;
 
@@ -66,8 +68,9 @@ public class Reporter extends PersistentObject {
     @Column(name = "MNRPTR_IND")
     private String mandatedReporterIndicator;
 
+    @Type(type = "integer")
     @Column(name = "MSG_EXT_NO")
-    private int messagePhoneExtensionNumber = 0;
+    private Integer messagePhoneExtensionNumber;
 
     @Column(name = "MSG_TEL_NO")
     private BigDecimal messagePhoneNumber;
@@ -81,9 +84,11 @@ public class Reporter extends PersistentObject {
     @Column(name = "PRM_TEL_NO")
     private BigDecimal primaryPhoneNumber;
 
+    @Type(type = "integer")
     @Column(name = "PRM_EXT_NO")
-    private int primaryPhoneExtensionNumber =0;
+    private Integer primaryPhoneExtensionNumber;
 
+    @Type(type = "short")
     @Column(name = "STATE_C")
     private Short stateCodeType;
 
@@ -96,28 +101,38 @@ public class Reporter extends PersistentObject {
     @Column(name = "SUFX_TLDSC")
     private String suffixTitleDescription;
 
+    @Type(type = "integer")
     @Column(name = "RPTR_ZIPNO")
-    private int zipNumber = 0;
+    private Integer zipNumber;
 
     @Column(name = "FKLAW_ENFT")
     private String lawEnforcementId;
 
+    @Type(type = "short")
     @Column(name = "ZIP_SFX_NO")
     private Short zipSuffixNumber;
 
     @Column(name = "CNTY_SPFCD")
     private String countySpecificCode;
 
-    /*
-     * Constructor - needed for hibernate
-     */
+
+	/**
+	 * Default constructor 
+	 * 
+	 * Required for Hibernate
+	 */
 	public Reporter() {
 		super();
 	}
 
-	public Reporter(gov.ca.cwds.rest.api.domain.Reporter reporter, String lastUpdatedId) {
-		super(lastUpdatedId);
-		
+	/**
+	 * Constructor 
+	 * 
+	 * @param reporter The domain object to construct this object from 
+	 * @param lastUpdatedId  the id of the last person to update this object
+	 */
+    public Reporter(gov.ca.cwds.rest.api.domain.Reporter reporter, String lastUpdatedId) {
+        super(lastUpdatedId);
         try {
             this.badgeNumber = reporter.getBadgeNumber();
             this.cityName = reporter.getCityName();
@@ -246,7 +261,7 @@ public class Reporter extends PersistentObject {
 	/**
 	 * @return the messagePhoneExtensionNumber
 	 */
-	public int getMessagePhoneExtensionNumber() {
+	public Integer getMessagePhoneExtensionNumber() {
 		return messagePhoneExtensionNumber;
 	}
 
@@ -281,7 +296,7 @@ public class Reporter extends PersistentObject {
 	/**
 	 * @return the primaryPhoneExtensionNumber
 	 */
-	public int getPrimaryPhoneExtensionNumber() {
+	public Integer getPrimaryPhoneExtensionNumber() {
 		return primaryPhoneExtensionNumber;
 	}
 
@@ -316,7 +331,7 @@ public class Reporter extends PersistentObject {
 	/**
 	 * @return the zipNumber
 	 */
-	public int getZipNumber() {
+	public Integer getZipNumber() {
 		return zipNumber;
 	}
 
@@ -398,7 +413,10 @@ public class Reporter extends PersistentObject {
 				* result
 				+ ((mandatedReporterIndicator == null) ? 0
 						: mandatedReporterIndicator.hashCode());
-		result = prime * result + messagePhoneExtensionNumber;
+		result = prime
+				* result
+				+ ((messagePhoneExtensionNumber == null) ? 0
+						: messagePhoneExtensionNumber.hashCode());
 		result = prime
 				* result
 				+ ((messagePhoneNumber == null) ? 0 : messagePhoneNumber
@@ -411,7 +429,10 @@ public class Reporter extends PersistentObject {
 				* result
 				+ ((namePrefixDescription == null) ? 0 : namePrefixDescription
 						.hashCode());
-		result = prime * result + primaryPhoneExtensionNumber;
+		result = prime
+				* result
+				+ ((primaryPhoneExtensionNumber == null) ? 0
+						: primaryPhoneExtensionNumber.hashCode());
 		result = prime
 				* result
 				+ ((primaryPhoneNumber == null) ? 0 : primaryPhoneNumber
@@ -428,7 +449,8 @@ public class Reporter extends PersistentObject {
 				* result
 				+ ((suffixTitleDescription == null) ? 0
 						: suffixTitleDescription.hashCode());
-		result = prime * result + zipNumber;
+		result = prime * result
+				+ ((zipNumber == null) ? 0 : zipNumber.hashCode());
 		result = prime * result
 				+ ((zipSuffixNumber == null) ? 0 : zipSuffixNumber.hashCode());
 		return result;
@@ -522,7 +544,11 @@ public class Reporter extends PersistentObject {
 		} else if (!mandatedReporterIndicator
 				.equals(other.mandatedReporterIndicator))
 			return false;
-		if (messagePhoneExtensionNumber != other.messagePhoneExtensionNumber)
+		if (messagePhoneExtensionNumber == null) {
+			if (other.messagePhoneExtensionNumber != null)
+				return false;
+		} else if (!messagePhoneExtensionNumber
+				.equals(other.messagePhoneExtensionNumber))
 			return false;
 		if (messagePhoneNumber == null) {
 			if (other.messagePhoneNumber != null)
@@ -539,7 +565,11 @@ public class Reporter extends PersistentObject {
 				return false;
 		} else if (!namePrefixDescription.equals(other.namePrefixDescription))
 			return false;
-		if (primaryPhoneExtensionNumber != other.primaryPhoneExtensionNumber)
+		if (primaryPhoneExtensionNumber == null) {
+			if (other.primaryPhoneExtensionNumber != null)
+				return false;
+		} else if (!primaryPhoneExtensionNumber
+				.equals(other.primaryPhoneExtensionNumber))
 			return false;
 		if (primaryPhoneNumber == null) {
 			if (other.primaryPhoneNumber != null)
@@ -571,7 +601,10 @@ public class Reporter extends PersistentObject {
 				return false;
 		} else if (!suffixTitleDescription.equals(other.suffixTitleDescription))
 			return false;
-		if (zipNumber != other.zipNumber)
+		if (zipNumber == null) {
+			if (other.zipNumber != null)
+				return false;
+		} else if (!zipNumber.equals(other.zipNumber))
 			return false;
 		if (zipSuffixNumber == null) {
 			if (other.zipSuffixNumber != null)
