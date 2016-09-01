@@ -5,8 +5,8 @@ import javax.validation.constraints.Size;
 
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,15 +24,14 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 @InjectLinks(
-        { 
+        {
         	@InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="referralId=${instance.referralId},clientId=${instance.clientId}"), @Binding(name="resource", value=Api.RESOURCE_STAFF_PERSON) } ),
         	@InjectLink(value="/{resource}/{id}", rel="referralId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.referralId}"), @Binding(name="resource", value=Api.RESOURCE_REFERRAL) }, condition="${not empty instance.referralId }" ),
         	@InjectLink(value="/{resource}/{id}", rel="clientId", style=Style.ABSOLUTE, bindings={ @Binding(name="id", value="${instance.clientId}"), @Binding(name="resource", value=Api.RESOURCE_CLIENT) }, condition="${not empty instance.clientId }" ),
         })
 public class ReferralClient extends DomainObject {
-	
     @Size(max=10)
-    @ApiModelProperty(required=false, readOnly=false, value="", example="A123")
+    @ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
     private String approvalNumber;
 
     @NotNull
@@ -40,7 +39,7 @@ public class ReferralClient extends DomainObject {
     private Short approvalStatusType;
 
     @NotNull
-    @ApiModelProperty(required=true, readOnly=false, example="123")
+    @ApiModelProperty(required=true, readOnly=false, example="234")
     private Short dispositionClosureReasonType;
 
     @NotEmpty
@@ -48,33 +47,33 @@ public class ReferralClient extends DomainObject {
     @ApiModelProperty(required=true, readOnly=false, value="", example="A")
     private String dispositionCode;
 
-    @gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
     @JsonProperty(value="dispositionDate")
-    @ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01", dataType="Date")
+    @gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+    @ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
     private String dispositionDate;
 
     @NotNull
-    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
+    @ApiModelProperty(required=true, readOnly=false)
     private Boolean selfReportedIndicator;
 
     @NotNull
-    @ApiModelProperty(required=true, readOnly=false, value="", example="true")
+    @ApiModelProperty(required=true, readOnly=false)
     private Boolean staffPersonAddedIndicator;
 
     @NotEmpty
     @Size(min=1, max=10)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
     private String referralId;
 
     @NotEmpty
     @Size(min=1, max=10)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="abc")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
     private String clientId;
 
     @NotEmpty
     @Size(min=1, max=254)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="description abc")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="Some Description")
     private String dispositionClosureDescription;
 
     @NotNull
@@ -83,21 +82,21 @@ public class ReferralClient extends DomainObject {
 
     @NotEmpty
     @Size(min=1, max=1, message="size must be 1")
-    @ApiModelProperty(required=true, readOnly=false, value="size must be 1", example="A")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="D")
     private String agePeriodCode;
 
     @NotEmpty
     @Size(min=1, max=2)
-    @ApiModelProperty(required=true, readOnly=false, value="", example="AB")
+    @ApiModelProperty(required=true, readOnly=false, value="", example="A1")
     private String countySpecificCode;
 
-    @ApiModelProperty(required=false, readOnly=false, example="true")
+    @ApiModelProperty(required=false, readOnly=false)
     private Boolean mentalHealthIssuesIndicator;
 
-    @ApiModelProperty(required=false, readOnly=false, example="true")
+    @ApiModelProperty(required=false, readOnly=false)
     private Boolean alcoholIndicator;
 
-    @ApiModelProperty(required=false, readOnly=false, example="true")
+    @ApiModelProperty(required=false, readOnly=false)
     private Boolean drugIndicator;
 
 
@@ -137,7 +136,7 @@ public class ReferralClient extends DomainObject {
 		this.alcoholIndicator = alcoholIndicator;
 		this.drugIndicator = drugIndicator;
 	}
-	
+
 	public ReferralClient(gov.ca.cwds.rest.api.persistence.legacy.ReferralClient persistedReferralClient) {
 		this.approvalNumber = persistedReferralClient.getApprovalNumber();
 		this.approvalStatusType = persistedReferralClient.getApprovalStatusType();
@@ -155,8 +154,8 @@ public class ReferralClient extends DomainObject {
 		this.mentalHealthIssuesIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getMentalHealthIssuesIndicator());
 		this.alcoholIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getAlcoholIndicator());
 		this.drugIndicator = DomainObject.uncookBooleanString(persistedReferralClient.getDrugIndicator());
-	}
-	
+    }
+
     /**
      * @return the approvalNumber
      */
@@ -193,14 +192,14 @@ public class ReferralClient extends DomainObject {
     }
     
     /**
-     * @return the selfReportedInd
+     * @return the selfReportedIndicator
      */
     public Boolean getSelfReportedIndicator() {
         return selfReportedIndicator;
     }
     
     /**
-     * @return the staffPersonAddedInd
+     * @return the staffPersonAddedIndicator
      */
     public Boolean getStaffPersonAddedIndicator() {
         return staffPersonAddedIndicator;
@@ -249,26 +248,26 @@ public class ReferralClient extends DomainObject {
     }
     
     /**
-     * @return the mentalHealthIssuesInd
+     * @return the mentalHealthIssuesIndicator
      */
     public Boolean getMentalHealthIssuesIndicator() {
         return mentalHealthIssuesIndicator;
     }
     
     /**
-     * @return the alcoholInd
+     * @return the alcoholIndicator
      */
     public Boolean getAlcoholIndicator() {
         return alcoholIndicator;
     }
     
     /**
-     * @return the drugInd
+     * @return the drugIndicator
      */
     public Boolean getDrugIndicator() {
         return drugIndicator;
     }
-
+    
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */

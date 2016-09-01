@@ -35,7 +35,7 @@ public class StaffPerson extends DomainObject {
 
 	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
-	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC")
+	@ApiModelProperty(required=true, readOnly=true, value="", example="ABC")
  	private String id;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)

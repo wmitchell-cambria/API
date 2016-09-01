@@ -1,5 +1,4 @@
 {
-
   "approvalNumber": "A123",
   "approvalStatusType": 123,
   "dispositionClosureReasonType": 123,
@@ -15,5 +14,5 @@
   "countySpecificCode": "AB",
   "mentalHealthIssuesIndicator": false,
   "alcoholIndicator": false,
-  "drugIndicator": ""
+  "drugIndicator": null
 }

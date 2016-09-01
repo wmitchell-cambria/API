@@ -1,5 +1,4 @@
 {
-
   "approvalNumber": "A123",
   "approvalStatusType": 123,
   "dispositionClosureReasonType": 123,
@@ -13,7 +12,7 @@
   "ageNumber": 12,
   "agePeriodCode": "M",
   "countySpecificCode": "AB",
-  "mentalHealthIssuesIndicator": "",
+  "mentalHealthIssuesIndicator": null,
   "alcoholIndicator": false,
   "drugIndicator": false
 }
