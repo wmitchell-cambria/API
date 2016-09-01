@@ -20,7 +20,7 @@ sourceCompatibility = 1.8
 project.ext {
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.0.0-rc4"
-	dropwizardFlywayVersion = "1.0.0-rc3-2"
+	dropwizardFlywayVersion = "1.0.0-1"
 	metricsVersion = "3.1.0"
 	dropwizardSwaggerVersion = "1.0.0-1"
 	mainclass = "gov.ca.cwds.rest.ApiApplication" 
