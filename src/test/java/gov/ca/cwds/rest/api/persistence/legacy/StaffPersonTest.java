@@ -33,6 +33,8 @@ public class StaffPersonTest {
 	private String cwsOfficeAddress = "l";
 	private String emailAddress = "m";
 	
+	private String lastUpdatedId = "z";
+	
 	/*
 	 * Constructor test
 	 */
@@ -42,7 +44,7 @@ public class StaffPersonTest {
 	}
 
 	@Test
-	public void domainCrossReportLastUpdateConstructorTest() throws Exception {
+	public void domainStaffPersonLastUpdateConstructorTest() throws Exception {
 		gov.ca.cwds.rest.api.domain.StaffPerson domain = new gov.ca.cwds.rest.api.domain.StaffPerson(id, endDate, firstName, jobTitle, lastName,
 				middleInitial, namePrefix, phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator,
 				cwsOffice, availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator,
@@ -68,5 +70,6 @@ public class StaffPersonTest {
 		assertThat(persistent.getDutyWorkerIndicator(), is(equalTo("N")));
 		assertThat(persistent.getCwsOfficeAddress(), is(equalTo(cwsOfficeAddress)));
 		assertThat(persistent.getEmailAddress(), is(equalTo(emailAddress)));
+		assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
 	}
 }

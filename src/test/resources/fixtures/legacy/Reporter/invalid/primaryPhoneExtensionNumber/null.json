@@ -16,7 +16,7 @@
   "middleInitialName": "A",
   "namePrefixDescription": "ABC123",
   "primaryPhoneNumber": 1234567,
-  "primaryPhoneExtensionNumber": 123,
+  "primaryPhoneExtensionNumber": null,
   "stateCodeType": 1234,
   "streetName": "ABC STREET",
   "streetNumber": "123",
@@ -25,5 +25,5 @@
   "referralId": "DEF",
   "lawEnforcementId": "DEF",
   "zipSuffixNumber": 1234,
-  "countySpecificCode": ""
+  "countySpecificCode": "AB"
 }

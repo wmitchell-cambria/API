@@ -113,7 +113,6 @@ public class ReporterTest {
 		assertThat(totest.getMiddleInitialName(), is(equalTo(persistent.getMiddleInitialName())));
 		assertThat(totest.getNamePrefixDescription(), is(equalTo(persistent.getNamePrefixDescription())));
 		assertThat(totest.getPrimaryPhoneNumber(), is(equalTo(persistent.getPrimaryPhoneNumber())));
-		assertThat(totest.getMessagePhoneNumber(), is(equalTo(persistent.getMessagePhoneNumber())));
 		assertThat(totest.getPrimaryPhoneExtensionNumber(), is(equalTo(persistent.getPrimaryPhoneExtensionNumber())));
 		assertThat(totest.getStateCodeType(), is(equalTo(persistent.getStateCodeType())));
 		assertThat(totest.getStreetName(), is(equalTo(persistent.getStreetName())));
@@ -153,7 +152,6 @@ public class ReporterTest {
 		assertThat(reporter.getMiddleInitialName(), is(equalTo(middleInitialName)));
 		assertThat(reporter.getNamePrefixDescription(), is(equalTo(namePrefixDescription)));
 		assertThat(reporter.getPrimaryPhoneNumber(), is(equalTo(primaryPhoneNumber)));
-		assertThat(reporter.getMessagePhoneNumber(), is(equalTo(messagePhoneNumber)));
 		assertThat(reporter.getPrimaryPhoneExtensionNumber(), is(equalTo(primaryPhoneExtensionNumber)));
 		assertThat(reporter.getStateCodeType(), is(equalTo(stateCodeType)));
 		assertThat(reporter.getStreetName(), is(equalTo(streetName)));
@@ -727,6 +725,32 @@ public class ReporterTest {
 	}
 
 	/*
+	* messagePhoneExtensionNumber Tests
+	*/
+	@Test
+	public void failsWhenMessagePhoneExtensionNumberMissing() throws Exception {
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/messagePhoneExtensionNumber/missing.json"),
+				Reporter.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
+				is(greaterThanOrEqualTo(0)));
+	}
+	@Test
+	public void failsWhenMessagePhoneExtensionNumberNull() throws Exception {
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/messagePhoneExtensionNumber/null.json"),
+				Reporter.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
+				is(greaterThanOrEqualTo(0)));
+	}
+
+	/*
 	 * messagePhoneNumber Tests
 	 */
 	@Test
@@ -879,6 +903,32 @@ public class ReporterTest {
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
 		assertThat(response.readEntity(String.class).indexOf("primaryPhoneNumber may not be null"),
+				is(greaterThanOrEqualTo(0)));
+	}
+
+	/*
+	* primaryPhoneExtensionNumber Tests
+	*/
+	@Test
+	public void failsWhenPrimaryPhoneExtensionNumberMissing() throws Exception {
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/primaryPhoneExtensionNumber/missing.json"),
+				Reporter.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("primaryPhoneExtensionNumber may not be null"),
+				is(greaterThanOrEqualTo(0)));
+	}
+	@Test
+	public void failsWhenPrimaryPhoneExtensionNumberNull() throws Exception {
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/primaryPhoneExtensionNumber/null.json"),
+				Reporter.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("primaryPhoneExtensionNumber may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 
@@ -1059,6 +1109,32 @@ public class ReporterTest {
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
 		assertThat(response.readEntity(String.class).indexOf("suffixTitleDescription size must be between 1 and 4"),
+				is(greaterThanOrEqualTo(0)));
+	}
+
+	/*
+	* zipNumber Tests
+	*/
+	@Test
+	public void failsWhenZipNumberMissing() throws Exception {
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/missing.json"),
+				Reporter.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("zipNumber may not be null"),
+				is(greaterThanOrEqualTo(0)));
+	}
+	@Test
+	public void failsWhenZipNumberNull() throws Exception {
+		Reporter toCreate = MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/null.json"),
+				Reporter.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("zipNumber may not be null"),
 				is(greaterThanOrEqualTo(0)));
 	}
 

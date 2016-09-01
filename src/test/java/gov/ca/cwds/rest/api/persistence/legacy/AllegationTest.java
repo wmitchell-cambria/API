@@ -32,6 +32,8 @@ public class AllegationTest {
 	private String countySpecificCode = "i";
 	private Boolean zippyCrestedIndicator = Boolean.TRUE;
 	private Integer placementFacilityType = 4;
+		
+	private String lastUpdatedId = "z";
 	
 	/*
 	 * Constructor test
@@ -42,7 +44,7 @@ public class AllegationTest {
 	}
 
 	@Test
-	public void domainCrossReportLastUpdateConstructorTest() throws Exception {
+	public void domainAllegationLastUpdateConstructorTest() throws Exception {
 		gov.ca.cwds.rest.api.domain.Allegation domain = new gov.ca.cwds.rest.api.domain.Allegation(id, abuseEndDate,
 				abuseFrequency, abuseFrequencyPeriodCode, abuseLocationDescription, abuseStartDate,
 				allegationDispositionType, allegationType, dispositionDescription, dispositionDate,
@@ -68,6 +70,7 @@ public class AllegationTest {
 		assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
 		assertThat(persistent.getZippyCrestedIndicator(), is(equalTo("Y")));
 		assertThat(persistent.getPlacementFacilityType(), is(equalTo(placementFacilityType)));
+		assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
 	}
 
 
