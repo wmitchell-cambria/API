@@ -5,25 +5,17 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.current_session_context_class">thread</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
-        <!-- Resolves very slow connection establishment to RDS -->
+        <property name="hibernate.dialect">org.hibernate.dialect.DB2Dialect</property>
         <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
-        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.username">cwdsapi</property>
-        <property name="hibernate.connection.password">ZQ6Y7TdsK</property>
-        <!--<property name="hibernate.connection.password"></property>-->
-        <property name="hibernate.connection.url">SOME_CONNECTION_URL</property>
-
-
-
-
-
-
-
+        <property name="hibernate.connection.driver_class">com.ibm.db2.jcc.DB2Driver</property>
+        <property name="hibernate.connection.username">cwdsrba</property>
+        <property name="hibernate.connection.password">1Passwor</property>
+        <property name="hibernate.connection.url">jdbc:db2://localhost:9000/DB0TSOC</property>
         <property name="connection_pool_size">1</property>
         <property name="show_sql">true</property>
-        <mapping class="com.tabordasolutions.cws.parentportal.api.User"/>
-        <mapping class="com.tabordasolutions.cws.parentportal.api.Conversation"/>
-        <mapping class="com.tabordasolutions.cws.parentportal.api.Message"/>
+        
+        
+        
+        <mapping class="gov.ca.cwds.rest.api.persistence.legacy.Allegation"/>
     </session-factory>
 </hibernate-configuration>
