@@ -97,7 +97,7 @@ public class ReferralClient extends PersistentObject {
 	 * @param referralClient The domain object to construct this object from 
 	 * @param lastUpdatedId  the id of the last person to update this object
 	 */
-	public ReferralClient(gov.ca.cwds.rest.api.domain.ReferralClient referralClient, String lastUpdatedId) {
+	public ReferralClient(gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient, String lastUpdatedId) {
 		super(lastUpdatedId);		
 		try{
 			this.referralId = referralClient.getReferralId();

@@ -17,7 +17,7 @@ public class CrossReportServiceImpl implements CrossReportService {
 	private static final String KEY_REFERRAL_ID = "referralId";
 	private static final String KEY_THIRD_ID = "thirdId";
 
-	private CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.legacy.CrossReport, CrossReport> crudsService;
 
 	/**
 	 * Constructor
@@ -25,7 +25,7 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public CrossReportServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crudsService) {
+	public CrossReportServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.legacy.CrossReport, CrossReport> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -33,9 +33,9 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.CrossReport find(Serializable primaryKey) {
+	public gov.ca.cwds.rest.api.domain.legacy.CrossReport find(Serializable primaryKey) {
 		CrossReport.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
-		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.find(primaryKeyObject);
+		return (gov.ca.cwds.rest.api.domain.legacy.CrossReport) crudsService.find(primaryKeyObject);
 	}
 	
 	/*
@@ -44,16 +44,16 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.CrossReport delete(Serializable primaryKey) {
+	public gov.ca.cwds.rest.api.domain.legacy.CrossReport delete(Serializable primaryKey) {
 		CrossReport.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
-		return (gov.ca.cwds.rest.api.domain.CrossReport) crudsService.delete(primaryKeyObject);
+		return (gov.ca.cwds.rest.api.domain.legacy.CrossReport) crudsService.delete(primaryKeyObject);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Serializable create(gov.ca.cwds.rest.api.domain.CrossReport object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.legacy.CrossReport object) {
 		return crudsService.create(object);
 	}
 
@@ -61,7 +61,7 @@ public class CrossReportServiceImpl implements CrossReportService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String update(gov.ca.cwds.rest.api.domain.CrossReport object) {
+	public String update(gov.ca.cwds.rest.api.domain.legacy.CrossReport object) {
 		return crudsService.update(object);
 	}
 	

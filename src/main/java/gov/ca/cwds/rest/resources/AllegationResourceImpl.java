@@ -9,7 +9,7 @@ import org.glassfish.jersey.server.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.rest.api.domain.Allegation;
+import gov.ca.cwds.rest.api.domain.legacy.Allegation;
 import gov.ca.cwds.rest.services.AllegationService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.swagger.annotations.ApiOperation;

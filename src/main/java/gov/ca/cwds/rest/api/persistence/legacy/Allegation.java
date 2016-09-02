@@ -85,7 +85,7 @@ public class Allegation extends PersistentObject {
 	 */
 	public Allegation() {}
 
-	public Allegation(gov.ca.cwds.rest.api.domain.Allegation allegation, String lastUpdatedId) {
+	public Allegation(gov.ca.cwds.rest.api.domain.legacy.Allegation allegation, String lastUpdatedId) {
 		super(lastUpdatedId);
 		try {
 			this.id = allegation.getId();

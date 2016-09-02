@@ -17,7 +17,7 @@ public class ReferralServiceImpl implements ReferralService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReferralServiceImpl.class);
 
-	private CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> crudsService;
 
 	/**
 	 * Constructor
@@ -25,7 +25,7 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public ReferralServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService) {
+	public ReferralServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -33,8 +33,8 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Referral find(Serializable primaryKey) {
-		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.find(primaryKey);
+	public gov.ca.cwds.rest.api.domain.legacy.Referral find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.legacy.Referral) crudsService.find(primaryKey);
 	}
 
 	/*
@@ -43,15 +43,15 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Referral delete(Serializable id) {
-		return (gov.ca.cwds.rest.api.domain.Referral) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.legacy.Referral delete(Serializable id) {
+		return (gov.ca.cwds.rest.api.domain.legacy.Referral) crudsService.delete(id);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Serializable create(gov.ca.cwds.rest.api.domain.Referral object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.legacy.Referral object) {
 		return crudsService.create(object);
 	}
 
@@ -59,7 +59,7 @@ public class ReferralServiceImpl implements ReferralService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String update(gov.ca.cwds.rest.api.domain.Referral object) {
+	public String update(gov.ca.cwds.rest.api.domain.legacy.Referral object) {
 		return crudsService.update(object);
 	}
 }

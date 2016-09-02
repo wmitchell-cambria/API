@@ -12,7 +12,7 @@ public class ReporterServiceImpl implements ReporterService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReporterServiceImpl.class);
 
-	private CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.legacy.Reporter, Reporter> crudsService;
 
 	/**
 	 * Constructor
@@ -20,7 +20,7 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public ReporterServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> crudsService) {
+	public ReporterServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.legacy.Reporter, Reporter> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -28,8 +28,8 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Reporter find(Serializable primaryKey) {
-		return (gov.ca.cwds.rest.api.domain.Reporter) crudsService.find(primaryKey);
+	public gov.ca.cwds.rest.api.domain.legacy.Reporter find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.legacy.Reporter) crudsService.find(primaryKey);
 	}
 
 	/*
@@ -38,15 +38,15 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Reporter delete(Serializable id) {
-		return (gov.ca.cwds.rest.api.domain.Reporter) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.legacy.Reporter delete(Serializable id) {
+		return (gov.ca.cwds.rest.api.domain.legacy.Reporter) crudsService.delete(id);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Serializable create(gov.ca.cwds.rest.api.domain.Reporter object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.legacy.Reporter object) {
 		return crudsService.create(object);
 	}
 
@@ -54,7 +54,7 @@ public class ReporterServiceImpl implements ReporterService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String update(gov.ca.cwds.rest.api.domain.Reporter object) {
+	public String update(gov.ca.cwds.rest.api.domain.legacy.Reporter object) {
 		return crudsService.update(object);
 	}
 }

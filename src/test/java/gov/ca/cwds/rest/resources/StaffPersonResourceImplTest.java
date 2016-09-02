@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.StaffPerson;
+import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.StaffPersonService;
 import gov.ca.cwds.rest.services.StaffPersonServiceImpl;

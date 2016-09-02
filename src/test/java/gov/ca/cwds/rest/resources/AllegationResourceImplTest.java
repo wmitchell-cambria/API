@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.Allegation;
+import gov.ca.cwds.rest.api.domain.legacy.Allegation;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.AllegationService;
 import gov.ca.cwds.rest.services.AllegationServiceImpl;

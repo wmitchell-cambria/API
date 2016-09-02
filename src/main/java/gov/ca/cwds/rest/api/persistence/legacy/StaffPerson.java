@@ -100,7 +100,7 @@ public class StaffPerson extends PersistentObject {
 	 * @param staffPerson The domain object to construct this object from 
 	 * @param lastUpdatedId  the id of the last person to update this object
 	 */
-	public StaffPerson(gov.ca.cwds.rest.api.domain.StaffPerson staffPerson, String lastUpdatedId) {
+	public StaffPerson(gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson, String lastUpdatedId) {
 		super(lastUpdatedId);
 		
 		try {

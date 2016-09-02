@@ -34,25 +34,25 @@ public class ServiceEnvironmentTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Illegal Superclass");
          
-        CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> fakeService = new CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral>() {
+        CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> fakeService = new CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral>() {
 
 			@Override
-			public gov.ca.cwds.rest.api.domain.Referral find(Serializable primaryKey) {
+			public gov.ca.cwds.rest.api.domain.legacy.Referral find(Serializable primaryKey) {
 				return null;
 			}
 
 			@Override
-			public gov.ca.cwds.rest.api.domain.Referral delete(Serializable id) {
+			public gov.ca.cwds.rest.api.domain.legacy.Referral delete(Serializable id) {
 				return null;
 			}
 
 			@Override
-			public String create(gov.ca.cwds.rest.api.domain.Referral object) {
+			public String create(gov.ca.cwds.rest.api.domain.legacy.Referral object) {
 				return null;
 			}
 
 			@Override
-			public String update(gov.ca.cwds.rest.api.domain.Referral object) {
+			public String update(gov.ca.cwds.rest.api.domain.legacy.Referral object) {
 				return null;
 			}
 			
@@ -64,7 +64,7 @@ public class ServiceEnvironmentTest {
 	@Test
 	public void checkCorrectServiceReturned() {
 		@SuppressWarnings("unchecked")
-		CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService = mock(CrudsService.class);
+		CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> crudsService = mock(CrudsService.class);
 		ReferralService referralService = new ReferralServiceImpl(crudsService);
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		
@@ -79,7 +79,7 @@ public class ServiceEnvironmentTest {
 	@Test
 	public void checkNoServiceReturnedCorrectlyOnBadImplementationClass() {
 		@SuppressWarnings("unchecked")
-		CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> crudsService = mock(CrudsService.class);
+		CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> crudsService = mock(CrudsService.class);
 		ReferralService referralService = new ReferralServiceImpl(crudsService);
 		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
 		

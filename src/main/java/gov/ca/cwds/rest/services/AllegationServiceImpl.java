@@ -17,7 +17,7 @@ public class AllegationServiceImpl implements AllegationService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AllegationServiceImpl.class);
 
-	private CrudsService<gov.ca.cwds.rest.api.domain.Allegation, Allegation> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.legacy.Allegation, Allegation> crudsService;
 
 	/**
 	 * Constructor
@@ -25,7 +25,7 @@ public class AllegationServiceImpl implements AllegationService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public AllegationServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.Allegation, Allegation> crudsService) {
+	public AllegationServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.legacy.Allegation, Allegation> crudsService) {
 		this.crudsService = crudsService;
 	}
 
@@ -33,8 +33,8 @@ public class AllegationServiceImpl implements AllegationService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Allegation find(Serializable primaryKey) {
-		return (gov.ca.cwds.rest.api.domain.Allegation) crudsService.find(primaryKey);
+	public gov.ca.cwds.rest.api.domain.legacy.Allegation find(Serializable primaryKey) {
+		return (gov.ca.cwds.rest.api.domain.legacy.Allegation) crudsService.find(primaryKey);
 	}
 
 	/*
@@ -43,15 +43,15 @@ public class AllegationServiceImpl implements AllegationService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.Allegation delete(Serializable id) {
-		return (gov.ca.cwds.rest.api.domain.Allegation) crudsService.delete(id);
+	public gov.ca.cwds.rest.api.domain.legacy.Allegation delete(Serializable id) {
+		return (gov.ca.cwds.rest.api.domain.legacy.Allegation) crudsService.delete(id);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Serializable create(gov.ca.cwds.rest.api.domain.Allegation object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.legacy.Allegation object) {
 		return crudsService.create(object);
 	}
 
@@ -59,7 +59,7 @@ public class AllegationServiceImpl implements AllegationService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String update(gov.ca.cwds.rest.api.domain.Allegation object) {
+	public String update(gov.ca.cwds.rest.api.domain.legacy.Allegation object) {
 		return crudsService.update(object);
 	}
 

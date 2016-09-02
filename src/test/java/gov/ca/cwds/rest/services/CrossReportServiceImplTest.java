@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.CrossReport;
+import gov.ca.cwds.rest.api.domain.legacy.CrossReport;
 import io.dropwizard.jackson.Jackson;
 
 public class CrossReportServiceImplTest {

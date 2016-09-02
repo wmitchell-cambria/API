@@ -182,14 +182,14 @@ public class ApiApplication extends Application<ApiConfiguration> {
 	private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
     	
-    	final CrudsService<gov.ca.cwds.rest.api.domain.Referral, Referral> referralCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Referral, Referral>(daos.get(Referral.class), gov.ca.cwds.rest.api.domain.Referral.class, Referral.class);
+    	final CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> referralCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral>(daos.get(Referral.class), gov.ca.cwds.rest.api.domain.legacy.Referral.class, Referral.class);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());	    	
     	final ReferralService referralService = new ReferralServiceImpl(referralCrudsService);
     	apiEnvironment.services().register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
     	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final CrudsService<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPerson>(daos.get(StaffPerson.class), gov.ca.cwds.rest.api.domain.StaffPerson.class, StaffPerson.class);
+    	final CrudsService<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson>(daos.get(StaffPerson.class), gov.ca.cwds.rest.api.domain.legacy.StaffPerson.class, StaffPerson.class);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());		
     	final StaffPersonService staffPersonService = new StaffPersonServiceImpl(staffPersonCrudsService);
     	apiEnvironment.services().register(StaffPersonService.class, Api.Version.JSON_VERSION_1, staffPersonService);
@@ -197,7 +197,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				AllegationService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.Allegation, Allegation> allegationCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Allegation, Allegation>(daos.get(Allegation.class), gov.ca.cwds.rest.api.domain.Allegation.class, Allegation.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.legacy.Allegation, Allegation> allegationCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.Allegation, Allegation>(daos.get(Allegation.class), gov.ca.cwds.rest.api.domain.legacy.Allegation.class, Allegation.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), AllegationService.class.getName());
 		final AllegationService allegationService = new AllegationServiceImpl(allegationCrudsService);
@@ -207,7 +207,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				ReporterService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.Reporter, Reporter> reporterCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.Reporter, Reporter>(daos.get(Reporter.class), gov.ca.cwds.rest.api.domain.Reporter.class, Reporter.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.legacy.Reporter, Reporter> reporterCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.Reporter, Reporter>(daos.get(Reporter.class), gov.ca.cwds.rest.api.domain.legacy.Reporter.class, Reporter.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), ReporterService.class.getName());
 		final ReporterService reporterService = new ReporterServiceImpl(reporterCrudsService);
@@ -217,7 +217,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				CrossReportService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport> crossReportCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.CrossReport, CrossReport>(daos.get(CrossReport.class), gov.ca.cwds.rest.api.domain.CrossReport.class, CrossReport.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.legacy.CrossReport, CrossReport> crossReportCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.CrossReport, CrossReport>(daos.get(CrossReport.class), gov.ca.cwds.rest.api.domain.legacy.CrossReport.class, CrossReport.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), CrossReportService.class.getName());
 		final CrossReportService crossReportService = new CrossReportServiceImpl(crossReportCrudsService);
@@ -227,7 +227,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(),
 				ReferralClientService.class.getName());
-		final CrudsService<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient> referralClientCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient>(daos.get(ReferralClient.class), gov.ca.cwds.rest.api.domain.ReferralClient.class, ReferralClient.class);
+		final CrudsService<gov.ca.cwds.rest.api.domain.legacy.ReferralClient, ReferralClient> referralClientCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.ReferralClient, ReferralClient>(daos.get(ReferralClient.class), gov.ca.cwds.rest.api.domain.legacy.ReferralClient.class, ReferralClient.class);
 		LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), ReferralClientService.class.getName());
 		final ReferralClientService referralClientService = new ReferralClientServiceImpl(referralClientCrudsService);
@@ -242,27 +242,27 @@ public class ApiApplication extends Application<ApiConfiguration> {
         apiEnvironment.jersey().register(applicationResource);
         
         LOGGER.info("Registering ReferralResource");
-        CrudsResource<gov.ca.cwds.rest.api.domain.Referral> referralCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.Referral, ReferralService>(apiEnvironment.services(), ReferralService.class);
+        CrudsResource<gov.ca.cwds.rest.api.domain.legacy.Referral> referralCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.Referral, ReferralService>(apiEnvironment.services(), ReferralService.class);
         final ReferralResource referralResource = new ReferralResourceImpl(apiEnvironment.services(), referralCrudsResource);
         apiEnvironment.jersey().register(referralResource);
         
         LOGGER.info("Registering StaffPersonResource");
-        CrudsResource<gov.ca.cwds.rest.api.domain.StaffPerson> staffPersonCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.StaffPerson, StaffPersonService>(apiEnvironment.services(), StaffPersonService.class);
+        CrudsResource<gov.ca.cwds.rest.api.domain.legacy.StaffPerson> staffPersonCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPersonService>(apiEnvironment.services(), StaffPersonService.class);
         final StaffPersonResource staffPersonResource = new StaffPersonResourceImpl(apiEnvironment.services(), staffPersonCrudsResource);
         apiEnvironment.jersey().register(staffPersonResource);
         
         LOGGER.info("Registering CrossReportResource");
-        CrudsResource<gov.ca.cwds.rest.api.domain.CrossReport> crossReportCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.CrossReport, CrossReportService>(apiEnvironment.services(), CrossReportService.class);
+        CrudsResource<gov.ca.cwds.rest.api.domain.legacy.CrossReport> crossReportCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.CrossReport, CrossReportService>(apiEnvironment.services(), CrossReportService.class);
         final CrossReportResource crossReportResource = new CrossReportResourceImpl(apiEnvironment.services(), crossReportCrudsResource);
         apiEnvironment.jersey().register(crossReportResource);
         
         LOGGER.info("Registering ReferralClientResource");
-        CrudsResource<gov.ca.cwds.rest.api.domain.ReferralClient> referralClientCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClientService>(apiEnvironment.services(), ReferralClientService.class);
+        CrudsResource<gov.ca.cwds.rest.api.domain.legacy.ReferralClient> referralClientCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.ReferralClient, ReferralClientService>(apiEnvironment.services(), ReferralClientService.class);
         final ReferralClientResource referralClientResource = new ReferralClientResourceImpl(apiEnvironment.services(), referralClientCrudsResource);
         apiEnvironment.jersey().register(referralClientResource);
         
         LOGGER.info("Registering ReporterResource");
-        CrudsResource<gov.ca.cwds.rest.api.domain.Reporter> reporterCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.Reporter, ReporterService>(apiEnvironment.services(), ReporterService.class);
+        CrudsResource<gov.ca.cwds.rest.api.domain.legacy.Reporter> reporterCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.Reporter, ReporterService>(apiEnvironment.services(), ReporterService.class);
         final ReporterResource reporterResource = new ReporterResourceImpl(apiEnvironment.services(), reporterCrudsResource);
         apiEnvironment.jersey().register(reporterResource);
         
@@ -274,7 +274,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
      	apiEnvironment.jersey().register(swaggerResource);
      	
      	LOGGER.info("Registering AllegationResource");
-		CrudsResource<gov.ca.cwds.rest.api.domain.Allegation> allegationCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.Allegation, AllegationService>(
+		CrudsResource<gov.ca.cwds.rest.api.domain.legacy.Allegation> allegationCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.Allegation, AllegationService>(
 				apiEnvironment.services(), AllegationService.class);
 		final AllegationResource allegationResource = new AllegationResourceImpl(apiEnvironment.services(),
 				allegationCrudsResource);
