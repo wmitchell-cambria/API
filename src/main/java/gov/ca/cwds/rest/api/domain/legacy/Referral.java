@@ -37,180 +37,228 @@ public class Referral extends DomainObject {
 
 	@NotEmpty
 	@Size(min=1, max=10)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
 	private String id;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String additionalInfoIncludedCode;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean anonymousReporterIndicator;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean applicationForPetitionIndicator;
 	
-	@Size(max=10)	
+	@Size(max=10)
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String approvalNumber;
 	
-	@NotNull	
+	@NotNull
+	@ApiModelProperty(required=true, readOnly=false, example="1234")
 	private Short approvalStatusType;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String caretakersPerpetratorCode;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="closureDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String closureDate;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false, example="1234")
 	private Short communicationMethodType;
 	
-	@Size(max=10)	
+	@Size(max=10)
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String currentLocationOfChildren;
 	
 	@Size(max=10)
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String drmsAllegationDescriptionDoc;
 	
 	@Size(max=10)
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String drmsErReferralDoc;
 	
-	@Size(max=10)	
+	@Size(max=10)
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String drmsInvestigationDoc;
 
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 	
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean familyAwarenessIndicator;
 	
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false, example="1234")
 	private Short govtEntityType;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String legalDefinitionCode;
 	
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean legalRightsNoticeIndicator;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
 	@OneOf(value = {"S", "R", "N"}, ignoreCase = true, ignoreWhitespace = true)
-	@ApiModelProperty(required = true, readOnly = false, value = "Size must be 1", example = "S", allowableValues="S,R,N")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="S", allowableValues = "S, R, N")
 	private String limitedAccessCode;
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="mandatedCrossReportReceivedDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String mandatedCrossReportReceivedDate;
 	
 	@NotEmpty
-	@Size(min=1, max=35)	
+	@Size(min=1, max=35)
+	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
 	private String referralName;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String openAdequateCaseCode;
 
+	@NotNull
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="receivedDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=true)
+	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String receivedDate;
 	
+	@NotNull
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
+	@JsonProperty(value="receivedTime")
 	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=true)
-	@ApiModelProperty(required=false, readOnly=true, example="2000-01-01-16.41.49.214")
+	@ApiModelProperty(required=true, readOnly=false, example="2000-01-01-16.41.49.214")
 	private String receivedTime;
 		
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false, example="1234")
 	private Short referralResponseType;
 
 	@NotNull
+	@ApiModelProperty(required=true, readOnly=false, example="1234")
 	private Short referredToResourceType;
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="responseDeterminationDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String responseDeterminationDate;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=TIMESTAMP_FORMAT)
+	@JsonProperty(value="responseDeterminationTime")
 	@gov.ca.cwds.rest.validation.Date(format=TIMESTAMP_FORMAT, required=false)
-	@ApiModelProperty(required=false, readOnly=true, example="2000-01-01-16.41.49.214")
+	@ApiModelProperty(required=false, readOnly=false, example="2000-01-01-16.41.49.214")
 	private String responseDeterminationTime;
 		
 	@Size(max=10)	
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String responseRationaleText;
 
 	@Size(max=10)	
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String screenerNoteText;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String specificsIncludedCode;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String sufficientInformationCode;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A")
 	private String unfoundedSeriesCode;
 
 	@Size(max=10)	
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String linkToPrimaryReferralId;
 
 	@Size(max=10)	
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String allegesAbuseOccurredAtAddressId;
 
 	@Size(max=3)	
+	@ApiModelProperty(required=false, readOnly=false, value="", example="A1")
 	private String firstResponseDeterminedByStaffPersonId;
 
 	@NotEmpty
 	@Size(min=1, max=3)	
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A1")
 	private String primaryContactStaffPersonId;
 
 	@NotEmpty
 	@Size(min=1, max=2)	
+	@ApiModelProperty(required=true, readOnly=false, value="", example="A1")
 	private String countySpecificCode;
 	
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean specialProjectReferralIndicator;
 
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean zippyCreatedIndicator;
 
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean homelessIndicator;
 
 	@NotNull	
+	@ApiModelProperty(required=true, readOnly=false)
 	private Boolean familyRefusedServicesIndicator;
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="firstEvaluatedOutApprovalDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String firstEvaluatedOutApprovalDate;
 	
 	@NotEmpty
 	@Size(min=1, max=1, message="size must be 1")
 	@OneOf(value = {"C", "P", "O", "A", "S", "I", "K", "M"}, ignoreCase = true, ignoreWhitespace = true)
-	@ApiModelProperty(required = true, readOnly = false, value = "Size must be 1", example = "C", allowableValues="C,P,O,A,S,I,K,M")
+	@ApiModelProperty(required=true, readOnly=false, value="", example="C", allowableValues = "C, P, O, A, S, I, K, M")
 	private String responsibleAgencyCode;
 	
+	@ApiModelProperty(required=false, readOnly=false, example="1234")
 	private Short limitedAccessGovtAgencyType;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="limitedAccessDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String limitedAccessDate;
 
 	@Size(max=254)	
+	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	private String limitedAccessDesc;
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="originalClosureDate")
 	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=false)
+	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String originalClosureDate;
 
 	@JsonCreator
@@ -237,10 +285,10 @@ public class Referral extends DomainObject {
 			@JsonProperty("mandatedCrossReportReceivedDate") String mandatedCrossReportReceivedDate,
 			@JsonProperty("referralName") String referralName, 
 			@JsonProperty("openAdequateCaseCode") String openAdequateCaseCode,
-			@JsonProperty("receivedDate") String receivedDate , 
-			@JsonProperty("receivedTime") String  receivedTime, 
+			@JsonProperty("receivedDate") String receivedDate, 
+			@JsonProperty("receivedTime") String receivedTime, 
 			@JsonProperty("referralResponseType") Short referralResponseType,
-			@JsonProperty("referredToResourceType") Short referredToResourceType, 
+			@JsonProperty("referredToResourceType") Short referredToResourceType,
 			@JsonProperty("responseDeterminationDate") String responseDeterminationDate,
 			@JsonProperty("responseDeterminationTime") String responseDeterminationTime, 
 			@JsonProperty("responseRationaleText") String responseRationaleText,
@@ -315,14 +363,13 @@ public class Referral extends DomainObject {
 	}
 	
 	public Referral(gov.ca.cwds.rest.api.persistence.legacy.Referral persistedReferral) {
-		super();
 		this.id = persistedReferral.getId();
 		this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
 		this.anonymousReporterIndicator = DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporterIndicator());
 		this.applicationForPetitionIndicator = DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetitionIndicator());
 		this.approvalNumber = persistedReferral.getApprovalNumber();
 		this.approvalStatusType = persistedReferral.getApprovalStatusType();
-		this.caretakersPerpetratorCode =  persistedReferral.getCaretakersPerpetratorCode();
+		this.caretakersPerpetratorCode = persistedReferral.getCaretakersPerpetratorCode();
 		this.closureDate = DomainObject.cookDate(persistedReferral.getClosureDate());
 		this.communicationMethodType = persistedReferral.getCommunicationMethodType();
 		this.currentLocationOfChildren = persistedReferral.getCurrentLocationOfChildren();
@@ -347,7 +394,7 @@ public class Referral extends DomainObject {
 		this.responseRationaleText = persistedReferral.getResponseRationaleText();
 		this.screenerNoteText = persistedReferral.getScreenerNoteText();
 		this.specificsIncludedCode = persistedReferral.getSpecificsIncludedCode();
-		this.sufficientInformationCode = persistedReferral.getSpecificsIncludedCode();
+		this.sufficientInformationCode = persistedReferral.getSufficientInformationCode();
 		this.unfoundedSeriesCode = persistedReferral.getUnfoundedSeriesCode();
 		this.linkToPrimaryReferralId = persistedReferral.getLinkToPrimaryReferralId();
 		this.allegesAbuseOccurredAtAddressId = persistedReferral.getAllegesAbuseOccurredAtAddressId();
@@ -371,7 +418,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the id
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="ABC123")
 	public String getId() {
 		return id;
 	}
@@ -379,7 +425,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the additionalInfoIncludedCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getAdditionalInfoIncludedCode() {
 		return additionalInfoIncludedCode;
 	}
@@ -387,7 +432,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the anonymousReporterIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="N")
 	public Boolean getAnonymousReporterIndicator() {
 		return anonymousReporterIndicator;
 	}
@@ -395,7 +439,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the applicationForPetitionIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getApplicationForPetitionIndicator() {
 		return applicationForPetitionIndicator;
 	}
@@ -403,7 +446,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the approvalNumber
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="ABC123")
 	public String getApprovalNumber() {
 		return approvalNumber;
 	}
@@ -411,15 +453,13 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the approvalStatusType
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public Short getApprovalStatusType() {
 		return approvalStatusType;
 	}
-
+	
 	/**
 	 * @return the caretakersPerpetratorCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getCaretakersPerpetratorCode() {
 		return caretakersPerpetratorCode;
 	}
@@ -427,7 +467,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the closureDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-05-22")
 	public String getClosureDate() {
 		return closureDate;
 	}
@@ -435,7 +474,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the communicationMethodType
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public Short getCommunicationMethodType() {
 		return communicationMethodType;
 	}
@@ -443,7 +481,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the currentLocationOfChildren
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="QABC12")
 	public String getCurrentLocationOfChildren() {
 		return currentLocationOfChildren;
 	}
@@ -451,7 +488,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the drmsAllegationDescriptionDoc
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="QABC12")
 	public String getDrmsAllegationDescriptionDoc() {
 		return drmsAllegationDescriptionDoc;
 	}
@@ -459,7 +495,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the drmsErReferralDoc
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="QABC12")
 	public String getDrmsErReferralDoc() {
 		return drmsErReferralDoc;
 	}
@@ -467,7 +502,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the drmsInvestigationDoc
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="QABC12")
 	public String getDrmsInvestigationDoc() {
 		return drmsInvestigationDoc;
 	}
@@ -475,7 +509,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the filedSuspectedChildAbuseReporttoLawEnforcementIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator() {
 		return filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 	}
@@ -483,7 +516,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the familyAwarenessIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getFamilyAwarenessIndicator() {
 		return familyAwarenessIndicator;
 	}
@@ -491,7 +523,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the govtEntityType
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public Short getGovtEntityType() {
 		return govtEntityType;
 	}
@@ -499,7 +530,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the legalDefinitionCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getLegalDefinitionCode() {
 		return legalDefinitionCode;
 	}
@@ -507,7 +537,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the legalRightsNoticeIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getLegalRightsNoticeIndicator() {
 		return legalRightsNoticeIndicator;
 	}
@@ -522,7 +551,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the mandatedCrossReportReceivedDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-01-01")
 	public String getMandatedCrossReportReceivedDate() {
 		return mandatedCrossReportReceivedDate;
 	}
@@ -530,7 +558,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the referralName
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getReferralName() {
 		return referralName;
 	}
@@ -538,7 +565,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the openAdequateCaseCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getOpenAdequateCaseCode() {
 		return openAdequateCaseCode;
 	}
@@ -546,7 +572,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the receivedDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-01-01")
 	public String getReceivedDate() {
 		return receivedDate;
 	}
@@ -561,7 +586,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the referralResponseType
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public Short getReferralResponseType() {
 		return referralResponseType;
 	}
@@ -569,7 +593,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the referredToResourceType
 	 */
-	@ApiModelProperty(required=true, readOnly=false, example="123")
 	public Short getReferredToResourceType() {
 		return referredToResourceType;
 	}
@@ -577,7 +600,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the responseDeterminationDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-01-01")
 	public String getResponseDeterminationDate() {
 		return responseDeterminationDate;
 	}
@@ -592,7 +614,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the responseRationaleText
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Qabcd")
 	public String getResponseRationaleText() {
 		return responseRationaleText;
 	}
@@ -600,7 +621,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the screenerNoteText
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="QABCD")
 	public String getScreenerNoteText() {
 		return screenerNoteText;
 	}
@@ -608,16 +628,13 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the specificsIncludedCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getSpecificsIncludedCode() {
 		return specificsIncludedCode;
 	}
 
-
 	/**
 	 * @return the sufficientInformationCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getSufficientInformationCode() {
 		return sufficientInformationCode;
 	}
@@ -625,7 +642,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the unfoundedSeriesCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getUnfoundedSeriesCode() {
 		return unfoundedSeriesCode;
 	}
@@ -633,7 +649,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the linkToPrimaryReferralId
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
 	public String getLinkToPrimaryReferralId() {
 		return linkToPrimaryReferralId;
 	}
@@ -641,7 +656,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the allegesAbuseOccurredAtAddressId
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
 	public String getAllegesAbuseOccurredAtAddressId() {
 		return allegesAbuseOccurredAtAddressId;
 	}
@@ -649,7 +663,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the firstResponseDeterminedByStaffPersonId
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="Q")
 	public String getFirstResponseDeterminedByStaffPersonId() {
 		return firstResponseDeterminedByStaffPersonId;
 	}
@@ -657,7 +670,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the primaryContactStaffPersonId
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getPrimaryContactStaffPersonId() {
 		return primaryContactStaffPersonId;
 	}
@@ -665,7 +677,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the countySpecificCode
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public String getCountySpecificCode() {
 		return countySpecificCode;
 	}
@@ -673,7 +684,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the specialProjectReferralIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getSpecialProjectReferralIndicator() {
 		return specialProjectReferralIndicator;
 	}
@@ -681,7 +691,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the zippyCreatedIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getZippyCreatedIndicator() {
 		return zippyCreatedIndicator;
 	}
@@ -689,7 +698,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the homelessIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getHomelessIndicator() {
 		return homelessIndicator;
 	}
@@ -697,7 +705,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the familyRefusedServicesIndicator
 	 */
-	@ApiModelProperty(required=true, readOnly=false, value="", example="Q")
 	public Boolean getFamilyRefusedServicesIndicator() {
 		return familyRefusedServicesIndicator;
 	}
@@ -705,7 +712,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the firstEvaluatedOutApprovalDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-01-01")
 	public String getFirstEvaluatedOutApprovalDate() {
 		return firstEvaluatedOutApprovalDate;
 	}
@@ -720,7 +726,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the limitedAccessGovtAgencyType
 	 */
-	@ApiModelProperty(required=false, readOnly=false, example="123")
 	public Short getLimitedAccessGovtAgencyType() {
 		return limitedAccessGovtAgencyType;
 	}
@@ -728,7 +733,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the limitedAccessDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-01-01")
 	public String getLimitedAccessDate() {
 		return limitedAccessDate;
 	}
@@ -736,7 +740,6 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the limitedAccessDesc
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="", example="QASW")
 	public String getLimitedAccessDesc() {
 		return limitedAccessDesc;
 	}
@@ -744,11 +747,9 @@ public class Referral extends DomainObject {
 	/**
 	 * @return the originalClosureDate
 	 */
-	@ApiModelProperty(required=false, readOnly=false, value="yyyy-MM-dd", example="2016-01-01")
 	public String getOriginalClosureDate() {
 		return originalClosureDate;
 	}
-
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -763,8 +764,12 @@ public class Referral extends DomainObject {
 						: additionalInfoIncludedCode.hashCode());
 		result = prime
 				* result
-				+ ((anonymousReporterIndicator == null) ? 0 : anonymousReporterIndicator
-						.hashCode());
+				+ ((allegesAbuseOccurredAtAddressId == null) ? 0
+						: allegesAbuseOccurredAtAddressId.hashCode());
+		result = prime
+				* result
+				+ ((anonymousReporterIndicator == null) ? 0
+						: anonymousReporterIndicator.hashCode());
 		result = prime
 				* result
 				+ ((applicationForPetitionIndicator == null) ? 0
@@ -822,18 +827,10 @@ public class Referral extends DomainObject {
 				* result
 				+ ((firstEvaluatedOutApprovalDate == null) ? 0
 						: firstEvaluatedOutApprovalDate.hashCode());
-		result = prime * result
-				+ ((allegesAbuseOccurredAtAddressId == null) ? 0 : allegesAbuseOccurredAtAddressId.hashCode());
-		result = prime * result
-				+ ((firstResponseDeterminedByStaffPersonId == null) ? 0 : firstResponseDeterminedByStaffPersonId.hashCode());
 		result = prime
 				* result
-				+ ((linkToPrimaryReferralId == null) ? 0
-						: linkToPrimaryReferralId.hashCode());
-		result = prime
-				* result
-				+ ((primaryContactStaffPersonId == null) ? 0 : primaryContactStaffPersonId
-						.hashCode());
+				+ ((firstResponseDeterminedByStaffPersonId == null) ? 0
+						: firstResponseDeterminedByStaffPersonId.hashCode());
 		result = prime * result
 				+ ((govtEntityType == null) ? 0 : govtEntityType.hashCode());
 		result = prime
@@ -867,6 +864,10 @@ public class Referral extends DomainObject {
 						: limitedAccessGovtAgencyType.hashCode());
 		result = prime
 				* result
+				+ ((linkToPrimaryReferralId == null) ? 0
+						: linkToPrimaryReferralId.hashCode());
+		result = prime
+				* result
 				+ ((mandatedCrossReportReceivedDate == null) ? 0
 						: mandatedCrossReportReceivedDate.hashCode());
 		result = prime
@@ -877,6 +878,10 @@ public class Referral extends DomainObject {
 				* result
 				+ ((originalClosureDate == null) ? 0 : originalClosureDate
 						.hashCode());
+		result = prime
+				* result
+				+ ((primaryContactStaffPersonId == null) ? 0
+						: primaryContactStaffPersonId.hashCode());
 		result = prime * result
 				+ ((receivedDate == null) ? 0 : receivedDate.hashCode());
 		result = prime * result
@@ -956,18 +961,28 @@ public class Referral extends DomainObject {
 				.equals(other.additionalInfoIncludedCode)) {
 			return false;
 		}
+		if (allegesAbuseOccurredAtAddressId == null) {
+			if (other.allegesAbuseOccurredAtAddressId != null) {
+				return false;
+			}
+		} else if (!allegesAbuseOccurredAtAddressId
+				.equals(other.allegesAbuseOccurredAtAddressId)) {
+			return false;
+		}
 		if (anonymousReporterIndicator == null) {
 			if (other.anonymousReporterIndicator != null) {
 				return false;
 			}
-		} else if (!anonymousReporterIndicator.equals(other.anonymousReporterIndicator)) {
+		} else if (!anonymousReporterIndicator
+				.equals(other.anonymousReporterIndicator)) {
 			return false;
 		}
 		if (applicationForPetitionIndicator == null) {
 			if (other.applicationForPetitionIndicator != null) {
 				return false;
 			}
-		} else if (!applicationForPetitionIndicator.equals(other.applicationForPetitionIndicator)) {
+		} else if (!applicationForPetitionIndicator
+				.equals(other.applicationForPetitionIndicator)) {
 			return false;
 		}
 		if (approvalNumber == null) {
@@ -1076,32 +1091,12 @@ public class Referral extends DomainObject {
 				.equals(other.firstEvaluatedOutApprovalDate)) {
 			return false;
 		}
-		if (allegesAbuseOccurredAtAddressId == null) {
-			if (other.allegesAbuseOccurredAtAddressId != null) {
-				return false;
-			}
-		} else if (!allegesAbuseOccurredAtAddressId.equals(other.allegesAbuseOccurredAtAddressId)) {
-			return false;
-		}
 		if (firstResponseDeterminedByStaffPersonId == null) {
 			if (other.firstResponseDeterminedByStaffPersonId != null) {
 				return false;
 			}
-		} else if (!firstResponseDeterminedByStaffPersonId.equals(other.firstResponseDeterminedByStaffPersonId)) {
-			return false;
-		}
-		if (linkToPrimaryReferralId == null) {
-			if (other.linkToPrimaryReferralId != null) {
-				return false;
-			}
-		} else if (!linkToPrimaryReferralId.equals(other.linkToPrimaryReferralId)) {
-			return false;
-		}
-		if (primaryContactStaffPersonId == null) {
-			if (other.primaryContactStaffPersonId != null) {
-				return false;
-			}
-		} else if (!primaryContactStaffPersonId.equals(other.primaryContactStaffPersonId)) {
+		} else if (!firstResponseDeterminedByStaffPersonId
+				.equals(other.firstResponseDeterminedByStaffPersonId)) {
 			return false;
 		}
 		if (govtEntityType == null) {
@@ -1169,6 +1164,14 @@ public class Referral extends DomainObject {
 				.equals(other.limitedAccessGovtAgencyType)) {
 			return false;
 		}
+		if (linkToPrimaryReferralId == null) {
+			if (other.linkToPrimaryReferralId != null) {
+				return false;
+			}
+		} else if (!linkToPrimaryReferralId
+				.equals(other.linkToPrimaryReferralId)) {
+			return false;
+		}
 		if (mandatedCrossReportReceivedDate == null) {
 			if (other.mandatedCrossReportReceivedDate != null) {
 				return false;
@@ -1189,6 +1192,14 @@ public class Referral extends DomainObject {
 				return false;
 			}
 		} else if (!originalClosureDate.equals(other.originalClosureDate)) {
+			return false;
+		}
+		if (primaryContactStaffPersonId == null) {
+			if (other.primaryContactStaffPersonId != null) {
+				return false;
+			}
+		} else if (!primaryContactStaffPersonId
+				.equals(other.primaryContactStaffPersonId)) {
 			return false;
 		}
 		if (receivedDate == null) {
