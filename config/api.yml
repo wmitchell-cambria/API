@@ -25,6 +25,8 @@ dataSourceFactory:
 
 flywayFactory:
   sqlMigrationPrefix: v
+  schemas:
+    - CWSINT
   locations:
     - db/migrations
     
