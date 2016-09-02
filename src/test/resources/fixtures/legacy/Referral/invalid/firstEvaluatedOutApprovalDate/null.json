@@ -41,7 +41,7 @@
   "zippyCreatedIndicator": false,
   "homelessIndicator": false,
   "familyRefusedServicesIndicator": false,
-  "firstEvaluatedOutApprovalDate": "",
+  "firstEvaluatedOutApprovalDate": null,
   "responsibleAgencyCode": "C",
   "limitedAccessGovtAgencyType": 1234,
   "limitedAccessDate": "2000-05-05",

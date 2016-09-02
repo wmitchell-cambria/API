@@ -11,7 +11,7 @@
   "currentLocationOfChildren": "current",
   "drmsAllegationDescriptionDoc": "abcdefg",
   "drmsErReferralDoc": "A3B7sSC0Ab",
-  "drmsInvestigationDoc": "",
+  "drmsInvestigationDoc": null,
   "filedSuspectedChildAbuseReporttoLawEnforcementIndicator": false,
   "familyAwarenessIndicator": false,
   "govtEntityType": 1118,

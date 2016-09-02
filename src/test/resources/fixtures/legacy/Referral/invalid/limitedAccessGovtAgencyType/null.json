@@ -43,7 +43,7 @@
   "familyRefusedServicesIndicator": false,
   "firstEvaluatedOutApprovalDate": "2000-05-05",
   "responsibleAgencyCode": "C",
-  "limitedAccessGovtAgencyType": "",
+  "limitedAccessGovtAgencyType": null,
   "limitedAccessDate": "2000-05-05",
   "limitedAccessDesc": "thjkl",
   "originalClosureDate": "2000-05-05"

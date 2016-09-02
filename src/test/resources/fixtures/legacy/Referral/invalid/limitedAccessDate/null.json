@@ -44,7 +44,7 @@
   "firstEvaluatedOutApprovalDate": "2000-05-05",
   "responsibleAgencyCode": "C",
   "limitedAccessGovtAgencyType": 1234,
-  "limitedAccessDate": "",
+  "limitedAccessDate": null,
   "limitedAccessDesc": "thjkl",
   "originalClosureDate": "2000-05-05"
 }

@@ -45,6 +45,6 @@
   "responsibleAgencyCode": "C",
   "limitedAccessGovtAgencyType": 1234,
   "limitedAccessDate": "2000-05-05",
-  "limitedAccessDesc": "",
+  "limitedAccessDesc": null,
   "originalClosureDate": "2000-05-05"
 }
