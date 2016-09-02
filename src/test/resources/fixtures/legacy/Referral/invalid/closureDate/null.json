@@ -6,7 +6,7 @@
   "approvalNumber": "A3CDEOm0Ab",
   "approvalStatusType": 122,
   "caretakersPerpetratorCode": "A",
-  "closureDate": "",
+  "closureDate": null,
   "communicationMethodType": 409,
   "currentLocationOfChildren": "current",
   "drmsAllegationDescriptionDoc": "abcdefg",

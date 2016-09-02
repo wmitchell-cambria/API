@@ -32,7 +32,7 @@
   "specificsIncludedCode": "A",
   "sufficientInformationCode": "A",
   "unfoundedSeriesCode": "A",
-  "linkToPrimaryReferralId": "",
+  "linkToPrimaryReferralId": null,
   "allegesAbuseOccurredAtAddressId": "kjhgfdl",
   "firstResponseDeterminedByStaffPersonId": "0Ab",
   "primaryContactStaffPersonId": "0Ab",

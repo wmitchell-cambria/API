@@ -34,7 +34,7 @@
   "unfoundedSeriesCode": "A",
   "linkToPrimaryReferralId": "sdfghj",
   "allegesAbuseOccurredAtAddressId": "kjhgfdl",
-  "firstResponseDeterminedByStaffPersonId": "",
+  "firstResponseDeterminedByStaffPersonId": null,
   "primaryContactStaffPersonId": "0Ab",
   "countySpecificCode": "51",
   "specialProjectReferralIndicator": false,

@@ -9,7 +9,7 @@
   "closureDate": "2000-03-03",
   "communicationMethodType": 409,
   "currentLocationOfChildren": "current",
-  "drmsAllegationDescriptionDoc": "",
+  "drmsAllegationDescriptionDoc": null,
   "drmsErReferralDoc": "A3B7sSC0Ab",
   "drmsInvestigationDoc": "efghijk",
   "filedSuspectedChildAbuseReporttoLawEnforcementIndicator": false,

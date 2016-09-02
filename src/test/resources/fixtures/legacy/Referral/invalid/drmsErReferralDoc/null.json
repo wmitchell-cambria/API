@@ -10,7 +10,7 @@
   "communicationMethodType": 409,
   "currentLocationOfChildren": "current",
   "drmsAllegationDescriptionDoc": "abcdefg",
-  "drmsErReferralDoc": "",
+  "drmsErReferralDoc": null,
   "drmsInvestigationDoc": "efghijk",
   "filedSuspectedChildAbuseReporttoLawEnforcementIndicator": false,
   "familyAwarenessIndicator": false,

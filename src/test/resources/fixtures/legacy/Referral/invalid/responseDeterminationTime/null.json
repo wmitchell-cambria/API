@@ -26,7 +26,7 @@
   "referralResponseType": 1520,
   "referredToResourceType": 0,
   "responseDeterminationDate": "2000-01-31",
-  "responseDeterminationTime": "",
+  "responseDeterminationTime": null,
   "responseRationaleText": "lmnopq",
   "screenerNoteText": "rstuvw",
   "specificsIncludedCode": "A",

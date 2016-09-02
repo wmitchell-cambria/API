@@ -33,7 +33,7 @@
   "sufficientInformationCode": "A",
   "unfoundedSeriesCode": "A",
   "linkToPrimaryReferralId": "sdfghj",
-  "allegesAbuseOccurredAtAddressId": "",
+  "allegesAbuseOccurredAtAddressId": null,
   "firstResponseDeterminedByStaffPersonId": "0Ab",
   "primaryContactStaffPersonId": "0Ab",
   "countySpecificCode": "51",

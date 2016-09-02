@@ -28,7 +28,7 @@
   "responseDeterminationDate": "2000-01-31",
   "responseDeterminationTime": "2016-08-07-16.41.49.214",
   "responseRationaleText": "lmnopq",
-  "screenerNoteText": "",
+  "screenerNoteText": null,
   "specificsIncludedCode": "A",
   "sufficientInformationCode": "A",
   "unfoundedSeriesCode": "A",

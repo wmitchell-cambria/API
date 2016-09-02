@@ -25,7 +25,7 @@
   "receivedTime": "2016-08-07-16.41.49.214",
   "referralResponseType": 1520,
   "referredToResourceType": 0,
-  "responseDeterminationDate": "",
+  "responseDeterminationDate": null,
   "responseDeterminationTime": "2016-08-07-16.41.49.214",
   "responseRationaleText": "lmnopq",
   "screenerNoteText": "rstuvw",
