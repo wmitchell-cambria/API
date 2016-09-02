@@ -20,7 +20,7 @@ import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.StaffPerson;
+import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import io.dropwizard.jackson.Jackson;
 
@@ -35,13 +35,13 @@ public class CrudsServiceImplTest {
 	private CrudsDao<gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsDao;
 	
 	
-	private gov.ca.cwds.rest.api.domain.StaffPerson nonExistentStaffPersonToUpdate = new gov.ca.cwds.rest.api.domain.StaffPerson("notexists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson nonExistentStaffPersonToUpdate = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("notexists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson nonExistingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(nonExistentStaffPersonToUpdate, "ABC");
 	
-	private gov.ca.cwds.rest.api.domain.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.StaffPerson("exists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("exists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson existingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(existingStaffPersonToCreate, "ABC");
 	 
-	private gov.ca.cwds.rest.api.domain.StaffPerson toCreate;
+	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson toCreate;
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson toCreatePersistent;
 
 	@SuppressWarnings("unchecked")

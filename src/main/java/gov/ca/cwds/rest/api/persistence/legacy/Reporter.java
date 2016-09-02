@@ -131,7 +131,7 @@ public class Reporter extends PersistentObject {
 	 * @param reporter The domain object to construct this object from 
 	 * @param lastUpdatedId  the id of the last person to update this object
 	 */
-    public Reporter(gov.ca.cwds.rest.api.domain.Reporter reporter, String lastUpdatedId) {
+    public Reporter(gov.ca.cwds.rest.api.domain.legacy.Reporter reporter, String lastUpdatedId) {
         super(lastUpdatedId);
         try {
             this.badgeNumber = reporter.getBadgeNumber();

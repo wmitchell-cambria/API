@@ -48,7 +48,7 @@ public class CrossReportTest {
 
 	@Test
 	public void domainCrossReportLastUpdateConstructorTest() throws Exception {
-		gov.ca.cwds.rest.api.domain.CrossReport domain = new gov.ca.cwds.rest.api.domain.CrossReport(thirdId,
+		gov.ca.cwds.rest.api.domain.legacy.CrossReport domain = new gov.ca.cwds.rest.api.domain.legacy.CrossReport(thirdId,
 				 crossReportMethodType, filedOutOfStateIndicator, governmentOrgCrossRptIndicatorVar, informTime,
 				 recipientBadgeNumber, recipientPhoneExtensionNumber, recipientPhoneNumber, informDate,
 				 recipientPositionTitleDesc, referenceNumber, referralId, lawEnforcementId, staffPersonId, description,

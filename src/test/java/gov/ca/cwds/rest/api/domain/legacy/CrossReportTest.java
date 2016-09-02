@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.domain;
+package gov.ca.cwds.rest.api.domain.legacy;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -7,6 +7,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.legacy.CrossReport;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.CrossReportResourceImpl;
 import io.dropwizard.jackson.Jackson;

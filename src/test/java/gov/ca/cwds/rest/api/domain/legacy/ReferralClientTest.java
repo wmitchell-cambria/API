@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.domain;
+package gov.ca.cwds.rest.api.domain.legacy;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,6 +25,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.ReferralClientResourceImpl;
 import io.dropwizard.jackson.Jackson;

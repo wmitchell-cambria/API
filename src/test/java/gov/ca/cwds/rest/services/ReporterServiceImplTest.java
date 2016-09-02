@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.Reporter;
+import gov.ca.cwds.rest.api.domain.legacy.Reporter;
 import io.dropwizard.jackson.Jackson;
 
 public class ReporterServiceImplTest {

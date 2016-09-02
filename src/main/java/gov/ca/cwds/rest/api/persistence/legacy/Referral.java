@@ -190,7 +190,7 @@ public class Referral extends PersistentObject {
 	 */
 	public Referral() {}
 		
-	public Referral(gov.ca.cwds.rest.api.domain.Referral referral, String lastUpdatedId) {
+	public Referral(gov.ca.cwds.rest.api.domain.legacy.Referral referral, String lastUpdatedId) {
 		super(lastUpdatedId);
 		try {
 			this.id = referral.getId();

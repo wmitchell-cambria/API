@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.Referral;
+import gov.ca.cwds.rest.api.domain.legacy.Referral;
 import io.dropwizard.jackson.Jackson;
 
 public class ReferralServiceImplTest {

@@ -17,7 +17,7 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	private static final String KEY_REFERRAL_ID = "referralId";
 	private static final String KEY_CLIENT_ID = "clientId";
 
-	private CrudsService<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient> crudsService;
+	private CrudsService<gov.ca.cwds.rest.api.domain.legacy.ReferralClient, ReferralClient> crudsService;
 
 	/**
 	 * Constructor
@@ -25,7 +25,7 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	 * @param crudsService
 	 *            The {@link CrudsService} used by this service
 	 */
-	public ReferralClientServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.ReferralClient, ReferralClient> crudsService) {
+	public ReferralClientServiceImpl(CrudsService<gov.ca.cwds.rest.api.domain.legacy.ReferralClient, ReferralClient> crudsService) {
 		this.crudsService = crudsService;
 	}
 	
@@ -33,9 +33,9 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.ReferralClient find(Serializable primaryKey) {
+	public gov.ca.cwds.rest.api.domain.legacy.ReferralClient find(Serializable primaryKey) {
 		ReferralClient.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
-		return (gov.ca.cwds.rest.api.domain.ReferralClient) crudsService.find(primaryKeyObject);
+		return (gov.ca.cwds.rest.api.domain.legacy.ReferralClient) crudsService.find(primaryKeyObject);
 	}
 
 	/*
@@ -44,16 +44,16 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
 	 */
 	@Override
-	public gov.ca.cwds.rest.api.domain.ReferralClient delete(Serializable primaryKey) {
+	public gov.ca.cwds.rest.api.domain.legacy.ReferralClient delete(Serializable primaryKey) {
 		ReferralClient.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
-		return (gov.ca.cwds.rest.api.domain.ReferralClient) crudsService.delete(primaryKeyObject);
+		return (gov.ca.cwds.rest.api.domain.legacy.ReferralClient) crudsService.delete(primaryKeyObject);
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public Serializable create(gov.ca.cwds.rest.api.domain.ReferralClient object) {
+	public Serializable create(gov.ca.cwds.rest.api.domain.legacy.ReferralClient object) {
 		return crudsService.create(object);
 	}
 
@@ -61,7 +61,7 @@ public class ReferralClientServiceImpl implements ReferralClientService {
 	 * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
 	 */
 	@Override
-	public String update(gov.ca.cwds.rest.api.domain.ReferralClient object) {
+	public String update(gov.ca.cwds.rest.api.domain.legacy.ReferralClient object) {
 		return crudsService.update(object);
 	}
 	

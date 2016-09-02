@@ -74,7 +74,7 @@ public class ReferralTest {
 
 	@Test
 	public void domainReferralLastUpdateConstructorTest() throws Exception {
-		gov.ca.cwds.rest.api.domain.Referral domain = new gov.ca.cwds.rest.api.domain.Referral(id,
+		gov.ca.cwds.rest.api.domain.legacy.Referral domain = new gov.ca.cwds.rest.api.domain.legacy.Referral(id,
 				additionalInfoIncludedCode, anonymousReporterIndicator, applicationForPetitionIndicator, approvalNumber,
 				approvalStatusType, caretakersPerpetratorCode, closureDate, communicationMethodType,
 				currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,

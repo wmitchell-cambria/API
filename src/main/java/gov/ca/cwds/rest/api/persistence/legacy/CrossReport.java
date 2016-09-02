@@ -113,7 +113,7 @@ public class CrossReport extends PersistentObject {
 	 * @param crossReport The domain object to construct this object from 
 	 * @param lastUpdatedId  the id of the last person to update this object
 	 */
-    public CrossReport(gov.ca.cwds.rest.api.domain.CrossReport crossReport, String lastUpdatedId) {
+    public CrossReport(gov.ca.cwds.rest.api.domain.legacy.CrossReport crossReport, String lastUpdatedId) {
         super(lastUpdatedId);
         try {
             this.referralId = crossReport.getReferralId();
