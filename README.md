@@ -41,6 +41,7 @@ Run the application with Docker using a command like this:
 1. Source code, available at [GitHub](https://github.com/ca-cwds/API)
 1. Java SE 8 development kit
 1. DB2 Database
+1. Docker ( if running a Database Docker Container )
 
 ### Database 
 
