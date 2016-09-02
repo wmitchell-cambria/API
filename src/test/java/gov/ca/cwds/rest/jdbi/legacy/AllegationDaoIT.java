@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
 
-public class AllegationDaoTest {
+public class AllegationDaoIT {
 	private SessionFactory sessionFactory;
 	private AllegationDao allegationDao;
 
@@ -78,13 +78,14 @@ public class AllegationDaoTest {
 	@Test
 	public void testDelete() {
 		gov.ca.cwds.rest.api.domain.Allegation allegation = new gov.ca.cwds.rest.api.domain.Allegation(
-				"Aaeae9r0F6", null, 2, "M", "  ", null,
+				"Aaeae9r0F4", null, 2, "M", "  ", null,
 				0, 2180, "  ", null, false, 
-				"N", false, "AHooKwN0F6", null, "8mu1E710F4", "19", 
+				"N", false, "AHooKwN0F4", null, "8mu1E710F4", "19", 
 				false, null);
-		Allegation expected = new Allegation (allegation, "0F6");
-		Allegation create = allegationDao.create(expected);
-		assert expected.equals(create);
+		
+		Allegation expected = new Allegation (allegation, "0F4");
+		Allegation deleted = allegationDao.delete("Aaeae9r0F4");
+		assert expected.equals(deleted);
 	}
 	
 	@Test
