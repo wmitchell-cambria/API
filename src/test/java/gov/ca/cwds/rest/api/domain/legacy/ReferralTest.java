@@ -152,7 +152,7 @@ public class ReferralTest {
 		assertThat(totest.getResponseRationaleText(), is(equalTo(persistent.getResponseRationaleText())));
 		assertThat(totest.getScreenerNoteText(), is(equalTo(persistent.getScreenerNoteText())));
 		assertThat(totest.getSpecificsIncludedCode(), is(equalTo(persistent.getSpecificsIncludedCode())));
-		assertThat(totest.getSufficientInformationCode(), is(equalTo(persistent.getSpecificsIncludedCode())));
+		assertThat(totest.getSufficientInformationCode(), is(equalTo(persistent.getSufficientInformationCode())));
 		assertThat(totest.getUnfoundedSeriesCode(), is(equalTo(persistent.getUnfoundedSeriesCode())));
 		assertThat(totest.getLinkToPrimaryReferralId(), is(equalTo(persistent.getLinkToPrimaryReferralId())));
 		assertThat(totest.getAllegesAbuseOccurredAtAddressId(), is(equalTo(persistent.getAllegesAbuseOccurredAtAddressId())));
