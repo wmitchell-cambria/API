@@ -64,7 +64,7 @@ public class StaffPersonDaoIT {
 		//assert expected.equals(create);
 		
 	}
-	/**
+
 	@Test
 	public void testCreateExistingEntityExpection() {
 		gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(
@@ -80,7 +80,7 @@ public class StaffPersonDaoIT {
 			assertThat(entityExistsExp.getMessage(), IsNull.nullValue());
 		}
 	}
-	*/
+
 	@Test
 	public void testDelete() {
 		String id = "q1u";

@@ -14,6 +14,7 @@ public class ReferralTest {
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
   private String id = "a";
   private String additionalInfoIncludedCode = "b";
   private Boolean anonymousReporterIndicator = Boolean.TRUE;
@@ -37,11 +38,11 @@ public class ReferralTest {
   private String referralName = "k";
   private String openAdequateCaseCode = "l";
   private String receivedDate = "2010-06-30";
-  private String receivedTime = "1970-01-01-16.41.49.000";
+  private String receivedTime = "14:46:00";
   private Short referralResponseType = 4;
   private Short referredToResourceType = 5;
   private String responseDeterminationDate = "1985-09-04";
-  private String responseDeterminationTime = "1971-01-01-16.41.49.000";
+  private String responseDeterminationTime = "14:46:00";
   private String responseRationaleText = "m";
   private String screenerNoteText = "n";
   private String specificsIncludedCode = "o";
@@ -119,13 +120,13 @@ public class ReferralTest {
     assertThat(persistent.getReferralName(), is(equalTo(referralName)));
     assertThat(persistent.getOpenAdequateCaseCode(), is(equalTo(openAdequateCaseCode)));
     assertThat(persistent.getReceivedDate(), is(equalTo(df.parse(receivedDate))));
-    assertThat(persistent.getReceivedTime(), is(equalTo(tf.parse(receivedTime))));
+    assertThat(persistent.getReceivedTime(), is(equalTo(timeOnlyFormat.parse(receivedTime))));
     assertThat(persistent.getReferralResponseType(), is(equalTo(referralResponseType)));
     assertThat(persistent.getReferredToResourceType(), is(equalTo(referredToResourceType)));
     assertThat(persistent.getResponseDeterminationDate(),
         is(equalTo(df.parse(responseDeterminationDate))));
     assertThat(persistent.getResponseDeterminationTime(),
-        is(equalTo(tf.parse(responseDeterminationTime))));
+       is(equalTo(timeOnlyFormat.parse(responseDeterminationTime))));
     assertThat(persistent.getResponseRationaleText(), is(equalTo(responseRationaleText)));
     assertThat(persistent.getScreenerNoteText(), is(equalTo(screenerNoteText)));
     assertThat(persistent.getSpecificsIncludedCode(), is(equalTo(specificsIncludedCode)));

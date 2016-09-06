@@ -10,6 +10,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -38,7 +40,10 @@ public class CrudsServiceImplTest {
 	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson nonExistentStaffPersonToUpdate = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("notexists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson nonExistingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(nonExistentStaffPersonToUpdate, "ABC");
 	
-	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("exists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("q1u", null, "External Interface", "external interface", "SCXCFP8", " ",
+			"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
+			false, "MIZN02k00E", "  ", "    ", "99", false, 
+			"3XPCP92q38", null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson existingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(existingStaffPersonToCreate, "ABC");
 	 
 	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson toCreate;

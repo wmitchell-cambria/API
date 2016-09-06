@@ -160,9 +160,9 @@ public class Referral extends DomainObject {
   private String receivedDate;
 
   @NotNull
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIMESTAMP_FORMAT)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "receivedTime")
-  @gov.ca.cwds.rest.validation.Date(format = TIMESTAMP_FORMAT, required = true)
+  @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = true)
   @ApiModelProperty(required = true, readOnly = false, example = "2000-01-01-16.41.49.214")
   private String receivedTime;
 
@@ -181,9 +181,9 @@ public class Referral extends DomainObject {
       example = "2000-01-01")
   private String responseDeterminationDate;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIMESTAMP_FORMAT)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "responseDeterminationTime")
-  @gov.ca.cwds.rest.validation.Date(format = TIMESTAMP_FORMAT, required = false)
+  @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, example = "2000-01-01-16.41.49.214")
   private String responseDeterminationTime;
 
