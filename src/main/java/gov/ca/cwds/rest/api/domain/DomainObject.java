@@ -73,8 +73,6 @@ public class DomainObject {
 			}
 		}
 		return null;
-		
-		
 	}
 	
 	public static Date uncookTimeString(String timestamp) {
@@ -89,7 +87,4 @@ public class DomainObject {
 		return null;
 	}
 	
-	
-	}
-	
-
+}
