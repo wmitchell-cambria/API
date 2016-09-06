@@ -78,7 +78,7 @@ public class StaffPersonDaoIT {
 		} catch(EntityExistsException entityExistsExp){
 			assertThat(entityExistsExp, IsInstanceOf.instanceOf(EntityExistsException.class));
 			assertThat(entityExistsExp.getMessage(), IsNull.nullValue());
-		}
+		};
 	}
 	
 	@Test
