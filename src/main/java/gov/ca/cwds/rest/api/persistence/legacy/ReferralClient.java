@@ -340,7 +340,7 @@ public class ReferralClient extends PersistentObject {
     if (dispositionClosureDescription == null) {
       if (other.dispositionClosureDescription != null)
         return false;
-    } else if (!dispositionClosureDescription.equals(other.dispositionClosureDescription))
+    } else if (!dispositionClosureDescription.trim().equals(other.dispositionClosureDescription.trim()))
       return false;
     if (dispositionClosureReasonType == null) {
       if (other.dispositionClosureReasonType != null)

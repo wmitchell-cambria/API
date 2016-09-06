@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public class DomainObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
+	protected static final String TIME_FORMAT = "HH:mm:ss";
 
 	public DomainObject() {
 	}
@@ -72,6 +73,23 @@ public class DomainObject {
 			}
 		}
 		return null;
+		
+		
 	}
 	
-}
+	public static Date uncookTimeString(String timestamp) {
+		if( timestamp != null ) {
+			try {
+				DateFormat df = new SimpleDateFormat(TIME_FORMAT);
+				return df.parse(timestamp);
+			} catch (Exception e) {
+				throw new DomainException(e);
+			}
+		}
+		return null;
+	}
+	
+	
+	}
+	
+
