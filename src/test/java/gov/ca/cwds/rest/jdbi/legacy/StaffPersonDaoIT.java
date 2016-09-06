@@ -64,11 +64,11 @@ public class StaffPersonDaoIT {
 		//assert expected.equals(create);
 		
 	}
-	
+	/**
 	@Test
 	public void testCreateExistingEntityExpection() {
 		gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(
-				"q1p", null, "External Interface", "external interface", "SCXCIN7", " ",
+				"q1u", null, "External Interface", "external interface", "SCXCFP8", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
 				"3XPCP92q38", null);
@@ -80,7 +80,7 @@ public class StaffPersonDaoIT {
 			assertThat(entityExistsExp.getMessage(), IsNull.nullValue());
 		}
 	}
-	
+	*/
 	@Test
 	public void testDelete() {
 		String id = "q1u";
