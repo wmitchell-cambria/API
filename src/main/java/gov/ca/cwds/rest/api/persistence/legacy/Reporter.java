@@ -443,12 +443,12 @@ public class Reporter extends PersistentObject {
     if (badgeNumber == null) {
       if (other.badgeNumber != null)
         return false;
-    } else if (!badgeNumber.equals(other.badgeNumber))
+    } else if (!badgeNumber.trim().equals(other.badgeNumber.trim()))
       return false;
     if (cityName == null) {
       if (other.cityName != null)
         return false;
-    } else if (!cityName.equals(other.cityName))
+    } else if (!cityName.trim().equals(other.cityName.trim()))
       return false;
     if (colltrClientRptrReltnshpType == null) {
       if (other.colltrClientRptrReltnshpType != null)
@@ -478,7 +478,7 @@ public class Reporter extends PersistentObject {
     if (employerName == null) {
       if (other.employerName != null)
         return false;
-    } else if (!employerName.equals(other.employerName))
+    } else if (!employerName.trim().equals(other.employerName.trim()))
       return false;
     if (feedbackDate == null) {
       if (other.feedbackDate != null)
@@ -493,12 +493,12 @@ public class Reporter extends PersistentObject {
     if (firstName == null) {
       if (other.firstName != null)
         return false;
-    } else if (!firstName.equals(other.firstName))
+    } else if (!firstName.trim().equals(other.firstName.trim()))
       return false;
     if (lastName == null) {
       if (other.lastName != null)
         return false;
-    } else if (!lastName.equals(other.lastName))
+    } else if (!lastName.trim().equals(other.lastName.trim()))
       return false;
     if (lawEnforcementId == null) {
       if (other.lawEnforcementId != null)
@@ -528,7 +528,7 @@ public class Reporter extends PersistentObject {
     if (namePrefixDescription == null) {
       if (other.namePrefixDescription != null)
         return false;
-    } else if (!namePrefixDescription.equals(other.namePrefixDescription))
+    } else if (!namePrefixDescription.trim().equals(other.namePrefixDescription.trim()))
       return false;
     if (primaryPhoneExtensionNumber == null) {
       if (other.primaryPhoneExtensionNumber != null)
@@ -553,17 +553,17 @@ public class Reporter extends PersistentObject {
     if (streetName == null) {
       if (other.streetName != null)
         return false;
-    } else if (!streetName.equals(other.streetName))
+    } else if (!streetName.trim().equals(other.streetName.trim()))
       return false;
     if (streetNumber == null) {
       if (other.streetNumber != null)
         return false;
-    } else if (!streetNumber.equals(other.streetNumber))
+    } else if (!streetNumber.trim().equals(other.streetNumber.trim()))
       return false;
     if (suffixTitleDescription == null) {
       if (other.suffixTitleDescription != null)
         return false;
-    } else if (!suffixTitleDescription.equals(other.suffixTitleDescription))
+    } else if (!suffixTitleDescription.trim().equals(other.suffixTitleDescription.trim()))
       return false;
     if (zipNumber == null) {
       if (other.zipNumber != null)

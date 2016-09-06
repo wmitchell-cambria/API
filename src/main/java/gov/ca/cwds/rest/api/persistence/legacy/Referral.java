@@ -232,13 +232,13 @@ public class Referral extends PersistentObject {
       this.referralName = referral.getReferralName();
       this.openAdequateCaseCode = referral.getOpenAdequateCaseCode();
       this.receivedDate = DomainObject.uncookDateString(referral.getReceivedDate());
-      this.receivedTime = DomainObject.uncookTimestampString(referral.getReceivedTime());
+      this.receivedTime = DomainObject.uncookTimeString(referral.getReceivedTime());
       this.referralResponseType = referral.getReferralResponseType();
       this.referredToResourceType = referral.getReferredToResourceType();
       this.responseDeterminationDate =
           DomainObject.uncookDateString(referral.getResponseDeterminationDate());
       this.responseDeterminationTime =
-          DomainObject.uncookTimestampString(referral.getResponseDeterminationTime());
+          DomainObject.uncookTimeString(referral.getResponseDeterminationTime());
       this.responseRationaleText = referral.getResponseRationaleText();
       this.screenerNoteText = referral.getScreenerNoteText();
       this.specificsIncludedCode = referral.getSpecificsIncludedCode();
@@ -937,7 +937,7 @@ public class Referral extends PersistentObject {
     if (referralName == null) {
       if (other.referralName != null)
         return false;
-    } else if (!referralName.equals(other.referralName))
+    } else if (!referralName.trim().equals(other.referralName.trim()))
       return false;
     if (referralResponseType == null) {
       if (other.referralResponseType != null)
