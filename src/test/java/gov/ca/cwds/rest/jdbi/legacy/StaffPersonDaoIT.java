@@ -84,11 +84,11 @@ public class StaffPersonDaoIT {
 
 	@Test
 	public void testDelete() {
-		String id = "q1u";
+		String id = "q1p";
 		gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(
-				"q1u", null, "External Interface", "external interface", "SCXCFP8", " ",
+				"q1p", null, "External Interface", "external interface", "SCXCIN7", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
-				 false, "MIZN02k00E", "  ", "    ", "99", false, 
+				false, "MIZN02k00E", "  ", "    ", "99", false, 
 				"3XPCP92q38", null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		StaffPerson delete = staffPersonDao.delete(id);
