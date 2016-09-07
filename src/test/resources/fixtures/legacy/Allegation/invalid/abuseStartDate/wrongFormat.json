@@ -3,21 +3,19 @@
   "abuseEndDate": "1999-07-15",
   "abuseFrequency": 2,
   "abuseFrequencyPeriodCode": "M",
-  "abuseLocationDescription": "",
-  "abuseStartDate": "11/22/1873",
+  "abuseLocationDescription": "Barber Shop",
+  "abuseStartDate": "08/08/2010",
   "allegationDispositionType": 0,
   "allegationType": 2180,
-  "dispositionDescription": "",
+  "dispositionDescription": "Fremont",
   "dispositionDate": "",
   "injuryHarmDetailIndicator": false,
   "nonProtectingParentCode": "N",
   "staffPersonAddedIndicator": false,
-  
-  
   "fkClientT": "AHooKwN0F4",
   "fkClient0": "MKPFcB90F4",
   "fkReferralT": "8mu1E710F4",
   "countySpecificCode": "19",
-  "zippyCrestedIndicator": false,
+  "zippyCreatedIndicator": false,
   "placementFacilityType": 6574
 }

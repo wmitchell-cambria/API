@@ -16,11 +16,11 @@ public class AllegationTest {
 	private String id = "a";
 	private String abuseEndDate = "1973-11-22";
 	private String abuseStartDate = "2006-09-12";
-	private Integer abuseFrequency = 1;
+	private Short abuseFrequency = 1;
 	private String abuseFrequencyPeriodCode = "b";
 	private String abuseLocationDescription = "c";
-	private Integer allegationDispositionType= 2;
-	private Integer allegationType = 3;
+	private Short allegationDispositionType= 2;
+	private Short allegationType = 3;
 	private String dispositionDescription = "d";
 	private String dispositionDate = "1963-11-22";
 	private Boolean injuryHarmDetailIndicator = Boolean.TRUE;
@@ -30,8 +30,8 @@ public class AllegationTest {
 	private String fkClient0 = "g";
 	private String fkReferralT = "h";
 	private String countySpecificCode = "i";
-	private Boolean zippyCrestedIndicator = Boolean.TRUE;
-	private Integer placementFacilityType = 4;
+	private Boolean zippyCreatedIndicator = Boolean.TRUE;
+	private Short placementFacilityType = 4;
 		
 	private String lastUpdatedId = "z";
 	
@@ -49,7 +49,7 @@ public class AllegationTest {
 				abuseFrequency, abuseFrequencyPeriodCode, abuseLocationDescription, abuseStartDate,
 				allegationDispositionType, allegationType, dispositionDescription, dispositionDate,
 				injuryHarmDetailIndicator, nonProtectingParentCode, staffPersonAddedIndicator, fkClientT, fkClient0,
-				fkReferralT, countySpecificCode, zippyCrestedIndicator, placementFacilityType);
+				fkReferralT, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
 
 		Allegation persistent = new Allegation(domain, "z");
 		assertThat(persistent.getId(), is(equalTo(id)));
@@ -68,7 +68,7 @@ public class AllegationTest {
 		assertThat(persistent.getFkClient0(), is(equalTo(fkClient0)));
 		assertThat(persistent.getFkClientT(), is(equalTo(fkClientT)));
 		assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
-		assertThat(persistent.getZippyCrestedIndicator(), is(equalTo("Y")));
+		assertThat(persistent.getZippyCreatedIndicator(), is(equalTo("Y")));
 		assertThat(persistent.getPlacementFacilityType(), is(equalTo(placementFacilityType)));
 		assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
 	}

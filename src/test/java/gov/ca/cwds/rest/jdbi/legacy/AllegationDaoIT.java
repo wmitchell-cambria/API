@@ -39,7 +39,7 @@ public class AllegationDaoIT {
 	public void testFind() {
 		String id = "Aaeae9r0F4";
 		gov.ca.cwds.rest.api.domain.legacy.Allegation allegation = new gov.ca.cwds.rest.api.domain.legacy.Allegation("Aaeae9r0F4",
-				null, 2, "M", "  ", null, 0, 2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
+				null, (short)2, "M", "  ", null, (short)0, (short)2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
 				"19", false, null);
 		Allegation expected = new Allegation(allegation, "0F4");
 		Allegation found = allegationDao.find(id);
@@ -49,7 +49,7 @@ public class AllegationDaoIT {
 	@Test
 	public void testCreate() {
 		gov.ca.cwds.rest.api.domain.legacy.Allegation allegation = new gov.ca.cwds.rest.api.domain.legacy.Allegation("Aaeae9r0F6",
-				null, 2, "M", "  ", null, 0, 2180, "  ", null, false, "N", false, "AHooKwN0F6", null, "8mu1E710F4",
+				null, (short)2, "M", "  ", null, (short)0, (short)2180, "  ", null, false, "N", false, "AHooKwN0F6", null, "8mu1E710F4",
 				"19", false, null);
 		Allegation expected = new Allegation(allegation, "0F6");
 		Allegation create = allegationDao.create(expected);
@@ -59,7 +59,7 @@ public class AllegationDaoIT {
 	@Test
 	public void testCreateExistingEntityExpection() {
 		gov.ca.cwds.rest.api.domain.legacy.Allegation allegation = new gov.ca.cwds.rest.api.domain.legacy.Allegation("Aaeae9r0F4",
-				null, 2, "M", "  ", null, 0, 2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
+				null, (short)2, "M", "  ", null, (short)0, (short)2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
 				"19", false, null);
 
 		Allegation expected = new Allegation(allegation, "0F4");
@@ -75,7 +75,7 @@ public class AllegationDaoIT {
 	public void testDelete() {
 		String id = "Aaeae9r0F4";
 		gov.ca.cwds.rest.api.domain.legacy.Allegation allegation = new gov.ca.cwds.rest.api.domain.legacy.Allegation("Aaeae9r0F4",
-				null, 2, "M", "  ", null, 0, 2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
+				null, (short)2, "M", "  ", null, (short)0, (short)2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
 				"19", false, null);
 		Allegation expected = new Allegation(allegation, "0F4");
 		Allegation delete = allegationDao.delete(id);
@@ -86,7 +86,7 @@ public class AllegationDaoIT {
 	@Test
 	public void testUpdate() {
 		gov.ca.cwds.rest.api.domain.legacy.Allegation allegation = new gov.ca.cwds.rest.api.domain.legacy.Allegation("Aaeae9r0F4",
-				null, 2, "M", "  ", null, 0, 2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
+				null, (short)2, "M", "  ", null, (short)0, (short)2180, "  ", null, false, "N", false, "AHooKwN0F4", null, "8mu1E710F4",
 				"20", false, null);
 		Allegation expected = new Allegation(allegation, "0F4");
 		Allegation update = allegationDao.update(expected);
@@ -96,7 +96,7 @@ public class AllegationDaoIT {
 	@Test
 	public void testUpdateEntityNotFoundException() {
 		gov.ca.cwds.rest.api.domain.legacy.Allegation allegation = new gov.ca.cwds.rest.api.domain.legacy.Allegation("Aaeae9r0F7",
-				null, 2, "M", "  ", null, 0, 2180, "  ", null, false, "N", false, "AHooKwN0F7", null, "8mu1E710F7",
+				null, (short)2, "M", "  ", null, (short)0, (short)2180, "  ", null, false, "N", false, "AHooKwN0F7", null, "8mu1E710F7",
 				"20", false, null);
 		Allegation expected = new Allegation(allegation, "0F7");
 		try {
