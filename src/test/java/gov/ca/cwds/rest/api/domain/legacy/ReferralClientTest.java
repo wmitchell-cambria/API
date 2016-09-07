@@ -33,7 +33,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ReferralClientTest {
 
-  private static final String ROOT_RESOURCE = "/referralclients/";
+  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL_CLIENT + "/";
 
   private static final ReferralClientResourceImpl mockedReferralClientResource =
       mock(ReferralClientResourceImpl.class);

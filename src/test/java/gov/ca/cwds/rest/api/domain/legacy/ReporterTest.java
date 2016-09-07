@@ -32,7 +32,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ReporterTest {
 
-  private static final String ROOT_RESOURCE = "/reporters/";
+  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REPORTER + "/";
 
   private static final ReporterResourceImpl mockedReporterResource =
       mock(ReporterResourceImpl.class);
