@@ -25,9 +25,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.legacy.Reporter;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.ReporterResourceImpl;
+import gov.ca.cwds.rest.resources.legacy.ReporterResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 

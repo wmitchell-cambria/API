@@ -30,19 +30,6 @@ flywayFactory:
   locations:
     - db/migrations
     
-logging:
-  level: WARN
-  loggers:
-    io.dropwizard: INFO
-    gov.ca.cwds: DEBUG
-  appenders:
-    - type: file
-      currentLogFilename: /opt/cws-api/logs/api.log
-      threshold: ALL
-      archive: true
-      archivedLogFilenamePattern: /opt/cws-api/logs/api-%d.log
-      archivedFileCount: 5
-    
 server:
   applicationConnectors:
   - type: http 

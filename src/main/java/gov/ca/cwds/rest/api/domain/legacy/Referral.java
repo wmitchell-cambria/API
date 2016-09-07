@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a Referral
+ * {@link DomainObject} as a direct representation of the physical representation of a Referral in the legacy database.
  * 
  * @author CWDS API Team
  */
