@@ -1,3 +1,11 @@
 truncate table cwsint.ALLGTN_T immediate;
 INSERT INTO cwsint.ALLGTN_T(IDENTIFIER, ABUSE_ENDT, ABUSE_FREQ, ABUSE_PDCD, LOC_DSC, ABUSE_STDT, ALG_DSPC, ALG_TPC, DISPSN_DSC, DISPSN_DT, IJHM_DET_B, NON_PRT_CD, STFADD_IND, LST_UPD_ID, LST_UPD_TS, FKCLIENT_T, FKCLIENT_0, FKREFERL_T, CNTY_SPFCD, ZIPPY_IND, PLC_FCLC)
 VALUES ('Aaeae9r0F4', null, 2, 'M', '                                                                           ', null, 0, 2180, '                                                                                                                                                                                                                                                              ', null, 'N', 'N', 'N', '0F4', '1999-07-15 17:06:29.208', 'AHooKwN0F4', null, '8mu1E710F4', '19', 'N', null);
+
+truncate table cwsint.STFPERST immediate;
+INSERT INTO cwsint.STFPERST(IDENTIFIER, END_DT, FIRST_NM, JOB_TL_DSC, LAST_NM, MID_INI_NM, NMPRFX_DSC, PHONE_NO, TEL_EXT_NO, START_DT, SUFX_TLDSC, TLCMTR_IND, LST_UPD_ID, LST_UPD_TS, FKCWS_OFFT, AVLOC_DSC, SSRS_WKRID, CNTY_SPFCD, DTYWKR_IND, FKCWSADDRT, EMAIL_ADDR)
+VALUES ('q1p', null, 'External Interface  ', 'external interface            ', 'SCXCIN7                  ', ' ', '      ', '9165672100', '0', '1999-10-06', '    ', 'N', 'q38', '2000-08-29 13:51:39.247824', 'MIZN02k00E', '                                                                                                                                                                ', '    ', '99', 'N', '3XPCP92q38', null);
+
+truncate table cwsint.REFR_CLT immediate;
+INSERT INTO cwsint.REFR_CLT(APRVL_NO, APV_STC, DSP_RSNC, DISPSTN_CD, RCL_DISPDT, SLFRPT_IND, STFADD_IND, LST_UPD_ID, LST_UPD_TS, FKCLIENT_T, FKREFERL_T, DSP_CLSDSC, RFCL_AGENO, AGE_PRD_CD, CNTY_SPFCD, MHLTH_IND, ALCHL_IND, DRUG_IND)
+VALUES (null, '118', '0', ' ', null, 'N', 'Y', '04Z', '1998-05-30 09:53:36.768296', 'AapJGAU04Z', '8ckQ38M04Z', '                                                                                                                                                                                                                                                              ', '0', ' ', '25', null);
