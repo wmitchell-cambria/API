@@ -15,5 +15,9 @@
         <property name="show_sql">true</property>
         
         <mapping class="gov.ca.cwds.rest.api.persistence.legacy.Allegation"/>
+        <mapping class="gov.ca.cwds.rest.api.persistence.legacy.StaffPerson"/>
+        <mapping class="gov.ca.cwds.rest.api.persistence.legacy.ReferralClient"/>
+        <mapping class="gov.ca.cwds.rest.api.persistence.legacy.Referral"/>
+        <mapping class="gov.ca.cwds.rest.api.persistence.legacy.Reporter"/>
     </session-factory>
 </hibernate-configuration>

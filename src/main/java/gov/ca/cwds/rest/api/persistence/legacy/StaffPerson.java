@@ -344,8 +344,8 @@ public class StaffPerson extends PersistentObject {
 			if (other.availabilityAndLocationDescription != null) {
 				return false;
 			}
-		} else if (!availabilityAndLocationDescription
-				.equals(other.availabilityAndLocationDescription)) {
+		} else if (!availabilityAndLocationDescription.trim()
+				.equals(other.availabilityAndLocationDescription.trim())) {
 			return false;
 		}
 		if (countyCode == null) {
@@ -394,7 +394,7 @@ public class StaffPerson extends PersistentObject {
 			if (other.firstName != null) {
 				return false;
 			}
-		} else if (!firstName.equals(other.firstName)) {
+		} else if (!firstName.trim().equals(other.firstName.trim())) {
 			return false;
 		}
 		if (id == null) {
@@ -408,14 +408,14 @@ public class StaffPerson extends PersistentObject {
 			if (other.jobTitle != null) {
 				return false;
 			}
-		} else if (!jobTitle.equals(other.jobTitle)) {
+		} else if (!jobTitle.trim().equals(other.jobTitle.trim())) {
 			return false;
 		}
 		if (lastName == null) {
 			if (other.lastName != null) {
 				return false;
 			}
-		} else if (!lastName.equals(other.lastName)) {
+		} else if (!lastName.trim().equals(other.lastName.trim())) {
 			return false;
 		}
 		if (middleInitial == null) {
