@@ -32,7 +32,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class CrossReportTest {
 
-  private static final String ROOT_RESOURCE = "/crossreports/";
+  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CROSS_REPORT + "/";
 
   private static final CrossReportResourceImpl mockedCrossReportResource =
       mock(CrossReportResourceImpl.class);
