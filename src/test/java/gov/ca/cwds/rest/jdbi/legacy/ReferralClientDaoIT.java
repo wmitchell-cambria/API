@@ -40,7 +40,6 @@ public class ReferralClientDaoIT {
 	
 	@Test
 	public void testFind() {
-		//String id = "86XV1bG06s";
 		gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient = new 
 				gov.ca.cwds.rest.api.domain.legacy.ReferralClient(
 				"86XV1bG06s", (short) 122, (short) 681, "S", "1998-07-21", false,
@@ -48,7 +47,6 @@ public class ReferralClientDaoIT {
 				"Y", "43", null, null,null);
 		ReferralClient expected = new ReferralClient(referralClient, "06s");
 		ReferralClient found = referralClientDao.find(new PrimaryKey("LNuzMKw06s", "AazXkWY06s"));
-		//assert found.equals(expected);
 		assertThat(found, is(equalTo(expected)));
 	}
 	@Test
