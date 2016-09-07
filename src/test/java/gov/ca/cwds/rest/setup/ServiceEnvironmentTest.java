@@ -15,8 +15,8 @@ import org.junit.rules.ExpectedException;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.ReferralService;
-import gov.ca.cwds.rest.services.ReferralServiceImpl;
+import gov.ca.cwds.rest.services.legacy.ReferralService;
+import gov.ca.cwds.rest.services.legacy.ReferralServiceImpl;
 
 public class ServiceEnvironmentTest {
 	private ServiceEnvironment serviceEnvironment;

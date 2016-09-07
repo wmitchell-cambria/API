@@ -26,9 +26,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.ReferralClientResourceImpl;
+import gov.ca.cwds.rest.resources.legacy.ReferralClientResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 

@@ -95,6 +95,8 @@ public final class CrudsResourceImpl<T extends DomainObject, S extends Service> 
 		try {
 			Serializable primaryKey = service.create(domainObject);
 			
+			//TODO : abstract out the location header creation to something which can be reused for our domain services
+			//       maybe follow the model of InjectLinks
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 	        URI referralUri = ub.
 	                    path(primaryKey.toString()).

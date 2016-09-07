@@ -27,13 +27,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.StaffPersonResourceImpl;
+import gov.ca.cwds.rest.resources.legacy.StaffPersonResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class StaffPersonTest {
 
-	private static final String ROOT_RESOURCE = "/staffpersons/";
+	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_STAFF_PERSON + "/";
 	
 	private static final StaffPersonResourceImpl mockedStaffPersonResource = mock(StaffPersonResourceImpl.class);
 

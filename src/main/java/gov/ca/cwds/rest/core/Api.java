@@ -12,14 +12,20 @@ package gov.ca.cwds.rest.core;
 public class Api {
 
     /**
+     * A {@code String} constant representing {@value #RESOURCE_INTAKE_REFERRAL} api.
+     */
+    public final static String RESOURCE_INTAKE_REFERRAL = "intake/referrals";
+
+
+    /**
      * A {@code String} constant representing {@value #RESOURCE_ADDRESS} api.
      */
-    public final static String RESOURCE_ADDRESS = "addresses";
+    public final static String RESOURCE_ADDRESS = "legacy/addresses";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
      */
-    public final static String RESOURCE_ALLEGATION = "allegations";
+    public final static String RESOURCE_ALLEGATION = "legacy/allegations";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_APPLICATION} api.
@@ -29,42 +35,42 @@ public class Api {
     /**
      * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
      */
-    public final static String RESOURCE_CLIENT = "clients";
+    public final static String RESOURCE_CLIENT = "legacy/clients";
 
     /**
      * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api.
      */
-    public final static String RESOURCE_CROSS_REPORT = "crossreports";
+    public final static String RESOURCE_CROSS_REPORT = "legacy/crossreports";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_CWS_OFFICE} api.
      */
-    public final static String RESOURCE_CWS_OFFICE = "cwsOffice";
+    public final static String RESOURCE_CWS_OFFICE = "legacy/cwsOffice";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_CWS_OFFICE_ADDESS} api.
      */
-    public final static String RESOURCE_CWS_OFFICE_ADDESS = "cwsOfficeAddresses";
+    public final static String RESOURCE_CWS_OFFICE_ADDESS = "legacy/cwsOfficeAddresses";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_REFERRAL} api.
      */
-    public final static String RESOURCE_REFERRAL = "referrals";
+    public final static String RESOURCE_REFERRAL = "legacy/referrals";
 
     /**
      * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} api.
      */
-    public final static String RESOURCE_REFERRAL_CLIENT = "referralclients";
+    public final static String RESOURCE_REFERRAL_CLIENT = "legacy/referralclients";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_REPORTER} api.
      */
-    public final static String RESOURCE_REPORTER = "reporters";
+    public final static String RESOURCE_REPORTER = "legacy/reporters";
     
     /**
      * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api.
      */
-    public final static String RESOURCE_STAFF_PERSON = "staffpersons";
+    public final static String RESOURCE_STAFF_PERSON = "legacy/staffpersons";
     
     /**
     * A {@code String} constant representing {@value #RESOURCE_LAW_ENFORCEMENT} api.

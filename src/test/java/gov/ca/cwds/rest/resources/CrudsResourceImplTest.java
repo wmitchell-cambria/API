@@ -27,9 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.services.ReferralService;
-import gov.ca.cwds.rest.services.ReferralServiceImpl;
 import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.services.legacy.ReferralService;
+import gov.ca.cwds.rest.services.legacy.ReferralServiceImpl;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -40,8 +40,8 @@ public class CrudsResourceImplTest {
 	private static final String ID_NOT_FOUND = "-1";
 	private static final String ID_FOUND = "1";
 
-	private static final String ROOT_RESOURCE = "/referrals/";
-
+	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL + "/";
+	
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND;
 	private static final String NOT_FOUND_RESOURCE = ROOT_RESOURCE + ID_NOT_FOUND;
 
