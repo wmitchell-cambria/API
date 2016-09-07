@@ -51,6 +51,14 @@ public class DomainObject {
 		return null;
 	}
 	
+	public static String cookTime(Date date) {
+		if(date != null) {
+			DateFormat df = new SimpleDateFormat(TIME_FORMAT);
+			return df.format(date);
+		}
+		return null;
+	}
+	
 	public static Date uncookDateString(String date) {
 		if( date != null ) {
 			try {

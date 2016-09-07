@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.nullValue;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.hamcrest.core.Is;
@@ -19,6 +20,7 @@ import org.junit.rules.ExpectedException;
 public class DomainObjectTest {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
+	protected static final String TIME_FORMAT = "HH:mm:ss";
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -96,13 +98,27 @@ public class DomainObjectTest {
     public void cookTimestampReturnsNullOnNullDate() throws Exception {
         assertThat(DomainObject.cookTimestamp(null), is(nullValue()));
     }
-    
+
     @Test
     public void cookTimestampReturnsCorrectString() throws Exception {
     	DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
     	Date date = new Date();
     	
         assertThat(DomainObject.cookTimestamp(date), is(equalTo(df.format(date))));
+    }
+
+    //cookTime tests
+    @Test
+    public void cookTimeReturnsNullOnNullDate() throws Exception {
+        assertThat(DomainObject.cookTime(null), is(nullValue()));
+    }
+    
+    @Test
+    public void cookTimeReturnsCorrectString() throws Exception {
+    	DateFormat df = new SimpleDateFormat(TIME_FORMAT);
+    	Date date = new Date();
+    	
+        assertThat(DomainObject.cookTime(date), is(equalTo(df.format(date))));
     }
     
     //uncookDateString tests
@@ -149,5 +165,24 @@ public class DomainObjectTest {
         thrown.expect(DomainException.class);
         thrown.expectCause(Is.isA(ParseException.class));
     	DomainObject.uncookTimestampString("dlfjkdfjdkfjkd");
+    }
+    
+  //uncookTimeString tests
+    @Test
+    public void uncookTimeStringReturnsCorrectDate() throws Exception {
+    	Date dt = new SimpleDateFormat("HH:mm:ss").parse("14:20:20");
+        assertThat(DomainObject.uncookTimeString("14:20:20"), is(equalTo(dt)));
+    }
+    
+    @Test
+    public void uncookTimeStringReturnsNullOnNullString() throws Exception {
+    	assertThat(DomainObject.uncookDateString(null), is(nullValue()));
+    }
+    
+    @Test
+    public void uncookTimeStringThrowsExceptionOnBadInput() throws Exception {
+        thrown.expect(DomainException.class);
+        thrown.expectCause(Is.isA(ParseException.class));
+    	DomainObject.uncookTimeString("dlfjkdfjdkfjkd");
     }
 }

@@ -13,6 +13,7 @@ import org.junit.Test;
 public class ReferralTest {
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+  @SuppressWarnings("unused")
   private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
   private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
   private String id = "a";

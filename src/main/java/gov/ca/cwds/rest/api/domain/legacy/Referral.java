@@ -163,7 +163,7 @@ public class Referral extends DomainObject {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "receivedTime")
   @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = true)
-  @ApiModelProperty(required = true, readOnly = false, example = "2000-01-01-16.41.49.214")
+  @ApiModelProperty(required = true, readOnly = false, example = "16:41:49")
   private String receivedTime;
 
   @NotNull
@@ -184,7 +184,7 @@ public class Referral extends DomainObject {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "responseDeterminationTime")
   @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, example = "2000-01-01-16.41.49.214")
+  @ApiModelProperty(required = false, readOnly = false, example = "16:41:49")
   private String responseDeterminationTime;
 
   @Size(max = 10)
@@ -417,13 +417,13 @@ public class Referral extends DomainObject {
     this.referralName = persistedReferral.getReferralName();
     this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
     this.receivedDate = DomainObject.cookDate(persistedReferral.getReceivedDate());
-    this.receivedTime = DomainObject.cookTimestamp(persistedReferral.getReceivedTime());
+    this.receivedTime = DomainObject.cookTime(persistedReferral.getReceivedTime());
     this.referralResponseType = persistedReferral.getReferralResponseType();
     this.referredToResourceType = persistedReferral.getReferredToResourceType();
     this.responseDeterminationDate =
         DomainObject.cookDate(persistedReferral.getResponseDeterminationDate());
     this.responseDeterminationTime =
-        DomainObject.cookTimestamp(persistedReferral.getResponseDeterminationTime());
+        DomainObject.cookTime(persistedReferral.getResponseDeterminationTime());
     this.responseRationaleText = persistedReferral.getResponseRationaleText();
     this.screenerNoteText = persistedReferral.getScreenerNoteText();
     this.specificsIncludedCode = persistedReferral.getSpecificsIncludedCode();

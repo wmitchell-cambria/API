@@ -45,7 +45,9 @@ public class ReferralTest {
   private Referral validReferral = validReferral();
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+  @SuppressWarnings("unused")
   private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
   private String id = "a";
   private String additionalInfoIncludedCode = "b";
   private Boolean anonymousReporterIndicator = Boolean.TRUE;
@@ -69,11 +71,11 @@ public class ReferralTest {
   private String referralName = "k";
   private String openAdequateCaseCode = "l";
   private String receivedDate = "2010-06-30";
-  private String receivedTime = "1970-01-01-16.41.49.000";
+  private String receivedTime = "16:41:49";
   private Short referralResponseType = 4;
   private Short referredToResourceType = 5;
   private String responseDeterminationDate = "1985-09-04";
-  private String responseDeterminationTime = "1971-01-01-16.41.49.000";
+  private String responseDeterminationTime = "16:41:49";
   private String responseRationaleText = "m";
   private String screenerNoteText = "n";
   private String specificsIncludedCode = "o";
@@ -165,14 +167,14 @@ public class ReferralTest {
     assertThat(totest.getReferralName(), is(equalTo(persistent.getReferralName())));
     assertThat(totest.getOpenAdequateCaseCode(), is(equalTo(persistent.getOpenAdequateCaseCode())));
     assertThat(totest.getReceivedDate(), is(equalTo(df.format(persistent.getReceivedDate()))));
-    assertThat(totest.getReceivedTime(), is(equalTo(tf.format(persistent.getReceivedTime()))));
+    assertThat(totest.getReceivedTime(), is(equalTo(timeOnlyFormat.format(persistent.getReceivedTime()))));
     assertThat(totest.getReferralResponseType(), is(equalTo(persistent.getReferralResponseType())));
     assertThat(totest.getReferredToResourceType(),
         is(equalTo(persistent.getReferredToResourceType())));
     assertThat(totest.getResponseDeterminationDate(),
         is(equalTo(df.format(persistent.getResponseDeterminationDate()))));
     assertThat(totest.getResponseDeterminationTime(),
-        is(equalTo(tf.format(persistent.getResponseDeterminationTime()))));
+        is(equalTo(timeOnlyFormat.format(persistent.getResponseDeterminationTime()))));
     assertThat(totest.getResponseRationaleText(),
         is(equalTo(persistent.getResponseRationaleText())));
     assertThat(totest.getScreenerNoteText(), is(equalTo(persistent.getScreenerNoteText())));
@@ -1644,7 +1646,7 @@ public class ReferralTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
-            "receivedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
+            "receivedTime must be in the format of HH:mm:ss"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1660,7 +1662,7 @@ public class ReferralTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
-            "receivedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
+            "receivedTime must be in the format of HH:mm:ss"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1676,7 +1678,7 @@ public class ReferralTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
-            "receivedTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
+            "receivedTime must be in the format of HH:mm:ss"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1834,7 +1836,7 @@ public class ReferralTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
-            "responseDeterminationTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
+            "responseDeterminationTime must be in the format of HH:mm:ss"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -3027,8 +3029,8 @@ public class ReferralTest {
     return new Referral("DEF", "A", false, false, "A3CDEOm0Ab", new Short((short) 122), "A",
         "2000-03-03", new Short((short) 409), "current", "abcdefg", "A3B7sSC0Ab", "efghijk", false,
         false, new Short((short) 1118), "A", false, "N", "2000-01-31",
-        "Verification (R3)                  ", "A", "2000-01-01", "2016-08-07-16.41.49.214",
-        new Short((short) 1520), new Short((short) 0), "2000-01-31", "2016-08-07-16.41.49.214",
+        "Verification (R3)                  ", "A", "2000-01-01", "16:41:49",
+        new Short((short) 1520), new Short((short) 0), "2000-01-31", "16:41:49",
         "lmnopq", "rstuvw", "A", "A", "A", "sdfghj", "kjhgfdl", "0Ab", "0Ab", "51", false, false,
         false, false, "2000-05-05", "C", new Short((short) 1234), "2000-05-05", "thjkl",
         "2000-05-05");
