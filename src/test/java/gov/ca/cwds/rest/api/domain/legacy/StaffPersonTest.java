@@ -737,7 +737,7 @@ public class StaffPersonTest {
 		StaffPerson toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/invalid/emailAddress/tooLong.json"), StaffPerson.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
 		assertThat(response.getStatus(), is(equalTo(422)));
-		assertThat(response.readEntity(String.class).indexOf("emailAddress size must be between 1 and 50"), is(greaterThanOrEqualTo(0)));
+		assertThat(response.readEntity(String.class).indexOf("emailAddress size must be between 0 and 50"), is(greaterThanOrEqualTo(0)));
 	}
 	
 	/*

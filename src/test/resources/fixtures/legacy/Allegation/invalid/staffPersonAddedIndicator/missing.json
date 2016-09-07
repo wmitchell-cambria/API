@@ -3,7 +3,7 @@
   "abuseEndDate": "1999-07-15",
   "abuseFrequency": 2,
   "abuseFrequencyPeriodCode": "M",
-  "abuseLocationDescription": "barber Shop",
+  "abuseLocationDescription": "Barber Shop",
   "abuseStartDate": "1999-07-15",
   "allegationDispositionType": 0,
   "allegationType": 2180,
@@ -11,12 +11,10 @@
   "dispositionDate": "",
   "injuryHarmDetailIndicator": false,
   "nonProtectingParentCode": "N",
-  
-  
   "fkClientT": "AHooKwN0F4",
   "fkClient0": "MKPFcB90F4",
   "fkReferralT": "8mu1E710F4",
   "countySpecificCode": "19",
-  "zippyCrestedIndicator": false,
+  "zippyCreatedIndicator": false,
   "placementFacilityType": 6574
 }

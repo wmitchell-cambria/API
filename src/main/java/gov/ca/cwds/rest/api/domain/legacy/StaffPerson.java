@@ -37,7 +37,7 @@ public class StaffPerson extends DomainObject {
 	@NotEmpty
 	@Size(min=3, max=3, message="size must be 3")
 	@ApiModelProperty(required=true, readOnly=true, value="", example="ABC")
- 	private String id;
+	private String id;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="endDate")
@@ -74,14 +74,15 @@ public class StaffPerson extends DomainObject {
 	@ApiModelProperty(required=true, readOnly=false, example="9165551212")
 	private BigDecimal phoneNumber;
 	
+	@NotNull
 	@ApiModelProperty(required=true, readOnly=false, example="123")
-	private int phoneExt = 0;
+	private Integer phoneExt;
 
 	@NotNull
-	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
 	@JsonProperty(value="startDate")
-	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="1963-11-22")
+	@gov.ca.cwds.rest.validation.Date(format=DATE_FORMAT, required=true)
+	@ApiModelProperty(required=true, readOnly=false, value="yyyy-MM-dd", example="2000-01-01")
 	private String startDate;
 	
 	@NotEmpty
@@ -122,35 +123,37 @@ public class StaffPerson extends DomainObject {
 	@ApiModelProperty(required=true, readOnly=false, value="IDENTIFIER of CWSADDRT", example="ghi")
 	private String cwsOfficeAddress;
 	
-	@Size(min=1, max=50)
+	@Size(max=50)
 	@ApiModelProperty(required=false, readOnly=false, value="", example="john.q.smith@somedomain.com")
 	//NOTE : The legacy system doesn't seem to enforce valid email addresses
 	//@Email
 	private String emailAddress;
 
+
 	@JsonCreator
 	public StaffPerson(
-			@JsonProperty("id") String id, 
-			@JsonProperty("endDate") String endDate, 
+			@JsonProperty("id") String id,
+			@JsonProperty("endDate") String endDate,
 			@JsonProperty("firstName") String firstName,
-			@JsonProperty("jobTitle") String jobTitle, 
-			@JsonProperty("lastName") String lastName, 
+			@JsonProperty("jobTitle") String jobTitle,
+			@JsonProperty("lastName") String lastName,
 			@JsonProperty("middleInitial") String middleInitial,
-			@JsonProperty("namePrefix") String namePrefix, 
-			@JsonProperty("phoneNumber") BigDecimal phoneNumber, 
-			@JsonProperty("phoneExt") int phoneExt, 
+			@JsonProperty("namePrefix") String namePrefix,
+			@JsonProperty("phoneNumber") BigDecimal phoneNumber,
+			@JsonProperty("phoneExt") Integer phoneExt,
 			@JsonProperty("startDate") String startDate,
-			@JsonProperty("nameSuffix") String nameSuffix, 
-			@JsonProperty("telecommuterIndicator") Boolean telecommuterIndicator, 
-			@JsonProperty("cwsOffice") String cwsOffice, 
+			@JsonProperty("nameSuffix") String nameSuffix,
+			@JsonProperty("telecommuterIndicator") Boolean telecommuterIndicator,
+			@JsonProperty("cwsOffice") String cwsOffice,
 			@JsonProperty("availabilityAndLocationDescription") String availabilityAndLocationDescription,
-			@JsonProperty("ssrsLicensingWorkerId") String ssrsLicensingWorkerId, 
-			@JsonProperty("countyCode") String countyCode, 
+			@JsonProperty("ssrsLicensingWorkerId") String ssrsLicensingWorkerId,
+			@JsonProperty("countyCode") String countyCode,
 			@JsonProperty("dutyWorkerIndicator") Boolean dutyWorkerIndicator,
-			@JsonProperty("cwsOfficeAddress") String cwsOfficeAddress, 
+			@JsonProperty("cwsOfficeAddress") String cwsOfficeAddress,
 			@JsonProperty("emailAddress") String emailAddress) {
 		super();
 		this.id = id;
+		this.endDate = endDate;
 		this.firstName = firstName;
 		this.jobTitle = jobTitle;
 		this.lastName = lastName;
@@ -158,7 +161,6 @@ public class StaffPerson extends DomainObject {
 		this.namePrefix = namePrefix;
 		this.phoneNumber = phoneNumber;
 		this.phoneExt = phoneExt;
-		this.endDate = endDate;
 		this.startDate = startDate;
 		this.nameSuffix = nameSuffix;
 		this.telecommuterIndicator = telecommuterIndicator;
@@ -173,6 +175,7 @@ public class StaffPerson extends DomainObject {
 	
 	public StaffPerson(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistedStaffPerson) {
 		this.id = persistedStaffPerson.getId();
+		this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
 		this.firstName = persistedStaffPerson.getFirstName();
 		this.jobTitle = persistedStaffPerson.getJobTitle();
 		this.lastName = persistedStaffPerson.getLastName();
@@ -180,7 +183,6 @@ public class StaffPerson extends DomainObject {
 		this.namePrefix = persistedStaffPerson.getNamePrefix();
 		this.phoneNumber = persistedStaffPerson.getPhoneNumber();
 		this.phoneExt = persistedStaffPerson.getPhoneExt();
-		this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
 		this.startDate = DomainObject.cookDate(persistedStaffPerson.getStartDate());
 		this.nameSuffix = persistedStaffPerson.getNameSuffix();
 		this.telecommuterIndicator = DomainObject.uncookBooleanString(persistedStaffPerson.getTelecommuterIndicator());
@@ -201,12 +203,26 @@ public class StaffPerson extends DomainObject {
 	}
 
 	/**
+	 * @return the endDate
+	 */
+	public String getEndDate() {
+		return endDate;
+	}
+	
+	/**
 	 * @return the firstName
 	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
+	/**
+	 * @return the jobTitle
+	 */
+	public String getJobTitle() {
+		return jobTitle;
+	}
+	
 	/**
 	 * @return the lastName
 	 */
@@ -219,20 +235,6 @@ public class StaffPerson extends DomainObject {
 	 */
 	public String getMiddleInitial() {
 		return middleInitial;
-	}
-
-	/**
-	 * @return the endDate
-	 */
-	public String getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @return the jobTitle
-	 */
-	public String getJobTitle() {
-		return jobTitle;
 	}
 
 	/**
@@ -252,7 +254,7 @@ public class StaffPerson extends DomainObject {
 	/**
 	 * @return the phoneExt
 	 */
-	public int getPhoneExt() {
+	public Integer getPhoneExt() {
 		return phoneExt;
 	}
 
