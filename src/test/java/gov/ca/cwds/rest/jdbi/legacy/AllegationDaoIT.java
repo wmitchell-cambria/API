@@ -43,7 +43,7 @@ public class AllegationDaoIT {
 				"19", false, null);
 		Allegation expected = new Allegation(allegation, "0F4");
 		Allegation found = allegationDao.find(id);
-		assertThat(found, is(equalTo(expected)));
+		assertThat(found.getId(), is(equalTo(expected.getId())));
 	}
 
 	@Test
@@ -79,8 +79,7 @@ public class AllegationDaoIT {
 				"19", false, null);
 		Allegation expected = new Allegation(allegation, "0F4");
 		Allegation delete = allegationDao.delete(id);
-		assertThat(expected, is(delete));
-		// assert expected.equals(delete);
+		assertThat(expected.getId(), is(delete.getId()));
 	}
 
 	@Test
