@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @Entity
-@Table(schema = "CWSINT", name = "REFERL_T")
+@Table(name = "REFERL_T")
 public class Referral extends PersistentObject {
   @Id
   @Column(name = "IDENTIFIER")

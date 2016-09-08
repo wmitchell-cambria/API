@@ -22,7 +22,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @Entity
-@Table(schema = "CWSINT", name = "STFPERST")
+@Table(name = "STFPERST")
 public class StaffPerson extends PersistentObject {
   @Id
   @Column(name = "IDENTIFIER")

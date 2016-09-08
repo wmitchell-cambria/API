@@ -16,7 +16,7 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 @Entity
-@Table(schema = "CWSINT", name = "ALLGTN_T")
+@Table(name = "ALLGTN_T")
 public class Allegation extends PersistentObject {
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
