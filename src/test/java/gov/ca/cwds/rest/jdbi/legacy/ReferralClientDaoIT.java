@@ -58,8 +58,6 @@ public class ReferralClientDaoIT {
 				"Y", "43", null, null,null);
 		ReferralClient expected = new ReferralClient(referralClient, "06k");
 		ReferralClient create = referralClientDao.create(expected);
-		//assert expected.equals(create);
-		//allegationDao.delete("Aaeae9r0F6");
 		assertThat(expected, is(create));
 		
 	}
@@ -86,13 +84,12 @@ public class ReferralClientDaoIT {
 	//	String id = "86XV1bG06s";
 		gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient = new 
 				gov.ca.cwds.rest.api.domain.legacy.ReferralClient(
-				"S3123FM0Hj", (short) 122, (short) 680, "I", "2000-02-15", false,
-				false, "3YJfEW40Hj", "AbiOD9Y0Hj", "  ", (short) 2, 
-				"Y", "51", null, null,null);
-		ReferralClient expected = new ReferralClient(referralClient, "OHj");
-		ReferralClient delete = referralClientDao.delete(new PrimaryKey("3YJfEW40Hj", "AbiOD9Y0Hj"));
+						"86XV1bG06s", (short) 122, (short) 681, "S", "1998-07-21", false,
+						false, "LNuzMKw06s", "AazXkWY06s", "  ", (short) 2, 
+						"Y", "43", null, null,null);
+		ReferralClient expected = new ReferralClient(referralClient, "06s");
+		ReferralClient delete = referralClientDao.delete(new PrimaryKey("LNuzMKw06s", "AazXkWY06s"));
 		assertThat(expected, is(delete));
-		//assert expected.equals(delete);
 	}
 	
 	@Test
@@ -105,7 +102,6 @@ public class ReferralClientDaoIT {
 		ReferralClient expected = new ReferralClient(referralClient, "06s");
 		ReferralClient update = referralClientDao.update(expected);
 		assertThat(expected, is(update));
-		//assert expected.equals(update);
 	}
 
 	@Test
