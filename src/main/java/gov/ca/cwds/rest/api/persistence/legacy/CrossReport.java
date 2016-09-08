@@ -124,7 +124,7 @@ public class CrossReport extends PersistentObject {
           DomainObject.cookBoolean(crossReport.getFiledOutOfStateIndicator());
       this.governmentOrgCrossRptIndicatorVar =
           DomainObject.cookBoolean(crossReport.getGovernmentOrgCrossRptIndicatorVar());
-      this.informTime = DomainObject.uncookTimestampString(crossReport.getInformTime());
+      this.informTime = DomainObject.uncookTimeString(crossReport.getInformTime());
       this.recipientBadgeNumber = crossReport.getRecipientBadgeNumber();
       this.recipientPhoneExtensionNumber = crossReport.getRecipientPhoneExtensionNumber();
       this.recipientPhoneNumber = crossReport.getRecipientPhoneNumber();
@@ -390,7 +390,7 @@ public class CrossReport extends PersistentObject {
     if (description == null) {
       if (other.description != null)
         return false;
-    } else if (!description.equals(other.description))
+    } else if (!description.trim().equals(other.description.trim()))
       return false;
     if (filedOutOfStateIndicator == null) {
       if (other.filedOutOfStateIndicator != null)
@@ -430,17 +430,17 @@ public class CrossReport extends PersistentObject {
     if (outstateLawEnforcementAddr == null) {
       if (other.outstateLawEnforcementAddr != null)
         return false;
-    } else if (!outstateLawEnforcementAddr.equals(other.outstateLawEnforcementAddr))
+    } else if (!outstateLawEnforcementAddr.trim().equals(other.outstateLawEnforcementAddr.trim()))
       return false;
     if (recipientBadgeNumber == null) {
       if (other.recipientBadgeNumber != null)
         return false;
-    } else if (!recipientBadgeNumber.equals(other.recipientBadgeNumber))
+    } else if (!recipientBadgeNumber.trim().equals(other.recipientBadgeNumber.trim()))
       return false;
     if (recipientName == null) {
       if (other.recipientName != null)
         return false;
-    } else if (!recipientName.equals(other.recipientName))
+    } else if (!recipientName.trim().equals(other.recipientName.trim()))
       return false;
     if (recipientPhoneExtensionNumber == null) {
       if (other.recipientPhoneExtensionNumber != null)
@@ -455,12 +455,12 @@ public class CrossReport extends PersistentObject {
     if (recipientPositionTitleDesc == null) {
       if (other.recipientPositionTitleDesc != null)
         return false;
-    } else if (!recipientPositionTitleDesc.equals(other.recipientPositionTitleDesc))
+    } else if (!recipientPositionTitleDesc.trim().equals(other.recipientPositionTitleDesc.trim()))
       return false;
     if (referenceNumber == null) {
       if (other.referenceNumber != null)
         return false;
-    } else if (!referenceNumber.equals(other.referenceNumber))
+    } else if (!referenceNumber.trim().equals(other.referenceNumber.trim()))
       return false;
     if (referralId == null) {
       if (other.referralId != null)

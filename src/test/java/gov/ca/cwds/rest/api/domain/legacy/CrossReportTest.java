@@ -47,11 +47,12 @@ public class CrossReportTest {
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
   private String thirdId = "b";
   private Short crossReportMethodType = 1;
   private Boolean filedOutOfStateIndicator = Boolean.TRUE;
   private Boolean governmentOrgCrossRptIndicatorVar = Boolean.FALSE;
-  private String informTime = "1970-01-01-16.41.49.000";
+  private String informTime = "16:41:49";
   private String recipientBadgeNumber = "d";
   private Integer recipientPhoneExtensionNumber = 2;
   private BigDecimal recipientPhoneNumber = new BigDecimal(3);
@@ -102,7 +103,7 @@ public class CrossReportTest {
     assertThat(totest.getGovernmentOrgCrossRptIndicatorVar(),
         is(equalTo(DomainObject.uncookBooleanString(persistent
             .getGovernmentOrgCrossRptIndicatorVar()))));
-    assertThat(totest.getInformTime(), is(equalTo(tf.format(persistent.getInformTime()))));
+    assertThat(totest.getInformTime(), is(equalTo(timeOnlyFormat.format(persistent.getInformTime()))));
     assertThat(totest.getRecipientBadgeNumber(), is(equalTo(persistent.getRecipientBadgeNumber())));
     assertThat(totest.getRecipientPhoneExtensionNumber(),
         is(equalTo(persistent.getRecipientPhoneExtensionNumber())));
@@ -472,7 +473,7 @@ public class CrossReportTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
-            "informTime must be in the format of yyyy-MM-dd-HH.mm.ss.SSS"),
+            "informTime must be in the format of HH:mm:ss"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1388,7 +1389,7 @@ public class CrossReportTest {
    * Utils
    */
   private CrossReport validCrossReport() {
-    return new CrossReport("ABC123", (short) 123, false, false, "2000-01-01-16.41.49.214", "AB123",
+    return new CrossReport("ABC123", (short) 123, false, false, "16:41:49", "AB123",
         234, new BigDecimal(1234567), "2000-01-01", "ABC23", "DE123", "DEF", "GHJ", "AD",
         "ABC DESC", "JOHN", "ABC STREET", "AB", false, false, false);
   }

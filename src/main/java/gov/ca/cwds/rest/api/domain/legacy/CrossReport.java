@@ -60,10 +60,10 @@ public class CrossReport extends DomainObject {
   @ApiModelProperty(required = true, readOnly = false)
   private Boolean governmentOrgCrossRptIndicatorVar;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIMESTAMP_FORMAT)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "informTime")
-  @gov.ca.cwds.rest.validation.Date(format = TIMESTAMP_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, example = "2000-01-01-16.41.49.214")
+  @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = false)
+  @ApiModelProperty(required = false, readOnly = false, example = "16.41.49")
   private String informTime;
 
   @NotEmpty
@@ -197,7 +197,7 @@ public class CrossReport extends DomainObject {
     this.governmentOrgCrossRptIndicatorVar =
         DomainObject.uncookBooleanString(persistedCrossReport
             .getGovernmentOrgCrossRptIndicatorVar());
-    this.informTime = DomainObject.cookTimestamp(persistedCrossReport.getInformTime());
+    this.informTime = DomainObject.cookTime(persistedCrossReport.getInformTime());
     this.recipientBadgeNumber = persistedCrossReport.getRecipientBadgeNumber();
     this.recipientPhoneExtensionNumber = persistedCrossReport.getRecipientPhoneExtensionNumber();
     this.recipientPhoneNumber = persistedCrossReport.getRecipientPhoneNumber();
@@ -450,7 +450,7 @@ public class CrossReport extends DomainObject {
     if (description == null) {
       if (other.description != null)
         return false;
-    } else if (!description.equals(other.description))
+    } else if (!description.trim().equals(other.description.trim()))
       return false;
     if (filedOutOfStateIndicator == null) {
       if (other.filedOutOfStateIndicator != null)
@@ -490,17 +490,17 @@ public class CrossReport extends DomainObject {
     if (outstateLawEnforcementAddr == null) {
       if (other.outstateLawEnforcementAddr != null)
         return false;
-    } else if (!outstateLawEnforcementAddr.equals(other.outstateLawEnforcementAddr))
+    } else if (!outstateLawEnforcementAddr.trim().equals(other.outstateLawEnforcementAddr.trim()))
       return false;
     if (recipientBadgeNumber == null) {
       if (other.recipientBadgeNumber != null)
         return false;
-    } else if (!recipientBadgeNumber.equals(other.recipientBadgeNumber))
+    } else if (!recipientBadgeNumber.trim().equals(other.recipientBadgeNumber.trim()))
       return false;
     if (recipientName == null) {
       if (other.recipientName != null)
         return false;
-    } else if (!recipientName.equals(other.recipientName))
+    } else if (!recipientName.trim().equals(other.recipientName.trim()))
       return false;
     if (recipientPhoneExtensionNumber == null) {
       if (other.recipientPhoneExtensionNumber != null)
@@ -515,12 +515,12 @@ public class CrossReport extends DomainObject {
     if (recipientPositionTitleDesc == null) {
       if (other.recipientPositionTitleDesc != null)
         return false;
-    } else if (!recipientPositionTitleDesc.equals(other.recipientPositionTitleDesc))
+    } else if (!recipientPositionTitleDesc.trim().equals(other.recipientPositionTitleDesc.trim()))
       return false;
     if (referenceNumber == null) {
       if (other.referenceNumber != null)
         return false;
-    } else if (!referenceNumber.equals(other.referenceNumber))
+    } else if (!referenceNumber.trim().equals(other.referenceNumber.trim()))
       return false;
     if (referralId == null) {
       if (other.referralId != null)

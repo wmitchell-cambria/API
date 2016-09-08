@@ -20,5 +20,6 @@
         <mapping class="gov.ca.cwds.rest.api.persistence.legacy.ReferralClient"/>
         <mapping class="gov.ca.cwds.rest.api.persistence.legacy.Referral"/>
         <mapping class="gov.ca.cwds.rest.api.persistence.legacy.Reporter"/>
+        <mapping class="gov.ca.cwds.rest.api.persistence.legacy.CrossReport"/>
     </session-factory>
 </hibernate-configuration>

@@ -13,13 +13,13 @@ import org.junit.Test;
 
 public class CrossReportTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-  private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+  private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
 
   private String thirdId = "b";
   private Short crossReportMethodType = 1;
   private Boolean filedOutOfStateIndicator = Boolean.TRUE;
   private Boolean governmentOrgCrossRptIndicatorVar = Boolean.FALSE;
-  private String informTime = "1970-01-01-16.41.49.000";
+  private String informTime = "16:41:49";
   private String recipientBadgeNumber = "d";
   private Integer recipientPhoneExtensionNumber = 2;
   private BigDecimal recipientPhoneNumber = new BigDecimal(3);
