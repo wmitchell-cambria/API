@@ -2,14 +2,17 @@ package gov.ca.cwds.rest.api.domain.legacy;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.core.Api;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -23,12 +26,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.legacy.ReferralResourceImpl;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
-
 public class ReferralTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL + "/";;
@@ -234,6 +232,7 @@ public class ReferralTest {
             zippyCreatedIndicator, homelessIndicator, familyRefusedServicesIndicator,
             firstEvaluatedOutApprovalDate, responsibleAgencyCode, limitedAccessGovtAgencyType,
             limitedAccessDate, limitedAccessDesc, originalClosureDate);
+
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getAdditionalInfoIncludedCode(), is(equalTo(additionalInfoIncludedCode)));
     assertThat(domain.getAnonymousReporterIndicator(), is(equalTo(anonymousReporterIndicator)));
@@ -303,10 +302,9 @@ public class ReferralTest {
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    Referral deserialized =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class);
-    Referral valid = validReferral();
-    assertThat(deserialized, is(equalTo(valid)));
+    assertThat(
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class),
+        is(equalTo(validReferral())));
   }
 
   /*
@@ -604,7 +602,7 @@ public class ReferralTest {
   @Test
   public void successWhenApprovalNumberEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/approvalNumber/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/approvalNumber/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -616,7 +614,7 @@ public class ReferralTest {
   @Test
   public void successWhenApprovalNumberNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/approvalNumber/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/approvalNumber/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -744,7 +742,7 @@ public class ReferralTest {
   @Test
   public void successWhenClosureDateEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/closureDate/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/closureDate/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -756,7 +754,7 @@ public class ReferralTest {
   @Test
   public void successWhenClosureDateNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/closureDate/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/closureDate/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -823,7 +821,7 @@ public class ReferralTest {
   public void successWhenCurrentLocationOfChildrenEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/currentLocationOfChildren/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/currentLocationOfChildren/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -836,7 +834,7 @@ public class ReferralTest {
   public void successWhenCurrentLocationOfChildrenNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/currentLocationOfChildren/null.json"),
+            fixture("fixtures/legacy/Referral/valid/currentLocationOfChildren/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -868,7 +866,7 @@ public class ReferralTest {
   public void successWhenDrmsAllegationDescriptionDocEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/drmsAllegationDescriptionDoc/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/drmsAllegationDescriptionDoc/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -881,7 +879,7 @@ public class ReferralTest {
   public void successWhenDrmsAllegationDescriptionDocNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/drmsAllegationDescriptionDoc/null.json"),
+            fixture("fixtures/legacy/Referral/valid/drmsAllegationDescriptionDoc/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -913,7 +911,7 @@ public class ReferralTest {
   @Test
   public void successWhenDrmsErReferralDocEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/drmsErReferralDoc/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/drmsErReferralDoc/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -925,7 +923,7 @@ public class ReferralTest {
   @Test
   public void successWhenDrmsErReferralDocNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/drmsErReferralDoc/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/drmsErReferralDoc/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -957,8 +955,7 @@ public class ReferralTest {
   @Test
   public void successWhenDrmsInvestigationDocEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/drmsInvestigationDoc/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/drmsInvestigationDoc/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -970,8 +967,7 @@ public class ReferralTest {
   @Test
   public void successWhenDrmsInvestigationDocNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/drmsInvestigationDoc/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/drmsInvestigationDoc/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1380,7 +1376,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessCodeIsS() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/S.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessCode/S.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1392,7 +1388,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessCodeIsR() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/R.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessCode/R.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1404,7 +1400,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessCodeIsN() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessCode/N.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessCode/N.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1420,7 +1416,7 @@ public class ReferralTest {
   public void successWhenMandatedCrossReportReceivedDateEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/mandatedCrossReportReceivedDate/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/mandatedCrossReportReceivedDate/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1433,7 +1429,7 @@ public class ReferralTest {
   public void successWhenMandatedCrossReportReceivedDateNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/mandatedCrossReportReceivedDate/null.json"),
+            fixture("fixtures/legacy/Referral/valid/mandatedCrossReportReceivedDate/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1755,7 +1751,7 @@ public class ReferralTest {
   public void successWhenResponseDeterminationDateEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/responseDeterminationDate/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/responseDeterminationDate/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1768,7 +1764,7 @@ public class ReferralTest {
   public void successWhenResponseDeterminationDateNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/responseDeterminationDate/null.json"),
+            fixture("fixtures/legacy/Referral/valid/responseDeterminationDate/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1801,7 +1797,7 @@ public class ReferralTest {
   public void successWhenResponseDeterminationTimeEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/responseDeterminationTime/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/responseDeterminationTime/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1814,7 +1810,7 @@ public class ReferralTest {
   public void successWhenResponseDeterminationTimeNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/responseDeterminationTime/null.json"),
+            fixture("fixtures/legacy/Referral/valid/responseDeterminationTime/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1847,7 +1843,7 @@ public class ReferralTest {
   public void successWhenResponseRationaleTextEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/responseRationaleText/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/responseRationaleText/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1859,8 +1855,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponseRationaleTextNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/responseRationaleText/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responseRationaleText/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1891,7 +1886,7 @@ public class ReferralTest {
   @Test
   public void successWhenScreenerNoteTextEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/screenerNoteText/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/screenerNoteText/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1903,7 +1898,7 @@ public class ReferralTest {
   @Test
   public void successWhenScreenerNoteTextNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/screenerNoteText/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/screenerNoteText/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2125,7 +2120,7 @@ public class ReferralTest {
   public void successWhenLinkToPrimaryReferralIdEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/linkToPrimaryReferralId/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/linkToPrimaryReferralId/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2138,7 +2133,7 @@ public class ReferralTest {
   public void successWhenLinkToPrimaryReferralIdNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/linkToPrimaryReferralId/null.json"),
+            fixture("fixtures/legacy/Referral/valid/linkToPrimaryReferralId/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2170,7 +2165,7 @@ public class ReferralTest {
   public void successWhenAllegesAbuseOccurredAtAddressIdEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/allegesAbuseOccurredAtAddressId/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/allegesAbuseOccurredAtAddressId/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2183,7 +2178,7 @@ public class ReferralTest {
   public void successWhenAllegesAbuseOccurredAtAddressIdNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/allegesAbuseOccurredAtAddressId/null.json"),
+            fixture("fixtures/legacy/Referral/valid/allegesAbuseOccurredAtAddressId/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2218,7 +2213,7 @@ public class ReferralTest {
     Referral toCreate =
         MAPPER
             .readValue(
-                fixture("fixtures/legacy/Referral/invalid/firstResponseDeterminedByStaffPersonId/empty.json"),
+                fixture("fixtures/legacy/Referral/valid/firstResponseDeterminedByStaffPersonId/empty.json"),
                 Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2232,7 +2227,7 @@ public class ReferralTest {
     Referral toCreate =
         MAPPER
             .readValue(
-                fixture("fixtures/legacy/Referral/invalid/firstResponseDeterminedByStaffPersonId/null.json"),
+                fixture("fixtures/legacy/Referral/valid/firstResponseDeterminedByStaffPersonId/null.json"),
                 Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2663,7 +2658,7 @@ public class ReferralTest {
   public void successWhenFirstEvaluatedOutApprovalDateEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/firstEvaluatedOutApprovalDate/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/firstEvaluatedOutApprovalDate/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2676,7 +2671,7 @@ public class ReferralTest {
   public void successWhenFirstEvaluatedOutApprovalDateNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/firstEvaluatedOutApprovalDate/null.json"),
+            fixture("fixtures/legacy/Referral/valid/firstEvaluatedOutApprovalDate/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2786,7 +2781,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsC() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/C.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/C.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2798,7 +2793,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsP() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/P.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/P.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2810,7 +2805,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsO() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/O.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/O.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2822,7 +2817,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsA() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/A.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/A.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2834,7 +2829,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsS() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/S.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/S.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2846,7 +2841,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsI() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/I.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/I.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2858,7 +2853,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsK() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/K.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/K.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2870,7 +2865,7 @@ public class ReferralTest {
   @Test
   public void successWhenResponsibleAgencyCodeIsM() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/responsibleAgencyCode/M.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/responsibleAgencyCode/M.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2886,7 +2881,7 @@ public class ReferralTest {
   public void successWhenLimitedAccessGovtAgencyTypeEmpty() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/limitedAccessGovtAgencyType/empty.json"),
+            fixture("fixtures/legacy/Referral/valid/limitedAccessGovtAgencyType/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2899,7 +2894,7 @@ public class ReferralTest {
   public void successWhenLimitedAccessGovtAgencyTypeNull() throws Exception {
     Referral toCreate =
         MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/limitedAccessGovtAgencyType/null.json"),
+            fixture("fixtures/legacy/Referral/valid/limitedAccessGovtAgencyType/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2914,7 +2909,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessDateEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessDate/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessDate/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2926,7 +2921,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessDateNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessDate/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessDate/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2957,7 +2952,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessDescEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessDesc/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessDesc/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2969,7 +2964,7 @@ public class ReferralTest {
   @Test
   public void successWhenLimitedAccessDescNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/limitedAccessDesc/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/limitedAccessDesc/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2984,8 +2979,7 @@ public class ReferralTest {
   @Test
   public void successWhenOriginalClosureDateEmpty() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/legacy/Referral/invalid/originalClosureDate/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/originalClosureDate/empty.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -2997,7 +2991,7 @@ public class ReferralTest {
   @Test
   public void successWhenOriginalClosureDateNull() throws Exception {
     Referral toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/originalClosureDate/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/originalClosureDate/null.json"),
             Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -3034,5 +3028,4 @@ public class ReferralTest {
         "lmnopq", "rstuvw", "A", "A", "A", "sdfghj", "kjhgfdl", "0Ab", "0Ab", "51", false, false,
         false, false, "2000-05-05", "C", new Short((short) 1234), "2000-05-05", "thjkl",
         "2000-05-05");
-  }
-}
+  }}
