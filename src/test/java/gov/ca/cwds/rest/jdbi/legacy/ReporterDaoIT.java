@@ -47,7 +47,6 @@ public class ReporterDaoIT {
 		Reporter expected = new Reporter(reporter, "0Hj");
 		Reporter found = reporterDao.find(id);
 		assertThat(found, is(equalTo(expected)));
-		//assert found.equals(expected);
 	}
 
 	@Test
@@ -59,7 +58,6 @@ public class ReporterDaoIT {
 				"12345", " ", 95845, "AbiQCgu0Hk", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "0Hk");
 		Reporter create = reporterDao.create(expected);
-		//assert expected.equals(create);
 		assertThat(expected, is(create));
 		
 	}
@@ -83,16 +81,15 @@ public class ReporterDaoIT {
 	
 	@Test
 	public void testDelete() {
-		String id = "AbFA2mz0Ki";
+		String id = "AbiQCgu0Hj";
 		gov.ca.cwds.rest.api.domain.legacy.Reporter reporter = new gov.ca.cwds.rest.api.domain.legacy.Reporter(
-				"  ", "Lake Elsinore", (short) 600, (short) 410 , true, null,
-				"Butterfield Elementary", null, true,"Donna", "Kelley", true, 0, BigDecimal.valueOf(0), 
-				"W", "Mrs", BigDecimal.valueOf(6199221167L), 0, (short) 1828, "P.O.Box 123", 
-				" ", " ", 92234, "AbFA2mz0Ki", null, (short) 0, "34");
-		Reporter expected = new Reporter(reporter, "0Ki");
+				"  ", "City", (short) 591, (short) 0 , false, null,
+				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
+				" ", " ", BigDecimal.valueOf(0L), 0, (short) 1828, "Street", 
+				"12345", " ", 95845, "AbiQCgu0Hj", null, (short) 0, "51");
+		Reporter expected = new Reporter(reporter, "0Hj");
 		Reporter delete = reporterDao.delete(id);
 		assertThat(expected, is(delete));
-		//assert expected.equals(delete);
 	}
 	
 	@Test
@@ -105,7 +102,6 @@ public class ReporterDaoIT {
 		Reporter expected = new Reporter(reporter, "OHj");
 		Reporter update = reporterDao.update(expected);
 		assertThat(expected, is(update));
-		//assert expected.equals(update);
 	}
 
 	@Test
