@@ -454,6 +454,16 @@ public class AllegationTest {
 		assertThat(response.getStatus(), is(equalTo(422)));
 		assertThat(response.readEntity(String.class).indexOf("allegationDispositionType may not be null"), is(greaterThanOrEqualTo(0)));
 	}
+	@Test
+	public void failsWhenAllegationDispositionTypeEmplty() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/invalid/allegationDispositionType/empty.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("allegationDispositionType may not be null"), is(greaterThanOrEqualTo(0)));
+	}
 
 	/*
 	* allegationType Tests
@@ -472,6 +482,16 @@ public class AllegationTest {
 	public void failsWhenAllegationTypeNull() throws Exception {
 		Allegation toCreate = MAPPER.readValue(
 				fixture("fixtures/legacy/Allegation/invalid/allegationType/null.json"), Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(422)));
+		assertThat(response.readEntity(String.class).indexOf("allegationType may not be null"), is(greaterThanOrEqualTo(0)));
+	}
+	@Test
+	public void failsWhenAllegationTypeEmpty() throws Exception {
+		Allegation toCreate = MAPPER.readValue(
+				fixture("fixtures/legacy/Allegation/invalid/allegationType/empty.json"), Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
 				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
@@ -672,6 +692,15 @@ public class AllegationTest {
 	@Test
 	public void successWhenNonProtectingParentCodeIsN() throws Exception {
 		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/N.json"),
+				Allegation.class);
+		Response response = resources.client().target(ROOT_RESOURCE).request()
+				.accept(Api.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		assertThat(response.getStatus(), is(equalTo(204)));
+	}	
+	@Test
+	public void successWhenNonProtectingParentCodeIsLowerCase() throws Exception {
+		Allegation toCreate = MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/nonProtectingParentCode/lowerCase.json"),
 				Allegation.class);
 		Response response = resources.client().target(ROOT_RESOURCE).request()
 				.accept(Api.Version.JSON_VERSION_1.getMediaType())
