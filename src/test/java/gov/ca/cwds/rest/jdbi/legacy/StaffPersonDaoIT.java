@@ -92,8 +92,7 @@ public class StaffPersonDaoIT {
 				"3XPCP92q38", null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		StaffPerson delete = staffPersonDao.delete(id);
-		assertThat(expected, is(delete));
-		//assert expected.equals(delete);
+		assertThat(expected.getId(), is(delete.getId()));
 	}
 	
 	@Test
