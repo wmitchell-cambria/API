@@ -24,7 +24,7 @@ import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient.PrimaryKey;
  * @author CWDS API Team
  */
 @Entity
-@Table(schema = "CWSINT", name = "REFR_CLT")
+@Table(name = "REFR_CLT")
 @IdClass(PrimaryKey.class)
 public class ReferralClient extends PersistentObject {
 

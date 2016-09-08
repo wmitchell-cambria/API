@@ -22,7 +22,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @Entity
-@Table(schema = "CWSINT", name = "REPTR_T")
+@Table(name = "REPTR_T")
 public class Reporter extends PersistentObject {
 
   @Id

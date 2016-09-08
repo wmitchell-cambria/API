@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.api.persistence.legacy.CrossReport.PrimaryKey;
  * @author CWDS API Team
  */
 @Entity
-@Table(schema = "CWSINT", name = "CRSS_RPT")
+@Table(name = "CRSS_RPT")
 @IdClass(PrimaryKey.class)
 public class CrossReport extends PersistentObject {
   @Id
