@@ -13,6 +13,7 @@ The CWDS API requires the following environment variables:
 - DB_USER -- the database username
 - DB_PASSWORD -- the database password
 - DB_JDBC_URL -- the database URL in Java Database Connectivity format
+- DB_SCHEMA -- the database schema the tables belong to.
 
 The Docker env-file option provides a convenient method to supply these variables. These instructions assume an env file called .env located in the current directory. The repository contains a sample env file called env.sample.
 
