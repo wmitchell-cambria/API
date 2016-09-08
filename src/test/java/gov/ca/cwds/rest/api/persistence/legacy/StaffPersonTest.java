@@ -21,7 +21,7 @@ public class StaffPersonTest {
   private String middleInitial = "e";
   private String namePrefix = "f";
   private BigDecimal phoneNumber = new BigDecimal(1);
-  private int phoneExt = 0;
+  private Integer phoneExt = 2;
   private String startDate = "2006-09-12";
   private String nameSuffix = "g";
   private Boolean telecommuterIndicator = Boolean.TRUE;

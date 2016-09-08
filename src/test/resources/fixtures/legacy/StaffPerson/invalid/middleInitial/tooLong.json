@@ -4,15 +4,13 @@
   "firstName": "John",
   "jobTitle": "CEO",
   "lastName": "Doe",
-  "middleInitial": "C2",
+  "middleInitial": "12",
   "namePrefix": "Mr",
   "phoneNumber": 9165551212,
   "phoneExt": 22,
   "startDate": "2001-01-02",
   "nameSuffix": "sufx",
   "telecommuterIndicator": true,
-  
-  
   "cwsOffice": "MIZN02k11B",
   "availabilityAndLocationDescription": "abc",
   "ssrsLicensingWorkerId": "def",

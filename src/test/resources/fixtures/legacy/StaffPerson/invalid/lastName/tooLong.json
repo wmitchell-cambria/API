@@ -3,7 +3,7 @@
   "endDate": "2016-08-07",
   "firstName": "John",
   "jobTitle": "CEO",
-  "lastName": "12345678901234567890123456",
+  "lastName": "123456789012345678901234567890123456",
   "middleInitial": "C",
   "namePrefix": "Mr",
   "phoneNumber": 9165551212,
@@ -11,8 +11,6 @@
   "startDate": "2001-01-02",
   "nameSuffix": "sufx",
   "telecommuterIndicator": true,
-  
-  
   "cwsOffice": "MIZN02k11B",
   "availabilityAndLocationDescription": "abc",
   "ssrsLicensingWorkerId": "def",

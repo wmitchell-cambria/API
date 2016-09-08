@@ -1,6 +1,7 @@
 {
   "id": "ABC",
   "endDate": "2016-08-07",
+  "firstName": "John",
   "jobTitle": "CEO",
   "lastName": "Doe",
   "middleInitial": "C",
@@ -16,5 +17,5 @@
   "countyCode": "99",
   "dutyWorkerIndicator": false,
   "cwsOfficeAddress": "3XPCP92b24",
-  "emailAddress": "john.doe@anyco.com"
+  "emailAddress": ""
 }

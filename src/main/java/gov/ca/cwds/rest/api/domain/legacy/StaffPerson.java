@@ -339,8 +339,6 @@ public class StaffPerson extends DomainObject {
     return emailAddress;
   }
 
-
-
   /*
    * (non-Javadoc)
    * 
@@ -356,29 +354,27 @@ public class StaffPerson extends DomainObject {
             + ((availabilityAndLocationDescription == null) ? 0
                 : availabilityAndLocationDescription.hashCode());
     result = prime * result + ((countyCode == null) ? 0 : countyCode.hashCode());
+    result = prime * result + ((cwsOffice == null) ? 0 : cwsOffice.hashCode());
+    result = prime * result + ((cwsOfficeAddress == null) ? 0 : cwsOfficeAddress.hashCode());
     result = prime * result + ((dutyWorkerIndicator == null) ? 0 : dutyWorkerIndicator.hashCode());
     result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = prime * result + ((cwsOffice == null) ? 0 : cwsOffice.hashCode());
-    result = prime * result + ((cwsOfficeAddress == null) ? 0 : cwsOfficeAddress.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((middleInitial == null) ? 0 : middleInitial.hashCode());
     result = prime * result + ((namePrefix == null) ? 0 : namePrefix.hashCode());
-    result = prime * result + phoneExt;
+    result = prime * result + ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
+    result = prime * result + ((phoneExt == null) ? 0 : phoneExt.hashCode());
     result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
     result =
         prime * result + ((ssrsLicensingWorkerId == null) ? 0 : ssrsLicensingWorkerId.hashCode());
     result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-    result = prime * result + ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
     result =
         prime * result + ((telecommuterIndicator == null) ? 0 : telecommuterIndicator.hashCode());
     return result;
   }
-
-
 
   /*
    * (non-Javadoc)
@@ -387,112 +383,150 @@ public class StaffPerson extends DomainObject {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     StaffPerson other = (StaffPerson) obj;
     if (availabilityAndLocationDescription == null) {
-      if (other.availabilityAndLocationDescription != null)
+      if (other.availabilityAndLocationDescription != null) {
         return false;
-    } else if (!availabilityAndLocationDescription.equals(other.availabilityAndLocationDescription))
+      }
+    } else if (!availabilityAndLocationDescription.equals(other.availabilityAndLocationDescription)) {
       return false;
+    }
     if (countyCode == null) {
-      if (other.countyCode != null)
+      if (other.countyCode != null) {
         return false;
-    } else if (!countyCode.equals(other.countyCode))
+      }
+    } else if (!countyCode.equals(other.countyCode)) {
       return false;
-    if (dutyWorkerIndicator == null) {
-      if (other.dutyWorkerIndicator != null)
-        return false;
-    } else if (!dutyWorkerIndicator.equals(other.dutyWorkerIndicator))
-      return false;
-    if (emailAddress == null) {
-      if (other.emailAddress != null)
-        return false;
-    } else if (!emailAddress.equals(other.emailAddress))
-      return false;
-    if (endDate == null) {
-      if (other.endDate != null)
-        return false;
-    } else if (!endDate.equals(other.endDate))
-      return false;
-    if (firstName == null) {
-      if (other.firstName != null)
-        return false;
-    } else if (!firstName.equals(other.firstName))
-      return false;
+    }
     if (cwsOffice == null) {
-      if (other.cwsOffice != null)
+      if (other.cwsOffice != null) {
         return false;
-    } else if (!cwsOffice.equals(other.cwsOffice))
+      }
+    } else if (!cwsOffice.equals(other.cwsOffice)) {
       return false;
+    }
     if (cwsOfficeAddress == null) {
-      if (other.cwsOfficeAddress != null)
+      if (other.cwsOfficeAddress != null) {
         return false;
-    } else if (!cwsOfficeAddress.equals(other.cwsOfficeAddress))
+      }
+    } else if (!cwsOfficeAddress.equals(other.cwsOfficeAddress)) {
       return false;
+    }
+    if (dutyWorkerIndicator == null) {
+      if (other.dutyWorkerIndicator != null) {
+        return false;
+      }
+    } else if (!dutyWorkerIndicator.equals(other.dutyWorkerIndicator)) {
+      return false;
+    }
+    if (emailAddress == null) {
+      if (other.emailAddress != null) {
+        return false;
+      }
+    } else if (!emailAddress.equals(other.emailAddress)) {
+      return false;
+    }
+    if (endDate == null) {
+      if (other.endDate != null) {
+        return false;
+      }
+    } else if (!endDate.equals(other.endDate)) {
+      return false;
+    }
+    if (firstName == null) {
+      if (other.firstName != null) {
+        return false;
+      }
+    } else if (!firstName.equals(other.firstName)) {
+      return false;
+    }
     if (id == null) {
-      if (other.id != null)
+      if (other.id != null) {
         return false;
-    } else if (!id.equals(other.id))
+      }
+    } else if (!id.equals(other.id)) {
       return false;
+    }
     if (jobTitle == null) {
-      if (other.jobTitle != null)
+      if (other.jobTitle != null) {
         return false;
-    } else if (!jobTitle.equals(other.jobTitle))
+      }
+    } else if (!jobTitle.equals(other.jobTitle)) {
       return false;
+    }
     if (lastName == null) {
-      if (other.lastName != null)
+      if (other.lastName != null) {
         return false;
-    } else if (!lastName.equals(other.lastName))
+      }
+    } else if (!lastName.equals(other.lastName)) {
       return false;
+    }
     if (middleInitial == null) {
-      if (other.middleInitial != null)
+      if (other.middleInitial != null) {
         return false;
-    } else if (!middleInitial.equals(other.middleInitial))
+      }
+    } else if (!middleInitial.equals(other.middleInitial)) {
       return false;
+    }
     if (namePrefix == null) {
-      if (other.namePrefix != null)
+      if (other.namePrefix != null) {
         return false;
-    } else if (!namePrefix.equals(other.namePrefix))
+      }
+    } else if (!namePrefix.equals(other.namePrefix)) {
       return false;
-    if (phoneExt != other.phoneExt)
-      return false;
-    if (phoneNumber == null) {
-      if (other.phoneNumber != null)
-        return false;
-    } else if (!phoneNumber.equals(other.phoneNumber))
-      return false;
-    if (ssrsLicensingWorkerId == null) {
-      if (other.ssrsLicensingWorkerId != null)
-        return false;
-    } else if (!ssrsLicensingWorkerId.equals(other.ssrsLicensingWorkerId))
-      return false;
-    if (startDate == null) {
-      if (other.startDate != null)
-        return false;
-    } else if (!startDate.equals(other.startDate))
-      return false;
-    if (startDate == null) {
-      if (other.startDate != null)
-        return false;
-    } else if (!startDate.equals(other.startDate))
-      return false;
+    }
     if (nameSuffix == null) {
-      if (other.nameSuffix != null)
+      if (other.nameSuffix != null) {
         return false;
-    } else if (!nameSuffix.equals(other.nameSuffix))
+      }
+    } else if (!nameSuffix.equals(other.nameSuffix)) {
       return false;
+    }
+    if (phoneExt == null) {
+      if (other.phoneExt != null) {
+        return false;
+      }
+    } else if (!phoneExt.equals(other.phoneExt)) {
+      return false;
+    }
+    if (phoneNumber == null) {
+      if (other.phoneNumber != null) {
+        return false;
+      }
+    } else if (!phoneNumber.equals(other.phoneNumber)) {
+      return false;
+    }
+    if (ssrsLicensingWorkerId == null) {
+      if (other.ssrsLicensingWorkerId != null) {
+        return false;
+      }
+    } else if (!ssrsLicensingWorkerId.equals(other.ssrsLicensingWorkerId)) {
+      return false;
+    }
+    if (startDate == null) {
+      if (other.startDate != null) {
+        return false;
+      }
+    } else if (!startDate.equals(other.startDate)) {
+      return false;
+    }
     if (telecommuterIndicator == null) {
-      if (other.telecommuterIndicator != null)
+      if (other.telecommuterIndicator != null) {
         return false;
-    } else if (!telecommuterIndicator.equals(other.telecommuterIndicator))
+      }
+    } else if (!telecommuterIndicator.equals(other.telecommuterIndicator)) {
       return false;
+    }
     return true;
   }
-
 
 }

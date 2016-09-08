@@ -11,8 +11,6 @@
   "startDate": "2001-01-02",
   "nameSuffix": "sufx",
   "telecommuterIndicator": true,
-  
-  
   "availabilityAndLocationDescription": "abc",
   "ssrsLicensingWorkerId": "def",
   "countyCode": "99",
