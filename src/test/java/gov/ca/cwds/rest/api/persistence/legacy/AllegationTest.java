@@ -26,9 +26,9 @@ public class AllegationTest {
   private Boolean injuryHarmDetailIndicator = Boolean.TRUE;
   private String nonProtectingParentCode = "e";
   private Boolean staffPersonAddedIndicator = Boolean.FALSE;
-  private String fkClientT = "f";
-  private String fkClient0 = "g";
-  private String fkReferralT = "h";
+  private String victimClientId = "f";
+  private String perpetratorClientId = "g";
+  private String referralId = "h";
   private String countySpecificCode = "i";
   private Boolean zippyCreatedIndicator = Boolean.TRUE;
   private Short placementFacilityType = 4;
@@ -50,7 +50,7 @@ public class AllegationTest {
             abuseFrequencyPeriodCode, abuseLocationDescription, abuseStartDate,
             allegationDispositionType, allegationType, dispositionDescription, dispositionDate,
             injuryHarmDetailIndicator, nonProtectingParentCode, staffPersonAddedIndicator,
-            fkClientT, fkClient0, fkReferralT, countySpecificCode, zippyCreatedIndicator,
+            victimClientId, perpetratorClientId, referralId, countySpecificCode, zippyCreatedIndicator,
             placementFacilityType);
 
     Allegation persistent = new Allegation(domain, "z");
@@ -67,8 +67,9 @@ public class AllegationTest {
     assertThat(persistent.getInjuryHarmDetailIndicator(), is(equalTo("Y")));
     assertThat(persistent.getNonProtectingParentCode(), is(equalTo(nonProtectingParentCode)));
     assertThat(persistent.getStaffPersonAddedIndicator(), is(equalTo("N")));
-    assertThat(persistent.getFkClient0(), is(equalTo(fkClient0)));
-    assertThat(persistent.getFkClientT(), is(equalTo(fkClientT)));
+    assertThat(persistent.getPerpetratorClientId(), is(equalTo(perpetratorClientId)));
+    assertThat(persistent.getVictimClientId(), is(equalTo(victimClientId)));
+    assertThat(persistent.getReferralId(), is(equalTo(referralId)));
     assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
     assertThat(persistent.getZippyCreatedIndicator(), is(equalTo("Y")));
     assertThat(persistent.getPlacementFacilityType(), is(equalTo(placementFacilityType)));

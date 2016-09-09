@@ -29,15 +29,15 @@ import io.swagger.annotations.ApiModelProperty;
     @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.id}"),
         @Binding(name = "resource", value = Api.RESOURCE_ALLEGATION)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "fkClient0", style = Style.ABSOLUTE, bindings = {
-        @Binding(name = "id", value = "${instance.fkClient0}"),
+    @InjectLink(value = "/{resource}/{id}", rel = "perpetratorClientId", style = Style.ABSOLUTE, bindings = {
+        @Binding(name = "id", value = "${instance.perpetratorClientId}"),
         @Binding(name = "resource", value = Api.RESOURCE_CLIENT)},
-        condition = "${not empty instance.fkClient0 }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "fkClientT", style = Style.ABSOLUTE, bindings = {
-        @Binding(name = "id", value = "${instance.fkClientT}"),
+        condition = "${not empty instance.perpetratorClientId }"),
+    @InjectLink(value = "/{resource}/{id}", rel = "victimClientId", style = Style.ABSOLUTE, bindings = {
+        @Binding(name = "id", value = "${instance.victimClientId}"),
         @Binding(name = "resource", value = Api.RESOURCE_CLIENT)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "fkReferralT", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.fkReferralT}"),
+    @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
+        bindings = {@Binding(name = "id", value = "${instance.referralId}"),
             @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)})})
 public class Allegation extends DomainObject {
 
@@ -114,16 +114,16 @@ public class Allegation extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
-  private String fkClientT;
+  private String victimClientId;
 
   @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
-  private String fkClient0;
+  private String perpetratorClientId;
 
   @NotEmpty
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
-  private String fkReferralT;
+  private String referralId;
 
   @NotEmpty
   @Size(min = 1, max = 2)
@@ -151,8 +151,8 @@ public class Allegation extends DomainObject {
       @JsonProperty("injuryHarmDetailIndicator") Boolean injuryHarmDetailIndicator,
       @JsonProperty("nonProtectingParentCode") String nonProtectingParentCode,
       @JsonProperty("staffPersonAddedIndicator") Boolean staffPersonAddedIndicator,
-      @JsonProperty("fkClientT") String fkClientT, @JsonProperty("fkClient0") String fkClient0,
-      @JsonProperty("fkReferralT") String fkReferralT,
+      @JsonProperty("victimClientId") String victimClientId, @JsonProperty("perpetratorClientId") String perpetratorClientId,
+      @JsonProperty("referralId") String referralId,
       @JsonProperty("countySpecificCode") String countySpecificCode,
       @JsonProperty("zippyCreatedIndicator") Boolean zippyCreatedIndicator,
       @JsonProperty("placementFacilityType") Short placementFacilityType) {
@@ -170,9 +170,9 @@ public class Allegation extends DomainObject {
     this.injuryHarmDetailIndicator = injuryHarmDetailIndicator;
     this.nonProtectingParentCode = nonProtectingParentCode;
     this.staffPersonAddedIndicator = staffPersonAddedIndicator;
-    this.fkClientT = fkClientT;
-    this.fkClient0 = fkClient0;
-    this.fkReferralT = fkReferralT;
+    this.victimClientId = victimClientId;
+    this.perpetratorClientId = perpetratorClientId;
+    this.referralId = referralId;
     this.countySpecificCode = countySpecificCode;
     this.zippyCreatedIndicator = zippyCreatedIndicator;
     this.placementFacilityType = placementFacilityType;
@@ -194,9 +194,9 @@ public class Allegation extends DomainObject {
     this.nonProtectingParentCode = persistedAllegation.getNonProtectingParentCode();
     this.staffPersonAddedIndicator =
         DomainObject.uncookBooleanString(persistedAllegation.getStaffPersonAddedIndicator());
-    this.fkClientT = persistedAllegation.getFkClientT();
-    this.fkClient0 = persistedAllegation.getFkClient0();
-    this.fkReferralT = persistedAllegation.getFkReferralT();
+    this.victimClientId = persistedAllegation.getVictimClientId();
+    this.perpetratorClientId = persistedAllegation.getPerpetratorClientId();
+    this.referralId = persistedAllegation.getReferralId();
     this.countySpecificCode = persistedAllegation.getCountySpecificCode();
     this.zippyCreatedIndicator =
         DomainObject.uncookBooleanString(persistedAllegation.getZippyCreatedIndicator());
@@ -295,24 +295,24 @@ public class Allegation extends DomainObject {
   }
 
   /**
-   * @return the fkClientT
+   * @return the victimClientId
    */
-  public String getFkClientT() {
-    return fkClientT;
+  public String getVictimClientId() {
+    return victimClientId;
   }
 
   /**
-   * @return the fkClient0
+   * @return the perpetratorClientId
    */
-  public String getFkClient0() {
-    return fkClient0;
+  public String getPerpetratorClientId() {
+    return perpetratorClientId;
   }
 
   /**
-   * @return the fkReferralT
+   * @return the referralId
    */
-  public String getFkReferralT() {
-    return fkReferralT;
+  public String getReferralId() {
+    return referralId;
   }
 
   /**
@@ -362,9 +362,9 @@ public class Allegation extends DomainObject {
     result = prime * result + ((dispositionDate == null) ? 0 : dispositionDate.hashCode());
     result =
         prime * result + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
-    result = prime * result + ((fkClient0 == null) ? 0 : fkClient0.hashCode());
-    result = prime * result + ((fkClientT == null) ? 0 : fkClientT.hashCode());
-    result = prime * result + ((fkReferralT == null) ? 0 : fkReferralT.hashCode());
+    result = prime * result + ((perpetratorClientId == null) ? 0 : perpetratorClientId.hashCode());
+    result = prime * result + ((victimClientId == null) ? 0 : victimClientId.hashCode());
+    result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result =
         prime * result
@@ -469,25 +469,25 @@ public class Allegation extends DomainObject {
     } else if (!dispositionDescription.equals(other.dispositionDescription)) {
       return false;
     }
-    if (fkClient0 == null) {
-      if (other.fkClient0 != null) {
+    if (perpetratorClientId == null) {
+      if (other.perpetratorClientId != null) {
         return false;
       }
-    } else if (!fkClient0.equals(other.fkClient0)) {
+    } else if (!perpetratorClientId.equals(other.perpetratorClientId)) {
       return false;
     }
-    if (fkClientT == null) {
-      if (other.fkClientT != null) {
+    if (victimClientId == null) {
+      if (other.victimClientId != null) {
         return false;
       }
-    } else if (!fkClientT.equals(other.fkClientT)) {
+    } else if (!victimClientId.equals(other.victimClientId)) {
       return false;
     }
-    if (fkReferralT == null) {
-      if (other.fkReferralT != null) {
+    if (referralId == null) {
+      if (other.referralId != null) {
         return false;
       }
-    } else if (!fkReferralT.equals(other.fkReferralT)) {
+    } else if (!referralId.equals(other.referralId)) {
       return false;
     }
     if (id == null) {
