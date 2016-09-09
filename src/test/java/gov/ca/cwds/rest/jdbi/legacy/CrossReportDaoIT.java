@@ -49,7 +49,8 @@ public class CrossReportDaoIT {
 				false, false, false);
 		CrossReport expected = new CrossReport (crossreport, "0AB");
 		CrossReport found = crossreportDao.find(new PrimaryKey("925q4As0AB", "7wviAIk0AB"));
-		assertThat(found, is(equalTo(expected)));
+		assertThat(found.getThirdId(), is(equalTo(expected.getThirdId())));
+		
 	}
 
 	@Test
@@ -95,7 +96,7 @@ public class CrossReportDaoIT {
 		CrossReport expected = new CrossReport (crossreport, "00J");
 		CrossReport.PrimaryKey primaryKey = new CrossReport.PrimaryKey(referralId, thirdId);
 		CrossReport delete = crossreportDao.delete(primaryKey);
-		assertThat(expected, is(delete));
+		assertThat(expected.getThirdId(), is(delete.getThirdId()));
 	}
 	
 	@Test
