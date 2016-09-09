@@ -390,7 +390,7 @@ public class CrossReport extends PersistentObject {
     if (description == null) {
       if (other.description != null)
         return false;
-    } else if (!description.trim().equals(other.description.trim()))
+    } else if (!description.equals(other.description))
       return false;
     if (filedOutOfStateIndicator == null) {
       if (other.filedOutOfStateIndicator != null)
@@ -430,17 +430,17 @@ public class CrossReport extends PersistentObject {
     if (outstateLawEnforcementAddr == null) {
       if (other.outstateLawEnforcementAddr != null)
         return false;
-    } else if (!outstateLawEnforcementAddr.trim().equals(other.outstateLawEnforcementAddr.trim()))
+    } else if (!outstateLawEnforcementAddr.equals(other.outstateLawEnforcementAddr))
       return false;
     if (recipientBadgeNumber == null) {
       if (other.recipientBadgeNumber != null)
         return false;
-    } else if (!recipientBadgeNumber.trim().equals(other.recipientBadgeNumber.trim()))
+    } else if (!recipientBadgeNumber.equals(other.recipientBadgeNumber))
       return false;
     if (recipientName == null) {
       if (other.recipientName != null)
         return false;
-    } else if (!recipientName.trim().equals(other.recipientName.trim()))
+    } else if (!recipientName.equals(other.recipientName))
       return false;
     if (recipientPhoneExtensionNumber == null) {
       if (other.recipientPhoneExtensionNumber != null)
@@ -455,12 +455,12 @@ public class CrossReport extends PersistentObject {
     if (recipientPositionTitleDesc == null) {
       if (other.recipientPositionTitleDesc != null)
         return false;
-    } else if (!recipientPositionTitleDesc.trim().equals(other.recipientPositionTitleDesc.trim()))
+    } else if (!recipientPositionTitleDesc.equals(other.recipientPositionTitleDesc))
       return false;
     if (referenceNumber == null) {
       if (other.referenceNumber != null)
         return false;
-    } else if (!referenceNumber.trim().equals(other.referenceNumber.trim()))
+    } else if (!referenceNumber.equals(other.referenceNumber))
       return false;
     if (referralId == null) {
       if (other.referralId != null)
