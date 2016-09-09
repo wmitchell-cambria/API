@@ -12,8 +12,9 @@
   "injuryHarmDetailIndicator": false,
   "nonProtectingParentCode": "N",
   "staffPersonAddedIndicator": false,
-  "fkClientT": "AHooKwN0F4",
-  "fkClient0": "MKPFcB90F4",
+  "victimClientId": "AHooKwN0F4",
+  "perpetratorClientId": "",
+  "referralId": "8mu1E710F4",
   "countySpecificCode": "19",
   "zippyCreatedIndicator": false,
   "placementFacilityType": 6574

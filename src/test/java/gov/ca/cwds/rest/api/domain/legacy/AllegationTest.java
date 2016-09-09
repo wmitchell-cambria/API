@@ -57,9 +57,9 @@ public class AllegationTest {
   private Boolean injuryHarmDetailIndicator = Boolean.TRUE;
   private String nonProtectingParentCode = "e";
   private Boolean staffPersonAddedIndicator = Boolean.FALSE;
-  private String fkClientT = "f";
-  private String fkClient0 = "g";
-  private String fkReferralT = "h";
+  private String victimClientId = "f";
+  private String perpetratorClientId = "g";
+  private String referralId = "h";
   private String countySpecificCode = "i";
   private Boolean zippyCreatedIndicator = Boolean.TRUE;
   private Short placementFacilityType = 4;
@@ -81,7 +81,7 @@ public class AllegationTest {
         new Allegation(id, abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
             abuseLocationDescription, abuseStartDate, allegationDispositionType, allegationType,
             dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
-            nonProtectingParentCode, staffPersonAddedIndicator, fkClientT, fkClient0, fkReferralT,
+            nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId, referralId,
             countySpecificCode, zippyCreatedIndicator, placementFacilityType);
     gov.ca.cwds.rest.api.persistence.legacy.Allegation persistent =
         new gov.ca.cwds.rest.api.persistence.legacy.Allegation(domain, "lastUpdatedId");
@@ -107,9 +107,9 @@ public class AllegationTest {
         is(equalTo(persistent.getNonProtectingParentCode())));
     assertThat(totest.getStaffPersonAddedIndicator(),
         is(equalTo(DomainObject.uncookBooleanString(persistent.getStaffPersonAddedIndicator()))));
-    assertThat(totest.getFkClientT(), is(equalTo(persistent.getFkClientT())));
-    assertThat(totest.getFkClient0(), is(equalTo(persistent.getFkClient0())));
-    assertThat(totest.getFkReferralT(), is(equalTo(persistent.getFkReferralT())));
+    assertThat(totest.getVictimClientId(), is(equalTo(persistent.getVictimClientId())));
+    assertThat(totest.getPerpetratorClientId(), is(equalTo(persistent.getPerpetratorClientId())));
+    assertThat(totest.getReferralId(), is(equalTo(persistent.getReferralId())));
     assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
     assertThat(totest.getZippyCreatedIndicator(),
         is(equalTo(DomainObject.uncookBooleanString(persistent.getZippyCreatedIndicator()))));
@@ -123,7 +123,7 @@ public class AllegationTest {
         new Allegation(id, abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
             abuseLocationDescription, abuseStartDate, allegationDispositionType, allegationType,
             dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
-            nonProtectingParentCode, staffPersonAddedIndicator, fkClientT, fkClient0, fkReferralT,
+            nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId, referralId ,
             countySpecificCode, zippyCreatedIndicator, placementFacilityType);
 
     assertThat(domain.getId(), is(equalTo(id)));
@@ -139,9 +139,9 @@ public class AllegationTest {
     assertThat(domain.getInjuryHarmDetailIndicator(), is(equalTo(injuryHarmDetailIndicator)));
     assertThat(domain.getNonProtectingParentCode(), is(equalTo(nonProtectingParentCode)));
     assertThat(domain.getStaffPersonAddedIndicator(), is(equalTo(staffPersonAddedIndicator)));
-    assertThat(domain.getFkClientT(), is(equalTo(fkClientT)));
-    assertThat(domain.getFkClient0(), is(equalTo(fkClient0)));
-    assertThat(domain.getFkReferralT(), is(equalTo(fkReferralT)));
+    assertThat(domain.getVictimClientId(), is(equalTo(victimClientId)));
+    assertThat(domain.getPerpetratorClientId(), is(equalTo(perpetratorClientId)));
+    assertThat(domain.getReferralId(), is(equalTo(referralId)));
     assertThat(domain.getCountySpecificCode(), is(equalTo(countySpecificCode)));
     assertThat(domain.getZippyCreatedIndicator(), is(equalTo(zippyCreatedIndicator)));
     assertThat(domain.getPlacementFacilityType(), is(equalTo(placementFacilityType)));
@@ -1051,54 +1051,54 @@ public class AllegationTest {
   }
 
   /*
-   * fkClientT Tests
+   * victimClientId Tests
    */
   @Test
-  public void failsWhenFkClientTMissing() throws Exception {
+  public void failsWhenVictimClientIdMissing() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkClientT/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/victimClientId/missing.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("fkClientT may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("victimClientId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenFkClientTNull() throws Exception {
+  public void failsWhenVictimClientIdNull() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkClientT/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/victimClientId/null.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("fkClientT may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("victimClientId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenFkClientTEmpty() throws Exception {
+  public void failsWhenVictimClientIdEmpty() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkClientT/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/victimClientId/empty.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("fkClientT may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("victimClientId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenFkClientTTooLong() throws Exception {
+  public void failsWhenVictimClientIdTooLong() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkClientT/tooLong.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/victimClientId/tooLong.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1106,17 +1106,17 @@ public class AllegationTest {
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("fkClientT size must be between 1 and 10"),
+        response.readEntity(String.class).indexOf("victimClientId size must be between 1 and 10"),
         is(greaterThanOrEqualTo(0)));
   }
 
   /*
-   * fkClient0 Tests
+   * perpetratorClientId Tests
    */
   @Test
-  public void successWhenFkClient0Empty() throws Exception {
+  public void successWhenPerpetratorClientIdEmpty() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/fkClient0/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/perpetratorClientId/empty.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1126,9 +1126,9 @@ public class AllegationTest {
   }
 
   @Test
-  public void successWhenFkClient0Null() throws Exception {
+  public void successWhenPerpetratorClientIdNull() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/fkClient0/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/valid/perpetratorClientId/null.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1138,9 +1138,9 @@ public class AllegationTest {
   }
 
   @Test
-  public void failsWhenFkClient0TooLong() throws Exception {
+  public void failsWhenPerpetratorClientIdTooLong() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkClient0/tooLong.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/perpetratorClientId/tooLong.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1148,59 +1148,59 @@ public class AllegationTest {
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("fkClient0 size must be between 0 and 10"),
+        response.readEntity(String.class).indexOf("perpetratorClientId size must be between 0 and 10"),
         is(greaterThanOrEqualTo(0)));
   }
 
   /*
-   * fkReferralT Tests
+   * referralId Tests
    */
   @Test
-  public void failsWhenFkReferralTMissing() throws Exception {
+  public void failsWhenReferralIdMissing() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkReferralT/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/referralId/missing.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("fkReferralT may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenFkReferralTNull() throws Exception {
+  public void failsWhenReferralIdNull() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkReferralT/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/referralId/null.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("fkReferralT may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenFkReferralTEmpty() throws Exception {
+  public void failsWhenReferralIdEmpty() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkReferralT/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/referralId/empty.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("fkReferralT may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenFkReferralTTooLong() throws Exception {
+  public void failsWhenReferralIdTooLong() throws Exception {
     Allegation toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/fkReferralT/tooLong.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Allegation/invalid/referralId/tooLong.json"),
             Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1208,7 +1208,7 @@ public class AllegationTest {
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("fkReferralT size must be between 1 and 10"),
+        response.readEntity(String.class).indexOf("referralId size must be between 1 and 10"),
         is(greaterThanOrEqualTo(0)));
   }
 

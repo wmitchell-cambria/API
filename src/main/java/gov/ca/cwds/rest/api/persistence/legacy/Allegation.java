@@ -67,13 +67,13 @@ public class Allegation extends PersistentObject {
   private String staffPersonAddedIndicator;
 
   @Column(name = "FKCLIENT_T")
-  private String fkClientT;
+  private String victimClientId;
 
   @Column(name = "FKCLIENT_0")
-  private String fkClient0;
+  private String perpetratorClientId;
 
   @Column(name = "FKREFERL_T")
-  private String fkReferralT;
+  private String referralId;
 
   @Column(name = "CNTY_SPFCD")
   private String countySpecificCode;
@@ -119,9 +119,9 @@ public class Allegation extends PersistentObject {
       this.nonProtectingParentCode = allegation.getNonProtectingParentCode();
       this.staffPersonAddedIndicator =
           DomainObject.cookBoolean(allegation.getStaffPersonAddedIndicator());
-      this.fkClientT = allegation.getFkClientT();
-      this.fkClient0 = allegation.getFkClient0();
-      this.fkReferralT = allegation.getFkReferralT();
+      this.victimClientId = allegation.getVictimClientId();
+      this.perpetratorClientId = allegation.getPerpetratorClientId();
+      this.referralId = allegation.getReferralId();
       this.countySpecificCode = allegation.getCountySpecificCode();
       this.zippyCreatedIndicator = DomainObject.cookBoolean(allegation.getZippyCreatedIndicator());
       this.placementFacilityType = allegation.getPlacementFacilityType();
@@ -232,24 +232,24 @@ public class Allegation extends PersistentObject {
   }
 
   /**
-   * @return the fkClientT
+   * @return the victimClientId
    */
-  public String getFkClientT() {
-    return StringUtils.trimToEmpty(fkClientT);
+  public String getVictimClientId() {
+    return StringUtils.trimToEmpty(victimClientId);
   }
 
   /**
-   * @return the fkClient0
+   * @return the perpetratorClientId
    */
-  public String getFkClient0() {
-    return StringUtils.trimToEmpty(fkClient0);
+  public String getPerpetratorClientId() {
+    return StringUtils.trimToEmpty(perpetratorClientId);
   }
 
   /**
-   * @return the fkReferralT
+   * @return the referralId
    */
-  public String getFkReferralT() {
-    return StringUtils.trimToEmpty(fkReferralT);
+  public String getReferralId() {
+    return StringUtils.trimToEmpty(referralId);
   }
 
   /**

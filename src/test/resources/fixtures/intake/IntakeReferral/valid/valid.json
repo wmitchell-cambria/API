@@ -63,9 +63,9 @@
     "injuryHarmDetailIndicator": false,
     "nonProtectingParentCode": "U",
     "staffPersonAddedIndicator": false,
-    "fkClientT": "ABC123",
-    "fkClient0": "ABC123",
-    "fkReferralT": "ABC123",
+    "victimClientId": "ABC123",
+    "perpetratorClientId": "ABC123",
+    "referralId": "ABC123",
     "countySpecificCode": "A1",
     "zippyCreatedIndicator": false,
     "placementFacilityType": 1234
