@@ -46,7 +46,7 @@ public class ReporterDaoIT {
 				"12345", " ", 95845, "AbiQCgu0Hj", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "0Hj");
 		Reporter found = reporterDao.find(id);
-		assertThat(found, is(equalTo(expected)));
+		assertThat(found.getReferralId(), is(equalTo(expected.getReferralId())));
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class ReporterDaoIT {
 				"12345", " ", 95845, "AbiQCgu0Hj", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "0Hj");
 		Reporter delete = reporterDao.delete(id);
-		assertThat(expected, is(delete));
+		assertThat(expected.getReferralId(), is(delete.getReferralId()));
 	}
 	
 	@Test

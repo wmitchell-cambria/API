@@ -443,12 +443,12 @@ public class Reporter extends PersistentObject {
     if (badgeNumber == null) {
       if (other.badgeNumber != null)
         return false;
-    } else if (!badgeNumber.trim().equals(other.badgeNumber.trim()))
+    } else if (!badgeNumber.equals(other.badgeNumber))
       return false;
     if (cityName == null) {
       if (other.cityName != null)
         return false;
-    } else if (!cityName.trim().equals(other.cityName.trim()))
+    } else if (!cityName.equals(other.cityName))
       return false;
     if (colltrClientRptrReltnshpType == null) {
       if (other.colltrClientRptrReltnshpType != null)
@@ -478,7 +478,7 @@ public class Reporter extends PersistentObject {
     if (employerName == null) {
       if (other.employerName != null)
         return false;
-    } else if (!employerName.trim().equals(other.employerName.trim()))
+    } else if (!employerName.equals(other.employerName))
       return false;
     if (feedbackDate == null) {
       if (other.feedbackDate != null)
@@ -493,12 +493,12 @@ public class Reporter extends PersistentObject {
     if (firstName == null) {
       if (other.firstName != null)
         return false;
-    } else if (!firstName.trim().equals(other.firstName.trim()))
+    } else if (!firstName.equals(other.firstName))
       return false;
     if (lastName == null) {
       if (other.lastName != null)
         return false;
-    } else if (!lastName.trim().equals(other.lastName.trim()))
+    } else if (!lastName.equals(other.lastName))
       return false;
     if (lawEnforcementId == null) {
       if (other.lawEnforcementId != null)
@@ -553,17 +553,17 @@ public class Reporter extends PersistentObject {
     if (streetName == null) {
       if (other.streetName != null)
         return false;
-    } else if (!streetName.trim().equals(other.streetName.trim()))
+    } else if (!streetName.equals(other.streetName))
       return false;
     if (streetNumber == null) {
       if (other.streetNumber != null)
         return false;
-    } else if (!streetNumber.trim().equals(other.streetNumber.trim()))
+    } else if (!streetNumber.equals(other.streetNumber))
       return false;
     if (suffixTitleDescription == null) {
       if (other.suffixTitleDescription != null)
         return false;
-    } else if (!suffixTitleDescription.trim().equals(other.suffixTitleDescription.trim()))
+    } else if (!suffixTitleDescription.equals(other.suffixTitleDescription))
       return false;
     if (zipNumber == null) {
       if (other.zipNumber != null)
