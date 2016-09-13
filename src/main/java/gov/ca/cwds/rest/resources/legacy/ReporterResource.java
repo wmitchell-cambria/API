@@ -13,6 +13,6 @@ import io.swagger.annotations.Api;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_REPORTER, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+@Api(value = RESOURCE_REPORTER, tags = RESOURCE_REPORTER, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
 @Path(value =  RESOURCE_REPORTER)
 public interface ReporterResource {}

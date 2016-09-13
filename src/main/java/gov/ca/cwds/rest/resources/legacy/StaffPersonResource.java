@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_STAFF_PERSON, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+@Api(value = RESOURCE_STAFF_PERSON, tags = RESOURCE_STAFF_PERSON, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
 @Path(value =  RESOURCE_STAFF_PERSON)
 public interface StaffPersonResource {}
 
