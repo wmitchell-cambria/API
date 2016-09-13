@@ -51,7 +51,7 @@ public class Referral extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, example = "ABC123", value = "Value overwritten on POST")
   private String id;
 
   @NotEmpty
