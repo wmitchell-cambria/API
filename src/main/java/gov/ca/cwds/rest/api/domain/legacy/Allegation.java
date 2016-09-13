@@ -43,7 +43,7 @@ public class Allegation extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "Value overwritten on POST", example = "ABC123")
   private String id;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
