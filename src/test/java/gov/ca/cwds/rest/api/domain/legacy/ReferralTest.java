@@ -2,17 +2,14 @@ package gov.ca.cwds.rest.api.domain.legacy;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -26,7 +23,11 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.legacy.ReferralResourceImpl;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.testing.junit.ResourceTestRule;
 public class ReferralTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL + "/";;

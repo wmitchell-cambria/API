@@ -46,7 +46,6 @@ public class CrossReportTest {
   private CrossReport validCrossReport = validCrossReport();
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-  private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
   private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
   private String thirdId = "b";
   private Short crossReportMethodType = 1;

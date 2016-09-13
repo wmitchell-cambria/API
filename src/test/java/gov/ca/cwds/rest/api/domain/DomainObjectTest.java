@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.nullValue;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.hamcrest.core.Is;
