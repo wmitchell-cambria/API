@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
 
-@Api(value = gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+@Api(value = gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL, tags = gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
 @Path(gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL)
 public interface ReferralResource {
 
