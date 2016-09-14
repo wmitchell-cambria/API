@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -16,7 +17,10 @@ import gov.ca.cwds.rest.resources.BaseResource;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.intake.ReferralService;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
+import io.swagger.annotations.Api;
 
+@Api(tags = gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+@Path(gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL)
 public class ReferralResourceImpl extends BaseResource<ReferralService> implements ReferralResource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferralResourceImpl.class);
 	
@@ -24,6 +28,9 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 		super(serviceEnvironment, ReferralService.class);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.ca.cwds.rest.resources.intake.ReferralResource#create(gov.ca.cwds.rest.api.domain.intake.IntakeReferral, java.lang.String, javax.ws.rs.core.UriInfo)
+	 */
 	@Override
 	public Response create(IntakeReferral intakeReferral, String acceptHeader, UriInfo uriInfo) {
 		ReferralService service = (ReferralService)super.versionedService(acceptHeader);
@@ -35,26 +42,6 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 		try {
 			Map<String, Serializable> objects = service.create(intakeReferral);
 
-			//TODO : abstract out the location header creation to something which can be reused for our domain services
-			//       maybe follow the model of InjectLinks
-//			URI[] locations = new URI[objects.size()];
-//			int count = 0;
-//			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-//			for(String name : objects.keySet() ) {
-//				URI referralUri = ub.
-//	                    path(createdIntakeReferral.getReferral().getPr).
-//	                    build();
-//				
-//				
-//				count++;
-//			}
-//			
-//			
-//
-//			
-//	        URI referralUri = ub.
-//	                    path(createdIntakeReferral.getReferral().getPr).
-//	                    build();
 			return Response.status(Response.Status.CREATED).build();
 		} catch (ServiceException e) {
 			if( e.getCause() instanceof EntityExistsException ) {

@@ -180,13 +180,12 @@ public class ApiApplication extends Application<ApiConfiguration> {
     
     @SuppressWarnings("unchecked")
 	private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
-    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
-    	
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());  	
     	final CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> referralCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral>(daos.get(Referral.class), gov.ca.cwds.rest.api.domain.legacy.Referral.class, Referral.class);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());	    	
     	final ReferralService referralService = new ReferralServiceImpl(referralCrudsService);
     	apiEnvironment.services().register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
-    	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
+    	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
     	final CrudsService<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson>(daos.get(StaffPerson.class), gov.ca.cwds.rest.api.domain.legacy.StaffPerson.class, StaffPerson.class);
@@ -234,6 +233,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		apiEnvironment.services().register(ReferralClientService.class, Api.Version.JSON_VERSION_1, referralClientService);
 		LOGGER.info("ReferralClientService:{} for {} of {}", ReferralClientServiceImpl.class.getName(),
 				Api.Version.JSON_VERSION_1.getMediaType(), ReferralClientService.class.getName());
+		
+    	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), gov.ca.cwds.rest.services.intake.ReferralService.class.getName());  	
+    	final gov.ca.cwds.rest.services.intake.ReferralService intakeReferralService = new gov.ca.cwds.rest.services.intake.ReferralServiceImpl(referralService, allegationService, crossReportService, referralClientService, reporterService);
+    	apiEnvironment.services().register(gov.ca.cwds.rest.services.intake.ReferralService.class, Api.Version.JSON_VERSION_1, intakeReferralService);
+    	LOGGER.info("ReferralService:{} for {} of {}", gov.ca.cwds.rest.services.intake.ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), gov.ca.cwds.rest.services.intake.ReferralService.class.getName());
     }
     
     private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {    	
@@ -241,30 +245,34 @@ public class ApiApplication extends Application<ApiConfiguration> {
         final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
         apiEnvironment.jersey().register(applicationResource);
         
-        LOGGER.info("Registering ReferralResource");
+        LOGGER.info("Registering Legacy ReferralResource");
         CrudsResource<gov.ca.cwds.rest.api.domain.legacy.Referral> referralCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.Referral, ReferralService>(apiEnvironment.services(), ReferralService.class);
         final ReferralResource referralResource = new ReferralResourceImpl(apiEnvironment.services(), referralCrudsResource);
         apiEnvironment.jersey().register(referralResource);
         
-        LOGGER.info("Registering StaffPersonResource");
+        LOGGER.info("Registering Legacy StaffPersonResource");
         CrudsResource<gov.ca.cwds.rest.api.domain.legacy.StaffPerson> staffPersonCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPersonService>(apiEnvironment.services(), StaffPersonService.class);
         final StaffPersonResource staffPersonResource = new StaffPersonResourceImpl(apiEnvironment.services(), staffPersonCrudsResource);
         apiEnvironment.jersey().register(staffPersonResource);
         
-        LOGGER.info("Registering CrossReportResource");
+        LOGGER.info("Registering Legacy CrossReportResource");
         CrudsResource<gov.ca.cwds.rest.api.domain.legacy.CrossReport> crossReportCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.CrossReport, CrossReportService>(apiEnvironment.services(), CrossReportService.class);
         final CrossReportResource crossReportResource = new CrossReportResourceImpl(apiEnvironment.services(), crossReportCrudsResource);
         apiEnvironment.jersey().register(crossReportResource);
         
-        LOGGER.info("Registering ReferralClientResource");
+        LOGGER.info("Registering Legacy ReferralClientResource");
         CrudsResource<gov.ca.cwds.rest.api.domain.legacy.ReferralClient> referralClientCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.ReferralClient, ReferralClientService>(apiEnvironment.services(), ReferralClientService.class);
         final ReferralClientResource referralClientResource = new ReferralClientResourceImpl(apiEnvironment.services(), referralClientCrudsResource);
         apiEnvironment.jersey().register(referralClientResource);
         
-        LOGGER.info("Registering ReporterResource");
+        LOGGER.info("Registering Legacy ReporterResource");
         CrudsResource<gov.ca.cwds.rest.api.domain.legacy.Reporter> reporterCrudsResource = new CrudsResourceImpl<gov.ca.cwds.rest.api.domain.legacy.Reporter, ReporterService>(apiEnvironment.services(), ReporterService.class);
         final ReporterResource reporterResource = new ReporterResourceImpl(apiEnvironment.services(), reporterCrudsResource);
         apiEnvironment.jersey().register(reporterResource);
+        
+        LOGGER.info("Registering Intake ReferralResource");
+        final gov.ca.cwds.rest.resources.intake.ReferralResourceImpl intakeReferralResource = new gov.ca.cwds.rest.resources.intake.ReferralResourceImpl(apiEnvironment.services());
+        apiEnvironment.jersey().register(intakeReferralResource);
         
         LOGGER.info("Registering ApiListingResource");
      	apiEnvironment.jersey().register(new ApiListingResource());
