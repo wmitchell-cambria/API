@@ -225,6 +225,7 @@ public class Referral extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 3)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @gov.ca.cwds.rest.validation.ForeignKey(required = true, daoImplementer = "StaffPersonDao")
   private String primaryContactStaffPersonId;
 
   @NotEmpty
