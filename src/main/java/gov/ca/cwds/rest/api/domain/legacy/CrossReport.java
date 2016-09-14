@@ -7,8 +7,8 @@ import javax.validation.constraints.Size;
 
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
