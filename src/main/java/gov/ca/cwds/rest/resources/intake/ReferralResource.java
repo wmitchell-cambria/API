@@ -11,15 +11,12 @@ import org.apache.http.HttpStatus;
 
 import gov.ca.cwds.rest.api.domain.intake.IntakeReferral;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
 
-@Api(value = gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL, tags = gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-@Path(gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_REFERRAL)
 public interface ReferralResource {
 
 	@POST

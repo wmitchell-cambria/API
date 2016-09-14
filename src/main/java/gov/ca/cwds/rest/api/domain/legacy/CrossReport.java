@@ -63,7 +63,7 @@ public class CrossReport extends DomainObject {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "informTime")
   @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, example = "16.41.49")
+  @ApiModelProperty(required = false, readOnly = false, example = "16:41:49")
   private String informTime;
 
   @NotEmpty
