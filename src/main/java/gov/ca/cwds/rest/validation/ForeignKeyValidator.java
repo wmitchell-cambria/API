@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.validation;
 
+import gov.ca.cwds.rest.HibernateUtility;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
 import javax.validation.ConstraintValidator;
@@ -31,20 +32,19 @@ public class ForeignKeyValidator implements ConstraintValidator<ForeignKey, Stri
     if (required || !Strings.isNullOrEmpty(value)) {
       try {
         sessionFactory = new Configuration().configure().buildSessionFactory();
+        sessionFactory = HibernateUtility.getSessionFactory(sessionFactory);
         sessionFactory.getCurrentSession().beginTransaction();
         crudsDao =
             (CrudsDaoImpl<?>) Class.forName("gov.ca.cwds.rest.jdbi.legacy." + daoImplementer)
                 .getConstructor(SessionFactory.class).newInstance(sessionFactory);
         if (crudsDao.find(value) == null) {
-          LOGGER.info("Unable to validate Staff Person Id string {} ", value);
+          LOGGER.info("Unable to validate Foreign Key {} ", value);
           return false;
         }
-        Object found = crudsDao.find(value);
+
       } catch (Exception e) {
         LOGGER.info("Exception in Foreign Key Validator {} ", e.toString());
         return false;
-      } finally {
-        sessionFactory.close();
       }
     }
 
