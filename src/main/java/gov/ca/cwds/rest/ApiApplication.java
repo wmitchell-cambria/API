@@ -152,6 +152,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         
         LOGGER.info("Configuring SWAGGER");
         configureSwagger(configuration, environment);
+        
+        HibernateUtility.getSessionFactory(hibernateBundle.getSessionFactory());
     }
     
     private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
