@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.validation.LawEnforcementBR;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -37,6 +38,13 @@ import io.swagger.annotations.ApiModelProperty;
     @InjectLink(value = "/{resource}/{id}", rel = "lawEnforcementId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
             @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
+
+@LawEnforcementBR.List({
+    @LawEnforcementBR(
+        fieldName = "lawEnforcementId",
+        dependentFieldName = "badgeNumber")
+})
+
 public class Reporter extends DomainObject {
 
   @NotEmpty
