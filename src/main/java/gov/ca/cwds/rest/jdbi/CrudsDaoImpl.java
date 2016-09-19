@@ -37,9 +37,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	 */
 	@Override
 	public T find(Serializable primaryKey) {
-		T object = get(primaryKey);
-		currentSession().clear();
-		return object;
+		return get(primaryKey);
 	}
 
 	/* (non-Javadoc)
@@ -75,7 +73,6 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 		if( databaseObject == null ) {
 			throw new EntityNotFoundException();
 		}
-		currentSession().clear();
 		return persist(object);
 	}
 }
