@@ -15,9 +15,18 @@ import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.api.domain.legacy.Reporter;
 import gov.ca.cwds.rest.core.Api;
 
-@InjectLinks({ @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE, bindings = {
-		@Binding(name = "id", value = "${instance.referral.id}"),
-		@Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }), })
+/**
+ * Logical representation of a Referral
+ * 
+ * @author CWDS API Team
+ */
+@InjectLinks({ 
+	@InjectLink(value = "/{resource}/{id}", rel = "referral", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "${instance.referral.id}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
+	@InjectLink(value = "/{resource}/{id}", rel = "allegation", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "${instance.allegation.id}"), @Binding(name = "resource", value = Api.RESOURCE_ALLEGATION) }),
+	@InjectLink(value = "/{resource}/{id}", rel = "crossReport", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "referralId=${instance.crossReport.referralId},thirdId=${instance.crossReport.thirdId}"), @Binding(name = "resource", value = Api.RESOURCE_CROSS_REPORT) }),
+	@InjectLink(value = "/{resource}/{id}", rel = "referralClient", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "referralId=${instance.referralClient.referralId},clientId=${instance.referralClient.clientId}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
+	@InjectLink(value = "/{resource}/{id}", rel = "reporter", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "${instance.reporter.referralId}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
+	})
 public class IntakeReferral {
 	private Referral referral;
 	private Allegation allegation;
