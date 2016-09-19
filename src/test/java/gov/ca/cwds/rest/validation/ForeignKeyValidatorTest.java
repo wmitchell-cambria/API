@@ -39,39 +39,42 @@ public class ForeignKeyValidatorTest {
 	}
 
 	@Test
-	public void isValidReturnsTrueWhenNotRequiredAndKeyFound() throws Exception {
+	public void isValidReturnsTrueWhenRequiredAndFound() throws Exception {
 		ForeignKeyValidator validator = new ForeignKeyValidator();
-		validator.initialize(constraintAnnotationNotRequired);
+		validator.initialize(constraintAnnotationRequired);
 		assertThat(validator.isValid(foundKey, context), is(equalTo(true)));
 	}
 	
 	@Test
-	public void isValidReturnsFalseWhenNotRequiredButKeyNotFound() throws Exception {
-		ForeignKeyValidator validator = new ForeignKeyValidator();
-		validator.initialize(constraintAnnotationNotRequired);
-		assertThat(validator.isValid(notFoundKey, context), is(equalTo(false)));
-	}
-
-	@Test
-	public void isValidReturnsFalseWhenRequiredButKeyNotFound() throws Exception {
+	public void isValidReturnsFalseWhenRequiredAndNotFound() throws Exception {
 		ForeignKeyValidator validator = new ForeignKeyValidator();
 		validator.initialize(constraintAnnotationRequired);
 		assertThat(validator.isValid(notFoundKey, context), is(equalTo(false)));
+		
 	}
-
-	@Test
-	public void isValidReturnsTrueWhenNotRequiredAndEmptyValue() throws Exception {
+	
+	@Test 
+	public void isValidReturnsTrueWhenNotRequiredAndFound() throws Exception {
 		ForeignKeyValidator validator = new ForeignKeyValidator();
 		validator.initialize(constraintAnnotationNotRequired);
+		assertThat(validator.isValid(foundKey, context), is(equalTo(true)));
+		
+	}
+	
+	@Test
+	public void isValidReturnsFalseWhenNotRequiredAndNotFound() throws Exception {
+		ForeignKeyValidator validator = new ForeignKeyValidator();
+		validator.initialize(constraintAnnotationNotRequired);
+		assertThat(validator.isValid(notFoundKey, context), is(equalTo(false)));
+		
+	}
+	
+	public void isValidReturnsTrueWhenNotRequiredAndEmpty() throws Exception {
+		ForeignKeyValidator validator = new ForeignKeyValidator();
+		validator.initialize(constraintAnnotationRequired);
 		assertThat(validator.isValid("", context), is(equalTo(true)));
 	}
-	
-	@Test
-	public void isValidReturnsTrueWhenRequiredAndKeyFound() throws Exception {
-		ForeignKeyValidator validator = new ForeignKeyValidator();
-		validator.initialize(constraintAnnotationRequired);
-		assertThat(validator.isValid(foundKey, context), is(equalTo(true)));
-	}
+
 
 	/*
 	 * static initialization
