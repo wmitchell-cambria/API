@@ -1,20 +1,190 @@
 package gov.ca.cwds.rest.resources.filter;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Link;
+import javax.ws.rs.core.Link.Builder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response.StatusType;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.Assert;
-
 public class EmptyBodyFilterTest {
 
-	  @Before
-	  public void setup() {
-	  }
-	  
-	  @Test
-	  public void failTest() throws Exception {
-		  //RDB Assert.assertTrue(false);
-	  }
+	private ContainerResponseContext responseContext;
+	
+	@Before
+	public void setup() {
+		responseContext = new ContainerResponseContext() {
+			private Object entity;
+			
+			@Override
+			public void setStatusInfo(StatusType statusInfo) {
+			}
 
+			@Override
+			public void setStatus(int code) {
+			}
+
+			@Override
+			public void setEntityStream(OutputStream outputStream) {
+			}
+
+			@Override
+			public void setEntity(Object entity, Annotation[] annotations, MediaType mediaType) {
+			}
+
+			@Override
+			public void setEntity(Object entity) {
+				this.entity = entity;
+			}
+
+			@Override
+			public boolean hasLink(String relation) {
+				return false;
+			}
+
+			@Override
+			public boolean hasEntity() {
+				return false;
+			}
+
+			@Override
+			public MultivaluedMap<String, String> getStringHeaders() {
+				return null;
+			}
+
+			@Override
+			public StatusType getStatusInfo() {
+				return null;
+			}
+
+			@Override
+			public int getStatus() {
+				return 0;
+			}
+
+			@Override
+			public MediaType getMediaType() {
+				return null;
+			}
+
+			@Override
+			public URI getLocation() {
+				return null;
+			}
+
+			@Override
+			public Set<Link> getLinks() {
+				return null;
+			}
+
+			@Override
+			public Builder getLinkBuilder(String relation) {
+				return null;
+			}
+
+			@Override
+			public Link getLink(String relation) {
+				return null;
+			}
+
+			@Override
+			public int getLength() {
+				return 0;
+			}
+
+			@Override
+			public Date getLastModified() {
+				return null;
+			}
+
+			@Override
+			public Locale getLanguage() {
+				return null;
+			}
+
+			@Override
+			public MultivaluedMap<String, Object> getHeaders() {
+				return null;
+			}
+
+			@Override
+			public String getHeaderString(String name) {
+				return null;
+			}
+
+			@Override
+			public Type getEntityType() {
+				return null;
+			}
+
+			@Override
+			public EntityTag getEntityTag() {
+				return null;
+			}
+
+			@Override
+			public OutputStream getEntityStream() {
+				return null;
+			}
+
+			@Override
+			public Class<?> getEntityClass() {
+				return null;
+			}
+
+			@Override
+			public Annotation[] getEntityAnnotations() {
+				return null;
+			}
+
+			@Override
+			public Object getEntity() {
+				return entity;
+			}
+
+			@Override
+			public Date getDate() {
+				return null;
+			}
+
+			@Override
+			public Map<String, NewCookie> getCookies() {
+				return null;
+			}
+
+			@Override
+			public Set<String> getAllowedMethods() {
+				return null;
+			}
+		};
+
+	}
+
+	@Test
+	public void filterEmptiesBody() throws Exception {
+		responseContext.setEntity(new Object());
+		EmptyBodyFilter emptyBodyFilter = new EmptyBodyFilter();
+		emptyBodyFilter.filter(null, responseContext);
+		assertThat(responseContext.getEntity(), is(nullValue()));
+	}
 
 }
