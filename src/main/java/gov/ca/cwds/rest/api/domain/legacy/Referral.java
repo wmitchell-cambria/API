@@ -227,7 +227,7 @@ public class Referral extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 3)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
-  //RDB @ForeignKey(required = true, persistentObjectClass = StaffPerson.class)
+  @ForeignKey(required = true, persistentObjectClass = StaffPerson.class)
   private String primaryContactStaffPersonId;
 
   @NotEmpty

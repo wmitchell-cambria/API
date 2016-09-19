@@ -24,7 +24,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.AllegationResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -66,10 +69,13 @@ public class AllegationTest {
 
   @Before
   public void setup() {
-    when(
-        mockedAllegationResource.create(eq(validAllegation),
-            eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    @SuppressWarnings("rawtypes")
+    CrudsDao crudsDao = mock(CrudsDao.class);
+    DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.Referral.class, crudsDao);
+    when(crudsDao.find(any())).thenReturn(mock(Referral.class));
+
+    when(mockedAllegationResource.create(eq(validAllegation), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+            any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
   /*
@@ -1375,6 +1381,6 @@ public class AllegationTest {
   private Allegation validAllegation() {
     return new Allegation("Aaeae9r0F4", "1999-07-15", (short) 2, "M", "Barber Shop", "1999-07-15",
         (short) 0, (short) 2180, "Fremont", "", false, "N", false, "AHooKwN0F4", "MKPFcB90F4",
-        "8mu1E710F4", "19", false, (short) 6574);
+        "AbiQCgu0Hj", "19", false, (short) 6574);
   }
 }

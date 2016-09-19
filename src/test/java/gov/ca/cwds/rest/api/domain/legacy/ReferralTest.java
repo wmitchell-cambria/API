@@ -24,7 +24,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.ReferralResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -98,12 +101,14 @@ public class ReferralTest {
 
   @Before
   public void setup() {
-    when(
-        mockedReferralResource.create(eq(validReferral),
-            eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
-  }
+      @SuppressWarnings("rawtypes")
+      CrudsDao crudsDao = mock(CrudsDao.class);
+      DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson.class, crudsDao);
+      when(crudsDao.find(any())).thenReturn(mock(StaffPerson.class));
 
+      when(mockedReferralResource.create(eq(validReferral), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+              any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+  }
   /*
    * Constructor Tests
    */

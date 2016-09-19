@@ -41,7 +41,7 @@ public class ReferralClientResourceImplTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private static final String ID_FOUND = "1";
-	private static final String ID_VERIFY = "referralId=abc,clientId=abc";
+	private static final String ID_VERIFY = "referralId=AbiQCgu0Hj,clientId=abc";
 	
 	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL_CLIENT + "/";
 	
