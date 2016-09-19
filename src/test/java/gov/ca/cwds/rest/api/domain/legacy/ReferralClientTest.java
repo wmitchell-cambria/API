@@ -26,7 +26,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.ReferralClientResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -67,10 +70,13 @@ public class ReferralClientTest {
 
   @Before
   public void setup() {
-    when(
-        mockedReferralClientResource.create(eq(validReferralClient),
-            eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    @SuppressWarnings("rawtypes")
+    CrudsDao crudsDao = mock(CrudsDao.class);
+    DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.Referral.class, crudsDao);
+    when(crudsDao.find(any())).thenReturn(mock(Referral.class));
+
+    when(mockedReferralClientResource.create(eq(validReferralClient), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+            any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
   @Test
@@ -958,7 +964,7 @@ public class ReferralClientTest {
    */
   private ReferralClient validReferralClient() {
     return new ReferralClient("A123", new Short((short) 123), new Short((short) 123), "A",
-        "2000-01-01", false, false, "abc", "abc", "description abc", new Short((short) 12), "M",
+        "2000-01-01", false, false, "AbiQCgu0Hj", "abc", "description abc", new Short((short) 12), "M",
         "AB", false, false, false);
   }
 }

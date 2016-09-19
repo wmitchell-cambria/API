@@ -41,7 +41,7 @@ public class CrossReportResourceImplTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	private static final String ID_FOUND = "1";
-	private static final String ID_VERIFY = "referralId=DEF,thirdId=ABC123";
+	private static final String ID_VERIFY = "referralId=AbiQCgu0Hj,thirdId=ABC123";
 	
 	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CROSS_REPORT + "/";
 	

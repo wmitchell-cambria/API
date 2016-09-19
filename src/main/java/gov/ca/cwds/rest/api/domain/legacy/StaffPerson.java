@@ -103,6 +103,7 @@ public class StaffPerson extends DomainObject {
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "IDENTIFIER of CWS_OFFT",
       example = "def")
+  //TODO Add Foreign Key Validation after CWS_OFFICE table is added to source code
   private String cwsOffice;
 
   @NotEmpty
@@ -128,6 +129,7 @@ public class StaffPerson extends DomainObject {
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "IDENTIFIER of CWSADDRT",
       example = "ghi")
+  //TODO Add Foreign Key Validation after CWS_OFFICE_ADDRESS table is added to source code
   private String cwsOfficeAddress;
 
   @Size(max = 50)

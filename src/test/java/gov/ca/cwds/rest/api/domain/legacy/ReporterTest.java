@@ -25,7 +25,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.ReporterResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -75,11 +78,14 @@ public class ReporterTest {
 
   @Before
   public void setup() {
-    when(
-        mockedReporterResource.create(eq(validReporter),
-            eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
-  }
+    @SuppressWarnings("rawtypes")
+    CrudsDao crudsDao = mock(CrudsDao.class);
+    DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.Referral.class, crudsDao);
+    when(crudsDao.find(any())).thenReturn(mock(Referral.class));
+
+    when(mockedReporterResource.create(eq(validReporter), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+            any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+}
 
   /*
    * Constructor Tests
@@ -1586,6 +1592,6 @@ public class ReporterTest {
     return new Reporter("A123", "ABC", new Short((short) 12), new Short((short) 34), false,
         "ABC123", "DEF", "2000-01-01", false, "John", "Smith", false, 123, new BigDecimal(1234567),
         "A", "ABC123", new BigDecimal(1234567), 123, new Short((short) 1234), "ABC STREET", "123",
-        "AB", 12345, "DEF", "DEF", new Short((short) 1234), "AB");
+        "AB", 12345, "AbiQCgu0Hj", "DEF", new Short((short) 1234), "AB");
   }
 }
