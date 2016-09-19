@@ -13,6 +13,7 @@ import java.util.HashMap;
 import javax.persistence.EntityExistsException;
 import javax.ws.rs.client.Entity;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -79,10 +80,7 @@ public class ReferralResourceImplTest {
 
 	@Test
 	public void createReturnsLocationHeaderWhenCreated() {
-//		assertThat(
-//				resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-//						.post(Entity.entity(uniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getHeaders().get("Location"),
-//				is(notNullValue()));
+		//RDB Assert.fail("Implement This Test");
 	}
 
 	@Test

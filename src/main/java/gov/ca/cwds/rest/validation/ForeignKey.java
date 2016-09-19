@@ -7,7 +7,6 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import gov.ca.cwds.rest.jdbi.legacy.StaffPersonDao;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -16,6 +15,8 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+
 /**
  * Checks to see that the value is a valid Foreign Key.
  */
@@ -23,7 +24,6 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = ForeignKeyValidator.class)
-// @Constraint(validatedBy = StaffPersonIdValidator.class)
 public @interface ForeignKey {
   String message() default "must be a valid {format}";
 
@@ -35,5 +35,5 @@ public @interface ForeignKey {
 
   boolean required() default true;
 
-  String daoImplementer();
+  Class<? extends PersistentObject> persistentObjectClass();
 }

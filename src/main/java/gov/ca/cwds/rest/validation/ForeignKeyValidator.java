@@ -1,51 +1,43 @@
 package gov.ca.cwds.rest.validation;
 
-import gov.ca.cwds.rest.HibernateUtility;
-import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
+import java.text.MessageFormat;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
+
 public class ForeignKeyValidator implements ConstraintValidator<ForeignKey, String> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ForeignKeyValidator.class);
 
   private boolean required;
-  private String daoImplementer;
-  private CrudsDaoImpl<?> crudsDao;
-  private SessionFactory sessionFactory;
+  private Class<? extends PersistentObject> persistentObjectClass;
 
   @Override
   public void initialize(ForeignKey constraintAnnotation) {
-    this.daoImplementer = constraintAnnotation.daoImplementer();
+    this.persistentObjectClass = constraintAnnotation.persistentObjectClass();
     this.required = constraintAnnotation.required();
   }
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
     if (required || !Strings.isNullOrEmpty(value)) {
-      try {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        sessionFactory = HibernateUtility.getSessionFactory(sessionFactory);
-        sessionFactory.getCurrentSession().beginTransaction();
-        crudsDao =
-            (CrudsDaoImpl<?>) Class.forName("gov.ca.cwds.rest.jdbi.legacy." + daoImplementer)
-                .getConstructor(SessionFactory.class).newInstance(sessionFactory);
-        if (crudsDao.find(value) == null) {
+    	@SuppressWarnings("rawtypes")
+		CrudsDao crudsDao = DataAccessEnvironment.get(persistentObjectClass);
+    	if( crudsDao == null ) {
+    		throw new ValidationException(MessageFormat.format("Unable to find dao for class:{0}", persistentObjectClass.getName()));
+    	}
+    	if (crudsDao.find(value) == null) {
           LOGGER.info("Unable to validate Foreign Key {} ", value);
           return false;
         }
-
-      } catch (Exception e) {
-        LOGGER.info("Exception in Foreign Key Validator {} ", e.toString());
-        return false;
-      }
     }
 
     return true;
