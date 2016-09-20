@@ -42,15 +42,15 @@ public class DateValidatorTest {
 	public void isValidReturnsFalseWhenRequiredAndNotValid() throws Exception {
 		DateValidator validator = new DateValidator();
 		validator.initialize(constraintAnnotationRequired);
-		assertThat(validator.isValid(VALID, context), is(equalTo(false)));
+		assertThat(validator.isValid(NOT_VALID, context), is(equalTo(false)));
 		
 	}
 	
 	@Test 
-	public void isValidReturnsTrueWhenNotRequiredAndFound() throws Exception {
+	public void isValidReturnsTrueWhenNotRequiredAndValid() throws Exception {
 		DateValidator validator = new DateValidator();
 		validator.initialize(constraintAnnotationNotRequired);
-		assertThat(validator.isValid(NOT_VALID, context), is(equalTo(true)));
+		assertThat(validator.isValid(VALID, context), is(equalTo(true)));
 		
 	}
 	
