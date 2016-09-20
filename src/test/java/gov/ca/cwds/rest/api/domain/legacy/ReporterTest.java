@@ -1590,7 +1590,7 @@ public class ReporterTest {
    */
   private Reporter validReporter() {
     return new Reporter("A123", "ABC", new Short((short) 12), new Short((short) 34), false,
-        "ABC123", "DEF", "2000-01-01", false, "John", "Smith", false, 123, new BigDecimal(1234567),
+        "ABC123", "  ", "2000-01-01", false, "John", "Smith", false, 123, new BigDecimal(1234567),
         "A", "ABC123", new BigDecimal(1234567), 123, new Short((short) 1234), "ABC STREET", "123",
         "AB", 12345, "AbiQCgu0Hj", "DEF", new Short((short) 1234), "AB");
   }

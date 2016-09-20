@@ -21,9 +21,9 @@ import javax.validation.Payload;
 
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = LawEnforcementBRValidator.class)
+@Constraint(validatedBy = AgencyNameValidator.class)
 @Documented
-public @interface LawEnforcementBR {
+public @interface AgencyName {
 
 	String fieldName();
 
@@ -39,7 +39,7 @@ public @interface LawEnforcementBR {
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {
-		LawEnforcementBR[] value();
+		AgencyName[] value();
 	}
 
 }
