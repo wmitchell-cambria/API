@@ -1,19 +1,52 @@
 package gov.ca.cwds.rest.resources.filter;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Method;
+
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.FeatureContext;
+import javax.ws.rs.core.UriInfo;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.Assert;
+import gov.ca.cwds.rest.api.domain.intake.IntakeReferral;
+import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
+import gov.ca.cwds.rest.resources.intake.ReferralResourceImpl;
+import gov.ca.cwds.rest.resources.legacy.StaffPersonResourceImpl;
 
 public class EmptyBodyFeatureTest {
 
-	  @Before
-	  public void setup() {
-	  }
-	  
-	  @Test
-	  public void failTest() throws Exception {
-		  //RDB Assert.assertTrue(false);
-	  }
+	private ResourceInfo resourceInfoWithAnnotatedMethod = mock(ResourceInfo.class);
+	private ResourceInfo resourceInfoWithoutAnnotatedMethod = mock(ResourceInfo.class);
+	private Method annotatedMethod;
+	private Method notAnnotatedMethod;
+	private FeatureContext context = mock(FeatureContext.class);
 
+	@Before
+	public void setup() throws Exception {
+		annotatedMethod = ReferralResourceImpl.class.getMethod("create", IntakeReferral.class, String.class, UriInfo.class);
+		notAnnotatedMethod = StaffPersonResourceImpl.class.getMethod("create", StaffPerson.class, String.class, UriInfo.class);
+		
+		when(resourceInfoWithAnnotatedMethod.getResourceMethod()).thenReturn(annotatedMethod);
+		when(resourceInfoWithoutAnnotatedMethod.getResourceMethod()).thenReturn(notAnnotatedMethod);
+	}
+
+	@Test
+	public void configureRegistersFilterWhenAnnotationExists() throws Exception {
+		EmptyBodyFeature emptyBodyFeature = new EmptyBodyFeature();
+		emptyBodyFeature.configure(resourceInfoWithAnnotatedMethod, context);
+		verify(context, times(1)).register(EmptyBodyFilter.class);
+	}
+
+	@Test
+	public void configureDoesNotRegisterFilterWhenAnnotationDoesNotExist() throws Exception {
+		EmptyBodyFeature emptyBodyFeature = new EmptyBodyFeature();
+		emptyBodyFeature.configure(resourceInfoWithoutAnnotatedMethod, context);
+		verify(context, times(0)).register(EmptyBodyFilter.class);
+	}
 }
