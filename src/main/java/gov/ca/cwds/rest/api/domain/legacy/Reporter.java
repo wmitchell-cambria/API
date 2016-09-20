@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.validation.AgencyName;
 import gov.ca.cwds.rest.validation.ForeignKey;
 import gov.ca.cwds.rest.validation.LawEnforcementBR;
 import io.swagger.annotations.ApiModel;
@@ -46,6 +47,13 @@ import io.swagger.annotations.ApiModelProperty;
         fieldName = "lawEnforcementId",
         dependentFieldName = "badgeNumber")
 })
+
+@AgencyName.List({
+	@AgencyName(
+            fieldName = "lawEnforcementId",
+            dependentFieldName = "employerName")
+})
+
 
 public class Reporter extends DomainObject {
 
