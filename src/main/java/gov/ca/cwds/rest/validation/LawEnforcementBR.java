@@ -29,13 +29,15 @@ public @interface LawEnforcementBR {
 
 	String dependentFieldName();
 
+	String SecondFieldName();
+
 	String message() default "{format}";
 
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
 
-	@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+	@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {
