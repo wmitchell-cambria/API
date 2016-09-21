@@ -18,7 +18,9 @@ import javax.validation.Payload;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
- * Checks to see that the value is a valid Foreign Key.
+ * Indicates that the annotated member is a foreign key.
+ * 
+ * @author CWDS API Team
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
