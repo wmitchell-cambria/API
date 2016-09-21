@@ -14,6 +14,11 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 
+/**
+ * Validates a given {@link ForeignKey} exists.
+ *  
+ * @author CWDS API Team
+ */
 public class ForeignKeyValidator implements ConstraintValidator<ForeignKey, String> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ForeignKeyValidator.class);
 
