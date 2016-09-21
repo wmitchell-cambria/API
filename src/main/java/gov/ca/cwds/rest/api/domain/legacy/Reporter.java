@@ -21,6 +21,7 @@ import gov.ca.cwds.rest.core.Api;
 //import gov.ca.cwds.rest.validation.AgencyName;
 import gov.ca.cwds.rest.validation.ForeignKey;
 import gov.ca.cwds.rest.validation.LawEnforcementBR;
+import gov.ca.cwds.rest.validation.ZipCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -160,6 +161,7 @@ public class Reporter extends DomainObject {
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ZipCode(required = true)
   private Integer zipNumber;
 
   @Size(max = 10)
