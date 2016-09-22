@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Validator which confirms only one of a bean's given properties have been set. 
+ * Validator which confirms only one of the given properties on a bean have been set. 
  *
  * @author CWDS API Team
  */
