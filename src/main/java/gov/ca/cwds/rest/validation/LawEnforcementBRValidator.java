@@ -5,11 +5,9 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class LawEnforcementBRValidator implements ConstraintValidator<LawEnforcementBR, Object> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LawEnforcementBRValidator.class);
+
 
 	private String lawEnforcementId;
 	private String badgeNumber;
@@ -52,8 +50,7 @@ public class LawEnforcementBRValidator implements ConstraintValidator<LawEnforce
 			}
 
 		} catch (Exception e) {
-			LOGGER.info("Exception in BusinessRule Validator {} ", e.toString());
-			return false;
+			throw new ValidationException("Unable to find the bean", e);
 		}
 		return true;
 	}
