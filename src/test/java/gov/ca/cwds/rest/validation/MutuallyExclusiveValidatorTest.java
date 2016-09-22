@@ -4,7 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.endsWith;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.validation.ConstraintValidatorContext;
@@ -69,6 +72,7 @@ public class MutuallyExclusiveValidatorTest {
 		
 		validator.initialize(requiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+		verify(context,times(1)).buildConstraintViolationWithTemplate(endsWith("must have one of their values set"));
 	}
 	
 	@Test
@@ -79,6 +83,7 @@ public class MutuallyExclusiveValidatorTest {
 
 		validator.initialize(notRequiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+		verify(context,times(1)).buildConstraintViolationWithTemplate(endsWith("are mutually exclusive but multiple values are set"));
 	}
 
 	@Test
