@@ -21,7 +21,8 @@ public class MutuallyExclusiveValidatorTest {
 	private String def;
 	private String ghi;
 
-	private MutuallyExclusive constraintAnnotation = mock(MutuallyExclusive.class);
+	private MutuallyExclusive requiredConstraintAnnotation = mock(MutuallyExclusive.class);
+	private MutuallyExclusive notRequiredConstraintAnnotation = mock(MutuallyExclusive.class);
 	private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
 	private ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
 	private NodeBuilderCustomizableContext nodeBuilder = mock(NodeBuilderCustomizableContext.class);
@@ -38,35 +39,52 @@ public class MutuallyExclusiveValidatorTest {
 		when(context.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
 		when(builder.addPropertyNode(any())).thenReturn(nodeBuilder);
 		
-		when(constraintAnnotation.properties()).thenReturn(properties);
-		validator.initialize(constraintAnnotation);
+		when(requiredConstraintAnnotation.properties()).thenReturn(properties);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(properties);
+		
+		when(notRequiredConstraintAnnotation.required()).thenReturn(false);
+		when(requiredConstraintAnnotation.required()).thenReturn(true);
 	}
 
 	@Test
 	public void validReturnsTrueWhenSingleValueSet() throws Exception {
 		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
 		bean.abc = "abc";
+		
+		validator.initialize(requiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(true)));
 	}
 
 	@Test
-	public void validReturnsTrueWhenNoValueSet() throws Exception {
+	public void validReturnsTrueWhenNoValueSetAndNotRequired() throws Exception {
 		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		
+		validator.initialize(notRequiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(true)));
 	}
 
+	@Test
+	public void validReturnsFalseWhenNoValueSetAndRequired() throws Exception {
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		
+		validator.initialize(requiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+	}
+	
 	@Test
 	public void validReturnsFalseWhenMoreThan1ValueSet() throws Exception {
 		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
 		bean.abc = "abc";
 		bean.def = "def";
 
+		validator.initialize(notRequiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(false)));
 	}
 
 	@Test
 	public void validThrowsExceptionWhenPropertyNotExistsInBean() throws Exception {
 		thrown.expect(ValidationException.class);
+		validator.initialize(notRequiredConstraintAnnotation);
 		validator.isValid(new InvalidBean(), context);
 	}
 
