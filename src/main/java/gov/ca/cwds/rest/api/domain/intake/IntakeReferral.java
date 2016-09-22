@@ -14,6 +14,7 @@ import gov.ca.cwds.rest.api.domain.legacy.Referral;
 import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.api.domain.legacy.Reporter;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.validation.AnonymousReporterInd;
 
 /**
  * Logical representation of a Referral
@@ -27,6 +28,8 @@ import gov.ca.cwds.rest.core.Api;
 	@InjectLink(value = "/{resource}/{id}", rel = "referralClient", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "referralId=${instance.referralClient.referralId},clientId=${instance.referralClient.clientId}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
 	@InjectLink(value = "/{resource}/{id}", rel = "reporter", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "${instance.reporter.referralId}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
 	})
+
+@AnonymousReporterInd
 public class IntakeReferral {
 	private Referral referral;
 	private Allegation allegation;

@@ -16,20 +16,15 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Checks to see that the LawEnforcementId is required for Badge Number and EmployerName should not be Exist.
+ * Checks to see that the if REFERRAL. Anonymous Ind = Y then REFERRAL> REFERRAL
+ * CLIENT. Self Reporter Ind = N, or vice versa.
  */
 
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = LawEnforcementBRValidator.class)
+@Constraint(validatedBy = AnonymousReporterIndValidator.class)
 @Documented
-public @interface LawEnforcementBR {
-
-	String fieldName();
-
-	String dependentFieldName();
-
-	String SecondFieldName();
+public @interface AnonymousReporterInd {
 
 	String message() default "{format}";
 
@@ -37,13 +32,5 @@ public @interface LawEnforcementBR {
 
 	Class<? extends Payload>[] payload() default {};
 
-	@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
-	@Retention(RUNTIME)
-	@Documented
-	@interface List {
-		LawEnforcementBR[] value();
-	}
-
-	
 
 }
