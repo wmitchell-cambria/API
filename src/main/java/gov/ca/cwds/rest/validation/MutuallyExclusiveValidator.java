@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.validation;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -11,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Validator which confirms only one of a beans given properties have been set. 
+ * Validator which confirms only one of a bean's given properties have been set. 
  *
  * @author CWDS API Team
  */
@@ -20,16 +21,17 @@ public class MutuallyExclusiveValidator implements ConstraintValidator<MutuallyE
 	private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyExclusiveValidator.class);
 
 	private String[] properties;
-	private String message;
+	private boolean required;
 
 	@Override
 	public void initialize(MutuallyExclusive constraintAnnotation) {
 		this.properties = constraintAnnotation.properties();
-		this.message = constraintAnnotation.message();
+		this.required = constraintAnnotation.required();
 	}
 
 	@Override
 	public boolean isValid(final Object bean, ConstraintValidatorContext context) {
+		boolean valid = true;
 		int countNotEmpty = 0;
 		for( String property : properties ) {
 			String value = readBeanValue(bean, property);
@@ -37,13 +39,20 @@ public class MutuallyExclusiveValidator implements ConstraintValidator<MutuallyE
 				countNotEmpty++;
 			}
 		}
+		
+		if( required && countNotEmpty == 0 ) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(MessageFormat.format("{0} must have one of their values set", Arrays.toString(properties)))
+					.addPropertyNode("Properties").addConstraintViolation();
+			valid = false;
+		}
 		if( countNotEmpty > 1 ) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(message)
+			context.buildConstraintViolationWithTemplate(MessageFormat.format("{0} are mutually exclusive but multiple values are set", Arrays.toString(properties)))
 					.addPropertyNode("Properties").addConstraintViolation();	
-			return false;
+			valid = false;
 		}
-		return true;
+		return valid;
 	}
 	
 	private String readBeanValue(Object bean, String property) {

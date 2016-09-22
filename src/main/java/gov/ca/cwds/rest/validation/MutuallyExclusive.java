@@ -25,11 +25,11 @@ import javax.validation.Payload;
 @Documented
 @Constraint(validatedBy = MutuallyExclusiveValidator.class)
 public @interface MutuallyExclusive {
-  String message() default "{properties} are mutually exclusive but multiple values set";
-
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
   String[] properties() default {};
+  
+  boolean required() default true;
 }
