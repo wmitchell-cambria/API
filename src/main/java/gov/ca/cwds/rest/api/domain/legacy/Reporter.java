@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
-//import gov.ca.cwds.rest.validation.AgencyName;
 import gov.ca.cwds.rest.validation.ForeignKey;
-import gov.ca.cwds.rest.validation.LawEnforcementBR;
+import gov.ca.cwds.rest.validation.LawEnforcementIdBR;
+import gov.ca.cwds.rest.validation.ReporterBusinessRule;
 import gov.ca.cwds.rest.validation.ZipCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,11 +43,31 @@ import io.swagger.annotations.ApiModelProperty;
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
             @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
 
-@LawEnforcementBR.List({
-    @LawEnforcementBR(
-        fieldName = "lawEnforcementId",
-        dependentFieldName = "badgeNumber",
-        SecondFieldName = "employerName")
+@ReporterBusinessRule.List({
+		@ReporterBusinessRule(
+				fieldName = "lawEnforcementId", 
+				dependentFieldName = "badgeNumber", 
+				message = "Badge number is null so lawEnforcement can not be entered"),
+		@ReporterBusinessRule(
+				fieldName = "badgeNumber", 
+				dependentFieldName = "lawEnforcementId",
+				message = "LawEnforcement is null so Badge number can not be entered"),
+		@ReporterBusinessRule(
+				fieldName = "streetNumber", 
+				dependentFieldName = "streetName", 
+				message = "StreetName should not be null or empty when streetNumber existed"),
+		@ReporterBusinessRule(
+				fieldName = "streetName", 
+				dependentFieldName = "cityName", 
+				message = "CityName should not be null or empty when streetName existed"
+		) 
+})
+
+@LawEnforcementIdBR.List({
+	@LawEnforcementIdBR(
+			fieldName = "lawEnforcementId", 
+			dependentFieldName = "employerName"
+			)
 })
 
 public class Reporter extends DomainObject {
