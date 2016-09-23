@@ -32,4 +32,7 @@ public @interface MutuallyExclusive {
   String[] properties() default {};
   
   boolean required() default true;
+  
+	@SuppressWarnings("rawtypes")
+	Class type() default String.class;
 }

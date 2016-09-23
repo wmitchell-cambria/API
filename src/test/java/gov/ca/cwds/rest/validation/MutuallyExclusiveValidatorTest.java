@@ -23,6 +23,9 @@ public class MutuallyExclusiveValidatorTest {
 	private String abc;
 	private String def;
 	private String ghi;
+	private Boolean jkl;
+	private Boolean mno;
+	private Boolean pqr;
 
 	private MutuallyExclusive requiredConstraintAnnotation = mock(MutuallyExclusive.class);
 	private MutuallyExclusive notRequiredConstraintAnnotation = mock(MutuallyExclusive.class);
@@ -32,7 +35,8 @@ public class MutuallyExclusiveValidatorTest {
 	
 	private MutuallyExclusiveValidator validator = new MutuallyExclusiveValidator();
 
-	private String[] properties = { "abc", "def", "ghi" };
+	private String[] stringProperties = { "abc", "def", "ghi" };
+	private String[] booleanProperties = { "jkl", "mno", "pqr" };
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -42,32 +46,49 @@ public class MutuallyExclusiveValidatorTest {
 		when(context.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
 		when(builder.addPropertyNode(any())).thenReturn(nodeBuilder);
 		
-		when(requiredConstraintAnnotation.properties()).thenReturn(properties);
-		when(notRequiredConstraintAnnotation.properties()).thenReturn(properties);
-		
 		when(notRequiredConstraintAnnotation.required()).thenReturn(false);
 		when(requiredConstraintAnnotation.required()).thenReturn(true);
 	}
 
 	@Test
+	public void initializeThrowsExceptionWhenUnhandledType() throws Exception {
+		thrown.expect(ValidationException.class);
+		thrown.expectMessage("Unhandled type : java.lang.Object");
+		when(requiredConstraintAnnotation.type()).thenReturn(Object.class);
+		when(requiredConstraintAnnotation.properties()).thenReturn(stringProperties);
+		
+		validator.initialize(requiredConstraintAnnotation);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		validator.isValid(bean, context);
+	}
+	
+	@Test
 	public void validReturnsTrueWhenSingleValueSet() throws Exception {
+		when(requiredConstraintAnnotation.type()).thenReturn(String.class);
+		when(requiredConstraintAnnotation.properties()).thenReturn(stringProperties);
+		
 		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
 		bean.abc = "abc";
-		
 		validator.initialize(requiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(true)));
 	}
 
 	@Test
 	public void validReturnsTrueWhenNoValueSetAndNotRequired() throws Exception {
-		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		when(notRequiredConstraintAnnotation.type()).thenReturn(String.class);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(stringProperties);
 		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
 		validator.initialize(notRequiredConstraintAnnotation);
 		assertThat(validator.isValid(bean, context), is(equalTo(true)));
 	}
 
 	@Test
 	public void validReturnsFalseWhenNoValueSetAndRequired() throws Exception {
+		when(requiredConstraintAnnotation.type()).thenReturn(String.class);
+		when(requiredConstraintAnnotation.properties()).thenReturn(stringProperties);
+		
 		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
 		
 		validator.initialize(requiredConstraintAnnotation);
@@ -77,6 +98,9 @@ public class MutuallyExclusiveValidatorTest {
 	
 	@Test
 	public void validReturnsFalseWhenMoreThan1ValueSet() throws Exception {
+		when(notRequiredConstraintAnnotation.type()).thenReturn(String.class);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(stringProperties);
+		
 		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
 		bean.abc = "abc";
 		bean.def = "def";
@@ -88,10 +112,86 @@ public class MutuallyExclusiveValidatorTest {
 
 	@Test
 	public void validThrowsExceptionWhenPropertyNotExistsInBean() throws Exception {
+		when(notRequiredConstraintAnnotation.type()).thenReturn(String.class);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(stringProperties);
+		
 		thrown.expect(ValidationException.class);
 		validator.initialize(notRequiredConstraintAnnotation);
 		validator.isValid(new InvalidBean(), context);
 	}
+
+	@Test
+	public void validReturnsFalseWhenRequiredAndTotalTrueIsZero() throws Exception {
+		when(requiredConstraintAnnotation.type()).thenReturn(Boolean.class);
+		when(requiredConstraintAnnotation.properties()).thenReturn(booleanProperties);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		validator.initialize(requiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+		verify(context,times(1)).buildConstraintViolationWithTemplate(endsWith("must have one and only one true value"));
+	}
+
+	@Test
+	public void validReturnsFalseWhenRequiredAndTotalTrueGreaterThanOne() throws Exception {
+		when(requiredConstraintAnnotation.type()).thenReturn(Boolean.class);
+		when(requiredConstraintAnnotation.properties()).thenReturn(booleanProperties);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		bean.jkl = true;
+		bean.mno = true;
+		
+		validator.initialize(requiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+		verify(context,times(1)).buildConstraintViolationWithTemplate(endsWith("must have one and only one true value"));
+	}
+
+	@Test
+	public void validReturnsTrueWhenRequiredAndTotalTrueEqualsOne() throws Exception {
+		when(requiredConstraintAnnotation.type()).thenReturn(Boolean.class);
+		when(requiredConstraintAnnotation.properties()).thenReturn(booleanProperties);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		bean.jkl = true;
+		bean.mno = false;
+		
+		validator.initialize(requiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(true)));
+	}
+	
+	@Test
+	public void validReturnsTrueWhenNotRequiredAndCountSetEqualsZero() throws Exception {
+		when(notRequiredConstraintAnnotation.type()).thenReturn(Boolean.class);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(booleanProperties);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		
+		validator.initialize(notRequiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(true)));
+	}
+	
+	@Test
+	public void validReturnsTrueWhenNotRequiredAndCountTrueEqualsOne() throws Exception {
+		when(notRequiredConstraintAnnotation.type()).thenReturn(Boolean.class);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(booleanProperties);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		bean.mno = true;
+		validator.initialize(notRequiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(true)));
+	}
+
+	@Test
+	public void validReturnsFalseWhenNotRequiredAndCountSetGreaterThanZeroAndCountTrueNotEqualOne() throws Exception {
+		when(notRequiredConstraintAnnotation.type()).thenReturn(Boolean.class);
+		when(notRequiredConstraintAnnotation.properties()).thenReturn(booleanProperties);
+		
+		MutuallyExclusiveValidatorTest bean = new MutuallyExclusiveValidatorTest();
+		bean.mno = true;
+		bean.jkl = true;
+		validator.initialize(notRequiredConstraintAnnotation);
+		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+	}
+
 
 	public String getAbc() {
 		return abc;
@@ -107,5 +207,17 @@ public class MutuallyExclusiveValidatorTest {
 
 	protected class InvalidBean {
 		public String jkl;
+	}
+	
+	public Boolean getJkl() {
+		return jkl;
+	}
+	
+	public Boolean getMno() {
+		return mno;
+	}
+	
+	public Boolean getPqr() {
+		return pqr;
 	}
 }
