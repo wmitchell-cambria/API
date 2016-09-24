@@ -6,41 +6,34 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Checks to see that the value is in a valid Zip Code format, five digits or zero.
- * 
+ * Checks to see that the value is in a valid Zip Code format, five digits 
+ *  
  * @author CWDS API Team
  */
-public class ZipCodeValidator implements ConstraintValidator<ZipCode, Integer> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ZipCodeValidator.class);
+public class ZipCodeValidator implements ConstraintValidator<ZipCode, String> {
+	@SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(ZipCodeValidator.class);
+	private static final Pattern pattern = Pattern.compile("[0-9]{5}");
 
-  private boolean required;
+	private boolean required;
 
-  @Override
-  public void initialize(ZipCode constraintAnnotation) {
-    this.required = constraintAnnotation.required();
-  }
+	@Override
+	public void initialize(ZipCode constraintAnnotation) {
+		this.required = constraintAnnotation.required();
+	}
 
-  @Override
-  public boolean isValid(Integer value, ConstraintValidatorContext context) {
-    boolean success = false;
-    if (required || !(value == null)) {
-      try{
-        String stringValue = Integer.toString(value);
-        String string = "[0-9]{5}|0";
-        Pattern pattern = Pattern.compile(string);
-        Matcher matcher = pattern.matcher(stringValue);
-        if (matcher.matches()) {
-          success = true;
-        }
-      }catch (Exception e){
-        LOGGER.info("Unable to validate Zip Code with value {}", value);
-        return false;
-      }
-    }
-    return success;
-  }
+	@Override
+	public boolean isValid(String value, ConstraintValidatorContext context) {
+		boolean success = true;
+		if (required || StringUtils.isNotBlank(value)) {
+			Matcher matcher = pattern.matcher(value);
+			success = matcher.matches();
+		}
+		return success;
+	}
 }
