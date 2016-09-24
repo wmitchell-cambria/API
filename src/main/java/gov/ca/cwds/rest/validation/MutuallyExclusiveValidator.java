@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author CWDS API Team
  */
-public class MutuallyExclusiveValidator implements ConstraintValidator<MutuallyExclusive, Object> {
+public class MutuallyExclusiveValidator extends AbstractBeanValidator implements ConstraintValidator<MutuallyExclusive, Object> {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyExclusiveValidator.class);
 
@@ -126,11 +126,5 @@ public class MutuallyExclusiveValidator implements ConstraintValidator<MutuallyE
 		return valid;
 	}
 	
-	private String readBeanValue(Object bean, String property) {
-		try {
-			return BeanUtils.getProperty(bean, property);
-		} catch (Throwable e) {
-			throw new ValidationException(MessageFormat.format("Unable to read '{0}' from bean:{1}", property, bean), e);
-		}
-	}
+
 }

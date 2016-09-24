@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author CWDS API Team
  */
-public class MutuallyNecassaryValidator implements ConstraintValidator<MutuallyNecassary, Object> {
+public class MutuallyNecassaryValidator extends AbstractBeanValidator implements ConstraintValidator<MutuallyNecassary, Object> {
 
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyNecassaryValidator.class);
@@ -54,13 +54,5 @@ public class MutuallyNecassaryValidator implements ConstraintValidator<MutuallyN
 			valid = false;
 		}
 		return valid;
-	}
-	
-	private String readBeanValue(Object bean, String property) {
-		try {
-			return BeanUtils.getProperty(bean, property);
-		} catch (Throwable e) {
-			throw new ValidationException(MessageFormat.format("Unable to read '{0}' from bean:{1}", property, bean), e);
-		}
 	}
 }
