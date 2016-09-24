@@ -25,7 +25,7 @@ import javax.validation.Payload;
 @Documented
 @Constraint(validatedBy = ZipCodeValidator.class)
 public @interface ZipCode {
-  String message() default "must be 5 digits or zero";
+  String message() default "must be 5 digits";
 
   Class<?>[] groups() default {};
 
