@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.validation.MutuallyExclusive;
-import gov.ca.cwds.rest.validation.ZipCode;
+import gov.ca.cwds.rest.validation.Zipcode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -150,7 +150,7 @@ public class Reporter extends DomainObject {
   private String suffixTitleDescription;
 
   @ApiModelProperty(required = true, readOnly = false, example = "08654")
-  @ZipCode(required=false)
+  @Zipcode(required=false)
   private String zipcode;
 
   @Size(max = 10, message="size must be 10")
