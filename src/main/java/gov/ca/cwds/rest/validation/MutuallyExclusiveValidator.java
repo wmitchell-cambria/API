@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +65,7 @@ public class MutuallyExclusiveValidator extends AbstractBeanValidator implements
 		int countTrue = 0;
 		int countSet = 0;
 		for( String property : properties ) {
-			String value =readBeanValue(bean, property);
+			String value = readBeanValue(bean, property);
 			if( value != null ) {
 				countSet++;
 				if( Boolean.TRUE.equals(Boolean.valueOf(value)) ) {

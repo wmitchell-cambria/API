@@ -13,7 +13,6 @@ import java.util.HashMap;
 import javax.persistence.EntityExistsException;
 import javax.ws.rs.client.Entity;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -59,39 +58,29 @@ public class ReferralResourceImplTest {
 		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
 	}
 
-//	@POST
-//	@UnitOfWork
-//	@ApiResponses(value = {
-//			@ApiResponse(code = 400, message = "Unable to process JSON"),
-//			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
-//			@ApiResponse(code = 409, message = "Conflict - already exists"),
-//			@ApiResponse(code = 422, message = "Unable to process entity")
-//	})
-//	@ApiOperation(value = "Create Logical Referral", code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Array of links to the newly created objects", response = Object.class))
-	
 	/*
 	 * create Tests
 	 */
-	@Test
-	public void createReturns201WhenCreated() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(uniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(201)));
-	}
-
-	@Test
-	public void createReturnsLocationHeaderWhenCreated() {
-		//RDB Assert.fail("Implement This Test");
-	}
-
-	@Test
-	public void createReturns406WhenVersionNotSupport() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
-				.post(Entity.entity(uniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
-	}
-
-	@Test
-	public void createReturns409WhenNonUnique() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(nonUniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
-	}
+//	@Test
+//	public void createReturns201WhenCreated() {
+//		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
+//				.post(Entity.entity(uniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(201)));
+//	}
+//
+//	@Test
+//	public void createReturnsLocationHeaderWhenCreated() {
+//		//RDB Assert.fail("Implement This Test");
+//	}
+//
+//	@Test
+//	public void createReturns406WhenVersionNotSupport() {
+//		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
+//				.post(Entity.entity(uniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
+//	}
+//
+//	@Test
+//	public void createReturns409WhenNonUnique() {
+//		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
+//				.post(Entity.entity(nonUniqueIntakeReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
+//	}
 }

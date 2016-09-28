@@ -30,7 +30,12 @@ public class ZipCodeValidator implements ConstraintValidator<ZipCode, String> {
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		boolean success = true;
-		if (required || StringUtils.isNotBlank(value)) {
+		if( required && StringUtils.isBlank(value) ) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate("is required")
+					.addConstraintViolation();
+			success = false;
+		} else if (StringUtils.isNotBlank(value)) {
 			Matcher matcher = pattern.matcher(value);
 			success = matcher.matches();
 		}

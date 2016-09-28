@@ -16,10 +16,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.validation.ForeignKey;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -102,7 +99,6 @@ public class CrossReport extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC123")
-  @ForeignKey(required = true, persistentObjectClass = Referral.class)
   private String referralId;
 
   @Size(max = 10)
@@ -112,7 +108,6 @@ public class CrossReport extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 3)
   @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC")
-  @ForeignKey(required = true, persistentObjectClass = StaffPerson.class)
   private String staffPersonId;
 
   @NotEmpty

@@ -159,7 +159,7 @@ public class Reporter extends PersistentObject {
       this.streetName = reporter.getStreetName();
       this.streetNumber = reporter.getStreetNumber();
       this.suffixTitleDescription = reporter.getSuffixTitleDescription();
-      this.zipNumber = reporter.getZipNumber();
+      this.zipNumber = DomainObject.uncookZipcodeString(reporter.getZipcode());
       this.referralId = reporter.getReferralId();
       this.lawEnforcementId = reporter.getLawEnforcementId();
       this.zipSuffixNumber = reporter.getZipSuffixNumber();

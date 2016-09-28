@@ -71,7 +71,7 @@ public class ReporterTest {
   private String streetName = "j";
   private String streetNumber = "k";
   private String suffixTitleDescription = "l";
-  private int zipNumber = 0;
+  private String zipcode = "08642";
   private String lawEnforcementId = "m";
   private Short zipSuffixNumber = 9;
   private String countySpecificCode = "n";
@@ -98,7 +98,7 @@ public class ReporterTest {
             feedbackRequiredIndicator, firstName, lastName, mandatedReporterIndicator,
             messagePhoneExtensionNumber, messagePhoneNumber, middleInitialName,
             namePrefixDescription, primaryPhoneNumber, primaryPhoneExtensionNumber, stateCodeType,
-            streetName, streetNumber, suffixTitleDescription, zipNumber, referralId,
+            streetName, streetNumber, suffixTitleDescription, zipcode, referralId,
             lawEnforcementId, zipSuffixNumber, countySpecificCode);
     gov.ca.cwds.rest.api.persistence.legacy.Reporter persistent =
         new gov.ca.cwds.rest.api.persistence.legacy.Reporter(domain, "lastUpdatedId");
@@ -137,7 +137,7 @@ public class ReporterTest {
     assertThat(totest.getStreetNumber(), is(equalTo(persistent.getStreetNumber())));
     assertThat(totest.getSuffixTitleDescription(),
         is(equalTo(persistent.getSuffixTitleDescription())));
-    assertThat(totest.getZipNumber(), is(equalTo(persistent.getZipNumber())));
+    assertThat(totest.getZipcode(), is(equalTo(DomainObject.cookZipcodeNumber(persistent.getZipNumber()))));
     assertThat(totest.getLawEnforcementId(), is(equalTo(persistent.getLawEnforcementId())));
     assertThat(totest.getZipSuffixNumber(), is(equalTo(persistent.getZipSuffixNumber())));
     assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
@@ -152,7 +152,7 @@ public class ReporterTest {
             feedbackRequiredIndicator, firstName, lastName, mandatedReporterIndicator,
             messagePhoneExtensionNumber, messagePhoneNumber, middleInitialName,
             namePrefixDescription, primaryPhoneNumber, primaryPhoneExtensionNumber, stateCodeType,
-            streetName, streetNumber, suffixTitleDescription, zipNumber, referralId,
+            streetName, streetNumber, suffixTitleDescription, zipcode, referralId,
             lawEnforcementId, zipSuffixNumber, countySpecificCode);
 
     assertThat(reporter.getReferralId(), is(equalTo(referralId)));
@@ -179,7 +179,7 @@ public class ReporterTest {
     assertThat(reporter.getStreetName(), is(equalTo(streetName)));
     assertThat(reporter.getStreetNumber(), is(equalTo(streetNumber)));
     assertThat(reporter.getSuffixTitleDescription(), is(equalTo(suffixTitleDescription)));
-    assertThat(reporter.getZipNumber(), is(equalTo(zipNumber)));
+    assertThat(reporter.getZipcode(), is(equalTo(zipcode)));
     assertThat(reporter.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
     assertThat(reporter.getZipSuffixNumber(), is(equalTo(zipSuffixNumber)));
     assertThat(reporter.getCountySpecificCode(), is(equalTo(countySpecificCode)));
@@ -213,18 +213,83 @@ public class ReporterTest {
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
-
+  
+  /*
+   * Class level lawEnforcementIdAndEmployerName tests
+   */
   @Test
-  public void successfulWithOptionalsNotIncluded() throws Exception {
+  public void failsWhenBothSupplied() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/optionalsNotIncluded.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/_classLevel/lawEnforcementIdAndEmployerName/bothSupplied.json"),
             Reporter.class);
-    assertThat(
+    Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"Properties [employerName, lawEnforcementId] are mutually exclusive but multiple values are set\"]}")));
+  }
+  
+  @Test
+  public void successWhenBothEmpty() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/lawEnforcementIdAndEmployerName/bothEmpty.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
+  @Test
+  public void successWhenBothMissing() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/lawEnforcementIdAndEmployerName/bothMissing.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenBothNull() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/lawEnforcementIdAndEmployerName/bothNull.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenEmployerNameSuppliedLawEnforcementIdNot() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/lawEnforcementIdAndEmployerName/employerNameSuppliedLawEnforcementIdNot.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenLawEnforcementIdSuppliedEmployerNameSuppliedNot() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/lawEnforcementIdAndEmployerName/lawEnforcementIdSuppliedEmployerNameNot.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
   /*
    * badgeNumber Tests
    */
@@ -530,47 +595,17 @@ public class ReporterTest {
    * employerName Tests
    */
   @Test
-  public void failsWhenEmployerNameMissing() throws Exception {
+  public void successWhenEmployerNameValid() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/employerName/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/employerName/valid.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("employerName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
-
-  @Test
-  public void failsWhenEmployerNameNull() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/employerName/null.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("employerName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenEmployerNameEmpty() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/employerName/empty.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("employerName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
+  
   @Test
   public void failsWhenEmployerNameTooLong() throws Exception {
     Reporter toCreate =
@@ -582,8 +617,7 @@ public class ReporterTest {
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("employerName size must be between 1 and 35"),
-        is(greaterThanOrEqualTo(0)));
+        response.readEntity(String.class), is(equalTo("{\"errors\":[\"employerName size must be less than or equal to 35\"]}")));
   }
 
   /*
@@ -1360,94 +1394,77 @@ public class ReporterTest {
   }
 
   /*
-   * zipNumber Tests
+   * Zipcode tests
    */
   @Test
-  public void failsWhenZipNumberMissing() throws Exception {
+  public void successWhenZipcodeMissing() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/zipcode/missing.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenZipNumberNull() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/null.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenZipNumberTooShort() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/tooShort.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipNumber must be 5 digits or zero"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenZipNumberTooLong() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/tooLong.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipNumber must be 5 digits or zero"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenZipNumberNonZeroDigit() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipNumber/nonZeroDigit.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipNumber must be 5 digits or zero"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void successWhenZipNumberFiveDigits() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/zipNumber/fiveDigits.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)); System.out.println("here "+response.readEntity(String.class));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void successWhenZipNumberZero() throws Exception {
+  public void successWhenZipcodeNull() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/zipNumber/zero.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/zipcode/null.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void failsWhenZipcodeTooShort() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipcode/tooShort.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("zipcode must be 5 digits"),
+        is(greaterThanOrEqualTo(0)));
+  }
+
+  @Test
+  public void failsWhenZipcodeTooLong() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipcode/tooLong.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class),
+        is(equalTo("{\"errors\":[\"zipcode must be 5 digits\"]}")));
+  }
+
+  @Test
+  public void failsWhenZipcodeNonDigits() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/zipcode/nonDigits.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"zipcode must be 5 digits\"]}")));
+  }
+
+  @Test
+  public void successWhenZipcodeFiveDigits() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/zipcode/fiveDigits.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1519,21 +1536,9 @@ public class ReporterTest {
    * lawEnforcementId Tests
    */
   @Test
-  public void successWhenLawEnforcementIdEmpty() throws Exception {
+  public void successWhenLawEnforcementIdValid() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/lawEnforcementId/empty.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenLawEnforcementIdNull() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/lawEnforcementId/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/lawEnforcementId/valid.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
@@ -1553,7 +1558,7 @@ public class ReporterTest {
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("lawEnforcementId size must be between 0 and 10"),
+        response.readEntity(String.class).indexOf("lawEnforcementId size must be 10"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1656,8 +1661,8 @@ public class ReporterTest {
    */
   private Reporter validReporter() {
     return new Reporter("A123", "ABC", new Short((short) 12), new Short((short) 34), false,
-        "ABC123", "  ", "2000-01-01", false, "John", "Smith", false, 123, new BigDecimal(1234567),
+        "ABC123", "", "2000-01-01", false, "John", "Smith", false, 123, new BigDecimal(1234567),
         "A", "ABC123", new BigDecimal(1234567), 123, new Short((short) 1234), "ABC STREET", "123",
-        "AB", 12345, "AbiQCgu0Hj", "DEF", new Short((short) 1234), "AB");
+        "AB", "95842", "AbiQCgu0Hj", "DEF", new Short((short) 1234), "AB");
   }
 }

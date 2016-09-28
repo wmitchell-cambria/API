@@ -14,9 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.validation.ForeignKey;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -227,7 +225,6 @@ public class Referral extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 3)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
-  @ForeignKey(required = true, persistentObjectClass = StaffPerson.class)
   private String primaryContactStaffPersonId;
 
   @NotEmpty
