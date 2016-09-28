@@ -111,6 +111,9 @@ public class DomainObject {
 	}
 	
 	public static Integer uncookZipcodeString(String zipcode) {
+		if(StringUtils.isBlank(zipcode)) {
+			return new Integer(0);
+		}
 		Matcher matcher = ZIPCODE_PATTERN.matcher(zipcode);
 		if( matcher.matches() ) {
 			try {
