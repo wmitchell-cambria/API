@@ -40,8 +40,9 @@ import io.swagger.annotations.ApiModelProperty;
         condition = "${not empty instance.referralId }"),
     @InjectLink(value = "/{resource}/{id}", rel = "lawEnforcementId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
-
+            @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)},
+        condition = "${not empty instance.lawEnforcementId }")
+    })
 @MutuallyExclusive(required=false, properties={"employerName","lawEnforcementId"})
 @OnlyIf(property="badgeNumber", ifProperty="lawEnforcementId")
 @IfThen.List({

@@ -217,6 +217,11 @@ public class DomainObjectTest {
     public void uncookZipcodeStringReturnsCorrectIntegerWhenLeadingNo0s() throws Exception {
     	assertThat(DomainObject.uncookZipcodeString("95842"), is(equalTo(new Integer(95842))));
     }
+
+    @Test
+    public void uncookZipcodeStringReturnsCorrect0WhenEmpty() throws Exception {
+    	assertThat(DomainObject.uncookZipcodeString(" "), is(equalTo(new Integer(0))));
+    }
     
     @Test
     public void uncookZipcodeStringThrowsExceptionOnBadGroupMatching() throws Exception {
