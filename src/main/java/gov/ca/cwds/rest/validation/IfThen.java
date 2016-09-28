@@ -18,6 +18,8 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Constraint(validatedBy = IfThenValidator.class)
 public @interface IfThen {
+	String message() default "{thenProperty} must be set if {ifProperty} is set";
+	
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
