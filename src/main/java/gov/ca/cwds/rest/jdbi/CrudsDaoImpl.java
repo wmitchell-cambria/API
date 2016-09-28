@@ -73,6 +73,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 		if( databaseObject == null ) {
 			throw new EntityNotFoundException();
 		}
+		currentSession().evict(databaseObject);
 		return persist(object);
 	}
 }
