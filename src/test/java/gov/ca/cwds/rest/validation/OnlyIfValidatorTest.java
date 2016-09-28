@@ -3,10 +3,16 @@ package gov.ca.cwds.rest.validation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
+import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder.NodeBuilderCustomizableContext;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +23,8 @@ public class OnlyIfValidatorTest {
 
 	private OnlyIf constraintAnnotation = mock(OnlyIf.class);
 	private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+	private ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
+	private NodeBuilderCustomizableContext nodeBuilder = mock(NodeBuilderCustomizableContext.class);
 	
 	private OnlyIfValidator validator = new OnlyIfValidator();
 
@@ -24,6 +32,8 @@ public class OnlyIfValidatorTest {
 	public void setup() throws Exception {
 		when(constraintAnnotation.ifProperty()).thenReturn("abc");
 		when(constraintAnnotation.property()).thenReturn("def");
+		when(context.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
+		when(builder.addPropertyNode(any())).thenReturn(nodeBuilder);
 	}
 
 	@Test
@@ -60,6 +70,7 @@ public class OnlyIfValidatorTest {
 		bean.def = "def";
 		
 		assertThat(validator.isValid(bean, context), is(equalTo(false)));
+		verify(context,times(1)).buildConstraintViolationWithTemplate(contains("an only be set if"));
 	}
 
 	public String getAbc() {

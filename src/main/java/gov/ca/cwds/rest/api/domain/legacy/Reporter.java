@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.validation.MutuallyExclusive;
+import gov.ca.cwds.rest.validation.OnlyIf;
 import gov.ca.cwds.rest.validation.Zipcode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -42,6 +43,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 //@MutuallyNecassary(properties={"badgeNumber","lawEnforcementId"})
 @MutuallyExclusive(required=false, properties={"employerName","lawEnforcementId"})
+@OnlyIf(property="badgeNumber", ifProperty="lawEnforcementId")
 public class Reporter extends DomainObject {
 
   @NotEmpty
@@ -49,9 +51,8 @@ public class Reporter extends DomainObject {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
   private String referralId;
   
-  @NotEmpty
-  @Size(min = 1, max = 6)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(max = 6, message="size must be less than or equal to 6")
+  @ApiModelProperty(required = false, readOnly = false, value = "can only be set if lawEnforcementId also provided", example = "ABC123")
   private String badgeNumber;
 
   @NotEmpty
@@ -76,7 +77,7 @@ public class Reporter extends DomainObject {
   private String drmsMandatedRprtrFeedback;
 
   @Size(max = 35, message="size must be less than or equal to 35")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "cannot be set if lawEnforcementId provided", example = "ABC123")
   private String employerName;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -154,7 +155,7 @@ public class Reporter extends DomainObject {
   private String zipcode;
 
   @Size(max = 10, message="size must be 10")
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "cannot be set if employerName provided", example = "ABC123")
   private String lawEnforcementId;
 
   @NotNull

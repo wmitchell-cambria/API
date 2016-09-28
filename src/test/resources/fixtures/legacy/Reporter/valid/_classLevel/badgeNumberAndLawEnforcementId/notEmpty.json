@@ -1,5 +1,5 @@
 {
-  "badgeNumber": "",
+  "badgeNumber": "ASDF",
   "cityName": "ABC",
   "colltrClientRptrReltnshpType": 12,
   "communicationMethodType": 34,
@@ -23,7 +23,7 @@
   "suffixTitleDescription": "AB",
   "zipcode": "95842",
   "referralId": "AbiQCgu0Hj",
-  "lawEnforcementId": "abcd",
+  "lawEnforcementId": "DEF",
   "zipSuffixNumber": 1234,
   "countySpecificCode": "AB"
 }

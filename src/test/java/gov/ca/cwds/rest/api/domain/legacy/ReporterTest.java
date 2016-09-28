@@ -294,48 +294,6 @@ public class ReporterTest {
    * badgeNumber Tests
    */
   @Test
-  public void failsWhenBadgeNumberMissing() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/badgeNumber/missing.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("badgeNumber may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenBadgeNumberNull() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/badgeNumber/null.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("badgeNumber may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenBadgeNumberEmpty() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/badgeNumber/empty.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("badgeNumber may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenBadgeNumberTooLong() throws Exception {
     Reporter toCreate =
         MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/badgeNumber/tooLong.json"),
@@ -345,10 +303,82 @@ public class ReporterTest {
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("badgeNumber size must be between 1 and 6"), is(greaterThanOrEqualTo(0)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"badgeNumber size must be less than or equal to 6\"]}")));
+  }
+  
+  @Test
+  public void failsWhenBadgeNumberNotEmptyButNoLawEnforcementId() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/_classLevel/badgeNumberAndLawEnforcementId/notEmptyButNoLawEnforcementId.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"badgeNumber can only be set if lawEnforcementId is set\"]}")));
+  }
+  
+  @Test
+  public void successWhenBadgeNumberEmptyAndNoLawEnforcementId() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/badgeNumberAndLawEnforcementId/emptyWithNoLawEnforcementId.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
+  @Test
+  public void successWhenBadgeNumberEmpty() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/badgeNumberAndLawEnforcementId/empty.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenBadgeNumberMissing() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/badgeNumberAndLawEnforcementId/missing.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenBadgeNumberNotEmpty() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/badgeNumberAndLawEnforcementId/notEmpty.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenBadgeNumberNull() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/badgeNumberAndLawEnforcementId/null.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
   /*
    * cityName Tests
    */
@@ -1660,7 +1690,7 @@ public class ReporterTest {
    * Utils
    */
   private Reporter validReporter() {
-    return new Reporter("A123", "ABC", new Short((short) 12), new Short((short) 34), false,
+    return new Reporter("", "ABC", new Short((short) 12), new Short((short) 34), false,
         "ABC123", "", "2000-01-01", false, "John", "Smith", false, 123, new BigDecimal(1234567),
         "A", "ABC123", new BigDecimal(1234567), 123, new Short((short) 1234), "ABC STREET", "123",
         "AB", "95842", "AbiQCgu0Hj", "DEF", new Short((short) 1234), "AB");

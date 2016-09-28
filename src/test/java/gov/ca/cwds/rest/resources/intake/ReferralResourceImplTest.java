@@ -1,9 +1,6 @@
 package gov.ca.cwds.rest.resources.intake;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -11,11 +8,9 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 
 import javax.persistence.EntityExistsException;
-import javax.ws.rs.client.Entity;
 
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
