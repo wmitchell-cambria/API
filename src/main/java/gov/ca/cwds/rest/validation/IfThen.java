@@ -28,4 +28,11 @@ public @interface IfThen {
 
 	String ifProperty();
 	String thenProperty();
+	
+
+	@Target({ TYPE_USE })
+	@Retention(RUNTIME)
+	@interface List {
+		IfThen[] value();
+	}
 }

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.validation.IfThen;
 import gov.ca.cwds.rest.validation.MutuallyExclusive;
 import gov.ca.cwds.rest.validation.OnlyIf;
 import gov.ca.cwds.rest.validation.Zipcode;
@@ -41,9 +42,12 @@ import io.swagger.annotations.ApiModelProperty;
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
             @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
 
-//@MutuallyNecassary(properties={"badgeNumber","lawEnforcementId"})
 @MutuallyExclusive(required=false, properties={"employerName","lawEnforcementId"})
 @OnlyIf(property="badgeNumber", ifProperty="lawEnforcementId")
+@IfThen.List({
+	@IfThen(ifProperty="streetNumber", thenProperty="streetName", required=false),
+	@IfThen(ifProperty="streetName", thenProperty="cityName", required=false)	
+})
 public class Reporter extends DomainObject {
 
   @NotEmpty
@@ -55,9 +59,8 @@ public class Reporter extends DomainObject {
   @ApiModelProperty(required = false, readOnly = false, value = "can only be set if lawEnforcementId also provided", example = "ABC123")
   private String badgeNumber;
 
-  @NotEmpty
-  @Size(min = 1, max = 20)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(max = 20, message="size must be less than or equal to 20")
+  @ApiModelProperty(required = false, readOnly = false, value = "required if streetName provided", example = "ABC123")
   private String cityName;
 
   @NotNull
@@ -135,14 +138,12 @@ public class Reporter extends DomainObject {
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private Short stateCodeType;
 
-  @NotEmpty
-  @Size(min = 1, max = 40)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(max = 40, message="size must be less than or equal to 40")
+  @ApiModelProperty(required = false, readOnly = false, value = "required if streetNumber provided", example = "Main")
   private String streetName;
 
-  @NotEmpty
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(max = 10, message="size must be less than or equal to 10")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "123")
   private String streetNumber;
 
   @NotEmpty
