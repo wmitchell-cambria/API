@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 
 import org.junit.Test;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+
 public class ReporterTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private String referralId = "a";
@@ -36,7 +38,7 @@ public class ReporterTest {
   private String streetName = "j";
   private String streetNumber = "k";
   private String suffixTitleDescription = "l";
-  private int zipNumber = 8;
+  private String zipcode = "95862";
   private String lawEnforcementId = "m";
   private Short zipSuffixNumber = 9;
   private String countySpecificCode = "n";
@@ -60,7 +62,7 @@ public class ReporterTest {
             firstName, lastName, mandatedReporterIndicator, messagePhoneExtensionNumber,
             messagePhoneNumber, middleInitialName, namePrefixDescription, primaryPhoneNumber,
             primaryPhoneExtensionNumber, stateCodeType, streetName, streetNumber,
-            suffixTitleDescription, zipNumber, referralId, lawEnforcementId, zipSuffixNumber,
+            suffixTitleDescription, zipcode, referralId, lawEnforcementId, zipSuffixNumber,
             countySpecificCode);
 
     Reporter persistent = new Reporter(domain, lastUpdatedId);
@@ -90,7 +92,7 @@ public class ReporterTest {
     assertThat(persistent.getStreetName(), is(equalTo(streetName)));
     assertThat(persistent.getStreetNumber(), is(equalTo(streetNumber)));
     assertThat(persistent.getSuffixTitleDescription(), is(equalTo(suffixTitleDescription)));
-    assertThat(persistent.getZipNumber(), is(equalTo(zipNumber)));
+    assertThat(persistent.getZipNumber(), is(equalTo(DomainObject.uncookZipcodeString(zipcode))));
     assertThat(persistent.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
     assertThat(persistent.getZipSuffixNumber(), is(equalTo(zipSuffixNumber)));
     assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));

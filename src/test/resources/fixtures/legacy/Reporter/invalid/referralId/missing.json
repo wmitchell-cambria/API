@@ -5,7 +5,7 @@
   "communicationMethodType": 34,
   "confidentialWaiverIndicator": false,
   "drmsMandatedRprtrFeedback": "ABC123",
-  "employerName": "DEF",
+  "employerName": "",
   "feedbackDate": "2000-01-01",
   "feedbackRequiredIndicator": false,
   "firstName": "John",
@@ -21,7 +21,7 @@
   "streetName": "ABC STREET",
   "streetNumber": "123",
   "suffixTitleDescription": "AB",
-  "zipNumber": 12345,
+  "zipcode": "95842",
   "lawEnforcementId": "DEF",
   "zipSuffixNumber": 1234,
   "countySpecificCode": "AB"

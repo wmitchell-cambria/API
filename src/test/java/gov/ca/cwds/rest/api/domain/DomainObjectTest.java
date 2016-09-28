@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -184,4 +185,51 @@ public class DomainObjectTest {
         thrown.expectCause(Is.isA(ParseException.class));
     	DomainObject.uncookTimeString("dlfjkdfjdkfjkd");
     }
+    
+    //cookZipcodeNumber tests
+    @Test
+    public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberIsNull() throws Exception {
+    	assertThat(DomainObject.cookZipcodeNumber(null), is(equalTo("")));
+    }
+    
+    @Test
+    public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberEquals0() throws Exception {
+    	assertThat(DomainObject.cookZipcodeNumber(new Integer(0)), is(equalTo("")));
+    }
+    
+    @Test
+    public void cookZipcodeNumberReturnsCorrectValueWhenLeading0Needed() throws Exception {
+    	assertThat(DomainObject.cookZipcodeNumber(new Integer(5842)), is(equalTo("05842")));
+    }
+    
+    @Test
+    public void cookZipcodeNumberReturnsCorrectValueWhenNoLeading0Needed() throws Exception {
+    	assertThat(DomainObject.cookZipcodeNumber(new Integer(95842)), is(equalTo("95842")));
+    }
+    
+    //uncookZipcodeString tests
+    @Test
+    public void uncookZipcodeStringReturnsCorrectIntegerWhenLeading0s() throws Exception {
+    	assertThat(DomainObject.uncookZipcodeString("05842"), is(equalTo(new Integer(5842))));
+    }
+    
+    @Test
+    public void uncookZipcodeStringReturnsCorrectIntegerWhenLeadingNo0s() throws Exception {
+    	assertThat(DomainObject.uncookZipcodeString("95842"), is(equalTo(new Integer(95842))));
+    }
+    
+    @Test
+    public void uncookZipcodeStringThrowsExceptionOnBadGroupMatching() throws Exception {
+    	thrown.expect(DomainException.class);
+    	thrown.expectCause(Is.isA(NumberFormatException.class));
+    	DomainObject.uncookZipcodeString("000000");
+    }
+    
+    @Test
+    public void uncookZipcodeStringThrowsExceptionOnNoMatch() throws Exception {
+    	thrown.expect(DomainException.class);
+    	thrown.expectMessage(startsWith("Unable to uncook zipcode string"));
+    	DomainObject.uncookZipcodeString("dlfjkdfjdkfjkd");
+    }
+
 }

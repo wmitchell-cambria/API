@@ -43,7 +43,7 @@ public class ReporterDaoIT {
 				"  ", "City", (short) 591, (short) 0 , false, null,
 				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
 				" ", " ", BigDecimal.valueOf(0L), 0, (short) 1828, "Street", 
-				"12345", " ", 95845, "AbiQCgu0Hj", null, (short) 0, "51");
+				"12345", " ", "95845", "AbiQCgu0Hj", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "0Hj");
 		Reporter found = reporterDao.find(id);
 		assertThat(found.getReferralId(), is(equalTo(expected.getReferralId())));
@@ -55,7 +55,7 @@ public class ReporterDaoIT {
 				"  ", "City", (short) 591, (short) 0 , false, null,
 				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
 				" ", " ", BigDecimal.valueOf(0L), 0, (short) 1828, "Street", 
-				"12345", " ", 95845, "AbiQCgu0Hk", null, (short) 0, "51");
+				"12345", " ", "95845", "AbiQCgu0Hk", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "0Hk");
 		Reporter create = reporterDao.create(expected);
 		assertThat(expected, is(create));
@@ -68,7 +68,7 @@ public class ReporterDaoIT {
 				"  ", "City", (short) 591, (short) 0 , false, null,
 				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
 				" ", " ", BigDecimal.valueOf(0L), 0, (short) 1828, "Street", 
-				"12345", " ", 95845, "AbiQCgu0Hj", null, (short) 0, "51");
+				"12345", " ", "95845", "AbiQCgu0Hj", null, (short) 0, "51");
 		
 		Reporter expected = new Reporter(reporter, "0Kj");
 		try{
@@ -86,7 +86,7 @@ public class ReporterDaoIT {
 				"  ", "City", (short) 591, (short) 0 , false, null,
 				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
 				" ", " ", BigDecimal.valueOf(0L), 0, (short) 1828, "Street", 
-				"12345", " ", 95845, "AbiQCgu0Hj", null, (short) 0, "51");
+				"12345", " ", "95845", "AbiQCgu0Hj", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "0Hj");
 		Reporter delete = reporterDao.delete(id);
 		assertThat(expected.getReferralId(), is(delete.getReferralId()));
@@ -98,7 +98,7 @@ public class ReporterDaoIT {
 				"  ", "City", (short) 591, (short) 0 , false, null,
 				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
 				" ", " ", BigDecimal.valueOf(0), 0, (short) 1828, "Street", 
-				"12345", " ", 94536, "AbiQCgu0Hj", null, (short) 0, "51");
+				"12345", " ", "94536", "AbiQCgu0Hj", null, (short) 0, "51");
 		Reporter expected = new Reporter(reporter, "OHj");
 		Reporter update = reporterDao.update(expected);
 		assertThat(expected, is(update));
@@ -110,7 +110,7 @@ public class ReporterDaoIT {
 				"  ", "City", (short) 591, (short) 0 , false, null,
 				" ", null, false,"Fred", "Reporter", false, 0, BigDecimal.valueOf(0), 
 				" ", " ", BigDecimal.valueOf(0), 0, (short) 1828, "Street", 
-				"12345", " ", 95845, "AbiQCgu0Hz", null, (short) 0, "51");
+				"12345", " ", "95845", "AbiQCgu0Hz", null, (short) 0, "51");
 		
 		Reporter expected = new Reporter(reporter, "0Kz");
 		try{

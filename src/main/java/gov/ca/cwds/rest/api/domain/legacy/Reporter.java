@@ -16,11 +16,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.validation.ForeignKey;
-import gov.ca.cwds.rest.validation.LawEnforcementIdBR;
-import gov.ca.cwds.rest.validation.ReporterBusinessRule;
+import gov.ca.cwds.rest.validation.MutuallyExclusive;
 import gov.ca.cwds.rest.validation.ZipCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,39 +40,13 @@ import io.swagger.annotations.ApiModelProperty;
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
             @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
 
-@ReporterBusinessRule.List({
-		@ReporterBusinessRule(
-				fieldName = "lawEnforcementId", 
-				dependentFieldName = "badgeNumber", 
-				message = "Badge number is null so lawEnforcement can not be entered"),
-		@ReporterBusinessRule(
-				fieldName = "badgeNumber", 
-				dependentFieldName = "lawEnforcementId",
-				message = "LawEnforcement is null so Badge number can not be entered"),
-		@ReporterBusinessRule(
-				fieldName = "streetNumber", 
-				dependentFieldName = "streetName", 
-				message = "StreetName should not be null or empty when streetNumber existed"),
-		@ReporterBusinessRule(
-				fieldName = "streetName", 
-				dependentFieldName = "cityName", 
-				message = "CityName should not be null or empty when streetName existed"
-		) 
-})
-
-@LawEnforcementIdBR.List({
-	@LawEnforcementIdBR(
-			fieldName = "lawEnforcementId", 
-			dependentFieldName = "employerName"
-			)
-})
-
+//@MutuallyNecassary(properties={"badgeNumber","lawEnforcementId"})
+@MutuallyExclusive(required=false, properties={"employerName","lawEnforcementId"})
 public class Reporter extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
-  @ForeignKey(required = true, persistentObjectClass = Referral.class)
   private String referralId;
   
   @NotEmpty
@@ -104,8 +75,7 @@ public class Reporter extends DomainObject {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String drmsMandatedRprtrFeedback;
 
-  @NotEmpty
-  @Size(min = 1, max = 35)
+  @Size(max = 35, message="size must be less than or equal to 35")
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
   private String employerName;
 
@@ -179,12 +149,11 @@ public class Reporter extends DomainObject {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
   private String suffixTitleDescription;
 
-  @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
-  @ZipCode(required = true)
-  private Integer zipNumber;
+  @ApiModelProperty(required = true, readOnly = false, example = "08654")
+  @ZipCode(required=false)
+  private String zipcode;
 
-  @Size(max = 10)
+  @Size(max = 10, message="size must be 10")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String lawEnforcementId;
 
@@ -224,7 +193,7 @@ public class Reporter extends DomainObject {
     this.streetName = persistedReporter.getStreetName();
     this.streetNumber = persistedReporter.getStreetNumber();
     this.suffixTitleDescription = persistedReporter.getSuffixTitleDescription();
-    this.zipNumber = persistedReporter.getZipNumber();
+    this.zipcode = DomainObject.cookZipcodeNumber(persistedReporter.getZipNumber());
     this.lawEnforcementId = persistedReporter.getLawEnforcementId().trim();
     this.zipSuffixNumber = persistedReporter.getZipSuffixNumber();
     this.countySpecificCode = persistedReporter.getCountySpecificCode();
@@ -252,7 +221,8 @@ public class Reporter extends DomainObject {
       @JsonProperty("streetName") String streetName,
       @JsonProperty("streetNumber") String streetNumber,
       @JsonProperty("suffixTitleDescription") String suffixTitleDescription,
-      @JsonProperty("zipNumber") Integer zipNumber, @JsonProperty("referralId") String referralId,
+      @JsonProperty("zipcode") String zipcode, 
+      @JsonProperty("referralId") String referralId,
       @JsonProperty("lawEnforcementId") String lawEnforcementId,
       @JsonProperty("zipSuffixNumber") Short zipSuffixNumber,
       @JsonProperty("countySpecificCode") String countySpecificCode) {
@@ -279,7 +249,7 @@ public class Reporter extends DomainObject {
     this.streetName = streetName;
     this.streetNumber = streetNumber;
     this.suffixTitleDescription = suffixTitleDescription;
-    this.zipNumber = zipNumber;
+    this.zipcode = zipcode;
     this.referralId = referralId;
     this.lawEnforcementId = lawEnforcementId;
     this.zipSuffixNumber = zipSuffixNumber;
@@ -441,10 +411,10 @@ public class Reporter extends DomainObject {
   }
 
   /**
-   * @return the zipNumber
+   * @return the zipcode
    */
-  public Integer getZipNumber() {
-    return zipNumber;
+  public String getZipcode() {
+    return zipcode;
   }
 
   /**
@@ -528,7 +498,7 @@ public class Reporter extends DomainObject {
     result = prime * result + ((streetNumber == null) ? 0 : streetNumber.hashCode());
     result =
         prime * result + ((suffixTitleDescription == null) ? 0 : suffixTitleDescription.hashCode());
-    result = prime * result + ((zipNumber == null) ? 0 : zipNumber.hashCode());
+    result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
     result = prime * result + ((zipSuffixNumber == null) ? 0 : zipSuffixNumber.hashCode());
     return result;
   }
@@ -672,10 +642,10 @@ public class Reporter extends DomainObject {
         return false;
     } else if (!suffixTitleDescription.equals(other.suffixTitleDescription))
       return false;
-    if (zipNumber == null) {
-      if (other.zipNumber != null)
+    if (zipcode == null) {
+      if (other.zipcode != null)
         return false;
-    } else if (!zipNumber.equals(other.zipNumber))
+    } else if (!zipcode.equals(other.zipcode))
       return false;
     if (zipSuffixNumber == null) {
       if (other.zipSuffixNumber != null)

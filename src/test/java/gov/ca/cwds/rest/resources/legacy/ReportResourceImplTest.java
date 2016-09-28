@@ -25,7 +25,6 @@ import gov.ca.cwds.rest.api.domain.legacy.Reporter;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.CrudsResource;
 import gov.ca.cwds.rest.resources.CrudsResourceImplTest;
-import gov.ca.cwds.rest.resources.legacy.ReporterResourceImpl;
 import gov.ca.cwds.rest.services.legacy.ReporterService;
 import gov.ca.cwds.rest.services.legacy.ReporterServiceImpl;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;

@@ -1,14 +1,23 @@
 package gov.ca.cwds.rest.api.persistence;
 
-import org.junit.Assert;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
+
+import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
+import gov.ca.cwds.rest.jdbi.CrudsDao;
+import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 
 public class DataAccessEnvironmentTest {
 
 	@Test
-	public void failedTest() {
-		//RDB Assert.fail("Implement This Test");
+	public void dataAccessEnvironmentSuccessfullyReturnsDaoAfterRegistration() throws Exception {
+		@SuppressWarnings("unchecked")
+		CrudsDao<PersistentObject> crudsDao = mock(CrudsDao.class);
+		DataAccessEnvironment.register(StaffPerson.class, crudsDao);
+		assertThat(DataAccessEnvironment.get(StaffPerson.class), is(equalTo(crudsDao)));
 	}
-
-
 }

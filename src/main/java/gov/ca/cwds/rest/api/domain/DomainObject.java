@@ -1,9 +1,12 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,6 +14,9 @@ public class DomainObject {
 	protected static final String DATE_FORMAT = "yyyy-MM-dd";
 	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 	protected static final String TIME_FORMAT = "HH:mm:ss";
+	
+	protected static final String ZIP_ALL_ZEROES = "00000";
+	protected static final Pattern ZIPCODE_PATTERN = Pattern.compile("0*([1-9]*)"); 
 
 	public DomainObject() {
 	}
@@ -95,4 +101,25 @@ public class DomainObject {
 		return null;
 	}
 	
+	public static String cookZipcodeNumber(Integer zipcodeNumber) {
+		String zipcode = "";
+		if( zipcodeNumber != null && zipcodeNumber > 0 ) {
+			String draft = (ZIP_ALL_ZEROES + zipcodeNumber.toString());
+			zipcode = draft.substring(draft.length() - 5, draft.length());
+		}
+		return zipcode;
+	}
+	
+	public static Integer uncookZipcodeString(String zipcode) {
+		Matcher matcher = ZIPCODE_PATTERN.matcher(zipcode);
+		if( matcher.matches() ) {
+			try {
+				return Integer.parseInt(matcher.group(1));
+			} catch (NumberFormatException e) {
+				throw new DomainException(MessageFormat.format("Unable to convert zipcode to Integer - {1}", zipcode), e);
+			}
+		} else {
+			throw new DomainException(MessageFormat.format("Unable to uncook zipcode string {1}", zipcode));
+		} 
+	}
 }
