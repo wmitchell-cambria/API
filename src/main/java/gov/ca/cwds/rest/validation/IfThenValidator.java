@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableList;
  */
 public class IfThenValidator extends AbstractBeanValidator implements ConstraintValidator<IfThen, Object> {
 	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyExclusiveValidator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(IfThenValidator.class);
 
 	private boolean required;
 
