@@ -12,6 +12,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
@@ -22,7 +23,7 @@ import javax.validation.Payload;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Documented
-//@Constraint(validatedBy = MutuallyNecassaryValidator.class)
+@Constraint(validatedBy = MutuallyNecassaryValidator.class)
 public @interface MutuallyNecassary {
   String message() default "{properties} are mutually exclusive but multiple values set";
 
