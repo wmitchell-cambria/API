@@ -215,6 +215,110 @@ public class ReporterTest {
   }
   
   /*
+   * Class level streetNameAndCityName tests
+   */
+  @Test
+  public void failsWhenStreetNameProvidedAndCityNameNot() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/_classLevel/streetNameAndCityName/streetNameProvidedAndCityNameNot.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"cityName is required since streetName is set\"]}")));
+  }
+
+  @Test
+  public void successWhenStreetNameAndCityNameProvided() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/streetNameAndCityName/bothProvided.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenStreetNameAndCityNameNotProvided() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/streetNameAndCityName/neitherProvided.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenOnlyCityNameProvided() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/streetNameAndCityName/onlyCityNameProvided.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  /*
+   * Class level streetNumberAndStreetName tests
+   */
+  @Test
+  public void failsWhenStreetNumberProvidedAndStreetNameNot() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/_classLevel/streetNumberAndStreetName/streetNumberProvidedAndStreetNameNot.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"streetName is required since streetNumber is set\"]}")));
+  }
+
+  @Test
+  public void successWhenStreetNumberAndStreetNameProvided() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/streetNumberAndStreetName/bothProvided.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenStreetNumberAndStreetNameNotProvided() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/streetNumberAndStreetName/neitherProvided.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  @Test
+  public void successWhenOnlyStreetNameProvided() throws Exception {
+    Reporter toCreate =
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/_classLevel/streetNumberAndStreetName/onlyStreetNameProvided.json"),
+            Reporter.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request()
+            .accept(Api.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+  
+  /*
    * Class level lawEnforcementIdAndEmployerName tests
    */
   @Test
@@ -383,45 +487,39 @@ public class ReporterTest {
    * cityName Tests
    */
   @Test
-  public void failsWhenCityNameMissing() throws Exception {
+  public void successWhenCityNameMissing() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/cityName/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/cityName/missing.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("cityName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenCityNameNull() throws Exception {
+  public void successWhenCityNameNull() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/cityName/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/cityName/null.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("cityName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenCityNameEmpty() throws Exception {
+  public void successWhenCityNameEmpty() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/cityName/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/cityName/empty.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("cityName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -434,10 +532,10 @@ public class ReporterTest {
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("cityName size must be between 1 and 20"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.readEntity(String.class),
+        is(equalTo("{\"errors\":[\"cityName size must be less than or equal to 20\"]}")));
   }
-
+  
   /*
    * colltrClientRptrReltnshpType Tests
    */
@@ -1241,45 +1339,39 @@ public class ReporterTest {
    * streetName Tests
    */
   @Test
-  public void failsWhenStreetNameMissing() throws Exception {
+  public void successWhenStreetNameMissing() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/streetName/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/streetName/missing.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenStreetNameNull() throws Exception {
+  public void successWhenStreetNameNull() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/streetName/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/streetName/null.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenStreetNameEmpty() throws Exception {
+  public void successWhenStreetNameEmpty() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/streetName/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/streetName/empty.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -1292,53 +1384,46 @@ public class ReporterTest {
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("streetName size must be between 1 and 40"), is(greaterThanOrEqualTo(0)));
+    assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"streetName size must be less than or equal to 40\"]}")));
   }
-
+  
   /*
    * streetNumber Tests
    */
   @Test
-  public void failsWhenStreetNumberMissing() throws Exception {
+  public void successWhenStreetNumberMissing() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/streetNumber/missing.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/streetNumber/missing.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetNumber may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenStreetNumberNull() throws Exception {
+  public void successWhenStreetNumberNull() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/streetNumber/null.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/streetNumber/null.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetNumber may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenStreetNumberEmpty() throws Exception {
+  public void successWhenStreetNumberEmpty() throws Exception {
     Reporter toCreate =
-        MAPPER.readValue(fixture("fixtures/legacy/Reporter/invalid/streetNumber/empty.json"),
+        MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/streetNumber/empty.json"),
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
             .accept(Api.Version.JSON_VERSION_1.getMediaType())
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetNumber may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -1352,8 +1437,7 @@ public class ReporterTest {
             .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("streetNumber size must be between 1 and 10"),
-        is(greaterThanOrEqualTo(0)));
+        response.readEntity(String.class), is(equalTo("{\"errors\":[\"streetNumber size must be less than or equal to 10\"]}")));
   }
 
   /*

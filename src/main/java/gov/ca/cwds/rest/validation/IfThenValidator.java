@@ -42,7 +42,9 @@ public class IfThenValidator extends AbstractBeanValidator implements Constraint
 		if( required ) {
 			if( !ifValueNotBlank ) { 
 				valid = false;
-				messages.add(MessageFormat.format("{0} is required but not set", ifProperty));
+				context.disableDefaultConstraintViolation();
+				context.buildConstraintViolationWithTemplate("is required but not set").addPropertyNode(ifProperty).addConstraintViolation();
+				messages.add();
 			}
 		} 
 		
@@ -50,7 +52,8 @@ public class IfThenValidator extends AbstractBeanValidator implements Constraint
 			String thenValue = readBeanValue(bean, thenProperty);
 			if( StringUtils.isBlank(thenValue)) {
 				valid = false;
-				messages.add(MessageFormat.format("{0} is required since {1} is set", thenProperty, ifProperty));
+				context.disableDefaultConstraintViolation();
+				context.buildConstraintViolationWithTemplate(MessageFormat.format("is required since {0} is set", ifProperty)).addPropertyNode(thenProperty).addConstraintViolation();
 			}
 		}
 		

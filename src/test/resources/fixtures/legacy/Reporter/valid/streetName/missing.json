@@ -1,6 +1,6 @@
 {
   "badgeNumber": "",
-  "cityName": null,
+  "cityName": "ABC",
   "colltrClientRptrReltnshpType": 12,
   "communicationMethodType": 34,
   "confidentialWaiverIndicator": false,
@@ -18,8 +18,7 @@
   "primaryPhoneNumber": 1234567,
   "primaryPhoneExtensionNumber": 123,
   "stateCodeType": 1234,
-  "streetName": "ABC STREET",
-  "streetNumber": "123",
+  "streetNumber": "",
   "suffixTitleDescription": "AB",
   "zipcode": "95842",
   "referralId": "AbiQCgu0Hj",
