@@ -16,7 +16,7 @@ import javax.validation.Payload;
  */
 @Target({ TYPE_USE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = IfThenValidator.class)
+@Constraint(validatedBy = OnlyIfValidator.class)
 public @interface OnlyIf {
 	String message() default "{property} can only be set if {ifProperty} is set";
 	

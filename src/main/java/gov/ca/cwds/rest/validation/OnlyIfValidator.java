@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * Validates that the {@code OnlyIf.property} of a given bean is not set unless the {@code Onlyif.ifProperty} is also not empty.
  *  
@@ -39,6 +37,9 @@ public class OnlyIfValidator extends AbstractBeanValidator implements Constraint
 		if( ifValueBlank ) {
 			String value = readBeanValue(bean, property);
 			if( StringUtils.isNotBlank(value)) {
+				context.disableDefaultConstraintViolation();
+				context.buildConstraintViolationWithTemplate(MessageFormat.format("can only be set if {0} is set", ifProperty))
+						.addPropertyNode(property).addConstraintViolation();
 				valid = false;
 			}
 		}
