@@ -29,6 +29,10 @@ public class SwaggerConfiguration {
     @JsonProperty
     @NotEmpty
     private String jsonUrl;
+    
+    @JsonProperty
+    @NotEmpty
+    private String logo;
 
 	/**
 	 * @return the templateName
@@ -70,5 +74,12 @@ public class SwaggerConfiguration {
 	 */
 	public String getJsonUrl() {
 		return jsonUrl;
+	}
+
+	/**
+	 * @return the logo
+	 */
+	public String getLogo() {
+		return logo;
 	}
 }

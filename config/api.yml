@@ -5,7 +5,8 @@ swagger:
   assetsPath: /static
   resourcePackage: gov.ca.cwds.rest.resources
   title: CWDS API
-  description: Definition of the CWDS API
+  description: RESTful API definitions for the CWS New System.
+  logo: images/CWDS-API-Logo-Horizontal.png
   
 dataSourceFactory:
   driverClass: com.ibm.db2.jcc.DB2Driver
