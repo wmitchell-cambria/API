@@ -6,6 +6,11 @@ The CWDS API provides RESTful services for the CWDS Modules.
 
 The development team is actively using the [Github Wiki](https://github.com/ca-cwds/API/wiki).  
 
+## Documentation
+
+The development team uses [Swagger](http://swagger.io/) for documenting the API.  
+NOTE : At this time there is not a publicy available link to the documentation, a link will be provided as soon as one is available.
+
 ## Configuration
 
 The CWDS API requires the following environment variables:
