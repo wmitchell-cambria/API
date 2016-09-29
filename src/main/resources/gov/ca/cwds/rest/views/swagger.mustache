@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Swagger UI</title>
+  <title>{{title}}</title>
   <link rel="icon" type="{{assetsPath}}/image/png" href="images/favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="{{assetsPath}}/image/png" href="images/favicon-16x16.png" sizes="16x16" />
   <link href='{{assetsPath}}/css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
@@ -27,18 +27,13 @@
   <script src='{{assetsPath}}/lib/swagger-oauth.js' type='text/javascript'></script>
 
   <!-- Some basic translations -->
-  <!-- <script src='{{assetsPath}}/lang/translator.js' type='text/javascript'></script> -->
-  <!-- <script src='{{assetsPath}}/lang/ru.js' type='text/javascript'></script> -->
-  <!-- <script src='{{assetsPath}}/lang/en.js' type='text/javascript'></script> -->
+  <!-- <script src='lang/translator.js' type='text/javascript'></script> -->
+  <!-- <script src='lang/ru.js' type='text/javascript'></script> -->
+  <!-- <script src='lang/en.js' type='text/javascript'></script> -->
 
   <script type="text/javascript">
     $(function () {
-      var url = window.location.search.match(/url=([^&]+)/);
-      if (url && url.length > 1) {
-        url = decodeURIComponent(url[1]);
-      } else {
-        url = "{{jsonUrl}}";
-      }
+      var url = "{{jsonUrl}}";
 
       hljs.configure({
         highlightSizeThreshold: 5000
@@ -91,16 +86,12 @@
 <body class="swagger-section">
 <div id='header'>
   <div class="swagger-ui-wrap">
-    <a id="logo" href="http://swagger.io"><img class="logo__img" alt="swagger" height="30" width="30" src="{{assetsPath}}/images/logo_small.png" /><span class="logo__title">swagger</span></a>
-    <form id='api_selector'>
-      <div class='input'><input disabled=true placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
-      <div id='auth_container'></div>
-      <div class='input'><a id="explore" class="header__btn" href="#" data-sw-translate>Explore</a></div>
-    </form>
+    <img class="logo__img" alt="swagger" height="80px" src="{{assetsPath}}/{{logo}}" />
+    <div id=apiDescription>{{description}}</div>
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
   </div>
 </div>
 
-<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
 <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
 </body>
 </html>

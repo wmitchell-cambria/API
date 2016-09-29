@@ -190,9 +190,6 @@ hr {
   font-weight: 500;
   line-height: 1.1;
 }
-.footer {
-  display: none;
-}
 .swagger-section .swagger-ui-wrap h2 {
   padding: 0;
 }
@@ -247,4 +244,7 @@ h2 {
   font-size: 13px;
   font-weight: bold;
   color: #08b;
+}
+img#validator {
+  display: none;
 }

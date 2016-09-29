@@ -563,7 +563,7 @@
 }
 .swagger-section .swagger-ui-wrap h2 {
   color: black;
-  font-size: 1.3em;
+  font-size: 1.7em;
   padding: 10px 0 10px 0;
 }
 .swagger-section .swagger-ui-wrap h2 a {
@@ -831,6 +831,11 @@
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li a {
   text-decoration: none;
+}
+.swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li a .markdown p {
+  color: inherit;
+  padding: 0;
+  line-height: inherit;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li.access {
   color: black;
@@ -1406,9 +1411,9 @@
   cursor: pointer;
 }
 .swagger-section #header {
-  background-color: #89bf04;
+  background-color: #f9f9f9;
   padding: 9px 14px 19px 14px;
-  height: 23px;
+  height: 73px;
   min-width: 775px;
 }
 .swagger-section #input_baseUrl {
@@ -1473,9 +1478,12 @@
   color: #999999;
 }
 .swagger-section #message-bar {
-  min-height: 30px;
-  text-align: center;
+  min-height: 20px;
+  text-align: right;
   padding-top: 10px;
+  float: right;
+  margin-top: -20px;
+  color: #808080;
 }
 .swagger-section .swagger-collapse:before {
   content: "-";
@@ -1486,4 +1494,28 @@
 .swagger-section .error {
   outline-color: #cc0000;
   background-color: #f2dede;
+}
+#apiDescription {
+  display: block;
+  float: right;
+  padding-top: 30px;
+  font-size: 24px;
+}
+.info {
+  display: none;
+}
+.footer {
+  display: none;
+}
+.optionName {
+  font-size: 40px;
+}
+.attrOptionsList {
+  color: #999;
+  padding-left: 10px;
+  margin-left: 0 !important;
+}
+.readOnly {
+  border-bottom: 1px solid #c3e8d1;
+  padding: 5px;
 }
