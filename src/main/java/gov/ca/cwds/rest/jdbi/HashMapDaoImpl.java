@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,4 +71,10 @@ public final class HashMapDaoImpl<T extends PersistentObject> implements CrudsDa
 		dummyData.put(object.getPrimaryKey().toString(), object);
 		return object;
 	}
+
+  @Override
+  public SessionFactory getSessionFactory() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

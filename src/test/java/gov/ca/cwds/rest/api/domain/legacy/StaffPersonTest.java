@@ -66,6 +66,7 @@ public class StaffPersonTest {
   private Boolean dutyWorkerIndicator = Boolean.FALSE;
   private String cwsOfficeAddress = "l";
   private String emailAddress = "m";
+  private String twitterName = "n";
 
   @Before
   public void setup() {
@@ -84,11 +85,13 @@ public class StaffPersonTest {
         new StaffPerson(id, endDate, firstName, jobTitle, lastName, middleInitial, namePrefix,
             phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator, cwsOffice,
             availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode,
-            dutyWorkerIndicator, cwsOfficeAddress, emailAddress);
+            dutyWorkerIndicator, cwsOfficeAddress, emailAddress, twitterName);
     gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistent =
         new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(domain, "lastUpdatedId");
+    gov.ca.cwds.rest.api.persistence.ns.StaffPersonNS persistentNS =
+        new gov.ca.cwds.rest.api.persistence.ns.StaffPersonNS(domain, "lastUpdatedId");
 
-    StaffPerson totest = new StaffPerson(persistent);
+    StaffPerson totest = new StaffPerson(persistent, persistentNS);
     assertThat(totest.getId(), is(equalTo(persistent.getId())));
     assertThat(totest.getEndDate(), is(equalTo(df.format(persistent.getEndDate()))));
     assertThat(totest.getFirstName(), is(equalTo(persistent.getFirstName())));
@@ -112,6 +115,7 @@ public class StaffPersonTest {
         is(equalTo(DomainObject.uncookBooleanString(persistent.getDutyWorkerIndicator()))));
     assertThat(totest.getCwsOfficeAddress(), is(equalTo(persistent.getCwsOfficeAddress())));
     assertThat(totest.getEmailAddress(), is(equalTo(persistent.getEmailAddress())));
+    assertThat(totest.getTwitterName(), is(equalTo(persistentNS.getTwitterName())));
   }
 
   @Test
@@ -120,7 +124,7 @@ public class StaffPersonTest {
         new StaffPerson(id, endDate, firstName, jobTitle, lastName, middleInitial, namePrefix,
             phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator, cwsOffice,
             availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode,
-            dutyWorkerIndicator, cwsOfficeAddress, emailAddress);
+            dutyWorkerIndicator, cwsOfficeAddress, emailAddress, twitterName);
 
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getEndDate(), is(equalTo(endDate)));
@@ -142,6 +146,7 @@ public class StaffPersonTest {
     assertThat(domain.getDutyWorkerIndicator(), is(equalTo(dutyWorkerIndicator)));
     assertThat(domain.getCwsOfficeAddress(), is(equalTo(cwsOfficeAddress)));
     assertThat(domain.getEmailAddress(), is(equalTo(emailAddress)));
+    assertThat(domain.getTwitterName(), is(equalTo(twitterName)));
   }
 
   @Test
@@ -1288,6 +1293,6 @@ public class StaffPersonTest {
   private StaffPerson validStaffPerson() {
     return new StaffPerson("ABC", "2016-08-07", "John", "CEO", "Doe", "C", "Mr", new BigDecimal(
         9165551212L), 22, "2001-01-02", "sufx", true, "MIZN02k11B", "abc", "def", "99", false,
-        "3XPCP92b24", "john.doe@anyco.com");
+        "3XPCP92b24", "john.doe@anyco.com", "john");
   }
 }

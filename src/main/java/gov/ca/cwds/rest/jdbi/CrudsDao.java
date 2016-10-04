@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.SessionFactory;
+
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
@@ -58,4 +60,12 @@ public interface CrudsDao<T extends PersistentObject> extends Dao {
 	 * @throws EntityNotFoundException when the {@link PersistentObject} does not exist
 	 */
 	public T update(T object) throws EntityNotFoundException;
+	
+    /**
+     * Get the SessionFactory associated with {@link PersistentObject}
+     * 
+     * @return The SessionFactory
+     */
+    public SessionFactory getSessionFactory();
+    
 }

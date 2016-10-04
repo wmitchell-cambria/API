@@ -139,6 +139,10 @@ public class StaffPerson extends DomainObject {
   // @Email
   private String emailAddress;
 
+  @Size(min = 0, max = 20)
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "john")
+  private String twitterName;
+
 
   @JsonCreator
   public StaffPerson(
@@ -160,7 +164,8 @@ public class StaffPerson extends DomainObject {
       @JsonProperty("countyCode") String countyCode,
       @JsonProperty("dutyWorkerIndicator") Boolean dutyWorkerIndicator,
       @JsonProperty("cwsOfficeAddress") String cwsOfficeAddress,
-      @JsonProperty("emailAddress") String emailAddress) {
+      @JsonProperty("emailAddress") String emailAddress,
+      @JsonProperty("twitterName") String twitterName) {
     super();
     this.id = id;
     this.endDate = endDate;
@@ -181,6 +186,7 @@ public class StaffPerson extends DomainObject {
     this.dutyWorkerIndicator = dutyWorkerIndicator;
     this.cwsOfficeAddress = cwsOfficeAddress;
     this.emailAddress = emailAddress;
+    this.twitterName = twitterName;
   }
 
   public StaffPerson(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistedStaffPerson) {
@@ -206,6 +212,33 @@ public class StaffPerson extends DomainObject {
         DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
     this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
     this.emailAddress = persistedStaffPerson.getEmailAddress();
+    this.twitterName = "";
+  }
+  
+  public StaffPerson(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson persistedStaffPerson, gov.ca.cwds.rest.api.persistence.ns.StaffPersonNS persistedStaffPersonNS) {
+    this.id = persistedStaffPerson.getId();
+    this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
+    this.firstName = persistedStaffPerson.getFirstName();
+    this.jobTitle = persistedStaffPerson.getJobTitle();
+    this.lastName = persistedStaffPerson.getLastName();
+    this.middleInitial = persistedStaffPerson.getMiddleInitial();
+    this.namePrefix = persistedStaffPerson.getNamePrefix();
+    this.phoneNumber = persistedStaffPerson.getPhoneNumber();
+    this.phoneExt = persistedStaffPerson.getPhoneExt();
+    this.startDate = DomainObject.cookDate(persistedStaffPerson.getStartDate());
+    this.nameSuffix = persistedStaffPerson.getNameSuffix();
+    this.telecommuterIndicator =
+        DomainObject.uncookBooleanString(persistedStaffPerson.getTelecommuterIndicator());
+    this.cwsOffice = persistedStaffPerson.getCwsOffice();
+    this.availabilityAndLocationDescription =
+        persistedStaffPerson.getAvailabilityAndLocationDescription();
+    this.ssrsLicensingWorkerId = persistedStaffPerson.getSsrsLicensingWorkerId();
+    this.countyCode = persistedStaffPerson.getCountyCode();
+    this.dutyWorkerIndicator =
+        DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
+    this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
+    this.emailAddress = persistedStaffPerson.getEmailAddress();
+    this.twitterName = persistedStaffPersonNS.getTwitterName();
   }
 
   /**
@@ -227,6 +260,13 @@ public class StaffPerson extends DomainObject {
    */
   public String getFirstName() {
     return firstName;
+  }
+  
+  /**
+   * @return the twitterName
+   */
+  public String getTwitterName() {
+    return twitterName;
   }
 
   /**
@@ -362,6 +402,7 @@ public class StaffPerson extends DomainObject {
     result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+    result = prime * result + ((twitterName == null) ? 0 : twitterName.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -449,6 +490,13 @@ public class StaffPerson extends DomainObject {
         return false;
       }
     } else if (!firstName.equals(other.firstName)) {
+      return false;
+    }
+    if (twitterName == null) {
+      if (other.twitterName != null) {
+        return false;
+      }
+    } else if (!twitterName.equals(other.twitterName)) {
       return false;
     }
     if (id == null) {
