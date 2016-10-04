@@ -17,5 +17,6 @@
   "countyCode": "99",
   "dutyWorkerIndicator": false,
   "cwsOfficeAddress": "3XPCP92b24",
-  "emailAddress": "john.doe@anyco.com"
+  "emailAddress": "john.doe@anyco.com",
+  "twitterName": "john"
 }

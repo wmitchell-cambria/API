@@ -24,14 +24,20 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> imp
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CrudsDaoImpl.class);
 	
+	private SessionFactory sessionFactory;
+	
 	/**
 	 * 
 	 * @param sessionFactory	the session factory
 	 */
 	public CrudsDaoImpl(SessionFactory sessionFactory) {
 		super(sessionFactory);
+		this.sessionFactory = sessionFactory;
 	}
-
+	@Override
+	public SessionFactory getSessionFactory(){
+      return sessionFactory;
+    }
 	/* (non-Javadoc)
 	 * @see gov.ca.cwds.rest.jdbi.CrudsDao#find(java.io.Serializable)
 	 */

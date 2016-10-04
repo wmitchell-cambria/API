@@ -15,11 +15,13 @@ import java.math.BigDecimal;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
@@ -35,15 +37,16 @@ public class CrudsServiceImplTest {
 	
 	private CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsServiceImpl;
 	private CrudsDao<gov.ca.cwds.rest.api.persistence.legacy.StaffPerson> crudsDao;
+	private SessionFactory sessionFactory;
+	private Session session;
 	
-	
-	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson nonExistentStaffPersonToUpdate = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("notexists","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null);
+	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson nonExistentStaffPersonToUpdate = new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("not","1973-11-22",null,null,null,null,null,null,new Integer(33),"1973-11-22",null,null,null,null,null,null,null,null,null, null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson nonExistingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(nonExistentStaffPersonToUpdate, "ABC");
 	
 	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson existingStaffPersonToCreate= new gov.ca.cwds.rest.api.domain.legacy.StaffPerson("q1u", null, "External Interface", "external interface", "SCXCFP8", " ",
 			"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 			false, "MIZN02k00E", "  ", "    ", "99", false, 
-			"3XPCP92q38", null);
+			"3XPCP92q38", null, null);
 	private gov.ca.cwds.rest.api.persistence.legacy.StaffPerson existingPersistentStaffPerson = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(existingStaffPersonToCreate, "ABC");
 	 
 	private gov.ca.cwds.rest.api.domain.legacy.StaffPerson toCreate;
@@ -55,13 +58,18 @@ public class CrudsServiceImplTest {
 		crudsDao = mock(CrudsDao.class);
 		toCreate = MAPPER.readValue(fixture("fixtures/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 		toCreatePersistent = new gov.ca.cwds.rest.api.persistence.legacy.StaffPerson(toCreate, "ABC");
-		
+		sessionFactory = mock(SessionFactory.class);
+		session = mock(Session.class);
+		when(sessionFactory.openSession()).thenReturn(session);
+	    when(ManagedSessionContext.bind(session)).thenReturn(null);
+	    when((gov.ca.cwds.rest.api.persistence.legacy.StaffPerson)session.merge(nonExistingPersistentStaffPerson)).thenReturn(nonExistingPersistentStaffPerson);
 		when(crudsDao.create(existingPersistentStaffPerson)).thenThrow(new EntityExistsException());
 		when(crudsDao.update(nonExistingPersistentStaffPerson)).thenThrow(new EntityNotFoundException());
 		when(crudsDao.create(eq(toCreatePersistent))).thenReturn(toCreatePersistent);
 		when(crudsDao.find("1")).thenReturn(toCreatePersistent);
 		when(crudsDao.find("null")).thenThrow(new EntityNotFoundException());
 		when(crudsDao.delete("1")).thenReturn(toCreatePersistent);
+		when(crudsDao.getSessionFactory()).thenReturn(sessionFactory);
 		crudsServiceImpl = new CrudsServiceImpl<StaffPerson, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson>(crudsDao, StaffPerson.class, gov.ca.cwds.rest.api.persistence.legacy.StaffPerson.class);
 	}
 

@@ -20,6 +20,7 @@ import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
 import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.ns.StaffPersonNS;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.HashMapDaoImpl;
@@ -29,6 +30,7 @@ import gov.ca.cwds.rest.jdbi.legacy.ReferralClientDao;
 import gov.ca.cwds.rest.jdbi.legacy.ReferralDao;
 import gov.ca.cwds.rest.jdbi.legacy.ReporterDao;
 import gov.ca.cwds.rest.jdbi.legacy.StaffPersonDao;
+import gov.ca.cwds.rest.jdbi.ns.StaffPersonNSDao;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.CrudsResource;
@@ -47,6 +49,7 @@ import gov.ca.cwds.rest.resources.legacy.ReporterResourceImpl;
 import gov.ca.cwds.rest.resources.legacy.StaffPersonResource;
 import gov.ca.cwds.rest.resources.legacy.StaffPersonResourceImpl;
 import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.CrudsServiceCombinedImpl;
 import gov.ca.cwds.rest.services.CrudsServiceImpl;
 import gov.ca.cwds.rest.services.legacy.AllegationService;
 import gov.ca.cwds.rest.services.legacy.AllegationServiceImpl;
@@ -80,11 +83,26 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     private static final boolean debug = "true".equals(System.getenv("debug"));
     
-    private final HibernateBundle<ApiConfiguration> hibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class, Reporter.class) {
+    private final HibernateBundle<ApiConfiguration> cwsBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class, Reporter.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-            return configuration.getDataSourceFactory();
+            return configuration.getDataSourceFactoryLegacy();
         }
+        @Override
+        public String name(){
+          return "legacy";
+        }
+    };
+    
+    private final HibernateBundle<ApiConfiguration> nsBundle = new HibernateBundle<ApiConfiguration>(StaffPersonNS.class) {
+      @Override
+      public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getDataSourceFactory();
+      }
+      @Override
+      public String name(){
+        return "newsystem";
+      }
     };
     
     private final FlywayBundle<ApiConfiguration> flywayBundle = new FlywayBundle<ApiConfiguration>() {
@@ -116,7 +134,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         if(!debug) {
         	LOGGER.info("Loading database bundles");
         	bootstrap.addBundle(flywayBundle);
-        	bootstrap.addBundle(hibernateBundle);
+        	bootstrap.addBundle(cwsBundle);
+            bootstrap.addBundle(nsBundle);
         } else {
         	LOGGER.warn("DEBUG is on so not loading database bundles");
         }
@@ -162,14 +181,16 @@ public class ApiApplication extends Application<ApiConfiguration> {
     		DataAccessEnvironment.register(CrossReport.class, new HashMapDaoImpl<>(new HashMap()));
     		DataAccessEnvironment.register(ReferralClient.class, new HashMapDaoImpl<>(new HashMap()));
     		DataAccessEnvironment.register(Reporter.class, new HashMapDaoImpl<>(new HashMap()));
+    		DataAccessEnvironment.register(StaffPersonNS.class, new HashMapDaoImpl<>(new HashMap()));
     	} else {
     		LOGGER.info("Setting up production DAOs");
-    		DataAccessEnvironment.register(Referral.class, new ReferralDao(hibernateBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(StaffPerson.class, new StaffPersonDao(hibernateBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(Allegation.class, new AllegationDao(hibernateBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(CrossReport.class, new CrossReportDao(hibernateBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(ReferralClient.class, new ReferralClientDao(hibernateBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(Reporter.class, new ReporterDao(hibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(Referral.class, new ReferralDao(cwsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(StaffPerson.class, new StaffPersonDao(cwsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(Allegation.class, new AllegationDao(cwsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(CrossReport.class, new CrossReportDao(cwsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(ReferralClient.class, new ReferralClientDao(cwsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(Reporter.class, new ReporterDao(cwsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(StaffPersonNS.class, new StaffPersonNSDao(nsBundle.getSessionFactory()));
     	}
     }
     
@@ -183,7 +204,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     	LOGGER.info("ReferralService:{} for {} of {}", ReferralServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), ReferralService.class.getName());
     	
     	LOGGER.info("Registering {} of {}", Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());
-    	final CrudsService<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceImpl<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson>(DataAccessEnvironment.get(StaffPerson.class), gov.ca.cwds.rest.api.domain.legacy.StaffPerson.class, StaffPerson.class);
+    	final CrudsService<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson> staffPersonCrudsService = new CrudsServiceCombinedImpl<gov.ca.cwds.rest.api.domain.legacy.StaffPerson, StaffPerson, StaffPersonNS>(DataAccessEnvironment.get(StaffPerson.class), DataAccessEnvironment.get(StaffPersonNS.class),gov.ca.cwds.rest.api.domain.legacy.StaffPerson.class, StaffPerson.class, StaffPersonNS.class);
     	LOGGER.info("CrudsService:{} for {} of {}", CrudsServiceImpl.class.getName(), Api.Version.JSON_VERSION_1.getMediaType(), StaffPersonService.class.getName());		
     	final StaffPersonService staffPersonService = new StaffPersonServiceImpl(staffPersonCrudsService);
     	apiEnvironment.services().register(StaffPersonService.class, Api.Version.JSON_VERSION_1, staffPersonService);

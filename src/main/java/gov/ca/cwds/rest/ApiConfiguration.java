@@ -21,6 +21,8 @@ public class ApiConfiguration extends Configuration {
 
     private FlywayFactory flywayFactory;
     
+    private DataSourceFactory dataSourceFactoryLegacy;
+
     @JsonProperty
     public String getApplicationName() {
         return applicationName;
@@ -39,6 +41,17 @@ public class ApiConfiguration extends Configuration {
     @JsonProperty
     public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
         this.dataSourceFactory = dataSourceFactory;
+    }
+
+
+    @JsonProperty
+    public DataSourceFactory getDataSourceFactoryLegacy() {
+      return dataSourceFactoryLegacy;
+    }
+
+    @JsonProperty
+    public void setDataSourceFactoryLegacy(DataSourceFactory dataSourceFactoryLegacy) {
+      this.dataSourceFactoryLegacy = dataSourceFactoryLegacy;
     }
 
     @JsonProperty

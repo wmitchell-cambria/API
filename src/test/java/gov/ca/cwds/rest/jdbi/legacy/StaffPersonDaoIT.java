@@ -44,7 +44,7 @@ public class StaffPersonDaoIT {
 				"q1p", null, "External Interface", "external interface", "SCXCIN7", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
-				"3XPCP92q38", null);
+				"3XPCP92q38", null, null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		StaffPerson found = staffPersonDao.find(id);
 		assertThat(found.getId(), is(equalTo(expected.getId())));
@@ -58,7 +58,7 @@ public class StaffPersonDaoIT {
 				"q1k", null, "External Interface", "external interface", "SCXCIN7", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
-				"3XPCP92q38", null);
+				"3XPCP92q38", null, null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		StaffPerson create = staffPersonDao.create(expected);
 		assertThat(expected, is(create));
@@ -72,7 +72,7 @@ public class StaffPersonDaoIT {
 				"q1u", null, "External Interface", "external interface", "SCXCFP8", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
-				"3XPCP92q38", null);
+				"3XPCP92q38", null, null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		try{
             staffPersonDao.create(expected);
@@ -89,7 +89,7 @@ public class StaffPersonDaoIT {
 				"q1p", null, "External Interface", "external interface", "SCXCIN7", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
-				"3XPCP92q38", null);
+				"3XPCP92q38", null, null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		StaffPerson delete = staffPersonDao.delete(id);
 		assertThat(expected.getId(), is(delete.getId()));
@@ -101,7 +101,7 @@ public class StaffPersonDaoIT {
 				"q1p", null, "External Interface", "external interface", "SCXCIN7", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-07", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
-				"3XPCP92q38", null);
+				"3XPCP92q38", null, null);
 		StaffPerson expected = new StaffPerson(staffPerson, "q38");
 		StaffPerson update = staffPersonDao.update(expected);
 		assertThat(expected, is(update));
@@ -114,7 +114,7 @@ public class StaffPersonDaoIT {
 				"q1a", null, "External Interface", "external interface", "SCXCIN7", " ",
 				"      ", BigDecimal.valueOf(9165672100L), 0, "1999-10-06", "    ", 
 				false, "MIZN02k00E", "  ", "    ", "99", false, 
-				"3XPCP92j17", null);
+				"3XPCP92j17", null, null);
 		StaffPerson expected = new StaffPerson(staffPerson, "j17");
 		try{
             staffPersonDao.update(expected);

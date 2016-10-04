@@ -14,7 +14,6 @@ import javax.ws.rs.core.UriInfo;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.core.Api;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -40,7 +39,6 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
 	@GET
-	@UnitOfWork
 	@Path("/{id}")
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
@@ -61,7 +59,6 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
 	@DELETE
-	@UnitOfWork
 	@Path("/{id}")
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
@@ -83,7 +80,6 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 * @return {@link Response} with a {@link DomainObject} representing an associated {@link PersistentObject}
 	 */
 	@POST
-	@UnitOfWork
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 406, message = "Accept Header/Version not supported"),
@@ -104,7 +100,6 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 * @return {@link Response} with a {@link DomainObject} representing an associated {@link PersistentObject}
 	 */
 	@PUT
-	@UnitOfWork
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 404, message = "not found"),

@@ -32,6 +32,7 @@ public class StaffPersonTest {
   private Boolean dutyWorkerIndicator = Boolean.FALSE;
   private String cwsOfficeAddress = "l";
   private String emailAddress = "m";
+  private String twitterName = "n";
 
   private String lastUpdatedId = "z";
 
@@ -49,7 +50,7 @@ public class StaffPersonTest {
         new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(id, endDate, firstName, jobTitle,
             lastName, middleInitial, namePrefix, phoneNumber, phoneExt, startDate, nameSuffix,
             telecommuterIndicator, cwsOffice, availabilityAndLocationDescription,
-            ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator, cwsOfficeAddress, emailAddress);
+            ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator, cwsOfficeAddress, emailAddress, twitterName);
 
     StaffPerson persistent = new StaffPerson(domain, "z");
     assertThat(persistent.getId(), is(equalTo(id)));

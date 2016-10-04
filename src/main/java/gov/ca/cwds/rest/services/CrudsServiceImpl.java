@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +44,9 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public T find(Serializable primaryKey) {
+	    SessionFactory sessionFactory = crudsDao.getSessionFactory();
+	    org.hibernate.Session session = sessionFactory.openSession();
+        ManagedSessionContext.bind(session);
 		P object = crudsDao.find(primaryKey);
 		if( object != null ) {
 			return constructDomainObject(object);
@@ -51,7 +56,11 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public T delete(Serializable id) {
-		P object = crudsDao.delete(id);
+        SessionFactory sessionFactory = crudsDao.getSessionFactory();
+        org.hibernate.Session session = sessionFactory.openSession();
+        ManagedSessionContext.bind(session);
+        P object = crudsDao.delete(id);
+        session.flush();
 		if( object != null ) {
 			return constructDomainObject(object);
 		}
@@ -60,9 +69,13 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 
 	@Override
 	public Serializable create(T object) {
+        SessionFactory sessionFactory = crudsDao.getSessionFactory();
+        org.hibernate.Session session = sessionFactory.openSession();
+        ManagedSessionContext.bind(session);
 		try {
 			P persistentObject = constructPersistentObject(object);
 			persistentObject = crudsDao.create(persistentObject);
+	        session.flush();
 			return persistentObject.getPrimaryKey();
 		} catch (EntityExistsException e) {
 			LOGGER.info("object already exists {}", object);
@@ -70,12 +83,18 @@ public class CrudsServiceImpl<T extends DomainObject, P extends PersistentObject
 		} 
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public String update(T object) {
 		try {
-			P persistentObject = constructPersistentObject(object);
-			persistentObject = crudsDao.update(persistentObject);
-			return persistentObject.getPrimaryKey().toString();
+  	      SessionFactory sessionFactory = crudsDao.getSessionFactory();
+  	      org.hibernate.Session session = sessionFactory.openSession();
+  	      ManagedSessionContext.bind(session);
+  	      P persistentObject = constructPersistentObject(object);
+  	      persistentObject = (P) session.merge(persistentObject);
+  	      persistentObject = crudsDao.update(persistentObject);
+  	      session.flush();
+  	      return persistentObject.getPrimaryKey().toString();
 		} catch (EntityNotFoundException e) {
 			LOGGER.info("object not found : {}", object);
 			throw new ServiceException(e);
