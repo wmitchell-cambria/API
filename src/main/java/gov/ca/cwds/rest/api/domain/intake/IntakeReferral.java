@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain.intake;
 
+import javax.validation.Valid;
+
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
@@ -16,7 +18,7 @@ import gov.ca.cwds.rest.api.domain.legacy.Reporter;
 import gov.ca.cwds.rest.core.Api;
 
 /**
- * Logical representation of a Referral
+ * Logical representation of a Referral.
  * 
  * @author CWDS API Team
  */
@@ -27,11 +29,18 @@ import gov.ca.cwds.rest.core.Api;
 	@InjectLink(value = "/{resource}/{id}", rel = "referralClient", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "referralId=${instance.referralClient.referralId},clientId=${instance.referralClient.clientId}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
 	@InjectLink(value = "/{resource}/{id}", rel = "reporter", style = Style.ABSOLUTE, bindings = { @Binding(name = "id", value = "${instance.reporter.referralId}"), @Binding(name = "resource", value = Api.RESOURCE_REFERRAL) }),
 	})
+//NOTE this is more of a proof of concept.
+@Deprecated
 public class IntakeReferral {
+	@Valid
 	private Referral referral;
+	@Valid
 	private Allegation allegation;
+	@Valid
 	private CrossReport crossReport;
+	@Valid
 	private ReferralClient referralClient;
+	@Valid
 	private Reporter reporter;
 
 	@JsonCreator

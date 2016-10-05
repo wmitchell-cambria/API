@@ -7,7 +7,7 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 
 /**
- * Response filter which empties the response body.
+ * Response filter which empties the response body on successful requests.
  * 
  * @author CWDS API Team
  */
@@ -19,7 +19,9 @@ public class EmptyBodyFilter implements ContainerResponseFilter {
 	@Override
 	public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
 			throws IOException {
-		responseContext.setEntity(null);
+		if( responseContext.getStatus() >= 200 && responseContext.getStatus() < 300 ) {
+			responseContext.setEntity(null);
+		}
 	}
 
 
