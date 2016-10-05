@@ -33,6 +33,9 @@ public abstract class BaseResource<T extends Service> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected T versionedService(String mediaType) {
+		//TODO : loop through media types, use first one found
+		//TODO : Test this
+		//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
 		return (T)serviceEnvironment.getService(clazz, mediaType);
 	}
 

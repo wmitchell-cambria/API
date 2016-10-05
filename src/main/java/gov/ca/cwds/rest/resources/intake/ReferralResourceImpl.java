@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -42,18 +43,15 @@ public class ReferralResourceImpl extends BaseResource<ReferralService> implemen
 	@Override
 	@UnitOfWork(flushMode=FlushMode.COMMIT, transactional=true)
 	@EmptyBody
-	public Response create(IntakeReferral intakeReferral, String acceptHeader, UriInfo uriInfo) {
+	public Response create(@Valid IntakeReferral intakeReferral, String acceptHeader, UriInfo uriInfo) {
 		ReferralService service = (ReferralService)super.versionedService(acceptHeader);
 		if(service == null) {
-			//TODO : Test this
-			//check out - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 		}
 		try {
 			@SuppressWarnings("unused")
 			Map<String, Serializable> objects = service.create(intakeReferral);
 
-			//return Response.status(Response.Status.CREATED).build();
 			return Response.ok(intakeReferral).status(Response.Status.CREATED).build();
 		} catch (ServiceException e) {
 			if( e.getCause() instanceof EntityExistsException ) {
