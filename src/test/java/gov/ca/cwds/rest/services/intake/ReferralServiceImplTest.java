@@ -23,6 +23,7 @@ import gov.ca.cwds.rest.services.legacy.ReferralClientService;
 import gov.ca.cwds.rest.services.legacy.ReferralService;
 import gov.ca.cwds.rest.services.legacy.ReporterService;
 
+@SuppressWarnings("deprecation")
 public class ReferralServiceImplTest {
 	private ReferralServiceImpl referralServiceImpl;
 	
