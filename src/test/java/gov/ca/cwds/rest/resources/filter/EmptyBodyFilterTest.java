@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources.filter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.io.OutputStream;
@@ -33,6 +34,7 @@ public class EmptyBodyFilterTest {
 	public void setup() {
 		responseContext = new ContainerResponseContext() {
 			private Object entity;
+			private int status;
 			
 			@Override
 			public void setStatusInfo(StatusType statusInfo) {
@@ -40,6 +42,7 @@ public class EmptyBodyFilterTest {
 
 			@Override
 			public void setStatus(int code) {
+				this.status = code;
 			}
 
 			@Override
@@ -77,7 +80,7 @@ public class EmptyBodyFilterTest {
 
 			@Override
 			public int getStatus() {
-				return 0;
+				return status;
 			}
 
 			@Override
@@ -179,11 +182,49 @@ public class EmptyBodyFilterTest {
 	}
 
 	@Test
-	public void filterEmptiesBody() throws Exception {
+	public void filterEmptiesBodyOnSuccess() throws Exception {
+		responseContext.setStatus(201);
 		responseContext.setEntity(new Object());
 		EmptyBodyFilter emptyBodyFilter = new EmptyBodyFilter();
 		emptyBodyFilter.filter(null, responseContext);
 		assertThat(responseContext.getEntity(), is(nullValue()));
 	}
+
+	@Test
+	public void filterEmptiesBodyOn200() throws Exception {
+		responseContext.setStatus(200);
+		responseContext.setEntity(new Object());
+		EmptyBodyFilter emptyBodyFilter = new EmptyBodyFilter();
+		emptyBodyFilter.filter(null, responseContext);
+		assertThat(responseContext.getEntity(), is(nullValue()));
+	}
+
+	@Test
+	public void filterEmptiesBodyOn299() throws Exception {
+		responseContext.setStatus(299);
+		responseContext.setEntity(new Object());
+		EmptyBodyFilter emptyBodyFilter = new EmptyBodyFilter();
+		emptyBodyFilter.filter(null, responseContext);
+		assertThat(responseContext.getEntity(), is(nullValue()));
+	}
+
+	@Test
+	public void filterDoesNotEmptyBodyOn199() throws Exception {
+		responseContext.setStatus(199);
+		responseContext.setEntity(new Object());
+		EmptyBodyFilter emptyBodyFilter = new EmptyBodyFilter();
+		emptyBodyFilter.filter(null, responseContext);
+		assertThat(responseContext.getEntity(), is(notNullValue()));
+	}
+
+	@Test
+	public void filterDoesNotEmptyBodyOn300() throws Exception {
+		responseContext.setStatus(300);
+		responseContext.setEntity(new Object());
+		EmptyBodyFilter emptyBodyFilter = new EmptyBodyFilter();
+		emptyBodyFilter.filter(null, responseContext);
+		assertThat(responseContext.getEntity(), is(notNullValue()));
+	}
+
 
 }
