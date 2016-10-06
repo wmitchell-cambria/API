@@ -83,32 +83,32 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     private static final boolean debug = "true".equals(System.getenv("debug"));
     
-    private final HibernateBundle<ApiConfiguration> cwsBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class, Reporter.class) {
+    private final HibernateBundle<ApiConfiguration> cmsHibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class, Reporter.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-            return configuration.getDataSourceFactoryLegacy();
+            return configuration.getCmsDataSourceFactory();
         }
         @Override
         public String name(){
-          return "legacy";
+          return "cms";
         }
     };
     
-    private final HibernateBundle<ApiConfiguration> nsBundle = new HibernateBundle<ApiConfiguration>(StaffPersonNS.class) {
+    private final HibernateBundle<ApiConfiguration> nsHibernateBundle = new HibernateBundle<ApiConfiguration>(StaffPersonNS.class) {
       @Override
       public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getDataSourceFactory();
+          return configuration.getNsDataSourceFactory();
       }
       @Override
       public String name(){
-        return "newsystem";
+        return "ns";
       }
     };
     
     private final FlywayBundle<ApiConfiguration> flywayBundle = new FlywayBundle<ApiConfiguration>() {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-            return configuration.getDataSourceFactory();
+            return configuration.getNsDataSourceFactory();
         }
 
         @Override
@@ -134,8 +134,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         if(!debug) {
         	LOGGER.info("Loading database bundles");
         	bootstrap.addBundle(flywayBundle);
-        	bootstrap.addBundle(cwsBundle);
-            bootstrap.addBundle(nsBundle);
+        	bootstrap.addBundle(cmsHibernateBundle);
+            bootstrap.addBundle(nsHibernateBundle);
         } else {
         	LOGGER.warn("DEBUG is on so not loading database bundles");
         }
@@ -184,13 +184,13 @@ public class ApiApplication extends Application<ApiConfiguration> {
     		DataAccessEnvironment.register(StaffPersonNS.class, new HashMapDaoImpl<>(new HashMap()));
     	} else {
     		LOGGER.info("Setting up production DAOs");
-    		DataAccessEnvironment.register(Referral.class, new ReferralDao(cwsBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(StaffPerson.class, new StaffPersonDao(cwsBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(Allegation.class, new AllegationDao(cwsBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(CrossReport.class, new CrossReportDao(cwsBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(ReferralClient.class, new ReferralClientDao(cwsBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(Reporter.class, new ReporterDao(cwsBundle.getSessionFactory()));
-    		DataAccessEnvironment.register(StaffPersonNS.class, new StaffPersonNSDao(nsBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(Referral.class, new ReferralDao(cmsHibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(StaffPerson.class, new StaffPersonDao(cmsHibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(Allegation.class, new AllegationDao(cmsHibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(CrossReport.class, new CrossReportDao(cmsHibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(ReferralClient.class, new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(Reporter.class, new ReporterDao(cmsHibernateBundle.getSessionFactory()));
+    		DataAccessEnvironment.register(StaffPersonNS.class, new StaffPersonNSDao(nsHibernateBundle.getSessionFactory()));
     	}
     }
     
