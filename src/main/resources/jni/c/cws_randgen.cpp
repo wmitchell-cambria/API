@@ -42,7 +42,6 @@
 
 
 
-
 /**
  ______________________________________________________________________________
 |                                                                              |
@@ -96,7 +95,8 @@
 #include <cstdint>
 
 #ifdef CWDS_BUILD_DLL
-#include "KeyJNI.h"
+// #include "KeyJNI.h"
+#include "gov_ca_cwds_rest_util_jni_KeyJNI.h"
 #endif
 
 // #include "..\common\diag.h"
@@ -1415,24 +1415,24 @@ int showUsageAndExit(const char * program_nm) {
     exit( EXIT_FAILURE );
 }
 
+//==========================
+// MAIN:
+//==========================
+
 #ifdef CWDS_BUILD_DLL
 
-//==========================
-// SHARED LIB / JNI:
-//==========================
-
 // Implementation of native method sayHello() in KeyJNI class.
-JNIEXPORT void JNICALL Java_KeyJNI_sayHello(JNIEnv *env, jobject thisObj) {
-   printf("C++: Hello World!\n");
-   return;
-}
+// JNIEXPORT void JNICALL Java_KeyJNI_sayHello(JNIEnv *env, jobject thisObj) {
+//    printf("Hello World!\n");
+//    return;
+// }
 
 /*
  * Class:     KeyJNI
  * Method:    generateKey
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_KeyJNI_generateKey(JNIEnv *env, jobject thisObj, jstring inJNIStr) {
+JNIEXPORT jstring JNICALL Java_gov_ca_cwds_rest_util_jni_KeyJNI_generateKey(JNIEnv *env, jobject thisObj, jstring inJNIStr) {
 	using namespace std;
 	printf("C++: ENTER JNI generateKey!\n");
   
@@ -1484,7 +1484,7 @@ JNIEXPORT jstring JNICALL Java_KeyJNI_generateKey(JNIEnv *env, jobject thisObj, 
  * Method:    decomposeKey
  * Signature: (Ljava/lang/String;LKeyJNI/KeyDetail;)LKeyJNI/KeyDetail;
  */
-JNIEXPORT void JNICALL Java_KeyJNI_decomposeKey(JNIEnv *env, jobject thisObj, jstring key, jobject key_detail) {
+JNIEXPORT void JNICALL Java_gov_ca_cwds_rest_util_jni_KeyJNI_decomposeKey(JNIEnv *env, jobject thisObj, jstring key, jobject key_detail) {
 	using namespace std;
 	printf("C++: ENTER decomposeKey()\n");
 
@@ -1574,10 +1574,6 @@ JNIEXPORT void JNICALL Java_KeyJNI_decomposeKey(JNIEnv *env, jobject thisObj, js
 }
 
 #else
-
-//==========================
-// MAIN:
-//==========================
 
 int main (int argc, char* argv[]) {
 	using namespace std;

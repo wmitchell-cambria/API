@@ -12,7 +12,7 @@ package gov.ca.cwds.rest.util.jni;
 // javac KeyJNI.java
 
 // JAVA EXECUTE:
-// java -Djava.library.path=. KeyJNI
+// java -Djava.library.path=.:/usr/lib/ gov.ca.cwds.rest.util.jni.KeyJNI
 
 
 /**
@@ -28,11 +28,11 @@ public class KeyJNI {
 
     // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix)
     // Load native library at runtime.
-    // System.loadLibrary("KeyJNI");
+     System.loadLibrary("KeyJNI");
     // System.loadLibrary("libKeyJNI.dylib");
 
-    // System.load("KeyJNI");
-    System.load("/Users/CWS-NS3/Documents/workspace_neon/CWDS_API/libKeyJNI.dylib");
+    // System.load("libKeyJNI.dylib");
+    // System.load("/Users/CWS-NS3/Documents/workspace_neon/CWDS_API/libKeyJNI.dylib");
   }
 
   /**
