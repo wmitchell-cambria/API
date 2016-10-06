@@ -9,72 +9,68 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.flyway.FlywayFactory;
 
 public class ApiConfiguration extends Configuration {
-    /**
-     * The application name
-     */
-    @NotEmpty
-    private String applicationName;
+	/**
+	 * The application name
+	 */
+	@NotEmpty
+	private String applicationName;
 
-    private SwaggerConfiguration swaggerConfiguration;
-    
-    private DataSourceFactory dataSourceFactory;
+	private SwaggerConfiguration swaggerConfiguration;
 
-    private FlywayFactory flywayFactory;
-    
-    private DataSourceFactory dataSourceFactoryLegacy;
+	private DataSourceFactory nsDataSourceFactory;
 
-    @JsonProperty
-    public String getApplicationName() {
-        return applicationName;
-    }
+	private FlywayFactory flywayFactory;
 
-    @JsonProperty
-    public void setApplicationName(String applicationName) {
-        this.applicationName = applicationName;
-    }
+	private DataSourceFactory cmsDataSourceFactory;
 
 	@JsonProperty
-    public DataSourceFactory getDataSourceFactory() {
-        return dataSourceFactory;
-    }
+	public String getApplicationName() {
+		return applicationName;
+	}
 
-    @JsonProperty
-    public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
-        this.dataSourceFactory = dataSourceFactory;
-    }
+	@JsonProperty
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
+	}
 
+	@JsonProperty
+	public DataSourceFactory getNsDataSourceFactory() {
+		return nsDataSourceFactory;
+	}
 
-    @JsonProperty
-    public DataSourceFactory getDataSourceFactoryLegacy() {
-      return dataSourceFactoryLegacy;
-    }
+	@JsonProperty
+	public void setNsDataSourceFactory(DataSourceFactory dataSourceFactory) {
+		this.nsDataSourceFactory = dataSourceFactory;
+	}
 
-    @JsonProperty
-    public void setDataSourceFactoryLegacy(DataSourceFactory dataSourceFactoryLegacy) {
-      this.dataSourceFactoryLegacy = dataSourceFactoryLegacy;
-    }
+	@JsonProperty
+	public DataSourceFactory getCmsDataSourceFactory() {
+		return cmsDataSourceFactory;
+	}
 
-    @JsonProperty
-    public FlywayFactory getFlywayFactory() {
-        return flywayFactory;
-    }
+	@JsonProperty
+	public void setDataSourceFactoryLegacy(DataSourceFactory dataSourceFactory) {
+		this.cmsDataSourceFactory = dataSourceFactory;
+	}
 
-    @JsonProperty
-    public void setFlywayFactory(FlywayFactory flywayFactory) {
-        this.flywayFactory = flywayFactory;
-    }
+	@JsonProperty
+	public FlywayFactory getFlywayFactory() {
+		return flywayFactory;
+	}
 
-    @JsonProperty(value="swagger")
+	@JsonProperty
+	public void setFlywayFactory(FlywayFactory flywayFactory) {
+		this.flywayFactory = flywayFactory;
+	}
+
+	@JsonProperty(value = "swagger")
 	public SwaggerConfiguration getSwaggerConfiguration() {
 		return swaggerConfiguration;
 	}
 
-    @JsonProperty
+	@JsonProperty
 	public void setSwaggerConfiguration(SwaggerConfiguration swaggerConfiguration) {
 		this.swaggerConfiguration = swaggerConfiguration;
 	}
-    
-    
-
 
 }
