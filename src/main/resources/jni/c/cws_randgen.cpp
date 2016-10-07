@@ -10,9 +10,9 @@
 // 1: JDK location: 
 //     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_101.jdk/Contents/Home/
 // 2: Compile Java class:
-//     javac -jni KeyJNI
+//     javac gov/ca/cwds/rest/util/jni/KeyJNI.java
 // 3: Generate C header:
-//     javah -jni KeyJNI
+//     javah -jni gov.ca.cwds.rest.util.jni.KeyJNI
 // 4: Compile C object:
 //     CLANG:
 //        clang++ -o KeyJNI.o -c cws_randgen.cpp -dead_strip -O2 -DCWDS_BUILD_DLL -DNDEBUG -stdlib=libc++ -fpermissive -w -Wfatal-errors -I. -I..  -I../.. -I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin -std=gnu++14
@@ -35,12 +35,30 @@
 //
 // COMPILE/LINK STANDALONE EXECUTABLE:
 // OS X:
-// clang++ cws_randgen.cpp -o cws_randgen -pipe -march=native -dead_strip -O2 -DNDEBUG -fexpensive-optimizations -stdlib=libc++ -fpermissive -fomit-frame-pointer -w -Wfatal-errors -I. -I.. -I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin -std=gnu++14;strip -S -x cws_randgen;upx -v -8 cws_randgen
+// clang++ cws_randgen.cpp -o cws_randgen -pipe -march=native -dead_strip -O2 -DNDEBUG -fexpensive-optimizations -stdlib=libc++ -fpermissive -fomit-frame-pointer -w -Wfatal-errors -I. -I.. -I../.. -I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin -std=gnu++14;strip -S -x cws_randgen;upx -v -8 cws_randgen
+
+
+// readlink -f $(which java)
+// On Ubuntu: JAVA_HOME=/usr/lib/jvm/java-8-oracle
 //
-// LINUX (UBUNTU) GCC: static build:
-// g++ cws_randgen.cpp -o cws_randgen -pipe -s -O2 -static -DNDEBUG -fexpensive-optimizations -fpermissive -fomit-frame-pointer -w -Wfatal-errors -I. -I.. -L/usr/lib/x86_64-linux-gnu/ -std=gnu++14;upx -v cws_randgen
+// LINUX (UBUNTU) GCC: static, stand-alone executable:
+// g++ cws_randgen.cpp -o cws_randgen -pipe -s -O2 -static -DNDEBUG -fexpensive-optimizations -fpermissive -fomit-frame-pointer -w -Wfatal-errors -I. -I.. -I../..  -I${JAVA_HOME}/include -L/usr/lib/x86_64-linux-gnu/ -std=gnu++14;upx -v cws_randgen
+
+// LINUX (UBUNTU) GCC: shared lib:
+// COMPILE:
+// g++ -c cws_randgen.cpp -o cws_randgen.o -O2 -fPIC -DCWDS_BUILD_DLL -DNDEBUG -fpermissive -w -Wfatal-errors -I. -I.. -I../.. -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -static-libstdc++ -L/usr/lib/x86_64-linux-gnu/ -std=gnu++14
+
+// LINK:
+// g++ -fPIC -o libKeyJNI.so -shared cws_randgen.o -lc -I. -I.. -I../.. -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -L/usr/lib/x86_64-linux-gnu/ -static-libstdc++ -std=gnu++14
+
+// RUN:
+// java -Djava.library.path=. gov.ca.cwds.rest.util.jni.KeyJNI
 
 
+// DIAGNOSTICS:
+//
+// List exported functions in shared library: nm libKeyJNI.so | grep Java
+//
 
 /**
  ______________________________________________________________________________
@@ -1432,6 +1450,7 @@ int showUsageAndExit(const char * program_nm) {
  * Method:    generateKey
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
+//                        Java_gov_ca_cwds_rest_util_jni_KeyJNI_generateKey
 JNIEXPORT jstring JNICALL Java_gov_ca_cwds_rest_util_jni_KeyJNI_generateKey(JNIEnv *env, jobject thisObj, jstring inJNIStr) {
 	using namespace std;
 	printf("C++: ENTER JNI generateKey!\n");
