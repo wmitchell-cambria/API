@@ -6,7 +6,7 @@ package gov.ca.cwds.rest.util.jni;
 //
 
 // COMPILE JAVA:
-// javac KeyJNI.java
+// javac gov/ca/cwds/rest/util/jni/KeyJNI.java
 
 // GENERATE C HEADERS:
 // javah -jni gov.ca.cwds.rest.util.jni.KeyJNI
