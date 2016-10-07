@@ -13,12 +13,22 @@ NOTE : At this time there is not a publicy available link to the documentation, 
 
 ## Configuration
 
-The CWDS API requires the following environment variables:
+The CWDS API currently utilizes two persistent store:
 
-- DB_USER -- the database username
-- DB_PASSWORD -- the database password
-- DB_JDBC_URL -- the database URL in Java Database Connectivity format
-- DB_SCHEMA -- the database schema the tables belong to.
+1. DB2 - CWDS CMS database
+2. Postgres - CWDS NS database
+
+In order for the CWDS API successfully connect to the above databases the following environment variables are required to be set:
+
+- DB_NS_USER -- the CWDS NS database username
+- DB_NS_PASSWORD -- the CWDS NS database password
+- DB_NS_JDBC_URL -- the CWDS NS database URL in Java Database Connectivity format
+
+
+- DB_CMS_USER -- the CWDS CMS database username
+- DB_CMS_PASSWORD -- the CWDS CMS database password
+- DB_CMS_JDBC_URL -- the CWDS CMS database URL in Java Database Connectivity format
+- DB_CMS_SCHEMA -- the CWDS CMS database schema the tables belong to.
 
 The Docker env-file option provides a convenient method to supply these variables. These instructions assume an env file called .env located in the current directory. The repository contains a sample env file called env.sample.
 
@@ -29,6 +39,7 @@ Further configuration options are available in the file config/api.yml.
 ### Prerequisites
 
 1.  DB2 10.x
+2.  Postgres 9.x
 
 ### Using Docker
 
@@ -47,19 +58,23 @@ Run the application with Docker using a command like this:
 1. Source code, available at [GitHub](https://github.com/ca-cwds/API)
 1. Java SE 8 development kit
 1. DB2 Database
+1. Postgres Database
 1. Docker ( if running a Database Docker Container )
 
 ### Database 
 
-#### Docker
+#### Docker - DB2
 A [Docker Image](https://hub.docker.com/r/cwds/db2/) with DB2 is available to develop against.  The database server running in the container does not contain a database, to create one attach the container and create the database:
     
     % docker attach container_name
     % su - db2inst1
     % db2 create database DB0TDEV using CODESET ISO-8859-1 TERRITORY US
 
+#### Docker - Postgres
+A [Docker Image](https://hub.docker.com/r/cwds/postgresql/) with Postgress is available to develop against.  
+
 #### Initialization
-The CWDS API database must be initialized prior to starting the first time. To initialize, execute the
+The CWDS API postgres database must be initialized prior to starting the first time. To initialize, execute the
 following commands:
 
     % ./gradlew shadowJar
@@ -69,7 +84,7 @@ The first time the application starts it will initialize the database schema dur
 
 ### Database Migrations
 
-The CWDS API uses [Flyway](https://flywaydb.org/) for handling database migrations.  To update your database to the latest version run the following:
+The CWDS API uses [Flyway](https://flywaydb.org/) for handling postgres database migrations.  To update your database to the latest version run the following:
 
    % java -jar build/libs/api-all.jar db migrate config/api.yml
    
