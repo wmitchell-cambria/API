@@ -24,11 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ApiEnvironment {
 	private Environment environment;
-	private ServiceEnvironment serviceEnvironment;
 
 	public ApiEnvironment(Environment environment) {
 		this.environment = environment;
-		this.serviceEnvironment = new ServiceEnvironment();
 	}
 	
 	/**
@@ -164,14 +162,5 @@ public class ApiEnvironment {
 	 */
 	public MutableServletContextHandler getAdminContext() {
 		return environment.getAdminContext();
-	}
-	
-	/**
-	 * Get the {@link ServiceEnvironment}
-	 * 
-	 * @return The {@link ServiceEnvironment} for this application
-	 */
-	public ServiceEnvironment services() {
-		return this.serviceEnvironment;
 	}
 }

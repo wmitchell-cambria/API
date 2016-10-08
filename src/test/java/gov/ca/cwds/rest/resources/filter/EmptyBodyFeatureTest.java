@@ -9,13 +9,9 @@ import java.lang.reflect.Method;
 
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.FeatureContext;
-import javax.ws.rs.core.UriInfo;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
-import gov.ca.cwds.rest.resources.legacy.StaffPersonResourceImpl;
 
 public class EmptyBodyFeatureTest {
 
@@ -28,7 +24,7 @@ public class EmptyBodyFeatureTest {
 	@Before
 	public void setup() throws Exception {
 		annotatedMethod = EmptyBodyFeatureTest.class.getMethod("annotatedMethod");
-		notAnnotatedMethod = StaffPersonResourceImpl.class.getMethod("create", StaffPerson.class, String.class, UriInfo.class);
+		notAnnotatedMethod = EmptyBodyFeatureTest.class.getMethod("nonAnnotatedMethod");
 
 		when(resourceInfoWithAnnotatedMethod.getResourceMethod()).thenReturn(annotatedMethod);
 		when(resourceInfoWithoutAnnotatedMethod.getResourceMethod()).thenReturn(notAnnotatedMethod);
@@ -50,6 +46,10 @@ public class EmptyBodyFeatureTest {
 	
 	@EmptyBody
 	public void annotatedMethod() {
+		
+	}
+	
+	public void nonAnnotatedMethod() {
 		
 	}
 	

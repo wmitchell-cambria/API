@@ -5,7 +5,7 @@ package gov.ca.cwds.rest.core;
  * 
  * @author CDWS API Team
  */
-public class Api extends ApiPoc {
+public class Api {
 
 	/**
 	 * A {@code String} constant representing {@value #RESOURCE_APPLICATION}

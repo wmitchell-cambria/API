@@ -13,21 +13,20 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import gov.ca.cwds.rest.api.persistence.legacy.Allegation;
-import gov.ca.cwds.rest.api.persistence.legacy.CrossReport;
-import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
-import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
-import gov.ca.cwds.rest.api.persistence.ns.StaffPersonNS;
+import gov.ca.cwds.rest.api.persistence.cms.Allegation;
+import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
+import gov.ca.cwds.rest.api.persistence.cms.Referral;
+import gov.ca.cwds.rest.api.persistence.cms.ReferralClient;
+import gov.ca.cwds.rest.api.persistence.cms.Reporter;
+import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.ns.Filler;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
-import gov.ca.cwds.rest.jdbi.legacy.AllegationDao;
-import gov.ca.cwds.rest.jdbi.legacy.CrossReportDao;
-import gov.ca.cwds.rest.jdbi.legacy.ReferralClientDao;
-import gov.ca.cwds.rest.jdbi.legacy.ReferralDao;
-import gov.ca.cwds.rest.jdbi.legacy.ReporterDao;
-import gov.ca.cwds.rest.jdbi.legacy.StaffPersonDao;
-import gov.ca.cwds.rest.jdbi.ns.StaffPersonNSDao;
+import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
+import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
+import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
+import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
+import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
+import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.SwaggerResource;
@@ -63,8 +62,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		}
 	};
 
-	private final HibernateBundle<ApiConfiguration> nsHibernateBundle = new HibernateBundle<ApiConfiguration>(
-			StaffPersonNS.class) {
+	private final HibernateBundle<ApiConfiguration> nsHibernateBundle = new HibernateBundle<ApiConfiguration>(Filler.class) {
 		@Override
 		public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
 			return configuration.getNsDataSourceFactory();
@@ -145,8 +143,6 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		DataAccessEnvironment.register(ReferralClient.class,
 				new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
 		DataAccessEnvironment.register(Reporter.class, new ReporterDao(cmsHibernateBundle.getSessionFactory()));
-		DataAccessEnvironment.register(StaffPersonNS.class,
-				new StaffPersonNSDao(nsHibernateBundle.getSessionFactory()));
 	}
 
 	private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
