@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 

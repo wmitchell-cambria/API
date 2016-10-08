@@ -1,11 +1,7 @@
 package gov.ca.cwds.rest.util.jni;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
 
 /**
  * TODO: The JNI native library does not run on the Jenkins Linux environment due to missing dependencies.

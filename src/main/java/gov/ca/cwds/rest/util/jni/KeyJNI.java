@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.util.jni;
 
-import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
+import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 
 //
 // http://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html

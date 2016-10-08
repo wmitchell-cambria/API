@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.services;
 import java.io.Serializable;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
  * Interface for business {@link Service} which perform CRUDS operations
@@ -11,10 +10,9 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  *
  * @param <T>	The {@link DomainObject} the service implements CRUDS for
- * @param <P> The {@link PersistentObject} the service performs CRUDs operations on
  * 
  */
-public interface CrudsService<T extends DomainObject, P extends PersistentObject> extends Service {
+public interface CrudsService<T extends DomainObject> extends Service {
 	
 	/**
 	 * Find object by primaryKey
