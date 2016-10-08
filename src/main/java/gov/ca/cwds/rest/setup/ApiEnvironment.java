@@ -34,7 +34,7 @@ public class ApiEnvironment {
 	/**
 	 * Returns the underlying environment
 	 * 
-	 * @return The undeylying environment
+	 * @return The underlying environment
 	 */
 	public Environment environment() {
 		return environment;
