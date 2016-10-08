@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources.legacy;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL;
+import static gov.ca.cwds.rest.core.ApiPoc.RESOURCE_REFERRAL;
 
 import javax.ws.rs.Path;
 
@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_REFERRAL, tags = RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+@Api(hidden=true,  value = RESOURCE_REFERRAL, tags = RESOURCE_REFERRAL, produces=gov.ca.cwds.rest.core.ApiPoc.MEDIA_TYPE_JSON_V1, consumes=gov.ca.cwds.rest.core.ApiPoc.MEDIA_TYPE_JSON_V1)
 @Path(value =  RESOURCE_REFERRAL)
+@Deprecated
 public interface ReferralResource {}

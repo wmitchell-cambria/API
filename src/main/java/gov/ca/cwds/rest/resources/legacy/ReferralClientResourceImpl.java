@@ -21,6 +21,7 @@ import io.swagger.annotations.ResponseHeader;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public class ReferralClientResourceImpl extends BaseResource<ReferralClientService>
 		implements ReferralClientResource, CrudsResource<ReferralClient> {
 

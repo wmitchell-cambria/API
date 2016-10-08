@@ -26,14 +26,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.resources.legacy.StaffPersonResourceImpl;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class StaffPersonTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_STAFF_PERSON + "/";
+  private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_STAFF_PERSON + "/";
 
   private static final StaffPersonResourceImpl mockedStaffPersonResource =
       mock(StaffPersonResourceImpl.class);
@@ -72,7 +72,7 @@ public class StaffPersonTest {
   public void setup() {
     when(
         mockedStaffPersonResource.create(eq(validStaffPerson),
-            eq(Api.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(
+            eq(ApiPoc.Version.JSON_VERSION_1.getMediaType()), any(UriInfo.class))).thenReturn(
         Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
@@ -174,8 +174,8 @@ public class StaffPersonTest {
             .readValue(fixture("fixtures/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -185,8 +185,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
 
   /*
@@ -199,8 +199,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -213,8 +213,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -227,8 +227,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -241,8 +241,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("id size must be 3"),
         is(greaterThanOrEqualTo(0)));
@@ -255,8 +255,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("id size must be 3"),
         is(greaterThanOrEqualTo(0)));
@@ -272,8 +272,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -284,8 +284,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -296,8 +296,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("endDate must be in the format of yyyy-MM-dd"),
@@ -314,8 +314,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -328,8 +328,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -342,8 +342,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -356,8 +356,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("firstName size must be between 1 and 20"),
@@ -374,8 +374,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("jobTitle may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -388,8 +388,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("jobTitle may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -402,8 +402,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("jobTitle may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -416,8 +416,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("jobTitle size must be between 1 and 30"),
         is(greaterThanOrEqualTo(0)));
@@ -433,8 +433,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -447,8 +447,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -461,8 +461,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -475,8 +475,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName size must be between 1 and 25"),
         is(greaterThanOrEqualTo(0)));
@@ -492,8 +492,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitial may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -506,8 +506,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitial may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -520,8 +520,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitial may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -534,8 +534,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitial size must be 1"),
         is(greaterThanOrEqualTo(0)));
@@ -551,8 +551,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("namePrefix may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -565,8 +565,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("namePrefix may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -579,8 +579,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("namePrefix may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -593,8 +593,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("namePrefix size must be between 1 and 6"),
@@ -611,8 +611,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("phoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -625,8 +625,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("phoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -639,8 +639,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("phoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -656,8 +656,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("phoneExt may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -670,8 +670,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("phoneExt may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -684,8 +684,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("phoneExt may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -701,8 +701,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("startDate must be in the format of yyyy-MM-dd"),
@@ -716,8 +716,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("startDate must be in the format of yyyy-MM-dd"),
@@ -731,8 +731,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("startDate must be in the format of yyyy-MM-dd"),
@@ -749,8 +749,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("nameSuffix may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -763,8 +763,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("nameSuffix may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -777,8 +777,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("nameSuffix may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -791,8 +791,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("nameSuffix size must be between 1 and 4"),
@@ -810,8 +810,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -825,8 +825,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -840,8 +840,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -856,8 +856,8 @@ public class StaffPersonTest {
                 StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("telecommuterIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -873,8 +873,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("cwsOffice may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -887,8 +887,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("cwsOffice may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -901,8 +901,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("cwsOffice may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -915,8 +915,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("cwsOffice size must be between 1 and 10"),
@@ -935,8 +935,8 @@ public class StaffPersonTest {
                 StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -952,8 +952,8 @@ public class StaffPersonTest {
                 StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -969,8 +969,8 @@ public class StaffPersonTest {
                 StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -986,8 +986,8 @@ public class StaffPersonTest {
                 StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -1006,8 +1006,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1021,8 +1021,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1036,8 +1036,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("ssrsLicensingWorkerId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1051,8 +1051,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -1069,8 +1069,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countyCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1083,8 +1083,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countyCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1097,8 +1097,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countyCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1111,8 +1111,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("countyCode size must be between 1 and 2"),
@@ -1130,8 +1130,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1145,8 +1145,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1160,8 +1160,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1175,8 +1175,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dutyWorkerIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1193,8 +1193,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1207,8 +1207,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1222,8 +1222,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("cwsOfficeAddress may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1237,8 +1237,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("cwsOfficeAddress size must be between 1 and 10"),
@@ -1255,8 +1255,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1267,8 +1267,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1279,8 +1279,8 @@ public class StaffPersonTest {
             StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("emailAddress size must be between 0 and 50"),

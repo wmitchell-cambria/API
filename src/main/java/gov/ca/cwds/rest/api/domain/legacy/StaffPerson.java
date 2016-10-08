@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -29,13 +29,13 @@ import io.swagger.annotations.ApiModelProperty;
 @InjectLinks({
     @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.id}"),
-        @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_STAFF_PERSON)}),
     @InjectLink(value = "/{resource}/{id}", rel = "cwsOffice", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.cwsOffice}"),
-        @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE)}),
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_CWS_OFFICE)}),
     @InjectLink(value = "/{resource}/{id}", rel = "cwsofficeAddress", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.cwsOfficeAddress}"),
-            @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE_ADDESS)})})
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_CWS_OFFICE_ADDESS)})})
 public class StaffPerson extends DomainObject {
 
   @NotEmpty

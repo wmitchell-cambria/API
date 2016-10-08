@@ -10,6 +10,7 @@ import gov.ca.cwds.rest.api.persistence.legacy.ReferralClient;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.util.ServiceUtils;
 
+@Deprecated
 public class ReferralClientServiceImpl implements ReferralClientService {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory

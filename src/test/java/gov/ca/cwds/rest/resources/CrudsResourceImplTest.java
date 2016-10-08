@@ -26,7 +26,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.legacy.ReferralService;
 import gov.ca.cwds.rest.services.legacy.ReferralServiceImpl;
@@ -40,7 +40,7 @@ public class CrudsResourceImplTest {
 	private static final String ID_NOT_FOUND = "-1";
 	private static final String ID_FOUND = "1";
 
-	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL + "/";
+	private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_REFERRAL + "/";
 	
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND;
 	private static final String NOT_FOUND_RESOURCE = ROOT_RESOURCE + ID_NOT_FOUND;
@@ -74,7 +74,7 @@ public class CrudsResourceImplTest {
 			when(referralService.update(eq(uniqueReferral)))
 					.thenThrow(new ServiceException(new EntityNotFoundException()));
 			when(referralService.update(eq(nonUniqueReferral))).thenReturn(nonUniqueReferral.getId());
-			when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType()))
+			when(serviceEnvironment.getService(ReferralService.class, ApiPoc.Version.JSON_VERSION_1.getMediaType()))
 					.thenReturn(referralService);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -87,14 +87,14 @@ public class CrudsResourceImplTest {
 
 	@Test
 	public void getReturns200WhenFound() {
-		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
+		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
 				.get().getStatus(), is(equalTo(200)));
 	}
 
 	@Test
 	public void getReturns404WhenNotFound() {
 		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
+				.accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
 	}
 
 	@Test
@@ -107,14 +107,14 @@ public class CrudsResourceImplTest {
 	@Test
 	public void getReturnsNonNullEntity() {
 		Object entity = resources.client().target(FOUND_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getEntity();
+				.accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).get().getEntity();
 		assertThat(entity, is(notNullValue()));
 	}
 
 	@Test
 	public void getReturnsReferral() {
 		Referral referral = resources.client().target(FOUND_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType()).get().readEntity(Referral.class);
+				.accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).get().readEntity(Referral.class);
 		assertThat(referral.getId(), is(equalTo("1")));
 	}
 
@@ -123,14 +123,14 @@ public class CrudsResourceImplTest {
 	 */
 	@Test
 	public void deleteReturns200WhenDeleted() {
-		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
+		assertThat(resources.client().target(FOUND_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
 				.delete().getStatus(), is(equalTo(200)));
 	}
 
 	@Test
 	public void deleteReturns404WhenNotFound() {
 		assertThat(resources.client().target(NOT_FOUND_RESOURCE).request()
-				.accept(Api.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
+				.accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).get().getStatus(), is(equalTo(404)));
 	}
 
 	@Test
@@ -145,28 +145,28 @@ public class CrudsResourceImplTest {
 	 */
 	@Test
 	public void createReturns201WhenCreated() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(201)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(uniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(201)));
 	}
 
 	@Test
 	public void createReturnsLocationHeaderWhenCreated() {
 		assertThat(
-				resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-						.post(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getHeaders().get("Location"),
+				resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+						.post(Entity.entity(uniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getHeaders().get("Location"),
 				is(notNullValue()));
 	}
 
 	@Test
 	public void createReturns406WhenVersionNotSupport() {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
-				.post(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
+				.post(Entity.entity(uniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
 	}
 
 	@Test
 	public void createReturns409WhenNonUnique() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.post(Entity.entity(nonUniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+				.post(Entity.entity(nonUniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(409)));
 	}
 
 	/*
@@ -174,26 +174,26 @@ public class CrudsResourceImplTest {
 	 */
 	@Test
 	public void updateReturns204WhenUpdated() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.put(Entity.entity(nonUniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+				.put(Entity.entity(nonUniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
 	}
 
 	@Test
 	public void updateReturns406WhenVersionNotSupport() {
 		assertThat(resources.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
-				.put(Entity.entity(nonUniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
+				.put(Entity.entity(nonUniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(406)));
 	}
 
 	@Test
 	public void updateReturns404WhenNotFound() {
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-				.put(Entity.entity(uniqueReferral, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(404)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+				.put(Entity.entity(uniqueReferral, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(404)));
 	}
 
 	/*
 	 * Helpers
 	 */
-	@Path(value = gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL)
+	@Path(value = gov.ca.cwds.rest.core.ApiPoc.RESOURCE_REFERRAL)
 	static class TestCrudsResourceImpl implements CrudsResource<Referral> {
 		@Context
 		UriInfo uriInfo;

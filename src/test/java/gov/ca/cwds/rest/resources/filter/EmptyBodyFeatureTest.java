@@ -14,9 +14,7 @@ import javax.ws.rs.core.UriInfo;
 import org.junit.Before;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.domain.intake.IntakeReferral;
 import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
-import gov.ca.cwds.rest.resources.intake.ReferralResourceImpl;
 import gov.ca.cwds.rest.resources.legacy.StaffPersonResourceImpl;
 
 public class EmptyBodyFeatureTest {
@@ -29,9 +27,9 @@ public class EmptyBodyFeatureTest {
 
 	@Before
 	public void setup() throws Exception {
-		annotatedMethod = ReferralResourceImpl.class.getMethod("create", IntakeReferral.class, String.class, UriInfo.class);
+		annotatedMethod = EmptyBodyFeatureTest.class.getMethod("annotatedMethod");
 		notAnnotatedMethod = StaffPersonResourceImpl.class.getMethod("create", StaffPerson.class, String.class, UriInfo.class);
-		
+
 		when(resourceInfoWithAnnotatedMethod.getResourceMethod()).thenReturn(annotatedMethod);
 		when(resourceInfoWithoutAnnotatedMethod.getResourceMethod()).thenReturn(notAnnotatedMethod);
 	}
@@ -49,4 +47,10 @@ public class EmptyBodyFeatureTest {
 		emptyBodyFeature.configure(resourceInfoWithoutAnnotatedMethod, context);
 		verify(context, times(0)).register(EmptyBodyFilter.class);
 	}
+	
+	@EmptyBody
+	public void annotatedMethod() {
+		
+	}
+	
 }

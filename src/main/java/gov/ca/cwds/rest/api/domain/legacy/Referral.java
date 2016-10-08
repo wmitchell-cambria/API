@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,25 +28,25 @@ import io.swagger.annotations.ApiModelProperty;
 @InjectLinks({
     @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.id}"),
-        @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)}),
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_REFERRAL)}),
     @InjectLink(value = "/{resource}/{id}", rel = "allegesAbuseOccurredAtAddressId",
         style = Style.ABSOLUTE, bindings = {
             @Binding(name = "id", value = "${instance.allegesAbuseOccurredAtAddressId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_ADDRESS)}),
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_ADDRESS)}),
     @InjectLink(value = "/{resource}/{id}", rel = "linkToPrimaryReferralId",
         style = Style.ABSOLUTE, bindings = {
             @Binding(name = "id", value = "${instance.linkToPrimaryReferralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)},
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_REFERRAL)},
         condition = "${not empty instance.linkToPrimaryReferralId }"),
     @InjectLink(value = "/{resource}/{id}", rel = "firstResponseDeterminedByStaffPersonId",
         style = Style.ABSOLUTE, bindings = {
             @Binding(name = "id", value = "${instance.firstResponseDeterminedByStaffPersonId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)},
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_STAFF_PERSON)},
         condition = "${not empty instance.firstResponseDeterminedByStaffPersonId }"),
     @InjectLink(value = "/{resource}/{id}", rel = "primaryContactStaffPersonId",
         style = Style.ABSOLUTE, bindings = {
             @Binding(name = "id", value = "${instance.primaryContactStaffPersonId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),})
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_STAFF_PERSON)}),})
 public class Referral extends DomainObject {
 
   @NotEmpty

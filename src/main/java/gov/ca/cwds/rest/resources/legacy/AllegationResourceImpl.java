@@ -22,6 +22,7 @@ import io.swagger.annotations.ResponseHeader;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public class AllegationResourceImpl extends BaseResource<AllegationService>
 		implements AllegationResource, CrudsResource<Allegation> {
 

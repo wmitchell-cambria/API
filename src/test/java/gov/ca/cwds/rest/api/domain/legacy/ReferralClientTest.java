@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.ReferralClientResourceImpl;
@@ -36,7 +36,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ReferralClientTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL_CLIENT + "/";
+  private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_REFERRAL_CLIENT + "/";
 
   private static final ReferralClientResourceImpl mockedReferralClientResource =
       mock(ReferralClientResourceImpl.class);
@@ -75,7 +75,7 @@ public class ReferralClientTest {
     DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.Referral.class, crudsDao);
     when(crudsDao.find(any())).thenReturn(mock(Referral.class));
 
-    when(mockedReferralClientResource.create(eq(validReferralClient), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+    when(mockedReferralClientResource.create(eq(validReferralClient), eq(ApiPoc.Version.JSON_VERSION_1.getMediaType()),
             any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
@@ -170,8 +170,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -181,8 +181,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
 
   /*
@@ -196,8 +196,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -209,8 +209,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -222,8 +222,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("approvalNumber size must be between 0 and 10"),
@@ -242,8 +242,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("dispositionClosureReasonType may not be null"),
@@ -259,8 +259,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("dispositionClosureReasonType may not be null"),
@@ -278,8 +278,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("approvalStatusType may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -293,8 +293,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("approvalStatusType may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -311,8 +311,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -326,8 +326,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -341,8 +341,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -356,8 +356,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("dispositionCode size must be 1"),
         is(greaterThanOrEqualTo(0)));
@@ -374,8 +374,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -387,8 +387,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -400,8 +400,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -419,8 +419,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -434,8 +434,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -449,8 +449,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -465,8 +465,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -484,8 +484,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
@@ -500,8 +500,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
@@ -516,8 +516,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
@@ -533,8 +533,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
@@ -551,8 +551,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -565,8 +565,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -579,8 +579,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -593,8 +593,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("referralId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
@@ -610,8 +610,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -624,8 +624,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -638,8 +638,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -652,8 +652,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("clientId size must be between 1 and 10"),
         is(greaterThanOrEqualTo(0)));
@@ -671,8 +671,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("dispositionClosureDescription may not be empty"),
@@ -688,8 +688,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("dispositionClosureDescription may not be empty"),
@@ -705,8 +705,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("dispositionClosureDescription may not be empty"),
@@ -723,8 +723,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("ageNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -737,8 +737,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("ageNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -755,8 +755,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -769,8 +769,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -784,8 +784,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -799,8 +799,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("agePeriodCode size must be 1"),
         is(greaterThanOrEqualTo(0)));
@@ -817,8 +817,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -832,8 +832,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -847,8 +847,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -862,8 +862,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)
@@ -883,8 +883,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -897,8 +897,8 @@ public class ReferralClientTest {
                 ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -913,8 +913,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -926,8 +926,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -942,8 +942,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -954,8 +954,8 @@ public class ReferralClientTest {
             ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 

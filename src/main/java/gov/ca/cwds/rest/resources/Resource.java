@@ -21,6 +21,6 @@ import javax.ws.rs.Produces;
 //        schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS},
 //        externalDocs = @ExternalDocs(value = "About me", url = "http://about.me/me")
 //)
-@Produces(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
-@Consumes(gov.ca.cwds.rest.core.Api.MEDIA_TYPE_JSON_V1)
+@Produces(gov.ca.cwds.rest.core.ApiPoc.MEDIA_TYPE_JSON_V1)
+@Consumes(gov.ca.cwds.rest.core.ApiPoc.MEDIA_TYPE_JSON_V1)
 public interface Resource {}

@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.legacy.ReferralService;
 import gov.ca.cwds.rest.services.legacy.ReferralServiceImpl;
@@ -58,7 +58,7 @@ public class ServiceEnvironmentTest {
 			
 		};
         
-    	serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, fakeService);
+    	serviceEnvironment.register(ReferralService.class, ApiPoc.Version.JSON_VERSION_1, fakeService);
 	}
 	
 	@Test
@@ -66,14 +66,14 @@ public class ServiceEnvironmentTest {
 		@SuppressWarnings("unchecked")
 		CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> crudsService = mock(CrudsService.class);
 		ReferralService referralService = new ReferralServiceImpl(crudsService);
-		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
+		serviceEnvironment.register(ReferralService.class, ApiPoc.Version.JSON_VERSION_1, referralService);
 		
-		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType()), is(equalTo(referralService)));
+		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, ApiPoc.Version.JSON_VERSION_1.getMediaType()), is(equalTo(referralService)));
 	}
 	
 	@Test
 	public void checkNoServiceReturnedOnNonTrackedService() {
-		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType()), is(equalTo(null)));
+		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, ApiPoc.Version.JSON_VERSION_1.getMediaType()), is(equalTo(null)));
 	}
 	
 	@Test
@@ -81,9 +81,9 @@ public class ServiceEnvironmentTest {
 		@SuppressWarnings("unchecked")
 		CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> crudsService = mock(CrudsService.class);
 		ReferralService referralService = new ReferralServiceImpl(crudsService);
-		serviceEnvironment.register(ReferralService.class, Api.Version.JSON_VERSION_1, referralService);
+		serviceEnvironment.register(ReferralService.class, ApiPoc.Version.JSON_VERSION_1, referralService);
 		
-		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, Api.Version.VERSION_NOOP.getMediaType()), is(equalTo(null)));
+		assertThat((ReferralService)serviceEnvironment.getService(ReferralService.class, ApiPoc.Version.VERSION_NOOP.getMediaType()), is(equalTo(null)));
 	}
 
 }

@@ -20,6 +20,7 @@ import io.swagger.annotations.ResponseHeader;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public class ReporterResourceImpl extends BaseResource<ReporterService>
 		implements ReporterResource, CrudsResource<Reporter> {
 

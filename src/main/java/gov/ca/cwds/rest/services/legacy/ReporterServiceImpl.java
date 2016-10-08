@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.rest.api.persistence.legacy.Reporter;
 import gov.ca.cwds.rest.services.CrudsService;
 
+@Deprecated
 public class ReporterServiceImpl implements ReporterService {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory

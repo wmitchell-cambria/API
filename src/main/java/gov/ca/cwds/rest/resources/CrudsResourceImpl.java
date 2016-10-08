@@ -27,6 +27,7 @@ import gov.ca.cwds.rest.setup.ServiceEnvironment;
  * @param <T>	The {@link DomainObject} to perform CRUDS on
  * @param <S>	The root {@link Service} interface that will handle the CRUDS from a business layer.  We want the root interface because have different implementations of the interfaces for each version of the API. 
  */
+@Deprecated
 public final class CrudsResourceImpl<T extends DomainObject, S extends Service> extends BaseResource<S> implements CrudsResource<T> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrudsResourceImpl.class);
 	

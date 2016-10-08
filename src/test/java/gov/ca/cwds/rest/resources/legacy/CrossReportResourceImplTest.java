@@ -24,7 +24,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.legacy.CrossReport;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.resources.CrudsResource;
 import gov.ca.cwds.rest.resources.CrudsResourceImplTest;
 import gov.ca.cwds.rest.resources.legacy.CrossReportResourceImpl;
@@ -43,7 +43,7 @@ public class CrossReportResourceImplTest {
 	private static final String ID_FOUND = "1";
 	private static final String ID_VERIFY = "referralId=AbiQCgu0Hj,thirdId=ABC123";
 	
-	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CROSS_REPORT + "/";
+	private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_CROSS_REPORT + "/";
 	
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND ;
 	private static final String VERIFY_RESOURCE = ROOT_RESOURCE + ID_VERIFY ;
@@ -59,7 +59,7 @@ public class CrossReportResourceImplTest {
 
 	@Before
 	public void setup() {
-		when(serviceEnvironment.getService(CrossReportService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(crossReportService);
+		when(serviceEnvironment.getService(CrossReportService.class, ApiPoc.Version.JSON_VERSION_1.getMediaType())).thenReturn(crossReportService);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -74,22 +74,22 @@ public class CrossReportResourceImplTest {
 	@Test
 	public void getDelegatestoCrudsResource() throws Exception {
 		CrossReport toVerify = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
-		resources.client().target(VERIFY_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get();
+		resources.client().target(VERIFY_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).get();
 		String id = MessageFormat.format("referralId={0},thirdId={1}", toVerify.getReferralId(), toVerify.getThirdId());
-		verify(crudsResource, times(1)).get(id, Api.MEDIA_TYPE_JSON_V1);
+		verify(crudsResource, times(1)).get(id, ApiPoc.MEDIA_TYPE_JSON_V1);
 
 	}
 
 	@Test
 	public void deleteDelegatestoCrudsResource() {
-		resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).delete();
+		resources.client().target(FOUND_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).delete();
 		verify(crudsResource, times(1)).delete(any(String.class), any(String.class));
 	}
 
 	@Test
 	public void createDelegatestoCrudsResource() throws Exception {
 		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
-		resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
 		verify(crudsResource, times(1)).create(any(CrossReport.class), any(String.class), any(UriInfo.class) );
 	}
 
@@ -97,21 +97,21 @@ public class CrossReportResourceImplTest {
 	@Test
 	public void updateDelegatestoCrudsResource() throws Exception {
 		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
-		resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
 		verify(crudsResource, times(1)).update(any(CrossReport.class), any(String.class));
 	}
 	
 	@Test
 	public void createValidatesCrossReport() throws Exception {
 		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/referralId/missing.json"), CrossReport.class);
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 
 	
 	@Test
 	public void updateValidatesCrossReport() throws Exception {
 		CrossReport toCreate = MAPPER.readValue(fixture("fixtures/legacy/CrossReport/invalid/referralId/missing.json"), CrossReport.class);
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 }	
 
