@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
 import gov.ca.cwds.rest.api.persistence.legacy.StaffPerson;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.CrossReportResourceImpl;
@@ -36,7 +36,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class CrossReportTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CROSS_REPORT + "/";
+  private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_CROSS_REPORT + "/";
 
   private static final CrossReportResourceImpl mockedCrossReportResource =
       mock(CrossReportResourceImpl.class);
@@ -80,7 +80,7 @@ public class CrossReportTest {
     DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.StaffPerson.class, crudsDaoStaffPerson);
     when(crudsDaoStaffPerson.find(any())).thenReturn(mock(StaffPerson.class));
 
-    when(mockedCrossReportResource.create(eq(validCrossReport), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+    when(mockedCrossReportResource.create(eq(validCrossReport), eq(ApiPoc.Version.JSON_VERSION_1.getMediaType()),
             any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 
     @SuppressWarnings("rawtypes")
@@ -88,7 +88,7 @@ public class CrossReportTest {
     DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.Referral.class, crudsDao);
     when(crudsDao.find(any())).thenReturn(mock(Referral.class));
 
-    when(mockedCrossReportResource.create(eq(validCrossReport), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+    when(mockedCrossReportResource.create(eq(validCrossReport), eq(ApiPoc.Version.JSON_VERSION_1.getMediaType()),
             any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
@@ -205,8 +205,8 @@ public class CrossReportTest {
             .readValue(fixture("fixtures/legacy/CrossReport/valid/valid.json"), CrossReport.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -216,8 +216,8 @@ public class CrossReportTest {
             CrossReport.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
 
   /*
@@ -230,8 +230,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("thirdId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -244,8 +244,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("thirdId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -258,8 +258,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("thirdId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -272,8 +272,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("thirdId size must be between 1 and 10"),
         is(greaterThanOrEqualTo(0)));
@@ -290,8 +290,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("crossReportMethodType may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -305,8 +305,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("crossReportMethodType may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -323,8 +323,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("filedOutOfStateIndicator may not be null"), is(greaterThanOrEqualTo(0)));
@@ -338,8 +338,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("filedOutOfStateIndicator may not be null"), is(greaterThanOrEqualTo(0)));
@@ -353,8 +353,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("filedOutOfStateIndicator may not be null"), is(greaterThanOrEqualTo(0)));
@@ -369,8 +369,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("filedOutOfStateIndicator may not be null"), is(greaterThanOrEqualTo(0)));
@@ -388,8 +388,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -405,8 +405,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -422,8 +422,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -439,8 +439,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -457,8 +457,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -469,8 +469,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -482,8 +482,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -502,8 +502,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientBadgeNumber may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -517,8 +517,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientBadgeNumber may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -532,8 +532,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientBadgeNumber may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -547,8 +547,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -567,8 +567,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientPhoneExtensionNumber may not be null"),
@@ -583,8 +583,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientPhoneExtensionNumber may not be null"),
@@ -602,8 +602,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientPhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -617,8 +617,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientPhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -634,8 +634,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("informDate must be in the format of yyyy-MM-dd"),
@@ -649,8 +649,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("informDate must be in the format of yyyy-MM-dd"),
@@ -665,8 +665,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("informDate must be in the format of yyyy-MM-dd"),
@@ -684,8 +684,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientPositionTitleDesc may not be empty"),
@@ -700,8 +700,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientPositionTitleDesc may not be empty"),
@@ -716,8 +716,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientPositionTitleDesc may not be empty"),
@@ -732,8 +732,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -752,8 +752,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referenceNumber may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -766,8 +766,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referenceNumber may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -780,8 +780,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referenceNumber may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -795,8 +795,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("referenceNumber size must be between 1 and 10"),
@@ -813,8 +813,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -827,8 +827,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -841,8 +841,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -855,8 +855,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("referralId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
@@ -873,8 +873,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -885,8 +885,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -898,8 +898,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("lawEnforcementId size must be between 0 and 10"),
@@ -916,8 +916,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("staffPersonId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -930,8 +930,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("staffPersonId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -944,8 +944,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("staffPersonId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -958,8 +958,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("staffPersonId size must be between 1 and 3"),
@@ -976,8 +976,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("description may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -990,8 +990,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("description may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1004,8 +1004,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("description may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1021,8 +1021,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1035,8 +1035,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1049,8 +1049,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("recipientName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1063,8 +1063,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientName size must be between 1 and 40"),
@@ -1082,8 +1082,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("outstateLawEnforcementAddr may not be empty"),
@@ -1098,8 +1098,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("outstateLawEnforcementAddr may not be empty"),
@@ -1114,8 +1114,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("outstateLawEnforcementAddr may not be empty"),
@@ -1133,8 +1133,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1148,8 +1148,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1163,8 +1163,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1178,8 +1178,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)
@@ -1198,8 +1198,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
@@ -1214,8 +1214,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
@@ -1230,8 +1230,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
@@ -1247,8 +1247,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
@@ -1267,8 +1267,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)
@@ -1285,8 +1285,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)
@@ -1303,8 +1303,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)
@@ -1321,8 +1321,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)
@@ -1342,8 +1342,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
@@ -1358,8 +1358,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
@@ -1374,8 +1374,8 @@ public class CrossReportTest {
             CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
@@ -1391,8 +1391,8 @@ public class CrossReportTest {
                 CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),

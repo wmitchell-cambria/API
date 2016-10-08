@@ -21,6 +21,7 @@ import io.swagger.annotations.ResponseHeader;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public class CrossReportResourceImpl extends BaseResource<CrossReportService>
 		implements CrossReportResource, CrudsResource<CrossReport> {
 

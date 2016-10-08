@@ -30,6 +30,15 @@ public class ApiEnvironment {
 		this.environment = environment;
 		this.serviceEnvironment = new ServiceEnvironment();
 	}
+	
+	/**
+	 * Returns the underlying environment
+	 * 
+	 * @return The undeylying environment
+	 */
+	public Environment environment() {
+		return environment;
+	}
 
 	/**
 	 * @see io.dropwizard.setup.Environment#jersey()

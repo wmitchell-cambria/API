@@ -20,7 +20,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.resources.CrudsResource;
 import gov.ca.cwds.rest.resources.legacy.ReferralResourceImpl;
 import gov.ca.cwds.rest.services.legacy.ReferralService;
@@ -36,7 +36,7 @@ public class ReferralResourceImplTest {
 	private static final String ID_FOUND = "1";
 	private static final String ID_VERIFY = "1";
 	
-	private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL + "/";
+	private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_REFERRAL + "/";
 	
 	private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND ;
 	private static final String VERIFY_RESOURCE = ROOT_RESOURCE + ID_VERIFY ;
@@ -52,7 +52,7 @@ public class ReferralResourceImplTest {
 
 	@Before
 	public void setup(){
-		when(serviceEnvironment.getService(ReferralService.class, Api.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
+		when(serviceEnvironment.getService(ReferralService.class, ApiPoc.Version.JSON_VERSION_1.getMediaType())).thenReturn(referralService);
 	}
 
 	/*
@@ -61,21 +61,21 @@ public class ReferralResourceImplTest {
 	@Test
 	public void getDelegatestoCrudsResource() throws Exception {
 		Referral toVerify =  MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/validNonUnique.json"), Referral.class);
-		resources.client().target(VERIFY_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).get();
-		verify(crudsResource, times(1)).get(toVerify.getId(), Api.MEDIA_TYPE_JSON_V1);
+		resources.client().target(VERIFY_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).get();
+		verify(crudsResource, times(1)).get(toVerify.getId(), ApiPoc.MEDIA_TYPE_JSON_V1);
 
 	}
 
 	@Test
 	public void deleteDelegatestoCrudsResource() {
-		resources.client().target(FOUND_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).delete();
+		resources.client().target(FOUND_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).delete();
 		verify(crudsResource, times(1)).delete(any(String.class), any(String.class));
 	}
 
 	@Test
 	public void createDelegatestoCrudsResource() throws Exception {
 		Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class);
-		resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
 		verify(crudsResource, times(1)).create(any(Referral.class), any(String.class), any(UriInfo.class) );
 	}
 
@@ -83,20 +83,20 @@ public class ReferralResourceImplTest {
 	@Test
 	public void updateDelegatestoCrudsResource() throws Exception {
 		Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/valid/valid.json"), Referral.class);
-		resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+		resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
 		verify(crudsResource, times(1)).update(any(Referral.class), any(String.class));
 	}
 	
 	@Test
 	public void createValidatesReferral() throws Exception {
 		Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/id/missing.json"), Referral.class);
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 
 	
 	@Test
 	public void updateValidatesReferral() throws Exception {
 		Referral toCreate = MAPPER.readValue(fixture("fixtures/legacy/Referral/invalid/id/missing.json"), Referral.class);
-		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
+		assertThat(resources.client().target(ROOT_RESOURCE).request().accept(ApiPoc.Version.JSON_VERSION_1.getMediaType()).put(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(422)));
 	}
 }	

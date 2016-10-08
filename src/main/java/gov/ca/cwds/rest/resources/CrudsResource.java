@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiResponses;
  *
  * @param <T>	The {@link DomainObject} which represents a {@link PersistentObject} the CRUDS endpoints work on
  */
+@Deprecated
 public interface CrudsResource<T extends DomainObject> extends Resource {
 
 	/**
@@ -34,7 +35,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 *            The id of the {@link PersistentObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link Api.Version}
+	 *            corresponds to a value in {@link ApiPoc.Version}
 	 * 
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
@@ -54,7 +55,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 *            The id of the {@link PersistentObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link Api.Version}
+	 *            corresponds to a value in {@link ApiPoc.Version}
 	 * 
 	 * @return {@link Response} with the {@link PersistentObject}
 	 */
@@ -74,7 +75,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 *            The {@link DomainObject}
 	 * @param acceptHeader
 	 *            The accept header. Used to determine version of API,
-	 *            corresponds to a value in {@link Api.Version}
+	 *            corresponds to a value in {@link ApiPoc.Version}
 	 * @param uriInfo	The {@link UriInfo}           
 	 * 
 	 * @return {@link Response} with a {@link DomainObject} representing an associated {@link PersistentObject}
@@ -95,7 +96,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 * Update a {@link PersistentObject}
 	 *
 	 * @param domainObject The {@link DomainObject}
-	 * @param acceptHeader The accept header. Used to determine version of API, corresponds to a value in {@link Api.Version}
+	 * @param acceptHeader The accept header. Used to determine version of API, corresponds to a value in {@link ApiPoc.Version}
 	 *
 	 * @return {@link Response} with a {@link DomainObject} representing an associated {@link PersistentObject}
 	 */

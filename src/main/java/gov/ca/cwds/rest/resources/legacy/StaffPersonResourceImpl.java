@@ -22,6 +22,7 @@ import io.swagger.annotations.ResponseHeader;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public class StaffPersonResourceImpl extends BaseResource<StaffPersonService>
 		implements StaffPersonResource, CrudsResource<StaffPerson> {
 

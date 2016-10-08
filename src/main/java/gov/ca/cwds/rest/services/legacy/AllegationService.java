@@ -10,4 +10,5 @@ import gov.ca.cwds.rest.services.CrudsService;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public interface AllegationService extends CrudsService<gov.ca.cwds.rest.api.domain.legacy.Allegation, Allegation> {}

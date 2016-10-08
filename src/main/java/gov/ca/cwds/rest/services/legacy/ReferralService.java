@@ -9,4 +9,5 @@ import gov.ca.cwds.rest.services.CrudsService;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public interface ReferralService extends CrudsService<gov.ca.cwds.rest.api.domain.legacy.Referral, Referral> {}

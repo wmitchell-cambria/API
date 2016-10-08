@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.legacy.Referral;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.legacy.ReporterResourceImpl;
@@ -35,7 +35,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ReporterTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REPORTER + "/";
+  private static final String ROOT_RESOURCE = "/" + ApiPoc.RESOURCE_REPORTER + "/";
 
   private static final ReporterResourceImpl mockedReporterResource =
       mock(ReporterResourceImpl.class);
@@ -83,7 +83,7 @@ public class ReporterTest {
     DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.legacy.Referral.class, crudsDao);
     when(crudsDao.find(any())).thenReturn(mock(Referral.class));
 
-    when(mockedReporterResource.create(eq(validReporter), eq(Api.Version.JSON_VERSION_1.getMediaType()),
+    when(mockedReporterResource.create(eq(validReporter), eq(ApiPoc.Version.JSON_VERSION_1.getMediaType()),
             any(UriInfo.class))).thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 }
 
@@ -210,8 +210,8 @@ public class ReporterTest {
         MAPPER.readValue(fixture("fixtures/legacy/Reporter/valid/valid.json"), Reporter.class);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
   }
   
   /*
@@ -224,8 +224,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"cityName is required since streetName is set\"]}")));
   }
@@ -237,8 +237,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -249,8 +249,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -261,8 +261,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -276,8 +276,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"streetName is required since streetNumber is set\"]}")));
   }
@@ -289,8 +289,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -301,8 +301,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -313,8 +313,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -328,8 +328,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"Properties [employerName, lawEnforcementId] are mutually exclusive but multiple values are set\"]}")));
   }
@@ -341,8 +341,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -353,8 +353,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -365,8 +365,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -377,8 +377,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -389,8 +389,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -404,8 +404,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"badgeNumber size must be less than or equal to 6\"]}")));
   }
@@ -417,8 +417,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"badgeNumber can only be set if lawEnforcementId is set\"]}")));
   }
@@ -430,8 +430,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -442,8 +442,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -454,8 +454,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -466,8 +466,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -478,8 +478,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -493,8 +493,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -505,8 +505,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -517,8 +517,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -529,8 +529,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class),
         is(equalTo("{\"errors\":[\"cityName size must be less than or equal to 20\"]}")));
@@ -547,8 +547,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("colltrClientRptrReltnshpType may not be null"),
@@ -563,8 +563,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("colltrClientRptrReltnshpType may not be null"),
@@ -582,8 +582,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("communicationMethodType may not be null"),
@@ -598,8 +598,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("communicationMethodType may not be null"),
@@ -617,8 +617,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
@@ -633,8 +633,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
@@ -649,8 +649,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
@@ -666,8 +666,8 @@ public class ReporterTest {
                 Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
@@ -685,8 +685,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -698,8 +698,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -711,8 +711,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -729,8 +729,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
   
@@ -741,8 +741,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class), is(equalTo("{\"errors\":[\"employerName size must be less than or equal to 35\"]}")));
@@ -758,8 +758,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -770,8 +770,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -782,8 +782,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -801,8 +801,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
@@ -817,8 +817,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
@@ -833,8 +833,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
@@ -850,8 +850,8 @@ public class ReporterTest {
                 Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
@@ -868,8 +868,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -882,8 +882,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -896,8 +896,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -910,8 +910,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("firstName size must be between 1 and 20"),
@@ -928,8 +928,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -942,8 +942,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -956,8 +956,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -970,8 +970,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("lastName size must be between 1 and 25"),
         is(greaterThanOrEqualTo(0)));
@@ -988,8 +988,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
@@ -1004,8 +1004,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
@@ -1020,8 +1020,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
@@ -1037,8 +1037,8 @@ public class ReporterTest {
                 Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
@@ -1056,8 +1056,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
@@ -1072,8 +1072,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
@@ -1091,8 +1091,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("messagePhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1105,8 +1105,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("messagePhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1123,8 +1123,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitialName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1137,8 +1137,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitialName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1151,8 +1151,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitialName may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1166,8 +1166,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("middleInitialName size must be 1"),
         is(greaterThanOrEqualTo(0)));
@@ -1184,8 +1184,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("namePrefixDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1199,8 +1199,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("namePrefixDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1214,8 +1214,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("namePrefixDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1229,8 +1229,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -1248,8 +1248,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("primaryPhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1262,8 +1262,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("primaryPhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1280,8 +1280,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("primaryPhoneExtensionNumber may not be null"),
@@ -1296,8 +1296,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("primaryPhoneExtensionNumber may not be null"),
@@ -1314,8 +1314,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("stateCodeType may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1328,8 +1328,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("stateCodeType may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1345,8 +1345,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1357,8 +1357,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1369,8 +1369,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1381,8 +1381,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"streetName size must be less than or equal to 40\"]}")));
   }
@@ -1397,8 +1397,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1409,8 +1409,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1421,8 +1421,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1433,8 +1433,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class), is(equalTo("{\"errors\":[\"streetNumber size must be less than or equal to 10\"]}")));
@@ -1451,8 +1451,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("suffixTitleDescription may not be empty"),
@@ -1467,8 +1467,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("suffixTitleDescription may not be empty"),
@@ -1483,8 +1483,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("suffixTitleDescription may not be empty"),
@@ -1499,8 +1499,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf(
@@ -1517,8 +1517,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1529,8 +1529,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1541,8 +1541,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("zipcode must be 5 digits"),
         is(greaterThanOrEqualTo(0)));
@@ -1555,8 +1555,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class),
         is(equalTo("{\"errors\":[\"zipcode must be 5 digits\"]}")));
@@ -1569,8 +1569,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class), is(equalTo("{\"errors\":[\"zipcode must be 5 digits\"]}")));
   }
@@ -1582,8 +1582,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1597,8 +1597,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1611,8 +1611,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1625,8 +1625,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1639,8 +1639,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class)
         .indexOf("referralId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
@@ -1656,8 +1656,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -1668,8 +1668,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("lawEnforcementId size must be 10"),
@@ -1686,8 +1686,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("zipSuffixNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1700,8 +1700,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("zipSuffixNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
@@ -1718,8 +1718,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1732,8 +1732,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1746,8 +1746,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
         is(greaterThanOrEqualTo(0)));
@@ -1761,8 +1761,8 @@ public class ReporterTest {
             Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request()
-            .accept(Api.Version.JSON_VERSION_1.getMediaType())
-            .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1));
+            .accept(ApiPoc.Version.JSON_VERSION_1.getMediaType())
+            .post(Entity.entity(toCreate, ApiPoc.MEDIA_TYPE_JSON_V1));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class)

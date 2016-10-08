@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,17 +28,17 @@ import io.swagger.annotations.ApiModelProperty;
 @InjectLinks({
     @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.id}"),
-        @Binding(name = "resource", value = Api.RESOURCE_ALLEGATION)}),
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_ALLEGATION)}),
     @InjectLink(value = "/{resource}/{id}", rel = "perpetratorClientId", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.perpetratorClientId}"),
-        @Binding(name = "resource", value = Api.RESOURCE_CLIENT)},
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_CLIENT)},
         condition = "${not empty instance.perpetratorClientId }"),
     @InjectLink(value = "/{resource}/{id}", rel = "victimClientId", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id", value = "${instance.victimClientId}"),
-        @Binding(name = "resource", value = Api.RESOURCE_CLIENT)}),
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_CLIENT)}),
     @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)})})
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_REFERRAL)})})
 public class Allegation extends DomainObject {
 
   @NotEmpty

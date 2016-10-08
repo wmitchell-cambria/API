@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import gov.ca.cwds.rest.services.Service;
 import gov.ca.cwds.rest.setup.ServiceEnvironment;
 
@@ -8,7 +8,7 @@ import gov.ca.cwds.rest.setup.ServiceEnvironment;
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link Service} interface the resource delegates to.  NOTE : this should be an interface because we store versions of the implementations based on {@link Api.Version}
+ * @param <T>	The {@link Service} interface the resource delegates to.  NOTE : this should be an interface because we store versions of the implementations based on {@link ApiPoc.Version}
  */
 public abstract class BaseResource<T extends Service> {
 	private ServiceEnvironment serviceEnvironment;
@@ -26,7 +26,7 @@ public abstract class BaseResource<T extends Service> {
 	}
 	
 	/**
-	 * Get the implementation of the service for the given {@link Api.Version}
+	 * Get the implementation of the service for the given {@link ApiPoc.Version}
 	 * 
 	 * @param mediaType	The mediaType of the version being requested
 	 * @return	The implementation of the {@link Service} based on the given mediaType

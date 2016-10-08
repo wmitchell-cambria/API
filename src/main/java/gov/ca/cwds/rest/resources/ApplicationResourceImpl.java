@@ -1,9 +1,10 @@
 package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_APPLICATION;
-import io.swagger.annotations.Api;
 
 import javax.ws.rs.Path;
+
+import io.swagger.annotations.Api;
 
 
 /**

@@ -13,6 +13,7 @@ import gov.ca.cwds.rest.services.CrudsService;
  * 
  * @author CDWS API Team
  */
+@Deprecated
 public class ReferralServiceImpl implements ReferralService {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory

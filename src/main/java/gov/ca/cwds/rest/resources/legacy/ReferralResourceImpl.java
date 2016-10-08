@@ -22,6 +22,7 @@ import io.swagger.annotations.ResponseHeader;
  * 
  * @author CWDS API Team
  */
+@Deprecated
 public class ReferralResourceImpl extends BaseResource<ReferralService> implements ReferralResource, CrudsResource<Referral> {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferralResourceImpl.class);

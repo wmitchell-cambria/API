@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.core.ApiPoc;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -30,18 +30,18 @@ import io.swagger.annotations.ApiModelProperty;
     @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE, bindings = {
         @Binding(name = "id",
             value = "referralId=${instance.referralId},thirdId=${instance.thirdId}"),
-        @Binding(name = "resource", value = Api.RESOURCE_CROSS_REPORT)}),
+        @Binding(name = "resource", value = ApiPoc.RESOURCE_CROSS_REPORT)}),
     @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)},
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_REFERRAL)},
         condition = "${not empty instance.referralId }"),
     @InjectLink(value = "/{resource}/{id}", rel = "staffPersonId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.staffPersonId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)},
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_STAFF_PERSON)},
         condition = "${not empty instance.staffPersonId }"),
     @InjectLink(value = "/{resource}/{id}", rel = "lawEnforcementId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
+            @Binding(name = "resource", value = ApiPoc.RESOURCE_LAW_ENFORCEMENT)})})
 public class CrossReport extends DomainObject {
   @NotEmpty
   @Size(min = 1, max = 10)
