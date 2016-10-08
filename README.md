@@ -112,6 +112,12 @@ Tests that access the database utilize the src/test/resources/hibernate.cfg.xml 
 Use the gradlew command to execute the test task:
 
     % ./gradlew integrationTest
+    
+### Commiting Changes
+
+Before commiting changes to the reporsitory please run the following to ensure the build is successful.
+
+    % ./gradlew clean test integrationTest javadoc
 
 ### Building Docker Container
 
