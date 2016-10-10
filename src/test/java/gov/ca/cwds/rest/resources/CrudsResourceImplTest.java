@@ -13,7 +13,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -28,6 +27,9 @@ import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class CrudsResourceImplTest {
+	
+	private static final HttpServletResponse RESPONSE = mock(HttpServletResponse.class); 
+	
 	private static final String ID_NOT_FOUND = "-1";
 	private static final String ID_FOUND = "1";
 
@@ -42,8 +44,10 @@ public class CrudsResourceImplTest {
 	private static CrudsResourceImplTestDomainObject nonUniqueDomainObject;
 	private static CrudsResourceImplTestDomainObject uniqueDomainObject;
 
+	
+	//TODO : RDB - https://jersey.java.net/documentation/latest/migration.html
 	@ClassRule
-	public static final ResourceTestRule resources = ResourceTestRule.builder().addResource(new TestCrudsResourceImpl())
+	public static final ResourceTestRule resources = ResourceTestRule.builder().addResource(new TestCrudsResourceImpl())//.addProvider(new SingletonTypeInjectableProvider<Context, HttpServletResponse>(HttpServletResponse.class, RESPONSE) {}) 
 			.build();
 
 	@Before
@@ -183,8 +187,6 @@ public class CrudsResourceImplTest {
 	 */
 	@Path(value = ROOT_RESOURCE)
 	static class TestCrudsResourceImpl implements CrudsResource<CrudsResourceImplTestDomainObject> {
-		@Context
-		UriInfo uriInfo;
 		
 		CrudsResourceImpl<CrudsResourceImplTestDomainObject> crudsResourceImpl;
 
@@ -214,4 +216,5 @@ public class CrudsResourceImplTest {
 			return crudsResourceImpl.update(object, acceptHeader);
 		}
 	}
+	
 }
