@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,10 +15,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.http.HttpStatus;
+
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 
 /**
  * Interface for Resources which provide CRUDS end points.  The implementation of this is not meant to be exposed as an actual end point though.  It is meant to be delegated to by an exposed resource.
@@ -45,6 +50,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header not supported") })
+	@ApiOperation(hidden=true, value = "Find DomainObject by id", response = DomainObject.class)
 	public Response get(
 			@PathParam("id") @ApiParam(required = true, value = "id of object to get") String id,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
@@ -64,6 +70,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	@ApiResponses(value = {
 			@ApiResponse(code = 404, message = "Not found"),
 			@ApiResponse(code = 406, message = "Accept Header not supported") })
+	@ApiOperation(hidden=true, value = "Delete DomainObject", code = HttpStatus.SC_OK, response = Object.class)
 	public Response delete(
 			@PathParam("id") @ApiParam(required = true, value = "id of object to delete") String id,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);
@@ -76,8 +83,9 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	 * @param acceptHeader
 	 *            The accept header. 
 	 * @param uriInfo	The {@link UriInfo}           
+	 * @param response	The servlet response
 	 * 
-	 * @return {@link Response} with a {@link DomainObject} 
+	 * @return {@link gov.ca.cwds.rest.api.domain.ApiResponse} an {@link gov.ca.cwds.rest.api.domain.ApiResponse} for the newly create {@link DomainObject} 
 	 */
 	@POST
 	@ApiResponses(value = {
@@ -87,10 +95,12 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 			@ApiResponse(code = 422, message = "Unable to process entity")
 	})
 	@Consumes(value=MediaType.APPLICATION_JSON)
-	public Response create(
+	@ApiOperation(hidden=true, value = "Create DomainObject", response = Object.class, code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
+	public gov.ca.cwds.rest.api.domain.ApiResponse<T> create(
 			@ApiParam(required = true, value = "Object to be created") T domainObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader,
-			@Context UriInfo uriInfo);
+			@Context UriInfo uriInfo,
+			@Context HttpServletResponse response);
 	
 	/**
 	 * Update a {@link DomainObject}
@@ -108,6 +118,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 			@ApiResponse(code = 422, message = "Unable to process entity")
 	})
 	@Consumes(value=MediaType.APPLICATION_JSON)
+	@ApiOperation(hidden=true, value = "Update DomainObject", code = HttpStatus.SC_NO_CONTENT, response = Object.class)
 	public Response update(
 			@ApiParam(required = true, value = "the object to be updated") T domainObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader);

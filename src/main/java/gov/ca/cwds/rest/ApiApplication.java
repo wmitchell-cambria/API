@@ -27,6 +27,7 @@ import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
 import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
+import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.SwaggerResource;
@@ -62,7 +63,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		}
 	};
 
-	private final HibernateBundle<ApiConfiguration> nsHibernateBundle = new HibernateBundle<ApiConfiguration>(Filler.class) {
+	private final HibernateBundle<ApiConfiguration> nsHibernateBundle = new HibernateBundle<ApiConfiguration>(
+			Filler.class) {
 		@Override
 		public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
 			return configuration.getNsDataSourceFactory();
@@ -152,7 +154,10 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		LOGGER.info("Registering ApplicationResource");
 		final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
 		apiEnvironment.jersey().register(applicationResource);
-
+		
+		LOGGER.info("Registering AddressResource");
+		AddressResource addressResource = new AddressResource(null);
+		apiEnvironment.jersey().register(addressResource);
 	}
 
 	private void configureCors(final ApiEnvironment apiEnvironment) {
