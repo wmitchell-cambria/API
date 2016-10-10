@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -15,6 +17,7 @@ import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.rest.api.domain.ApiResponse;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -72,32 +75,38 @@ public final class CrudsResourceImpl<T extends DomainObject>implements CrudsReso
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo)
+	/*
+	 * (non-Javadoc)
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo, javax.servlet.http.HttpServletResponse)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Response create(T domainObject, String acceptHeader, UriInfo uriInfo) {
+	public ApiResponse<T> create(T domainObject, String acceptHeader, UriInfo uriInfo, final HttpServletResponse response) {
+		ApiResponse<T> retval = null;
 		if( !acceptHeaderContainsKnownMediaType(acceptHeader) ) {
-			return buildUnsupportedResponse();
-		}
-		try {
-			Serializable primaryKey = service.create(domainObject);
-			
-			//TODO : abstract out the location header creation to something which can be reused for our domain services
-			//       maybe follow the model of InjectLinks
-			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-	        URI referralUri = ub.
-	                    path(primaryKey.toString()).
-	                    build();
-			return Response.status(Response.Status.CREATED).header("Location", referralUri.toASCIIString()).build();
-		} catch (ServiceException e) {
-			if( e.getCause() instanceof EntityExistsException ) {
-				return Response.status(Response.Status.CONFLICT).entity(null).build();
-			} else {
-				LOGGER.error("Unable to handle request", e);
-				return Response.status(HttpStatus.SC_SERVICE_UNAVAILABLE).entity(null).build();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}  else {
+			try {
+				Serializable primaryKey = service.create(domainObject);
+				
+				//TODO : abstract out the location header creation to something which can be reused for our domain services
+				//       maybe follow the model of InjectLinks
+				UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+		        URI uri = ub.
+		                    path(primaryKey.toString()).
+		                    build();
+				retval = new ApiResponse(primaryKey.toString(), domainObject);
+				response.setStatus(HttpServletResponse.SC_CREATED);
+			} catch (ServiceException e) {
+				if( e.getCause() instanceof EntityExistsException ) {
+					response.setStatus(HttpServletResponse.SC_CONFLICT);
+				} else {
+					LOGGER.error("Unable to handle request", e);
+					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				}
 			}
 		}
+		return retval;
 	}
 
 	/* (non-Javadoc)

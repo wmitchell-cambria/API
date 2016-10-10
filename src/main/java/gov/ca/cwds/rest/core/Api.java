@@ -13,4 +13,10 @@ public class Api {
 	 */
 	public final static String RESOURCE_APPLICATION = "application";
 
+	/**
+	 * A {@code String} constant representing {@value #RESOURCE_ADDRESSES}
+	 * api.
+	 */
+	public final static String RESOURCE_ADDRESSES = "addresses";
+
 }
