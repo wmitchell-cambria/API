@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class AddressResourceTest {

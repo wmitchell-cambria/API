@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.resources;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_ADDRESSES;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -70,7 +71,7 @@ public class AddressResource implements CrudsResource<Address> {
 	 */
 	@Override
 	@ApiOperation(value = "Create Address", code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created Address", response = Address.class))
-	public gov.ca.cwds.rest.api.domain.ApiResponse<Address> create(Address domainObject, String acceptHeader, UriInfo uriInfo, HttpServletResponse response) {
+	public gov.ca.cwds.rest.api.domain.ApiResponse<Address> create(@Valid Address domainObject, String acceptHeader, UriInfo uriInfo, HttpServletResponse response) {
 		response.setStatus(HttpServletResponse.SC_CREATED);
 	    try {
 	        response.flushBuffer();
