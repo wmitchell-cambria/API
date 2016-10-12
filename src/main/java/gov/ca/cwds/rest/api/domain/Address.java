@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @author CWDS API Team
  */
-public class Address extends DomainObject {
+public final class Address extends DomainObject {
 
 	private String street_address;
 
