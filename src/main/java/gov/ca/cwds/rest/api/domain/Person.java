@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.validation.Date;
 
+//TODO - RDB add constraints
 /**
  * {@link DomainObject} representing an person
  * 
