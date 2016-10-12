@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.core;
 
 /**
- * Constants defining resouces locations in the API. 
+ * Constants defining resources locations in the API. 
  * 
  * @author CDWS API Team
  */
@@ -26,10 +26,10 @@ public class Api {
 	public final static String RESOURCE_PEOPLE = "people";
 	
 	/**
-	 * A {@code String} constant representing {@value #RESOURCE_SCREENING}
+	 * A {@code String} constant representing {@value #RESOURCE_SCREENINGS}
 	 * api.
 	 */
-	public final static String RESOURCE_SCREENING = "screenings";
+	public final static String RESOURCE_SCREENINGS = "screenings";
 
 
 }

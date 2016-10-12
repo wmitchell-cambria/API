@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.rest.validation.Date;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,6 +24,7 @@ public class Screening extends DomainObject {
 	@JsonProperty("incident_county")
 	private String incident_county;
 	
+	@Date
 	@JsonProperty("incident_date")
 	private String incident_date;
 	
@@ -168,5 +171,132 @@ public class Screening extends DomainObject {
 	public String getNarrative() {
 		return narrative;
 	}
+
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((ended_at == null) ? 0 : ended_at.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((incident_county == null) ? 0 : incident_county.hashCode());
+    result = prime * result + ((incident_date == null) ? 0 : incident_date.hashCode());
+    result = prime * result + ((location_type == null) ? 0 : location_type.hashCode());
+    result = prime * result + ((method_of_referral == null) ? 0 : method_of_referral.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((narrative == null) ? 0 : narrative.hashCode());
+    result = prime * result + ((reference == null) ? 0 : reference.hashCode());
+    result = prime * result + ((response_time == null) ? 0 : response_time.hashCode());
+    result = prime * result + ((screening_decision == null) ? 0 : screening_decision.hashCode());
+    result = prime * result + ((started_at == null) ? 0 : started_at.hashCode());
+    return result;
+  }
+
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Screening other = (Screening) obj;
+    if (ended_at == null) {
+      if (other.ended_at != null) {
+        return false;
+      }
+    } else if (!ended_at.equals(other.ended_at)) {
+      return false;
+    }
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    if (incident_county == null) {
+      if (other.incident_county != null) {
+        return false;
+      }
+    } else if (!incident_county.equals(other.incident_county)) {
+      return false;
+    }
+    if (incident_date == null) {
+      if (other.incident_date != null) {
+        return false;
+      }
+    } else if (!incident_date.equals(other.incident_date)) {
+      return false;
+    }
+    if (location_type == null) {
+      if (other.location_type != null) {
+        return false;
+      }
+    } else if (!location_type.equals(other.location_type)) {
+      return false;
+    }
+    if (method_of_referral == null) {
+      if (other.method_of_referral != null) {
+        return false;
+      }
+    } else if (!method_of_referral.equals(other.method_of_referral)) {
+      return false;
+    }
+    if (name == null) {
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
+    if (narrative == null) {
+      if (other.narrative != null) {
+        return false;
+      }
+    } else if (!narrative.equals(other.narrative)) {
+      return false;
+    }
+    if (reference == null) {
+      if (other.reference != null) {
+        return false;
+      }
+    } else if (!reference.equals(other.reference)) {
+      return false;
+    }
+    if (response_time == null) {
+      if (other.response_time != null) {
+        return false;
+      }
+    } else if (!response_time.equals(other.response_time)) {
+      return false;
+    }
+    if (screening_decision == null) {
+      if (other.screening_decision != null) {
+        return false;
+      }
+    } else if (!screening_decision.equals(other.screening_decision)) {
+      return false;
+    }
+    if (started_at == null) {
+      if (other.started_at != null) {
+        return false;
+      }
+    } else if (!started_at.equals(other.started_at)) {
+      return false;
+    }
+    return true;
+  }
+	
 	
 }
