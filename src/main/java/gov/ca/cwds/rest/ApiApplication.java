@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
 import gov.ca.cwds.rest.resources.PersonResource;
+import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
@@ -163,6 +164,10 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		LOGGER.info("Registering PeopleResource");
 		PersonResource peopleResource = new PersonResource();
 		apiEnvironment.jersey().register(peopleResource);
+		
+		LOGGER.info("Registering ScreeningResource");
+		ScreeningResource screeningResource = new ScreeningResource();
+		apiEnvironment.jersey().register(screeningResource);
 	}
 
 	private void configureCors(final ApiEnvironment apiEnvironment) {
