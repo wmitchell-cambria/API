@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.ApiResponse;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -127,45 +128,45 @@ public class CrudsResourceImplTest {
 	/*
 	 * create Tests
 	 */
-//	@Test
-//	public void createReturns201WhenCreated() {
-//		assertThat(
-//				grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-//						.post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
-//				is(equalTo(201)));
-//	}
-//
-//	@Test
-//	public void createReturnsLocationHeaderWhenCreated() {
-//		assertThat(grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-//				.post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getHeaders().get("Location"),
-//				is(notNullValue()));
-//	}
-//
-//	@Test
-//	public void createReturns406WhenVersionNotSupport() {
-//		assertThat(
-//				grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
-//						.post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
-//				is(equalTo(406)));
-//	}
-//
-//	@Test
-//	public void createReturns409WhenNonUnique() {
-//		assertThat(
-//				grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-//						.post(Entity.entity(nonUniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
-//				is(equalTo(409)));
-//	}
-//	
-//	@Test
-//	public void createReturns400WhenCannotProcessJson() throws Exception {
-//		//create expects to deserialize the payload to a CrudsResourceImplTestDomainObject - lets give it something else instead.
-//		Address address = new Address("street", "city", "state", 12345);
-//		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON).post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
-//		assertThat(status, is(400));
-//		
-//	}
+	@Test
+	public void createReturns201WhenCreated() {
+		assertThat(
+				grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+						.post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
+				is(equalTo(201)));
+	}
+
+	@Test
+	public void createReturnsLocationHeaderWhenCreated() {
+		assertThat(grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getHeaders().get("Location"),
+				is(notNullValue()));
+	}
+
+	@Test
+	public void createReturns406WhenVersionNotSupport() {
+		assertThat(
+				grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
+						.post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
+				is(equalTo(406)));
+	}
+
+	@Test
+	public void createReturns409WhenNonUnique() {
+		assertThat(
+				grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+						.post(Entity.entity(nonUniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
+				is(equalTo(409)));
+	}
+	
+	@Test
+	public void createReturns400WhenCannotProcessJson() throws Exception {
+		//create expects to deserialize the payload to a CrudsResourceImplTestDomainObject - lets give it something else instead.
+		Address address = new Address("street", "city", "state", 12345);
+		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON).post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
+		assertThat(status, is(400));
+		
+	}
 
 	/*
 	 * update Tests

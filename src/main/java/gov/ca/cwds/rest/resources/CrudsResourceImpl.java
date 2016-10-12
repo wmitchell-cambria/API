@@ -26,48 +26,56 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link DomainObject} to perform CRUDS on
+ * @param <T>
+ *            The {@link DomainObject} to perform CRUDS on
  */
-public final class CrudsResourceImpl<T extends DomainObject>implements CrudsResource<T> {
+public final class CrudsResourceImpl<T extends DomainObject> implements CrudsResource<T> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrudsResourceImpl.class);
-	
+
 	private CrudsService<T> service;
-	
+
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
-	 * @param crudsService The crudsService for this resource.
+	 * @param crudsService
+	 *            The crudsService for this resource.
 	 */
 	public CrudsResourceImpl(CrudsService<T> crudsService) {
 		this.service = crudsService;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#get(java.lang.String,
+	 * java.lang.String)
 	 */
 	@Override
 	public Response get(String id, String acceptHeader) {
-		if( !acceptHeaderContainsKnownMediaType(acceptHeader) ) {
+		if (!acceptHeaderContainsKnownMediaType(acceptHeader)) {
 			return buildUnsupportedResponse();
 		}
-		T domainObject = (T)service.find(id);
-		if( domainObject != null ) {
+		T domainObject = (T) service.find(id);
+		if (domainObject != null) {
 			return Response.ok(domainObject).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.ca.cwds.rest.resources.CrudsResource#delete(java.lang.String,
+	 * java.lang.String)
 	 */
 	@Override
 	public Response delete(String id, String acceptHeader) {
-		if( !acceptHeaderContainsKnownMediaType(acceptHeader) ) {
+		if (!acceptHeaderContainsKnownMediaType(acceptHeader)) {
 			return buildUnsupportedResponse();
 		}
-		T domainObject = (T)service.delete(id);
-		if( domainObject != null ) {
+		T domainObject = (T) service.delete(id);
+		if (domainObject != null) {
 			return Response.status(Response.Status.OK).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
@@ -76,55 +84,66 @@ public final class CrudsResourceImpl<T extends DomainObject>implements CrudsReso
 
 	/*
 	 * (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo, javax.servlet.http.HttpServletResponse)
+	 * 
+	 * @see
+	 * gov.ca.cwds.rest.resources.CrudsResource#create(gov.ca.cwds.rest.api.
+	 * domain.DomainObject, java.lang.String, javax.ws.rs.core.UriInfo,
+	 * javax.servlet.http.HttpServletResponse)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public ApiResponse<T> create(T domainObject, String acceptHeader, UriInfo uriInfo, final HttpServletResponse response) {
+	public ApiResponse<T> create(T domainObject, String acceptHeader, UriInfo uriInfo,
+			final HttpServletResponse response) {
 		ApiResponse<T> retval = null;
-		if( !acceptHeaderContainsKnownMediaType(acceptHeader) ) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}  else {
-			try {
+
+		try {
+			if (!acceptHeaderContainsKnownMediaType(acceptHeader)) {
+				response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			} else {
 				Serializable primaryKey = service.create(domainObject);
-				
-				//TODO : abstract out the location header creation to something which can be reused for our domain services
-				//       maybe follow the model of InjectLinks
+				retval = new ApiResponse<T>(primaryKey.toString(), domainObject);
+
+				// TODO : abstract out the location header creation to something
+				// which can be reused for our domain services
+				// maybe follow the model of InjectLinks
 				UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-		        URI uri = ub.
-		                    path(primaryKey.toString()).
-		                    build();
-				retval = new ApiResponse(primaryKey.toString(), domainObject);
+				URI uri = ub.path(primaryKey.toString()).build();
+				
+				response.addHeader("Location", uri.toString());
 				response.setStatus(HttpServletResponse.SC_CREATED);
-				try {
-					response.flushBuffer();
-				} catch (Exception e) {
-				}
-			} catch (ServiceException e) {
-				if( e.getCause() instanceof EntityExistsException ) {
-					response.setStatus(HttpServletResponse.SC_CONFLICT);
-				} else {
-					LOGGER.error("Unable to handle request", e);
-					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-				}
+			}
+		} catch (ServiceException e) {
+			if (e.getCause() instanceof EntityExistsException) {
+				response.setStatus(HttpServletResponse.SC_CONFLICT);
+			} else {
+				LOGGER.error("Unable to handle request", e);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} finally {
+			try {
+				response.flushBuffer();
+			} catch (Exception e) {
 			}
 		}
 		return retval;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.domain.DomainObject, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.
+	 * domain.DomainObject, java.lang.String)
 	 */
 	@Override
 	public Response update(T domainObject, String acceptHeader) {
-		if( !acceptHeaderContainsKnownMediaType(acceptHeader) ) {
+		if (!acceptHeaderContainsKnownMediaType(acceptHeader)) {
 			return buildUnsupportedResponse();
 		}
 		try {
 			service.update(domainObject);
 			return Response.status(Response.Status.NO_CONTENT).build();
 		} catch (ServiceException e) {
-			if( e.getCause() instanceof EntityNotFoundException ) {
+			if (e.getCause() instanceof EntityNotFoundException) {
 				return Response.status(Response.Status.NOT_FOUND).entity(null).build();
 			} else {
 				LOGGER.error("Unable to handle request", e);
@@ -132,13 +151,13 @@ public final class CrudsResourceImpl<T extends DomainObject>implements CrudsReso
 			}
 		}
 	}
-	
+
 	private boolean acceptHeaderContainsKnownMediaType(String acceptHeader) {
 		return Arrays.asList(acceptHeader.split(",")).contains(MediaType.APPLICATION_JSON);
 	}
-	
+
 	private Response buildUnsupportedResponse() {
 		return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
 	}
-	
+
 }
