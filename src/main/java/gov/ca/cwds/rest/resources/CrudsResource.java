@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -98,7 +99,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@ApiOperation(hidden = true, value = "Create DomainObject", response = Object.class, code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created object", response = Object.class))
 	public gov.ca.cwds.rest.api.domain.ApiResponse<T> create(
-			@ApiParam(required = true, value = "Object to be created") T domainObject,
+			@ApiParam(required = true, value = "Object to be created") @Valid T domainObject,
 			@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader, @Context UriInfo uriInfo,
 			@Context HttpServletResponse response);
 
