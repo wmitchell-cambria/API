@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.validation.Date;
  * 
  * @author CWDS API Team
  */
-public class Person extends DomainObject {
+public final class Person extends DomainObject {
 	@JsonProperty("first_name")
 	private String first_name;
 

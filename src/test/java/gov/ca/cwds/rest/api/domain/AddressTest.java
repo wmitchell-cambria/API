@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.resources.AddressResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class AddressTest {
 
@@ -46,6 +48,12 @@ public class AddressTest {
         assertThat(serialized, is(expected));
     }
     
+    @Test
+    public void equalsHashCodeWork() {
+        EqualsVerifier.forClass(Address.class)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
+    }
     
     /*
      * validation tests
