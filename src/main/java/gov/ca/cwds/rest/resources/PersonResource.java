@@ -2,8 +2,6 @@ package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_PEOPLE;
 
-import java.util.Arrays;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.Path;
@@ -13,7 +11,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.http.HttpStatus;
 
-import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.ApiResponse;
 import gov.ca.cwds.rest.api.domain.Person;
 import io.swagger.annotations.Api;
@@ -31,14 +28,16 @@ import io.swagger.annotations.ResponseHeader;
 @Path(value = RESOURCE_PEOPLE)
 public class PersonResource implements CrudsResource<Person> {
 
-	@SuppressWarnings("unused")
-	private CrudsResourceImpl<Person> crudsResourceImpl;
+	private CrudsResource<Person> crudsResource;
 
 	/**
 	 * Constructor
+	 * 
+	 * @param crudsResource the crudsResource to delegate to
 	 */
-	public PersonResource() {
+	public PersonResource(CrudsResource<Person> crudsResource) {
 		super();
+		this.crudsResource = crudsResource;
 	}
 
 	/*
@@ -50,15 +49,7 @@ public class PersonResource implements CrudsResource<Person> {
 	@Override
 	@ApiOperation(value = "Find Person by id", response = Person.class)
 	public Response get(String id, String acceptHeader) {
-		if (!Arrays.asList(acceptHeader.split(",")).contains(MediaType.APPLICATION_JSON)) {
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity(null).build();
-		}
-		if ("1".equals(id)) {
-			return Response.status(Response.Status.OK)
-					.entity(new Person("firstname", "last", "gender", "11/22/1973", "000000000", null)).build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity(null).build();
-		}
+		return crudsResource.get(id, acceptHeader);
 	}
 
 	/*
@@ -88,19 +79,7 @@ public class PersonResource implements CrudsResource<Person> {
 	@ApiOperation(value = "Create Person", code = HttpStatus.SC_CREATED, responseHeaders = @ResponseHeader(name = "Location", description = "Link to the newly created Person", response = Person.class))
 	public ApiResponse<Person> create(@Valid Person domainObject, String acceptHeader, UriInfo uriInfo,
 			HttpServletResponse response) {
-		int status = HttpServletResponse.SC_CREATED;
-		if (!Arrays.asList(acceptHeader.split(",")).contains(MediaType.APPLICATION_JSON)) {
-			status = HttpServletResponse.SC_NOT_ACCEPTABLE;
-		}
-		response.addHeader("Location", "some_value");
-		response.setStatus(status);
-		try {
-			response.flushBuffer();
-		} catch (Exception e) {
-		}
-		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
-		Person person = new Person("Bart", "Simpson", "Male", "01/01/1990", "123456789", address);
-		return new ApiResponse<Person>("1", person);
+		return crudsResource.create(domainObject, acceptHeader, uriInfo, response);
 	}
 
 	/*
