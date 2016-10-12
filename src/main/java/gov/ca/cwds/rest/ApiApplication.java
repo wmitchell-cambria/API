@@ -30,7 +30,7 @@ import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
-import gov.ca.cwds.rest.resources.PeopleResource;
+import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
@@ -161,7 +161,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		apiEnvironment.jersey().register(addressResource);
 		
 		LOGGER.info("Registering PeopleResource");
-		PeopleResource peopleResource = new PeopleResource();
+		PersonResource peopleResource = new PersonResource();
 		apiEnvironment.jersey().register(peopleResource);
 	}
 

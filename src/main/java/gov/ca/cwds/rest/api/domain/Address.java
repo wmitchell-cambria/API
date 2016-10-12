@@ -1,54 +1,50 @@
 package gov.ca.cwds.rest.api.domain;
 
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-//TODO - RDB add constraints
 /**
  * {@link DomainObject} representing an address
- *  
+ * 
  * @author CWDS API Team
  */
 public class Address extends DomainObject {
-	
-	@Size(max=10)
-	@JsonProperty("street_address")
-	private String streetAddress;
 
-	@JsonProperty("city")
+	private String street_address;
+
 	private String city;
 
-	@JsonProperty("state")
 	private String state;
 
-	@JsonProperty("zip")
 	private Integer zip;
 
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
-	 * @param streetAddress	the street address
-	 * @param city	the city
-	 * @param state	the state
-	 * @param zip	the zip
+	 * @param street_address
+	 *            The street address
+	 * @param city
+	 *            The city
+	 * @param state
+	 *            The state
+	 * @param zip
+	 *            The zip
 	 */
 	@JsonCreator
-	public Address(@JsonProperty("street_address") String streetAddress, @JsonProperty("city") String city,
+	public Address(@JsonProperty("street_address") String street_address, @JsonProperty("city") String city,
 			@JsonProperty("state") String state, @JsonProperty("zip") Integer zip) {
 		super();
-		this.streetAddress = streetAddress;
+		this.street_address = street_address;
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
 	}
 
 	/**
-	 * @return the streetAddress
+	 * @return the street_address
 	 */
-	public String getStreetAddress() {
-		return streetAddress;
+	public String getStreet_address() {
+		return street_address;
 	}
 
 	/**
@@ -72,7 +68,9 @@ public class Address extends DomainObject {
 		return zip;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -81,12 +79,14 @@ public class Address extends DomainObject {
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
+		result = prime * result + ((street_address == null) ? 0 : street_address.hashCode());
 		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -108,10 +108,10 @@ public class Address extends DomainObject {
 				return false;
 		} else if (!state.equals(other.state))
 			return false;
-		if (streetAddress == null) {
-			if (other.streetAddress != null)
+		if (street_address == null) {
+			if (other.street_address != null)
 				return false;
-		} else if (!streetAddress.equals(other.streetAddress))
+		} else if (!street_address.equals(other.street_address))
 			return false;
 		if (zip == null) {
 			if (other.zip != null)
@@ -120,6 +120,5 @@ public class Address extends DomainObject {
 			return false;
 		return true;
 	}
-	
-	
+
 }

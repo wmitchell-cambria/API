@@ -116,7 +116,7 @@ public interface CrudsResource<T extends DomainObject> extends Resource {
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Unable to process JSON"),
 			@ApiResponse(code = 404, message = "not found"),
 			@ApiResponse(code = 406, message = "Accept Header not supported"),
-			@ApiResponse(code = 422, message = "Unable to process entity") })
+			@ApiResponse(code = 422, message = "Unable to validate entity") })
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@ApiOperation(hidden = true, value = "Update DomainObject", code = HttpStatus.SC_NO_CONTENT, response = Object.class)
 	public Response update(@ApiParam(required = true, value = "the object to be updated") T domainObject,
