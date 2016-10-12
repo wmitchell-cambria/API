@@ -96,6 +96,10 @@ public final class CrudsResourceImpl<T extends DomainObject>implements CrudsReso
 		                    build();
 				retval = new ApiResponse(primaryKey.toString(), domainObject);
 				response.setStatus(HttpServletResponse.SC_CREATED);
+				try {
+					response.flushBuffer();
+				} catch (Exception e) {
+				}
 			} catch (ServiceException e) {
 				if( e.getCause() instanceof EntityExistsException ) {
 					response.setStatus(HttpServletResponse.SC_CONFLICT);

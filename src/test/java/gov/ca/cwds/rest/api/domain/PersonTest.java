@@ -7,5 +7,4 @@ public class PersonTest {
 	@Test
 	public void failedTest() {
 	}
-	//TODO : RDB implement tests
 }

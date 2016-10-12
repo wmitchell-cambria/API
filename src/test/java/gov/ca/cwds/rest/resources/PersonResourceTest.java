@@ -23,26 +23,26 @@ import gov.ca.cwds.rest.api.domain.Person;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
-public class AddressResourceTest {
+public class PersonResourceTest {
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-	private static final String ROOT_RESOURCE = "/addresses/";
-	private static final String FOUND_RESOURCE = "/addresses/1";
-	private static final String NOT_FOUND_RESOURCE = "/addresses/2";
+	private static final String ROOT_RESOURCE = "/people/";
+	private static final String FOUND_RESOURCE = "/people/1";
+	private static final String NOT_FOUND_RESOURCE = "/people/2";
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	@SuppressWarnings({ "unchecked" })
-	private final static CrudsResource<Address> mockedCrudsResource = mock(CrudsResource.class);
+	@SuppressWarnings({ "unchecked", "unused" })
+	private CrudsResource<Person> mockedCrudsResource = mock(CrudsResource.class);
 
 	@ClassRule
-	public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder().addResource(new AddressResource(mockedCrudsResource))
+	public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder().addResource(new PersonResource())
 			.build();
 
 	@ClassRule
-	public final static ResourceTestRule grizzlyResource = ResourceTestRule.builder()
-			.setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(new AddressResource(mockedCrudsResource)).build();
+	public static final ResourceTestRule grizzlyResource = ResourceTestRule.builder()
+			.setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(new PersonResource()).build();
 
 	@Before
 	public void setup() throws Exception {
@@ -83,11 +83,12 @@ public class AddressResourceTest {
 	// }
 
 	@Test
-	public void getReturnsJsonWhichCanBeSerializedIntoAddress() throws Exception {
+	public void getReturnsJsonWhichCanBeSerializedIntoPerson() throws Exception {
 		String json = inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
 				.get().readEntity(String.class);
-		Address getresult = MAPPER.readValue(json, Address.class);
-		Address expected = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+		Person getresult = MAPPER.readValue(json, Person.class);
+		Person expected = new Person("firstname", "last", "gender", "11/22/1973", "000000000", null);
+
 		assertThat(getresult, is(expected));
 	}
 
@@ -96,9 +97,9 @@ public class AddressResourceTest {
 	 */
 	@Test
 	public void createReturns201OnSuccess() throws Exception {
-		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+		Person person = new Person("Bart", "Simpson", "Male", "01/01/1990", "123456789", null);
 		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
+				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
 		assertThat(status, is(201));
 	}
 
@@ -106,45 +107,48 @@ public class AddressResourceTest {
 	public void createReturns400WhenCannotProcessJson() throws Exception {
 		// create expects to deserialize the payload to a person - lets give it
 		// an address instead.
-		Person person = new Person("first", "last", "male", "4/1/1990", "123456789", null);
+		Address address = new Address("street", "city", "state", 12345);
 		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
+				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
 		assertThat(status, is(400));
 
 	}
 
 	@Test
 	public void createReturns406OnWrongAcceptType() throws Exception {
-		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+		Person person = new Person("Bart", "Simpson", "Male", "01/01/1990", "123456789", null);
 		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_TYPE")
-				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
+				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
 		assertThat(status, is(406));
 	}
 
 	@Test
-	public void createReturns422WhenCannotValidateAddress() throws Exception {
-		//NOTE : address currently has no validation/constraints on it.
-//		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
-//		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-//				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
-//		assertThat(status, is(422));
+	public void createReturns422WhenCannotValidatePerson() throws Exception {
+		Person person = new Person("Bart", "Simpson", "Male", "1990/04/01", "123456789", null);
+		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
+		assertThat(status, is(422));
+
 	}
 
 	@Test
 	public void createReturnsLocationHeader() throws Exception {
-		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+		Person person = new Person("Bart", "Simpson", "Male", "01/01/1990", "123456789", null);
 		Object o = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).getHeaders().get("Location");
+				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).getHeaders().get("Location");
 		assertThat(o, is(notNullValue()));
 	}
 
 	@Test
 	public void createReturnsProperJson() throws Exception {
-		String expected = "{\"id\": \"1\",\"Address\": { \"street_address\": \"742 Evergreen Terrace\", \"city\": \"Springfield\", \"state\": \"WA\", \"zip\": 98700 } }";
+		String expected = "{ \"id\": \"1\", \"Person\": { \"first_name\": \"Bart\", \"last_name\": \"Simpson\", \"gender\": \"Male\", "
+				+ "\"date_of_birth\": \"01/01/1990\", \"ssn\": \"123456789\", \"address\": { \"street_address\": \"742 Evergreen Terrace\", \"city\": \"Springfield\", "
+				+ "\"state\": \"WA\", \"zip\": 98700 } } }";
 		
 		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+		Person person = new Person("Bart", "Simpson", "Male", "01/01/1990", "123456789", address);
 		String json = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).readEntity(String.class);
+				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).readEntity(String.class);
 
 		expected = expected.replaceAll("\\s+","");
 		json = json.replaceAll("\\s+","");
@@ -169,9 +173,9 @@ public class AddressResourceTest {
 	 */
 	@Test
 	public void udpateReturns501() throws Exception {
-		Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+		Person person = new Person("Bart", "Simpson", "Male", "01/01/1990", "123456789", null);
 		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.put(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
+				.put(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
 		assertThat(status, is(501));		
 	}
 }

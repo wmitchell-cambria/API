@@ -9,6 +9,11 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import gov.ca.cwds.rest.api.domain.ApiResponse;
 
+/**
+ *  Serializer for {@link ApiResponse}
+ * 
+ * @author CWDS API Team
+ */
 @SuppressWarnings({ "serial", "rawtypes" })
 public class ApiResponseSerializer extends StdSerializer<ApiResponse> {
 
