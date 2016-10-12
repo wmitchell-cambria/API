@@ -35,6 +35,7 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.AddressService;
+import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -120,10 +121,6 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		LOGGER.info("Preparing DAOs");
 		setupDaos(configuration);
 
-		// NOTE : Services must be registered before Resources can be
-		LOGGER.info("Registering Application Service");
-		registerServices(configuration, apiEnvironment);
-
 		LOGGER.info("Registering Application Resources");
 		registerResources(configuration, apiEnvironment);
 
@@ -151,9 +148,6 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		DataAccessEnvironment.register(Reporter.class, new ReporterDao(cmsHibernateBundle.getSessionFactory()));
 	}
 
-	private void registerServices(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
-	}
-
 	private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
 		LOGGER.info("Registering ApplicationResource");
 		final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
@@ -164,7 +158,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		apiEnvironment.jersey().register(addressResource);
 		
 		LOGGER.info("Registering PersonResource");
-		PersonResource peopleResource = new PersonResource(new CrudsResourceImpl<>(null));
+		PersonResource peopleResource = new PersonResource(new CrudsResourceImpl<>(new PersonService()));
 		apiEnvironment.jersey().register(peopleResource);
 		
 		LOGGER.info("Registering ScreeningResource");
