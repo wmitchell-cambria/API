@@ -30,9 +30,11 @@ import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
+import gov.ca.cwds.rest.resources.CrudsResourceImpl;
 import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -158,11 +160,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
 		apiEnvironment.jersey().register(applicationResource);
 		
 		LOGGER.info("Registering AddressResource");
-		AddressResource addressResource = new AddressResource(null);
+		AddressResource addressResource = new AddressResource(new CrudsResourceImpl<>(new AddressService()));
 		apiEnvironment.jersey().register(addressResource);
 		
-		LOGGER.info("Registering PeopleResource");
-		PersonResource peopleResource = new PersonResource();
+		LOGGER.info("Registering PersonResource");
+		PersonResource peopleResource = new PersonResource(new CrudsResourceImpl<>(null));
 		apiEnvironment.jersey().register(peopleResource);
 		
 		LOGGER.info("Registering ScreeningResource");
