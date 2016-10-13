@@ -2,25 +2,30 @@ package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.PersonResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+
 public class PersonTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PEOPLE + "/";
-
+  private static final String ROOT_RESOURCE = "/people/";
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private static final PersonResource mockedPeopleResource = mock(PersonResource.class);
@@ -63,46 +68,88 @@ public class PersonTest {
     assertThat(serialized, is(expected));
   }
 
-  // @Test
-  // public void successfulWithValid() throws Exception {
-  // Address address = new Address("123 Main", "Sacramento", "CA", 95757);
-  // Person toCreate = MAPPER.readValue(fixture("fixtures/domain/people/valid/valid.json"),
-  // Person.class);
-  // assertThat(resources.client().target(ROOT_RESOURCE).request().accept(Api.Version.JSON_VERSION_1.getMediaType())
-  // .post(Entity.entity(toCreate, Api.MEDIA_TYPE_JSON_V1)).getStatus(), is(equalTo(204)));
-  //
-  //
-  // }
+  /*
+   * success test
+   */
+  @Test
+  public void successfulWithValid() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/people/valid/valid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  /*
+   * date of birth test - success
+   */
+  @Test
+  public void successWhenValidDateOfBirth() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/people/valid/valid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+    // assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
+    // is(greaterThanOrEqualTo(0)));
+
+  }
+
+  /*
+   * date of birth test - invalid format
+   */
+  @Test
+  public void failsWhenInvalidDateOfBirth() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/people/invalid/dob/invalid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
+        is(greaterThanOrEqualTo(0)));
+  }
+
+  /*
+   * date of birth test - empty/null date
+   */
+  @Test
+  public void failsWhenDateOfBirthNull() throws Exception {
+    Person serialized = MAPPER
+        .readValue(fixture("fixtures/domain/people/invalid/dobnull/invalid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
+        is(greaterThanOrEqualTo(0)));
+  }
+
+  @Test
+  public void failsWhenDateOfBirthInFuture() throws Exception {
+    Person serialized = MAPPER.readValue(
+        fixture("fixtures/domain/people/invalid/dobinfuture/invalid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failsWhenInvalidGender() throws Exception {
+    Person serialized = MAPPER
+        .readValue(fixture("fixtures/domain/people/invalid/gender/invalid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
 
   @Test
   public void failedTest() {}
-
-  // @Test
-  // public void successWhenValidDateFormat () throws Exception {
-  // Person serialized = MAPPER.readValue(fixture("fixtures/domain/people/valid/valid.json"),
-  // Person.class);
-  // Response response =
-  // resources.client().target("/people/").request()
-  // .accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // assertThat(response.readEntity(String.class).indexOf("invalid date format"),
-  // is(greaterThanOrEqualTo(0)));
-  //
-  // }
-  //
-  // public void failureWhenInvalidDateFormat() throws Exception {
-  // Person serialized = MAPPER.readValue(fixture("fixtures/domain/people/invalid.dateFormat"),
-  // Person.class);
-  // Response response =
-  // resources.client().target("/people/").request()
-  // .accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-  // assertThat()
-  //
-  //
-  // }
-
-
   // TODO : RDB implement tests
 }
