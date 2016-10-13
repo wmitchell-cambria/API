@@ -157,7 +157,7 @@ public class DomainObjectTest {
     
     @Test
     public void uncookTimestampStringReturnsNullOnNullString() throws Exception {
-    	assertThat(DomainObject.uncookDateString(null), is(nullValue()));
+    	assertThat(DomainObject.uncookTimestampString(null), is(nullValue()));
     }
     
     @Test
@@ -176,7 +176,7 @@ public class DomainObjectTest {
     
     @Test
     public void uncookTimeStringReturnsNullOnNullString() throws Exception {
-    	assertThat(DomainObject.uncookDateString(null), is(nullValue()));
+    	assertThat(DomainObject.uncookTimeString(null), is(nullValue()));
     }
     
     @Test

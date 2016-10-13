@@ -23,7 +23,7 @@ public class ZipcodeValidator implements ConstraintValidator<Zipcode, String> {
 	private boolean required;
 
 	@Override
-	public void initialize(Zipcode constraintAnnotation) {
+	public void initialize(Zipcode constraintAnnotation) { 
 		this.required = constraintAnnotation.required();
 	}
 
