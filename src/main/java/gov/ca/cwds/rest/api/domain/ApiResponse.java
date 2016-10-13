@@ -6,27 +6,27 @@ import gov.ca.cwds.rest.resources.serialize.ApiResponseSerializer;
 
 @JsonSerialize(using = ApiResponseSerializer.class)
 public class ApiResponse<T extends DomainObject> {
-	private String id;
-	private T object;
+  private String id;
+  private T object;
 
-	public ApiResponse(String id, T domainObject) {
-		super();
-		this.id = id;
-		this.object = domainObject;
-	}
+  public ApiResponse(String id, T domainObject) {
+    super();
+    this.id = id;
+    this.object = domainObject;
+  }
 
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+  /**
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
 
-	/**
-	 * @return the object
-	 */
-	public T getObject() {
-		return object;
-	}
+  /**
+   * @return the object
+   */
+  public T getObject() {
+    return object;
+  }
 
 }

@@ -7,29 +7,29 @@ import io.dropwizard.views.View;
 
 public class SwaggerView extends View {
 
-	SwaggerConfiguration swaggerConfiguration;
-	String swaggerJsonUrl;
-	
-	public SwaggerView(SwaggerConfiguration swaggerConfiguration, String swaggerJsonUrl) {
-		super(swaggerConfiguration.getTemplateName(), Charsets.UTF_8);
-		this.swaggerConfiguration = swaggerConfiguration;
-		this.swaggerJsonUrl = swaggerJsonUrl;
-	}
+  SwaggerConfiguration swaggerConfiguration;
+  String swaggerJsonUrl;
 
-	public String getAssetsPath() {
-		return swaggerConfiguration.getAssetsPath();
-	}
-	
-	public String getTitle() {
-		return swaggerConfiguration.getTitle();
-	}
+  public SwaggerView(SwaggerConfiguration swaggerConfiguration, String swaggerJsonUrl) {
+    super(swaggerConfiguration.getTemplateName(), Charsets.UTF_8);
+    this.swaggerConfiguration = swaggerConfiguration;
+    this.swaggerJsonUrl = swaggerJsonUrl;
+  }
 
-	public String getJsonUrl() {
-		return swaggerJsonUrl;
-	}
-	
-	public String getLogo() {
-		return swaggerConfiguration.getLogo();
-	}
+  public String getAssetsPath() {
+    return swaggerConfiguration.getAssetsPath();
+  }
+
+  public String getTitle() {
+    return swaggerConfiguration.getTitle();
+  }
+
+  public String getJsonUrl() {
+    return swaggerJsonUrl;
+  }
+
+  public String getLogo() {
+    return swaggerConfiguration.getLogo();
+  }
 
 }

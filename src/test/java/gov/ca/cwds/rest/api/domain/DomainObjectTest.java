@@ -16,225 +16,225 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-//@RunWith(PowerMockRunner.class)
+// @RunWith(PowerMockRunner.class)
 public class DomainObjectTest {
-	protected static final String DATE_FORMAT = "yyyy-MM-dd";
-	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
-	protected static final String TIME_FORMAT = "HH:mm:ss";
-	
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
-	//cookBoolean tests
-    @Test
-    public void cookBooleanReturnsNullOnNullBoolean() throws Exception {
-        assertThat(DomainObject.cookBoolean(null), is(nullValue()));
-    }
-    
-    @Test
-    public void cookBooleanReturnsYOnTrue() throws Exception {
-        assertThat(DomainObject.cookBoolean(Boolean.TRUE), is(equalTo("Y")));
-    }
-	
-    @Test
-    public void cookBooleanReturnsNOnFalse() throws Exception {
-    	assertThat(DomainObject.cookBoolean(Boolean.FALSE), is(equalTo("N")));
-    }
+  protected static final String DATE_FORMAT = "yyyy-MM-dd";
+  protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
+  protected static final String TIME_FORMAT = "HH:mm:ss";
 
-    //uncookBoolean tests
-    @Test
-    public void uncookBooleanStringReturnsFalseOnN() throws Exception {
-    	assertThat(DomainObject.uncookBooleanString("N"), is(equalTo(Boolean.FALSE)));
-    }
-    
-    @Test
-    public void uncookBooleanStringReturnsFalseOnSmallN() throws Exception {
-    	assertThat(DomainObject.uncookBooleanString("n"), is(equalTo(Boolean.FALSE)));
-    }
-    
-    @Test
-    public void uncookBooleanStringReturnsFalseOnY() throws Exception {
-    	assertThat(DomainObject.uncookBooleanString("Y"), is(equalTo(Boolean.TRUE)));
-    }
-    
-    @Test
-    public void uncookBooleanStringReturnsFalseOnSmallY() throws Exception {
-    	assertThat(DomainObject.uncookBooleanString("y"), is(equalTo(Boolean.TRUE)));
-    }
-    
-    @Test
-    public void uncookBooleanstringReturnsNullOnNull() throws Exception {
-    	assertThat(DomainObject.uncookBooleanString(null), is(nullValue()));
-    }
-    
-    @Test
-    public void uncookBooleanstringReturnsNullOnEmpty() throws Exception {
-    	assertThat(DomainObject.uncookBooleanString("  "), is(nullValue()));
-    }
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-    @Test
-    public void uncookBooleanStringThrowsDomainExceptionOnNonYOrN() throws Exception {
-        thrown.expect(DomainException.class);
-        thrown.expectCause(Is.isA(ParseException.class));
-    	DomainObject.uncookBooleanString("T");
-    }
-    
-    //cookDate tests
-    @Test
-    public void cookDateReturnsNullOnNullDate() throws Exception {
-        assertThat(DomainObject.cookDate(null), is(nullValue()));
-    }
-    
-    @Test
-    public void cookDateReturnsCorrectString() throws Exception {
-    	DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-    	Date date = new Date();
-    	
-        assertThat(DomainObject.cookDate(date), is(equalTo(df.format(date))));
-    }
-   
-    //cookTimestamp tests
-    @Test
-    public void cookTimestampReturnsNullOnNullDate() throws Exception {
-        assertThat(DomainObject.cookTimestamp(null), is(nullValue()));
-    }
+  // cookBoolean tests
+  @Test
+  public void cookBooleanReturnsNullOnNullBoolean() throws Exception {
+    assertThat(DomainObject.cookBoolean(null), is(nullValue()));
+  }
 
-    @Test
-    public void cookTimestampReturnsCorrectString() throws Exception {
-    	DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-    	Date date = new Date();
-    	
-        assertThat(DomainObject.cookTimestamp(date), is(equalTo(df.format(date))));
-    }
+  @Test
+  public void cookBooleanReturnsYOnTrue() throws Exception {
+    assertThat(DomainObject.cookBoolean(Boolean.TRUE), is(equalTo("Y")));
+  }
 
-    //cookTime tests
-    @Test
-    public void cookTimeReturnsNullOnNullDate() throws Exception {
-        assertThat(DomainObject.cookTime(null), is(nullValue()));
-    }
-    
-    @Test
-    public void cookTimeReturnsCorrectString() throws Exception {
-    	DateFormat df = new SimpleDateFormat(TIME_FORMAT);
-    	Date date = new Date();
-    	
-        assertThat(DomainObject.cookTime(date), is(equalTo(df.format(date))));
-    }
-    
-    //uncookDateString tests
-    @Test
-    public void uncookDateStringReturnsCorrectDate() throws Exception {
-    	DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-    	Date dateWithTime = new Date();
-    	String dateString = df.format(dateWithTime);
+  @Test
+  public void cookBooleanReturnsNOnFalse() throws Exception {
+    assertThat(DomainObject.cookBoolean(Boolean.FALSE), is(equalTo("N")));
+  }
 
-    	Date dateBasedOnFormat = df.parse(df.format(dateWithTime));
-    	
-        assertThat(DomainObject.uncookDateString(dateString), is(equalTo(dateBasedOnFormat)));
-    }
-    
-    @Test
-    public void uncookDateStringReturnsNullOnNullString() throws Exception {
-    	assertThat(DomainObject.uncookDateString(null), is(nullValue()));
-    }
-    
-    @Test
-    public void uncookDateStringThrowsExceptionOnBadInput() throws Exception {
-        thrown.expect(DomainException.class);
-        thrown.expectCause(Is.isA(ParseException.class));
-    	DomainObject.uncookDateString("dlfjkdfjdkfjkd");
-    }
-    
-    //uncookTimestampString tests
-    @Test
-    public void uncookTimestampStringReturnsCorrectDate() throws Exception {
-    	DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-    	Date date = new Date();
-    	String dateString = df.format(date);
-    	
-        assertThat(DomainObject.uncookTimestampString(dateString), is(equalTo(date)));
-    }
-    
-    @Test
-    public void uncookTimestampStringReturnsNullOnNullString() throws Exception {
-    	assertThat(DomainObject.uncookTimestampString(null), is(nullValue()));
-    }
-    
-    @Test
-    public void uncookTimestampStringThrowsExceptionOnBadInput() throws Exception {
-        thrown.expect(DomainException.class);
-        thrown.expectCause(Is.isA(ParseException.class));
-    	DomainObject.uncookTimestampString("dlfjkdfjdkfjkd");
-    }
-    
-  //uncookTimeString tests
-    @Test
-    public void uncookTimeStringReturnsCorrectDate() throws Exception {
-    	Date dt = new SimpleDateFormat("HH:mm:ss").parse("14:20:20");
-        assertThat(DomainObject.uncookTimeString("14:20:20"), is(equalTo(dt)));
-    }
-    
-    @Test
-    public void uncookTimeStringReturnsNullOnNullString() throws Exception {
-    	assertThat(DomainObject.uncookTimeString(null), is(nullValue()));
-    }
-    
-    @Test
-    public void uncookTimeStringThrowsExceptionOnBadInput() throws Exception {
-        thrown.expect(DomainException.class);
-        thrown.expectCause(Is.isA(ParseException.class));
-    	DomainObject.uncookTimeString("dlfjkdfjdkfjkd");
-    }
-    
-    //cookZipcodeNumber tests
-    @Test
-    public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberIsNull() throws Exception {
-    	assertThat(DomainObject.cookZipcodeNumber(null), is(equalTo("")));
-    }
-    
-    @Test
-    public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberEquals0() throws Exception {
-    	assertThat(DomainObject.cookZipcodeNumber(new Integer(0)), is(equalTo("")));
-    }
-    
-    @Test
-    public void cookZipcodeNumberReturnsCorrectValueWhenLeading0Needed() throws Exception {
-    	assertThat(DomainObject.cookZipcodeNumber(new Integer(5842)), is(equalTo("05842")));
-    }
-    
-    @Test
-    public void cookZipcodeNumberReturnsCorrectValueWhenNoLeading0Needed() throws Exception {
-    	assertThat(DomainObject.cookZipcodeNumber(new Integer(95842)), is(equalTo("95842")));
-    }
-    
-    //uncookZipcodeString tests
-    @Test
-    public void uncookZipcodeStringReturnsCorrectIntegerWhenLeading0s() throws Exception {
-    	assertThat(DomainObject.uncookZipcodeString("05842"), is(equalTo(new Integer(5842))));
-    }
-    
-    @Test
-    public void uncookZipcodeStringReturnsCorrectIntegerWhenLeadingNo0s() throws Exception {
-    	assertThat(DomainObject.uncookZipcodeString("95842"), is(equalTo(new Integer(95842))));
-    }
+  // uncookBoolean tests
+  @Test
+  public void uncookBooleanStringReturnsFalseOnN() throws Exception {
+    assertThat(DomainObject.uncookBooleanString("N"), is(equalTo(Boolean.FALSE)));
+  }
 
-    @Test
-    public void uncookZipcodeStringReturnsCorrect0WhenEmpty() throws Exception {
-    	assertThat(DomainObject.uncookZipcodeString(" "), is(equalTo(new Integer(0))));
-    }
-    
-    @Test
-    public void uncookZipcodeStringThrowsExceptionOnBadGroupMatching() throws Exception {
-    	thrown.expect(DomainException.class);
-    	thrown.expectCause(Is.isA(NumberFormatException.class));
-    	DomainObject.uncookZipcodeString("000000");
-    }
-    
-    @Test
-    public void uncookZipcodeStringThrowsExceptionOnNoMatch() throws Exception {
-    	thrown.expect(DomainException.class);
-    	thrown.expectMessage(startsWith("Unable to uncook zipcode string"));
-    	DomainObject.uncookZipcodeString("dlfjkdfjdkfjkd");
-    }
+  @Test
+  public void uncookBooleanStringReturnsFalseOnSmallN() throws Exception {
+    assertThat(DomainObject.uncookBooleanString("n"), is(equalTo(Boolean.FALSE)));
+  }
+
+  @Test
+  public void uncookBooleanStringReturnsFalseOnY() throws Exception {
+    assertThat(DomainObject.uncookBooleanString("Y"), is(equalTo(Boolean.TRUE)));
+  }
+
+  @Test
+  public void uncookBooleanStringReturnsFalseOnSmallY() throws Exception {
+    assertThat(DomainObject.uncookBooleanString("y"), is(equalTo(Boolean.TRUE)));
+  }
+
+  @Test
+  public void uncookBooleanstringReturnsNullOnNull() throws Exception {
+    assertThat(DomainObject.uncookBooleanString(null), is(nullValue()));
+  }
+
+  @Test
+  public void uncookBooleanstringReturnsNullOnEmpty() throws Exception {
+    assertThat(DomainObject.uncookBooleanString("  "), is(nullValue()));
+  }
+
+  @Test
+  public void uncookBooleanStringThrowsDomainExceptionOnNonYOrN() throws Exception {
+    thrown.expect(DomainException.class);
+    thrown.expectCause(Is.isA(ParseException.class));
+    DomainObject.uncookBooleanString("T");
+  }
+
+  // cookDate tests
+  @Test
+  public void cookDateReturnsNullOnNullDate() throws Exception {
+    assertThat(DomainObject.cookDate(null), is(nullValue()));
+  }
+
+  @Test
+  public void cookDateReturnsCorrectString() throws Exception {
+    DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+    Date date = new Date();
+
+    assertThat(DomainObject.cookDate(date), is(equalTo(df.format(date))));
+  }
+
+  // cookTimestamp tests
+  @Test
+  public void cookTimestampReturnsNullOnNullDate() throws Exception {
+    assertThat(DomainObject.cookTimestamp(null), is(nullValue()));
+  }
+
+  @Test
+  public void cookTimestampReturnsCorrectString() throws Exception {
+    DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+    Date date = new Date();
+
+    assertThat(DomainObject.cookTimestamp(date), is(equalTo(df.format(date))));
+  }
+
+  // cookTime tests
+  @Test
+  public void cookTimeReturnsNullOnNullDate() throws Exception {
+    assertThat(DomainObject.cookTime(null), is(nullValue()));
+  }
+
+  @Test
+  public void cookTimeReturnsCorrectString() throws Exception {
+    DateFormat df = new SimpleDateFormat(TIME_FORMAT);
+    Date date = new Date();
+
+    assertThat(DomainObject.cookTime(date), is(equalTo(df.format(date))));
+  }
+
+  // uncookDateString tests
+  @Test
+  public void uncookDateStringReturnsCorrectDate() throws Exception {
+    DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+    Date dateWithTime = new Date();
+    String dateString = df.format(dateWithTime);
+
+    Date dateBasedOnFormat = df.parse(df.format(dateWithTime));
+
+    assertThat(DomainObject.uncookDateString(dateString), is(equalTo(dateBasedOnFormat)));
+  }
+
+  @Test
+  public void uncookDateStringReturnsNullOnNullString() throws Exception {
+    assertThat(DomainObject.uncookDateString(null), is(nullValue()));
+  }
+
+  @Test
+  public void uncookDateStringThrowsExceptionOnBadInput() throws Exception {
+    thrown.expect(DomainException.class);
+    thrown.expectCause(Is.isA(ParseException.class));
+    DomainObject.uncookDateString("dlfjkdfjdkfjkd");
+  }
+
+  // uncookTimestampString tests
+  @Test
+  public void uncookTimestampStringReturnsCorrectDate() throws Exception {
+    DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+    Date date = new Date();
+    String dateString = df.format(date);
+
+    assertThat(DomainObject.uncookTimestampString(dateString), is(equalTo(date)));
+  }
+
+  @Test
+  public void uncookTimestampStringReturnsNullOnNullString() throws Exception {
+    assertThat(DomainObject.uncookTimestampString(null), is(nullValue()));
+  }
+
+  @Test
+  public void uncookTimestampStringThrowsExceptionOnBadInput() throws Exception {
+    thrown.expect(DomainException.class);
+    thrown.expectCause(Is.isA(ParseException.class));
+    DomainObject.uncookTimestampString("dlfjkdfjdkfjkd");
+  }
+
+  // uncookTimeString tests
+  @Test
+  public void uncookTimeStringReturnsCorrectDate() throws Exception {
+    Date dt = new SimpleDateFormat("HH:mm:ss").parse("14:20:20");
+    assertThat(DomainObject.uncookTimeString("14:20:20"), is(equalTo(dt)));
+  }
+
+  @Test
+  public void uncookTimeStringReturnsNullOnNullString() throws Exception {
+    assertThat(DomainObject.uncookTimeString(null), is(nullValue()));
+  }
+
+  @Test
+  public void uncookTimeStringThrowsExceptionOnBadInput() throws Exception {
+    thrown.expect(DomainException.class);
+    thrown.expectCause(Is.isA(ParseException.class));
+    DomainObject.uncookTimeString("dlfjkdfjdkfjkd");
+  }
+
+  // cookZipcodeNumber tests
+  @Test
+  public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberIsNull() throws Exception {
+    assertThat(DomainObject.cookZipcodeNumber(null), is(equalTo("")));
+  }
+
+  @Test
+  public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberEquals0() throws Exception {
+    assertThat(DomainObject.cookZipcodeNumber(new Integer(0)), is(equalTo("")));
+  }
+
+  @Test
+  public void cookZipcodeNumberReturnsCorrectValueWhenLeading0Needed() throws Exception {
+    assertThat(DomainObject.cookZipcodeNumber(new Integer(5842)), is(equalTo("05842")));
+  }
+
+  @Test
+  public void cookZipcodeNumberReturnsCorrectValueWhenNoLeading0Needed() throws Exception {
+    assertThat(DomainObject.cookZipcodeNumber(new Integer(95842)), is(equalTo("95842")));
+  }
+
+  // uncookZipcodeString tests
+  @Test
+  public void uncookZipcodeStringReturnsCorrectIntegerWhenLeading0s() throws Exception {
+    assertThat(DomainObject.uncookZipcodeString("05842"), is(equalTo(new Integer(5842))));
+  }
+
+  @Test
+  public void uncookZipcodeStringReturnsCorrectIntegerWhenLeadingNo0s() throws Exception {
+    assertThat(DomainObject.uncookZipcodeString("95842"), is(equalTo(new Integer(95842))));
+  }
+
+  @Test
+  public void uncookZipcodeStringReturnsCorrect0WhenEmpty() throws Exception {
+    assertThat(DomainObject.uncookZipcodeString(" "), is(equalTo(new Integer(0))));
+  }
+
+  @Test
+  public void uncookZipcodeStringThrowsExceptionOnBadGroupMatching() throws Exception {
+    thrown.expect(DomainException.class);
+    thrown.expectCause(Is.isA(NumberFormatException.class));
+    DomainObject.uncookZipcodeString("000000");
+  }
+
+  @Test
+  public void uncookZipcodeStringThrowsExceptionOnNoMatch() throws Exception {
+    thrown.expect(DomainException.class);
+    thrown.expectMessage(startsWith("Unable to uncook zipcode string"));
+    DomainObject.uncookZipcodeString("dlfjkdfjdkfjkd");
+  }
 
 }

@@ -16,26 +16,26 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Annotation at the class level indicating that one of the given properties is
- * required however mutually exclusive.
+ * Annotation at the class level indicating that one of the given properties is required however
+ * mutually exclusive.
  * 
  * @author CWDS API Team
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = MutuallyExclusiveValidator.class)
 public @interface MutuallyExclusive {
-	String message() default "The following properties are mutually exclusive {properties}";
+  String message() default "The following properties are mutually exclusive {properties}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	String[] properties() default {};
+  String[] properties() default {};
 
-	boolean required() default true;
+  boolean required() default true;
 
-	@SuppressWarnings("rawtypes")
-	Class type() default String.class;
+  @SuppressWarnings("rawtypes")
+  Class type() default String.class;
 }

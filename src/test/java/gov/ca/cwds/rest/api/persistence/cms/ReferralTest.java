@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class ReferralTest {
 
-	/*
-	 * Constructor test
-	 */
-	@Test
-	public void emtpyConstructorIsNotNull() throws Exception {
-		assertThat(Referral.class.newInstance(), is(notNullValue()));
-	}
+  /*
+   * Constructor test
+   */
+  @Test
+  public void emtpyConstructorIsNotNull() throws Exception {
+    assertThat(Referral.class.newInstance(), is(notNullValue()));
+  }
 
 }

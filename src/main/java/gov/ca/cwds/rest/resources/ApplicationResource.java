@@ -11,13 +11,13 @@ import javax.ws.rs.GET;
  * @author CWDS API Team
  */
 public interface ApplicationResource extends Resource {
-	
-	@ApiOperation("Get the application name")
-	@GET
-	/**
-	 * Get the name of the API
-	 * 
-	 * @return The name of the API
-	 */
-	public String getApplicationName();
+
+  @ApiOperation("Get the application name")
+  @GET
+  /**
+   * Get the name of the API
+   * 
+   * @return The name of the API
+   */
+  public String getApplicationName();
 }

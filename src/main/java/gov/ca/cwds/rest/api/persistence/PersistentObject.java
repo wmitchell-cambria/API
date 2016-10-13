@@ -15,52 +15,52 @@ import org.hibernate.annotations.Type;
  */
 @MappedSuperclass
 public abstract class PersistentObject {
-	protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
-	
-	@Column(name = "\"LST_UPD_ID\"")
-	private String lastUpdatedId;
-	
-	@Type(type = "timestamp")
-	@Column(name = "\"LST_UPD_TS\"")
-	private Date lastUpdatedTime;
-	
+  protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
-	/**
-	 * Default constructor 
-	 * 
-	 * Required for Hibernate
-	 */
-	protected PersistentObject() {
-		
-	}
+  @Column(name = "\"LST_UPD_ID\"")
+  private String lastUpdatedId;
 
-	/**
-	 * Constructor 
-	 * 
-	 * @param lastUpdatedId  the id of the last person to update this object
-	 */
-	protected PersistentObject(String lastUpdatedId) {
-		this.lastUpdatedId = lastUpdatedId;
-		this.lastUpdatedTime = new Date();
-	}
-	
-	/**
-	 * @return the lastUpdatedId
-	 */
-	public String getLastUpdatedId() {
-		return lastUpdatedId;
-	}
+  @Type(type = "timestamp")
+  @Column(name = "\"LST_UPD_TS\"")
+  private Date lastUpdatedTime;
 
-	/**
-	 * @return the lastUpdatedTime
-	 */
-	public Date getLastUpdatedTime() {
-		return lastUpdatedTime;
-	}
 
-	/**
-	 * @return the primaryKey
-	 */
-	public abstract Serializable getPrimaryKey() ;
+  /**
+   * Default constructor
+   * 
+   * Required for Hibernate
+   */
+  protected PersistentObject() {
+
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param lastUpdatedId the id of the last person to update this object
+   */
+  protected PersistentObject(String lastUpdatedId) {
+    this.lastUpdatedId = lastUpdatedId;
+    this.lastUpdatedTime = new Date();
+  }
+
+  /**
+   * @return the lastUpdatedId
+   */
+  public String getLastUpdatedId() {
+    return lastUpdatedId;
+  }
+
+  /**
+   * @return the lastUpdatedTime
+   */
+  public Date getLastUpdatedTime() {
+    return lastUpdatedTime;
+  }
+
+  /**
+   * @return the primaryKey
+   */
+  public abstract Serializable getPrimaryKey();
 
 }

@@ -8,7 +8,6 @@ package gov.ca.cwds.rest.api.persistence.ns;
  */
 public class Filler {
 
-	public Filler() {
-	}
+  public Filler() {}
 
 }

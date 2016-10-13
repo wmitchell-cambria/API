@@ -21,115 +21,116 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class MutuallyNecassaryValidatorTest {
-	private String abc;
-	private String def;
-	private String ghi;
+  private String abc;
+  private String def;
+  private String ghi;
 
-	private MutuallyNecassary requiredConstraintAnnotation = mock(MutuallyNecassary.class);
-	private MutuallyNecassary notRequiredConstraintAnnotation = mock(MutuallyNecassary.class);
-	private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
-	private ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
-	private NodeBuilderCustomizableContext nodeBuilder = mock(NodeBuilderCustomizableContext.class);
-	
-	private MutuallyNecassaryValidator validator = new MutuallyNecassaryValidator();
+  private MutuallyNecassary requiredConstraintAnnotation = mock(MutuallyNecassary.class);
+  private MutuallyNecassary notRequiredConstraintAnnotation = mock(MutuallyNecassary.class);
+  private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+  private ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
+  private NodeBuilderCustomizableContext nodeBuilder = mock(NodeBuilderCustomizableContext.class);
 
-	private String[] properties = { "abc", "def", "ghi" };
+  private MutuallyNecassaryValidator validator = new MutuallyNecassaryValidator();
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+  private String[] properties = {"abc", "def", "ghi"};
 
-	@Before
-	public void setup() throws Exception {
-		when(context.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
-		when(builder.addPropertyNode(any())).thenReturn(nodeBuilder);
-		
-		when(requiredConstraintAnnotation.properties()).thenReturn(properties);
-		when(notRequiredConstraintAnnotation.properties()).thenReturn(properties);
-		
-		when(notRequiredConstraintAnnotation.required()).thenReturn(false);
-		when(requiredConstraintAnnotation.required()).thenReturn(true);
-	}
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-	@Test
-	public void validReturnsTrueWhenRequiredAndAllSet() throws Exception {
-		MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
-		bean.abc = "abc";
-		bean.def = "def";
-		bean.ghi = "ghi";
-		
-		validator.initialize(requiredConstraintAnnotation);
-		assertThat(validator.isValid(bean, context), is(equalTo(true)));
-	}
+  @Before
+  public void setup() throws Exception {
+    when(context.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
+    when(builder.addPropertyNode(any())).thenReturn(nodeBuilder);
 
-	@Test
-	public void validReturnsFalseWhenRequiredAndNotAllSet() throws Exception {
-		MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
-		bean.abc = "abc";
-		
-		validator.initialize(requiredConstraintAnnotation);
-		assertThat(validator.isValid(bean, context), is(equalTo(false)));
-	}
+    when(requiredConstraintAnnotation.properties()).thenReturn(properties);
+    when(notRequiredConstraintAnnotation.properties()).thenReturn(properties);
 
-	@Test
-	public void validReturnsTrueWhenNotRequiredAndAllSet() throws Exception {
-		MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
-		bean.abc = "abc";
-		bean.def = "def";
-		bean.ghi = "ghi";
-		
-		validator.initialize(notRequiredConstraintAnnotation);
-		assertThat(validator.isValid(bean, context), is(equalTo(true)));
-	}
-	
-	@Test
-	public void validReturnsTrueWhenNotRequiredAndNoneSet() throws Exception {
-		MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
-		
-		validator.initialize(notRequiredConstraintAnnotation);
-		assertThat(validator.isValid(bean, context), is(equalTo(true)));
-	}
+    when(notRequiredConstraintAnnotation.required()).thenReturn(false);
+    when(requiredConstraintAnnotation.required()).thenReturn(true);
+  }
 
-	@Test
-	public void validReturnsFalseWhenNotRequiredAndSomeButNotAllSet() throws Exception {
-		MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
-		bean.abc = "abc";
-		
-		validator.initialize(notRequiredConstraintAnnotation);
-		assertThat(validator.isValid(bean, context), is(equalTo(false)));
-	}
+  @Test
+  public void validReturnsTrueWhenRequiredAndAllSet() throws Exception {
+    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    bean.abc = "abc";
+    bean.def = "def";
+    bean.ghi = "ghi";
 
-	@Test
-	public void validThrowsExceptionWhenPropertyNotExistsInBean() throws Exception {
-		thrown.expect(ValidationException.class);
-		validator.initialize(notRequiredConstraintAnnotation);
-		validator.isValid(new InvalidBean(), context);
-	}
-	
-	/*
-	 * Oddness with cobertura cause the declaring class line to be not counted as run.  This has to do with bridge functions.
-	 * To get our coverage numbers the "test" below calls the bridge functions directly.
-	 */
-	@Test
-	public void callBridgeFunctions() throws Exception {
-		MutuallyNecassaryValidator validator = new MutuallyNecassaryValidator();
-		Method initialize = MutuallyNecassaryValidator.class.getMethod("initialize", Annotation.class);
-		initialize.invoke(validator, notRequiredConstraintAnnotation);
-		Assert.assertTrue(true);
-	}
+    validator.initialize(requiredConstraintAnnotation);
+    assertThat(validator.isValid(bean, context), is(equalTo(true)));
+  }
 
-	public String getAbc() {
-		return abc;
-	}
+  @Test
+  public void validReturnsFalseWhenRequiredAndNotAllSet() throws Exception {
+    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    bean.abc = "abc";
 
-	public String getDef() {
-		return def;
-	}
+    validator.initialize(requiredConstraintAnnotation);
+    assertThat(validator.isValid(bean, context), is(equalTo(false)));
+  }
 
-	public String getGhi() {
-		return ghi;
-	}
+  @Test
+  public void validReturnsTrueWhenNotRequiredAndAllSet() throws Exception {
+    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    bean.abc = "abc";
+    bean.def = "def";
+    bean.ghi = "ghi";
 
-	protected class InvalidBean {
-		public String jkl;
-	}
+    validator.initialize(notRequiredConstraintAnnotation);
+    assertThat(validator.isValid(bean, context), is(equalTo(true)));
+  }
+
+  @Test
+  public void validReturnsTrueWhenNotRequiredAndNoneSet() throws Exception {
+    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+
+    validator.initialize(notRequiredConstraintAnnotation);
+    assertThat(validator.isValid(bean, context), is(equalTo(true)));
+  }
+
+  @Test
+  public void validReturnsFalseWhenNotRequiredAndSomeButNotAllSet() throws Exception {
+    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    bean.abc = "abc";
+
+    validator.initialize(notRequiredConstraintAnnotation);
+    assertThat(validator.isValid(bean, context), is(equalTo(false)));
+  }
+
+  @Test
+  public void validThrowsExceptionWhenPropertyNotExistsInBean() throws Exception {
+    thrown.expect(ValidationException.class);
+    validator.initialize(notRequiredConstraintAnnotation);
+    validator.isValid(new InvalidBean(), context);
+  }
+
+  /*
+   * Oddness with cobertura cause the declaring class line to be not counted as run. This has to do
+   * with bridge functions. To get our coverage numbers the "test" below calls the bridge functions
+   * directly.
+   */
+  @Test
+  public void callBridgeFunctions() throws Exception {
+    MutuallyNecassaryValidator validator = new MutuallyNecassaryValidator();
+    Method initialize = MutuallyNecassaryValidator.class.getMethod("initialize", Annotation.class);
+    initialize.invoke(validator, notRequiredConstraintAnnotation);
+    Assert.assertTrue(true);
+  }
+
+  public String getAbc() {
+    return abc;
+  }
+
+  public String getDef() {
+    return def;
+  }
+
+  public String getGhi() {
+    return ghi;
+  }
+
+  protected class InvalidBean {
+    public String jkl;
+  }
 }

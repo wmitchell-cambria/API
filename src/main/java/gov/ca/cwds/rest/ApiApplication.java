@@ -52,150 +52,162 @@ import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 
 public class ApiApplication extends Application<ApiConfiguration> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
-	private final HibernateBundle<ApiConfiguration> cmsHibernateBundle = new HibernateBundle<ApiConfiguration>(
-			StaffPerson.class, Referral.class, Allegation.class, CrossReport.class, ReferralClient.class,
-			Reporter.class) {
-		@Override
-		public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-			return configuration.getCmsDataSourceFactory();
-		}
+  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class,
+          CrossReport.class, ReferralClient.class, Reporter.class) {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getCmsDataSourceFactory();
+        }
 
-		@Override
-		public String name() {
-			return "cms";
-		}
-	};
+        @Override
+        public String name() {
+          return "cms";
+        }
+      };
 
-	private final HibernateBundle<ApiConfiguration> nsHibernateBundle = new HibernateBundle<ApiConfiguration>(
-			Filler.class) {
-		@Override
-		public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-			return configuration.getNsDataSourceFactory();
-		}
+  private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(Filler.class) {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getNsDataSourceFactory();
+        }
 
-		@Override
-		public String name() {
-			return "ns";
-		}
-	};
+        @Override
+        public String name() {
+          return "ns";
+        }
+      };
 
-	private final FlywayBundle<ApiConfiguration> flywayBundle = new FlywayBundle<ApiConfiguration>() {
-		@Override
-		public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-			return configuration.getNsDataSourceFactory();
-		}
+  private final FlywayBundle<ApiConfiguration> flywayBundle = new FlywayBundle<ApiConfiguration>() {
+    @Override
+    public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+      return configuration.getNsDataSourceFactory();
+    }
 
-		@Override
-		public FlywayFactory getFlywayFactory(ApiConfiguration configuration) {
-			return configuration.getFlywayFactory();
-		}
-	};
+    @Override
+    public FlywayFactory getFlywayFactory(ApiConfiguration configuration) {
+      return configuration.getFlywayFactory();
+    }
+  };
 
-	public static void main(final String[] args) throws Exception {
-		new ApiApplication().run(args);
-	}
+  public static void main(final String[] args) throws Exception {
+    new ApiApplication().run(args);
+  }
 
-	@Override
-	public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
-		// Enable variable substitution with environment variables
-		bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
-				bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
-		bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
+  @Override
+  public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
+    // Enable variable substitution with environment variables
+    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
+        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+    bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
 
-		LOGGER.info("Loading database bundles");
-		bootstrap.addBundle(flywayBundle);
-		bootstrap.addBundle(cmsHibernateBundle);
-		bootstrap.addBundle(nsHibernateBundle);
-	}
+    LOGGER.info("Loading database bundles");
+    bootstrap.addBundle(flywayBundle);
+    bootstrap.addBundle(cmsHibernateBundle);
+    bootstrap.addBundle(nsHibernateBundle);
+  }
 
-	@Override
-	public void run(final ApiConfiguration configuration, final Environment environment) throws Exception {
-		environment.jersey().getResourceConfig().packages(getClass().getPackage().getName())
-				.register(DeclarativeLinkingFeature.class);
+  @Override
+  public void run(final ApiConfiguration configuration, final Environment environment)
+      throws Exception {
+    environment.jersey().getResourceConfig().packages(getClass().getPackage().getName())
+        .register(DeclarativeLinkingFeature.class);
 
-		LOGGER.info("Application name: {}", configuration.getApplicationName());
-		ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
+    LOGGER.info("Application name: {}", configuration.getApplicationName());
+    ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
 
-		LOGGER.info("Preparing DAOs");
-		setupDaos(configuration);
+    LOGGER.info("Preparing DAOs");
+    setupDaos(configuration);
 
-		LOGGER.info("Registering Application Resources");
-		registerResources(configuration, apiEnvironment);
+    LOGGER.info("Registering Application Resources");
+    registerResources(configuration, apiEnvironment);
 
-		LOGGER.info("Registering Health Checks");
-		registerHealthChecks(apiEnvironment);
+    LOGGER.info("Registering Health Checks");
+    registerHealthChecks(apiEnvironment);
 
-		LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
-		configureCors(apiEnvironment);
+    LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
+    configureCors(apiEnvironment);
 
-		LOGGER.info("Configuring SWAGGER");
-		configureSwagger(configuration, apiEnvironment);
-	}
+    LOGGER.info("Configuring SWAGGER");
+    configureSwagger(configuration, apiEnvironment);
+  }
 
-	private void registerHealthChecks(final ApiEnvironment apiEnvironment) {
-	}
+  private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
 
-	private void setupDaos(final ApiConfiguration configuration) {
-		LOGGER.info("Setting up production DAOs");
-		DataAccessEnvironment.register(Referral.class, new ReferralDao(cmsHibernateBundle.getSessionFactory()));
-		DataAccessEnvironment.register(StaffPerson.class, new StaffPersonDao(cmsHibernateBundle.getSessionFactory()));
-		DataAccessEnvironment.register(Allegation.class, new AllegationDao(cmsHibernateBundle.getSessionFactory()));
-		DataAccessEnvironment.register(CrossReport.class, new CrossReportDao(cmsHibernateBundle.getSessionFactory()));
-		DataAccessEnvironment.register(ReferralClient.class,
-				new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
-		DataAccessEnvironment.register(Reporter.class, new ReporterDao(cmsHibernateBundle.getSessionFactory()));
-	}
+  private void setupDaos(final ApiConfiguration configuration) {
+    LOGGER.info("Setting up production DAOs");
+    DataAccessEnvironment.register(Referral.class,
+        new ReferralDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(StaffPerson.class,
+        new StaffPersonDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(Allegation.class,
+        new AllegationDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(CrossReport.class,
+        new CrossReportDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(ReferralClient.class,
+        new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(Reporter.class,
+        new ReporterDao(cmsHibernateBundle.getSessionFactory()));
+  }
 
-	private void registerResources(final ApiConfiguration configuration, final ApiEnvironment apiEnvironment) {
-		LOGGER.info("Registering ApplicationResource");
-		final ApplicationResource applicationResource = new ApplicationResourceImpl(configuration.getApplicationName());
-		apiEnvironment.jersey().register(applicationResource);
-		
-		LOGGER.info("Registering AddressResource");
-		AddressResource addressResource = new AddressResource(new CrudsResourceImpl<>(new AddressService()));
-		apiEnvironment.jersey().register(addressResource);
-		
-		LOGGER.info("Registering PersonResource");
-		PersonResource peopleResource = new PersonResource(new CrudsResourceImpl<>(new PersonService()));
-		apiEnvironment.jersey().register(peopleResource);
-		
-		LOGGER.info("Registering ScreeningResource");
-		ScreeningResource screeningResource = new ScreeningResource();
-		apiEnvironment.jersey().register(screeningResource);
-	}
+  private void registerResources(final ApiConfiguration configuration,
+      final ApiEnvironment apiEnvironment) {
+    LOGGER.info("Registering ApplicationResource");
+    final ApplicationResource applicationResource =
+        new ApplicationResourceImpl(configuration.getApplicationName());
+    apiEnvironment.jersey().register(applicationResource);
 
-	private void configureCors(final ApiEnvironment apiEnvironment) {
-		FilterRegistration.Dynamic filter = apiEnvironment.servlets().addFilter("CORS", CrossOriginFilter.class);
-		filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-		filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
-		filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-		filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
-		filter.setInitParameter("allowedHeaders",
-				"Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,X-Auth-Token");
-		filter.setInitParameter("allowCredentials", "true");
-	}
+    LOGGER.info("Registering AddressResource");
+    AddressResource addressResource =
+        new AddressResource(new CrudsResourceImpl<>(new AddressService()));
+    apiEnvironment.jersey().register(addressResource);
 
-	private void configureSwagger(final ApiConfiguration apiConfiguration, final ApiEnvironment apiEnvironment) {
-		BeanConfig config = new BeanConfig();
-		config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
-		config.setDescription(apiConfiguration.getSwaggerConfiguration().getDescription());
-		config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
-		config.setScan(true);
+    LOGGER.info("Registering PersonResource");
+    PersonResource peopleResource =
+        new PersonResource(new CrudsResourceImpl<>(new PersonService()));
+    apiEnvironment.jersey().register(peopleResource);
 
-		new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
-				apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
-						.run(apiEnvironment.environment());
-		apiEnvironment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		apiEnvironment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    LOGGER.info("Registering ScreeningResource");
+    ScreeningResource screeningResource = new ScreeningResource();
+    apiEnvironment.jersey().register(screeningResource);
+  }
 
-		LOGGER.info("Registering ApiListingResource");
-		apiEnvironment.jersey().register(new ApiListingResource());
+  private void configureCors(final ApiEnvironment apiEnvironment) {
+    FilterRegistration.Dynamic filter =
+        apiEnvironment.servlets().addFilter("CORS", CrossOriginFilter.class);
+    filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+    filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
+    filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+    filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+    filter.setInitParameter("allowedHeaders",
+        "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,X-Auth-Token");
+    filter.setInitParameter("allowCredentials", "true");
+  }
 
-		LOGGER.info("Registering SwaggerResource");
-		final SwaggerResource swaggerResource = new SwaggerResource(apiConfiguration.getSwaggerConfiguration());
-		apiEnvironment.jersey().register(swaggerResource);
+  private void configureSwagger(final ApiConfiguration apiConfiguration,
+      final ApiEnvironment apiEnvironment) {
+    BeanConfig config = new BeanConfig();
+    config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
+    config.setDescription(apiConfiguration.getSwaggerConfiguration().getDescription());
+    config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
+    config.setScan(true);
 
-	}
+    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
+        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
+            .run(apiEnvironment.environment());
+    apiEnvironment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    apiEnvironment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    LOGGER.info("Registering ApiListingResource");
+    apiEnvironment.jersey().register(new ApiListingResource());
+
+    LOGGER.info("Registering SwaggerResource");
+    final SwaggerResource swaggerResource =
+        new SwaggerResource(apiConfiguration.getSwaggerConfiguration());
+    apiEnvironment.jersey().register(swaggerResource);
+
+  }
 }

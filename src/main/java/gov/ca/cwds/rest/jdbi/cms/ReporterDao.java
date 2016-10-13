@@ -7,8 +7,8 @@ import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
 public class ReporterDao extends CrudsDaoImpl<Reporter> {
 
-	public ReporterDao(SessionFactory sessionFactory) {
-		super(sessionFactory);
-	}
+  public ReporterDao(SessionFactory sessionFactory) {
+    super(sessionFactory);
+  }
 
 }

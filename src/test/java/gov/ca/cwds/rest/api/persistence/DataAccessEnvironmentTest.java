@@ -13,11 +13,11 @@ import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 
 public class DataAccessEnvironmentTest {
 
-	@Test
-	public void dataAccessEnvironmentSuccessfullyReturnsDaoAfterRegistration() throws Exception {
-		@SuppressWarnings("unchecked")
-		CrudsDao<PersistentObject> crudsDao = mock(CrudsDao.class);
-		DataAccessEnvironment.register(StaffPerson.class, crudsDao);
-		assertThat(DataAccessEnvironment.get(StaffPerson.class), is(equalTo(crudsDao)));
-	}
+  @Test
+  public void dataAccessEnvironmentSuccessfullyReturnsDaoAfterRegistration() throws Exception {
+    @SuppressWarnings("unchecked")
+    CrudsDao<PersistentObject> crudsDao = mock(CrudsDao.class);
+    DataAccessEnvironment.register(StaffPerson.class, crudsDao);
+    assertThat(DataAccessEnvironment.get(StaffPerson.class), is(equalTo(crudsDao)));
+  }
 }

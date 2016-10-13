@@ -13,73 +13,86 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import io.dropwizard.hibernate.AbstractDAO;
 
 /**
- * An implementation of {@link CrudsDao}.  Class is final and is expected that other {@link Dao} will contain this implementation and delegate.
+ * An implementation of {@link CrudsDao}. Class is final and is expected that other {@link Dao} will
+ * contain this implementation and delegate.
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link PersistentObject} to perform CRUDS operations on
+ * @param <T> The {@link PersistentObject} to perform CRUDS operations on
  */
-public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> implements CrudsDao<T>{
-	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CrudsDaoImpl.class);
-	
-	private SessionFactory sessionFactory;
-	
-	/**
-	 * 
-	 * @param sessionFactory	the session factory
-	 */
-	public CrudsDaoImpl(SessionFactory sessionFactory) {
-		super(sessionFactory);
-		this.sessionFactory = sessionFactory;
-	}
-	@Override
-	public SessionFactory getSessionFactory(){
-      return sessionFactory;
+public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
+    implements CrudsDao<T> {
+  @SuppressWarnings("unused")
+  private static final Logger LOGGER = LoggerFactory.getLogger(CrudsDaoImpl.class);
+
+  private SessionFactory sessionFactory;
+
+  /**
+   * 
+   * @param sessionFactory the session factory
+   */
+  public CrudsDaoImpl(SessionFactory sessionFactory) {
+    super(sessionFactory);
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Override
+  public SessionFactory getSessionFactory() {
+    return sessionFactory;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.jdbi.CrudsDao#find(java.io.Serializable)
+   */
+  @Override
+  public T find(Serializable primaryKey) {
+    return get(primaryKey);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.api.persistence.CrudsDao#delete(java.io.Serializable)
+   */
+  @Override
+  public T delete(Serializable id) {
+    T object = find(id);
+    if (object != null) {
+      currentSession().delete(object);
     }
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.jdbi.CrudsDao#find(java.io.Serializable)
-	 */
-	@Override
-	public T find(Serializable primaryKey) {
-		return get(primaryKey);
-	}
+    return object;
+  }
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#delete(java.io.Serializable)
-	 */
-	@Override
-	public T delete(Serializable id) {
-		T object = find(id);
-		if( object != null ) {
-			currentSession().delete(object);
-		} 
-		return object;
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.api.persistence.CrudsDao#create(gov.ca.cwds.rest.api.persistence.
+   * PersistentObject)
+   */
+  @Override
+  public T create(T object) {
+    T databaseObject = find(object.getPrimaryKey());
+    if (databaseObject != null) {
+      throw new EntityExistsException();
+    }
+    return persist(object);
+  }
 
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#create(gov.ca.cwds.rest.api.persistence.PersistentObject)
-	 */
-	@Override
-	public T create(T object) {
-		T databaseObject = find(object.getPrimaryKey());
-		if( databaseObject != null ) {
-			throw new EntityExistsException();
-		}
-		return persist(object);
-	}
-
-	/* (non-Javadoc)
-	 * @see gov.ca.cwds.rest.api.persistence.CrudsDao#update(gov.ca.cwds.rest.api.persistence.PersistentObject)
-	 */
-	@Override
-	public T update(T object) {
-		T databaseObject = find(object.getPrimaryKey());
-		if( databaseObject == null ) {
-			throw new EntityNotFoundException();
-		}
-		currentSession().evict(databaseObject);
-		return persist(object);
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.api.persistence.CrudsDao#update(gov.ca.cwds.rest.api.persistence.
+   * PersistentObject)
+   */
+  @Override
+  public T update(T object) {
+    T databaseObject = find(object.getPrimaryKey());
+    if (databaseObject == null) {
+      throw new EntityNotFoundException();
+    }
+    currentSession().evict(databaseObject);
+    return persist(object);
+  }
 }

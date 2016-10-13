@@ -14,16 +14,17 @@ import javax.validation.Payload;
  * 
  * @author CWDS API Team
  */
-@Target({ TYPE_USE })
+@Target({TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = OnlyIfValidator.class)
 public @interface OnlyIf {
-	String message() default "{property} can only be set if {ifProperty} is set";
-	
-	Class<?>[] groups() default {};
+  String message() default "{property} can only be set if {ifProperty} is set";
 
-	Class<? extends Payload>[] payload() default {};
+  Class<?>[] groups() default {};
 
-	String ifProperty();
-	String property();
+  Class<? extends Payload>[] payload() default {};
+
+  String ifProperty();
+
+  String property();
 }

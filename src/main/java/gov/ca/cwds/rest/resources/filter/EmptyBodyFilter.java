@@ -13,16 +13,19 @@ import javax.ws.rs.container.ContainerResponseFilter;
  */
 public class EmptyBodyFilter implements ContainerResponseFilter {
 
-	/* (non-Javadoc)
-	 * @see javax.ws.rs.container.ContainerResponseFilter#filter(javax.ws.rs.container.ContainerRequestContext, javax.ws.rs.container.ContainerResponseContext)
-	 */
-	@Override
-	public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
-			throws IOException {
-		if( responseContext.getStatus() >= 200 && responseContext.getStatus() < 300 ) {
-			responseContext.setEntity(null);
-		}
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.ws.rs.container.ContainerResponseFilter#filter(javax.ws.rs.container.
+   * ContainerRequestContext, javax.ws.rs.container.ContainerResponseContext)
+   */
+  @Override
+  public void filter(ContainerRequestContext requestContext,
+      ContainerResponseContext responseContext) throws IOException {
+    if (responseContext.getStatus() >= 200 && responseContext.getStatus() < 300) {
+      responseContext.setEntity(null);
+    }
+  }
 
 
 }
