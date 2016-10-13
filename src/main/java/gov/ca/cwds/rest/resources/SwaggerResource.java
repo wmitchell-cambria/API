@@ -17,7 +17,7 @@ import io.swagger.annotations.Api;
 @Produces(MediaType.TEXT_HTML)
 public class SwaggerResource {
 	private SwaggerConfiguration swaggerConfiguration;
-	
+
 	public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
 		super();
 		this.swaggerConfiguration = swaggerConfiguration;
@@ -27,9 +27,7 @@ public class SwaggerResource {
 	@GET
 	public SwaggerView get(@Context UriInfo uriInfo) {
 		UriBuilder ub = uriInfo.getBaseUriBuilder();
-        String swaggerjsonUrl = ub.
-                    path("swagger.json").
-                    build().toASCIIString();
+		String swaggerjsonUrl = ub.path("swagger.json").build().toASCIIString();
 		return new SwaggerView(swaggerConfiguration, swaggerjsonUrl);
 	}
 
