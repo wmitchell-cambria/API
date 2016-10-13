@@ -19,594 +19,598 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 @Entity
 @Table(name = "REFERL_T")
 public class Referral extends PersistentObject {
-	@Id
-	@Column(name = "IDENTIFIER")
-	private String id;
+  @Id
+  @Column(name = "IDENTIFIER")
+  private String id;
 
-	@Column(name = "ADD_INF_CD")
-	private String additionalInfoIncludedCode;
+  @Column(name = "ADD_INF_CD")
+  private String additionalInfoIncludedCode;
 
-	@Column(name = "ANRPTR_IND")
-	private String anonymousReporterIndicator;
+  @Column(name = "ANRPTR_IND")
+  private String anonymousReporterIndicator;
 
-	@Column(name = "PETAPL_IND")
-	private String applicationForPetitionIndicator;
+  @Column(name = "PETAPL_IND")
+  private String applicationForPetitionIndicator;
 
-	@Column(name = "APRVL_NO")
-	private String approvalNumber;
+  @Column(name = "APRVL_NO")
+  private String approvalNumber;
 
-	@Type(type = "short")
-	@Column(name = "APV_STC")
-	private Short approvalStatusType;
+  @Type(type = "short")
+  @Column(name = "APV_STC")
+  private Short approvalStatusType;
 
-	@Column(name = "CR_PERP_CD")
-	private String caretakersPerpetratorCode;
+  @Column(name = "CR_PERP_CD")
+  private String caretakersPerpetratorCode;
 
-	@Type(type = "date")
-	@Column(name = "REFCLSR_DT")
-	private Date closureDate;
+  @Type(type = "date")
+  @Column(name = "REFCLSR_DT")
+  private Date closureDate;
 
-	@Type(type = "short")
-	@Column(name = "CMM_MTHC")
-	private Short communicationMethodType;
+  @Type(type = "short")
+  @Column(name = "CMM_MTHC")
+  private Short communicationMethodType;
 
-	@Column(name = "CHILOC_TXT")
-	private String currentLocationOfChildren;
+  @Column(name = "CHILOC_TXT")
+  private String currentLocationOfChildren;
 
-	@Column(name = "ALGDSC_DOC")
-	private String drmsAllegationDescriptionDoc;
+  @Column(name = "ALGDSC_DOC")
+  private String drmsAllegationDescriptionDoc;
 
-	@Column(name = "ER_REF_DOC")
-	private String drmsErReferralDoc;
+  @Column(name = "ER_REF_DOC")
+  private String drmsErReferralDoc;
 
-	@Column(name = "INVSTG_DOC")
-	private String drmsInvestigationDoc;
+  @Column(name = "INVSTG_DOC")
+  private String drmsInvestigationDoc;
 
-	@Column(name = "XRPT_LWIND")
-	private String filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
+  @Column(name = "XRPT_LWIND")
+  private String filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 
-	@Column(name = "FMY_AW_IND")
-	private String familyAwarenessIndicator;
+  @Column(name = "FMY_AW_IND")
+  private String familyAwarenessIndicator;
 
-	@Type(type = "short")
-	@Column(name = "GVR_ENTC")
-	private Short govtEntityType;
+  @Type(type = "short")
+  @Column(name = "GVR_ENTC")
+  private Short govtEntityType;
 
-	@Column(name = "LGL_DEF_CD")
-	private String legalDefinitionCode;
+  @Column(name = "LGL_DEF_CD")
+  private String legalDefinitionCode;
 
-	@Column(name = "LGLRGT_IND")
-	private String legalRightsNoticeIndicator;
+  @Column(name = "LGLRGT_IND")
+  private String legalRightsNoticeIndicator;
 
-	@Column(name = "LMT_ACSSCD")
-	private String limitedAccessCode;
+  @Column(name = "LMT_ACSSCD")
+  private String limitedAccessCode;
 
-	@Type(type = "date")
-	@Column(name = "XRPT_RCVDT")
-	private Date mandatedCrossReportReceivedDate;
+  @Type(type = "date")
+  @Column(name = "XRPT_RCVDT")
+  private Date mandatedCrossReportReceivedDate;
 
-	@Column(name = "REFERRL_NM")
-	private String referralName;
+  @Column(name = "REFERRL_NM")
+  private String referralName;
 
-	@Column(name = "ADQT_CS_CD")
-	private String openAdequateCaseCode;
+  @Column(name = "ADQT_CS_CD")
+  private String openAdequateCaseCode;
 
-	@Type(type = "date")
-	@Column(name = "REF_RCV_DT")
-	private Date receivedDate;
+  @Type(type = "date")
+  @Column(name = "REF_RCV_DT")
+  private Date receivedDate;
 
-	@Type(type = "time")
-	@Column(name = "REF_RCV_TM")
-	private Date receivedTime;
+  @Type(type = "time")
+  @Column(name = "REF_RCV_TM")
+  private Date receivedTime;
 
-	@Type(type = "short")
-	@Column(name = "RFR_RSPC")
-	private Short referralResponseType;
+  @Type(type = "short")
+  @Column(name = "RFR_RSPC")
+  private Short referralResponseType;
 
-	@Type(type = "short")
-	@Column(name = "RFRD_RSC")
-	private Short referredToResourceType;
+  @Type(type = "short")
+  @Column(name = "RFRD_RSC")
+  private Short referredToResourceType;
 
-	@Type(type = "date")
-	@Column(name = "RSP_DTR_DT")
-	private Date responseDeterminationDate;
+  @Type(type = "date")
+  @Column(name = "RSP_DTR_DT")
+  private Date responseDeterminationDate;
 
-	@Type(type = "time")
-	@Column(name = "RSP_DTR_TM")
-	private Date responseDeterminationTime;
+  @Type(type = "time")
+  @Column(name = "RSP_DTR_TM")
+  private Date responseDeterminationTime;
 
-	@Column(name = "RSP_RTNTXT")
-	private String responseRationaleText;
+  @Column(name = "RSP_RTNTXT")
+  private String responseRationaleText;
 
-	@Column(name = "SCN_NT_TXT")
-	private String screenerNoteText;
+  @Column(name = "SCN_NT_TXT")
+  private String screenerNoteText;
 
-	@Column(name = "SP_INCL_CD")
-	private String specificsIncludedCode;
+  @Column(name = "SP_INCL_CD")
+  private String specificsIncludedCode;
 
-	@Column(name = "SFC_INF_CD")
-	private String sufficientInformationCode;
+  @Column(name = "SFC_INF_CD")
+  private String sufficientInformationCode;
 
-	@Column(name = "UNFD_SR_CD")
-	private String unfoundedSeriesCode;
-
-	@Column(name = "FKREFERL_T")
-	private String linkToPrimaryReferralId;
-
-	@Column(name = "FKADDRS_T")
-	private String allegesAbuseOccurredAtAddressId;
-
-	@Column(name = "FKSTFPERS0")
-	private String firstResponseDeterminedByStaffPersonId;
-
-	@Column(name = "FKSTFPERST")
-	private String primaryContactStaffPersonId;
-
-	@Column(name = "CNTY_SPFCD")
-	private String countySpecificCode;
-
-	@Column(name = "SPRJRF_IND")
-	private String specialProjectReferralIndicator;
-
-	@Column(name = "ZIPPY_IND")
-	private String zippyCreatedIndicator;
-
-	@Column(name = "HOMLES_IND")
-	private String homelessIndicator;
-
-	@Column(name = "FAMREF_IND")
-	private String familyRefusedServicesIndicator;
-
-	@Type(type = "date")
-	@Column(name = "FIRST_EODT")
-	private Date firstEvaluatedOutApprovalDate;
-
-	@Column(name = "RSP_AGY_CD")
-	private String responsibleAgencyCode;
-
-	@Type(type = "short")
-	@Column(name = "L_GVR_ENTC")
-	private Short limitedAccessGovtAgencyType;
-
-	@Type(type = "date")
-	@Column(name = "LMT_ACS_DT")
-	private Date limitedAccessDate;
-
-	@Column(name = "LMT_ACSDSC")
-	private String limitedAccessDesc;
-
-	@Type(type = "date")
-	@Column(name = "ORIGCLS_DT")
-	private Date originalClosureDate;
-
-	/**
-	 * Default constructor
-	 * 
-	 * Required for Hibernate
-	 */
-	public Referral() {
-		super();
-	}
-
-	public Referral(String id, String additionalInfoIncludedCode, String anonymousReporterIndicator,
-			String applicationForPetitionIndicator, String approvalNumber, Short approvalStatusType,
-
-			String caretakersPerpetratorCode, Date closureDate, Short communicationMethodType,
-			String currentLocationOfChildren, String drmsAllegationDescriptionDoc, String drmsErReferralDoc,
-
-			String drmsInvestigationDoc, String filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
-			String familyAwarenessIndicator, Short govtEntityType, String legalDefinitionCode,
-			String legalRightsNoticeIndicator,
-
-			String limitedAccessCode, Date mandatedCrossReportReceivedDate, String referralName,
-			String openAdequateCaseCode, Date receivedDate, Date receivedTime,
-
-			Short referralResponseType, Short referredToResourceType, Date responseDeterminationDate,
-			Date responseDeterminationTime, String responseRationaleText, String screenerNoteText,
-
-			String specificsIncludedCode, String sufficientInformationCode, String unfoundedSeriesCode,
-			String linkToPrimaryReferralId, String allegesAbuseOccurredAtAddressId,
-			String firstResponseDeterminedByStaffPersonId,
-
-			String primaryContactStaffPersonId, String countySpecificCode, String specialProjectReferralIndicator,
-			String zippyCreatedIndicator, String homelessIndicator, String familyRefusedServicesIndicator,
-
-			Date firstEvaluatedOutApprovalDate, String responsibleAgencyCode, Short limitedAccessGovtAgencyType,
-			Date limitedAccessDate, String limitedAccessDesc, Date originalClosureDate) {
-		super();
-		this.id = id;
-		this.additionalInfoIncludedCode = additionalInfoIncludedCode;
-		this.anonymousReporterIndicator = anonymousReporterIndicator;
-		this.applicationForPetitionIndicator = applicationForPetitionIndicator;
-		this.approvalNumber = approvalNumber;
-		this.approvalStatusType = approvalStatusType;
-		this.caretakersPerpetratorCode = caretakersPerpetratorCode;
-		this.closureDate = closureDate;
-		this.communicationMethodType = communicationMethodType;
-		this.currentLocationOfChildren = currentLocationOfChildren;
-		this.drmsAllegationDescriptionDoc = drmsAllegationDescriptionDoc;
-		this.drmsErReferralDoc = drmsErReferralDoc;
-		this.drmsInvestigationDoc = drmsInvestigationDoc;
-		this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
-		this.familyAwarenessIndicator = familyAwarenessIndicator;
-		this.govtEntityType = govtEntityType;
-		this.legalDefinitionCode = legalDefinitionCode;
-		this.legalRightsNoticeIndicator = legalRightsNoticeIndicator;
-		this.limitedAccessCode = limitedAccessCode;
-		this.mandatedCrossReportReceivedDate = mandatedCrossReportReceivedDate;
-		this.referralName = referralName;
-		this.openAdequateCaseCode = openAdequateCaseCode;
-		this.receivedDate = receivedDate;
-		this.receivedTime = receivedTime;
-		this.referralResponseType = referralResponseType;
-		this.referredToResourceType = referredToResourceType;
-		this.responseDeterminationDate = responseDeterminationDate;
-		this.responseDeterminationTime = responseDeterminationTime;
-		this.responseRationaleText = responseRationaleText;
-		this.screenerNoteText = screenerNoteText;
-		this.specificsIncludedCode = specificsIncludedCode;
-		this.sufficientInformationCode = sufficientInformationCode;
-		this.unfoundedSeriesCode = unfoundedSeriesCode;
-		this.linkToPrimaryReferralId = linkToPrimaryReferralId;
-		this.allegesAbuseOccurredAtAddressId = allegesAbuseOccurredAtAddressId;
-		this.firstResponseDeterminedByStaffPersonId = firstResponseDeterminedByStaffPersonId;
-		this.primaryContactStaffPersonId = primaryContactStaffPersonId;
-		this.countySpecificCode = countySpecificCode;
-		this.specialProjectReferralIndicator = specialProjectReferralIndicator;
-		this.zippyCreatedIndicator = zippyCreatedIndicator;
-		this.homelessIndicator = homelessIndicator;
-		this.familyRefusedServicesIndicator = familyRefusedServicesIndicator;
-		this.firstEvaluatedOutApprovalDate = firstEvaluatedOutApprovalDate;
-		this.responsibleAgencyCode = responsibleAgencyCode;
-		this.limitedAccessGovtAgencyType = limitedAccessGovtAgencyType;
-		this.limitedAccessDate = limitedAccessDate;
-		this.limitedAccessDesc = limitedAccessDesc;
-		this.originalClosureDate = originalClosureDate;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
-	 */
-	@Override
-	public String getPrimaryKey() {
-		return getId();
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * @return the additionalInfoIncludedCode
-	 */
-	public String getAdditionalInfoIncludedCode() {
-		return additionalInfoIncludedCode;
-	}
-
-	/**
-	 * @return the anonymousReporterIndicator
-	 */
-	public String getAnonymousReporterIndicator() {
-		return anonymousReporterIndicator;
-	}
-
-	/**
-	 * @return the applicationForPetitionIndicator
-	 */
-	public String getApplicationForPetitionIndicator() {
-		return applicationForPetitionIndicator;
-	}
-
-	/**
-	 * @return the approvalNumber
-	 */
-	public String getApprovalNumber() {
-		return approvalNumber;
-	}
-
-	/**
-	 * @return the approvalStatusType
-	 */
-	public Short getApprovalStatusType() {
-		return approvalStatusType;
-	}
-
-	/**
-	 * @return the caretakersPerpetratorCode
-	 */
-	public String getCaretakersPerpetratorCode() {
-		return caretakersPerpetratorCode;
-	}
-
-	/**
-	 * @return the closureDate
-	 */
-	public Date getClosureDate() {
-		return closureDate;
-	}
-
-	/**
-	 * @return the communicationMethodType
-	 */
-	public Short getCommunicationMethodType() {
-		return communicationMethodType;
-	}
-
-	/**
-	 * @return the currentLocationOfChildren
-	 */
-	public String getCurrentLocationOfChildren() {
-		return currentLocationOfChildren;
-	}
-
-	/**
-	 * @return the drmsAllegationDescriptionDoc
-	 */
-	public String getDrmsAllegationDescriptionDoc() {
-		return drmsAllegationDescriptionDoc;
-	}
-
-	/**
-	 * @return the drmsErReferralDoc
-	 */
-	public String getDrmsErReferralDoc() {
-		return drmsErReferralDoc;
-	}
-
-	/**
-	 * @return the drmsInvestigationDoc
-	 */
-	public String getDrmsInvestigationDoc() {
-		return drmsInvestigationDoc;
-	}
-
-	/**
-	 * @return the filedSuspectedChildAbuseReporttoLawEnforcementIndicator
-	 */
-	public String getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator() {
-		return filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
-	}
-
-	/**
-	 * @return the familyAwarenessIndicator
-	 */
-	public String getFamilyAwarenessIndicator() {
-		return familyAwarenessIndicator;
-	}
-
-	/**
-	 * @return the govtEntityType
-	 */
-	public Short getGovtEntityType() {
-		return govtEntityType;
-	}
-
-	/**
-	 * @return the legalDefinitionCode
-	 */
-	public String getLegalDefinitionCode() {
-		return legalDefinitionCode;
-	}
-
-	/**
-	 * @return the legalRightsNoticeIndicator
-	 */
-	public String getLegalRightsNoticeIndicator() {
-		return legalRightsNoticeIndicator;
-	}
-
-	/**
-	 * @return the limitedAccessCode
-	 */
-	public String getLimitedAccessCode() {
-		return limitedAccessCode;
-	}
-
-	/**
-	 * @return the mandatedCrossReportReceivedDate
-	 */
-	public Date getMandatedCrossReportReceivedDate() {
-		return mandatedCrossReportReceivedDate;
-	}
-
-	/**
-	 * @return the referralName
-	 */
-	public String getReferralName() {
-		return referralName;
-	}
-
-	/**
-	 * @return the openAdequateCaseCode
-	 */
-	public String getOpenAdequateCaseCode() {
-		return openAdequateCaseCode;
-	}
-
-	/**
-	 * @return the receivedDate
-	 */
-	public Date getReceivedDate() {
-		return receivedDate;
-	}
-
-	/**
-	 * @return the receivedTime
-	 */
-	public Date getReceivedTime() {
-		return receivedTime;
-	}
-
-	/**
-	 * @return the referralResponseType
-	 */
-	public Short getReferralResponseType() {
-		return referralResponseType;
-	}
-
-	/**
-	 * @return the referredToResourceType
-	 */
-	public Short getReferredToResourceType() {
-		return referredToResourceType;
-	}
-
-	/**
-	 * @return the responseDeterminationDate
-	 */
-	public Date getResponseDeterminationDate() {
-		return responseDeterminationDate;
-	}
-
-	/**
-	 * @return the responseDeterminationTime
-	 */
-	public Date getResponseDeterminationTime() {
-		return responseDeterminationTime;
-	}
-
-	/**
-	 * @return the responseRationaleText
-	 */
-	public String getResponseRationaleText() {
-		return responseRationaleText;
-	}
-
-	/**
-	 * @return the screenerNoteText
-	 */
-	public String getScreenerNoteText() {
-		return screenerNoteText;
-	}
-
-	/**
-	 * @return the specificsIncludedCode
-	 */
-	public String getSpecificsIncludedCode() {
-		return specificsIncludedCode;
-	}
-
-	/**
-	 * @return the sufficientInformationCode
-	 */
-	public String getSufficientInformationCode() {
-		return sufficientInformationCode;
-	}
-
-	/**
-	 * @return the unfoundedSeriesCode
-	 */
-	public String getUnfoundedSeriesCode() {
-		return unfoundedSeriesCode;
-	}
-
-	/**
-	 * @return the linkToPrimaryReferralId
-	 */
-	public String getLinkToPrimaryReferralId() {
-		return linkToPrimaryReferralId;
-	}
-
-	/**
-	 * @return the allegesAbuseOccurredAtAddressId
-	 */
-	public String getAllegesAbuseOccurredAtAddressId() {
-		return allegesAbuseOccurredAtAddressId;
-	}
-
-	/**
-	 * @return the firstResponseDeterminedByStaffPersonId
-	 */
-	public String getFirstResponseDeterminedByStaffPersonId() {
-		return firstResponseDeterminedByStaffPersonId;
-	}
-
-	/**
-	 * @return the primaryContactStaffPersonId
-	 */
-	public String getPrimaryContactStaffPersonId() {
-		return primaryContactStaffPersonId;
-	}
-
-	/**
-	 * @return the countySpecificCode
-	 */
-	public String getCountySpecificCode() {
-		return countySpecificCode;
-	}
-
-	/**
-	 * @return the specialProjectReferralIndicator
-	 */
-	public String getSpecialProjectReferralIndicator() {
-		return specialProjectReferralIndicator;
-	}
-
-	/**
-	 * @return the zippyCreatedIndicator
-	 */
-	public String getZippyCreatedIndicator() {
-		return zippyCreatedIndicator;
-	}
-
-	/**
-	 * @return the homelessIndicator
-	 */
-	public String getHomelessIndicator() {
-		return homelessIndicator;
-	}
-
-	/**
-	 * @return the familyRefusedServicesIndicator
-	 */
-	public String getFamilyRefusedServicesIndicator() {
-		return familyRefusedServicesIndicator;
-	}
-
-	/**
-	 * @return the firstEvaluatedOutApprovalDate
-	 */
-	public Date getFirstEvaluatedOutApprovalDate() {
-		return firstEvaluatedOutApprovalDate;
-	}
-
-	/**
-	 * @return the responsibleAgencyCode
-	 */
-	public String getResponsibleAgencyCode() {
-		return responsibleAgencyCode;
-	}
-
-	/**
-	 * @return the limitedAccessGovtAgencyType
-	 */
-	public Short getLimitedAccessGovtAgencyType() {
-		return limitedAccessGovtAgencyType;
-	}
-
-	/**
-	 * @return the limitedAccessDate
-	 */
-	public Date getLimitedAccessDate() {
-		return limitedAccessDate;
-	}
-
-	/**
-	 * @return the limitedAccessDesc
-	 */
-	public String getLimitedAccessDesc() {
-		return limitedAccessDesc;
-	}
-
-	/**
-	 * @return the originalClosureDate
-	 */
-	public Date getOriginalClosureDate() {
-		return originalClosureDate;
-	}
+  @Column(name = "UNFD_SR_CD")
+  private String unfoundedSeriesCode;
+
+  @Column(name = "FKREFERL_T")
+  private String linkToPrimaryReferralId;
+
+  @Column(name = "FKADDRS_T")
+  private String allegesAbuseOccurredAtAddressId;
+
+  @Column(name = "FKSTFPERS0")
+  private String firstResponseDeterminedByStaffPersonId;
+
+  @Column(name = "FKSTFPERST")
+  private String primaryContactStaffPersonId;
+
+  @Column(name = "CNTY_SPFCD")
+  private String countySpecificCode;
+
+  @Column(name = "SPRJRF_IND")
+  private String specialProjectReferralIndicator;
+
+  @Column(name = "ZIPPY_IND")
+  private String zippyCreatedIndicator;
+
+  @Column(name = "HOMLES_IND")
+  private String homelessIndicator;
+
+  @Column(name = "FAMREF_IND")
+  private String familyRefusedServicesIndicator;
+
+  @Type(type = "date")
+  @Column(name = "FIRST_EODT")
+  private Date firstEvaluatedOutApprovalDate;
+
+  @Column(name = "RSP_AGY_CD")
+  private String responsibleAgencyCode;
+
+  @Type(type = "short")
+  @Column(name = "L_GVR_ENTC")
+  private Short limitedAccessGovtAgencyType;
+
+  @Type(type = "date")
+  @Column(name = "LMT_ACS_DT")
+  private Date limitedAccessDate;
+
+  @Column(name = "LMT_ACSDSC")
+  private String limitedAccessDesc;
+
+  @Type(type = "date")
+  @Column(name = "ORIGCLS_DT")
+  private Date originalClosureDate;
+
+  /**
+   * Default constructor
+   * 
+   * Required for Hibernate
+   */
+  public Referral() {
+    super();
+  }
+
+  public Referral(String id, String additionalInfoIncludedCode, String anonymousReporterIndicator,
+      String applicationForPetitionIndicator, String approvalNumber, Short approvalStatusType,
+
+      String caretakersPerpetratorCode, Date closureDate, Short communicationMethodType,
+      String currentLocationOfChildren, String drmsAllegationDescriptionDoc,
+      String drmsErReferralDoc,
+
+      String drmsInvestigationDoc, String filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
+      String familyAwarenessIndicator, Short govtEntityType, String legalDefinitionCode,
+      String legalRightsNoticeIndicator,
+
+      String limitedAccessCode, Date mandatedCrossReportReceivedDate, String referralName,
+      String openAdequateCaseCode, Date receivedDate, Date receivedTime,
+
+      Short referralResponseType, Short referredToResourceType, Date responseDeterminationDate,
+      Date responseDeterminationTime, String responseRationaleText, String screenerNoteText,
+
+      String specificsIncludedCode, String sufficientInformationCode, String unfoundedSeriesCode,
+      String linkToPrimaryReferralId, String allegesAbuseOccurredAtAddressId,
+      String firstResponseDeterminedByStaffPersonId,
+
+      String primaryContactStaffPersonId, String countySpecificCode,
+      String specialProjectReferralIndicator, String zippyCreatedIndicator,
+      String homelessIndicator, String familyRefusedServicesIndicator,
+
+      Date firstEvaluatedOutApprovalDate, String responsibleAgencyCode,
+      Short limitedAccessGovtAgencyType, Date limitedAccessDate, String limitedAccessDesc,
+      Date originalClosureDate) {
+    super();
+    this.id = id;
+    this.additionalInfoIncludedCode = additionalInfoIncludedCode;
+    this.anonymousReporterIndicator = anonymousReporterIndicator;
+    this.applicationForPetitionIndicator = applicationForPetitionIndicator;
+    this.approvalNumber = approvalNumber;
+    this.approvalStatusType = approvalStatusType;
+    this.caretakersPerpetratorCode = caretakersPerpetratorCode;
+    this.closureDate = closureDate;
+    this.communicationMethodType = communicationMethodType;
+    this.currentLocationOfChildren = currentLocationOfChildren;
+    this.drmsAllegationDescriptionDoc = drmsAllegationDescriptionDoc;
+    this.drmsErReferralDoc = drmsErReferralDoc;
+    this.drmsInvestigationDoc = drmsInvestigationDoc;
+    this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator =
+        filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
+    this.familyAwarenessIndicator = familyAwarenessIndicator;
+    this.govtEntityType = govtEntityType;
+    this.legalDefinitionCode = legalDefinitionCode;
+    this.legalRightsNoticeIndicator = legalRightsNoticeIndicator;
+    this.limitedAccessCode = limitedAccessCode;
+    this.mandatedCrossReportReceivedDate = mandatedCrossReportReceivedDate;
+    this.referralName = referralName;
+    this.openAdequateCaseCode = openAdequateCaseCode;
+    this.receivedDate = receivedDate;
+    this.receivedTime = receivedTime;
+    this.referralResponseType = referralResponseType;
+    this.referredToResourceType = referredToResourceType;
+    this.responseDeterminationDate = responseDeterminationDate;
+    this.responseDeterminationTime = responseDeterminationTime;
+    this.responseRationaleText = responseRationaleText;
+    this.screenerNoteText = screenerNoteText;
+    this.specificsIncludedCode = specificsIncludedCode;
+    this.sufficientInformationCode = sufficientInformationCode;
+    this.unfoundedSeriesCode = unfoundedSeriesCode;
+    this.linkToPrimaryReferralId = linkToPrimaryReferralId;
+    this.allegesAbuseOccurredAtAddressId = allegesAbuseOccurredAtAddressId;
+    this.firstResponseDeterminedByStaffPersonId = firstResponseDeterminedByStaffPersonId;
+    this.primaryContactStaffPersonId = primaryContactStaffPersonId;
+    this.countySpecificCode = countySpecificCode;
+    this.specialProjectReferralIndicator = specialProjectReferralIndicator;
+    this.zippyCreatedIndicator = zippyCreatedIndicator;
+    this.homelessIndicator = homelessIndicator;
+    this.familyRefusedServicesIndicator = familyRefusedServicesIndicator;
+    this.firstEvaluatedOutApprovalDate = firstEvaluatedOutApprovalDate;
+    this.responsibleAgencyCode = responsibleAgencyCode;
+    this.limitedAccessGovtAgencyType = limitedAccessGovtAgencyType;
+    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDesc = limitedAccessDesc;
+    this.originalClosureDate = originalClosureDate;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
+   */
+  @Override
+  public String getPrimaryKey() {
+    return getId();
+  }
+
+  /**
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * @return the additionalInfoIncludedCode
+   */
+  public String getAdditionalInfoIncludedCode() {
+    return additionalInfoIncludedCode;
+  }
+
+  /**
+   * @return the anonymousReporterIndicator
+   */
+  public String getAnonymousReporterIndicator() {
+    return anonymousReporterIndicator;
+  }
+
+  /**
+   * @return the applicationForPetitionIndicator
+   */
+  public String getApplicationForPetitionIndicator() {
+    return applicationForPetitionIndicator;
+  }
+
+  /**
+   * @return the approvalNumber
+   */
+  public String getApprovalNumber() {
+    return approvalNumber;
+  }
+
+  /**
+   * @return the approvalStatusType
+   */
+  public Short getApprovalStatusType() {
+    return approvalStatusType;
+  }
+
+  /**
+   * @return the caretakersPerpetratorCode
+   */
+  public String getCaretakersPerpetratorCode() {
+    return caretakersPerpetratorCode;
+  }
+
+  /**
+   * @return the closureDate
+   */
+  public Date getClosureDate() {
+    return closureDate;
+  }
+
+  /**
+   * @return the communicationMethodType
+   */
+  public Short getCommunicationMethodType() {
+    return communicationMethodType;
+  }
+
+  /**
+   * @return the currentLocationOfChildren
+   */
+  public String getCurrentLocationOfChildren() {
+    return currentLocationOfChildren;
+  }
+
+  /**
+   * @return the drmsAllegationDescriptionDoc
+   */
+  public String getDrmsAllegationDescriptionDoc() {
+    return drmsAllegationDescriptionDoc;
+  }
+
+  /**
+   * @return the drmsErReferralDoc
+   */
+  public String getDrmsErReferralDoc() {
+    return drmsErReferralDoc;
+  }
+
+  /**
+   * @return the drmsInvestigationDoc
+   */
+  public String getDrmsInvestigationDoc() {
+    return drmsInvestigationDoc;
+  }
+
+  /**
+   * @return the filedSuspectedChildAbuseReporttoLawEnforcementIndicator
+   */
+  public String getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator() {
+    return filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
+  }
+
+  /**
+   * @return the familyAwarenessIndicator
+   */
+  public String getFamilyAwarenessIndicator() {
+    return familyAwarenessIndicator;
+  }
+
+  /**
+   * @return the govtEntityType
+   */
+  public Short getGovtEntityType() {
+    return govtEntityType;
+  }
+
+  /**
+   * @return the legalDefinitionCode
+   */
+  public String getLegalDefinitionCode() {
+    return legalDefinitionCode;
+  }
+
+  /**
+   * @return the legalRightsNoticeIndicator
+   */
+  public String getLegalRightsNoticeIndicator() {
+    return legalRightsNoticeIndicator;
+  }
+
+  /**
+   * @return the limitedAccessCode
+   */
+  public String getLimitedAccessCode() {
+    return limitedAccessCode;
+  }
+
+  /**
+   * @return the mandatedCrossReportReceivedDate
+   */
+  public Date getMandatedCrossReportReceivedDate() {
+    return mandatedCrossReportReceivedDate;
+  }
+
+  /**
+   * @return the referralName
+   */
+  public String getReferralName() {
+    return referralName;
+  }
+
+  /**
+   * @return the openAdequateCaseCode
+   */
+  public String getOpenAdequateCaseCode() {
+    return openAdequateCaseCode;
+  }
+
+  /**
+   * @return the receivedDate
+   */
+  public Date getReceivedDate() {
+    return receivedDate;
+  }
+
+  /**
+   * @return the receivedTime
+   */
+  public Date getReceivedTime() {
+    return receivedTime;
+  }
+
+  /**
+   * @return the referralResponseType
+   */
+  public Short getReferralResponseType() {
+    return referralResponseType;
+  }
+
+  /**
+   * @return the referredToResourceType
+   */
+  public Short getReferredToResourceType() {
+    return referredToResourceType;
+  }
+
+  /**
+   * @return the responseDeterminationDate
+   */
+  public Date getResponseDeterminationDate() {
+    return responseDeterminationDate;
+  }
+
+  /**
+   * @return the responseDeterminationTime
+   */
+  public Date getResponseDeterminationTime() {
+    return responseDeterminationTime;
+  }
+
+  /**
+   * @return the responseRationaleText
+   */
+  public String getResponseRationaleText() {
+    return responseRationaleText;
+  }
+
+  /**
+   * @return the screenerNoteText
+   */
+  public String getScreenerNoteText() {
+    return screenerNoteText;
+  }
+
+  /**
+   * @return the specificsIncludedCode
+   */
+  public String getSpecificsIncludedCode() {
+    return specificsIncludedCode;
+  }
+
+  /**
+   * @return the sufficientInformationCode
+   */
+  public String getSufficientInformationCode() {
+    return sufficientInformationCode;
+  }
+
+  /**
+   * @return the unfoundedSeriesCode
+   */
+  public String getUnfoundedSeriesCode() {
+    return unfoundedSeriesCode;
+  }
+
+  /**
+   * @return the linkToPrimaryReferralId
+   */
+  public String getLinkToPrimaryReferralId() {
+    return linkToPrimaryReferralId;
+  }
+
+  /**
+   * @return the allegesAbuseOccurredAtAddressId
+   */
+  public String getAllegesAbuseOccurredAtAddressId() {
+    return allegesAbuseOccurredAtAddressId;
+  }
+
+  /**
+   * @return the firstResponseDeterminedByStaffPersonId
+   */
+  public String getFirstResponseDeterminedByStaffPersonId() {
+    return firstResponseDeterminedByStaffPersonId;
+  }
+
+  /**
+   * @return the primaryContactStaffPersonId
+   */
+  public String getPrimaryContactStaffPersonId() {
+    return primaryContactStaffPersonId;
+  }
+
+  /**
+   * @return the countySpecificCode
+   */
+  public String getCountySpecificCode() {
+    return countySpecificCode;
+  }
+
+  /**
+   * @return the specialProjectReferralIndicator
+   */
+  public String getSpecialProjectReferralIndicator() {
+    return specialProjectReferralIndicator;
+  }
+
+  /**
+   * @return the zippyCreatedIndicator
+   */
+  public String getZippyCreatedIndicator() {
+    return zippyCreatedIndicator;
+  }
+
+  /**
+   * @return the homelessIndicator
+   */
+  public String getHomelessIndicator() {
+    return homelessIndicator;
+  }
+
+  /**
+   * @return the familyRefusedServicesIndicator
+   */
+  public String getFamilyRefusedServicesIndicator() {
+    return familyRefusedServicesIndicator;
+  }
+
+  /**
+   * @return the firstEvaluatedOutApprovalDate
+   */
+  public Date getFirstEvaluatedOutApprovalDate() {
+    return firstEvaluatedOutApprovalDate;
+  }
+
+  /**
+   * @return the responsibleAgencyCode
+   */
+  public String getResponsibleAgencyCode() {
+    return responsibleAgencyCode;
+  }
+
+  /**
+   * @return the limitedAccessGovtAgencyType
+   */
+  public Short getLimitedAccessGovtAgencyType() {
+    return limitedAccessGovtAgencyType;
+  }
+
+  /**
+   * @return the limitedAccessDate
+   */
+  public Date getLimitedAccessDate() {
+    return limitedAccessDate;
+  }
+
+  /**
+   * @return the limitedAccessDesc
+   */
+  public String getLimitedAccessDesc() {
+    return limitedAccessDesc;
+  }
+
+  /**
+   * @return the originalClosureDate
+   */
+  public Date getOriginalClosureDate() {
+    return originalClosureDate;
+  }
 }

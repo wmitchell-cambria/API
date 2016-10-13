@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class ReporterTest {
 
-	/*
-	 * Constructor test
-	 */
-	@Test
-	public void emtpyConstructorIsNotNull() throws Exception {
-		assertThat(Reporter.class.newInstance(), is(notNullValue()));
-	}
+  /*
+   * Constructor test
+   */
+  @Test
+  public void emtpyConstructorIsNotNull() throws Exception {
+    assertThat(Reporter.class.newInstance(), is(notNullValue()));
+  }
 
 }

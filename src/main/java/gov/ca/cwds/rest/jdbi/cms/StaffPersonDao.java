@@ -7,8 +7,8 @@ import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
 public class StaffPersonDao extends CrudsDaoImpl<StaffPerson> {
 
-	public StaffPersonDao(SessionFactory sessionFactory) {
-		super(sessionFactory);
-	}
+  public StaffPersonDao(SessionFactory sessionFactory) {
+    super(sessionFactory);
+  }
 
 }

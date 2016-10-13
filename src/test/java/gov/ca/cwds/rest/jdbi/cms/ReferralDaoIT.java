@@ -19,80 +19,80 @@ import org.junit.Test;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
 
 public class ReferralDaoIT {
-	private SessionFactory sessionFactory;
-	private ReferralDao referralDao;
+  private SessionFactory sessionFactory;
+  private ReferralDao referralDao;
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-	@Before
-	public void setup() {
-		sessionFactory = new Configuration().configure().buildSessionFactory();
-		sessionFactory.getCurrentSession().beginTransaction();
-		referralDao = new ReferralDao(sessionFactory);
-	}
+  @Before
+  public void setup() {
+    sessionFactory = new Configuration().configure().buildSessionFactory();
+    sessionFactory.getCurrentSession().beginTransaction();
+    referralDao = new ReferralDao(sessionFactory);
+  }
 
-	@After
-	public void tearndown() {
-		sessionFactory.close();
-	}
+  @After
+  public void tearndown() {
+    sessionFactory.close();
+  }
 
-	@Test
-	public void testFind() {
-		String id = "AbiQCgu0Hj";
-		Referral found = referralDao.find(id);
-		assertThat(found.getId(), is(id));
-	}
+  @Test
+  public void testFind() {
+    String id = "AbiQCgu0Hj";
+    Referral found = referralDao.find(id);
+    assertThat(found.getId(), is(id));
+  }
 
-	@Test
-	public void testCreate() {
-		Referral referral = new Referral("AbiQCgu0Ht", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ", (Date) null,
-				(short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N", (Date) null,
-				"Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0, (Date) null, (Date) null,
-				"", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N", "N", (Date) null, "C", (short) 0,
-				(Date) null, "", (Date) null);
-		Referral created = referralDao.create(referral);
-		assertThat(created, is(referral));
+  @Test
+  public void testCreate() {
+    Referral referral = new Referral("AbiQCgu0Ht", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ",
+        (Date) null, (short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N",
+        (Date) null, "Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0,
+        (Date) null, (Date) null, "", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N",
+        "N", (Date) null, "C", (short) 0, (Date) null, "", (Date) null);
+    Referral created = referralDao.create(referral);
+    assertThat(created, is(referral));
 
-	}
+  }
 
-	@Test
-	public void testCreateExistingEntityException() {
-		thrown.expect(EntityExistsException.class);
-		Referral referral = new Referral("AbiQCgu0Hj", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ", (Date) null,
-				(short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N", (Date) null,
-				"Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0, (Date) null, (Date) null,
-				"", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N", "N", (Date) null, "C", (short) 0,
-				(Date) null, "", (Date) null);
-		referralDao.create(referral);
-	}
+  @Test
+  public void testCreateExistingEntityException() {
+    thrown.expect(EntityExistsException.class);
+    Referral referral = new Referral("AbiQCgu0Hj", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ",
+        (Date) null, (short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N",
+        (Date) null, "Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0,
+        (Date) null, (Date) null, "", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N",
+        "N", (Date) null, "C", (short) 0, (Date) null, "", (Date) null);
+    referralDao.create(referral);
+  }
 
-	@Test
-	public void testDelete() {
-		String id = "AbiQCgu0Hj";
-		Referral deleted = referralDao.delete(id);
-		assertThat(deleted.getId(), is(id));
-	}
+  @Test
+  public void testDelete() {
+    String id = "AbiQCgu0Hj";
+    Referral deleted = referralDao.delete(id);
+    assertThat(deleted.getId(), is(id));
+  }
 
-	@Test
-	public void testUpdate() {
-		Referral referral = new Referral("AbiQCgu0Hj", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ", (Date) null,
-				(short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N", (Date) null,
-				"Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0, (Date) null, (Date) null,
-				"", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N", "N", (Date) null, "C", (short) 0,
-				(Date) null, "", (Date) null);
-		Referral updated = referralDao.update(referral);
-		assertThat(updated, is(referral));
-	}
+  @Test
+  public void testUpdate() {
+    Referral referral = new Referral("AbiQCgu0Hj", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ",
+        (Date) null, (short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N",
+        (Date) null, "Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0,
+        (Date) null, (Date) null, "", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N",
+        "N", (Date) null, "C", (short) 0, (Date) null, "", (Date) null);
+    Referral updated = referralDao.update(referral);
+    assertThat(updated, is(referral));
+  }
 
-	@Test
-	public void testUpdateEntityNotFoundException() {
-		thrown.expect(EntityNotFoundException.class);
-		Referral referral = new Referral("ZZZZZZZZZ", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ", (Date) null,
-				(short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N", (Date) null,
-				"Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0, (Date) null, (Date) null,
-				"", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N", "N", (Date) null, "C", (short) 0,
-				(Date) null, "", (Date) null);
-		referralDao.update(referral);
-	}
+  @Test
+  public void testUpdateEntityNotFoundException() {
+    thrown.expect(EntityNotFoundException.class);
+    Referral referral = new Referral("ZZZZZZZZZ", " ", "N", "N", "D5YRVOm0Ht", (short) 122, " ",
+        (Date) null, (short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N", "N",
+        (Date) null, "Verification (R3)", " ", (Date) null, (Date) null, (short) 1520, (short) 0,
+        (Date) null, (Date) null, "", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N", "N", "N",
+        "N", (Date) null, "C", (short) 0, (Date) null, "", (Date) null);
+    referralDao.update(referral);
+  }
 }

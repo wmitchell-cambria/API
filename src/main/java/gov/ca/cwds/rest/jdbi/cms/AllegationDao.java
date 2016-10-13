@@ -7,12 +7,12 @@ import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
 public class AllegationDao extends CrudsDaoImpl<Allegation> {
 
-	SessionFactory sessionFactory;
+  SessionFactory sessionFactory;
 
-	public AllegationDao(SessionFactory sessionFactory) {
-		super(sessionFactory);
-		this.sessionFactory = sessionFactory;
-	}
+  public AllegationDao(SessionFactory sessionFactory) {
+    super(sessionFactory);
+    this.sessionFactory = sessionFactory;
+  }
 
 
 }

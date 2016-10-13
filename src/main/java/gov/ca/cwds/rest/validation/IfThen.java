@@ -14,25 +14,26 @@ import javax.validation.Payload;
  * 
  * @author CWDS API Team
  */
-@Target({ TYPE_USE })
+@Target({TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = IfThenValidator.class)
 public @interface IfThen {
-	String message() default "{thenProperty} must be set if {ifProperty} is set";
-	
-	Class<?>[] groups() default {};
+  String message() default "{thenProperty} must be set if {ifProperty} is set";
 
-	Class<? extends Payload>[] payload() default {};
+  Class<?>[] groups() default {};
 
-	boolean required() default true;
+  Class<? extends Payload>[] payload() default {};
 
-	String ifProperty();
-	String thenProperty();
-	
+  boolean required() default true;
 
-	@Target({ TYPE_USE })
-	@Retention(RUNTIME)
-	@interface List {
-		IfThen[] value();
-	}
+  String ifProperty();
+
+  String thenProperty();
+
+
+  @Target({TYPE_USE})
+  @Retention(RUNTIME)
+  @interface List {
+    IfThen[] value();
+  }
 }

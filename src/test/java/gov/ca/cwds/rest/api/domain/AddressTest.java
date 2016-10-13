@@ -18,45 +18,43 @@ import nl.jqno.equalsverifier.Warning;
 
 public class AddressTest {
 
-    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-    
-    private static final AddressResource mockedAddressResource =
-    	      mock(AddressResource.class);
-    
-    @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
-        .addResource(mockedAddressResource).build();
+  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+
+  private static final AddressResource mockedAddressResource = mock(AddressResource.class);
+
+  @ClassRule
+  public static final ResourceTestRule resources =
+      ResourceTestRule.builder().addResource(mockedAddressResource).build();
 
 
-    /*
-     * Serialization and deserialization
-     */
-    @Test
-    public void serializesToJSON() throws Exception {
-    	String expected = MAPPER.writeValueAsString( new Address("123 Main", "Sacramento", "CA", 95757) );
+  /*
+   * Serialization and deserialization
+   */
+  @Test
+  public void serializesToJSON() throws Exception {
+    String expected = MAPPER.writeValueAsString(new Address("123 Main", "Sacramento", "CA", 95757));
 
-        String serialized = MAPPER.writeValueAsString(
-        		MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class));
+    String serialized = MAPPER.writeValueAsString(
+        MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class));
 
-        assertThat(serialized, is(expected));
-    }
-    
-    @Test
-    public void deserializesFromJSON() throws Exception {
-        Address expected = new Address("123 Main", "Sacramento", "CA", 95757);
-        Address serialized = MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class);
-        assertThat(serialized, is(expected));
-    }
-    
-    @Test
-    public void equalsHashCodeWork() {
-        EqualsVerifier.forClass(Address.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
-    }
-    
-    /*
-     * validation tests
-     */
-    
+    assertThat(serialized, is(expected));
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    Address expected = new Address("123 Main", "Sacramento", "CA", 95757);
+    Address serialized =
+        MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class);
+    assertThat(serialized, is(expected));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(Address.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
+  /*
+   * validation tests
+   */
+
 }

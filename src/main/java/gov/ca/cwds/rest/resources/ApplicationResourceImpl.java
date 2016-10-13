@@ -12,26 +12,26 @@ import io.swagger.annotations.Api;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_APPLICATION, hidden=true)
+@Api(value = RESOURCE_APPLICATION, hidden = true)
 @Path(RESOURCE_APPLICATION)
 public class ApplicationResourceImpl implements ApplicationResource {
 
-	private String applicationName;
+  private String applicationName;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param applicationName The name of the application
-	 */
-	public ApplicationResourceImpl(String applicationName) {
-		this.applicationName = applicationName;
+  /**
+   * Constructor
+   * 
+   * @param applicationName The name of the application
+   */
+  public ApplicationResourceImpl(String applicationName) {
+    this.applicationName = applicationName;
 
-	}
+  }
 
-	/**
-	 * Get the name of the application
-	 */
-	public String getApplicationName() {
-		return applicationName;
-	}
+  /**
+   * Get the name of the application
+   */
+  public String getApplicationName() {
+    return applicationName;
+  }
 }

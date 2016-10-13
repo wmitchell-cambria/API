@@ -7,8 +7,8 @@ import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
 public class ReferralClientDao extends CrudsDaoImpl<ReferralClient> {
 
-	public ReferralClientDao(SessionFactory sessionFactory) {
-		super(sessionFactory);
-	}
+  public ReferralClientDao(SessionFactory sessionFactory) {
+    super(sessionFactory);
+  }
 
 }

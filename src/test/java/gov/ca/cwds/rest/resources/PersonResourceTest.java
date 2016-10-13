@@ -21,67 +21,68 @@ import gov.ca.cwds.rest.api.domain.Person;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
- * NOTE : The CWDS API Team has taken the pattern of delegating Resource
- * functions to {@link CrudsResourceImpl}. As such the tests in here reflect
- * that assumption.
+ * NOTE : The CWDS API Team has taken the pattern of delegating Resource functions to
+ * {@link CrudsResourceImpl}. As such the tests in here reflect that assumption.
  * 
  * @author CWDS API Team
  */
 public class PersonResourceTest {
-	private static final String ROOT_RESOURCE = "/people/";
-	private static final String FOUND_RESOURCE = "/people/1";
+  private static final String ROOT_RESOURCE = "/people/";
+  private static final String FOUND_RESOURCE = "/people/1";
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-	@SuppressWarnings({ "unchecked" })
-	private static CrudsResource<Person> mockedCrudsResource = mock(CrudsResource.class);
+  @SuppressWarnings({"unchecked"})
+  private static CrudsResource<Person> mockedCrudsResource = mock(CrudsResource.class);
 
-	@ClassRule
-	public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder().addResource(new PersonResource(mockedCrudsResource))
-			.build();
+  @ClassRule
+  public static final ResourceTestRule inMemoryResource =
+      ResourceTestRule.builder().addResource(new PersonResource(mockedCrudsResource)).build();
 
-	/*
-	 * Get Tests
-	 */
+  /*
+   * Get Tests
+   */
 
-	@Test
-	public void getDelegatesToCrudsResource() throws Exception {
-		inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON).get().getStatus();
-		verify(mockedCrudsResource).get("1", MediaType.APPLICATION_JSON);
-	}
+  @Test
+  public void getDelegatesToCrudsResource() throws Exception {
+    inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .get().getStatus();
+    verify(mockedCrudsResource).get("1", MediaType.APPLICATION_JSON);
+  }
 
-	/*
-	 * Create Tests
-	 */
-	@Test
-	public void createDelegatesToCrudsResource() throws Exception {
-		Person person = new Person("firstname", "last", "gender", "11/22/1973", "000000000", null);
-		inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
-		verify(mockedCrudsResource).create(eq(person), eq(MediaType.APPLICATION_JSON), any(UriInfo.class),
-				any(HttpServletResponse.class));
-	}
+  /*
+   * Create Tests
+   */
+  @Test
+  public void createDelegatesToCrudsResource() throws Exception {
+    Person person = new Person("firstname", "last", "gender", "11/22/1973", "000000000", null);
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
+    verify(mockedCrudsResource).create(eq(person), eq(MediaType.APPLICATION_JSON),
+        any(UriInfo.class), any(HttpServletResponse.class));
+  }
 
-	/*
-	 * Delete Tests
-	 */
-	@Test
-	public void deleteReturns501() throws Exception {
-		int receivedStatus = inMemoryResource.client().target(FOUND_RESOURCE).request()
-				.accept(MediaType.APPLICATION_JSON).delete().getStatus();
-		int expectedStatus = 501;
-		assertThat(receivedStatus, is(expectedStatus));
-	}
+  /*
+   * Delete Tests
+   */
+  @Test
+  public void deleteReturns501() throws Exception {
+    int receivedStatus = inMemoryResource.client().target(FOUND_RESOURCE).request()
+        .accept(MediaType.APPLICATION_JSON).delete().getStatus();
+    int expectedStatus = 501;
+    assertThat(receivedStatus, is(expectedStatus));
+  }
 
-	/*
-	 * Update Tests
-	 */
-	@Test
-	public void udpateReturns501() throws Exception {
-		Person person = new Person("firstname", "last", "gender", "11/22/1973", "000000000", null);
-		int status = inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-				.put(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
-		assertThat(status, is(501));
-	}
+  /*
+   * Update Tests
+   */
+  @Test
+  public void udpateReturns501() throws Exception {
+    Person person = new Person("firstname", "last", "gender", "11/22/1973", "000000000", null);
+    int status =
+        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .put(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
+    assertThat(status, is(501));
+  }
 }

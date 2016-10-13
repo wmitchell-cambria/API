@@ -7,9 +7,9 @@ import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
 public class CrossReportDao extends CrudsDaoImpl<CrossReport> {
 
-	public CrossReportDao(SessionFactory sessionFactory) {
-		super(sessionFactory);
-	}
+  public CrossReportDao(SessionFactory sessionFactory) {
+    super(sessionFactory);
+  }
 
 }
 

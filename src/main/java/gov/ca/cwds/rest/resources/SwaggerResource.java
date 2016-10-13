@@ -16,19 +16,19 @@ import io.swagger.annotations.Api;
 @Path(value = "swagger")
 @Produces(MediaType.TEXT_HTML)
 public class SwaggerResource {
-	private SwaggerConfiguration swaggerConfiguration;
+  private SwaggerConfiguration swaggerConfiguration;
 
-	public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
-		super();
-		this.swaggerConfiguration = swaggerConfiguration;
+  public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
+    super();
+    this.swaggerConfiguration = swaggerConfiguration;
 
-	}
+  }
 
-	@GET
-	public SwaggerView get(@Context UriInfo uriInfo) {
-		UriBuilder ub = uriInfo.getBaseUriBuilder();
-		String swaggerjsonUrl = ub.path("swagger.json").build().toASCIIString();
-		return new SwaggerView(swaggerConfiguration, swaggerjsonUrl);
-	}
+  @GET
+  public SwaggerView get(@Context UriInfo uriInfo) {
+    UriBuilder ub = uriInfo.getBaseUriBuilder();
+    String swaggerjsonUrl = ub.path("swagger.json").build().toASCIIString();
+    return new SwaggerView(swaggerConfiguration, swaggerjsonUrl);
+  }
 
 }

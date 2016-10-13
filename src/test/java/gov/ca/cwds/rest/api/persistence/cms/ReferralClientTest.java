@@ -11,17 +11,18 @@ import nl.jqno.equalsverifier.Warning;
 
 public class ReferralClientTest {
 
-	/*
-	 * Constructor test
-	 */
-	@Test
-	public void emtpyConstructorIsNotNull() throws Exception {
-		assertThat(ReferralClient.class.newInstance(), is(notNullValue()));
-	}
+  /*
+   * Constructor test
+   */
+  @Test
+  public void emtpyConstructorIsNotNull() throws Exception {
+    assertThat(ReferralClient.class.newInstance(), is(notNullValue()));
+  }
 
-	@Test
-	public void equalsHashCodeWork() {
-		EqualsVerifier.forClass(ReferralClient.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS).verify();
-	}
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(ReferralClient.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS)
+        .verify();
+  }
 
 }

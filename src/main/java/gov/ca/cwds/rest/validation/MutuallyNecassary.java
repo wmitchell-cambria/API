@@ -17,10 +17,10 @@ import javax.validation.Payload;
 
 /**
  * Annotation indicating that all of the given properties are required together.
- *  
+ * 
  * @author CWDS API Team
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = MutuallyNecassaryValidator.class)
@@ -32,6 +32,6 @@ public @interface MutuallyNecassary {
   Class<? extends Payload>[] payload() default {};
 
   String[] properties() default {};
-  
+
   boolean required() default true;
 }

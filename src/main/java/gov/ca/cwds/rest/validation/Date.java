@@ -23,14 +23,14 @@ import javax.validation.Payload;
 @Documented
 @Constraint(validatedBy = DateValidator.class)
 public @interface Date {
-    String message() default "must be in the format of {format}";
+  String message() default "must be in the format of {format}";
 
-    Class<?>[] groups() default {};
-    
-    Class<? extends Payload>[] payload() default {};
-    
-    String format() default "MM/dd/yyyy";
+  Class<?>[] groups() default {};
 
-    boolean required() default true;
+  Class<? extends Payload>[] payload() default {};
+
+  String format() default "MM/dd/yyyy";
+
+  boolean required() default true;
 
 }

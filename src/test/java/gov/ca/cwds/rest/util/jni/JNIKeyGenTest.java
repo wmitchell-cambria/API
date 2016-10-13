@@ -4,9 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * TODO: The JNI native library does not run on the Jenkins Linux environment due to missing dependencies.
+ * TODO: The JNI native library does not run on the Jenkins Linux environment due to missing
+ * dependencies.
  * 
- * <p/>The library does build and run on OS X and Linux environments with current compilers installed.
+ * <p/>
+ * The library does build and run on OS X and Linux environments with current compilers installed.
  * 
  */
 public class JNIKeyGenTest {
@@ -17,7 +19,7 @@ public class JNIKeyGenTest {
 
   @Before
   public void setUpBeforeTest() throws Exception {
-//    this.inst = new KeyJNI();
+    // this.inst = new KeyJNI();
   }
 
   // ===================
@@ -26,58 +28,58 @@ public class JNIKeyGenTest {
 
   @Test
   public void testGenKeyGood() {
-//    final String key = inst.generateKey("0X5");
-//    assertTrue("key not generated", key != null && key.length() == GOOD_KEY_LEN);
+    // final String key = inst.generateKey("0X5");
+    // assertTrue("key not generated", key != null && key.length() == GOOD_KEY_LEN);
   }
 
   @Test
   public void testGenKeyGoodStaff2() {
     // Good staff id.
-//    final String key = inst.generateKey("0yz");
-//    assertTrue("key not generated", key != null && key.length() == GOOD_KEY_LEN);
+    // final String key = inst.generateKey("0yz");
+    // assertTrue("key not generated", key != null && key.length() == GOOD_KEY_LEN);
   }
 
   @Test
   public void testGenKeyBadStaffEmpty() {
     // Empty staff id.
-//    final String key = inst.generateKey("");
-//    assertTrue("key generated", key == null || key.length() == 0);
+    // final String key = inst.generateKey("");
+    // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test
   public void testGenKeyBadStaffNull() {
     // Null staff id.
-//    final String key = inst.generateKey(null);
-//    assertTrue("key generated", key == null || key.length() == 0);
+    // final String key = inst.generateKey(null);
+    // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test
   public void testGenKeyBadStaffWrongLength() {
     // Wrong staff id length.
-//    final String key = inst.generateKey("abcdefg");
-//    assertTrue("key generated", key == null || key.length() == 0);
+    // final String key = inst.generateKey("abcdefg");
+    // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test
   public void testGenKeyBadStaffTooShort() {
     // Wrong staff id length.
-//    final String key = inst.generateKey("a");
-//    assertTrue("key generated", key == null || key.length() == 0);
+    // final String key = inst.generateKey("a");
+    // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test
   public void testGenKeyBadStaffTooLong() {
     // Wrong staff id length.
-//    final String key =
-//        inst.generateKey("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
-//    assertTrue("key generated", key == null || key.length() == 0);
+    // final String key =
+    // inst.generateKey("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
+    // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test
   public void testGenKeyBadStaffBadChars() {
     // Invalid chars in staff id.
-//    final String key = inst.generateKey("ab&");
-//    assertTrue("key generated", key == null || key.length() == 0);
+    // final String key = inst.generateKey("ab&");
+    // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   // ===================
@@ -87,33 +89,33 @@ public class JNIKeyGenTest {
   @Test
   public void testDecomposeKeyLong() {
     // Wrong staff id size: too long.
-//    KeyDetail kd = new KeyDetail();
-//    inst.decomposeKey("wro000000000000ng", kd);
-//    assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
+    // KeyDetail kd = new KeyDetail();
+    // inst.decomposeKey("wro000000000000ng", kd);
+    // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
   @Test
   public void testDecomposeKeyShort() {
     // Wrong staff id size: too short.
-//    KeyDetail kd = new KeyDetail();
-//    inst.decomposeKey("w", kd);
-//    assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
+    // KeyDetail kd = new KeyDetail();
+    // inst.decomposeKey("w", kd);
+    // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
   @Test
   public void testDecomposeKeyEmpty() {
     // Empty staff id.
-//    KeyDetail kd = new KeyDetail();
-//    inst.decomposeKey("", kd);
-//    assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
+    // KeyDetail kd = new KeyDetail();
+    // inst.decomposeKey("", kd);
+    // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
   @Test
   public void testDecomposeKeyNull() {
     // Null staff id.
-//    KeyDetail kd = new KeyDetail();
-//    inst.decomposeKey(null, kd);
-//    assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
+    // KeyDetail kd = new KeyDetail();
+    // inst.decomposeKey(null, kd);
+    // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
 }

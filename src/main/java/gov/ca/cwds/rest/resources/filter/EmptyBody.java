@@ -9,10 +9,11 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation indicating a resource method needs to have its body content emptied out.
- *  
+ * 
  * @author CWDS API Team
  */
 @Target({METHOD})
 @Retention(RUNTIME)
 @Documented
-public @interface EmptyBody {}
+public @interface EmptyBody {
+}

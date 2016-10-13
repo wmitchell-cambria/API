@@ -24,278 +24,278 @@ import gov.ca.cwds.rest.api.persistence.cms.ReferralClient.PrimaryKey;
 @IdClass(PrimaryKey.class)
 public class ReferralClient extends PersistentObject {
 
-	@Id
-	@Column(name = "FKREFERL_T")
-	private String referralId;
+  @Id
+  @Column(name = "FKREFERL_T")
+  private String referralId;
 
-	@Id
-	@Column(name = "FKCLIENT_T")
-	private String clientId;
+  @Id
+  @Column(name = "FKCLIENT_T")
+  private String clientId;
 
-	@Column(name = "APRVL_NO")
-	private String approvalNumber;
+  @Column(name = "APRVL_NO")
+  private String approvalNumber;
 
-	@Type(type = "short")
-	@Column(name = "APV_STC")
-	private Short approvalStatusType;
+  @Type(type = "short")
+  @Column(name = "APV_STC")
+  private Short approvalStatusType;
 
-	@Type(type = "short")
-	@Column(name = "DSP_RSNC")
-	private Short dispositionClosureReasonType;
+  @Type(type = "short")
+  @Column(name = "DSP_RSNC")
+  private Short dispositionClosureReasonType;
 
-	@Column(name = "DISPSTN_CD")
-	private String dispositionCode;
+  @Column(name = "DISPSTN_CD")
+  private String dispositionCode;
 
-	@Type(type = "date")
-	@Column(name = "RCL_DISPDT")
-	private Date dispositionDate;
+  @Type(type = "date")
+  @Column(name = "RCL_DISPDT")
+  private Date dispositionDate;
 
-	@Column(name = "SLFRPT_IND")
-	private String selfReportedIndicator;
+  @Column(name = "SLFRPT_IND")
+  private String selfReportedIndicator;
 
-	@Column(name = "STFADD_IND")
-	private String staffPersonAddedIndicator;
+  @Column(name = "STFADD_IND")
+  private String staffPersonAddedIndicator;
 
-	@Column(name = "DSP_CLSDSC")
-	private String dispositionClosureDescription;
+  @Column(name = "DSP_CLSDSC")
+  private String dispositionClosureDescription;
 
-	@Type(type = "short")
-	@Column(name = "RFCL_AGENO")
-	private Short ageNumber;
+  @Type(type = "short")
+  @Column(name = "RFCL_AGENO")
+  private Short ageNumber;
 
-	@Column(name = "AGE_PRD_CD")
-	private String agePeriodCode;
+  @Column(name = "AGE_PRD_CD")
+  private String agePeriodCode;
 
-	@Column(name = "CNTY_SPFCD")
-	private String countySpecificCode;
+  @Column(name = "CNTY_SPFCD")
+  private String countySpecificCode;
 
-	@Column(name = "MHLTH_IND")
-	private String mentalHealthIssuesIndicator;
+  @Column(name = "MHLTH_IND")
+  private String mentalHealthIssuesIndicator;
 
-	@Column(name = "ALCHL_IND")
-	private String alcoholIndicator;
+  @Column(name = "ALCHL_IND")
+  private String alcoholIndicator;
 
-	@Column(name = "DRUG_IND")
-	private String drugIndicator;
+  @Column(name = "DRUG_IND")
+  private String drugIndicator;
 
-	/**
-	 * Default constructor
-	 * 
-	 * Required for Hibernate
-	 */
-	public ReferralClient() {
-		super();
-	}
+  /**
+   * Default constructor
+   * 
+   * Required for Hibernate
+   */
+  public ReferralClient() {
+    super();
+  }
 
-	public ReferralClient(String referralId, String clientId, String approvalNumber, Short approvalStatusType,
-			Short dispositionClosureReasonType, String dispositionCode, Date dispositionDate,
-			String selfReportedIndicator, String staffPersonAddedIndicator, String dispositionClosureDescription,
-			Short ageNumber, String agePeriodCode, String countySpecificCode, String mentalHealthIssuesIndicator,
-			String alcoholIndicator, String drugIndicator) {
-		super();
-		this.referralId = referralId;
-		this.clientId = clientId;
-		this.approvalNumber = approvalNumber;
-		this.approvalStatusType = approvalStatusType;
-		this.dispositionClosureReasonType = dispositionClosureReasonType;
-		this.dispositionCode = dispositionCode;
-		this.dispositionDate = dispositionDate;
-		this.selfReportedIndicator = selfReportedIndicator;
-		this.staffPersonAddedIndicator = staffPersonAddedIndicator;
-		this.dispositionClosureDescription = dispositionClosureDescription;
-		this.ageNumber = ageNumber;
-		this.agePeriodCode = agePeriodCode;
-		this.countySpecificCode = countySpecificCode;
-		this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
-		this.alcoholIndicator = alcoholIndicator;
-		this.drugIndicator = drugIndicator;
-	}
+  public ReferralClient(String referralId, String clientId, String approvalNumber,
+      Short approvalStatusType, Short dispositionClosureReasonType, String dispositionCode,
+      Date dispositionDate, String selfReportedIndicator, String staffPersonAddedIndicator,
+      String dispositionClosureDescription, Short ageNumber, String agePeriodCode,
+      String countySpecificCode, String mentalHealthIssuesIndicator, String alcoholIndicator,
+      String drugIndicator) {
+    super();
+    this.referralId = referralId;
+    this.clientId = clientId;
+    this.approvalNumber = approvalNumber;
+    this.approvalStatusType = approvalStatusType;
+    this.dispositionClosureReasonType = dispositionClosureReasonType;
+    this.dispositionCode = dispositionCode;
+    this.dispositionDate = dispositionDate;
+    this.selfReportedIndicator = selfReportedIndicator;
+    this.staffPersonAddedIndicator = staffPersonAddedIndicator;
+    this.dispositionClosureDescription = dispositionClosureDescription;
+    this.ageNumber = ageNumber;
+    this.agePeriodCode = agePeriodCode;
+    this.countySpecificCode = countySpecificCode;
+    this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
+    this.alcoholIndicator = alcoholIndicator;
+    this.drugIndicator = drugIndicator;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
-	 */
-	@Override
-	public Serializable getPrimaryKey() {
-		return new PrimaryKey(this.getReferralId(), this.getClientId());
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
+   */
+  @Override
+  public Serializable getPrimaryKey() {
+    return new PrimaryKey(this.getReferralId(), this.getClientId());
+  }
 
-	/**
-	 * @return the referralId
-	 */
-	public String getReferralId() {
-		return referralId;
-	}
+  /**
+   * @return the referralId
+   */
+  public String getReferralId() {
+    return referralId;
+  }
 
-	/**
-	 * @return the clientId
-	 */
-	public String getClientId() {
-		return clientId;
-	}
+  /**
+   * @return the clientId
+   */
+  public String getClientId() {
+    return clientId;
+  }
 
-	/**
-	 * @return the approvalNumber
-	 */
-	public String getApprovalNumber() {
-		return approvalNumber;
-	}
+  /**
+   * @return the approvalNumber
+   */
+  public String getApprovalNumber() {
+    return approvalNumber;
+  }
 
-	/**
-	 * @return the approvalStatusType
-	 */
-	public Short getApprovalStatusType() {
-		return approvalStatusType;
-	}
+  /**
+   * @return the approvalStatusType
+   */
+  public Short getApprovalStatusType() {
+    return approvalStatusType;
+  }
 
-	/**
-	 * @return the dispositionClosureReasonType
-	 */
-	public Short getDispositionClosureReasonType() {
-		return dispositionClosureReasonType;
-	}
+  /**
+   * @return the dispositionClosureReasonType
+   */
+  public Short getDispositionClosureReasonType() {
+    return dispositionClosureReasonType;
+  }
 
-	/**
-	 * @return the dispositionCode
-	 */
-	public String getDispositionCode() {
-		return dispositionCode;
-	}
+  /**
+   * @return the dispositionCode
+   */
+  public String getDispositionCode() {
+    return dispositionCode;
+  }
 
-	/**
-	 * @return the dispositionDate
-	 */
-	public Date getDispositionDate() {
-		return dispositionDate;
-	}
+  /**
+   * @return the dispositionDate
+   */
+  public Date getDispositionDate() {
+    return dispositionDate;
+  }
 
-	/**
-	 * @return the selfReportedIndicator
-	 */
-	public String getSelfReportedIndicator() {
-		return selfReportedIndicator;
-	}
+  /**
+   * @return the selfReportedIndicator
+   */
+  public String getSelfReportedIndicator() {
+    return selfReportedIndicator;
+  }
 
-	/**
-	 * @return the staffPersonAddedIndicator
-	 */
-	public String getStaffPersonAddedIndicator() {
-		return staffPersonAddedIndicator;
-	}
+  /**
+   * @return the staffPersonAddedIndicator
+   */
+  public String getStaffPersonAddedIndicator() {
+    return staffPersonAddedIndicator;
+  }
 
-	/**
-	 * @return the dispositionClosureDescription
-	 */
-	public String getDispositionClosureDescription() {
-		return dispositionClosureDescription;
-	}
+  /**
+   * @return the dispositionClosureDescription
+   */
+  public String getDispositionClosureDescription() {
+    return dispositionClosureDescription;
+  }
 
-	/**
-	 * @return the ageNumber
-	 */
-	public Short getAgeNumber() {
-		return ageNumber;
-	}
+  /**
+   * @return the ageNumber
+   */
+  public Short getAgeNumber() {
+    return ageNumber;
+  }
 
-	/**
-	 * @return the agePeriodCode
-	 */
-	public String getAgePeriodCode() {
-		return agePeriodCode;
-	}
+  /**
+   * @return the agePeriodCode
+   */
+  public String getAgePeriodCode() {
+    return agePeriodCode;
+  }
 
-	/**
-	 * @return the countySpecificCode
-	 */
-	public String getCountySpecificCode() {
-		return countySpecificCode;
-	}
+  /**
+   * @return the countySpecificCode
+   */
+  public String getCountySpecificCode() {
+    return countySpecificCode;
+  }
 
-	/**
-	 * @return the mentalHealthIssuesIndicator
-	 */
-	public String getMentalHealthIssuesIndicator() {
-		return mentalHealthIssuesIndicator;
-	}
+  /**
+   * @return the mentalHealthIssuesIndicator
+   */
+  public String getMentalHealthIssuesIndicator() {
+    return mentalHealthIssuesIndicator;
+  }
 
-	/**
-	 * @return the alcoholIndicator
-	 */
-	public String getAlcoholIndicator() {
-		return alcoholIndicator;
-	}
+  /**
+   * @return the alcoholIndicator
+   */
+  public String getAlcoholIndicator() {
+    return alcoholIndicator;
+  }
 
-	/**
-	 * @return the drugIndicator
-	 */
-	public String getDrugIndicator() {
-		return drugIndicator;
-	}
+  /**
+   * @return the drugIndicator
+   */
+  public String getDrugIndicator() {
+    return drugIndicator;
+  }
 
-	public static final class PrimaryKey implements Serializable {
-		private static final long serialVersionUID = 1L;
-		private String referralId;
-		private String clientId;
+  public static final class PrimaryKey implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String referralId;
+    private String clientId;
 
-		public PrimaryKey() {
-		}
+    public PrimaryKey() {}
 
-		public PrimaryKey(String referralId, String clientId) {
-			this.referralId = referralId;
-			this.clientId = clientId;
-		}
+    public PrimaryKey(String referralId, String clientId) {
+      this.referralId = referralId;
+      this.clientId = clientId;
+    }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "referralId=" + referralId.trim() + ",clientId=" + clientId.trim();
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+      return "referralId=" + referralId.trim() + ",clientId=" + clientId.trim();
+    }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Object#hashCode()
-		 */
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
-			result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
-			return result;
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+      result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
+      return result;
+    }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			PrimaryKey other = (PrimaryKey) obj;
-			if (clientId == null) {
-				if (other.clientId != null)
-					return false;
-			} else if (!clientId.equals(other.clientId))
-				return false;
-			if (referralId == null) {
-				if (other.referralId != null)
-					return false;
-			} else if (!referralId.equals(other.referralId))
-				return false;
-			return true;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      PrimaryKey other = (PrimaryKey) obj;
+      if (clientId == null) {
+        if (other.clientId != null)
+          return false;
+      } else if (!clientId.equals(other.clientId))
+        return false;
+      if (referralId == null) {
+        if (other.referralId != null)
+          return false;
+      } else if (!referralId.equals(other.referralId))
+        return false;
+      return true;
+    }
+  }
 
 }

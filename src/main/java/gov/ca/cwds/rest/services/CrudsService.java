@@ -9,48 +9,44 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
  * 
  * @author CWDS API Team
  *
- * @param <T>	The {@link DomainObject} the service implements CRUDS for
+ * @param <T> The {@link DomainObject} the service implements CRUDS for
  * 
  */
 public interface CrudsService<T extends DomainObject> extends Service {
-	
-	/**
-	 * Find object by primaryKey
-	 * 
-	 * @param primaryKey
-	 *            The primaryKey of the object to find.
-	 * 
-	 * @return The found object, null otherwise
-	 */
-	public T find(Serializable primaryKey);
 
-	/**
-	 * Delete object by id
-	 * 
-	 * @param id
-	 *            The id of the object to delete.
-	 * 
-	 * @return The deleted object, null if not found
-	 */
-	public T delete(Serializable id);
+  /**
+   * Find object by primaryKey
+   * 
+   * @param primaryKey The primaryKey of the object to find.
+   * 
+   * @return The found object, null otherwise
+   */
+  public T find(Serializable primaryKey);
 
-	/**
-	 * Create object
-	 * 
-	 * @param object
-	 *            The object to be created
-	 * 
-	 * @return The primaryKey of the newly created object
-	 */
-	public Serializable create(T object);
+  /**
+   * Delete object by id
+   * 
+   * @param id The id of the object to delete.
+   * 
+   * @return The deleted object, null if not found
+   */
+  public T delete(Serializable id);
 
-	/**
-	 * Update object
-	 * 
-	 * @param object
-	 *            The object to be updated
-	 * 
-	 * @return The id of the updated object
-	 */
-	public String update(T object);
+  /**
+   * Create object
+   * 
+   * @param object The object to be created
+   * 
+   * @return The primaryKey of the newly created object
+   */
+  public Serializable create(T object);
+
+  /**
+   * Update object
+   * 
+   * @param object The object to be updated
+   * 
+   * @return The id of the updated object
+   */
+  public String update(T object);
 }

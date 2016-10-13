@@ -11,17 +11,18 @@ import nl.jqno.equalsverifier.Warning;
 
 public class CrossReportTest {
 
-	/*
-	 * Constructor test
-	 */
-	@Test
-	public void emtpyConstructorIsNotNull() throws Exception {
-		assertThat(CrossReport.class.newInstance(), is(notNullValue()));
-	}
-	
-	@Test
-	public void equalsHashCodeWork() {
-		EqualsVerifier.forClass(CrossReport.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS).verify();
-	}
+  /*
+   * Constructor test
+   */
+  @Test
+  public void emtpyConstructorIsNotNull() throws Exception {
+    assertThat(CrossReport.class.newInstance(), is(notNullValue()));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(CrossReport.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS)
+        .verify();
+  }
 
 }
