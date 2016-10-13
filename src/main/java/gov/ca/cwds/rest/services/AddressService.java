@@ -41,7 +41,7 @@ public class AddressService implements CrudsService<Address> {
 	 */
 	@Override
 	public String update(Address object) {
-		throw new NotImplementedException("Delete is not implemented");
+		throw new NotImplementedException("Update is not implemented");
 	}
 
 }

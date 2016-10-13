@@ -6,6 +6,9 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+
 public class ReferralClientTest {
 
 	/*
@@ -14,6 +17,11 @@ public class ReferralClientTest {
 	@Test
 	public void emtpyConstructorIsNotNull() throws Exception {
 		assertThat(ReferralClient.class.newInstance(), is(notNullValue()));
+	}
+
+	@Test
+	public void equalsHashCodeWork() {
+		EqualsVerifier.forClass(ReferralClient.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS).verify();
 	}
 
 }

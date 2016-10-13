@@ -44,22 +44,22 @@ public class CrudsResourceImplTest {
 
 	private static CrudsResourceImplTestDomainObject nonUniqueDomainObject;
 	private static CrudsResourceImplTestDomainObject uniqueDomainObject;
+	private static CrudsResourceImplTestDomainObject unexpectedExceptionDomainObject;
 
 	@ClassRule
-	public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder().addResource(new TestCrudsResourceImpl())
-			.build();
+	public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder()
+			.addResource(new TestCrudsResourceImpl()).build();
 
 	@ClassRule
 	public static final ResourceTestRule grizzlyResource = ResourceTestRule.builder()
 			.setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(new TestCrudsResourceImpl())
 			.build();
-	
+
 	@Before
 	public void setup() throws Exception {
-
 		nonUniqueDomainObject = new CrudsResourceImplTestDomainObject(ID_FOUND);
-
 		uniqueDomainObject = new CrudsResourceImplTestDomainObject(ID_NOT_FOUND);
+		unexpectedExceptionDomainObject = new CrudsResourceImplTestDomainObject("13");
 
 		when(crudsService.find(ID_NOT_FOUND)).thenReturn(null);
 		when(crudsService.find(ID_FOUND)).thenReturn(nonUniqueDomainObject);
@@ -68,6 +68,10 @@ public class CrudsResourceImplTest {
 		when(crudsService.create(eq(uniqueDomainObject))).thenReturn(nonUniqueDomainObject.getId());
 		when(crudsService.create(eq(nonUniqueDomainObject)))
 				.thenThrow(new ServiceException(new EntityExistsException()));
+		when(crudsService.create(eq(unexpectedExceptionDomainObject)))
+				.thenThrow(new ServiceException(new RuntimeException()));
+		when(crudsService.update(eq(unexpectedExceptionDomainObject)))
+				.thenThrow(new ServiceException(new RuntimeException()));
 		when(crudsService.update(eq(uniqueDomainObject)))
 				.thenThrow(new ServiceException(new EntityNotFoundException()));
 		when(crudsService.update(eq(nonUniqueDomainObject))).thenReturn(nonUniqueDomainObject.getId());
@@ -85,21 +89,20 @@ public class CrudsResourceImplTest {
 
 	@Test
 	public void getReturns404WhenNotFound() {
-		assertThat(inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON).get()
-				.getStatus(), is(equalTo(404)));
+		assertThat(inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.get().getStatus(), is(equalTo(404)));
 	}
 
 	@Test
 	public void getReturns406WhenVersionNotSupport() {
-		assertThat(
-				inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(),
-				is(equalTo(406)));
+		assertThat(inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get()
+				.getStatus(), is(equalTo(406)));
 	}
 
 	@Test
 	public void getReturnsNonNullEntity() {
-		Object entity = inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON).get()
-				.getEntity();
+		Object entity = inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.get().getEntity();
 		assertThat(entity, is(notNullValue()));
 	}
 
@@ -108,21 +111,20 @@ public class CrudsResourceImplTest {
 	 */
 	@Test
 	public void deleteReturns200WhenDeleted() {
-		assertThat(inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON).delete()
-				.getStatus(), is(equalTo(200)));
+		assertThat(inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.delete().getStatus(), is(equalTo(200)));
 	}
 
 	@Test
 	public void deleteReturns404WhenNotFound() {
-		assertThat(inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON).get()
-				.getStatus(), is(equalTo(404)));
+		assertThat(inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.delete().getStatus(), is(equalTo(404)));
 	}
 
 	@Test
 	public void deleteReturns406WhenVersionNotSupport() {
-		assertThat(
-				inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").get().getStatus(),
-				is(equalTo(406)));
+		assertThat(inMemoryResource.client().target(NOT_FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION").delete()
+				.getStatus(), is(equalTo(406)));
 	}
 
 	/*
@@ -158,14 +160,24 @@ public class CrudsResourceImplTest {
 						.post(Entity.entity(nonUniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
 				is(equalTo(409)));
 	}
-	
+
 	@Test
 	public void createReturns400WhenCannotProcessJson() throws Exception {
-		//create expects to deserialize the payload to a CrudsResourceImplTestDomainObject - lets give it something else instead.
+		// create expects to deserialize the payload to a
+		// CrudsResourceImplTestDomainObject - lets give it something else
+		// instead.
 		Address address = new Address("street", "city", "state", 12345);
-		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON).post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
+		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
 		assertThat(status, is(400));
-		
+
+	}
+
+	@Test
+	public void createReturns503OnUnexpectedException() throws Exception {
+		int status = grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(unexpectedExceptionDomainObject, MediaType.APPLICATION_JSON)).getStatus();
+		assertThat(status, is(503));
 	}
 
 	/*
@@ -193,6 +205,13 @@ public class CrudsResourceImplTest {
 				inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
 						.put(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
 				is(equalTo(404)));
+	}
+
+	@Test
+	public void updateReturns503OnUnexpectedException() throws Exception {
+		int status = inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+				.put(Entity.entity(unexpectedExceptionDomainObject, MediaType.APPLICATION_JSON)).getStatus();
+		assertThat(status, is(503));
 	}
 
 	/*
