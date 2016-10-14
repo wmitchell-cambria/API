@@ -1,13 +1,13 @@
 package gov.ca.cwds.rest.api.domain;
 
+import javax.validation.constraints.Pattern;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.validation.Date;
-import gov.ca.cwds.rest.validation.Gender;
 import gov.ca.cwds.rest.validation.PastDate;
 
-// TODO - RDB add constraints
 /**
  * {@link DomainObject} representing an person
  * 
@@ -20,7 +20,7 @@ public final class Person extends DomainObject {
   @JsonProperty("last_name")
   private String last_name;
 
-  @Gender
+  @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   @JsonProperty("gender")
   private String gender;
 
@@ -47,9 +47,9 @@ public final class Person extends DomainObject {
    */
   @JsonCreator
   public Person(@JsonProperty("first_name") String first_name,
-      @JsonProperty("last_name") String last_name, @JsonProperty("gender") @Gender String gender,
-      @JsonProperty("date_of_birth") @Date @PastDate String date_of_birth,
-      @JsonProperty("ssn") String ssn, @JsonProperty("address") Address address) {
+      @JsonProperty("last_name") String last_name, @JsonProperty("gender") String gender,
+      @JsonProperty("date_of_birth") String date_of_birth, @JsonProperty("ssn") String ssn,
+      @JsonProperty("address") Address address) {
     super();
     this.first_name = first_name;
     this.last_name = last_name;

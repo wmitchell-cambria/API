@@ -90,9 +90,6 @@ public class PersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(204)));
-    // assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
-    // is(greaterThanOrEqualTo(0)));
-
   }
 
   /*
@@ -100,41 +97,29 @@ public class PersonTest {
    */
   @Test
   public void failsWhenInvalidDateOfBirth() throws Exception {
-    Person serialized =
-        MAPPER.readValue(fixture("fixtures/domain/person/invalid/dob/invalid.json"), Person.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /*
-   * date of birth test - empty/null date
-   */
-  @Test
-  public void failsWhenDateOfBirthNull() throws Exception {
     Person serialized = MAPPER
-        .readValue(fixture("fixtures/domain/person/invalid/dobnull/invalid.json"), Person.class);
+        .readValue(fixture("fixtures/domain/person/invalid/dob/wrongFormat.json"), Person.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
+    assertThat(response.readEntity(String.class).indexOf("date_of_birth must be in the format of"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
   public void failsWhenDateOfBirthInFuture() throws Exception {
-    Person serialized = MAPPER.readValue(
-        fixture("fixtures/domain/person/invalid/dobinfuture/invalid.json"), Person.class);
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/person/invalid/dob/future.json"), Person.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
   }
 
+  /*
+   * Gender Tests
+   */
   @Test
   public void failsWhenInvalidGender() throws Exception {
     Person serialized = MAPPER
@@ -143,8 +128,38 @@ public class PersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("invalid gender"),
+    assertThat(response.readEntity(String.class).indexOf("gender must be one of [M, F, O]"),
         is(greaterThanOrEqualTo(0)));
+  }
+
+  @Test
+  public void successWhenDobIsM() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/person/valid/dob/M.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenDobIsF() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/person/valid/dob/F.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenDobIsO() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/person/valid/dob/O.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
