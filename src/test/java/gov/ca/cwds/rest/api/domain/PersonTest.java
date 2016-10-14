@@ -22,17 +22,16 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-
 public class PersonTest {
 
   private static final String ROOT_RESOURCE = "/people/";
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private static final PersonResource mockedPeopleResource = mock(PersonResource.class);
+  private static final PersonResource mockedPersonResource = mock(PersonResource.class);
 
   @ClassRule
   public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedPeopleResource).build();
+      ResourceTestRule.builder().addResource(mockedPersonResource).build();
 
   /*
    * Serialization and deserialization
@@ -126,15 +125,15 @@ public class PersonTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenDateOfBirthInFuture() throws Exception {
-  // Person serialized = MAPPER.readValue(
-  // fixture("fixtures/domain/person/invalid/dobinfuture/invalid.json"), Person.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // }
+  @Test
+  public void failsWhenDateOfBirthInFuture() throws Exception {
+    Person serialized = MAPPER.readValue(
+        fixture("fixtures/domain/person/invalid/dobinfuture/invalid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+  }
 
   @Test
   public void failsWhenInvalidGender() throws Exception {
