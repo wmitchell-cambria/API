@@ -31,6 +31,6 @@ public @interface Date {
 
   String format() default "MM/dd/yyyy";
 
-  boolean required() default true;
+  boolean required() default false;
 
 }
