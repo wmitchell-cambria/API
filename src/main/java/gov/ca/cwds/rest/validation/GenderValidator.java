@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.validation;
 
+import java.util.ArrayList;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -15,30 +17,30 @@ import com.google.common.base.Strings;
  *
  */
 public class GenderValidator implements ConstraintValidator<Gender, String> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(DateValidator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenderValidator.class);
 
   private String values;
+  private ArrayList<String> validValue = new ArrayList<String>();
   private boolean required;
 
   @Override
   public void initialize(Gender constraintAnnotation) {
     this.values = constraintAnnotation.values();
     this.required = constraintAnnotation.required();
+    validValue.add("M");
+    validValue.add("F");
+    validValue.add("O");
   }
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
 
     if (required || !Strings.isNullOrEmpty(value)) {
-      if (value.equals("M"))
-        return true;
-      if (value.equals("F"))
-        return true;
-      if (value.equals("O"))
-        return true;
-      else {
+      if (validValue.indexOf(value) == -1) {
         LOGGER.info("unable to validate gender value", values);
         return false;
+      } else {
+        return true;
       }
     }
     return true;
