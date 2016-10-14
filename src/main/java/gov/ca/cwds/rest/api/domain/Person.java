@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.validation.Date;
+import gov.ca.cwds.rest.validation.Gender;
 
-//TODO - RDB add constraints
+// TODO - RDB add constraints
 /**
  * {@link DomainObject} representing an person
  * 
@@ -18,6 +19,7 @@ public final class Person extends DomainObject {
   @JsonProperty("last_name")
   private String last_name;
 
+  @Gender
   @JsonProperty("gender")
   private String gender;
 
@@ -161,5 +163,4 @@ public final class Person extends DomainObject {
       return false;
     return true;
   }
-
 }

@@ -1,9 +1,5 @@
 package gov.ca.cwds.rest.validation;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -18,30 +14,30 @@ import com.google.common.base.Strings;
  * @author CWDS API Team
  *
  */
-public class DateValidator implements ConstraintValidator<Date, String> {
+public class GenderValidator implements ConstraintValidator<Gender, String> {
   private static final Logger LOGGER = LoggerFactory.getLogger(DateValidator.class);
 
-  private String format;
+  private String values;
   private boolean required;
 
   @Override
-  public void initialize(Date constraintAnnotation) {
-    this.format = constraintAnnotation.format();
+  public void initialize(Gender constraintAnnotation) {
+    this.values = constraintAnnotation.values();
     this.required = constraintAnnotation.required();
   }
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    DateFormat df = new SimpleDateFormat(format);
-    df.setLenient(false);
+
     if (required || !Strings.isNullOrEmpty(value)) {
-      try {
-        df.parse(value);
-      } catch (ParseException e) {
-        LOGGER.info("Unable to validate date string {} with format {}", value, format);
-        return false;
-      } catch (NullPointerException npe) {
-        LOGGER.info("Unable to validate null date string with format {}", format);
+      if (value.equals("M"))
+        return true;
+      if (value.equals("F"))
+        return true;
+      if (value.equals("O"))
+        return true;
+      else {
+        LOGGER.info("unable to validate gender value", values);
         return false;
       }
     }
