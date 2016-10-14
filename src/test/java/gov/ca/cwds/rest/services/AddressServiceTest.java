@@ -7,8 +7,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.lang.reflect.Method;
 
-import javax.validation.ConstraintValidatorContext;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Assert;
@@ -18,7 +16,6 @@ import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.validation.ZipcodeValidator;
 
 public class AddressServiceTest {
   private AddressService addressService;
