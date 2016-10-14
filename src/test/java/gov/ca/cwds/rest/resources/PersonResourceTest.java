@@ -56,9 +56,9 @@ public class PersonResourceTest {
    */
   @Test
   public void createDelegatesToCrudsResource() throws Exception {
-    Person person = new Person("firstname", "last", "gender", "11/22/1973", "000000000", null);
+    Person person = new Person("firstname", "last", "M", "11/22/1973", "000000000", null);
     inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .post(Entity.entity(person, MediaType.APPLICATION_JSON)).getStatus();
+        .post(Entity.entity(person, MediaType.APPLICATION_JSON));
     verify(mockedCrudsResource).create(eq(person), eq(MediaType.APPLICATION_JSON),
         any(UriInfo.class), any(HttpServletResponse.class));
   }
