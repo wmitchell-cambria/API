@@ -1,0 +1,21 @@
+{
+  "id": 2,
+  "reference": "X5HNJK",
+  "ended_at": "2016-10-13T01:07",
+  "incident_county": "amador",
+  "incident_date": "2016-10-13",
+  "location_type": "Relative's Home",
+  "method_of_referral": "email",
+  "name": "first screening",
+  "response_time": "immediate",
+  "screening_decision": "accept_for_investigation",
+  "started_at": "2016-10-05T01:01",
+  "narrative": "first narrative",
+  "address": {
+    "street_address": "10 main st",
+    "city": "Sacramento",
+    "state": "CA",
+    "zip": 95814
+  },
+  "involved_person_ids" :[1, 2, 3]
+}
