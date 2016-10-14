@@ -21,16 +21,16 @@ import javax.validation.Payload;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = DateValidator.class)
-public @interface Past {
-    String message() default "must be in the format of {format}";
+@Constraint(validatedBy = PastDateValidator.class)
+public @interface PastDate {
+  String message() default "date cannot be in future";
 
-    Class<?>[] groups() default {};
-    
-    Class<? extends Payload>[] payload() default {};
-    
-    String format() default "MM/dd/yyyy";
+  Class<?>[] groups() default {};
 
-    boolean required() default true;
+  Class<? extends Payload>[] payload() default {};
+
+  String format() default "MM/dd/yyyy";
+
+  boolean required() default true;
 
 }

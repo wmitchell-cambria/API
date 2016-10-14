@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.Gender;
+import gov.ca.cwds.rest.validation.PastDate;
 
 // TODO - RDB add constraints
 /**
@@ -24,6 +25,7 @@ public final class Person extends DomainObject {
   private String gender;
 
   @Date
+  @PastDate
   @JsonProperty("date_of_birth")
   private String date_of_birth;
 
@@ -45,9 +47,9 @@ public final class Person extends DomainObject {
    */
   @JsonCreator
   public Person(@JsonProperty("first_name") String first_name,
-      @JsonProperty("last_name") String last_name, @JsonProperty("gender") String gender,
-      @JsonProperty("date_of_birth") @Date String date_of_birth, @JsonProperty("ssn") String ssn,
-      @JsonProperty("address") Address address) {
+      @JsonProperty("last_name") String last_name, @JsonProperty("gender") @Gender String gender,
+      @JsonProperty("date_of_birth") @Date @PastDate String date_of_birth,
+      @JsonProperty("ssn") String ssn, @JsonProperty("address") Address address) {
     super();
     this.first_name = first_name;
     this.last_name = last_name;
