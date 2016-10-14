@@ -36,6 +36,7 @@ import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
+import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -171,7 +172,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
     apiEnvironment.jersey().register(peopleResource);
 
     LOGGER.info("Registering ScreeningResource");
-    ScreeningResource screeningResource = new ScreeningResource();
+    ScreeningResource screeningResource =
+        new ScreeningResource(new CrudsResourceImpl<>(new ScreeningService()));
     apiEnvironment.jersey().register(screeningResource);
   }
 
