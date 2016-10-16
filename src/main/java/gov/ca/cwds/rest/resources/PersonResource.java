@@ -52,9 +52,9 @@ public class PersonResource {
   /**
    * Finds an person by id.
    * 
-   * @param id
-   * @param acceptHeader
-   * @return
+   * @param id the id
+   * 
+   * @return the response
    */
   @GET
   @Path("/{id}")
@@ -70,7 +70,6 @@ public class PersonResource {
    * Delete an person
    * 
    * @param id The id of the {@link Person}
-   * @param acceptHeader The accept header.
    * 
    * @return {@link Response}
    */
@@ -79,8 +78,7 @@ public class PersonResource {
   @ApiOperation(hidden = true, value = "Delete Person - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(
-      @PathParam("id") @ApiParam(required = true, value = "id of person to delete") long id,
-      @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
+      @PathParam("id") @ApiParam(required = true, value = "id of person to delete") long id) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 
@@ -88,7 +86,6 @@ public class PersonResource {
    * Create an {@link Person}
    * 
    * @param person The {@link Person}
-   * @param acceptHeader The accept header.
    * 
    * @return The {@link Response}
    */
@@ -105,7 +102,8 @@ public class PersonResource {
 
   /**
    * Update an {@link Person}
-   *
+   * 
+   * @param id the id
    * @param person {@link Person}
    * @param acceptHeader The accept header.
    *

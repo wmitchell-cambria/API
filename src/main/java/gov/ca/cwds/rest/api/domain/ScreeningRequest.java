@@ -26,7 +26,6 @@ public class ScreeningRequest extends Screening implements Request {
   /**
    * Constructor
    * 
-   * @param id The id
    * @param reference The reference
    * @param ended_at The ended at
    * @param incident_county The incident county
@@ -39,7 +38,7 @@ public class ScreeningRequest extends Screening implements Request {
    * @param started_at The started at
    * @param narrative The narrative
    * @param address The {@link Address}
-   * @param participants The {@link List<Long>}
+   * @param participant_ids The {@link List}
    */
   @JsonCreator
   public ScreeningRequest(@JsonProperty("reference") String reference,

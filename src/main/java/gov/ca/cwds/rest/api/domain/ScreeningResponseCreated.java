@@ -38,7 +38,7 @@ public class ScreeningResponseCreated extends ScreeningResponse {
    * @param started_at The started at
    * @param narrative The narrative
    * @param address The {@link Address}
-   * @param participants The {@link List<Person}
+   * @param participants The {@link List}
    */
   public ScreeningResponseCreated(long id, String reference, String ended_at,
       String incident_county, String incident_date, String location_type,

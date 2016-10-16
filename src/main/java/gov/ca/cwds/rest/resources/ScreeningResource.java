@@ -56,9 +56,9 @@ public class ScreeningResource {
   /**
    * Finds an screening by id.
    * 
-   * @param id
-   * @param acceptHeader
-   * @return
+   * @param id The id
+   *
+   * @return the response
    */
   @GET
   @Path("/{id}")
@@ -92,7 +92,6 @@ public class ScreeningResource {
    * Create an {@link Screening}
    * 
    * @param screeningReference The {@link ScreeningReference}
-   * @param acceptHeader The accept header.
    * 
    * @return The {@link Response}
    */
@@ -112,8 +111,8 @@ public class ScreeningResource {
   /**
    * Update an {@link Screening}
    *
-   * @param screening {@link Screening}
-   * @param acceptHeader The accept header.
+   * @param id the id
+   * @param screeningRequest {@link Screening}
    *
    * @return The {@link Response}
    */

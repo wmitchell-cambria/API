@@ -37,7 +37,7 @@ public interface ResourceDelegate {
   /**
    * Create a {@link DomainObject}
    * 
-   * @param domainObject The {@link DomainObject}
+   * @param request The {@link Request}
    * 
    * @return The {@link Response}
    */

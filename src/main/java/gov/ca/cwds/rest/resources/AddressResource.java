@@ -52,7 +52,8 @@ public class AddressResource {
   /**
    * Finds an address by id.
    * 
-   * @param id
+   * @param id The id
+   * 
    * @return The response
    */
   @GET
@@ -85,7 +86,6 @@ public class AddressResource {
    * Create an {@link Address}
    * 
    * @param address The {@link Address}
-   * @param acceptHeader The accept header.
    * 
    * @return The {@link Response}
    */
@@ -104,8 +104,8 @@ public class AddressResource {
   /**
    * Update an {@link Address}
    *
+   * @param id the id
    * @param address {@link Address}
-   * @param acceptHeader The accept header.
    *
    * @return The {@link Response}
    */
