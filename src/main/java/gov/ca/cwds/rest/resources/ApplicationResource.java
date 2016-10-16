@@ -31,6 +31,8 @@ public class ApplicationResource {
 
   /**
    * Get the name of the application
+   * 
+   * @return the application name
    */
   @GET
   public String getApplicationName() {
