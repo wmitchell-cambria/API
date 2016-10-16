@@ -5,6 +5,8 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.PastDate;
 
@@ -13,7 +15,7 @@ import gov.ca.cwds.rest.validation.PastDate;
  * 
  * @author CWDS API Team
  */
-public final class Person extends DomainObject {
+public class Person extends DomainObject implements Request, Response {
   @JsonProperty("first_name")
   private String first_name;
 
@@ -107,7 +109,7 @@ public final class Person extends DomainObject {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
@@ -125,12 +127,12 @@ public final class Person extends DomainObject {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (!(getClass().isInstance(obj)))
       return false;
     Person other = (Person) obj;
     if (address == null) {

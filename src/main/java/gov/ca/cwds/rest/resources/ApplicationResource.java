@@ -1,8 +1,11 @@
 package gov.ca.cwds.rest.resources;
 
-import io.swagger.annotations.ApiOperation;
+import static gov.ca.cwds.rest.core.Api.RESOURCE_APPLICATION;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import io.swagger.annotations.Api;
 
 
 /**
@@ -10,14 +13,27 @@ import javax.ws.rs.GET;
  * 
  * @author CWDS API Team
  */
-public interface ApplicationResource extends Resource {
+@Api(value = RESOURCE_APPLICATION, hidden = true)
+@Path(RESOURCE_APPLICATION)
+public class ApplicationResource {
 
-  @ApiOperation("Get the application name")
-  @GET
+  private String applicationName;
+
   /**
-   * Get the name of the API
+   * Constructor
    * 
-   * @return The name of the API
+   * @param applicationName The name of the application
    */
-  public String getApplicationName();
+  public ApplicationResource(String applicationName) {
+    this.applicationName = applicationName;
+
+  }
+
+  /**
+   * Get the name of the application
+   */
+  @GET
+  public String getApplicationName() {
+    return applicationName;
+  }
 }

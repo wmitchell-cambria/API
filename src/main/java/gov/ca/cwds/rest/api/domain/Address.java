@@ -3,12 +3,17 @@ package gov.ca.cwds.rest.api.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import io.swagger.annotations.ApiModel;
+
 /**
  * {@link DomainObject} representing an address
  * 
  * @author CWDS API Team
  */
-public final class Address extends DomainObject {
+@ApiModel
+public class Address extends DomainObject implements Request, Response {
 
   private String street_address;
 
@@ -71,7 +76,7 @@ public final class Address extends DomainObject {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((city == null) ? 0 : city.hashCode());
@@ -87,12 +92,12 @@ public final class Address extends DomainObject {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (!(getClass().isInstance(obj)))
       return false;
     Address other = (Address) obj;
     if (city == null) {

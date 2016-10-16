@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import gov.ca.cwds.rest.api.ApiException;
+
 // @RunWith(PowerMockRunner.class)
 public class DomainObjectTest {
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -74,7 +76,7 @@ public class DomainObjectTest {
 
   @Test
   public void uncookBooleanStringThrowsDomainExceptionOnNonYOrN() throws Exception {
-    thrown.expect(DomainException.class);
+    thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(ParseException.class));
     DomainObject.uncookBooleanString("T");
   }
@@ -140,7 +142,7 @@ public class DomainObjectTest {
 
   @Test
   public void uncookDateStringThrowsExceptionOnBadInput() throws Exception {
-    thrown.expect(DomainException.class);
+    thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(ParseException.class));
     DomainObject.uncookDateString("dlfjkdfjdkfjkd");
   }
@@ -162,7 +164,7 @@ public class DomainObjectTest {
 
   @Test
   public void uncookTimestampStringThrowsExceptionOnBadInput() throws Exception {
-    thrown.expect(DomainException.class);
+    thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(ParseException.class));
     DomainObject.uncookTimestampString("dlfjkdfjdkfjkd");
   }
@@ -181,7 +183,7 @@ public class DomainObjectTest {
 
   @Test
   public void uncookTimeStringThrowsExceptionOnBadInput() throws Exception {
-    thrown.expect(DomainException.class);
+    thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(ParseException.class));
     DomainObject.uncookTimeString("dlfjkdfjdkfjkd");
   }
@@ -225,14 +227,14 @@ public class DomainObjectTest {
 
   @Test
   public void uncookZipcodeStringThrowsExceptionOnBadGroupMatching() throws Exception {
-    thrown.expect(DomainException.class);
+    thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(NumberFormatException.class));
     DomainObject.uncookZipcodeString("000000");
   }
 
   @Test
   public void uncookZipcodeStringThrowsExceptionOnNoMatch() throws Exception {
-    thrown.expect(DomainException.class);
+    thrown.expect(ApiException.class);
     thrown.expectMessage(startsWith("Unable to uncook zipcode string"));
     DomainObject.uncookZipcodeString("dlfjkdfjdkfjkd");
   }

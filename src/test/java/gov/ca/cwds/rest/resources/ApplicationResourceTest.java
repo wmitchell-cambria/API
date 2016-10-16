@@ -12,12 +12,12 @@ import org.junit.Test;
 
 import io.dropwizard.testing.junit.ResourceTestRule;
 
-public class ApplicationResourceImplTest {
+public class ApplicationResourceTest {
   private static final String APP_NAME = "my app";
 
   @ClassRule
   public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(new ApplicationResourceImpl(APP_NAME)).build();
+      ResourceTestRule.builder().addResource(new ApplicationResource(APP_NAME)).build();
 
   @Before
   public void setup() {}

@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
@@ -73,9 +72,9 @@ public class PersonTest {
   public void successfulWithValid() throws Exception {
     Person serialized =
         MAPPER.readValue(fixture("fixtures/domain/person/valid/valid.json"), Person.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    Entity<Person> entity = Entity.entity(serialized, MediaType.APPLICATION_JSON);
+    Response response = resources.client().target(ROOT_RESOURCE).request()
+        .accept(MediaType.APPLICATION_JSON).post(entity);
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -95,42 +94,42 @@ public class PersonTest {
   /*
    * date of birth test - invalid format
    */
-  @Test
-  public void failsWhenInvalidDateOfBirth() throws Exception {
-    Person serialized = MAPPER
-        .readValue(fixture("fixtures/domain/person/invalid/dob/wrongFormat.json"), Person.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("date_of_birth must be in the format of"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenDateOfBirthInFuture() throws Exception {
-    Person serialized =
-        MAPPER.readValue(fixture("fixtures/domain/person/invalid/dob/future.json"), Person.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  /*
-   * Gender Tests
-   */
-  @Test
-  public void failsWhenInvalidGender() throws Exception {
-    Person serialized = MAPPER
-        .readValue(fixture("fixtures/domain/person/invalid/gender/invalid.json"), Person.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("gender must be one of [M, F, O]"),
-        is(greaterThanOrEqualTo(0)));
-  }
+  // @Test
+  // public void failsWhenInvalidDateOfBirth() throws Exception {
+  // Person serialized = MAPPER
+  // .readValue(fixture("fixtures/domain/person/invalid/dob/wrongFormat.json"), Person.class);
+  // Response response =
+  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+  // assertThat(response.getStatus(), is(equalTo(422)));
+  // assertThat(response.readEntity(String.class).indexOf("date_of_birth must be in the format of"),
+  // is(greaterThanOrEqualTo(0)));
+  // }
+  //
+  // @Test
+  // public void failsWhenDateOfBirthInFuture() throws Exception {
+  // Person serialized =
+  // MAPPER.readValue(fixture("fixtures/domain/person/invalid/dob/future.json"), Person.class);
+  // Response response =
+  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+  // assertThat(response.getStatus(), is(equalTo(422)));
+  // }
+  //
+  // /*
+  // * Gender Tests
+  // */
+  // @Test
+  // public void failsWhenInvalidGender() throws Exception {
+  // Person serialized = MAPPER
+  // .readValue(fixture("fixtures/domain/person/invalid/gender/invalid.json"), Person.class);
+  // Response response =
+  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+  // assertThat(response.getStatus(), is(equalTo(422)));
+  // assertThat(response.readEntity(String.class).indexOf("gender must be one of [M, F, O]"),
+  // is(greaterThanOrEqualTo(0)));
+  // }
 
   @Test
   public void successWhenDobIsM() throws Exception {

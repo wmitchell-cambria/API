@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import gov.ca.cwds.rest.api.ApiException;
+
+// TODO : RDB move this to DomainChef.
 public class DomainObject {
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
@@ -37,7 +40,7 @@ public class DomainObject {
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
       return null;
     }
-    throw new DomainException(new ParseException("Unable to generate boolean", 0));
+    throw new ApiException(new ParseException("Unable to generate boolean", 0));
 
   }
 
@@ -71,7 +74,7 @@ public class DomainObject {
         DateFormat df = new SimpleDateFormat(DATE_FORMAT);
         return df.parse(date);
       } catch (Exception e) {
-        throw new DomainException(e);
+        throw new ApiException(e);
       }
     }
     return null;
@@ -83,7 +86,7 @@ public class DomainObject {
         DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
         return df.parse(timestamp);
       } catch (Exception e) {
-        throw new DomainException(e);
+        throw new ApiException(e);
       }
     }
     return null;
@@ -95,7 +98,7 @@ public class DomainObject {
         DateFormat df = new SimpleDateFormat(TIME_FORMAT);
         return df.parse(timestamp);
       } catch (Exception e) {
-        throw new DomainException(e);
+        throw new ApiException(e);
       }
     }
     return null;
@@ -119,11 +122,11 @@ public class DomainObject {
       try {
         return Integer.parseInt(matcher.group(1));
       } catch (NumberFormatException e) {
-        throw new DomainException(
+        throw new ApiException(
             MessageFormat.format("Unable to convert zipcode to Integer - {1}", zipcode), e);
       }
     } else {
-      throw new DomainException(
+      throw new ApiException(
           MessageFormat.format("Unable to uncook zipcode string {1}", zipcode));
     }
   }

@@ -4,9 +4,17 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.AddressCreated;
 
-public class AddressService implements CrudsService<Address> {
+/**
+ * Business layer object to work on {@link Address}
+ * 
+ * @author CWDS API Team
+ */
+public class AddressService implements CrudsService {
 
   /*
    * (non-Javadoc)
@@ -14,9 +22,10 @@ public class AddressService implements CrudsService<Address> {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public Address find(Serializable primaryKey) {
+  public Response find(Serializable primaryKey) {
     if ("found".equals(primaryKey)) {
-      return new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
+      return new gov.ca.cwds.rest.api.domain.Address("742 Evergreen Terrace", "Springfield", "WA",
+          98700);
     } else {
       return null;
     }
@@ -28,28 +37,28 @@ public class AddressService implements CrudsService<Address> {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
-  public Address delete(Serializable id) {
+  public Response delete(Serializable primaryKey) {
     throw new NotImplementedException("Delete is not implemented");
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
+   * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public Serializable create(Address object) {
-    return "someid";
+  public Response create(Request request) {
+    return new AddressCreated(1111L, "742 Evergreen Terrace", "Springfield", "WA", 98700);
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
+   * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
+   * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public String update(Address object) {
+  public Response update(Serializable primaryKey, Request request) {
     throw new NotImplementedException("Update is not implemented");
   }
-
 }

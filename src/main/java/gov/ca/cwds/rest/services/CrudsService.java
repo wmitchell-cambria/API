@@ -2,51 +2,52 @@ package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 
 /**
  * Interface for business {@link Service} which perform CRUDS operations
  * 
  * @author CWDS API Team
- *
- * @param <T> The {@link DomainObject} the service implements CRUDS for
  * 
  */
-public interface CrudsService<T extends DomainObject> extends Service {
+public interface CrudsService extends Service {
 
   /**
    * Find object by primaryKey
    * 
-   * @param primaryKey The primaryKey of the object to find.
+   * @param primaryKey The primaryKey of the {@link DomainObject} to find.
    * 
-   * @return The found object, null otherwise
+   * @return The {@link Response} containing the found object, null if not found.
    */
-  public T find(Serializable primaryKey);
+  public Response find(Serializable primaryKey);
 
   /**
    * Delete object by id
    * 
-   * @param id The id of the object to delete.
+   * @param primaryKey The primaryKey of the {@link DomainObject} to delete.
    * 
-   * @return The deleted object, null if not found
+   * @return The {@link Response} containing the deleted object, null if not found.
    */
-  public T delete(Serializable id);
+  public Response delete(Serializable primaryKey);
 
   /**
    * Create object
    * 
-   * @param object The object to be created
+   * @param request {@link Request} with a {@link DomainObject} to create.
    * 
-   * @return The primaryKey of the newly created object
+   * @return The {@link Response}
    */
-  public Serializable create(T object);
+  public Response create(Request request);
 
   /**
    * Update object
    * 
-   * @param object The object to be updated
+   * @param primaryKey The primaryKey of the {@link DomainObject} to update.
+   * @param request {@link Request} with a {@link DomainObject} to update.
    * 
-   * @return The id of the updated object
+   * @return The {@link Response}
    */
-  public String update(T object);
+  public Response update(Serializable primaryKey, Request request);
 }
