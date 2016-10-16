@@ -84,7 +84,7 @@ test {
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
-    include '**/*IeeeeT*'
+    include '**/*IT*'
     exclude '**/*Test*'
 }
 
