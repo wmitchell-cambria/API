@@ -3,23 +3,25 @@ package gov.ca.cwds.rest.resources;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 
-public class CrudsResourceImplTestDomainObject extends DomainObject {
+public class ResourceDelegateTestDomainObject extends DomainObject implements Request, Response {
   @JsonProperty("id")
-  private String id;
+  private Long id;
 
-  public CrudsResourceImplTestDomainObject() {
+  public ResourceDelegateTestDomainObject() {
     super();
   }
 
   @JsonCreator
-  public CrudsResourceImplTestDomainObject(String id) {
+  public ResourceDelegateTestDomainObject(Long id) {
     super();
     this.id = id;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
@@ -49,7 +51,7 @@ public class CrudsResourceImplTestDomainObject extends DomainObject {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    CrudsResourceImplTestDomainObject other = (CrudsResourceImplTestDomainObject) obj;
+    ResourceDelegateTestDomainObject other = (ResourceDelegateTestDomainObject) obj;
     if (id == null) {
       if (other.id != null)
         return false;

@@ -1,0 +1,111 @@
+package gov.ca.cwds.rest.resources;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ServiceException;
+
+/**
+ * An implementation of the {@link ResourceDelegate} which passes work to a service layer. All
+ * {@link Resource} should decorate this class. Resources will delegate to this class with the
+ * decoration being swagger {@link Annotation} classes for documentation and Jersey
+ * {@link Annotation} for RESTful resources.
+ * 
+ * @author CWDS API Team
+ */
+public final class ServiceBackedResourceDelegate implements ResourceDelegate {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServiceBackedResourceDelegate.class);
+
+  private CrudsService service;
+
+  /**
+   * Constructor
+   * 
+   * @param crudsService The crudsService for this resource.
+   */
+  public ServiceBackedResourceDelegate(CrudsService crudsService) {
+    this.service = crudsService;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#get(java.io.Serializable)
+   */
+  @Override
+  public Response get(Serializable id) {
+    gov.ca.cwds.rest.api.Response response = service.find(id);
+    if (response != null) {
+      return Response.ok(response).build();
+    } else {
+      return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+    }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#delete(java.io.Serializable)
+   */
+  @Override
+  public Response delete(Serializable id) {
+    gov.ca.cwds.rest.api.Response response = service.delete(id);
+    if (response != null) {
+      return Response.status(Response.Status.OK).build();
+    } else {
+      return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+    }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#create(gov.ca.cwds.rest.api.Request)
+   */
+  @Override
+  public Response create(Request request) {
+    Response response = null;
+    try {
+      response = Response.status(Response.Status.OK).entity(service.create(request)).build();
+    } catch (ServiceException e) {
+      if (e.getCause() instanceof EntityExistsException) {
+        response = Response.status(Response.Status.CONFLICT).entity(null).build();
+      } else {
+        LOGGER.error("Unable to handle request", e);
+        response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+      }
+    }
+    return response;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#update(java.io.Serializable,
+   * gov.ca.cwds.rest.api.Request)
+   */
+  @Override
+  public Response update(Serializable id, Request request) {
+    Response response = null;
+    try {
+      response = Response.status(Response.Status.OK).entity(service.update(id, request)).build();
+    } catch (ServiceException e) {
+      if (e.getCause() instanceof EntityNotFoundException) {
+        response = Response.status(Response.Status.NOT_FOUND).entity(null).build();
+      } else {
+        LOGGER.error("Unable to handle request", e);
+        response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+      }
+    }
+    return response;
+  }
+}

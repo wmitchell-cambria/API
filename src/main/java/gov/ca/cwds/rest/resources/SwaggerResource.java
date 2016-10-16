@@ -15,7 +15,7 @@ import io.swagger.annotations.Api;
 @Api(value = "swagger", hidden = true)
 @Path(value = "swagger")
 @Produces(MediaType.TEXT_HTML)
-public class SwaggerResource {
+public class SwaggerResource implements Resource {
   private SwaggerConfiguration swaggerConfiguration;
 
   public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {

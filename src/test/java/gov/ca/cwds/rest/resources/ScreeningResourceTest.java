@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -13,12 +14,16 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.domain.Screening;
+import com.google.common.collect.ImmutableList;
+
+import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.ScreeningReference;
+import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * NOTE : The CWDS API Team has taken the pattern of delegating Resource functions to
- * {@link CrudsResourceImpl}. As such the tests in here reflect that assumption.
+ * {@link ServiceBackedResourceDelegate}. As such the tests in here reflect that assumption.
  * 
  * @author CWDS API Team
  */
@@ -29,37 +34,33 @@ public class ScreeningResourceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @SuppressWarnings({"unchecked"})
-  private static CrudsResource<Screening> mockedCrudsResource = mock(CrudsResource.class);
+  private static ResourceDelegate resourceDelegate = mock(ResourceDelegate.class);
 
   @ClassRule
   public static final ResourceTestRule inMemoryResource =
-      ResourceTestRule.builder().addResource(new ScreeningResource(mockedCrudsResource)).build();
+      ResourceTestRule.builder().addResource(new ScreeningResource(resourceDelegate)).build();
 
   /*
    * Get Tests
    */
 
   @Test
-  public void getDelegatesToCrudsResource() throws Exception {
+  public void getDelegatesToResourceDelegate() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .get().getStatus();
-    verify(mockedCrudsResource).get("1", MediaType.APPLICATION_JSON);
+    verify(resourceDelegate).get(1L);
   }
 
   /*
    * Create Tests
    */
-  // @Test
-  // public void createDelegatesToCrudsResource() throws Exception {
-  // Screening screening = new Screening((long) 2, "X5HNJK", "2016-10-13T01:07", "amador",
-  // "2016-10-13", "Relative's Home", "email", "first screening", "immediate",
-  // "accept_for_investigation", "2016-10-05T01:01", "first narrative", null, null);
-  // inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(screening, MediaType.APPLICATION_JSON)).getStatus();
-  // verify(mockedCrudsResource).create(eq(screening), eq(MediaType.APPLICATION_JSON),
-  // any(UriInfo.class), any(HttpServletResponse.class));
-  // }
+  @Test
+  public void createDelegatesToResourceDelegate() throws Exception {
+    ScreeningReference screeningReference = new ScreeningReference("reference");
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .post(Entity.entity(screeningReference, MediaType.APPLICATION_JSON));
+    verify(resourceDelegate).create(eq(screeningReference));
+  }
 
   /*
    * Delete Tests
@@ -76,13 +77,15 @@ public class ScreeningResourceTest {
    * Update Tests
    */
   @Test
-  public void udpateReturns501() throws Exception {
-    Screening screening = new Screening((long) 2, "X5HNJK", "2016-10-13T01:07", "amador",
-        "2016-10-13", "Relative's Home", "email", "first screening", "immediate",
-        "accept_for_investigation", "2016-10-05T01:01", "first narrative", null, null);
-    int status =
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .put(Entity.entity(screening, MediaType.APPLICATION_JSON)).getStatus();
-    assertThat(status, is(501));
+  public void udpateDelegatesToResourceDelegate() throws Exception {
+    Address address = new Address("10 main st", "Sacramento", "CA", 95814);
+    ImmutableList.Builder<Long> builder = ImmutableList.builder();
+    ImmutableList<Long> ids = builder.add(new Long(123)).add(new Long(345)).build();
+    ScreeningRequest screeningRequest = new ScreeningRequest("X5HNJK", "11/22/1973", "Amador",
+        "11/22/1973", "Home", "email", "First screening", "immediate", "accept_for_investigation",
+        "10/11/2016", "first narrative", address, ids);
+    inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .put(Entity.entity(screeningRequest, MediaType.APPLICATION_JSON));
+    verify(resourceDelegate).update(eq(new Long(1)), eq(screeningRequest));
   }
 }

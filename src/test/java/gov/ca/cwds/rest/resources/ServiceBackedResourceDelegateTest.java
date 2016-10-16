@@ -10,72 +10,76 @@ import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.process.internal.RequestScoped;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import gov.ca.cwds.rest.api.PrimaryKeyResponse;
 import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.ApiResponse;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
-public class CrudsResourceImplTest {
-  private static final String ID_NOT_FOUND = "-1";
-  private static final String ID_FOUND = "1";
+public class ServiceBackedResourceDelegateTest {
+  private static final Long ID_NOT_FOUND = new Long(-1);
+  private static final Long ID_FOUND = new Long(1);
 
-  private static final String ROOT_RESOURCE = "/crudsTest/";
+  private static final String ROOT_RESOURCE = "/resource/";
 
   private static final String FOUND_RESOURCE = ROOT_RESOURCE + ID_FOUND;
   private static final String NOT_FOUND_RESOURCE = ROOT_RESOURCE + ID_NOT_FOUND;
 
-  @SuppressWarnings("unchecked")
-  private static final CrudsService<CrudsResourceImplTestDomainObject> crudsService =
-      mock(CrudsService.class);
+  private static final CrudsService crudsService = mock(CrudsService.class);
 
-  private static CrudsResourceImplTestDomainObject nonUniqueDomainObject;
-  private static CrudsResourceImplTestDomainObject uniqueDomainObject;
-  private static CrudsResourceImplTestDomainObject unexpectedExceptionDomainObject;
+  private static ResourceDelegateTestDomainObject nonUniqueDomainObject;
+  private static ResourceDelegateTestDomainObject uniqueDomainObject;
+  private static ResourceDelegateTestDomainObject unexpectedExceptionDomainObject;
 
   @ClassRule
-  public static final ResourceTestRule inMemoryResource =
-      ResourceTestRule.builder().addResource(new TestCrudsResourceImpl()).build();
+  public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder()
+      .addResource(new WrapperResource(new ServiceBackedResourceDelegate(crudsService))).build();
 
   @ClassRule
-  public static final ResourceTestRule grizzlyResource =
-      ResourceTestRule.builder().setTestContainerFactory(new GrizzlyWebTestContainerFactory())
-          .addResource(new TestCrudsResourceImpl()).build();
+  public static final ResourceTestRule grizzlyResource = ResourceTestRule.builder()
+      .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
+      .addResource(new WrapperResource(new ServiceBackedResourceDelegate(crudsService))).build();
 
   @Before
   public void setup() throws Exception {
-    nonUniqueDomainObject = new CrudsResourceImplTestDomainObject(ID_FOUND);
-    uniqueDomainObject = new CrudsResourceImplTestDomainObject(ID_NOT_FOUND);
-    unexpectedExceptionDomainObject = new CrudsResourceImplTestDomainObject("13");
+    nonUniqueDomainObject = new ResourceDelegateTestDomainObject(ID_FOUND);
+    uniqueDomainObject = new ResourceDelegateTestDomainObject(ID_NOT_FOUND);
+    unexpectedExceptionDomainObject = new ResourceDelegateTestDomainObject(new Long(13));
 
     when(crudsService.find(ID_NOT_FOUND)).thenReturn(null);
     when(crudsService.find(ID_FOUND)).thenReturn(nonUniqueDomainObject);
     when(crudsService.delete(ID_NOT_FOUND)).thenReturn(null);
     when(crudsService.delete(ID_FOUND)).thenReturn(nonUniqueDomainObject);
-    when(crudsService.create(eq(uniqueDomainObject))).thenReturn(nonUniqueDomainObject.getId());
+    when(crudsService.create(eq(uniqueDomainObject)))
+        .thenReturn(new PrimaryKeyResponse(nonUniqueDomainObject.getId()));
     when(crudsService.create(eq(nonUniqueDomainObject)))
         .thenThrow(new ServiceException(new EntityExistsException()));
     when(crudsService.create(eq(unexpectedExceptionDomainObject)))
         .thenThrow(new ServiceException(new RuntimeException()));
-    when(crudsService.update(eq(unexpectedExceptionDomainObject)))
+    when(crudsService.update(eq(1L), eq(unexpectedExceptionDomainObject)))
         .thenThrow(new ServiceException(new RuntimeException()));
-    when(crudsService.update(eq(uniqueDomainObject)))
+    when(crudsService.update(eq(-1L), eq(uniqueDomainObject)))
         .thenThrow(new ServiceException(new EntityNotFoundException()));
-    when(crudsService.update(eq(nonUniqueDomainObject))).thenReturn(nonUniqueDomainObject.getId());
+    when(crudsService.update(eq(1L), eq(nonUniqueDomainObject)))
+        .thenReturn(new PrimaryKeyResponse(nonUniqueDomainObject.getId()));
   }
 
   /*
@@ -132,20 +136,12 @@ public class CrudsResourceImplTest {
    * create Tests
    */
   @Test
-  public void createReturns201WhenCreated() {
+  public void createReturns200WhenCreated() {
     assertThat(
         grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request()
             .accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(201)));
-  }
-
-  @Test
-  public void createReturnsLocationHeaderWhenCreated() {
-    assertThat(grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request()
-        .accept(MediaType.APPLICATION_JSON)
-        .post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getHeaders()
-        .get("Location"), is(notNullValue()));
+        is(equalTo(200)));
   }
 
   @Test
@@ -192,17 +188,18 @@ public class CrudsResourceImplTest {
    * update Tests
    */
   @Test
-  public void updateReturns204WhenUpdated() {
+  public void updateReturns200WhenUpdated() {
     assertThat(
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        inMemoryResource.client().target(FOUND_RESOURCE).request()
+            .accept(MediaType.APPLICATION_JSON)
             .put(Entity.entity(nonUniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+        is(equalTo(200)));
   }
 
   @Test
   public void updateReturns406WhenVersionNotSupport() {
     assertThat(
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept("UNSUPPORTED_VERSION")
+        inMemoryResource.client().target(FOUND_RESOURCE).request().accept("UNSUPPORTED_VERSION")
             .put(Entity.entity(nonUniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
         is(equalTo(406)));
   }
@@ -210,62 +207,58 @@ public class CrudsResourceImplTest {
   @Test
   public void updateReturns404WhenNotFound() {
     assertThat(
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        inMemoryResource.client().target(NOT_FOUND_RESOURCE).request()
+            .accept(MediaType.APPLICATION_JSON)
             .put(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
         is(equalTo(404)));
   }
 
   @Test
   public void updateReturns503OnUnexpectedException() throws Exception {
-    int status =
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .put(Entity.entity(unexpectedExceptionDomainObject, MediaType.APPLICATION_JSON))
-            .getStatus();
+    int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
+        .accept(MediaType.APPLICATION_JSON)
+        .put(Entity.entity(unexpectedExceptionDomainObject, MediaType.APPLICATION_JSON))
+        .getStatus();
     assertThat(status, is(503));
   }
 
   /*
    * Helpers
    */
-  @Path(value = ROOT_RESOURCE)
-  static class TestCrudsResourceImpl implements CrudsResource<CrudsResourceImplTestDomainObject> {
+  @Path(ROOT_RESOURCE)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public static class WrapperResource {
+    private ResourceDelegate resourceDelegate;
 
-    CrudsResourceImpl<CrudsResourceImplTestDomainObject> crudsResourceImpl;
-
-    public TestCrudsResourceImpl() {
-      this.crudsResourceImpl =
-          new CrudsResourceImpl<CrudsResourceImplTestDomainObject>(crudsService);
+    public WrapperResource(ResourceDelegate resourceDelegate) {
+      this.resourceDelegate = resourceDelegate;
     }
 
-    @Override
-    public Response get(String id, String acceptHeader) {
-      return crudsResourceImpl.get(id, acceptHeader);
+    @GET
+    @Path("/{id}")
+    public Response get(@PathParam("id") long id) {
+      return resourceDelegate.get(id);
     }
 
-    @Override
-    public Response delete(String id, String acceptHeader) {
-      return crudsResourceImpl.delete(id, acceptHeader);
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") long id) {
+      return resourceDelegate.delete(id);
     }
 
-    @Override
-    public ApiResponse<CrudsResourceImplTestDomainObject> create(
-        CrudsResourceImplTestDomainObject object, String acceptHeader, UriInfo uriInfo,
-        HttpServletResponse response) {
-      return crudsResourceImpl.create(object, acceptHeader, uriInfo, response);
+    @POST
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response create(ResourceDelegateTestDomainObject object) {
+      return resourceDelegate.create(object);
     }
 
-    @Override
-    public Response update(CrudsResourceImplTestDomainObject object, String acceptHeader) {
-      return crudsResourceImpl.update(object, acceptHeader);
-    }
-  }
-
-  public static class MyBinder extends AbstractBinder {
-
-    @Override
-    protected void configure() {
-      // request scope binding
-      bind(HttpServletResponse.class).to(HttpServletResponse.class).in(RequestScoped.class);
+    @PUT
+    @Path("/{id}")
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("id") long id,
+        @Valid ResourceDelegateTestDomainObject object) {
+      return resourceDelegate.update(id, object);
     }
 
   }

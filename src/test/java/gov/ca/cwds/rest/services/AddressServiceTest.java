@@ -5,17 +5,15 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.lang.reflect.Method;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.hamcrest.junit.ExpectedException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.AddressCreated;
 
 public class AddressServiceTest {
   private AddressService addressService;
@@ -35,14 +33,14 @@ public class AddressServiceTest {
   public void findReturnsCorrectAddressWhenFoundWhenFound() throws Exception {
     Address expected = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
 
-    Address found = addressService.find("found");
+    Address found = (Address) addressService.find("found");
 
     assertThat(found, is(expected));
   }
 
   @Test
   public void findReturnsNullWhenNotFound() throws Exception {
-    Address found = addressService.find("notfound");
+    Address found = (Address) addressService.find("notfound");
 
     assertThat(found, is(nullValue()));
   }
@@ -51,11 +49,12 @@ public class AddressServiceTest {
    * create tests
    */
   @Test
-  public void createReturnsIdOnCreate() throws Exception {
+  public void createReturnsPrimaryKeyResponseOnCreate() throws Exception {
     Address tocreate = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
-    String id = (String) addressService.create(tocreate);
+    Response response = addressService.create(tocreate);
 
-    assertThat(id, is(notNullValue()));
+    assertThat(response, is(notNullValue()));
+    assertThat(response.getClass(), is(AddressCreated.class));
   }
 
   /*
@@ -74,7 +73,7 @@ public class AddressServiceTest {
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
 
-    addressService.update(new Address("street", "city", "state", 95555));
+    addressService.update(1L, new Address("street", "city", "state", 95555));
   }
 
   /*
@@ -82,11 +81,11 @@ public class AddressServiceTest {
    * with bridge functions. To get our coverage numbers the "test" below calls the bridge functions
    * directly.
    */
-  @Test
-  public void callBridgeFunctions() throws Exception {
-    Method create = AddressService.class.getMethod("create", DomainObject.class);
-    create.invoke(addressService, new Address("street", "city", "state", 95555));
-    Assert.assertTrue(true);
-  }
+  // @Test
+  // public void callBridgeFunctions() throws Exception {
+  // Method create = AddressService.class.getMethod("create", DomainObject.class);
+  // create.invoke(addressService, new Address("street", "city", "state", 95555));
+  // Assert.assertTrue(true);
+  // }
 
 }

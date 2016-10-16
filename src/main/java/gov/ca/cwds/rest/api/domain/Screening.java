@@ -1,26 +1,16 @@
 package gov.ca.cwds.rest.api.domain;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.validation.Date;
 
-// TODO - RDB add constraints
-/**
- * {@link DomainObject} representing a screening
- * 
- * @author CWDS API Team
- */
-
-public final class Screening extends DomainObject {
-  @JsonProperty("id")
-  private Long id;
-
+public class Screening extends DomainObject implements Request {
   @JsonProperty("reference")
   private String reference;
 
+  @Date
   @JsonProperty("ended_at")
   private String ended_at;
 
@@ -34,8 +24,8 @@ public final class Screening extends DomainObject {
   @JsonProperty("location_type")
   private String location_type;
 
-  @JsonProperty("method_of_referral")
-  private String method_of_referral;
+  @JsonProperty("communication_method")
+  private String communication_method;
 
   @JsonProperty("name")
   private String name;
@@ -46,70 +36,60 @@ public final class Screening extends DomainObject {
   @JsonProperty("screening_decision")
   private String screening_decision;
 
+  @Date
   @JsonProperty("started_at")
   private String started_at;
 
   @JsonProperty("narrative")
   private String narrative;
 
-  @JsonProperty("address")
-  private Address address;
-
-  @JsonProperty("involved_person_ids")
-  private ArrayList<Integer> involved_person_ids;
-
   /**
    * Constructor
    * 
-   * @param id The id
    * @param reference The reference
    * @param ended_at The ended at
    * @param incident_county The incident county
    * @param incident_date The incident date
    * @param location_type The location type
-   * @param method_of_referral The method of referral
+   * @param communication_method The communication method
    * @param name The name
    * @param response_time The response time
    * @param screening_decision The screening decision
    * @param started_at The started at
    * @param narrative The narrative
-   * @param address The address
-   * @param involved_person_ids The involved person ids
    */
   @JsonCreator
-  public Screening(@JsonProperty("id") Long id, @JsonProperty("reference") String reference,
+  public Screening(@JsonProperty("reference") String reference,
       @JsonProperty("ended_at") String ended_at,
       @JsonProperty("incident_county") String incident_county,
       @JsonProperty("incident_date") String incident_date,
       @JsonProperty("location_type") String location_type,
-      @JsonProperty("method_of_referral") String method_of_referral,
+      @JsonProperty("communication_method") String communication_method,
       @JsonProperty("name") String name, @JsonProperty("response_time") String response_time,
       @JsonProperty("screening_decision") String screening_decision,
-      @JsonProperty("started_at") String started_at, @JsonProperty("narrative") String narrative,
-      @JsonProperty("address") Address address,
-      @JsonProperty("involved_person_ids") ArrayList<Integer> involved_person_ids) {
+      @JsonProperty("started_at") String started_at, @JsonProperty("narrative") String narrative) {
     super();
-    this.id = id;
     this.reference = reference;
     this.ended_at = ended_at;
     this.incident_county = incident_county;
     this.incident_date = incident_date;
     this.location_type = location_type;
-    this.method_of_referral = method_of_referral;
+    this.communication_method = communication_method;
     this.name = name;
     this.response_time = response_time;
     this.screening_decision = screening_decision;
     this.started_at = started_at;
     this.narrative = narrative;
-    this.address = address;
-    this.involved_person_ids = involved_person_ids;
   }
 
   /**
-   * @return the id
+   * Constructor
+   * 
+   * @param reference the reference for this screening
    */
-  public Long getId() {
-    return id;
+  public Screening(String reference) {
+    super();
+    this.reference = reference;
   }
 
   /**
@@ -148,10 +128,10 @@ public final class Screening extends DomainObject {
   }
 
   /**
-   * @return the method_of_referral
+   * @return the communication_method
    */
-  public String getMethod_of_referral() {
-    return method_of_referral;
+  public String getCommunication_method() {
+    return communication_method;
   }
 
   /**
@@ -188,163 +168,4 @@ public final class Screening extends DomainObject {
   public String getNarrative() {
     return narrative;
   }
-
-  /**
-   * @return the address
-   */
-  public Address getAddress() {
-    return address;
-  }
-
-  /**
-   * @return the involved_person_ids
-   */
-  public ArrayList<Integer> getInvolved_person_ids() {
-    return involved_person_ids;
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((address == null) ? 0 : address.hashCode());
-    result = prime * result + ((ended_at == null) ? 0 : ended_at.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((incident_county == null) ? 0 : incident_county.hashCode());
-    result = prime * result + ((incident_date == null) ? 0 : incident_date.hashCode());
-    result = prime * result + ((involved_person_ids == null) ? 0 : involved_person_ids.hashCode());
-    result = prime * result + ((location_type == null) ? 0 : location_type.hashCode());
-    result = prime * result + ((method_of_referral == null) ? 0 : method_of_referral.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((narrative == null) ? 0 : narrative.hashCode());
-    result = prime * result + ((reference == null) ? 0 : reference.hashCode());
-    result = prime * result + ((response_time == null) ? 0 : response_time.hashCode());
-    result = prime * result + ((screening_decision == null) ? 0 : screening_decision.hashCode());
-    result = prime * result + ((started_at == null) ? 0 : started_at.hashCode());
-    return result;
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    Screening other = (Screening) obj;
-    if (address == null) {
-      if (other.address != null) {
-        return false;
-      }
-    } else if (!address.equals(other.address)) {
-      return false;
-    }
-    if (ended_at == null) {
-      if (other.ended_at != null) {
-        return false;
-      }
-    } else if (!ended_at.equals(other.ended_at)) {
-      return false;
-    }
-    if (id == null) {
-      if (other.id != null) {
-        return false;
-      }
-    } else if (!id.equals(other.id)) {
-      return false;
-    }
-    if (incident_county == null) {
-      if (other.incident_county != null) {
-        return false;
-      }
-    } else if (!incident_county.equals(other.incident_county)) {
-      return false;
-    }
-    if (incident_date == null) {
-      if (other.incident_date != null) {
-        return false;
-      }
-    } else if (!incident_date.equals(other.incident_date)) {
-      return false;
-    }
-    if (involved_person_ids == null) {
-      if (other.involved_person_ids != null) {
-        return false;
-      }
-    } else if (!involved_person_ids.equals(other.involved_person_ids)) {
-      return false;
-    }
-    if (location_type == null) {
-      if (other.location_type != null) {
-        return false;
-      }
-    } else if (!location_type.equals(other.location_type)) {
-      return false;
-    }
-    if (method_of_referral == null) {
-      if (other.method_of_referral != null) {
-        return false;
-      }
-    } else if (!method_of_referral.equals(other.method_of_referral)) {
-      return false;
-    }
-    if (name == null) {
-      if (other.name != null) {
-        return false;
-      }
-    } else if (!name.equals(other.name)) {
-      return false;
-    }
-    if (narrative == null) {
-      if (other.narrative != null) {
-        return false;
-      }
-    } else if (!narrative.equals(other.narrative)) {
-      return false;
-    }
-    if (reference == null) {
-      if (other.reference != null) {
-        return false;
-      }
-    } else if (!reference.equals(other.reference)) {
-      return false;
-    }
-    if (response_time == null) {
-      if (other.response_time != null) {
-        return false;
-      }
-    } else if (!response_time.equals(other.response_time)) {
-      return false;
-    }
-    if (screening_decision == null) {
-      if (other.screening_decision != null) {
-        return false;
-      }
-    } else if (!screening_decision.equals(other.screening_decision)) {
-      return false;
-    }
-    if (started_at == null) {
-      if (other.started_at != null) {
-        return false;
-      }
-    } else if (!started_at.equals(other.started_at)) {
-      return false;
-    }
-    return true;
-  }
-
 }

@@ -29,8 +29,7 @@ import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
-import gov.ca.cwds.rest.resources.ApplicationResourceImpl;
-import gov.ca.cwds.rest.resources.CrudsResourceImpl;
+import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.SwaggerResource;
@@ -158,22 +157,22 @@ public class ApiApplication extends Application<ApiConfiguration> {
       final ApiEnvironment apiEnvironment) {
     LOGGER.info("Registering ApplicationResource");
     final ApplicationResource applicationResource =
-        new ApplicationResourceImpl(configuration.getApplicationName());
+        new ApplicationResource(configuration.getApplicationName());
     apiEnvironment.jersey().register(applicationResource);
 
     LOGGER.info("Registering AddressResource");
     AddressResource addressResource =
-        new AddressResource(new CrudsResourceImpl<>(new AddressService()));
+        new AddressResource(new ServiceBackedResourceDelegate(new AddressService()));
     apiEnvironment.jersey().register(addressResource);
 
     LOGGER.info("Registering PersonResource");
     PersonResource peopleResource =
-        new PersonResource(new CrudsResourceImpl<>(new PersonService()));
+        new PersonResource(new ServiceBackedResourceDelegate(new PersonService()));
     apiEnvironment.jersey().register(peopleResource);
 
     LOGGER.info("Registering ScreeningResource");
     ScreeningResource screeningResource =
-        new ScreeningResource(new CrudsResourceImpl<>(new ScreeningService()));
+        new ScreeningResource(new ServiceBackedResourceDelegate(new ScreeningService()));
     apiEnvironment.jersey().register(screeningResource);
   }
 
