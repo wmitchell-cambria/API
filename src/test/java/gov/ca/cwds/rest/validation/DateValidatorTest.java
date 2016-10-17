@@ -27,7 +27,6 @@ public class DateValidatorTest {
 
 
   private Date constraintAnnotation = mock(Date.class);
-
   private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
 
 
@@ -95,7 +94,6 @@ public class DateValidatorTest {
   @Test
   public void callBridgeFunctions() throws Exception {
     when(constraintAnnotation.required()).thenReturn(true);
-    when(constraintAnnotation.format()).thenReturn(FORMAT);
     DateValidator validator = new DateValidator();
     Method initialize = DateValidator.class.getMethod("initialize", Annotation.class);
     initialize.invoke(validator, constraintAnnotation);

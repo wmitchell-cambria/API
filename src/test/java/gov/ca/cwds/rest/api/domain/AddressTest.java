@@ -2,8 +2,14 @@ package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -17,6 +23,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 public class AddressTest {
+
+  private static final String ROOT_RESOURCE = "/address/";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
@@ -54,7 +62,20 @@ public class AddressTest {
   }
 
   /*
-   * validation tests
+   * zip test - invalid format
    */
+
+  @Test
+  public void failsWhenInvalidZip() throws Exception {
+    Person serialized =
+        MAPPER.readValue(fixture("fixtures/domain/address/invalid/zip/invalid.json"), Person.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("must be in the format of"),
+        is(greaterThanOrEqualTo(0)));
+  }
+
 
 }
