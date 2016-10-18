@@ -17,11 +17,11 @@ import org.hibernate.annotations.Type;
 public abstract class PersistentObject {
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
-  @Column(name = "\"LST_UPD_ID\"")
-  private String lastUpdatedId;
+  @Column(name = "update_user_id")
+  private Long lastUpdatedId;
 
   @Type(type = "timestamp")
-  @Column(name = "\"LST_UPD_TS\"")
+  @Column(name = "update_datetime")
   private Date lastUpdatedTime;
 
 
@@ -39,7 +39,7 @@ public abstract class PersistentObject {
    * 
    * @param lastUpdatedId the id of the last person to update this object
    */
-  protected PersistentObject(String lastUpdatedId) {
+  protected PersistentObject(Long lastUpdatedId) {
     this.lastUpdatedId = lastUpdatedId;
     this.lastUpdatedTime = new Date();
   }
@@ -47,7 +47,7 @@ public abstract class PersistentObject {
   /**
    * @return the lastUpdatedId
    */
-  public String getLastUpdatedId() {
+  public Long getLastUpdatedId() {
     return lastUpdatedId;
   }
 

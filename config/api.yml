@@ -22,6 +22,7 @@ nsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
       hibernate.show_sql: true
+      hibernate.default_schema: ${DB_NS_SCHEMA}
       
 cmsDataSourceFactory:
   driverClass: com.ibm.db2.jcc.DB2Driver
@@ -37,7 +38,7 @@ cmsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.DB2Dialect
       hibernate.show_sql: true
-      hibernate.default_schema: ${DB_CMS_SCHEMA}
+
       
 
 flywayFactory:
@@ -49,7 +50,7 @@ flywayFactory:
 server:
   applicationConnectors:
   - type: http 
-    port: 8080
+    port: 8090
   adminConnectors:
   - type: http
-    port: 8081
+    port: 8091
