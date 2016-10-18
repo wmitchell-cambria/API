@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.jdbi;
 
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import io.dropwizard.hibernate.AbstractDAO;
+
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -9,9 +12,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-import io.dropwizard.hibernate.AbstractDAO;
-
 /**
  * An implementation of {@link CrudsDao}. Class is final and is expected that other {@link Dao} will
  * contain this implementation and delegate.
@@ -20,8 +20,7 @@ import io.dropwizard.hibernate.AbstractDAO;
  *
  * @param <T> The {@link PersistentObject} to perform CRUDS operations on
  */
-public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
-    implements CrudsDao<T> {
+public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T> implements CrudsDao<T> {
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(CrudsDaoImpl.class);
 

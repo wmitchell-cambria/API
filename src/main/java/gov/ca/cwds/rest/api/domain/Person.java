@@ -1,14 +1,14 @@
 package gov.ca.cwds.rest.api.domain;
 
-import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.PastDate;
+
+import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * {@link DomainObject} representing an person
@@ -59,6 +59,20 @@ public class Person extends DomainObject implements Request, Response {
     this.date_of_birth = date_of_birth;
     this.ssn = ssn;
     this.address = address;
+  }
+
+  public Person(gov.ca.cwds.rest.api.persistence.ns.Person person,
+      gov.ca.cwds.rest.api.persistence.ns.Address address) {
+    this.first_name = person.getFirstName();
+    this.last_name = person.getLastName();
+    this.gender = person.getGender();
+    this.date_of_birth = DomainObject.cookDate(person.getDateOfBirth());
+    this.ssn = person.getSsn();
+    if (address != null) {
+      this.address = new Address(address);
+    } else {
+      this.address = null;
+    }
   }
 
   /**
