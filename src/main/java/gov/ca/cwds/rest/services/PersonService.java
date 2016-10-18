@@ -9,6 +9,8 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PersonCreated;
+import gov.ca.cwds.rest.jdbi.ns.AddressDao;
+import gov.ca.cwds.rest.jdbi.ns.PersonDao;
 
 /**
  * Business layer object to work on {@link Person}
@@ -17,6 +19,19 @@ import gov.ca.cwds.rest.api.domain.PersonCreated;
  */
 
 public class PersonService implements CrudsService {
+  private PersonDao personDao;
+  private AddressDao addressDao;
+
+  /**
+   * Constructor
+   * 
+   * @param crudsDao
+   * @param addressDao
+   */
+  public PersonService(PersonDao crudsDao, AddressDao addressDao) {
+    this.personDao = crudsDao;
+    this.addressDao = addressDao;
+  }
 
   /*
    * (non-Javadoc)
@@ -25,13 +40,19 @@ public class PersonService implements CrudsService {
    */
   @Override
   public Response find(Serializable primaryKey) {
-    if (new Long(123).equals(primaryKey)) {
-      Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
-      Person person = new Person("Bart", "Simpson", "M", "04/01/1990", "1234556789", address);
-      return person;
-    } else {
-      return null;
+    gov.ca.cwds.rest.api.persistence.ns.Person object = personDao.find(primaryKey);
+    if (object != null) {
+      Long addressPrimaryKey = object.getPersonAddressId();
+      gov.ca.cwds.rest.api.persistence.ns.Address address = null;
+      if (addressPrimaryKey != null) {
+        address = addressDao.find(addressPrimaryKey);
+      }
+      if (address != null) {
+        return new Person(object, address);
+      }
+      return new Person(object, null);
     }
+    return null;
   }
 
   /*
@@ -51,9 +72,24 @@ public class PersonService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
-    return new PersonCreated(11111, "Bart", "Simpson", "M", "04/01/1990", "1234556789", address);
+    assert (request instanceof Person);
+
+    Person person = ((Person) request);
+    Address address = person.getAddress();
+
+    gov.ca.cwds.rest.api.persistence.ns.Address persistedAddress =
+        new gov.ca.cwds.rest.api.persistence.ns.Address(address, null);
+    persistedAddress = addressDao.create(persistedAddress);
+
+
+    gov.ca.cwds.rest.api.persistence.ns.Person persistedPerson =
+        new gov.ca.cwds.rest.api.persistence.ns.Person(person, null);
+    Long id = persistedAddress.getId();
+    persistedPerson.setPersonAddressId(id);
+    persistedPerson = personDao.create(persistedPerson);
+    return new PersonCreated(persistedPerson, persistedAddress);
   }
+
 
   /*
    * (non-Javadoc)
@@ -65,4 +101,5 @@ public class PersonService implements CrudsService {
   public Response update(Serializable primaryKey, Request request) {
     throw new NotImplementedException("Update is not implemented");
   }
+
 }

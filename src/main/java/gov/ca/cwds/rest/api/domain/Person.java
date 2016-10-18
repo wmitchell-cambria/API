@@ -1,14 +1,13 @@
 package gov.ca.cwds.rest.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.PastDate;
-
-import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing an person
@@ -22,13 +21,14 @@ public class Person extends DomainObject implements Request, Response {
   @JsonProperty("last_name")
   private String last_name;
 
-  @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
+  // @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   @JsonProperty("gender")
   private String gender;
 
   @Date
   @PastDate
   @JsonProperty("date_of_birth")
+  @ApiModelProperty(example = "04/01/1990")
   private String date_of_birth;
 
   @JsonProperty("ssn")

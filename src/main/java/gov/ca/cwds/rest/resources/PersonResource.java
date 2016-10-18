@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_PEOPLE;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 
 import gov.ca.cwds.rest.api.domain.Person;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -56,6 +58,7 @@ public class PersonResource {
    * 
    * @return the response
    */
+  @UnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
@@ -89,6 +92,7 @@ public class PersonResource {
    * 
    * @return The {@link Response}
    */
+  @UnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -96,7 +100,7 @@ public class PersonResource {
       @ApiResponse(code = 422, message = "Unable to validate Person")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create Person", code = HttpStatus.SC_CREATED)
-  public Response create(@ApiParam(hidden = false, required = true) Person person) {
+  public Response create(@Valid @ApiParam(hidden = false, required = true) Person person) {
     return resourceDelegate.create(person);
   }
 
@@ -109,6 +113,7 @@ public class PersonResource {
    *
    * @return The {@link Response}
    */
+  @UnitOfWork
   @PUT
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),

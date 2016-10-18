@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.api.ApiException;
 
 // TODO : RDB move this to DomainChef.
 public class DomainObject {
-  protected static final String DATE_FORMAT = "yyyy-MM-dd";
+  protected static final String DATE_FORMAT = "MM/dd/yyyy";
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
   protected static final String TIME_FORMAT = "HH:mm:ss";
 
@@ -126,8 +126,7 @@ public class DomainObject {
             MessageFormat.format("Unable to convert zipcode to Integer - {1}", zipcode), e);
       }
     } else {
-      throw new ApiException(
-          MessageFormat.format("Unable to uncook zipcode string {1}", zipcode));
+      throw new ApiException(MessageFormat.format("Unable to uncook zipcode string {1}", zipcode));
     }
   }
 }

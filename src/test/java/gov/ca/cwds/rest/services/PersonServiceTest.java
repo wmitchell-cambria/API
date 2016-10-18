@@ -24,7 +24,7 @@ public class PersonServiceTest {
 
   @Before
   public void setup() throws Exception {
-    personService = new PersonService();
+    // personService = new PersonService();
   }
 
   /*
