@@ -1,5 +1,18 @@
 package gov.ca.cwds.rest;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.api.persistence.ns.Filler;
 import gov.ca.cwds.rest.api.persistence.ns.Person;
@@ -14,7 +27,6 @@ import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
-import gov.ca.cwds.rest.services.PersonServiceImpl;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
@@ -30,19 +42,6 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
-
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ApiApplication extends Application<ApiConfiguration> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
@@ -93,8 +92,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
   @Override
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
     // Enable variable substitution with environment variables
-    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(bootstrap
-        .getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
+        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
     bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
 
     LOGGER.info("Loading database bundles");
@@ -159,7 +158,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     apiEnvironment.jersey().register(applicationResource);
 
     final PersonService personService =
-        new PersonServiceImpl((PersonDao) DataAccessEnvironment.get(Person.class),
+        new PersonService((PersonDao) DataAccessEnvironment.get(Person.class),
             (AddressDao) DataAccessEnvironment.get(Address.class));
 
     LOGGER.info("Registering AddressResource");
@@ -198,9 +197,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(), apiConfiguration
-        .getSwaggerConfiguration().getAssetsPath(), null, "swagger").run(apiEnvironment
-        .environment());
+    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
+        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
+            .run(apiEnvironment.environment());
     apiEnvironment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
     apiEnvironment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 

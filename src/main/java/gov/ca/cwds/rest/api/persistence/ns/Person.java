@@ -1,16 +1,19 @@
 package gov.ca.cwds.rest.api.persistence.ns;
 
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
  * {@link PersistentObject} representing a Person
@@ -21,10 +24,9 @@ import org.hibernate.annotations.Type;
 @Table(name = "person")
 public class Person extends PersistentObject {
 
-  // @SequenceGenerator(allocationSize = 1, initialValue = 1, sequenceName = "seq_person_id",
-  // name = "seq_person_id")
-  // @GeneratedValue(generator = "seq_person_id", strategy = GenerationType.SEQUENCE)
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_person_id")
+  @SequenceGenerator(name = "seq_person_id", sequenceName = "seq_person_id", allocationSize = 50)
   @Column(name = "person_id")
   private Long id;
 
@@ -47,8 +49,6 @@ public class Person extends PersistentObject {
   @Column(name = "person_address_id")
   private Long personAddressId;
 
-  private static int count = 1;
-
   /**
    * Default constructor
    * 
@@ -59,10 +59,9 @@ public class Person extends PersistentObject {
   }
 
 
-  public Person(Long id, String firstName, String lastName, String gender, Date dateOfBirth,
-      String ssn, Long personAddressId) {
+  public Person(String firstName, String lastName, String gender, Date dateOfBirth, String ssn,
+      Long personAddressId) {
     super();
-    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.gender = gender;
@@ -80,7 +79,6 @@ public class Person extends PersistentObject {
    */
   public Person(gov.ca.cwds.rest.api.domain.Person person, Long lastUpdatedId) {
     super(lastUpdatedId);
-    this.id = (long) count++;
     this.firstName = person.getFirst_name();
     this.lastName = person.getLast_name();
     this.gender = person.getGender();

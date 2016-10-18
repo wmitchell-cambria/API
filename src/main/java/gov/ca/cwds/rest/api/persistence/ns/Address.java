@@ -1,11 +1,14 @@
 package gov.ca.cwds.rest.api.persistence.ns;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
  * {@link PersistentObject} representing an Address
@@ -16,9 +19,8 @@ import javax.persistence.Table;
 @Table(name = "address")
 public class Address extends PersistentObject {
 
-  // @SequenceGenerator(name = "people", sequenceName = "seq_address_id", allocationSize = 1,
-  // initialValue=1)
-  // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "people")
+  @SequenceGenerator(name = "seq_address_id", sequenceName = "seq_address_id", allocationSize = 50)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_address_id")
   @Id
   @Column(name = "address_id")
   private Long id;
@@ -44,8 +46,6 @@ public class Address extends PersistentObject {
     super();
   }
 
-  public static int count = 1;
-
   public Address(Long id, String streetAddress, String city, String state) {
     super();
     this.id = id;
@@ -62,7 +62,6 @@ public class Address extends PersistentObject {
    */
   public Address(gov.ca.cwds.rest.api.domain.Address address, Long lastUpdatedId) {
     super(lastUpdatedId);
-    this.id = (long) count++;
     this.streetAddress = address.getStreet_address();
     this.city = address.getCity();
     this.state = address.getState();
