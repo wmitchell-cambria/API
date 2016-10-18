@@ -22,7 +22,6 @@ nsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
       hibernate.show_sql: true
-      hibernate.default_schema: ${DB_NS_SCHEMA}
       
 cmsDataSourceFactory:
   driverClass: com.ibm.db2.jcc.DB2Driver
