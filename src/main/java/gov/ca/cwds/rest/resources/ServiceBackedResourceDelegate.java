@@ -78,7 +78,7 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
   public Response create(Request request) {
     Response response = null;
     try {
-      response = Response.status(Response.Status.OK).entity(service.create(request)).build();
+      response = Response.status(Response.Status.CREATED).entity(service.create(request)).build();
     } catch (ServiceException e) {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();
