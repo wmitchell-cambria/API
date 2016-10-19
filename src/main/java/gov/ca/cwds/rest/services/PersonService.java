@@ -8,10 +8,12 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PersonCreated;
+import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.ns.PersonDao;
 
 /**
- * Business layer object to work on {@link Person}
+ * Business layer object to work on {@link Person} and
+ * {@link gov.ca.cwds.rest.api.persistence.ns.Person}
  * 
  * @author CWDS API Team
  */
@@ -22,11 +24,11 @@ public class PersonService implements CrudsService {
   /**
    * Constructor
    * 
-   * @param crudsDao
-   * @param addressDao
+   * @param personDao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Person}
+   *        objects.
    */
-  public PersonService(PersonDao crudsDao) {
-    this.personDao = crudsDao;
+  public PersonService(PersonDao personDao) {
+    this.personDao = personDao;
   }
 
   /*
