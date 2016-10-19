@@ -46,12 +46,22 @@ public class Address extends PersistentObject {
     super();
   }
 
-  public Address(Long id, String streetAddress, String city, String state) {
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param streetAddress The street address
+   * @param city The city
+   * @param state The state
+   * @param zip The zip
+   */
+  public Address(Long id, String streetAddress, String city, String state, Integer zip) {
     super();
     this.id = id;
     this.streetAddress = streetAddress;
     this.city = city;
     this.state = state;
+    this.zip = zip;
   }
 
   /**
