@@ -11,12 +11,12 @@ import io.dropwizard.jackson.JsonSnakeCase;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-public class AddressCreated extends Address {
+public class PostedAddress extends Address {
 
   @JsonProperty("id")
   private long id;
 
-  public AddressCreated(long id, String street_address, String city, String state, Integer zip) {
+  public PostedAddress(long id, String street_address, String city, String state, Integer zip) {
     super(street_address, city, state, zip);
     this.id = id;
   }
