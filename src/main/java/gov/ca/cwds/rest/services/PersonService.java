@@ -7,7 +7,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Person;
-import gov.ca.cwds.rest.api.domain.PersonCreated;
+import gov.ca.cwds.rest.api.domain.PostedPerson;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.ns.PersonDao;
 
@@ -65,7 +65,7 @@ public class PersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public PersonCreated create(Request request) {
+  public PostedPerson create(Request request) {
     assert (request instanceof Person);
 
     Person person = ((Person) request);
@@ -73,7 +73,7 @@ public class PersonService implements CrudsService {
         new gov.ca.cwds.rest.api.persistence.ns.Person(person, null);
 
     managed = personDao.create(managed);
-    return new PersonCreated(managed);
+    return new PostedPerson(managed);
   }
 
 

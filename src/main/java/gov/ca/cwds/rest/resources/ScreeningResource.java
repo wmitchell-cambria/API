@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
@@ -104,8 +105,8 @@ public class ScreeningResource {
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate Screening")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Creates a new screening", code = HttpStatus.SC_OK,
-      response = ScreeningResponse.class)
+  @ApiOperation(value = "Creates a new screening", code = HttpStatus.SC_CREATED,
+      response = PostedScreening.class)
   public Response create(
       @ApiParam(hidden = false, required = true) ScreeningReference screeningReference) {
     return resourceDelegate.create(screeningReference);

@@ -99,7 +99,7 @@ public class PersonResource {
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate Person")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Create Person", code = HttpStatus.SC_CREATED)
+  @ApiOperation(value = "Create Person", code = HttpStatus.SC_CREATED, response = Person.class)
   public Response create(@Valid @ApiParam(hidden = false, required = true) Person person) {
     return resourceDelegate.create(person);
   }

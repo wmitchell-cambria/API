@@ -7,7 +7,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.AddressCreated;
+import gov.ca.cwds.rest.api.domain.PostedAddress;
 
 /**
  * Business layer object to work on {@link Address}
@@ -48,7 +48,7 @@ public class AddressService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    return new AddressCreated(1111L, "742 Evergreen Terrace", "Springfield", "WA", 98700);
+    return new PostedAddress(1111L, "742 Evergreen Terrace", "Springfield", "WA", 98700);
   }
 
   /*

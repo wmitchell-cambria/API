@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.AddressCreated;
+import gov.ca.cwds.rest.api.domain.PostedAddress;
 
 public class AddressServiceTest {
   private AddressService addressService;
@@ -54,7 +54,7 @@ public class AddressServiceTest {
     Response response = addressService.create(tocreate);
 
     assertThat(response, is(notNullValue()));
-    assertThat(response.getClass(), is(AddressCreated.class));
+    assertThat(response.getClass(), is(PostedAddress.class));
   }
 
   /*

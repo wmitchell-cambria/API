@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 
 import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.AddressCreated;
+import gov.ca.cwds.rest.api.domain.PostedAddress;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -96,7 +96,7 @@ public class AddressResource {
       @ApiResponse(code = 422, message = "Unable to validate Address")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create Address", code = HttpStatus.SC_CREATED,
-      response = AddressCreated.class)
+      response = PostedAddress.class)
   public Response create(@ApiParam(hidden = false, required = true) Address address) {
     return resourceDelegate.create(address);
   }
