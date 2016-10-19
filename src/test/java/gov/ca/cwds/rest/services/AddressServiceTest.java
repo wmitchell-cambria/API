@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -23,15 +22,15 @@ import gov.ca.cwds.rest.jdbi.ns.AddressDao;
 public class AddressServiceTest {
   private AddressService addressService;
 
-  private AddressDao addressDao = mock(AddressDao.class);
+  private AddressDao addressDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setup() throws Exception {
+    addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao);
-    reset(addressDao);
   }
 
   /*
@@ -72,7 +71,7 @@ public class AddressServiceTest {
    * create tests
    */
   @Test
-  public void createReturnsPostedAddressOnCreate() throws Exception {
+  public void createReturnsPostedAddress() throws Exception {
     gov.ca.cwds.rest.api.persistence.ns.Address toCreate =
         new gov.ca.cwds.rest.api.persistence.ns.Address(1L, "742 Evergreen Terrace", "Springfield",
             "WA", new Integer(98700));
@@ -82,12 +81,25 @@ public class AddressServiceTest {
         .thenReturn(toCreate);
 
     PostedAddress postAddress = addressService.create(request);
-    assertThat(postAddress, is(notNullValue()));
     assertThat(postAddress.getClass(), is(PostedAddress.class));
   }
 
   @Test
-  public void createReturnsReturnsCorrectIdWithAddress() throws Exception {
+  public void createReturnsNonNull() throws Exception {
+    gov.ca.cwds.rest.api.persistence.ns.Address toCreate =
+        new gov.ca.cwds.rest.api.persistence.ns.Address(1L, "742 Evergreen Terrace", "Springfield",
+            "WA", new Integer(98700));
+    Address request = new Address(toCreate);
+
+    when(addressDao.create(any(gov.ca.cwds.rest.api.persistence.ns.Address.class)))
+        .thenReturn(toCreate);
+
+    PostedAddress postedAddress = addressService.create(request);
+    assertThat(postedAddress, is(notNullValue()));
+  }
+
+  @Test
+  public void createReturnsReturnsCorrectPostedAddress() throws Exception {
     gov.ca.cwds.rest.api.persistence.ns.Address toCreate =
         new gov.ca.cwds.rest.api.persistence.ns.Address(1L, "742 Evergreen Terrace", "Springfield",
             "WA", new Integer(98700));
@@ -149,7 +161,7 @@ public class AddressServiceTest {
     // TODO : thrown.expect not working on AssertionError???? WHY???
     // thrown.expect(AssertionError.class);
     try {
-      addressService.find("wrong");
+      addressService.update("wrong", null);
       Assert.fail("Expected AssertionError");
     } catch (AssertionError e) {
     }
