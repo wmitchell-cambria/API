@@ -19,9 +19,9 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 @Table(name = "address")
 public class Address extends PersistentObject {
 
-  @SequenceGenerator(name = "seq_address_id", sequenceName = "seq_address_id", allocationSize = 50)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_address_id")
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_address_id")
+  @SequenceGenerator(name = "seq_address_id", sequenceName = "seq_address_id", allocationSize = 50)
   @Column(name = "address_id")
   private Long id;
 

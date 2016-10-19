@@ -8,6 +8,8 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
+import gov.ca.cwds.rest.jdbi.Dao;
+import gov.ca.cwds.rest.jdbi.ns.AddressDao;
 
 /**
  * Business layer object to work on {@link Address}
@@ -15,6 +17,17 @@ import gov.ca.cwds.rest.api.domain.PostedAddress;
  * @author CWDS API Team
  */
 public class AddressService implements CrudsService {
+  private AddressDao addressDao;
+
+  /**
+   * Constructor
+   * 
+   * @param personDao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Person}
+   *        objects.
+   */
+  public AddressService(AddressDao addressDao) {
+    this.addressDao = addressDao;
+  }
 
   /*
    * (non-Javadoc)
@@ -22,13 +35,14 @@ public class AddressService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public Response find(Serializable primaryKey) {
-    if ("found".equals(primaryKey)) {
-      return new gov.ca.cwds.rest.api.domain.Address("742 Evergreen Terrace", "Springfield", "WA",
-          98700);
-    } else {
-      return null;
+  public Address find(Serializable primaryKey) {
+    assert (primaryKey instanceof Long);
+
+    gov.ca.cwds.rest.api.persistence.ns.Address persistedAddress = addressDao.find(primaryKey);
+    if (persistedAddress != null) {
+      return new Address(persistedAddress);
     }
+    return null;
   }
 
   /*
@@ -38,6 +52,8 @@ public class AddressService implements CrudsService {
    */
   @Override
   public Response delete(Serializable primaryKey) {
+    assert (primaryKey instanceof Long);
+
     throw new NotImplementedException("Delete is not implemented");
   }
 
@@ -47,9 +63,17 @@ public class AddressService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public Response create(Request request) {
-    return new PostedAddress(1111L, "742 Evergreen Terrace", "Springfield", "WA", 98700);
+  public PostedAddress create(Request request) {
+    assert (request instanceof Address);
+
+    Address address = ((Address) request);
+    gov.ca.cwds.rest.api.persistence.ns.Address managed =
+        new gov.ca.cwds.rest.api.persistence.ns.Address(address, null);
+
+    managed = addressDao.create(managed);
+    return new PostedAddress(managed);
   }
+
 
   /*
    * (non-Javadoc)
@@ -59,6 +83,8 @@ public class AddressService implements CrudsService {
    */
   @Override
   public Response update(Serializable primaryKey, Request request) {
+    assert (primaryKey instanceof Long);
     throw new NotImplementedException("Update is not implemented");
   }
+
 }
