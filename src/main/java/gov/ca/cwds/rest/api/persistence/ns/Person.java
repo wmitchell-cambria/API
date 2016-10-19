@@ -2,11 +2,14 @@ package gov.ca.cwds.rest.api.persistence.ns;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -46,8 +49,9 @@ public class Person extends PersistentObject {
   @Column(name = "ssn")
   private String ssn;
 
-  @Column(name = "person_address_id")
-  private Long personAddressId;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "person_address_id")
+  private Address address;
 
   /**
    * Default constructor
@@ -58,23 +62,23 @@ public class Person extends PersistentObject {
     super();
   }
 
-
-  public Person(String firstName, String lastName, String gender, Date dateOfBirth, String ssn,
-      Long personAddressId) {
+  public Person(Long id, String firstName, String lastName, String gender, Date dateOfBirth,
+      String ssn, Address address) {
     super();
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.gender = gender;
     this.dateOfBirth = dateOfBirth;
     this.ssn = ssn;
-    this.personAddressId = personAddressId;
+    this.address = address;
   }
 
 
   /**
    * Constructor
    * 
-   * @param staffPerson The domain object to construct this object from
+   * @param person The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
   public Person(gov.ca.cwds.rest.api.domain.Person person, Long lastUpdatedId) {
@@ -84,6 +88,7 @@ public class Person extends PersistentObject {
     this.gender = person.getGender();
     this.dateOfBirth = DomainObject.uncookDateString(person.getDate_of_birth());
     this.ssn = person.getSsn();
+    this.address = new Address(person.getAddress(), null);
   }
 
   /*
@@ -146,14 +151,10 @@ public class Person extends PersistentObject {
 
 
   /**
-   * @return the personAddressId
+   * @return the address
    */
-  public Long getPersonAddressId() {
-    return personAddressId;
-  }
-
-  public void setPersonAddressId(Long personAddressId) {
-    this.personAddressId = personAddressId;
+  public Address getAddress() {
+    return address;
   }
 
 

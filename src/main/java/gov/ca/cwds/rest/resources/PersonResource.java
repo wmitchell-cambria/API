@@ -58,7 +58,7 @@ public class PersonResource {
    * 
    * @return the response
    */
-  @UnitOfWork
+  @UnitOfWork(value = "ns")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
@@ -92,7 +92,7 @@ public class PersonResource {
    * 
    * @return The {@link Response}
    */
-  @UnitOfWork
+  @UnitOfWork(value = "ns")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -113,7 +113,7 @@ public class PersonResource {
    *
    * @return The {@link Response}
    */
-  @UnitOfWork
+  @UnitOfWork(value = "ns")
   @PUT
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),

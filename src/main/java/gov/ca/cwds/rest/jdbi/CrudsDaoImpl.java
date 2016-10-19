@@ -72,10 +72,6 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T create(T object) {
-    // T databaseObject = find(object.getPrimaryKey());
-    // if (databaseObject != null) {
-    // throw new EntityExistsException();
-    // }
     return persist(object);
   }
 

@@ -1,10 +1,34 @@
 package gov.ca.cwds.rest;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import gov.ca.cwds.rest.api.persistence.cms.Allegation;
+import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
+import gov.ca.cwds.rest.api.persistence.cms.Referral;
+import gov.ca.cwds.rest.api.persistence.cms.ReferralClient;
+import gov.ca.cwds.rest.api.persistence.cms.Reporter;
+import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.persistence.ns.Address;
-import gov.ca.cwds.rest.api.persistence.ns.Filler;
 import gov.ca.cwds.rest.api.persistence.ns.Person;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
+import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
+import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
+import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
+import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
+import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
+import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.jdbi.ns.AddressDao;
 import gov.ca.cwds.rest.jdbi.ns.PersonDao;
 import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
@@ -17,7 +41,6 @@ import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
-import gov.ca.cwds.rest.services.ScreeningServiceImpl;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -33,39 +56,25 @@ import io.dropwizard.views.ViewBundle;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 public class ApiApplication extends Application<ApiConfiguration> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
-  // private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
-  // new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class,
-  // CrossReport.class, ReferralClient.class, Reporter.class) {
-  // @Override
-  // public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-  // return configuration.getCmsDataSourceFactory();
-  // }
-  //
-  // @Override
-  // public String name() {
-  // return "cms";
-  // }
-  // };
+  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class,
+          CrossReport.class, ReferralClient.class, Reporter.class) {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getCmsDataSourceFactory();
+        }
+
+        @Override
+        public String name() {
+          return "cms";
+        }
+      };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(Filler.class, Person.class, Address.class,
-          Screening.class) {
+      new HibernateBundle<ApiConfiguration>(Person.class, Address.class, Screening.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -96,13 +105,13 @@ public class ApiApplication extends Application<ApiConfiguration> {
   @Override
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
     // Enable variable substitution with environment variables
-    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(bootstrap
-        .getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
+        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
     bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
 
     LOGGER.info("Loading database bundles");
     bootstrap.addBundle(flywayBundle);
-    // bootstrap.addBundle(cmsHibernateBundle);
+    bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
   }
 
@@ -142,18 +151,18 @@ public class ApiApplication extends Application<ApiConfiguration> {
     DataAccessEnvironment.register(Screening.class,
         new ScreeningDao(nsHibernateBundle.getSessionFactory()));
 
-    // DataAccessEnvironment.register(Referral.class,
-    // new ReferralDao(cmsHibernateBundle.getSessionFactory()));
-    // DataAccessEnvironment.register(StaffPerson.class,
-    // new StaffPersonDao(cmsHibernateBundle.getSessionFactory()));
-    // DataAccessEnvironment.register(Allegation.class,
-    // new AllegationDao(cmsHibernateBundle.getSessionFactory()));
-    // DataAccessEnvironment.register(CrossReport.class,
-    // new CrossReportDao(cmsHibernateBundle.getSessionFactory()));
-    // DataAccessEnvironment.register(ReferralClient.class,
-    // new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
-    // DataAccessEnvironment.register(Reporter.class,
-    // new ReporterDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(Referral.class,
+        new ReferralDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(StaffPerson.class,
+        new StaffPersonDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(Allegation.class,
+        new AllegationDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(CrossReport.class,
+        new CrossReportDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(ReferralClient.class,
+        new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(Reporter.class,
+        new ReporterDao(cmsHibernateBundle.getSessionFactory()));
   }
 
   private void registerResources(final ApiConfiguration configuration,
@@ -164,12 +173,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     apiEnvironment.jersey().register(applicationResource);
 
     final PersonService personService =
-        new PersonService((PersonDao) DataAccessEnvironment.get(Person.class),
-            (AddressDao) DataAccessEnvironment.get(Address.class));
-
-    final ScreeningService screeningService =
-        new ScreeningServiceImpl((ScreeningDao) DataAccessEnvironment.get(Screening.class),
-            (AddressDao) DataAccessEnvironment.get(Address.class), personService);
+        new PersonService((PersonDao) DataAccessEnvironment.get(Person.class));
+    final ScreeningService screeningService = new ScreeningService(
+        (ScreeningDao) DataAccessEnvironment.get(Screening.class), personService);
 
     LOGGER.info("Registering AddressResource");
     AddressResource addressResource =
@@ -207,9 +213,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(), apiConfiguration
-        .getSwaggerConfiguration().getAssetsPath(), null, "swagger").run(apiEnvironment
-        .environment());
+    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
+        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
+            .run(apiEnvironment.environment());
     apiEnvironment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
     apiEnvironment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 

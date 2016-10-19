@@ -1,16 +1,22 @@
 package gov.ca.cwds.rest.api.persistence.ns;
 
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
  * {@link PersistentObject} representing a Person
@@ -22,7 +28,9 @@ import org.hibernate.annotations.Type;
 public class Screening extends PersistentObject {
 
   @Id
-  // @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_hotline_contact_id")
+  @SequenceGenerator(name = "seq_hotline_contact_id", sequenceName = "seq_hotline_contact_id",
+      allocationSize = 50)
   @Column(name = "hotline_contact_id")
   private Long id;
 
@@ -49,9 +57,6 @@ public class Screening extends PersistentObject {
   @Column(name = "hotline_contact_name")
   private String name;
 
-  // @Column(name = "response_type")
-  // private String response_time;
-
   @Column(name = "screening_result")
   private String screeningDecision;
 
@@ -62,15 +67,12 @@ public class Screening extends PersistentObject {
   @Column(name = "screening_report_narrative")
   private String narrative;
 
-  @Column(name = "contact_address_id")
-  private Long addressId;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "contact_address_id")
+  private Address contactAddress;
 
   @Column(name = "hotline_contact_participant_array")
   private String participantIds;
-
-
-
-  private static int count = 1;
 
   /**
    * Default constructor
@@ -81,14 +83,35 @@ public class Screening extends PersistentObject {
     super();
   }
 
+  /**
+   * Constructor
+   * 
+   * @param reference The reference
+   */
+  public Screening(String reference) {
+    this.reference = reference;
+  }
 
-
-  public Screening(Long id, String reference, Date endedAt, String incidentCounty,
-      Date incidentDate, String locationType, String communicationMethod, String name,
-      String screeningDecision, Date startedAt, String narrative, Long addressId,
-      String participantIds) {
+  /**
+   * Constructor
+   * 
+   * @param reference
+   * @param endedAt
+   * @param incidentCounty
+   * @param incidentDate
+   * @param locationType
+   * @param communicationMethod
+   * @param name
+   * @param screeningDecision
+   * @param startedAt
+   * @param narrative
+   * @param contactAddress
+   * @param participantIds
+   */
+  public Screening(String reference, Date endedAt, String incidentCounty, Date incidentDate,
+      String locationType, String communicationMethod, String name, String screeningDecision,
+      Date startedAt, String narrative, Address contactAddress, String participantIds) {
     super();
-    this.id = id;
     this.reference = reference;
     this.endedAt = endedAt;
     this.incidentCounty = incidentCounty;
@@ -99,7 +122,7 @@ public class Screening extends PersistentObject {
     this.screeningDecision = screeningDecision;
     this.startedAt = startedAt;
     this.narrative = narrative;
-    this.addressId = addressId;
+    this.contactAddress = contactAddress;
     this.participantIds = participantIds;
   }
 
@@ -108,26 +131,30 @@ public class Screening extends PersistentObject {
   /**
    * Constructor
    * 
-   * @param staffPerson The domain object to construct this object from
+   * @param id The id
+   * @param screeningRequest The screenRequest
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public Screening(gov.ca.cwds.rest.api.domain.ScreeningRequest screening, Long lastUpdatedId) {
+  public Screening(Long id, gov.ca.cwds.rest.api.domain.ScreeningRequest screeningRequest,
+      Long lastUpdatedId) {
     super(lastUpdatedId);
 
-    this.id = (long) count++;
-    this.reference = screening.getReference();
-    this.endedAt = DomainObject.uncookDateString(screening.getEnded_at());
-    this.incidentCounty = screening.getIncident_county();
-    this.incidentDate = DomainObject.uncookDateString(screening.getIncident_date());
-    this.locationType = screening.getLocation_type();
-    this.communicationMethod = screening.getCommunication_method();
-    this.name = screening.getName();
-    this.screeningDecision = screening.getScreening_decision();
-    this.startedAt = DomainObject.uncookDateString(screening.getStarted_at());
-    this.narrative = screening.getNarrative();
+    this.id = id;
+    this.reference = screeningRequest.getReference();
+    this.endedAt = DomainObject.uncookDateString(screeningRequest.getEnded_at());
+    this.incidentCounty = screeningRequest.getIncident_county();
+    this.incidentDate = DomainObject.uncookDateString(screeningRequest.getIncident_date());
+    this.locationType = screeningRequest.getLocation_type();
+    this.communicationMethod = screeningRequest.getCommunication_method();
+    this.name = screeningRequest.getName();
+    this.screeningDecision = screeningRequest.getScreening_decision();
+    this.startedAt = DomainObject.uncookDateString(screeningRequest.getStarted_at());
+    this.narrative = screeningRequest.getNarrative();
+    if (screeningRequest.getAddress() != null) {
+      this.contactAddress = new Address(screeningRequest.getAddress(), null);
+    }
     this.participantIds =
-        screening.getParticipant_ids().toString().replace("[", "").replace("]", "");
-    // this.addressId = screening.;
+        screeningRequest.getParticipant_ids().toString().replace("[", "").replace("]", "");
   }
 
   /*
@@ -210,8 +237,6 @@ public class Screening extends PersistentObject {
     return startedAt;
   }
 
-
-
   /**
    * @return the narrative
    */
@@ -220,24 +245,17 @@ public class Screening extends PersistentObject {
   }
 
   /**
-   * @return the addressId
-   */
-  public Long getAddressId() {
-    return addressId;
-  }
-
-  /**
-   * @param addressId the addressId to set
-   */
-  public void setAddressId(Long addressId) {
-    this.addressId = addressId;
-  }
-
-  /**
    * @return the participantIds
    */
   public String getParticipantIds() {
     return participantIds;
+  }
+
+  /**
+   * @return the contactAddress
+   */
+  public Address getContactAddress() {
+    return contactAddress;
   }
 
 
