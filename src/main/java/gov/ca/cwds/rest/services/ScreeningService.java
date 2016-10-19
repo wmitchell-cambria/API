@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +16,11 @@ import com.google.common.collect.ImmutableList;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Person;
+import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
-import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
 
@@ -124,23 +125,28 @@ public class ScreeningService implements CrudsService {
 
   private List<gov.ca.cwds.rest.api.domain.Person> buildParticipantList(
       gov.ca.cwds.rest.api.persistence.ns.Screening screening) {
+    List<gov.ca.cwds.rest.api.domain.Person> retval = null;
     // TODO : making some assumptions here that this string is a comma delimited list of longs.
     // Need to refactor the database to actually have a xref table.
     // See - https://www.pivotaltracker.com/story/show/132727211
-    ImmutableList.Builder<gov.ca.cwds.rest.api.domain.Person> builder = ImmutableList.builder();
-    for (String particpantIdString : screening.getParticipantIds().split(",")) {
-      Long participantId = Long.valueOf(particpantIdString.trim());
-      gov.ca.cwds.rest.api.domain.Person person = personService.find(participantId);
-      if (person == null) {
-        // NOTE : the database doesn't enforce RI so we are expecting an issue COULD happen. It
-        // shouldn't though
-        // Database should be refactored to enforce RI
-        String msg = MessageFormat.format("Unable to find participant with id={0}", participantId);
-        LOGGER.warn(msg);
-        throw new ServiceException(new EntityNotFoundException(msg));
+    if (StringUtils.isNotBlank(screening.getParticipantIds())) {
+      ImmutableList.Builder<gov.ca.cwds.rest.api.domain.Person> builder = ImmutableList.builder();
+      for (String particpantIdString : screening.getParticipantIds().split(",")) {
+        Long participantId = Long.valueOf(particpantIdString.trim());
+        gov.ca.cwds.rest.api.domain.Person person = personService.find(participantId);
+        if (person == null) {
+          // NOTE : the database doesn't enforce RI so we are expecting an issue COULD happen. It
+          // shouldn't though
+          // Database should be refactored to enforce RI
+          String msg =
+              MessageFormat.format("Unable to find participant with id={0}", participantId);
+          LOGGER.warn(msg);
+          throw new ServiceException(new EntityNotFoundException(msg));
+        }
+        builder.add(person);
       }
-      builder.add(person);
+      retval = builder.build();
     }
-    return builder.build();
+    return retval;
   }
 }
