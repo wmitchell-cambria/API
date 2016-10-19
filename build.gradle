@@ -84,8 +84,9 @@ test {
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
-    include '**/*IT*'
-    exclude '**/*Test*'
+    //include '**/*IT*'
+    //exclude '**/*Test*'
+    exclude '**/*'
 }
 
 mainClassName = mainclass
