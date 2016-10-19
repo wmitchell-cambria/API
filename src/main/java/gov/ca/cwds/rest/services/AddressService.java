@@ -22,7 +22,7 @@ public class AddressService implements CrudsService {
   /**
    * Constructor
    * 
-   * @param personDao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Person}
+   * @param addressDao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Address}
    *        objects.
    */
   public AddressService(AddressDao addressDao) {
