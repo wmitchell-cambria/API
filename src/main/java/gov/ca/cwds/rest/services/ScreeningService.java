@@ -19,7 +19,7 @@ import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
-import gov.ca.cwds.rest.api.domain.ScreeningResponseCreated;
+import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
 
@@ -37,7 +37,7 @@ public class ScreeningService implements CrudsService {
    * 
    * @param screeningDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.ns.Screening} objects.
-   * @param personService
+   * @param personService The person service
    */
   public ScreeningService(ScreeningDao screeningDao, PersonService personService) {
     this.screeningDao = screeningDao;
@@ -77,7 +77,7 @@ public class ScreeningService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public ScreeningResponseCreated create(Request request) {
+  public PostedScreening create(Request request) {
     assert (request instanceof ScreeningReference);
 
     ScreeningReference screeningReference = (ScreeningReference) request;
@@ -85,7 +85,7 @@ public class ScreeningService implements CrudsService {
         new gov.ca.cwds.rest.api.persistence.ns.Screening(screeningReference.getReference());
 
     managed = screeningDao.create(managed);
-    return new ScreeningResponseCreated(managed.getId(), managed.getReference());
+    return new PostedScreening(managed.getId(), managed.getReference());
   }
 
 

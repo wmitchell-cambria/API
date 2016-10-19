@@ -52,7 +52,8 @@ public class ScreeningResponse extends Screening implements Response {
   /**
    * Constructor
    * 
-   * @param screening
+   * @param screening The persistent version of a screening
+   * @param particpants The list of particpants for this screening
    */
   public ScreeningResponse(gov.ca.cwds.rest.api.persistence.ns.Screening screening,
       List<Person> particpants) {
