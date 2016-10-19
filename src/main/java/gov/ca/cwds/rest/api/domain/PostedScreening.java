@@ -16,7 +16,7 @@ import io.dropwizard.jackson.JsonSnakeCase;
  */
 @JsonSnakeCase
 @JsonInclude(Include.ALWAYS)
-public class ScreeningResponseCreated extends ScreeningResponse {
+public class PostedScreening extends ScreeningResponse {
 
   @JsonProperty("id")
   private long id;
@@ -40,7 +40,7 @@ public class ScreeningResponseCreated extends ScreeningResponse {
    * @param address The {@link Address}
    * @param participants The {@link List}
    */
-  public ScreeningResponseCreated(long id, String reference, String ended_at,
+  public PostedScreening(long id, String reference, String ended_at,
       String incident_county, String incident_date, String location_type,
       String communication_method, String name, String response_time, String screening_decision,
       String started_at, String narrative, Address address, List<Person> participants) {
@@ -56,7 +56,7 @@ public class ScreeningResponseCreated extends ScreeningResponse {
    * @param id The id
    * @param reference The reference
    */
-  public ScreeningResponseCreated(long id, String reference) {
+  public PostedScreening(long id, String reference) {
     super(reference);
     this.id = id;
   }

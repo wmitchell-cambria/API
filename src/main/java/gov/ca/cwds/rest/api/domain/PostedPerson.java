@@ -9,17 +9,17 @@ import gov.ca.cwds.rest.api.Response;
  * 
  * @author CWDS API Team
  */
-public class PersonCreated extends Person {
+public class PostedPerson extends Person {
   @JsonProperty("id")
   private long id;
 
-  public PersonCreated(long id, String first_name, String last_name, String gender,
+  public PostedPerson(long id, String first_name, String last_name, String gender,
       String date_of_birth, String ssn, Address address) {
     super(first_name, last_name, gender, date_of_birth, ssn, address);
     this.id = id;
   }
 
-  public PersonCreated(gov.ca.cwds.rest.api.persistence.ns.Person person) {
+  public PostedPerson(gov.ca.cwds.rest.api.persistence.ns.Person person) {
     super(person);
     this.id = person.getId();
   }
