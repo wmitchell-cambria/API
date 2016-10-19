@@ -1,24 +1,13 @@
 package gov.ca.cwds.rest;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.api.persistence.ns.Filler;
 import gov.ca.cwds.rest.api.persistence.ns.Person;
+import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.ns.AddressDao;
 import gov.ca.cwds.rest.jdbi.ns.PersonDao;
+import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.PersonResource;
@@ -28,6 +17,7 @@ import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
+import gov.ca.cwds.rest.services.ScreeningServiceImpl;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -42,6 +32,19 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
+
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ApiApplication extends Application<ApiConfiguration> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
@@ -61,7 +64,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
   // };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(Filler.class, Person.class, Address.class) {
+      new HibernateBundle<ApiConfiguration>(Filler.class, Person.class, Address.class,
+          Screening.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -92,8 +96,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
   @Override
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
     // Enable variable substitution with environment variables
-    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
-        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(bootstrap
+        .getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
     bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
 
     LOGGER.info("Loading database bundles");
@@ -135,6 +139,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new PersonDao(nsHibernateBundle.getSessionFactory()));
     DataAccessEnvironment.register(Address.class,
         new AddressDao(nsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(Screening.class,
+        new ScreeningDao(nsHibernateBundle.getSessionFactory()));
 
     // DataAccessEnvironment.register(Referral.class,
     // new ReferralDao(cmsHibernateBundle.getSessionFactory()));
@@ -161,6 +167,10 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new PersonService((PersonDao) DataAccessEnvironment.get(Person.class),
             (AddressDao) DataAccessEnvironment.get(Address.class));
 
+    final ScreeningService screeningService =
+        new ScreeningServiceImpl((ScreeningDao) DataAccessEnvironment.get(Screening.class),
+            (AddressDao) DataAccessEnvironment.get(Address.class), personService);
+
     LOGGER.info("Registering AddressResource");
     AddressResource addressResource =
         new AddressResource(new ServiceBackedResourceDelegate(new AddressService()));
@@ -173,7 +183,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     LOGGER.info("Registering ScreeningResource");
     ScreeningResource screeningResource =
-        new ScreeningResource(new ServiceBackedResourceDelegate(new ScreeningService()));
+        new ScreeningResource(new ServiceBackedResourceDelegate(screeningService));
     apiEnvironment.jersey().register(screeningResource);
   }
 
@@ -197,9 +207,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
-        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
-            .run(apiEnvironment.environment());
+    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(), apiConfiguration
+        .getSwaggerConfiguration().getAssetsPath(), null, "swagger").run(apiEnvironment
+        .environment());
     apiEnvironment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
     apiEnvironment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
