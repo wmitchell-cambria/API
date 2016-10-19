@@ -136,12 +136,12 @@ public class ServiceBackedResourceDelegateTest {
    * create Tests
    */
   @Test
-  public void createReturns200WhenCreated() {
+  public void createReturns201WhenCreated() {
     assertThat(
         grizzlyResource.getJerseyTest().target(ROOT_RESOURCE).request()
             .accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(uniqueDomainObject, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(200)));
+        is(equalTo(201)));
   }
 
   @Test
