@@ -17,6 +17,7 @@ import org.apache.http.HttpStatus;
 
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,7 +34,7 @@ import io.swagger.annotations.ApiResponses;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_ADDRESSES, tags = RESOURCE_ADDRESSES, hidden = true)
+@Api(value = RESOURCE_ADDRESSES, tags = RESOURCE_ADDRESSES)
 @Path(value = RESOURCE_ADDRESSES)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -56,6 +57,7 @@ public class AddressResource {
    * 
    * @return The response
    */
+  @UnitOfWork(value = "ns")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
@@ -73,6 +75,7 @@ public class AddressResource {
    * 
    * @return {@link Response}
    */
+  @UnitOfWork(value = "ns")
   @DELETE
   @Path("/{id}")
   @ApiOperation(hidden = true, value = "Delete Address - not currently implemented",
@@ -89,6 +92,7 @@ public class AddressResource {
    * 
    * @return The {@link Response}
    */
+  @UnitOfWork(value = "ns")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -109,6 +113,7 @@ public class AddressResource {
    *
    * @return The {@link Response}
    */
+  @UnitOfWork(value = "ns")
   @PUT
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
