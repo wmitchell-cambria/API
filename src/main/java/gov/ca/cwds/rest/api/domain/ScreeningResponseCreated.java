@@ -1,13 +1,13 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.rest.api.Response;
+import io.dropwizard.jackson.JsonSnakeCase;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import gov.ca.cwds.rest.api.Response;
-import io.dropwizard.jackson.JsonSnakeCase;
 
 /**
  * {@link Response} adding an id to the {@link ScreeningResponse}
@@ -61,6 +61,11 @@ public class ScreeningResponseCreated extends ScreeningResponse {
     this.id = id;
   }
 
+  public ScreeningResponseCreated(gov.ca.cwds.rest.api.persistence.ns.Screening screening,
+      gov.ca.cwds.rest.api.persistence.ns.Address address) {
+    super(screening, address);
+    this.id = screening.getId();
+  }
 
 
   /**

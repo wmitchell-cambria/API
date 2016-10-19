@@ -1,10 +1,10 @@
 package gov.ca.cwds.rest.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.validation.Date;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Screening extends DomainObject implements Request {
   @JsonProperty("reference")
@@ -90,6 +90,19 @@ public class Screening extends DomainObject implements Request {
   public Screening(String reference) {
     super();
     this.reference = reference;
+  }
+
+  public Screening(gov.ca.cwds.rest.api.persistence.ns.Screening screening) {
+    this.reference = screening.getReference();
+    this.ended_at = DomainObject.cookDate(screening.getEndedAt());
+    this.incident_county = screening.getIncidentCounty();
+    this.incident_date = DomainObject.cookDate(screening.getIncidentDate());
+    this.location_type = screening.getLocationType();
+    this.communication_method = screening.getCommunicationMethod();
+    this.name = screening.getName();
+    this.screening_decision = screening.getScreeningDecision();
+    this.started_at = DomainObject.cookDate(screening.getStartedAt());
+    this.narrative = screening.getNarrative();
   }
 
   /**

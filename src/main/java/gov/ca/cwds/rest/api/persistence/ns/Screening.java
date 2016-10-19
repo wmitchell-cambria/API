@@ -65,7 +65,12 @@ public class Screening extends PersistentObject {
   @Column(name = "contact_address_id")
   private Long addressId;
 
-  private static int count = 8;
+  @Column(name = "hotline_contact_participant_array")
+  private String participantIds;
+
+
+
+  private static int count = 1;
 
   /**
    * Default constructor
@@ -80,7 +85,8 @@ public class Screening extends PersistentObject {
 
   public Screening(Long id, String reference, Date endedAt, String incidentCounty,
       Date incidentDate, String locationType, String communicationMethod, String name,
-      String screeningDecision, Date startedAt, String narrative, Long addressId) {
+      String screeningDecision, Date startedAt, String narrative, Long addressId,
+      String participantIds) {
     super();
     this.id = id;
     this.reference = reference;
@@ -94,7 +100,9 @@ public class Screening extends PersistentObject {
     this.startedAt = startedAt;
     this.narrative = narrative;
     this.addressId = addressId;
+    this.participantIds = participantIds;
   }
+
 
 
   /**
@@ -103,26 +111,23 @@ public class Screening extends PersistentObject {
    * @param staffPerson The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public Screening(gov.ca.cwds.rest.api.domain.Screening screening, Long lastUpdatedId) {
+  public Screening(gov.ca.cwds.rest.api.domain.ScreeningRequest screening, Long lastUpdatedId) {
     super(lastUpdatedId);
 
-    try {
-      this.id = (long) count++;
-      this.reference = screening.getReference();
-      this.endedAt = DomainObject.uncookDateString(screening.getEnded_at());
-      this.incidentCounty = screening.getIncident_county();
-      this.incidentDate = DomainObject.uncookDateString(screening.getIncident_date());
-      this.locationType = screening.getLocation_type();
-      this.communicationMethod = screening.getCommunication_method();
-      this.name = screening.getName();
-      this.screeningDecision = screening.getScreening_decision();
-      this.startedAt = DomainObject.uncookDateString(screening.getStarted_at());
-      this.narrative = screening.getNarrative();
-      // this.addressId = screening.;
-
-    } catch (Exception e) {
-      System.out.println("exception in screening constr");
-    }
+    this.id = (long) count++;
+    this.reference = screening.getReference();
+    this.endedAt = DomainObject.uncookDateString(screening.getEnded_at());
+    this.incidentCounty = screening.getIncident_county();
+    this.incidentDate = DomainObject.uncookDateString(screening.getIncident_date());
+    this.locationType = screening.getLocation_type();
+    this.communicationMethod = screening.getCommunication_method();
+    this.name = screening.getName();
+    this.screeningDecision = screening.getScreening_decision();
+    this.startedAt = DomainObject.uncookDateString(screening.getStarted_at());
+    this.narrative = screening.getNarrative();
+    this.participantIds =
+        screening.getParticipant_ids().toString().replace("[", "").replace("]", "");
+    // this.addressId = screening.;
   }
 
   /*
@@ -227,5 +232,14 @@ public class Screening extends PersistentObject {
   public void setAddressId(Long addressId) {
     this.addressId = addressId;
   }
+
+  /**
+   * @return the participantIds
+   */
+  public String getParticipantIds() {
+    return participantIds;
+  }
+
+
 
 }
