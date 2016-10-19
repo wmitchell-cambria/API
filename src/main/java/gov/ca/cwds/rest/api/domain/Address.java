@@ -1,11 +1,12 @@
 package gov.ca.cwds.rest.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import io.swagger.annotations.ApiModel;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing an address
@@ -15,12 +16,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @ApiModel
 public class Address extends DomainObject implements Request, Response {
 
+  @ApiModelProperty(example = "742 Evergreen Terrace")
   private String street_address;
 
+  @ApiModelProperty(example = "Springfield")
   private String city;
 
+  @ApiModelProperty(example = "WA")
   private String state;
 
+  @ApiModelProperty(example = "6525")
   private Integer zip;
 
   /**
