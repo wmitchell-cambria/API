@@ -37,6 +37,8 @@ public class PostedAddress extends Address {
    */
   public PostedAddress(gov.ca.cwds.rest.api.persistence.ns.Address address) {
     super(address);
+    assert (address.getId() != null);
+
     this.id = address.getId();
   }
 
