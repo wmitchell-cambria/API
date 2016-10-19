@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class Screening extends DomainObject implements Request {
   @JsonProperty("reference")
+  @ApiModelProperty(example = "WXTSKD")
   private String reference;
 
   @Date
@@ -17,6 +18,7 @@ public class Screening extends DomainObject implements Request {
   private String ended_at;
 
   @JsonProperty("incident_county")
+  @ApiModelProperty(example = "Sacramento")
   private String incident_county;
 
   @Date
@@ -25,18 +27,23 @@ public class Screening extends DomainObject implements Request {
   private String incident_date;
 
   @JsonProperty("location_type")
+  @ApiModelProperty(example = "home")
   private String location_type;
 
   @JsonProperty("communication_method")
+  @ApiModelProperty(example = "email")
   private String communication_method;
 
   @JsonProperty("name")
+  @ApiModelProperty(example = "Some Screening name")
   private String name;
 
   @JsonProperty("response_time")
+  @ApiModelProperty(example = "FYI : We aren't storing this???")
   private String response_time;
 
   @JsonProperty("screening_decision")
+  @ApiModelProperty(example = "Decision")
   private String screening_decision;
 
   @Date
@@ -45,6 +52,7 @@ public class Screening extends DomainObject implements Request {
   private String started_at;
 
   @JsonProperty("narrative")
+  @ApiModelProperty(example = "On the evening of...")
   private String narrative;
 
   /**
