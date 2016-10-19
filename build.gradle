@@ -79,6 +79,10 @@ dependencies {
 	
 }
 
+tasks.withType(Test) {
+    enableAssertions = true
+}
+
 test {
     exclude '**/*IT*'
 }
