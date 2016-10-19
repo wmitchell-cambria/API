@@ -16,9 +16,28 @@ public class PostedAddress extends Address {
   @JsonProperty("id")
   private long id;
 
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param street_address The street address
+   * @param city The city
+   * @param state The state
+   * @param zip The zip
+   */
   public PostedAddress(long id, String street_address, String city, String state, Integer zip) {
     super(street_address, city, state, zip);
     this.id = id;
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param address The persisted address
+   */
+  public PostedAddress(gov.ca.cwds.rest.api.persistence.ns.Address address) {
+    super(address);
+    this.id = address.getId();
   }
 
   /**

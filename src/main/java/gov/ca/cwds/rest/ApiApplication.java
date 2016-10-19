@@ -178,8 +178,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
         (ScreeningDao) DataAccessEnvironment.get(Screening.class), personService);
 
     LOGGER.info("Registering AddressResource");
-    AddressResource addressResource =
-        new AddressResource(new ServiceBackedResourceDelegate(new AddressService()));
+    AddressResource addressResource = new AddressResource(new ServiceBackedResourceDelegate(
+        new AddressService((AddressDao) DataAccessEnvironment.get(Address.class))));
     apiEnvironment.jersey().register(addressResource);
 
     LOGGER.info("Registering PersonResource");
