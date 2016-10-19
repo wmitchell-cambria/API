@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,15 +19,18 @@ import io.swagger.annotations.ApiModelProperty;
 public class Person extends DomainObject implements Request, Response {
   @JsonProperty("first_name")
   @ApiModelProperty(example = "Bart")
+  @Size(max = 50)
   private String first_name;
 
   @JsonProperty("last_name")
   @ApiModelProperty(example = "Simpson")
+  @Size(max = 50)
   private String last_name;
 
   // @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   @JsonProperty("gender")
   @ApiModelProperty(example = "Male")
+  @Size(max = 10)
   private String gender;
 
   @Date
@@ -36,6 +41,7 @@ public class Person extends DomainObject implements Request, Response {
 
   @JsonProperty("ssn")
   @ApiModelProperty(example = "999551111")
+  @Size(max = 9)
   private String ssn;
 
   @JsonProperty("address")

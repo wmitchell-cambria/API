@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,12 +19,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class Address extends DomainObject implements Request, Response {
 
   @ApiModelProperty(example = "742 Evergreen Terrace")
+  @Size(max = 50)
   private String street_address;
 
   @ApiModelProperty(example = "Springfield")
+  @Size(max = 50)
   private String city;
 
   @ApiModelProperty(example = "WA")
+  @Size(max = 50)
   private String state;
 
   @ApiModelProperty(example = "6525")

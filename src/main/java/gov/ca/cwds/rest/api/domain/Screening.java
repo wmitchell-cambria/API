@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class Screening extends DomainObject implements Request {
   @JsonProperty("reference")
   @ApiModelProperty(example = "WXTSKD")
+  @Size(max = 50)
   private String reference;
 
   @Date
@@ -19,6 +22,7 @@ public class Screening extends DomainObject implements Request {
 
   @JsonProperty("incident_county")
   @ApiModelProperty(example = "Sacramento")
+  @Size(max = 50)
   private String incident_county;
 
   @Date
@@ -28,14 +32,17 @@ public class Screening extends DomainObject implements Request {
 
   @JsonProperty("location_type")
   @ApiModelProperty(example = "home")
+  @Size(max = 50)
   private String location_type;
 
   @JsonProperty("communication_method")
   @ApiModelProperty(example = "email")
+  @Size(max = 50)
   private String communication_method;
 
   @JsonProperty("name")
   @ApiModelProperty(example = "Some Screening name")
+  @Size(max = 50)
   private String name;
 
   @JsonProperty("response_time")
@@ -44,6 +51,7 @@ public class Screening extends DomainObject implements Request {
 
   @JsonProperty("screening_decision")
   @ApiModelProperty(example = "Decision")
+  @Size(max = 50)
   private String screening_decision;
 
   @Date
@@ -53,6 +61,7 @@ public class Screening extends DomainObject implements Request {
 
   @JsonProperty("narrative")
   @ApiModelProperty(example = "On the evening of...")
+  @Size(max = 1500)
   private String narrative;
 
   /**
