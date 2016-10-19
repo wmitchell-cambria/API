@@ -16,13 +16,16 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class Person extends DomainObject implements Request, Response {
   @JsonProperty("first_name")
+  @ApiModelProperty(example = "Bart")
   private String first_name;
 
   @JsonProperty("last_name")
+  @ApiModelProperty(example = "Simpson")
   private String last_name;
 
   // @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   @JsonProperty("gender")
+  @ApiModelProperty(example = "Male")
   private String gender;
 
   @Date
@@ -32,6 +35,7 @@ public class Person extends DomainObject implements Request, Response {
   private String date_of_birth;
 
   @JsonProperty("ssn")
+  @ApiModelProperty(example = "999551111")
   private String ssn;
 
   @JsonProperty("address")
