@@ -1,16 +1,19 @@
 package gov.ca.cwds.rest.api.domain;
 
-import gov.ca.cwds.rest.api.Response;
-
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import gov.ca.cwds.rest.api.Response;
 
 /**
  * {@link DomainObject} representing a screening response
  * 
  * @author CWDS API Team
  */
+@JsonInclude(Include.ALWAYS)
 public class ScreeningResponse extends Screening implements Response {
   @JsonProperty("address")
   private Address address;
@@ -46,17 +49,25 @@ public class ScreeningResponse extends Screening implements Response {
     this.participants = participants;
   }
 
+  /**
+   * Constructor
+   * 
+   * @param screening
+   */
   public ScreeningResponse(gov.ca.cwds.rest.api.persistence.ns.Screening screening,
-      gov.ca.cwds.rest.api.persistence.ns.Address address) {
+      List<Person> particpants) {
     super(screening);
-    if (address != null) {
-      this.address = new Address(address);
-    } else {
-      this.address = null;
+    if (screening.getContactAddress() != null) {
+      this.address = new Address(screening.getContactAddress());
     }
+    this.participants = particpants;
   }
 
-
+  /**
+   * Constructor
+   * 
+   * @param reference the reference
+   */
   public ScreeningResponse(String reference) {
     super(reference);
   }

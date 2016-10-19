@@ -33,7 +33,7 @@ public class ScreeningServiceTest {
 
   @Before
   public void setup() throws Exception {
-    screeningService = new ScreeningService();
+    // screeningService = new ScreeningService();
   }
 
   /*

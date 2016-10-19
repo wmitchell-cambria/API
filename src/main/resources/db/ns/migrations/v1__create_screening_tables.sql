@@ -60,7 +60,8 @@ CREATE TABLE public.hotline_contact
 	create_user_id integer NULL,    -- The ID of the user that created the record.
 	create_datetime timestamp NULL,    -- The date and time that the user created the record.
 	update_user_id integer NULL,    -- The ID of the user which made the last update to the record.
-	update_datetime timestamp NULL    -- The date and time that the user updated the record.
+	update_datetime timestamp NULL,    -- The date and time that the user updated the record.
+	screening_respone_time varchar(50) NULL   -- Check with Larry on this.
 )
 ;
 

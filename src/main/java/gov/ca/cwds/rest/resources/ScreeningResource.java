@@ -20,6 +20,7 @@ import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -60,6 +61,7 @@ public class ScreeningResource {
    *
    * @return the response
    */
+  @UnitOfWork(value = "ns")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
@@ -95,6 +97,7 @@ public class ScreeningResource {
    * 
    * @return The {@link Response}
    */
+  @UnitOfWork(value = "ns")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -116,6 +119,7 @@ public class ScreeningResource {
    *
    * @return The {@link Response}
    */
+  @UnitOfWork(value = "ns")
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

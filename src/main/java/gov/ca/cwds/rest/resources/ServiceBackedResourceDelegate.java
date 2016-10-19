@@ -7,8 +7,11 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableMap;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -99,8 +102,15 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     try {
       response = Response.status(Response.Status.OK).entity(service.update(id, request)).build();
     } catch (ServiceException e) {
+      Object entity = null;
       if (e.getCause() instanceof EntityNotFoundException) {
-        response = Response.status(Response.Status.NOT_FOUND).entity(null).build();
+        if (StringUtils.isNotEmpty(e.getMessage())) {
+          ImmutableMap<String, String> map =
+              ImmutableMap.<String, String>builder().put("message", e.getMessage()).build();
+          entity = map;
+        }
+
+        response = Response.status(Response.Status.NOT_FOUND).entity(entity).build();
       } else {
         LOGGER.error("Unable to handle request", e);
         response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
