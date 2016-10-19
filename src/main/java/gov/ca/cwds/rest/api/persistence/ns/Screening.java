@@ -95,18 +95,18 @@ public class Screening extends PersistentObject {
   /**
    * Constructor
    * 
-   * @param reference
-   * @param endedAt
-   * @param incidentCounty
-   * @param incidentDate
-   * @param locationType
-   * @param communicationMethod
-   * @param name
-   * @param screeningDecision
-   * @param startedAt
-   * @param narrative
-   * @param contactAddress
-   * @param participantIds
+   * @param reference The reference
+   * @param endedAt The endedAt date
+   * @param incidentCounty The incident county
+   * @param incidentDate The incident date
+   * @param locationType The location type
+   * @param communicationMethod The communication method
+   * @param name The name of the screening
+   * @param screeningDecision The screening decision
+   * @param startedAt The started at date
+   * @param narrative The narrative
+   * @param contactAddress The contact address
+   * @param participantIds The list of participant ids
    */
   public Screening(String reference, Date endedAt, String incidentCounty, Date incidentDate,
       String locationType, String communicationMethod, String name, String screeningDecision,
