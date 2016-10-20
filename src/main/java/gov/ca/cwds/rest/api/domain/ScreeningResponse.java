@@ -1,12 +1,12 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.rest.api.Response;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import gov.ca.cwds.rest.api.Response;
 
 /**
  * {@link DomainObject} representing a screening response
@@ -53,15 +53,15 @@ public class ScreeningResponse extends Screening implements Response {
    * Constructor
    * 
    * @param screening The persistent version of a screening
-   * @param particpants The list of particpants for this screening
+   * @param participants The list of participants for this screening
    */
   public ScreeningResponse(gov.ca.cwds.rest.api.persistence.ns.Screening screening,
-      List<Person> particpants) {
+      List<Person> participants) {
     super(screening);
     if (screening.getContactAddress() != null) {
       this.address = new Address(screening.getContactAddress());
     }
-    this.participants = particpants;
+    this.participants = participants;
   }
 
   /**
