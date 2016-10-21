@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.validation.IfThen;
@@ -46,7 +48,7 @@ import io.swagger.annotations.ApiModelProperty;
 @OnlyIf(property = "badgeNumber", ifProperty = "lawEnforcementId")
 @IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
     @IfThen(ifProperty = "streetName", thenProperty = "cityName", required = false)})
-public class Reporter extends DomainObject {
+public class Reporter extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 10)

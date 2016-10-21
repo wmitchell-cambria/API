@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
 import io.dropwizard.validation.OneOf;
@@ -39,7 +41,7 @@ import io.swagger.annotations.ApiModelProperty;
     @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.referralId}"),
             @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)})})
-public class Allegation extends DomainObject {
+public class Allegation extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 10)
