@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
@@ -43,7 +45,7 @@ import io.swagger.annotations.ApiModelProperty;
     @InjectLink(value = "/{resource}/{id}", rel = "lawEnforcementId", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
             @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
-public class CrossReport extends DomainObject {
+public class CrossReport extends DomainObject implements Request, Response {
   @NotEmpty
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC123")

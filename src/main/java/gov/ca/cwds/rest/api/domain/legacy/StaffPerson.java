@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
@@ -36,7 +38,7 @@ import io.swagger.annotations.ApiModelProperty;
     @InjectLink(value = "/{resource}/{id}", rel = "cwsofficeAddress", style = Style.ABSOLUTE,
         bindings = {@Binding(name = "id", value = "${instance.cwsOfficeAddress}"),
             @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE_ADDRESS)})})
-public class StaffPerson extends DomainObject {
+public class StaffPerson extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 3, max = 3, message = "size must be 3")
