@@ -59,4 +59,16 @@ public class Api {
    */
   public final static String RESOURCE_LAW_ENFORCEMENT = "law_enforcement";
 
+  /**
+   * A {@code String constant representing {@value #RESOURCE_CWS_OFFICE} api
+   */
+  public final static String RESOURCE_CWS_OFFICE = "cws_office";
+
+  /**
+   * A {@code String constant representing {@value #RESOURCE_CWS_OFFICE_ADDESS} api
+   */
+  public final static String RESOURCE_CWS_OFFICE_ADDRESS = "cws_office_address";
+
+
+
 }
