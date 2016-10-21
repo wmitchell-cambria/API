@@ -28,4 +28,35 @@ public class Api {
   public final static String RESOURCE_SCREENINGS = "screenings";
 
 
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
+   */
+  public final static String RESOURCE_ALLEGATION = "allegation";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
+   */
+  public final static String RESOURCE_CLIENT = "client";
+
+
+  /**
+   * A {@code String constant representing {@value #RESOURCE_CROSS_REPORT} api
+   */
+  public final static String RESOURCE_CROSS_REPORT = "cross_report";
+
+  /**
+   * A {@code String constant representing {@value #RESOURCE_REFERRAL} api
+   */
+  public final static String RESOURCE_REFERRAL = "referral";
+
+  /**
+   * A {@code String constant representing {@value #RESOURCE_STAFF_PERSON} api
+   */
+  public final static String RESOURCE_STAFF_PERSON = "staff_person";
+
+  /**
+   * A {@code String constant representing {@value #RESOURCE_LAW_ENFORCEMENT} api
+   */
+  public final static String RESOURCE_LAW_ENFORCEMENT = "law_enforcement";
+
 }
