@@ -8,16 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-
 /**
- * {@link PersistentObject} representing an Address
+ * {@link NsPersistentObject} representing an Address
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "address")
-public class Address extends PersistentObject {
+public class Address extends NsPersistentObject {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_address_id")

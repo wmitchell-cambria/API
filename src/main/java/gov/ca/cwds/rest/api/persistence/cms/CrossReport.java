@@ -12,18 +12,18 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.persistence.cms.CrossReport.PrimaryKey;
+import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
- * {@link PersistentObject} representing a CrossReport
+ * {@link NsPersistentObject} representing a CrossReport
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "CRSS_RPT")
 @IdClass(PrimaryKey.class)
-public class CrossReport extends PersistentObject {
+public class CrossReport extends CmsPersistentObject {
   @Id
   @Column(name = "FKREFERL_T")
   private String referralId;

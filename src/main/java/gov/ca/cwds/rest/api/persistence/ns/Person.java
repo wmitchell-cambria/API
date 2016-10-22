@@ -16,16 +16,15 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
- * {@link PersistentObject} representing a Person
+ * {@link NsPersistentObject} representing a Person
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "person")
-public class Person extends PersistentObject {
+public class Person extends NsPersistentObject {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_person_id")

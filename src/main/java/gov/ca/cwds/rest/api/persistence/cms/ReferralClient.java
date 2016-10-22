@@ -11,18 +11,18 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient.PrimaryKey;
+import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
- * {@link PersistentObject} representing a ReferralClient
+ * {@link NsPersistentObject} representing a ReferralClient
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "REFR_CLT")
 @IdClass(PrimaryKey.class)
-public class ReferralClient extends PersistentObject {
+public class ReferralClient extends CmsPersistentObject {
 
   @Id
   @Column(name = "FKREFERL_T")

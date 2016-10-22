@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
  * Container for {@link Dao} classes
@@ -22,7 +23,7 @@ public class DataAccessEnvironment {
   /**
    * Registers a {@link Dao} to the environment
    * 
-   * @param clazz The {@link PersistentObject} the dao performs operations on
+   * @param clazz The {@link NsPersistentObject} the dao performs operations on
    * 
    * @param dao The dao implementation
    */
