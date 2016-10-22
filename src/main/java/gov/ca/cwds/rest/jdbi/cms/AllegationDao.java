@@ -3,16 +3,16 @@ package gov.ca.cwds.rest.jdbi.cms;
 import org.hibernate.SessionFactory;
 
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
-import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.CmsCrudsDaoImpl;
 
-public class AllegationDao extends CrudsDaoImpl<Allegation> {
+public class AllegationDao extends CmsCrudsDaoImpl<Allegation> {
 
-  SessionFactory sessionFactory;
-
+  /**
+   * Constructor
+   * 
+   * @param sessionFactory The sessionFactory
+   */
   public AllegationDao(SessionFactory sessionFactory) {
     super(sessionFactory);
-    this.sessionFactory = sessionFactory;
   }
-
-
 }

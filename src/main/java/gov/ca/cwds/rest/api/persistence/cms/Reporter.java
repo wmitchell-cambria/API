@@ -10,16 +10,16 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
- * {@link PersistentObject} representing a Reporter
+ * {@link NsPersistentObject} representing a Reporter
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "REPTR_T")
-public class Reporter extends PersistentObject {
+public class Reporter extends CmsPersistentObject {
 
   @Id
   @Column(name = "FKREFERL_T")

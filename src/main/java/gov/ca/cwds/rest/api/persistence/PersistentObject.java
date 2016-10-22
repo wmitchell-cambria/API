@@ -1,66 +1,11 @@
 package gov.ca.cwds.rest.api.persistence;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-
-import org.hibernate.annotations.Type;
-
-/**
- * Base class for objects in the persistence layer.
- * 
- * @author CWDS API Team
- */
-@MappedSuperclass
-public abstract class PersistentObject {
-  protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
-
-  @Column(name = "update_user_id")
-  private Long lastUpdatedId;
-
-  @Type(type = "timestamp")
-  @Column(name = "update_datetime")
-  private Date lastUpdatedTime;
-
-
-  /**
-   * Default constructor
-   * 
-   * Required for Hibernate
-   */
-  protected PersistentObject() {
-
-  }
-
-  /**
-   * Constructor
-   * 
-   * @param lastUpdatedId the id of the last person to update this object
-   */
-  protected PersistentObject(Long lastUpdatedId) {
-    this.lastUpdatedId = lastUpdatedId;
-    this.lastUpdatedTime = new Date();
-  }
-
-  /**
-   * @return the lastUpdatedId
-   */
-  public Long getLastUpdatedId() {
-    return lastUpdatedId;
-  }
-
-  /**
-   * @return the lastUpdatedTime
-   */
-  public Date getLastUpdatedTime() {
-    return lastUpdatedTime;
-  }
+public interface PersistentObject {
 
   /**
    * @return the primaryKey
    */
-  public abstract Serializable getPrimaryKey();
-
+  public Serializable getPrimaryKey();
 }

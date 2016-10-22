@@ -10,16 +10,16 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
- * {@link PersistentObject} representing a StaffPerson
+ * {@link NsPersistentObject} representing a StaffPerson
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "STFPERST")
-public class StaffPerson extends PersistentObject {
+public class StaffPerson extends CmsPersistentObject {
   @Id
   @Column(name = "IDENTIFIER")
   private String id;

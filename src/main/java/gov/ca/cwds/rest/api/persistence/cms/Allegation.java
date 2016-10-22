@@ -9,11 +9,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-
 @Entity
 @Table(name = "ALLGTN_T")
-public class Allegation extends PersistentObject {
+public class Allegation extends CmsPersistentObject {
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
   @Id
