@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.jdbi;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -85,7 +86,8 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   public T update(T object) {
     T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
-      throw new EntityNotFoundException();
+      String msg = MessageFormat.format("Unable to find entity with id={0}", object);
+      throw new EntityNotFoundException(msg);
     }
     currentSession().evict(databaseObject);
     return persist(object);
