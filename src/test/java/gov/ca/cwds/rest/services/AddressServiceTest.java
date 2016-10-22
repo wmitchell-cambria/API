@@ -80,8 +80,8 @@ public class AddressServiceTest {
     when(addressDao.create(any(gov.ca.cwds.rest.api.persistence.ns.Address.class)))
         .thenReturn(toCreate);
 
-    PostedAddress postAddress = addressService.create(request);
-    assertThat(postAddress.getClass(), is(PostedAddress.class));
+    PostedAddress postedAddress = addressService.create(request);
+    assertThat(postedAddress.getClass(), is(PostedAddress.class));
   }
 
   @Test
@@ -113,17 +113,6 @@ public class AddressServiceTest {
     PostedAddress returned = addressService.create(request);
 
     assertThat(returned, is(expected));
-  }
-
-  @Test
-  public void createThrowsAssertionError() throws Exception {
-    // TODO : thrown.expect not working on AssertionError???? WHY???
-    // thrown.expect(AssertionError.class);
-    try {
-      addressService.find("wrong");
-      Assert.fail("Expected AssertionError");
-    } catch (AssertionError e) {
-    }
   }
 
   /*
