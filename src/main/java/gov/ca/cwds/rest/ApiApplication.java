@@ -42,7 +42,7 @@ import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
-import gov.ca.cwds.rest.services.StaffPersonService;
+import gov.ca.cwds.rest.services.legacy.StaffPersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
