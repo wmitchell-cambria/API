@@ -31,7 +31,7 @@ public class Api {
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
    */
-  public final static String RESOURCE_ALLEGATION = "allegation";
+  public final static String RESOURCE_ALLEGATION = "allegations";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
@@ -42,17 +42,17 @@ public class Api {
   /**
    * A {@code String constant representing {@value #RESOURCE_CROSS_REPORT} api
    */
-  public final static String RESOURCE_CROSS_REPORT = "cross_report";
+  public final static String RESOURCE_CROSS_REPORT = "crossReports";
 
   /**
    * A {@code String constant representing {@value #RESOURCE_REFERRAL} api
    */
-  public final static String RESOURCE_REFERRAL = "referral";
+  public final static String RESOURCE_REFERRAL = "referrals";
 
   /**
    * A {@code String constant representing {@value #RESOURCE_STAFF_PERSON} api
    */
-  public final static String RESOURCE_STAFF_PERSON = "staff_person";
+  public final static String RESOURCE_STAFF_PERSON = "staffpersons";
 
   /**
    * A {@code String constant representing {@value #RESOURCE_LAW_ENFORCEMENT} api

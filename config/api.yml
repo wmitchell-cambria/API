@@ -38,6 +38,7 @@ cmsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.DB2Dialect
       hibernate.show_sql: true
+      hibernate.default_schema: ${DB_CMS_SCHEMA}
 
       
 
