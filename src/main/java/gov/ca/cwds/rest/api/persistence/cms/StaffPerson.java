@@ -146,6 +146,7 @@ public class StaffPerson extends CmsPersistentObject {
   /**
    * Constructor
    * 
+   * @param id The id
    * @param staffPerson The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */

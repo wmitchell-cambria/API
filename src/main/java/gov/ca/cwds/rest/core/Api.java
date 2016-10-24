@@ -40,35 +40,17 @@ public class Api {
 
 
   /**
-   * A {@code String constant representing {@value #RESOURCE_CROSS_REPORT} api
+   * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api
    */
   public final static String RESOURCE_CROSS_REPORT = "crossReports";
 
   /**
-   * A {@code String constant representing {@value #RESOURCE_REFERRAL} api
+   * A {@code String} constant representing {@value #RESOURCE_REFERRAL} api
    */
   public final static String RESOURCE_REFERRAL = "referrals";
 
   /**
-   * A {@code String constant representing {@value #RESOURCE_STAFF_PERSON} api
+   * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api
    */
   public final static String RESOURCE_STAFF_PERSON = "staffpersons";
-
-  /**
-   * A {@code String constant representing {@value #RESOURCE_LAW_ENFORCEMENT} api
-   */
-  public final static String RESOURCE_LAW_ENFORCEMENT = "law_enforcement";
-
-  /**
-   * A {@code String constant representing {@value #RESOURCE_CWS_OFFICE} api
-   */
-  public final static String RESOURCE_CWS_OFFICE = "cws_office";
-
-  /**
-   * A {@code String constant representing {@value #RESOURCE_CWS_OFFICE_ADDESS} api
-   */
-  public final static String RESOURCE_CWS_OFFICE_ADDRESS = "cws_office_address";
-
-
-
 }
