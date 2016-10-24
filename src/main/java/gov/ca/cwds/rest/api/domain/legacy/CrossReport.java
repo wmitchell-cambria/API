@@ -5,10 +5,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.glassfish.jersey.linking.Binding;
-import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLink.Style;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -28,23 +23,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@InjectLinks({
-    @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-        bindings = {
-            @Binding(name = "id",
-                value = "referralId=${instance.referralId},thirdId=${instance.thirdId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_CROSS_REPORT)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)},
-        condition = "${not empty instance.referralId }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "staffPersonId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.staffPersonId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)},
-        condition = "${not empty instance.staffPersonId }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "lawEnforcementId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)})})
 public class CrossReport extends DomainObject implements Request, Response {
   @NotEmpty
   @Size(min = 1, max = 10)

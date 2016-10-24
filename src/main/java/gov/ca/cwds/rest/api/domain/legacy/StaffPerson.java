@@ -23,16 +23,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-// @InjectLinks({
-// @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.id}"),
-// @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),
-// @InjectLink(value = "/{resource}/{id}", rel = "cwsOffice", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.cwsOffice}"),
-// @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE)}),
-// @InjectLink(value = "/{resource}/{id}", rel = "cwsofficeAddress", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.cwsOfficeAddress}"),
-// @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE_ADDRESS)})})
 public class StaffPerson extends DomainObject implements Request, Response {
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -134,7 +124,29 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "john")
   private String twitterName;
 
-
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param endDate The endDate
+   * @param firstName The firstName
+   * @param jobTitle The jobTitle
+   * @param lastName The lastName
+   * @param middleInitial The middleInitial
+   * @param namePrefix The namePrefix
+   * @param phoneNumber The phoneNumber
+   * @param phoneExt The phoneExt
+   * @param startDate The startDate
+   * @param nameSuffix The nameSuffix
+   * @param telecommuterIndicator The telecommuterIndicator
+   * @param cwsOffice The cwsoffic
+   * @param availabilityAndLocationDescription The availabilityAndLocationDescription
+   * @param ssrsLicensingWorkerId The ssrsLicensingWorkerId
+   * @param countyCode The countyCode
+   * @param dutyWorkerIndicator The dutyWorkerIndicator
+   * @param cwsOfficeAddress The cwsOfficeAddress
+   * @param emailAddress The emailAddress
+   */
   @JsonCreator
   public StaffPerson(@JsonProperty("id") String id, @JsonProperty("endDate") String endDate,
       @JsonProperty("firstName") String firstName, @JsonProperty("jobTitle") String jobTitle,
@@ -151,8 +163,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
       @JsonProperty("countyCode") String countyCode,
       @JsonProperty("dutyWorkerIndicator") Boolean dutyWorkerIndicator,
       @JsonProperty("cwsOfficeAddress") String cwsOfficeAddress,
-      @JsonProperty("emailAddress") String emailAddress,
-      @JsonProperty("twitterName") String twitterName) {
+      @JsonProperty("emailAddress") String emailAddress) {
     super();
     this.endDate = endDate;
     this.firstName = firstName;
@@ -172,7 +183,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
     this.dutyWorkerIndicator = dutyWorkerIndicator;
     this.cwsOfficeAddress = cwsOfficeAddress;
     this.emailAddress = emailAddress;
-    this.twitterName = twitterName;
   }
 
   public StaffPerson(gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson) {
