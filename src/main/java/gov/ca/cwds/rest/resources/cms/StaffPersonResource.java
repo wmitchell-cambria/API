@@ -88,7 +88,7 @@ public class StaffPersonResource {
   /**
    * Create an {@link StaffPerson}
    * 
-   * @param staffperson The {@link StaffPerson}
+   * @param staffPerson The {@link StaffPerson}
    * 
    * @return The {@link Response}
    */
@@ -110,8 +110,7 @@ public class StaffPersonResource {
    * Update an {@link StaffPerson}
    * 
    * @param id the id
-   * @param person {@link StaffPerson}
-   * @param acceptHeader The accept header.
+   * @param staffPerson {@link StaffPerson}
    *
    * @return The {@link Response}
    */
