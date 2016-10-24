@@ -5,10 +5,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.glassfish.jersey.linking.Binding;
-import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLink.Style;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -28,29 +23,22 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@InjectLinks({
-    @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.id}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "cwsOffice", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.cwsOffice}"),
-            @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "cwsofficeAddress", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.cwsOfficeAddress}"),
-            @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE_ADDRESS)})})
+// @InjectLinks({
+// @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.id}"),
+// @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),
+// @InjectLink(value = "/{resource}/{id}", rel = "cwsOffice", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.cwsOffice}"),
+// @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE)}),
+// @InjectLink(value = "/{resource}/{id}", rel = "cwsofficeAddress", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.cwsOfficeAddress}"),
+// @Binding(name = "resource", value = Api.RESOURCE_CWS_OFFICE_ADDRESS)})})
 public class StaffPerson extends DomainObject implements Request, Response {
-
-  @NotEmpty
-  @Size(min = 3, max = 3, message = "size must be 3")
-  @ApiModelProperty(required = true, readOnly = true, value = "Value overwritten on POST",
-      example = "ABC")
-  private String id;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "endDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2016-05-22")
+  @ApiModelProperty(required = false, readOnly = false, value = "MM/dd/yyyy", example = "5/22/2016")
   private String endDate;
 
   @NotEmpty
@@ -90,7 +78,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "startDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = true)
-  @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd", example = "2000-01-01")
+  @ApiModelProperty(required = true, readOnly = false, value = "MM/dd/yyyy", example = "1/1/2000")
   private String startDate;
 
   @NotEmpty
@@ -166,7 +154,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
       @JsonProperty("emailAddress") String emailAddress,
       @JsonProperty("twitterName") String twitterName) {
     super();
-    this.id = id;
     this.endDate = endDate;
     this.firstName = firstName;
     this.jobTitle = jobTitle;
@@ -189,7 +176,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
   }
 
   public StaffPerson(gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson) {
-    this.id = persistedStaffPerson.getId();
     this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
     this.firstName = persistedStaffPerson.getFirstName();
     this.jobTitle = persistedStaffPerson.getJobTitle();
@@ -212,44 +198,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
     this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
     this.emailAddress = persistedStaffPerson.getEmailAddress();
     this.twitterName = "";
-  }
-
-  /*
-   * to add new fields to StaffPerson in Postgres database will add back code when StaffPerson
-   * defined in Postress database
-   */
-  // public StaffPerson(gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson,
-  // gov.ca.cwds.rest.api.persistence.ns.StaffPersonNS persistedStaffPersonNS) {
-  // this.id = persistedStaffPerson.getId();
-  // this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
-  // this.firstName = persistedStaffPerson.getFirstName();
-  // this.jobTitle = persistedStaffPerson.getJobTitle();
-  // this.lastName = persistedStaffPerson.getLastName();
-  // this.middleInitial = persistedStaffPerson.getMiddleInitial();
-  // this.namePrefix = persistedStaffPerson.getNamePrefix();
-  // this.phoneNumber = persistedStaffPerson.getPhoneNumber();
-  // this.phoneExt = persistedStaffPerson.getPhoneExt();
-  // this.startDate = DomainObject.cookDate(persistedStaffPerson.getStartDate());
-  // this.nameSuffix = persistedStaffPerson.getNameSuffix();
-  // this.telecommuterIndicator =
-  // DomainObject.uncookBooleanString(persistedStaffPerson.getTelecommuterIndicator());
-  // this.cwsOffice = persistedStaffPerson.getCwsOffice();
-  // this.availabilityAndLocationDescription =
-  // persistedStaffPerson.getAvailabilityAndLocationDescription();
-  // this.ssrsLicensingWorkerId = persistedStaffPerson.getSsrsLicensingWorkerId();
-  // this.countyCode = persistedStaffPerson.getCountyCode();
-  // this.dutyWorkerIndicator =
-  // DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
-  // this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
-  // this.emailAddress = persistedStaffPerson.getEmailAddress();
-  // this.twitterName = persistedStaffPersonNS.getTwitterName();
-  // }
-
-  /**
-   * @return the id
-   */
-  public String getId() {
-    return id;
   }
 
   /**
@@ -404,7 +352,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
     result = prime * result + ((twitterName == null) ? 0 : twitterName.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((middleInitial == null) ? 0 : middleInitial.hashCode());
@@ -499,13 +446,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
         return false;
       }
     } else if (!twitterName.equals(other.twitterName)) {
-      return false;
-    }
-    if (id == null) {
-      if (other.id != null) {
-        return false;
-      }
-    } else if (!id.equals(other.id)) {
       return false;
     }
     if (jobTitle == null) {

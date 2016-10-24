@@ -6,10 +6,13 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
@@ -90,6 +93,29 @@ public class StaffPerson extends CmsPersistentObject {
     super();
   }
 
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param endDate The endDate
+   * @param firstName The firstName
+   * @param jobTitle The jobTitle
+   * @param lastName The lastName
+   * @param middleInitial The middleInitial
+   * @param namePrefix The namePrefix
+   * @param phoneNumber The phoneNumber
+   * @param phoneExt The phoneExt
+   * @param startDate The startDate
+   * @param nameSuffix The nameSuffix
+   * @param telecommuterIndicator The telecommuterIndicator
+   * @param cwsOffice The cwsoffic
+   * @param availabilityAndLocationDescription The availabilityAndLocationDescription
+   * @param ssrsLicensingWorkerId The ssrsLicensingWorkerId
+   * @param countyCode The countyCode
+   * @param dutyWorkerIndicator The dutyWorkerIndicator
+   * @param cwsOfficeAddress The cwsOfficeAddress
+   * @param emailAddress The emailAddress
+   */
   public StaffPerson(String id, Date endDate, String firstName, String jobTitle, String lastName,
       String middleInitial, String namePrefix, BigDecimal phoneNumber, Integer phoneExt,
       Date startDate, String nameSuffix, String telecommuterIndicator, String cwsOffice,
@@ -115,6 +141,41 @@ public class StaffPerson extends CmsPersistentObject {
     this.dutyWorkerIndicator = dutyWorkerIndicator;
     this.cwsOfficeAddress = cwsOfficeAddress;
     this.emailAddress = emailAddress;
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param staffPerson The domain object to construct this object from
+   * @param lastUpdatedId the id of the last person to update this object
+   */
+  public StaffPerson(String id, gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson,
+      String lastUpdatedId) {
+    super(lastUpdatedId);
+
+    try {
+      this.id = id;
+      this.endDate = DomainObject.uncookDateString(staffPerson.getEndDate());
+      this.firstName = staffPerson.getFirstName();
+      this.jobTitle = staffPerson.getJobTitle();
+      this.lastName = staffPerson.getLastName();
+      this.middleInitial = staffPerson.getMiddleInitial();
+      this.namePrefix = staffPerson.getNamePrefix();
+      this.phoneNumber = staffPerson.getPhoneNumber();
+      this.phoneExt = staffPerson.getPhoneExt();
+      this.startDate = DomainObject.uncookDateString(staffPerson.getStartDate());
+      this.nameSuffix = staffPerson.getNameSuffix();
+      this.telecommuterIndicator = DomainObject.cookBoolean(staffPerson.getTelecommuterIndicator());
+      this.cwsOffice = staffPerson.getCwsOffice();
+      this.availabilityAndLocationDescription = staffPerson.getAvailabilityAndLocationDescription();
+      this.ssrsLicensingWorkerId = staffPerson.getSsrsLicensingWorkerId();
+      this.countyCode = staffPerson.getCountyCode();
+      this.dutyWorkerIndicator = DomainObject.cookBoolean(staffPerson.getDutyWorkerIndicator());
+      this.cwsOfficeAddress = staffPerson.getCwsOfficeAddress();
+      this.emailAddress = staffPerson.getEmailAddress();
+    } catch (ApiException e) {
+      throw new PersistenceException(e);
+    }
   }
 
   /*

@@ -38,9 +38,11 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
+import gov.ca.cwds.rest.services.StaffPersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -191,6 +193,14 @@ public class ApiApplication extends Application<ApiConfiguration> {
     ScreeningResource screeningResource =
         new ScreeningResource(new ServiceBackedResourceDelegate(screeningService));
     apiEnvironment.jersey().register(screeningResource);
+
+    LOGGER.info("Registering StaffPersonResource");
+    StaffPersonService staffPersonService =
+        new StaffPersonService((StaffPersonDao) DataAccessEnvironment.get(StaffPerson.class));
+    StaffPersonResource staffPersonResource =
+        new StaffPersonResource(new ServiceBackedResourceDelegate(staffPersonService));
+    apiEnvironment.jersey().register(staffPersonResource);
+
   }
 
   private void configureCors(final ApiEnvironment apiEnvironment) {
