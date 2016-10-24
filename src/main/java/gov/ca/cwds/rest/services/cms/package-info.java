@@ -3,4 +3,4 @@
  * are for proof of concept purposes only.
  */
 @java.lang.Deprecated
-package gov.ca.cwds.rest.services.legacy;
+package gov.ca.cwds.rest.services.cms;
