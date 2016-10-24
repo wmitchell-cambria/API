@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.services;
+package gov.ca.cwds.rest.services.legacy;
 
 import java.io.Serializable;
 
@@ -13,6 +13,8 @@ import gov.ca.cwds.rest.api.domain.legacy.PostedStaffPerson;
 import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.util.IdGenerator;
 
 /**
