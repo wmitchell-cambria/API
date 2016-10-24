@@ -5,10 +5,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.glassfish.jersey.linking.Binding;
-import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLink.Style;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,10 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.validation.IfThen;
-import gov.ca.cwds.rest.validation.MutuallyExclusive;
-import gov.ca.cwds.rest.validation.OnlyIf;
 // import gov.ca.cwds.rest.validation.Zipcode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,22 +24,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@InjectLinks({
-    @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)},
-        condition = "${not empty instance.referralId }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "lawEnforcementId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.lawEnforcementId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_LAW_ENFORCEMENT)},
-        condition = "${not empty instance.lawEnforcementId }")})
-@MutuallyExclusive(required = false, properties = {"employerName", "lawEnforcementId"})
-@OnlyIf(property = "badgeNumber", ifProperty = "lawEnforcementId")
-@IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
-    @IfThen(ifProperty = "streetName", thenProperty = "cityName", required = false)})
 public class Reporter extends DomainObject implements Request, Response {
 
   @NotEmpty
