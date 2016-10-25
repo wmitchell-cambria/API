@@ -4,6 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.EntityExistsException;
@@ -20,8 +22,31 @@ import org.junit.Test;
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
 
 public class AllegationDaoIT {
+
   private SessionFactory sessionFactory;
   private AllegationDao allegationDao;
+  private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+  private String id = "Aaeae9r0F4";
+  private String abuseEndDateString = "2016-11-22";
+  private String abuseStartDateString = "2016-09-12";
+  private Short abuseFrequency = 1;
+  private String abuseFrequencyPeriodCode = "M";
+  private String abuseLocationDescription = "Home";
+  private Short allegationDispositionType = 2;
+  private Short allegationType = 3;
+  private String dispositionDescription = "disposition description";
+  private String dispositionDateString = "2016-11-22";
+  private String injuryHarmDetailIndicator = "Y";
+  private String nonProtectingParentCode = "N";
+  private String staffPersonAddedIndicator = "N";
+  private String victimClientId = "1234567890";
+  private String perpetratorClientId = "0987654321";
+  private String referralId = "2345678901";
+  private String countySpecificCode = "099";
+  private String zippyCreatedIndicator = "Y";
+  private Short placementFacilityType = 4;
+
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -46,20 +71,32 @@ public class AllegationDaoIT {
   }
 
   @Test
-  public void testCreate() {
-    Allegation allegation = new Allegation("Aaeae9r0F7", (Date) null, (short) 2, "M", "  ",
-        (Date) null, (short) 0, (short) 2180, "  ", (Date) null, "N", "N", "N", "AHooKwN0F7", null,
-        "8mu1E710F7", "20", "N", null);
+  public void testCreate() throws Exception {
+
+    Date abuseEndDate = df.parse(abuseEndDateString);
+    Date abuseStartDate = df.parse(abuseStartDateString);
+    Date dispositionDate = df.parse(dispositionDateString);
+    Allegation allegation = new Allegation(id, abuseEndDate, abuseStartDate, abuseFrequency,
+        abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
+        allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
+        nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
+        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
+
     Allegation create = allegationDao.create(allegation);
     assertThat(allegation, is(create));
   }
 
   @Test
-  public void testCreateExistingEntityException() {
+  public void testCreateExistingEntityException() throws Exception {
     thrown.expect(EntityExistsException.class);
-    Allegation allegation = new Allegation("Aaeae9r0F4", (Date) null, (short) 2, "M", "  ",
-        (Date) null, (short) 0, (short) 2180, "  ", (Date) null, "N", "N", "N", "AHooKwN0F7", null,
-        "8mu1E710F7", "20", "N", null);
+    Date abuseEndDate = df.parse(abuseEndDateString);
+    Date abuseStartDate = df.parse(abuseStartDateString);
+    Date dispositionDate = df.parse(dispositionDateString);
+    Allegation allegation = new Allegation(id, abuseEndDate, abuseStartDate, abuseFrequency,
+        abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
+        allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
+        nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
+        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
     allegationDao.create(allegation);
   }
 
@@ -71,21 +108,31 @@ public class AllegationDaoIT {
   }
 
   @Test
-  public void testUpdate() {
-    Allegation allegation = new Allegation("Aaeae9r0F4", (Date) null, (short) 2, "M", "  ",
-        (Date) null, (short) 0, (short) 2180, "  ", (Date) null, "N", "N", "N", "AHooKwN0F7", null,
-        "8mu1E710F7", "20", "N", null);
+  public void testUpdate() throws Exception {
+    Date abuseEndDate = df.parse(abuseEndDateString);
+    Date abuseStartDate = df.parse(abuseStartDateString);
+    Date dispositionDate = df.parse(dispositionDateString);
+    Allegation allegation = new Allegation(id, abuseEndDate, abuseStartDate, abuseFrequency,
+        abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
+        allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
+        nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
+        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
     Allegation update = allegationDao.update(allegation);
     assertThat(allegation, is(update));
   }
 
   @Test
-  public void testUpdateEntityNotFoundException() {
+  public void testUpdateEntityNotFoundException() throws Exception {
     thrown.expect(EntityNotFoundException.class);
 
-    Allegation allegation = new Allegation("ZZZZZZZZZZ", (Date) null, (short) 2, "M", "  ",
-        (Date) null, (short) 0, (short) 2180, "  ", (Date) null, "N", "N", "N", "AHooKwN0F7", null,
-        "8mu1E710F7", "20", "N", null);
+    Date abuseEndDate = df.parse(abuseEndDateString);
+    Date abuseStartDate = df.parse(abuseStartDateString);
+    Date dispositionDate = df.parse(dispositionDateString);
+    Allegation allegation = new Allegation(id, abuseEndDate, abuseStartDate, abuseFrequency,
+        abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
+        allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
+        nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
+        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
     allegationDao.update(allegation);
   }
 

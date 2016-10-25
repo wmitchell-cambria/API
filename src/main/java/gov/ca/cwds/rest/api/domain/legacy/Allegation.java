@@ -44,9 +44,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class Allegation extends DomainObject implements Request, Response {
 
   @NotEmpty
-  @Size(min = 1, max = 10)
+  @Size(min = 10, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "Value overwritten on POST",
-      example = "ABC123")
+      example = "ABC1234567")
   private String id;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
