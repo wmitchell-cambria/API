@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+
 @Entity
 @Table(name = "ALLGTN_T")
 public class Allegation extends CmsPersistentObject {
@@ -88,20 +89,28 @@ public class Allegation extends CmsPersistentObject {
     super();
   }
 
-  public Allegation(String id, Date abuseEndDate, Short abuseFrequency,
-      String abuseFrequencyPeriodCode, String abuseLocationDescription, Date abuseStartDate,
+  /**
+   * Constructor
+   * 
+   * @param allegation The domain object to construct this object from
+   * @param lastUpdatedId the id of the last person to update this object
+   */
+  public Allegation(String id, Date abuseEndDate, Date abuseStartDate, Short abuseFrequency,
+      String abuseFrequencyPeriodCode, String abuseLocationDescription,
       Short allegationDispositionType, Short allegationType, String dispositionDescription,
       Date dispositionDate, String injuryHarmDetailIndicator, String nonProtectingParentCode,
       String staffPersonAddedIndicator, String victimClientId, String perpetratorClientId,
       String referralId, String countySpecificCode, String zippyCreatedIndicator,
       Short placementFacilityType) {
+
     super();
+
     this.id = id;
     this.abuseEndDate = abuseEndDate;
+    this.abuseStartDate = abuseStartDate;
     this.abuseFrequency = abuseFrequency;
     this.abuseFrequencyPeriodCode = abuseFrequencyPeriodCode;
     this.abuseLocationDescription = abuseLocationDescription;
-    this.abuseStartDate = abuseStartDate;
     this.allegationDispositionType = allegationDispositionType;
     this.allegationType = allegationType;
     this.dispositionDescription = dispositionDescription;
@@ -115,6 +124,7 @@ public class Allegation extends CmsPersistentObject {
     this.countySpecificCode = countySpecificCode;
     this.zippyCreatedIndicator = zippyCreatedIndicator;
     this.placementFacilityType = placementFacilityType;
+
   }
 
   /*
