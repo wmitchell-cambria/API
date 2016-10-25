@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
 import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
+import gov.ca.cwds.rest.api.persistence.cms.DocumentControl;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.Reporter;
@@ -25,6 +26,7 @@ import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
 import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
+import gov.ca.cwds.rest.jdbi.cms.DocumentControlDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
 import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
@@ -165,6 +167,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
     DataAccessEnvironment.register(Reporter.class,
         new ReporterDao(cmsHibernateBundle.getSessionFactory()));
+
+    DataAccessEnvironment.register(DocumentControl.class,
+        new DocumentControlDao(cmsHibernateBundle.getSessionFactory()));
   }
 
   private void registerResources(final ApiConfiguration configuration,
