@@ -40,6 +40,7 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.resources.cms.DocumentResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
@@ -198,6 +199,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
     ScreeningResource screeningResource =
         new ScreeningResource(new ServiceBackedResourceDelegate(screeningService));
     apiEnvironment.jersey().register(screeningResource);
+
+    LOGGER.info("Registering DocumentResource");
+    DocumentResource documentResource =
+        new DocumentResource(new ServiceBackedResourceDelegate(screeningService));
+    apiEnvironment.jersey().register(documentResource);
 
     LOGGER.info("Registering StaffPersonResource");
     StaffPersonService staffPersonService =
