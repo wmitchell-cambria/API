@@ -2,10 +2,15 @@ package gov.ca.cwds.rest.api.persistence.cms;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -13,7 +18,7 @@ import org.hibernate.annotations.Type;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
- * {@link PersistentObject} representing a record in TSCNTRLT.
+ * {@link PersistentObject} represents a record in TSCNTRLT.
  * 
  * @author CWDS API Team
  */
@@ -53,10 +58,16 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
+  // @OneToMany(fetch = FetchType.LAZY, mappedBy = "TSCNTRLT")
+  // @OneToMany(cascade={CascadeType.ALL})
+  @OneToMany(fetch = FetchType.EAGER)
+  @JoinColumn(name = "DOC_HANDLE", nullable = false)
+  private Set<CmsDocumentBlobSegment> blobSegments = new HashSet<CmsDocumentBlobSegment>(0);
+
   /**
    * Default constructor
    * 
-   * Required for Hibernate
+   * Required for Hibernate.
    */
   public CmsDocument() {
     super();
@@ -159,6 +170,14 @@ public class CmsDocument extends CmsPersistentObject {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public Set<CmsDocumentBlobSegment> getBlobSegments() {
+    return blobSegments;
+  }
+
+  public void setBlobSegments(Set<CmsDocumentBlobSegment> blobSegments) {
+    this.blobSegments = blobSegments;
   }
 
 }
