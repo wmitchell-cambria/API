@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
-import gov.ca.cwds.rest.api.domain.legacy.DocumentControl;
+import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -27,9 +27,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link DocumentControl}. It delegates functions to
- * {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but
- * with @see <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * A resource providing a RESTful interface for {@link CmsDocument}. It delegates
+ * functions to {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in
+ * functionality but with @see
+ * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
  * Annotations</a> and
  * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
@@ -40,7 +41,8 @@ import io.swagger.annotations.ApiResponses;
 @Path(value = RESOURCE_DOC_CONTROL)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class DocumentResource {
+public class CmsDocumentResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -48,7 +50,7 @@ public class DocumentResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public DocumentResource(ResourceDelegate resourceDelegate) {
+  public CmsDocumentResource(ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 
@@ -64,17 +66,17 @@ public class DocumentResource {
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find document by id (doc_handle)", response = DocumentControl.class,
-      code = 200)
+  @ApiOperation(value = "Find document by id (doc_handle)",
+      response = CmsDocument.class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the Document to find") long id) {
+      value = "The id (doc_handle) of the Document to find") String id) {
     return resourceDelegate.get(id);
   }
 
   /**
-   * Delete an allegation by id.
+   * Delete a document by id.
    * 
-   * @param id The id of the {@link Allegation}
+   * @param id The id of the {@link CmsDocument}
    * 
    * @return {@link Response}
    */
@@ -83,16 +85,16 @@ public class DocumentResource {
   @ApiOperation(hidden = true, value = "Delete Document - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(
-      @PathParam("id") @ApiParam(required = true, value = "id of Document to delete") long id) {
+      @PathParam("id") @ApiParam(required = true, value = "id of Document to delete") String id) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 
   /**
-   * Create an {@link DocumentControl}
+   * Create an {@link CmsDocument}
    * 
-   * @param allegation The {@link DocumentControl}
+   * @param document The {@link CmsDocument}
    * 
-   * @return The {@link DocumentControl}
+   * @return The {@link CmsDocument}
    */
   @UnitOfWork(value = "cms")
   @POST
@@ -102,17 +104,17 @@ public class DocumentResource {
       @ApiResponse(code = 422, message = "Unable to validate Document")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create Document", code = HttpStatus.SC_CREATED,
-      response = DocumentControl.class)
+      response = CmsDocument.class)
   public Response create(@Valid @ApiParam(hidden = false,
-      required = true) gov.ca.cwds.rest.api.domain.legacy.DocumentControl doc) {
-    return resourceDelegate.create(doc);
+      required = true) gov.ca.cwds.rest.api.domain.legacy.CmsDocument doc) {
+    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 
   /**
-   * Update an {@link Allegation}
+   * Update an {@link CmsDocument}
    * 
    * @param id the id
-   * @param person {@link Allegation}
+   * @param document {@link CmsDocument}
    * @param acceptHeader The accept header.
    *
    * @return The {@link Response}
@@ -128,8 +130,8 @@ public class DocumentResource {
       response = Object.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of the Document to update") long id,
-      @ApiParam(hidden = true) DocumentControl doc,
+          value = "The id of the Document to update") String id,
+      @ApiParam(hidden = true) CmsDocument doc,
       @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
