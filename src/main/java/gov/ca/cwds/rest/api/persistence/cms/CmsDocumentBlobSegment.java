@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnTransformer;
+
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient.PrimaryKey;
 
@@ -29,7 +31,7 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
   @Column(name = "DOC_SEGSEQ")
   private String segmentSequence;
 
-  @Column(name = "DOC_BLOB")
+  @ColumnTransformer(read = "blob(DOC_BLOB)")
   private String docBlob;
 
   /**
@@ -48,8 +50,8 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     this.docBlob = docBlob;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
    */
