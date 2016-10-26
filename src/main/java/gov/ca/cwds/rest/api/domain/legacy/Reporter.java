@@ -28,7 +28,8 @@ public class Reporter extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "Reporter Identifier",
+      example = "ABC1234567")
   private String referralId;
 
   @Size(max = 6, message = "size must be less than or equal to 6")
@@ -54,7 +55,7 @@ public class Reporter extends DomainObject implements Request, Response {
   private Boolean confidentialWaiverIndicator;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsMandatedRprtrFeedback;
 
   @Size(max = 35, message = "size must be less than or equal to 35")
@@ -70,17 +71,17 @@ public class Reporter extends DomainObject implements Request, Response {
   private String feedbackDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = false, readOnly = false)
   private Boolean feedbackRequiredIndicator;
 
   @NotEmpty
   @Size(min = 1, max = 20)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String firstName;
 
   @NotEmpty
   @Size(min = 1, max = 25)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String lastName;
 
   @NotNull
@@ -88,33 +89,33 @@ public class Reporter extends DomainObject implements Request, Response {
   private Boolean mandatedReporterIndicator;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Integer messagePhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private BigDecimal messagePhoneNumber;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "A")
   private String middleInitialName;
 
   @NotEmpty
   @Size(min = 1, max = 6)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String namePrefixDescription;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private BigDecimal primaryPhoneNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Integer primaryPhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short stateCodeType;
 
   @Size(max = 40, message = "size must be less than or equal to 40")
@@ -128,60 +129,32 @@ public class Reporter extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 4)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "A1")
   private String suffixTitleDescription;
 
-  @ApiModelProperty(required = true, readOnly = false, example = "08654")
+  @Size(max = 5)
+  @ApiModelProperty(required = false, readOnly = false, example = "08654")
   // @Zipcode(required=false)
   private String zipcode;
 
   @Size(max = 10, message = "size must be 10")
   @ApiModelProperty(required = false, readOnly = false,
-      value = "cannot be set if employerName provided", example = "ABC123")
+      value = "cannot be set if employerName provided", example = "ABC1236789")
   private String lawEnforcementId;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short zipSuffixNumber;
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "99")
   private String countySpecificCode;
 
-  public Reporter(gov.ca.cwds.rest.api.persistence.cms.Reporter persistedReporter) {
-    this.referralId = persistedReporter.getReferralId().trim();
-    this.badgeNumber = persistedReporter.getBadgeNumber();
-    this.cityName = persistedReporter.getCityName();
-    this.colltrClientRptrReltnshpType = persistedReporter.getColltrClientRptrReltnshpType();
-    this.communicationMethodType = persistedReporter.getCommunicationMethodType();
-    this.confidentialWaiverIndicator =
-        DomainObject.uncookBooleanString(persistedReporter.getConfidentialWaiverIndicator());
-    this.drmsMandatedRprtrFeedback = persistedReporter.getDrmsMandatedRprtrFeedback();
-    this.employerName = persistedReporter.getEmployerName();
-    this.feedbackDate = DomainObject.cookDate(persistedReporter.getFeedbackDate());
-    this.feedbackRequiredIndicator =
-        DomainObject.uncookBooleanString(persistedReporter.getFeedbackRequiredIndicator());
-    this.firstName = persistedReporter.getFirstName();
-    this.lastName = persistedReporter.getLastName();
-    this.mandatedReporterIndicator =
-        DomainObject.uncookBooleanString(persistedReporter.getMandatedReporterIndicator());
-    this.messagePhoneExtensionNumber = persistedReporter.getMessagePhoneExtensionNumber();
-    this.messagePhoneNumber = persistedReporter.getMessagePhoneNumber();
-    this.middleInitialName = persistedReporter.getMiddleInitialName();
-    this.namePrefixDescription = persistedReporter.getNamePrefixDescription();
-    this.primaryPhoneNumber = persistedReporter.getPrimaryPhoneNumber();
-    this.primaryPhoneExtensionNumber = persistedReporter.getPrimaryPhoneExtensionNumber();
-    this.stateCodeType = persistedReporter.getStateCodeType();
-    this.streetName = persistedReporter.getStreetName();
-    this.streetNumber = persistedReporter.getStreetNumber();
-    this.suffixTitleDescription = persistedReporter.getSuffixTitleDescription();
-    this.zipcode = DomainObject.cookZipcodeNumber(persistedReporter.getZipNumber());
-    this.lawEnforcementId = persistedReporter.getLawEnforcementId().trim();
-    this.zipSuffixNumber = persistedReporter.getZipSuffixNumber();
-    this.countySpecificCode = persistedReporter.getCountySpecificCode();
-  }
-
+  /**
+   * Constructor
+   * 
+   **/
   @JsonCreator
   public Reporter(@JsonProperty("badgeNumber") String badgeNumber,
       @JsonProperty("cityName") String cityName,
@@ -236,6 +209,44 @@ public class Reporter extends DomainObject implements Request, Response {
     this.lawEnforcementId = lawEnforcementId;
     this.zipSuffixNumber = zipSuffixNumber;
     this.countySpecificCode = countySpecificCode;
+  }
+
+
+  /**
+   * Constructor from persistent Reporter
+   * 
+   **/
+  public Reporter(gov.ca.cwds.rest.api.persistence.cms.Reporter persistedReporter) {
+    this.referralId = persistedReporter.getReferralId().trim();
+    this.badgeNumber = persistedReporter.getBadgeNumber();
+    this.cityName = persistedReporter.getCityName();
+    this.colltrClientRptrReltnshpType = persistedReporter.getColltrClientRptrReltnshpType();
+    this.communicationMethodType = persistedReporter.getCommunicationMethodType();
+    this.confidentialWaiverIndicator =
+        DomainObject.uncookBooleanString(persistedReporter.getConfidentialWaiverIndicator());
+    this.drmsMandatedRprtrFeedback = persistedReporter.getDrmsMandatedRprtrFeedback();
+    this.employerName = persistedReporter.getEmployerName();
+    this.feedbackDate = DomainObject.cookDate(persistedReporter.getFeedbackDate());
+    this.feedbackRequiredIndicator =
+        DomainObject.uncookBooleanString(persistedReporter.getFeedbackRequiredIndicator());
+    this.firstName = persistedReporter.getFirstName();
+    this.lastName = persistedReporter.getLastName();
+    this.mandatedReporterIndicator =
+        DomainObject.uncookBooleanString(persistedReporter.getMandatedReporterIndicator());
+    this.messagePhoneExtensionNumber = persistedReporter.getMessagePhoneExtensionNumber();
+    this.messagePhoneNumber = persistedReporter.getMessagePhoneNumber();
+    this.middleInitialName = persistedReporter.getMiddleInitialName();
+    this.namePrefixDescription = persistedReporter.getNamePrefixDescription();
+    this.primaryPhoneNumber = persistedReporter.getPrimaryPhoneNumber();
+    this.primaryPhoneExtensionNumber = persistedReporter.getPrimaryPhoneExtensionNumber();
+    this.stateCodeType = persistedReporter.getStateCodeType();
+    this.streetName = persistedReporter.getStreetName();
+    this.streetNumber = persistedReporter.getStreetNumber();
+    this.suffixTitleDescription = persistedReporter.getSuffixTitleDescription();
+    this.zipcode = DomainObject.cookZipcodeNumber(persistedReporter.getZipNumber());
+    this.lawEnforcementId = persistedReporter.getLawEnforcementId().trim();
+    this.zipSuffixNumber = persistedReporter.getZipSuffixNumber();
+    this.countySpecificCode = persistedReporter.getCountySpecificCode();
   }
 
   /**

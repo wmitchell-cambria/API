@@ -54,35 +54,35 @@ import io.swagger.annotations.ApiModelProperty;
 public class Referral extends DomainObject implements Request, Response {
 
   @NotEmpty
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, example = "ABC123",
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = true, readOnly = false, example = "ABC1234567",
       value = "Value overwritten on POST")
   private String id;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "Y")
   private String additionalInfoIncludedCode;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = true, readOnly = false, value = "N", example = "N")
   private Boolean anonymousReporterIndicator;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = true, readOnly = false, value = "N", example = "N")
   private Boolean applicationForPetitionIndicator;
 
-  @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String approvalNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = true, readOnly = false, value = "118", example = "1234")
   private Short approvalStatusType;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "Y")
   private String caretakersPerpetratorCode;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -96,20 +96,25 @@ public class Referral extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private Short communicationMethodType;
 
-  @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @NotEmpty
+  @Size(min = 1, max = 2)
+  @ApiModelProperty(required = true, readOnly = false, value = "99", example = "99")
+  private String countySpecificCode;
+
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String currentLocationOfChildren;
 
-  @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsAllegationDescriptionDoc;
 
-  @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsErReferralDoc;
 
-  @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsInvestigationDoc;
 
   @NotNull
@@ -117,11 +122,11 @@ public class Referral extends DomainObject implements Request, Response {
   private Boolean filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = true, readOnly = false, value = "N", example = "N")
   private Boolean familyAwarenessIndicator;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, value = "0", example = "1234")
   private Short govtEntityType;
 
   @NotEmpty
@@ -130,13 +135,14 @@ public class Referral extends DomainObject implements Request, Response {
   private String legalDefinitionCode;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = true, readOnly = false, value = "N", example = "N")
   private Boolean legalRightsNoticeIndicator;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
   @OneOf(value = {"S", "R", "N"}, ignoreCase = true, ignoreWhitespace = true)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "S",
+  @ApiModelProperty(required = true, readOnly = false,
+      value = "S = sensitive, R = sealed, N = no restriction", example = "S",
       allowableValues = "S, R, N")
   private String limitedAccessCode;
 
@@ -154,7 +160,7 @@ public class Referral extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "N")
   private String openAdequateCaseCode;
 
   @NotNull
@@ -193,49 +199,47 @@ public class Referral extends DomainObject implements Request, Response {
   private String responseDeterminationTime;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String responseRationaleText;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String screenerNoteText;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String specificsIncludedCode;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String sufficientInformationCode;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String unfoundedSeriesCode;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String linkToPrimaryReferralId;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "alleged abuse occurred at address",
+      example = "ABC1234567")
   private String allegesAbuseOccurredAtAddressId;
 
   @Size(max = 3)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = false, readOnly = false,
+      value = "first response determined by staff person id", example = "A1A")
   private String firstResponseDeterminedByStaffPersonId;
 
   @NotEmpty
   @Size(min = 1, max = 3)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = true, readOnly = false, value = "primary contact staff person id",
+      example = "A1A")
   private String primaryContactStaffPersonId;
-
-  @NotEmpty
-  @Size(min = 1, max = 2)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
-  private String countySpecificCode;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
@@ -390,73 +394,71 @@ public class Referral extends DomainObject implements Request, Response {
     this.originalClosureDate = originalClosureDate;
   }
 
-  // public Referral(gov.ca.cwds.rest.api.persistence.legacy.Referral persistedReferral) {
-  // this.id = persistedReferral.getId();
-  // this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
-  // this.anonymousReporterIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporterIndicator());
-  // this.applicationForPetitionIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetitionIndicator());
-  // this.approvalNumber = persistedReferral.getApprovalNumber();
-  // this.approvalStatusType = persistedReferral.getApprovalStatusType();
-  // this.caretakersPerpetratorCode = persistedReferral.getCaretakersPerpetratorCode();
-  // this.closureDate = DomainObject.cookDate(persistedReferral.getClosureDate());
-  // this.communicationMethodType = persistedReferral.getCommunicationMethodType();
-  // this.currentLocationOfChildren = persistedReferral.getCurrentLocationOfChildren();
-  // this.drmsAllegationDescriptionDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
-  // this.drmsErReferralDoc = persistedReferral.getDrmsErReferralDoc();
-  // this.drmsInvestigationDoc = persistedReferral.getDrmsInvestigationDoc();
-  // this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator =
-  // DomainObject.uncookBooleanString(
-  // persistedReferral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
-  // this.familyAwarenessIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getFamilyAwarenessIndicator());
-  // this.govtEntityType = persistedReferral.getGovtEntityType();
-  // this.legalDefinitionCode = persistedReferral.getLegalDefinitionCode();
-  // this.legalRightsNoticeIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getLegalRightsNoticeIndicator());
-  // this.limitedAccessCode = persistedReferral.getLimitedAccessCode();
-  // this.mandatedCrossReportReceivedDate =
-  // DomainObject.cookDate(persistedReferral.getMandatedCrossReportReceivedDate());
-  // this.referralName = persistedReferral.getReferralName();
-  // this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
-  // this.receivedDate = DomainObject.cookDate(persistedReferral.getReceivedDate());
-  // this.receivedTime = DomainObject.cookTime(persistedReferral.getReceivedTime());
-  // this.referralResponseType = persistedReferral.getReferralResponseType();
-  // this.referredToResourceType = persistedReferral.getReferredToResourceType();
-  // this.responseDeterminationDate =
-  // DomainObject.cookDate(persistedReferral.getResponseDeterminationDate());
-  // this.responseDeterminationTime =
-  // DomainObject.cookTime(persistedReferral.getResponseDeterminationTime());
-  // this.responseRationaleText = persistedReferral.getResponseRationaleText();
-  // this.screenerNoteText = persistedReferral.getScreenerNoteText();
-  // this.specificsIncludedCode = persistedReferral.getSpecificsIncludedCode();
-  // this.sufficientInformationCode = persistedReferral.getSufficientInformationCode();
-  // this.unfoundedSeriesCode = persistedReferral.getUnfoundedSeriesCode();
-  // this.linkToPrimaryReferralId = persistedReferral.getLinkToPrimaryReferralId();
-  // this.allegesAbuseOccurredAtAddressId = persistedReferral.getAllegesAbuseOccurredAtAddressId();
-  // this.firstResponseDeterminedByStaffPersonId =
-  // persistedReferral.getFirstResponseDeterminedByStaffPersonId();
-  // this.primaryContactStaffPersonId = persistedReferral.getPrimaryContactStaffPersonId();
-  // this.countySpecificCode = persistedReferral.getCountySpecificCode();
-  // this.specialProjectReferralIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getSpecialProjectReferralIndicator());
-  // this.zippyCreatedIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getZippyCreatedIndicator());
-  // this.homelessIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getHomelessIndicator());
-  // this.familyRefusedServicesIndicator =
-  // DomainObject.uncookBooleanString(persistedReferral.getFamilyRefusedServicesIndicator());
-  // this.firstEvaluatedOutApprovalDate =
-  // DomainObject.cookDate(persistedReferral.getFirstEvaluatedOutApprovalDate());
-  // this.responsibleAgencyCode = persistedReferral.getResponsibleAgencyCode();
-  // this.limitedAccessGovtAgencyType = persistedReferral.getLimitedAccessGovtAgencyType();
-  // this.limitedAccessDate = DomainObject.cookDate(persistedReferral.getLimitedAccessDate());
-  // this.limitedAccessDesc = persistedReferral.getLimitedAccessDesc();
-  // this.originalClosureDate = DomainObject.cookDate(persistedReferral.getOriginalClosureDate());
-  //
-  //
-  // }
+  public Referral(gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral) {
+    this.id = persistedReferral.getId();
+    this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
+    this.anonymousReporterIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporterIndicator());
+    this.applicationForPetitionIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetitionIndicator());
+    this.approvalNumber = persistedReferral.getApprovalNumber();
+    this.approvalStatusType = persistedReferral.getApprovalStatusType();
+    this.caretakersPerpetratorCode = persistedReferral.getCaretakersPerpetratorCode();
+    this.closureDate = DomainObject.cookDate(persistedReferral.getClosureDate());
+    this.communicationMethodType = persistedReferral.getCommunicationMethodType();
+    this.currentLocationOfChildren = persistedReferral.getCurrentLocationOfChildren();
+    this.drmsAllegationDescriptionDoc = persistedReferral.getDrmsAllegationDescriptionDoc();
+    this.drmsErReferralDoc = persistedReferral.getDrmsErReferralDoc();
+    this.drmsInvestigationDoc = persistedReferral.getDrmsInvestigationDoc();
+    this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = DomainObject.uncookBooleanString(
+        persistedReferral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
+    this.familyAwarenessIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getFamilyAwarenessIndicator());
+    this.govtEntityType = persistedReferral.getGovtEntityType();
+    this.legalDefinitionCode = persistedReferral.getLegalDefinitionCode();
+    this.legalRightsNoticeIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getLegalRightsNoticeIndicator());
+    this.limitedAccessCode = persistedReferral.getLimitedAccessCode();
+    this.mandatedCrossReportReceivedDate =
+        DomainObject.cookDate(persistedReferral.getMandatedCrossReportReceivedDate());
+    this.referralName = persistedReferral.getReferralName();
+    this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
+    this.receivedDate = DomainObject.cookDate(persistedReferral.getReceivedDate());
+    this.receivedTime = DomainObject.cookTime(persistedReferral.getReceivedTime());
+    this.referralResponseType = persistedReferral.getReferralResponseType();
+    this.referredToResourceType = persistedReferral.getReferredToResourceType();
+    this.responseDeterminationDate =
+        DomainObject.cookDate(persistedReferral.getResponseDeterminationDate());
+    this.responseDeterminationTime =
+        DomainObject.cookTime(persistedReferral.getResponseDeterminationTime());
+    this.responseRationaleText = persistedReferral.getResponseRationaleText();
+    this.screenerNoteText = persistedReferral.getScreenerNoteText();
+    this.specificsIncludedCode = persistedReferral.getSpecificsIncludedCode();
+    this.sufficientInformationCode = persistedReferral.getSufficientInformationCode();
+    this.unfoundedSeriesCode = persistedReferral.getUnfoundedSeriesCode();
+    this.linkToPrimaryReferralId = persistedReferral.getLinkToPrimaryReferralId();
+    this.allegesAbuseOccurredAtAddressId = persistedReferral.getAllegesAbuseOccurredAtAddressId();
+    this.firstResponseDeterminedByStaffPersonId =
+        persistedReferral.getFirstResponseDeterminedByStaffPersonId();
+    this.primaryContactStaffPersonId = persistedReferral.getPrimaryContactStaffPersonId();
+    this.countySpecificCode = persistedReferral.getCountySpecificCode();
+    this.specialProjectReferralIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getSpecialProjectReferralIndicator());
+    this.zippyCreatedIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getZippyCreatedIndicator());
+    this.homelessIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getHomelessIndicator());
+    this.familyRefusedServicesIndicator =
+        DomainObject.uncookBooleanString(persistedReferral.getFamilyRefusedServicesIndicator());
+    this.firstEvaluatedOutApprovalDate =
+        DomainObject.cookDate(persistedReferral.getFirstEvaluatedOutApprovalDate());
+    this.responsibleAgencyCode = persistedReferral.getResponsibleAgencyCode();
+    this.limitedAccessGovtAgencyType = persistedReferral.getLimitedAccessGovtAgencyType();
+    this.limitedAccessDate = DomainObject.cookDate(persistedReferral.getLimitedAccessDate());
+    this.limitedAccessDesc = persistedReferral.getLimitedAccessDesc();
+    this.originalClosureDate = DomainObject.cookDate(persistedReferral.getOriginalClosureDate());
+
+  }
 
   /**
    * @return the id

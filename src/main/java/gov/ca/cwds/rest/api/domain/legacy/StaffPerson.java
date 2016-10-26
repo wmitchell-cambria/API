@@ -207,7 +207,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
         DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
     this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
     this.emailAddress = persistedStaffPerson.getEmailAddress();
-    this.twitterName = "";
+    // this.twitterName = "";
   }
 
   /**

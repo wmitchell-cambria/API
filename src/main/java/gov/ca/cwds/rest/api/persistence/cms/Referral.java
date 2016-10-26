@@ -5,10 +5,13 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
@@ -188,31 +191,27 @@ public class Referral extends CmsPersistentObject {
     super();
   }
 
+  /**
+   * Constructor
+   * 
+   **/
   public Referral(String id, String additionalInfoIncludedCode, String anonymousReporterIndicator,
       String applicationForPetitionIndicator, String approvalNumber, Short approvalStatusType,
-
       String caretakersPerpetratorCode, Date closureDate, Short communicationMethodType,
       String currentLocationOfChildren, String drmsAllegationDescriptionDoc,
-      String drmsErReferralDoc,
-
-      String drmsInvestigationDoc, String filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
+      String drmsErReferralDoc, String drmsInvestigationDoc,
+      String filedSuspectedChildAbuseReporttoLawEnforcementIndicator,
       String familyAwarenessIndicator, Short govtEntityType, String legalDefinitionCode,
-      String legalRightsNoticeIndicator,
-
-      String limitedAccessCode, Date mandatedCrossReportReceivedDate, String referralName,
-      String openAdequateCaseCode, Date receivedDate, Date receivedTime,
-
-      Short referralResponseType, Short referredToResourceType, Date responseDeterminationDate,
-      Date responseDeterminationTime, String responseRationaleText, String screenerNoteText,
-
-      String specificsIncludedCode, String sufficientInformationCode, String unfoundedSeriesCode,
-      String linkToPrimaryReferralId, String allegesAbuseOccurredAtAddressId,
-      String firstResponseDeterminedByStaffPersonId,
-
+      String legalRightsNoticeIndicator, String limitedAccessCode,
+      Date mandatedCrossReportReceivedDate, String referralName, String openAdequateCaseCode,
+      Date receivedDate, Date receivedTime, Short referralResponseType,
+      Short referredToResourceType, Date responseDeterminationDate, Date responseDeterminationTime,
+      String responseRationaleText, String screenerNoteText, String specificsIncludedCode,
+      String sufficientInformationCode, String unfoundedSeriesCode, String linkToPrimaryReferralId,
+      String allegesAbuseOccurredAtAddressId, String firstResponseDeterminedByStaffPersonId,
       String primaryContactStaffPersonId, String countySpecificCode,
       String specialProjectReferralIndicator, String zippyCreatedIndicator,
       String homelessIndicator, String familyRefusedServicesIndicator,
-
       Date firstEvaluatedOutApprovalDate, String responsibleAgencyCode,
       Short limitedAccessGovtAgencyType, Date limitedAccessDate, String limitedAccessDesc,
       Date originalClosureDate) {
@@ -266,6 +265,83 @@ public class Referral extends CmsPersistentObject {
     this.limitedAccessDate = limitedAccessDate;
     this.limitedAccessDesc = limitedAccessDesc;
     this.originalClosureDate = originalClosureDate;
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param staffPerson The domain object to construct this object from
+   * @param lastUpdatedId the id of the last person to update this object
+   */
+  public Referral(String id, gov.ca.cwds.rest.api.domain.legacy.Referral referral,
+      String lastUpdatedId) {
+    super(lastUpdatedId);
+
+    try {
+
+      this.additionalInfoIncludedCode = referral.getAdditionalInfoIncludedCode();
+      this.anonymousReporterIndicator =
+          DomainObject.cookBoolean(referral.getAnonymousReporterIndicator());
+      this.applicationForPetitionIndicator =
+          DomainObject.cookBoolean(referral.getApplicationForPetitionIndicator());
+      this.approvalNumber = referral.getApprovalNumber();
+      this.approvalStatusType = referral.getApprovalStatusType();
+      this.caretakersPerpetratorCode = referral.getCaretakersPerpetratorCode();
+      this.closureDate = DomainObject.uncookDateString(referral.getClosureDate());
+      this.communicationMethodType = referral.getCommunicationMethodType();
+      this.currentLocationOfChildren = referral.getCurrentLocationOfChildren();
+      this.drmsAllegationDescriptionDoc = referral.getDrmsAllegationDescriptionDoc();
+      this.drmsErReferralDoc = referral.getDrmsErReferralDoc();
+      this.drmsInvestigationDoc = referral.getDrmsInvestigationDoc();
+      this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = DomainObject
+          .cookBoolean(referral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
+      this.familyAwarenessIndicator =
+          DomainObject.cookBoolean(referral.getFamilyAwarenessIndicator());
+      this.govtEntityType = referral.getGovtEntityType();
+      this.legalDefinitionCode = referral.getLegalDefinitionCode();
+      this.legalRightsNoticeIndicator =
+          DomainObject.cookBoolean(referral.getLegalRightsNoticeIndicator());
+      this.limitedAccessCode = referral.getLimitedAccessCode();
+      this.mandatedCrossReportReceivedDate =
+          DomainObject.uncookDateString(referral.getMandatedCrossReportReceivedDate());
+      this.referralName = referral.getReferralName();
+      this.openAdequateCaseCode = referral.getOpenAdequateCaseCode();
+      this.receivedDate = DomainObject.uncookDateString(referral.getReceivedDate());
+      this.receivedTime = DomainObject.uncookTimeString(referral.getReceivedTime());
+      this.referralResponseType = referral.getReferralResponseType();
+      this.referredToResourceType = referral.getReferredToResourceType();
+      this.responseDeterminationDate =
+          DomainObject.uncookDateString(referral.getResponseDeterminationDate());
+      this.responseDeterminationTime =
+          DomainObject.uncookDateString(referral.getResponseDeterminationTime());
+      this.responseRationaleText = referral.getResponseRationaleText();
+      this.screenerNoteText = referral.getScreenerNoteText();
+      this.specificsIncludedCode = referral.getSpecificsIncludedCode();
+      this.sufficientInformationCode = referral.getSufficientInformationCode();
+      this.unfoundedSeriesCode = referral.getUnfoundedSeriesCode();
+      this.linkToPrimaryReferralId = referral.getLinkToPrimaryReferralId();
+      this.allegesAbuseOccurredAtAddressId = referral.getAllegesAbuseOccurredAtAddressId();
+      this.firstResponseDeterminedByStaffPersonId =
+          referral.getFirstResponseDeterminedByStaffPersonId();
+      this.primaryContactStaffPersonId = referral.getPrimaryContactStaffPersonId();
+      this.countySpecificCode = referral.getCountySpecificCode();
+      this.specialProjectReferralIndicator =
+          DomainObject.cookBoolean(referral.getSpecialProjectReferralIndicator());
+      this.zippyCreatedIndicator = DomainObject.cookBoolean(referral.getZippyCreatedIndicator());
+      this.homelessIndicator = DomainObject.cookBoolean(referral.getHomelessIndicator());
+      this.familyRefusedServicesIndicator =
+          DomainObject.cookBoolean(referral.getFamilyRefusedServicesIndicator());
+      this.firstEvaluatedOutApprovalDate =
+          DomainObject.uncookDateString(referral.getFirstEvaluatedOutApprovalDate());
+      this.responsibleAgencyCode = referral.getResponsibleAgencyCode();
+      this.limitedAccessGovtAgencyType = referral.getLimitedAccessGovtAgencyType();
+      this.limitedAccessDate = DomainObject.uncookDateString(referral.getLimitedAccessDate());
+      this.limitedAccessDesc = referral.getLimitedAccessDesc();
+      this.originalClosureDate = DomainObject.uncookDateString(referral.getOriginalClosureDate());
+    } catch (ApiException e) {
+      throw new PersistenceException(e);
+    }
   }
 
   /*

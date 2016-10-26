@@ -100,7 +100,7 @@ public class Allegation extends DomainObject implements Request, Response {
   private String dispositionDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = false, readOnly = false)
   private Boolean injuryHarmDetailIndicator;
 
   @NotEmpty
