@@ -23,7 +23,6 @@ public class DateValidatorTest {
   private final static Date constraintAnnotationNotRequired;
 
 
-  private Date constraintAnnotation = mock(Date.class);
   private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
 
 

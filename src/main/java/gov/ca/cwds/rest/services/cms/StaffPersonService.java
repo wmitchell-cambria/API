@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.services.legacy;
+package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
 
