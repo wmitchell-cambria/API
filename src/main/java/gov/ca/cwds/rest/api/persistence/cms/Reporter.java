@@ -6,10 +6,13 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
@@ -157,6 +160,54 @@ public class Reporter extends CmsPersistentObject {
     this.lawEnforcementId = lawEnforcementId;
     this.zipSuffixNumber = zipSuffixNumber;
     this.countySpecificCode = countySpecificCode;
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param reporter The domain object to construct this object from
+   * @param lastUpdatedId the id of the last person to update this object
+   */
+  public Reporter(String id, gov.ca.cwds.rest.api.domain.legacy.Reporter reporter,
+      String lastUpdatedId) {
+    super(lastUpdatedId);
+
+    try {
+      this.referralId = reporter.getReferralId();
+      this.badgeNumber = reporter.getBadgeNumber();
+      this.cityName = reporter.getCityName();
+      this.colltrClientRptrReltnshpType = reporter.getColltrClientRptrReltnshpType();
+      this.communicationMethodType = reporter.getCommunicationMethodType();
+      this.confidentialWaiverIndicator =
+          DomainObject.cookBoolean(reporter.getConfidentialWaiverIndicator());
+      this.drmsMandatedRprtrFeedback = reporter.getDrmsMandatedRprtrFeedback();
+      this.employerName = reporter.getEmployerName();
+      this.feedbackDate = DomainObject.uncookDateString(reporter.getFeedbackDate());
+      this.feedbackRequiredIndicator =
+          DomainObject.cookBoolean(reporter.getFeedbackRequiredIndicator());
+      this.firstName = reporter.getFirstName();
+      this.lastName = reporter.getLastName();
+      this.mandatedReporterIndicator =
+          DomainObject.cookBoolean(reporter.getMandatedReporterIndicator());
+      this.messagePhoneExtensionNumber = reporter.getMessagePhoneExtensionNumber();
+      this.messagePhoneNumber = reporter.getMessagePhoneNumber();
+      this.middleInitialName = reporter.getMiddleInitialName();
+      this.namePrefixDescription = reporter.getNamePrefixDescription();
+      this.primaryPhoneNumber = reporter.getPrimaryPhoneNumber();
+      this.primaryPhoneExtensionNumber = reporter.getPrimaryPhoneExtensionNumber();
+      this.stateCodeType = reporter.getStateCodeType();
+      this.streetName = reporter.getStreetName();
+      this.streetNumber = reporter.getStreetNumber();
+      this.suffixTitleDescription = reporter.getSuffixTitleDescription();
+      this.zipNumber = DomainObject.uncookZipcodeString(reporter.getZipcode());
+      this.lawEnforcementId = reporter.getLawEnforcementId();
+      this.zipSuffixNumber = reporter.getZipSuffixNumber();
+      this.countySpecificCode = reporter.getCountySpecificCode();
+    } catch (ApiException e) {
+      throw new PersistenceException(e);
+    }
+
   }
 
   /*

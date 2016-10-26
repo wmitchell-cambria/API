@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
 
 @Entity
 @Table(name = "ALLGTN_T")
@@ -126,6 +127,42 @@ public class Allegation extends CmsPersistentObject {
     this.placementFacilityType = placementFacilityType;
 
   }
+
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param staffPerson The domain object to construct this object from
+   * @param lastUpdatedId the id of the last person to update this object
+   */
+  public Allegation(String id, gov.ca.cwds.rest.api.domain.legacy.Allegation persistedAllegation,
+      String lastUpdatedId) {
+    super(lastUpdatedId);
+
+    this.id = id;
+    this.abuseEndDate = DomainObject.uncookDateString(persistedAllegation.getAbuseEndDate());
+    this.abuseStartDate = DomainObject.uncookDateString(persistedAllegation.getAbuseStartDate());
+    this.abuseFrequency = persistedAllegation.getAbuseFrequency();
+    this.abuseFrequencyPeriodCode = persistedAllegation.getAbuseFrequencyPeriodCode();
+    this.abuseLocationDescription = persistedAllegation.getAbuseLocationDescription();
+    this.allegationDispositionType = persistedAllegation.getAllegationDispositionType();
+    this.allegationType = persistedAllegation.getAllegationType();
+    this.dispositionDescription = persistedAllegation.getDispositionDescription();
+    this.dispositionDate = DomainObject.uncookDateString(persistedAllegation.getDispositionDate());
+    this.injuryHarmDetailIndicator =
+        DomainObject.cookBoolean(persistedAllegation.getInjuryHarmDetailIndicator());
+    this.nonProtectingParentCode = persistedAllegation.getNonProtectingParentCode();
+    this.staffPersonAddedIndicator =
+        DomainObject.cookBoolean(persistedAllegation.getStaffPersonAddedIndicator());
+    this.victimClientId = persistedAllegation.getVictimClientId();
+    this.perpetratorClientId = persistedAllegation.getPerpetratorClientId();
+    this.referralId = persistedAllegation.getReferralId();
+    this.countySpecificCode = persistedAllegation.getCountySpecificCode();
+    this.zippyCreatedIndicator =
+        DomainObject.cookBoolean(persistedAllegation.getZippyCreatedIndicator());
+    this.placementFacilityType = persistedAllegation.getPlacementFacilityType();
+  }
+
 
   /*
    * (non-Javadoc)

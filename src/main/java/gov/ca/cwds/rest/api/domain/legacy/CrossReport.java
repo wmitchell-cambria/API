@@ -25,8 +25,8 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class CrossReport extends DomainObject implements Request, Response {
   @NotEmpty
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = true, readOnly = true, value = "", example = "1234ABC123")
   private String thirdId;
 
   @NotNull
@@ -88,7 +88,7 @@ public class CrossReport extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 3)
-  @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC1234567")
   private String staffPersonId;
 
   @NotEmpty
@@ -108,7 +108,7 @@ public class CrossReport extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "AB")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "99")
   private String countySpecificCode;
 
   @NotNull

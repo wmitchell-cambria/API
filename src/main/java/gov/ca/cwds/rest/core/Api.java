@@ -36,8 +36,7 @@ public class Api {
   /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
    */
-  public final static String RESOURCE_CLIENT = "client";
-
+  public final static String RESOURCE_CLIENT = "clients";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api
@@ -53,4 +52,10 @@ public class Api {
    * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api
    */
   public final static String RESOURCE_STAFF_PERSON = "staffpersons";
+
+  /**
+   * a {@code String} constant representing {@value #RESOURCE_REPORTER} api
+   */
+  public final static String RESOURCE_REPORTER = "reporters";
+
 }
