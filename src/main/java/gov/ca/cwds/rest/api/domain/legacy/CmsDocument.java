@@ -31,7 +31,7 @@ import io.swagger.annotations.ApiModelProperty;
 @InjectLinks({@InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
     bindings = {@Binding(name = "id", value = "${instance.id}"),
         @Binding(name = "resource", value = Api.RESOURCE_DOC_CONTROL)})})
-public class DocumentControl extends DomainObject implements Request, Response {
+public class CmsDocument extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 10)
@@ -79,7 +79,7 @@ public class DocumentControl extends DomainObject implements Request, Response {
   private Date docTime;
 
   @JsonCreator
-  public DocumentControl(@JsonProperty("id") String id,
+  public CmsDocument(@JsonProperty("id") String id,
       @JsonProperty("segmentCount") Short segmentCount, @JsonProperty("docLength") Long docLength,
       @JsonProperty("docAuth") String docAuth, @JsonProperty("docServ") String docServ,
       @JsonProperty("docDate") String docDate, @JsonProperty("docTime") String docTime,
@@ -98,7 +98,7 @@ public class DocumentControl extends DomainObject implements Request, Response {
     this.compressionMethod = compressionMethod;
   }
 
-  public DocumentControl(gov.ca.cwds.rest.api.persistence.cms.DocumentControl doc) {
+  public CmsDocument(gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc) {
     this.id = doc.getId();
 
     this.segmentCount = doc.getSegmentCount();
@@ -156,7 +156,7 @@ public class DocumentControl extends DomainObject implements Request, Response {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    DocumentControl other = (DocumentControl) obj;
+    CmsDocument other = (CmsDocument) obj;
 
     if (segmentCount == null) {
       if (other.segmentCount != null) {

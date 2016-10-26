@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.persistence.cms;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,17 +19,17 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  */
 @Entity
 @Table(name = "TSCNTRLT")
-public class DocumentControl extends CmsPersistentObject {
+public class CmsDocument extends CmsPersistentObject {
 
   @Id
   @Column(name = "DOC_HANDLE")
   private String id;
 
-  @Type(type = "integer")
+  @Type(type = "short")
   @Column(name = "DOC_SEGS")
   private Short segmentCount;
 
-  @Type(type = "integer")
+  @Type(type = "long")
   @Column(name = "DOC_LEN")
   private Long docLength;
 
@@ -57,12 +58,12 @@ public class DocumentControl extends CmsPersistentObject {
    * 
    * Required for Hibernate
    */
-  public DocumentControl() {
+  public CmsDocument() {
     super();
   }
 
-  public DocumentControl(String id, Short segmentCount, Long docLength, String docAuth,
-      String docServ, Date docDate, Date docTime, String docName, String compressionMethod) {
+  public CmsDocument(String id, Short segmentCount, Long docLength, String docAuth, String docServ,
+      Date docDate, Date docTime, String docName, String compressionMethod) {
     super();
     this.id = id;
     this.docAuth = docAuth;
@@ -81,7 +82,7 @@ public class DocumentControl extends CmsPersistentObject {
    * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
-  public String getPrimaryKey() {
+  public Serializable getPrimaryKey() {
     return getId();
   }
 
