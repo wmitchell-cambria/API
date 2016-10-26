@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -38,12 +38,12 @@ public class PostedScreening extends ScreeningResponse {
    * @param started_at The started at
    * @param narrative The narrative
    * @param address The {@link Address}
-   * @param participants The {@link List}
+   * @param participants The {@link Set}
    */
-  public PostedScreening(long id, String reference, String ended_at,
-      String incident_county, String incident_date, String location_type,
-      String communication_method, String name, String response_time, String screening_decision,
-      String started_at, String narrative, Address address, List<Person> participants) {
+  public PostedScreening(long id, String reference, String ended_at, String incident_county,
+      String incident_date, String location_type, String communication_method, String name,
+      String response_time, String screening_decision, String started_at, String narrative,
+      Address address, Set<Person> participants) {
     super(reference, ended_at, incident_county, incident_date, location_type, communication_method,
         name, response_time, screening_decision, started_at, narrative, address, participants);
     this.id = id;

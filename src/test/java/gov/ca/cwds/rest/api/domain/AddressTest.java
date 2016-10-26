@@ -18,8 +18,6 @@ import nl.jqno.equalsverifier.Warning;
 
 public class AddressTest {
 
-  private static final String ROOT_RESOURCE = "/address/";
-
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private static final AddressResource mockedAddressResource = mock(AddressResource.class);
