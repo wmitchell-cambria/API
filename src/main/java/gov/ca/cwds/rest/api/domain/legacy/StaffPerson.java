@@ -25,6 +25,12 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class StaffPerson extends DomainObject implements Request, Response {
 
+  @NotEmpty
+  @Size(min = 3, max = 3)
+  @ApiModelProperty(required = true, readOnly = false, example = "ABC",
+      value = "Value overwritten on POST")
+  private String id;
+
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "endDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
@@ -36,9 +42,9 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "John")
   private String firstName;
 
-  @NotEmpty
-  @Size(min = 1, max = 30)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "Case Worker")
+  @Size(max = 30)
+  @ApiModelProperty(required = false, readOnly = false, value = "Job Title",
+      example = "Case Worker")
   private String jobTitle;
 
   @NotEmpty
@@ -46,14 +52,12 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Smith")
   private String lastName;
 
-  @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "Q")
+  @Size(max = 1, message = "size must be 1")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "Q")
   private String middleInitial;
 
-  @NotEmpty
-  @Size(min = 1, max = 6)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "MR.")
+  @Size(max = 6)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "MR.")
   private String namePrefix;
 
   @NotNull
@@ -71,9 +75,8 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "MM/dd/yyyy", example = "1/1/2000")
   private String startDate;
 
-  @NotEmpty
-  @Size(min = 1, max = 4)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "SR.")
+  @Size(max = 4)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "SR.")
   private String nameSuffix;
 
   @NotNull
@@ -81,20 +84,20 @@ public class StaffPerson extends DomainObject implements Request, Response {
   private Boolean telecommuterIndicator;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
+  @Size(min = 10, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "IDENTIFIER of CWS_OFFT",
-      example = "def")
+      example = "1234567def")
   // TODO Add Foreign Key Validation after CWS_OFFICE table is added to source code
   private String cwsOffice;
 
-  @NotEmpty
-  @Size(min = 1, max = 160)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "some free form text")
+  @NotNull
+  @Size(max = 160)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "some free form text")
   private String availabilityAndLocationDescription;
 
-  @NotEmpty
-  @Size(min = 1, max = 4)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "9021")
+  @NotNull
+  @Size(max = 4)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "9021")
   private String ssrsLicensingWorkerId;
 
   @NotEmpty
@@ -107,7 +110,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   private Boolean dutyWorkerIndicator;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
+  @Size(min = 10, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "IDENTIFIER of CWSADDRT",
       example = "ghi")
   // TODO Add Foreign Key Validation after CWS_OFFICE_ADDRESS table is added to source code
@@ -120,9 +123,9 @@ public class StaffPerson extends DomainObject implements Request, Response {
   // @Email
   private String emailAddress;
 
-  @Size(min = 0, max = 20)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "john")
-  private String twitterName;
+  // @Size(min = 0, max = 20)
+  // @ApiModelProperty(required = true, readOnly = false, value = "", example = "john")
+  // private String twitterName;
 
   /**
    * Constructor
@@ -165,6 +168,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
       @JsonProperty("cwsOfficeAddress") String cwsOfficeAddress,
       @JsonProperty("emailAddress") String emailAddress) {
     super();
+    this.id = id;
     this.endDate = endDate;
     this.firstName = firstName;
     this.jobTitle = jobTitle;
@@ -186,6 +190,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   }
 
   public StaffPerson(gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson) {
+    this.id = persistedStaffPerson.getId();
     this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
     this.firstName = persistedStaffPerson.getFirstName();
     this.jobTitle = persistedStaffPerson.getJobTitle();
@@ -211,6 +216,14 @@ public class StaffPerson extends DomainObject implements Request, Response {
   }
 
   /**
+   * return the staff id
+   * 
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
    * @return the endDate
    */
   public String getEndDate() {
@@ -227,9 +240,9 @@ public class StaffPerson extends DomainObject implements Request, Response {
   /**
    * @return the twitterName
    */
-  public String getTwitterName() {
-    return twitterName;
-  }
+  // public String getTwitterName() {
+  // return twitterName;
+  // }
 
   /**
    * @return the jobTitle
@@ -361,7 +374,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
     result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = prime * result + ((twitterName == null) ? 0 : twitterName.hashCode());
+    // result = prime * result + ((twitterName == null) ? 0 : twitterName.hashCode());
     result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((middleInitial == null) ? 0 : middleInitial.hashCode());
@@ -451,13 +464,13 @@ public class StaffPerson extends DomainObject implements Request, Response {
     } else if (!firstName.equals(other.firstName)) {
       return false;
     }
-    if (twitterName == null) {
-      if (other.twitterName != null) {
-        return false;
-      }
-    } else if (!twitterName.equals(other.twitterName)) {
-      return false;
-    }
+    // if (twitterName == null) {
+    // if (other.twitterName != null) {
+    // return false;
+    // }
+    // } else if (!twitterName.equals(other.twitterName)) {
+    // return false;
+    // }
     if (jobTitle == null) {
       if (other.jobTitle != null) {
         return false;
