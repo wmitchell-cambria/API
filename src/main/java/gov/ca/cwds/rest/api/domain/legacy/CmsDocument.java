@@ -18,12 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a record in CMS Document Control.
+ * {@link DomainObject} represents a CMS Document.
  * 
  * @author CWDS API Team
  */
@@ -80,13 +81,17 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
   @ApiModelProperty(required = false, readOnly = false, value = "HH:mm:ss", example = "19:59:07")
   private String docTime;
 
+  @NotNull
+  private String base64Blob;
+
   @JsonCreator
   public CmsDocument(@JsonProperty("id") String id,
       @JsonProperty("segmentCount") Short segmentCount, @JsonProperty("docLength") Long docLength,
       @JsonProperty("docAuth") String docAuth, @JsonProperty("docServ") String docServ,
       @JsonProperty("docDate") String docDate, @JsonProperty("docTime") String docTime,
       @JsonProperty("docName") String docName,
-      @JsonProperty("compressionMethod") String compressionMethod) {
+      @JsonProperty("compressionMethod") String compressionMethod,
+      @JsonProperty("base64Blob") String base64Blob) {
     super();
     this.id = id;
 
@@ -98,6 +103,7 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     this.docTime = docTime;
     this.docName = docName;
     this.compressionMethod = compressionMethod;
+    this.base64Blob = base64Blob;
   }
 
   public CmsDocument(gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc) {
@@ -111,6 +117,14 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     this.docTime = DomainObject.cookTime(doc.getDocTime());
     this.docName = doc.getDocName();
     this.compressionMethod = doc.getCompressionMethod();
+
+    StringBuilder buf =
+        new StringBuilder(doc.getDocLength() != null ? doc.getDocLength().intValue() : 1024);
+    for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
+      buf.append(seg.getDocBlob());
+    }
+
+    this.base64Blob = buf.toString();
   }
 
   /**
@@ -138,6 +152,7 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     result = prime * result + ((docTime == null) ? 0 : docTime.hashCode());
     result = prime * result + ((docName == null) ? 0 : docName.hashCode());
     result = prime * result + ((compressionMethod == null) ? 0 : compressionMethod.hashCode());
+    result = prime * result + ((base64Blob == null) ? 0 : base64Blob.hashCode());
 
     return result;
   }
@@ -216,6 +231,15 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     } else if (!compressionMethod.equals(other.compressionMethod)) {
       return false;
     }
+
+    if (base64Blob == null) {
+      if (other.base64Blob != null) {
+        return false;
+      }
+    } else if (!base64Blob.equals(other.base64Blob)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -285,6 +309,14 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public String getBase64Blob() {
+    return base64Blob;
+  }
+
+  public void setBase64Blob(String base64Blob) {
+    this.base64Blob = base64Blob;
   }
 
 

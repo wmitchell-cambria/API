@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.api.persistence.cms;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -58,11 +58,9 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
-  // @OneToMany(fetch = FetchType.LAZY, mappedBy = "TSCNTRLT")
-  // @OneToMany(cascade={CascadeType.ALL})
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "DOC_HANDLE", nullable = false)
-  private Set<CmsDocumentBlobSegment> blobSegments = new HashSet<CmsDocumentBlobSegment>(0);
+  private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<CmsDocumentBlobSegment>();
 
   /**
    * Default constructor
