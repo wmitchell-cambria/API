@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain.legacy;
 
-import java.util.Date;
+import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,15 +23,17 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing an DocumentControl
+ * {@link DomainObject} representing a record in CMS Document Control.
  * 
  * @author CWDS API Team
  */
 @ApiModel
 @InjectLinks({@InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
     bindings = {@Binding(name = "id", value = "${instance.id}"),
-        @Binding(name = "resource", value = Api.RESOURCE_DOC_CONTROL)})})
-public class CmsDocument extends DomainObject implements Request, Response {
+        @Binding(name = "resource", value = Api.RESOURCE_CMS_DOCUMENT)})})
+public class CmsDocument extends DomainObject implements Request, Response, Serializable {
+
+  private static final long serialVersionUID = -9133158600820834189L;
 
   @NotEmpty
   @Size(min = 1, max = 10)
@@ -47,7 +49,7 @@ public class CmsDocument extends DomainObject implements Request, Response {
   private String docDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "10000")
+  @ApiModelProperty(required = true, readOnly = false, example = "1000")
   private Long docLength;
 
   @NotNull
@@ -72,11 +74,11 @@ public class CmsDocument extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private String docName;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   @JsonProperty(value = "docTime")
-  @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
+  @gov.ca.cwds.rest.validation.Date(format = TIME_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "HH:mm:ss", example = "19:59:07")
-  private Date docTime;
+  private String docTime;
 
   @JsonCreator
   public CmsDocument(@JsonProperty("id") String id,
@@ -93,7 +95,7 @@ public class CmsDocument extends DomainObject implements Request, Response {
     this.docAuth = docAuth;
     this.docServ = docServ;
     this.docDate = docDate;
-    this.docTime = DomainObject.uncookTimeString(docTime);
+    this.docTime = docTime;
     this.docName = docName;
     this.compressionMethod = compressionMethod;
   }
@@ -106,7 +108,7 @@ public class CmsDocument extends DomainObject implements Request, Response {
     this.docAuth = doc.getDocAuth();
     this.docServ = doc.getDocServ();
     this.docDate = DomainObject.cookDate(doc.getDocDate());
-    this.docTime = doc.getDocTime();
+    this.docTime = DomainObject.cookTime(doc.getDocTime());
     this.docName = doc.getDocName();
     this.compressionMethod = doc.getCompressionMethod();
   }
@@ -215,6 +217,74 @@ public class CmsDocument extends DomainObject implements Request, Response {
       return false;
     }
     return true;
+  }
+
+  public String getDocDate() {
+    return docDate;
+  }
+
+  public void setDocDate(String docDate) {
+    this.docDate = docDate;
+  }
+
+  public Long getDocLength() {
+    return docLength;
+  }
+
+  public void setDocLength(Long docLength) {
+    this.docLength = docLength;
+  }
+
+  public Short getSegmentCount() {
+    return segmentCount;
+  }
+
+  public void setSegmentCount(Short segmentCount) {
+    this.segmentCount = segmentCount;
+  }
+
+  public String getDocAuth() {
+    return docAuth;
+  }
+
+  public void setDocAuth(String docAuth) {
+    this.docAuth = docAuth;
+  }
+
+  public String getDocServ() {
+    return docServ;
+  }
+
+  public void setDocServ(String docServ) {
+    this.docServ = docServ;
+  }
+
+  public String getCompressionMethod() {
+    return compressionMethod;
+  }
+
+  public void setCompressionMethod(String compressionMethod) {
+    this.compressionMethod = compressionMethod;
+  }
+
+  public String getDocName() {
+    return docName;
+  }
+
+  public void setDocName(String docName) {
+    this.docName = docName;
+  }
+
+  public String getDocTime() {
+    return docTime;
+  }
+
+  public void setDocTime(String docTime) {
+    this.docTime = docTime;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
 

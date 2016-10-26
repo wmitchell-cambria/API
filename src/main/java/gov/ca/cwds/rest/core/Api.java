@@ -55,7 +55,7 @@ public class Api {
   public final static String RESOURCE_STAFF_PERSON = "staffpersons";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_DOC_CONTROL} api
+   * A {@code String} constant representing {@value #RESOURCE_CMS_DOCUMENT} api
    */
-  public final static String RESOURCE_DOC_CONTROL = "documentcontrol";
+  public final static String RESOURCE_CMS_DOCUMENT = "cmsdocument";
 }

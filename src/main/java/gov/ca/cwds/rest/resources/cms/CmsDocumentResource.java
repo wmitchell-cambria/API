@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_DOC_CONTROL;
+import static gov.ca.cwds.rest.core.Api.RESOURCE_CMS_DOCUMENT;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -37,8 +37,8 @@ import io.swagger.annotations.ApiResponses;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_DOC_CONTROL)
-@Path(value = RESOURCE_DOC_CONTROL)
+@Api(value = RESOURCE_CMS_DOCUMENT)
+@Path(value = RESOURCE_CMS_DOCUMENT)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CmsDocumentResource {
