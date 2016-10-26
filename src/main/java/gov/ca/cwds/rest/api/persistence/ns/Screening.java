@@ -1,14 +1,19 @@
 package gov.ca.cwds.rest.api.persistence.ns;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -70,8 +75,11 @@ public class Screening extends NsPersistentObject {
   @JoinColumn(name = "contact_address_id")
   private Address contactAddress;
 
-  @Column(name = "hotline_contact_participant_array")
-  private String participantIds;
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(name = "hotline_contact_participant",
+      joinColumns = {@JoinColumn(name = "hotline_contact_id", nullable = false, updatable = false)},
+      inverseJoinColumns = {@JoinColumn(name = "person_id", nullable = false, updatable = false)})
+  private Set<Person> participants = new HashSet<Person>(0);
 
   /**
    * Default constructor
@@ -105,11 +113,11 @@ public class Screening extends NsPersistentObject {
    * @param startedAt The started at date
    * @param narrative The narrative
    * @param contactAddress The contact address
-   * @param participantIds The list of participant ids
+   * @param participants The list of participants
    */
   public Screening(String reference, Date endedAt, String incidentCounty, Date incidentDate,
       String locationType, String communicationMethod, String name, String screeningDecision,
-      Date startedAt, String narrative, Address contactAddress, String participantIds) {
+      Date startedAt, String narrative, Address contactAddress, Set<Person> participants) {
     super();
     this.reference = reference;
     this.endedAt = endedAt;
@@ -122,7 +130,9 @@ public class Screening extends NsPersistentObject {
     this.startedAt = startedAt;
     this.narrative = narrative;
     this.contactAddress = contactAddress;
-    this.participantIds = participantIds;
+    if (participants != null) {
+      this.participants.addAll(participants);
+    }
   }
 
 
@@ -131,29 +141,30 @@ public class Screening extends NsPersistentObject {
    * Constructor
    * 
    * @param id The id
-   * @param screeningRequest The screenRequest
+   * @param screening The screening
+   * @param address The address
+   * @param participants The set of participants
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public Screening(Long id, gov.ca.cwds.rest.api.domain.ScreeningRequest screeningRequest,
-      Long lastUpdatedId) {
+  public Screening(Long id, gov.ca.cwds.rest.api.domain.Screening screening, Address address,
+      Set<Person> participants, Long lastUpdatedId) {
     super(lastUpdatedId);
 
     this.id = id;
-    this.reference = screeningRequest.getReference();
-    this.endedAt = DomainObject.uncookDateString(screeningRequest.getEnded_at());
-    this.incidentCounty = screeningRequest.getIncident_county();
-    this.incidentDate = DomainObject.uncookDateString(screeningRequest.getIncident_date());
-    this.locationType = screeningRequest.getLocation_type();
-    this.communicationMethod = screeningRequest.getCommunication_method();
-    this.name = screeningRequest.getName();
-    this.screeningDecision = screeningRequest.getScreening_decision();
-    this.startedAt = DomainObject.uncookDateString(screeningRequest.getStarted_at());
-    this.narrative = screeningRequest.getNarrative();
-    if (screeningRequest.getAddress() != null) {
-      this.contactAddress = new Address(screeningRequest.getAddress(), null);
+    this.reference = screening.getReference();
+    this.endedAt = DomainObject.uncookDateString(screening.getEnded_at());
+    this.incidentCounty = screening.getIncident_county();
+    this.incidentDate = DomainObject.uncookDateString(screening.getIncident_date());
+    this.locationType = screening.getLocation_type();
+    this.communicationMethod = screening.getCommunication_method();
+    this.name = screening.getName();
+    this.screeningDecision = screening.getScreening_decision();
+    this.startedAt = DomainObject.uncookDateString(screening.getStarted_at());
+    this.narrative = screening.getNarrative();
+    this.contactAddress = address;
+    if (participants != null) {
+      this.participants.addAll(participants);
     }
-    this.participantIds =
-        screeningRequest.getParticipant_ids().toString().replace("[", "").replace("]", "");
   }
 
   /*
@@ -244,17 +255,17 @@ public class Screening extends NsPersistentObject {
   }
 
   /**
-   * @return the participantIds
-   */
-  public String getParticipantIds() {
-    return participantIds;
-  }
-
-  /**
    * @return the contactAddress
    */
   public Address getContactAddress() {
     return contactAddress;
+  }
+
+  /**
+   * @return the participants
+   */
+  public Set<Person> getParticipants() {
+    return participants;
   }
 
 
