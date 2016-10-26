@@ -2,16 +2,14 @@ package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -21,6 +19,7 @@ import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
+import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
 
@@ -56,7 +55,7 @@ public class ScreeningService implements CrudsService {
 
     gov.ca.cwds.rest.api.persistence.ns.Screening screening = screeningDao.find(primaryKey);
     if (screening != null) {
-      return new ScreeningResponse(screening, buildParticipantList(screening));
+      return new ScreeningResponse(screening, screening.getParticipants());
     }
     return null;
   }
@@ -102,14 +101,9 @@ public class ScreeningService implements CrudsService {
     assert (request instanceof ScreeningRequest);
 
     ScreeningRequest screeningRequest = (ScreeningRequest) request;
-    gov.ca.cwds.rest.api.persistence.ns.Screening screening =
-        new gov.ca.cwds.rest.api.persistence.ns.Screening((Long) primaryKey, screeningRequest,
-            null);
 
-    // TODO before we update we need to ensure some RI on the participant list. This needs to be
-    // refactored away from a comma delimited string of ids to a xref table or something of the
-    // sort.
-    // See https://www.pivotaltracker.com/story/show/132727211
+    Set<gov.ca.cwds.rest.api.persistence.ns.Person> participants =
+        new HashSet<gov.ca.cwds.rest.api.persistence.ns.Person>();
     for (Long participantId : screeningRequest.getParticipant_ids()) {
       Person person = personService.find(participantId);
       if (person == null) {
@@ -117,36 +111,16 @@ public class ScreeningService implements CrudsService {
         LOGGER.warn(msg);
         throw new ServiceException(new EntityNotFoundException(msg));
       }
+      participants.add(new gov.ca.cwds.rest.api.persistence.ns.Person(person, null));
     }
+
+
+    Address address = new Address(screeningRequest.getAddress(), null);
+    gov.ca.cwds.rest.api.persistence.ns.Screening screening =
+        new gov.ca.cwds.rest.api.persistence.ns.Screening((Long) primaryKey, screeningRequest,
+            address, participants, null);
 
     screening = screeningDao.update(screening);
-    return new ScreeningResponse(screening, buildParticipantList(screening));
-  }
-
-  private List<gov.ca.cwds.rest.api.domain.Person> buildParticipantList(
-      gov.ca.cwds.rest.api.persistence.ns.Screening screening) {
-    List<gov.ca.cwds.rest.api.domain.Person> retval = null;
-    // TODO : making some assumptions here that this string is a comma delimited list of longs.
-    // Need to refactor the database to actually have a xref table.
-    // See - https://www.pivotaltracker.com/story/show/132727211
-    if (StringUtils.isNotBlank(screening.getParticipantIds())) {
-      ImmutableList.Builder<gov.ca.cwds.rest.api.domain.Person> builder = ImmutableList.builder();
-      for (String particpantIdString : screening.getParticipantIds().split(",")) {
-        Long participantId = Long.valueOf(particpantIdString.trim());
-        gov.ca.cwds.rest.api.domain.Person person = personService.find(participantId);
-        if (person == null) {
-          // NOTE : the database doesn't enforce RI so we are expecting an issue COULD happen. It
-          // shouldn't though
-          // Database should be refactored to enforce RI
-          String msg =
-              MessageFormat.format("Unable to find participant with id={0}", participantId);
-          LOGGER.warn(msg);
-          throw new ServiceException(new EntityNotFoundException(msg));
-        }
-        builder.add(person);
-      }
-      retval = builder.build();
-    }
-    return retval;
+    return new ScreeningResponse(screening, screening.getParticipants());
   }
 }
