@@ -14,7 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
+import gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
+import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
+import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.Reporter;
@@ -25,6 +28,7 @@ import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
 import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
+import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
 import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
@@ -38,8 +42,10 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
+import gov.ca.cwds.rest.services.CmsDocumentService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.cms.StaffPersonService;
@@ -63,7 +69,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class,
-          CrossReport.class, ReferralClient.class, Reporter.class) {
+          CrossReport.class, ReferralClient.class, Reporter.class, CmsDocument.class,
+          CmsDocumentBlobSegment.class, CmsDocReferralClient.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getCmsDataSourceFactory();
@@ -165,6 +172,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new ReferralClientDao(cmsHibernateBundle.getSessionFactory()));
     DataAccessEnvironment.register(Reporter.class,
         new ReporterDao(cmsHibernateBundle.getSessionFactory()));
+
+    DataAccessEnvironment.register(CmsDocument.class,
+        new CmsDocumentDao(cmsHibernateBundle.getSessionFactory()));
   }
 
   private void registerResources(final ApiConfiguration configuration,
@@ -194,13 +204,19 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new ScreeningResource(new ServiceBackedResourceDelegate(screeningService));
     apiEnvironment.jersey().register(screeningResource);
 
+    LOGGER.info("Registering CmsDocumentResource");
+    final CmsDocumentService docService =
+        new CmsDocumentService((CmsDocumentDao) DataAccessEnvironment.get(CmsDocument.class));
+    CmsDocumentResource docResource =
+        new CmsDocumentResource(new ServiceBackedResourceDelegate(docService));
+    apiEnvironment.jersey().register(docResource);
+
     LOGGER.info("Registering StaffPersonResource");
     StaffPersonService staffPersonService =
         new StaffPersonService((StaffPersonDao) DataAccessEnvironment.get(StaffPerson.class));
     StaffPersonResource staffPersonResource =
         new StaffPersonResource(new ServiceBackedResourceDelegate(staffPersonService));
     apiEnvironment.jersey().register(staffPersonResource);
-
   }
 
   private void configureCors(final ApiEnvironment apiEnvironment) {
