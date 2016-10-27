@@ -5,7 +5,7 @@ package gov.ca.cwds.rest.core;
  * 
  * @author CDWS API Team
  */
-public class Api {
+public interface Api {
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_APPLICATION} api.
@@ -27,7 +27,6 @@ public class Api {
    */
   public final static String RESOURCE_SCREENINGS = "screenings";
 
-
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
    */
@@ -37,7 +36,6 @@ public class Api {
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
    */
   public final static String RESOURCE_CLIENT = "client";
-
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api
@@ -54,7 +52,6 @@ public class Api {
    */
   public final static String RESOURCE_STAFF_PERSON = "staffpersons";
 
-
   /**
    * a {@code String} constant representing {@value #RESOURCE_REPORTER} api
    */
@@ -64,4 +61,12 @@ public class Api {
    * A {@code String} constant representing {@value #RESOURCE_CMS_DOCUMENT} api
    */
   public final static String RESOURCE_CMS_DOCUMENT = "cmsdocument";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_CMS_DOC_REFRRAL_CLIENT} api
+   */
+  public final static String RESOURCE_CMS_DOC_REFRRAL_CLIENT = "cmsdocreferralclient";
+
+
+
 }
