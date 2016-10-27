@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
+import gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
@@ -69,7 +70,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(StaffPerson.class, Referral.class, Allegation.class,
           CrossReport.class, ReferralClient.class, Reporter.class, CmsDocument.class,
-          CmsDocumentBlobSegment.class) {
+          CmsDocumentBlobSegment.class, CmsDocReferralClient.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getCmsDataSourceFactory();
