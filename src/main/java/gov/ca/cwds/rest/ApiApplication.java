@@ -27,6 +27,7 @@ import gov.ca.cwds.rest.api.persistence.ns.Person;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
+import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
@@ -42,12 +43,14 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
-import gov.ca.cwds.rest.services.CmsDocumentService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
+import gov.ca.cwds.rest.services.cms.CmsDocReferralClientService;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
@@ -175,6 +178,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     DataAccessEnvironment.register(CmsDocument.class,
         new CmsDocumentDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(CmsDocReferralClient.class,
+        new CmsDocReferralClientDao(cmsHibernateBundle.getSessionFactory()));
   }
 
   private void registerResources(final ApiConfiguration configuration,
@@ -210,6 +215,13 @@ public class ApiApplication extends Application<ApiConfiguration> {
     CmsDocumentResource docResource =
         new CmsDocumentResource(new ServiceBackedResourceDelegate(docService));
     apiEnvironment.jersey().register(docResource);
+
+    LOGGER.info("Registering CmsDocReferralClientResource");
+    final CmsDocReferralClientService docReferralClientService = new CmsDocReferralClientService(
+        (CmsDocReferralClientDao) DataAccessEnvironment.get(CmsDocReferralClient.class));
+    CmsDocReferralClientResource docReferralClientResource = new CmsDocReferralClientResource(
+        new ServiceBackedResourceDelegate(docReferralClientService));
+    apiEnvironment.jersey().register(docReferralClientResource);
 
     LOGGER.info("Registering StaffPersonResource");
     StaffPersonService staffPersonService =

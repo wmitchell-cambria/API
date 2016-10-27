@@ -13,15 +13,24 @@ import org.hibernate.annotations.Type;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
- * {@link PersistentObject} represents a record in TSCNTRLT.
+ * {@link PersistentObject} represents a custom query to find Referral and Client references.
+ * Documents.
  * 
  * @author CWDS API Team
  */
 @Entity
 @NamedNativeQuery(name = "DocReferalClient",
-    query = "select rf.identifier as referl_id, cl.identifier as client_id, cl.com_fst_nm, cl.com_mid_nm, cl.com_lst_nm, cl.birth_dt, ctrl.doc_handle, ctrl.doc_name, ctrl.doc_date as doc_added_upd from cwsint.oth_doct od JOIN cwsint.referl_t rf on rf.identifier = od.fkreferl_t JOIN cwsint.drmsdoct dd on dd.identifier = od.fkdrmsdoct JOIN cwsint.TSCNTRLT ctrl on ctrl.doc_handle = dd.dochndl_nm and ctrl.cmprs_prg != 'DELETED' and ctrl.doc_handle != 'DUMMY' JOIN cwsint.refr_clt rc on od.fkreferl_t = rc.fkreferl_t JOIN cwsint.client_t cl on cl.identifier = rc.fkclient_t where ctrl.DOC_HANDLE = :docHandle",
+    query = "select rf.identifier as referl_id, cl.identifier as client_id, "
+        + "rtrim(cl.com_fst_nm) as com_fst_nm, rtrim(cl.com_mid_nm) as com_mid_nm, rtrim(cl.com_lst_nm) as com_lst_nm,"
+        + "cl.birth_dt, ctrl.doc_handle, rtrim(ctrl.doc_name) as doc_name, ctrl.doc_date as doc_added_upd,rf.LST_UPD_ID,rf.LST_UPD_TS "
+        + "from cwsint.oth_doct od " + "JOIN cwsint.referl_t rf on rf.identifier = od.fkreferl_t "
+        + "JOIN cwsint.drmsdoct dd on dd.identifier = od.fkdrmsdoct  "
+        + "JOIN cwsint.TSCNTRLT ctrl on ctrl.doc_handle = dd.dochndl_nm and ctrl.cmprs_prg != 'DELETED' and ctrl.doc_handle != 'DUMMY' "
+        + "JOIN cwsint.refr_clt rc on od.fkreferl_t = rc.fkreferl_t "
+        + "JOIN cwsint.client_t cl on cl.identifier = rc.fkclient_t "
+        + "where ctrl.DOC_HANDLE = :docHandle",
     resultClass = CmsDocReferralClient.class)
-public class CmsDocReferralClient implements PersistentObject, Serializable {
+public class CmsDocReferralClient extends CmsPersistentObject implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -78,14 +87,14 @@ public class CmsDocReferralClient implements PersistentObject, Serializable {
     this.birthDate = birthDate;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
   public Serializable getPrimaryKey() {
-    return new PrimaryKey3(this.docHandle, this.getReferlId(), this.getClientId());
+    return new PrimaryKey3(this.getDocHandle(), this.getReferlId(), this.getClientId());
   }
 
   /**

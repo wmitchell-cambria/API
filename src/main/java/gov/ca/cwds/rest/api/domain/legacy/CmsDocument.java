@@ -37,7 +37,7 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
   private static final long serialVersionUID = -9133158600820834189L;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
+  @Size(min = 30, max = 30)
   @ApiModelProperty(required = true, readOnly = false, value = "Value overwritten on POST",
       example = "0131351421120020*JONESMF 00004")
   private String id;

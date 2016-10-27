@@ -1,6 +1,7 @@
-package gov.ca.cwds.rest.services;
+package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -11,19 +12,21 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
+import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
 import gov.ca.cwds.rest.jdbi.Dao;
-import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
+import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
+import gov.ca.cwds.rest.services.CrudsService;
 
 /**
  * Business layer object to work on {@link Screening}
  * 
  * @author CWDS API Team
  */
-public class CmsDocumentService implements CrudsService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentService.class);
+public class CmsDocReferralClientService implements CrudsService {
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocReferralClientService.class);
 
-  private CmsDocumentDao dao;
+  private CmsDocReferralClientDao dao;
 
   /**
    * 
@@ -31,7 +34,7 @@ public class CmsDocumentService implements CrudsService {
    *        objects.
    * @param personService The person service
    */
-  public CmsDocumentService(CmsDocumentDao dao) {
+  public CmsDocReferralClientService(CmsDocReferralClientDao dao) {
     this.dao = dao;
   }
 
@@ -41,13 +44,15 @@ public class CmsDocumentService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public CmsDocument find(Serializable primaryKey) {
+  public CmsDocReferralClient find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
-    LOGGER.info("primaryKey=" + primaryKey);
-    gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc = dao.find(primaryKey);
-    if (doc != null) {
-      return new CmsDocument(doc);
+    final String key = (String) primaryKey;
+    LOGGER.info("primaryKey=" + key);
+    List<gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient> docs =
+        dao.listDocReferralClient(key);
+    if (docs != null) {
+      return new CmsDocReferralClient(docs);
     }
     return null;
   }
