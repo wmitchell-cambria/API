@@ -54,6 +54,12 @@ public class Api {
    */
   public final static String RESOURCE_STAFF_PERSON = "staffpersons";
 
+
+  /**
+   * a {@code String} constant representing {@value #RESOURCE_REPORTER} api
+   */
+  public final static String RESOURCE_REPORTER = "reporters";
+
   /**
    * A {@code String} constant representing {@value #RESOURCE_CMS_DOCUMENT} api
    */
