@@ -810,7 +810,7 @@ public class StaffPersonTest {
   public void failsWhenTelecommuterIndicatorAllWhitespace() throws Exception {
     StaffPerson toCreate = MAPPER.readValue(
         fixture(
-            "fixtures/domain/legacy/StaffPerson/invalid/telecommuterIndicatorAllWhitespace.json"),
+            "fixtures/domain/legacy/StaffPerson/invalid/telecommuterIndicatorAllWhiteSpace.json"),
         StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
