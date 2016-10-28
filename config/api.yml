@@ -51,9 +51,9 @@ flywayFactory:
 server:
   applicationConnectors:
   - type: http 
-    port: 8090
+    port: 8080
   adminConnectors:
   - type: http
-    port: 8091
+    port: 8081
 
     
