@@ -76,11 +76,12 @@ public class AllegationDaoIT {
     Date abuseEndDate = df.parse(abuseEndDateString);
     Date abuseStartDate = df.parse(abuseStartDateString);
     Date dispositionDate = df.parse(dispositionDateString);
-    Allegation allegation = new Allegation(id, abuseEndDate, abuseStartDate, abuseFrequency,
-        abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
-        allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
-        nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
-        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
+    Allegation allegation =
+        new Allegation("1234567890", abuseEndDate, abuseStartDate, abuseFrequency,
+            abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
+            allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
+            nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
+            referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType);
 
     Allegation create = allegationDao.create(allegation);
     assertThat(allegation, is(create));
@@ -128,7 +129,7 @@ public class AllegationDaoIT {
     Date abuseEndDate = df.parse(abuseEndDateString);
     Date abuseStartDate = df.parse(abuseStartDateString);
     Date dispositionDate = df.parse(dispositionDateString);
-    Allegation allegation = new Allegation(id, abuseEndDate, abuseStartDate, abuseFrequency,
+    Allegation allegation = new Allegation("abc", abuseEndDate, abuseStartDate, abuseFrequency,
         abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
         allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
         nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
