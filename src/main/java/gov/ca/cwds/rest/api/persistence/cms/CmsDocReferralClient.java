@@ -20,15 +20,47 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  */
 @Entity
 @NamedNativeQuery(name = "DocReferalClient",
-    query = "select rf.identifier as referl_id, cl.identifier as client_id, "
-        + "rtrim(cl.com_fst_nm) as com_fst_nm, rtrim(cl.com_mid_nm) as com_mid_nm, rtrim(cl.com_lst_nm) as com_lst_nm,"
-        + "cl.birth_dt, ctrl.doc_handle, rtrim(ctrl.doc_name) as doc_name, ctrl.doc_date as doc_added_upd,rf.LST_UPD_ID,rf.LST_UPD_TS "
-        + "from cwsint.oth_doct od " + "JOIN cwsint.referl_t rf on rf.identifier = od.fkreferl_t "
-        + "JOIN cwsint.drmsdoct dd on dd.identifier = od.fkdrmsdoct  "
-        + "JOIN cwsint.TSCNTRLT ctrl on ctrl.doc_handle = dd.dochndl_nm and ctrl.cmprs_prg != 'DELETED' and ctrl.doc_handle != 'DUMMY' "
-        + "JOIN cwsint.refr_clt rc on od.fkreferl_t = rc.fkreferl_t "
-        + "JOIN cwsint.client_t cl on cl.identifier = rc.fkclient_t "
-        + "where ctrl.DOC_HANDLE = :docHandle",
+    query = "SELECT "
+        + "    rf.identifier as referl_id "
+        + "    , cl.identifier as client_id "
+        + "    , rtrim(cl.com_fst_nm) as com_fst_nm "
+        + "    , rtrim(cl.com_mid_nm) as com_mid_nm "
+        + "    , rtrim(cl.com_lst_nm) as com_lst_nm "
+        + "    , ( "
+        + "SELECT "
+        + "    rtrim(first_nm)||' '||rtrim(middle_nm)||' '||rtrim(last_nm) "
+        + "FROM "
+        + "    cwsint.ocl_nm_t "
+        + "WHERE "
+        + "    fkclient_t = rc.fkclient_t fetch first rows only) as otherName "
+        + "    , ( "
+        + "SELECT rtrim(short_dsc) "
+        + "FROM cwsint.ocl_nm_t n, cwsint.sys_cd_c m "
+        + "WHERE sys_id = name_tpc AND fkclient_t = rc.fkclient_t AND fks_meta_t = 'NAME_TPC' fetch first rows only) as name_type "
+        + "    , ( "
+        + "SELECT "
+        + "    rtrim(street_nm) ||' '|| street_no ||' '||rtrim(city_nm)||' '||zip_no "
+        + "FROM cwsint.addrs_t adr , cwsint.cl_addrt cla "
+        + "WHERE cla.fkclient_t = cl.identifier AND adr.identifier = cla.fkaddrs_t AND cla.eff_end_dt IS null) as address "
+        + "    , ( SELECT rtrim(short_dsc) "
+        + "FROM cwsint.cl_addrt cla, cwsint.sys_cd_c m "
+        + "WHERE sys_id = addr_tpc AND cla.fkclient_t = cl.identifier AND cla.eff_end_dt IS null AND fks_meta_t = 'ADDR_TPC') as address_type "
+        + "    , cl.birth_dt "
+        + "    , ctrl.doc_handle "
+        + "    , rtrim(ctrl.doc_name) as doc_name "
+        + "    , ctrl.doc_date as doc_added_upd "
+        + "    ,rf.LST_UPD_ID "
+        + "    ,rf.LST_UPD_TS "
+        + "FROM "
+        + "    cwsint.oth_doct od JOIN cwsint.referl_t rf "
+        + "        ON rf.identifier = od.fkreferl_t JOIN cwsint.drmsdoct dd "
+        + "        ON dd.identifier = od.fkdrmsdoct JOIN cwsint.TSCNTRLT ctrl "
+        + "        ON ctrl.doc_handle = dd.dochndl_nm AND ctrl.cmprs_prg != 'DELETED' AND ctrl.doc_handle != 'DUMMY' JOIN cwsint.refr_clt rc "
+        + "        ON od.fkreferl_t = rc.fkreferl_t JOIN cwsint.client_t cl "
+        + "        ON cl.identifier = rc.fkclient_t "
+        + "WHERE ctrl.DOC_HANDLE = :docHandle "
+        + "ORDER BY 1,2 "
+        + "FOR READ ONLY",
     resultClass = CmsDocReferralClient.class)
 public class CmsDocReferralClient extends CmsPersistentObject implements Serializable {
 
@@ -66,6 +98,18 @@ public class CmsDocReferralClient extends CmsPersistentObject implements Seriali
   @Column(name = "BIRTH_DT")
   private Date birthDate;
 
+  @Column(name = "OTHERNAME")
+  private String otherName;
+
+  @Column(name = "NAME_TYPE")
+  private String nameType;
+
+  @Column(name = "ADDRESS")
+  private String address;
+
+  @Column(name = "ADDRESS_TYPE")
+  private String addressType;
+
   /**
    * Default constructor
    * 
@@ -76,7 +120,8 @@ public class CmsDocReferralClient extends CmsPersistentObject implements Seriali
   }
 
   public CmsDocReferralClient(String docHandle, String referlId, String clientId,
-      String commonFirstName, String commonMiddleName, String commonLastName, Date birthDate) {
+      String commonFirstName, String commonMiddleName, String commonLastName, Date birthDate,
+      String otherName, String nameType, String address, String addressType) {
     super();
     this.docHandle = docHandle;
     this.referlId = referlId;
@@ -85,6 +130,10 @@ public class CmsDocReferralClient extends CmsPersistentObject implements Seriali
     this.commonMiddleName = commonMiddleName;
     this.commonLastName = commonLastName;
     this.birthDate = birthDate;
+    this.otherName = otherName;
+    this.nameType = nameType;
+    this.address = address;
+    this.addressType = addressType;
   }
 
   /**
@@ -176,5 +225,60 @@ public class CmsDocReferralClient extends CmsPersistentObject implements Seriali
     this.birthDate = birthDate;
   }
 
+  /**
+   * @return the otherName
+   */
+  public String getOtherName() {
+    return otherName;
+  }
+
+  /**
+   * @param otherName the otherName to set
+   */
+  public void setOtherName(String otherName) {
+    this.otherName = otherName;
+  }
+
+  /**
+   * @return the nameType
+   */
+  public String getNameType() {
+    return nameType;
+  }
+
+  /**
+   * @param nameType the nameType to set
+   */
+  public void setNameType(String nameType) {
+    this.nameType = nameType;
+  }
+
+  /**
+   * @return the address
+   */
+  public String getAddress() {
+    return address;
+  }
+
+  /**
+   * @param address the address to set
+   */
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  /**
+   * @return the addressType
+   */
+  public String getAddressType() {
+    return addressType;
+  }
+
+  /**
+   * @param addressType the addressType to set
+   */
+  public void setAddressType(String addressType) {
+    this.addressType = addressType;
+  }
 
 }
