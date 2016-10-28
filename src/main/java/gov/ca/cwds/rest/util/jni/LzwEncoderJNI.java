@@ -7,13 +7,13 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 //
 
 // COMPILE JAVA:
-// javac gov/ca/cwds/rest/util/jni/KeyJNI.java
+// javac gov/ca/cwds/rest/util/jni/LzwEncoderJNI.java
 
 // GENERATE C HEADERS:
-// javah -jni gov.ca.cwds.rest.util.jni.KeyJNI
+// javah -jni gov.ca.cwds.rest.util.jni.LzwEncoderJNI
 
 // JAVA EXECUTE: OS X:
-// java -Djava.library.path=.:/usr/local/lib/ gov.ca.cwds.rest.util.jni.KeyJNI
+// java -Djava.library.path=.:/usr/local/lib/ gov.ca.cwds.rest.util.jni.LzwEncoderJNI
 
 /**
  * Calls native CWDS key generation library via JNI.
@@ -22,14 +22,14 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
  * 
  * @author CWDS API Team
  */
-public class KeyJNI {
+public class LzwEncoderJNI {
   static {
     System.out.println("user.dir=" + System.getProperty("user.dir"));
     System.out.println("java.library.path=" + System.getProperty("java.library.path"));
 
     // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix)
     // Load native library at runtime.
-    System.loadLibrary("KeyJNI");
+    System.loadLibrary("LzwEncoderJNI");
   }
 
   /**
@@ -73,7 +73,7 @@ public class KeyJNI {
 
   // Test Driver
   public static void main(String[] args) {
-    KeyJNI inst = new KeyJNI();
+    LzwEncoderJNI inst = new LzwEncoderJNI();
 
     // ===================
     // GENERATE KEY:
