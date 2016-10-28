@@ -222,7 +222,7 @@ public class StaffPersonTest {
   @Test
   public void failsWhenIdTooShort() throws Exception {
     StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idtooShort.json"), StaffPerson.class);
+        fixture("fixtures/domain/legacy/StaffPerson/invalid/idtooshort.json"), StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -234,7 +234,7 @@ public class StaffPersonTest {
   @Test
   public void failsWhenIdTooLong() throws Exception {
     StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idtooLong.json"), StaffPerson.class);
+        fixture("fixtures/domain/legacy/StaffPerson/invalid/idtoolong.json"), StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -810,7 +810,7 @@ public class StaffPersonTest {
   public void failsWhenTelecommuterIndicatorAllWhitespace() throws Exception {
     StaffPerson toCreate = MAPPER.readValue(
         fixture(
-            "fixtures/domain/legacy/StaffPerson/invalid/telecommuterIndicatorAllWhitespace.json"),
+            "fixtures/domain/legacy/StaffPerson/invalid/telecommuterindicatorAllWhitespace.json"),
         StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
