@@ -85,8 +85,8 @@ public class CmsDocument extends CmsPersistentObject {
     this.compressionMethod = compressionMethod;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
    */

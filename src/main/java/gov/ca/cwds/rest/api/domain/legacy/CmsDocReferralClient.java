@@ -49,13 +49,19 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
         @JsonProperty("commonFirstName") String commonFirstName,
         @JsonProperty("commonMiddleName") String commonMiddleName,
         @JsonProperty("commonLastName") String commonLastName,
-        @JsonProperty("birthDate") String birthDate) {
+        @JsonProperty("birthDate") String birthDate, @JsonProperty("otherName") String otherName,
+        @JsonProperty("nameType") String nameType, @JsonProperty("address") String address,
+        @JsonProperty("addressType") String addressType) {
       this.referlId = referlId;
       this.clientId = clientId;
       this.commonFirstName = commonFirstName;
       this.commonMiddleName = commonMiddleName;
       this.commonLastName = commonLastName;
       this.birthDate = birthDate;
+      this.otherName = otherName;
+      this.nameType = nameType;
+      this.address = address;
+      this.addressType = addressType;
     }
 
     @NotEmpty
@@ -75,21 +81,41 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
         example = "2000-01-01")
     private String birthDate;
 
+    private String otherName;
+
+    private String nameType;
+
+    private String address;
+
+    private String addressType;
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-
-      result = prime * result + ((referlId == null) ? 0 : referlId.hashCode());
+      result = prime * result + ((address == null) ? 0 : address.hashCode());
+      result = prime * result + ((addressType == null) ? 0 : addressType.hashCode());
+      result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
       result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
       result = prime * result + ((commonFirstName == null) ? 0 : commonFirstName.hashCode());
-      result = prime * result + ((commonMiddleName == null) ? 0 : commonMiddleName.hashCode());
       result = prime * result + ((commonLastName == null) ? 0 : commonLastName.hashCode());
-      result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
-
+      result = prime * result + ((commonMiddleName == null) ? 0 : commonMiddleName.hashCode());
+      result = prime * result + ((nameType == null) ? 0 : nameType.hashCode());
+      result = prime * result + ((otherName == null) ? 0 : otherName.hashCode());
+      result = prime * result + ((referlId == null) ? 0 : referlId.hashCode());
       return result;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
       if (this == obj) {
@@ -102,12 +128,25 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
         return false;
       }
       CmsDocReferralClientDetail other = (CmsDocReferralClientDetail) obj;
-
-      if (referlId == null) {
-        if (other.referlId != null) {
+      if (address == null) {
+        if (other.address != null) {
           return false;
         }
-      } else if (!referlId.equals(other.referlId)) {
+      } else if (!address.equals(other.address)) {
+        return false;
+      }
+      if (addressType == null) {
+        if (other.addressType != null) {
+          return false;
+        }
+      } else if (!addressType.equals(other.addressType)) {
+        return false;
+      }
+      if (birthDate == null) {
+        if (other.birthDate != null) {
+          return false;
+        }
+      } else if (!birthDate.equals(other.birthDate)) {
         return false;
       }
       if (clientId == null) {
@@ -124,13 +163,6 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       } else if (!commonFirstName.equals(other.commonFirstName)) {
         return false;
       }
-      if (commonMiddleName == null) {
-        if (other.commonMiddleName != null) {
-          return false;
-        }
-      } else if (!commonMiddleName.equals(other.commonMiddleName)) {
-        return false;
-      }
       if (commonLastName == null) {
         if (other.commonLastName != null) {
           return false;
@@ -138,14 +170,34 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       } else if (!commonLastName.equals(other.commonLastName)) {
         return false;
       }
-      if (birthDate == null) {
-        if (other.birthDate != null) {
+      if (commonMiddleName == null) {
+        if (other.commonMiddleName != null) {
           return false;
         }
-      } else if (!birthDate.equals(other.birthDate)) {
+      } else if (!commonMiddleName.equals(other.commonMiddleName)) {
         return false;
       }
-
+      if (nameType == null) {
+        if (other.nameType != null) {
+          return false;
+        }
+      } else if (!nameType.equals(other.nameType)) {
+        return false;
+      }
+      if (otherName == null) {
+        if (other.otherName != null) {
+          return false;
+        }
+      } else if (!otherName.equals(other.otherName)) {
+        return false;
+      }
+      if (referlId == null) {
+        if (other.referlId != null) {
+          return false;
+        }
+      } else if (!referlId.equals(other.referlId)) {
+        return false;
+      }
       return true;
     }
 
@@ -188,6 +240,64 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     public void setCommonLastName(String commonLastName) {
       this.commonLastName = commonLastName;
     }
+
+    /**
+     * @return the otherName
+     */
+    public String getOtherName() {
+      return otherName;
+    }
+
+    /**
+     * @param otherName the otherName to set
+     */
+    public void setOtherName(String otherName) {
+      this.otherName = otherName;
+    }
+
+    /**
+     * @return the nameType
+     */
+    public String getNameType() {
+      return nameType;
+    }
+
+    /**
+     * @param nameType the nameType to set
+     */
+    public void setNameType(String nameType) {
+      this.nameType = nameType;
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+      return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+      this.address = address;
+    }
+
+    /**
+     * @return the addressType
+     */
+    public String getAddressType() {
+      return addressType;
+    }
+
+    /**
+     * @param addressType the addressType to set
+     */
+    public void setAddressType(String addressType) {
+      this.addressType = addressType;
+    }
+
+
   }
 
   @NotEmpty
@@ -232,6 +342,11 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       detail.setCommonFirstName(entry.getCommonFirstName());
       detail.setCommonLastName(entry.getCommonLastName());
       detail.setCommonMiddleName(entry.getCommonMiddleName());
+
+      detail.setAddress(entry.getAddress());
+      detail.setAddressType(entry.getAddressType());
+      detail.setNameType(entry.getNameType());
+      detail.setOtherName(entry.getOtherName());
       details.add(detail);
 
       this.setDocName(entry.getDocName());
