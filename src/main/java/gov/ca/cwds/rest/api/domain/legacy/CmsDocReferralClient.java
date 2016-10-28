@@ -44,14 +44,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     public CmsDocReferralClientDetail() {}
 
     @JsonCreator
-    public CmsDocReferralClientDetail(@JsonProperty("referlId") String referlId,
-        @JsonProperty("clientId") String clientId,
-        @JsonProperty("commonFirstName") String commonFirstName,
-        @JsonProperty("commonMiddleName") String commonMiddleName,
-        @JsonProperty("commonLastName") String commonLastName,
-        @JsonProperty("birthDate") String birthDate, @JsonProperty("otherName") String otherName,
-        @JsonProperty("nameType") String nameType, @JsonProperty("address") String address,
-        @JsonProperty("addressType") String addressType) {
+    public CmsDocReferralClientDetail(@JsonProperty("referral_id") String referlId,
+        @JsonProperty("client_id") String clientId,
+        @JsonProperty("common_first_name") String commonFirstName,
+        @JsonProperty("common_middle_name") String commonMiddleName,
+        @JsonProperty("common_last_name") String commonLastName,
+        @JsonProperty("birth_date") String birthDate, @JsonProperty("other_name") String otherName,
+        @JsonProperty("name_type") String nameType, @JsonProperty("address") String address,
+        @JsonProperty("address_type") String addressType) {
       this.referlId = referlId;
       this.clientId = clientId;
       this.commonFirstName = commonFirstName;
@@ -65,28 +65,39 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     }
 
     @NotEmpty
+    @JsonProperty("referral_id")
     private String referlId;
 
     @NotEmpty
+    @JsonProperty("client_id")
     private String clientId;
 
+    @JsonProperty("common_first_name")
     private String commonFirstName;
+
+    @JsonProperty("common_middle_name")
     private String commonMiddleName;
+
+    @JsonProperty("common_last_name")
     private String commonLastName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
-    @JsonProperty(value = "birthDate")
+    @JsonProperty(value = "birth_date")
     @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
     @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
         example = "2000-01-01")
     private String birthDate;
 
+    @JsonProperty("other_name")
     private String otherName;
 
+    @JsonProperty("name_type")
     private String nameType;
 
+    @JsonProperty("address")
     private String address;
 
+    @JsonProperty("address_type")
     private String addressType;
 
     /**
@@ -297,7 +308,6 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       this.addressType = addressType;
     }
 
-
   }
 
   @NotEmpty
@@ -308,10 +318,16 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, example = "MJS000.DOC")
+  @JsonProperty("doc_name")
   private String docName;
 
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false, example = "base64-encoded binary document")
+  @JsonProperty("doc_content")
+  private String docContent;
+
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
-  @JsonProperty(value = "docAddedDate")
+  @JsonProperty("doc_added_date")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
       example = "2000-01-01")
@@ -320,8 +336,8 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
   private Set<CmsDocReferralClientDetail> details = new LinkedHashSet<CmsDocReferralClientDetail>();
 
   @JsonCreator
-  public CmsDocReferralClient(@JsonProperty("docHandle") String docHandle,
-      @JsonProperty("docName") String docName, @JsonProperty("docAddedDate") String docAddedDate,
+  public CmsDocReferralClient(@JsonProperty("id") String docHandle,
+      @JsonProperty("doc_name") String docName, @JsonProperty("doc_added_date") String docAddedDate,
       @JsonProperty("details") Set<CmsDocReferralClientDetail> details) {
     super();
 
@@ -342,7 +358,6 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       detail.setCommonFirstName(entry.getCommonFirstName());
       detail.setCommonLastName(entry.getCommonLastName());
       detail.setCommonMiddleName(entry.getCommonMiddleName());
-
       detail.setAddress(entry.getAddress());
       detail.setAddressType(entry.getAddressType());
       detail.setNameType(entry.getNameType());
@@ -352,6 +367,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       this.setDocName(entry.getDocName());
       this.setId(entry.getDocHandle());
       this.setDocAddedDate(DomainObject.cookDate(entry.getDocAddedDate()));
+      this.setDocContent("6833c22e050ac434e10042e190d870007c0001801f");
     }
   }
 
@@ -453,6 +469,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
 
   public void setDetails(Set<CmsDocReferralClientDetail> details) {
     this.details = details;
+  }
+
+  public String getDocContent() {
+    return docContent;
+  }
+
+  public void setDocContent(String docContent) {
+    this.docContent = docContent;
   }
 
 
