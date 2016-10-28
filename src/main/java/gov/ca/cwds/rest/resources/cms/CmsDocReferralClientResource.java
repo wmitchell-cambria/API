@@ -91,7 +91,7 @@ public class CmsDocReferralClientResource {
   /**
    * Create an {@link CmsDocReferralClient}
    * 
-   * @param document The {@link CmsDocReferralClient}
+   * @param doc The {@link CmsDocReferralClient}
    * 
    * @return The {@link CmsDocReferralClient}
    */
@@ -113,7 +113,7 @@ public class CmsDocReferralClientResource {
    * Update an {@link CmsDocReferralClient}
    * 
    * @param id the id
-   * @param document {@link CmsDocReferralClient}
+   * @param doc {@link CmsDocReferralClient}
    * @param acceptHeader The accept header.
    *
    * @return The {@link Response}
