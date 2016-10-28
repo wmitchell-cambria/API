@@ -30,7 +30,7 @@ public class ReferralService implements CrudsService {
   /**
    * Constructor
    * 
-   * @param sReferralnDao The {@link Dao} handling
+   * @param referralDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.Referral} objects.
    */
   public ReferralService(ReferralDao referralDao) {

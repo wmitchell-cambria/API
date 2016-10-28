@@ -3,10 +3,6 @@ package gov.ca.cwds.rest.api.domain.legacy;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.glassfish.jersey.linking.Binding;
-import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLink.Style;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,35 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@InjectLinks({
-    @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.id}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "allegesAbuseOccurredAtAddressId",
-        style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.allegesAbuseOccurredAtAddressId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_ADDRESSES)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "linkToPrimaryReferralId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.linkToPrimaryReferralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)},
-        condition = "${not empty instance.linkToPrimaryReferralId }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "firstResponseDeterminedByStaffPersonId",
-        style = Style.ABSOLUTE,
-        bindings = {
-            @Binding(name = "id", value = "${instance.firstResponseDeterminedByStaffPersonId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)},
-        condition = "${not empty instance.firstResponseDeterminedByStaffPersonId }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "primaryContactStaffPersonId",
-        style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.primaryContactStaffPersonId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_STAFF_PERSON)}),})
 public class Referral extends DomainObject implements Request, Response {
-
-  @NotEmpty
-  @Size(min = 10, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, example = "ABC1234567",
-      value = "Value overwritten on POST")
-  private String id;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
@@ -343,7 +310,6 @@ public class Referral extends DomainObject implements Request, Response {
       @JsonProperty("limitedAccessDesc") String limitedAccessDesc,
       @JsonProperty("originalClosureDate") String originalClosureDate) {
     super();
-    this.id = id;
     this.additionalInfoIncludedCode = additionalInfoIncludedCode;
     this.anonymousReporterIndicator = anonymousReporterIndicator;
     this.applicationForPetitionIndicator = applicationForPetitionIndicator;
@@ -395,7 +361,6 @@ public class Referral extends DomainObject implements Request, Response {
   }
 
   public Referral(gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral) {
-    this.id = persistedReferral.getId();
     this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
     this.anonymousReporterIndicator =
         DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporterIndicator());
@@ -458,13 +423,6 @@ public class Referral extends DomainObject implements Request, Response {
     this.limitedAccessDesc = persistedReferral.getLimitedAccessDesc();
     this.originalClosureDate = DomainObject.cookDate(persistedReferral.getOriginalClosureDate());
 
-  }
-
-  /**
-   * @return the id
-   */
-  public String getId() {
-    return id;
   }
 
   /**
@@ -840,7 +798,6 @@ public class Referral extends DomainObject implements Request, Response {
         : firstResponseDeterminedByStaffPersonId.hashCode());
     result = prime * result + ((govtEntityType == null) ? 0 : govtEntityType.hashCode());
     result = prime * result + ((homelessIndicator == null) ? 0 : homelessIndicator.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((legalDefinitionCode == null) ? 0 : legalDefinitionCode.hashCode());
     result = prime * result
         + ((legalRightsNoticeIndicator == null) ? 0 : legalRightsNoticeIndicator.hashCode());
@@ -1050,13 +1007,6 @@ public class Referral extends DomainObject implements Request, Response {
         return false;
       }
     } else if (!homelessIndicator.equals(other.homelessIndicator)) {
-      return false;
-    }
-    if (id == null) {
-      if (other.id != null) {
-        return false;
-      }
-    } else if (!id.equals(other.id)) {
       return false;
     }
     if (legalDefinitionCode == null) {

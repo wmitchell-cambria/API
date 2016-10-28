@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -66,7 +65,7 @@ public class AllegationResource {
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find allegation by id", response = Allegation.class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the Allegation to find") long id) {
+      value = "The id of the Allegation to find") String id) {
     return resourceDelegate.get(id);
   }
 
@@ -82,8 +81,8 @@ public class AllegationResource {
   @ApiOperation(hidden = true, value = "Delete Allegation - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(
-      @PathParam("id") @ApiParam(required = true, value = "id of Allegation to delete") long id) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+      @PathParam("id") @ApiParam(required = true, value = "id of Allegation to delete") String id) {
+    return resourceDelegate.delete(id);
   }
 
   /**
@@ -110,13 +109,13 @@ public class AllegationResource {
    * Update an {@link Allegation}
    * 
    * @param id the id
-   * @param person {@link Allegation}
-   * @param acceptHeader The accept header.
+   * @param allegation {@link Allegation}
    *
    * @return The {@link Response}
    */
   @UnitOfWork(value = "cms")
   @PUT
+  @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -126,9 +125,8 @@ public class AllegationResource {
       response = Object.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of the Allegation to update") long id,
-      @ApiParam(hidden = true) Allegation person,
-      @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+          value = "The id of the Allegation to update") String id,
+      @Valid @ApiParam(hidden = true) Allegation allegation) {
+    return resourceDelegate.update(id, allegation);
   }
 }

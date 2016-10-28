@@ -58,6 +58,11 @@ public interface Api {
   public final static String RESOURCE_REPORTER = "reporters";
 
   /**
+   * a {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} api
+   */
+  public final static String RESOURCE_REFERRAL_CLIENT = "referralClients";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_CMS_DOCUMENT} api
    */
   public final static String RESOURCE_CMS_DOCUMENT = "cmsdocument";

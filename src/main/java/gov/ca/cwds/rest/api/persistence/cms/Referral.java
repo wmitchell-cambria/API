@@ -191,10 +191,6 @@ public class Referral extends CmsPersistentObject {
     super();
   }
 
-  /**
-   * Constructor
-   * 
-   **/
   public Referral(String id, String additionalInfoIncludedCode, String anonymousReporterIndicator,
       String applicationForPetitionIndicator, String approvalNumber, Short approvalStatusType,
       String caretakersPerpetratorCode, Date closureDate, Short communicationMethodType,
@@ -271,7 +267,7 @@ public class Referral extends CmsPersistentObject {
    * Constructor
    * 
    * @param id The id
-   * @param staffPerson The domain object to construct this object from
+   * @param referral The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
   public Referral(String id, gov.ca.cwds.rest.api.domain.legacy.Referral referral,

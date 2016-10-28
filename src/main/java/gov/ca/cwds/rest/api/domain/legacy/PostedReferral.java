@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Response;
 
 /**
- * {@link Response} adding an id to the {@link StaffPerson}
+ * {@link Response} adding an id to the {@link Referral}
  * 
  * @author CWDS API Team
  */
@@ -16,7 +16,7 @@ public class PostedReferral extends Referral {
   /**
    * Constructor
    * 
-   * @param staffPerson The persisted staffPerson
+   * @param referral The persisted referral
    */
   public PostedReferral(gov.ca.cwds.rest.api.persistence.cms.Referral referral) {
 
@@ -29,7 +29,6 @@ public class PostedReferral extends Referral {
   /**
    * @return the id
    */
-  @Override
   public String getId() {
     return id;
   }

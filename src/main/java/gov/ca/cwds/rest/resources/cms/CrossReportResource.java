@@ -2,6 +2,8 @@ package gov.ca.cwds.rest.resources.cms;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CROSS_REPORT;
 
+import java.text.MessageFormat;
+
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -52,37 +54,48 @@ public class CrossReportResource {
   }
 
   /**
-   * Finds an crossreport by id.
+   * Finds an crossreport by referral id and third id.
    * 
-   * @param id the id
+   * @param referralId the referralId
+   * @param thirdId the thirdId
    * 
    * @return the response
    */
   @UnitOfWork(value = "cms")
   @GET
-  @Path("/{id}")
+  @Path("/referralId={referralId},thirdId={thirdId}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find crossreport by id", response = CrossReport.class, code = 200)
-  public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the CrossReport to find") String id) {
-    return resourceDelegate.get(id);
+  @ApiOperation(value = "Find crossreport by referral id and third id",
+      response = CrossReport.class, code = 200)
+  public Response get(
+      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+          example = "abcdefghif") String referralId,
+      @PathParam("thirdId") @ApiParam(required = true, value = "The third id",
+          example = "td89slaz98") String thirdId) {
+    String pk = MessageFormat.format("referralId={0},thirdId={1}", referralId, thirdId);
+    return resourceDelegate.get(pk);
   }
 
   /**
-   * Delete an crossreport by id.
+   * Delete an crossreport by referral id and third id.
    * 
-   * @param id The id of the {@link CrossReport}
+   * @param referralId the referralId
+   * @param thirdId the thirdId
    * 
    * @return {@link Response}
    */
   @UnitOfWork(value = "cms")
   @DELETE
-  @Path("/{id}")
+  @Path("/referralId={referralId},thirdId={thirdId}")
   @ApiOperation(value = "Delete CrossReport", code = HttpStatus.SC_OK, response = Object.class)
-  public Response delete(@PathParam("id") @ApiParam(required = true,
-      value = "id of CrossReport to delete") String id) {
-    return resourceDelegate.delete(id);
+  public Response delete(
+      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+          example = "abcdefghif") String referralId,
+      @PathParam("thirdId") @ApiParam(required = true, value = "The third id",
+          example = "td89slaz98") String thirdId) {
+    String pk = MessageFormat.format("referralId={0},thirdId={1}", referralId, thirdId);
+    return resourceDelegate.delete(pk);
   }
 
   /**
@@ -109,14 +122,15 @@ public class CrossReportResource {
   /**
    * Update an {@link CrossReport}
    * 
-   * @param id the id
-   * @param crossreport {@link CrossReport}
+   * @param referralId the referralId
+   * @param thirdId the thirdId
+   * @param crossReport {@link CrossReport}
    *
    * @return The {@link Response}
    */
   @UnitOfWork(value = "cms")
   @PUT
-  @Path("/{id}")
+  @Path("/referralId={referralId},thirdId={thirdId}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -125,9 +139,12 @@ public class CrossReportResource {
   @ApiOperation(value = "Update CrossReport", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
   public Response update(
-      @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of the CrossReport to update") String id,
+      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+          example = "abcdefghif") String referralId,
+      @PathParam("thirdId") @ApiParam(required = true, value = "The third id",
+          example = "td89slaz98") String thirdId,
       @Valid @ApiParam(hidden = false, required = true) CrossReport crossReport) {
-    return resourceDelegate.update(id, crossReport);
+    String pk = MessageFormat.format("referralId={0},thirdId={1}", referralId, thirdId);
+    return resourceDelegate.update(pk, crossReport);
   }
 }

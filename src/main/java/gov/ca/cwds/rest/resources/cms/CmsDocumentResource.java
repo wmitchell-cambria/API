@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,10 +26,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link CmsDocument}. It delegates
- * functions to {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in
- * functionality but with @see
- * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * A resource providing a RESTful interface for {@link CmsDocument}. It delegates functions to
+ * {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but
+ * with @see <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
  * Annotations</a> and
  * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
@@ -66,8 +64,8 @@ public class CmsDocumentResource {
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find document by id (doc_handle)",
-      response = CmsDocument.class, code = 200)
+  @ApiOperation(value = "Find document by id (doc_handle)", response = CmsDocument.class,
+      code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id (doc_handle) of the Document to find") String id) {
     return resourceDelegate.get(id);
@@ -92,7 +90,7 @@ public class CmsDocumentResource {
   /**
    * Create an {@link CmsDocument}
    * 
-   * @param document The {@link CmsDocument}
+   * @param doc The {@link CmsDocument}
    * 
    * @return The {@link CmsDocument}
    */
@@ -114,8 +112,7 @@ public class CmsDocumentResource {
    * Update an {@link CmsDocument}
    * 
    * @param id the id
-   * @param document {@link CmsDocument}
-   * @param acceptHeader The accept header.
+   * @param doc {@link CmsDocument}
    *
    * @return The {@link Response}
    */
@@ -131,8 +128,7 @@ public class CmsDocumentResource {
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The id of the Document to update") String id,
-      @ApiParam(hidden = true) CmsDocument doc,
-      @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
+      @ApiParam(hidden = true) CmsDocument doc) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 }
