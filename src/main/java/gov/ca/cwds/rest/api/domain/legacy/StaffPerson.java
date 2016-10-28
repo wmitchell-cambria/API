@@ -216,7 +216,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   }
 
   /**
-   * return the staff id
+   * @return the staff id
    * 
    */
   public String getId() {

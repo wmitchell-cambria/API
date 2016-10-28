@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Response;
 
 /**
- * {@link Response} adding an id to the {@link StaffPerson}
+ * {@link Response} adding an id to the {@link CrossReport}
  * 
  * @author CWDS API Team
  */
@@ -16,7 +16,7 @@ public class PostedCrossReport extends CrossReport {
   /**
    * Constructor
    * 
-   * @param staffPerson The persisted staffPerson
+   * @param crossReport The persisted crossReport
    */
   public PostedCrossReport(gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReport) {
     super(crossReport);

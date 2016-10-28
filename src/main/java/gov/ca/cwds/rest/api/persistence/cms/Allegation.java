@@ -90,12 +90,6 @@ public class Allegation extends CmsPersistentObject {
     super();
   }
 
-  /**
-   * Constructor
-   * 
-   * @param allegation The domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
-   */
   public Allegation(String id, Date abuseEndDate, Date abuseStartDate, Short abuseFrequency,
       String abuseFrequencyPeriodCode, String abuseLocationDescription,
       Short allegationDispositionType, Short allegationType, String dispositionDescription,
@@ -132,7 +126,7 @@ public class Allegation extends CmsPersistentObject {
    * Constructor
    * 
    * @param id The id
-   * @param staffPerson The domain object to construct this object from
+   * @param persistedAllegation The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
   public Allegation(String id, gov.ca.cwds.rest.api.domain.legacy.Allegation persistedAllegation,

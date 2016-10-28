@@ -151,10 +151,6 @@ public class Reporter extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "99")
   private String countySpecificCode;
 
-  /**
-   * Constructor
-   * 
-   **/
   @JsonCreator
   public Reporter(@JsonProperty("badgeNumber") String badgeNumber,
       @JsonProperty("cityName") String cityName,
@@ -212,10 +208,6 @@ public class Reporter extends DomainObject implements Request, Response {
   }
 
 
-  /**
-   * Constructor from persistent Reporter
-   * 
-   **/
   public Reporter(gov.ca.cwds.rest.api.persistence.cms.Reporter persistedReporter) {
     this.referralId = persistedReporter.getReferralId().trim();
     this.badgeNumber = persistedReporter.getBadgeNumber();

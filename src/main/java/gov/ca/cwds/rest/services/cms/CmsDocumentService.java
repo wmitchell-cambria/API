@@ -30,7 +30,6 @@ public class CmsDocumentService implements CrudsService {
    * 
    * @param dao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Screening}
    *        objects.
-   * @param personService The person service
    */
   public CmsDocumentService(CmsDocumentDao dao) {
     this.dao = dao;

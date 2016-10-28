@@ -108,7 +108,7 @@ public class ReferralResource {
    * Update an {@link Referral}
    * 
    * @param id the id
-   * @param Referral {@link Referral}
+   * @param referral {@link Referral}
    *
    * @return The {@link Response}
    */

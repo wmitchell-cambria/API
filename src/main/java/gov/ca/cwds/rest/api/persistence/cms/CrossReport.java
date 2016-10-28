@@ -105,32 +105,6 @@ public class CrossReport extends CmsPersistentObject {
     super();
   }
 
-  /**
-   * Constructor
-   * 
-   * @param referralId The referral id
-   * @param thirdId The primary key
-   * @param crossReportMethodType
-   * @param filedOutOfStateIndicator
-   * @param governmentOrgCrossRptIndicatorVar
-   * @param informTime
-   * @param recipientBadgeNumber
-   * @param recipientPhoneExtensionNumber
-   * @param recipientPhoneNumber
-   * @param informDate
-   * @param recipientPositionTitleDesc
-   * @param referenceNumber
-   * @param lawEnforcementId
-   * @param staffPersonId
-   * @param description
-   * @param recipientName
-   * @param outstateLawEnforcementAddr
-   * @param countySpecificCode
-   * @param lawEnforcementIndicator
-   * @param outStateLawEnforcementIndicator
-   * @param satisfyCrossReportIndicator
-   * 
-   **/
   public CrossReport(String referralId, String thirdId, Short crossReportMethodType,
       String filedOutOfStateIndicator, String governmentOrgCrossRptIndicatorVar, Date informTime,
       String recipientBadgeNumber, Integer recipientPhoneExtensionNumber,
@@ -167,7 +141,7 @@ public class CrossReport extends CmsPersistentObject {
    * Constructor
    * 
    * @param thirdId The ThirdId
-   * @param staffPerson The domain object to construct this object from
+   * @param crossReport The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
   public CrossReport(String thirdId, gov.ca.cwds.rest.api.domain.legacy.CrossReport crossReport,
