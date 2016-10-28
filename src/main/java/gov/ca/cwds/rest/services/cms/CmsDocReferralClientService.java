@@ -13,8 +13,6 @@ import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
-import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
 import gov.ca.cwds.rest.services.CrudsService;
 
@@ -30,9 +28,7 @@ public class CmsDocReferralClientService implements CrudsService {
 
   /**
    * 
-   * @param dao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Screening}
-   *        objects.
-   * @param personService The person service
+   * @param dao The dao
    */
   public CmsDocReferralClientService(CmsDocReferralClientDao dao) {
     this.dao = dao;
