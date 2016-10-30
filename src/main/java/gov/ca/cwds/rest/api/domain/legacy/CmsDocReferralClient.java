@@ -122,8 +122,8 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       return result;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * {@inheritDoc}
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -307,7 +307,94 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     public void setAddressType(String addressType) {
       this.addressType = addressType;
     }
+  }
 
+  public static final class CmsDocReferralClientDocument implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public CmsDocReferralClientDocument() {}
+
+    @JsonCreator
+    public CmsDocReferralClientDocument(@JsonProperty("_name") String name,
+        @JsonProperty("_content") String content) {
+      this.name = name;
+      this.content = content;
+    }
+
+    @JsonProperty("_name")
+    private String name;
+
+    @JsonProperty("_content")
+    private String content;
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+
+      result = prime * result + ((name == null) ? 0 : name.hashCode());
+      result = prime * result + ((content == null) ? 0 : content.hashCode());
+
+      return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      CmsDocReferralClientDocument other = (CmsDocReferralClientDocument) obj;
+
+      if (name == null) {
+        if (other.name != null) {
+          return false;
+        }
+      } else if (!name.equals(other.name)) {
+        return false;
+      }
+
+      if (content == null) {
+        if (other.content != null) {
+          return false;
+        }
+      } else if (!content.equals(other.content)) {
+        return false;
+      }
+
+      return true;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getContent() {
+      return content;
+    }
+
+    public void setContent(String content) {
+      this.content = content;
+    }
   }
 
   @NotEmpty
@@ -321,11 +408,6 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
   @JsonProperty("doc_name")
   private String docName;
 
-  @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "base64-encoded binary document")
-  @JsonProperty("doc_content")
-  private String docContent;
-
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty("doc_added_date")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
@@ -333,17 +415,24 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       example = "2000-01-01")
   private String docAddedDate;
 
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false, example = "base64-encoded binary document")
+  @JsonProperty("cms_document")
+  private CmsDocReferralClientDocument cmsDocument = new CmsDocReferralClientDocument();
+
   private Set<CmsDocReferralClientDetail> details = new LinkedHashSet<CmsDocReferralClientDetail>();
 
   @JsonCreator
   public CmsDocReferralClient(@JsonProperty("id") String docHandle,
       @JsonProperty("doc_name") String docName, @JsonProperty("doc_added_date") String docAddedDate,
+      @JsonProperty("cms_document") CmsDocReferralClientDocument cmsDocument,
       @JsonProperty("details") Set<CmsDocReferralClientDetail> details) {
     super();
 
     this.id = docHandle;
     this.docName = docName;
     this.docAddedDate = docAddedDate;
+    this.cmsDocument = cmsDocument;
     this.details = details;
   }
 
@@ -367,7 +456,9 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       this.setDocName(entry.getDocName());
       this.setId(entry.getDocHandle());
       this.setDocAddedDate(DomainObject.cookDate(entry.getDocAddedDate()));
-      this.setDocContent("6833c22e050ac434e10042e190d870007c0001801f");
+
+      this.cmsDocument.setContent("6833c22e050ac434e10042e190d870007c0001801f");
+      this.cmsDocument.setName(entry.getDocName());
     }
   }
 
@@ -471,13 +562,12 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     this.details = details;
   }
 
-  public String getDocContent() {
-    return docContent;
+  public CmsDocReferralClientDocument getCmsDocument() {
+    return cmsDocument;
   }
 
-  public void setDocContent(String docContent) {
-    this.docContent = docContent;
+  public void setCmsDocument(CmsDocReferralClientDocument cmsDocument) {
+    this.cmsDocument = cmsDocument;
   }
-
 
 }

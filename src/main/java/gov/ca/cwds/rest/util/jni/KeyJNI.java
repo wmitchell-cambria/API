@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 /**
  * Calls native CWDS key generation library via JNI.
  * 
- * <p/><h2>Steps to build and run</h2>
+ * <h2>Steps to build and run</h2>
  * 
  * @author CWDS API Team
  */
@@ -27,7 +27,7 @@ public class KeyJNI {
     System.out.println("user.dir=" + System.getProperty("user.dir"));
     System.out.println("java.library.path=" + System.getProperty("java.library.path"));
 
-    // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix)
+    // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix).
     // Load native library at runtime.
     System.loadLibrary("KeyJNI");
   }
