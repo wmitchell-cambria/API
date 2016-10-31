@@ -23,12 +23,13 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
  * @author CWDS API Team
  */
 public class KeyJNI {
-  static {
-    System.out.println("user.dir=" + System.getProperty("user.dir"));
-    System.out.println("java.library.path=" + System.getProperty("java.library.path"));
 
-    // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix).
+  static {
+    System.out.println("KeyJNI: user.dir=" + System.getProperty("user.dir"));
+    System.out.println("KeyJNI: java.library.path=" + System.getProperty("java.library.path"));
+
     // Load native library at runtime.
+    // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix).
     System.loadLibrary("KeyJNI");
   }
 
