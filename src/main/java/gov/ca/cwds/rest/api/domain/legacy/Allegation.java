@@ -52,51 +52,52 @@ public class Allegation extends DomainObject implements Request, Response {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "abuseEndDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+  @ApiModelProperty(required = false, readOnly = false, value = "date when abuse allegedly ended",
+      example = "11/31/2016")
   private String abuseEndDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short abuseFrequency;
 
-  @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
+  @NotNull
+  @Size(max = 1)
   @OneOf(value = {"D", "M", "W", "Y"}, ignoreCase = true, ignoreWhitespace = true)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "D",
+  @ApiModelProperty(required = false, readOnly = false, value = "frequency of abuse", example = "D",
       allowableValues = "D, M, W, Y")
   private String abuseFrequencyPeriodCode;
 
-  @NotEmpty
-  @Size(min = 1, max = 75)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @NotNull
+  @Size(max = 75)
+  @ApiModelProperty(required = true, readOnly = false, value = "location description")
   private String abuseLocationDescription;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "abuseStartDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+  @ApiModelProperty(required = false, readOnly = false, value = "start date of alleged abuse",
+      example = "11/31/2016")
   private String abuseStartDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short allegationDispositionType;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private Short allegationType;
 
-  @NotEmpty
-  @Size(min = 1, max = 254)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @NotNull
+  @Size(max = 254)
+  @ApiModelProperty(required = false, readOnly = false,
+      value = "description of allegation disposition")
   private String dispositionDescription;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "dispositionDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+  @ApiModelProperty(required = false, readOnly = false, value = "date of allegation disposition",
+      example = "11/31/2016")
   private String dispositionDate;
 
   @NotNull
@@ -115,13 +116,15 @@ public class Allegation extends DomainObject implements Request, Response {
   private Boolean staffPersonAddedIndicator;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = true, readOnly = false, value = "CLIENT ID of victim",
+      example = "ABC1234567")
   // TODO Add Foreign Key Validation after CLIENT table is added to source code
   private String victimClientId;
 
-  @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = false, readOnly = false, value = "CLIENT ID of perpetrator",
+      example = "ABC1234567")
   private String perpetratorClientId;
 
   @NotEmpty
@@ -131,7 +134,7 @@ public class Allegation extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = true, readOnly = false, value = "County code", example = "A1")
   private String countySpecificCode;
 
   @NotNull
