@@ -22,12 +22,25 @@ package gov.ca.cwds.rest.util.jni;
  */
 public class LZWEncoder {
 
-  static {
-    System.out.println("user.dir=" + System.getProperty("user.dir"));
-    System.out.println("java.library.path=" + System.getProperty("java.library.path"));
+  // CWS-NS3@Daves-Taborda-MacBook-Pro:~/Documents/workspace_neon/CWDS_API/bin$ java
+  // -Djava.library.path=..:/usr/local/lib/ gov.ca.cwds.rest.util.jni.LZWEncoder -d
+  // ~/playground/temp/test.lzw ~/playground/temp/test.doc
+  // 
+  // user.dir=/Users/CWS-NS3/Documents/workspace_neon/CWDS_API/bin
+  // java.library.path=..:/usr/local/lib/
+  // C++: ENTER JNI fileCopyUncompress!
+  // CCompress::ExpandFile: BEGIN
+  // C++: EXIT JNI fileCopyUncompress!
+  // used memory = 0
+  // CWS-NS3@Daves-Taborda-MacBook-Pro:~/Documents/workspace_neon/CWDS_API/bin$
 
-    // LZW.dll (Windows), libLZW.dylib (Mac), libLZW.so (Unix).
+
+  static {
+    System.out.println("LZWEncoder: user.dir=" + System.getProperty("user.dir"));
+    System.out.println("LZWEncoder: java.library.path=" + System.getProperty("java.library.path"));
+
     // Load native library at runtime.
+    // LZW.dll (Windows), libLZW.dylib (Mac), libLZW.so (Unix).
     System.loadLibrary("LZW");
   }
 
