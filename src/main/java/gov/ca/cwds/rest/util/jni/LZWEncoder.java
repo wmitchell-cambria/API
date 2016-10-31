@@ -44,10 +44,6 @@ public class LZWEncoder {
     return (freeMemory + (maxMemory - allocatedMemory)) / 1024L;
   }
 
-  // Implemented in lzw15v.cpp.
-  // extern void FileCopyCompress (LPCSTR pszSrcFile, LPCSTR pszDestFile);
-  // extern void FileCopyUncompress(LPCSTR pszSrcFile, LPCSTR pszDestFile);
-
   /**
    * Compresses a file.
    * 
