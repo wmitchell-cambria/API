@@ -64,7 +64,6 @@ dependencies {
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
 
     testCompile "junit:junit:4.12"
-
     testCompile 'org.mockito:mockito-core:2.0.54-beta'
  	testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
  	
@@ -79,12 +78,12 @@ dependencies {
 
 tasks.withType(Test) {
     enableAssertions = true
-    jvmArgs '-Djava.library.path=.:..:/usr/local/lib/'
+    jvmArgs '-Djava.library.path=.:..:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
 }
 
 test {
     exclude '**/*IT*'
-    jvmArgs '-Djava.library.path=.:..:/usr/local/lib/'
+    jvmArgs '-Djava.library.path=.:..:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
