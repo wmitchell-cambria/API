@@ -53,6 +53,20 @@ import javax.xml.bind.DatatypeConverter;
  * </blockquote>
  * </p>
  * 
+ * <p>
+ * Force JUnit tests to run against native libraries, loaded or not, with JVM argument
+ * </p>
+ * 
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ * {@code -Dcwds.jni.force=Y}
+ * </pre>
+ * 
+ * </blockquote>
+ * </p>
+ * 
  * @author CWDS API Team
  */
 public class LZWCompressionTest {

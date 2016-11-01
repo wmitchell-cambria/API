@@ -44,6 +44,20 @@ import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
  * </blockquote>
  * </p>
  * 
+ * <p>
+ * Force JUnit tests to run against native libraries, loaded or not, with JVM argument
+ * </p>
+ * 
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ * {@code -Dcwds.jni.force=Y}
+ * </pre>
+ * 
+ * </blockquote>
+ * </p>
+ * 
  * @author CWDS API Team
  */
 public class KeyGenTest {
@@ -63,6 +77,20 @@ public class KeyGenTest {
    * <p>
    * Some JUnit tests can run manually but fail when run via Gradle in a specific environment. Work
    * in progress.
+   * </p>
+   * 
+   * <p>
+   * Force JUnit tests to run against native libraries, loaded or not, with JVM argument
+   * </p>
+   * 
+   * <p>
+   * <blockquote>
+   * 
+   * <pre>
+   * {@code -Dcwds.jni.force=Y}
+   * </pre>
+   * 
+   * </blockquote>
    * </p>
    * 
    * @return
