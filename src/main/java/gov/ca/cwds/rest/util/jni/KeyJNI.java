@@ -32,17 +32,20 @@ public class KeyJNI {
    * 
    * <p>
    * <ul>
-   * <li>Windows: LZW.dll</li>
-   * <li>OS X: libLZW.dylib</li>
-   * <li>LinuxlibLZW.so</li>
+   * <li>Windows: KeyJNI.dll</li>
+   * <li>OS X: libKeyJNI.dylib</li>
+   * <li>LinuxlibKeyJNI.so</li>
    * </ul>
    * </p>
    * 
    * @return true = native libraries load correctly
    */
   private static final boolean loadLibs() {
-    System.out.println("LZWEncoder: user.dir=" + System.getProperty("user.dir"));
-    System.out.println("LZWEncoder: java.library.path=" + System.getProperty("java.library.path"));
+    System.out.println("KeyJNI: user.dir=" + System.getProperty("user.dir"));
+    System.out.println("KeyJNI: java.library.path=" + System.getProperty("java.library.path"));
+
+    final boolean forceLoad = "Y".equalsIgnoreCase(System.getProperty("cwds.jni.force", "N"));
+    System.out.println("KeyJNI: cwds.jni.force=" + forceLoad);
 
     boolean retval = false;
 
@@ -52,6 +55,10 @@ public class KeyJNI {
     } catch (UnsatisfiedLinkError e) {
       retval = false;
       e.printStackTrace();
+    }
+
+    if (!retval && forceLoad) {
+      retval = true;
     }
 
     return retval;
@@ -81,7 +88,7 @@ public class KeyJNI {
   }
 
   /**
-   * Generates a unique key for use within CWDS CMS based on the given staff person id.
+   * Generates a unique key for use within CWDS, derived from a staff person id.
    * 
    * @param staffId the {@link StaffPerson}
    * @return The generated key
@@ -100,33 +107,28 @@ public class KeyJNI {
   public static void main(String[] args) {
     KeyJNI inst = new KeyJNI();
 
-    // ===================
-    // GENERATE KEY:
-    // ===================
+    if (args[0].startsWith("-d")) {
+      // ===================
+      // DECOMPOSE KEY:
+      // ===================
 
-    { // Generate a key from a staff id.
-      System.out.println("Java: Call JNI generateKey ... ");
-      final String key = inst.generateKey("0X5");
-      System.out.println("Java: key=" + key);
-    }
-
-    // ===================
-    // DECOMPOSE KEY:
-    // ===================
-
-    final long startingMemory = calcMemory();
-
-    for (int i = 0; i < 10; i++) {
-      System.out.println("current memory = " + calcMemory());
-      System.out.println("Java: Call JNI decomposeKey ... " + i);
-
+      final long startingMemory = calcMemory();
       KeyDetail kd = new KeyDetail();
-      inst.decomposeKey("S8eScDM0X5", kd);
+      inst.decomposeKey(args[1], kd);
       System.out.println("Java: key=" + kd.key + ", staffId=" + kd.staffId + ", UITimestamp="
           + kd.UITimestamp + ", PTimestamp=" + kd.PTimestamp);
-    }
+      System.out.println("used memory = " + (calcMemory() - startingMemory));
+    } else {
+      // ===================
+      // GENERATE KEY:
+      // ===================
 
-    System.out.println("used memory = " + (calcMemory() - startingMemory));
+      final long startingMemory = calcMemory();
+      System.out.println("Java: Call JNI generateKey ... ");
+      final String key = inst.generateKey(args[1]);
+      System.out.println("Java: key=" + key);
+      System.out.println("used memory = " + (calcMemory() - startingMemory));
+    }
   }
 
   public static boolean isClassloaded() {

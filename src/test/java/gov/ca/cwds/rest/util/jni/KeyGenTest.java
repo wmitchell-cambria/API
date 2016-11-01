@@ -30,8 +30,8 @@ import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
  * </p>
  * 
  * <p>
- * Run the JUnit manually with the sample command below. Note that jars are copied manually with the sample script,
- * cp_api_libs.sh.
+ * Run the JUnit manually with the sample command below. Note that jars are copied manually with the
+ * sample script, cp_api_libs.sh.
  * </p>
  * 
  * <p>
@@ -166,6 +166,18 @@ public class KeyGenTest {
   // ===================
   // DECOMPOSE KEY:
   // ===================
+
+  @Test
+  public void testDecomposeGoodKey() {
+    if (doesPlatformSupport()) {
+      return;
+    }
+
+    // Good key, decomposes correctly.
+    KeyDetail kd = new KeyDetail();
+    inst.decomposeKey("1qxx0OC0X5", kd);
+    assertTrue("Staff ID empty", kd.staffId != null && "0X5".equals(kd.staffId));
+  }
 
   @Test
   public void testDecomposeKeyLong() {
