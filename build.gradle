@@ -55,7 +55,6 @@ dependencies {
 	compile group: "org.glassfish.web", name: "javax.el", version: "2.2.4"
 	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
 	
-
     compile fileTree(dir: 'lib', include: ['*.jar'])
     
    	//compile project(':swagger-project:swagger-jersey2-jaxrs')
@@ -76,7 +75,6 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
 	testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
-	
 }
 
 tasks.withType(Test) {
@@ -86,6 +84,7 @@ tasks.withType(Test) {
 
 test {
     exclude '**/*IT*'
+    jvmArgs '-Djava.library.path=.:..:/usr/local/lib/'
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
