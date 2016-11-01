@@ -42,6 +42,9 @@ public class LZWEncoder {
     System.out.println("LZWEncoder: user.dir=" + System.getProperty("user.dir"));
     System.out.println("LZWEncoder: java.library.path=" + System.getProperty("java.library.path"));
 
+    final boolean forceLoad = "Y".equalsIgnoreCase(System.getProperty("cwds.jni.force", "N"));
+    System.out.println("LZWEncoder: cwds.jni.force=" + forceLoad);
+
     boolean retval = false;
 
     try {
@@ -50,6 +53,10 @@ public class LZWEncoder {
     } catch (UnsatisfiedLinkError e) {
       retval = false;
       e.printStackTrace();
+    }
+
+    if (!retval && forceLoad) {
+      retval = true;
     }
 
     return retval;
