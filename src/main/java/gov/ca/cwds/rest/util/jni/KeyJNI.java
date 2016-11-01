@@ -24,13 +24,37 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
  */
 public class KeyJNI {
 
-  static {
-    System.out.println("KeyJNI: user.dir=" + System.getProperty("user.dir"));
-    System.out.println("KeyJNI: java.library.path=" + System.getProperty("java.library.path"));
+  private static final boolean classLoaded = loadLibs();
 
-    // Load native library at runtime.
-    // keyJNI.dll (Windows), libKeyJNI.dylib (Mac), libKeyJNI.so (Unix).
-    System.loadLibrary("KeyJNI");
+  /**
+   * Load native library at runtime, when the classloader loads this class. Native libraries follow
+   * the naming convention of the host operating system:
+   * 
+   * <p>
+   * <ul>
+   * <li>Windows: LZW.dll</li>
+   * <li>OS X: libLZW.dylib</li>
+   * <li>LinuxlibLZW.so</li>
+   * </ul>
+   * </p>
+   * 
+   * @return true = native libraries load correctly
+   */
+  private static final boolean loadLibs() {
+    System.out.println("LZWEncoder: user.dir=" + System.getProperty("user.dir"));
+    System.out.println("LZWEncoder: java.library.path=" + System.getProperty("java.library.path"));
+
+    boolean retval = false;
+
+    try {
+      System.loadLibrary("KeyJNI");
+      retval = true;
+    } catch (UnsatisfiedLinkError e) {
+      retval = false;
+      e.printStackTrace();
+    }
+
+    return retval;
   }
 
   /**
@@ -103,5 +127,9 @@ public class KeyJNI {
     }
 
     System.out.println("used memory = " + (calcMemory() - startingMemory));
+  }
+
+  public static boolean isClassloaded() {
+    return classLoaded;
   }
 }

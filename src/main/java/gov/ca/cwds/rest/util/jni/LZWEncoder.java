@@ -22,26 +22,37 @@ package gov.ca.cwds.rest.util.jni;
  */
 public class LZWEncoder {
 
-  // CWS-NS3@Daves-Taborda-MacBook-Pro:~/Documents/workspace_neon/CWDS_API/bin$ java
-  // -Djava.library.path=..:/usr/local/lib/ gov.ca.cwds.rest.util.jni.LZWEncoder -d
-  // ~/playground/temp/test.lzw ~/playground/temp/test.doc
-  // 
-  // user.dir=/Users/CWS-NS3/Documents/workspace_neon/CWDS_API/bin
-  // java.library.path=..:/usr/local/lib/
-  // C++: ENTER JNI fileCopyUncompress!
-  // CCompress::ExpandFile: BEGIN
-  // C++: EXIT JNI fileCopyUncompress!
-  // used memory = 0
-  // CWS-NS3@Daves-Taborda-MacBook-Pro:~/Documents/workspace_neon/CWDS_API/bin$
+  private static final boolean classLoaded = loadLibs();
 
-
-  static {
+  /**
+   * Load native library at runtime, when the classloader loads this class. Native libraries follow
+   * the naming convention of the host operating system:
+   * 
+   * <p>
+   * <ul>
+   * <li>Windows: LZW.dll</li>
+   * <li>OS X: libLZW.dylib</li>
+   * <li>LinuxlibLZW.so</li>
+   * </ul>
+   * </p>
+   * 
+   * @return true = native libraries load correctly
+   */
+  private static final boolean loadLibs() {
     System.out.println("LZWEncoder: user.dir=" + System.getProperty("user.dir"));
     System.out.println("LZWEncoder: java.library.path=" + System.getProperty("java.library.path"));
 
-    // Load native library at runtime.
-    // LZW.dll (Windows), libLZW.dylib (Mac), libLZW.so (Unix).
-    System.loadLibrary("LZW");
+    boolean retval = false;
+
+    try {
+      System.loadLibrary("LZW");
+      retval = true;
+    } catch (UnsatisfiedLinkError e) {
+      retval = false;
+      e.printStackTrace();
+    }
+
+    return retval;
   }
 
   /**
@@ -86,7 +97,15 @@ public class LZWEncoder {
       inst.fileCopyCompress(args[1], args[2]);
       System.out.println("used memory = " + (calcMemory() - startingMemory));
     }
+  }
 
+  /**
+   * Some JUnit tests may not run in all environments, if native libraries did not load correctly.
+   * 
+   * @return whether dependent native libraries loaded correctly
+   */
+  public static boolean isClassloaded() {
+    return classLoaded;
   }
 }
 
