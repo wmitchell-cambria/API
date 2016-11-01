@@ -81,6 +81,7 @@ dependencies {
 
 tasks.withType(Test) {
     enableAssertions = true
+    jvmArgs '-Djava.library.path=.:..:/usr/local/lib/'
 }
 
 test {
