@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class Reporter extends DomainObject implements Request, Response {
 
   @NotEmpty
-  @Size(min = 1, max = 10)
+  @Size(min = 10, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "Reporter Identifier",
       example = "ABC1234567")
   private String referralId;
@@ -37,6 +37,7 @@ public class Reporter extends DomainObject implements Request, Response {
       value = "can only be set if lawEnforcementId also provided", example = "ABC123")
   private String badgeNumber;
 
+  @NotNull
   @Size(max = 20, message = "size must be less than or equal to 20")
   @ApiModelProperty(required = false, readOnly = false, value = "required if streetName provided",
       example = "ABC123")
@@ -58,6 +59,7 @@ public class Reporter extends DomainObject implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsMandatedRprtrFeedback;
 
+  @NotNull
   @Size(max = 35, message = "size must be less than or equal to 35")
   @ApiModelProperty(required = true, readOnly = false,
       value = "cannot be set if lawEnforcementId provided", example = "ABC123")
@@ -118,26 +120,29 @@ public class Reporter extends DomainObject implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short stateCodeType;
 
+  @NotNull
   @Size(max = 40, message = "size must be less than or equal to 40")
   @ApiModelProperty(required = false, readOnly = false, value = "required if streetNumber provided",
       example = "Main")
   private String streetName;
 
+  @NotNull
   @Size(max = 10, message = "size must be less than or equal to 10")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "123")
   private String streetNumber;
 
-  @NotEmpty
-  @Size(min = 1, max = 4)
+  @NotNull
+  @Size(max = 4)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "A1")
   private String suffixTitleDescription;
 
-  @Size(max = 5)
+  @NotNull
+  @Size(min = 5, max = 5)
   @ApiModelProperty(required = false, readOnly = false, example = "08654")
   // @Zipcode(required=false)
   private String zipcode;
 
-  @Size(max = 10, message = "size must be 10")
+  @Size(min = 10, max = 10, message = "size must be 10")
   @ApiModelProperty(required = false, readOnly = false,
       value = "cannot be set if employerName provided", example = "ABC1236789")
   private String lawEnforcementId;

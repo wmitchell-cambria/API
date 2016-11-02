@@ -44,9 +44,9 @@ public class StaffPersonTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private StaffPerson validStaffPerson = validStaffPerson();
 
-  private final static DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+  private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private String id = "a";
-  private String endDate = "11/22/2008";
+  private String endDate = "2016-10-31";
   private String firstName = "b";
   private String jobTitle = "c";
   private String lastName = "d";
@@ -54,7 +54,7 @@ public class StaffPersonTest {
   private String namePrefix = "f";
   private BigDecimal phoneNumber = new BigDecimal(1);
   private Integer phoneExt = 2;
-  private String startDate = "09/12/2009";
+  private String startDate = "2016-10-31";
   private String nameSuffix = "g";
   private Boolean telecommuterIndicator = Boolean.TRUE;
   private String cwsOffice = "h";
@@ -275,8 +275,7 @@ public class StaffPersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("endDate must be in the format of MM/dd/yyyy"),
+    assertThat(response.readEntity(String.class).indexOf("endDate must be in the format of"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -660,8 +659,7 @@ public class StaffPersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("startDate must be in the format of MM/dd/yyyy"),
+    assertThat(response.readEntity(String.class).indexOf("startDate must be in the format of"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -674,8 +672,7 @@ public class StaffPersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("startDate must be in the format of MM/dd/yyyy"),
+    assertThat(response.readEntity(String.class).indexOf("startDate must be in the format of"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -688,8 +685,7 @@ public class StaffPersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("startDate must be in the format of MM/dd/yyyy"),
+    assertThat(response.readEntity(String.class).indexOf("startDate must be in the format of"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -702,8 +698,7 @@ public class StaffPersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("startDate must be in the format of MM/dd/yyyy"),
+    assertThat(response.readEntity(String.class).indexOf("startDate must be in the format of"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1238,8 +1233,8 @@ public class StaffPersonTest {
    * Utils
    */
   private StaffPerson validStaffPerson() {
-    return new StaffPerson("ABC", "07/08/2016", "John", "CEO", "Doe", "C", "Mr",
-        new BigDecimal(9165551212L), 22, "7/20/2016", "III", true, "MIZN02k11B", "abc", "def", "99",
-        false, "3XPCP92b24", "john.doe@anyco.com");
+    return new StaffPerson("ABC", "2016-10-31", "John", "CEO", "Doe", "C", "Mr",
+        new BigDecimal(9165551212L), 22, "2016-10-31", "III", true, "MIZN02k11B", "abc", "def",
+        "99", false, "3XPCP92b24", "john.doe@anyco.com");
   }
 }

@@ -128,8 +128,8 @@ public class Allegation extends DomainObject implements Request, Response {
   private String perpetratorClientId;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC1234567")
   private String referralId;
 
   @NotEmpty
