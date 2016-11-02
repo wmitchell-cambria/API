@@ -34,7 +34,7 @@ public class Person extends DomainObject implements Request, Response {
   private String gender;
 
   @Date
-  @PastDate
+  @PastDate()
   @JsonProperty("date_of_birth")
   @ApiModelProperty(example = "04/01/1990")
   private String date_of_birth;

@@ -5,14 +5,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import java.util.List;
+
 import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import io.dropwizard.jackson.Jackson;
+import io.dropwizard.jersey.validation.ValidationErrorMessage;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Before;
@@ -70,9 +75,24 @@ public class CmsDocReferralClientResourceTest {
   // MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocReferralClient/invalid/invalid.json"),
   // CmsDocReferralClient.class);
   //
-  // int status =
+  // final Response resp =
   // inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
+  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
+  //
+  // final int status = resp.getStatus();
+  //
+  // System.out.println("status=" + status);
+  //
+  // ValidationErrorMessage msg = resp.readEntity(ValidationErrorMessage.class);
+  // if (msg != null) {
+  // final List<String> errors = msg.getErrors();
+  // if (errors != null && errors.size() > 0) {
+  // for (String err : errors) {
+  // System.out.println("ERROR: " + err);
+  // }
+  // }
+  // }
+  //
   // assertThat(status, is(422));
   // }
 }

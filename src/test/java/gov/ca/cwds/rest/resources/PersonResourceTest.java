@@ -6,8 +6,11 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.ClassRule;
@@ -15,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.Person;
+import io.dropwizard.jersey.validation.ValidationErrorMessage;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
@@ -52,9 +56,21 @@ public class PersonResourceTest {
    */
   @Test
   public void createDelegatesToCrudsResource() throws Exception {
-    Person person = new Person("firstname", "last", "M", "11/22/1973", "000000000", null);
-    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .post(Entity.entity(person, MediaType.APPLICATION_JSON));
+    Person person = new Person("firstname", "last", "M", "1990-11-22", "000000000", null);
+
+    final Response resp = inMemoryResource.client().target(ROOT_RESOURCE).request()
+        .accept(MediaType.APPLICATION_JSON).post(Entity.entity(person, MediaType.APPLICATION_JSON));
+
+    ValidationErrorMessage msg = resp.readEntity(ValidationErrorMessage.class);
+    if (msg != null) {
+      final List<String> errors = msg.getErrors();
+      if (errors != null && errors.size() > 0) {
+        for (String err : errors) {
+          System.out.println("ERROR: " + err);
+        }
+      }
+    }
+
     verify(resourceDelegate).create(eq(person));
   }
 
