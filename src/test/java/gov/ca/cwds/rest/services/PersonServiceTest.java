@@ -41,7 +41,7 @@ public class PersonServiceTest {
   @Test
   public void findReturnsCorrectPersonWhenFoundWhenFound() throws Exception {
     Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
-    Person expected = new Person("Bart", "Simpson", "M", "04/01/1990", "1234556789", address);
+    Person expected = new Person("Bart", "Simpson", "M", "2016-10-31", "1234556789", address);
 
     gov.ca.cwds.rest.api.persistence.ns.Person person =
         new gov.ca.cwds.rest.api.persistence.ns.Person(expected, null);
@@ -83,7 +83,7 @@ public class PersonServiceTest {
             "WA", new Integer(98700));
     gov.ca.cwds.rest.api.persistence.ns.Person toCreate =
         new gov.ca.cwds.rest.api.persistence.ns.Person(2L, "Bart", "Simpson", "M",
-            DomainObject.uncookDateString("04/01/1990"), "1234556789", toCreateAddress);
+            DomainObject.uncookDateString("2013-10-31"), "1234556789", toCreateAddress);
     Person request = new Person(toCreate);
     when(personDao.create(any(gov.ca.cwds.rest.api.persistence.ns.Person.class)))
         .thenReturn(toCreate);
@@ -99,7 +99,7 @@ public class PersonServiceTest {
             "WA", new Integer(98700));
     gov.ca.cwds.rest.api.persistence.ns.Person toCreate =
         new gov.ca.cwds.rest.api.persistence.ns.Person(2L, "Bart", "Simpson", "M",
-            DomainObject.uncookDateString("04/01/1990"), "1234556789", toCreateAddress);
+            DomainObject.uncookDateString("2016-10-31"), "1234556789", toCreateAddress);
     Person request = new Person(toCreate);
     when(personDao.create(any(gov.ca.cwds.rest.api.persistence.ns.Person.class)))
         .thenReturn(toCreate);
@@ -115,14 +115,14 @@ public class PersonServiceTest {
             "WA", new Integer(98700));
     gov.ca.cwds.rest.api.persistence.ns.Person toCreate =
         new gov.ca.cwds.rest.api.persistence.ns.Person(2L, "Bart", "Simpson", "M",
-            DomainObject.uncookDateString("04/01/1990"), "1234556789", toCreateAddress);
+            DomainObject.uncookDateString("2016-10-31"), "1234556789", toCreateAddress);
     Person request = new Person(toCreate);
     when(personDao.create(any(gov.ca.cwds.rest.api.persistence.ns.Person.class)))
         .thenReturn(toCreate);
 
     Address address = new Address("742 Evergreen Terrace", "Springfield", "WA", 98700);
     PostedPerson expected =
-        new PostedPerson(2L, "Bart", "Simpson", "M", "04/01/1990", "1234556789", address);
+        new PostedPerson(2L, "Bart", "Simpson", "M", "2016-10-31", "1234556789", address);
 
     PostedPerson returned = personService.create(request);
     assertThat(returned, is(expected));
