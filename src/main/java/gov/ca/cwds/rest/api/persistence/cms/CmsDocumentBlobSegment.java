@@ -60,6 +60,67 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     return new PrimaryKey(this.getDocHandle(), this.getSegmentSequence());
   }
 
+  /**
+   * {@inheritDoc}
+   * 
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+
+    result = prime * result + ((docHandle == null) ? 0 : docHandle.hashCode());
+    result = prime * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
+    result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
+
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    CmsDocumentBlobSegment other = (CmsDocumentBlobSegment) obj;
+
+    if (docHandle == null) {
+      if (other.docHandle != null) {
+        return false;
+      }
+    } else if (!docHandle.equals(other.docHandle)) {
+      return false;
+    }
+    if (segmentSequence == null) {
+      if (other.segmentSequence != null) {
+        return false;
+      }
+    } else if (!segmentSequence.equals(other.segmentSequence)) {
+      return false;
+    }
+    if (docBlob == null) {
+      if (other.docBlob != null) {
+        return false;
+      }
+    } else if (!docBlob.equals(other.docBlob)) {
+      return false;
+    }
+
+    return true;
+  }
+
+
   public String getSegmentSequence() {
     return segmentSequence;
   }
