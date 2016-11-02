@@ -75,7 +75,7 @@ public class ReferralResourceTest {
   @Test
   public void createValidatesEntity() throws Exception {
     Referral serialized = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/invalid/closureDate/invalidFormat.json"),
+        fixture("fixtures/domain/legacy/Referral/invalid/closureDateWrongFormat.json"),
         Referral.class);
 
     int status =
@@ -110,7 +110,7 @@ public class ReferralResourceTest {
   @Test
   public void udpateValidatesEntity() throws Exception {
     Referral serialized = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/invalid/closureDate/invalidFormat.json"),
+        fixture("fixtures/domain/legacy/Referral/invalid/closureDateWrongFormat.json"),
         Referral.class);
 
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
