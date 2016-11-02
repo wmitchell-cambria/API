@@ -1,10 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 
@@ -23,7 +19,6 @@ import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.util.jni.LZWCompressionTest;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
 /**
