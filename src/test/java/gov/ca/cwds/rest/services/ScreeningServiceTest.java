@@ -60,11 +60,11 @@ public class ScreeningServiceTest {
       throws Exception {
     gov.ca.cwds.rest.api.domain.Address domainAddress = new gov.ca.cwds.rest.api.domain.Address(
         "742 Evergreen Terrace", "Springfield", "WA", 98700);
-    Person bart = new Person("Bart", "Simpson", "M", "04/01/1990", "123456789", domainAddress);
-    Person maggie = new Person("Maggie", "Simpson", "M", "05/21/1991", "123456789", domainAddress);
+    Person bart = new Person("Bart", "Simpson", "M", "2016-10-31", "123456789", domainAddress);
+    Person maggie = new Person("Maggie", "Simpson", "M", "2016-10-31", "123456789", domainAddress);
 
     Address address = new Address(1L, "742 Evergreen Terrace", "Springfield", "WA", 98700);
-    Date date = DomainObject.uncookDateString("10/13/2016");
+    Date date = DomainObject.uncookDateString("2016-10-31");
     ImmutableSet.Builder<gov.ca.cwds.rest.api.persistence.ns.Person> persistentPersonSetBuilder =
         ImmutableSet.builder();
     persistentPersonSetBuilder.add(new gov.ca.cwds.rest.api.persistence.ns.Person(bart, null))
@@ -96,7 +96,7 @@ public class ScreeningServiceTest {
   public void findReturnsCorrectScreeningWhenFoundWhenFoundAndParticipantListIsNull()
       throws Exception {
     Address address = new Address(1L, "742 Evergreen Terrace", "Springfield", "WA", 98700);
-    Date date = DomainObject.uncookDateString("10/13/2016");
+    Date date = DomainObject.uncookDateString("2016-10-31");
     Screening screening = new Screening("X5HNJK", date, "Amador", date, "Home", "email",
         "First screening", "accept_for_investigation", date, "first narrative", address, null);
 
@@ -224,11 +224,12 @@ public class ScreeningServiceTest {
     ImmutableList.Builder<Long> peopleIdListBuilder = ImmutableList.builder();
     ImmutableList<Long> peopleIds = peopleIdListBuilder.add(1L).add(2L).build();
 
-    ScreeningRequest screeningRequest = new ScreeningRequest("ref", "10/1/2016", "Sac", "10/1/2016",
-        "loc", "comm", "name", "now", "sure", "1/1/2015", "narrative", domainAddress, peopleIds);
+    ScreeningRequest screeningRequest =
+        new ScreeningRequest("ref", "2016-10-31", "Sac", "2016-10-31", "loc", "comm", "name", "now",
+            "sure", "2016-10-31", "narrative", domainAddress, peopleIds);
 
-    Person bart = new Person("Bart", "Simpson", "M", "04/01/1990", "123456789", domainAddress);
-    Person maggie = new Person("Maggie", "Simpson", "M", "05/21/1991", "123456789", domainAddress);
+    Person bart = new Person("Bart", "Simpson", "M", "2016-10-31", "123456789", domainAddress);
+    Person maggie = new Person("Maggie", "Simpson", "M", "2016-10-31", "123456789", domainAddress);
     gov.ca.cwds.rest.api.persistence.ns.Screening screening =
         new gov.ca.cwds.rest.api.persistence.ns.Screening(1L, screeningRequest,
             new Address(domainAddress, null), null, null);
@@ -249,13 +250,14 @@ public class ScreeningServiceTest {
     ImmutableList.Builder<Long> peopleIdListBuilder = ImmutableList.builder();
     ImmutableList<Long> peopleIds = peopleIdListBuilder.add(1L).add(2L).build();
 
-    ScreeningRequest screeningRequest = new ScreeningRequest("ref", "10/1/2016", "Sac", "10/1/2016",
-        "loc", "comm", "name", "now", "sure", "1/1/2015", "narrative", domainAddress, peopleIds);
+    ScreeningRequest screeningRequest =
+        new ScreeningRequest("ref", "2016-10-31", "Sac", "2016-10-31", "loc", "comm", "name", "now",
+            "sure", "2016-10-31", "narrative", domainAddress, peopleIds);
 
     ImmutableSet.Builder<gov.ca.cwds.rest.api.persistence.ns.Person> peopleListBuilder =
         ImmutableSet.builder();
-    Person bart = new Person("Bart", "Simpson", "M", "04/01/1990", "123456789", domainAddress);
-    Person maggie = new Person("Maggie", "Simpson", "M", "05/21/1991", "123456789", domainAddress);
+    Person bart = new Person("Bart", "Simpson", "M", "2016-10-31", "123456789", domainAddress);
+    Person maggie = new Person("Maggie", "Simpson", "M", "2016-10-31", "123456789", domainAddress);
     ImmutableSet<gov.ca.cwds.rest.api.persistence.ns.Person> people =
         peopleListBuilder.add(new gov.ca.cwds.rest.api.persistence.ns.Person(bart, null))
             .add(new gov.ca.cwds.rest.api.persistence.ns.Person(maggie, null)).build();
@@ -287,8 +289,9 @@ public class ScreeningServiceTest {
     ImmutableList.Builder<Long> peopleIdListBuilder = ImmutableList.builder();
     ImmutableList<Long> peopleIds = peopleIdListBuilder.add(11L).build();
 
-    ScreeningRequest screeningRequest = new ScreeningRequest("ref", "10/1/2016", "Sac", "10/1/2016",
-        "loc", "comm", "name", "now", "sure", "1/1/2015", "narrative", domainAddress, peopleIds);
+    ScreeningRequest screeningRequest =
+        new ScreeningRequest("ref", "2016-10-31", "Sac", "2016-10-31", "loc", "comm", "name", "now",
+            "sure", "2016-10-31", "narrative", domainAddress, peopleIds);
 
     gov.ca.cwds.rest.api.persistence.ns.Screening screening =
         new gov.ca.cwds.rest.api.persistence.ns.Screening(1L, screeningRequest,
