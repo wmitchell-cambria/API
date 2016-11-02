@@ -118,13 +118,13 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     this.docName = doc.getDocName();
     this.compressionMethod = doc.getCompressionMethod();
 
-    StringBuilder buf =
-        new StringBuilder(doc.getDocLength() != null ? doc.getDocLength().intValue() : 1024);
-    for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
-      buf.append(seg.getDocBlob());
-    }
-
-    this.base64Blob = buf.toString();
+    // StringBuilder buf =
+    // new StringBuilder(doc.getDocLength() != null ? doc.getDocLength().intValue() : 1024);
+    // for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
+    // buf.append(seg.getDocBlob());
+    // }
+    //
+    // this.base64Blob = buf.toString();
   }
 
   /**
@@ -134,8 +134,8 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     return id;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#hashCode()
    */

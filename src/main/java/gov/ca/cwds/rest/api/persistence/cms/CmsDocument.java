@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -60,6 +61,7 @@ public class CmsDocument extends CmsPersistentObject {
 
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "DOC_HANDLE", nullable = false)
+  @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<CmsDocumentBlobSegment>();
 
   /**

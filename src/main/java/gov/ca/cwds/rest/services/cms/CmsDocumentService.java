@@ -3,6 +3,9 @@ package gov.ca.cwds.rest.services.cms;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -49,6 +52,7 @@ public class CmsDocumentService implements CrudsService {
   public CmsDocument find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
     CmsDocument retval = null;
+    String base64Doc = "";
 
     LOGGER.info("primaryKey=" + primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc = dao.find(primaryKey);
@@ -73,7 +77,13 @@ public class CmsDocumentService implements CrudsService {
             fos.flush();
             fos.close();
 
+            // DECOMPRESS!
+            // TODO: Trap std::exception in shared library and return error code.
+            // Unhandled C++ exceptions kill the JVM.
             lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
+
+            Path path = Paths.get(tgt.getAbsolutePath());
+            base64Doc = DatatypeConverter.printBase64Binary(Files.readAllBytes(path));
           } catch (Exception e) {
             LOGGER.error("ERROR DECOMPRESSING LZW! " + e.getMessage());
             throw new RuntimeException(e);
@@ -84,7 +94,10 @@ public class CmsDocumentService implements CrudsService {
       } else {
         LOGGER.warn("UNSUPPORTED compression method " + doc.getCompressionMethod());
       }
+
       retval = new CmsDocument(doc);
+      retval.setBase64Blob(base64Doc);
+
     } else {
       LOGGER.warn("EMPTY document!");
     }
