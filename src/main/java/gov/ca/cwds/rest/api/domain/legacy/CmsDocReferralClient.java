@@ -432,8 +432,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     this.id = docHandle;
     this.docName = docName;
     this.docAddedDate = docAddedDate;
-    this.cmsDocument = cmsDocument;
-    this.details = details;
+
+    if (cmsDocument != null) {
+      this.cmsDocument = cmsDocument;
+    }
+
+    if (details != null) {
+      this.details = details;
+    }
   }
 
   public CmsDocReferralClient(

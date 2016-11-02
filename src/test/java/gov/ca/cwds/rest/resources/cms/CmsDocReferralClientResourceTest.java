@@ -48,7 +48,7 @@ public class CmsDocReferralClientResourceTest {
   @Before
   public void setup() throws Exception {}
 
-  /*
+  /**
    * Get Tests
    */
   @Test
@@ -58,19 +58,21 @@ public class CmsDocReferralClientResourceTest {
     verify(resourceDelegate).get("abc");
   }
 
-  /*
+  /**
    * Create Tests
+   * <p>
+   * <strong>NOT YET IMPLEMENTED</strong>
+   * </p>
    */
-  @Test
-  public void createValidatesEntity() throws Exception {
-    CmsDocReferralClient serialized =
-        MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocReferralClient/invalid/invalid.json"),
-            CmsDocReferralClient.class);
-
-    int status =
-        inMemoryResource.client().target(ROOT_RESOURCE).request()
-            .accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
-    assertThat(status, is(422));
-  }
+  // @Test
+  // public void createValidatesEntity() throws Exception {
+  // CmsDocReferralClient serialized =
+  // MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocReferralClient/invalid/invalid.json"),
+  // CmsDocReferralClient.class);
+  //
+  // int status =
+  // inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
+  // assertThat(status, is(422));
+  // }
 }

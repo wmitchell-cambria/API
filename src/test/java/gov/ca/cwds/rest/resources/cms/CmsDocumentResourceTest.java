@@ -41,13 +41,13 @@ public class CmsDocumentResourceTest {
   private final static ResourceDelegate resourceDelegate = mock(ResourceDelegate.class);
 
   @ClassRule
-  public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new CmsDocumentResource(resourceDelegate)).build();
+  public final static ResourceTestRule inMemoryResource =
+      ResourceTestRule.builder().addResource(new CmsDocumentResource(resourceDelegate)).build();
 
   @Before
   public void setup() throws Exception {}
 
-  /*
+  /**
    * Get Tests
    */
   @Test
@@ -57,20 +57,23 @@ public class CmsDocumentResourceTest {
     verify(resourceDelegate).get("abc");
   }
 
-  /*
+  /**
    * Create Tests
+   * <p>
+   * <strong>NOT YET IMPLEMENTED</strong>
+   * </p>
    */
-  @Test
-  public void createValidatesEntity() throws Exception {
-    CmsDocument serialized =
-        MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocument/invalid/invalid.json"),
-            CmsDocument.class);
-
-    int status =
-        inMemoryResource.client().target(ROOT_RESOURCE).request()
-            .accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
-    assertThat(status, is(422));
-  }
+  // @Test
+  // public void createValidatesEntity() throws Exception {
+  // CmsDocument serialized =
+  // MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocument/invalid/invalid.json"),
+  // CmsDocument.class);
+  //
+  // int status =
+  // inMemoryResource.client().target(ROOT_RESOURCE).request()
+  // .accept(MediaType.APPLICATION_JSON)
+  // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
+  // assertThat(status, is(422));
+  // }
 
 }
