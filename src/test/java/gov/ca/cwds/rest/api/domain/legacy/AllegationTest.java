@@ -249,27 +249,26 @@ public class AllegationTest {
   /*
    * abuseEndDate Tests
    */
-  // @Test
-  // public void successWhenAbuseEndDateEmpty() throws Exception {
-  // Allegation toCreate =
-  // MAPPER.readValue(fixture("fixtures/domain/legacy/Allegation/valid/abuseEndDate/empty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenAbuseEndDateNull() throws Exception {
-  // Allegation toCreate =
-  // MAPPER.readValue(fixture("fixtures/domain/legacy/Allegation/valid/abuseEndDate/null.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
+  @Test
+  public void successWhenAbuseEndDateEmpty() throws Exception {
+    Allegation toCreate =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Allegation/valid/abuseEndDateEmpty.json"),
+            Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenAbuseEndDateNull() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/abuseEndDateNull.json"), Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
   @Test
   public void failsWhenAbuseEndDateWrongFormat() throws Exception {
