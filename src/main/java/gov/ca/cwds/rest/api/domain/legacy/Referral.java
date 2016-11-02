@@ -27,9 +27,14 @@ import io.swagger.annotations.ApiModelProperty;
 public class Referral extends DomainObject implements Request, Response {
 
   @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "Y")
-  private String additionalInfoIncludedCode;
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = true, readOnly = false, value = "Value overwritten on POST",
+      example = "ABC1234567")
+  private String id;
+
+  @NotNull
+  @ApiModelProperty(required = false, readOnly = false, value = "Y/N", example = "Y")
+  private Boolean additionalInfoIncludedCode;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "N", example = "N")
@@ -47,10 +52,9 @@ public class Referral extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "118", example = "1234")
   private Short approvalStatusType;
 
-  @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
+  @NotNull
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "Y")
-  private String caretakersPerpetratorCode;
+  private Boolean caretakersPerpetratorCode;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "closureDate")
@@ -60,7 +64,7 @@ public class Referral extends DomainObject implements Request, Response {
   private String closureDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = true, readOnly = false, example = "Y")
   private Short communicationMethodType;
 
   @NotEmpty
@@ -68,19 +72,19 @@ public class Referral extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "99", example = "99")
   private String countySpecificCode;
 
-  @Size(min = 10, max = 10)
+  @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String currentLocationOfChildren;
 
-  @Size(min = 10, max = 10)
+  @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsAllegationDescriptionDoc;
 
-  @Size(min = 10, max = 10)
+  @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsErReferralDoc;
 
-  @Size(min = 10, max = 10)
+  @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsInvestigationDoc;
 
@@ -102,7 +106,7 @@ public class Referral extends DomainObject implements Request, Response {
   private String legalDefinitionCode;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, value = "N", example = "N")
+  @ApiModelProperty(required = false, readOnly = false, value = "N", example = "N")
   private Boolean legalRightsNoticeIndicator;
 
   @NotEmpty
@@ -120,13 +124,13 @@ public class Referral extends DomainObject implements Request, Response {
       example = "2000-01-01")
   private String mandatedCrossReportReceivedDate;
 
-  @NotEmpty
-  @Size(min = 1, max = 35)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @NotNull
+  @Size(max = 35)
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String referralName;
 
-  @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
+  @NotNull
+  @Size(max = 1, message = "size must be 1")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "N")
   private String openAdequateCaseCode;
 
@@ -145,11 +149,11 @@ public class Referral extends DomainObject implements Request, Response {
   private String receivedTime;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short referralResponseType;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short referredToResourceType;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -174,8 +178,8 @@ public class Referral extends DomainObject implements Request, Response {
   private String screenerNoteText;
 
   @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
+  @Size(max = 1, message = "size must be 1")
+  @ApiModelProperty(readOnly = false, value = "", example = "N")
   private String specificsIncludedCode;
 
   @NotEmpty
@@ -185,7 +189,7 @@ public class Referral extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "N")
   private String unfoundedSeriesCode;
 
   @Size(max = 10)
@@ -203,7 +207,7 @@ public class Referral extends DomainObject implements Request, Response {
   private String firstResponseDeterminedByStaffPersonId;
 
   @NotEmpty
-  @Size(min = 1, max = 3)
+  @Size(min = 3, max = 3)
   @ApiModelProperty(required = true, readOnly = false, value = "primary contact staff person id",
       example = "A1A")
   private String primaryContactStaffPersonId;
@@ -262,12 +266,12 @@ public class Referral extends DomainObject implements Request, Response {
 
   @JsonCreator
   public Referral(@JsonProperty("id") String id,
-      @JsonProperty("additionalInfoIncludedCode") String additionalInfoIncludedCode,
+      @JsonProperty("additionalInfoIncludedCode") Boolean additionalInfoIncludedCode,
       @JsonProperty("anonymousReporterIndicator") Boolean anonymousReporterIndicator,
       @JsonProperty("applicationForPetitionIndicator") Boolean applicationForPetitionIndicator,
       @JsonProperty("approvalNumber") String approvalNumber,
       @JsonProperty("approvalStatusType") Short approvalStatusType,
-      @JsonProperty("caretakersPerpetratorCode") String caretakersPerpetratorCode,
+      @JsonProperty("caretakersPerpetratorCode") Boolean caretakersPerpetratorCode,
       @JsonProperty("closureDate") String closureDate,
       @JsonProperty("communicationMethodType") Short communicationMethodType,
       @JsonProperty("currentLocationOfChildren") String currentLocationOfChildren,
@@ -310,6 +314,7 @@ public class Referral extends DomainObject implements Request, Response {
       @JsonProperty("limitedAccessDesc") String limitedAccessDesc,
       @JsonProperty("originalClosureDate") String originalClosureDate) {
     super();
+    this.id = id;
     this.additionalInfoIncludedCode = additionalInfoIncludedCode;
     this.anonymousReporterIndicator = anonymousReporterIndicator;
     this.applicationForPetitionIndicator = applicationForPetitionIndicator;
@@ -361,14 +366,16 @@ public class Referral extends DomainObject implements Request, Response {
   }
 
   public Referral(gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral) {
-    this.additionalInfoIncludedCode = persistedReferral.getAdditionalInfoIncludedCode();
+    this.additionalInfoIncludedCode =
+        DomainObject.uncookBooleanString(persistedReferral.getAdditionalInfoIncludedCode());
     this.anonymousReporterIndicator =
         DomainObject.uncookBooleanString(persistedReferral.getAnonymousReporterIndicator());
     this.applicationForPetitionIndicator =
         DomainObject.uncookBooleanString(persistedReferral.getApplicationForPetitionIndicator());
     this.approvalNumber = persistedReferral.getApprovalNumber();
     this.approvalStatusType = persistedReferral.getApprovalStatusType();
-    this.caretakersPerpetratorCode = persistedReferral.getCaretakersPerpetratorCode();
+    this.caretakersPerpetratorCode =
+        DomainObject.uncookBooleanString(persistedReferral.getCaretakersPerpetratorCode());
     this.closureDate = DomainObject.cookDate(persistedReferral.getClosureDate());
     this.communicationMethodType = persistedReferral.getCommunicationMethodType();
     this.currentLocationOfChildren = persistedReferral.getCurrentLocationOfChildren();
@@ -426,9 +433,17 @@ public class Referral extends DomainObject implements Request, Response {
   }
 
   /**
+   * @return the referral id
+   * 
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
    * @return the additionalInfoIncludedCode
    */
-  public String getAdditionalInfoIncludedCode() {
+  public Boolean getAdditionalInfoIncludedCode() {
     return additionalInfoIncludedCode;
   }
 
@@ -463,7 +478,7 @@ public class Referral extends DomainObject implements Request, Response {
   /**
    * @return the caretakersPerpetratorCode
    */
-  public String getCaretakersPerpetratorCode() {
+  public Boolean getCaretakersPerpetratorCode() {
     return caretakersPerpetratorCode;
   }
 

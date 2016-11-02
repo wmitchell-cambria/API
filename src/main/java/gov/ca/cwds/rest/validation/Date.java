@@ -29,7 +29,7 @@ public @interface Date {
 
   Class<? extends Payload>[] payload() default {};
 
-  String format() default "MM/dd/yyyy";
+  String format() default "yyyy-MM-dd";
 
   boolean required() default false;
 

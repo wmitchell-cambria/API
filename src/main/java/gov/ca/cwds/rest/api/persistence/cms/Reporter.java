@@ -174,7 +174,7 @@ public class Reporter extends CmsPersistentObject {
     super(lastUpdatedId);
 
     try {
-      this.referralId = reporter.getReferralId();
+      this.referralId = id;
       this.badgeNumber = reporter.getBadgeNumber();
       this.cityName = reporter.getCityName();
       this.colltrClientRptrReltnshpType = reporter.getColltrClientRptrReltnshpType();

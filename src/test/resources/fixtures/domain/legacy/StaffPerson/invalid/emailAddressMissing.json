@@ -1,6 +1,6 @@
 {
   "id": "ABC",
-  "endDate": "08/07/2016",
+  "endDate": "2016-10-31",
   "firstName": "John",
   "jobTitle": "CEO",
   "lastName": "Doe",
@@ -8,7 +8,7 @@
   "namePrefix": "Mr",
   "phoneNumber": 9165551212,
   "phoneExt": 22,
-  "startDate": "08/08/2016",
+  "startDate": "2016-10-31",
   "nameSuffix": "sufx",
   "telecommuterIndicator": false,
   "cwsOffice": "ABC1234567",

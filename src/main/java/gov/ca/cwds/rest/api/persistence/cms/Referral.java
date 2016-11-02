@@ -276,14 +276,16 @@ public class Referral extends CmsPersistentObject {
 
     try {
 
-      this.additionalInfoIncludedCode = referral.getAdditionalInfoIncludedCode();
+      this.additionalInfoIncludedCode =
+          DomainObject.cookBoolean(referral.getAdditionalInfoIncludedCode());
       this.anonymousReporterIndicator =
           DomainObject.cookBoolean(referral.getAnonymousReporterIndicator());
       this.applicationForPetitionIndicator =
           DomainObject.cookBoolean(referral.getApplicationForPetitionIndicator());
       this.approvalNumber = referral.getApprovalNumber();
       this.approvalStatusType = referral.getApprovalStatusType();
-      this.caretakersPerpetratorCode = referral.getCaretakersPerpetratorCode();
+      this.caretakersPerpetratorCode =
+          DomainObject.cookBoolean(referral.getCaretakersPerpetratorCode());
       this.closureDate = DomainObject.uncookDateString(referral.getClosureDate());
       this.communicationMethodType = referral.getCommunicationMethodType();
       this.currentLocationOfChildren = referral.getCurrentLocationOfChildren();
@@ -310,7 +312,7 @@ public class Referral extends CmsPersistentObject {
       this.responseDeterminationDate =
           DomainObject.uncookDateString(referral.getResponseDeterminationDate());
       this.responseDeterminationTime =
-          DomainObject.uncookDateString(referral.getResponseDeterminationTime());
+          DomainObject.uncookTimeString(referral.getResponseDeterminationTime());
       this.responseRationaleText = referral.getResponseRationaleText();
       this.screenerNoteText = referral.getScreenerNoteText();
       this.specificsIncludedCode = referral.getSpecificsIncludedCode();

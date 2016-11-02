@@ -15,9 +15,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient;
-import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
+import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.Reporter;
@@ -28,8 +28,8 @@ import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
-import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
+import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
 import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
@@ -43,22 +43,16 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
-<<<<<<< HEAD
+import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
-=======
-import gov.ca.cwds.rest.resources.cms.AllegationResource;
->>>>>>> modification to Allegation legacy domain
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
-<<<<<<< HEAD
+import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.CmsDocReferralClientService;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
-=======
-import gov.ca.cwds.rest.services.cms.AllegationService;
->>>>>>> modification to Allegation legacy domain
 import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
@@ -237,8 +231,6 @@ public class ApiApplication extends Application<ApiConfiguration> {
     StaffPersonResource staffPersonResource =
         new StaffPersonResource(new ServiceBackedResourceDelegate(staffPersonService));
     apiEnvironment.jersey().register(staffPersonResource);
-<<<<<<< HEAD
-=======
 
     LOGGER.info("Registering Allegations");
     AllegationService allegationService =
@@ -247,7 +239,6 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new AllegationResource(new ServiceBackedResourceDelegate(allegationService));
     apiEnvironment.jersey().register(allegationResource);
 
->>>>>>> modification to Allegation legacy domain
   }
 
   private void configureCors(final ApiEnvironment apiEnvironment) {

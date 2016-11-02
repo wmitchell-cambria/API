@@ -53,11 +53,11 @@ public class CrossReport extends DomainObject implements Request, Response {
   private String recipientBadgeNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Integer recipientPhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private BigDecimal recipientPhoneNumber;
 
   @NotNull
@@ -78,27 +78,27 @@ public class CrossReport extends DomainObject implements Request, Response {
   private String referenceNumber;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
+  @Size(min = 10, max = 10)
   @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC123")
   private String referralId;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = true, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = true, value = "", example = "ABC1234567")
   private String lawEnforcementId;
 
   @NotEmpty
-  @Size(min = 1, max = 3)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC1234567")
+  @Size(min = 3, max = 3)
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC")
   private String staffPersonId;
 
-  @NotEmpty
+  @NotNull
   @Size(min = 1, max = 120)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String description;
 
   @NotEmpty
   @Size(min = 1, max = 40)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String recipientName;
 
   @NotEmpty
