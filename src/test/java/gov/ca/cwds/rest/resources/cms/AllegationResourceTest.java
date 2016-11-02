@@ -75,7 +75,7 @@ public class AllegationResourceTest {
   @Test
   public void createValidatesEntity() throws Exception {
     Allegation serialized = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/abuseEndDate/invalidFormat.json"),
+        fixture("fixtures/domain/legacy/Allegation/invalid/abuseEndDateWrongFormat.json"),
         Allegation.class);
 
     int status =
@@ -110,7 +110,7 @@ public class AllegationResourceTest {
   @Test
   public void udpateValidatesEntity() throws Exception {
     Allegation serialized = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/abuseEndDate/invalidFormat.json"),
+        fixture("fixtures/domain/legacy/Allegation/invalid/abuseEndDateWrongFormat.json"),
         Allegation.class);
 
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()

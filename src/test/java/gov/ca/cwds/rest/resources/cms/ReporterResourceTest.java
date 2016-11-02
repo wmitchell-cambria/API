@@ -75,7 +75,7 @@ public class ReporterResourceTest {
   @Test
   public void createValidatesEntity() throws Exception {
     Reporter serialized = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackDate/invalidFormat.json"),
+        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackDateWrongFormat.json"),
         Reporter.class);
 
     int status =
@@ -110,7 +110,7 @@ public class ReporterResourceTest {
   @Test
   public void udpateValidatesEntity() throws Exception {
     Reporter serialized = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackDate/invalidFormat.json"),
+        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackDateWrongFormat.json"),
         Reporter.class);
 
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
