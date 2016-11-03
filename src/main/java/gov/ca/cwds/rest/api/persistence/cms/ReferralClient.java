@@ -7,10 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient.PrimaryKey;
 import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
@@ -110,6 +113,38 @@ public class ReferralClient extends CmsPersistentObject {
     this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
     this.alcoholIndicator = alcoholIndicator;
     this.drugIndicator = drugIndicator;
+  }
+
+  public ReferralClient(String referralId, String clientId,
+      gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient, String lastUpdateId) {
+
+    super(lastUpdateId);
+
+    try {
+
+      this.referralId = referralId;
+      this.clientId = clientId;
+      this.approvalNumber = referralClient.getApprovalNumber();
+      this.approvalStatusType = referralClient.getApprovalStatusType();
+      this.dispositionClosureReasonType = referralClient.getDispositionClosureReasonType();
+      this.dispositionCode = referralClient.getDispositionCode();
+      this.dispositionDate = DomainObject.uncookDateString(referralClient.getDispositionDate());
+      this.selfReportedIndicator =
+          DomainObject.cookBoolean(referralClient.getSelfReportedIndicator());
+      this.staffPersonAddedIndicator =
+          DomainObject.cookBoolean(referralClient.getStaffPersonAddedIndicator());
+      this.dispositionClosureDescription = referralClient.getDispositionClosureDescription();
+      this.ageNumber = referralClient.getAgeNumber();
+      this.agePeriodCode = referralClient.getAgePeriodCode();
+      this.countySpecificCode = referralClient.getCountySpecificCode();
+      this.mentalHealthIssuesIndicator =
+          DomainObject.cookBoolean(referralClient.getMentalHealthIssuesIndicator());
+      this.alcoholIndicator = DomainObject.cookBoolean(referralClient.getAlcoholIndicator());
+      this.drugIndicator = DomainObject.cookBoolean(referralClient.getDrugIndicator());
+
+    } catch (ApiException e) {
+      throw new PersistenceException(e);
+    }
   }
 
   /*
