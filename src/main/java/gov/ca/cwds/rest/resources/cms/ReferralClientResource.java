@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * Implementation of {@link ReferralClientResource} delegating work to {@link ReferralClientService}
+ * Implementation of {@link ReferralClientResource} delegating work to 
  * 
  * @author CWDS API Team
  */
@@ -43,10 +43,8 @@ public class ReferralClientResource {
   /**
    * Constructor
    * 
-   * @param resourceDelagte - the resourceDelegate to delegate to.
-   * 
+   * @param resourceDelegate - the resourceDelegate to delegate to.
    */
-
   public ReferralClientResource(ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
 
