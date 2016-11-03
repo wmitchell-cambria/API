@@ -43,6 +43,12 @@ public class DB2PassUserTest {
           System.out.println("staffId = " + staffId);
         }
       }
+      
+      conn
+      .prepareStatement(
+          "UPDATE CWSINT. SELECT CURRENT CLIENT_USERID as staff_id FROM sysibm.sysdummy1 for read only")
+      .executeUpdate();
+      
     } catch (Throwable e) {
       e.printStackTrace();
     }
