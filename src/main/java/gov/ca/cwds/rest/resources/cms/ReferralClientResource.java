@@ -18,7 +18,6 @@ import org.apache.http.HttpStatus;
 
 import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
-import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +27,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
 
 /**
- * Implementation of {@link ReferralClientResource} delegating work to 
+ * Implementation of {@link ReferralClientResource} delegating work to
  * 
  * @author CWDS API Team
  */
@@ -64,9 +63,9 @@ public class ReferralClientResource {
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find Referral Client by composite id of referralId and clientId",
       response = ReferralClient.class, code = 200)
-  public Response get(@ApiParam(required = true, allowMultiple = true,
+  public Response get(@PathParam("id") @ApiParam(required = true,
       value = "ReferralClient has a composite key of referralId and clientId",
-      example = "referralId=1234567ABC,clientId=ABC1234567") String id, String acceptHeader) {
+      example = "referralId=1234567ABC,clientId=ABC1234567") String id) {
     return resourceDelegate.get(id);
   }
 
@@ -80,7 +79,7 @@ public class ReferralClientResource {
   @Path("/{id}")
   @ApiOperation(value = "Delete Referral Client by composite id of referralId and clientId",
       code = HttpStatus.SC_OK, response = Object.class)
-  public Response delete(@ApiParam(required = true, allowMultiple = true,
+  public Response delete(@PathParam("id") @ApiParam(required = true, allowMultiple = true,
       value = "ReferralClient has a composite key of referralId and clientId",
       example = "referralId=1234567ABC,clientId=ABCDEFG123") String id) {
     return resourceDelegate.delete(id);
