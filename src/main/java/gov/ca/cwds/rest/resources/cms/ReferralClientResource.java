@@ -18,12 +18,14 @@ import org.apache.http.HttpStatus;
 
 import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
+import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 
 /**
  * Implementation of {@link ReferralClientResource} delegating work to 
@@ -49,16 +51,6 @@ public class ReferralClientResource {
     this.resourceDelegate = resourceDelegate;
 
   }
-  // @SuppressWarnings("unused")
-  // private static final Logger LOGGER = LoggerFactory.getLogger(ReferralClientResourceImpl.class);
-  //
-  // private CrudsResource<ReferralClient> crudsResource;
-  //
-  // public ReferralClientResourceImpl(ServiceEnvironment serviceEnvironment,
-  // CrudsResource<ReferralClient> crudsResource) {
-  // super(serviceEnvironment, ReferralClientService.class);
-  // this.crudsResource = crudsResource;
-  // }
 
   /*
    * (non-Javadoc)
@@ -68,15 +60,13 @@ public class ReferralClientResource {
   @UnitOfWork(value = "cms")
   @GET
   @Path("/id")
-  @ApiResponses(value = {@ApiResponse(code = 404, message = "Not fournd"),
+  @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find ReferralClient by composite id of referralId and clientId",
-      response = ReferralClient.class)
-  public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "ReferralClient has a composite key of referralId and clientId") String id) {
-    // public Response get(@ApiParam(required = true, allowMultiple=true, value = "ReferralClient
-    // has a composite key of referralId and clientId",
-    // example="referralId=abcdefgh,clientId=td89slaz") String id, String acceptHeader) {
+  @ApiOperation(value = "Find Referral Client by composite id of referralId and clientId",
+      response = ReferralClient.class, code = 200)
+  public Response get(@ApiParam(required = true, allowMultiple = true,
+      value = "ReferralClient has a composite key of referralId and clientId",
+      example = "referralId=1234567ABC,clientId=ABC1234567") String id, String acceptHeader) {
     return resourceDelegate.get(id);
   }
 
@@ -88,11 +78,11 @@ public class ReferralClientResource {
   @UnitOfWork(value = "cms")
   @DELETE
   @Path("/{id}")
-  @ApiOperation(value = "Delete ReferralClient by composite id of referralId and clientId",
+  @ApiOperation(value = "Delete Referral Client by composite id of referralId and clientId",
       code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(@ApiParam(required = true, allowMultiple = true,
       value = "ReferralClient has a composite key of referralId and clientId",
-      example = "referralId=abcdefgh,clientId=td89slaz") String id) {
+      example = "referralId=1234567ABC,clientId=ABCDEFG123") String id) {
     return resourceDelegate.delete(id);
   }
 
@@ -109,9 +99,9 @@ public class ReferralClientResource {
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
-      @ApiResponse(code = 422, message = "Unable to validate ReferralClient")})
+      @ApiResponse(code = 422, message = "Unable to validate Referral Client")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Update ReferralClient", code = HttpStatus.SC_NO_CONTENT,
+  @ApiOperation(value = "Update Referra lClient", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
@@ -133,8 +123,9 @@ public class ReferralClientResource {
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate Referral")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Create Referral", code = HttpStatus.SC_CREATED,
-      response = ReferralClient.class)
+  @ApiOperation(value = "Create Referral Client", code = HttpStatus.SC_CREATED,
+      responseHeaders = @ResponseHeader(name = "Location", description = "Link to Referral Client",
+          response = Object.class))
   public Response create(
       @Valid @ApiParam(hidden = false, required = true) ReferralClient referral) {
     return resourceDelegate.create(referral);
