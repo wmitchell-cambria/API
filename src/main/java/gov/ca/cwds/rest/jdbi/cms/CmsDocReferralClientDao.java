@@ -19,6 +19,12 @@ public class CmsDocReferralClientDao extends CmsCrudsDaoImpl<CmsDocReferralClien
     super(sessionFactory);
   }
 
+  /**
+   * Result set sort order is determined by {@link CmsDocReferralClient}.
+   * 
+   * @param docHandle "document handle", the primary key of CMS legacy document
+   * @return ordered list of referral/client document records
+   */
   public List<CmsDocReferralClient> listDocReferralClient(String docHandle) {
     Query query = this.getSessionFactory().getCurrentSession().getNamedQuery("DocReferalClient")
         .setString("docHandle", docHandle);

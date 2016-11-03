@@ -107,18 +107,19 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
      */
     @Override
     public int hashCode() {
-      final int prime = 31;
+      final int prime = 43;
       int result = 1;
-      result = prime * result + ((address == null) ? 0 : address.hashCode());
-      result = prime * result + ((addressType == null) ? 0 : addressType.hashCode());
-      result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
-      result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
-      result = prime * result + ((commonFirstName == null) ? 0 : commonFirstName.hashCode());
-      result = prime * result + ((commonLastName == null) ? 0 : commonLastName.hashCode());
-      result = prime * result + ((commonMiddleName == null) ? 0 : commonMiddleName.hashCode());
-      result = prime * result + ((nameType == null) ? 0 : nameType.hashCode());
-      result = prime * result + ((otherName == null) ? 0 : otherName.hashCode());
-      result = prime * result + ((referlId == null) ? 0 : referlId.hashCode());
+      result = (prime * result) + ((address == null) ? prime : address.hashCode());
+      result = (prime * result) + ((addressType == null) ? prime : addressType.hashCode());
+      result = (prime * result) + ((birthDate == null) ? prime : birthDate.hashCode());
+      result = (prime * result) + ((clientId == null) ? prime : clientId.hashCode());
+      result = (prime * result) + ((commonFirstName == null) ? prime : commonFirstName.hashCode());
+      result = (prime * result) + ((commonLastName == null) ? prime : commonLastName.hashCode());
+      result =
+          (prime * result) + ((commonMiddleName == null) ? prime : commonMiddleName.hashCode());
+      result = (prime * result) + ((nameType == null) ? prime : nameType.hashCode());
+      result = (prime * result) + ((otherName == null) ? prime : otherName.hashCode());
+      result = (prime * result) + ((referlId == null) ? prime : referlId.hashCode());
       return result;
     }
 
@@ -139,69 +140,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
         return false;
       }
       CmsDocReferralClientDetail other = (CmsDocReferralClientDetail) obj;
-      if (address == null) {
-        if (other.address != null) {
-          return false;
-        }
-      } else if (!address.equals(other.address)) {
-        return false;
-      }
-      if (addressType == null) {
-        if (other.addressType != null) {
-          return false;
-        }
-      } else if (!addressType.equals(other.addressType)) {
-        return false;
-      }
-      if (birthDate == null) {
-        if (other.birthDate != null) {
-          return false;
-        }
-      } else if (!birthDate.equals(other.birthDate)) {
-        return false;
-      }
-      if (clientId == null) {
-        if (other.clientId != null) {
-          return false;
-        }
-      } else if (!clientId.equals(other.clientId)) {
-        return false;
-      }
-      if (commonFirstName == null) {
-        if (other.commonFirstName != null) {
-          return false;
-        }
-      } else if (!commonFirstName.equals(other.commonFirstName)) {
-        return false;
-      }
-      if (commonLastName == null) {
-        if (other.commonLastName != null) {
-          return false;
-        }
-      } else if (!commonLastName.equals(other.commonLastName)) {
-        return false;
-      }
-      if (commonMiddleName == null) {
-        if (other.commonMiddleName != null) {
-          return false;
-        }
-      } else if (!commonMiddleName.equals(other.commonMiddleName)) {
-        return false;
-      }
-      if (nameType == null) {
-        if (other.nameType != null) {
-          return false;
-        }
-      } else if (!nameType.equals(other.nameType)) {
-        return false;
-      }
-      if (otherName == null) {
-        if (other.otherName != null) {
-          return false;
-        }
-      } else if (!otherName.equals(other.otherName)) {
-        return false;
-      }
+
       if (referlId == null) {
         if (other.referlId != null) {
           return false;
@@ -209,6 +148,79 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       } else if (!referlId.equals(other.referlId)) {
         return false;
       }
+
+      if (clientId == null) {
+        if (other.clientId != null) {
+          return false;
+        }
+      } else if (!clientId.equals(other.clientId)) {
+        return false;
+      }
+
+      if (commonFirstName == null) {
+        if (other.commonFirstName != null) {
+          return false;
+        }
+      } else if (!commonFirstName.equals(other.commonFirstName)) {
+        return false;
+      }
+
+      if (commonLastName == null) {
+        if (other.commonLastName != null) {
+          return false;
+        }
+      } else if (!commonLastName.equals(other.commonLastName)) {
+        return false;
+      }
+
+      if (otherName == null) {
+        if (other.otherName != null) {
+          return false;
+        }
+      } else if (!otherName.equals(other.otherName)) {
+        return false;
+      }
+
+      if (birthDate == null) {
+        if (other.birthDate != null) {
+          return false;
+        }
+      } else if (!birthDate.equals(other.birthDate)) {
+        return false;
+      }
+
+      if (address == null) {
+        if (other.address != null) {
+          return false;
+        }
+      } else if (!address.equals(other.address)) {
+        return false;
+      }
+
+      if (addressType == null) {
+        if (other.addressType != null) {
+          return false;
+        }
+      } else if (!addressType.equals(other.addressType)) {
+        return false;
+      }
+
+      if (commonMiddleName == null) {
+        if (other.commonMiddleName != null) {
+          return false;
+        }
+      } else if (!commonMiddleName.equals(other.commonMiddleName)) {
+        return false;
+      }
+
+      if (nameType == null) {
+        if (other.nameType != null) {
+          return false;
+        }
+      } else if (!nameType.equals(other.nameType)) {
+        return false;
+      }
+
       return true;
     }
 
@@ -334,11 +346,11 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
      */
     @Override
     public int hashCode() {
-      final int prime = 31;
+      final int prime = 43;
       int result = 1;
 
-      result = prime * result + ((name == null) ? 0 : name.hashCode());
-      result = prime * result + ((content == null) ? 0 : content.hashCode());
+      result = (prime * result) + ((name == null) ? prime : name.hashCode());
+      result = (prime * result) + ((content == null) ? prime : content.hashCode());
 
       return result;
     }
@@ -475,13 +487,13 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
    */
   @Override
   public int hashCode() {
-    final int prime = 31;
+    final int prime = 43;
     int result = 1;
 
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((docName == null) ? 0 : docName.hashCode());
-    result = prime * result + ((docAddedDate == null) ? 0 : docAddedDate.hashCode());
-    result = prime * result + ((details == null) ? 0 : details.hashCode());
+    result = (prime * result) + ((id == null) ? prime : id.hashCode());
+    result = (prime * result) + ((docName == null) ? prime : docName.hashCode());
+    result = (prime * result) + ((docAddedDate == null) ? prime : docAddedDate.hashCode());
+    result = (prime * result) + ((details == null) ? prime : details.hashCode());
 
     return result;
   }
@@ -511,6 +523,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     } else if (!id.equals(other.id)) {
       return false;
     }
+
     if (docName == null) {
       if (other.docName != null) {
         return false;
@@ -518,6 +531,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     } else if (!docName.equals(other.docName)) {
       return false;
     }
+
     if (docAddedDate == null) {
       if (other.docAddedDate != null) {
         return false;
@@ -525,6 +539,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     } else if (!docAddedDate.equals(other.docAddedDate)) {
       return false;
     }
+
     if (details == null) {
       if (other.details != null) {
         return false;

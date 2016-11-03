@@ -19,117 +19,56 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @Entity
-@NamedNativeQuery(name = "DocReferalClient",
-    query = 
-        " SELECT REF.IDENTIFIER AS REFERL_ID "
-            + "        , CLT.IDENTIFIER AS CLIENT_ID "
-            + "        , RTRIM(CLT.COM_FST_NM) as COM_FST_NM "
-            + "        , RTRIM(CLT.COM_MID_NM) as COM_MID_NM "
-            + "        , RTRIM(CLT.COM_LST_NM) as COM_LST_NM "
-            + "        , ( RTRIM(NMT.FIRST_NM) || ' ' || RTRIM(NMT.MIDDLE_NM) || ' ' || RTRIM(NMT.LAST_NM) ) AS OTHERNAME "
-            + "        , RTRIM(CDTN.SHORT_DSC) AS NAME_TYPE "
-            + "        , CLT.BIRTH_DT "
-            + "        , ( RTRIM(ADR.STREET_NM) || ' ' || RTRIM(ADR.STREET_NO) || ' ' || RTRIM(ADR.CITY_NM) || ' ' || ADR.ZIP_NO ) AS ADDRESS "
-            + "        , RTRIM(CDTA.SHORT_DSC) AS ADDRESS_TYPE "
-            + "        , CNT.DOC_HANDLE "
-            + "        , CNT.DOC_NAME "
-            + "        , CNT.DOC_DATE AS DOC_ADDED_UPD "
-            + " , ref.LST_UPD_ID "
-            + " , ref.LST_UPD_TS "
-            + " FROM (((((((((CWSINT.REFR_CLT AS RCL "
-            + "     JOIN CWSINT.REFERL_T AS REF "
-            + "    ON REF.IDENTIFIER = RCL.FKREFERL_T "
-            + "   ) "
-            + "     JOIN CWSINT.DRMSDOCT AS DRM "
-            + "    ON ( DRM.IDENTIFIER = REF.ALGDSC_DOC "
-            + "       OR DRM.IDENTIFIER = REF.ER_REF_DOC "
-            + "       OR DRM.IDENTIFIER = REF.INVSTG_DOC "
-            + "       ) "
-            + "   ) "
-            + "     JOIN CWSINT.TSCNTRLT AS CNT "
-            + "    ON CNT.DOC_HANDLE = DRM.DOCHNDL_NM "
-            + "    AND CNT.CMPRS_PRG <> 'DELETED' "
-            + "    AND CNT.DOC_HANDLE <> 'DUMMY' "
-            + "   ) "
-            + "     JOIN CWSINT.CLIENT_T AS CLT "
-            + "    ON CLT.IDENTIFIER = RCL.FKCLIENT_T "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.OCL_NM_T AS NMT "
-            + "    ON NMT.FKCLIENT_T = RCL.FKCLIENT_T "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTN "
-            + "    ON CDTN.SYS_ID = NMT.NAME_TPC "
-            + "    AND CDTN.FKS_META_T = 'NAME_TPC' "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.CL_ADDRT AS CAD "
-            + "    ON CAD.FKCLIENT_T = CLT.IDENTIFIER "
-            + "    AND CAD.EFF_END_DT IS NULL "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.ADDRS_T AS ADR "
-            + "    ON ADR.IDENTIFIER = CAD.FKADDRS_T "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTA "
-            + "    ON CDTA.SYS_ID = CAD.ADDR_TPC "
-            + "    AND CDTA.FKS_META_T = 'ADDR_TPC' "
-            + "   ) "
-            + " WHERE CNT.DOC_HANDLE = :docHandle "
-            + " UNION ALL "
-            + " SELECT REF.IDENTIFIER AS REFERL_ID "
-            + "        , CLT.IDENTIFIER AS CLIENT_ID "
-            + "        , RTRIM(CLT.COM_FST_NM) as COM_FST_NM "
-            + "        , RTRIM(CLT.COM_MID_NM) as COM_MID_NM "
-            + "        , RTRIM(CLT.COM_LST_NM) as COM_LST_NM "
-            + "        , ( RTRIM(NMT.FIRST_NM) || ' ' || RTRIM(NMT.MIDDLE_NM) || ' ' || RTRIM(NMT.LAST_NM) ) AS OTHERNAME "
-            + "        , RTRIM(CDTN.SHORT_DSC) AS NAME_TYPE "
-            + "        , CLT.BIRTH_DT "
-            + "        , ( RTRIM(ADR.STREET_NM) || ' ' || RTRIM(ADR.STREET_NO) || ' ' || RTRIM(ADR.CITY_NM) || ' ' || ADR.ZIP_NO ) AS ADDRESS "
-            + "        , RTRIM(CDTA.SHORT_DSC) AS ADDRESS_TYPE "
-            + "        , CNT.DOC_HANDLE "
-            + "        , CNT.DOC_NAME "
-            + "        , CNT.DOC_DATE AS DOC_ADDED_UPD "
-            + " , ref.LST_UPD_ID "
-            + " , ref.LST_UPD_TS "
-            + " FROM ((((((((((CWSINT.REFR_CLT AS RCL "
-            + "     JOIN CWSINT.OTH_DOCT AS OTD "
-            + "    ON OTD.FKREFERL_T = RCL.FKREFERL_T "
-            + "   ) "
-            + "     JOIN CWSINT.REFERL_T AS REF "
-            + "    ON REF.IDENTIFIER = OTD.FKREFERL_T "
-            + "   ) "
-            + "     JOIN CWSINT.DRMSDOCT AS DRM "
-            + "    ON DRM.IDENTIFIER = OTD.FKDRMSDOCT "
-            + "   ) "
-            + "     JOIN CWSINT.TSCNTRLT AS CNT "
-            + "    ON CNT.DOC_HANDLE = DRM.DOCHNDL_NM "
-            + "    AND CNT.CMPRS_PRG <> 'DELETED' "
-            + "    AND CNT.DOC_HANDLE <> 'DUMMY' "
-            + "   ) "
-            + "     JOIN CWSINT.CLIENT_T AS CLT "
-            + "    ON CLT.IDENTIFIER = RCL.FKCLIENT_T "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.OCL_NM_T AS NMT "
-            + "    ON NMT.FKCLIENT_T = RCL.FKCLIENT_T "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTN "
-            + "    ON CDTN.SYS_ID = NMT.NAME_TPC "
-            + "    AND CDTN.FKS_META_T = 'NAME_TPC' "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.CL_ADDRT AS CAD "
-            + "    ON CAD.FKCLIENT_T = CLT.IDENTIFIER "
-            + "    AND CAD.EFF_END_DT IS NULL "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.ADDRS_T AS ADR "
-            + "    ON ADR.IDENTIFIER = CAD.FKADDRS_T "
-            + "   ) "
-            + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTA "
-            + "    ON CDTA.SYS_ID = CAD.ADDR_TPC "
-            + "    AND CDTA.FKS_META_T = 'ADDR_TPC' "
-            + "   ) "
-            + " WHERE CNT.DOC_HANDLE = :docHandle "
-            + " ORDER BY 1,2 "
-            + " FOR READ ONLY "
-,
-    resultClass = CmsDocReferralClient.class)
+@NamedNativeQuery(name = "DocReferalClient", query = " SELECT REF.IDENTIFIER AS REFERL_ID "
+    + "        , CLT.IDENTIFIER AS CLIENT_ID " + "        , RTRIM(CLT.COM_FST_NM) as COM_FST_NM "
+    + "        , RTRIM(CLT.COM_MID_NM) as COM_MID_NM "
+    + "        , RTRIM(CLT.COM_LST_NM) as COM_LST_NM "
+    + "        , ( RTRIM(NMT.FIRST_NM) || ' ' || RTRIM(NMT.MIDDLE_NM) || ' ' || RTRIM(NMT.LAST_NM) ) AS OTHERNAME "
+    + "        , RTRIM(CDTN.SHORT_DSC) AS NAME_TYPE " + "        , CLT.BIRTH_DT "
+    + "        , ( RTRIM(ADR.STREET_NM) || ' ' || RTRIM(ADR.STREET_NO) || ' ' || RTRIM(ADR.CITY_NM) || ' ' || ADR.ZIP_NO ) AS ADDRESS "
+    + "        , RTRIM(CDTA.SHORT_DSC) AS ADDRESS_TYPE " + "        , CNT.DOC_HANDLE "
+    + "        , CNT.DOC_NAME " + "        , CNT.DOC_DATE AS DOC_ADDED_UPD " + " , ref.LST_UPD_ID "
+    + " , ref.LST_UPD_TS " + " FROM (((((((((CWSINT.REFR_CLT AS RCL "
+    + "     JOIN CWSINT.REFERL_T AS REF " + "    ON REF.IDENTIFIER = RCL.FKREFERL_T " + "   ) "
+    + "     JOIN CWSINT.DRMSDOCT AS DRM " + "    ON ( DRM.IDENTIFIER = REF.ALGDSC_DOC "
+    + "       OR DRM.IDENTIFIER = REF.ER_REF_DOC " + "       OR DRM.IDENTIFIER = REF.INVSTG_DOC "
+    + "       ) " + "   ) " + "     JOIN CWSINT.TSCNTRLT AS CNT "
+    + "    ON CNT.DOC_HANDLE = DRM.DOCHNDL_NM " + "    AND CNT.CMPRS_PRG <> 'DELETED' "
+    + "    AND CNT.DOC_HANDLE <> 'DUMMY' " + "   ) " + "     JOIN CWSINT.CLIENT_T AS CLT "
+    + "    ON CLT.IDENTIFIER = RCL.FKCLIENT_T " + "   ) "
+    + "    LEFT OUTER JOIN CWSINT.OCL_NM_T AS NMT " + "    ON NMT.FKCLIENT_T = RCL.FKCLIENT_T "
+    + "   ) " + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTN "
+    + "    ON CDTN.SYS_ID = NMT.NAME_TPC " + "    AND CDTN.FKS_META_T = 'NAME_TPC' " + "   ) "
+    + "    LEFT OUTER JOIN CWSINT.CL_ADDRT AS CAD " + "    ON CAD.FKCLIENT_T = CLT.IDENTIFIER "
+    + "    AND CAD.EFF_END_DT IS NULL " + "   ) " + "    LEFT OUTER JOIN CWSINT.ADDRS_T AS ADR "
+    + "    ON ADR.IDENTIFIER = CAD.FKADDRS_T " + "   ) "
+    + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTA " + "    ON CDTA.SYS_ID = CAD.ADDR_TPC "
+    + "    AND CDTA.FKS_META_T = 'ADDR_TPC' " + "   ) " + " WHERE CNT.DOC_HANDLE = :docHandle "
+    + " UNION ALL " + " SELECT REF.IDENTIFIER AS REFERL_ID "
+    + "        , CLT.IDENTIFIER AS CLIENT_ID " + "        , RTRIM(CLT.COM_FST_NM) as COM_FST_NM "
+    + "        , RTRIM(CLT.COM_MID_NM) as COM_MID_NM "
+    + "        , RTRIM(CLT.COM_LST_NM) as COM_LST_NM "
+    + "        , ( RTRIM(NMT.FIRST_NM) || ' ' || RTRIM(NMT.MIDDLE_NM) || ' ' || RTRIM(NMT.LAST_NM) ) AS OTHERNAME "
+    + "        , RTRIM(CDTN.SHORT_DSC) AS NAME_TYPE " + "        , CLT.BIRTH_DT "
+    + "        , ( RTRIM(ADR.STREET_NM) || ' ' || RTRIM(ADR.STREET_NO) || ' ' || RTRIM(ADR.CITY_NM) || ' ' || ADR.ZIP_NO ) AS ADDRESS "
+    + "        , RTRIM(CDTA.SHORT_DSC) AS ADDRESS_TYPE " + "        , CNT.DOC_HANDLE "
+    + "        , CNT.DOC_NAME " + "        , CNT.DOC_DATE AS DOC_ADDED_UPD " + " , ref.LST_UPD_ID "
+    + " , ref.LST_UPD_TS " + " FROM ((((((((((CWSINT.REFR_CLT AS RCL "
+    + "     JOIN CWSINT.OTH_DOCT AS OTD " + "    ON OTD.FKREFERL_T = RCL.FKREFERL_T " + "   ) "
+    + "     JOIN CWSINT.REFERL_T AS REF " + "    ON REF.IDENTIFIER = OTD.FKREFERL_T " + "   ) "
+    + "     JOIN CWSINT.DRMSDOCT AS DRM " + "    ON DRM.IDENTIFIER = OTD.FKDRMSDOCT " + "   ) "
+    + "     JOIN CWSINT.TSCNTRLT AS CNT " + "    ON CNT.DOC_HANDLE = DRM.DOCHNDL_NM "
+    + "    AND CNT.CMPRS_PRG <> 'DELETED' " + "    AND CNT.DOC_HANDLE <> 'DUMMY' " + "   ) "
+    + "     JOIN CWSINT.CLIENT_T AS CLT " + "    ON CLT.IDENTIFIER = RCL.FKCLIENT_T " + "   ) "
+    + "    LEFT OUTER JOIN CWSINT.OCL_NM_T AS NMT " + "    ON NMT.FKCLIENT_T = RCL.FKCLIENT_T "
+    + "   ) " + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTN "
+    + "    ON CDTN.SYS_ID = NMT.NAME_TPC " + "    AND CDTN.FKS_META_T = 'NAME_TPC' " + "   ) "
+    + "    LEFT OUTER JOIN CWSINT.CL_ADDRT AS CAD " + "    ON CAD.FKCLIENT_T = CLT.IDENTIFIER "
+    + "    AND CAD.EFF_END_DT IS NULL " + "   ) " + "    LEFT OUTER JOIN CWSINT.ADDRS_T AS ADR "
+    + "    ON ADR.IDENTIFIER = CAD.FKADDRS_T " + "   ) "
+    + "    LEFT OUTER JOIN CWSINT.SYS_CD_C AS CDTA " + "    ON CDTA.SYS_ID = CAD.ADDR_TPC "
+    + "    AND CDTA.FKS_META_T = 'ADDR_TPC' " + "   ) " + " WHERE CNT.DOC_HANDLE = :docHandle "
+    + " ORDER BY 1,2 " + " FOR READ ONLY ", resultClass = CmsDocReferralClient.class)
 public class CmsDocReferralClient extends CmsPersistentObject implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -153,28 +92,35 @@ public class CmsDocReferralClient extends CmsPersistentObject implements Seriali
   @Column(name = "DOC_ADDED_UPD")
   private Date docAddedDate;
 
+  @Id
   @Column(name = "COM_FST_NM")
   private String commonFirstName;
 
   @Column(name = "COM_MID_NM")
   private String commonMiddleName;
 
+  @Id
   @Column(name = "COM_LST_NM")
   private String commonLastName;
 
+  @Id
   @Type(type = "date")
   @Column(name = "BIRTH_DT")
   private Date birthDate;
 
+  @Id
   @Column(name = "OTHERNAME")
   private String otherName;
 
+  @Id
   @Column(name = "NAME_TYPE")
   private String nameType;
 
+  @Id
   @Column(name = "ADDRESS")
   private String address;
 
+  @Id
   @Column(name = "ADDRESS_TYPE")
   private String addressType;
 
@@ -211,7 +157,9 @@ public class CmsDocReferralClient extends CmsPersistentObject implements Seriali
    */
   @Override
   public Serializable getPrimaryKey() {
-    return new PrimaryKey3(this.getDocHandle(), this.getReferlId(), this.getClientId());
+    return new VarargPrimaryKey(getDocHandle(), getReferlId(), getClientId(), getCommonLastName(),
+        getCommonFirstName(), String.valueOf(getBirthDate().getTime()), getOtherName(),
+        getAddressType(), getAddress());
   }
 
   /**
