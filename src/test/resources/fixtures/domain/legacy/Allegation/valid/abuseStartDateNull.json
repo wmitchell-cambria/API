@@ -4,7 +4,7 @@
   "abuseFrequency": 2,
   "abuseFrequencyPeriodCode": "M",
   "abuseLocationDescription": "Barber Shop",
-  "abuseStartDate": "2016-10-31",
+  "abuseStartDate": null,
   "allegationDispositionType": 0,
   "allegationType": 2180,
   "dispositionDescription": "Fremont",

@@ -67,7 +67,7 @@ public class Allegation extends DomainObject implements Request, Response {
       allowableValues = "D, M, W, Y")
   private String abuseFrequencyPeriodCode;
 
-  @NotNull
+  @NotEmpty
   @Size(max = 75)
   @ApiModelProperty(required = true, readOnly = false, value = "location description")
   private String abuseLocationDescription;
@@ -87,7 +87,7 @@ public class Allegation extends DomainObject implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private Short allegationType;
 
-  @NotNull
+  @NotEmpty
   @Size(max = 254)
   @ApiModelProperty(required = false, readOnly = false,
       value = "description of allegation disposition")
@@ -122,7 +122,7 @@ public class Allegation extends DomainObject implements Request, Response {
   // TODO Add Foreign Key Validation after CLIENT table is added to source code
   private String victimClientId;
 
-  @Size(min = 10, max = 10)
+  @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "CLIENT ID of perpetrator",
       example = "ABC1234567")
   private String perpetratorClientId;
