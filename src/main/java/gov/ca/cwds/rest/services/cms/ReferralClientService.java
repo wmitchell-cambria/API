@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.util.ServiceUtils;
 // import gov.ca.cwds.rest.util.ServiceUtils;
 
 /**
- * Business layer object to work on {@link ReferralClient
+ * Business layer object to work on {@link ReferralClient}
  * 
  * @author CWDS API Team
  *
