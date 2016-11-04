@@ -78,12 +78,12 @@ dependencies {
 
 tasks.withType(Test) {
     enableAssertions = true
-    jvmArgs '-Djava.library.path=.:..:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
 }
 
 test {
     exclude '**/*IT*'
-    jvmArgs '-Djava.library.path=.:..:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {

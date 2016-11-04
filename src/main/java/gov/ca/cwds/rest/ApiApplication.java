@@ -220,7 +220,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     LOGGER.info("Registering CmsDocReferralClientResource");
     final CmsDocReferralClientService docReferralClientService = new CmsDocReferralClientService(
-        (CmsDocReferralClientDao) DataAccessEnvironment.get(CmsDocReferralClient.class));
+        (CmsDocReferralClientDao) DataAccessEnvironment.get(CmsDocReferralClient.class),
+        (CmsDocumentDao) DataAccessEnvironment.get(CmsDocument.class));
     CmsDocReferralClientResource docReferralClientResource = new CmsDocReferralClientResource(
         new ServiceBackedResourceDelegate(docReferralClientService));
     apiEnvironment.jersey().register(docReferralClientResource);
