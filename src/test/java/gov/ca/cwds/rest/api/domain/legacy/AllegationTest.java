@@ -435,8 +435,8 @@ public class AllegationTest {
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    String message = response.readEntity(String.class);
-    System.out.print(message);
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
@@ -453,7 +453,7 @@ public class AllegationTest {
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("abuseLocationDescription may not be null"),
+        response.readEntity(String.class).indexOf("abuseLocationDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -467,23 +467,23 @@ public class AllegationTest {
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("abuseLocationDescription may not be null"),
+        response.readEntity(String.class).indexOf("abuseLocationDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenAbuseLocationDescriptionEmpty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/invalid/abuseLocationDescription/empty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(
-  // response.readEntity(String.class).indexOf("abuseLocationDescription may not be empty"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenAbuseLocationDescriptionEmpty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/invalid/abuseLocationDescriptionEmpty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(
+        response.readEntity(String.class).indexOf("abuseLocationDescription may not be empty"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   @Test
   public void failsWhenAbuseLocationDescriptionTooLong() throws Exception {
@@ -501,27 +501,27 @@ public class AllegationTest {
   /*
    * abuseStartDate Tests
    */
-  // @Test
-  // public void successWhenAbuseStartDateEmpty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/valid/abuseStartDate/empty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenAbuseStartDateNull() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/valid/abuseStartDate/null.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
+  @Test
+  public void successWhenAbuseStartDateEmpty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/abuseStartDateEmpty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenAbuseStartDateNull() throws Exception {
+    Allegation toCreate =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Allegation/valid/abuseStartDateNull.json"),
+            Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
   @Test
   public void failsWhenAbuseStartDateWrongFormat() throws Exception {
@@ -569,19 +569,21 @@ public class AllegationTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenAllegationDispositionTypeEmplty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/invalid/allegationDispositionTypeEmpty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(
-  // response.readEntity(String.class).indexOf("allegationDispositionType may not be null"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenAllegationDispositionTypeEmplty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/invalid/allegationDispositionTypeEmpty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+    assertThat(
+        response.readEntity(String.class).indexOf("allegationDispositionType may not be null"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   /*
    * allegationType Tests
@@ -612,18 +614,18 @@ public class AllegationTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenAllegationTypeEmpty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/invalid/allegationType/empty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(response.readEntity(String.class).indexOf("allegationType may not be null"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenAllegationTypeEmpty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/invalid/allegationTypeEmpty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("allegationType may not be null"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   /*
    * dispositionDescription Tests
@@ -637,7 +639,7 @@ public class AllegationTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionDescription may not be null"),
+    assertThat(response.readEntity(String.class).indexOf("dispositionDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -650,24 +652,22 @@ public class AllegationTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionDescription may not be null"),
+    assertThat(response.readEntity(String.class).indexOf("dispositionDescription may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenDispositionDescriptionEmpty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/invalid/dispositionDescriptionEmpty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // String message = response.readEntity(String.class);
-  // System.out.print(message);
-  // assertThat(response.readEntity(String.class).indexOf("dispositionDescription may not be null"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenDispositionDescriptionEmpty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/invalid/dispositionDescriptionEmpty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("dispositionDescription may not be empty"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   /*
    * dispositionDate Tests
@@ -1028,40 +1028,42 @@ public class AllegationTest {
   /*
    * perpetratorClientId Tests
    */
-  // @Test
-  // public void successWhenPerpetratorClientIdEmpty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/valid/perpetratorClientId/empty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenPerpetratorClientIdNull() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/valid/perpetratorClientId/null.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void failsWhenPerpetratorClientIdTooLong() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/invalid/perpetratorClientId/tooLong.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(response.readEntity(String.class)
-  // .indexOf("perpetratorClientId size must be between 0 and 10"), is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void successWhenPerpetratorClientIdEmpty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/perpetratorClientIEempty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenPerpetratorClientIdNull() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/perpetratorClientIdNull.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void failsWhenPerpetratorClientIdTooLong() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/invalid/perpetratorClientIdTooLong.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+    assertThat(response.readEntity(String.class)
+        .indexOf("perpetratorClientId size must be between 0 and 10"), is(greaterThanOrEqualTo(0)));
+  }
 
   /*
    * referralId Tests
@@ -1246,34 +1248,34 @@ public class AllegationTest {
   /*
    * placementFacilityType Tests
    */
-  // @Test
-  // public void successWhenPlacementFacilityTypeEmpty() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/valid/placementFacilityType/empty.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenPlacementFacilityTypeNull() throws Exception {
-  // Allegation toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Allegation/valid/placementFacilityType/null.json"),
-  // Allegation.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
+  @Test
+  public void successWhenPlacementFacilityTypeEmpty() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/placementFacilityTypeEmpty.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenPlacementFacilityTypeNull() throws Exception {
+    Allegation toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/placementFacilityTypeNull.json"),
+        Allegation.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
   /*
    * Utils
    */
   private Allegation validAllegation() {
     return new Allegation("Aaeae9r0F4", "2016-10-31", (short) 2, "M", "Barber Shop", "2016-10-31",
-        (short) 0, (short) 2180, "Fremont", "", false, "N", false, "AHooKwN0F4", "MKPFcB90F4",
-        "AbiQCgu0Hj", "19", false, (short) 6574);
+        (short) 0, (short) 2180, "Fremont", "2016-10-31", false, "N", false, "AHooKwN0F4",
+        "MKPFcB90F4", "AbiQCgu0Hj", "19", false, (short) 6574);
   }
 }
