@@ -74,7 +74,6 @@ public class LZWCompressionTest {
   private LZWEncoder inst;
 
   public static String checksum(File file) throws IOException, NoSuchAlgorithmException {
-
     MessageDigest md = MessageDigest.getInstance("SHA1");
     try (FileInputStream fis = new FileInputStream(file)) {
       byte[] dataBytes = new byte[1024];

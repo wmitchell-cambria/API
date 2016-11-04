@@ -13,7 +13,9 @@ import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
+import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
+import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;
 
 /**
@@ -25,13 +27,17 @@ public class CmsDocReferralClientService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocReferralClientService.class);
 
   private CmsDocReferralClientDao dao;
+  private CmsDocumentDao docDao;
 
   /**
+   * Core constructor.
    * 
-   * @param dao The dao
+   * @param dao The referral client document DAO
+   * @param docDao The document blob DAO
    */
-  public CmsDocReferralClientService(CmsDocReferralClientDao dao) {
+  public CmsDocReferralClientService(CmsDocReferralClientDao dao, CmsDocumentDao docDao) {
     this.dao = dao;
+    this.docDao = docDao;
   }
 
   /*
@@ -43,14 +49,20 @@ public class CmsDocReferralClientService implements CrudsService {
   public CmsDocReferralClient find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
+    CmsDocReferralClient retval = null;
+
     final String key = (String) primaryKey;
     LOGGER.info("primaryKey=" + key);
     List<gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient> docs =
         dao.listDocReferralClient(key);
     if (docs != null) {
-      return new CmsDocReferralClient(docs);
+      retval = new CmsDocReferralClient(docs);
+      CmsDocument blobDoc = docDao.find(key);
+      if (blobDoc != null) {
+        // retval.getCmsDocument().setContent(blobDoc.g);
+      }
     }
-    return null;
+    return retval;
   }
 
   /*
