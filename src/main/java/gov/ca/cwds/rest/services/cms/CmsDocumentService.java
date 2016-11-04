@@ -43,6 +43,10 @@ public class CmsDocumentService implements CrudsService {
     this.dao = dao;
   }
 
+  public static String decompressLZW() {
+    return null;
+  }
+  
   /**
    * {@inheritDoc}
    * 
