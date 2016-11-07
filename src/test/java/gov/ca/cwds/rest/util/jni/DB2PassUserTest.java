@@ -15,8 +15,6 @@ public class DB2PassUserTest {
 
       // DOCKER:
       // final String url = "jdbc:db2://localhost:50000/DB0TDEV";
-      // final String user = "db2inst1";
-      // final String password = "prasad12";
 
       // MAINFRAME:
       final String url =
@@ -32,23 +30,26 @@ public class DB2PassUserTest {
         db2conn.setDB2ClientUser("0X5"); // staff id
         db2conn.setDB2ClientWorkstation("192.168.9.121");
 
+        conn.setAutoCommit(true);
+
+        conn.prepareStatement(
+            "update cwsint.tscntrlt c set c.LST_UPD_ID = CURRENT CLIENT_USERID where c.doc_handle = '0001121506110220*RAMESHA 00001'")
+            .executeUpdate();
+
         // Execute SQL to force extended client information to be sent to the server.
-        ResultSet rs = conn
-            .prepareStatement(
-                "SELECT CURRENT CLIENT_USERID as staff_id FROM sysibm.sysdummy1 for read only")
+        ResultSet rs = conn.prepareStatement(
+            "select c.doc_handle, c.DOC_SEGS, c.CMPRS_PRG, c.DOC_NAME, c.DOC_DATE, c.DOC_TIME, c.DOC_LEN, c.LST_UPD_ID, c.LST_UPD_TS, c.DOC_AUTH, c.DOC_SERV "
+                + "from cwsint.TSCNTRLT c "
+                + "where c.doc_handle = '0001121506110220*RAMESHA 00001' "
+                + "order by c.DOC_HANDLE for read only")
             .executeQuery();
 
         while (rs.next()) {
-          final String staffId = rs.getString("staff_id");
+          final String staffId = rs.getString("LST_UPD_ID");
           System.out.println("staffId = " + staffId);
         }
       }
-      
-      conn
-      .prepareStatement(
-          "UPDATE CWSINT. SELECT CURRENT CLIENT_USERID as staff_id FROM sysibm.sysdummy1 for read only")
-      .executeUpdate();
-      
+
     } catch (Throwable e) {
       e.printStackTrace();
     }
