@@ -116,14 +116,6 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
     this.docTime = DomainObject.cookTime(doc.getDocTime());
     this.docName = doc.getDocName();
     this.compressionMethod = doc.getCompressionMethod();
-
-    // StringBuilder buf =
-    // new StringBuilder(doc.getDocLength() != null ? doc.getDocLength().intValue() : 1024);
-    // for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
-    // buf.append(seg.getDocBlob());
-    // }
-    //
-    // this.base64Blob = buf.toString();
   }
 
   /**

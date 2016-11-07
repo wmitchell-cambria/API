@@ -1,13 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -18,7 +11,6 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
-import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -43,10 +35,7 @@ public class CmsDocumentService implements CrudsService {
     this.dao = dao;
   }
 
-  public static String decompressLZW() {
-    return null;
-  }
-  
+
   /**
    * {@inheritDoc}
    * 
@@ -56,52 +45,15 @@ public class CmsDocumentService implements CrudsService {
   public CmsDocument find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
     CmsDocument retval = null;
+
     String base64Doc = "";
 
     LOGGER.info("primaryKey=" + primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc = dao.find(primaryKey);
     if (doc != null) {
-      if (doc.getCompressionMethod().endsWith("01")) {
-        if (!LZWEncoder.isClassloaded()) {
-          LOGGER.warn("LZW compression not enabled!");
-        } else {
-          LZWEncoder lzw = new LZWEncoder();
-          try {
-            File src = File.createTempFile("src", ".lzw");
-            src.deleteOnExit();
-
-            File tgt = File.createTempFile("tgt", ".doc");
-            tgt.deleteOnExit();
-
-            FileOutputStream fos = new FileOutputStream(src);
-            for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
-              final byte[] bytes = DatatypeConverter.parseHexBinary(seg.getDocBlob().trim());
-              fos.write(bytes, 0, bytes.length);
-            }
-            fos.flush();
-            fos.close();
-
-            // DECOMPRESS!
-            // TODO: Trap std::exception in shared library and return error code.
-            // Unhandled C++ exceptions kill the JVM.
-            lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
-
-            Path path = Paths.get(tgt.getAbsolutePath());
-            base64Doc = DatatypeConverter.printBase64Binary(Files.readAllBytes(path));
-          } catch (Exception e) {
-            LOGGER.error("ERROR DECOMPRESSING LZW! " + e.getMessage());
-            throw new RuntimeException(e);
-          }
-        }
-      } else if (doc.getCompressionMethod().endsWith("02")) {
-        LOGGER.warn("PK compression not enabled!");
-      } else {
-        LOGGER.warn("UNSUPPORTED compression method " + doc.getCompressionMethod());
-      }
-
+      base64Doc = CmsDocumentDao.decompressDoc(doc);
       retval = new CmsDocument(doc);
       retval.setBase64Blob(base64Doc);
-
     } else {
       LOGGER.warn("EMPTY document!");
     }
