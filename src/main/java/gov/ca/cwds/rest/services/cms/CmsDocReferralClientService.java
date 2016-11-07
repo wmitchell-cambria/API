@@ -40,8 +40,8 @@ public class CmsDocReferralClientService implements CrudsService {
     this.docDao = docDao;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
@@ -59,14 +59,14 @@ public class CmsDocReferralClientService implements CrudsService {
       retval = new CmsDocReferralClient(docs);
       CmsDocument blobDoc = docDao.find(key);
       if (blobDoc != null) {
-        // retval.getCmsDocument().setContent(blobDoc.g);
+        retval.getCmsDocument().setContent(CmsDocumentDao.decompressDoc(blobDoc));
       }
     }
     return retval;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
@@ -76,8 +76,8 @@ public class CmsDocReferralClientService implements CrudsService {
     throw new NotImplementedException("Delete is not implemented");
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
@@ -87,11 +87,11 @@ public class CmsDocReferralClientService implements CrudsService {
     throw new NotImplementedException("Create is not implemented");
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
-   * gov.ca.cwds.rest.api.Request)
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public ScreeningResponse update(Serializable primaryKey, Request request) {
