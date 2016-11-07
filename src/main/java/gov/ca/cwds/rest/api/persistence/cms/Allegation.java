@@ -133,6 +133,7 @@ public class Allegation extends CmsPersistentObject {
       String lastUpdatedId) {
     super(lastUpdatedId);
 
+    // TODO: constructor will not work with null date fields
     this.id = id;
     this.abuseEndDate = DomainObject.uncookDateString(persistedAllegation.getAbuseEndDate());
     this.abuseStartDate = DomainObject.uncookDateString(persistedAllegation.getAbuseStartDate());

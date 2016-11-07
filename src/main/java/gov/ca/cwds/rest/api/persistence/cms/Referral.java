@@ -276,6 +276,7 @@ public class Referral extends CmsPersistentObject {
 
     try {
 
+      this.id = id;
       this.additionalInfoIncludedCode =
           DomainObject.cookBoolean(referral.getAdditionalInfoIncludedCode());
       this.anonymousReporterIndicator =

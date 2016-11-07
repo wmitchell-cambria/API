@@ -34,7 +34,8 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "endDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, value = "MM/dd/yyyy", example = "5/22/2016")
+  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
+      example = "2016-10-31")
   private String endDate;
 
   @NotEmpty
@@ -72,7 +73,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "startDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = true)
-  @ApiModelProperty(required = true, readOnly = false, value = "MM/dd/yyyy", example = "1/1/2000")
+  @ApiModelProperty(required = true, readOnly = false, value = "2016-10-31", example = "2016-10-31")
   private String startDate;
 
   @Size(max = 4)
@@ -112,7 +113,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   @NotEmpty
   @Size(min = 10, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "IDENTIFIER of CWSADDRT",
-      example = "ghi")
+      example = "1234567ghi")
   // TODO Add Foreign Key Validation after CWS_OFFICE_ADDRESS table is added to source code
   private String cwsOfficeAddress;
 
