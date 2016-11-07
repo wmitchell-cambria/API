@@ -1266,19 +1266,6 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenOpenAdequateCaseCodeEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/invalid/openAdequateCaseCode/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(response.readEntity(String.class).indexOf("openAdequateCaseCode may not be empty"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
-  //
   @Test
   public void failsWhenOpenAdequateCaseCodeTooLong() throws Exception {
     Referral toCreate = MAPPER.readValue(
@@ -1451,27 +1438,27 @@ public class ReferralTest {
   /*
    * responseDeterminationDate Tests
    */
-  // @Test
-  // public void successWhenResponseDeterminationDateEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationDate/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenResponseDeterminationDateNull() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationDate/null.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
+  @Test
+  public void successWhenResponseDeterminationDateEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationDateEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenResponseDeterminationDateNull() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationDateNull.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
   @Test
   public void failsWhenResponseDeterminationDateWrongFormat() throws Exception {
@@ -1490,27 +1477,27 @@ public class ReferralTest {
   /*
    * responseDeterminationTime Tests
    */
-  // @Test
-  // public void successWhenResponseDeterminationTimeEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationTime/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenResponseDeterminationTimeNull() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationTime/null.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
+  @Test
+  public void successWhenResponseDeterminationTimeEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationTimeEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenResponseDeterminationTimeNull() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/responseDeterminationTimeNull.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
   @Test
   public void failsWhenResponseDeterminationTimeWrongFormat() throws Exception {
@@ -1531,27 +1518,27 @@ public class ReferralTest {
   /*
    * responseRationaleText Tests
    */
-  // @Test
-  // public void successWhenResponseRationaleTextEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/responseRationaleText/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenResponseRationaleTextNull() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/responseRationaleText/null.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
+  @Test
+  public void successWhenResponseRationaleTextEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/responseRationaleTextEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenResponseRationaleTextNull() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/responseRationaleTextNull.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
   @Test
   public void failsWhenResponseRationaleTextTooLong() throws Exception {
@@ -1569,27 +1556,26 @@ public class ReferralTest {
   /*
    * screenerNoteText Tests
    */
-  // @Test
-  // public void successWhenScreenerNoteTextEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/screenerNoteText/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenScreenerNoteTextNull() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/valid/screenerNoteText/null.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
+  @Test
+  public void successWhenScreenerNoteTextEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/screenerNoteTextEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+  @Test
+  public void successWhenScreenerNoteTextNull() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/valid/screenerNoteTextNull.json"), Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
   @Test
   public void failsWhenScreenerNoteTextTooLong() throws Exception {
@@ -1634,18 +1620,18 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenSpecificsIncludedCodeEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/invalid/specificsIncludedCode/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(response.readEntity(String.class).indexOf("specificsIncludedCode may not be empty"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenSpecificsIncludedCodeEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/invalid/specificsIncludedCodeEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("specificsIncludedCode may not be empty"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   @Test
   public void failsWhenSpecificsIncludedCodeTooLong() throws Exception {
@@ -1691,19 +1677,19 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenSufficientInformationCodeEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/invalid/sufficientInformationCode/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(
-  // response.readEntity(String.class).indexOf("sufficientInformationCode may not be empty"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenSufficientInformationCodeEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/invalid/sufficientInformationCodeEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(
+        response.readEntity(String.class).indexOf("sufficientInformationCode may not be empty"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   @Test
   public void failsWhenSufficientInformationCodeTooLong() throws Exception {
@@ -1748,18 +1734,18 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenUnfoundedSeriesCodeEmpty() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/invalid/unfoundedSeriesCode/empty.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(response.readEntity(String.class).indexOf("unfoundedSeriesCode may not be empty"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenUnfoundedSeriesCodeEmpty() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/invalid/unfoundedSeriesCodeEmpty.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("unfoundedSeriesCode may not be empty"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   @Test
   public void failsWhenUnfoundedSeriesCodeTooLong() throws Exception {
@@ -2323,18 +2309,18 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
-  // @Test
-  // public void failsWhenResponsibleAgencyCodeTooLong() throws Exception {
-  // Referral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Referral/invalid/responsibleAgencyCode/tooLong.json"),
-  // Referral.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // assertThat(response.readEntity(String.class).indexOf("responsibleAgencyCode size must be 1"),
-  // is(greaterThanOrEqualTo(0)));
-  // }
+  @Test
+  public void failsWhenResponsibleAgencyCodeTooLong() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Referral/invalid/responsibleAgencyCodeTooLong.json"),
+        Referral.class);
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("responsibleAgencyCode size must be 1"),
+        is(greaterThanOrEqualTo(0)));
+  }
 
   @Test
   public void failsWhenResponsibleAgencyCodeNotValidValue() throws Exception {

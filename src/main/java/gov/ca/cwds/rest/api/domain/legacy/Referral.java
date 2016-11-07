@@ -366,6 +366,7 @@ public class Referral extends DomainObject implements Request, Response {
   }
 
   public Referral(gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral) {
+    this.id = persistedReferral.getId();
     this.additionalInfoIncludedCode =
         DomainObject.uncookBooleanString(persistedReferral.getAdditionalInfoIncludedCode());
     this.anonymousReporterIndicator =
