@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
-import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
@@ -19,7 +18,7 @@ import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;
 
 /**
- * Business layer object to work on {@link Screening}
+ * Business layer object to work on {@link CmsDocReferralClient}
  * 
  * @author CWDS API Team
  */
