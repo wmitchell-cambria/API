@@ -34,8 +34,7 @@ import com.pkware.deflate.InflateInputStream;
  * <code>PKSession session = new PKSession(PKWARE_LICENSE_KEY);</code>
  * </pre>
  * 
- * <p>
- * Java PKWare SDK:
+ * <strong>Java PKWare SDK details:</strong>
  * <ul>
  * <li>Name: com/pkware/archive</li>
  * <li>Implementation-Vendor: PKWARE, Inc.</li>
@@ -45,7 +44,6 @@ import com.pkware.deflate.InflateInputStream;
  * <li>Specification-Version: 3.20</li>
  * <li>Specification-Vendor: PKWARE, Inc.</li>
  * </ul>
- * </p>
  * 
  * @author CWDS API Team
  * @see LZWEncoder
@@ -58,8 +56,10 @@ public class CmsPKCompressor implements LicenseCWDS {
   public CmsPKCompressor() {}
 
   /**
-   * Extract a CMS PKWare archive.
+   * Decompress (inflate) a CMS PKWare archive.
    * 
+   * @param inputFileName file name of resulting decompressed output
+   * @param outputFileName file name to decompress
    * @throws IOException If an I/O error occurs
    */
   public void decompressPKToFile(String inputFileName, String outputFileName) throws IOException {
@@ -74,8 +74,11 @@ public class CmsPKCompressor implements LicenseCWDS {
   }
 
   /**
-   * Extract a CMS PKWare archive.
+   * Compress (deflate) a CMS PKWare archive and writes resulting decompressed document to given
+   * output file.
    * 
+   * @param inputFileName file name to decompress
+   * @param outputFileName file name of resulting decompressed output
    * @throws IOException If an I/O error occurs
    */
   public void compressToPKFile(String inputFileName, String outputFileName) throws IOException {
@@ -89,22 +92,22 @@ public class CmsPKCompressor implements LicenseCWDS {
   }
 
   /**
-   * Inflates an InputStream of a PK-compressed document.
+   * Decompress (inflate) an InputStream of a PK-compressed document.
    * 
    * @param input InputStream of PK-compressed document.
    * @return byte array of decompressed document
-   * @throws IOException
+   * @throws IOException If an I/O error occurs
    */
   public byte[] decompressPKToBytes(InputStream input) throws IOException {
     return IOUtils.toByteArray(new InflateInputStream(input, true));
   }
 
   /**
-   * Deflates a document InputStream.
+   * Compress (deflate) a document InputStream.
    * 
    * @param bytes raw bytes of the document to compress
-   * @return byte array of compressed document
-   * @throws IOException
+   * @return raw byte array of compressed document
+   * @throws IOException If an I/O error occurs
    */
   public byte[] compressToPKBytes(byte[] bytes) throws IOException {
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
@@ -123,8 +126,8 @@ public class CmsPKCompressor implements LicenseCWDS {
    * Convenience method. Deflates a base64-encoded, PK-compressed archive.
    * 
    * @param base64Doc base64-encoded, PK-compressed archive
-   * @return byte array of decompressed document
-   * @throws IOException
+   * @return raw byte array of decompressed document
+   * @throws IOException If an I/O error occurs
    */
   public byte[] decompressPKToBytes(String base64Doc) throws IOException {
     return decompressPKToBytes(
