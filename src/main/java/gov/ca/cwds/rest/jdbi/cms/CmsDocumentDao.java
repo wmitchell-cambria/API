@@ -31,10 +31,10 @@ public class CmsDocumentDao extends CmsCrudsDaoImpl<CmsDocument> {
   }
 
   /**
-   * Decompress a document by determining the compression type, assembling blob segments, and
-   * calling native library.
+   * Decompress (inflate) a document by determining the compression type, assembling blob segments,
+   * and calling native library.
    * 
-   * @param doc
+   * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
   public static String decompressDoc(gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc) {
@@ -58,7 +58,7 @@ public class CmsDocumentDao extends CmsCrudsDaoImpl<CmsDocument> {
   /**
    * Decompress an LZW-compressed document by assembling blob segments and calling native library.
    * 
-   * @param doc
+   * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
   protected static String decompressLZW(gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc) {
