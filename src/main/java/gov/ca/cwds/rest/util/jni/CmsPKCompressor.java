@@ -103,7 +103,7 @@ public class CmsPKCompressor implements LicenseCWDS {
   }
 
   /**
-   * Compress (deflate) a document InputStream.
+   * Convenience method. Compress (deflate) a document InputStream.
    * 
    * @param bytes raw bytes of the document to compress
    * @return raw byte array of compressed document
@@ -113,17 +113,17 @@ public class CmsPKCompressor implements LicenseCWDS {
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
     ByteArrayOutputStream bos = new ByteArrayOutputStream(0x10000);
 
-    OutputStream fos = new DeflateOutputStream(bos, 6, true);
-    IOUtils.copy(bis, fos);
+    OutputStream dos = new DeflateOutputStream(bos, 6, true);
+    IOUtils.copy(bis, dos);
 
     bis.close();
-    bos.close();
+    dos.close();
 
     return bos.toByteArray();
   }
 
   /**
-   * Convenience method. Deflates a base64-encoded, PK-compressed archive.
+   * Convenience method. Decompress (inflate) a base64-encoded, PK-compressed archive.
    * 
    * @param base64Doc base64-encoded, PK-compressed archive
    * @return raw byte array of decompressed document
