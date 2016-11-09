@@ -14,7 +14,6 @@ import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
 /**
  * Business layer object to work on {@link CmsDocument}.
@@ -34,7 +33,6 @@ public class CmsDocumentService implements CrudsService {
   public CmsDocumentService(CmsDocumentDao dao) {
     this.dao = dao;
   }
-
 
   /**
    * {@inheritDoc}
