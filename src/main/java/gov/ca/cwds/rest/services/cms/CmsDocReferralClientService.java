@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;
 
 /**
- * Business layer object to work on {@link CmsDocReferralClient}
+ * Business layer object to work on {@link CmsDocReferralClient}.
  * 
  * @author CWDS API Team
  */

@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.compress.utils.IOUtils;
+import org.flywaydb.core.internal.util.FileCopyUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -24,8 +26,12 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class PKCompressionTest {
 
-  private static final String GOOD_PK = "/jni/pk/good.pk";
-  private static final String GOOD_DOC = "/jni/pk/good.doc";
+  private static final String ZIP_PK_1 = "/jni/pk/first.pk";
+  private static final String ZIP_DOC_1 = "/jni/pk/first.doc";
+
+  private static final String ZIP_PK_3 = "/jni/pk/third.pk";
+  private static final String ZIP_B64_3 = "/jni/pk/third.b64";
+  private static final String ZIP_DOC_3 = "/jni/pk/third.doc";
 
   private CmsPKCompressor inst;
 
@@ -66,58 +72,59 @@ public class PKCompressionTest {
   // ===================
 
   @Test
-  public void testDecompressGoodFile() {
+  public void testDecompressFile2File1() {
     try {
-      final String src = PKCompressionTest.class.getResource(GOOD_PK).getPath();
-      final String good = PKCompressionTest.class.getResource(GOOD_DOC).getPath();
+      final String src = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
+      final String good = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
 
       File tgt = File.createTempFile("tgt", ".pk");
       tgt.deleteOnExit();
 
-      inst.decompressPKToFile(src, tgt.getAbsolutePath());
+      inst.decompressFile(src, tgt.getAbsolutePath());
 
       final String chkTgt = checksum(tgt);
-      final String chkGood = checksum(new File(good));
+      final String chkFirst = checksum(new File(good));
 
-      assertTrue("PK decompression failed", chkTgt.equals(chkGood));
+      assertTrue("PK decompression failed", chkTgt.equals(chkFirst));
     } catch (Exception e) {
       fail("Exception: " + e.getMessage());
     }
   }
 
   @Test
-  public void testDecompressGoodBase64() {
+  public void testDecompressInputStream1() {
     try {
-      final String src = PKCompressionTest.class.getResource(GOOD_PK).getPath();
-      final String good = PKCompressionTest.class.getResource(GOOD_DOC).getPath();
+      final String src = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
+      final String good = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
 
-      final String base64Doc = DatatypeConverter
-          .printBase64Binary(IOUtils.toByteArray(new FileInputStream(new File(src))));
-
-      final byte[] bytes = inst.decompressPKToBytes(base64Doc);
-
-      final String chkTgt = checksum(bytes);
-      final String chkGood = checksum(new File(good));
-
-      assertTrue("PK decompression failed", chkTgt.equals(chkGood));
-    } catch (Exception e) {
-      fail("Exception: " + e.getMessage());
-    }
-  }
-
-  @Test
-  public void testDecompressGoodInputStream() {
-    try {
-      final String src = PKCompressionTest.class.getResource(GOOD_PK).getPath();
-      final String good = PKCompressionTest.class.getResource(GOOD_DOC).getPath();
-
-      final byte[] bytes = inst.decompressPKToBytes(
+      final byte[] bytes = inst.decompressStream(
           new ByteArrayInputStream(IOUtils.toByteArray(new FileInputStream(new File(src)))));
 
       final String chkTgt = checksum(bytes);
-      final String chkGood = checksum(new File(good));
+      final String chkFirst = checksum(new File(good));
 
-      assertTrue("PK decompression failed", chkTgt.equals(chkGood));
+      assertTrue("PK decompression failed", chkTgt.equals(chkFirst));
+    } catch (Exception e) {
+      fail("Exception: " + e.getMessage());
+    }
+  }
+
+  @Test
+  public void testDecompressBase64Encoded3() {
+    try {
+      final String src = PKCompressionTest.class.getResource(ZIP_B64_3).getPath();
+      final String good = PKCompressionTest.class.getResource(ZIP_DOC_3).getPath();
+
+      final String b64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
+      System.out.println("b64 len=" + b64.length());
+
+      final byte[] bytes = inst.decompressBase64(b64);
+      System.out.println("bytes len=" + bytes.length);
+
+      final String chkTgt = checksum(bytes);
+      final String chkFirst = checksum(new File(good));
+
+      assertTrue("PK decompression failed", chkTgt.equals(chkFirst));
     } catch (Exception e) {
       fail("Exception: " + e.getMessage());
     }
@@ -128,38 +135,37 @@ public class PKCompressionTest {
   // ===================
 
   @Test
-  public void testCompressGoodFile() {
+  public void testCompressFirstFile() {
     try {
-      final String src = PKCompressionTest.class.getResource(GOOD_DOC).getPath();
-      final String good = PKCompressionTest.class.getResource(GOOD_PK).getPath();
+      final String src = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
+      final String good = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
 
       File tgt = File.createTempFile("tgt", ".doc");
       tgt.deleteOnExit();
 
-      inst.compressToPKFile(src, tgt.getAbsolutePath());
+      inst.compress(src, tgt.getAbsolutePath());
 
       final String chkTgt = checksum(tgt);
-      final String chkGood = checksum(new File(good));
+      final String chkFirst = checksum(new File(good));
 
-      assertTrue("PK compression failed", chkTgt.equals(chkGood));
+      assertTrue("PK compression failed", chkTgt.equals(chkFirst));
     } catch (Exception e) {
       fail("Exception: " + e.getMessage());
     }
   }
 
   @Test
-  public void testCompressGoodBytes() {
+  public void testCompressFirstBytes() {
     try {
-      final String src = PKCompressionTest.class.getResource(GOOD_DOC).getPath();
-      final String good = PKCompressionTest.class.getResource(GOOD_PK).getPath();
+      final String src = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
+      final String good = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
 
-      final byte[] bytes =
-          inst.compressToPKBytes(IOUtils.toByteArray(new FileInputStream(new File(src))));
+      final byte[] bytes = inst.compress(IOUtils.toByteArray(new FileInputStream(new File(src))));
 
       final String chkTgt = checksum(bytes);
-      final String chkGood = checksum(new File(good));
+      final String chkFirst = checksum(new File(good));
 
-      assertTrue("PK compression failed", chkTgt.equals(chkGood));
+      assertTrue("PK compression failed", chkTgt.equals(chkFirst));
     } catch (Exception e) {
       fail("Exception: " + e.getMessage());
     }
