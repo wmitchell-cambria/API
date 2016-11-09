@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,44 +60,6 @@ public class CmsPKCompressor implements LicenseCWDS {
    * Constructor
    */
   public CmsPKCompressor() {}
-
-  /**
-   * Compress (deflate) a CMS PKWare archive and writes resulting decompressed document to given
-   * output file.
-   * 
-   * @param inputFileName file name to decompress
-   * @param outputFileName file name of resulting decompressed output
-   * @throws IOException If an I/O error occurs
-   */
-  public void compress(String inputFileName, String outputFileName) throws IOException {
-    FileInputStream fis = new FileInputStream(new File(inputFileName));
-    OutputStream fos =
-        new DeflateOutputStream(new FileOutputStream(new File(outputFileName)), 6, true);
-    IOUtils.copy(fis, fos);
-
-    fis.close();
-    fos.close();
-  }
-
-  /**
-   * Convenience method. Compress (deflate) a document InputStream.
-   * 
-   * @param bytes raw bytes of the document to compress
-   * @return raw byte array of compressed document
-   * @throws IOException If an I/O error occurs
-   */
-  public byte[] compress(byte[] bytes) throws IOException {
-    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-    ByteArrayOutputStream bos = new ByteArrayOutputStream(0x10000);
-
-    OutputStream dos = new DeflateOutputStream(bos, 6, true);
-    IOUtils.copy(bis, dos);
-
-    bis.close();
-    dos.close();
-
-    return bos.toByteArray();
-  }
 
   /**
    * Decompress (inflate) a CMS PKWare archive.
@@ -191,55 +152,41 @@ public class CmsPKCompressor implements LicenseCWDS {
   }
 
   /**
-   * Compress or decompress a CMS PKWare archive.
+   * Compress (deflate) a CMS PKWare archive and writes resulting decompressed document to given
+   * output file.
    * 
-   * <p>
-   * EXAMPLE USAGE:
-   * </p>
-   * 
-   * <pre>
-   * {@code -d 6916351513091620_CWDST___00007.pk from_java_pk.doc}
-   * </pre>
-   *
-   * <pre>
-   * {@code -c from_java_pk.doc something.pk}
-   * </pre>
-   *
-   * <pre>
-   * {@code -d something.pk again.doc}
-   * </pre>
-   *
-   * @param args Command line arguments
+   * @param inputFileName file name to decompress
+   * @param outputFileName file name of resulting decompressed output
+   * @throws IOException If an I/O error occurs
    */
-  public static void main(String[] args) {
-    try {
-      CmsPKCompressor inst = new CmsPKCompressor();
+  public void compressFile(String inputFileName, String outputFileName) throws IOException {
+    FileInputStream fis = new FileInputStream(new File(inputFileName));
+    OutputStream fos =
+        new DeflateOutputStream(new FileOutputStream(new File(outputFileName)), 6, true);
+    IOUtils.copy(fis, fos);
 
-      String mode = args[0];
+    fis.close();
+    fos.close();
+  }
 
-      if ("-d".equals(mode)) {
-        // Decompress
-        inst.decompressFile(args[1], args[2]);
-      } else if ("-b".equals(mode)) {
-        // Base64
-        final String b64 = FileCopyUtils.copyToString(new FileReader(new File(args[1]))).trim();
-        System.out.println("b64 len=" + b64.length());
+  /**
+   * Convenience method. Compress (deflate) a document InputStream.
+   * 
+   * @param bytes raw bytes of the document to compress
+   * @return raw byte array of compressed document
+   * @throws IOException If an I/O error occurs
+   */
+  public byte[] compressBytes(byte[] bytes) throws IOException {
+    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+    ByteArrayOutputStream bos = new ByteArrayOutputStream(0x10000);
 
-        final byte[] bytes = inst.decompressBase64(b64);
-        System.out.println("bytes len=" + bytes.length);
+    OutputStream dos = new DeflateOutputStream(bos, 6, true);
+    IOUtils.copy(bis, dos);
 
-        FileOutputStream writer = new FileOutputStream(new File(args[2]));
-        writer.write(bytes);
-        writer.flush();
-        writer.close();
-      } else {
-        // Compress
-        inst.compress(args[1], args[2]);
-      }
+    bis.close();
+    dos.close();
 
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    return bos.toByteArray();
   }
 
 }

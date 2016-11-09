@@ -11,6 +11,8 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.flywaydb.core.internal.util.FileCopyUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -26,11 +28,13 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class PKCompressionTest {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsPKCompressor.class);
+
   private static final String ZIP_PK_1 = "/jni/pk/first.pk";
   private static final String ZIP_DOC_1 = "/jni/pk/first.doc";
 
-  private static final String ZIP_PK_3 = "/jni/pk/third.pk";
   private static final String ZIP_B64_3 = "/jni/pk/third.b64";
+  private static final String ZIP_HEX_3 = "/jni/pk/third.hex";
   private static final String ZIP_DOC_3 = "/jni/pk/third.doc";
 
   private CmsPKCompressor inst;
@@ -116,10 +120,31 @@ public class PKCompressionTest {
       final String good = PKCompressionTest.class.getResource(ZIP_DOC_3).getPath();
 
       final String b64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
-      System.out.println("b64 len=" + b64.length());
+      LOGGER.debug("b64 len=" + b64.length());
 
       final byte[] bytes = inst.decompressBase64(b64);
-      System.out.println("bytes len=" + bytes.length);
+      LOGGER.debug("bytes len=" + bytes.length);
+
+      final String chkTgt = checksum(bytes);
+      final String chkFirst = checksum(new File(good));
+
+      assertTrue("PK decompression failed", chkTgt.equals(chkFirst));
+    } catch (Exception e) {
+      fail("Exception: " + e.getMessage());
+    }
+  }
+
+  @Test
+  public void testDecompressBase64Hex3() {
+    try {
+      final String src = PKCompressionTest.class.getResource(ZIP_HEX_3).getPath();
+      final String good = PKCompressionTest.class.getResource(ZIP_DOC_3).getPath();
+
+      final String hex = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
+      LOGGER.debug("hex len=" + hex.length());
+
+      final byte[] bytes = inst.decompressHex(hex);
+      LOGGER.debug("bytes len=" + bytes.length);
 
       final String chkTgt = checksum(bytes);
       final String chkFirst = checksum(new File(good));
@@ -135,7 +160,7 @@ public class PKCompressionTest {
   // ===================
 
   @Test
-  public void testCompressFirstFile() {
+  public void testCompressFile1() {
     try {
       final String src = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
       final String good = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
@@ -143,7 +168,7 @@ public class PKCompressionTest {
       File tgt = File.createTempFile("tgt", ".doc");
       tgt.deleteOnExit();
 
-      inst.compress(src, tgt.getAbsolutePath());
+      inst.compressFile(src, tgt.getAbsolutePath());
 
       final String chkTgt = checksum(tgt);
       final String chkFirst = checksum(new File(good));
@@ -155,12 +180,13 @@ public class PKCompressionTest {
   }
 
   @Test
-  public void testCompressFirstBytes() {
+  public void testCompressBytes1() {
     try {
       final String src = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
       final String good = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
 
-      final byte[] bytes = inst.compress(IOUtils.toByteArray(new FileInputStream(new File(src))));
+      final byte[] bytes =
+          inst.compressBytes(IOUtils.toByteArray(new FileInputStream(new File(src))));
 
       final String chkTgt = checksum(bytes);
       final String chkFirst = checksum(new File(good));
