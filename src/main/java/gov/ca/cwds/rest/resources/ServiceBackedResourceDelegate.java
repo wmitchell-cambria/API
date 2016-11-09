@@ -39,8 +39,8 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     this.service = crudsService;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.resources.ResourceDelegate#get(java.io.Serializable)
    */
@@ -54,8 +54,8 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     }
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.resources.ResourceDelegate#delete(java.io.Serializable)
    */
@@ -69,8 +69,8 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     }
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.resources.ResourceDelegate#create(gov.ca.cwds.rest.api.Request)
    */
@@ -90,11 +90,11 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     return response;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.resources.ResourceDelegate#update(java.io.Serializable,
-   * gov.ca.cwds.rest.api.Request)
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Response update(Serializable id, Request request) {
@@ -117,5 +117,9 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
       }
     }
     return response;
+  }
+
+  public CrudsService getService() {
+    return service;
   }
 }

@@ -48,8 +48,10 @@ import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
+import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
+import gov.ca.cwds.rest.services.ServiceRegistry;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.CmsDocReferralClientService;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
@@ -69,6 +71,11 @@ import io.dropwizard.views.ViewBundle;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 
+/**
+ * Core execution class of CWDS REST API server application.
+ * 
+ * @author CWDS API Team
+ */
 public class ApiApplication extends Application<ApiConfiguration> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
@@ -118,7 +125,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
   @Override
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
-    // Enable variable substitution with environment variables
+    // Enable variable substitution with environment variables.
     bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
         bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
     bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
@@ -154,9 +161,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     configureSwagger(configuration, apiEnvironment);
   }
 
-  private void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
+  protected void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
 
-  private void setupDaos(final ApiConfiguration configuration) {
+  protected void setupDaos(final ApiConfiguration configuration) {
     LOGGER.info("Setting up production DAOs");
     DataAccessEnvironment.register(Person.class,
         new PersonDao(nsHibernateBundle.getSessionFactory()));
@@ -184,7 +191,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new CmsDocReferralClientDao(cmsHibernateBundle.getSessionFactory()));
   }
 
-  private void registerResources(final ApiConfiguration configuration,
+  protected void registerResources(final ApiConfiguration configuration,
       final ApiEnvironment apiEnvironment) {
     LOGGER.info("Registering ApplicationResource");
     final ApplicationResource applicationResource =
@@ -193,12 +200,15 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     final PersonService personService =
         new PersonService((PersonDao) DataAccessEnvironment.get(Person.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.Address.class, personService);
     final ScreeningService screeningService = new ScreeningService(
         (ScreeningDao) DataAccessEnvironment.get(Screening.class), personService);
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.Address.class, screeningService);
 
     LOGGER.info("Registering AddressResource");
-    AddressResource addressResource = new AddressResource(new ServiceBackedResourceDelegate(
-        new AddressService((AddressDao) DataAccessEnvironment.get(Address.class))));
+    CrudsService svc = new AddressService((AddressDao) DataAccessEnvironment.get(Address.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.Address.class, svc);
+    AddressResource addressResource = new AddressResource(new ServiceBackedResourceDelegate(svc));
     apiEnvironment.jersey().register(addressResource);
 
     LOGGER.info("Registering PersonResource");
@@ -214,6 +224,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     LOGGER.info("Registering CmsDocumentResource");
     final CmsDocumentService docService =
         new CmsDocumentService((CmsDocumentDao) DataAccessEnvironment.get(CmsDocument.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.CmsDocument.class, docService);
     CmsDocumentResource docResource =
         new CmsDocumentResource(new ServiceBackedResourceDelegate(docService));
     apiEnvironment.jersey().register(docResource);
@@ -222,6 +233,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
     final CmsDocReferralClientService docReferralClientService = new CmsDocReferralClientService(
         (CmsDocReferralClientDao) DataAccessEnvironment.get(CmsDocReferralClient.class),
         (CmsDocumentDao) DataAccessEnvironment.get(CmsDocument.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient.class,
+        docReferralClientService);
     CmsDocReferralClientResource docReferralClientResource = new CmsDocReferralClientResource(
         new ServiceBackedResourceDelegate(docReferralClientService));
     apiEnvironment.jersey().register(docReferralClientResource);
@@ -229,6 +242,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
     LOGGER.info("Registering StaffPersonResource");
     StaffPersonService staffPersonService =
         new StaffPersonService((StaffPersonDao) DataAccessEnvironment.get(StaffPerson.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.StaffPerson.class,
+        staffPersonService);
     StaffPersonResource staffPersonResource =
         new StaffPersonResource(new ServiceBackedResourceDelegate(staffPersonService));
     apiEnvironment.jersey().register(staffPersonResource);
@@ -236,13 +251,14 @@ public class ApiApplication extends Application<ApiConfiguration> {
     LOGGER.info("Registering Allegations");
     AllegationService allegationService =
         new AllegationService((AllegationDao) DataAccessEnvironment.get(Allegation.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.Allegation.class,
+        allegationService);
     AllegationResource allegationResource =
         new AllegationResource(new ServiceBackedResourceDelegate(allegationService));
     apiEnvironment.jersey().register(allegationResource);
-
   }
 
-  private void configureCors(final ApiEnvironment apiEnvironment) {
+  protected void configureCors(final ApiEnvironment apiEnvironment) {
     FilterRegistration.Dynamic filter =
         apiEnvironment.servlets().addFilter("CORS", CrossOriginFilter.class);
     filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -254,7 +270,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     filter.setInitParameter("allowCredentials", "true");
   }
 
-  private void configureSwagger(final ApiConfiguration apiConfiguration,
+  protected void configureSwagger(final ApiConfiguration apiConfiguration,
       final ApiEnvironment apiEnvironment) {
     BeanConfig config = new BeanConfig();
     config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
@@ -276,5 +292,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new SwaggerResource(apiConfiguration.getSwaggerConfiguration());
     apiEnvironment.jersey().register(swaggerResource);
 
+  }
+
+  @Override
+  protected void addDefaultCommands(Bootstrap<ApiConfiguration> bootstrap) {
+    // Run Dropwizard as a server.
+    super.addDefaultCommands(bootstrap);
   }
 }
