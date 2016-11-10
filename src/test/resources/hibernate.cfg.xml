@@ -2,7 +2,8 @@
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
-<!-- NOTE: Connect to Taborda VPN to run integration tests. -->
+<!-- NOTE: Connect to Taborda VPN to run integration tests (test package 
+	gov.ca.cwds.rest.jbdi.cms). -->
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.current_session_context_class">thread</property>
