@@ -191,6 +191,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
   }
 
   public StaffPerson(gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson) {
+
     this.id = persistedStaffPerson.getId();
     this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
     this.firstName = persistedStaffPerson.getFirstName();
@@ -213,7 +214,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
         DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
     this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
     this.emailAddress = persistedStaffPerson.getEmailAddress();
-    // this.twitterName = "";
+
   }
 
   /**
