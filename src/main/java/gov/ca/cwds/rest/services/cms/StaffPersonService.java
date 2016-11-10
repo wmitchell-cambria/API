@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.legacy.PostedStaffPerson;
-import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -79,12 +79,13 @@ public class StaffPersonService implements CrudsService {
   public PostedStaffPerson create(Request request) {
     assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.StaffPerson);
 
-    gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson =
-        ((gov.ca.cwds.rest.api.domain.legacy.StaffPerson) request);
+    StaffPerson staffPerson = ((StaffPerson) request);
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
-      StaffPerson managed = new StaffPerson(IdGenerator.randomString(3), staffPerson, "q1p");
+      gov.ca.cwds.rest.api.persistence.cms.StaffPerson managed =
+          new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(IdGenerator.randomString(3),
+              staffPerson, "q1p");
 
       managed = staffPersonDao.create(managed);
       return new PostedStaffPerson(managed);
@@ -102,8 +103,7 @@ public class StaffPersonService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.StaffPerson update(Serializable primaryKey,
-      Request request) {
+  public StaffPerson update(Serializable primaryKey, Request request) {
     assert (primaryKey instanceof String);
     assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.StaffPerson);
     gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson =
@@ -111,7 +111,9 @@ public class StaffPersonService implements CrudsService {
 
 
     try {
-      StaffPerson managed = new StaffPerson((String) primaryKey, staffPerson, "q1p");
+      gov.ca.cwds.rest.api.persistence.cms.StaffPerson managed =
+          new gov.ca.cwds.rest.api.persistence.cms.StaffPerson((String) primaryKey, staffPerson,
+              "q1p");
 
       managed = staffPersonDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(managed);
