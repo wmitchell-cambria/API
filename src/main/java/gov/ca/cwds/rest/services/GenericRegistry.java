@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Generic registry container for arbitrary class type.
+ * Generic registry container associates arbitrary class type K with an instance of type V.
  * 
  * @author CWDS API Team
  */
@@ -35,5 +35,14 @@ public class GenericRegistry<K, V> {
    */
   public V get(Class<? extends K> clazz) {
     return registry.get(clazz);
+  }
+
+  /**
+   * Wipe the slate clean. Clear all key/value pairs.
+   * 
+   * <p>Underlying map implementation is synchronized but could change.</p>
+   */
+  public synchronized void clear() {
+    registry.clear();
   }
 }

@@ -157,9 +157,8 @@ public class Allegation extends CmsPersistentObject {
     this.placementFacilityType = persistedAllegation.getPlacementFacilityType();
   }
 
-
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
    */

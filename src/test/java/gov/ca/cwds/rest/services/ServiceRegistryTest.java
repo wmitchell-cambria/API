@@ -4,25 +4,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ServiceRegistryTest {
+import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
+import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 
-  private ServiceRegistry registry;
+public class ServiceRegistryTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setup() throws Exception {
-    registry = mock(ServiceRegistry.class);
+    ServiceRegistry.clear();
   }
 
   @Test
@@ -32,22 +32,56 @@ public class ServiceRegistryTest {
   }
 
   @Test
-  public void register_A$Class$Object() throws Exception {
-    // final PersonService personService =
-    // new PersonService((PersonDao) DataAccessEnvironment.get(Person.class));
-    // when(registry.get( ).thenReturn(new gov.ca.cwds.rest.api.persistence.ns.Address(
-    // 1L, "742 Evergreen Terrace", "Springfield", "WA", new Integer(98700)));
+  public void registerServiceItsAllGood() throws Exception {
+    final Service expected = mock(CmsDocumentService.class);
 
-    Class clazz = null;
-    Service v = null;
-    ServiceRegistry.register(clazz, v);
+    // Set:
+    final Class<CmsDocument> clazz = CmsDocument.class;
+    ServiceRegistry.register(clazz, expected);
+
+    // Get:
+    final Service returned = ServiceRegistry.get(clazz);
+    assertThat(returned, is(expected));
   }
 
-  public void test_register_A$Class$Service() throws Exception {
+  @Test
+  public void registerServiceUnknownService() throws Exception {
+    // Set:
+    final Class<CmsDocument> clazz = CmsDocument.class;
 
-    Class clazz = null;
-    Service v = null;
-    ServiceRegistry.register(clazz, v);
+    // Get:
+    final Service returned = ServiceRegistry.get(clazz);
+    assertThat(returned, is(nullValue()));
+  }
+
+  @Test
+  public void testRegisterNullValue() throws Exception {
+    thrown.expect(NullPointerException.class);
+    final Class<CmsDocument> clazz = CmsDocument.class;
+    ServiceRegistry.register(clazz, null);
+  }
+
+  @Test
+  public void testGetNullKey() throws Exception {
+    thrown.expect(NullPointerException.class);
+    final Service expected = mock(CmsDocumentService.class);
+    ServiceRegistry.register(null, expected);
+  }
+
+  @Test
+  public void testRegisterNullKeyValue() throws Exception {
+    thrown.expect(NullPointerException.class);
+    ServiceRegistry.register(null, null);
+  }
+
+  @Test
+  public void testRegisterDuplicateService() throws Exception {
+    final Service expected = mock(CmsDocumentService.class);
+    final Class<CmsDocument> clazz1 = CmsDocument.class;
+    final Class<CmsDocReferralClient> clazz2 = CmsDocReferralClient.class;
+
+    ServiceRegistry.register(clazz1, expected);
+    ServiceRegistry.register(clazz2, expected);
   }
 
 }
