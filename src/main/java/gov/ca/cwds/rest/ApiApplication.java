@@ -291,12 +291,5 @@ public class ApiApplication extends Application<ApiConfiguration> {
     final SwaggerResource swaggerResource =
         new SwaggerResource(apiConfiguration.getSwaggerConfiguration());
     apiEnvironment.jersey().register(swaggerResource);
-
-  }
-
-  @Override
-  protected void addDefaultCommands(Bootstrap<ApiConfiguration> bootstrap) {
-    // Run Dropwizard as a server.
-    super.addDefaultCommands(bootstrap);
   }
 }
