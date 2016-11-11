@@ -424,5 +424,4 @@ public class ReferralClient extends DomainObject implements Request, Response {
       return false;
     return true;
   }
-
 }

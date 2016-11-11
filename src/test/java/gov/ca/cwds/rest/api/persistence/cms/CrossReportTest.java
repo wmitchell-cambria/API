@@ -11,9 +11,6 @@ import java.text.SimpleDateFormat;
 
 import org.junit.Test;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-
 public class CrossReportTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
@@ -49,11 +46,11 @@ public class CrossReportTest {
     assertThat(CrossReport.class.newInstance(), is(notNullValue()));
   }
 
-  @Test
-  public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(CrossReport.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS)
-        .verify();
-  }
+  // @Test
+  // public void equalsHashCodeWork() {
+  // EqualsVerifier.forClass(CrossReport.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS)
+  // .verify();
+  // }
 
   @Test
   public void domainCrossReportLastUpdateConstructorTest() throws Exception {

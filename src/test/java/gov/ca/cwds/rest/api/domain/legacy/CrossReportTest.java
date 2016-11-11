@@ -226,7 +226,7 @@ public class CrossReportTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("thirdId may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("thirdId may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -238,7 +238,7 @@ public class CrossReportTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("thirdId may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("thirdId may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -249,8 +249,10 @@ public class CrossReportTest {
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("thirdId may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("thirdId size must be between 10 and 10"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -786,7 +788,7 @@ public class CrossReportTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("referralId may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -799,7 +801,9 @@ public class CrossReportTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+    assertThat(response.readEntity(String.class).indexOf("referralId may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -812,7 +816,8 @@ public class CrossReportTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
+    assertThat(
+        response.readEntity(String.class).indexOf("referralId size must be between 10 and 10"),
         is(greaterThanOrEqualTo(0)));
   }
 

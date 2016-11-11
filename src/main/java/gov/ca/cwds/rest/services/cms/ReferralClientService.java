@@ -106,23 +106,25 @@ public class ReferralClientService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.ReferralClient update(Serializable primaryKey,
+  public gov.ca.cwds.rest.api.domain.legacy.ReferralClient update(Serializable primaryKeyObject,
       Request request) {
 
-    // assert (primaryKeyObject instanceof String);
+    assert (primaryKeyObject instanceof String);
     assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.ReferralClient);
     gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient =
         ((gov.ca.cwds.rest.api.domain.legacy.ReferralClient) request);
 
 
     try {
-      ReferralClient managed = new ReferralClient(referralClient.getReferralId(),
-          referralClient.getClientId(), referralClient, "q1p");
+      ReferralClient managed = new ReferralClient(getReferralId(primaryKeyObject),
+          getClientId(primaryKeyObject), referralClient, "q1p");
 
       managed = referralClientDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.legacy.ReferralClient(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("Referral not found : {}", referralClient);
+      String message = e.getMessage();
+      System.out.print(message);
       throw new ServiceException(e);
     }
   }
@@ -134,6 +136,18 @@ public class ReferralClientService implements CrudsService {
     ReferralClient.PrimaryKey primaryKeyObject =
         new ReferralClient.PrimaryKey(referralId, clientId);
     return primaryKeyObject;
+  }
+
+  private String getReferralId(Serializable primaryKey) {
+    Map<String, String> nameValuePairs = ServiceUtils.extractKeyValuePairs(primaryKey);
+    String referralId = nameValuePairs.get(KEY_REFERRAL_ID);
+    return referralId;
+  }
+
+  private String getClientId(Serializable primaryKey) {
+    Map<String, String> nameValuePairs = ServiceUtils.extractKeyValuePairs(primaryKey);
+    String clientId = nameValuePairs.get(KEY_CLIENT_ID);
+    return clientId;
   }
 
 }
