@@ -19,7 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
-import gov.ca.cwds.rest.api.persistence.cms.CrossReport.PrimaryKey;
+// import gov.ca.cwds.rest.api.persistence.cms.CrossReport.PrimaryKey;
 
 public class CrossReportDaoIT {
   private SessionFactory sessionFactory;
@@ -42,9 +42,9 @@ public class CrossReportDaoIT {
 
   @Test
   public void testFind() {
-    CrossReport found = crossreportDao.find(new PrimaryKey("925q4As0AB", "7wviAIk0AB"));
+    CrossReport found = crossreportDao.find("7wviAIk0AB");
     assertThat(found.getThirdId(), is(equalTo("7wviAIk0AB")));
-    assertThat(found.getReferralId(), is(equalTo("925q4As0AB")));
+    // assertThat(found.getReferralId(), is(equalTo("925q4As0AB")));
 
   }
 
@@ -70,11 +70,11 @@ public class CrossReportDaoIT {
   @Test
   public void testDelete() {
     String thirdId = "FsMh09h00J";
-    String referralId = "AAKhYyf00J";
-    CrossReport.PrimaryKey primaryKey = new CrossReport.PrimaryKey(referralId, thirdId);
-    CrossReport delete = crossreportDao.delete(primaryKey);
+    // String referralId = "AAKhYyf00J";
+    // CrossReport.PrimaryKey primaryKey = new CrossReport.PrimaryKey(referralId, thirdId);
+    CrossReport delete = crossreportDao.delete(thirdId);
     assertThat(delete.getThirdId(), is(thirdId));
-    assertThat(delete.getReferralId(), is(referralId));
+    // assertThat(delete.getReferralId(), is(referralId));
   }
 
   @Test

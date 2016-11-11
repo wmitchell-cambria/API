@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services.cms;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -17,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.legacy.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import io.dropwizard.jackson.Jackson;
@@ -137,9 +139,13 @@ public class StaffPersonServiceTest {
 
   @Test
   public void updateThrowsExceptionWhenStaffPersonNotFound() throws Exception {
+    // TODO: test does not throw exception from allegationService.update method
+    //
+    // remove comments before running unit test
+    //
     // thrown.expect(ServiceException.class);
     // thrown.expectCause(Is.isA(EntityNotFoundException.class));
-    // thrown.expectMessage(contains("Unable to find"));
+    // thrown.expectMessage(contains("Expected test to throw"));
 
     StaffPerson staffPersonRequest = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
@@ -152,20 +158,61 @@ public class StaffPersonServiceTest {
     when(staffPersonDao.update(any())).thenReturn(staffPerson);
 
     staffPersonService.update("ZZZ", staffPersonRequest);
-
   }
 
-  // @Test
-  // public void createThrowsAssertionError() throws Exception {
-  // // TODO: thrown.expect not working on AssertionError???? WHY???
-  // // thrown.expect(AssertionError.class);
-  // StaffPerson staffPersonRequest = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
-  // try {
-  // staffPersonService.create(staffPersonRequest);
-  // Assert.fail("Expected AssertionError");
-  // } catch (AssertionError e) {
-  // }
-  // }
+  @Test
+  public void createReturnsPostedStaffPerson() throws Exception {
+    StaffPerson staffPersonDomain = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
+    gov.ca.cwds.rest.api.persistence.cms.StaffPerson toCreate =
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonDomain.getId(),
+            staffPersonDomain, "last_update");
 
+    StaffPerson request = new StaffPerson(toCreate);
+
+    when(staffPersonDao.create(any(gov.ca.cwds.rest.api.persistence.cms.StaffPerson.class)))
+        .thenReturn(toCreate);
+
+    Response response = staffPersonService.create(request);
+
+    assertThat(response.getClass(), is(PostedStaffPerson.class));
+  }
+
+  @Test
+  public void createReturnsNonNull() throws Exception {
+    StaffPerson staffPersonDomain = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
+    gov.ca.cwds.rest.api.persistence.cms.StaffPerson toCreate =
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonDomain.getId(),
+            staffPersonDomain, "last_update");
+
+    StaffPerson request = new StaffPerson(toCreate);
+
+    when(staffPersonDao.create(any(gov.ca.cwds.rest.api.persistence.cms.StaffPerson.class)))
+        .thenReturn(toCreate);
+
+    PostedStaffPerson postedStaffPerson = staffPersonService.create(request);
+
+    assertThat(postedStaffPerson, is(notNullValue()));
+  }
+
+  @Test
+  public void createReturnsCorrectPostedPerson() throws Exception {
+    StaffPerson staffPersonDomain = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
+    gov.ca.cwds.rest.api.persistence.cms.StaffPerson toCreate =
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonDomain.getId(),
+            staffPersonDomain, "last_update");
+
+    StaffPerson request = new StaffPerson(toCreate);
+
+    when(staffPersonDao.create(any(gov.ca.cwds.rest.api.persistence.cms.StaffPerson.class)))
+        .thenReturn(toCreate);
+
+    PostedStaffPerson expected = new PostedStaffPerson(toCreate);
+
+    PostedStaffPerson returned = staffPersonService.create(request);
+
+    assertThat(returned, is(expected));
+  }
 }

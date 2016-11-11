@@ -10,6 +10,7 @@ public class ServiceUtils {
   public static Map<String, String> extractKeyValuePairs(Serializable nameValuePairsSerializable) {
     Map<String, String> keyValuePairs = new HashMap<String, String>();
     if (!(nameValuePairsSerializable instanceof String)) {
+
       throw new ServiceException("Unable to read nameValuePairs as string");
     }
     try {
