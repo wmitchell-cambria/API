@@ -25,7 +25,6 @@ import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 @Table(name = "CRSS_RPT")
 // @IdClass(PrimaryKey.class)
 public class CrossReport extends CmsPersistentObject {
-  @Id
   @Column(name = "FKREFERL_T")
   private String referralId;
 
