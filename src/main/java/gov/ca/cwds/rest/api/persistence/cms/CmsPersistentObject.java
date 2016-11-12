@@ -16,7 +16,12 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @MappedSuperclass
-public abstract class CmsPersistentObject implements PersistentObject {
+public abstract class CmsPersistentObject implements PersistentObject, Serializable {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
   @Column(name = "\"LST_UPD_ID\"")

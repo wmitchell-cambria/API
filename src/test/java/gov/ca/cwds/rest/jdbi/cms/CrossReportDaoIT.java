@@ -42,7 +42,9 @@ public class CrossReportDaoIT {
 
   @Test
   public void testFind() {
-    CrossReport found = crossreportDao.find("7wviAIk0AB");
+    String thirdId = "7wviAIk0AB";
+
+    CrossReport found = crossreportDao.find(thirdId);
     assertThat(found.getThirdId(), is(equalTo("7wviAIk0AB")));
     // assertThat(found.getReferralId(), is(equalTo("925q4As0AB")));
 
