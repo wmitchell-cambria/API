@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,7 +12,6 @@ import java.io.OutputStream;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.compress.utils.IOUtils;
-import org.flywaydb.core.internal.util.FileCopyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +25,11 @@ import com.pkware.deflate.InflateInputStream;
  * <p>
  * <strong>NOTE: </strong>This class only works with PK-compressed docs, not the LZW variable 15-bit
  * algorithm. For the latter, see {@link LZWEncoder}.
+ * </p>
+ *
+ * <p>
+ * This class provides specialized methods to compress/decompress documents for various inputs,
+ * including files, streams, byte arrays, base64-encoded strings, and hexadecimal strings.
  * </p>
  *
  * <p>
@@ -55,6 +58,9 @@ import com.pkware.deflate.InflateInputStream;
 public class CmsPKCompressor implements LicenseCWDS {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsPKCompressor.class);
+
+  private static final int DEFAULT_COMPRESSION_LEVEL = 6;
+  private static final int DEFAULT_OUTPUT_SIZE = 0x10000;
 
   /**
    * Constructor
@@ -89,7 +95,7 @@ public class CmsPKCompressor implements LicenseCWDS {
   public byte[] decompressBytes(byte[] bytes) throws IOException {
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
     InputStream iis = new InflateInputStream(bis, true);
-    ByteArrayOutputStream bos = new ByteArrayOutputStream(0x10000);
+    ByteArrayOutputStream bos = new ByteArrayOutputStream(DEFAULT_OUTPUT_SIZE);
     IOUtils.copy(iis, bos);
 
     iis.close();
@@ -112,17 +118,13 @@ public class CmsPKCompressor implements LicenseCWDS {
    */
   public byte[] decompressStream(InputStream input) throws IOException {
     InputStream iis = new InflateInputStream(input, true);
-    ByteArrayOutputStream bos = new ByteArrayOutputStream(0x10000);
+    ByteArrayOutputStream bos = new ByteArrayOutputStream(DEFAULT_OUTPUT_SIZE);
     IOUtils.copy(iis, bos);
 
     iis.close();
     bos.flush();
     bos.close();
-
-    final byte[] bytes = bos.toByteArray();
-    LOGGER.debug("CmsPKCompressor.decompressStream(InputStream): bytes len=" + bytes.length);
-
-    return bytes;
+    return bos.toByteArray();
   }
 
   /**
@@ -152,7 +154,7 @@ public class CmsPKCompressor implements LicenseCWDS {
   }
 
   /**
-   * Compress (deflate) a CMS PKWare archive and writes resulting decompressed document to given
+   * Compress (deflate) a CMS PKWare archive and writes resulting compressed document to given
    * output file.
    * 
    * @param inputFileName file name to decompress
@@ -161,8 +163,8 @@ public class CmsPKCompressor implements LicenseCWDS {
    */
   public void compressFile(String inputFileName, String outputFileName) throws IOException {
     FileInputStream fis = new FileInputStream(new File(inputFileName));
-    OutputStream fos =
-        new DeflateOutputStream(new FileOutputStream(new File(outputFileName)), 6, true);
+    OutputStream fos = new DeflateOutputStream(new FileOutputStream(new File(outputFileName)),
+        DEFAULT_COMPRESSION_LEVEL, true);
     IOUtils.copy(fis, fos);
 
     fis.close();
@@ -178,9 +180,9 @@ public class CmsPKCompressor implements LicenseCWDS {
    */
   public byte[] compressBytes(byte[] bytes) throws IOException {
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-    ByteArrayOutputStream bos = new ByteArrayOutputStream(0x10000);
+    ByteArrayOutputStream bos = new ByteArrayOutputStream(DEFAULT_OUTPUT_SIZE);
 
-    OutputStream dos = new DeflateOutputStream(bos, 6, true);
+    OutputStream dos = new DeflateOutputStream(bos, DEFAULT_COMPRESSION_LEVEL, true);
     IOUtils.copy(bis, dos);
 
     bis.close();
