@@ -3,10 +3,6 @@ package gov.ca.cwds.rest.api.domain.legacy;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.glassfish.jersey.linking.Binding;
-import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLink.Style;
-import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.core.Api;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,20 +22,20 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@InjectLinks({
-    @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.id}"),
-            @Binding(name = "resource", value = Api.RESOURCE_ALLEGATION)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "perpetratorClientId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.perpetratorClientId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_CLIENT)},
-        condition = "${not empty instance.perpetratorClientId }"),
-    @InjectLink(value = "/{resource}/{id}", rel = "victimClientId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.victimClientId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_CLIENT)}),
-    @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
-        bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-            @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)})})
+// @InjectLinks({
+// @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.id}"),
+// @Binding(name = "resource", value = Api.RESOURCE_ALLEGATION)}),
+// @InjectLink(value = "/{resource}/{id}", rel = "perpetratorClientId", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.perpetratorClientId}"),
+// @Binding(name = "resource", value = Api.RESOURCE_CLIENT)},
+// condition = "${not empty instance.perpetratorClientId }"),
+// @InjectLink(value = "/{resource}/{id}", rel = "victimClientId", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.victimClientId}"),
+// @Binding(name = "resource", value = Api.RESOURCE_CLIENT)}),
+// @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
+// bindings = {@Binding(name = "id", value = "${instance.referralId}"),
+// @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)})})
 public class Allegation extends DomainObject implements Request, Response {
 
   @NotEmpty
@@ -53,7 +48,7 @@ public class Allegation extends DomainObject implements Request, Response {
   @JsonProperty(value = "abuseEndDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "date when abuse allegedly ended",
-      example = "11/31/2016")
+      example = "2016-11-30")
   private String abuseEndDate;
 
   @NotNull
@@ -76,7 +71,7 @@ public class Allegation extends DomainObject implements Request, Response {
   @JsonProperty(value = "abuseStartDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "start date of alleged abuse",
-      example = "11/31/2016")
+      example = "2016-11-30")
   private String abuseStartDate;
 
   @NotNull
@@ -97,7 +92,7 @@ public class Allegation extends DomainObject implements Request, Response {
   @JsonProperty(value = "dispositionDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "date of allegation disposition",
-      example = "11/31/2016")
+      example = "2016-11-30")
   private String dispositionDate;
 
   @NotNull
