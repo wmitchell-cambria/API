@@ -46,6 +46,10 @@ import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
+import gov.ca.cwds.rest.resources.cms.CrossReportResource;
+import gov.ca.cwds.rest.resources.cms.ReferralClientResource;
+import gov.ca.cwds.rest.resources.cms.ReferralResource;
+import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -55,6 +59,10 @@ import gov.ca.cwds.rest.services.ServiceRegistry;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.CmsDocReferralClientService;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
+import gov.ca.cwds.rest.services.cms.CrossReportService;
+import gov.ca.cwds.rest.services.cms.ReferralClientService;
+import gov.ca.cwds.rest.services.cms.ReferralService;
+import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
@@ -256,6 +264,40 @@ public class ApiApplication extends Application<ApiConfiguration> {
     AllegationResource allegationResource =
         new AllegationResource(new ServiceBackedResourceDelegate(allegationService));
     apiEnvironment.jersey().register(allegationResource);
+
+    LOGGER.info("Registering ReporterResource");
+    ReporterService reporterService =
+        new ReporterService((ReporterDao) DataAccessEnvironment.get(Reporter.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.Reporter.class, reporterService);
+    ReporterResource reporterResource =
+        new ReporterResource(new ServiceBackedResourceDelegate(reporterService));
+    apiEnvironment.jersey().register(reporterResource);
+
+    LOGGER.info("Registering CrossReportResource");
+    CrossReportService crossReportService =
+        new CrossReportService((CrossReportDao) DataAccessEnvironment.get(CrossReport.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.CrossReport.class,
+        crossReportService);
+    CrossReportResource crossReportResource =
+        new CrossReportResource(new ServiceBackedResourceDelegate(crossReportService));
+    apiEnvironment.jersey().register(crossReportResource);
+
+    LOGGER.info("Registering ReferralClientResource");
+    ReferralClientService referralClientService = new ReferralClientService(
+        (ReferralClientDao) DataAccessEnvironment.get(ReferralClient.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.ReferralClient.class,
+        referralClientService);
+    ReferralClientResource referralClientResource =
+        new ReferralClientResource(new ServiceBackedResourceDelegate(referralClientService));
+    apiEnvironment.jersey().register(referralClientResource);
+
+    LOGGER.info("Registering ReferralResource");
+    ReferralService referralService =
+        new ReferralService((ReferralDao) DataAccessEnvironment.get(Referral.class));
+    ServiceRegistry.register(gov.ca.cwds.rest.api.domain.legacy.Referral.class, referralService);
+    ReferralResource referralResource =
+        new ReferralResource(new ServiceBackedResourceDelegate(referralService));
+    apiEnvironment.jersey().register(referralResource);
   }
 
   protected void configureCors(final ApiEnvironment apiEnvironment) {
