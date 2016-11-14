@@ -83,7 +83,7 @@ public class ReporterService implements CrudsService {
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
-      Reporter managed = new Reporter(IdGenerator.randomString(3), reporter, "q1p");
+      Reporter managed = new Reporter(IdGenerator.randomString(10), reporter, "q1p");
 
       managed = reporterDao.create(managed);
       return new PostedReporter(managed);
