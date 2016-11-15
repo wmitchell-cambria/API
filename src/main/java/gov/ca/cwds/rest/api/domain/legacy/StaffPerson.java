@@ -24,13 +24,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 public class StaffPerson extends DomainObject implements Request, Response {
-
-  @NotEmpty
-  @Size(min = 3, max = 3)
-  @ApiModelProperty(required = true, readOnly = false, example = "ABC",
-      value = "Value overwritten on POST")
-  private String id;
-
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "endDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
@@ -131,7 +124,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
   /**
    * Constructor
    * 
-   * @param id The id
    * @param endDate The endDate
    * @param firstName The firstName
    * @param jobTitle The jobTitle
@@ -152,7 +144,7 @@ public class StaffPerson extends DomainObject implements Request, Response {
    * @param emailAddress The emailAddress
    */
   @JsonCreator
-  public StaffPerson(@JsonProperty("id") String id, @JsonProperty("endDate") String endDate,
+  public StaffPerson(@JsonProperty("endDate") String endDate,
       @JsonProperty("firstName") String firstName, @JsonProperty("jobTitle") String jobTitle,
       @JsonProperty("lastName") String lastName,
       @JsonProperty("middleInitial") String middleInitial,
@@ -169,7 +161,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
       @JsonProperty("cwsOfficeAddress") String cwsOfficeAddress,
       @JsonProperty("emailAddress") String emailAddress) {
     super();
-    this.id = id;
     this.endDate = endDate;
     this.firstName = firstName;
     this.jobTitle = jobTitle;
@@ -191,8 +182,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
   }
 
   public StaffPerson(gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson) {
-
-    this.id = persistedStaffPerson.getId();
     this.endDate = DomainObject.cookDate(persistedStaffPerson.getEndDate());
     this.firstName = persistedStaffPerson.getFirstName();
     this.jobTitle = persistedStaffPerson.getJobTitle();
@@ -214,15 +203,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
         DomainObject.uncookBooleanString(persistedStaffPerson.getDutyWorkerIndicator());
     this.cwsOfficeAddress = persistedStaffPerson.getCwsOfficeAddress();
     this.emailAddress = persistedStaffPerson.getEmailAddress();
-
-  }
-
-  /**
-   * @return the staff id
-   * 
-   */
-  public String getId() {
-    return id;
   }
 
   /**
@@ -238,13 +218,6 @@ public class StaffPerson extends DomainObject implements Request, Response {
   public String getFirstName() {
     return firstName;
   }
-
-  /**
-   * @return the twitterName
-   */
-  // public String getTwitterName() {
-  // return twitterName;
-  // }
 
   /**
    * @return the jobTitle

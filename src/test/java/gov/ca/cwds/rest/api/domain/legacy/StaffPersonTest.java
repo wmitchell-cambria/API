@@ -77,15 +77,13 @@ public class StaffPersonTest {
    */
   @Test
   public void persistentObjectConstructorTest() throws Exception {
-    StaffPerson domain = new StaffPerson(id, endDate, firstName, jobTitle, lastName, middleInitial,
+    StaffPerson domain = new StaffPerson(endDate, firstName, jobTitle, lastName, middleInitial,
         namePrefix, phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator, cwsOffice,
         availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator,
         cwsOfficeAddress, emailAddress);
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistent =
         new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, domain, "lastUpdatedId");
 
-    // StaffPerson totest = new StaffPerson(persistent, persistentNS);
-    // assertThat(domain.getId(), is(equalTo(persistent.getId())));
     assertThat(domain.getEndDate(), is(equalTo(df.format(persistent.getEndDate()))));
     assertThat(domain.getFirstName(), is(equalTo(persistent.getFirstName())));
     assertThat(domain.getJobTitle(), is(equalTo(persistent.getJobTitle())));
@@ -108,12 +106,11 @@ public class StaffPersonTest {
         is(equalTo(DomainObject.uncookBooleanString(persistent.getDutyWorkerIndicator()))));
     assertThat(domain.getCwsOfficeAddress(), is(equalTo(persistent.getCwsOfficeAddress())));
     assertThat(domain.getEmailAddress(), is(equalTo(persistent.getEmailAddress())));
-    // assertThat(domain.getTwitterName(), is(equalTo(persistentNS.getTwitterName())));
   }
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
-    StaffPerson domain = new StaffPerson(id, endDate, firstName, jobTitle, lastName, middleInitial,
+    StaffPerson domain = new StaffPerson(endDate, firstName, jobTitle, lastName, middleInitial,
         namePrefix, phoneNumber, phoneExt, startDate, nameSuffix, telecommuterIndicator, cwsOffice,
         availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator,
         cwsOfficeAddress, emailAddress);
@@ -178,69 +175,6 @@ public class StaffPersonTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  /*
-   * id Tests
-   */
-  @Test
-  public void failsWhenIdMissing() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idmissing.json"), StaffPerson.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdEmpty() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idempty.json"), StaffPerson.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdNull() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idnull.json"), StaffPerson.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdTooShort() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idtooshort.json"), StaffPerson.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id size must be"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdTooLong() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/StaffPerson/invalid/idtoolong.json"), StaffPerson.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id size must be"),
-        is(greaterThanOrEqualTo(0)));
   }
 
   /*
@@ -1233,7 +1167,7 @@ public class StaffPersonTest {
    * Utils
    */
   private StaffPerson validStaffPerson() {
-    return new StaffPerson("ABC", "2016-10-31", "John", "CEO", "Doe", "C", "Mr",
+    return new StaffPerson("2016-10-31", "John", "CEO", "Doe", "C", "Mr",
         new BigDecimal(9165551212L), 22, "2016-10-31", "III", true, "MIZN02k11B", "abc", "def",
         "99", false, "3XPCP92b24", "john.doe@anyco.com");
   }

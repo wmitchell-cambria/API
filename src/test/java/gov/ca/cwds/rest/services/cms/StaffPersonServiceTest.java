@@ -54,15 +54,16 @@ public class StaffPersonServiceTest {
 
   @Test
   public void findReturnsCorrectStaffPersonWhenFound() throws Exception {
+    String id = "ABC";
     StaffPerson expected = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(expected.getId(), expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, expected, "000");
 
-    when(staffPersonDao.find(expected.getId())).thenReturn(staffPerson);
+    when(staffPersonDao.find(id)).thenReturn(staffPerson);
 
-    StaffPerson found = staffPersonService.find("ABC");
+    StaffPerson found = staffPersonService.find(id);
 
     assertThat(found, is(expected));
   }
@@ -105,33 +106,34 @@ public class StaffPersonServiceTest {
 
   @Test
   public void updateReturnsStaffPersonResponseOnSuccess() throws Exception {
+    String id = "ABC";
     StaffPerson expected = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(expected.getId(), expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, expected, "000");
 
-    when(staffPersonDao.find("ABC")).thenReturn(staffPerson);
+    when(staffPersonDao.find(id)).thenReturn(staffPerson);
     when(staffPersonDao.update(any())).thenReturn(staffPerson);
-    Object retval = staffPersonService.update("ABC", expected);
+    Object retval = staffPersonService.update(id, expected);
     assertThat(retval.getClass(), is(StaffPerson.class));
 
   }
 
   @Test
   public void updateReturnsCorrectStaffPersonOnSuccess() throws Exception {
+    String id = "ABC";
     StaffPerson staffPersonRequest = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonRequest.getId(),
-            staffPersonRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, staffPersonRequest, "000");
 
-    when(staffPersonDao.find("ABC")).thenReturn(staffPerson);
+    when(staffPersonDao.find(id)).thenReturn(staffPerson);
     when(staffPersonDao.update(any())).thenReturn(staffPerson);
 
     StaffPerson expected = new StaffPerson(staffPerson);
-    StaffPerson updated = staffPersonService.update("ABC", expected);
+    StaffPerson updated = staffPersonService.update(id, expected);
 
     assertThat(updated, is(expected));
 
@@ -146,15 +148,14 @@ public class StaffPersonServiceTest {
     // thrown.expect(ServiceException.class);
     // thrown.expectCause(Is.isA(EntityNotFoundException.class));
     // thrown.expectMessage(contains("Expected test to throw"));
-
+    String id = "ABC";
     StaffPerson staffPersonRequest = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonRequest.getId(),
-            staffPersonRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, staffPersonRequest, "000");
 
-    when(staffPersonDao.find("ABC")).thenReturn(staffPerson);
+    when(staffPersonDao.find(id)).thenReturn(staffPerson);
     when(staffPersonDao.update(any())).thenReturn(staffPerson);
 
     staffPersonService.update("ZZZ", staffPersonRequest);
@@ -162,11 +163,11 @@ public class StaffPersonServiceTest {
 
   @Test
   public void createReturnsPostedStaffPerson() throws Exception {
+    String id = "ABC";
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonDomain.getId(),
-            staffPersonDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, staffPersonDomain, "last_update");
 
     StaffPerson request = new StaffPerson(toCreate);
 
@@ -180,11 +181,11 @@ public class StaffPersonServiceTest {
 
   @Test
   public void createReturnsNonNull() throws Exception {
+    String id = "ABC";
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonDomain.getId(),
-            staffPersonDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, staffPersonDomain, "last_update");
 
     StaffPerson request = new StaffPerson(toCreate);
 
@@ -198,11 +199,11 @@ public class StaffPersonServiceTest {
 
   @Test
   public void createReturnsCorrectPostedPerson() throws Exception {
+    String id = "ABC";
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(staffPersonDomain.getId(),
-            staffPersonDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.StaffPerson(id, staffPersonDomain, "last_update");
 
     StaffPerson request = new StaffPerson(toCreate);
 
