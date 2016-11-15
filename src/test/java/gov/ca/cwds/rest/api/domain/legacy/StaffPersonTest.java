@@ -177,29 +177,6 @@ public class StaffPersonTest {
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
-  /*
-   * endDate Tests
-   */
-  // @Test
-  // public void successWhenEndDateEmpty() throws Exception {
-  // StaffPerson toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/StaffPerson/valid/endDate/empty.json"), StaffPerson.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-  //
-  // @Test
-  // public void successWhenEndDateNull() throws Exception {
-  // StaffPerson toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/StaffPerson/valid/endDate/null.json"), StaffPerson.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
-
   @Test
   public void failsWhenEndDateWrongFormat() throws Exception {
     StaffPerson toCreate = MAPPER.readValue(
