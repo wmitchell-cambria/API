@@ -47,7 +47,7 @@ public class Reporter extends DomainObject implements Request, Response {
   @NotNull
   @Size(max = 20, message = "size must be less than or equal to 20")
   @ApiModelProperty(required = false, readOnly = false, value = "required if streetName provided",
-      example = "ABC123")
+      example = "San Jose")
   private String cityName;
 
   @NotNull
@@ -69,7 +69,7 @@ public class Reporter extends DomainObject implements Request, Response {
   @NotNull
   @Size(max = 35, message = "size must be less than or equal to 35")
   @ApiModelProperty(required = true, readOnly = false,
-      value = "cannot be set if lawEnforcementId provided", example = "ABC123")
+      value = "cannot be set if lawEnforcementId provided", example = "J. D. Edwards")
   private String employerName;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -85,12 +85,12 @@ public class Reporter extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 20)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "George")
   private String firstName;
 
   @NotEmpty
   @Size(min = 1, max = 25)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "Jones")
   private String lastName;
 
   @NotNull
@@ -98,11 +98,11 @@ public class Reporter extends DomainObject implements Request, Response {
   private Boolean mandatedReporterIndicator;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "123")
   private Integer messagePhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234678")
   private BigDecimal messagePhoneNumber;
 
   @NotEmpty
@@ -116,15 +116,15 @@ public class Reporter extends DomainObject implements Request, Response {
   private String namePrefixDescription;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234567")
   private BigDecimal primaryPhoneNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "123")
   private Integer primaryPhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "12")
   private Short stateCodeType;
 
   @NotNull

@@ -44,7 +44,8 @@ public class Allegation extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(max = 75)
-  @ApiModelProperty(required = true, readOnly = false, value = "location description")
+  @ApiModelProperty(required = true, readOnly = false, value = "location description",
+      example = "school yard")
   private String abuseLocationDescription;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -65,7 +66,7 @@ public class Allegation extends DomainObject implements Request, Response {
   @NotEmpty
   @Size(max = 254)
   @ApiModelProperty(required = false, readOnly = false,
-      value = "description of allegation disposition")
+      value = "description of allegation disposition", example = "investigate")
   private String dispositionDescription;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)

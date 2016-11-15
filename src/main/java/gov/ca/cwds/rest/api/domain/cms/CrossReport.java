@@ -53,11 +53,11 @@ public class CrossReport extends DomainObject implements Request, Response {
   private String recipientBadgeNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "123")
   private Integer recipientPhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234567")
   private BigDecimal recipientPhoneNumber;
 
   @NotNull
@@ -69,7 +69,7 @@ public class CrossReport extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 30)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "title")
   private String recipientPositionTitleDesc;
 
   @NotEmpty
@@ -98,12 +98,12 @@ public class CrossReport extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 40)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "recipient name")
   private String recipientName;
 
   @NotEmpty
   @Size(min = 1, max = 254)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "law address")
   private String outstateLawEnforcementAddr;
 
   @NotEmpty
