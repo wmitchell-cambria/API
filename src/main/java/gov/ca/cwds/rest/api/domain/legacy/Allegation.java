@@ -22,27 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-// @InjectLinks({
-// @InjectLink(value = "/{resource}/{id}", rel = "self", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.id}"),
-// @Binding(name = "resource", value = Api.RESOURCE_ALLEGATION)}),
-// @InjectLink(value = "/{resource}/{id}", rel = "perpetratorClientId", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.perpetratorClientId}"),
-// @Binding(name = "resource", value = Api.RESOURCE_CLIENT)},
-// condition = "${not empty instance.perpetratorClientId }"),
-// @InjectLink(value = "/{resource}/{id}", rel = "victimClientId", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.victimClientId}"),
-// @Binding(name = "resource", value = Api.RESOURCE_CLIENT)}),
-// @InjectLink(value = "/{resource}/{id}", rel = "referralId", style = Style.ABSOLUTE,
-// bindings = {@Binding(name = "id", value = "${instance.referralId}"),
-// @Binding(name = "resource", value = Api.RESOURCE_REFERRAL)})})
 public class Allegation extends DomainObject implements Request, Response {
-
-  @NotEmpty
-  @Size(min = 10, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "Value overwritten on POST",
-      example = "ABC1234567")
-  private String id;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "abuseEndDate")
@@ -140,8 +120,7 @@ public class Allegation extends DomainObject implements Request, Response {
   private Short placementFacilityType;
 
   @JsonCreator
-  public Allegation(@JsonProperty("id") String id,
-      @JsonProperty("abuseEndDate") String abuseEndDate,
+  public Allegation(@JsonProperty("abuseEndDate") String abuseEndDate,
       @JsonProperty("abuseFrequency") Short abuseFrequency,
       @JsonProperty("abuseFrequencyPeriodCode") String abuseFrequencyPeriodCode,
       @JsonProperty("abuseLocationDescription") String abuseLocationDescription,
@@ -160,7 +139,6 @@ public class Allegation extends DomainObject implements Request, Response {
       @JsonProperty("zippyCreatedIndicator") Boolean zippyCreatedIndicator,
       @JsonProperty("placementFacilityType") Short placementFacilityType) {
     super();
-    this.id = id;
     this.abuseEndDate = abuseEndDate;
     this.abuseFrequency = abuseFrequency;
     this.abuseFrequencyPeriodCode = abuseFrequencyPeriodCode;
@@ -182,7 +160,6 @@ public class Allegation extends DomainObject implements Request, Response {
   }
 
   public Allegation(gov.ca.cwds.rest.api.persistence.cms.Allegation persistedAllegation) {
-    this.id = persistedAllegation.getId();
     this.abuseEndDate = DomainObject.cookDate(persistedAllegation.getAbuseEndDate());
     this.abuseFrequency = persistedAllegation.getAbuseFrequency();
     this.abuseFrequencyPeriodCode = persistedAllegation.getAbuseFrequencyPeriodCode();
@@ -204,13 +181,6 @@ public class Allegation extends DomainObject implements Request, Response {
     this.zippyCreatedIndicator =
         DomainObject.uncookBooleanString(persistedAllegation.getZippyCreatedIndicator());
     this.placementFacilityType = persistedAllegation.getPlacementFacilityType();
-  }
-
-  /**
-   * @return the id
-   */
-  public String getId() {
-    return id;
   }
 
   /**
@@ -365,7 +335,6 @@ public class Allegation extends DomainObject implements Request, Response {
     result = prime * result + ((perpetratorClientId == null) ? 0 : perpetratorClientId.hashCode());
     result = prime * result + ((victimClientId == null) ? 0 : victimClientId.hashCode());
     result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result
         + ((injuryHarmDetailIndicator == null) ? 0 : injuryHarmDetailIndicator.hashCode());
     result = prime * result
@@ -485,13 +454,6 @@ public class Allegation extends DomainObject implements Request, Response {
         return false;
       }
     } else if (!referralId.equals(other.referralId)) {
-      return false;
-    }
-    if (id == null) {
-      if (other.id != null) {
-        return false;
-      }
-    } else if (!id.equals(other.id)) {
       return false;
     }
     if (injuryHarmDetailIndicator == null) {
