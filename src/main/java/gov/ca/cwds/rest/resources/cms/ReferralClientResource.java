@@ -2,6 +2,8 @@ package gov.ca.cwds.rest.resources.cms;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_CLIENT;
 
+import java.text.MessageFormat;
+
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -58,15 +60,18 @@ public class ReferralClientResource {
    */
   @UnitOfWork(value = "cms")
   @GET
-  @Path("/id")
+  @Path("/referralId={referralId},clientId={clientId}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find Referral Client by composite id of referralId and clientId",
       response = ReferralClient.class, code = 200)
-  public Response get(@PathParam("id") @ApiParam(required = true,
-      value = "ReferralClient has a composite key of referralId and clientId",
-      example = "referralId=1234567ABC,clientId=ABC1234567") String id) {
-    return resourceDelegate.get(id);
+  public Response get(
+      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+          example = "abcdefghif") String referralId,
+      @PathParam("clientId") @ApiParam(required = true, value = "The client id",
+          example = "td89slaz98") String clientId) {
+    String pk = MessageFormat.format("referralId={0},clientId={1}", referralId, clientId);
+    return resourceDelegate.get(pk);
   }
 
   /*
@@ -76,13 +81,16 @@ public class ReferralClientResource {
    */
   @UnitOfWork(value = "cms")
   @DELETE
-  @Path("/{id}")
+  @Path("/referralId={referralId},clientId={clientId}")
   @ApiOperation(value = "Delete Referral Client by composite id of referralId and clientId",
       code = HttpStatus.SC_OK, response = Object.class)
-  public Response delete(@PathParam("id") @ApiParam(required = true, allowMultiple = true,
-      value = "ReferralClient has a composite key of referralId and clientId",
-      example = "referralId=1234567ABC,clientId=ABCDEFG123") String id) {
-    return resourceDelegate.delete(id);
+  public Response delete(
+      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+          example = "abcdefghif") String referralId,
+      @PathParam("clientId") @ApiParam(required = true, value = "The client id",
+          example = "td89slaz98") String clientId) {
+    String pk = MessageFormat.format("referralId={0},clientId={1}", referralId, clientId);
+    return resourceDelegate.delete(pk);
   }
 
   /*
@@ -91,10 +99,8 @@ public class ReferralClientResource {
    * @see gov.ca.cwds.rest.resources.CrudsResource#update(gov.ca.cwds.rest.api.domain.DomainObject,
    * java.lang.String)
    */
-
   @UnitOfWork(value = "cms")
   @PUT
-  @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -103,10 +109,8 @@ public class ReferralClientResource {
   @ApiOperation(value = "Update Referra lClient", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
   public Response update(
-      @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of ReferralClient to update") String id,
       @Valid @ApiParam(hidden = false, required = true) ReferralClient referralClient) {
-    return resourceDelegate.update(id, referralClient);
+    return resourceDelegate.update(null, referralClient);
   }
 
   /*

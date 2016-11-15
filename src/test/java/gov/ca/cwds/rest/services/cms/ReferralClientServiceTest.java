@@ -18,7 +18,6 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.legacy.PostedReferralClient;
 import gov.ca.cwds.rest.api.domain.legacy.ReferralClient;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import io.dropwizard.jackson.Jackson;
@@ -57,8 +56,7 @@ public class ReferralClientServiceTest {
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
 
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected.getReferralId(),
-            expected.getClientId(), expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected, "ABC");
 
     when(referralClientDao.find(referralClient.getPrimaryKey())).thenReturn(referralClient);
 
@@ -73,8 +71,7 @@ public class ReferralClientServiceTest {
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
 
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected.getReferralId(),
-            expected.getClientId(), expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected, "ABC");
 
     Response found = referralClientService.find(referralClient.getPrimaryKey().toString());
     // String message = referralClient.getPrimaryKey().toString();
@@ -119,8 +116,7 @@ public class ReferralClientServiceTest {
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
 
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected.getReferralId(),
-            expected.getClientId(), expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected, "ABC");
 
     when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
         .thenReturn(referralClient);
@@ -137,9 +133,7 @@ public class ReferralClientServiceTest {
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
 
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(
-            referralClientRequest.getReferralId(), referralClientRequest.getClientId(),
-            referralClientRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralClientRequest, "ABC");
 
     when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
         .thenReturn(referralClient);
@@ -166,7 +160,7 @@ public class ReferralClientServiceTest {
 
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
         new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(
-            referralClientRequest.getReferralId(), referralClientRequest.getClientId(),
+
             referralClientRequest, "ABC");
 
     when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
@@ -182,9 +176,8 @@ public class ReferralClientServiceTest {
     ReferralClient referralClientDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(
-            referralClientDomain.getReferralId(), referralClientDomain.getClientId(),
-            referralClientDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralClientDomain,
+            "last_update");
 
     ReferralClient request = new ReferralClient(toCreate);
 
@@ -193,7 +186,7 @@ public class ReferralClientServiceTest {
 
     Response response = referralClientService.create(request);
 
-    assertThat(response.getClass(), is(PostedReferralClient.class));
+    assertThat(response.getClass(), is(ReferralClient.class));
   }
 
   @Test
@@ -201,16 +194,15 @@ public class ReferralClientServiceTest {
     ReferralClient referralClientDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(
-            referralClientDomain.getReferralId(), referralClientDomain.getClientId(),
-            referralClientDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralClientDomain,
+            "last_update");
 
     ReferralClient request = new ReferralClient(toCreate);
 
     when(referralClientDao.create(any(gov.ca.cwds.rest.api.persistence.cms.ReferralClient.class)))
         .thenReturn(toCreate);
 
-    PostedReferralClient postedReferralClient = referralClientService.create(request);
+    ReferralClient postedReferralClient = referralClientService.create(request);
 
     assertThat(postedReferralClient, is(notNullValue()));
   }
@@ -220,18 +212,17 @@ public class ReferralClientServiceTest {
     ReferralClient referralClientDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(
-            referralClientDomain.getReferralId(), referralClientDomain.getClientId(),
-            referralClientDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralClientDomain,
+            "last_update");
 
     ReferralClient request = new ReferralClient(toCreate);
 
     when(referralClientDao.create(any(gov.ca.cwds.rest.api.persistence.cms.ReferralClient.class)))
         .thenReturn(toCreate);
 
-    PostedReferralClient expected = new PostedReferralClient(toCreate);
+    ReferralClient expected = new ReferralClient(toCreate);
 
-    PostedReferralClient returned = referralClientService.create(request);
+    ReferralClient returned = referralClientService.create(request);
 
     assertThat(returned, is(expected));
   }

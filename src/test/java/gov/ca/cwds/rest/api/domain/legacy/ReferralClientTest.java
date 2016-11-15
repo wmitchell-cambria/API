@@ -105,8 +105,7 @@ public class ReferralClientTest {
             referralId, clientId, dispositionClosureDescription, ageNumber, agePeriodCode,
             countySpecificCode, mentalHealthIssuesIndicator, alcoholIndicator, drugIndicator);
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient persistent =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralId, clientId, domain,
-            "lastUpdatedId");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(domain, "lastUpdatedId");
 
     ReferralClient totest = new ReferralClient(persistent);
     assertThat(totest.getReferralId(), is(equalTo(persistent.getReferralId())));
