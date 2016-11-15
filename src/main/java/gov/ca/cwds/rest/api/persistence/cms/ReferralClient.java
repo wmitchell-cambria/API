@@ -22,6 +22,7 @@ import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "REFR_CLT")
 @IdClass(PrimaryKey.class)

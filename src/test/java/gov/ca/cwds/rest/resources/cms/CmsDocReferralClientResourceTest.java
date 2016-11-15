@@ -1,23 +1,9 @@
 package gov.ca.cwds.rest.resources.cms;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import java.util.List;
-
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
-import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.jersey.validation.ValidationErrorMessage;
-import io.dropwizard.testing.junit.ResourceTestRule;
-
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Before;
@@ -25,7 +11,9 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import gov.ca.cwds.rest.resources.ResourceDelegate;
+import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
 
 /**
@@ -36,10 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CmsDocReferralClientResourceTest {
 
-  private static final String ROOT_RESOURCE = "/cmsdocreferralclient/";
   private static final String FOUND_RESOURCE = "/cmsdocreferralclient/abc";
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

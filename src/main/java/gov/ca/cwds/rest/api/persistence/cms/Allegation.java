@@ -11,6 +11,7 @@ import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "ALLGTN_T")
 public class Allegation extends CmsPersistentObject {

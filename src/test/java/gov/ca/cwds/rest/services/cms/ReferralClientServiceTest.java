@@ -173,8 +173,8 @@ public class ReferralClientServiceTest {
         .thenReturn(referralClient);
     when(referralClientDao.update(any())).thenReturn(referralClient);
 
-    ReferralClient updated = referralClientService
-        .update("referralId=ZZZZZZZABC,clientId=ABCZZZZZZZ", referralClientRequest);
+    referralClientService.update("referralId=ZZZZZZZABC,clientId=ABCZZZZZZZ",
+        referralClientRequest);
   }
 
   @Test

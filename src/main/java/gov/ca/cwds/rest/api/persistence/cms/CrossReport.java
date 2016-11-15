@@ -21,6 +21,7 @@ import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "CRSS_RPT")
 // @IdClass(PrimaryKey.class)

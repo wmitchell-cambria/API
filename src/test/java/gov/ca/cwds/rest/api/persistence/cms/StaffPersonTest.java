@@ -32,7 +32,6 @@ public class StaffPersonTest {
   private Boolean dutyWorkerIndicator = Boolean.FALSE;
   private String cwsOfficeAddress = "l";
   private String emailAddress = "m";
-  private String twitterName = "n";
 
   private String lastUpdatedId = "z";
 
