@@ -100,9 +100,9 @@ public class CrossReportResourceTest {
     CrossReport serialized = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 
-    inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .put(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    verify(resourceDelegate).update(eq("referralId=abc,thirdId=def"), eq(serialized));
+    verify(resourceDelegate).update(eq(null), eq(serialized));
   }
 
   @Test
@@ -111,9 +111,9 @@ public class CrossReportResourceTest {
         fixture("fixtures/domain/legacy/CrossReport/invalid/informDate/invalidFormat.json"),
         CrossReport.class);
 
-    int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
-        .accept(MediaType.APPLICATION_JSON)
-        .put(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
+    int status =
+        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .put(Entity.entity(serialized, MediaType.APPLICATION_JSON)).getStatus();
     assertThat(status, is(422));
   }
 }

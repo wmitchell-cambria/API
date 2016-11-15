@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
@@ -14,6 +15,7 @@ import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.cms.CrossReport.PrimaryKey;
 import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
@@ -24,8 +26,9 @@ import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "CRSS_RPT")
-// @IdClass(PrimaryKey.class)
+@IdClass(PrimaryKey.class)
 public class CrossReport extends CmsPersistentObject {
+  @Id
   @Column(name = "FKREFERL_T")
   private String referralId;
 
@@ -138,17 +141,16 @@ public class CrossReport extends CmsPersistentObject {
   /**
    * Constructor
    * 
-   * @param thirdId The ThirdId
    * @param crossReport The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public CrossReport(String thirdId, gov.ca.cwds.rest.api.domain.legacy.CrossReport crossReport,
+  public CrossReport(gov.ca.cwds.rest.api.domain.legacy.CrossReport crossReport,
       String lastUpdatedId) {
     super(lastUpdatedId);
 
     try {
       this.referralId = crossReport.getReferralId();
-      this.thirdId = thirdId;
+      this.thirdId = crossReport.getThirdId();
       this.crossReportMethodType = crossReport.getCrossReportMethodType();
       this.filedOutOfStateIndicator =
           DomainObject.cookBoolean(crossReport.getFiledOutOfStateIndicator());
@@ -186,7 +188,7 @@ public class CrossReport extends CmsPersistentObject {
    */
   @Override
   public Serializable getPrimaryKey() {
-    return this.getThirdId();
+    return new PrimaryKey(this.referralId, this.thirdId);
   }
 
   /**
@@ -336,67 +338,67 @@ public class CrossReport extends CmsPersistentObject {
     return satisfyCrossReportIndicator;
   }
 
-  // public static final class PrimaryKey implements Serializable {
-  // private static final long serialVersionUID = 1L;
-  //// private String referralId;
-  // private String thirdId;
-  //
-  // public PrimaryKey() {}
-  //
-  // public PrimaryKey(String referralId, String thirdId) {
-  //// this.referralId = referralId;
-  // this.thirdId = thirdId;
-  // }
-  //
-  // /*
-  // * (non-Javadoc)
-  // *
-  // * @see java.lang.Object#hashCode()
-  // */
-  // @Override
-  // public int hashCode() {
-  // final int prime = 31;
-  // int result = 1;
-  // result = prime * result + ((this.ge == null) ? 0 : referralId.hashCode());
-  // result = prime * result + ((thirdId == null) ? 0 : thirdId.hashCode());
-  // return result;
-  // }
-  //
-  // /*
-  // * (non-Javadoc)
-  // *
-  // * @see java.lang.Object#equals(java.lang.Object)
-  // */
-  // @Override
-  // public boolean equals(Object obj) {
-  // if (this == obj)
-  // return true;
-  // if (obj == null)
-  // return false;
-  // if (getClass() != obj.getClass())
-  // return false;
-  // PrimaryKey other = (PrimaryKey) obj;
-  // if (referralId == null) {
-  // if (other.referralId != null)
-  // return false;
-  // } else if (!referralId.equals(other.referralId))
-  // return false;
-  // if (thirdId == null) {
-  // if (other.thirdId != null)
-  // return false;
-  // } else if (!thirdId.equals(other.thirdId))
-  // return false;
-  // return true;
-  // }
-  //
-  // /*
-  // * (non-Javadoc)
-  // *
-  // * @see java.lang.Object#toString()
-  // */
-  // @Override
-  // public String toString() {
-  // return "referralId=" + referralId.trim() + ",thirdId=" + thirdId.trim();
-  // }
-  // }
+  public static final class PrimaryKey implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String referralId;
+    private String thirdId;
+
+    public PrimaryKey() {}
+
+    public PrimaryKey(String referralId, String thirdId) {
+      this.referralId = referralId;
+      this.thirdId = thirdId;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
+      result = prime * result + ((thirdId == null) ? 0 : thirdId.hashCode());
+      return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      PrimaryKey other = (PrimaryKey) obj;
+      if (referralId == null) {
+        if (other.referralId != null)
+          return false;
+      } else if (!referralId.equals(other.referralId))
+        return false;
+      if (thirdId == null) {
+        if (other.thirdId != null)
+          return false;
+      } else if (!thirdId.equals(other.thirdId))
+        return false;
+      return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+      return "referralId=" + referralId.trim() + ",thirdId=" + thirdId.trim();
+    }
+  }
 }

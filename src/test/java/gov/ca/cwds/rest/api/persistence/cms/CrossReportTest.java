@@ -63,7 +63,7 @@ public class CrossReportTest {
             countySpecificCode, lawEnforcementIndicator, outStateLawEnforcementIndicator,
             satisfyCrossReportIndicator);
 
-    CrossReport persistent = new CrossReport(thirdId, domain, "z");
+    CrossReport persistent = new CrossReport(domain, "z");
     assertThat(persistent.getThirdId(), is(equalTo(thirdId)));
     assertThat(persistent.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
     assertThat(persistent.getFiledOutOfStateIndicator(), is(equalTo("Y")));
