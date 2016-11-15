@@ -26,12 +26,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Referral extends DomainObject implements Request, Response {
 
-  @NotEmpty
-  @Size(min = 10, max = 10)
-  @ApiModelProperty(required = true, readOnly = false,
-      value = "NOTE : Value overwritten if provided on POST", example = "ABC1234567")
-  private String id;
-
   @NotNull
   @ApiModelProperty(required = false, readOnly = false, value = "Y/N", example = "Y")
   private Boolean additionalInfoIncludedCode;
@@ -64,7 +58,7 @@ public class Referral extends DomainObject implements Request, Response {
   private String closureDate;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "Y")
+  @ApiModelProperty(required = true, readOnly = false, example = "444")
   private Short communicationMethodType;
 
   @NotEmpty
@@ -265,8 +259,7 @@ public class Referral extends DomainObject implements Request, Response {
   private String originalClosureDate;
 
   @JsonCreator
-  public Referral(@JsonProperty("id") String id,
-      @JsonProperty("additionalInfoIncludedCode") Boolean additionalInfoIncludedCode,
+  public Referral(@JsonProperty("additionalInfoIncludedCode") Boolean additionalInfoIncludedCode,
       @JsonProperty("anonymousReporterIndicator") Boolean anonymousReporterIndicator,
       @JsonProperty("applicationForPetitionIndicator") Boolean applicationForPetitionIndicator,
       @JsonProperty("approvalNumber") String approvalNumber,
@@ -314,7 +307,6 @@ public class Referral extends DomainObject implements Request, Response {
       @JsonProperty("limitedAccessDesc") String limitedAccessDesc,
       @JsonProperty("originalClosureDate") String originalClosureDate) {
     super();
-    this.id = id;
     this.additionalInfoIncludedCode = additionalInfoIncludedCode;
     this.anonymousReporterIndicator = anonymousReporterIndicator;
     this.applicationForPetitionIndicator = applicationForPetitionIndicator;
@@ -366,7 +358,6 @@ public class Referral extends DomainObject implements Request, Response {
   }
 
   public Referral(gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral) {
-    this.id = persistedReferral.getId();
     this.additionalInfoIncludedCode =
         DomainObject.uncookBooleanString(persistedReferral.getAdditionalInfoIncludedCode());
     this.anonymousReporterIndicator =
@@ -431,14 +422,6 @@ public class Referral extends DomainObject implements Request, Response {
     this.limitedAccessDesc = persistedReferral.getLimitedAccessDesc();
     this.originalClosureDate = DomainObject.cookDate(persistedReferral.getOriginalClosureDate());
 
-  }
-
-  /**
-   * @return the referral id
-   * 
-   */
-  public String getId() {
-    return id;
   }
 
   /**

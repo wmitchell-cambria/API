@@ -83,7 +83,7 @@ public class ReferralService implements CrudsService {
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
-      Referral managed = new Referral(IdGenerator.randomString(3), referral, "q1p");
+      Referral managed = new Referral(IdGenerator.randomString(10), referral, "q1p");
 
       managed = referralDao.create(managed);
       return new PostedReferral(managed);

@@ -116,7 +116,7 @@ public class ReferralTest {
    */
   @Test
   public void persistentObjectConstructorTest() throws Exception {
-    Referral domain = new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
+    Referral domain = new Referral(additionalInfoIncludedCode, anonymousReporterIndicator,
         applicationForPetitionIndicator, approvalNumber, approvalStatusType,
         caretakersPerpetratorCode, closureDate, communicationMethodType, currentLocationOfChildren,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
@@ -136,7 +136,6 @@ public class ReferralTest {
         new gov.ca.cwds.rest.api.persistence.cms.Referral(id, domain, "lastUpdatedId");
 
     Referral totest = new Referral(persistent);
-    assertThat(totest.getId(), is(equalTo(persistent.getId())));
     assertThat(totest.getAdditionalInfoIncludedCode(),
         is(equalTo(DomainObject.uncookBooleanString(persistent.getAdditionalInfoIncludedCode()))));
     assertThat(totest.getAnonymousReporterIndicator(),
@@ -220,7 +219,7 @@ public class ReferralTest {
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
-    Referral domain = new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
+    Referral domain = new Referral(additionalInfoIncludedCode, anonymousReporterIndicator,
         applicationForPetitionIndicator, approvalNumber, approvalStatusType,
         caretakersPerpetratorCode, closureDate, communicationMethodType, currentLocationOfChildren,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
@@ -236,7 +235,6 @@ public class ReferralTest {
         firstEvaluatedOutApprovalDate, responsibleAgencyCode, limitedAccessGovtAgencyType,
         limitedAccessDate, limitedAccessDesc, originalClosureDate);
 
-    assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getAdditionalInfoIncludedCode(), is(equalTo(additionalInfoIncludedCode)));
     assertThat(domain.getAnonymousReporterIndicator(), is(equalTo(anonymousReporterIndicator)));
     assertThat(domain.getApplicationForPetitionIndicator(),
@@ -332,72 +330,8 @@ public class ReferralTest {
   }
 
   /*
-   * id Tests
-   */
-  @Test
-  public void failsWhenIdMissing() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/invalid/idMissing.json"), Referral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdNull() throws Exception {
-    Referral toCreate = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Referral/invalid/idNull.json"), Referral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdEmpty() throws Exception {
-    Referral toCreate = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Referral/invalid/idEmpty.json"), Referral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdTooLong() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/invalid/idTooLong.json"), Referral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdTooShort() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/invalid/idTooShort.json"), Referral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /*
    * additionalInfoIncludedCode Tests
    */
-
   @Test
   public void failsWhenAdditionalInfoIncludedCodeNull() throws Exception {
     Referral toCreate = MAPPER.readValue(
@@ -2557,9 +2491,9 @@ public class ReferralTest {
    * Utils
    */
   private Referral validReferral() {
-    return new Referral("1234567ABC", false, false, false, "A3CDEOm0Ab", new Short((short) 122),
-        false, "2000-03-03", new Short((short) 409), "current", "1234567ABC", "A3B7sSC0Ab",
-        "asdbdfdrsd", false, false, new Short((short) 1118), "A", false, "N", "2000-01-31",
+    return new Referral(false, false, false, "A3CDEOm0Ab", new Short((short) 122), false,
+        "2000-03-03", new Short((short) 409), "current", "1234567ABC", "A3B7sSC0Ab", "asdbdfdrsd",
+        false, false, new Short((short) 1118), "A", false, "N", "2000-01-31",
         "Verification (R3)                  ", "A", "2000-01-01", "16:41:49",
         new Short((short) 1520), new Short((short) 0), "2000-01-31", "16:41:49", "1234567ABC",
         "1234567ABC", "A", "A", "A", "1234567ABC", "1234567ABC", "0Ab", "q1p", "51", false, false,
