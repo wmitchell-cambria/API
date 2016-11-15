@@ -79,7 +79,7 @@ public class CrossReport extends DomainObject implements Request, Response {
 
   @NotNull
   @Size(min = 10, max = 10)
-  @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC1234567")
   private String referralId;
 
   @Size(max = 10)

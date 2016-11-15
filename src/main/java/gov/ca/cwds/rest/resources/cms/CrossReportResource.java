@@ -122,15 +122,12 @@ public class CrossReportResource {
   /**
    * Update an {@link CrossReport}
    * 
-   * @param referralId the referralId
-   * @param thirdId the thirdId
    * @param crossReport {@link CrossReport}
    *
    * @return The {@link Response}
    */
   @UnitOfWork(value = "cms")
   @PUT
-  @Path("/referralId={referralId},thirdId={thirdId}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -139,12 +136,7 @@ public class CrossReportResource {
   @ApiOperation(value = "Update CrossReport", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
   public Response update(
-      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
-          example = "abcdefghif") String referralId,
-      @PathParam("thirdId") @ApiParam(required = true, value = "The third id",
-          example = "td89slaz98") String thirdId,
       @Valid @ApiParam(hidden = false, required = true) CrossReport crossReport) {
-    String pk = MessageFormat.format("referralId={0},thirdId={1}", referralId, thirdId);
-    return resourceDelegate.update(pk, crossReport);
+    return resourceDelegate.update(null, crossReport);
   }
 }
