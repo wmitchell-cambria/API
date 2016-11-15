@@ -28,8 +28,8 @@ public class Referral extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 10, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "Value overwritten on POST",
-      example = "ABC1234567")
+  @ApiModelProperty(required = true, readOnly = false,
+      value = "NOTE : Value overwritten if provided on POST", example = "ABC1234567")
   private String id;
 
   @NotNull
