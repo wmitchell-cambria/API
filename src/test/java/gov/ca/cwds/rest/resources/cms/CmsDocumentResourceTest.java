@@ -1,17 +1,8 @@
 package gov.ca.cwds.rest.resources.cms;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
-import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
@@ -20,7 +11,9 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import gov.ca.cwds.rest.resources.ResourceDelegate;
+import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
+import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * NOTE : The CWDS API Team has taken the pattern of delegating Resource functions to
@@ -30,10 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CmsDocumentResourceTest {
 
-  private static final String ROOT_RESOURCE = "/cmsdocument/";
   private static final String FOUND_RESOURCE = "/cmsdocument/abc";
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

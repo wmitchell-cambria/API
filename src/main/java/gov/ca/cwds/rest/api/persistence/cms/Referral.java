@@ -19,6 +19,7 @@ import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "REFERL_T")
 public class Referral extends CmsPersistentObject {

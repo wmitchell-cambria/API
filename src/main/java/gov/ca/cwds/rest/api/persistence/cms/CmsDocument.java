@@ -23,6 +23,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "TSCNTRLT")
 public class CmsDocument extends CmsPersistentObject {

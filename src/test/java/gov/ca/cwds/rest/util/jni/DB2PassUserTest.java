@@ -8,6 +8,7 @@ import com.ibm.db2.jcc.DB2Connection;
 
 public class DB2PassUserTest {
 
+  @SuppressWarnings("deprecation")
   public static void main(String[] args) {
 
     try {
