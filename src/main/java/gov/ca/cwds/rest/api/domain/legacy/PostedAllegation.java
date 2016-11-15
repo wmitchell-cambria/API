@@ -28,7 +28,6 @@ public class PostedAllegation extends Allegation {
   /**
    * @return the id
    */
-  @Override
   public String getId() {
     return id;
   }

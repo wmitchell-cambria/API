@@ -76,10 +76,10 @@ public class AllegationResource {
    * 
    * @return {@link Response}
    */
+  @UnitOfWork(value = "cms")
   @DELETE
   @Path("/{id}")
-  @ApiOperation(hidden = true, value = "Delete Allegation - not currently implemented",
-      code = HttpStatus.SC_OK, response = Object.class)
+  @ApiOperation(value = "Delete Allegation", code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(
       @PathParam("id") @ApiParam(required = true, value = "id of Allegation to delete") String id) {
     return resourceDelegate.delete(id);
@@ -121,12 +121,12 @@ public class AllegationResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 422, message = "Unable to validate Allegation")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(hidden = true, value = "Update Allegation", code = HttpStatus.SC_NO_CONTENT,
+  @ApiOperation(value = "Update Allegation", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The id of the Allegation to update") String id,
-      @Valid @ApiParam(hidden = true) Allegation allegation) {
+      @Valid @ApiParam(hidden = false) Allegation allegation) {
     return resourceDelegate.update(id, allegation);
   }
 }

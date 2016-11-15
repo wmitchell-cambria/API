@@ -75,7 +75,7 @@ public class AllegationTest {
   @Test
   public void persistentObjectConstructorTest() throws Exception {
 
-    Allegation domain = new Allegation(id, abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
+    Allegation domain = new Allegation(abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
         abuseLocationDescription, abuseStartDate, allegationDispositionType, allegationType,
         dispositionDescription, dispositionDate, injuryHarmDetailIndicator, nonProtectingParentCode,
         staffPersonAddedIndicator, victimClientId, perpetratorClientId, referralId,
@@ -85,7 +85,6 @@ public class AllegationTest {
         new gov.ca.cwds.rest.api.persistence.cms.Allegation(id, domain, "lastUpdatedId");
 
     Allegation totest = new Allegation(persistent);
-    assertThat(totest.getId(), is(equalTo(persistent.getId())));
     assertThat(totest.getAbuseEndDate(), is(equalTo(df.format(persistent.getAbuseEndDate()))));
     assertThat(totest.getAbuseFrequency(), is(equalTo(persistent.getAbuseFrequency())));
     assertThat(totest.getAbuseFrequencyPeriodCode(),
@@ -118,13 +117,12 @@ public class AllegationTest {
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
-    Allegation domain = new Allegation(id, abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
+    Allegation domain = new Allegation(abuseEndDate, abuseFrequency, abuseFrequencyPeriodCode,
         abuseLocationDescription, abuseStartDate, allegationDispositionType, allegationType,
         dispositionDescription, dispositionDate, injuryHarmDetailIndicator, nonProtectingParentCode,
         staffPersonAddedIndicator, victimClientId, perpetratorClientId, referralId,
         countySpecificCode, zippyCreatedIndicator, placementFacilityType);
 
-    assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getAbuseEndDate(), is(equalTo(abuseEndDate)));
     assertThat(domain.getAbuseFrequency(), is(equalTo(abuseFrequency)));
     assertThat(domain.getAbuseFrequencyPeriodCode(), is(equalTo(abuseFrequencyPeriodCode)));
@@ -181,69 +179,6 @@ public class AllegationTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
         is(equalTo(204)));
-  }
-
-  /*
-   * id Tests
-   */
-  @Test
-  public void failsWhenIdMissing() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/idMissing.json"), Allegation.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdNull() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/idNull.json"), Allegation.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdEmpty() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/idEmpty.json"), Allegation.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdTooLong() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/idTooLong.json"), Allegation.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenIdTooShort() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Allegation/invalid/idTooShort.json"), Allegation.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("id size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
   }
 
   /*
@@ -1274,8 +1209,8 @@ public class AllegationTest {
    * Utils
    */
   private Allegation validAllegation() {
-    return new Allegation("Aaeae9r0F4", "2016-10-31", (short) 2, "M", "Barber Shop", "2016-10-31",
-        (short) 0, (short) 2180, "Fremont", "2016-10-31", false, "N", false, "AHooKwN0F4",
-        "MKPFcB90F4", "AbiQCgu0Hj", "19", false, (short) 6574);
+    return new Allegation("2016-10-31", (short) 2, "M", "Barber Shop", "2016-10-31", (short) 0,
+        (short) 2180, "Fremont", "2016-10-31", false, "N", false, "AHooKwN0F4", "MKPFcB90F4",
+        "AbiQCgu0Hj", "19", false, (short) 6574);
   }
 }
