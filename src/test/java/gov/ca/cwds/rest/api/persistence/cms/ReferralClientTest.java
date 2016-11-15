@@ -59,7 +59,7 @@ public class ReferralClientTest {
             ageNumber, agePeriodCode, countySpecificCode, mentalHealthIssuesIndicator,
             alcoholIndicator, drugIndicator);
 
-    ReferralClient persistent = new ReferralClient(referralId, clientId, domain, lastUpdatedId);
+    ReferralClient persistent = new ReferralClient(domain, lastUpdatedId);
     assertThat(persistent.getReferralId(), is(equalTo(referralId)));
     assertThat(persistent.getClientId(), is(equalTo(clientId)));
     assertThat(persistent.getApprovalNumber(), is(equalTo(approvalNumber)));

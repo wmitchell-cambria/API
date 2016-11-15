@@ -116,15 +116,15 @@ public class ReferralClient extends CmsPersistentObject {
     this.drugIndicator = drugIndicator;
   }
 
-  public ReferralClient(String referralId, String clientId,
-      gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient, String lastUpdateId) {
+  public ReferralClient(gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient,
+      String lastUpdateId) {
 
     super(lastUpdateId);
 
     try {
 
-      this.referralId = referralId;
-      this.clientId = clientId;
+      this.referralId = referralClient.getReferralId();
+      this.clientId = referralClient.getClientId();
       this.approvalNumber = referralClient.getApprovalNumber();
       this.approvalStatusType = referralClient.getApprovalStatusType();
       this.dispositionClosureReasonType = referralClient.getDispositionClosureReasonType();
