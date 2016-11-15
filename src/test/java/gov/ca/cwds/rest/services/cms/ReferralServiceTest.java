@@ -56,7 +56,7 @@ public class ReferralServiceTest {
     Referral expected = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
     gov.ca.cwds.rest.api.persistence.cms.Referral referral =
-        new gov.ca.cwds.rest.api.persistence.cms.Referral(expected.getId(), expected, "0XA");
+        new gov.ca.cwds.rest.api.persistence.cms.Referral("1234567ABC", expected, "0XA");
 
     when(referralDao.find("1234567ABC")).thenReturn(referral);
 
@@ -106,7 +106,7 @@ public class ReferralServiceTest {
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
 
     gov.ca.cwds.rest.api.persistence.cms.Referral referral =
-        new gov.ca.cwds.rest.api.persistence.cms.Referral(expected.getId(), expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.Referral("1234567ABC", expected, "ABC");
 
     when(referralDao.find("ABC1234567")).thenReturn(referral);
     when(referralDao.update(any())).thenReturn(referral);
@@ -129,8 +129,7 @@ public class ReferralServiceTest {
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
 
     gov.ca.cwds.rest.api.persistence.cms.Referral referral =
-        new gov.ca.cwds.rest.api.persistence.cms.Referral(referralRequest.getId(), referralRequest,
-            "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.Referral("1234567ABC", referralRequest, "ABC");
 
     when(referralDao.find("ABC1234567")).thenReturn(referral);
     when(referralDao.update(any())).thenReturn(referral);
@@ -144,7 +143,7 @@ public class ReferralServiceTest {
     Referral referralDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
     gov.ca.cwds.rest.api.persistence.cms.Referral toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.Referral(referralDomain.getId(), referralDomain,
+        new gov.ca.cwds.rest.api.persistence.cms.Referral("1234567ABC", referralDomain,
             "last_update");
 
     Referral request = new Referral(toCreate);
@@ -162,7 +161,7 @@ public class ReferralServiceTest {
     Referral referralDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
     gov.ca.cwds.rest.api.persistence.cms.Referral toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.Referral(referralDomain.getId(), referralDomain,
+        new gov.ca.cwds.rest.api.persistence.cms.Referral("1234567ABC", referralDomain,
             "last_update");
 
     Referral request = new Referral(toCreate);
@@ -180,7 +179,7 @@ public class ReferralServiceTest {
     Referral referralDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
     gov.ca.cwds.rest.api.persistence.cms.Referral toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.Referral(referralDomain.getId(), referralDomain,
+        new gov.ca.cwds.rest.api.persistence.cms.Referral("1234567ABC", referralDomain,
             "last_update");
 
     Referral request = new Referral(toCreate);
