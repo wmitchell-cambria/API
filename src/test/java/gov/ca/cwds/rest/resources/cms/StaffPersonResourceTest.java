@@ -33,8 +33,8 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class StaffPersonResourceTest {
 
-  private static final String ROOT_RESOURCE = "/staffpersons/";
-  private static final String FOUND_RESOURCE = "/staffpersons/abc";
+  private static final String ROOT_RESOURCE = "/_staffpersons/";
+  private static final String FOUND_RESOURCE = "/_staffpersons/abc";
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
