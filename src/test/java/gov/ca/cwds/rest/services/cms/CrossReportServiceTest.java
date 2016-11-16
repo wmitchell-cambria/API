@@ -19,7 +19,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.legacy.CrossReport;
+import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
 import io.dropwizard.jackson.Jackson;
 

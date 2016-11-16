@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.rest.api.domain.legacy.Reporter;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import io.dropwizard.jackson.Jackson;

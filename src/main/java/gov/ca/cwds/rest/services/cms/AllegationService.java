@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.legacy.PostedAllegation;
+import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
@@ -43,13 +43,13 @@ public class AllegationService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.Allegation find(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.Allegation find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
     gov.ca.cwds.rest.api.persistence.cms.Allegation persistedAllegation =
         allegationDao.find(primaryKey);
     if (persistedAllegation != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.Allegation(persistedAllegation);
+      return new gov.ca.cwds.rest.api.domain.cms.Allegation(persistedAllegation);
     }
     return null;
   }
@@ -60,12 +60,12 @@ public class AllegationService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.Allegation delete(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.Allegation delete(Serializable primaryKey) {
     assert (primaryKey instanceof String);
     gov.ca.cwds.rest.api.persistence.cms.Allegation persistedAllegation =
         allegationDao.delete(primaryKey);
     if (persistedAllegation != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.Allegation(persistedAllegation);
+      return new gov.ca.cwds.rest.api.domain.cms.Allegation(persistedAllegation);
     }
     return null;
   }
@@ -77,10 +77,10 @@ public class AllegationService implements CrudsService {
    */
   @Override
   public PostedAllegation create(Request request) {
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.Allegation);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.Allegation);
 
-    gov.ca.cwds.rest.api.domain.legacy.Allegation allegation =
-        ((gov.ca.cwds.rest.api.domain.legacy.Allegation) request);
+    gov.ca.cwds.rest.api.domain.cms.Allegation allegation =
+        ((gov.ca.cwds.rest.api.domain.cms.Allegation) request);
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
@@ -102,19 +102,19 @@ public class AllegationService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.Allegation update(Serializable primaryKey,
+  public gov.ca.cwds.rest.api.domain.cms.Allegation update(Serializable primaryKey,
       Request request) {
     assert (primaryKey instanceof String);
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.Allegation);
-    gov.ca.cwds.rest.api.domain.legacy.Allegation allegation =
-        ((gov.ca.cwds.rest.api.domain.legacy.Allegation) request);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.Allegation);
+    gov.ca.cwds.rest.api.domain.cms.Allegation allegation =
+        ((gov.ca.cwds.rest.api.domain.cms.Allegation) request);
 
 
     try {
       Allegation managed = new Allegation((String) primaryKey, allegation, "q1p");
 
       managed = allegationDao.update(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.Allegation(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.Allegation(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("Allegation not found : {}", allegation);
       throw new ServiceException(e);

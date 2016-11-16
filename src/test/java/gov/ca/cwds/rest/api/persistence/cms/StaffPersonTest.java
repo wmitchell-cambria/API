@@ -45,8 +45,8 @@ public class StaffPersonTest {
 
   @Test
   public void domainStaffPersonLastUpdateConstructorTest() throws Exception {
-    gov.ca.cwds.rest.api.domain.legacy.StaffPerson domain =
-        new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(endDate, firstName, jobTitle, lastName,
+    gov.ca.cwds.rest.api.domain.cms.StaffPerson domain =
+        new gov.ca.cwds.rest.api.domain.cms.StaffPerson(endDate, firstName, jobTitle, lastName,
             middleInitial, namePrefix, phoneNumber, phoneExt, startDate, nameSuffix,
             telecommuterIndicator, cwsOffice, availabilityAndLocationDescription,
             ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator, cwsOfficeAddress, emailAddress);

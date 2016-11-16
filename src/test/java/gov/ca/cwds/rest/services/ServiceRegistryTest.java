@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 
 public class ServiceRegistryTest {

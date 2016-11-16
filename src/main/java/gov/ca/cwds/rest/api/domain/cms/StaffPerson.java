@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.domain.legacy;
+package gov.ca.cwds.rest.api.domain.cms;
 
 import java.math.BigDecimal;
 
