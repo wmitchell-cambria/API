@@ -32,8 +32,8 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class ReporterResourceTest {
 
-  private static final String ROOT_RESOURCE = "/reporters/";
-  private static final String FOUND_RESOURCE = "/reporters/abc";
+  private static final String ROOT_RESOURCE = "/_reporters/";
+  private static final String FOUND_RESOURCE = "/_reporters/abc";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 

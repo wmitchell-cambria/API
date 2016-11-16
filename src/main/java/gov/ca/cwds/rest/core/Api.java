@@ -30,37 +30,37 @@ public interface Api {
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} api.
    */
-  public final static String RESOURCE_ALLEGATION = "allegations";
+  public final static String RESOURCE_ALLEGATION = "_allegations";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} api.
    */
-  public final static String RESOURCE_CLIENT = "client";
+  public final static String RESOURCE_CLIENT = "_client";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} api
    */
-  public final static String RESOURCE_CROSS_REPORT = "crossReports";
+  public final static String RESOURCE_CROSS_REPORT = "_crossReports";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_REFERRAL} api
    */
-  public final static String RESOURCE_REFERRAL = "referrals";
+  public final static String RESOURCE_REFERRAL = "_referrals";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} api
    */
-  public final static String RESOURCE_STAFF_PERSON = "staffpersons";
+  public final static String RESOURCE_STAFF_PERSON = "_staffpersons";
 
   /**
    * a {@code String} constant representing {@value #RESOURCE_REPORTER} api
    */
-  public final static String RESOURCE_REPORTER = "reporters";
+  public final static String RESOURCE_REPORTER = "_reporters";
 
   /**
    * a {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} api
    */
-  public final static String RESOURCE_REFERRAL_CLIENT = "referralClients";
+  public final static String RESOURCE_REFERRAL_CLIENT = "_referralClients";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CMS_DOCUMENT} api

@@ -30,8 +30,8 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class CrossReportResourceTest {
 
-  private static final String ROOT_RESOURCE = "/crossReports/";
-  private static final String FOUND_RESOURCE = "/crossReports/referralId=abc,thirdId=def";
+  private static final String ROOT_RESOURCE = "/_crossReports/";
+  private static final String FOUND_RESOURCE = "/_crossReports/referralId=abc,thirdId=def";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
