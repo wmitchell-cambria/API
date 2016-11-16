@@ -55,8 +55,8 @@ public class ReporterTest {
 
   @Test
   public void domainReporterLastUpdateConstructorTest() throws Exception {
-    gov.ca.cwds.rest.api.domain.legacy.Reporter domain =
-        new gov.ca.cwds.rest.api.domain.legacy.Reporter(badgeNumber, cityName,
+    gov.ca.cwds.rest.api.domain.cms.Reporter domain =
+        new gov.ca.cwds.rest.api.domain.cms.Reporter(badgeNumber, cityName,
             colltrClientRptrReltnshpType, communicationMethodType, confidentialWaiverIndicator,
             drmsMandatedRprtrFeedback, employerName, feedbackDate, feedbackRequiredIndicator,
             firstName, lastName, mandatedReporterIndicator, messagePhoneExtensionNumber,

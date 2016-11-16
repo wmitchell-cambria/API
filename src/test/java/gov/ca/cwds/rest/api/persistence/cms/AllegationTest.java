@@ -46,8 +46,8 @@ public class AllegationTest {
 
   @Test
   public void domainAllegationLastUpdateConstructorTest() throws Exception {
-    gov.ca.cwds.rest.api.domain.legacy.Allegation domain =
-        new gov.ca.cwds.rest.api.domain.legacy.Allegation(abuseEndDate, abuseFrequency,
+    gov.ca.cwds.rest.api.domain.cms.Allegation domain =
+        new gov.ca.cwds.rest.api.domain.cms.Allegation(abuseEndDate, abuseFrequency,
             abuseFrequencyPeriodCode, abuseLocationDescription, abuseStartDate,
             allegationDispositionType, allegationType, dispositionDescription, dispositionDate,
             injuryHarmDetailIndicator, nonProtectingParentCode, staffPersonAddedIndicator,

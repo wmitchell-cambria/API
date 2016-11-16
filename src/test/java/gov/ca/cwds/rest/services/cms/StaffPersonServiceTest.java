@@ -18,8 +18,8 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.legacy.PostedStaffPerson;
-import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
+import gov.ca.cwds.rest.api.domain.cms.PostedStaffPerson;
+import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import io.dropwizard.jackson.Jackson;
 

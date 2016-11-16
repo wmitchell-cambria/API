@@ -49,12 +49,12 @@ public class ReferralClientService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.ReferralClient find(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.ReferralClient find(Serializable primaryKey) {
     ReferralClient.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient persistedReferralClient =
         referralClientDao.find(primaryKeyObject);
     if (persistedReferralClient != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.ReferralClient(persistedReferralClient);
+      return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(persistedReferralClient);
     }
     return null;
   }
@@ -65,12 +65,12 @@ public class ReferralClientService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.ReferralClient delete(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.ReferralClient delete(Serializable primaryKey) {
     ReferralClient.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient persistedReferralClient =
         referralClientDao.delete(primaryKeyObject);
     if (persistedReferralClient != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.ReferralClient(persistedReferralClient);
+      return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(persistedReferralClient);
     }
     return null;
   }
@@ -81,17 +81,17 @@ public class ReferralClientService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.domain.DomainObject)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.ReferralClient create(Request request) {
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.ReferralClient);
+  public gov.ca.cwds.rest.api.domain.cms.ReferralClient create(Request request) {
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.ReferralClient);
 
-    gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient =
-        ((gov.ca.cwds.rest.api.domain.legacy.ReferralClient) request);
+    gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient =
+        ((gov.ca.cwds.rest.api.domain.cms.ReferralClient) request);
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
       ReferralClient managed = new ReferralClient(referralClient, "q1p");
       managed = referralClientDao.create(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.ReferralClient(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Referral Client already exists : {}", referralClient);
       throw new ServiceException(e);
@@ -104,19 +104,19 @@ public class ReferralClientService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#update(gov.ca.cwds.rest.api.domain.DomainObject)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.ReferralClient update(Serializable primaryKeyObject,
+  public gov.ca.cwds.rest.api.domain.cms.ReferralClient update(Serializable primaryKeyObject,
       Request request) {
 
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.ReferralClient);
-    gov.ca.cwds.rest.api.domain.legacy.ReferralClient referralClient =
-        ((gov.ca.cwds.rest.api.domain.legacy.ReferralClient) request);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.ReferralClient);
+    gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient =
+        ((gov.ca.cwds.rest.api.domain.cms.ReferralClient) request);
 
 
     try {
       ReferralClient managed = new ReferralClient(referralClient, "q1p");
 
       managed = referralClientDao.update(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.ReferralClient(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("Referral not found : {}", referralClient);
       String message = e.getMessage();

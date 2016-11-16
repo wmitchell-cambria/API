@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -105,7 +105,7 @@ public class CmsDocReferralClientResource {
   @ApiOperation(value = "Create Document", code = HttpStatus.SC_CREATED,
       response = CmsDocReferralClient.class)
   public Response create(@Valid @ApiParam(hidden = false,
-      required = true) gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient doc) {
+      required = true) gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient doc) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 

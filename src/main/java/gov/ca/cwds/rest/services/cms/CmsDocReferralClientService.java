@@ -11,7 +11,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocReferralClient;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;

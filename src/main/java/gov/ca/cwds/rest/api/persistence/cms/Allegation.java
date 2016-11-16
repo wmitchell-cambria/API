@@ -130,7 +130,7 @@ public class Allegation extends CmsPersistentObject {
    * @param persistedAllegation The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public Allegation(String id, gov.ca.cwds.rest.api.domain.legacy.Allegation persistedAllegation,
+  public Allegation(String id, gov.ca.cwds.rest.api.domain.cms.Allegation persistedAllegation,
       String lastUpdatedId) {
     super(lastUpdatedId);
 

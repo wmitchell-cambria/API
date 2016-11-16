@@ -23,6 +23,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import io.dropwizard.jackson.Jackson;

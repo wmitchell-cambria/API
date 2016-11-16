@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
-import gov.ca.cwds.rest.api.domain.legacy.CmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.services.CrudsService;

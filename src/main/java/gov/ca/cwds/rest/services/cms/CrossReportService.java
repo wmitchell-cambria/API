@@ -46,7 +46,7 @@ public class CrossReportService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.CrossReport find(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.CrossReport find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
     CrossReport.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
@@ -54,7 +54,7 @@ public class CrossReportService implements CrudsService {
     gov.ca.cwds.rest.api.persistence.cms.CrossReport persistedCrossReport =
         crossReportDao.find(primaryKeyObject);
     if (persistedCrossReport != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.CrossReport(persistedCrossReport);
+      return new gov.ca.cwds.rest.api.domain.cms.CrossReport(persistedCrossReport);
     }
     return null;
   }
@@ -65,13 +65,13 @@ public class CrossReportService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.CrossReport delete(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.CrossReport delete(Serializable primaryKey) {
     assert (primaryKey instanceof String);
     CrossReport.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport persistedCrossReport =
         crossReportDao.delete(primaryKeyObject);
     if (persistedCrossReport != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.CrossReport(persistedCrossReport);
+      return new gov.ca.cwds.rest.api.domain.cms.CrossReport(persistedCrossReport);
     }
     return null;
   }
@@ -82,18 +82,18 @@ public class CrossReportService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.CrossReport create(Request request) {
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.CrossReport);
+  public gov.ca.cwds.rest.api.domain.cms.CrossReport create(Request request) {
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.CrossReport);
 
-    gov.ca.cwds.rest.api.domain.legacy.CrossReport crossReport =
-        ((gov.ca.cwds.rest.api.domain.legacy.CrossReport) request);
+    gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport =
+        ((gov.ca.cwds.rest.api.domain.cms.CrossReport) request);
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
       CrossReport managed = new CrossReport(crossReport, "q1p");
 
       managed = crossReportDao.create(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.CrossReport(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("CrossReport already exists : {}", crossReport);
       throw new ServiceException(e);
@@ -108,16 +108,16 @@ public class CrossReportService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.CrossReport update(Serializable primaryKey,
+  public gov.ca.cwds.rest.api.domain.cms.CrossReport update(Serializable primaryKey,
       Request request) {
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.CrossReport);
-    gov.ca.cwds.rest.api.domain.legacy.CrossReport crossReport =
-        ((gov.ca.cwds.rest.api.domain.legacy.CrossReport) request);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.CrossReport);
+    gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport =
+        ((gov.ca.cwds.rest.api.domain.cms.CrossReport) request);
 
     try {
       CrossReport managed = new CrossReport(crossReport, "q1p");
       managed = crossReportDao.update(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.CrossReport(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("CrossReport not found : {}", crossReport);
       throw new ServiceException(e);

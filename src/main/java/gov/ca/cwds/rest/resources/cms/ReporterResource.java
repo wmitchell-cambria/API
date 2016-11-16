@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
-import gov.ca.cwds.rest.api.domain.legacy.Reporter;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;

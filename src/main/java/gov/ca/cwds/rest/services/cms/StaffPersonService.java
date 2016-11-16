@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.legacy.PostedStaffPerson;
-import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
+import gov.ca.cwds.rest.api.domain.cms.PostedStaffPerson;
+import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.StaffPersonDao;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -43,13 +43,13 @@ public class StaffPersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.StaffPerson find(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.StaffPerson find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson =
         staffPersonDao.find(primaryKey);
     if (persistedStaffPerson != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(persistedStaffPerson);
+      return new gov.ca.cwds.rest.api.domain.cms.StaffPerson(persistedStaffPerson);
     }
     return null;
   }
@@ -60,12 +60,12 @@ public class StaffPersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.StaffPerson delete(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.StaffPerson delete(Serializable primaryKey) {
     assert (primaryKey instanceof String);
     gov.ca.cwds.rest.api.persistence.cms.StaffPerson persistedStaffPerson =
         staffPersonDao.delete(primaryKey);
     if (persistedStaffPerson != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(persistedStaffPerson);
+      return new gov.ca.cwds.rest.api.domain.cms.StaffPerson(persistedStaffPerson);
     }
     return null;
   }
@@ -77,7 +77,7 @@ public class StaffPersonService implements CrudsService {
    */
   @Override
   public PostedStaffPerson create(Request request) {
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.StaffPerson);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.StaffPerson);
 
     StaffPerson staffPerson = ((StaffPerson) request);
 
@@ -105,9 +105,9 @@ public class StaffPersonService implements CrudsService {
   @Override
   public StaffPerson update(Serializable primaryKey, Request request) {
     assert (primaryKey instanceof String);
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.StaffPerson);
-    gov.ca.cwds.rest.api.domain.legacy.StaffPerson staffPerson =
-        ((gov.ca.cwds.rest.api.domain.legacy.StaffPerson) request);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.StaffPerson);
+    gov.ca.cwds.rest.api.domain.cms.StaffPerson staffPerson =
+        ((gov.ca.cwds.rest.api.domain.cms.StaffPerson) request);
 
 
     try {
@@ -116,7 +116,7 @@ public class StaffPersonService implements CrudsService {
               "q1p");
 
       managed = staffPersonDao.update(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.StaffPerson(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.StaffPerson(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("StaffPerson not found : {}", staffPerson);
       throw new ServiceException(e);

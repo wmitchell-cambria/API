@@ -20,8 +20,8 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.legacy.PostedReferral;
-import gov.ca.cwds.rest.api.domain.legacy.Referral;
+import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
+import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
 import io.dropwizard.jackson.Jackson;
 

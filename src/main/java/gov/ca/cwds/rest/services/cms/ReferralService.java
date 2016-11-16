@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.legacy.PostedReferral;
+import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.ReferralDao;
@@ -43,12 +43,12 @@ public class ReferralService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.Referral find(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.Referral find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
     gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral = referralDao.find(primaryKey);
     if (persistedReferral != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.Referral(persistedReferral);
+      return new gov.ca.cwds.rest.api.domain.cms.Referral(persistedReferral);
     }
     return null;
   }
@@ -59,12 +59,12 @@ public class ReferralService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.Referral delete(Serializable primaryKey) {
+  public gov.ca.cwds.rest.api.domain.cms.Referral delete(Serializable primaryKey) {
     assert (primaryKey instanceof String);
     gov.ca.cwds.rest.api.persistence.cms.Referral persistedReferral =
         referralDao.delete(primaryKey);
     if (persistedReferral != null) {
-      return new gov.ca.cwds.rest.api.domain.legacy.Referral(persistedReferral);
+      return new gov.ca.cwds.rest.api.domain.cms.Referral(persistedReferral);
     }
     return null;
   }
@@ -76,10 +76,10 @@ public class ReferralService implements CrudsService {
    */
   @Override
   public PostedReferral create(Request request) {
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.Referral);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.Referral);
 
-    gov.ca.cwds.rest.api.domain.legacy.Referral referral =
-        ((gov.ca.cwds.rest.api.domain.legacy.Referral) request);
+    gov.ca.cwds.rest.api.domain.cms.Referral referral =
+        ((gov.ca.cwds.rest.api.domain.cms.Referral) request);
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
@@ -101,19 +101,19 @@ public class ReferralService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.legacy.Referral update(Serializable primaryKey,
+  public gov.ca.cwds.rest.api.domain.cms.Referral update(Serializable primaryKey,
       Request request) {
     assert (primaryKey instanceof String);
-    assert (request instanceof gov.ca.cwds.rest.api.domain.legacy.Referral);
-    gov.ca.cwds.rest.api.domain.legacy.Referral referral =
-        ((gov.ca.cwds.rest.api.domain.legacy.Referral) request);
+    assert (request instanceof gov.ca.cwds.rest.api.domain.cms.Referral);
+    gov.ca.cwds.rest.api.domain.cms.Referral referral =
+        ((gov.ca.cwds.rest.api.domain.cms.Referral) request);
 
 
     try {
       Referral managed = new Referral((String) primaryKey, referral, "q1p");
 
       managed = referralDao.update(managed);
-      return new gov.ca.cwds.rest.api.domain.legacy.Referral(managed);
+      return new gov.ca.cwds.rest.api.domain.cms.Referral(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("Referral not found : {}", referral);
       throw new ServiceException(e);

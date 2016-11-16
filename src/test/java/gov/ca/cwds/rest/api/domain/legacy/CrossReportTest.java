@@ -25,6 +25,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
 import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.core.Api;

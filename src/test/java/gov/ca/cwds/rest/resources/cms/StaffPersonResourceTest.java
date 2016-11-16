@@ -19,7 +19,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.domain.legacy.StaffPerson;
+import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import io.dropwizard.jersey.validation.ValidationErrorMessage;
