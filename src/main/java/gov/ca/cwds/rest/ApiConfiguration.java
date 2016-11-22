@@ -1,12 +1,12 @@
 package gov.ca.cwds.rest;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.flyway.FlywayFactory;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ApiConfiguration extends Configuration {
   /**
@@ -22,6 +22,8 @@ public class ApiConfiguration extends Configuration {
   private FlywayFactory flywayFactory;
 
   private DataSourceFactory cmsDataSourceFactory;
+
+  private ElasticsearchConfiguration elasticsearchConfiguration;
 
   @JsonProperty
   public String getApplicationName() {
@@ -71,6 +73,17 @@ public class ApiConfiguration extends Configuration {
   @JsonProperty
   public void setSwaggerConfiguration(SwaggerConfiguration swaggerConfiguration) {
     this.swaggerConfiguration = swaggerConfiguration;
+  }
+
+
+  @JsonProperty(value = "elasticsearch")
+  public ElasticsearchConfiguration getElasticsearchConfiguration() {
+    return elasticsearchConfiguration;
+  }
+
+  @JsonProperty
+  public void setElasticsearchConfiguration(ElasticsearchConfiguration elasticsearchConfiguration) {
+    this.elasticsearchConfiguration = elasticsearchConfiguration;
   }
 
 }

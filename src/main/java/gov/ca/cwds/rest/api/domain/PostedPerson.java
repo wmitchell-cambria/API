@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.Response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * {@link Response} adding an id to the {@link Person}
@@ -22,6 +22,13 @@ public class PostedPerson extends Person {
   public PostedPerson(gov.ca.cwds.rest.api.persistence.ns.Person person) {
     super(person);
     this.id = person.getId();
+  }
+
+  /**
+   * @return the id
+   */
+  public long getId() {
+    return id;
   }
 
 

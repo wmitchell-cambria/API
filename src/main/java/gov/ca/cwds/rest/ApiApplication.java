@@ -1,18 +1,5 @@
 package gov.ca.cwds.rest;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
@@ -25,6 +12,7 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.api.persistence.ns.Person;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
+import gov.ca.cwds.rest.elasticsearch.db.ElasticsearchDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
@@ -82,6 +70,19 @@ import io.dropwizard.views.ViewBundle;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 /**
  * Core execution class of CWDS REST API server application.
  * 
@@ -137,8 +138,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
   @Override
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
     // Enable variable substitution with environment variables.
-    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
-        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+    bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(bootstrap
+        .getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
     bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
 
     LOGGER.info("Loading database bundles");
@@ -198,8 +199,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     DataAccessEnvironment.register(CmsDocument.class,
         new CmsDocumentDao(cmsHibernateBundle.getSessionFactory()));
-    DataAccessEnvironment.register(CmsDocReferralClient.class,
-        new CmsDocReferralClientDao(cmsHibernateBundle.getSessionFactory()));
+    DataAccessEnvironment.register(CmsDocReferralClient.class, new CmsDocReferralClientDao(
+        cmsHibernateBundle.getSessionFactory()));
   }
 
   protected void registerResources(final ApiConfiguration configuration,
@@ -209,11 +210,19 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new ApplicationResource(configuration.getApplicationName());
     apiEnvironment.jersey().register(applicationResource);
 
+    ElasticsearchDao elasticsearchPersonDao =
+        new ElasticsearchDao(configuration.getElasticsearchConfiguration());
+    elasticsearchPersonDao.setIndexName(configuration.getElasticsearchConfiguration()
+        .getPeopleIndexName());
+    elasticsearchPersonDao.setIndexType(configuration.getElasticsearchConfiguration()
+        .getPeopleIndexType());
     final PersonService personService =
-        new PersonService((PersonDao) DataAccessEnvironment.get(Person.class));
+        new PersonService((PersonDao) DataAccessEnvironment.get(Person.class),
+            elasticsearchPersonDao);
     ServiceRegistry.register(gov.ca.cwds.rest.api.domain.Address.class, personService);
-    final ScreeningService screeningService = new ScreeningService(
-        (ScreeningDao) DataAccessEnvironment.get(Screening.class), personService);
+    final ScreeningService screeningService =
+        new ScreeningService((ScreeningDao) DataAccessEnvironment.get(Screening.class),
+            personService);
     ServiceRegistry.register(gov.ca.cwds.rest.api.domain.Address.class, screeningService);
 
     LOGGER.info("Registering AddressResource");
@@ -241,13 +250,15 @@ public class ApiApplication extends Application<ApiConfiguration> {
     apiEnvironment.jersey().register(docResource);
 
     LOGGER.info("Registering CmsDocReferralClientResource");
-    final CmsDocReferralClientService docReferralClientService = new CmsDocReferralClientService(
-        (CmsDocReferralClientDao) DataAccessEnvironment.get(CmsDocReferralClient.class),
-        (CmsDocumentDao) DataAccessEnvironment.get(CmsDocument.class));
+    final CmsDocReferralClientService docReferralClientService =
+        new CmsDocReferralClientService(
+            (CmsDocReferralClientDao) DataAccessEnvironment.get(CmsDocReferralClient.class),
+            (CmsDocumentDao) DataAccessEnvironment.get(CmsDocument.class));
     ServiceRegistry.register(gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient.class,
         docReferralClientService);
-    CmsDocReferralClientResource docReferralClientResource = new CmsDocReferralClientResource(
-        new ServiceBackedResourceDelegate(docReferralClientService));
+    CmsDocReferralClientResource docReferralClientResource =
+        new CmsDocReferralClientResource(
+            new ServiceBackedResourceDelegate(docReferralClientService));
     apiEnvironment.jersey().register(docReferralClientResource);
 
     LOGGER.info("Registering StaffPersonResource");
@@ -283,8 +294,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     apiEnvironment.jersey().register(crossReportResource);
 
     LOGGER.info("Registering ReferralClientResource");
-    ReferralClientService referralClientService = new ReferralClientService(
-        (ReferralClientDao) DataAccessEnvironment.get(ReferralClient.class));
+    ReferralClientService referralClientService =
+        new ReferralClientService(
+            (ReferralClientDao) DataAccessEnvironment.get(ReferralClient.class));
     ServiceRegistry.register(gov.ca.cwds.rest.api.domain.cms.ReferralClient.class,
         referralClientService);
     ReferralClientResource referralClientResource =
@@ -300,8 +312,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     apiEnvironment.jersey().register(referralResource);
 
     LOGGER.info("Registering CmsReferralResource");
-    CmsReferralService cmsreferralService = new CmsReferralService(referralService,
-        allegationService, crossReportService, referralClientService, reporterService);
+    CmsReferralService cmsreferralService =
+        new CmsReferralService(referralService, allegationService, crossReportService,
+            referralClientService, reporterService);
     ServiceRegistry.register(gov.ca.cwds.rest.api.domain.cms.CmsReferral.class, cmsreferralService);
     CmsReferralResource cmsreferralResource =
         new JerseyCmsReferralResource(new ServiceBackedResourceDelegate(cmsreferralService));
@@ -328,9 +341,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
     config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
-        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
-            .run(apiEnvironment.environment());
+    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(), apiConfiguration
+        .getSwaggerConfiguration().getAssetsPath(), null, "swagger").run(apiEnvironment
+        .environment());
     apiEnvironment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
     apiEnvironment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
