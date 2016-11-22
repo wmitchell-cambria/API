@@ -47,6 +47,14 @@ flywayFactory:
   locations:
     - db/ns/migrations
 
+elasticsearch:
+  elasticsearch.host: localhost
+  elasticsearch.port: 9300
+  elasticsearch.cluster: elasticsearch
+  elasticsearch.clientnode: javaclient
+  elasticsearch.clientport: 10080
+  peopleIndexName: people
+  peopleIndexType: person
     
 server:
   applicationConnectors:
