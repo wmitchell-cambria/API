@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 public class Person extends DomainObject implements Request, Response {
+
   @JsonProperty("first_name")
   @ApiModelProperty(example = "Bart")
   @Size(max = 50)
@@ -36,12 +37,12 @@ public class Person extends DomainObject implements Request, Response {
   @Date
   @PastDate()
   @JsonProperty("date_of_birth")
-  @ApiModelProperty(example = "04/01/1990")
+  @ApiModelProperty(example = "1990-04-01")
   private String date_of_birth;
 
   @JsonProperty("ssn")
   @ApiModelProperty(example = "999551111")
-  @Size(max = 9)
+  @Size(min = 9, max = 9) // SSN is fixed width.
   private String ssn;
 
   @JsonProperty("address")
@@ -124,8 +125,8 @@ public class Person extends DomainObject implements Request, Response {
     return address;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#hashCode()
    */
@@ -142,8 +143,8 @@ public class Person extends DomainObject implements Request, Response {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
