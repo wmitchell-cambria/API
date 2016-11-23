@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
@@ -86,6 +87,20 @@ public class CmsDocument extends CmsPersistentObject {
     this.docLength = docLength;
     this.docTime = docTime;
     this.compressionMethod = compressionMethod;
+  }
+
+  public CmsDocument(gov.ca.cwds.rest.api.domain.cms.CmsDocument cmsDocument) {
+    super();
+    this.id = cmsDocument.getId();
+    this.docAuth = cmsDocument.getDocAuth();
+    this.docServ = cmsDocument.getDocServ();
+    this.docName = cmsDocument.getDocName();
+    this.segmentCount = cmsDocument.getSegmentCount();
+    this.docDate = DomainObject.uncookDateString(cmsDocument.getDocDate());
+    this.docLength = cmsDocument.getDocLength();
+    this.docTime = DomainObject.uncookTimeString(cmsDocument.getDocTime());
+    this.compressionMethod = cmsDocument.getCompressionMethod();
+
   }
 
   /**
