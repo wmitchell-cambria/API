@@ -54,13 +54,15 @@ public class CmsReferralResourceTest {
    */
   // @Test
   // public void createDelegatesToResourceDelegate() throws Exception {
+  //
   // CmsReferral serialized = MAPPER.readValue(
   // fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
   //
   // inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
   // .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
   //
-  // verify(resourceDelegate).create(eq(serialized));
+  // verify(mockedCmsReferralResource).post(eq(serialized));
+  //
   // }
 
   @Test
