@@ -131,6 +131,40 @@ public class CmsReferralTest {
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
+  @Test
+  public void failureWhenReferralNotIncluded() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWithoutReferral.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    String message = response.readEntity(String.class);
+    System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenReferralClientNotIncluded() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWithoutReferralClient.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    String message = response.readEntity(String.class);
+    System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
   /*
    * Utils
    */
