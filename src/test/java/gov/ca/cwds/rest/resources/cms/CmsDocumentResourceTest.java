@@ -40,6 +40,8 @@ public class CmsDocumentResourceTest {
   /**
    * Get Tests
    */
+
+
   @Test
   public void getDelegatesToResourceDelegate() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
