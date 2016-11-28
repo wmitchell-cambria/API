@@ -273,7 +273,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     }
 
     /**
-     * @param birthDate
+     * @param birthDate birth date to set
      */
     public void setBirthDate(String birthDate) {
       this.birthDate = birthDate;
