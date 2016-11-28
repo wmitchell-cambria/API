@@ -32,7 +32,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 public class CmsReferralResourceTest {
 
   private static final String ROOT_RESOURCE = "/_cmsreferrals/";
-  private static final String FOUND_RESOURCE = "/_cmsreferrals/abc";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
