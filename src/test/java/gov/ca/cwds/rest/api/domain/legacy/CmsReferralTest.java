@@ -10,8 +10,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -52,11 +50,6 @@ public class CmsReferralTest {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private CmsReferral validCmsReferral = validCmsReferral();
-
-  private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-  @SuppressWarnings("unused")
-  private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
-  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
 
   @Before
   public void setup() {
