@@ -25,7 +25,7 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String adoptionStatusCode;
 
   @NotEmpty

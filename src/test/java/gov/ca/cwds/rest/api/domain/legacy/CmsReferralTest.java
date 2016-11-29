@@ -126,47 +126,262 @@ public class CmsReferralTest {
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    String message = response.readEntity(String.class);
-    System.out.print(message);
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
+  // failure when Referral is invalid, missing, or null
   @Test
-  public void failureWhenReferralNotIncluded() throws Exception {
+  public void failureWhenReferralNull() throws Exception {
 
     CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWithoutReferral.json"),
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReferral.json"),
         CmsReferral.class);
 
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    String message = response.readEntity(String.class);
-    System.out.print(message);
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+  }
+
+  @Test
+  public void failureWhenReferralIsEmpty() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReferralEmpty.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
 
     assertThat(response.getStatus(), is(equalTo(422)));
 
   }
 
   @Test
-  public void failureWhenReferralClientNotIncluded() throws Exception {
+  public void failureWhenReferralIsInvalid() throws Exception {
 
     CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWithoutReferralClient.json"),
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidReferral.json"),
         CmsReferral.class);
 
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    String message = response.readEntity(String.class);
-    System.out.print(message);
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
 
     assertThat(response.getStatus(), is(equalTo(422)));
 
   }
 
   /*
-   * Utils
+   * failure when ReferralClient is null, missing, or invalid
+   */
+  @Test
+  public void failureWhenReferralClientNull() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReferralClient.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenReferralClientIsEmpty() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReferralClientEmpty.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenReferralClientIsInvalid() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidReferralClient.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  /*
+   * failure when Reporter is null, missing, or invalid
+   */
+  @Test
+  public void failureWhenReporterNull() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReporter.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenReporterIsEmpty() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReporterEmpty.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenReporterInvalid() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidReporter.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  /*
+   * failure when Reporter is null, missing, or invalid
+   */
+  @Test
+  public void failureWhenAllegationNull() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullAllegation.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenAllegationIsEmpty() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenAllegationEmpty.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  @Test
+  public void failureWhenAllegationInvalid() throws Exception {
+
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidAllegation.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  /*
+   * cross report test - cross report is not required for minimal referral data
+   */
+
+  @Test
+  public void successWhenCrossReportNull() throws Exception {
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferralNullCrossReport.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(204)));
+  }
+
+
+  @Test
+  public void failureWhenCrossReportIsEmpty() throws Exception {
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralEmptyCrossReport.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    // String message = response.readEntity(String.class);
+    // System.out.print(message);
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+  public void failureWhenCrossReportInvalid() throws Exception {
+    CmsReferral toCreate = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidCrossReport.json"),
+        CmsReferral.class);
+
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatus(), is(equalTo(422)));
+
+  }
+
+
+  /*
+   * Utilities
    */
   private CmsReferral validCmsReferral() {
 
