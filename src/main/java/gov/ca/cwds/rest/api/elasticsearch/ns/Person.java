@@ -22,6 +22,16 @@ public class Person extends NsElasticsearchObject {
     super();
   }
 
+  /**
+   * Constructor
+   * 
+   * @param id The id
+   * @param firstName The first name
+   * @param lastName The last name
+   * @param gender The gender
+   * @param dateOfBirth The date of birth
+   * @param ssn the social security number
+   */
   public Person(String id, String firstName, String lastName, String gender, String dateOfBirth,
       String ssn) {
     super();
@@ -38,10 +48,10 @@ public class Person extends NsElasticsearchObject {
    * Constructor
    * 
    * @param person The domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
+   * @param updatedAt The time of the last update of this object
    */
-  public Person(gov.ca.cwds.rest.api.domain.Person person, String lastUpdatedId) {
-    super(lastUpdatedId);
+  public Person(gov.ca.cwds.rest.api.domain.Person person, String updatedAt) {
+    super(updatedAt);
     this.first_name = person.getFirst_name();
     this.last_name = person.getLast_name();
     this.gender = person.getGender();

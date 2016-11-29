@@ -27,10 +27,10 @@ public abstract class NsElasticsearchObject {
   /**
    * Constructor
    * 
-   * @param lastUpdatedId the id of the last person to update this object
+   * @param updatedAt The time of last update of this object
    */
-  protected NsElasticsearchObject(String lastUpdatedId) {
-    this.updated_at = lastUpdatedId;
+  protected NsElasticsearchObject(String updatedAt) {
+    this.updated_at = updatedAt;
     this.created_at = DomainObject.cookTimestamp(new Date()).toString();
   }
 
