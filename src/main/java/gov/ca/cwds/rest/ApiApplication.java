@@ -42,6 +42,7 @@ import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.PersonResource;
+import gov.ca.cwds.rest.resources.PersonSearchResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
@@ -327,6 +328,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
     ServiceRegistry.register(SAFAuthBean.class, oauthSvc);
     OauthLoginResource oauthResource = new OauthLoginResource(client);
     apiEnvironment.jersey().register(oauthResource);
+
+    LOGGER.info("Registering PersonSearchResource");
+    PersonSearchResource personSearchResource =
+        new PersonSearchResource(new ServiceBackedResourceDelegate(personService));
+    apiEnvironment.jersey().register(personSearchResource);
   }
 
   protected void configureCors(final ApiEnvironment apiEnvironment) {

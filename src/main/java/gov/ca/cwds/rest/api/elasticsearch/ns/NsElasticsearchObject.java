@@ -7,7 +7,7 @@ import java.util.Date;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base class for objects in the elasticsearch layer.
+ * Base class of objects in the elasticsearch layer.
  * 
  * @author CWDS API Team
  */

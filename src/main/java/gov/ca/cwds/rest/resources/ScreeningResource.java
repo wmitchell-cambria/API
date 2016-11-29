@@ -56,7 +56,7 @@ public class ScreeningResource {
   }
 
   /**
-   * Finds an screening by id.
+   * Finds a {@link Screening} by id.
    * 
    * @param id The id
    *
@@ -74,7 +74,7 @@ public class ScreeningResource {
   }
 
   /**
-   * Delete an screening
+   * Delete a {@link Screening}
    * 
    * @param id The id of the {@link Screening}
    * @param acceptHeader The accept header.
@@ -92,7 +92,7 @@ public class ScreeningResource {
   }
 
   /**
-   * Create an {@link Screening}
+   * Create a {@link Screening}
    * 
    * @param screeningReference The {@link ScreeningReference}
    * 
@@ -113,7 +113,7 @@ public class ScreeningResource {
   }
 
   /**
-   * Update an {@link Screening}
+   * Update a {@link Screening}
    *
    * @param id the id
    * @param screeningRequest {@link Screening}

@@ -82,6 +82,10 @@ public interface Api {
    */
   public final static String RESOURCE_OAUTH_SAF = "saf";
 
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_SEARCH_PERSON} api
+   */
+  public final static String RESOURCE_SEARCH_PERSON = "search_person";
 
 
 }

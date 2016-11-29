@@ -41,7 +41,6 @@ public class DomainObject {
       return null;
     }
     throw new ApiException(new ParseException("Unable to generate boolean", 0));
-
   }
 
   public static String cookDate(Date date) {
