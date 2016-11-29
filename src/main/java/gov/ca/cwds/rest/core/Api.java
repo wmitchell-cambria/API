@@ -78,9 +78,9 @@ public interface Api {
   public final static String RESOURCE_CMSREFERRAL = "_cmsreferrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_OAUTH_SAF} api
+   * A {@code String} constant representing {@value #RESOURCE_OAUTH_CWDS} api
    */
-  public final static String RESOURCE_OAUTH_SAF = "saf";
+  public final static String RESOURCE_OAUTH_CWDS = "cwdsAuth";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_SEARCH_PERSON} api
