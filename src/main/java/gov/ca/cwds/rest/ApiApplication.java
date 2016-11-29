@@ -42,13 +42,10 @@ import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.PersonResource;
-import gov.ca.cwds.rest.resources.PersonSearchResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
-import gov.ca.cwds.rest.resources.auth.OauthLoginResource;
-import gov.ca.cwds.rest.resources.auth.OauthLoginService;
-import gov.ca.cwds.rest.resources.auth.SAFAuthBean;
+import gov.ca.cwds.rest.resources.auth.CwdsAuthLoginResource;
 import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
@@ -321,18 +318,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new JerseyCmsReferralResource(new ServiceBackedResourceDelegate(cmsreferralService));
     apiEnvironment.jersey().register(cmsreferralResource);
 
-    LOGGER.info("Registering OauthLoginResource");
+    LOGGER.info("Registering CwdsAuthLoginResource");
     final Client client = new JerseyClientBuilder(apiEnvironment.environment())
         .using(new JerseyClientConfiguration()).build(getName());
-    OauthLoginService oauthSvc = new OauthLoginService(client);
-    ServiceRegistry.register(SAFAuthBean.class, oauthSvc);
-    OauthLoginResource oauthResource = new OauthLoginResource(client);
-    apiEnvironment.jersey().register(oauthResource);
-
-    LOGGER.info("Registering PersonSearchResource");
-    PersonSearchResource personSearchResource =
-        new PersonSearchResource(new ServiceBackedResourceDelegate(personService));
-    apiEnvironment.jersey().register(personSearchResource);
+    CwdsAuthLoginResource sampleAuthResource = new CwdsAuthLoginResource(client);
+    apiEnvironment.jersey().register(sampleAuthResource);
   }
 
   protected void configureCors(final ApiEnvironment apiEnvironment) {
