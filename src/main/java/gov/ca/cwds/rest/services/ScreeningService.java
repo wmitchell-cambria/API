@@ -44,8 +44,8 @@ public class ScreeningService implements CrudsService {
     this.personService = personService;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
@@ -60,8 +60,8 @@ public class ScreeningService implements CrudsService {
     return null;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
@@ -71,8 +71,8 @@ public class ScreeningService implements CrudsService {
     throw new NotImplementedException("Delete is not implemented");
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
@@ -88,12 +88,11 @@ public class ScreeningService implements CrudsService {
     return new PostedScreening(managed.getId(), managed.getReference());
   }
 
-
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
-   * gov.ca.cwds.rest.api.Request)
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public ScreeningResponse update(Serializable primaryKey, Request request) {
@@ -113,7 +112,6 @@ public class ScreeningService implements CrudsService {
       }
       participants.add(new gov.ca.cwds.rest.api.persistence.ns.Person(person, null));
     }
-
 
     Address address = new Address(screeningRequest.getAddress(), null);
     gov.ca.cwds.rest.api.persistence.ns.Screening screening =

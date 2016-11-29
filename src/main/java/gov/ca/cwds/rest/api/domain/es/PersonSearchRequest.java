@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.domain;
+package gov.ca.cwds.rest.api.domain.es;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,18 +7,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 
 /**
- * {@link DomainObject} representing a screening request
+ * {@link DomainObject} representing a Person Search request for ElasticSearch or similar search
+ * engine.
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
-public class ScreeningRequest extends Screening implements Request {
-  @JsonProperty("address")
-  private Address address;
-
+public class PersonSearchRequest extends DomainObject implements Request {
   @JsonProperty("participant_ids")
   private List<Long> participant_ids;
 
@@ -40,7 +40,7 @@ public class ScreeningRequest extends Screening implements Request {
    * @param participant_ids The {@link List}
    */
   @JsonCreator
-  public ScreeningRequest(@JsonProperty("reference") String reference,
+  public PersonSearchRequest(@JsonProperty("reference") String reference,
       @JsonProperty("ended_at") String ended_at,
       @JsonProperty("incident_county") String incident_county,
       @JsonProperty("incident_date") String incident_date,
@@ -51,17 +51,9 @@ public class ScreeningRequest extends Screening implements Request {
       @JsonProperty("started_at") String started_at, @JsonProperty("narrative") String narrative,
       @JsonProperty("address") Address address,
       @JsonProperty("participant_ids") List<Long> participant_ids) {
-    super(reference, ended_at, incident_county, incident_date, location_type, communication_method,
-        name, response_time, screening_decision, started_at, narrative);
-    this.address = address;
-    this.participant_ids = participant_ids;
-  }
+    super();
 
-  /**
-   * @return the address
-   */
-  public Address getAddress() {
-    return address;
+    this.participant_ids = participant_ids;
   }
 
   /**
@@ -71,8 +63,8 @@ public class ScreeningRequest extends Screening implements Request {
     return participant_ids;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#hashCode()
    */
@@ -80,13 +72,12 @@ public class ScreeningRequest extends Screening implements Request {
   public final int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((address == null) ? 0 : address.hashCode());
     result = prime * result + ((participant_ids == null) ? 0 : participant_ids.hashCode());
     return result;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
@@ -98,12 +89,8 @@ public class ScreeningRequest extends Screening implements Request {
       return false;
     if (!(getClass().isInstance(obj)))
       return false;
-    ScreeningRequest other = (ScreeningRequest) obj;
-    if (address == null) {
-      if (other.address != null)
-        return false;
-    } else if (!address.equals(other.address))
-      return false;
+    PersonSearchRequest other = (PersonSearchRequest) obj;
+
     if (participant_ids == null) {
       if (other.participant_ids != null)
         return false;

@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.api.elasticsearch.ns;
 
 
 /**
- * {@link NsElasticsearchObject} representing a Person
+ * {@link NsElasticsearchObject} representing a Person.
  * 
  * @author CWDS API Team
  */
@@ -17,7 +17,7 @@ public class Person extends NsElasticsearchObject {
 
   /**
    * Default constructor
-   * */
+   */
   public Person() {
     super();
   }
@@ -42,7 +42,6 @@ public class Person extends NsElasticsearchObject {
     this.date_of_birth = dateOfBirth;
     this.ssn = ssn;
   }
-
 
   /**
    * Constructor
