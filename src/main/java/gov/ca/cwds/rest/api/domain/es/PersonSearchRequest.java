@@ -1,105 +1,113 @@
 package gov.ca.cwds.rest.api.domain.es;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a Person Search request for ElasticSearch or similar search
- * engine.
+ * {@link DomainObject} representing a Person search request for ElasticSearch.
  * 
  * @author CWDS API Team
  */
+@ApiModel
 @JsonSnakeCase
 public class PersonSearchRequest extends DomainObject implements Request {
-  @JsonProperty("participant_ids")
-  private List<Long> participant_ids;
+
+  @ApiModelProperty(example = "Bart")
+  @JsonProperty("first_name")
+  private String firstName;
+
+  @ApiModelProperty(example = "Simpson")
+  @JsonProperty("last_name")
+  private String lastName;
+
+  @ApiModelProperty(example = "2008-09-01")
+  @JsonProperty("birth_date")
+  private String birthDate;
+
+  PersonSearchRequest() {}
 
   /**
    * Constructor
    * 
-   * @param reference The reference
-   * @param ended_at The ended at
-   * @param incident_county The incident county
-   * @param incident_date The incident date
-   * @param location_type The location type
-   * @param communication_method The communication method
-   * @param name The name
-   * @param response_time The response time
-   * @param screening_decision The screening decision
-   * @param started_at The started at
-   * @param narrative The narrative
-   * @param address The {@link Address}
-   * @param participant_ids The {@link List}
+   * @param firstName the first name to search
+   * @param lastName the last name to search
+   * @param birthDate the birth date to search
    */
   @JsonCreator
-  public PersonSearchRequest(@JsonProperty("reference") String reference,
-      @JsonProperty("ended_at") String ended_at,
-      @JsonProperty("incident_county") String incident_county,
-      @JsonProperty("incident_date") String incident_date,
-      @JsonProperty("location_type") String location_type,
-      @JsonProperty("communication_method") String communication_method,
-      @JsonProperty("name") String name, @JsonProperty("response_time") String response_time,
-      @JsonProperty("screening_decision") String screening_decision,
-      @JsonProperty("started_at") String started_at, @JsonProperty("narrative") String narrative,
-      @JsonProperty("address") Address address,
-      @JsonProperty("participant_ids") List<Long> participant_ids) {
+  public PersonSearchRequest(@JsonProperty("first_name") String firstName,
+      @JsonProperty("last_name") String lastName, @JsonProperty("birth_date") String birthDate) {
     super();
-
-    this.participant_ids = participant_ids;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.birthDate = birthDate;
   }
 
-  /**
-   * @return the participant_ids
-   */
-  public List<Long> getParticipant_ids() {
-    return participant_ids;
+  public String getFirstName() {
+    return firstName;
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(String birthDate) {
+    this.birthDate = birthDate;
+  }
+
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((participant_ids == null) ? 0 : participant_ids.hashCode());
+    result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
+    result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+    result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     return result;
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)
       return false;
-    if (!(getClass().isInstance(obj)))
+    if (getClass() != obj.getClass())
       return false;
     PersonSearchRequest other = (PersonSearchRequest) obj;
-
-    if (participant_ids == null) {
-      if (other.participant_ids != null)
+    if (birthDate == null) {
+      if (other.birthDate != null)
         return false;
-    } else if (other.participant_ids == null) {
+    } else if (!birthDate.equals(other.birthDate))
       return false;
-    } else if (!Arrays.equals(participant_ids.toArray(), other.participant_ids.toArray())) {
+    if (firstName == null) {
+      if (other.firstName != null)
+        return false;
+    } else if (!firstName.equals(other.firstName))
       return false;
-    }
-
+    if (lastName == null) {
+      if (other.lastName != null)
+        return false;
+    } else if (!lastName.equals(other.lastName))
+      return false;
     return true;
   }
+
+
 }

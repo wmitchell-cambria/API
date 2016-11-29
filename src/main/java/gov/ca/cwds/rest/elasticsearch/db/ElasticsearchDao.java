@@ -1,6 +1,10 @@
 package gov.ca.cwds.rest.elasticsearch.db;
 
 import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
+import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESFieldSearchEntry;
+import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESSearchElement;
+import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ElementType;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -19,15 +23,16 @@ import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
 /**
- * A DAO for Elasticsearch
+ * A DAO for Elasticsearch.
  * 
  * @author CWDS API Team
- *
  */
 public class ElasticsearchDao {
 
-
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ElasticsearchDao.class);
+
+  private static final int DEFAULT_MAX_RESULTS = 60;
+
   private Client client;
   private final String host;
   private final String port;
@@ -59,6 +64,12 @@ public class ElasticsearchDao {
     this.port = elasticsearchConfiguration.getElasticsearchPort();
   }
 
+  /**
+   * Initialize ElasticSearch client once. Synchronized to prevent race conditions and multiple
+   * connections.
+   * 
+   * @throws UnknownHostException if host not found
+   */
   protected synchronized void init() throws UnknownHostException {
     if (this.client == null) {
       Settings settings = Settings.settingsBuilder().put("cluster.name", clusterName).build();
@@ -67,9 +78,16 @@ public class ElasticsearchDao {
     }
   }
 
+  /**
+   * Start the ElasticSearch client, if not started already.
+   * 
+   * @throws Exception I/O error or unknown host
+   * @see #init()
+   */
   protected void start() throws Exception {
     LOGGER.info("ElasticSearchDao.start()");
 
+    // Only enter synchronized method if client is not initialized.
     if (this.client == null) {
       init();
     }
@@ -108,18 +126,64 @@ public class ElasticsearchDao {
     return response.isCreated();
   }
 
-  public SearchHit[] queryAllPersons() throws Exception {
+  /**
+   * Returns ALL Person documents in the target ElasticSearch index, up the maximum number of rows
+   * defined by {@link #DEFAULT_MAX_RESULTS}.
+   * 
+   * <p>
+   * This method intentionally returns raw ElasticSearch {@link SearchHit}. Calling services should
+   * convert data to appropriate classes.
+   * </p>
+   * 
+   * <p>
+   * SAMPLE HIT:
+   * </p>
+   * <p>
+   * <blockquote>{updated_at=2016-11-23-09.09.15.930, gender=Male, date_of_birth=1990-04-01,
+   * created_at=2016-11-23-09.09.15.953, last_name=Simpson, id=100, first_name=Bart, ssn=999551111}
+   * </blockquote>
+   * </p>
+   * 
+   * @return array of generic ElasticSearch {@link SearchHit}
+   * @throws Exception
+   */
+  public SearchHit[] fetchAllPerson() throws Exception {
     // Initialize and start ElasticSearch client, if not started.
     start();
 
-    SearchResponse response = client.prepareSearch(indexName).setTypes(indexType)
+    final SearchResponse response = client.prepareSearch(indexName).setTypes(indexType)
         .setSearchType(SearchType.QUERY_AND_FETCH)
         // .setQuery(QueryBuilders.termQuery("first_name", "bart"))
-        .setQuery(QueryBuilders.matchQuery("first_name", "bart")).setFrom(0).setSize(60)
-        .setExplain(true).execute().actionGet();
+        // .setQuery(QueryBuilders.matchQuery("first_name", "bart"))
+        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet();
 
     return response.getHits().getHits();
   }
+
+  public SearchHit[] queryPerson(ESSearchRequest req) throws Exception {
+    // Initialize and start ElasticSearch client, if not started.
+    start();
+
+    String field = "";
+    String value = "";
+    for (ESSearchElement elem : req.getRoot().getElems()) {
+      if (elem.getElementType() == ElementType.FIELD_TERM) {
+        ESFieldSearchEntry fieldSearch = (ESFieldSearchEntry) elem;
+        field = fieldSearch.getField();
+        value = fieldSearch.getValue();
+      }
+    }
+
+    final SearchResponse response = client.prepareSearch(indexName).setTypes(indexType)
+        .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(QueryBuilders.matchQuery(field, value))
+        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet();
+
+    return response.getHits().getHits();
+  }
+
+  // ===================
+  // ACCESSORS:
+  // ===================
 
   /**
    * @return the client
