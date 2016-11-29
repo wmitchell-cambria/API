@@ -259,73 +259,73 @@ public class Client extends CmsPersistentObject {
 
 
   /**
-   * @param adjudicatedDelinquentIndicator
-   * @param adoptionStatusCode
-   * @param alienRegistrationNumber
-   * @param birthCity
-   * @param birthCountryCodeType
-   * @param birthDate
-   * @param birthFacilityName
-   * @param birthStateCodeType
-   * @param birthplaceVerifiedIndicator
-   * @param childClientIndicatorVar
-   * @param clientIndicatorexNumber
-   * @param commentDescription
-   * @param commonFirstName
-   * @param commonLastName
-   * @param commonMiddleName
-   * @param confidentialityActionDate
-   * @param confidentialityInEffectIndicator
-   * @param creationDate
-   * @param currCaChildrenServIndicator
-   * @param currentlyOtherDescription
-   * @param currentlyRegionalCenterIndicator
-   * @param deathDate
-   * @param deathDateVerifiedIndicator
-   * @param deathPlace
-   * @param deathReasonText
-   * @param driverLicenseNumber
-   * @param driverLicenseStateCodeType
-   * @param emailAddress
-   * @param estimatedDobCode
-   * @param ethUnableToDetReasonCode
-   * @param fatherParentalRightTermDate
-   * @param genderCode
-   * @param healthSummaryText
-   * @param hispUnableToDetReasonCode
-   * @param hispanicOriginCode
-   * @param id
-   * @param immigrationCountryCodeType
-   * @param immigrationStatusType
-   * @param incapacitatedParentCode
-   * @param individualHealthCarePlanIndicator
-   * @param limitationOnScpHealthIndicator
-   * @param literateCode
-   * @param maritalCohabitatnHstryIndicatorVar
-   * @param maritalStatusType
-   * @param militaryStatusCode
-   * @param motherParentalRightTermDate
-   * @param namePrefixDescription
-   * @param nameType
-   * @param outstandingWarrantIndicator
-   * @param prevCaChildrenServIndicator
-   * @param prevOtherDescription
-   * @param prevRegionalCenterIndicator
-   * @param primaryEthnicityType
-   * @param primaryLanguageType
-   * @param religionType
-   * @param secondaryLanguageType
-   * @param sensitiveHlthInfoOnFileIndicator
-   * @param sensitivityIndicatoricator
-   * @param soc158PlacementCode
-   * @param soc158SealedClientIndicator
-   * @param socialSecurityNumChangedCode
-   * @param socialSecurityNumber
-   * @param suffixTitleDescription
-   * @param tribalAncestryClientIndicatorVar
-   * @param tribalMembrshpVerifctnIndicatorVar
-   * @param unemployedParentCode
-   * @param zippyCreatedIndicator
+   * @param adjudicatedDelinquentIndicator The adjudicatedDelinquentIndicator
+   * @param adoptionStatusCode The adoptionStatusCode
+   * @param alienRegistrationNumber The alienRegistrationNumber
+   * @param birthCity The birthCity
+   * @param birthCountryCodeType The birthCountryCodeType
+   * @param birthDate The birthDate
+   * @param birthFacilityName The birthFacilityName
+   * @param birthStateCodeType The birthStateCodeType
+   * @param birthplaceVerifiedIndicator The birthplaceVerifiedIndicator
+   * @param childClientIndicatorVar The childClientIndicatorVar
+   * @param clientIndicatorexNumber The clientIndicatorexNumber
+   * @param commentDescription The commentDescription
+   * @param commonFirstName The commonFirstName
+   * @param commonLastName The commonLastName
+   * @param commonMiddleName The commonMiddleName
+   * @param confidentialityActionDate The confidentialityActionDate
+   * @param confidentialityInEffectIndicator The confidentialityInEffectIndicator
+   * @param creationDate The creationDate
+   * @param currCaChildrenServIndicator The currCaChildrenServIndicator
+   * @param currentlyOtherDescription The currentlyOtherDescription
+   * @param currentlyRegionalCenterIndicator The currentlyRegionalCenterIndicator
+   * @param deathDate The deathDate
+   * @param deathDateVerifiedIndicator The deathDateVerifiedIndicator
+   * @param deathPlace The deathPlace
+   * @param deathReasonText The deathReasonText
+   * @param driverLicenseNumber The driverLicenseNumber
+   * @param driverLicenseStateCodeType The driverLicenseStateCodeType
+   * @param emailAddress The emailAddress
+   * @param estimatedDobCode The estimatedDobCode
+   * @param ethUnableToDetReasonCode The ethUnableToDetReasonCode
+   * @param fatherParentalRightTermDate The fatherParentalRightTermDate
+   * @param genderCode The genderCode
+   * @param healthSummaryText The healthSummaryText
+   * @param hispUnableToDetReasonCode The hispUnableToDetReasonCode
+   * @param hispanicOriginCode The hispanicOriginCode
+   * @param id The id
+   * @param immigrationCountryCodeType The immigrationCountryCodeType
+   * @param immigrationStatusType The immigrationStatusType
+   * @param incapacitatedParentCode The incapacitatedParentCode
+   * @param individualHealthCarePlanIndicator The individualHealthCarePlanIndicator
+   * @param limitationOnScpHealthIndicator The limitationOnScpHealthIndicator
+   * @param literateCode The literateCode
+   * @param maritalCohabitatnHstryIndicatorVar The maritalCohabitatnHstryIndicatorVar
+   * @param maritalStatusType The maritalStatusType
+   * @param militaryStatusCode The militaryStatusCode
+   * @param motherParentalRightTermDate The motherParentalRightTermDate
+   * @param namePrefixDescription The namePrefixDescription
+   * @param nameType The nameType
+   * @param outstandingWarrantIndicator The outstandingWarrantIndicator
+   * @param prevCaChildrenServIndicator The prevCaChildrenServIndicator
+   * @param prevOtherDescription The prevOtherDescription
+   * @param prevRegionalCenterIndicator The prevRegionalCenterIndicator
+   * @param primaryEthnicityType The primaryEthnicityType
+   * @param primaryLanguageType The primaryLanguageType
+   * @param religionType The religionType
+   * @param secondaryLanguageType The secondaryLanguageType
+   * @param sensitiveHlthInfoOnFileIndicator The sensitiveHlthInfoOnFileIndicator
+   * @param sensitivityIndicatoricator The sensitivityIndicatoricator
+   * @param soc158PlacementCode The soc158PlacementCode
+   * @param soc158SealedClientIndicator The soc158SealedClientIndicator
+   * @param socialSecurityNumChangedCode The socialSecurityNumChangedCode
+   * @param socialSecurityNumber The socialSecurityNumber
+   * @param suffixTitleDescription The suffixTitleDescription
+   * @param tribalAncestryClientIndicatorVar The tribalAncestryClientIndicatorVar
+   * @param tribalMembrshpVerifctnIndicatorVar The tribalMembrshpVerifctnIndicatorVar
+   * @param unemployedParentCode The unemployedParentCode
+   * @param zippyCreatedIndicator The zippyCreatedIndicator
    */
   public Client(String adjudicatedDelinquentIndicator, String adoptionStatusCode,
       String alienRegistrationNumber, String birthCity, Short birthCountryCodeType, Date birthDate,
