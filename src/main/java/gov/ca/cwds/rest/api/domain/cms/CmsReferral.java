@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Logical representation of a CmsReferral
@@ -16,14 +18,27 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
  */
 public class CmsReferral extends DomainObject implements Request, Response {
 
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private Referral referral;
+
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private Allegation allegation;
+
+  @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private CrossReport crossReport;
+
+  @NotNull
+  @ApiModelProperty(required = false, readOnly = false)
   @Valid
   private ReferralClient referralClient;
+
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private Reporter reporter;
 
