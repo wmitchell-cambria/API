@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources.auth;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_OAUTH_SAF;
+import static gov.ca.cwds.rest.core.Api.RESOURCE_OAUTH_CWDS;
 
 import java.io.IOException;
 import java.util.Date;
@@ -44,8 +44,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(value = RESOURCE_OAUTH_SAF)
-@Path(value = RESOURCE_OAUTH_SAF)
+@Api(value = RESOURCE_OAUTH_CWDS)
+@Path(value = RESOURCE_OAUTH_CWDS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class OauthLoginResource {
@@ -157,12 +157,12 @@ public class OauthLoginResource {
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find document by id (doc_handle)", response = CmsDocument.class,
-      code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id (doc_handle) of the Document to find") String id) {
     return resourceDelegate.get(id);
   }
+
+
 
   /**
    * Delete a document by id.
@@ -227,7 +227,7 @@ public class OauthLoginResource {
 
   @GET
   @Path("/login")
-  public Response login(final @Context HttpServletResponse response) {
+  public Response login1(final @Context HttpServletResponse response) {
     // Track this login request.
     final String state = getUniqueId();
     SAFAuthBean auth = new SAFAuthBean();
