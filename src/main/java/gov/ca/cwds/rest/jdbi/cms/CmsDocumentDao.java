@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
-import gov.ca.cwds.rest.jdbi.CmsCrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
-public class CmsDocumentDao extends CmsCrudsDaoImpl<CmsDocument> {
+public class CmsDocumentDao extends CrudsDaoImpl<CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
 

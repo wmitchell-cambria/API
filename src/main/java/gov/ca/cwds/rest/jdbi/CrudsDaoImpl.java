@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.jdbi;
 import java.io.Serializable;
 import java.text.MessageFormat;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.SessionFactory;
@@ -73,6 +74,13 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T create(T object) {
+    if (object.getPrimaryKey() != null) {
+      T databaseObject = find(object.getPrimaryKey());
+      if (databaseObject != null) {
+        String msg = MessageFormat.format("entity with id={0} already exists", object);
+        throw new EntityExistsException(msg);
+      }
+    }
     return persist(object);
   }
 
@@ -86,7 +94,8 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   public T update(T object) {
     T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
-      String msg = MessageFormat.format("Unable to find entity with id={0}", object);
+      String msg =
+          MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
       throw new EntityNotFoundException(msg);
     }
     currentSession().evict(databaseObject);

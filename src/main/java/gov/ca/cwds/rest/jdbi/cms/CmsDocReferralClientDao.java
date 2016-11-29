@@ -6,9 +6,9 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient;
-import gov.ca.cwds.rest.jdbi.CmsCrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
-public class CmsDocReferralClientDao extends CmsCrudsDaoImpl<CmsDocReferralClient> {
+public class CmsDocReferralClientDao extends CrudsDaoImpl<CmsDocReferralClient> {
 
   /**
    * Constructor

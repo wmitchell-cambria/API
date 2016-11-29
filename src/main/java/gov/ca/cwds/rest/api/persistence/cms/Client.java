@@ -9,6 +9,8 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.ApiException;
@@ -20,8 +22,13 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
+@NamedQueries({
+    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.cms.Client.findAll",
+        query = "FROM Client"),
+    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.cms.Client.findAllUpdatedAfter",
+        query = "FROM Client WHERE lastUpdatedTime > :after")})
 @Entity
-@Table(schema = "CWSINT", name = "CLIENT_T")
+@Table(name = "CLIENT_T")
 public class Client extends CmsPersistentObject {
   /**
    * 
@@ -430,7 +437,7 @@ public class Client extends CmsPersistentObject {
    * @param client The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public Client(gov.ca.cwds.rest.api.domain.legacy.Client client, String lastUpdatedId) {
+  public Client(gov.ca.cwds.rest.api.domain.cms.Client client, String lastUpdatedId) {
     super(lastUpdatedId);
     try {
       this.adjudicatedDelinquentIndicator =

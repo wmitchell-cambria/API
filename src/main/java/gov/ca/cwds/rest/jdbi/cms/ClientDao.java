@@ -1,13 +1,11 @@
 package gov.ca.cwds.rest.jdbi.cms;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import gov.ca.cwds.rest.api.persistence.cms.Client;
-import gov.ca.cwds.rest.jdbi.CmsCrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.BaseDaoImpl;
 
-public class ClientDao extends CmsCrudsDaoImpl<Client> {
+public class ClientDao extends BaseDaoImpl<Client> {
 
   /**
    * Constructor
@@ -17,13 +15,4 @@ public class ClientDao extends CmsCrudsDaoImpl<Client> {
   public ClientDao(SessionFactory sessionFactory) {
     super(sessionFactory);
   }
-
-
-  @SuppressWarnings("unchecked")
-  public List<Client> findAllClient() {
-    List<Client> clientList = this.getSessionFactory().getCurrentSession()
-        .createSQLQuery("SELECT * FROM cwsint.client_t").list();
-    return clientList;
-  }
-
 }
