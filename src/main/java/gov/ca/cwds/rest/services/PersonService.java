@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
@@ -12,7 +13,10 @@ import gov.ca.cwds.rest.jdbi.ns.PersonDao;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -25,6 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PersonService implements CrudsService {
   private PersonDao personDao;
   private ElasticsearchDao elasticsearchDao;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
 
   /**
    * Constructor
@@ -91,12 +97,14 @@ public class PersonService implements CrudsService {
       if (esPerson != null) {
         document = mapper.writeValueAsString(esPerson);
       }
+
       elasticsearchDao.start();
-      elasticsearchDao.createDocument(document, esPerson.getId().toString());
+      elasticsearchDao.index(document, esPerson.getId().toString());
       elasticsearchDao.stop();
+    } catch (JsonProcessingException e) {
+      throw new ApiException("Unable to convert Person to json to Index in Elasticsearch");
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw new ApiException("Unable to Index Person in Elasticsearch");
     }
     return postedPerson;
   }
