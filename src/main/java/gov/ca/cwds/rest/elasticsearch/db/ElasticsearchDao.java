@@ -3,14 +3,19 @@ package gov.ca.cwds.rest.elasticsearch.db;
 import gov.ca.cwds.rest.api.ApiException;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -54,20 +59,29 @@ public class ElasticsearchDao {
     this.port = elasticsearchConfiguration.getElasticsearchPort();
   }
 
-  public void start() throws Exception {
-    LOGGER.info("ElasticSearchDao.start()");
-
-    Settings settings = Settings.settingsBuilder().put("cluster.name", clusterName).build();
-    this.client =
-        TransportClient
-            .builder()
-            .settings(settings)
-            .build()
-            .addTransportAddress(
-                new InetSocketTransportAddress(InetAddress.getByName(host), Integer.parseInt(port)));
+  protected synchronized void init() throws UnknownHostException {
+    if (this.client == null) {
+      Settings settings = Settings.settingsBuilder().put("cluster.name", clusterName).build();
+      this.client = TransportClient.builder().settings(settings).build().addTransportAddress(
+          new InetSocketTransportAddress(InetAddress.getByName(host), Integer.parseInt(port)));
+    }
   }
 
-  public void stop() throws Exception {
+  protected void start() throws Exception {
+    LOGGER.info("ElasticSearchDao.start()");
+
+    if (this.client == null) {
+      init();
+    }
+  }
+
+  /**
+   * Only stop the ElasticSearch client, when the container stops or if the connection becomes
+   * unhealthy.
+   * 
+   * @throws Exception if ElasticSearch client fails to close properly.
+   */
+  protected void stop() throws Exception {
     LOGGER.info("ElasticSearchDao.stop()");
     this.client.close();
   }
@@ -83,16 +97,28 @@ public class ElasticsearchDao {
   public boolean index(String document, String id) throws Exception {
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
 
-    IndexResponse response =
-        client.prepareIndex(indexName, indexType, id)
-            .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-            .actionGet();
+    IndexResponse response = client.prepareIndex(indexName, indexType, id)
+        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
+        .actionGet();
 
     LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
         + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
         + "\ncreated: " + response.isCreated());
 
     return response.isCreated();
+  }
+
+  public SearchHit[] queryAllPersons() throws Exception {
+    // Initialize and start ElasticSearch client, if not started.
+    start();
+
+    SearchResponse response = client.prepareSearch(indexName).setTypes(indexType)
+        .setSearchType(SearchType.QUERY_AND_FETCH)
+        // .setQuery(QueryBuilders.termQuery("first_name", "bart"))
+        .setQuery(QueryBuilders.matchQuery("first_name", "bart")).setFrom(0).setSize(60)
+        .setExplain(true).execute().actionGet();
+
+    return response.getHits().getHits();
   }
 
   /**
