@@ -6,14 +6,19 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
+import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 import gov.ca.cwds.rest.elasticsearch.db.ElasticsearchDao;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.ns.PersonDao;
+import io.swagger.annotations.ApiParam;
 
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.ws.rs.FormParam;
+
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +95,6 @@ public class PersonService implements CrudsService {
 
       // Methods start/stop are now protected. Dao manages its own connections.
       // elasticsearchDao.start();
-      // elasticsearchDao.start();
       elasticsearchDao.index(document, esPerson.getId().toString());
       // elasticsearchDao.stop();
     } catch (JsonProcessingException e) {
@@ -101,20 +105,58 @@ public class PersonService implements CrudsService {
     return postedPerson;
   }
 
+  /**
+   * Returns all persons in Elasticsearch, up the default number of rows set in
+   * {@link ElasticsearchDao#queryAllPersons()}.
+   * 
+   * @return array of {@link PostedPerson}
+   * @throws Exception in case of I/O error or unknown host
+   */
   public PostedPerson[] fetchAllPersons() throws Exception {
-    final SearchHit[] hits = this.elasticsearchDao.queryAllPersons();
+    final SearchHit[] hits = this.elasticsearchDao.fetchAllPerson();
 
-    // SAMPLE HIT:
-    // {updated_at=2016-11-23-09.09.15.930, gender=Male, date_of_birth=1990-04-01,
-    // created_at=2016-11-23-09.09.15.953, last_name=Simpson, id=100, first_name=Bart,
-    // ssn=999551111}
-
-    PostedPerson[] persons = new PostedPerson[hits.length];
+    final PostedPerson[] persons = new PostedPerson[hits.length];
     int counter = -1;
     for (SearchHit hit : hits) {
       System.out.println("------------------------------");
       final Map<String, Object> m = hit.getSource();
-      System.out.println(m);
+      LOGGER.debug(m.toString());
+
+      persons[++counter] = new PostedPerson(Long.parseLong(m.getOrDefault("id", "0").toString()),
+          (String) m.getOrDefault("first_name", ""), (String) m.getOrDefault("last_name", ""),
+          (String) m.getOrDefault("gender", null), (String) m.getOrDefault("date_of_birth", null),
+          (String) m.getOrDefault("ssn", null), null);
+    }
+
+    return persons;
+  }
+
+  public PostedPerson[] queryPerson(String firstName, String lastName, String birthDate)
+      throws Exception {
+
+    ESSearchRequest req = new ESSearchRequest();
+    String field = "";
+    String value = "";
+    if (!StringUtils.isBlank(firstName)) {
+      field = "first_name";
+      value = firstName;
+    } else if (!StringUtils.isBlank(lastName)) {
+      field = "last_name";
+      value = lastName;
+    } else if (!StringUtils.isBlank(birthDate)) {
+      field = "birth_date";
+      value = birthDate;
+    }
+
+    req.getRoot().addElem(new ESSearchRequest.ESFieldSearchEntry(field, value));
+    final SearchHit[] hits = this.elasticsearchDao.queryPerson(req);
+
+    final PostedPerson[] persons = new PostedPerson[hits.length];
+    int counter = -1;
+    for (SearchHit hit : hits) {
+      System.out.println("------------------------------");
+      final Map<String, Object> m = hit.getSource();
+      LOGGER.debug(m.toString());
 
       persons[++counter] = new PostedPerson(Long.parseLong(m.getOrDefault("id", "0").toString()),
           (String) m.getOrDefault("first_name", ""), (String) m.getOrDefault("last_name", ""),
@@ -130,7 +172,7 @@ public class PersonService implements CrudsService {
   // ===================
 
   /**
-   * {@inheritDoc}
+   * <strong>NOT IMPLEMENTED! REQUIRED BY {@link CrudsService}!</strong> {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
@@ -141,7 +183,7 @@ public class PersonService implements CrudsService {
   }
 
   /**
-   * {@inheritDoc}
+   * <strong>NOT IMPLEMENTED! REQUIRED BY {@link CrudsService}!</strong> {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)

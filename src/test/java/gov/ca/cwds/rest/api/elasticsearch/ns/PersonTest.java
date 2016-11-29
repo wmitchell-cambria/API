@@ -18,7 +18,7 @@ public class PersonTest {
   private String lastUpdatedId = "z";
 
 
-  /*
+  /**
    * Constructor test
    */
   @Test
@@ -28,9 +28,8 @@ public class PersonTest {
 
   @Test
   public void domainPersonConstructorTest() throws Exception {
-    gov.ca.cwds.rest.api.domain.Person domain =
-        new gov.ca.cwds.rest.api.domain.Person(first_name, last_name, gender, date_of_birth, ssn,
-            null);
+    gov.ca.cwds.rest.api.domain.Person domain = new gov.ca.cwds.rest.api.domain.Person(first_name,
+        last_name, gender, date_of_birth, ssn, null);
 
     gov.ca.cwds.rest.api.elasticsearch.ns.Person indexed =
         new gov.ca.cwds.rest.api.elasticsearch.ns.Person(domain, "z");
