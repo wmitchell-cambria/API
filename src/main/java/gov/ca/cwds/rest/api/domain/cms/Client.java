@@ -1,9 +1,8 @@
-package gov.ca.cwds.rest.api.domain.legacy;
+package gov.ca.cwds.rest.api.domain.cms;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.glassfish.jersey.linking.InjectLinks;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -20,17 +19,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@InjectLinks({
-    // @InjectLink(value="/{resource}/{id}", rel="self", style=Style.ABSOLUTE, bindings={
-    // @Binding(name="id", value="${instance.id}"), @Binding(name="resource",
-    // value=Api.RESOURCE_STAFF_PERSON) } ),
-    // @InjectLink(value="/{resource}/{id}", rel="cwsOffice", style=Style.ABSOLUTE, bindings={
-    // @Binding(name="id", value="${instance.cwsOffice}"), @Binding(name="resource",
-    // value=Api.RESOURCE_CWS_OFFICE) } ),
-    // @InjectLink(value="/{resource}/{id}", rel="cwsofficeAddress", style=Style.ABSOLUTE,
-    // bindings={ @Binding(name="id", value="${instance.cwsOfficeAddress}"),
-    // @Binding(name="resource", value=Api.RESOURCE_CWS_OFFICE_ADDESS) } )
-})
 public class Client extends DomainObject {
   @ApiModelProperty(required = false, readOnly = false)
   private Boolean adjudicatedDelinquentIndicator;

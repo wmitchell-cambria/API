@@ -9,32 +9,46 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import org.hamcrest.junit.ExpectedException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 
 public class StaffPersonDaoIT {
-  private SessionFactory sessionFactory;
-  private StaffPersonDao staffPersonDao;
-
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Before
-  public void setup() {
-    sessionFactory = new Configuration().configure().buildSessionFactory();
-    sessionFactory.getCurrentSession().beginTransaction();
+  private static StaffPersonDao staffPersonDao;
+  private static SessionFactory sessionFactory;
+  private Session session;
+
+  @BeforeClass
+  public static void beforeClass() {
+    sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
     staffPersonDao = new StaffPersonDao(sessionFactory);
   }
 
-  @After
-  public void tearndown() {
+  @AfterClass
+  public static void afterClass() {
     sessionFactory.close();
+  }
+
+  @Before
+  public void setup() {
+    session = sessionFactory.getCurrentSession();
+    session.beginTransaction();
+  }
+
+  @After
+  public void tearddown() {
+    session.getTransaction().rollback();
   }
 
   @Test

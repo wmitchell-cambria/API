@@ -1,29 +1,32 @@
 package gov.ca.cwds.rest.jdbi.cms;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import org.hamcrest.junit.ExpectedException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.persistence.cms.Client;
 
 public class ClientDaoIT {
-  private SessionFactory sessionFactory;
-  private ClientDao clientDao;
+  private static final DateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private String birthDateString = "1972-08-17";
   private String creationDateString = "2004-08-17";
@@ -31,16 +34,57 @@ public class ClientDaoIT {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Before
-  public void setup() {
-    sessionFactory = new Configuration().configure().buildSessionFactory();
-    sessionFactory.getCurrentSession().beginTransaction();
+  private static ClientDao clientDao;
+  private static SessionFactory sessionFactory;
+  private Session session;
+
+  @BeforeClass
+  public static void beforeClass() {
+    sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
     clientDao = new ClientDao(sessionFactory);
   }
 
-  @After
-  public void tearndown() {
+  @AfterClass
+  public static void afterClass() {
     sessionFactory.close();
+  }
+
+  @Before
+  public void setup() {
+    session = sessionFactory.getCurrentSession();
+    session.beginTransaction();
+  }
+
+  @After
+  public void tearddown() {
+    session.getTransaction().rollback();
+  }
+
+  @Test
+  public void testFindAllNamedQueryExists() throws Exception {
+    Query query = session.getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.Client.findAll");
+    assertThat(query, is(notNullValue()));
+  }
+
+  @Test
+  public void testFindAllReturnsCorrectList() {
+    Query query = session.getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.Client.findAll");
+    assertThat(query.list().size(), is(2));
+  }
+
+  @Test
+  public void testfindAllUpdatedAfterNamedQueryExists() throws Exception {
+    Query query =
+        session.getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.Client.findAllUpdatedAfter");
+    assertThat(query, is(notNullValue()));
+  }
+
+  @Test
+  public void testfindAllUpdatedAfterReturnsCorrectList() throws Exception {
+    Query query =
+        session.getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.Client.findAllUpdatedAfter")
+            .setDate("after", TIMESTAMP_FORMAT.parse("2000-11-02 00:00:00"));
+    assertThat(query.list().size(), is(1));
   }
 
   @Test
@@ -111,12 +155,5 @@ public class ClientDaoIT {
         "N", " ", "N", (short) 0, (short) 0, (short) 0, (short) 0, "N", "N", "N", "N", "O", " ",
         " ", "N", "N", "U", "N");
     clientDao.update(client);
-  }
-
-
-  @Test
-  public void testSelect() throws Exception {
-    List<Client> found = clientDao.findAllClient();
-    assertThat(found.size(), is(2));
   }
 }
