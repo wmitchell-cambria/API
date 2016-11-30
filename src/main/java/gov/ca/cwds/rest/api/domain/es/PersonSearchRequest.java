@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.validation.Date;
+import gov.ca.cwds.rest.validation.PastDate;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,6 +28,8 @@ public class PersonSearchRequest extends DomainObject implements Request {
   @JsonProperty("last_name")
   private String lastName;
 
+  @Date
+  @PastDate()
   @ApiModelProperty(example = "2008-09-01")
   @JsonProperty("birth_date")
   private String birthDate;

@@ -88,6 +88,7 @@ public class PersonSearchResource {
    * Query Persons in ElasticSearch by searching on one of the following: first name, last name or
    * date of birth.
    * 
+   * @param req JSON {@link PersonSearchRequest}
    * @return the response
    */
   // @UnitOfWork(value = "ns") // No transaction?
@@ -100,9 +101,7 @@ public class PersonSearchResource {
       response = PostedPerson[].class)
   @Consumes(value = MediaType.APPLICATION_JSON)
   public Response queryPersonOrTerm(
-      @ApiParam(hidden = false, required = true) PersonSearchRequest req,
-      @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
-
+      @ApiParam(hidden = false, required = true) PersonSearchRequest req) {
     PostedPerson[] hits = null;
     try {
       // TODO: remove cast abuse.

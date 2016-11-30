@@ -138,26 +138,21 @@ public class ElasticsearchDao {
    * <p>
    * SAMPLE HIT:
    * </p>
-   * <p>
+   * 
    * <blockquote>{updated_at=2016-11-23-09.09.15.930, gender=Male, date_of_birth=1990-04-01,
    * created_at=2016-11-23-09.09.15.953, last_name=Simpson, id=100, first_name=Bart, ssn=999551111}
    * </blockquote>
-   * </p>
    * 
    * @return array of generic ElasticSearch {@link SearchHit}
-   * @throws Exception
+   * @throws Exception unable to connect to ElasticSearch or disconnects midstream, etc.
    */
   public SearchHit[] fetchAllPerson() throws Exception {
     // Initialize and start ElasticSearch client, if not started.
     start();
 
-    final SearchResponse response = client.prepareSearch(indexName).setTypes(indexType)
-        .setSearchType(SearchType.QUERY_AND_FETCH)
-        // .setQuery(QueryBuilders.termQuery("first_name", "bart"))
-        // .setQuery(QueryBuilders.matchQuery("first_name", "bart"))
-        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet();
-
-    return response.getHits().getHits();
+    return client.prepareSearch(indexName).setTypes(indexType)
+        .setSearchType(SearchType.QUERY_AND_FETCH).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
+        .setExplain(true).execute().actionGet().getHits().getHits();
   }
 
   public SearchHit[] queryPerson(ESSearchRequest req) throws Exception {
@@ -174,11 +169,10 @@ public class ElasticsearchDao {
       }
     }
 
-    final SearchResponse response = client.prepareSearch(indexName).setTypes(indexType)
+    return client.prepareSearch(indexName).setTypes(indexType)
         .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(QueryBuilders.matchQuery(field, value))
-        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet();
-
-    return response.getHits().getHits();
+        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits()
+        .getHits();
   }
 
   // ===================

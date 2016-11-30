@@ -107,7 +107,7 @@ public class PersonService implements CrudsService {
 
   /**
    * Returns all persons in Elasticsearch, up the default number of rows set in
-   * {@link ElasticsearchDao#queryAllPersons()}.
+   * {@link ElasticsearchDao#fetchAllPerson()}.
    * 
    * @return array of {@link PostedPerson}
    * @throws Exception in case of I/O error or unknown host
