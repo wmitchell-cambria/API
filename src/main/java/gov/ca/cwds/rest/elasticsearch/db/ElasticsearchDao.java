@@ -73,8 +73,14 @@ public class ElasticsearchDao {
   protected synchronized void init() throws UnknownHostException {
     if (this.client == null) {
       Settings settings = Settings.settingsBuilder().put("cluster.name", clusterName).build();
-      this.client = TransportClient.builder().settings(settings).build().addTransportAddress(
-          new InetSocketTransportAddress(InetAddress.getByName(host), Integer.parseInt(port)));
+      this.client =
+          TransportClient
+              .builder()
+              .settings(settings)
+              .build()
+              .addTransportAddress(
+                  new InetSocketTransportAddress(InetAddress.getByName(host), Integer
+                      .parseInt(port)));
     }
   }
 
@@ -114,10 +120,11 @@ public class ElasticsearchDao {
    */
   public boolean index(String document, String id) throws Exception {
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-
-    IndexResponse response = client.prepareIndex(indexName, indexType, id)
-        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-        .actionGet();
+    start();
+    IndexResponse response =
+        client.prepareIndex(indexName, indexType, id)
+            .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
+            .actionGet();
 
     LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
         + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
