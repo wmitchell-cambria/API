@@ -83,19 +83,20 @@ public class PersonSearchResource {
 
   /**
    * Query Persons in ElasticSearch by searching on one of the following: first name, last name or
-   * date of birth.
+   * birth date.
    * 
    * @param req JSON {@link PersonSearchRequest}
    * @return the response
    */
   // @UnitOfWork(value = "ns") // No transaction?
   @POST
-  @Path("/query_or_term")
+  @Path("/query_or")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Query Persons from ElasticSearch", code = HttpStatus.SC_OK,
-      response = PostedPerson[].class)
+  @ApiOperation(
+      value = "Query Persons from ElasticSearch by first non-blank field. Wildcards allowed (*,?)",
+      code = HttpStatus.SC_OK, response = PostedPerson[].class)
   @Consumes(value = MediaType.APPLICATION_JSON)
   public Response queryPersonOrTerm(
       @ApiParam(hidden = false, required = true) PersonSearchRequest req) {
@@ -103,7 +104,7 @@ public class PersonSearchResource {
     try {
       // TODO: remove cast abuse.
       hits = ((PersonService) ((ServiceBackedResourceDelegate) resourceDelegate).getService())
-          .queryPerson(req.getFirstName(), req.getLastName(), req.getBirthDate());
+          .queryPersonOr(req.getFirstName(), req.getLastName(), req.getBirthDate());
     } catch (Exception e) {
       e.printStackTrace();
     }

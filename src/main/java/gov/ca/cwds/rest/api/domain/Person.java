@@ -19,26 +19,26 @@ import io.swagger.annotations.ApiModelProperty;
 public class Person extends DomainObject implements Request, Response {
 
   @JsonProperty("first_name")
-  @ApiModelProperty(example = "Bart")
+  @ApiModelProperty(example = "bart")
   @Size(max = 50)
   private String first_name;
 
   @JsonProperty("last_name")
-  @ApiModelProperty(example = "Simpson")
+  @ApiModelProperty(example = "simpson")
   @Size(max = 50)
   private String last_name;
 
-  // @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   @JsonProperty("gender")
-  @ApiModelProperty(example = "Male")
+  @ApiModelProperty(example = "m")
   @Size(max = 10)
+  // @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   private String gender;
 
   @Date
   @PastDate()
-  @JsonProperty("date_of_birth")
+  @JsonProperty("birth_date")
   @ApiModelProperty(example = "1990-04-01")
-  private String date_of_birth;
+  private String birth_date;
 
   @JsonProperty("ssn")
   @ApiModelProperty(example = "999551111")
@@ -54,20 +54,20 @@ public class Person extends DomainObject implements Request, Response {
    * @param first_name The first name
    * @param last_name The last name
    * @param gender The gender
-   * @param date_of_birth The date of birth
+   * @param birth_date The date of birth
    * @param ssn The ssn
    * @param address The address
    */
   @JsonCreator
   public Person(@JsonProperty("first_name") String first_name,
       @JsonProperty("last_name") String last_name, @JsonProperty("gender") String gender,
-      @JsonProperty("date_of_birth") String date_of_birth, @JsonProperty("ssn") String ssn,
+      @JsonProperty("birth_date") String birth_date, @JsonProperty("ssn") String ssn,
       @JsonProperty("address") Address address) {
     super();
     this.first_name = first_name;
     this.last_name = last_name;
     this.gender = gender;
-    this.date_of_birth = date_of_birth;
+    this.birth_date = birth_date;
     this.ssn = ssn;
     this.address = address;
   }
@@ -76,7 +76,7 @@ public class Person extends DomainObject implements Request, Response {
     this.first_name = person.getFirstName();
     this.last_name = person.getLastName();
     this.gender = person.getGender();
-    this.date_of_birth = DomainObject.cookDate(person.getDateOfBirth());
+    this.birth_date = DomainObject.cookDate(person.getDateOfBirth());
     this.ssn = person.getSsn();
     if (person.getAddress() != null) {
       this.address = new Address(person.getAddress());
@@ -105,10 +105,10 @@ public class Person extends DomainObject implements Request, Response {
   }
 
   /**
-   * @return the date_of_birth
+   * @return the birth_date
    */
   public String getDate_of_birth() {
-    return date_of_birth;
+    return birth_date;
   }
 
   /**
@@ -135,7 +135,7 @@ public class Person extends DomainObject implements Request, Response {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
-    result = prime * result + ((date_of_birth == null) ? 0 : date_of_birth.hashCode());
+    result = prime * result + ((birth_date == null) ? 0 : birth_date.hashCode());
     result = prime * result + ((first_name == null) ? 0 : first_name.hashCode());
     result = prime * result + ((gender == null) ? 0 : gender.hashCode());
     result = prime * result + ((last_name == null) ? 0 : last_name.hashCode());
@@ -162,10 +162,10 @@ public class Person extends DomainObject implements Request, Response {
         return false;
     } else if (!address.equals(other.address))
       return false;
-    if (date_of_birth == null) {
-      if (other.date_of_birth != null)
+    if (birth_date == null) {
+      if (other.birth_date != null)
         return false;
-    } else if (!date_of_birth.equals(other.date_of_birth))
+    } else if (!birth_date.equals(other.birth_date))
       return false;
     if (first_name == null) {
       if (other.first_name != null)

@@ -139,7 +139,7 @@ public class ElasticsearchDao {
    * SAMPLE HIT:
    * </p>
    * 
-   * <blockquote>{updated_at=2016-11-23-09.09.15.930, gender=Male, date_of_birth=1990-04-01,
+   * <blockquote>{updated_at=2016-11-23-09.09.15.930, gender=Male, birth_date=1990-04-01,
    * created_at=2016-11-23-09.09.15.953, last_name=Simpson, id=100, first_name=Bart, ssn=999551111}
    * </blockquote>
    * 
@@ -156,13 +156,13 @@ public class ElasticsearchDao {
   }
 
   /**
-   * Generic query for Person.
+   * Generic OR query for Person.
    * 
    * @param req boolean hierarchy search request
    * @return array of raw ElasticSearch hits
    * @throws Exception unable to connect, disconnect, bad hair day, etc.
    */
-  public SearchHit[] queryPerson(ESSearchRequest req) throws Exception {
+  public SearchHit[] queryPersonOr(ESSearchRequest req) throws Exception {
     // Initialize and start ElasticSearch client, if not started.
     start();
 
