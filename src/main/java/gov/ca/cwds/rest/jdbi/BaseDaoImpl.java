@@ -56,8 +56,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
         txn.rollback();
       }
       throw new DaoException(h);
-    } finally {
-      session.close();
     }
   }
 
@@ -85,8 +83,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
         txn.rollback();
       }
       throw new DaoException(h);
-    } finally {
-      session.close();
     }
   }
 
