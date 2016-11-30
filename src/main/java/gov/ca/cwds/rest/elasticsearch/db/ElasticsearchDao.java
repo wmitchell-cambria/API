@@ -11,6 +11,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
@@ -154,6 +155,13 @@ public class ElasticsearchDao {
         .setExplain(true).execute().actionGet().getHits().getHits();
   }
 
+  /**
+   * Generic query for Person.
+   * 
+   * @param req boolean hierarchy search request
+   * @return array of raw ElasticSearch hits
+   * @throws Exception unable to connect, disconnect, bad hair day, etc.
+   */
   public SearchHit[] queryPerson(ESSearchRequest req) throws Exception {
     // Initialize and start ElasticSearch client, if not started.
     start();
@@ -168,10 +176,17 @@ public class ElasticsearchDao {
       }
     }
 
+    QueryBuilder qb = null;
+    if ((value.contains("*") || value.contains("?"))
+        && (!value.startsWith("?") && !value.startsWith("*"))) {
+      qb = QueryBuilders.wildcardQuery(field, value);
+    } else {
+      qb = QueryBuilders.matchQuery(field, value);
+    }
+
     return client.prepareSearch(indexName).setTypes(indexType)
-        .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(QueryBuilders.matchQuery(field, value))
-        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits()
-        .getHits();
+        .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(qb).setFrom(0)
+        .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
   }
 
   // ===================
