@@ -24,7 +24,8 @@ public class ESSearchRequest extends DomainObject implements Request {
       for (int j = 0; j < clses.length; ++j)
         try {
           return getAnyMethod(clses[j], name, argTypes);
-        } catch (NoSuchMethodException e2) { // ignore it
+        } catch (NoSuchMethodException e2) {
+          // Ignore.
         }
 
       cls = cls.getSuperclass();
@@ -84,10 +85,8 @@ public class ESSearchRequest extends DomainObject implements Request {
   }
 
   // ================
-  // CLASSES:
+  // INNER CLASSES:
   // ================
-
-
 
   /**
    * Node in a tree of groupings and search terms.
@@ -97,8 +96,6 @@ public class ESSearchRequest extends DomainObject implements Request {
   @JsonSnakeCase
   public static interface ESSearchElement {
     ElementType getElementType();
-
-    // QueryBuilder getQueryBuilder();
   }
 
   /**
@@ -212,7 +209,8 @@ public class ESSearchRequest extends DomainObject implements Request {
     }
 
     @JsonCreator
-    public ESFieldSearchEntry(@JsonProperty("field") String field, @JsonProperty("value") String value) {
+    public ESFieldSearchEntry(@JsonProperty("field") String field,
+        @JsonProperty("value") String value) {
       super();
       this.field = field;
       this.value = value;

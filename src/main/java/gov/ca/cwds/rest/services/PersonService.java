@@ -90,9 +90,7 @@ public class PersonService implements CrudsService {
       }
 
       // Methods start/stop are now protected. Dao manages its own connections.
-      // elasticsearchDao.start();
       elasticsearchDao.index(document, esPerson.getId().toString());
-      // elasticsearchDao.stop();
     } catch (JsonProcessingException e) {
       throw new ApiException("Unable to convert Person to json to Index in Elasticsearch");
     } catch (Exception e) {
@@ -120,7 +118,7 @@ public class PersonService implements CrudsService {
 
       persons[++counter] = new PostedPerson(Long.parseLong(m.getOrDefault("id", "0").toString()),
           (String) m.getOrDefault("first_name", ""), (String) m.getOrDefault("last_name", ""),
-          (String) m.getOrDefault("gender", null), (String) m.getOrDefault("date_of_birth", null),
+          (String) m.getOrDefault("gender", null), (String) m.getOrDefault("birth_date", null),
           (String) m.getOrDefault("ssn", null), null);
     }
 
@@ -136,7 +134,7 @@ public class PersonService implements CrudsService {
    * @return array of found Persons
    * @throws Exception I/O error or unknown host
    */
-  public PostedPerson[] queryPerson(String firstName, String lastName, String birthDate)
+  public PostedPerson[] queryPersonOr(String firstName, String lastName, String birthDate)
       throws Exception {
 
     ESSearchRequest req = new ESSearchRequest();
@@ -149,12 +147,12 @@ public class PersonService implements CrudsService {
       field = "last_name";
       value = lastName;
     } else if (!StringUtils.isBlank(birthDate)) {
-      field = "date_of_birth";
+      field = "birth_date";
       value = birthDate;
     }
 
     req.getRoot().addElem(new ESSearchRequest.ESFieldSearchEntry(field, value));
-    final SearchHit[] hits = this.elasticsearchDao.queryPerson(req);
+    final SearchHit[] hits = this.elasticsearchDao.queryPersonOr(req);
 
     final PostedPerson[] persons = new PostedPerson[hits.length];
     int counter = -1;
@@ -164,7 +162,7 @@ public class PersonService implements CrudsService {
 
       persons[++counter] = new PostedPerson(Long.parseLong(m.getOrDefault("id", "0").toString()),
           (String) m.getOrDefault("first_name", ""), (String) m.getOrDefault("last_name", ""),
-          (String) m.getOrDefault("gender", null), (String) m.getOrDefault("date_of_birth", null),
+          (String) m.getOrDefault("gender", null), (String) m.getOrDefault("birth_date", null),
           (String) m.getOrDefault("ssn", null), null);
     }
 
