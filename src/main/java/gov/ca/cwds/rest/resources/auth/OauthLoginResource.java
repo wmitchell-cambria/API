@@ -12,10 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -153,8 +149,8 @@ public class OauthLoginResource {
    * @return the response
    */
   @UnitOfWork(value = "cms")
-  @GET
-  @Path("/{id}")
+  // @GET
+  // @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
@@ -171,8 +167,8 @@ public class OauthLoginResource {
    * 
    * @return {@link Response}
    */
-  @DELETE
-  @Path("/{id}")
+  // @DELETE
+  // @Path("/{id}")
   @ApiOperation(hidden = true, value = "Delete Document - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(
@@ -188,7 +184,7 @@ public class OauthLoginResource {
    * @return The {@link CmsDocument}
    */
   @UnitOfWork(value = "cms")
-  @POST
+  // @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 409, message = "Conflict - already exists"),
@@ -210,7 +206,7 @@ public class OauthLoginResource {
    * @return The {@link Response}
    */
   @UnitOfWork(value = "cms")
-  @PUT
+  // @PUT
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -225,8 +221,8 @@ public class OauthLoginResource {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 
-  @GET
-  @Path("/login")
+  // @GET
+  // @Path("/login")
   public Response login1(final @Context HttpServletResponse response) {
     // Track this login request.
     final String state = getUniqueId();
@@ -246,8 +242,8 @@ public class OauthLoginResource {
     return Response.ok("fred").build();
   }
 
-  @GET
-  @Path("/callback")
+  // @GET
+  // @Path("/callback")
   // @Produces({MediaType.APPLICATION_FORM_URLENCODED})
   // public Response safCallback(HttpServletResponse response,
   public Response safCallback(@Context HttpServletRequest req,
