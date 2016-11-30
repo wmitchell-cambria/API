@@ -3,9 +3,7 @@ package gov.ca.cwds.rest.resources;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SEARCH_PERSON;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,7 +16,6 @@ import org.apache.http.HttpStatus;
 import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
-import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 import gov.ca.cwds.rest.api.domain.es.PersonSearchRequest;
 import gov.ca.cwds.rest.services.PersonService;
 import io.swagger.annotations.Api;

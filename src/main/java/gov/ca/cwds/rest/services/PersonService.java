@@ -110,7 +110,7 @@ public class PersonService implements CrudsService {
    * {@link ElasticsearchDao#fetchAllPerson()}.
    * 
    * @return array of {@link PostedPerson}
-   * @throws Exception in case of I/O error or unknown host
+   * @throws Exception I/O error or unknown host
    */
   public PostedPerson[] fetchAllPersons() throws Exception {
     final SearchHit[] hits = this.elasticsearchDao.fetchAllPerson();
@@ -131,6 +131,15 @@ public class PersonService implements CrudsService {
     return persons;
   }
 
+  /**
+   * Search on the first non-null, non-whitespace term.
+   * 
+   * @param firstName first name to search, if any
+   * @param lastName last name to search, if any
+   * @param birthDate birth date to search, if any
+   * @return array of found Persons
+   * @throws Exception I/O error or unknown host
+   */
   public PostedPerson[] queryPerson(String firstName, String lastName, String birthDate)
       throws Exception {
 
@@ -144,7 +153,7 @@ public class PersonService implements CrudsService {
       field = "last_name";
       value = lastName;
     } else if (!StringUtils.isBlank(birthDate)) {
-      field = "birth_date";
+      field = "date_of_birth";
       value = birthDate;
     }
 
