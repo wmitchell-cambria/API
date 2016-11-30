@@ -34,10 +34,13 @@ public class PersonSearchRequest extends DomainObject implements Request {
   @JsonProperty("birth_date")
   private String birthDate;
 
+  /**
+   * Default, no-param ctor. Required by frameworks.
+   */
   PersonSearchRequest() {}
 
   /**
-   * Constructor
+   * JSON DropWizard Constructor.
    * 
    * @param firstName the first name to search
    * @param lastName the last name to search
@@ -47,9 +50,9 @@ public class PersonSearchRequest extends DomainObject implements Request {
   public PersonSearchRequest(@JsonProperty("first_name") String firstName,
       @JsonProperty("last_name") String lastName, @JsonProperty("birth_date") String birthDate) {
     super();
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.birthDate = birthDate;
+    this.firstName = firstName != null ? firstName.trim() : "";
+    this.lastName = lastName != null ? lastName.trim() : "";
+    this.birthDate = birthDate != null ? birthDate.trim() : "";
   }
 
   public String getFirstName() {

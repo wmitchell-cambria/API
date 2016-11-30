@@ -1,21 +1,7 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.Person;
-import gov.ca.cwds.rest.api.domain.PostedPerson;
-import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
-import gov.ca.cwds.rest.elasticsearch.db.ElasticsearchDao;
-import gov.ca.cwds.rest.jdbi.Dao;
-import gov.ca.cwds.rest.jdbi.ns.PersonDao;
-import io.swagger.annotations.ApiParam;
-
 import java.io.Serializable;
 import java.util.Map;
-
-import javax.ws.rs.FormParam;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
@@ -26,13 +12,23 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Person;
+import gov.ca.cwds.rest.api.domain.PostedPerson;
+import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
+import gov.ca.cwds.rest.elasticsearch.db.ElasticsearchDao;
+import gov.ca.cwds.rest.jdbi.Dao;
+import gov.ca.cwds.rest.jdbi.ns.PersonDao;
+
 /**
  * Business layer object to work on {@link Person} and
  * {@link gov.ca.cwds.rest.api.persistence.ns.Person}
  * 
  * @author CWDS API Team
  */
-
 public class PersonService implements CrudsService {
   private PersonDao personDao;
   private ElasticsearchDao elasticsearchDao;
@@ -163,9 +159,8 @@ public class PersonService implements CrudsService {
     final PostedPerson[] persons = new PostedPerson[hits.length];
     int counter = -1;
     for (SearchHit hit : hits) {
-      System.out.println("------------------------------");
       final Map<String, Object> m = hit.getSource();
-      LOGGER.debug(m.toString());
+      // LOGGER.debug(m.toString());
 
       persons[++counter] = new PostedPerson(Long.parseLong(m.getOrDefault("id", "0").toString()),
           (String) m.getOrDefault("first_name", ""), (String) m.getOrDefault("last_name", ""),
