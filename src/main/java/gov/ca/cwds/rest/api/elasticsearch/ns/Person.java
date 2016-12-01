@@ -14,6 +14,8 @@ public class Person extends NsElasticsearchObject {
   private String gender;
   private String date_of_birth;
   private String ssn;
+  private String type;
+  private String source;
 
   /**
    * Default constructor
@@ -31,9 +33,11 @@ public class Person extends NsElasticsearchObject {
    * @param gender The gender
    * @param dateOfBirth The date of birth
    * @param ssn the social security number
+   * @param type the type of the person
+   * @param source the JSON of the original object
    */
   public Person(String id, String firstName, String lastName, String gender, String dateOfBirth,
-      String ssn) {
+      String ssn, String type, String source) {
     super();
     this.id = id;
     this.first_name = firstName;
@@ -41,6 +45,8 @@ public class Person extends NsElasticsearchObject {
     this.gender = gender;
     this.date_of_birth = dateOfBirth;
     this.ssn = ssn;
+    this.type = type;
+    this.source = source;
   }
 
   /**
@@ -49,27 +55,20 @@ public class Person extends NsElasticsearchObject {
    * @param person The domain object to construct this object from
    * @param updatedAt The time of the last update of this object
    */
-  public Person(gov.ca.cwds.rest.api.domain.Person person, String updatedAt) {
-    super(updatedAt);
-    this.first_name = person.getFirst_name();
-    this.last_name = person.getLast_name();
-    this.gender = person.getGender();
-    this.date_of_birth = person.getDate_of_birth();
-    this.ssn = person.getSsn();
-  }
+  // public Person(gov.ca.cwds.rest.api.domain.Person person, String updatedAt) {
+  // super(updatedAt);
+  // this.first_name = person.getFirst_name();
+  // this.last_name = person.getLast_name();
+  // this.gender = person.getGender();
+  // this.date_of_birth = person.getDate_of_birth();
+  // this.ssn = person.getSsn();
+  // }
 
   /**
    * @return the id
    */
   public String getId() {
     return id;
-  }
-
-  /**
-   * @param id the id to set
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 
   /**
@@ -80,24 +79,10 @@ public class Person extends NsElasticsearchObject {
   }
 
   /**
-   * @param first_name the first_name to set
-   */
-  public void setFirst_name(String first_name) {
-    this.first_name = first_name;
-  }
-
-  /**
    * @return the last_name
    */
   public String getLast_name() {
     return last_name;
-  }
-
-  /**
-   * @param last_name the last_name to set
-   */
-  public void setLast_name(String last_name) {
-    this.last_name = last_name;
   }
 
   /**
@@ -108,24 +93,10 @@ public class Person extends NsElasticsearchObject {
   }
 
   /**
-   * @param gender the gender to set
-   */
-  public void setGender(String gender) {
-    this.gender = gender;
-  }
-
-  /**
    * @return the date_of_birth
    */
   public String getDate_of_birth() {
     return date_of_birth;
-  }
-
-  /**
-   * @param date_of_birth the date_of_birth to set
-   */
-  public void setDate_of_birth(String date_of_birth) {
-    this.date_of_birth = date_of_birth;
   }
 
   /**
@@ -136,10 +107,19 @@ public class Person extends NsElasticsearchObject {
   }
 
   /**
-   * @param ssn the ssn to set
+   * @return the type
    */
-  public void setSsn(String ssn) {
-    this.ssn = ssn;
+  public String getType() {
+    return type;
   }
+
+  /**
+   * @return the source
+   */
+  public String getSource() {
+    return source;
+  }
+
+
 
 }
