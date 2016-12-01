@@ -30,12 +30,12 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(max = 12)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "123456789012")
   private String alienRegistrationNumber;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 56)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "Fresno")
   private String birthCity;
 
   @NotNull
@@ -46,47 +46,47 @@ public class Client extends DomainObject {
   @JsonProperty(value = "birthDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+      example = "2016-01-01")
   private String birthDate;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 35)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "facility name")
   private String birthFacilityName;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short birthStateCodeType;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = false, readOnly = false)
   private Boolean birthplaceVerifiedIndicator;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false)
+  @ApiModelProperty(required = false, readOnly = false)
   private Boolean childClientIndicatorVar;
 
   @ApiModelProperty(required = false, readOnly = false)
-  private Boolean clientIndicatorexNumber;
+  private Boolean clientIndexNumber;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 120)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "a description")
   private String commentDescription;
 
   @NotEmpty
   @Size(min = 1, max = 20)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "first name")
   private String commonFirstName;
 
   @NotEmpty
   @Size(min = 1, max = 25)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "last name")
   private String commonLastName;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 20)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "middle name")
   private String commonMiddleName;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -104,19 +104,19 @@ public class Client extends DomainObject {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "creationDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = true)
-  @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd", example = "2000-01-01")
+  @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd", example = "2016-01-01")
   private String creationDate;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   private Boolean currCaChildrenServIndicator;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 25)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "other description")
   private String currentlyOtherDescription;
 
-  @NotNull
+  @NotEmpty
   @ApiModelProperty(required = true, readOnly = false)
   private Boolean currentlyRegionalCenterIndicator;
 
@@ -124,7 +124,7 @@ public class Client extends DomainObject {
   @JsonProperty(value = "deathDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+      example = "2016-01-01")
   private String deathDate;
 
   @NotNull
@@ -132,49 +132,49 @@ public class Client extends DomainObject {
   private Boolean deathDateVerifiedIndicator;
 
   @Size(max = 35)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "some location")
   private String deathPlace;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "reason text")
   private String deathReasonText;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 20)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "CA1234567891234567")
   private String driverLicenseNumber;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1828")
   private Short driverLicenseStateCodeType;
 
   @Size(max = 50)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "abc@def.com")
   private String emailAddress;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "Y")
   private String estimatedDobCode;
 
   @Size(max = 1)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "K")
   private String ethUnableToDetReasonCode;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "fatherParentalRightTermDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+      example = "2016-01-01")
   private String fatherParentalRightTermDate;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String genderCode;
 
   @Size(max = 10)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "summary text")
   private String healthSummaryText;
 
   @Size(max = 1)
@@ -183,25 +183,25 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "X")
   private String hispanicOriginCode;
 
   @NotEmpty
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @Size(min = 10, max = 10)
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC1234567")
   private String id;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short immigrationCountryCodeType;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1199")
   private Short immigrationStatusType;
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String incapacitatedParentCode;
 
   @NotNull
@@ -214,7 +214,7 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String literateCode;
 
   @NotNull
@@ -222,24 +222,24 @@ public class Client extends DomainObject {
   private Boolean maritalCohabitatnHstryIndicatorVar;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "0")
   private Short maritalStatusType;
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String militaryStatusCode;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty(value = "motherParentalRightTermDate")
   @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+      example = "2016-01-01")
   private String motherParentalRightTermDate;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 6)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = " ")
   private String namePrefixDescription;
 
   @NotNull
@@ -256,7 +256,7 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(max = 25)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "other description")
   private String prevOtherDescription;
 
   @NotNull
@@ -264,19 +264,19 @@ public class Client extends DomainObject {
   private Boolean prevRegionalCenterIndicator;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "839")
   private Short primaryEthnicityType;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1253")
   private Short primaryLanguageType;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short religionType;
 
   @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1255")
   private Short secondaryLanguageType;
 
   @NotNull
@@ -289,26 +289,25 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String soc158PlacementCode;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   private Boolean soc158SealedClientIndicator;
 
-  @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A")
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false)
   private String socialSecurityNumChangedCode;
 
   @NotEmpty
   @Size(max = 9)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "ABC123")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "123456789")
   private String socialSecurityNumber;
 
   @NotEmpty
   @Size(max = 4)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "A1")
   private String suffixTitleDescription;
 
   @NotNull
@@ -321,7 +320,7 @@ public class Client extends DomainObject {
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String unemployedParentCode;
 
   @NotNull
@@ -341,7 +340,7 @@ public class Client extends DomainObject {
       @JsonProperty("birthStateCodeType") Short birthStateCodeType,
       @JsonProperty("birthplaceVerifiedIndicator") Boolean birthplaceVerifiedIndicator,
       @JsonProperty("childClientIndicatorVar") Boolean childClientIndicatorVar,
-      @JsonProperty("clientIndicatorexNumber") Boolean clientIndicatorexNumber,
+      @JsonProperty("clientIndexNumber") Boolean clientIndexNumber,
       @JsonProperty("commentDescription") String commentDescription,
       @JsonProperty("commonFirstName") String commonFirstName,
       @JsonProperty("commonLastName") String commonLastName,
@@ -408,7 +407,7 @@ public class Client extends DomainObject {
     this.birthStateCodeType = birthStateCodeType;
     this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
     this.childClientIndicatorVar = childClientIndicatorVar;
-    this.clientIndicatorexNumber = clientIndicatorexNumber;
+    this.clientIndexNumber = clientIndexNumber;
     this.commentDescription = commentDescription;
     this.commonFirstName = commonFirstName;
     this.commonLastName = commonLastName;
@@ -481,8 +480,7 @@ public class Client extends DomainObject {
         DomainObject.uncookBooleanString(persistedClient.getBirthplaceVerifiedIndicator());
     this.childClientIndicatorVar =
         DomainObject.uncookBooleanString(persistedClient.getChildClientIndicatorVar());
-    this.clientIndicatorexNumber =
-        DomainObject.uncookBooleanString(persistedClient.getClientIndicatorexNumber());
+    this.clientIndexNumber = DomainObject.uncookBooleanString(persistedClient.clientIndexNumber());
     this.commentDescription = persistedClient.getCommentDescription();
     this.commonFirstName = persistedClient.getCommonFirstName();
     this.commonLastName = persistedClient.getCommonLastName();
@@ -631,10 +629,10 @@ public class Client extends DomainObject {
   }
 
   /**
-   * @return the clientIndicatorexNumber
+   * @return the clientIndexNumber
    */
-  public Boolean getClientIndicatorexNumber() {
-    return clientIndicatorexNumber;
+  public Boolean clientIndexNumber() {
+    return clientIndexNumber;
   }
 
   /**
