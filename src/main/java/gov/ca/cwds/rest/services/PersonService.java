@@ -34,6 +34,7 @@ public class PersonService implements CrudsService {
   private ElasticsearchDao elasticsearchDao;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /**
    * Constructor
@@ -78,15 +79,16 @@ public class PersonService implements CrudsService {
 
     managed = personDao.create(managed);
     PostedPerson postedPerson = new PostedPerson(managed);
-    gov.ca.cwds.rest.api.elasticsearch.ns.Person esPerson =
-        new gov.ca.cwds.rest.api.elasticsearch.ns.Person(postedPerson,
-            DomainObject.cookTimestamp(managed.getLastUpdatedTime()));
-    esPerson.setId(managed.getId().toString());
-    String document = "";
     try {
-      ObjectMapper mapper = new ObjectMapper();
+      gov.ca.cwds.rest.api.elasticsearch.ns.Person esPerson =
+          new gov.ca.cwds.rest.api.elasticsearch.ns.Person(managed.getId().toString(),
+              managed.getFirstName(), managed.getLastName(), managed.getSsn(), managed.getGender(),
+              DomainObject.cookDate(managed.getDateOfBirth()), managed.getClass().getName(),
+              MAPPER.writeValueAsString(managed));
+      String document = "";
+
       if (esPerson != null) {
-        document = mapper.writeValueAsString(esPerson);
+        document = MAPPER.writeValueAsString(esPerson);
       }
 
       // Methods start/stop are now protected. Dao manages its own connections.
@@ -112,7 +114,6 @@ public class PersonService implements CrudsService {
     final PostedPerson[] persons = new PostedPerson[hits.length];
     int counter = -1;
     for (SearchHit hit : hits) {
-      System.out.println("------------------------------");
       final Map<String, Object> m = hit.getSource();
       LOGGER.debug(m.toString());
 
