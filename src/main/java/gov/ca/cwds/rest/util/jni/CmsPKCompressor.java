@@ -78,8 +78,8 @@ public class CmsPKCompressor implements LicenseCWDS {
    */
   public void decompressFile(String inputFileName, String outputFileName) throws IOException {
     FileInputStream fis = new FileInputStream(new File(inputFileName));
-
     InputStream iis = new InflateInputStream(fis, true);
+
     FileOutputStream fos = new FileOutputStream(new File(outputFileName));
     IOUtils.copy(iis, fos);
 
@@ -220,17 +220,14 @@ public class CmsPKCompressor implements LicenseCWDS {
       CmsPKCompressor inst = new CmsPKCompressor();
 
       String mode = args[0];
-      if ("-d".equals(mode)) {
-        // Decompress
+      if ("-d".equals(mode)) { // Decompress
         inst.decompressFile(args[1], args[2]);
-      } else if ("-h".equals(mode)) {
-        // hex
+      } else if ("-h".equals(mode)) { // hex
         final String hex = FileCopyUtils.copyToString(new FileReader(new File(args[1]))).trim();
         System.out.println("hex len=" + hex.length());
         final byte[] bytes = inst.decompressHex(hex);
         System.out.println("bytes len = " + bytes.length);
-      } else if ("-b".equals(mode)) {
-        // Base64
+      } else if ("-b".equals(mode)) { // Base64
         final String b64 = FileCopyUtils.copyToString(new FileReader(new File(args[1]))).trim();
         System.out.println("b64 len=" + b64.length());
       }
