@@ -68,7 +68,7 @@ public class CwdsAuthLoginResource {
     Form formData = new Form();
     formData.param("username", username);
     formData.param("password", password);
-    String url = "http://localhost:8090/cwds/password_type_token";
+    String url = "http://localhost:9080/cwds/password_type_token";
     Response response = client.target(url).request().post(Entity.form(formData));
 
     System.out.println(response.getStatus());

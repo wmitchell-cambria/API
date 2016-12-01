@@ -40,10 +40,9 @@ public class PersonResourceTest {
   public static final ResourceTestRule inMemoryResource =
       ResourceTestRule.builder().addResource(new PersonResource(resourceDelegate)).build();
 
-  /*
+  /**
    * Get Tests
    */
-
   @Test
   public void getDelegatesToCrudsResource() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -51,7 +50,7 @@ public class PersonResourceTest {
     verify(resourceDelegate).get(1L);
   }
 
-  /*
+  /**
    * Create Tests
    */
   @Test
@@ -74,7 +73,7 @@ public class PersonResourceTest {
     verify(resourceDelegate).create(eq(person));
   }
 
-  /*
+  /**
    * Delete Tests
    */
   @Test
@@ -85,7 +84,7 @@ public class PersonResourceTest {
     assertThat(receivedStatus, is(expectedStatus));
   }
 
-  /*
+  /**
    * Update Tests
    */
   @Test
