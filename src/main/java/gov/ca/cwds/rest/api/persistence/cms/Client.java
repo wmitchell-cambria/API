@@ -69,7 +69,7 @@ public class Client extends CmsPersistentObject {
   private String childClientIndicatorVar;
 
   @Column(name = "CL_INDX_NO")
-  private String clientIndicatorexNumber;
+  private String clientIndexNumber;
 
   @Column(name = "COMMNT_DSC")
   private String commentDescription;
@@ -371,7 +371,7 @@ public class Client extends CmsPersistentObject {
     this.birthStateCodeType = birthStateCodeType;
     this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
     this.childClientIndicatorVar = childClientIndicatorVar;
-    this.clientIndicatorexNumber = clientIndicatorexNumber;
+    this.clientIndexNumber = clientIndicatorexNumber;
     this.commentDescription = commentDescription;
     this.commonFirstName = commonFirstName;
     this.commonLastName = commonLastName;
@@ -452,7 +452,7 @@ public class Client extends CmsPersistentObject {
       this.birthplaceVerifiedIndicator =
           DomainObject.cookBoolean(client.getBirthplaceVerifiedIndicator());
       this.childClientIndicatorVar = DomainObject.cookBoolean(client.getChildClientIndicatorVar());
-      this.clientIndicatorexNumber = DomainObject.cookBoolean(client.getClientIndicatorexNumber());
+      this.clientIndexNumber = DomainObject.cookBoolean(client.clientIndexNumber());
       this.commentDescription = client.getCommentDescription();
       this.commonFirstName = client.getCommonFirstName();
       this.commonLastName = client.getCommonLastName();
@@ -616,8 +616,8 @@ public class Client extends CmsPersistentObject {
   /**
    * @return the clientIndicatorexNumber
    */
-  public String getClientIndicatorexNumber() {
-    return StringUtils.trimToEmpty(clientIndicatorexNumber);
+  public String clientIndexNumber() {
+    return StringUtils.trimToEmpty(clientIndexNumber);
   }
 
   /**

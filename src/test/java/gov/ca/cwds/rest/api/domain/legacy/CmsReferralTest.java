@@ -366,6 +366,7 @@ public class CmsReferralTest {
 
   }
 
+  @Test
   public void failureWhenCrossReportInvalid() throws Exception {
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidCrossReport.json"),
@@ -379,6 +380,22 @@ public class CmsReferralTest {
 
   }
 
+
+  // @Test
+  // public void failureWhenReferralIdIsDifferentReferralClient() throws Exception {
+  // CmsReferral toCreate = MAPPER.readValue(
+  // fixture(
+  // "fixtures/domain/cms/CmsReferral/invalid/cmsReferralIdIsDifferentReferralClient.json"),
+  // CmsReferral.class);
+  //
+  // Response response =
+  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+  //
+  // assertThat(response.getStatus(), is(equalTo(422)));
+  //
+  //
+  // }
 
   /*
    * Utilities
