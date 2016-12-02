@@ -380,7 +380,110 @@ public class CmsReferralTest {
 
   }
 
+  @Test
+  public void SuccessWhenCmsReferralEqualsNullCmsReferral() throws Exception {
+    CmsReferral validReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
 
+    assertThat(validReferral.equals(null), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SuccessWhenCmsReferralEqualsNullReferralClient() throws Exception {
+    CmsReferral validReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
+
+    CmsReferral invalidReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReferralClient.json"),
+        CmsReferral.class);
+
+    assertThat(validReferral.equals(invalidReferral), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SucessWhenCmsReferralEqualsOtherObjectType() throws Exception {
+    CmsReferral validCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
+
+    Referral validReferral = MAPPER
+        .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
+
+    assertThat(validCmsReferral.equals(validReferral), is(equalTo(Boolean.FALSE)));
+  }
+
+  @Test
+  public void SucessWhenCmsReferralAndEmptyReferralClient() throws Exception {
+    CmsReferral validCmsReferral = this.validCmsReferral();
+
+    CmsReferral invalidCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReferralClientEmpty.json"),
+        CmsReferral.class);
+
+    assertThat(validCmsReferral.equals(invalidCmsReferral), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SucessWhenCmsReferralAndEmptyAllegation() throws Exception {
+    CmsReferral validCmsReferral = this.validCmsReferral();
+
+    CmsReferral invalidCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenAllegationEmpty.json"),
+        CmsReferral.class);
+
+    assertThat(validCmsReferral.equals(invalidCmsReferral), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SucessWhenCmsReferralAndEmptyReporter() throws Exception {
+    CmsReferral validCmsReferral = this.validCmsReferral();
+
+    CmsReferral invalidCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReporterEmpty.json"),
+        CmsReferral.class);
+
+    assertThat(validCmsReferral.equals(invalidCmsReferral), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SucessWhenCmsReferralAndEmptyReferral() throws Exception {
+    CmsReferral validCmsReferral = this.validCmsReferral();
+
+    CmsReferral invalidCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReferralEmpty.json"),
+        CmsReferral.class);
+
+    assertThat(validCmsReferral.equals(invalidCmsReferral), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SucessWhenCmsReferralAndEmptyCrossReport() throws Exception {
+    CmsReferral validCmsReferral = this.validCmsReferral();
+
+    CmsReferral invalidCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralEmptyCrossReport.json"),
+        CmsReferral.class);
+
+    assertThat(validCmsReferral.equals(invalidCmsReferral), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void SucessWhenCmsReferralAndNullAllegation() throws Exception {
+    CmsReferral validCmsReferral = this.validCmsReferral();
+
+    CmsReferral invalidCmsReferral = MAPPER.readValue(
+        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullAllegation.json"),
+        CmsReferral.class);
+
+    assertThat(invalidCmsReferral.equals(validCmsReferral), is(equalTo(Boolean.FALSE)));
+
+  }
   // @Test
   // public void failureWhenReferralIdIsDifferentReferralClient() throws Exception {
   // CmsReferral toCreate = MAPPER.readValue(
