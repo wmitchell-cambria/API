@@ -162,5 +162,4 @@ public class Person extends NsPersistentObject {
     return address;
   }
 
-
 }
