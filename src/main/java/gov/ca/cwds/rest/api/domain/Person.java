@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
-import gov.ca.cwds.rest.validation.PastDate;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -29,15 +28,15 @@ public class Person extends DomainObject implements Request, Response {
   private String last_name;
 
   @JsonProperty("gender")
-  @ApiModelProperty(example = "m")
+  @ApiModelProperty(example = "M")
   @Size(max = 10)
   // @Pattern(message = "must be one of [M, F, O]", regexp = "[M|F|O]")
   private String gender;
 
   @Date
-  @PastDate()
+  // @PastDate()
   @JsonProperty("birth_date")
-  @ApiModelProperty(example = "1990-04-01")
+  @ApiModelProperty(example = "2012-04-01")
   private String birth_date;
 
   @JsonProperty("ssn")
@@ -131,7 +130,7 @@ public class Person extends DomainObject implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
@@ -149,7 +148,7 @@ public class Person extends DomainObject implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)
