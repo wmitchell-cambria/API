@@ -33,6 +33,8 @@ import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class ReporterTest {
 
@@ -183,6 +185,11 @@ public class ReporterTest {
     assertThat(reporter.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
     assertThat(reporter.getZipSuffixNumber(), is(equalTo(zipSuffixNumber)));
     assertThat(reporter.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(Reporter.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   @Test

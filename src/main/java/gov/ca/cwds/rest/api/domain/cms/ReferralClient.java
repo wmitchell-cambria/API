@@ -280,7 +280,7 @@ public class ReferralClient extends DomainObject implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((ageNumber == null) ? 0 : ageNumber.hashCode());
@@ -313,13 +313,18 @@ public class ReferralClient extends DomainObject implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public final boolean equals(Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (!(obj instanceof ReferralClient)) {
       return false;
+    }
+    // if (getClass() != obj.getClass())
+    // return false;
     ReferralClient other = (ReferralClient) obj;
     if (ageNumber == null) {
       if (other.ageNumber != null)

@@ -351,7 +351,7 @@ public class CrossReport extends DomainObject implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((countySpecificCode == null) ? 0 : countySpecificCode.hashCode());
@@ -395,14 +395,19 @@ public class CrossReport extends DomainObject implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public final boolean equals(Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (!(obj instanceof CrossReport)) {
       return false;
+    }
     CrossReport other = (CrossReport) obj;
+    //
+    // CrossReport other = (CrossReport) obj;
     if (countySpecificCode == null) {
       if (other.countySpecificCode != null)
         return false;
