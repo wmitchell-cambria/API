@@ -28,6 +28,8 @@ import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class AllegationTest {
 
@@ -142,6 +144,11 @@ public class AllegationTest {
     assertThat(domain.getCountySpecificCode(), is(equalTo(countySpecificCode)));
     assertThat(domain.getZippyCreatedIndicator(), is(equalTo(zippyCreatedIndicator)));
     assertThat(domain.getPlacementFacilityType(), is(equalTo(placementFacilityType)));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(Allegation.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   @Test

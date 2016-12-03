@@ -34,6 +34,8 @@ import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.cms.ReferralClientResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class ReferralClientTest {
 
@@ -160,6 +162,11 @@ public class ReferralClientTest {
     assertThat(referralClient.getMentalHealthIssuesIndicator(), is(equalTo(Boolean.TRUE)));
     assertThat(referralClient.getAlcoholIndicator(), is(nullValue()));
     assertThat(referralClient.getDrugIndicator(), is(equalTo(Boolean.FALSE)));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(ReferralClient.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   /*

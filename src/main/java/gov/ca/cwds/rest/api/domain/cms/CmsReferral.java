@@ -97,7 +97,7 @@ public class CmsReferral extends DomainObject implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((allegation == null) ? 0 : allegation.hashCode());
@@ -114,13 +114,18 @@ public class CmsReferral extends DomainObject implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public final boolean equals(Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (!(obj instanceof CmsReferral)) {
       return false;
+    }
+    // if (getClass() != obj.getClass())
+    // return false;
     CmsReferral other = (CmsReferral) obj;
     if (allegation == null) {
       if (other.allegation != null)

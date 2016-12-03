@@ -36,6 +36,8 @@ import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.cms.JerseyCmsReferralResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class CmsReferralTest {
 
@@ -61,6 +63,12 @@ public class CmsReferralTest {
 
     when(mockedCmsReferralResource.create(eq(validCmsReferral)))
         .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+  }
+
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(CmsReferral.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   @Test

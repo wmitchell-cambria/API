@@ -32,6 +32,8 @@ import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.cms.ReferralResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class ReferralTest {
 
@@ -291,6 +293,11 @@ public class ReferralTest {
     assertThat(domain.getLimitedAccessDate(), is(equalTo(limitedAccessDate)));
     assertThat(domain.getLimitedAccessDesc(), is(equalTo(limitedAccessDesc)));
     assertThat(domain.getOriginalClosureDate(), is(equalTo(originalClosureDate)));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(Referral.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   @Test
