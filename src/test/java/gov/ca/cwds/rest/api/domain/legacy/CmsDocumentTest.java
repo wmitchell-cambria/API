@@ -31,6 +31,8 @@ import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class CmsDocumentTest {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CMS_DOCUMENT + "/";
@@ -87,6 +89,11 @@ public class CmsDocumentTest {
   public void deserializesFromJSON() throws Exception {
     assertThat(MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocument/valid/valid.json"),
         CmsDocument.class), is(equalTo(validCmsDocument())));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(CmsDocument.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   // constructor test
