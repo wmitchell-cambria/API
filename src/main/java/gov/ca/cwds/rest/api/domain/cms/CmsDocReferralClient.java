@@ -106,7 +106,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() {
+    public final int hashCode() {
       final int prime = 43;
       int result = 1;
       result = (prime * result) + ((address == null) ? prime : address.hashCode());
@@ -129,14 +129,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
       if (this == obj) {
         return true;
       }
       if (obj == null) {
         return false;
       }
-      if (getClass() != obj.getClass()) {
+      if (!(obj instanceof CmsDocReferralClient)) {
         return false;
       }
       CmsDocReferralClientDetail other = (CmsDocReferralClientDetail) obj;
