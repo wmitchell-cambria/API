@@ -29,6 +29,8 @@ import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class StaffPersonTest {
 
@@ -151,6 +153,11 @@ public class StaffPersonTest {
   public void deserializesFromJSON() throws Exception {
     assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"),
         StaffPerson.class), is(equalTo(validStaffPerson())));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(StaffPerson.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   /*

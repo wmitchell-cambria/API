@@ -131,10 +131,11 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
 
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((segmentCount == null) ? 0 : segmentCount.hashCode());
     result = prime * result + ((docLength == null) ? 0 : docLength.hashCode());
     result = prime * result + ((docAuth == null) ? 0 : docAuth.hashCode());
@@ -154,17 +155,25 @@ public class CmsDocument extends DomainObject implements Request, Response, Seri
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof CmsDocument)) {
       return false;
     }
     CmsDocument other = (CmsDocument) obj;
+
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
 
     if (segmentCount == null) {
       if (other.segmentCount != null) {
