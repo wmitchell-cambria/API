@@ -136,6 +136,7 @@ public class CrossReport extends CmsPersistentObject {
   /**
    * Constructor
    * 
+   * @param thirdId The thirdId is unique key to CrossReport
    * @param crossReport The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
