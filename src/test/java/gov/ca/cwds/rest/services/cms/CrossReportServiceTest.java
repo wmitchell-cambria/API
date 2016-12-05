@@ -58,12 +58,11 @@ public class CrossReportServiceTest {
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 
     gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(expected, "ABC");
-    gov.ca.cwds.rest.api.persistence.cms.CrossReport.PrimaryKey pk =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport.PrimaryKey("1234567ABC", "ABC1234567");
-    when(crossReportDao.find(eq(pk))).thenReturn(crossReport);
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(expected.getThirdId(), expected,
+            "0X5");
+    when(crossReportDao.find(eq(expected.getThirdId()))).thenReturn(crossReport);
 
-    CrossReport found = crossReportService.find("thirdId=ABC1234567,referralId=1234567ABC");
+    CrossReport found = crossReportService.find("ABC1234567");
 
     assertThat(found, is(expected));
   }
@@ -102,11 +101,12 @@ public class CrossReportServiceTest {
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 
     gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(expected, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(expected.getThirdId(), expected,
+            "ABC");
 
-    when(crossReportDao.find("ABC")).thenReturn(crossReport);
+    when(crossReportDao.find("ABC1234567")).thenReturn(crossReport);
     when(crossReportDao.update(any())).thenReturn(crossReport);
-    Object retval = crossReportService.update("ABC", expected);
+    Object retval = crossReportService.update("ABC1234567", expected);
     assertThat(retval.getClass(), is(CrossReport.class));
 
   }
@@ -117,13 +117,14 @@ public class CrossReportServiceTest {
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 
     gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportRequest.getThirdId(),
+            crossReportRequest, "ABC");
 
-    when(crossReportDao.find("ABC")).thenReturn(crossReport);
+    when(crossReportDao.find("ABC1234567")).thenReturn(crossReport);
     when(crossReportDao.update(any())).thenReturn(crossReport);
 
     CrossReport expected = new CrossReport(crossReport);
-    CrossReport updated = crossReportService.update("ABC", expected);
+    CrossReport updated = crossReportService.update("ABC1234567", expected);
 
     assertThat(updated, is(expected));
 
@@ -143,12 +144,13 @@ public class CrossReportServiceTest {
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
 
     gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportRequest.getThirdId(),
+            crossReportRequest, "ABC");
 
-    when(crossReportDao.find("ABC")).thenReturn(crossReport);
+    when(crossReportDao.find("ABC1234567")).thenReturn(crossReport);
     when(crossReportDao.update(any())).thenReturn(crossReport);
 
-    crossReportService.update("ZZZ", crossReportRequest);
+    crossReportService.update("ZZZ1234567", crossReportRequest);
   }
 
   @Test
@@ -156,7 +158,8 @@ public class CrossReportServiceTest {
     CrossReport crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
+            crossReportDomain, "ABC");
 
     CrossReport request = new CrossReport(toCreate);
 
@@ -173,7 +176,8 @@ public class CrossReportServiceTest {
     CrossReport crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
+            crossReportDomain, "ABC");
 
     CrossReport request = new CrossReport(toCreate);
 
@@ -190,7 +194,8 @@ public class CrossReportServiceTest {
     CrossReport crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
+            crossReportDomain, "ABC");
 
     CrossReport request = new CrossReport(toCreate);
 

@@ -2,8 +2,6 @@ package gov.ca.cwds.rest.resources.cms;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CROSS_REPORT;
 
-import java.text.MessageFormat;
-
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -63,18 +61,14 @@ public class CrossReportResource {
    */
   @UnitOfWork(value = "cms")
   @GET
-  @Path("/referralId={referralId},thirdId={thirdId}")
+  @Path("/thirdId={thirdId}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find crossreport by referral id and third id",
       response = CrossReport.class, code = 200)
-  public Response get(
-      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
-          example = "abcdefghif") String referralId,
-      @PathParam("thirdId") @ApiParam(required = true, value = "The third id",
-          example = "td89slaz98") String thirdId) {
-    String pk = MessageFormat.format("referralId={0},thirdId={1}", referralId, thirdId);
-    return resourceDelegate.get(pk);
+  public Response get(@PathParam("thirdId") @ApiParam(required = true, value = "The third id",
+      example = "td89slaz98") String thirdId) {
+    return resourceDelegate.get(thirdId);
   }
 
   /**
@@ -87,15 +81,11 @@ public class CrossReportResource {
    */
   @UnitOfWork(value = "cms")
   @DELETE
-  @Path("/referralId={referralId},thirdId={thirdId}")
+  @Path("/thirdId={thirdId}")
   @ApiOperation(value = "Delete CrossReport", code = HttpStatus.SC_OK, response = Object.class)
-  public Response delete(
-      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
-          example = "abcdefghif") String referralId,
-      @PathParam("thirdId") @ApiParam(required = true, value = "The third id",
-          example = "td89slaz98") String thirdId) {
-    String pk = MessageFormat.format("referralId={0},thirdId={1}", referralId, thirdId);
-    return resourceDelegate.delete(pk);
+  public Response delete(@PathParam("thirdId") @ApiParam(required = true, value = "The third id",
+      example = "td89slaz98") String thirdId) {
+    return resourceDelegate.delete(thirdId);
   }
 
   /**

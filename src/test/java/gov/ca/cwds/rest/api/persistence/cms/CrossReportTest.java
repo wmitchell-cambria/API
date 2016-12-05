@@ -11,14 +11,11 @@ import java.text.SimpleDateFormat;
 
 import org.junit.Test;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-
 public class CrossReportTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
 
-  private String thirdId = "b";
+  private String thirdId = "ABC1234567";
   private Short crossReportMethodType = 1;
   private Boolean filedOutOfStateIndicator = Boolean.TRUE;
   private Boolean governmentOrgCrossRptIndicatorVar = Boolean.FALSE;
@@ -39,7 +36,7 @@ public class CrossReportTest {
   private Boolean lawEnforcementIndicator = Boolean.TRUE;
   private Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
   private Boolean satisfyCrossReportIndicator = Boolean.TRUE;
-  private String lastUpdatedId = "z";
+  private String lastUpdatedId = "ABC";
 
   /*
    * Constructor test
@@ -47,12 +44,6 @@ public class CrossReportTest {
   @Test
   public void emtpyConstructorIsNotNull() throws Exception {
     assertThat(CrossReport.class.newInstance(), is(notNullValue()));
-  }
-
-  @Test
-  public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(CrossReport.PrimaryKey.class).suppress(Warning.NONFINAL_FIELDS)
-        .verify();
   }
 
   @Test
@@ -66,7 +57,7 @@ public class CrossReportTest {
             countySpecificCode, lawEnforcementIndicator, outStateLawEnforcementIndicator,
             satisfyCrossReportIndicator);
 
-    CrossReport persistent = new CrossReport(domain, "z");
+    CrossReport persistent = new CrossReport(thirdId, domain, "ABC");
     assertThat(persistent.getThirdId(), is(equalTo(thirdId)));
     assertThat(persistent.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
     assertThat(persistent.getFiledOutOfStateIndicator(), is(equalTo("Y")));
@@ -91,5 +82,4 @@ public class CrossReportTest {
     assertThat(persistent.getSatisfyCrossReportIndicator(), is(equalTo("Y")));
     assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
   }
-
 }
