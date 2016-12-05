@@ -100,7 +100,8 @@ public class CmsReferralServiceTest {
         fixture("fixtures/domain/cms/CmsReferral/valid/crossReportCmsReferral.json"),
         CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReportToCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain, "2016-10-31");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
+            crossReportDomain, "OXA");
 
     Reporter reporterDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/reporterCmsReferral.json"), Reporter.class);
@@ -159,7 +160,8 @@ public class CmsReferralServiceTest {
         fixture("fixtures/domain/cms/CmsReferral/valid/crossReportCmsReferral.json"),
         CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport crossReportToCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain, "2016-10-31");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
+            crossReportDomain, "2016-10-31");
 
     Reporter reporterDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/reporterCmsReferral.json"), Reporter.class);

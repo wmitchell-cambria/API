@@ -42,9 +42,8 @@ public class CrossReportDaoIT {
 
   @Test
   public void testFind() {
-    CrossReport found = crossreportDao.find(new CrossReport.PrimaryKey("925q4As0AB", "7wviAIk0AB"));
+    CrossReport found = crossreportDao.find("7wviAIk0AB");
     assertThat(found.getThirdId(), is(equalTo("7wviAIk0AB")));
-    assertThat(found.getReferralId(), is(equalTo("925q4As0AB")));
 
   }
 
@@ -70,11 +69,8 @@ public class CrossReportDaoIT {
   @Test
   public void testDelete() {
     String thirdId = "FsMh09h00J";
-    String referralId = "AAKhYyf00J";
-    CrossReport.PrimaryKey primaryKey = new CrossReport.PrimaryKey(referralId, thirdId);
-    CrossReport delete = crossreportDao.delete(primaryKey);
+    CrossReport delete = crossreportDao.delete(thirdId);
     assertThat(delete.getThirdId(), is(thirdId));
-    assertThat(delete.getReferralId(), is(referralId));
   }
 
   @Test

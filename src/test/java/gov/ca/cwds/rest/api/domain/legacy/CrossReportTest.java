@@ -108,7 +108,7 @@ public class CrossReportTest {
         outstateLawEnforcementAddr, countySpecificCode, lawEnforcementIndicator,
         outStateLawEnforcementIndicator, satisfyCrossReportIndicator);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport persistent =
-        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(domain, "lastUpdatedId");
+        new gov.ca.cwds.rest.api.persistence.cms.CrossReport(thirdId, domain, "lastUpdatedId");
 
     CrossReport totest = new CrossReport(persistent);
     assertThat(totest.getThirdId(), is(equalTo(persistent.getThirdId())));

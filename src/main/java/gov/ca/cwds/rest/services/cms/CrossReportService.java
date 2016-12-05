@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -15,7 +14,6 @@ import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.util.ServiceUtils;
 
 /**
  * Business layer object to work on {@link CrossReport}
@@ -24,9 +22,6 @@ import gov.ca.cwds.rest.util.ServiceUtils;
  */
 public class CrossReportService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossReportService.class);
-
-  private static final String KEY_REFERRAL_ID = "referralId";
-  private static final String KEY_THIRD_ID = "thirdId";
 
   private CrossReportDao crossReportDao;
 
@@ -49,10 +44,8 @@ public class CrossReportService implements CrudsService {
   public gov.ca.cwds.rest.api.domain.cms.CrossReport find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
 
-    CrossReport.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
-
     gov.ca.cwds.rest.api.persistence.cms.CrossReport persistedCrossReport =
-        crossReportDao.find(primaryKeyObject);
+        crossReportDao.find(primaryKey);
     if (persistedCrossReport != null) {
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(persistedCrossReport);
     }
@@ -67,9 +60,8 @@ public class CrossReportService implements CrudsService {
   @Override
   public gov.ca.cwds.rest.api.domain.cms.CrossReport delete(Serializable primaryKey) {
     assert (primaryKey instanceof String);
-    CrossReport.PrimaryKey primaryKeyObject = extractPrimaryKey(primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport persistedCrossReport =
-        crossReportDao.delete(primaryKeyObject);
+        crossReportDao.delete(primaryKey);
     if (persistedCrossReport != null) {
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(persistedCrossReport);
     }
@@ -90,7 +82,7 @@ public class CrossReportService implements CrudsService {
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
-      CrossReport managed = new CrossReport(crossReport, "q1p");
+      CrossReport managed = new CrossReport(crossReport.getThirdId(), crossReport, "q1p");
 
       managed = crossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
@@ -115,7 +107,7 @@ public class CrossReportService implements CrudsService {
         ((gov.ca.cwds.rest.api.domain.cms.CrossReport) request);
 
     try {
-      CrossReport managed = new CrossReport(crossReport, "q1p");
+      CrossReport managed = new CrossReport(crossReport.getThirdId(), crossReport, "q1p");
       managed = crossReportDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityNotFoundException e) {
@@ -124,12 +116,5 @@ public class CrossReportService implements CrudsService {
     }
   }
 
-  private CrossReport.PrimaryKey extractPrimaryKey(Serializable primaryKey) {
-    Map<String, String> nameValuePairs = ServiceUtils.extractKeyValuePairs(primaryKey);
-    String referralId = nameValuePairs.get(KEY_REFERRAL_ID);
-    String thirdId = nameValuePairs.get(KEY_THIRD_ID);
-    CrossReport.PrimaryKey primaryKeyObject = new CrossReport.PrimaryKey(referralId, thirdId);
-    return primaryKeyObject;
-  }
 }
 

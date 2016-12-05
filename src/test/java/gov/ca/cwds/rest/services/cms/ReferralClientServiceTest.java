@@ -7,6 +7,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
@@ -77,6 +79,12 @@ public class ReferralClientServiceTest {
     // String message = referralClient.getPrimaryKey().toString();
     // System.out.print(message);
     assertThat(found, is(nullValue()));
+  }
+
+  @Test
+  public void deleteDelegatesToCrudsService() {
+    referralClientService.delete("1234567ABC");
+    verify(referralClientDao, times(1)).delete("ABC2345678");
   }
 
   // delete test

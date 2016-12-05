@@ -31,7 +31,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 public class CrossReportResourceTest {
 
   private static final String ROOT_RESOURCE = "/_crossReports/";
-  private static final String FOUND_RESOURCE = "/_crossReports/referralId=abc,thirdId=def";
+  private static final String FOUND_RESOURCE = "/_crossReports/thirdId=ABC1234567";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
@@ -54,7 +54,7 @@ public class CrossReportResourceTest {
   public void getDelegatesToResourceDelegate() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .get();
-    verify(resourceDelegate).get("referralId=abc,thirdId=def");
+    verify(resourceDelegate).get("ABC1234567");
   }
 
   /*
@@ -89,7 +89,7 @@ public class CrossReportResourceTest {
   public void deleteDelegatesToResourceDelegate() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .delete();
-    verify(resourceDelegate).delete("referralId=abc,thirdId=def");
+    verify(resourceDelegate).delete("ABC1234567");
   }
 
   /*
