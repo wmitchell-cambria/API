@@ -84,6 +84,7 @@ public class ReferralServiceTest {
 
   @Test
   public void deleteDelegatesToCrudsService() {
+
     referralService.delete("ABC2345678");
     verify(referralDao, times(1)).delete("ABC2345678");
   }
