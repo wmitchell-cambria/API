@@ -82,9 +82,16 @@ public class ReferralClientServiceTest {
   }
 
   @Test
-  public void deleteDelegatesToCrudsService() {
-    referralClientService.delete("1234567ABC");
-    verify(referralClientDao, times(1)).delete("ABC2345678");
+  public void deleteDelegatesToCrudsService() throws Exception {
+
+    ReferralClient expected = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
+
+    gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(expected, "ABC");
+
+    referralClientService.delete(referralClient.getPrimaryKey().toString());
+    verify(referralClientDao, times(1)).delete(referralClient.getPrimaryKey());
   }
 
   // delete test
@@ -167,9 +174,7 @@ public class ReferralClientServiceTest {
         fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
 
     gov.ca.cwds.rest.api.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(
-
-            referralClientRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralClientRequest, "ABC");
 
     when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
         .thenReturn(referralClient);

@@ -136,7 +136,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
       if (obj == null) {
         return false;
       }
-      if (!(obj instanceof CmsDocReferralClient)) {
+      if (!(obj instanceof CmsDocReferralClientDetail)) {
         return false;
       }
       CmsDocReferralClientDetail other = (CmsDocReferralClientDetail) obj;
@@ -360,7 +360,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() {
+    public final int hashCode() {
       final int prime = 43;
       int result = 1;
 
@@ -376,14 +376,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
       if (this == obj) {
         return true;
       }
       if (obj == null) {
         return false;
       }
-      if (getClass() != obj.getClass()) {
+      if (!(obj instanceof CmsDocReferralClientDocument)) {
         return false;
       }
       CmsDocReferralClientDocument other = (CmsDocReferralClientDocument) obj;
@@ -501,7 +501,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 43;
     int result = 1;
 
@@ -509,6 +509,7 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
     result = (prime * result) + ((docName == null) ? prime : docName.hashCode());
     result = (prime * result) + ((docAddedDate == null) ? prime : docAddedDate.hashCode());
     result = (prime * result) + ((details == null) ? prime : details.hashCode());
+    result = (prime * result) + ((cmsDocument == null) ? prime : cmsDocument.hashCode());
 
     return result;
   }
@@ -519,14 +520,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof CmsDocReferralClient)) {
       return false;
     }
     CmsDocReferralClient other = (CmsDocReferralClient) obj;
@@ -560,6 +561,14 @@ public class CmsDocReferralClient extends DomainObject implements Request, Respo
         return false;
       }
     } else if (!details.equals(other.details)) {
+      return false;
+    }
+
+    if (cmsDocument == null) {
+      if (other.cmsDocument != null) {
+        return false;
+      }
+    } else if (!cmsDocument.equals(other.cmsDocument)) {
       return false;
     }
 
