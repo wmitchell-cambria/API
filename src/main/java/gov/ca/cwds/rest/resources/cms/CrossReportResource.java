@@ -54,8 +54,7 @@ public class CrossReportResource {
   /**
    * Finds an crossreport by referral id and third id.
    * 
-   * @param referralId the referralId
-   * @param thirdId the thirdId
+   * @param thirdId the thirdId is unique key for CrossReport
    * 
    * @return the response
    */
@@ -74,8 +73,7 @@ public class CrossReportResource {
   /**
    * Delete an crossreport by referral id and third id.
    * 
-   * @param referralId the referralId
-   * @param thirdId the thirdId
+   * @param thirdId the thirdId is unique key for CrossReport
    * 
    * @return {@link Response}
    */
