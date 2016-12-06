@@ -10,6 +10,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
+import io.dropwizard.jackson.Jackson;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,12 +23,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
-import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
-import io.dropwizard.jackson.Jackson;
 
 public class ReporterServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -53,11 +52,11 @@ public class ReporterServiceTest {
 
   @Test
   public void findReturnsCorrectReporterWhenFound() throws Exception {
-    Reporter expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter expected =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+            Reporter.class);
     gov.ca.cwds.rest.api.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.rest.api.persistence.cms.Reporter(expected.getReferralId(), expected,
-            "0XA");
+        new gov.ca.cwds.rest.api.persistence.cms.Reporter(expected, "0XA");
 
     when(reporterDao.find("AbiQCgu0Hj")).thenReturn(reporter);
 
@@ -103,12 +102,12 @@ public class ReporterServiceTest {
 
   @Test
   public void updateReturnsReporterResponseOnSuccess() throws Exception {
-    Reporter expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter expected =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+            Reporter.class);
 
     gov.ca.cwds.rest.api.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.rest.api.persistence.cms.Reporter(expected.getReferralId(), expected,
-            "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.Reporter(expected, "ABC");
 
     when(reporterDao.find("ABC1234567")).thenReturn(reporter);
     when(reporterDao.update(any())).thenReturn(reporter);
@@ -127,12 +126,12 @@ public class ReporterServiceTest {
     // thrown.expectCause(Is.isA(EntityNotFoundException.class));
     // thrown.expectMessage(contains("Reporter not found"));
 
-    Reporter reporterRequest = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter reporterRequest =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+            Reporter.class);
 
     gov.ca.cwds.rest.api.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterRequest.getReferralId(),
-            reporterRequest, "ABC");
+        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterRequest, "ABC");
 
     when(reporterDao.find("ABC1234567")).thenReturn(reporter);
     when(reporterDao.update(any())).thenReturn(reporter);
@@ -143,16 +142,16 @@ public class ReporterServiceTest {
   // create test
   @Test
   public void createReturnsPostedReporter() throws Exception {
-    Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter reporterDomain =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+            Reporter.class);
     gov.ca.cwds.rest.api.persistence.cms.Reporter toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterDomain.getReferralId(),
-            reporterDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterDomain, "last_update");
 
     Reporter request = new Reporter(toCreate);
 
-    when(reporterDao.create(any(gov.ca.cwds.rest.api.persistence.cms.Reporter.class)))
-        .thenReturn(toCreate);
+    when(reporterDao.create(any(gov.ca.cwds.rest.api.persistence.cms.Reporter.class))).thenReturn(
+        toCreate);
 
     Response response = reporterService.create(request);
 
@@ -161,16 +160,16 @@ public class ReporterServiceTest {
 
   @Test
   public void createReturnsNonNull() throws Exception {
-    Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter reporterDomain =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+            Reporter.class);
     gov.ca.cwds.rest.api.persistence.cms.Reporter toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterDomain.getReferralId(),
-            reporterDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterDomain, "last_update");
 
     Reporter request = new Reporter(toCreate);
 
-    when(reporterDao.create(any(gov.ca.cwds.rest.api.persistence.cms.Reporter.class)))
-        .thenReturn(toCreate);
+    when(reporterDao.create(any(gov.ca.cwds.rest.api.persistence.cms.Reporter.class))).thenReturn(
+        toCreate);
 
     PostedReporter postedReporter = reporterService.create(request);
 
@@ -179,16 +178,16 @@ public class ReporterServiceTest {
 
   @Test
   public void createReturnsCorrectPostedPerson() throws Exception {
-    Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter reporterDomain =
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+            Reporter.class);
     gov.ca.cwds.rest.api.persistence.cms.Reporter toCreate =
-        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterDomain.getReferralId(),
-            reporterDomain, "last_update");
+        new gov.ca.cwds.rest.api.persistence.cms.Reporter(reporterDomain, "last_update");
 
     Reporter request = new Reporter(toCreate);
 
-    when(reporterDao.create(any(gov.ca.cwds.rest.api.persistence.cms.Reporter.class)))
-        .thenReturn(toCreate);
+    when(reporterDao.create(any(gov.ca.cwds.rest.api.persistence.cms.Reporter.class))).thenReturn(
+        toCreate);
 
     PostedReporter expected = new PostedReporter(toCreate);
 

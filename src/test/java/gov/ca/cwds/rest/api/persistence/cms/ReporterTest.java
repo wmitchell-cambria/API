@@ -4,14 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import org.junit.Test;
-
-import gov.ca.cwds.rest.api.domain.DomainObject;
 
 public class ReporterTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -65,7 +64,7 @@ public class ReporterTest {
             suffixTitleDescription, zipcode, referralId, lawEnforcementId, zipSuffixNumber,
             countySpecificCode);
 
-    Reporter persistent = new Reporter(referralId, domain, lastUpdatedId);
+    Reporter persistent = new Reporter(domain, lastUpdatedId);
     assertThat(persistent.getReferralId(), is(equalTo(referralId)));
     assertThat(persistent.getBadgeNumber(), is(equalTo(badgeNumber)));
     assertThat(persistent.getCityName(), is(equalTo(cityName)));
