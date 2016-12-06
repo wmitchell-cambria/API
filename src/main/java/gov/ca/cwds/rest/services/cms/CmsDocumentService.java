@@ -47,6 +47,12 @@ public class CmsDocumentService implements CrudsService {
     LOGGER.info("primaryKey=" + primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc = dao.find(primaryKey);
     if (doc != null) {
+      // Trim strings.
+      doc.setCompressionMethod(doc.getCompressionMethod() != null ? doc.getCompressionMethod().trim() : "");
+      doc.setDocAuth(doc.getDocAuth() != null ? doc.getDocAuth().trim() : "");
+      doc.setDocName(doc.getDocName() != null ? doc.getDocName().trim() : "");
+      doc.setDocServ(doc.getDocServ() != null ? doc.getDocServ().trim() : "");
+
       base64Doc = CmsDocumentDao.decompressDoc(doc);
       retval = new CmsDocument(doc);
       retval.setBase64Blob(base64Doc);
