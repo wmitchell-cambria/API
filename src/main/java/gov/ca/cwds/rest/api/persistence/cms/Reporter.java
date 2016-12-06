@@ -1,5 +1,9 @@
 package gov.ca.cwds.rest.api.persistence.cms;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,10 +14,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-
-import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.persistence.ns.NsPersistentObject;
 
 /**
  * {@link NsPersistentObject} representing a Reporter
@@ -166,16 +166,14 @@ public class Reporter extends CmsPersistentObject {
   /**
    * Constructor
    * 
-   * @param id The id
    * @param reporter The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
    */
-  public Reporter(String id, gov.ca.cwds.rest.api.domain.cms.Reporter reporter,
-      String lastUpdatedId) {
+  public Reporter(gov.ca.cwds.rest.api.domain.cms.Reporter reporter, String lastUpdatedId) {
     super(lastUpdatedId);
 
     try {
-      this.referralId = id;
+      this.referralId = reporter.getReferralId();
       this.badgeNumber = reporter.getBadgeNumber();
       this.cityName = reporter.getCityName();
       this.colltrClientRptrReltnshpType = reporter.getColltrClientRptrReltnshpType();

@@ -1,13 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.io.Serializable;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.persistence.cms.Reporter;
@@ -15,7 +7,14 @@ import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.util.IdGenerator;
+
+import java.io.Serializable;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Business layer object to work on {@link Reporter}
@@ -83,7 +82,7 @@ public class ReporterService implements CrudsService {
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
-      Reporter managed = new Reporter(IdGenerator.randomString(10), reporter, "q1p");
+      Reporter managed = new Reporter(reporter, "q1p");
 
       managed = reporterDao.create(managed);
       return new PostedReporter(managed);
@@ -101,8 +100,7 @@ public class ReporterService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.cms.Reporter update(Serializable primaryKey,
-      Request request) {
+  public gov.ca.cwds.rest.api.domain.cms.Reporter update(Serializable primaryKey, Request request) {
     assert (primaryKey instanceof String);
     assert (request instanceof gov.ca.cwds.rest.api.domain.cms.Reporter);
     gov.ca.cwds.rest.api.domain.cms.Reporter reporter =
@@ -110,7 +108,7 @@ public class ReporterService implements CrudsService {
 
 
     try {
-      Reporter managed = new Reporter((String) primaryKey, reporter, "q1p");
+      Reporter managed = new Reporter(reporter, "q1p");
 
       managed = reporterDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Reporter(managed);
@@ -121,4 +119,3 @@ public class ReporterService implements CrudsService {
   }
 
 }
-
