@@ -104,6 +104,22 @@ public class StaffPersonResourceTest {
     verify(resourceDelegate).delete("abc");
   }
 
+  @Test
+  public void deleteEntity() throws Exception {
+    int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
+        .accept(MediaType.APPLICATION_JSON).delete().getStatus();
+    assertThat(status, is(204));
+
+  }
+
+  @Test
+  public void deleteEntitySuccess() throws Exception {
+    inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .delete();
+    verify(resourceDelegate).delete("abc");
+
+  }
+
   /**
    * Update Tests
    */
