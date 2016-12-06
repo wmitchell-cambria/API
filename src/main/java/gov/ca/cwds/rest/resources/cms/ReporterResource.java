@@ -1,6 +1,14 @@
 package gov.ca.cwds.rest.resources.cms;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REPORTER;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.resources.ResourceDelegate;
+import io.dropwizard.hibernate.UnitOfWork;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -16,21 +24,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
-import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
 /**
  * A resource providing a RESTful interface for {@link Reporter}. It delegates functions to
- * {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but
- * with @see <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
- * Annotations</a> and
- * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
+ * {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but with @see
+ * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * Annotations</a> and <a
+ * href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
  * 
  * @author CWDS API Team
@@ -52,37 +51,37 @@ public class ReporterResource {
   }
 
   /**
-   * Finds an reporter by id.
+   * Finds a reporter by referral id.
    * 
-   * @param id the id
+   * @param referralId the referralId
    * 
    * @return the response
    */
   @UnitOfWork(value = "cms")
   @GET
-  @Path("/{id}")
+  @Path("/referralId={referralId}")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find reporter by id", response = Reporter.class, code = 200)
-  public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the Reporter to find") String id) {
-    return resourceDelegate.get(id);
+  @ApiOperation(value = "Find reporter by referral id", response = Reporter.class, code = 200)
+  public Response get(@PathParam("referralId") @ApiParam(required = true,
+      value = "The referral id", example = "abcdefghif") String referralId) {
+    return resourceDelegate.get(referralId);
   }
 
   /**
-   * Delete an reporter by id.
+   * Delete a reporter by referral id.
    * 
-   * @param id The id of the {@link Reporter}
+   * @param referralId the referralId
    * 
    * @return {@link Response}
    */
   @UnitOfWork(value = "cms")
   @DELETE
-  @Path("/{id}")
+  @Path("/referralId={referralId}")
   @ApiOperation(value = "Delete Reporter", code = HttpStatus.SC_OK, response = Object.class)
-  public Response delete(
-      @PathParam("id") @ApiParam(required = true, value = "id of Reporter to delete") String id) {
-    return resourceDelegate.delete(id);
+  public Response delete(@PathParam("referralId") @ApiParam(required = true,
+      value = "The referral id", example = "abcdefghif") String referralId) {
+    return resourceDelegate.delete(referralId);
   }
 
   /**
@@ -107,24 +106,23 @@ public class ReporterResource {
   /**
    * Update an {@link Reporter}
    * 
-   * @param id the id
+   * @param referralId the referralId
    * @param reporter {@link Reporter}
    *
    * @return The {@link Response}
    */
   @UnitOfWork(value = "cms")
   @PUT
-  @Path("/{id}")
+  @Path("/referralId={referralId}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 404, message = "not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 422, message = "Unable to validate Reporter")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Update Reporter", code = HttpStatus.SC_NO_CONTENT, response = Object.class)
-  public Response update(
-      @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of the Reporter to update") String id,
-      @Valid @ApiParam(hidden = false, required = true) Reporter reporter) {
-    return resourceDelegate.update(id, reporter);
+  public Response update(@PathParam("referralId") @ApiParam(required = true,
+      value = "The referral id", example = "abcdefghif") String referralId, @Valid @ApiParam(
+      hidden = false, required = true) Reporter reporter) {
+    return resourceDelegate.update(referralId, reporter);
   }
 }
