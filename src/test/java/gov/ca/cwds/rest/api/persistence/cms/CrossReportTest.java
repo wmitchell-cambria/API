@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 
 import org.junit.Test;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+
 public class CrossReportTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
@@ -20,19 +22,19 @@ public class CrossReportTest {
   private Boolean filedOutOfStateIndicator = Boolean.TRUE;
   private Boolean governmentOrgCrossRptIndicatorVar = Boolean.FALSE;
   private String informTime = "16:41:49";
-  private String recipientBadgeNumber = "d";
-  private Integer recipientPhoneExtensionNumber = 2;
-  private BigDecimal recipientPhoneNumber = new BigDecimal(3);
-  private String informDate = "1970-01-01";
-  private String recipientPositionTitleDesc = "e";
+  private String recipientBadgeNumber = "bg12345";
+  private Integer recipientPhoneExtensionNumber = 122;
+  private BigDecimal recipientPhoneNumber = new BigDecimal(3456789);
+  private String informDate = "2016-01-01";
+  private String recipientPositionTitleDesc = "title";
   private String referenceNumber = "f";
-  private String referralId = "a";
+  private String referralId = "ABC1234567";
   private String lawEnforcementId = "g";
-  private String staffPersonId = "h";
-  private String description = "i";
+  private String staffPersonId = "567";
+  private String description = "description";
   private String recipientName = "j";
   private String outstateLawEnforcementAddr = "k";
-  private String countySpecificCode = "l";
+  private String countySpecificCode = "99";
   private Boolean lawEnforcementIndicator = Boolean.TRUE;
   private Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
   private Boolean satisfyCrossReportIndicator = Boolean.TRUE;
@@ -48,6 +50,7 @@ public class CrossReportTest {
 
   @Test
   public void domainCrossReportLastUpdateConstructorTest() throws Exception {
+
     gov.ca.cwds.rest.api.domain.cms.CrossReport domain =
         new gov.ca.cwds.rest.api.domain.cms.CrossReport(thirdId, crossReportMethodType,
             filedOutOfStateIndicator, governmentOrgCrossRptIndicatorVar, informTime,
@@ -57,7 +60,8 @@ public class CrossReportTest {
             countySpecificCode, lawEnforcementIndicator, outStateLawEnforcementIndicator,
             satisfyCrossReportIndicator);
 
-    CrossReport persistent = new CrossReport(thirdId, domain, "ABC");
+    CrossReport persistent = new CrossReport(thirdId, domain, lastUpdatedId);
+
     assertThat(persistent.getThirdId(), is(equalTo(thirdId)));
     assertThat(persistent.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
     assertThat(persistent.getFiledOutOfStateIndicator(), is(equalTo("Y")));
@@ -81,5 +85,42 @@ public class CrossReportTest {
     assertThat(persistent.getOutStateLawEnforcementIndicator(), is(equalTo("N")));
     assertThat(persistent.getSatisfyCrossReportIndicator(), is(equalTo("Y")));
     assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
+  }
+
+  @Test
+  public void persistentCrossReportContructorTest() throws Exception {
+
+    CrossReport persistent = new CrossReport(referralId, thirdId, crossReportMethodType,
+        DomainObject.cookBoolean(filedOutOfStateIndicator),
+        DomainObject.cookBoolean(governmentOrgCrossRptIndicatorVar), tf.parse(informTime),
+        recipientBadgeNumber, recipientPhoneExtensionNumber, recipientPhoneNumber,
+        DomainObject.uncookDateString(informDate), recipientPositionTitleDesc, referenceNumber,
+        lawEnforcementId, staffPersonId, description, recipientName, outstateLawEnforcementAddr,
+        countySpecificCode, DomainObject.cookBoolean(lawEnforcementIndicator),
+        DomainObject.cookBoolean(outStateLawEnforcementIndicator),
+        DomainObject.cookBoolean(satisfyCrossReportIndicator));
+
+    assertThat(persistent.getThirdId(), is(equalTo(thirdId)));
+    assertThat(persistent.getCrossReportMethodType(), is(equalTo(crossReportMethodType)));
+    assertThat(persistent.getFiledOutOfStateIndicator(), is(equalTo("Y")));
+    assertThat(persistent.getGovernmentOrgCrossRptIndicatorVar(), is(equalTo("N")));
+    assertThat(persistent.getInformTime(), is(equalTo(tf.parse(informTime))));
+    assertThat(persistent.getRecipientBadgeNumber(), is(equalTo(recipientBadgeNumber)));
+    assertThat(persistent.getRecipientPhoneExtensionNumber(),
+        is(equalTo(recipientPhoneExtensionNumber)));
+    assertThat(persistent.getRecipientPhoneNumber(), is(equalTo(recipientPhoneNumber)));
+    assertThat(persistent.getInformDate(), is(equalTo(df.parse(informDate))));
+    assertThat(persistent.getRecipientPositionTitleDesc(), is(equalTo(recipientPositionTitleDesc)));
+    assertThat(persistent.getReferenceNumber(), is(equalTo(referenceNumber)));
+    assertThat(persistent.getReferralId(), is(equalTo(referralId)));
+    assertThat(persistent.getLawEnforcementId(), is(equalTo(lawEnforcementId)));
+    assertThat(persistent.getStaffPersonId(), is(equalTo(staffPersonId)));
+    assertThat(persistent.getDescription(), is(equalTo(description)));
+    assertThat(persistent.getRecipientName(), is(equalTo(recipientName)));
+    assertThat(persistent.getOutstateLawEnforcementAddr(), is(equalTo(outstateLawEnforcementAddr)));
+    assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+    assertThat(persistent.getLawEnforcementIndicator(), is(equalTo("Y")));
+    assertThat(persistent.getOutStateLawEnforcementIndicator(), is(equalTo("N")));
+    assertThat(persistent.getSatisfyCrossReportIndicator(), is(equalTo("Y")));
   }
 }
