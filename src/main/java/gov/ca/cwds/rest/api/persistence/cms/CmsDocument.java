@@ -86,7 +86,7 @@ public class CmsDocument extends CmsPersistentObject {
    * @param docDate creation date
    * @param docTime creation time
    * @param docName document name (e.g., "word.doc")
-   * @param compressionMethod
+   * @param compressionMethod type of compression, 01 (LZW) or 02 (PK)
    */
   public CmsDocument(String id, Short segmentCount, Long docLength, String docAuth, String docServ,
       Date docDate, Date docTime, String docName, String compressionMethod) {
