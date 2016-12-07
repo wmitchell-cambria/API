@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
@@ -73,6 +75,7 @@ public class CrossReportServiceTest {
     assertThat(found, is(nullValue()));
   }
 
+  // delete test
   public void deleteThrowsAssersionError() throws Exception {
     // TODO : thrown.expect not working on AssertionError???? WHY???
     // thrown.expect(AssertionError.class);
@@ -81,6 +84,18 @@ public class CrossReportServiceTest {
       Assert.fail("Expected AssertionError");
     } catch (AssertionError e) {
     }
+  }
+
+  @Test
+  public void deleteDelegatesToCrudsService() {
+    crossReportService.delete("ABC2345678");
+    verify(crossReportDao, times(1)).delete("ABC2345678");
+  }
+
+  @Test
+  public void deleteReturnsNullWhenNotFount() throws Exception {
+    Response found = crossReportService.delete("ABC1234567");
+    assertThat(found, is(nullValue()));
   }
 
   // update test
@@ -153,8 +168,9 @@ public class CrossReportServiceTest {
     crossReportService.update("ZZZ1234567", crossReportRequest);
   }
 
+  // create test
   @Test
-  public void createReturnsPostedCrossReport() throws Exception {
+  public void createReturnsPostedCrossReportClass() throws Exception {
     CrossReport crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport toCreate =

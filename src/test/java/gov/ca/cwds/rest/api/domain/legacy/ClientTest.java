@@ -27,14 +27,13 @@ public class ClientTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   @SuppressWarnings("unused")
-  private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
-  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
+  // private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+  private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
 
   @Before
   public void setup() {
 
     try {
-      Client validClient = validClient();
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -45,6 +44,21 @@ public class ClientTest {
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(Referral.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
+  @Test
+  public void serializesToJSON() throws Exception {
+    final String expected = MAPPER.writeValueAsString(
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Client/valid/valid.json"), Client.class));
+
+    assertThat(MAPPER.writeValueAsString(validClient()), is(equalTo(expected)));
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    assertThat(
+        MAPPER.readValue(fixture("fixtures/domain/legacy/Client/valid/valid.json"), Client.class),
+        is(equalTo(validClient())));
   }
 
   /*

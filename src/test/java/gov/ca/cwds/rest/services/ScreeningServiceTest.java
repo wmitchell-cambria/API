@@ -140,7 +140,7 @@ public class ScreeningServiceTest {
    * create tests
    */
   @Test
-  public void createReturnsPostedScreening() throws Exception {
+  public void createReturnsPostedScreeningClass() throws Exception {
     Screening screeningMock = mock(Screening.class);
     when(screeningMock.getReference()).thenReturn("some_reference");
     when(screeningMock.getId()).thenReturn(1L);

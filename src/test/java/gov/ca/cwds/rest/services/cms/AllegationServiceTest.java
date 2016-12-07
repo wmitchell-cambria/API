@@ -89,6 +89,12 @@ public class AllegationServiceTest {
     verify(allegationDao, times(1)).delete("ABC2345678");
   }
 
+  @Test
+  public void deleteReturnsNullWhenNotFount() throws Exception {
+    Response found = allegationService.delete("ABC1234567");
+    assertThat(found, is(nullValue()));
+  }
+
   // update test
   @Test
   public void updateThrowsAssertionError() throws Exception {

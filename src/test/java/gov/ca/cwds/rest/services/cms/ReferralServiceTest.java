@@ -89,6 +89,12 @@ public class ReferralServiceTest {
     verify(referralDao, times(1)).delete("ABC2345678");
   }
 
+  @Test
+  public void deleteReturnsNullWhenNotFount() throws Exception {
+    Response found = referralService.delete("ABC1234567");
+    assertThat(found, is(nullValue()));
+  }
+
   // update test
   @Test
   public void updateThrowsAssertionError() throws Exception {
@@ -140,7 +146,7 @@ public class ReferralServiceTest {
 
   // create test
   @Test
-  public void createReturnsPostedReferral() throws Exception {
+  public void createReturnsPostedReferralClass() throws Exception {
     Referral referralDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
     gov.ca.cwds.rest.api.persistence.cms.Referral toCreate =
