@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
@@ -40,11 +41,11 @@ public class CmsDocumentService implements CrudsService {
   @Override
   public CmsDocument find(Serializable primaryKey) {
     assert (primaryKey instanceof String);
-    CmsDocument retval = null;
+    LOGGER.info("primaryKey=" + primaryKey);
 
+    CmsDocument retval = null;
     String base64Doc = "";
 
-    LOGGER.info("primaryKey=" + primaryKey);
     gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc = dao.find(primaryKey);
     if (doc != null) {
       // Trim strings.
@@ -71,7 +72,7 @@ public class CmsDocumentService implements CrudsService {
   @Override
   public Response delete(Serializable primaryKey) {
     assert (primaryKey instanceof String);
-    throw new NotImplementedException("Delete is not implemented");
+    throw new NotImplementedException("DELETE NOT IMPLEMENTED!");
   }
 
   /**
@@ -85,7 +86,7 @@ public class CmsDocumentService implements CrudsService {
   @Override
   public CmsDocument create(Request request) {
     // assert (request instanceof ScreeningReference);
-    throw new NotImplementedException("Create is not implemented");
+    throw new NotImplementedException("CREATE NOT IMPLEMENTED!");
   }
 
   /**
@@ -98,10 +99,10 @@ public class CmsDocumentService implements CrudsService {
    *      gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public CmsDocument update(Serializable primaryKey, Request request) {
-    assert (primaryKey instanceof String);
+  public ScreeningResponse update(Serializable primaryKey, Request request) {
+    assert (primaryKey instanceof Long);
     // assert (request instanceof ScreeningRequest);
-    throw new NotImplementedException("Update is not implemented");
+    throw new NotImplementedException("UPDATE NOT IMPLEMENTED!");
   }
 
 }

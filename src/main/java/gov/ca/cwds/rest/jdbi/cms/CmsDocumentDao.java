@@ -115,13 +115,15 @@ public class CmsDocumentDao extends CrudsDaoImpl<CmsDocument> {
 
       // DECOMPRESS!
       // TODO: Trap std::exception in shared library and return error code.
-      // Unhandled C++ exceptions kill the JVM.
+      // The LZW library currently returns a blank when decompression fails, for safety, since
+      // unhandled C++ exceptions kill the JVM.
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
 
       Path path = Paths.get(tgt.getAbsolutePath());
       retval = DatatypeConverter.printBase64Binary(Files.readAllBytes(path));
 
-      // For security reasons, remove temp documents immediately.
+      // For security reasons, remove temporary documents immediately.
+      // TODO: pass bytes to C library instead of file names.
       src.delete();
       tgt.delete();
 
