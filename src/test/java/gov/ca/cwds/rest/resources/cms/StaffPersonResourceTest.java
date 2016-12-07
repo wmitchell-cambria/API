@@ -97,12 +97,12 @@ public class StaffPersonResourceTest {
   /**
    * Delete Tests
    */
-  @Test
-  public void deleteDelegatesToResourceDelegate() throws Exception {
-    inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .delete();
-    verify(resourceDelegate).delete("abc");
-  }
+  // @Test
+  // public void deleteDelegatesToResourceDelegate() throws Exception {
+  // inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .delete();
+  // verify(resourceDelegate).delete("abc");
+  // }
 
   @Test
   public void deleteEntity() throws Exception {
@@ -112,13 +112,15 @@ public class StaffPersonResourceTest {
 
   }
 
-  @Test
-  public void deleteEntitySuccess() throws Exception {
-    inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .delete();
-    verify(resourceDelegate).delete("abc");
-
-  }
+  // @Test
+  // public void deleteEntitySuccess() throws Exception {
+  // inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+  // .delete();
+  // // String message = response.readEntity(String.class);
+  // // System.out.print(message);
+  // verify(resourceDelegate).delete("abc");
+  //
+  // }
 
   /**
    * Update Tests
