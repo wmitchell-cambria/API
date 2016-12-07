@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 /**
@@ -20,6 +22,11 @@ import org.hibernate.annotations.Type;
  * 
  * @author CWDS API Team
  */
+@NamedQueries({
+    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.cms.Reporter.findAll",
+        query = "FROM Reporter"),
+    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.cms.Reporter.findAllUpdatedAfter",
+        query = "FROM Reporter WHERE lastUpdatedTime > :after")})
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "REPTR_T")
