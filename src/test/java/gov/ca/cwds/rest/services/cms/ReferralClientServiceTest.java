@@ -20,7 +20,6 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import io.dropwizard.jackson.Jackson;
@@ -242,7 +241,7 @@ public class ReferralClientServiceTest {
 
     Response response = referralClientService.create(request);
 
-    assertThat(response.getClass(), is(PostedReferral.class));
+    assertThat(response.getClass(), is(ReferralClient.class));
   }
 
   @Test
