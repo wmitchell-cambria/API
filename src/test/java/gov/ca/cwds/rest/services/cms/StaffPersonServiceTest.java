@@ -7,6 +7,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
@@ -74,14 +76,6 @@ public class StaffPersonServiceTest {
     assertThat(found, is(nullValue()));
   }
 
-  // delete test
-  // @Test
-  // public void deleteThrowsNotImplementedException() throws Exception {
-  // thrown.expect(NotImplementedException.class);
-  // staffPersonService.delete("1");
-  //
-  // }
-
   public void deleteThrowsAssersionError() throws Exception {
     // TODO : thrown.expect not working on AssertionError???? WHY???
     // thrown.expect(AssertionError.class);
@@ -90,6 +84,18 @@ public class StaffPersonServiceTest {
       Assert.fail("Expected AssertionError");
     } catch (AssertionError e) {
     }
+  }
+
+  @Test
+  public void deleteReturnsNullWhenNotFount() throws Exception {
+    Response found = staffPersonService.delete("ABC");
+    assertThat(found, is(nullValue()));
+  }
+
+  @Test
+  public void deleteDelegatesToCrudsService() {
+    staffPersonService.delete("ABC");
+    verify(staffPersonDao, times(1)).delete("ABC");
   }
 
   // update test
@@ -161,8 +167,9 @@ public class StaffPersonServiceTest {
     staffPersonService.update("ZZZ", staffPersonRequest);
   }
 
+  // create test
   @Test
-  public void createReturnsPostedStaffPerson() throws Exception {
+  public void createReturnsPostedStaffPersonClass() throws Exception {
     String id = "ABC";
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);

@@ -20,6 +20,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.jdbi.cms.ReferralClientDao;
 import io.dropwizard.jackson.Jackson;
@@ -112,6 +113,13 @@ public class ReferralClientServiceTest {
     } catch (AssertionError e) {
     }
   }
+
+  @Test
+  public void deleteReturnsNullWhenNotFount() throws Exception {
+    Response found = referralClientService.delete("referralId=1234567ABC,clientId=ABC1234567");
+    assertThat(found, is(nullValue()));
+  }
+
 
   // update test
   @Test
@@ -218,6 +226,23 @@ public class ReferralClientServiceTest {
     ReferralClient postedReferralClient = referralClientService.create(request);
 
     assertThat(postedReferralClient, is(notNullValue()));
+  }
+
+  @Test
+  public void createReturnsPostedReferralClientClass() throws Exception {
+    ReferralClient referralClientDomain = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"), ReferralClient.class);
+    gov.ca.cwds.rest.api.persistence.cms.ReferralClient toCreate =
+        new gov.ca.cwds.rest.api.persistence.cms.ReferralClient(referralClientDomain, "2016-12-07");
+
+    ReferralClient request = new ReferralClient(toCreate);
+
+    when(referralClientDao.create(any(gov.ca.cwds.rest.api.persistence.cms.ReferralClient.class)))
+        .thenReturn(toCreate);
+
+    Response response = referralClientService.create(request);
+
+    assertThat(response.getClass(), is(PostedReferral.class));
   }
 
   @Test

@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.PostedScreening;
-import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
@@ -79,7 +77,7 @@ public class CmsDocumentService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public PostedScreening create(Request request) {
+  public CmsDocument create(Request request) {
     // assert (request instanceof ScreeningReference);
     throw new NotImplementedException("Create is not implemented");
   }
@@ -94,8 +92,8 @@ public class CmsDocumentService implements CrudsService {
    *      gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public ScreeningResponse update(Serializable primaryKey, Request request) {
-    assert (primaryKey instanceof Long);
+  public CmsDocument update(Serializable primaryKey, Request request) {
+    assert (primaryKey instanceof String);
     // assert (request instanceof ScreeningRequest);
     throw new NotImplementedException("Update is not implemented");
   }
