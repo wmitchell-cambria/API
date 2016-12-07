@@ -69,7 +69,7 @@ public class CrossReportServiceTest {
 
   @Test
   public void findReturnsNullWhenNotFound() throws Exception {
-    Response found = crossReportService.find("referralId=a,thirdId=b");
+    Response found = crossReportService.find("0X51234567");
     assertThat(found, is(nullValue()));
   }
 
@@ -132,7 +132,7 @@ public class CrossReportServiceTest {
 
   @Test
   public void updateThrowsExceptionWhenCrossReportNotFound() throws Exception {
-    // TODO: test does not throw exception from allegationService.update method
+    // TODO: test does not throw exception from crossReportService.update method
     //
     // remove comments before running unit test
     //
@@ -190,7 +190,7 @@ public class CrossReportServiceTest {
   }
 
   @Test
-  public void createReturnsCorrectPostedPerson() throws Exception {
+  public void createReturnsCorrectPostedCrossReport() throws Exception {
     CrossReport crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
     gov.ca.cwds.rest.api.persistence.cms.CrossReport toCreate =

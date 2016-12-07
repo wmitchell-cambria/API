@@ -225,7 +225,7 @@ public class Client extends CmsPersistentObject {
   private String sensitiveHlthInfoOnFileIndicator;
 
   @Column(name = "SENSTV_IND")
-  private String sensitivityIndicatoricator;
+  private String sensitivityIndicator;
 
   @Column(name = "SOCPLC_CD")
   private String soc158PlacementCode;
@@ -276,7 +276,7 @@ public class Client extends CmsPersistentObject {
    * @param birthStateCodeType The birthStateCodeType
    * @param birthplaceVerifiedIndicator The birthplaceVerifiedIndicator
    * @param childClientIndicatorVar The childClientIndicatorVar
-   * @param clientIndicatorexNumber The clientIndicatorexNumber
+   * @param clientIndexNumber The clientIndexNumber
    * @param commentDescription The commentDescription
    * @param commonFirstName The commonFirstName
    * @param commonLastName The commonLastName
@@ -323,7 +323,7 @@ public class Client extends CmsPersistentObject {
    * @param religionType The religionType
    * @param secondaryLanguageType The secondaryLanguageType
    * @param sensitiveHlthInfoOnFileIndicator The sensitiveHlthInfoOnFileIndicator
-   * @param sensitivityIndicatoricator The sensitivityIndicatoricator
+   * @param sensitivityIndicator The sensitivityIndicator
    * @param soc158PlacementCode The soc158PlacementCode
    * @param soc158SealedClientIndicator The soc158SealedClientIndicator
    * @param socialSecurityNumChangedCode The socialSecurityNumChangedCode
@@ -337,7 +337,7 @@ public class Client extends CmsPersistentObject {
   public Client(String adjudicatedDelinquentIndicator, String adoptionStatusCode,
       String alienRegistrationNumber, String birthCity, Short birthCountryCodeType, Date birthDate,
       String birthFacilityName, Short birthStateCodeType, String birthplaceVerifiedIndicator,
-      String childClientIndicatorVar, String clientIndicatorexNumber, String commentDescription,
+      String childClientIndicatorVar, String clientIndexNumber, String commentDescription,
       String commonFirstName, String commonLastName, String commonMiddleName,
       Date confidentialityActionDate, String confidentialityInEffectIndicator, Date creationDate,
       String currCaChildrenServIndicator, String currentlyOtherDescription,
@@ -354,7 +354,7 @@ public class Client extends CmsPersistentObject {
       String outstandingWarrantIndicator, String prevCaChildrenServIndicator,
       String prevOtherDescription, String prevRegionalCenterIndicator, Short primaryEthnicityType,
       Short primaryLanguageType, Short religionType, Short secondaryLanguageType,
-      String sensitiveHlthInfoOnFileIndicator, String sensitivityIndicatoricator,
+      String sensitiveHlthInfoOnFileIndicator, String sensitivityIndicator,
       String soc158PlacementCode, String soc158SealedClientIndicator,
       String socialSecurityNumChangedCode, String socialSecurityNumber,
       String suffixTitleDescription, String tribalAncestryClientIndicatorVar,
@@ -371,7 +371,7 @@ public class Client extends CmsPersistentObject {
     this.birthStateCodeType = birthStateCodeType;
     this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
     this.childClientIndicatorVar = childClientIndicatorVar;
-    this.clientIndexNumber = clientIndicatorexNumber;
+    this.clientIndexNumber = clientIndexNumber;
     this.commentDescription = commentDescription;
     this.commonFirstName = commonFirstName;
     this.commonLastName = commonLastName;
@@ -418,7 +418,7 @@ public class Client extends CmsPersistentObject {
     this.religionType = religionType;
     this.secondaryLanguageType = secondaryLanguageType;
     this.sensitiveHlthInfoOnFileIndicator = sensitiveHlthInfoOnFileIndicator;
-    this.sensitivityIndicatoricator = sensitivityIndicatoricator;
+    this.sensitivityIndicator = sensitivityIndicator;
     this.soc158PlacementCode = soc158PlacementCode;
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
     this.socialSecurityNumChangedCode = socialSecurityNumChangedCode;
@@ -452,7 +452,7 @@ public class Client extends CmsPersistentObject {
       this.birthplaceVerifiedIndicator =
           DomainObject.cookBoolean(client.getBirthplaceVerifiedIndicator());
       this.childClientIndicatorVar = DomainObject.cookBoolean(client.getChildClientIndicatorVar());
-      this.clientIndexNumber = DomainObject.cookBoolean(client.clientIndexNumber());
+      this.clientIndexNumber = client.getClientIndexNumber();
       this.commentDescription = client.getCommentDescription();
       this.commonFirstName = client.getCommonFirstName();
       this.commonLastName = client.getCommonLastName();
@@ -513,8 +513,7 @@ public class Client extends CmsPersistentObject {
       this.secondaryLanguageType = client.getSecondaryLanguageType();
       this.sensitiveHlthInfoOnFileIndicator =
           DomainObject.cookBoolean(client.getSensitiveHlthInfoOnFileIndicator());
-      this.sensitivityIndicatoricator =
-          DomainObject.cookBoolean(client.getSensitivityIndicatoricator());
+      this.sensitivityIndicator = client.getSensitivityIndicator();
       this.soc158PlacementCode = client.getSoc158PlacementCode();
       this.soc158SealedClientIndicator =
           DomainObject.cookBoolean(client.getSoc158SealedClientIndicator());
@@ -614,9 +613,9 @@ public class Client extends CmsPersistentObject {
   }
 
   /**
-   * @return the clientIndicatorexNumber
+   * @return the clientIndexNumber
    */
-  public String clientIndexNumber() {
+  public String getClientIndexNumber() {
     return StringUtils.trimToEmpty(clientIndexNumber);
   }
 
@@ -943,10 +942,10 @@ public class Client extends CmsPersistentObject {
   }
 
   /**
-   * @return the sensitivityIndicatoricator
+   * @return the sensitivityIndicator
    */
-  public String getSensitivityIndicatoricator() {
-    return StringUtils.trimToEmpty(sensitivityIndicatoricator);
+  public String getSensitivityIndicator() {
+    return StringUtils.trimToEmpty(sensitivityIndicator);
   }
 
   /**
