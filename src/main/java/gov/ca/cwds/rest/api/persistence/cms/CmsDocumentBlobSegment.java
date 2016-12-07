@@ -43,6 +43,13 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     super();
   }
 
+  /**
+   * Convenience constructor.
+   * 
+   * @param docHandle document identifier
+   * @param segmentSequence blob segment sequence
+   * @param docBlob hexadecimal blob segment data
+   */
   public CmsDocumentBlobSegment(String docHandle, String segmentSequence, String docBlob) {
     super();
     this.docHandle = docHandle;
@@ -72,7 +79,9 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
 
     result = prime * result + ((docHandle == null) ? 0 : docHandle.hashCode());
     result = prime * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
-    result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
+
+    // NOT PART OF UNIQUE KEY.
+    // result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
 
     return result;
   }
@@ -109,17 +118,22 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     } else if (!segmentSequence.equals(other.segmentSequence)) {
       return false;
     }
-    if (docBlob == null) {
-      if (other.docBlob != null) {
-        return false;
-      }
-    } else if (!docBlob.equals(other.docBlob)) {
-      return false;
-    }
+
+    // NOT PART OF UNIQUE KEY.
+    // if (docBlob == null) {
+    // if (other.docBlob != null) {
+    // return false;
+    // }
+    // } else if (!docBlob.equals(other.docBlob)) {
+    // return false;
+    // }
 
     return true;
   }
 
+  // ==================
+  // ACCESSORS:
+  // ==================
 
   public String getSegmentSequence() {
     return segmentSequence;

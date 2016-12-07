@@ -75,6 +75,19 @@ public class CmsDocument extends CmsPersistentObject {
     super();
   }
 
+  /**
+   * Convenience constructor.
+   * 
+   * @param id unique document handle
+   * @param segmentCount number of blob segments
+   * @param docLength total bytes in all blob segments
+   * @param docAuth document "auth"
+   * @param docServ document "server"
+   * @param docDate creation date
+   * @param docTime creation time
+   * @param docName document name (e.g., "word.doc")
+   * @param compressionMethod
+   */
   public CmsDocument(String id, Short segmentCount, Long docLength, String docAuth, String docServ,
       Date docDate, Date docTime, String docName, String compressionMethod) {
     super();
@@ -89,6 +102,11 @@ public class CmsDocument extends CmsPersistentObject {
     this.compressionMethod = compressionMethod;
   }
 
+  /**
+   * Pseudo copy constructor. Build a persistence document from a domain document.
+   * 
+   * @param cmsDocument domain (JSON) document object
+   */
   public CmsDocument(gov.ca.cwds.rest.api.domain.cms.CmsDocument cmsDocument) {
     super();
     this.id = cmsDocument.getId();
