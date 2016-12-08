@@ -156,6 +156,10 @@ public class OtherClientName extends CmsPersistentObject {
     result =
         prime * result + ((suffixTitleDescription == null) ? 0 : suffixTitleDescription.hashCode());
     result = prime * result + ((thirdId == null) ? 0 : thirdId.hashCode());
+    result = prime * result
+        + ((super.getLastUpdatedId() == null) ? 0 : super.getLastUpdatedId().hashCode());
+    result = prime * result
+        + ((super.getLastUpdatedTime() == null) ? 0 : super.getLastUpdatedTime().hashCode());
 
     return result;
   }
@@ -226,6 +230,20 @@ public class OtherClientName extends CmsPersistentObject {
         return false;
       }
     } else if (!thirdId.equals(other.thirdId)) {
+      return false;
+    }
+    if (super.getLastUpdatedId() == null) {
+      if (other.getLastUpdatedId() != null) {
+        return false;
+      }
+    } else if (!super.getLastUpdatedId().equals(other.getLastUpdatedId())) {
+      return false;
+    }
+    if (super.getLastUpdatedTime() == null) {
+      if (other.getLastUpdatedTime() != null) {
+        return false;
+      }
+    } else if (!super.getLastUpdatedTime().equals(other.getLastUpdatedTime())) {
       return false;
     }
     return true;
