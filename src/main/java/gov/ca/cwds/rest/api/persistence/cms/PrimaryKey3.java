@@ -3,18 +3,20 @@ package gov.ca.cwds.rest.api.persistence.cms;
 import java.io.Serializable;
 
 public class PrimaryKey3 implements Serializable {
-
   private static final long serialVersionUID = 1L;
-  private String one;
-  private String two;
-  private String three;
+  private String keySegmentOne;
+  private String keySegmentTwo;
+  private String keySegmentThree;
 
-  public PrimaryKey3() {}
+  public PrimaryKey3() {
+    super();
 
-  public PrimaryKey3(String one, String two, String three) {
-    this.one = one;
-    this.two = two;
-    this.three = three;
+  }
+
+  public PrimaryKey3(String keySegmentOne, String keySegmentTwo, String keySegmentThree) {
+    this.keySegmentOne = keySegmentOne;
+    this.keySegmentTwo = keySegmentTwo;
+    this.keySegmentThree = keySegmentThree;
   }
 
   /**
@@ -24,7 +26,25 @@ public class PrimaryKey3 implements Serializable {
    */
   @Override
   public String toString() {
-    return "one=" + one.trim() + ",two=" + two.trim() + ",three=" + three.trim();
+    return "keySegmentOne=" + keySegmentOne.trim() + ",keySegmentTwo=" + keySegmentTwo.trim()
+        + ",keySegmentThree=" + keySegmentThree.trim();
+  }
+
+  public String getKeySegmentOne() {
+    return keySegmentOne;
+  }
+
+  public String getKeySegmentTwo() {
+    return keySegmentTwo;
+  }
+
+  public String getKeySegmentThree() {
+    return keySegmentThree;
+  }
+
+
+  public static long getSerialversionuid() {
+    return serialVersionUID;
   }
 
   /**
@@ -33,12 +53,12 @@ public class PrimaryKey3 implements Serializable {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((one == null) ? 0 : one.hashCode());
-    result = prime * result + ((two == null) ? 0 : two.hashCode());
-    result = prime * result + ((three == null) ? 0 : three.hashCode());
+    result = prime * result + ((keySegmentOne == null) ? 0 : keySegmentOne.hashCode());
+    result = prime * result + ((keySegmentTwo == null) ? 0 : keySegmentTwo.hashCode());
+    result = prime * result + ((keySegmentThree == null) ? 0 : keySegmentThree.hashCode());
     return result;
   }
 
@@ -48,32 +68,35 @@ public class PrimaryKey3 implements Serializable {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (!(obj instanceof PrimaryKey3)) {
       return false;
-
+    }
+    if (!(obj instanceof PrimaryKey3)) {
+      return false;
+    }
     PrimaryKey3 other = (PrimaryKey3) obj;
 
-    if (one == null) {
-      if (other.one != null)
+    if (keySegmentOne == null) {
+      if (other.keySegmentOne != null)
         return false;
-    } else if (!one.equals(other.one))
+    } else if (!keySegmentOne.equals(other.keySegmentOne))
       return false;
 
-    if (two == null) {
-      if (other.two != null)
+    if (keySegmentTwo == null) {
+      if (other.keySegmentTwo != null)
         return false;
-    } else if (!two.equals(other.two))
+    } else if (!keySegmentTwo.equals(other.keySegmentTwo))
       return false;
 
-    if (three == null) {
-      if (other.three != null)
+    if (keySegmentThree == null) {
+      if (other.keySegmentThree != null)
         return false;
-    } else if (!three.equals(other.three))
+    } else if (!keySegmentThree.equals(other.keySegmentThree))
       return false;
 
     return true;
