@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.api.persistence.cms;
 
-import gov.ca.cwds.rest.api.persistence.PersistentObject;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.rest.api.persistence.PersistentObject;
 
 /**
  * {@link PersistentObject} representing an OtherClientName
@@ -27,7 +27,7 @@ import org.hibernate.annotations.Type;
 @Table(schema = "CWSINT", name = "OCL_NM_T")
 public class OtherClientName extends CmsPersistentObject {
   @Column(name = "FKCLIENT_T")
-  private String fkClientTable;
+  private String clientId;
 
   @Column(name = "FIRST_NM")
   private String firstName;
@@ -62,11 +62,10 @@ public class OtherClientName extends CmsPersistentObject {
     super();
   }
 
-  public OtherClientName(String fkClientTable, String firstName, String lastName,
-      String middleName, String namePrefixDescription, Short nameType,
-      String suffixTitleDescription, String thirdId) {
+  public OtherClientName(String clientId, String firstName, String lastName, String middleName,
+      String namePrefixDescription, Short nameType, String suffixTitleDescription, String thirdId) {
     super();
-    this.fkClientTable = fkClientTable;
+    this.clientId = clientId;
     this.firstName = firstName;
     this.lastName = lastName;
     this.middleName = middleName;
@@ -95,10 +94,10 @@ public class OtherClientName extends CmsPersistentObject {
   }
 
   /**
-   * @return the fkclientT
+   * @return the clientId
    */
-  public String getFkclientT() {
-    return StringUtils.trimToEmpty(fkClientTable);
+  public String getClientId() {
+    return StringUtils.trimToEmpty(clientId);
   }
 
   /**
@@ -144,11 +143,11 @@ public class OtherClientName extends CmsPersistentObject {
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = prime * result + ((fkClientTable == null) ? 0 : fkClientTable.hashCode());
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
     result =
@@ -157,33 +156,34 @@ public class OtherClientName extends CmsPersistentObject {
     result =
         prime * result + ((suffixTitleDescription == null) ? 0 : suffixTitleDescription.hashCode());
     result = prime * result + ((thirdId == null) ? 0 : thirdId.hashCode());
+
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof OtherClientName)) {
       return false;
     }
     OtherClientName other = (OtherClientName) obj;
+    if (clientId == null) {
+      if (other.clientId != null) {
+        return false;
+      }
+    } else if (!clientId.equals(other.clientId)) {
+      return false;
+    }
     if (firstName == null) {
       if (other.firstName != null) {
         return false;
       }
     } else if (!firstName.equals(other.firstName)) {
-      return false;
-    }
-    if (fkClientTable == null) {
-      if (other.fkClientTable != null) {
-        return false;
-      }
-    } else if (!fkClientTable.equals(other.fkClientTable)) {
       return false;
     }
     if (lastName == null) {
@@ -230,7 +230,4 @@ public class OtherClientName extends CmsPersistentObject {
     }
     return true;
   }
-
-
-
 }
