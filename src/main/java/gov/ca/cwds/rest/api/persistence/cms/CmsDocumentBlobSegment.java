@@ -81,7 +81,7 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     result = prime * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
 
     // NOT PART OF UNIQUE KEY.
-    // result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
+    result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
 
     return result;
   }
@@ -120,13 +120,13 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     }
 
     // NOT PART OF UNIQUE KEY.
-    // if (docBlob == null) {
-    // if (other.docBlob != null) {
-    // return false;
-    // }
-    // } else if (!docBlob.equals(other.docBlob)) {
-    // return false;
-    // }
+    if (docBlob == null) {
+      if (other.docBlob != null) {
+        return false;
+      }
+    } else if (!docBlob.equals(other.docBlob)) {
+      return false;
+    }
 
     return true;
   }

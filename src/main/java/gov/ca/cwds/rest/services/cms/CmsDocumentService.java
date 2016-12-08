@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.ScreeningResponse;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
@@ -49,7 +48,8 @@ public class CmsDocumentService implements CrudsService {
     gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc = dao.find(primaryKey);
     if (doc != null) {
       // Trim strings.
-      doc.setCompressionMethod(doc.getCompressionMethod() != null ? doc.getCompressionMethod().trim() : "");
+      doc.setCompressionMethod(
+          doc.getCompressionMethod() != null ? doc.getCompressionMethod().trim() : "");
       doc.setDocAuth(doc.getDocAuth() != null ? doc.getDocAuth().trim() : "");
       doc.setDocName(doc.getDocName() != null ? doc.getDocName().trim() : "");
       doc.setDocServ(doc.getDocServ() != null ? doc.getDocServ().trim() : "");
@@ -85,7 +85,7 @@ public class CmsDocumentService implements CrudsService {
    */
   @Override
   public CmsDocument create(Request request) {
-    // assert (request instanceof ScreeningReference);
+    // assert (request instanceof CmsDocument);
     throw new NotImplementedException("CREATE NOT IMPLEMENTED!");
   }
 
@@ -99,9 +99,9 @@ public class CmsDocumentService implements CrudsService {
    *      gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public ScreeningResponse update(Serializable primaryKey, Request request) {
-    assert (primaryKey instanceof Long);
-    // assert (request instanceof ScreeningRequest);
+  public CmsDocument update(Serializable primaryKey, Request request) {
+    assert (primaryKey instanceof String);
+    // assert (request instanceof CmsDocument);
     throw new NotImplementedException("UPDATE NOT IMPLEMENTED!");
   }
 
