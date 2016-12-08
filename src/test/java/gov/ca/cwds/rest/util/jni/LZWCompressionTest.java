@@ -39,8 +39,8 @@ import javax.xml.bind.DatatypeConverter;
  * </p>
  * 
  * <p>
- * Run the JUnit manually with the sample command below. Note that jars are copied manually with the sample script,
- * cp_api_libs.sh.
+ * Run the JUnit manually with the sample command below. Note that jars are copied manually with the
+ * sample script, cp_api_libs.sh.
  * </p>
  * 
  * <p>
@@ -51,6 +51,23 @@ import javax.xml.bind.DatatypeConverter;
  * </pre>
  * 
  * </blockquote>
+ * </p>
+ * 
+ * <p>
+ * <strong>Windows</strong>
+ * </p>
+ * <p>
+ * On Windows systems, use this sample library path: <blockquote>
+ * 
+ * {@code -Djava.library.path=.;/Users/joeschmoe/workspace/API/lib;/Windows/System32}
+ * </pre>
+ * 
+ * </blockquote>
+ * </p>
+ * 
+ * <p>
+ * On Windows, check the execution permissions of LZW.dll. Verify that "deny" is disabled and that
+ * "read an execute" is enabled. Check file properties under security/advanced.
  * </p>
  * 
  * <p>
