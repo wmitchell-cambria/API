@@ -52,7 +52,7 @@ flywayFactory:
 elasticsearch:
   elasticsearch.host: localhost
   elasticsearch.port: 9300
-  elasticsearch.cluster: elasticsearch_CWS-NS3
+  elasticsearch.cluster: elasticsearch
   elasticsearch.clientnode: javaclient
   elasticsearch.clientport: 10080
   peopleIndexName: people
@@ -62,9 +62,9 @@ elasticsearch:
 server:
   applicationConnectors:
   - type: http 
-    port: 8090
+    port: 8080
   adminConnectors:
   - type: http
-    port: 8091
+    port: 8081
 
     
