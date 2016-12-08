@@ -4,7 +4,6 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
-import javax.ws.rs.client.Client;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
@@ -46,7 +45,6 @@ import gov.ca.cwds.rest.resources.PersonSearchResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
-import gov.ca.cwds.rest.resources.auth.CwdsAuthLoginResource;
 import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
@@ -74,8 +72,6 @@ import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.setup.ApiEnvironment;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.client.JerseyClientBuilder;
-import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -319,11 +315,11 @@ public class ApiApplication extends Application<ApiConfiguration> {
         new JerseyCmsReferralResource(new ServiceBackedResourceDelegate(cmsreferralService));
     apiEnvironment.jersey().register(cmsreferralResource);
 
-    LOGGER.info("Registering CwdsAuthLoginResource");
-    final Client client = new JerseyClientBuilder(apiEnvironment.environment())
-        .using(new JerseyClientConfiguration()).build(getName());
-    CwdsAuthLoginResource sampleAuthResource = new CwdsAuthLoginResource(client);
-    apiEnvironment.jersey().register(sampleAuthResource);
+    // LOGGER.info("Registering CwdsAuthLoginResource");
+    // final Client client = new JerseyClientBuilder(apiEnvironment.environment())
+    // .using(new JerseyClientConfiguration()).build(getName());
+    // CwdsAuthLoginResource sampleAuthResource = new CwdsAuthLoginResource(client);
+    // apiEnvironment.jersey().register(sampleAuthResource);
 
     LOGGER.info("Registering PersonSearchResource");
     PersonSearchResource personSearchResource =
