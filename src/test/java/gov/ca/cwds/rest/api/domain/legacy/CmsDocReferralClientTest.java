@@ -64,7 +64,6 @@ public class CmsDocReferralClientTest {
 
     when(mockedCmsDocReferralClientResource.create(eq(validCmsDocReferralClient)))
         .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
-
   }
 
   @Test

@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.resources;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SEARCH_PERSON;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,6 +17,7 @@ import gov.ca.cwds.rest.api.domain.PostedPerson;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.es.PersonSearchRequest;
 import gov.ca.cwds.rest.services.PersonService;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,7 +58,7 @@ public class PersonSearchResource {
    * @return the response
    */
   // @UnitOfWork(value = "ns") // No transaction?
-  @GET
+  @POST
   @Path("/all")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
@@ -88,7 +88,7 @@ public class PersonSearchResource {
    * @param req JSON {@link PersonSearchRequest}
    * @return the response
    */
-  // @UnitOfWork(value = "ns") // No transaction?
+  // @UnitOfWork(value = "ns") // Q: No transaction?
   @POST
   @Path("/query_or")
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
@@ -103,6 +103,7 @@ public class PersonSearchResource {
     PostedPerson[] hits = null;
     try {
       // TODO: remove cast abuse.
+      // ERROR: date validation never fires!
       hits = ((PersonService) ((ServiceBackedResourceDelegate) resourceDelegate).getService())
           .queryPersonOr(req.getFirstName(), req.getLastName(), req.getBirthDate());
     } catch (Exception e) {
