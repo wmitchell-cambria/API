@@ -1,12 +1,12 @@
 package gov.ca.cwds.rest.api.domain.es;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.validation.Date;
-import gov.ca.cwds.rest.validation.PastDate;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,24 +20,27 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 public class PersonSearchRequest extends DomainObject implements Request {
 
-  @ApiModelProperty(example = "Bart")
+  @ApiModelProperty(example = "bart")
   @JsonProperty("first_name")
   private String firstName;
 
-  @ApiModelProperty(example = "Simpson")
+  @ApiModelProperty(example = "simpson")
   @JsonProperty("last_name")
   private String lastName;
 
-  @Date
-  @PastDate()
-  @ApiModelProperty(example = "2008-09-01")
+  // BUG: Validation should fail, but annotations do not trap an error.
+  // @PastDate()
+  @Date(format = DATE_FORMAT, required = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty("birth_date")
+  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
+      example = "2000-01-01")
   private String birthDate;
 
   /**
-   * Default, no-param ctor. Required by frameworks.
+   * Default, no-param, no-op ctor. Required by frameworks.
    */
-  PersonSearchRequest() {}
+  public PersonSearchRequest() {}
 
   /**
    * JSON DropWizard Constructor.

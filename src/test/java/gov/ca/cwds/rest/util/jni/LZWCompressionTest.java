@@ -123,6 +123,7 @@ public class LZWCompressionTest {
       return;
     }
 
+    // TODO: verify that temp files are deleted!
     try {
       final String src = LZWCompressionTest.class.getResource("/jni/lzw/good.lzw").getPath();
       final String good = LZWCompressionTest.class.getResource("/jni/lzw/good.doc").getPath();

@@ -53,7 +53,7 @@ public class PersonTest {
   }
 
   /*
-   * Serialization and de serialization
+   * Serialization and de-serialization
    */
   @Test
   public void serializesToJSON() throws Exception {
@@ -122,15 +122,12 @@ public class PersonTest {
       return validPerson;
 
     } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
       return null;
     } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
       return null;
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
       return null;
     }
