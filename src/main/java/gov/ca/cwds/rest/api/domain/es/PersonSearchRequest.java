@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,7 +29,7 @@ public class PersonSearchRequest extends DomainObject implements Request {
 
   // BUG: Validation should fail, but annotations do not trap an error.
   // @PastDate()
-  @Date(format = DATE_FORMAT, required = false)
+  @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty("birth_date")
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
