@@ -49,10 +49,7 @@ public class PersonServiceTest {
         new gov.ca.cwds.rest.api.persistence.ns.Person(expected, null);
 
     when(personDao.find(123L)).thenReturn(person);
-
-
     Person found = personService.find(123L);
-
     assertThat(found, is(expected));
   }
 
@@ -60,7 +57,6 @@ public class PersonServiceTest {
   public void findReturnsNullWhenNotFound() throws Exception {
     when(personDao.find(new Long(-1))).thenReturn(null);
     Person found = personService.find(new Long(-1));
-
     assertThat(found, is(nullValue()));
   }
 

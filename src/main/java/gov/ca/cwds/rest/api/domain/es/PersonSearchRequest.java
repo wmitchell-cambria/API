@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 @JsonSnakeCase
-public class PersonSearchRequest extends DomainObject implements Request {
+public final class PersonSearchRequest extends DomainObject implements Request {
 
   @ApiModelProperty(example = "bart")
   @JsonProperty("first_name")
@@ -39,7 +39,7 @@ public class PersonSearchRequest extends DomainObject implements Request {
   /**
    * Default, no-param, no-op ctor. Required by frameworks.
    */
-  public PersonSearchRequest() {}
+  // public PersonSearchRequest() {}
 
   /**
    * JSON DropWizard Constructor.

@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain.legacy;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -89,8 +88,7 @@ public class PersonSearchRequestTest {
 
   @Test
   public void equalsHashCodeWork() {
-    // TODO: Broken test!! Date field not validating!
-    // EqualsVerifier.forClass(PersonSearchRequest.class).suppress(Warning.NONFINAL_FIELDS).verify();
+    EqualsVerifier.forClass(PersonSearchRequest.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   /**
@@ -144,11 +142,9 @@ public class PersonSearchRequestTest {
     // final String message = response.readEntity(String.class);
     // System.out.print(message);
 
-    // TODO: Broken test!! Date field not validating!
-    // assertThat(response.getStatus(), is(equalTo(422)));
-    // assertThat(
-    // response.readEntity(String.class).indexOf("birth_date must be in the format of yyyy-MM-dd"),
-    // is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).contains("must be in the format of yyyy-MM-dd"),
+        is(equalTo(true)));
   }
 
   /*

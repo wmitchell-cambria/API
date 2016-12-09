@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SEARCH_PERSON;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -99,7 +100,7 @@ public class PersonSearchResource {
       code = HttpStatus.SC_OK, response = PostedPerson[].class)
   @Consumes(value = MediaType.APPLICATION_JSON)
   public Response queryPersonOrTerm(
-      @ApiParam(hidden = false, required = true) PersonSearchRequest req) {
+      @Valid @ApiParam(hidden = false, required = true) PersonSearchRequest req) {
     PostedPerson[] hits = null;
     try {
       // TODO: remove cast abuse.
