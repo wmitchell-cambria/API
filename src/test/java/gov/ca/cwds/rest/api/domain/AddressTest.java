@@ -38,7 +38,7 @@ public class AddressTest {
 
 
   /*
-   * Serialization and deserialization
+   * Serialization and de-serialization
    */
   @Test
   public void serializesToJSON() throws Exception {
@@ -65,8 +65,6 @@ public class AddressTest {
 
   @Test
   public void persistentObjectConstructorTest() throws Exception {
-
-
     Address domain = this.validAddress();
 
     gov.ca.cwds.rest.api.persistence.ns.Address persistent =
@@ -77,19 +75,16 @@ public class AddressTest {
     assertThat(totest.getState(), is(equalTo(persistent.getState())));
     assertThat(totest.getStreet_address(), is(equalTo(persistent.getStreetAddress())));
     assertThat(totest.getZip(), is(equalTo(persistent.getZip())));
-
   }
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
-
     Address domain = new Address(street_name, city, state, zip);
 
     assertThat(domain.getCity(), is(equalTo(city)));
     assertThat(domain.getState(), is(equalTo(state)));
     assertThat(domain.getStreet_address(), is(equalTo(street_name)));
     assertThat(domain.getZip(), is(equalTo(zip)));
-
   }
 
   /*

@@ -88,8 +88,8 @@ public class OtherClientNameDaoIT {
 
   @Test
   public void testFind() {
-    String thirdId = "123";
     // TODO: BROKEN TEST!
+    // String thirdId = "123";
     // OtherClientName found = otherClientNameDao.find(thirdId);
     // assertThat(found.getThirdId(), is(thirdId));
   }
