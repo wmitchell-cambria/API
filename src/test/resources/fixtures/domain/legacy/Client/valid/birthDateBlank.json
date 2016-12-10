@@ -4,7 +4,7 @@
   "alienRegistrationNumber": "ABC123",
   "birthCity": "ANY CITY",
   "birthCountryCodeType": 563,
-  "birthDate": "1984-12-03",
+  "birthDate": "",
   "birthFacilityName": "home",
   "birthStateCodeType": 1828,
   "birthplaceVerifiedIndicator": false,

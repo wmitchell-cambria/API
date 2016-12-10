@@ -2,7 +2,7 @@
   "adjudicatedDelinquentIndicator": false,
   "adoptionStatusCode": "A",
   "alienRegistrationNumber": "ABC123",
-  "birthCity": "ANY CITY",
+  "birthCity": "123456789012345678901234567890123456",
   "birthCountryCodeType": 563,
   "birthDate": "1984-12-03",
   "birthFacilityName": "home",

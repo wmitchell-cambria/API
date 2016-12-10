@@ -6,7 +6,7 @@
   "birthCountryCodeType": 563,
   "birthDate": "1984-12-03",
   "birthFacilityName": "home",
-  "birthStateCodeType": 1828,
+  "birthStateCodeType": null,
   "birthplaceVerifiedIndicator": false,
   "childClientIndicatorVar": false,
   "clientIndexNumber": "CIN1234567",
