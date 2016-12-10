@@ -6,6 +6,7 @@ import gov.ca.cwds.rest.jdbi.Dao;
 import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.util.IdGenerator;
 
 import java.io.Serializable;
 
@@ -82,7 +83,7 @@ public class CrossReportService implements CrudsService {
 
     try {
       // TODO : refactor to actually determine who is updating. 'q1p' for now
-      CrossReport managed = new CrossReport(crossReport.getThirdId(), crossReport, "q1p");
+      CrossReport managed = new CrossReport(IdGenerator.randomString(10), crossReport, "q1p");
 
       managed = crossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
