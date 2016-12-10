@@ -1,6 +1,6 @@
 {
   "adjudicatedDelinquentIndicator": false,
-  "adoptionStatusCode": "A",
+  "adoptionStatusCode": null,
   "alienRegistrationNumber": "ABC123",
   "birthCity": "ANY CITY",
   "birthCountryCodeType": 563,

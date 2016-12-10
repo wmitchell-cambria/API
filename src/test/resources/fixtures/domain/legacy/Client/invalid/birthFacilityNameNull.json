@@ -5,7 +5,7 @@
   "birthCity": "ANY CITY",
   "birthCountryCodeType": 563,
   "birthDate": "1984-12-03",
-  "birthFacilityName": "home",
+  "birthFacilityName": null,
   "birthStateCodeType": 1828,
   "birthplaceVerifiedIndicator": false,
   "childClientIndicatorVar": false,

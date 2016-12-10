@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -27,16 +28,18 @@ public class Client extends DomainObject implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
+  @OneOf(value = {"T", "P", "N", "A"}, ignoreCase = true, ignoreWhitespace = true)
+  @ApiModelProperty(required = true, readOnly = false,
+      value = "T=totally free - P=partially free - N=not free - A=not applicable", example = "N")
   private String adoptionStatusCode;
 
-  @NotEmpty
+  @NotNull
   @Size(max = 12)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "123456789012")
   private String alienRegistrationNumber;
 
   @NotNull
-  @Size(max = 56)
+  @Size(max = 35)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "Fresno")
   private String birthCity;
 
@@ -65,7 +68,7 @@ public class Client extends DomainObject implements Request, Response {
   private Boolean birthplaceVerifiedIndicator;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false)
+  @ApiModelProperty(required = true, readOnly = false)
   private Boolean childClientIndicatorVar;
 
   @Size(max = 12)
@@ -119,7 +122,7 @@ public class Client extends DomainObject implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "other description")
   private String currentlyOtherDescription;
 
-  @NotEmpty
+  @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   private Boolean currentlyRegionalCenterIndicator;
 
