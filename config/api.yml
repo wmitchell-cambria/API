@@ -47,6 +47,7 @@ flywayFactory:
   sqlMigrationPrefix: v
   locations:
     - db/ns/migrations
+    - db/ns/seeds/${ENVIRONMENT:-dev}
 
 
 elasticsearch:
