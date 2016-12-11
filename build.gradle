@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
 
@@ -15,19 +16,23 @@ plugins {
 }
 
 apply plugin: 'maven-publish'
+apply plugin: 'docker'
 apply plugin: 'com.github.johnrengelman.shadow'
 sourceCompatibility = 1.8
 
 project.ext {
+    apiVersion = 1.12
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.0.0-rc4"
-	dropwizardFlywayVersion = "1.0.0-1"
-	metricsVersion = "3.1.0"
-	dropwizardSwaggerVersion = "1.0.0-1"
-	mainclass = "gov.ca.cwds.rest.ApiApplication" 
+    dropwizardFlywayVersion = "1.0.0-1"
+    metricsVersion = "3.1.0"
+    dropwizardSwaggerVersion = "1.0.0-1"
+    mainclass = "gov.ca.cwds.rest.ApiApplication" 
 }
 
-version = 0.12
+
+def dockerTag = apiVersion + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+version = apiVersion
 mainClassName = mainclass
 
 repositories {
@@ -131,4 +136,44 @@ publishing {
       url "file:///usr/share/nginx/html/maven2"
     }
   }
+}
+
+
+task copyConfig(type: Copy) {
+    from 'config'
+    into 'build/docker/config'
+}
+
+task copyDist(type: Copy, dependsOn: shadowJar) {
+    from 'build/libs'
+    into 'build/docker/libs'
+}
+
+task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
+    dockerfile = "Dockerfile"
+    project.group = "cwds"
+    applicationName = "api"
+    tagVersion = version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+}
+
+task createDockerImage(type:Exec, dependsOn: shadowJar) {
+  commandLine 'docker',  'build',  '-t',  'cwds/api', '.'
+}
+
+task tagDockerImage(type:Exec, dependsOn: createDockerImage) {
+  commandLine 'docker',  'tag',  'cwds/api',  "cwds/api:$dockerTag"
+}
+
+task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
+  commandLine 'docker',  'push',  'cwds/api:latest'
+}
+
+task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
+  commandLine 'docker',  'push',  "cwds/api:$dockerTag"
+}
+task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
+   doLast { 
+	println 'Published'
+   }
+ 
 }
