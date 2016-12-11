@@ -140,7 +140,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
     // Enable variable substitution with environment variables.
     bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
-        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+        bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
+
     bootstrap.addBundle(new ViewBundle<ApiConfiguration>());
 
     LOGGER.info("Loading database bundles");
