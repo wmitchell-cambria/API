@@ -78,7 +78,7 @@ The CWDS API postgres database must be initialized prior to starting the first t
 following commands:
 
     % ./gradlew shadowJar
-    % java -jar build/libs/api-all.jar db clean config/api.yml
+    % java -jar build/libs/api-dist.jar db clean config/api.yml
 
 The first time the application starts it will initialize the database schema during the boot process.
 
@@ -86,7 +86,7 @@ The first time the application starts it will initialize the database schema dur
 
 The CWDS API uses [Flyway](https://flywaydb.org/) for handling postgres database migrations.  To update your database to the latest version run the following:
 
-   % java -jar build/libs/api-all.jar db migrate config/api.yml
+   % java -jar build/libs/api-dist.jar db migrate config/api.yml
    
 ### Database Seeding  
 
