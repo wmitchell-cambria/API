@@ -21,7 +21,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 sourceCompatibility = 1.8
 
 project.ext {
-    apiVersion = 1.12
+    apiVersion = 0.12
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.0.0-rc4"
     dropwizardFlywayVersion = "1.0.0-1"
