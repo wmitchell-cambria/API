@@ -254,7 +254,6 @@ public class Client extends CmsPersistentObject {
   @Column(name = "ZIPPY_IND")
   private String zippyCreatedIndicator;
 
-
   /**
    * Default constructor
    * 
@@ -263,7 +262,6 @@ public class Client extends CmsPersistentObject {
   public Client() {
     super();
   }
-
 
   /**
    * @param adjudicatedDelinquentIndicator The adjudicatedDelinquentIndicator
@@ -430,7 +428,6 @@ public class Client extends CmsPersistentObject {
     this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
 
-
   /**
    * Constructor
    * 
@@ -532,8 +529,8 @@ public class Client extends CmsPersistentObject {
     }
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
    */
