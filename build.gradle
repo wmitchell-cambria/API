@@ -38,7 +38,7 @@ mainClassName = mainclass
 repositories {
     mavenCentral()
     maven {
-        url "http://maven2.cwds.tabordasolutions.net/maven2"
+        url "http://maven2.cwds.tabordasolutions.net"
     }
 }
 
