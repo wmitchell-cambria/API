@@ -5,6 +5,11 @@ import static gov.ca.cwds.rest.core.Api.RESOURCE_APPLICATION;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+
+import gov.ca.cwds.rest.api.ApiException;
 import io.swagger.annotations.Api;
 
 
@@ -18,24 +23,35 @@ import io.swagger.annotations.Api;
 public class ApplicationResource {
 
   private String applicationName;
+  private String version;
+
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /**
    * Constructor
    * 
    * @param applicationName The name of the application
+   * @param version The version of the api
    */
-  public ApplicationResource(String applicationName) {
+  public ApplicationResource(String applicationName, String version) {
     this.applicationName = applicationName;
+    this.version = version;
 
   }
 
   /**
    * Get the name of the application
    * 
-   * @return the application name
+   * @return the application data
    */
   @GET
-  public String getApplicationName() {
-    return applicationName;
+  public String get() {
+    ImmutableMap<String, String> map = ImmutableMap.<String, String>builder()
+        .put("Application", applicationName).put("Version", version).build();
+    try {
+      return MAPPER.writeValueAsString(map);
+    } catch (JsonProcessingException e) {
+      throw new ApiException("Unable to parse application data", e);
+    }
   }
 }
