@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -14,10 +15,11 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ApplicationResourceTest {
   private static final String APP_NAME = "my app";
+  private static final String VERSION = "1.0.0";
 
   @ClassRule
   public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(new ApplicationResource(APP_NAME)).build();
+      ResourceTestRule.builder().addResource(new ApplicationResource(APP_NAME, VERSION)).build();
 
   @Before
   public void setup() {}
@@ -31,7 +33,15 @@ public class ApplicationResourceTest {
   @Test
   public void applicationGetReturnsCorrectName() {
     assertThat(resources.client().target("/application").request()
-        .accept(MediaType.APPLICATION_JSON).get().readEntity(String.class), is(equalTo(APP_NAME)));
+        .accept(MediaType.APPLICATION_JSON).get().readEntity(String.class),
+        containsString(APP_NAME));
+  }
+
+  @Test
+  public void applicationGetReturnsCorrectVersion() {
+    assertThat(resources.client().target("/application").request()
+        .accept(MediaType.APPLICATION_JSON).get().readEntity(String.class),
+        containsString(VERSION));
   }
 
   @Test
