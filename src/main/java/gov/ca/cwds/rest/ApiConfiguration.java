@@ -1,12 +1,12 @@
 package gov.ca.cwds.rest;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.flyway.FlywayFactory;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.flyway.FlywayFactory;
 
 public class ApiConfiguration extends Configuration {
   /**
@@ -14,6 +14,12 @@ public class ApiConfiguration extends Configuration {
    */
   @NotEmpty
   private String applicationName;
+
+  /**
+   * The version
+   */
+  @NotEmpty
+  private String version;
 
   private SwaggerConfiguration swaggerConfiguration;
 
@@ -33,6 +39,22 @@ public class ApiConfiguration extends Configuration {
   @JsonProperty
   public void setApplicationName(String applicationName) {
     this.applicationName = applicationName;
+  }
+
+  /**
+   * @return the version
+   */
+  @JsonProperty
+  public String getVersion() {
+    return version;
+  }
+
+  /**
+   * @param version the version to set
+   */
+  @JsonProperty
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   @JsonProperty

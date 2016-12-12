@@ -1,11 +1,13 @@
 package gov.ca.cwds.rest;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.flywaydb.core.Flyway;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,6 +132,8 @@ public class ApiApplication extends Application<ApiConfiguration> {
     public FlywayFactory getFlywayFactory(ApiConfiguration configuration) {
       return configuration.getFlywayFactory();
     }
+
+
   };
 
   public static void main(final String[] args) throws Exception {
@@ -150,6 +154,16 @@ public class ApiApplication extends Application<ApiConfiguration> {
     bootstrap.addBundle(nsHibernateBundle);
   }
 
+  private void migrateDatabase(final ApiConfiguration configuration) {
+    Flyway flyway = new Flyway();
+    flyway.setDataSource(flywayBundle.getDataSourceFactory(configuration).build(null, "ds"));
+    List<String> locations = flywayBundle.getFlywayFactory(configuration).getLocations();
+    flyway.setLocations(locations.toArray(new String[locations.size()]));
+    flyway.setSqlMigrationPrefix(
+        flywayBundle.getFlywayFactory(configuration).getSqlMigrationPrefix());
+    flyway.migrate();
+  }
+
   @Override
   public void run(final ApiConfiguration configuration, final Environment environment)
       throws Exception {
@@ -158,6 +172,9 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     LOGGER.info("Application name: {}", configuration.getApplicationName());
     ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
+
+    LOGGER.info("Migrating Database");
+    migrateDatabase(configuration);
 
     LOGGER.info("Preparing DAOs");
     setupDaos(configuration);
@@ -209,7 +226,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
       final ApiEnvironment apiEnvironment) {
     LOGGER.info("Registering ApplicationResource");
     final ApplicationResource applicationResource =
-        new ApplicationResource(configuration.getApplicationName());
+        new ApplicationResource(configuration.getApplicationName(), configuration.getVersion());
     apiEnvironment.jersey().register(applicationResource);
 
     ElasticsearchDao elasticsearchPersonDao =
