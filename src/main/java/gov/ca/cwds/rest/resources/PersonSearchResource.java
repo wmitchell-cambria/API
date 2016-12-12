@@ -104,7 +104,6 @@ public class PersonSearchResource {
     PostedPerson[] hits = null;
     try {
       // TODO: remove cast abuse.
-      // ERROR: date validation never fires!
       hits = ((PersonService) ((ServiceBackedResourceDelegate) resourceDelegate).getService())
           .queryPersonOr(req.getFirstName(), req.getLastName(), req.getBirthDate());
     } catch (Exception e) {
