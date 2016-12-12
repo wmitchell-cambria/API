@@ -2,8 +2,8 @@ package gov.ca.cwds.rest.jdbi.cms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
-import gov.ca.cwds.rest.api.persistence.cms.OtherClientName;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +22,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+
+import gov.ca.cwds.rest.api.persistence.cms.OtherClientName;
 
 public class OtherClientNameDaoIT {
   private static final DateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -64,10 +66,9 @@ public class OtherClientNameDaoIT {
 
   @Test
   public void testFindAllReturnsCorrectList() {
-    // TODO: BROKEN TEST!
-    // Query query =
-    // session.getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.OtherClientName.findAll");
-    // assertThat(query.list().size(), is(2));
+    Query query =
+        session.getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.OtherClientName.findAll");
+    assertThat(query.list().size(), greaterThanOrEqualTo(1));
   }
 
   @Test
@@ -79,60 +80,54 @@ public class OtherClientNameDaoIT {
 
   @Test
   public void testfindAllUpdatedAfterReturnsCorrectList() throws Exception {
-    // TODO: BROKEN TEST!
-    // Query query = session
-    // .getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.OtherClientName.findAllUpdatedAfter")
-    // .setDate("after", TIMESTAMP_FORMAT.parse("2000-01-01 00:00:00"));
-    // assertThat(query.list().size(), is(1));
+    Query query = session
+        .getNamedQuery("gov.ca.cwds.rest.api.persistence.cms.OtherClientName.findAllUpdatedAfter")
+        .setDate("after", TIMESTAMP_FORMAT.parse("2000-01-01 00:00:00"));
+    assertThat(query.list().size(), greaterThanOrEqualTo(1));
   }
 
   @Test
   public void testFind() {
-    // TODO: BROKEN TEST!
-    // String thirdId = "123";
-    // OtherClientName found = otherClientNameDao.find(thirdId);
-    // assertThat(found.getThirdId(), is(thirdId));
+    String thirdId = "123";
+    OtherClientName found = otherClientNameDao.find(thirdId);
+    assertThat(found.getThirdId(), is(thirdId));
   }
 
   @Test
   public void testCreate() throws Exception {
-    // TODO: BROKEN TEST!
-    // OtherClientName otherClientName =
-    // new OtherClientName("1", "Gregg", "Hill", "Brian", "1", (short) 1, "1", "125");
+    OtherClientName otherClientName =
+        new OtherClientName("1", "Gregg", "Hill", "Brian", "1", (short) 1, "1", "125");
+    otherClientNameDao.create(otherClientName);
   }
 
   @Test
   public void testCreateExistingEntityException() throws Exception {
-    // TODO: BROKEN TEST!
-    // thrown.expect(EntityExistsException.class);
-    // OtherClientName otherClientName =
-    // new OtherClientName("1", "Gregg", "Hill", "Brian", "1", (short) 1, "1", "123");
-    // otherClientNameDao.create(otherClientName);
+    thrown.expect(EntityExistsException.class);
+    OtherClientName otherClientName =
+        new OtherClientName("1", "Gregg", "Hill", "Brian", "1", (short) 1, "1", "123");
+    otherClientNameDao.create(otherClientName);
   }
 
   @Test
   public void testDelete() {
-    // TODO: BROKEN TEST!
-    // String thirdId = "123";
-    // OtherClientName deleted = otherClientNameDao.delete(thirdId);
-    // assertThat(deleted.getThirdId(), is(thirdId));
+    String thirdId = "123";
+    OtherClientName deleted = otherClientNameDao.delete(thirdId);
+    assertThat(deleted.getThirdId(), is(thirdId));
   }
 
   @Test
   public void testUpdate() throws Exception {
-    // TODO: BROKEN TEST!
-    // OtherClientName otherClientName =
-    // new OtherClientName("1", "Gregory", "Hill", "Brian", "1", (short) 1, "1", "123");
-    // OtherClientName updated = otherClientNameDao.update(otherClientName);
-    // assertThat(updated, is(otherClientName));
+    OtherClientName otherClientName =
+        new OtherClientName("1", "Gregory", "Hill", "Brian", "1", (short) 1, "1", "123");
+    OtherClientName updated = otherClientNameDao.update(otherClientName);
+    assertThat(updated, is(otherClientName));
   }
 
   @Test
   public void testUpdateEntityNotFoundException() throws Exception {
-    // TODO: BROKEN TEST!
-    // thrown.expect(EntityNotFoundException.class);
-    // OtherClientName otherClientName =
-    // new OtherClientName("1", "Gregory", "Hill", "Brian", "1", (short) 1, "1", "ZZZ");
-    // otherClientNameDao.update(otherClientName);
+    thrown.expect(EntityNotFoundException.class);
+    OtherClientName otherClientName =
+        new OtherClientName("1", "Gregory", "Hill", "Brian", "1", (short) 1, "1", "ZZZ");
+    otherClientNameDao.update(otherClientName);
   }
 }
