@@ -1,4 +1,5 @@
 applicationName: CWDS API
+version: ${VERSION:-local}
 
 swagger:
   templateName: swagger.mustache
