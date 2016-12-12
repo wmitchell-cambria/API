@@ -39,7 +39,7 @@ public final class PersonSearchRequest extends DomainObject implements Request {
   /**
    * Default, no-param, no-op ctor. Required by frameworks.
    */
-  // public PersonSearchRequest() {}
+  public PersonSearchRequest() {}
 
   /**
    * JSON DropWizard Constructor.
