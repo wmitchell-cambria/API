@@ -27,6 +27,11 @@ INSERT INTO cwsInt.CLIENT_T(IDENTIFIER, ADPTN_STCD, ALN_REG_NO, BIRTH_DT, BR_FAC
 VALUES ('AaiU7IW0Rt', 'N', ' ', '1972-08-17', ' ', 0, 0, 'N', 'Tumbling', 'Waters', ' ',  'N',	NULL, '2004-08-17', NULL, NULL,	' ', 0,	'M', 0,	0, 'U',	'U', 'N', 0, 'U', ' ', 1313, 'N', 0, 0,	0, 0, 'N', 'N',	' ', 'O', ' ', 'U', '0Rt',	'2004-08-17 08:39:04.891566', ' ', 'Y',	'N', 'U', 'N', 'N', ' ', 'N', 'N', ' ',	'N', 'N', ' ',	NULL,	NULL,	NULL, 'N', NULL, 'N', 'N', 'N',	'N', NULL, NULL, NULL, NULL, 'N', NULL),
 ('AapJGAU04Z', 'N', ' ',	'1995-03-31', ' ',	0,	0,	'N', 'Alexander', 'Zamboanga', ' ',	'N', NULL,	'1998-05-30', NULL, NULL, ' ',	0,	'M', 0,	0, 'U', 'U', 'N', 0, 'U', ' ', 1313, 'N', 0, 0,	0,	0, 'N', 'N', '520565309', 'O', '90', 'U ', '04Z', '1998-05-30 14:18:33.65434', ' ', 'N',	'N', 'U', 'N', 'N', ' ', 'N', 'N', ' ',	'N', 'N', ' ',	NULL, NULL, NULL, 'N', NULL, 'N', 'N', 'N', 'N', NULL, NULL, NULL, NULL, 'N', NULL);
 
+truncate table cwsint.ATTRNY_T immediate;
+INSERT INTO cwsInt.ATTRNY_T (IDENTIFIER, CITY_NM, CWATRY_IND, FAX_NO, FIRST_NM, GVR_ENTC, LANG_TPC, LAST_NM, MSG_EXT_NO, MSG_TEL_NO, MID_INI_NM, NMPRFX_DSC, POSTIL_DSC, PRM_EXT_NO, PRM_TEL_NO, STATE_C, STREET_NM, STREET_NO, SUFX_TLDSC, ZIP_NO, LST_UPD_ID, LST_UPD_TS, BUSNSS_NM, ZIP_SFX_NO, END_DT, ARCASS_IND, EMAIL_ADDR)
+VALUES ('AcjOOPa0BU',' ',' ',0,'Lance',0,1274,'Johnson',0,0,' ',' ','Attorney',0,0,0,' ',' ',' ',0,'0BU','1998-07-30 09:14:09.412017',' ',0,NULL,'N',NULL),
+('AcoWleS0Rx',' ',' ',0,'Jose',0,0,'Perez',0,0,	' ',' ',' ',0,0,0,' ',' ',' ',0,'0Rx','2004-04-27 12:28:08.960772',' ',0,NULL,'N',NULL);
+
 -- Gregg Hill: Adding rows for Other Client Names
 INSERT INTO CWSINT.OCL_NM_T
 	(THIRD_ID, FIRST_NM, LAST_NM, MIDDLE_NM, NMPRFX_DSC, NAME_TPC, SUFX_TLDSC, LST_UPD_ID, LST_UPD_TS, FKCLIENT_T)
@@ -37,3 +42,4 @@ INSERT INTO CWSINT.OCL_NM_T
 	(THIRD_ID, FIRST_NM, LAST_NM, MIDDLE_NM, NMPRFX_DSC, NAME_TPC, SUFX_TLDSC, LST_UPD_ID, LST_UPD_TS, FKCLIENT_T)
 VALUES 
 	('124', 'Billiam', 'Hill', 'Brian', '1',1 , '1', '1', '2000-01-31 14:44:57.709335' , '1');	
+

@@ -1,0 +1,28 @@
+{
+  "archiveAssociationIndicator": "N",
+  "businessName": "businessName",
+  "cityName": "Sacramento",
+  "cwsAttorneyIndicator": "Y",
+  "emailAddress": "lance@email.com",
+  "endDate": "1999-08-15",
+  "faxNumber": 999,
+  "firstName": "Lance",
+  "governmentEntityType": 0,
+  "id": "AcjOOPa0BU",
+  "languageType": 1274,
+  "lastName": "Johnson",
+  "messagePhoneExtensionNumber": 999,
+  "messagePhoneNumber": 999,
+  "middleInitialName": "M",
+  "namePrefixDescription": "Mr",
+  "positionTitleDescription": "Attorney",
+  "primaryPhoneExtensionNumber": 999,
+  "primaryPhoneNumber": 999,
+  "stateCodeType": 0,
+  "streetName": "streetName",
+  "streetNumber": "streetNumber",
+  "suffixTitleDescription": "suffixTitleDescription",
+  "zipNumber": 99000,
+  "zipSuffixNumber": 0
+	
+}
