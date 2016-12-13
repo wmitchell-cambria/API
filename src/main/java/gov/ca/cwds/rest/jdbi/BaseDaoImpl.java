@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.api.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.persistence.ns.Person;
 
 /**
- * Base class for DAO with some common methods
+ * Base class for DAO with some common methods.
  * 
  * @author CWDS API Team
  */
@@ -31,17 +31,16 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     super(sessionFactory);
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.jdbi.BaseDao#findAll()
    */
   @SuppressWarnings("unchecked")
   @Override
   public List<T> findAll() {
-    String namedQueryName = constructNamedQueryName("findAll");
+    final String namedQueryName = constructNamedQueryName("findAll");
     Session session = getSessionFactory().getCurrentSession();
-
 
     Transaction txn = null;
     try {
@@ -59,15 +58,15 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     }
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.jdbi.BaseDao#findAllUpdatedAfter(java.util.Date)
    */
   @SuppressWarnings("unchecked")
   @Override
   public List<T> findAllUpdatedAfter(Date datetime) {
-    String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
+    final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
     Session session = getSessionFactory().getCurrentSession();
 
     Transaction txn = null;

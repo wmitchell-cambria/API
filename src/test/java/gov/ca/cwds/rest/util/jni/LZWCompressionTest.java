@@ -1,18 +1,12 @@
 package gov.ca.cwds.rest.util.jni;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.FileInputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import javax.xml.bind.DatatypeConverter;
 
 
 /**
@@ -88,24 +82,11 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class LZWCompressionTest {
 
+  private static final String TEST_BASE = "/jni/lzw/";
+  private static final String GOOD_LZW = TEST_BASE + "good.lzw";
+  private static final String GOOD_DOC = TEST_BASE + "good.doc";
+
   private LZWEncoder inst;
-
-  public static String checksum(File file) throws IOException, NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("SHA1");
-    try (FileInputStream fis = new FileInputStream(file)) {
-      byte[] dataBytes = new byte[1024];
-      int nread = 0;
-
-      while ((nread = fis.read(dataBytes)) != -1) {
-        md.update(dataBytes, 0, nread);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw e;
-    }
-
-    return DatatypeConverter.printHexBinary(md.digest());
-  }
 
   @Before
   public void setUpBeforeTest() throws Exception {
@@ -125,16 +106,16 @@ public class LZWCompressionTest {
 
     // TODO: verify that temp files are deleted!
     try {
-      final String src = LZWCompressionTest.class.getResource("/jni/lzw/good.lzw").getPath();
-      final String good = LZWCompressionTest.class.getResource("/jni/lzw/good.doc").getPath();
+      final String src = LZWCompressionTest.class.getResource(GOOD_LZW).getPath();
+      final String good = LZWCompressionTest.class.getResource(GOOD_DOC).getPath();
 
       File tgt = File.createTempFile("tgt", ".lzw");
       tgt.deleteOnExit();
 
       inst.fileCopyUncompress(src, tgt.getAbsolutePath());
 
-      final String chkTgt = checksum(tgt);
-      final String chkGood = checksum(new File(good));
+      final String chkTgt = CWDSCompressionUtils.checksum(tgt);
+      final String chkGood = CWDSCompressionUtils.checksum(new File(good));
 
       assertTrue("LZW decompression failed", chkTgt.equals(chkGood));
     } catch (Exception e) {
@@ -154,16 +135,16 @@ public class LZWCompressionTest {
     }
 
     try {
-      final String src = LZWCompressionTest.class.getResource("/jni/lzw/good.doc").getPath();
-      final String good = LZWCompressionTest.class.getResource("/jni/lzw/good.lzw").getPath();
+      final String src = LZWCompressionTest.class.getResource(GOOD_DOC).getPath();
+      final String good = LZWCompressionTest.class.getResource(GOOD_LZW).getPath();
 
       File tgt = File.createTempFile("tgt", ".doc");
       tgt.deleteOnExit();
 
       inst.fileCopyCompress(src, tgt.getAbsolutePath());
 
-      final String chkTgt = checksum(tgt);
-      final String chkGood = checksum(new File(good));
+      final String chkTgt = CWDSCompressionUtils.checksum(tgt);
+      final String chkGood = CWDSCompressionUtils.checksum(new File(good));
 
       assertTrue("LZW compression failed", chkTgt.equals(chkGood));
     } catch (Exception e) {
