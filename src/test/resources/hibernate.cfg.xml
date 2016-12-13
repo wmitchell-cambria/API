@@ -22,8 +22,12 @@
 		<mapping class="gov.ca.cwds.rest.api.persistence.cms.ReferralClient" />
 		<mapping class="gov.ca.cwds.rest.api.persistence.cms.Referral" />
 		<mapping class="gov.ca.cwds.rest.api.persistence.cms.Reporter" />
-		<mapping class="gov.ca.cwds.rest.api.persistence.cms.CrossReport" />
 		<mapping class="gov.ca.cwds.rest.api.persistence.cms.Client" />
 		<mapping class="gov.ca.cwds.rest.api.persistence.cms.OtherClientName" />
+		<mapping class="gov.ca.cwds.rest.api.persistence.cms.Attorney" />
+		<mapping class="gov.ca.cwds.rest.api.persistence.cms.CrossReport" />
+		<mapping class="gov.ca.cwds.rest.api.persistence.cms.CmsDocument" />
+		<mapping class="gov.ca.cwds.rest.api.persistence.cms.CmsDocReferralClient" />
+		<mapping class="gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment"/>
 	</session-factory>
 </hibernate-configuration>
