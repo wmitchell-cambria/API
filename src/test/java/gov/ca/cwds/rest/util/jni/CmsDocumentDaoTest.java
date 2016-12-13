@@ -57,6 +57,7 @@ public class CmsDocumentDaoTest {
   public void setUpBeforeTest() throws Exception {
     // this.uut = new CmsDocumentDao(CmsBaseDaoTest.getSessionFactory());
     this.uut = new CmsDocumentDao(mock(SessionFactory.class));
+    // mock(LZWEncoder.class).
   }
 
   // ===================
