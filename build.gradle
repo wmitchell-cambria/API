@@ -19,6 +19,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'docker'
 apply plugin: 'com.github.johnrengelman.shadow'
 sourceCompatibility = 1.8
+applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/"]
 
 project.ext {
     apiVersion = 0.12
@@ -90,12 +91,27 @@ dependencies {
 
 tasks.withType(Test) {
     enableAssertions = true
-    jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    
+    // These don't work. Docs mistaken?
+    // jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    // jvmArgs '-Djava.library.path=.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+
+    // Set system properties for the test JVM(s).
+    // Gradle passed the literal string '$rootProject.projectDir' ???
+    // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    systemProperty 'java.library.path', '.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
 }
 
 test {
     exclude '**/*IT*'
-    jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+
+    // These don't work. Docs mistaken?
+    // jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+
+    // Set system properties for the test JVM(s).
+    // Gradle passed the literal string '$rootProject.projectDir' ???
+    // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    systemProperty 'java.library.path', '.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
