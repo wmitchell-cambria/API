@@ -80,7 +80,8 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     result = prime * result + ((docHandle == null) ? 0 : docHandle.hashCode());
     result = prime * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
 
-    // NOT PART OF UNIQUE KEY.
+    // 1) NOT part of unique key, 2) potentially large and waste of processing to compute.
+    // 3) if you got this far, well ... ;)
     result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
 
     return result;
@@ -119,7 +120,8 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
       return false;
     }
 
-    // NOT PART OF UNIQUE KEY.
+    // 1) NOT part of unique key, 2) potentially large and waste of processing to compute.
+    // 3) if you got this far, well ... ;)
     if (docBlob == null) {
       if (other.docBlob != null) {
         return false;
@@ -135,6 +137,11 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
   // ACCESSORS:
   // ==================
 
+  /**
+   * Blob segment sequence is a 4-digit, zero left-padded string, starting with "0001".
+   * 
+   * @return segment number
+   */
   public String getSegmentSequence() {
     return segmentSequence;
   }
@@ -143,6 +150,11 @@ public class CmsDocumentBlobSegment implements PersistentObject, Serializable {
     this.segmentSequence = segmentSequence;
   }
 
+  /**
+   * Hex string of this segment's binary data.
+   * 
+   * @return hex string of segment data
+   */
   public String getDocBlob() {
     return docBlob;
   }

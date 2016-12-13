@@ -210,6 +210,10 @@ public class CmsDocument extends CmsPersistentObject {
     return blobSegments;
   }
 
+  public void addBlobSegment(CmsDocumentBlobSegment blobSegment) {
+    this.blobSegments.add(blobSegment);
+  }
+
   public void setBlobSegments(Set<CmsDocumentBlobSegment> blobSegments) {
     this.blobSegments = blobSegments;
   }

@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
-import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
+import gov.ca.cwds.rest.jdbi.BaseDaoImpl;
 import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
-public class CmsDocumentDao extends CrudsDaoImpl<CmsDocument> {
+public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
 
@@ -32,7 +32,7 @@ public class CmsDocumentDao extends CrudsDaoImpl<CmsDocument> {
   }
 
   /**
-   * Decompress (inflate) a document by determining the compression type, assembling blob segments,
+   * De-compress (inflate) a document by determining the compression type, assembling blob segments,
    * and calling appropriate library.
    * 
    * @param doc LZW or PK archive to decompress
@@ -61,7 +61,7 @@ public class CmsDocumentDao extends CrudsDaoImpl<CmsDocument> {
    * PKWare SDK.
    * 
    * <p>
-   * The DB2 SQL returns blob segments as hexadecimal
+   * The DB2 SQL returns blob segments as hexadecimal.
    * </p>
    * 
    * @param doc PK archive to decompress
