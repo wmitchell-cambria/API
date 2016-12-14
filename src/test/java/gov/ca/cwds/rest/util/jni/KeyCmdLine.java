@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.util.jni;
 
-import gov.ca.cwds.rest.util.jni.CmsKeyGenerator.KeyDetail;
+import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
 
 /**
  * Command line tool to call native CWDS key generation library.
@@ -24,7 +24,7 @@ public class KeyCmdLine {
 
   // Test Driver
   public static void main(String[] args) {
-    CmsKeyGenerator inst = new CmsKeyGenerator();
+    KeyJNI inst = new KeyJNI();
 
     if (args[0].startsWith("-d")) {
       // ===================

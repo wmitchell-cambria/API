@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
  * Linux. However, Gradle runs successfully on OS X and Windows. Switch to the Jenkins user with:
  * </p>
  * 
- * <p>
  * <blockquote>
  * 
  * <pre>
@@ -24,14 +23,12 @@ import org.slf4j.LoggerFactory;
  * </pre>
  * 
  * </blockquote>
- * </p>
  * 
  * <p>
  * Run the JUnit manually with the sample command below. Note that jars are copied manually with the
  * sample script, cp_api_libs.sh.
  * </p>
  * 
- * <p>
  * <blockquote>
  * 
  * <pre>
@@ -39,19 +36,17 @@ import org.slf4j.LoggerFactory;
  * </pre>
  * 
  * </blockquote>
- * </p>
  * 
  * <p>
  * <strong>Windows</strong>
  * </p>
- * <p>
  * On Windows systems, use this sample library path: <blockquote>
  * 
+ * <pre>
  * {@code -Djava.library.path=.;/Users/joeschmoe/workspace/API/lib;/Windows/System32}
  * </pre>
  * 
  * </blockquote>
- * </p>
  * 
  * <p>
  * On Windows, check the execution permissions of LZW.dll. Verify that "deny" is disabled and that
@@ -62,7 +57,6 @@ import org.slf4j.LoggerFactory;
  * Force JUnit tests to run against native libraries, loaded or not, with JVM argument
  * </p>
  * 
- * <p>
  * <blockquote>
  * 
  * <pre>
@@ -70,13 +64,12 @@ import org.slf4j.LoggerFactory;
  * </pre>
  * 
  * </blockquote>
- * </p>
  * 
  * @author CWDS API Team
  */
-public class CmsLZWCompressor {
+public class LZWEncoder {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsLZWCompressor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LZWEncoder.class);
 
   private static final boolean classLoaded = loadLibs();
 
@@ -88,7 +81,7 @@ public class CmsLZWCompressor {
    * <ul>
    * <li>Windows: LZW.dll</li>
    * <li>OS X: libLZW.dylib</li>
-   * <li>LinuxlibLZW.so</li>
+   * <li>Linux:libLZW.so</li>
    * </ul>
    * </p>
    * 

@@ -25,9 +25,9 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
  * 
  * @author CWDS API Team
  */
-public class CmsKeyGenerator {
+public class KeyJNI {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(KeyJNI.class);
   private static final boolean classLoaded = loadLibs();
 
   /**
