@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.util.jni;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
 
 //
@@ -22,8 +25,9 @@ import gov.ca.cwds.rest.api.persistence.cms.StaffPerson;
  * 
  * @author CWDS API Team
  */
-public class KeyJNI {
+public class CmsKeyGenerator {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyGenerator.class);
   private static final boolean classLoaded = loadLibs();
 
   /**
@@ -41,11 +45,11 @@ public class KeyJNI {
    * @return true = native libraries load correctly
    */
   private static final boolean loadLibs() {
-    System.out.println("KeyJNI: user.dir=" + System.getProperty("user.dir"));
-    System.out.println("KeyJNI: java.library.path=" + System.getProperty("java.library.path"));
+    LOGGER.info("user.dir=" + System.getProperty("user.dir"));
+    LOGGER.info("java.library.path=" + System.getProperty("java.library.path"));
 
     final boolean forceLoad = "Y".equalsIgnoreCase(System.getProperty("cwds.jni.force", "N"));
-    System.out.println("KeyJNI: cwds.jni.force=" + forceLoad);
+    LOGGER.info("cwds.jni.force=" + forceLoad);
 
     boolean retval = false;
 
@@ -62,19 +66,6 @@ public class KeyJNI {
     }
 
     return retval;
-  }
-
-  /**
-   * Track memory to hunt memory leaks and overall memory consumption.
-   * 
-   * @return free memory in MB
-   */
-  public static long calcMemory() {
-    Runtime runtime = Runtime.getRuntime();
-    long maxMemory = runtime.maxMemory();
-    long allocatedMemory = runtime.totalMemory();
-    long freeMemory = runtime.freeMemory();
-    return (freeMemory + (maxMemory - allocatedMemory)) / 1024L;
   }
 
   /**
@@ -102,34 +93,6 @@ public class KeyJNI {
    * @param kd the key detail
    */
   public native void decomposeKey(String key, KeyDetail kd);
-
-  // Test Driver
-  public static void main(String[] args) {
-    KeyJNI inst = new KeyJNI();
-
-    if (args[0].startsWith("-d")) {
-      // ===================
-      // DECOMPOSE KEY:
-      // ===================
-
-      final long startingMemory = calcMemory();
-      KeyDetail kd = new KeyDetail();
-      inst.decomposeKey(args[1], kd);
-      System.out.println("Java: key=" + kd.key + ", staffId=" + kd.staffId + ", UITimestamp="
-          + kd.UITimestamp + ", PTimestamp=" + kd.PTimestamp);
-      System.out.println("used memory = " + (calcMemory() - startingMemory));
-    } else {
-      // ===================
-      // GENERATE KEY:
-      // ===================
-
-      final long startingMemory = calcMemory();
-      System.out.println("Java: Call JNI generateKey ... ");
-      final String key = inst.generateKey(args[1]);
-      System.out.println("Java: key=" + key);
-      System.out.println("used memory = " + (calcMemory() - startingMemory));
-    }
-  }
 
   public static boolean isClassloaded() {
     return classLoaded;

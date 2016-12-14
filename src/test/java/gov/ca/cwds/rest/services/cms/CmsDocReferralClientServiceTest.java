@@ -13,12 +13,16 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
+import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
 import io.dropwizard.jackson.Jackson;
 
-public class CmsDocumentServiceTest {
+public class CmsDocReferralClientServiceTest {
+
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-  private CmsDocumentService cmsDocumentService;
+
+  private CmsDocReferralClientService svc;
+  private CmsDocReferralClientDao cmsDocReferralClientDao;
   private CmsDocumentDao cmsDocumentDao;
 
   @Rule
@@ -27,7 +31,8 @@ public class CmsDocumentServiceTest {
   @Before
   public void setup() throws Exception {
     cmsDocumentDao = mock(CmsDocumentDao.class);
-    cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
+    cmsDocReferralClientDao = mock(CmsDocReferralClientDao.class);
+    svc = new CmsDocReferralClientService(cmsDocReferralClientDao, cmsDocumentDao);
   }
 
   // find test
@@ -36,7 +41,7 @@ public class CmsDocumentServiceTest {
     // TODO : thrown.expect not working on AssertionError???? WHY???
     // thrown.expect(AssertionError.class);
     try {
-      cmsDocumentService.find("1");
+      svc.find("1");
       Assert.fail("Expected AssertionError");
     } catch (AssertionError e) {
     }
@@ -47,7 +52,7 @@ public class CmsDocumentServiceTest {
     thrown.expect(NotImplementedException.class);
     CmsDocument cmsDocumentDomain = MAPPER
         .readValue(fixture("fixtures/domain/cms/CmsDocument/valid/valid.json"), CmsDocument.class);
-    cmsDocumentService.create(cmsDocumentDomain);
+    svc.create(cmsDocumentDomain);
   }
 
   @Test
@@ -55,13 +60,13 @@ public class CmsDocumentServiceTest {
     thrown.expect(NotImplementedException.class);
     CmsDocument cmsDocumentDomain = MAPPER
         .readValue(fixture("fixtures/domain/cms/CmsDocument/valid/valid.json"), CmsDocument.class);
-    cmsDocumentService.update("testkey", cmsDocumentDomain);
+    svc.update("testkey", cmsDocumentDomain);
   }
 
   @Test
   public void deleteThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    cmsDocumentService.delete("testkey");
+    svc.delete("testkey");
   }
 
   // DRS: CmsDocument constructor doesn't populate blob segments directly from a base64-encoded,
