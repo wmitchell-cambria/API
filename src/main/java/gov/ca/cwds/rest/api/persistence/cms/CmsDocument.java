@@ -119,6 +119,8 @@ public class CmsDocument extends CmsPersistentObject {
     this.docTime = DomainObject.uncookTimeString(cmsDocument.getDocTime());
     this.compressionMethod = cmsDocument.getCompressionMethod();
 
+    // This constructor doesn't populate blob segments directly from a base64-encoded, decompressed
+    // document because that translation requires compression, which doesn't belong here.;)
   }
 
   /**
