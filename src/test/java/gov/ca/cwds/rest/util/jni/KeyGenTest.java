@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.util.jni.CmsKeyGenerator.KeyDetail;
+import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
 
 /**
  * This JNI native library runs correctly on Linux Jenkins when libLZW.so and libstdc++.so.6 are
@@ -64,11 +64,11 @@ public class KeyGenTest {
 
   private static final int GOOD_KEY_LEN = 10;
 
-  private CmsKeyGenerator inst;
+  private KeyJNI inst;
 
   @Before
   public void setUpBeforeTest() throws Exception {
-    this.inst = new CmsKeyGenerator();
+    this.inst = new KeyJNI();
   }
 
   /**
@@ -96,7 +96,7 @@ public class KeyGenTest {
    * @return
    */
   protected boolean doesPlatformSupport() {
-    return (this.inst == null || !CmsKeyGenerator.isClassloaded());
+    return (this.inst == null || !KeyJNI.isClassloaded());
   }
 
   // ===================

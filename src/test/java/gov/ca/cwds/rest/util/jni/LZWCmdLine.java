@@ -22,7 +22,7 @@ public class LZWCmdLine {
 
   // Test Driver
   public static void main(String[] args) {
-    CmsLZWCompressor inst = new CmsLZWCompressor();
+    LZWEncoder inst = new LZWEncoder();
 
     if (args[0].startsWith("-d")) { // De-compress target file.
       final long startingMemory = calcMemory();

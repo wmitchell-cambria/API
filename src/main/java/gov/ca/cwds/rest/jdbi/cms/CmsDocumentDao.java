@@ -16,7 +16,7 @@ import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.jdbi.BaseDaoImpl;
 import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
-import gov.ca.cwds.rest.util.jni.CmsLZWCompressor;
+import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
 public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
@@ -42,7 +42,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     String retval = "";
 
     if (doc.getCompressionMethod().endsWith("01")) {
-      if (!CmsLZWCompressor.isClassloaded()) {
+      if (!LZWEncoder.isClassloaded()) {
         LOGGER.warn("LZW compression not enabled!");
       } else {
         retval = CmsDocumentDao.decompressLZW(doc);
@@ -97,7 +97,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    */
   protected static String decompressLZW(gov.ca.cwds.rest.api.persistence.cms.CmsDocument doc) {
     String retval = "";
-    CmsLZWCompressor lzw = new CmsLZWCompressor();
+    LZWEncoder lzw = new LZWEncoder();
     try {
       File src = File.createTempFile("src", ".lzw");
       src.deleteOnExit();

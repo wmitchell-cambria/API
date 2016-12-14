@@ -15,11 +15,11 @@ public class LZWCompressionTest {
   private static final String GOOD_LZW = TEST_BASE + "good.lzw";
   private static final String GOOD_DOC = TEST_BASE + "good.doc";
 
-  private CmsLZWCompressor inst;
+  private LZWEncoder inst;
 
   @Before
   public void setUpBeforeTest() throws Exception {
-    this.inst = new CmsLZWCompressor();
+    this.inst = new LZWEncoder();
   }
 
   // ===================
@@ -28,7 +28,7 @@ public class LZWCompressionTest {
 
   @Test
   public void testDecompressGood() {
-    if (this.inst == null || !CmsLZWCompressor.isClassloaded()) {
+    if (this.inst == null || !LZWEncoder.isClassloaded()) {
       // Build platform does not yet support this test.
       return;
     }
@@ -58,7 +58,7 @@ public class LZWCompressionTest {
 
   @Test
   public void testCompressGood() {
-    if (this.inst == null || !CmsLZWCompressor.isClassloaded()) {
+    if (this.inst == null || !LZWEncoder.isClassloaded()) {
       // Build platform does not yet support this test.
       return;
     }

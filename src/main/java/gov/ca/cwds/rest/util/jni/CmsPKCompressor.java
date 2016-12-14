@@ -24,7 +24,7 @@ import com.pkware.deflate.InflateInputStream;
  * 
  * <p>
  * <strong>NOTE: </strong>This class only works with PK-compressed docs, not the LZW variable 15-bit
- * algorithm. For the latter, see {@link CmsLZWCompressor}.
+ * algorithm. For the latter, see {@link LZWEncoder}.
  * </p>
  *
  * <p>
@@ -53,7 +53,7 @@ import com.pkware.deflate.InflateInputStream;
  * </ul>
  * 
  * @author CWDS API Team
- * @see CmsLZWCompressor
+ * @see LZWEncoder
  */
 public class CmsPKCompressor implements CWDSPKLicense {
 
