@@ -52,14 +52,17 @@ public class Address extends DomainObject implements Request, Response {
     this.zip = zip;
   }
 
-
+  /**
+   * Construct from persistence class
+   * 
+   * @param address persistence level address object
+   */
   public Address(gov.ca.cwds.rest.api.persistence.ns.Address address) {
     this.street_address = address.getStreetAddress();
     this.city = address.getCity();
     this.state = address.getState();
     this.zip = address.getZip();
   }
-
 
   /**
    * @return the street_address
@@ -89,8 +92,8 @@ public class Address extends DomainObject implements Request, Response {
     return zip;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#hashCode()
    */
@@ -105,8 +108,8 @@ public class Address extends DomainObject implements Request, Response {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#equals(java.lang.Object)
    */

@@ -23,6 +23,9 @@ public class ScreeningResponse extends Screening implements Response {
   @JsonProperty("participants")
   private Set<Person> participants;
 
+  public ScreeningResponse() {
+    super();
+  }
 
   /**
    * Constructor
@@ -95,13 +98,13 @@ public class ScreeningResponse extends Screening implements Response {
     return participants;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
@@ -109,19 +112,25 @@ public class ScreeningResponse extends Screening implements Response {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+
+    // if (getClass() != obj.getClass())
+    // return false;
+
+    if (!(obj instanceof ScreeningResponse)) {
       return false;
+    }
+
     ScreeningResponse other = (ScreeningResponse) obj;
     if (address == null) {
       if (other.address != null)
@@ -133,8 +142,8 @@ public class ScreeningResponse extends Screening implements Response {
         return false;
     } else if (!participants.equals(other.participants))
       return false;
+
     return true;
   }
-
 
 }

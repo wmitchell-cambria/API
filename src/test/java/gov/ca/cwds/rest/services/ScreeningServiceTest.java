@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -32,15 +33,17 @@ import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
+import gov.ca.cwds.rest.api.domain.es.PersonSearchRequest;
 import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class ScreeningServiceTest {
   private ScreeningService screeningService;
   private ScreeningDao screeningDao;
   private PersonService personService;
-
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -74,7 +77,6 @@ public class ScreeningServiceTest {
         "First screening", "accept_for_investigation", date, "first narrative", address,
         persistentPersonSetBuilder.build());
 
-
     ImmutableSet.Builder<Person> domainPersonSetBuilder = ImmutableSet.builder();
     domainPersonSetBuilder.add(bart).add(maggie);
 
@@ -88,7 +90,6 @@ public class ScreeningServiceTest {
 
     Response found = screeningService.find(123L);
     assertThat(found.getClass(), is(ScreeningResponse.class));
-
     assertThat(found, is(expected));
   }
 
@@ -112,14 +113,12 @@ public class ScreeningServiceTest {
 
     Response found = screeningService.find(123L);
     assertThat(found.getClass(), is(ScreeningResponse.class));
-
     assertThat(found, is(expected));
   }
 
   @Test
   public void findReturnsNullWhenNotFound() throws Exception {
     Response found = screeningService.find(33L);
-
     assertThat(found, is(nullValue()));
   }
 
@@ -179,7 +178,6 @@ public class ScreeningServiceTest {
 
     PostedScreening expected = new PostedScreening(1L, "some_reference");
     PostedScreening returned = screeningService.create(request);
-
     assertThat(returned, is(expected));
   }
 
@@ -265,15 +263,12 @@ public class ScreeningServiceTest {
         new gov.ca.cwds.rest.api.persistence.ns.Screening(1L, screeningRequest,
             new Address(domainAddress, null), people, null);
 
-
     when(screeningDao.find(new Long(123))).thenReturn(screening);
     when(personService.find(1L)).thenReturn(bart);
     when(personService.find(2L)).thenReturn(maggie);
     when(screeningDao.update(any())).thenReturn(screening);
 
     ScreeningResponse expected = new ScreeningResponse(screening, people);
-
-
     ScreeningResponse updated = screeningService.update(1L, screeningRequest);
     assertThat(updated, is(expected));
   }
@@ -326,4 +321,57 @@ public class ScreeningServiceTest {
     } catch (AssertionError e) {
     }
   }
+
+  @Test
+  public void equalsHashCodeWork() {
+    // Trivial objects.
+    ScreeningResponse one = new ScreeningResponse();
+    ScreeningResponse two = new ScreeningResponse();
+    gov.ca.cwds.rest.api.domain.Screening parent = new gov.ca.cwds.rest.api.domain.Screening();
+    gov.ca.cwds.rest.api.domain.PostedScreening sibling =
+        new gov.ca.cwds.rest.api.domain.PostedScreening();
+
+    System.out.println("equals: " + one.equals(two));
+    System.out.println("Objects.equals: one=>two: " + Objects.equals(one, two));
+    System.out.println("Objects.equals: one=>sibling: " + Objects.equals(one, parent));
+    System.out.println("Objects.equals: one=>child: " + Objects.equals(one, sibling));
+
+    System.out.println("hash: one: " + one.hashCode() + ", two: " + two.hashCode());
+
+    // Questions.
+    // EqualsVerifier claims that a trivial superclass equals this class, but java.util.Objects
+    // disproves that claim.
+    // That assertion *could be valid*, if a parent class' key *also* defines a child class's key,
+    // but for domain classes, inheritance just reduces duplication of columns.
+    //
+    // In other words, if you stored different class variations of in a single collection, then yes,
+    // these tests would matter, but doesn't always apply to API. For instance, you would *never*
+    // mix and match domain classes for the same resource or ever mix persistence classes in the
+    // same collection.
+
+    // "does not equal superclass instance".
+    // Um, it better not!!
+    // EqualsVerifier.forClass(ScreeningResponse.class).suppress(Warning.NONFINAL_FIELDS).verify();
+
+    // Subclass: object is not equal to an instance of a trivial subclass with equal fields:
+    // Consider making the class final.
+
+    // EqualsVerifier.forClass(ScreeningResponse.class).suppress(Warning.NONFINAL_FIELDS)
+    // .withRedefinedSuperclass().verify();
+
+    // EqualsVerifier.forClass(ScreeningResponse.class).withRedefinedSuperclass()
+    // .suppress(Warning.TRANSIENT_FIELDS).verify();
+
+    // EqualsVerifier.forClass(ScreeningResponse.class).suppress(Warning.NONFINAL_FIELDS,
+    // Warning.NULL_FIELDS, Warning.ANNOTATION, Warning.STRICT_INHERITANCE).verify();
+
+    // EqualsVerifier.forClass(ScreeningResponse.class)
+    // .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS, Warning.STRICT_INHERITANCE)
+    // .withRedefinedSuperclass().withRedefinedSubclass(ScreeningResponse.class).verify();
+
+    // EqualsVerifier.forClass(ScreeningResponse.class)
+    // .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS).withRedefinedSuperclass()
+    // .verify();
+  }
+
 }
