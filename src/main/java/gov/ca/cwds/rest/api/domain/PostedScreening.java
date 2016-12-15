@@ -22,7 +22,13 @@ public class PostedScreening extends ScreeningResponse {
   private long id;
 
   /**
-   * 
+   * Default no-op constructor
+   */
+  public PostedScreening() {
+    super();
+  }
+
+  /**
    * Constructor
    * 
    * @param id The id
@@ -49,7 +55,6 @@ public class PostedScreening extends ScreeningResponse {
     this.id = id;
   }
 
-
   /**
    * Constructor
    * 
@@ -67,12 +72,39 @@ public class PostedScreening extends ScreeningResponse {
   // this.id = screening.getId();
   // }
 
-
   /**
    * @return the id
    */
   public long getId() {
     return id;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + (int) (id ^ (id >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+
+    // if (getClass() != obj.getClass())
+    // return false;
+
+    if (!(obj instanceof PostedScreening)) {
+      return false;
+    }
+
+    PostedScreening other = (PostedScreening) obj;
+    if (id != other.id)
+      return false;
+    return true;
   }
 
 }
