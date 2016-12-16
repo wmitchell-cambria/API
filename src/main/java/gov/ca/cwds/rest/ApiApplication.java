@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.flywaydb.core.Flyway;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
@@ -28,6 +29,7 @@ import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.api.persistence.ns.Person;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.elasticsearch.db.ElasticsearchDao;
+import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.jdbi.cms.AllegationDao;
 import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
@@ -170,6 +172,7 @@ public class ApiApplication extends Application<ApiConfiguration> {
     environment.jersey().getResourceConfig().packages(getClass().getPackage().getName())
         .register(DeclarativeLinkingFeature.class);
 
+    environment.servlets().setSessionHandler(new SessionHandler());
     LOGGER.info("Application name: {}", configuration.getApplicationName());
     ApiEnvironment apiEnvironment = new ApiEnvironment(environment);
 
@@ -190,6 +193,14 @@ public class ApiApplication extends Application<ApiConfiguration> {
 
     LOGGER.info("Configuring SWAGGER");
     configureSwagger(configuration, apiEnvironment);
+
+    LOGGER.info("Registering Filters");
+    registerFilters(environment);
+  }
+
+  public void registerFilters(final Environment environment) {
+    environment.servlets().addFilter("AuditAndLoggingFilter", new RequestResponseLoggingFilter())
+        .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
   }
 
   protected void registerHealthChecks(final ApiEnvironment apiEnvironment) {}
