@@ -19,7 +19,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'docker'
 apply plugin: 'com.github.johnrengelman.shadow'
 sourceCompatibility = 1.8
-applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/"]
+applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib/:/var/lib/jenkins/workspace/API/lib/:/usr/local/lib/"]
 
 project.ext {
     apiVersion = 0.12
@@ -103,7 +103,7 @@ tasks.withType(Test) {
     // Set system properties for the test JVM(s).
     // Gradle passed the literal string '$rootProject.projectDir' ???
     // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
-    systemProperty 'java.library.path', '.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    systemProperty 'java.library.path', '.:./lib/:/var/lib/jenkins/workspace/API/lib/:/usr/local/lib/'
 }
 
 test {
@@ -115,7 +115,7 @@ test {
     // Set system properties for the test JVM(s).
     // Gradle passed the literal string '$rootProject.projectDir' ???
     // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
-    systemProperty 'java.library.path', '.:./lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    systemProperty 'java.library.path', '.:./lib/:/var/lib/jenkins/workspace/API/lib/:/usr/local/lib/'
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
