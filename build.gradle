@@ -24,7 +24,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib/:/var/lib/jenkins/work
 project.ext {
     apiVersion = 0.12
     configPath = "$rootProject.projectDir/config/"
-    dropwizardVersion = "1.0.0-rc4"
+    dropwizardVersion = "1.0.5"
     dropwizardFlywayVersion = "1.0.0-1"
     metricsVersion = "3.1.0"
     dropwizardSwaggerVersion = "1.0.0-1"
@@ -68,6 +68,9 @@ dependencies {
 	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
     compile group: 'org.elasticsearch', name: 'elasticsearch', version:  '2.3.5'
 	compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.22'
+	//compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
+	compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.0.2'
+	
     
 	
     compile fileTree(dir: 'lib', include: ['*.jar'])

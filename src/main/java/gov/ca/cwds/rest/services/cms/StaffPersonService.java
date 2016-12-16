@@ -8,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.cms.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
@@ -33,6 +35,7 @@ public class StaffPersonService implements CrudsService {
    * @param staffPersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.StaffPerson} objects.
    */
+  @Inject
   public StaffPersonService(StaffPersonDao staffPersonDao) {
     this.staffPersonDao = staffPersonDao;
   }

@@ -17,6 +17,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.PersonServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Person;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -47,7 +50,8 @@ public class PersonResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public PersonResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public PersonResource(@PersonServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

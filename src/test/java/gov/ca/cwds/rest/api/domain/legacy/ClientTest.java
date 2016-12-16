@@ -47,7 +47,6 @@ public class ClientTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   @SuppressWarnings("unused")
   private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
-  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
 
   @Before
   public void setup() {
@@ -55,6 +54,7 @@ public class ClientTest {
     try {
       Client vc = validClient();
 
+      @SuppressWarnings("rawtypes")
       CrudsDao crudsDao = mock(CrudsDao.class);
       DataAccessEnvironment.register(gov.ca.cwds.rest.api.persistence.cms.Client.class, crudsDao);
       when(crudsDao.find(any()))

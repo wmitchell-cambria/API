@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.AllegationServieBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -47,7 +50,8 @@ public class AllegationResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public AllegationResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public AllegationResource(@AllegationServieBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

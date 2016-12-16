@@ -1,9 +1,12 @@
 package gov.ca.cwds.rest.jdbi.ns;
 
+import org.hibernate.SessionFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.NsSessionFactory;
 import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
-
-import org.hibernate.SessionFactory;
 
 /**
  * Address DAO
@@ -12,7 +15,13 @@ import org.hibernate.SessionFactory;
  */
 public class AddressDao extends CrudsDaoImpl<Address> {
 
-  public AddressDao(SessionFactory sessionFactory) {
+  /**
+   * Constructor
+   * 
+   * @param sessionFactory The session factory
+   */
+  @Inject
+  public AddressDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

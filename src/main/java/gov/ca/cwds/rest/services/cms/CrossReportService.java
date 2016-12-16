@@ -1,13 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
-import gov.ca.cwds.rest.jdbi.Dao;
-import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
-import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.util.IdGenerator;
-
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -15,6 +7,16 @@ import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.persistence.cms.CrossReport;
+import gov.ca.cwds.rest.jdbi.Dao;
+import gov.ca.cwds.rest.jdbi.cms.CrossReportDao;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.util.IdGenerator;
 
 /**
  * Business layer object to work on {@link CrossReport}
@@ -32,6 +34,7 @@ public class CrossReportService implements CrudsService {
    * @param crossReportDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.CrossReport} objects.
    */
+  @Inject
   public CrossReportService(CrossReportDao crossReportDao) {
     this.crossReportDao = crossReportDao;
   }
@@ -101,7 +104,8 @@ public class CrossReportService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.cms.CrossReport update(Serializable primaryKey, Request request) {
+  public gov.ca.cwds.rest.api.domain.cms.CrossReport update(Serializable primaryKey,
+      Request request) {
     assert (request instanceof gov.ca.cwds.rest.api.domain.cms.CrossReport);
     gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport =
         ((gov.ca.cwds.rest.api.domain.cms.CrossReport) request);

@@ -12,12 +12,20 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.api.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.jdbi.BaseDaoImpl;
 import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
+/**
+ * 
+ * 
+ * @author CWDS API Team
+ */
 public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
@@ -27,7 +35,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * 
    * @param sessionFactory The sessionFactory
    */
-  public CmsDocumentDao(SessionFactory sessionFactory) {
+  @Inject
+  public CmsDocumentDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

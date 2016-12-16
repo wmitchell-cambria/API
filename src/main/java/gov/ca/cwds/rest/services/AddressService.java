@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -25,6 +27,7 @@ public class AddressService implements CrudsService {
    * @param addressDao The {@link Dao} handling {@link gov.ca.cwds.rest.api.persistence.ns.Address}
    *        objects.
    */
+  @Inject
   public AddressService(AddressDao addressDao) {
     this.addressDao = addressDao;
   }

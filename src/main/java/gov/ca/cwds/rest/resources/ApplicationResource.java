@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import gov.ca.cwds.rest.api.ApiException;
 import io.swagger.annotations.Api;
@@ -33,7 +35,9 @@ public class ApplicationResource {
    * @param applicationName The name of the application
    * @param version The version of the api
    */
-  public ApplicationResource(String applicationName, String version) {
+  @Inject
+  public ApplicationResource(@Named("app.name") String applicationName,
+      @Named("app.version") String version) {
     this.applicationName = applicationName;
     this.version = version;
 

@@ -7,6 +7,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
@@ -34,6 +36,7 @@ public class CmsDocReferralClientService implements CrudsService {
    * @param dao The referral client document DAO
    * @param docDao The document blob DAO
    */
+  @Inject
   public CmsDocReferralClientService(CmsDocReferralClientDao dao, CmsDocumentDao docDao) {
     this.dao = dao;
     this.docDao = docDao;

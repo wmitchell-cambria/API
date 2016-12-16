@@ -8,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
@@ -33,6 +35,7 @@ public class ReferralService implements CrudsService {
    * @param referralDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.Referral} objects.
    */
+  @Inject
   public ReferralService(ReferralDao referralDao) {
     this.referralDao = referralDao;
   }
@@ -101,8 +104,7 @@ public class ReferralService implements CrudsService {
    * gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public gov.ca.cwds.rest.api.domain.cms.Referral update(Serializable primaryKey,
-      Request request) {
+  public gov.ca.cwds.rest.api.domain.cms.Referral update(Serializable primaryKey, Request request) {
     assert (primaryKey instanceof String);
     assert (request instanceof gov.ca.cwds.rest.api.domain.cms.Referral);
     gov.ca.cwds.rest.api.domain.cms.Referral referral =

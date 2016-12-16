@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.ReferralServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -47,7 +50,8 @@ public class ReferralResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public ReferralResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public ReferralResource(@ReferralServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

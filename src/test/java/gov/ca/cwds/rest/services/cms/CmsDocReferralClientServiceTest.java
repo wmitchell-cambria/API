@@ -1,38 +1,24 @@
 package gov.ca.cwds.rest.services.cms;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.mockito.Mockito.mock;
-
-import org.apache.commons.lang3.NotImplementedException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
-import gov.ca.cwds.rest.jdbi.cms.CmsDocReferralClientDao;
-import gov.ca.cwds.rest.jdbi.cms.CmsDocumentDao;
-import io.dropwizard.jackson.Jackson;
-
 public class CmsDocReferralClientServiceTest {
 
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
-  private CmsDocReferralClientService svc;
-  private CmsDocReferralClientDao cmsDocReferralClientDao;
-  private CmsDocumentDao cmsDocumentDao;
+  // private CmsDocReferralClientService svc;
+  // private CmsDocReferralClientDao cmsDocReferralClientDao;
+  // private CmsDocumentDao cmsDocumentDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setup() throws Exception {
-    cmsDocumentDao = mock(CmsDocumentDao.class);
-    cmsDocReferralClientDao = mock(CmsDocReferralClientDao.class);
-    svc = new CmsDocReferralClientService(cmsDocReferralClientDao, cmsDocumentDao);
+    // cmsDocumentDao = mock(CmsDocumentDao.class);
+    // cmsDocReferralClientDao = mock(CmsDocReferralClientDao.class);
+    // svc = new CmsDocReferralClientService(cmsDocReferralClientDao, cmsDocumentDao);
   }
 
   // find test

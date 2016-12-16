@@ -33,12 +33,9 @@ import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.ScreeningResponse;
-import gov.ca.cwds.rest.api.domain.es.PersonSearchRequest;
 import gov.ca.cwds.rest.api.persistence.ns.Address;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.ns.ScreeningDao;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 
 public class ScreeningServiceTest {
   private ScreeningService screeningService;

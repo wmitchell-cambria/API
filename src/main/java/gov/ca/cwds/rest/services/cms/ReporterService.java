@@ -1,13 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
-import gov.ca.cwds.rest.api.persistence.cms.Reporter;
-import gov.ca.cwds.rest.jdbi.Dao;
-import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
-import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.ServiceException;
-
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -15,6 +7,16 @@ import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
+import gov.ca.cwds.rest.api.persistence.cms.Reporter;
+import gov.ca.cwds.rest.jdbi.Dao;
+import gov.ca.cwds.rest.jdbi.cms.ReporterDao;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Business layer object to work on {@link Reporter}
@@ -32,6 +34,7 @@ public class ReporterService implements CrudsService {
    * @param reporterDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.Reporter} objects.
    */
+  @Inject
   public ReporterService(ReporterDao reporterDao) {
     this.reporterDao = reporterDao;
   }

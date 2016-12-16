@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.SwaggerConfiguration;
 import gov.ca.cwds.rest.views.SwaggerView;
 import io.swagger.annotations.Api;
@@ -18,6 +20,7 @@ import io.swagger.annotations.Api;
 public class SwaggerResource implements Resource {
   private SwaggerConfiguration swaggerConfiguration;
 
+  @Inject
   public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
     super();
     this.swaggerConfiguration = swaggerConfiguration;
