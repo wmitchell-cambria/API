@@ -66,7 +66,9 @@ dependencies {
 	compile group: "javax.el", name: "javax.el-api", version: "2.2.4"
 	compile group: "org.glassfish.web", name: "javax.el", version: "2.2.4"
 	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
-    compile 'org.elasticsearch:elasticsearch:2.3.5'
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version:  '2.3.5'
+	compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.22'
+    
 	
     compile fileTree(dir: 'lib', include: ['*.jar'])
     
@@ -76,7 +78,6 @@ dependencies {
 
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
 
-    testCompile "junit:junit:4.12"
     testCompile 'org.mockito:mockito-core:2.0.54-beta'
  	testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
  	
