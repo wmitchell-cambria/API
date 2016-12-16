@@ -1,13 +1,27 @@
 package gov.ca.cwds.rest.jdbi.cms;
 
+import org.hibernate.SessionFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.rest.api.persistence.cms.Reporter;
 import gov.ca.cwds.rest.jdbi.BaseDaoImpl;
 
-import org.hibernate.SessionFactory;
-
+/**
+ * 
+ * 
+ * @author CWDS API Team
+ */
 public class ReporterDao extends BaseDaoImpl<Reporter> {
 
-  public ReporterDao(SessionFactory sessionFactory) {
+  /**
+   * Constructor
+   * 
+   * @param sessionFactory The session factory
+   */
+  @Inject
+  public ReporterDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

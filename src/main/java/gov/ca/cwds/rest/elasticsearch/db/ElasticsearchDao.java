@@ -16,6 +16,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESFieldSearchEntry;
@@ -45,7 +48,7 @@ public class ElasticsearchDao {
    * 
    * @param host The host
    * @param port The port
-   * @param clusterName The cluster name // * @param clientName
+   * @param clusterName The cluster name
    */
   public ElasticsearchDao(String host, String port, String clusterName) {
     this.host = host;
@@ -58,7 +61,8 @@ public class ElasticsearchDao {
    * 
    * @param elasticsearchConfiguration The configuration
    */
-  public ElasticsearchDao(gov.ca.cwds.rest.ElasticsearchConfiguration elasticsearchConfiguration) {
+  @Inject
+  public ElasticsearchDao(ElasticsearchConfiguration elasticsearchConfiguration) {
     this.host = elasticsearchConfiguration.getElasticsearchHost();
     this.clusterName = elasticsearchConfiguration.getElasticsearchCluster();
     this.port = elasticsearchConfiguration.getElasticsearchPort();

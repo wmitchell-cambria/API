@@ -11,6 +11,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Person;
@@ -39,6 +41,7 @@ public class ScreeningService implements CrudsService {
    *        {@link gov.ca.cwds.rest.api.persistence.ns.Screening} objects.
    * @param personService The person service
    */
+  @Inject
   public ScreeningService(ScreeningDao screeningDao, PersonService personService) {
     this.screeningDao = screeningDao;
     this.personService = personService;

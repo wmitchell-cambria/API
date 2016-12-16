@@ -13,12 +13,14 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.PersonServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
 import gov.ca.cwds.rest.api.domain.ScreeningRequest;
 import gov.ca.cwds.rest.api.domain.es.PersonSearchRequest;
 import gov.ca.cwds.rest.services.PersonService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -49,7 +51,8 @@ public class PersonSearchResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public PersonSearchResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public PersonSearchResource(@PersonServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -35,6 +36,7 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
    * 
    * @param crudsService The crudsService for this resource.
    */
+  @Inject
   public ServiceBackedResourceDelegate(CrudsService crudsService) {
     this.service = crudsService;
   }

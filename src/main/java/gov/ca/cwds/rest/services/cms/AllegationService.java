@@ -8,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
@@ -33,6 +35,7 @@ public class AllegationService implements CrudsService {
    * @param allegationDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.Allegation} objects.
    */
+  @Inject
   public AllegationService(AllegationDao allegationDao) {
     this.allegationDao = allegationDao;
   }

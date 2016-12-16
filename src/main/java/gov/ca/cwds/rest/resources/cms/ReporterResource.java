@@ -1,14 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REPORTER;
-import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -24,12 +16,24 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.ReporterServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.resources.ResourceDelegate;
+import io.dropwizard.hibernate.UnitOfWork;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * A resource providing a RESTful interface for {@link Reporter}. It delegates functions to
- * {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but with @see
- * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
- * Annotations</a> and <a
- * href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
+ * {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but
+ * with @see <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * Annotations</a> and
+ * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
  * 
  * @author CWDS API Team
@@ -46,7 +50,8 @@ public class ReporterResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public ReporterResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public ReporterResource(@ReporterServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 
@@ -63,8 +68,8 @@ public class ReporterResource {
   @ApiResponses(value = {@ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find reporter by referral id", response = Reporter.class, code = 200)
-  public Response get(@PathParam("referralId") @ApiParam(required = true,
-      value = "The referral id", example = "abcdefghif") String referralId) {
+  public Response get(@PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+      example = "abcdefghif") String referralId) {
     return resourceDelegate.get(referralId);
   }
 
@@ -120,9 +125,10 @@ public class ReporterResource {
       @ApiResponse(code = 422, message = "Unable to validate Reporter")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Update Reporter", code = HttpStatus.SC_NO_CONTENT, response = Object.class)
-  public Response update(@PathParam("referralId") @ApiParam(required = true,
-      value = "The referral id", example = "abcdefghif") String referralId, @Valid @ApiParam(
-      hidden = false, required = true) Reporter reporter) {
+  public Response update(
+      @PathParam("referralId") @ApiParam(required = true, value = "The referral id",
+          example = "abcdefghif") String referralId,
+      @Valid @ApiParam(hidden = false, required = true) Reporter reporter) {
     return resourceDelegate.update(referralId, reporter);
   }
 }

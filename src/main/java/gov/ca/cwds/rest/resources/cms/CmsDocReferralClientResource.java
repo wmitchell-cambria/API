@@ -17,6 +17,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.CmsDocumentReferralClientServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -49,7 +52,9 @@ public class CmsDocReferralClientResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public CmsDocReferralClientResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public CmsDocReferralClientResource(
+      @CmsDocumentReferralClientServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

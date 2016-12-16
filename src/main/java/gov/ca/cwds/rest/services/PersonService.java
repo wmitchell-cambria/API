@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.Request;
@@ -43,6 +44,7 @@ public class PersonService implements CrudsService {
    *        objects.
    * @param elasticsearchDao the Elasticsearch DAO
    */
+  @Inject
   public PersonService(PersonDao personDao, ElasticsearchDao elasticsearchDao) {
     this.personDao = personDao;
     this.elasticsearchDao = elasticsearchDao;

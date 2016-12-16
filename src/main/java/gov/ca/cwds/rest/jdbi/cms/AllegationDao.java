@@ -2,6 +2,9 @@ package gov.ca.cwds.rest.jdbi.cms;
 
 import org.hibernate.SessionFactory;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.rest.api.persistence.cms.Allegation;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
 
@@ -12,7 +15,8 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
    * 
    * @param sessionFactory The sessionFactory
    */
-  public AllegationDao(SessionFactory sessionFactory) {
+  @Inject
+  public AllegationDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 }

@@ -9,6 +9,8 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.persistence.cms.ReferralClient;
 import gov.ca.cwds.rest.jdbi.Dao;
@@ -39,6 +41,7 @@ public class ReferralClientService implements CrudsService {
    * @param referralClientDao The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.api.persistence.cms.ReferralClient} objects.
    */
+  @Inject
   public ReferralClientService(ReferralClientDao referralClientDao) {
     this.referralClientDao = referralClientDao;
   }

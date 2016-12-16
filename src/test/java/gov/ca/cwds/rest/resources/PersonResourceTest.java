@@ -2,23 +2,16 @@ package gov.ca.cwds.rest.resources;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import java.util.List;
-
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.domain.Person;
-import io.dropwizard.jersey.validation.ValidationErrorMessage;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
@@ -28,7 +21,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  */
 public class PersonResourceTest {
-  private static final String ROOT_RESOURCE = "/people/";
   private static final String FOUND_RESOURCE = "/people/1";
 
   @Rule

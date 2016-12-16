@@ -6,6 +6,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
@@ -28,6 +30,7 @@ public class CmsDocumentService implements CrudsService {
    * 
    * @param dao The {@link Dao} handling {@link CmsDocumentDao} objects.
    */
+  @Inject
   public CmsDocumentService(CmsDocumentDao dao) {
     this.dao = dao;
   }

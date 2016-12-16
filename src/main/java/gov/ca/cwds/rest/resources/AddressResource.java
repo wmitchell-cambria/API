@@ -15,6 +15,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.AddressServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -46,7 +49,8 @@ public class AddressResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public AddressResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public AddressResource(@AddressServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

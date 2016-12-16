@@ -9,9 +9,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -28,7 +26,6 @@ import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient.CmsDocReferralClientDetail;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient.CmsDocReferralClientDocument;
 import gov.ca.cwds.rest.api.persistence.cms.Referral;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.jdbi.CrudsDao;
 import gov.ca.cwds.rest.jdbi.DataAccessEnvironment;
 import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
@@ -38,8 +35,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 public class CmsDocReferralClientTest {
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CMS_DOC_REFRRAL_CLIENT + "/";
-
   private static final CmsDocReferralClientResource mockedCmsDocReferralClientResource =
       mock(CmsDocReferralClientResource.class);
 
@@ -48,8 +43,6 @@ public class CmsDocReferralClientTest {
       ResourceTestRule.builder().addResource(mockedCmsDocReferralClientResource).build();
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private CmsDocReferralClient validCmsDocReferralClient = validCmsDocReferralClient();
-
-  private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   public CmsDocReferralClientTest() throws ParseException {}
 

@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.ScreeningServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.PostedScreening;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningReference;
@@ -51,7 +54,8 @@ public class ScreeningResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public ScreeningResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public ScreeningResource(@ScreeningServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

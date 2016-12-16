@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.CmsReferralServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.CmsReferral;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -43,7 +46,9 @@ public class JerseyCmsReferralResource implements CmsReferralResource {
    * 
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
-  public JerseyCmsReferralResource(ResourceDelegate resourceDelegate) {
+  @Inject
+  public JerseyCmsReferralResource(
+      @CmsReferralServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 

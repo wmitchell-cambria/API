@@ -30,8 +30,9 @@ import org.bouncycastle.util.io.TeeOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import gov.ca.cwds.logging.AuditLogger;
-import gov.ca.cwds.logging.AuditLoggerImpl;
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
@@ -43,11 +44,23 @@ import gov.ca.cwds.rest.api.ApiException;
 public class RequestResponseLoggingFilter implements Filter {
   private static final Logger LOGGER = LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
 
+  private AuditLogger auditLogger;
+
+  /**
+   * Constructor
+   * 
+   * @param auditLogger The audit logger
+   */
+  @Inject
+  public RequestResponseLoggingFilter(AuditLogger auditLogger) {
+    this.auditLogger = auditLogger;
+  }
+
+
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
 
-    AuditLogger auditLogger = new AuditLoggerImpl();
     String uniqueId;
     if (request instanceof HttpServletRequest) {
 

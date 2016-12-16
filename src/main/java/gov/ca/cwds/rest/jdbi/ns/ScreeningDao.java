@@ -1,9 +1,12 @@
 package gov.ca.cwds.rest.jdbi.ns;
 
+import org.hibernate.SessionFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.NsSessionFactory;
 import gov.ca.cwds.rest.api.persistence.ns.Screening;
 import gov.ca.cwds.rest.jdbi.CrudsDaoImpl;
-
-import org.hibernate.SessionFactory;
 
 /**
  * Screening DAO
@@ -12,7 +15,13 @@ import org.hibernate.SessionFactory;
  */
 public class ScreeningDao extends CrudsDaoImpl<Screening> {
 
-  public ScreeningDao(SessionFactory sessionFactory) {
+  /**
+   * Constructor
+   * 
+   * @param sessionFactory The session factory
+   */
+  @Inject
+  public ScreeningDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
