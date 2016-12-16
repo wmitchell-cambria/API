@@ -18,6 +18,19 @@ import javax.xml.bind.DatatypeConverter;
 public class CWDSCompressionUtils {
 
   /**
+   * Track memory to hunt memory leaks and record overall memory consumption.
+   * 
+   * @return free memory in MB
+   */
+  public static long calcMemory() {
+    Runtime runtime = Runtime.getRuntime();
+    long maxMemory = runtime.maxMemory();
+    long allocatedMemory = runtime.totalMemory();
+    long freeMemory = runtime.freeMemory();
+    return (freeMemory + (maxMemory - allocatedMemory)) / 1024L;
+  }
+
+  /**
    * Compare files when testing compression components.
    * 
    * @param iss input stream to run checksum on
