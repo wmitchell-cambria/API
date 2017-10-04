@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.investigation.People;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on Investigation
+ * Business layer object to work on Investigation People
  * 
  * @author CWDS API Team
  */

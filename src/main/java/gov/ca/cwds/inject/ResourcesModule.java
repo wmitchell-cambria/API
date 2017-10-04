@@ -160,9 +160,11 @@ public class ResourcesModule extends AbstractModule {
     bind(HistoryOfInvolvementResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.ScreeningSummaryResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
     bind(RelationshipListResource.class);
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
+    bind(AllegationResource.class);
   }
 
   @Provides
@@ -439,4 +441,9 @@ public class ResourcesModule extends AbstractModule {
     return new TypedServiceBackedResourceDelegate<>(injector.getInstance(PeopleService.class));
   }
 
+  @Provides
+  @InvestigationAllegationServiceBackedResource
+  public TypedResourceDelegate<String, Allegation> allegationBackedResource(Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(injector.getInstance(AllegationService.class));
+  }
 }

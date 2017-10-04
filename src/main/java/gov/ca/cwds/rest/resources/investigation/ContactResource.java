@@ -1,17 +1,6 @@
 package gov.ca.cwds.rest.resources.investigation;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INVESTIGATIONS;
-import gov.ca.cwds.inject.ContactServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
-import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
-import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
-import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -28,11 +17,25 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.inject.ContactServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
+import gov.ca.cwds.rest.resources.TypedResourceDelegate;
+import io.dropwizard.hibernate.UnitOfWork;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * A resource providing a RESTful interface for {@link Contact}. It delegates functions to
  * {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
- * functionality but with @see <a href=
- * "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger Annotations</a> and
+ * functionality but with @see
+ * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * Annotations</a> and
  * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
  * 
@@ -76,12 +79,11 @@ public class ContactResource {
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create deliveredService", code = HttpStatus.SC_CREATED,
       response = Contact.class)
-  public Response create(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the Referral ") String id, @Valid @ApiParam(hidden = false,
-      required = true) ContactRequest contact) {
-
-    ContactReferralRequest crr = new ContactReferralRequest(id, contact);
-    return typedResourceDelegate.create(crr);
+  public Response create(
+      @PathParam("id") @ApiParam(required = true, name = "id",
+          value = "The id of the Referral ") String id,
+      @Valid @ApiParam(hidden = false, required = true) ContactReferralRequest contact) {
+    return typedResourceDelegate.create(contact);
   }
 
   /**
@@ -103,9 +105,11 @@ public class ContactResource {
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create deliveredService", code = HttpStatus.SC_OK,
       response = Contact.class)
-  public Response find(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the Referral ") String id, @PathParam("contact_id") @ApiParam(
-      required = true, name = "contact_id", value = "The id of the Contact") String contactId) {
+  public Response find(
+      @PathParam("id") @ApiParam(required = true, name = "id",
+          value = "The id of the Referral ") String id,
+      @PathParam("contact_id") @ApiParam(required = true, name = "contact_id",
+          value = "The id of the Contact") String contactId) {
     String primaryKey = id + ":" + contactId;
     return typedResourceDelegate.get(primaryKey);
   }
@@ -126,7 +130,8 @@ public class ContactResource {
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate Contacts")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Create Contacts", code = HttpStatus.SC_OK, response = Contact[].class)
+  @ApiOperation(value = "Find Contacts of an investigation", code = HttpStatus.SC_OK,
+      response = ContactList.class)
   public Response findAll(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the Referral ") String id) {
     return typedResourceDelegate.get(id);
@@ -152,9 +157,11 @@ public class ContactResource {
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create deliveredService", code = HttpStatus.SC_OK,
       response = Contact.class)
-  public Response update(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the Referral ") String id, @PathParam("contact_id") @ApiParam(
-      required = true, name = "contact_id", value = "The id of the Contact") String contactId,
+  public Response update(
+      @PathParam("id") @ApiParam(required = true, name = "id",
+          value = "The id of the Referral ") String id,
+      @PathParam("contact_id") @ApiParam(required = true, name = "contact_id",
+          value = "The id of the Contact") String contactId,
       @Valid @ApiParam(hidden = false, required = true) ContactRequest contactToUpdate) {
     ContactReferralRequest contactReferralRequest = new ContactReferralRequest(id, contactToUpdate);
     return typedResourceDelegate.update(contactId, contactReferralRequest);

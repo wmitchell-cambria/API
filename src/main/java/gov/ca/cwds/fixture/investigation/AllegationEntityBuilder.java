@@ -29,8 +29,10 @@ public class AllegationEntityBuilder {
   protected String rational = "disposistion reason explained";
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
   private AllegationPerson victim = new AllegationPersonEntityBuilder().build();
-  private AllegationPerson perpetrator = new AllegationPersonEntityBuilder().setFirstName("Jack")
-      .setLastName("Jones").setPrefixTitle("Mr").build();
+  private AllegationPerson perpetrator =
+      new AllegationPersonEntityBuilder().setFirstName("jack").setLastName("kennson")
+          .setPrefixTitle("").setSuffixTitle("III").setMiddleName("Bill").build();
+
 
   public Allegation build() {
 

@@ -9,7 +9,7 @@ public class AllegationPersonEntityBuilder {
   protected String firstName = "Joanna";
   protected String lastName = "Kenneson";
   protected String middleName = "";
-  protected String suffixTitle = "phd";
+  protected String suffixTitle = "";
   protected String prefixTitle = "Ms";
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
