@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
         classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
 }
 
@@ -16,6 +17,10 @@ plugins {
     id 'application'
     id "org.sonarqube" version "2.2.1"
     id 'com.github.jk1.dependency-license-report' version '0.3.14'
+}
+
+allprojects {
+    apply plugin: "com.jfrog.artifactory"
 }
 
 apply plugin: 'maven-publish'
@@ -77,7 +82,47 @@ publishing {
   }
 }
 
+//Set artifactory variables in local gradle properties file. Example ~/.gradle/gradle.properties
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'gradle-release-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'gradle-release-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+
+        }
+    }
+}
+
 dependencies {
+    //third party libs
+    compile group: "gov.ca.cwds.api.libs", name: "bcprov-jdk15on", version: "150"
+    compile group: "gov.ca.cwds.api.libs", name: "cryptojFIPS", version: "1"
+    compile group: "gov.ca.cwds.api.libs", name: "db2jcc", version: "4"
+    compile group: "gov.ca.cwds.api.libs", name: "db2jcc_license_cisuz", version: "1"
+    compile group: "gov.ca.cwds.api.libs", name: "libKeyJNI", version: "1", ext: "dylib"
+    compile group: "gov.ca.cwds.api.libs", name: "libKeyJNI", version: "1", ext: "so"
+    compile group: "gov.ca.cwds.api.libs", name: "libLZW", version: "1", ext: "dylib"
+    compile group: "gov.ca.cwds.api.libs", name: "libLZW", version: "1", ext: "so"
+    compile group: "gov.ca.cwds.api.libs", name: "libstdc", version: "6", ext: "so"
+    compile group: "gov.ca.cwds.api.libs", name: "lzw", version: "1", ext: "dll"
+    compile group: "gov.ca.cwds.api.libs", name: "lzw", version: "1", ext: "lib"
+    compile group: "gov.ca.cwds.api.libs", name: "msvcp", version: "140" ,ext: "dll"
+    compile group: "gov.ca.cwds.api.libs", name: "securezip-toolkit", version: "1"
+    compile group: "gov.ca.cwds.api.libs", name: "vcruntime", version: "140" ,ext: "dll"
+
+    //end thirdparty libs
 	compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-views", version: dropwizardVersion
