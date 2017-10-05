@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.InvestigationAllegationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
+import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -43,7 +44,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AllegationResource {
-  private TypedResourceDelegate<String, Allegation> typedResourceDelegate;
+  private TypedResourceDelegate<String, AllegationList> typedResourceDelegate;
 
   /**
    * Constructor
@@ -52,7 +53,7 @@ public class AllegationResource {
    */
   @Inject
   public AllegationResource(
-      @InvestigationAllegationServiceBackedResource TypedResourceDelegate<String, Allegation> typedResourceDelegate) {
+      @InvestigationAllegationServiceBackedResource TypedResourceDelegate<String, AllegationList> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
@@ -74,12 +75,12 @@ public class AllegationResource {
       @ApiResponse(code = 422, message = "Unable to validate allegation")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Create allegations", code = HttpStatus.SC_CREATED,
-      response = Allegation.class)
+      response = AllegationList.class)
   public Response create(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The CMS id of the Referral or Case") String id,
-      @Valid @ApiParam(hidden = false, required = true) Allegation allegation) {
-    return typedResourceDelegate.create(allegation);
+      @Valid @ApiParam(hidden = false, required = true) AllegationList allegations) {
+    return typedResourceDelegate.create(allegations);
   }
 
   /**
@@ -123,7 +124,7 @@ public class AllegationResource {
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The CMS Id of the Referral or Case ") String id,
-      @Valid @ApiParam(hidden = false, required = true) Allegation allegationsToUpdate) {
+      @Valid @ApiParam(hidden = false, required = true) AllegationList allegationsToUpdate) {
     return typedResourceDelegate.update(id, allegationsToUpdate);
   }
 }

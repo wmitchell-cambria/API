@@ -4,9 +4,9 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.dao.investigation.AllegationDao;
-import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
+import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.investigation.Allegation;
+import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
@@ -14,10 +14,10 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * 
  * @author CWDS API Team
  */
-public class AllegationListService implements TypedCrudsService<String, Allegation, Response> {
+public class AllegationListService implements TypedCrudsService<String, AllegationList, Response> {
 
   private AllegationDao allegationDao;
-  private Allegation validAllegation = new AllegationEntityBuilder().build();
+  private AllegationList validAllegations = new AllegationListEntityBuilder().build();
 
   /**
    * @param allegationDao {@link Dao} handling
@@ -31,21 +31,21 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
 
   @Override
   public Response find(String primaryKey) {
-    return validAllegation;
+    return validAllegations;
   }
 
   @Override
-  public Response create(Allegation request) {
-    return validAllegation;
+  public Response create(AllegationList request) {
+    return validAllegations;
   }
 
   @Override
   public Response delete(String primaryKey) {
-    return validAllegation;
+    return validAllegations;
   }
 
   @Override
-  public Response update(String primaryKey, Allegation request) {
-    return validAllegation;
+  public Response update(String primaryKey, AllegationList request) {
+    return validAllegations;
   }
 }
