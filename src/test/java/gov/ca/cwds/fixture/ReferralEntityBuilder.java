@@ -9,6 +9,11 @@ import gov.ca.cwds.data.persistence.cms.CrossReport;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ReferralEntityBuilder {
   String id;
   String additionalInfoIncludedCode;
@@ -62,6 +67,25 @@ public class ReferralEntityBuilder {
   Set<Allegation> allegations;
   Set<CrossReport> crossReports;
   Set<Reporter> reporters;
+
+  public Referral build() {
+    return new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
+        applicationForPetitionIndicator, approvalNumber, approvalStatusType,
+        caretakersPerpetratorCode, closureDate, communicationMethodType, currentLocationOfChildren,
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
+        filedSuspectedChildAbuseReporttoLawEnforcementIndicator, familyAwarenessIndicator,
+        govtEntityType, legalDefinitionCode, legalRightsNoticeIndicator, limitedAccessCode,
+        mandatedCrossReportReceivedDate, referralName, openAdequateCaseCode, receivedDate,
+        receivedTime, referralResponseType, referredToResourceType, responseDeterminationDate,
+        responseDeterminationTime, responseRationaleText, screenerNoteText, specificsIncludedCode,
+        sufficientInformationCode, unfoundedSeriesCode, linkToPrimaryReferralId,
+        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId,
+        primaryContactStaffPersonId, countySpecificCode, specialProjectReferralIndicator,
+        zippyCreatedIndicator, homelessIndicator, familyRefusedServicesIndicator,
+        firstEvaluatedOutApprovalDate, responsibleAgencyCode, limitedAccessGovtAgencyType,
+        limitedAccessDate, limitedAccessDesc, originalClosureDate, addresses, allegations,
+        crossReports, reporters);
+  }
 
   public ReferralEntityBuilder setId(String id) {
     this.id = id;
@@ -333,22 +357,4 @@ public class ReferralEntityBuilder {
     return this;
   }
 
-  public Referral build() {
-    return new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
-        applicationForPetitionIndicator, approvalNumber, approvalStatusType,
-        caretakersPerpetratorCode, closureDate, communicationMethodType, currentLocationOfChildren,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        filedSuspectedChildAbuseReporttoLawEnforcementIndicator, familyAwarenessIndicator,
-        govtEntityType, legalDefinitionCode, legalRightsNoticeIndicator, limitedAccessCode,
-        mandatedCrossReportReceivedDate, referralName, openAdequateCaseCode, receivedDate,
-        receivedTime, referralResponseType, referredToResourceType, responseDeterminationDate,
-        responseDeterminationTime, responseRationaleText, screenerNoteText, specificsIncludedCode,
-        sufficientInformationCode, unfoundedSeriesCode, linkToPrimaryReferralId,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId,
-        primaryContactStaffPersonId, countySpecificCode, specialProjectReferralIndicator,
-        zippyCreatedIndicator, homelessIndicator, familyRefusedServicesIndicator,
-        firstEvaluatedOutApprovalDate, responsibleAgencyCode, limitedAccessGovtAgencyType,
-        limitedAccessDate, limitedAccessDesc, originalClosureDate, addresses, allegations,
-        crossReports, reporters);
-  }
 }
