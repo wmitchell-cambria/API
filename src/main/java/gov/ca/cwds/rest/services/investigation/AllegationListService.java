@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * 
  * @author CWDS API Team
  */
-public class AllegationService implements TypedCrudsService<String, Allegation, Response> {
+public class AllegationListService implements TypedCrudsService<String, Allegation, Response> {
 
   private AllegationDao allegationDao;
   private Allegation validAllegation = new AllegationEntityBuilder().build();
@@ -24,7 +24,7 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
    *        {@link gov.ca.cwds.rest.api.domain.investigation.Allegation} objects
    */
   @Inject
-  public AllegationService(AllegationDao allegationDao) {
+  public AllegationListService(AllegationDao allegationDao) {
     super();
     this.allegationDao = allegationDao;
   }

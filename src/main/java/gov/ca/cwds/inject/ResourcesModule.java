@@ -1,5 +1,10 @@
 package gov.ca.cwds.inject;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.SwaggerConfiguration;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
@@ -27,6 +32,7 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryRequest;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryResponse;
+import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.People;
@@ -99,16 +105,12 @@ import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
+import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.ContactService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
 import gov.ca.cwds.rest.services.investigation.RelationshipListService;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 
 
 /**
@@ -204,7 +206,8 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @AllegationServieBackedResource
-  public TypedResourceDelegate<String, Allegation> allegationServiceBackedResource(Injector injector) {
+  public TypedResourceDelegate<String, Allegation> allegationServiceBackedResource(
+      Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(injector.getInstance(AllegationService.class));
   }
 
@@ -218,7 +221,8 @@ public class ResourcesModule extends AbstractModule {
   @DrmsDocumentServiceBackedResource
   public TypedResourceDelegate<String, DrmsDocument> drmsDocumentServiceBackedResource(
       Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(injector.getInstance(DrmsDocumentService.class));
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(DrmsDocumentService.class));
   }
 
   @Provides
@@ -248,8 +252,8 @@ public class ResourcesModule extends AbstractModule {
   @ScreeningSummaryServiceBackedResource
   public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary> screeningSummaryServiceBackedResource(
       Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(gov.ca.cwds.rest.services.investigation.ScreeningSummaryService.class));
+    return new TypedServiceBackedResourceDelegate<>(injector
+        .getInstance(gov.ca.cwds.rest.services.investigation.ScreeningSummaryService.class));
   }
 
   @Provides
@@ -302,7 +306,8 @@ public class ResourcesModule extends AbstractModule {
   @Provides
   @ScreeningToReferralServiceBackedResource
   public ResourceDelegate screeningToReferralBackedResource(Injector injector) {
-    return new ServiceBackedResourceDelegate(injector.getInstance(ScreeningToReferralService.class));
+    return new ServiceBackedResourceDelegate(
+        injector.getInstance(ScreeningToReferralService.class));
   }
 
   @Provides
@@ -366,7 +371,8 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @AssignmentServiceBackedResource
-  public TypedResourceDelegate<String, Assignment> assignmentServiceBackedResource(Injector injector) {
+  public TypedResourceDelegate<String, Assignment> assignmentServiceBackedResource(
+      Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(injector.getInstance(AssignmentService.class));
   }
 
@@ -422,7 +428,8 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @InvestigationServiceBackedResource
-  public TypedResourceDelegate<String, Investigation> investigationBackedResource(Injector injector) {
+  public TypedResourceDelegate<String, Investigation> investigationBackedResource(
+      Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(InvestigationService.class));
   }
@@ -443,7 +450,8 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @InvestigationAllegationServiceBackedResource
-  public TypedResourceDelegate<String, Allegation> allegationBackedResource(Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(injector.getInstance(AllegationService.class));
+  public TypedResourceDelegate<String, AllegationList> allegationBackedResource(Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(AllegationListService.class));
   }
 }
