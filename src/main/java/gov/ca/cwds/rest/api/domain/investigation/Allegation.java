@@ -70,7 +70,6 @@ public class Allegation extends ReportingDomain implements Response {
     super();
   }
 
-
   /**
    * @param allegationType - LOV of allegation type
    * @param createdByScreener - is this created by a screener
@@ -129,58 +128,94 @@ public class Allegation extends ReportingDomain implements Response {
   }
 
 
+  /**
+   * @return - list of allegation sub-types
+   */
   public Set<AllegationSubType> getAllegationSubType() {
     return allegationSubType;
   }
 
 
+  /**
+   * @param allegationSubType - list of allegation sub-types
+   */
   public void setAllegationSubType(Set<AllegationSubType> allegationSubType) {
     this.allegationSubType = allegationSubType;
   }
 
 
+  /**
+   * @return - allegation disposition LOV
+   */
   public Short getDispositionType() {
     return dispositionType;
   }
 
 
+  /**
+   * @param dispositionType - allegation disposition LOV
+   */
   public void setDispositionType(Short dispositionType) {
     this.dispositionType = dispositionType;
   }
 
 
+  /**
+   * @return - allegation disposition rationale text
+   */
   public String getRationale() {
     return rationale;
   }
 
 
+  /**
+   * @param rationale - allegation disposition rationale text
+   */
   public void setRationale(String rationale) {
     this.rationale = rationale;
   }
 
 
+  /**
+   * @return - allegation victim
+   */
   public AllegationPerson getVictim() {
     return victim;
   }
 
+  /**
+   * @param legacyDescriptor - CMS record description of ALLEGATION
+   */
   public void setLegacyDescriptor(CmsRecordDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
 
+  /**
+   * @return - CMS record description of ALLEGATION
+   */
   public CmsRecordDescriptor getLegacyDescriptor() {
     return legacyDescriptor;
   }
 
+  /**
+   * @param victim - allegation victim
+   */
   public void setVictim(AllegationPerson victim) {
     this.victim = victim;
   }
 
 
+  /**
+   * @return - allegation perpetrator
+   */
   public AllegationPerson getPerpetrator() {
     return perpetrator;
   }
 
 
+  /**
+   * @param perpetrator - allegation perpetrator
+   */
   public void setPerpetrator(AllegationPerson perpetrator) {
     this.perpetrator = perpetrator;
   }

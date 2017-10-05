@@ -13,7 +13,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class AllegationDao extends CrudsDaoImpl<Allegation> {
+public class AllegationsDao extends CrudsDaoImpl<Allegation> {
   /**
    * Constructor
    * 
@@ -21,7 +21,7 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
    */
 
   @Inject
-  public AllegationDao(@CmsSessionFactory SessionFactory sessionFactory) {
+  public AllegationsDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 }
