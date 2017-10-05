@@ -69,7 +69,7 @@ public class StaffPersonIdRetriever {
     if (userIdentity == null) {
       LOGGER
           .warn("======= PerryUserIdentity not found, using default staff ID: " + DEFAULT_STAFF_ID);
-      String localDevProp = System.getenv("LOCAL_DEV");
+      String localDevProp = "true"; // System.getenv("LOCAL_DEV");
       if (StringUtils.isNotBlank(localDevProp) && "true".equals(localDevProp)) {
         userIdentity = new PerryUserIdentity();
         userIdentity.setStaffId(DEFAULT_STAFF_ID);
