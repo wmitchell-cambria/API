@@ -72,13 +72,14 @@ public class ChildClientDaoIT {
 
   /**
    * Find JUnit test
+   * 
+   * @throws Exception general error
    */
   @Test
   public void testFind() throws Exception {
     ChildClient found = childClientDao.find(victimId);
     assertThat(found.getVictimClientId(), is(equalTo(victimId)));
   }
-
 
   @Test
   public void testFindEntityNotFoundException() throws Exception {
@@ -88,6 +89,8 @@ public class ChildClientDaoIT {
 
   /**
    * Create JUnit test
+   * 
+   * @throws Exception general error
    */
   @Test
   public void testCreate() throws Exception {
@@ -105,13 +108,14 @@ public class ChildClientDaoIT {
 
   /**
    * Delete JUnit test
+   * 
+   * @throws Exception general error
    */
   @Test
   public void testDelete() throws Exception {
     ChildClient deleted = childClientDao.delete(victimId);
     assertThat(deleted.getVictimClientId(), is(victimId));
   }
-
 
   @Test
   public void testDeleteEntityNotFoundException() throws Exception {
@@ -121,6 +125,8 @@ public class ChildClientDaoIT {
 
   /**
    * Update JUnit test
+   * 
+   * @throws Exception general error
    */
   @Test
   public void testUpdate() throws Exception {
