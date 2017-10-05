@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.inject.InvestigationAllegationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
+import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -29,8 +30,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link Investigation/{id}/allegations}. It delegates
- * functions to {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
+ * A resource providing a RESTful interface for {{@link Investigation}. It delegates functions to
+ * {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
  * functionality but with @see
  * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
  * Annotations</a> and
@@ -58,10 +59,10 @@ public class AllegationResource {
   }
 
   /**
-   * Create an {@link Allegation}.
+   * Create an {@link AllegationList}.
    *
    * @param id - CMS iId of the Referral or Case the Allegations are for
-   * @param allegation - The {@link AllegationRequest}
+   * @param allegations - The allegations to create
    *
    * @return The {@link Response}
    */
