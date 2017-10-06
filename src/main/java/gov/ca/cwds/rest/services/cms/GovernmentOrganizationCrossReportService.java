@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -43,8 +42,6 @@ public class GovernmentOrganizationCrossReportService implements
 
   @SuppressWarnings("unused")
   private RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport;
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
 
   /**
    * @param governmentOrganizationCrossReportDao The {@link Dao} handling
@@ -63,7 +60,7 @@ public class GovernmentOrganizationCrossReportService implements
   /**
    * 
    */
-  public void initializeCodeMap() {
+  public final void initializeCodeMap() {
     agencyCodeMap.put("DISTRICT_ATTORNEY", "A");
     agencyCodeMap.put("COUNTY_LICENSING", "C");
     agencyCodeMap.put("DEPARTMENT_OF_JUSTICE", "D");
@@ -84,8 +81,8 @@ public class GovernmentOrganizationCrossReportService implements
     try {
       gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport managed =
           new gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport(
-              CmsKeyIdGenerator.generate(lastUpdatedId), governmentOrganizationCrossReport,
-              lastUpdatedId, lastUpdatedTime);
+              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), governmentOrganizationCrossReport,
+              RequestExecutionContext.instance().getStaffId(), RequestExecutionContext.instance().getRequestStartTime());
       managed = governmentOrganizationCrossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationCrossReport(managed);
     } catch (EntityExistsException e) {
@@ -166,7 +163,7 @@ public class GovernmentOrganizationCrossReportService implements
     try {
       gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport managed =
           new gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport(primaryKey,
-              governmentOrganizationCrossReport, lastUpdatedId, lastUpdatedTime);
+              governmentOrganizationCrossReport, RequestExecutionContext.instance().getStaffId(), RequestExecutionContext.instance().getRequestStartTime());
       managed = governmentOrganizationCrossReportDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationCrossReport(managed);
     } catch (EntityNotFoundException e) {

@@ -58,8 +58,8 @@ public class RIGovernmentOrganizationCrossReport
   private static final Logger LOGGER =
       LoggerFactory.getLogger(RIGovernmentOrganizationCrossReport.class);
 
-  private transient ReferralDao referralDao;
   private transient CrossReportDao crossReportDao;
+  private transient ReferralDao referralDao;
   private transient GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao;
 
 
@@ -71,11 +71,11 @@ public class RIGovernmentOrganizationCrossReport
    * @param governmentOrganizationCrossReportDao - governmentOrganizationCrossReportDao
    */
   @Inject
-  public RIGovernmentOrganizationCrossReport(final ReferralDao referralDao,
-      CrossReportDao crossReportDao,
+  public RIGovernmentOrganizationCrossReport(final CrossReportDao crossReportDao,
+      ReferralDao referralDao,
       GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao) {
-    this.referralDao = referralDao;
     this.crossReportDao = crossReportDao;
+    this.referralDao = referralDao;
     this.governmentOrganizationCrossReportDao = governmentOrganizationCrossReportDao;
     ApiHibernateInterceptor.addHandler(GovernmentOrganizationCrossReport.class,
         governmentOrganizationCrossReport -> apply(
@@ -85,14 +85,14 @@ public class RIGovernmentOrganizationCrossReport
   @Override
   public Boolean apply(GovernmentOrganizationCrossReport t) {
     LOGGER.debug("RI: GovernmentOrganizationCrossReport");
-    if (referralDao.find(t.getReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "GovernmentOrganizationCrossReport => Referral with given Identifier is not present in database");
-    } else if (crossReportDao.find(t.getThirdId()) == null) {
+    if (crossReportDao.find(t.getCrossReportThirdId()) == null) {
       throw new ReferentialIntegrityException(
           "GovernmentOrganizationCrossReport => CrossReport with given Identifier is not present in database");
+    } else if (referralDao.find(t.getReferralId()) == null) {
+      throw new ReferentialIntegrityException(
+          "GovernmentOrganizationCrossReport => Referral with given Identifier is not present in database");
     } else if (t.getGovernmentOrganizationId() != null
-        && governmentOrganizationCrossReportDao.find(t.getGovernmentOrganizationId()) == null) {
+        && governmentOrganizationCrossReportDao.find(t.getThirdId()) == null) {
       throw new ReferentialIntegrityException(
           "GovernmentOrganizationCrossReport => GovernmentOrganization with given Identifier is not present in database");
     }
