@@ -17,6 +17,11 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
 public class IntakeLovService
     extends SimpleResourceService<String, IntakeLovEntry, IntakeLovResponse> {
 
+  /**
+   * Default serialization.
+   */
+  private static final long serialVersionUID = 1L;
+
   private IntakeLovDao dao;
 
   /**
@@ -40,7 +45,7 @@ public class IntakeLovService
     try {
       return handleRequest(new IntakeLovEntry());
     } catch (Exception e) {
-      throw new ServiceException("ERROR handling find", e);
+      throw new ServiceException("ERROR handling \"find\"", e);
     }
   }
 

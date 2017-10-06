@@ -88,7 +88,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonProperty("communication_method")
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Communication Method",
-      allowableValues = "409", example = "409")
+      allowableValues = "$CMM_MTHC", example = "409")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.COMMUNICATION_METHOD)
   private Short communicationMethod;
 
@@ -174,7 +174,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
 
   @JsonProperty("responsible_agency")
   @ApiModelProperty(required = false, readOnly = false, value = "Responsible Agency Code",
-      example = "C", allowableValues = "$C, P, O, A, S, I, K, M")
+      example = "C", allowableValues = "C, P, O, A, S, I, K, M")
   @OneOf(value = {"C", "P", "O", "A", "S", "I", "K", "M"})
   @Size(max = 1)
   private String responsibleAgency;

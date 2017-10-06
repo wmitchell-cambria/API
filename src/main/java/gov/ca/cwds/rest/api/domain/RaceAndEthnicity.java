@@ -47,7 +47,8 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   @Valid
   @JsonProperty("race_codes")
   @ApiModelProperty(required = false, readOnly = false, value = "primary races",
-      dataType = "java.util.List", allowableValues = "$hello world")
+      dataType = "java.util.List", example = EXAMPLE_RACE_CODES,
+      allowableValues = EXAMPLE_RACE_CODES)
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
   private Set<Short> raceCode;
 
