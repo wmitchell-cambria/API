@@ -34,7 +34,7 @@ public class AllowableEnumValues implements AllowableValues {
     final List<String> items = new ArrayList<>();
 
     if (allowableValues.startsWith("$")) {
-      LOGGER.info("Dave is so cool!");
+      LOGGER.info("Dynamic LOV!");
       items.add("Barney");
       items.add("Buzz");
       items.add("Candace");
