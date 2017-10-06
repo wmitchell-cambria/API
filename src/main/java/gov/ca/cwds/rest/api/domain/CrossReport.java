@@ -12,7 +12,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
@@ -22,7 +21,6 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
-import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -82,7 +80,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   @JsonProperty("agencies")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
-  private Set<Agency> agencies;
+  private Set<GovernmentAgency> agencies;
 
   /**
    * Construct from all fields.
@@ -103,7 +101,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
       @JsonProperty("agency_name") String agencyName,
       @JsonProperty("filed_out_of_state") boolean filedOutOfState,
       @JsonProperty("method") Integer method, @JsonProperty("inform_date") String informDate,
-      @JsonProperty("agencies") Set<Agency> agencies) {
+      @JsonProperty("agencies") Set<GovernmentAgency> agencies) {
     super();
     this.id = id;
     this.legacySourceTable = legacySourceTable;
@@ -196,7 +194,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    * 
    * @return Agencies
    */
-  public Set<Agency> getAgencies() {
+  public Set<GovernmentAgency> getAgencies() {
     return agencies;
   }
 
@@ -227,50 +225,5 @@ public class CrossReport extends ReportingDomain implements Request, Response {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
-  /**
-   * Cross report agencies
-   */
-  @JsonSnakeCase
-  @ApiModel("NsCrossReportAgency")
-  public static class Agency {
 
-    @JsonProperty("id")
-    @ApiModelProperty(required = true, value = "", example = "1234")
-    @NotEmpty
-    private String id;
-
-    @JsonProperty("type")
-    @ApiModelProperty(required = true, value = "", example = "1234")
-    @OneOf(value = {"COMMUNITY_CARE_LICENSING", "COUNTY_LICENSING", "DISTRICT_ATTORNEY",
-        "DEPARTMENT_OF_JUSTICE", "LAW_ENFORCEMENT"})
-    private String type;
-
-    /**
-     * @param id - id
-     * @param type - type
-     */
-    @JsonCreator
-    public Agency(@JsonProperty("id") String id, @JsonProperty("type") String type) {
-      this.id = id;
-      this.type = type;
-    }
-
-    /**
-     * Get agency id
-     * 
-     * @return Agency id
-     */
-    public String getId() {
-      return id;
-    }
-
-    /**
-     * Get agency type
-     * 
-     * @return Agency type
-     */
-    public String getType() {
-      return type;
-    }
-  }
 }

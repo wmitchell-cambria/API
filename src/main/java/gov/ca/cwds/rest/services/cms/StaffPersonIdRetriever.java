@@ -45,7 +45,7 @@ public class StaffPersonIdRetriever {
     Subject currentUser = SecurityUtils.getSubject();
     PrincipalCollection principalCollection = currentUser.getPrincipals();
 
-    LOGGER.info("======= PrincipalCollection=" + principalCollection);
+    LOGGER.info("======= PrincipalCollection={}" + principalCollection);
 
     if (principalCollection != null) {
       @SuppressWarnings("rawtypes")
@@ -53,12 +53,12 @@ public class StaffPersonIdRetriever {
       int principalCount = principals.size();
       Object currentPrincipal = principalCount > 1 ? principals.get(1) : null;
 
-      LOGGER.info("======= principalCount=" + principalCount);
+      LOGGER.info("======= principalCount={}" + principalCount);
 
       if (currentPrincipal != null && currentPrincipal instanceof PerryUserIdentity) {
         PerryUserIdentity currentUserInfo = (PerryUserIdentity) currentPrincipal;
         String staffPersonId = currentUserInfo.getStaffId();
-        LOGGER.info("======= Current Staff ID =" + staffPersonId);
+        LOGGER.info("======= Current Staff ID ={}" + staffPersonId);
 
         if (!StringUtils.isBlank(staffPersonId)) {
           userIdentity = currentUserInfo;
@@ -69,7 +69,7 @@ public class StaffPersonIdRetriever {
     if (userIdentity == null) {
       LOGGER
           .warn("======= PerryUserIdentity not found, using default staff ID: " + DEFAULT_STAFF_ID);
-      String localDevProp = "true"; // System.getenv("LOCAL_DEV");
+      String localDevProp = System.getenv("LOCAL_DEV");
       if (StringUtils.isNotBlank(localDevProp) && "true".equals(localDevProp)) {
         userIdentity = new PerryUserIdentity();
         userIdentity.setStaffId(DEFAULT_STAFF_ID);

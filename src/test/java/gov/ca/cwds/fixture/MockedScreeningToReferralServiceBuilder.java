@@ -4,7 +4,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.rest.services.ParticipantService;
 import java.util.Date;
 
 import javax.validation.Validation;
@@ -18,15 +17,11 @@ import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.ClientAddress;
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
-import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
-import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
-import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
-import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
@@ -34,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -43,12 +39,10 @@ import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
-import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
-import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 
 /**
  * 
@@ -68,6 +62,7 @@ public class MockedScreeningToReferralServiceBuilder {
   private ParticipantService participantService;
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private Reminders reminders;
+  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private ReferralDao referralDao;
   private MessageBuilder messageBuilder;
@@ -279,6 +274,20 @@ public class MockedScreeningToReferralServiceBuilder {
   }
 
   /**
+   * @return the governmentOrganizationCrossReportService
+   */
+  public GovernmentOrganizationCrossReportService getGovernmentOrganizationCrossReportService() {
+    if (governmentOrganizationCrossReportService == null) {
+      buildDefaultMockForGovernmentOrganizationCrossReportService();
+    }
+    return governmentOrganizationCrossReportService;
+  }
+
+  private void buildDefaultMockForGovernmentOrganizationCrossReportService() {
+    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+  }
+
+  /**
    * 
    * @return the mocked assignmentService
    */
@@ -419,8 +428,8 @@ public class MockedScreeningToReferralServiceBuilder {
     return participantService;
   }
 
-  public MockedScreeningToReferralServiceBuilder addParticipantService(ParticipantService
-      participantService) {
+  public MockedScreeningToReferralServiceBuilder addParticipantService(
+      ParticipantService participantService) {
     this.participantService = participantService;
     return this;
   }
@@ -452,6 +461,7 @@ public class MockedScreeningToReferralServiceBuilder {
         getReporterService(), getAddressService(), getClientAddressService(),
         getChildClientService(), getAssignmentService(), getParticipantService(),
         Validation.buildDefaultValidatorFactory().getValidator(), getReferralDao(),
-        getMessageBuilder(), getAllegationPerpetratorHistoryService(), getReminders());
+        getMessageBuilder(), getAllegationPerpetratorHistoryService(), getReminders(),
+        getGovernmentOrganizationCrossReportService());
   }
 }

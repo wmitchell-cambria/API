@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Validator;
@@ -21,9 +22,11 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.CrossReport;
+import gov.ca.cwds.rest.api.domain.GovernmentAgency;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
@@ -38,6 +41,7 @@ import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -73,6 +77,7 @@ public class ScreeningToReferralService implements CrudsService {
   private AssignmentService assignmentService;
   private ParticipantService participantService;
   private Reminders reminders;
+  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private ReferralDao referralDao;
 
@@ -102,6 +107,7 @@ public class ScreeningToReferralService implements CrudsService {
    * @param messageBuilder log message
    * @param allegationPerpetratorHistoryService the allegationPerpetratorHistoryService
    * @param reminders - reminders
+   * @param governmentOrganizationCrossReportService - governmentOrganizationCrossReportService
    */
   @Inject
   public ScreeningToReferralService(ReferralService referralService, ClientService clientService,
@@ -111,8 +117,8 @@ public class ScreeningToReferralService implements CrudsService {
       ChildClientService childClientService, AssignmentService assignmentService,
       ParticipantService participantService, Validator validator, ReferralDao referralDao,
       MessageBuilder messageBuilder,
-      AllegationPerpetratorHistoryService allegationPerpetratorHistoryService,
-      Reminders reminders) {
+      AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
+      GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService) {
 
     super();
     this.referralService = referralService;
@@ -131,6 +137,7 @@ public class ScreeningToReferralService implements CrudsService {
     this.messageBuilder = messageBuilder;
     this.allegationPerpetratorHistoryService = allegationPerpetratorHistoryService;
     this.reminders = reminders;
+    this.governmentOrganizationCrossReportService = governmentOrganizationCrossReportService;
   }
 
   @UnitOfWork(value = "cms")
@@ -346,28 +353,35 @@ public class ScreeningToReferralService implements CrudsService {
          * </blockquote>
          * </pre>
          */
-        boolean mandatedReporter =
-            ParticipantValidator.hasMandatedReporterRole(scr.getParticipants());
-        boolean lawEnforcementAgencyType = crossReport.getAgencyType().contains("Law Enforcement");
-
-        if (lawEnforcementAgencyType && !mandatedReporter) {
-          lawEnforcementIndicator = Boolean.TRUE;
-        }
+        // boolean mandatedReporter =
+        // ParticipantValidator.hasMandatedReporterRole(scr.getParticipants());
+        // boolean lawEnforcementAgencyType = crossReport.getAgencyType().contains("Law
+        // Enforcement");
+        //
+        // if (lawEnforcementAgencyType && !mandatedReporter) {
+        // lawEnforcementIndicator = Boolean.TRUE;
+        // }
 
         if (StringUtils.isBlank(crossReport.getLegacyId())) {
-          // String outStateLawEnforcementAddr = null;
           // create the cross report
+
+          Map<String, String> agencyMap = getLawEnforcement(crossReport.getAgencies());
+          String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
+          Boolean governmentOrgCrossRptIndicatorVar =
+              StringUtils.isNotBlank(agencyMap.get("OTHER"));
+
           gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
               gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId,
                   crossReport, referralId, LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID,
-                  outStateLawEnforcementAddr, scr.getIncidentCounty(), lawEnforcementIndicator,
-                  outStateLawEnforcementIndicator);
+                  outStateLawEnforcementAddr, scr.getIncidentCounty(), lawEnforcementId,
+                  outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
 
           messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
 
           gov.ca.cwds.rest.api.domain.cms.CrossReport postedCrossReport =
               this.crossReportService.createWithSingleTimestamp(cmsCrossReport, timestamp);
-
+          governmentOrganizationCrossReportService.createDomainConstructor(postedCrossReport,
+              crossReport.getAgencies());
           crossReport.setLegacyId(postedCrossReport.getThirdId());
           crossReport.setLegacySourceTable(CROSS_REPORT_TABLE_NAME);
           resultCrossReports.add(crossReport);
@@ -386,6 +400,20 @@ public class ScreeningToReferralService implements CrudsService {
     }
 
     return resultCrossReports;
+  }
+
+  private Map<String, String> getLawEnforcement(Set<GovernmentAgency> agencies) {
+    Map<String, String> agencyMap = new HashMap<>();
+    if (agencies != null && !agencies.isEmpty()) {
+      for (GovernmentAgency agency : agencies) {
+        if (AgencyType.LAW_ENFORCEMENT.name().equals(agency.getType())) {
+          agencyMap.put(AgencyType.LAW_ENFORCEMENT.name(), agency.getId());
+        } else {
+          agencyMap.put("OTHER", "TRUE");
+        }
+      }
+    }
+    return agencyMap;
   }
 
   /*

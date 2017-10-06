@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -263,18 +264,20 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    * @param staffId - staffId
    * @param outStateLawEnforcementAddr - outStateLawEnforcementAddr
    * @param countyCode - countyCode
-   * @param lawEnforcementIndicator - lawEnforcementIndicator
+   * @param lawEnforcementId - lawEnforcementId
    * @param outStateLawEnforcementIndicator - outStateLawEnforcementIndicator
+   * @param governmentOrgCrossRptIndicatorVar - governmentOrgCrossRptIndicatorVar
    * @return the crossReport
    */
   public static CrossReport createWithDefaults(String id,
       gov.ca.cwds.rest.api.domain.CrossReport crossReport, String referralId, String staffId,
-      String outStateLawEnforcementAddr, String countyCode, Boolean lawEnforcementIndicator,
-      Boolean outStateLawEnforcementIndicator) {
+      String outStateLawEnforcementAddr, String countyCode, String lawEnforcementId,
+      Boolean outStateLawEnforcementIndicator, Boolean governmentOrgCrossRptIndicatorVar) {
     return new CrossReport(id, crossReport.getMethod().shortValue(),
-        crossReport.isFiledOutOfState(), Boolean.FALSE, "", "", DEFAULT_INT, DEFAULT_DECIMAL,
-        crossReport.getInformDate(), "", "", referralId, "", staffId, crossReport.getAgencyName(),
-        "", outStateLawEnforcementAddr, countyCode, lawEnforcementIndicator,
+        crossReport.isFiledOutOfState(), governmentOrgCrossRptIndicatorVar, "", "", DEFAULT_INT,
+        DEFAULT_DECIMAL, crossReport.getInformDate(), "", "", referralId, lawEnforcementId, staffId,
+        crossReport.getAgencyName(), "", outStateLawEnforcementAddr, countyCode,
+        StringUtils.isBlank(lawEnforcementId) ? Boolean.FALSE : Boolean.TRUE,
         outStateLawEnforcementIndicator, Boolean.FALSE);
   }
 

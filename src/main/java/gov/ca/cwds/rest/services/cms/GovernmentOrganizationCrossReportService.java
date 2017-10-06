@@ -1,6 +1,9 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -13,10 +16,14 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationCrossReportDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import gov.ca.cwds.rest.api.domain.GovernmentAgency;
+import gov.ca.cwds.rest.api.domain.cms.AgencyType;
+import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationCrossReport;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
+import gov.ca.cwds.rest.services.referentialintegrity.RIGovernmentOrganizationCrossReport;
 
 /**
  * Business layer object to work on
@@ -31,17 +38,37 @@ public class GovernmentOrganizationCrossReportService implements
       LoggerFactory.getLogger(GovernmentOrganizationCrossReportService.class);
 
   private GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao;
+
+  private static Map<String, String> agencyCodeMap = new HashMap<>();
+
+  @SuppressWarnings("unused")
+  private RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport;
   private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
   private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
 
   /**
    * @param governmentOrganizationCrossReportDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport} objects.
+   * @param riGovernmentOrganizationCrossReport - riGovernmentOrganizationCrossReport
    */
   @Inject
   public GovernmentOrganizationCrossReportService(
-      GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao) {
+      GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao,
+      RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport) {
     this.governmentOrganizationCrossReportDao = governmentOrganizationCrossReportDao;
+    this.riGovernmentOrganizationCrossReport = riGovernmentOrganizationCrossReport;
+    initializeCodeMap();
+  }
+
+  /**
+   * 
+   */
+  public void initializeCodeMap() {
+    agencyCodeMap.put("DISTRICT_ATTORNEY", "A");
+    agencyCodeMap.put("COUNTY_LICENSING", "C");
+    agencyCodeMap.put("DEPARTMENT_OF_JUSTICE", "D");
+    agencyCodeMap.put("COMMUNITY_CARE_LICENSING", "L");
+    agencyCodeMap.put("PROBATION", "P");
   }
 
   /**
@@ -66,6 +93,27 @@ public class GovernmentOrganizationCrossReportService implements
           governmentOrganizationCrossReport);
       throw new ServiceException(e);
     }
+  }
+
+  /**
+   * construct the domain
+   * 
+   * @param postedCrossReport - postedCrossReport
+   * @param agencies agencies
+   */
+  public void createDomainConstructor(CrossReport postedCrossReport,
+      Set<GovernmentAgency> agencies) {
+    for (GovernmentAgency agency : agencies) {
+      if (AgencyType.LAW_ENFORCEMENT.name().equals(agency.getType())) {
+        continue;
+      }
+      GovernmentOrganizationCrossReport governmentOrganizationCrossReport =
+          new GovernmentOrganizationCrossReport(null, postedCrossReport.getCountySpecificCode(),
+              postedCrossReport.getThirdId(), postedCrossReport.getReferralId(), agency.getId(),
+              agencyCodeMap.get(agency.getType()));
+      create(governmentOrganizationCrossReport);
+    }
+
   }
 
   /**

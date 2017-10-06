@@ -38,6 +38,7 @@ import gov.ca.cwds.rest.services.cms.CmsNSReferralService;
 import gov.ca.cwds.rest.services.cms.CmsReferralService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationService;
 import gov.ca.cwds.rest.services.cms.LegacyKeyService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
@@ -141,6 +142,7 @@ public class ServicesModule extends AbstractModule {
     bind(DeliveredService.class);
     bind(ContactService.class);
     bind(DeliveredToIndividualService.class);
+    bind(GovernmentOrganizationCrossReportService.class);
 
     UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);

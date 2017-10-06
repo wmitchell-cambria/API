@@ -209,8 +209,8 @@ public class CrossReportTest {
             Sets.newHashSet());
 
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
-        staffId, outStateLawEnforcementAddr, countyCode, lawEnforcementIndicator,
-        outStateLawEnforcementIndicator);
+        staffId, outStateLawEnforcementAddr, countyCode, lawEnforcementId,
+        outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
     assertEquals("Expected id field to be initialized with values", id,
         cmsCrossReport.getThirdId());
     assertEquals("Expected InformDate field to be initialized with values",
@@ -231,7 +231,6 @@ public class CrossReportTest {
         cmsCrossReport.getFiledOutOfStateIndicator());
     assertEquals("Expected  field to be initialized with default values", true,
         cmsCrossReport.getOutStateLawEnforcementIndicator());
-
   }
 
   @Test
@@ -252,8 +251,8 @@ public class CrossReportTest {
             Sets.newHashSet());
 
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
-        staffId, outStateLawEnforcementAddr, countyCode, lawEnforcementIndicator,
-        outStateLawEnforcementIndicator);
+        staffId, outStateLawEnforcementAddr, countyCode, lawEnforcementId,
+        outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
     // assertEquals("Expected field to be initialized with default values", new Short("0"),
     // cmsCrossReport.getCrossReportMethodType());
     assertEquals("Expected  field to be initialized with default values", false,
@@ -270,8 +269,6 @@ public class CrossReportTest {
         cmsCrossReport.getRecipientPositionTitleDesc());
     assertEquals("Expected  field to be initialized with default values", "",
         cmsCrossReport.getReferenceNumber());
-    assertEquals("Expected  field to be initialized with default values", "",
-        cmsCrossReport.getLawEnforcementId());
     assertEquals("Expected  field to be initialized with default values", "",
         cmsCrossReport.getRecipientName());
     // assertEquals("Expected field to be initialized with default values", "",

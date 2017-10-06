@@ -27,6 +27,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationCrossReport;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.services.referentialintegrity.RIGovernmentOrganizationCrossReport;
 
 /**
  * @author CWDS API Team
@@ -37,6 +38,7 @@ public class GovernmentOrganizationCrossReportServiceTest {
 
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
   private GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao;
+  private RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -45,8 +47,9 @@ public class GovernmentOrganizationCrossReportServiceTest {
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
     governmentOrganizationCrossReportDao = mock(GovernmentOrganizationCrossReportDao.class);
-    governmentOrganizationCrossReportService =
-        new GovernmentOrganizationCrossReportService(governmentOrganizationCrossReportDao);
+    riGovernmentOrganizationCrossReport = mock(RIGovernmentOrganizationCrossReport.class);
+    governmentOrganizationCrossReportService = new GovernmentOrganizationCrossReportService(
+        governmentOrganizationCrossReportDao, riGovernmentOrganizationCrossReport);
   }
 
   // find test

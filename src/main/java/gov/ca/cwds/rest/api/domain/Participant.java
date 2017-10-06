@@ -211,8 +211,7 @@ public class Participant extends ReportingDomain implements Request, Response {
       @JsonProperty("client_staff_person_added") boolean clientStaffPersonAdded,
       @JsonProperty("limited_access_code") String sensitivityIndicator,
       @JsonProperty("roles") Set<String> roles, @JsonProperty("addresses") Set<Address> addresses,
-      @JsonProperty("race_and_ethinicity") RaceAndEthnicity raceAndEthnicity)
-          throws ServiceException {
+      @JsonProperty("race_ethnicity") RaceAndEthnicity raceAndEthnicity) throws ServiceException {
     super();
     this.id = id;
     this.legacySourceTable = legacySourceTable;

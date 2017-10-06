@@ -39,6 +39,7 @@ import gov.ca.cwds.data.cms.CountyTriggerDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.ExternalInterfaceDao;
+import gov.ca.cwds.data.cms.GovernmentOrganizationCrossReportDao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.LongTextDao;
@@ -96,6 +97,7 @@ import gov.ca.cwds.data.persistence.cms.CrossReport;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 import gov.ca.cwds.data.persistence.cms.EducationProviderContact;
 import gov.ca.cwds.data.persistence.cms.ExternalInterface;
+import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport;
 import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationEntity;
 import gov.ca.cwds.data.persistence.cms.LawEnforcementEntity;
 import gov.ca.cwds.data.persistence.cms.LongText;
@@ -154,6 +156,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientCollateral;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
+import gov.ca.cwds.rest.services.referentialintegrity.RIGovernmentOrganizationCrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
@@ -174,24 +177,26 @@ public class DataAccessModule extends AbstractModule {
   private Map<String, Client> clients;
 
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
-          gov.ca.cwds.data.persistence.cms.Address.class, Allegation.class, ClientAddress.class,
-          ClientCollateral.class, gov.ca.cwds.data.persistence.cms.Client.class,
-          CmsDocReferralClient.class, CmsDocument.class, CmsDocumentBlobSegment.class,
-          CollateralIndividual.class, CrossReport.class, EducationProviderContact.class,
-          OtherAdultInPlacemtHome.class, OtherChildInPlacemtHome.class, OtherClientName.class,
-          Referral.class, ReferralClient.class, Reporter.class, ServiceProvider.class,
-          StaffPerson.class, SubstituteCareProvider.class, LongText.class,
-          AllegationPerpetratorHistory.class, ClientUc.class, ChildClient.class,
-          gov.ca.cwds.data.persistence.cms.Address.class, ClientAddress.class,
-          CountyOwnership.class, CountyTrigger.class, CountyTriggerEmbeddable.class,
-          SystemCode.class, SystemMeta.class, DrmsDocument.class, Assignment.class,
-          BaseAssignment.class, ReferralAssignment.class, CaseAssignment.class, CmsCase.class,
-          Tickle.class, ClientRelationship.class, ClientCollateral.class, AddressUc.class,
-          ExternalInterface.class, DeliveredServiceEntity.class,
-          ContactPartyDeliveredServiceEntity.class, ReferralClientDeliveredServiceEntity.class,
-          IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class, CaseLoad.class,
-          StaffPersonCaseLoad.class, ClientScpEthnicity.class, GovernmentOrganizationEntity.class),
+      new HibernateBundle<ApiConfiguration>(
+          ImmutableList.<Class<?>>of(gov.ca.cwds.data.persistence.cms.Address.class,
+              Allegation.class, ClientAddress.class, ClientCollateral.class,
+              gov.ca.cwds.data.persistence.cms.Client.class, CmsDocReferralClient.class,
+              CmsDocument.class, CmsDocumentBlobSegment.class, CollateralIndividual.class,
+              CrossReport.class, EducationProviderContact.class, OtherAdultInPlacemtHome.class,
+              OtherChildInPlacemtHome.class, OtherClientName.class, Referral.class,
+              ReferralClient.class, Reporter.class, ServiceProvider.class, StaffPerson.class,
+              SubstituteCareProvider.class, LongText.class, AllegationPerpetratorHistory.class,
+              ClientUc.class, ChildClient.class, gov.ca.cwds.data.persistence.cms.Address.class,
+              ClientAddress.class, CountyOwnership.class, CountyTrigger.class,
+              CountyTriggerEmbeddable.class, SystemCode.class, SystemMeta.class, DrmsDocument.class,
+              Assignment.class, BaseAssignment.class, ReferralAssignment.class,
+              CaseAssignment.class, CmsCase.class, Tickle.class, ClientRelationship.class,
+              ClientCollateral.class, AddressUc.class, ExternalInterface.class,
+              DeliveredServiceEntity.class, ContactPartyDeliveredServiceEntity.class,
+              ReferralClientDeliveredServiceEntity.class, IndividualDeliveredServiceEntity.class,
+              LawEnforcementEntity.class, CaseLoad.class, StaffPersonCaseLoad.class,
+              ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
+              GovernmentOrganizationCrossReport.class),
           new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
 
         @Override
@@ -283,6 +288,7 @@ public class DataAccessModule extends AbstractModule {
     bind(StaffPersonDao.class);
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
+    bind(GovernmentOrganizationCrossReportDao.class);
 
     // NS:
     bind(AddressDao.class);
@@ -328,6 +334,7 @@ public class DataAccessModule extends AbstractModule {
     bind(RIReporter.class);
     bind(RIReferral.class);
     bind(RIReferralClient.class);
+    bind(RIGovernmentOrganizationCrossReport.class);
   }
 
   @Provides

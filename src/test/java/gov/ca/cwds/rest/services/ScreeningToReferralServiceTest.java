@@ -98,6 +98,7 @@ import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
@@ -167,6 +168,7 @@ public class ScreeningToReferralServiceTest {
   private UpperCaseTables upperCaseTables;
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
+  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private Participant defaultVictim;
   private Participant defaultReporter;
@@ -281,11 +283,14 @@ public class ScreeningToReferralServiceTest {
 
     messageBuilder = new MessageBuilder();
 
+    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+
     screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
         allegationService, crossReportService, referralClientService, reporterService,
         addressService, clientAddressService, childClientService, assignmentService,
         participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        messageBuilder, allegationPerpetratorHistoryService, reminders);
+        messageBuilder, allegationPerpetratorHistoryService, reminders,
+        governmentOrganizationCrossReportService);
 
   }
 
@@ -1037,7 +1042,8 @@ public class ScreeningToReferralServiceTest {
         allegationService, crossReportService, referralClientService, reporterService,
         addressService, clientAddressService, childClientService, assignmentService,
         participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        new MessageBuilder(), allegationPerpetratorHistoryService, reminders);
+        new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+        governmentOrganizationCrossReportService);
 
     mockParticipantService(screeningToReferral);
 

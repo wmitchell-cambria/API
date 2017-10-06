@@ -23,7 +23,7 @@ public class AllegationEntityBuilder {
   private Set<AllegationSubType> allegationSubTypes = new HashSet<>();
 
   protected Short allegationType = 2179;
-  protected Boolean createdByScreener = false;
+  protected Boolean createdByScreener = Boolean.FALSE;
   protected AllegationSubType allegationSubType;
   protected Short dispositionType = 46;
   protected String rational = "disposistion reason explained";
