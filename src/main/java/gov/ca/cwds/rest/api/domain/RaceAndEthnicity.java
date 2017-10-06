@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.api.domain;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.validation.Valid;
 
@@ -42,10 +43,20 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
    */
   private static final long serialVersionUID = 1L;
 
+  private static final String EXAMPLE_RACE_CODES = "['839', '840']";
+
+  private static final String getExampleRaceCodes() {
+    return EXAMPLE_RACE_CODES;
+  }
+
+  private static final Supplier<String> fetchRaceCodes = () -> EXAMPLE_RACE_CODES;
+
+  private static final String ANOTHER_EXAMPLE = getExampleRaceCodes();
+
   @Valid
   @JsonProperty("race_codes")
   @ApiModelProperty(required = false, readOnly = false, value = "primary races",
-      dataType = "java.util.List", example = "['839', '840']")
+      dataType = "java.util.List", example = EXAMPLE_RACE_CODES)
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
   private Set<Short> raceCode;
 
@@ -56,7 +67,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   @Valid
   @JsonProperty("hispanic_codes")
-  @ApiModelProperty(required = false, readOnly = false, value = "other(secondary) races",
+  @ApiModelProperty(required = false, readOnly = false, value = "other (secondary) races",
       dataType = "java.util.List", example = "['3164']")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
   private Set<Short> hispanicCode;
