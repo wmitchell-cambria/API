@@ -7,10 +7,9 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
-import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import io.dropwizard.jackson.JsonSnakeCase;
@@ -30,6 +29,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  */
 @JsonSnakeCase
+@JsonPropertyOrder({"legacy_id", "legacy_ui_id", "legacy_table_neme", "legacy_table_description"})
 public class CmsRecordDescriptor implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -44,12 +44,6 @@ public class CmsRecordDescriptor implements Serializable {
   @ApiModelProperty(required = true, readOnly = false, value = "CWS/CMS user interface Id",
       example = "1111-2222-3333-4444555")
   private String uiId;
-
-  @JsonProperty("legacy_last_updated")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-  @ApiModelProperty(required = true, readOnly = false, value = "CWS/CMS Last Updated Time",
-      example = "2010-10-01T15:26:42.000-0700")
-  private DateTime lastUpdatedAt;
 
   @JsonProperty("legacy_table_name")
   @NotBlank
@@ -72,15 +66,12 @@ public class CmsRecordDescriptor implements Serializable {
   /**
    * @param id - the CMS id
    * @param uiId - the CMS user interface Id
-   * @param lastUpdated - date/time of last update to CMS record
    * @param tableName - the physical table name
    * @param tableDescription - the table Descrption
    */
-  public CmsRecordDescriptor(String id, String uiId, DateTime lastUpdated, String tableName,
-      String tableDescription) {
+  public CmsRecordDescriptor(String id, String uiId, String tableName, String tableDescription) {
     this.id = id;
     this.uiId = uiId;
-    this.lastUpdatedAt = lastUpdated;
     this.tableName = tableName;
     this.tableDescription = tableDescription;
   }
@@ -115,22 +106,6 @@ public class CmsRecordDescriptor implements Serializable {
    */
   public void setUiId(String uiId) {
     this.uiId = uiId;
-  }
-
-  /**
-   *
-   * @return return the last updated time as a string
-   */
-  public DateTime getLastUpdated() {
-    return lastUpdatedAt;
-  }
-
-  /**
-   *
-   * @param lastUpdated set the last updated time as a string
-   */
-  public void setLastUpdated(DateTime lastUpdated) {
-    this.lastUpdatedAt = lastUpdated;
   }
 
   /**

@@ -10,7 +10,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 
 import gov.ca.cwds.fixture.investigation.RelationshipToEntityBuilder;
@@ -27,10 +26,9 @@ public class RelationshipToTest {
   private String relationship = "Brother";
   private String relationshipToPerson = "Sister";
   private String relationshipContext = "step";
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
 
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", now, tableName, "Client");
+      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
 
 
   @Test

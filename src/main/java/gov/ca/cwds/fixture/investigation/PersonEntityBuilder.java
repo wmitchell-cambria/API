@@ -38,7 +38,7 @@ public class PersonEntityBuilder {
 
   private BigDecimal phoneNumber = new BigDecimal(3219876);
   private CmsRecordDescriptor phoneCmsRecordDescriptor =
-      new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", now, "CLIENT_T", "Client");
+      new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "CLIENT_T", "Client");
 
   private PhoneNumber phone =
       new PhoneNumber(phoneNumber, 3322, phoneType, phoneCmsRecordDescriptor);
@@ -54,7 +54,7 @@ public class PersonEntityBuilder {
     languages.add(primaryLanguage);
     languages.add(secondaryLanguage);
     cmsRecordDescriptor =
-        new CmsRecordDescriptor("1234567ABC", "111-222-333-4444", now, "CLIENT_T", "Client");
+        new CmsRecordDescriptor("1234567ABC", "111-222-333-4444", "CLIENT_T", "Client");
     phoneNumbers.add(phone);
 
     return new Person(cmsRecordDescriptor, lastUpdatedBy, lastUpdatedAt, firstName, middleName,
@@ -203,15 +203,6 @@ public class PersonEntityBuilder {
 
   public PersonEntityBuilder setSealed(Boolean sealed) {
     this.sealed = sealed;
-    return this;
-  }
-
-  public DateTime getNow() {
-    return now;
-  }
-
-  public PersonEntityBuilder setNow(DateTime now) {
-    this.now = now;
     return this;
   }
 

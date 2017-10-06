@@ -25,7 +25,7 @@ public class AllegationList extends ReportingDomain implements Request, Response
    * empty consturctor
    */
   public AllegationList() {
-
+    super();
   }
 
   /**

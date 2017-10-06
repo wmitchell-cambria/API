@@ -14,17 +14,20 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
+
 
 /**
  * {@link DomainObject} representing a Investigation
@@ -36,7 +39,7 @@ import io.swagger.annotations.ApiModelProperty;
     "incident_date", "location_type", "communication_method", "name", "investigation_summary",
     "reference", "response_time", "started_at", "assignee", "additional_information", "sensitive",
     "sealed", "incident_phone_number", "incident_address", "screening", "history_of_involvement",
-    "allegations", "people", "relationships"})
+    "allegations", "people", "relationships", "safety_alerts", "cross_reports", "contacts"})
 public class Investigation extends ReportingDomain implements Request, Response {
   private static final long serialVersionUID = 1L;
 
@@ -79,6 +82,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   private String locationType;
 
   @JsonProperty("communication_method")
+  @JsonSerialize(as = String.class)
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Communication Method",
       example = "409")
@@ -105,6 +109,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   private String reference;
 
   @JsonProperty("response_time")
+  @JsonSerialize(as = String.class)
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Referral Response Type",
       example = "1520")
@@ -160,7 +165,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @JsonProperty("allegations")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
-  private Set<HistoryOfInvolvementAllegation> allegations;
+  private AllegationList allegations;
 
   @JsonProperty("people")
   @ApiModelProperty(required = false, readOnly = false)
@@ -171,6 +176,19 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
   private Set<Relationship> relationships;
+
+  @JsonProperty("safety_alerts")
+  @ApiModelProperty(required = false, readOnly = false)
+  private String safetyAlerts;
+
+  @JsonProperty("cross_reports")
+  @ApiModelProperty(required = false, readOnly = false)
+  private String crossReports;
+
+  @JsonProperty("contacts")
+  @ApiModelProperty(required = false, readOnly = false)
+  private ContactList contacts;
+
 
   /**
    * empty constructor
@@ -203,16 +221,20 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param allegations - allegations
    * @param people - people of investigation
    * @param relationships - relationships of people
+   * @param safetyAlerts - safety alerts
+   * @param crossReports - crossReports
+   * @param contacts - contacts
    */
   public Investigation(@JsonProperty("legacy_descriptor") CmsRecordDescriptor cmsRecordDescriptor,
       @JsonProperty("last_updated_by") String lastUpdatedBy,
       @JsonProperty("last_updated_at") DateTime lastUpdatedAt,
       @JsonProperty("incident_county") @ValidLogicalId(required = true,
           category = "GVR_ENTC") String incidentCounty,
-      @JsonProperty("location_type") @Date String incidentDate, String locationType,
+      @JsonProperty("location_date") @Date String incidentDate,
+      @JsonProperty("location_type") String locationType,
       @JsonProperty("communication_method") @ValidSystemCodeId(required = true,
           category = "CMM_MTHC") Short communicationMethod,
-      @JsonProperty("report_narrative") String name, String reportNarrative,
+      @JsonProperty("name") String name, @JsonProperty("report_narrative") String reportNarrative,
       @JsonProperty("referrence") String reference,
       @JsonProperty("response_time") @ValidSystemCodeId(required = true,
           category = "RFR_RSPC") Short responseTime,
@@ -223,9 +245,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
       @JsonProperty("incident_address") InvestigationAddress address,
       @JsonProperty("screening") SimpleScreening screening,
       @JsonProperty("history_of_involvement") HistoryOfInvolvement historyOfInvolvement,
-      @JsonProperty("allegations") Set<HistoryOfInvolvementAllegation> allegations,
+      @JsonProperty("allegations") AllegationList allegations,
       @JsonProperty("people") Set<Person> people,
-      @JsonProperty("relationships") Set<Relationship> relationships) {
+      @JsonProperty("relationships") Set<Relationship> relationships,
+      @JsonProperty("safety_alerts") String safetyAlerts,
+      @JsonProperty("cross_reports") String crossReports,
+      @JsonProperty("contacts") ContactList contacts) {
     super();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
@@ -250,6 +275,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.allegations = allegations;
     this.people = people;
     this.relationships = relationships;
+    this.safetyAlerts = safetyAlerts;
+    this.crossReports = crossReports;
+    this.contacts = contacts;
   }
 
   /**
@@ -395,7 +423,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @return - allegations
    */
-  public Set<HistoryOfInvolvementAllegation> getAllegations() {
+  public AllegationList getAllegations() {
     return allegations;
   }
 
@@ -411,6 +439,18 @@ public class Investigation extends ReportingDomain implements Request, Response 
    */
   public Set<Relationship> getRelationships() {
     return relationships;
+  }
+
+  public String getSafetyAlerts() {
+    return safetyAlerts;
+  }
+
+  public String getCrossReports() {
+    return crossReports;
+  }
+
+  public ContactList getContacts() {
+    return contacts;
   }
 
   /**
