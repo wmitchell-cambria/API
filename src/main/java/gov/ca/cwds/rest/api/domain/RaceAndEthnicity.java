@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.api.domain;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import javax.validation.Valid;
 
@@ -45,13 +44,13 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   private static final String EXAMPLE_RACE_CODES = "['839', '840']";
 
-  private static final String getExampleRaceCodes() {
-    return EXAMPLE_RACE_CODES;
-  }
+  // private static final String getExampleRaceCodes() {
+  // return EXAMPLE_RACE_CODES;
+  // }
 
-  private static final Supplier<String> fetchRaceCodes = () -> EXAMPLE_RACE_CODES;
+  // private static final Supplier<String> fetchRaceCodes = () -> EXAMPLE_RACE_CODES;
 
-  private static final String ANOTHER_EXAMPLE = getExampleRaceCodes();
+  // private static final String ANOTHER_EXAMPLE = getExampleRaceCodes();
 
   @Valid
   @JsonProperty("race_codes")
