@@ -30,35 +30,32 @@ public class AllowableEnumValues implements AllowableValues {
     this.items = items;
   }
 
+  /**
+   * Construct an AllowableEnumValues from allowed values annotation.
+   * 
+   * @param allowableValues allowable values for a field on Swagger page
+   * @return AllowableEnumValues instance
+   */
   public static AllowableEnumValues create(String allowableValues) {
     final List<String> items = new ArrayList<>();
 
-    if (allowableValues.startsWith("$")) {
+    final boolean isSysCodeId = allowableValues.startsWith("$ID:");
+    final boolean isSysCodeLogical = allowableValues.startsWith("$LG:");
+
+    if (isSysCodeId || isSysCodeLogical) {
       LOGGER.info("Dynamic LOV: {}", allowableValues);
 
       if (SystemCodeCache.global() != null) {
-        final String category = allowableValues.substring(1);
+        final String category = allowableValues.substring(4);
         final Set<SystemCode> sysCodes = SystemCodeCache.global().getSystemCodesForMeta(category);
 
         if (sysCodes != null && !sysCodes.isEmpty()) {
-          items.addAll(sysCodes.stream().map(c -> c.getSystemId()).sorted().map(s -> s.toString())
-              .collect(Collectors.toList()));
+          items.addAll(sysCodes.stream().map(c -> isSysCodeId ? c.getSystemId() : c.getLogicalId())
+              .sorted().map(s -> s.toString()).collect(Collectors.toList()));
         } else {
           LOGGER.warn("NO SYSTEM CODES FOR CATEGORY {}", category);
         }
-      } else {
-        LOGGER.warn("system code cache not initialized at this point ...");
-
-        items.add("Barney");
-        items.add("Buzz");
-        items.add("Candace");
-        items.add("Dora");
-        items.add("Ferb");
-        items.add("Neutron");
-        items.add("Perry");
-        items.add("Phineas");
       }
-
     } else {
       LOGGER.info(allowableValues);
       for (String value : allowableValues.split(",")) {
