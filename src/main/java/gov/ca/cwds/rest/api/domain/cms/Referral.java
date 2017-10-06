@@ -257,7 +257,7 @@ public class Referral extends ReportingDomain implements Request, Response {
   @OneOf(value = {"C", "P", "O", "A", "S", "I", "K", "M"}, ignoreCase = true,
       ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "C",
-      allowableValues = "C, P, O, A, S, I, K, M")
+      allowableValues = "$C, P, O, A, S, I, K, M")
   private String responsibleAgencyCode;
 
   @ApiModelProperty(required = false, readOnly = false, example = "1234")

@@ -9,9 +9,20 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.swagger.models.properties.PropertyBuilder;
 
+/**
+ * Stolen from Swagger 1.5.9. Display LOV values at runtime without compiling enums or Strings in
+ * advance.
+ * 
+ * @author CWDS API Team
+ */
 public class AllowableEnumValues implements AllowableValues {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AllowableEnumValues.class);
 
   private final List<String> items;
 
@@ -20,14 +31,28 @@ public class AllowableEnumValues implements AllowableValues {
   }
 
   public static AllowableEnumValues create(String allowableValues) {
-    System.out.println("Dave is so cool");
     final List<String> items = new ArrayList<>();
-    for (String value : allowableValues.split(",")) {
-      final String trimmed = value.trim();
-      if (!trimmed.equals("")) {
-        items.add(trimmed);
+
+    if (allowableValues.startsWith("$")) {
+      LOGGER.info("Dave is so cool!");
+      items.add("Barney");
+      items.add("Buzz");
+      items.add("Candace");
+      items.add("Dora");
+      items.add("Ferb");
+      items.add("Neutron");
+      items.add("Perry");
+      items.add("Phineas");
+    } else {
+      LOGGER.info(allowableValues);
+      for (String value : allowableValues.split(",")) {
+        final String trimmed = value.trim();
+        if (!"".equals(trimmed)) {
+          items.add(trimmed);
+        }
       }
     }
+
     return items.isEmpty() ? null : new AllowableEnumValues(items);
   }
 
@@ -38,7 +63,7 @@ public class AllowableEnumValues implements AllowableValues {
   @Override
   public Map<PropertyBuilder.PropertyId, Object> asPropertyArguments() {
     final Map<PropertyBuilder.PropertyId, Object> map =
-        new EnumMap<PropertyBuilder.PropertyId, Object>(PropertyBuilder.PropertyId.class);
+        new EnumMap<>(PropertyBuilder.PropertyId.class);
     map.put(PropertyBuilder.PropertyId.ENUM, items);
     return map;
   }

@@ -21,7 +21,7 @@ import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a RaceAndEthnicity
+ * {@link DomainObject} representing a RaceAndEthnicity.
  * 
  * @author CWDS API Team
  */
@@ -44,18 +44,10 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   private static final String EXAMPLE_RACE_CODES = "['839', '840']";
 
-  // private static final String getExampleRaceCodes() {
-  // return EXAMPLE_RACE_CODES;
-  // }
-
-  // private static final Supplier<String> fetchRaceCodes = () -> EXAMPLE_RACE_CODES;
-
-  // private static final String ANOTHER_EXAMPLE = getExampleRaceCodes();
-
   @Valid
   @JsonProperty("race_codes")
   @ApiModelProperty(required = false, readOnly = false, value = "primary races",
-      dataType = "java.util.List", example = EXAMPLE_RACE_CODES)
+      dataType = "java.util.List", allowableValues = "$hello world")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
   private Set<Short> raceCode;
 
