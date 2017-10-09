@@ -1,4 +1,13 @@
-package gov.ca.cwds.rest.services.investigation;
+package gov.ca.cwds.rest.services.investigation.contact;
+
+import java.util.Date;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.cms.AttorneyDao;
@@ -12,16 +21,10 @@ import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.data.std.ApiPersonAware;
 import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
-
-import java.util.Date;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.inject.Inject;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 
 /**
  * Business layer object
@@ -32,6 +35,9 @@ public class DeliveredToIndividualService {
 
   private EnumMap<Code, BaseDaoImpl<? extends ApiPersonAware>> codeToDaoImplememterMap;
   private IndividualDeliveredServiceDao individualDeliveredServiceDao;
+  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
+  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
+
 
   /**
    * Constructor
@@ -68,9 +74,9 @@ public class DeliveredToIndividualService {
    * @return the Code Dao Implementer EnumMap
    */
   private EnumMap<Code, BaseDaoImpl<? extends ApiPersonAware>> deliveredToIndividualCodeToDaoImplementerMap(
-      ClientDao clientDao, AttorneyDao attorneyDao,
-      CollateralIndividualDao collateralIndividualDao, ServiceProviderDao serviceProviderDao,
-      SubstituteCareProviderDao substituteCareProviderDao, ReporterDao reporterDao) {
+      ClientDao clientDao, AttorneyDao attorneyDao, CollateralIndividualDao collateralIndividualDao,
+      ServiceProviderDao serviceProviderDao, SubstituteCareProviderDao substituteCareProviderDao,
+      ReporterDao reporterDao) {
     EnumMap<Code, BaseDaoImpl<? extends ApiPersonAware>> deliveredToIndividualCodeToDaoImplememterMap =
         new EnumMap<>(Code.class);
     deliveredToIndividualCodeToDaoImplememterMap.put(Code.CLIENT, clientDao);
@@ -105,38 +111,10 @@ public class DeliveredToIndividualService {
     final DeliveredToIndividualService.Code deliveredToIndividualCode =
         DeliveredToIndividualService.Code.lookupByCodeLiteral(individualDeliveredService
             .getIndividualDeliveredServiceEmbeddable().getDeliveredToIndividualCode());
-    final String id =
-        individualDeliveredService.getIndividualDeliveredServiceEmbeddable()
-            .getDeliveredToIndividualId();
+    final String id = individualDeliveredService.getIndividualDeliveredServiceEmbeddable()
+        .getDeliveredToIndividualId();
     return addPersonDetails(this.getDaoImplementer(deliveredToIndividualCode),
         deliveredToIndividualCode, id);
-  }
-
-  /**
-   * Creates a record in IndividualDeliveredService for each person in people
-   * 
-   * @param people the people associated with the Contact
-   * @param deliveredServiceId the identifier of the Delivered Service
-   * @param countySpecificCode the county of the Referral
-   * @param endDate the end date
-   * @param serviceContactType the service contact type
-   * @param startDate the start date
-   * @param lastUpdatedId the id of the logged in user
-   * @param lastUpdatedTime the time of update
-   */
-  public void addPeopleToIndividualDeliveredService(Set<PostedIndividualDeliveredService> people,
-      String deliveredServiceId, String countySpecificCode, Date endDate, short serviceContactType,
-      Date startDate, String lastUpdatedId, Date lastUpdatedTime) {
-    for (PostedIndividualDeliveredService person : people) {
-      String deliveredToIndividualCode =
-          DeliveredToIndividualService.Code.lookupByValue(person.getTableName()).getCodeLiteral();
-      String deliveredToIndividualId = person.getId();
-      IndividualDeliveredServiceEntity ids =
-          new IndividualDeliveredServiceEntity(deliveredServiceId, deliveredToIndividualCode,
-              deliveredToIndividualId, countySpecificCode, endDate, serviceContactType, startDate,
-              lastUpdatedId, lastUpdatedTime);
-      individualDeliveredServiceDao.create(ids);
-    }
   }
 
   /**
@@ -150,9 +128,10 @@ public class DeliveredToIndividualService {
   protected PostedIndividualDeliveredService addPersonDetails(
       final BaseDaoImpl<? extends ApiPersonAware> dao, final Code code, final String id) {
     final ApiPersonAware person = dao.find(id);
-    return (person != null) ? new PostedIndividualDeliveredService(code.getValue(), id,
-        person.getFirstName(), person.getMiddleName(), person.getLastName(),
-        person.getNameSuffix(), person.getNameSuffix(), code.getDescription())
+    return (person != null)
+        ? new PostedIndividualDeliveredService(code.getValue(), id, person.getFirstName(),
+            person.getMiddleName(), person.getLastName(), person.getNameSuffix(),
+            person.getNameSuffix(), code.getDescription())
         : defaultPostedIndividualDeliveredService(code, id);
   }
 
@@ -201,10 +180,11 @@ public class DeliveredToIndividualService {
    *
    */
   public enum Code {
-    CLIENT("C", "CLIENT_T", "Client"), SERVICE_PROVIDER("P", "SVC_PVRT", "Service Provider"), COLLATERAL_INDIVIDUAL(
-        "O", "COLTRL_T", "Collateral Individual"), REPORTER("R", "REPTR_T", "Reporter"), ATTORNEY(
-        "A", "ATTRNY_T", "Attorney"), SUBSTITUTE_CARE_PROVIDER("S", "SB_PVDRT",
-        "Substitute Care Provider");
+    CLIENT("C", "CLIENT_T", "Client"), SERVICE_PROVIDER("P", "SVC_PVRT",
+        "Service Provider"), COLLATERAL_INDIVIDUAL("O", "COLTRL_T",
+            "Collateral Individual"), REPORTER("R", "REPTR_T", "Reporter"), ATTORNEY("A",
+                "ATTRNY_T",
+                "Attorney"), SUBSTITUTE_CARE_PROVIDER("S", "SB_PVDRT", "Substitute Care Provider");
 
     private final String codeLiteral;
     private final String value;
@@ -266,5 +246,32 @@ public class DeliveredToIndividualService {
 
   }
 
+
+
+  /**
+   * Creates a record in IndividualDeliveredService for each person in people
+   * 
+   * @param deliveredServiceId the identifier of the Delivered Service
+   * @param contactRequest the contact request
+   * @param countySpecificCode the county of the Referral
+   * 
+   */
+  public void addPeopleToIndividualDeliveredService(String deliveredServiceId,
+      ContactRequest contactRequest, String countySpecificCode) {
+    Date endedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getEndedAt());
+    Date startedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getStartedAt());
+    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Set<PostedIndividualDeliveredService> people = contactRequest.getPeople();
+    for (PostedIndividualDeliveredService person : people) {
+      String deliveredToIndividualCode =
+          DeliveredToIndividualService.Code.lookupByValue(person.getTableName()).getCodeLiteral();
+      String deliveredToIndividualId = person.getId();
+      IndividualDeliveredServiceEntity ids =
+          new IndividualDeliveredServiceEntity(deliveredServiceId, deliveredToIndividualCode,
+              deliveredToIndividualId, countySpecificCode, endedAt, serviceContactType.shortValue(),
+              startedAt, lastUpdatedId, lastUpdatedTime);
+      individualDeliveredServiceDao.create(ids);
+    }
+  }
 
 }
