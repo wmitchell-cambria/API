@@ -90,6 +90,7 @@ public class Person extends ReportingDomain implements Request, Response {
 
   @Valid
   @JsonProperty("languages")
+  // @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "languages",
       dataType = "java.util.List", example = "['839', '840']")
   private Set<Short> languages;

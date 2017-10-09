@@ -1,16 +1,13 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.apache.commons.lang3.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -54,7 +51,7 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "FKCRSS_RP0", nullable = false, updatable = false, insertable = false)
-  private CrossReport crossreport;
+  private CrossReport crossReport;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "FKCRSS_RPT", nullable = false, updatable = false, insertable = false)
@@ -62,7 +59,7 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
 
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKGV_ORG_T", nullable = true, updatable = false, insertable = false)
-  private GovernmentOrganizationCrossReport governmentOrganizationCrossReportId;
+  private GovernmentOrganizationEntity governmentOrganization;
 
   /**
    * Default constructor
@@ -113,7 +110,8 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
     this.referralId = domainGovernmentOrganizationCrossReport.getReferralId();
     this.governmentOrganizationId =
         StringUtils.isBlank(domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId())
-            ? null : domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId();
+            ? null
+            : domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId();
     this.organizationTypeInd = domainGovernmentOrganizationCrossReport.getOrganizationTypeInd();
   }
 

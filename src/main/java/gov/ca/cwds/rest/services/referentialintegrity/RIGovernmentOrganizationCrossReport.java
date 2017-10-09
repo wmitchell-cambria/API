@@ -2,13 +2,11 @@ package gov.ca.cwds.rest.services.referentialintegrity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.ApiHibernateInterceptor;
 import gov.ca.cwds.data.ApiReferentialCheck;
 import gov.ca.cwds.data.cms.CrossReportDao;
-import gov.ca.cwds.data.cms.GovernmentOrganizationCrossReportDao;
+import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport;
 import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
@@ -35,11 +33,11 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  * 
  * &#64;ManyToOne(optional = false)
  * &#64;JoinColumn(name = "FKCRSS_RP0", nullable = false, updatable = false, insertable = false)
- * private CrossReport crossreport;
+ * private CrossReport crossReport;
  * 
  * &#64;ManyToOne(optional = true)
  * &#64;JoinColumn(name = "FKGV_ORG_T", nullable = true, updatable = false, insertable = false)
- * private GovernmentOrganizationCrossReport governmentOrganizationCrossReportId;
+ * private GovernmentOrganization governmentOrganization;
  * </pre>
  * 
  * </blockquote>
@@ -60,7 +58,7 @@ public class RIGovernmentOrganizationCrossReport
 
   private transient CrossReportDao crossReportDao;
   private transient ReferralDao referralDao;
-  private transient GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao;
+  private transient GovernmentOrganizationDao governmentOrganizationDao;
 
 
   /**
@@ -68,15 +66,14 @@ public class RIGovernmentOrganizationCrossReport
    * 
    * @param referralDao - referralDao
    * @param crossReportDao - crossReportDao
-   * @param governmentOrganizationCrossReportDao - governmentOrganizationCrossReportDao
+   * @param governmentOrganizationDao - governmentOrganizationDao
    */
   @Inject
   public RIGovernmentOrganizationCrossReport(final CrossReportDao crossReportDao,
-      ReferralDao referralDao,
-      GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao) {
+      ReferralDao referralDao, GovernmentOrganizationDao governmentOrganizationDao) {
     this.crossReportDao = crossReportDao;
     this.referralDao = referralDao;
-    this.governmentOrganizationCrossReportDao = governmentOrganizationCrossReportDao;
+    this.governmentOrganizationDao = governmentOrganizationDao;
     ApiHibernateInterceptor.addHandler(GovernmentOrganizationCrossReport.class,
         governmentOrganizationCrossReport -> apply(
             (GovernmentOrganizationCrossReport) governmentOrganizationCrossReport));
@@ -92,7 +89,7 @@ public class RIGovernmentOrganizationCrossReport
       throw new ReferentialIntegrityException(
           "GovernmentOrganizationCrossReport => Referral with given Identifier is not present in database");
     } else if (t.getGovernmentOrganizationId() != null
-        && governmentOrganizationCrossReportDao.find(t.getThirdId()) == null) {
+        && governmentOrganizationDao.find(t.getGovernmentOrganizationId()) == null) {
       throw new ReferentialIntegrityException(
           "GovernmentOrganizationCrossReport => GovernmentOrganization with given Identifier is not present in database");
     }

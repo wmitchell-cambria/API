@@ -8,13 +8,11 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -22,17 +20,14 @@ import javax.validation.ValidatorFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.assertj.core.util.Sets;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.core.Api;
@@ -63,6 +58,7 @@ public class ScreeningToReferralTest {
   private Set<Allegation> allegations = new HashSet<Allegation>();
   private long id = 2;
   private boolean filedOutOfState = false;
+  private String countyId = "34";
 
   int approvalStatus = 118;
   boolean familyAwarness = false;
@@ -118,8 +114,8 @@ public class ScreeningToReferralTest {
     Address address = validAddress();
     Participant participant = validParticipant();
     participants.add(participant);
-    CrossReport crossReport = new CrossReport("", "", "", agencyType, agencyName, filedOutOfState,
-        method, informDate, Sets.newHashSet());
+    CrossReport crossReport = new CrossReport("", "", "", filedOutOfState, method, informDate,
+        countyId, Sets.newHashSet());
     crossReports.add(crossReport);
     Allegation allegation = validAllegation();
     allegations.add(allegation);
@@ -143,8 +139,8 @@ public class ScreeningToReferralTest {
     Address address = validAddress();
     Participant participant = validParticipant();
     participants.add(participant);
-    CrossReport crossReport = new CrossReport("", "", "", agencyType, agencyName, filedOutOfState,
-        method, informDate, Sets.newHashSet());
+    CrossReport crossReport = new CrossReport("", "", "", filedOutOfState, method, informDate,
+        countyId, Sets.newHashSet());
     crossReports.add(crossReport);
     Allegation allegation = validAllegation();
     allegations.add(allegation);
@@ -273,17 +269,6 @@ public class ScreeningToReferralTest {
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
 
-  }
-
-  @Test
-  public void testWithAgencyTypeMissingFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/missingAgencyType.json"),
-        ScreeningToReferral.class);
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("may not be empty", constraintViolations.iterator().next().getMessage());
   }
 
   @Test

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
-import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
+import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleScreening;
-import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
+import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 
 @SuppressWarnings("javadoc")
 public class InvestigationEntityBuilder {
@@ -25,7 +25,7 @@ public class InvestigationEntityBuilder {
   String tableName = "REFERL_T";
   String id = "1234567ABC";
   String lastUpdatedBy = "0X5";
-  DateTime lastUpdatedAt = new DateTime("2016-08-03T01:00:00.000Z");
+  String lastUpdatedAt = "2016-08-03T01:00:00.000Z";
   String incidentCounty = "20";
   String incidentDate = "2017-08-20";
   String locationType = "Home";
@@ -61,7 +61,9 @@ public class InvestigationEntityBuilder {
   private HistoryOfInvolvement historyOfInvolvement =
       new HistoryOfInvolvementEntityBuilder().build();
 
-  private AllegationList allegations = new AllegationListEntityBuilder().build();
+  private Allegation allegation = new AllegationEntityBuilder().build();
+  private Set<Allegation> allegations = new HashSet<>();
+  // private AllegationList allegations = new AllegationListEntityBuilder().build();
 
   private Person person = new PersonEntityBuilder().build();
   private Set<Person> people = new HashSet<>();
@@ -69,14 +71,15 @@ public class InvestigationEntityBuilder {
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
 
-  private String safetyAlerts;
-  private String crossReports;
-  private ContactList contacts;
+  private Set<String> safetyAlerts = new HashSet<>();
+  private Set<String> crossReports = new HashSet<>();
+  private Set<Contact> contacts = new HashSet<>();
 
   public Investigation build() {
     people.add(person);
     phoneNumbers.add(phoneNumber);
     relationships.add(relationship);
+    allegations.add(allegation);
 
     return new Investigation(cmsRecordDescriptor, lastUpdatedBy, lastUpdatedAt, incidentCounty,
         incidentDate, locationType, communicationMethod, name, reportNarrative, reference,
@@ -112,11 +115,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public DateTime getLastUpdatedAt() {
+  public String getLastUpdatedAt() {
     return lastUpdatedAt;
   }
 
-  public InvestigationEntityBuilder setLastUpdatedAt(DateTime lastUpdatedAt) {
+  public InvestigationEntityBuilder setLastUpdatedAt(String lastUpdatedAt) {
     this.lastUpdatedAt = lastUpdatedAt;
     return this;
   }
@@ -330,11 +333,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public AllegationList getAllegations() {
+  public Set<Allegation> getAllegations() {
     return allegations;
   }
 
-  public InvestigationEntityBuilder setAllegations(AllegationList allegations) {
+  public InvestigationEntityBuilder setAllegations(Set<Allegation> allegations) {
     this.allegations = allegations;
     return this;
   }

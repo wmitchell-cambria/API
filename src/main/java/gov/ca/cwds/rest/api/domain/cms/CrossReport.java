@@ -1,21 +1,16 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
 import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -120,7 +115,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   private String staffPersonId;
 
   @NotNull
-  @Size(min = 1, max = 120)
+  @Size(min = 0, max = 120)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC123")
   private String description;
 
@@ -263,7 +258,6 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    * @param referralId - referralId
    * @param staffId - staffId
    * @param outStateLawEnforcementAddr - outStateLawEnforcementAddr
-   * @param countyCode - countyCode
    * @param lawEnforcementId - lawEnforcementId
    * @param outStateLawEnforcementIndicator - outStateLawEnforcementIndicator
    * @param governmentOrgCrossRptIndicatorVar - governmentOrgCrossRptIndicatorVar
@@ -271,12 +265,12 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    */
   public static CrossReport createWithDefaults(String id,
       gov.ca.cwds.rest.api.domain.CrossReport crossReport, String referralId, String staffId,
-      String outStateLawEnforcementAddr, String countyCode, String lawEnforcementId,
+      String outStateLawEnforcementAddr, String lawEnforcementId,
       Boolean outStateLawEnforcementIndicator, Boolean governmentOrgCrossRptIndicatorVar) {
     return new CrossReport(id, crossReport.getMethod().shortValue(),
         crossReport.isFiledOutOfState(), governmentOrgCrossRptIndicatorVar, "", "", DEFAULT_INT,
         DEFAULT_DECIMAL, crossReport.getInformDate(), "", "", referralId, lawEnforcementId, staffId,
-        crossReport.getAgencyName(), "", outStateLawEnforcementAddr, countyCode,
+        "", "", outStateLawEnforcementAddr, crossReport.getCountyId(),
         StringUtils.isBlank(lawEnforcementId) ? Boolean.FALSE : Boolean.TRUE,
         outStateLawEnforcementIndicator, Boolean.FALSE);
   }

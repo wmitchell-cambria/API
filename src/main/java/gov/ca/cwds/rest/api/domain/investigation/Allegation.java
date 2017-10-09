@@ -9,11 +9,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.util.SysIdSerializer;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,6 +33,7 @@ public class Allegation extends ReportingDomain implements Response {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("allegation_type")
+  @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "Allegation Type", example = "2179")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE)
   private Short allegationType;
@@ -46,6 +49,7 @@ public class Allegation extends ReportingDomain implements Response {
   private Set<AllegationSubType> allegationSubType;
 
   @JsonProperty("disposition")
+  @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false)
   private Short dispositionType;
 

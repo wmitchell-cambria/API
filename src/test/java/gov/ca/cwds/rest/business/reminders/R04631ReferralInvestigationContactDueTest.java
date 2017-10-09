@@ -5,16 +5,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
@@ -124,8 +121,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
-            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", DEFAULT_COUNTY_SPECIFIC_CODE, "", false,
-            false);
+            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
@@ -198,8 +194,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
-            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", DEFAULT_COUNTY_SPECIFIC_CODE, "", false,
-            false);
+            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
@@ -276,8 +271,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
-            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", DEFAULT_COUNTY_SPECIFIC_CODE, "ABc1qf56yi",
-            false, false);
+            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "ABc1qf56yi", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
@@ -352,8 +346,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
-            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", DEFAULT_COUNTY_SPECIFIC_CODE, "ABc1qf56yi",
-            false, false);
+            "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "ABc1qf56yi", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
