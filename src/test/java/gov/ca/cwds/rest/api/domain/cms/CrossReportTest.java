@@ -9,12 +9,10 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -22,16 +20,13 @@ import javax.validation.ValidatorFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.assertj.core.util.Sets;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.core.Api;
@@ -200,31 +195,26 @@ public class CrossReportTest {
     String countyCode = "countyCode";
     Boolean lawEnforcementIndicator = true;
     Boolean outStateLawEnforcementIndicator = true;
+    String countyId = "34";
 
-    String agencyName = "agencyName";
     String informDate = "informDate";
     gov.ca.cwds.rest.api.domain.CrossReport nsCrossReport =
         new gov.ca.cwds.rest.api.domain.CrossReport(id, "legacy_source_table", "legacy_id",
-            "agency_type", agencyName, filedOutOfStateIndicator, 2095, informDate,
-            Sets.newHashSet());
+            filedOutOfStateIndicator, 2095, informDate, countyId, Sets.newHashSet());
 
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
-        staffId, outStateLawEnforcementAddr, countyCode, lawEnforcementId,
-        outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
+        staffId, outStateLawEnforcementAddr, lawEnforcementId, outStateLawEnforcementIndicator,
+        governmentOrgCrossRptIndicatorVar);
     assertEquals("Expected id field to be initialized with values", id,
         cmsCrossReport.getThirdId());
     assertEquals("Expected InformDate field to be initialized with values",
         nsCrossReport.getInformDate(), cmsCrossReport.getInformDate());
-    assertEquals("Expected agencyName field to be initialized with values",
-        nsCrossReport.getAgencyName(), cmsCrossReport.getDescription());
     assertEquals("Expected referralId field to be initialized with values", referralId,
         cmsCrossReport.getReferralId());
     assertEquals("Expected staffId field to be initialized with values", staffId,
         cmsCrossReport.getStaffPersonId());
     assertEquals("Expected outStateLawEnforcementAddr field to be initialized with values",
         outStateLawEnforcementAddr, cmsCrossReport.getOutStateLawEnforcementAddr());
-    assertEquals("Expected countyCode field to be initialized with values", countyCode,
-        cmsCrossReport.getCountySpecificCode());
     assertEquals("Expected lawEnforcementIndicator field to be initialized with values",
         lawEnforcementIndicator, cmsCrossReport.getLawEnforcementIndicator());
     assertEquals("Expected  field to be initialized with default values", true,
@@ -239,20 +229,18 @@ public class CrossReportTest {
     String referralId = "referralId";
     String staffId = "staffId";
     String outStateLawEnforcementAddr = "Law Enforcement Address";
-    String countyCode = "countyCode";
     Boolean lawEnforcementIndicator = true;
     Boolean outStateLawEnforcementIndicator = true;
+    String countyId = "34";
 
-    String agencyName = "agencyName";
     String informDate = "informDate";
     gov.ca.cwds.rest.api.domain.CrossReport nsCrossReport =
         new gov.ca.cwds.rest.api.domain.CrossReport(id, "legacy_source_table", "legacy_id",
-            "agency_type", agencyName, filedOutOfStateIndicator, 2095, informDate,
-            Sets.newHashSet());
+            filedOutOfStateIndicator, 2095, informDate, countyId, Sets.newHashSet());
 
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
-        staffId, outStateLawEnforcementAddr, countyCode, lawEnforcementId,
-        outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
+        staffId, outStateLawEnforcementAddr, lawEnforcementId, outStateLawEnforcementIndicator,
+        governmentOrgCrossRptIndicatorVar);
     // assertEquals("Expected field to be initialized with default values", new Short("0"),
     // cmsCrossReport.getCrossReportMethodType());
     assertEquals("Expected  field to be initialized with default values", false,
@@ -454,9 +442,8 @@ public class CrossReportTest {
 
   @Test
   public void failsWhenFiledOutOfStateIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/filedOutOfStateIndicatorAllWhitespace.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/filedOutOfStateIndicatorAllWhitespace.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -472,9 +459,8 @@ public class CrossReportTest {
    */
   @Test
   public void failsWhenGovernmentOrgCrossRptIndicatorVarMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarMissing.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarMissing.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -486,9 +472,8 @@ public class CrossReportTest {
 
   @Test
   public void failsWhenGovernmentOrgCrossRptIndicatorVarNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarNull.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarNull.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -500,9 +485,8 @@ public class CrossReportTest {
 
   @Test
   public void failsWhenGovernmentOrgCrossRptIndicatorVarEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarEmpty.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarEmpty.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -514,9 +498,8 @@ public class CrossReportTest {
 
   @Test
   public void failsWhenGovernmentOrgCrossRptIndicatorVarAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarAllWhitespace.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarAllWhitespace.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1062,17 +1045,14 @@ public class CrossReportTest {
   }
 
   @Test
-  public void failsWhenDescriptionEmpty() throws Exception {
+  public void successWhenDescriptionEmpty() throws Exception {
     CrossReport toCreate = MAPPER.readValue(
         fixture("fixtures/domain/legacy/CrossReport/invalid/descriptionEmpty.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("description size must be between 1 and 120"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -1185,9 +1165,8 @@ public class CrossReportTest {
 
   @Test
   public void successWhenOutstateLawEnforcementAddrAllWhiteSpace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/valid/outStateLawEnforcementAddrAllWhiteSpace.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/valid/outStateLawEnforcementAddrAllWhiteSpace.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1311,9 +1290,8 @@ public class CrossReportTest {
    */
   @Test
   public void failsWhenOutStateLawEnforcementIndicatorMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorMissing.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorMissing.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1340,9 +1318,8 @@ public class CrossReportTest {
 
   @Test
   public void failsWhenOutStateLawEnforcementIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorAllWhitespace.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorAllWhitespace.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1400,9 +1377,8 @@ public class CrossReportTest {
 
   @Test
   public void failsWhenSatisfyCrossReportIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/satisfyCrossReportIndicatorAllWhitespace.json"),
+    CrossReport toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/CrossReport/invalid/satisfyCrossReportIndicatorAllWhitespace.json"),
         CrossReport.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)

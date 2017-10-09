@@ -11,11 +11,10 @@ public class CrossReportResourceBuilder {
   String id = "";
   String legacySourceTable = "";
   String legacyId = "";
-  String agencyType = "Law enforcement";
-  String agencyName = "Sacramento County Sheriff Deparment";
   boolean filedOutOfState = false;
   Integer method = 2095; // "electronic report"
   String informDate = "2017-03-15";
+  String countyId = "34";
 
   /**
    * @param id - id
@@ -45,24 +44,6 @@ public class CrossReportResourceBuilder {
   }
 
   /**
-   * @param agencyType - agencyType
-   * @return the agencyType
-   */
-  public CrossReportResourceBuilder setAgencyType(String agencyType) {
-    this.agencyType = agencyType;
-    return this;
-  }
-
-  /**
-   * @param agencyName - agencyName
-   * @return the agencyName
-   */
-  public CrossReportResourceBuilder setAgencyName(String agencyName) {
-    this.agencyName = agencyName;
-    return this;
-  }
-
-  /**
    * @param method - method
    * @return the method
    */
@@ -80,8 +61,21 @@ public class CrossReportResourceBuilder {
     return this;
   }
 
+  /**
+   * @param filedOutOfState - filedOutOfState
+   * @return the filedOutOfState
+   */
   public CrossReportResourceBuilder setFiledOutOfState(boolean filedOutOfState) {
     this.filedOutOfState = filedOutOfState;
+    return this;
+  }
+
+  /**
+   * @param countyId - countyId
+   * @return the countyId
+   */
+  public CrossReportResourceBuilder setCountyId(String countyId) {
+    this.countyId = countyId;
     return this;
   }
 
@@ -89,7 +83,7 @@ public class CrossReportResourceBuilder {
    * @return the CrossReport
    */
   public gov.ca.cwds.rest.api.domain.CrossReport createCrossReport() {
-    return new gov.ca.cwds.rest.api.domain.CrossReport(id, legacySourceTable, legacyId, agencyType,
-        agencyName, filedOutOfState, method, informDate, Sets.newHashSet());
+    return new gov.ca.cwds.rest.api.domain.CrossReport(id, legacySourceTable, legacyId,
+        filedOutOfState, method, informDate, countyId, Sets.newHashSet());
   }
 }

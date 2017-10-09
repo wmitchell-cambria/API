@@ -6,16 +6,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import javax.validation.Validator;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
@@ -319,7 +315,6 @@ public class ScreeningToReferralService implements CrudsService {
 
       for (CrossReport crossReport : crossReports) {
 
-        Boolean lawEnforcementIndicator = Boolean.FALSE;
         Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
         String outStateLawEnforcementAddr = "";
 
@@ -341,30 +336,8 @@ public class ScreeningToReferralService implements CrudsService {
           logError(message, se);
         }
 
-        /**
-         * <blockquote>
-         * 
-         * <pre>
-         * BUSINESS RULE: "R - 02535" - Do not report to In-State Law
-         * 
-         * IF    CrossReport agency type is 'Law Enforcement' 
-         * AND   Reporter is 'Mandated Reporter'
-         * THEN  Set lawEnforcementIndicator = false
-         * </blockquote>
-         * </pre>
-         */
-        // boolean mandatedReporter =
-        // ParticipantValidator.hasMandatedReporterRole(scr.getParticipants());
-        // boolean lawEnforcementAgencyType = crossReport.getAgencyType().contains("Law
-        // Enforcement");
-        //
-        // if (lawEnforcementAgencyType && !mandatedReporter) {
-        // lawEnforcementIndicator = Boolean.TRUE;
-        // }
-
         if (StringUtils.isBlank(crossReport.getLegacyId())) {
           // create the cross report
-
           Map<String, String> agencyMap = getLawEnforcement(crossReport.getAgencies());
           String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
           Boolean governmentOrgCrossRptIndicatorVar =
@@ -373,8 +346,8 @@ public class ScreeningToReferralService implements CrudsService {
           gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
               gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId,
                   crossReport, referralId, LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID,
-                  outStateLawEnforcementAddr, scr.getIncidentCounty(), lawEnforcementId,
-                  outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
+                  outStateLawEnforcementAddr, lawEnforcementId, outStateLawEnforcementIndicator,
+                  governmentOrgCrossRptIndicatorVar);
 
           messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
 

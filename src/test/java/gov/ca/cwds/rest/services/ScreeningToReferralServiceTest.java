@@ -12,15 +12,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -29,9 +26,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -380,12 +375,10 @@ public class ScreeningToReferralServiceTest {
   @Test
   public void testScreeningToReferralMultipleCrossReportsSuccess() throws Exception {
     Set crossReports = new HashSet();
-    gov.ca.cwds.rest.api.domain.CrossReport sheriffCrossReport =
-        new CrossReportResourceBuilder().setAgencyName("Sacramento County Sheriff Deparment")
-            .setAgencyType("Law enforcement").setInformDate("2017-03-15").createCrossReport();
-    gov.ca.cwds.rest.api.domain.CrossReport daCrossReport =
-        new CrossReportResourceBuilder().setAgencyName("Sacramento District Attorney")
-            .setAgencyType("District attorney").setInformDate("2017-04-15").createCrossReport();
+    gov.ca.cwds.rest.api.domain.CrossReport sheriffCrossReport = new CrossReportResourceBuilder()
+        .setCountyId("34").setInformDate("2017-03-15").createCrossReport();
+    gov.ca.cwds.rest.api.domain.CrossReport daCrossReport = new CrossReportResourceBuilder()
+        .setCountyId("19").setInformDate("2017-04-15").createCrossReport();
     crossReports.add(sheriffCrossReport);
     crossReports.add(daCrossReport);
 

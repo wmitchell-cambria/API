@@ -123,18 +123,16 @@
       {
          "legacy_source_table" : "",
          "legacy_id" : "",
-         "agency_type":"Law enforcement",
-         "agency_name":"Sacramento County Sheriff Deparment",
          "method": 2095,
-         "inform_date":"2017-03-15"
+         "inform_date":"2017-03-15",
+         "county_id":"34"
       },
       {
          "legacy_source_table" : "",
          "legacy_id" : "",
-         "agency_type":"District attorney",
-         "agency_name":"Sacramento District Attorney",
          "method": 2095,
-         "inform_date":"2017-04-15"
+         "inform_date":"2017-04-15",
+         "county_id":"34"
       }   
       ],
    "allegations":[

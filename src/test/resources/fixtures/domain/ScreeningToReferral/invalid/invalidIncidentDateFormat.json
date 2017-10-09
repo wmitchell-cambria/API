@@ -121,12 +121,11 @@
    "cross_reports":[
       {
     "legacy_source_table" : "",
-   "legacy_id" : "",
-         "agency_type":"Law enforcement",
-         "agency_name":"Sacramento County Sheriff Deparment",
+     "legacy_id" : "",
          "method": 2095,
-         "inform_date":"2017-03-15"
-      }   ],
+         "inform_date":"2017-03-15",
+         "county_id":"34"
+     }   ],
    "allegations":[
       {
    "legacy_source_table" : "",
