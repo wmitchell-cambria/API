@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,12 +42,11 @@ public class PersonTest {
   private RaceAndEthnicity raceAndEthnicity = new RaceAndEthnicityEntityBuilder().build();
   private Boolean sensitive = false;
   private Boolean sealed = false;
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
   private Short phoneType = 1111;
 
   private BigDecimal phoneNumber = new BigDecimal(3219876);
   private CmsRecordDescriptor phoneCmsRecordDescriptor =
-      new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", now, "CLIENT_T", "Client");
+      new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "CLIENT_T", "Client");
 
   private PhoneNumber phone =
       new PhoneNumber(phoneNumber, 3322, phoneType, phoneCmsRecordDescriptor);
@@ -66,7 +64,7 @@ public class PersonTest {
     languages.add(primaryLanguage);
     languages.add(secondaryLanguage);
     cmsRecordDescriptor =
-        new CmsRecordDescriptor("1234567ABC", "111-222-333-4444", now, "CLIENT_T", "Client");
+        new CmsRecordDescriptor("1234567ABC", "111-222-333-4444", "CLIENT_T", "Client");
     phoneNumbers.add(phone);
 
   }

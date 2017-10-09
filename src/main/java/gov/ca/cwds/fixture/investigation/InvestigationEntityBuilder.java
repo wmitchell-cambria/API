@@ -6,29 +6,26 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
+import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
-import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvementAllegation;
 import gov.ca.cwds.rest.api.domain.investigation.LimitedAccess;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleScreening;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 
 @SuppressWarnings("javadoc")
 public class InvestigationEntityBuilder {
 
   String tableName = "REFERL_T";
-
   String id = "1234567ABC";
-
-  String lastUpdatedBy = "OX5";
-
+  String lastUpdatedBy = "0X5";
   DateTime lastUpdatedAt = new DateTime("2016-08-03T01:00:00.000Z");
-
   String incidentCounty = "20";
   String incidentDate = "2017-08-20";
   String locationType = "Home";
@@ -47,7 +44,7 @@ public class InvestigationEntityBuilder {
   Short phoneType = 1111;
 
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", now, tableName, "Referral");
+      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
 
   private Assignee assignee = new Assignee("CWS Staff", incidentCounty, "Madera CWS", "0X5");
 
@@ -64,8 +61,7 @@ public class InvestigationEntityBuilder {
   private HistoryOfInvolvement historyOfInvolvement =
       new HistoryOfInvolvementEntityBuilder().build();
 
-  private HistoryOfInvolvementAllegation allegation = new HistoryOfInvolvementAllegationEntityBuilder().build();
-  private Set<HistoryOfInvolvementAllegation> allegations = new HashSet<>();
+  private AllegationList allegations = new AllegationListEntityBuilder().build();
 
   private Person person = new PersonEntityBuilder().build();
   private Set<Person> people = new HashSet<>();
@@ -73,16 +69,20 @@ public class InvestigationEntityBuilder {
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
 
+  private String safetyAlerts;
+  private String crossReports;
+  private ContactList contacts;
+
   public Investigation build() {
-    allegations.add(allegation);
     people.add(person);
     phoneNumbers.add(phoneNumber);
     relationships.add(relationship);
 
     return new Investigation(cmsRecordDescriptor, lastUpdatedBy, lastUpdatedAt, incidentCounty,
         incidentDate, locationType, communicationMethod, name, reportNarrative, reference,
-        responseTime, startedAt, assignee, additionalInformation, Boolean.FALSE, Boolean.FALSE,
-        phoneNumbers, address, screening, historyOfInvolvement, allegations, people, relationships);
+        responseTime, startedAt, assignee, additionalInformation, sensitive, sealed, phoneNumbers,
+        address, screening, historyOfInvolvement, allegations, people, relationships, safetyAlerts,
+        crossReports, contacts);
   }
 
   public String getTableName() {
@@ -247,15 +247,6 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public DateTime getNow() {
-    return now;
-  }
-
-  public InvestigationEntityBuilder setNow(DateTime now) {
-    this.now = now;
-    return this;
-  }
-
   public Short getPhoneType() {
     return phoneType;
   }
@@ -339,20 +330,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public HistoryOfInvolvementAllegation getAllegation() {
-    return allegation;
-  }
-
-  public InvestigationEntityBuilder setAllegation(HistoryOfInvolvementAllegation allegation) {
-    this.allegation = allegation;
-    return this;
-  }
-
-  public Set<HistoryOfInvolvementAllegation> getAllegations() {
+  public AllegationList getAllegations() {
     return allegations;
   }
 
-  public InvestigationEntityBuilder setAllegations(Set<HistoryOfInvolvementAllegation> allegations) {
+  public InvestigationEntityBuilder setAllegations(AllegationList allegations) {
     this.allegations = allegations;
     return this;
   }

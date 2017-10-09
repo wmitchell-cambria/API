@@ -15,13 +15,14 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
 import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
-import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementAllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimpleScreeningEntityBuilder;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -29,13 +30,9 @@ import nl.jqno.equalsverifier.Warning;
 public class InvestigationTest {
 
   private String tableName = "REFERL_T";
-
   private String id = "1234567ABC";
-
   private String lastUpdatedBy = "OX5";
-
   private DateTime lastUpdatedAt = new DateTime("2010-10-01T15:26:42.000-0700");
-
   private String incidentCounty = "20";
   private String incidentDate = "2017-08-20";
   private String locationType = "Home";
@@ -50,19 +47,16 @@ public class InvestigationTest {
   private Boolean sealed = Boolean.FALSE;
   private BigDecimal phone = new BigDecimal(4445555);
   private Integer phoneExtension = 1122;
-  private DateTime now = new DateTime();
   private Short phoneType = 1111;
 
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", now, tableName, "Referral");
+      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
 
   private Assignee assignee = new Assignee("CWS Staff", incidentCounty, "Madera CWS", "0X5");
 
   private Set<PhoneNumber> phoneNumbers = new HashSet<>();
   private PhoneNumber phoneNumber =
       new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
-
-  private LimitedAccess limitedAccess = new LimitedAccess("N", "20");
 
   private InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
 
@@ -71,18 +65,19 @@ public class InvestigationTest {
   private HistoryOfInvolvement historyOfInvolvement =
       new HistoryOfInvolvementEntityBuilder().build();
 
-  private HistoryOfInvolvementAllegation allegation = new HistoryOfInvolvementAllegationEntityBuilder().build();
-  private Set<HistoryOfInvolvementAllegation> allegations = new HashSet<>();
+  private AllegationList allegations = new AllegationListEntityBuilder().build();
 
   private Person person = new PersonEntityBuilder().build();
   private Set<Person> people = new HashSet<>();
 
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
+  private String safetyAlerts;
+  private String crossReports;
+  private ContactList contacts;
 
   @Before
   public void setup() {
-    allegations.add(allegation);
     people.add(person);
     phoneNumbers.add(phoneNumber);
     relationships.add(relationship);
@@ -100,7 +95,7 @@ public class InvestigationTest {
         lastUpdatedAt, incidentCounty, incidentDate, locationType, communicationMethod, name,
         reportNarrative, reference, responseTime, startedAt, assignee, additionalInformation,
         sensitive, sealed, phoneNumbers, address, screening, historyOfInvolvement, allegations,
-        people, relationships);
+        people, relationships, safetyAlerts, crossReports, contacts);
     assertThat(cmsRecordDescriptor, is(equalTo(investigation.getCmsRecordDescriptor())));
     assertThat(lastUpdatedBy, is(equalTo(investigation.getLastUpdatedBy())));
     assertThat(lastUpdatedAt, is(equalTo(investigation.getLastUpdatedAt())));

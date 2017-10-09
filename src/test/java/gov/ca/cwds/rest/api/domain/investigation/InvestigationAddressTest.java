@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
@@ -22,11 +21,10 @@ public class InvestigationAddressTest {
   private Short state = 1828;
   private String zip = "95757";
   private Short type = 32;
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
   private String id = "1234567ABC";
   private String tableName = "ADDRS_T";
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", now, tableName, "Address");
+      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Address");
 
   @Test
   public void testEmptyConstructorSuccess() {

@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,10 +24,9 @@ public class RelationshipTest {
 
   private String tableName = "CLIENT_T";
   private String id = "1234567ABC";
-  private DateTime now = new DateTime();
 
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", now, tableName, "Client");
+      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
   private String firstName = "Jackson";
   private String middleName = "R";
   private String lastName = "Greene";
@@ -36,7 +34,7 @@ public class RelationshipTest {
   private String suffixTitle = "";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
-  private Set<RelationshipTo> relationshipsTo = new HashSet();
+  private Set<RelationshipTo> relationshipsTo = new HashSet<>();
   private RelationshipTo relationshipTo = new RelationshipToEntityBuilder().build();
 
   @Before

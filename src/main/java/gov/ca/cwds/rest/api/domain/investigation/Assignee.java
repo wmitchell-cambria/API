@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 @JsonSnakeCase
-@JsonPropertyOrder({"county_code", "office", "staff_id"})
+@JsonPropertyOrder({"name", "county_code", "office", "staff_id"})
 public class Assignee implements Serializable {
 
   /**

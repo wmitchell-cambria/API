@@ -12,7 +12,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +24,6 @@ public class CmsRecordDescriptorTest {
 
   private static final String ID = "1234567ABC";
   private static final String UI_ID = "111122223333444455";
-  private static final DateTime LAST_UPDATED = new DateTime();
   private static final String TABLE_NAME = "REFERL_T";
   private static final String DESCRIPTION = "REFERRAL";
 
@@ -52,10 +50,9 @@ public class CmsRecordDescriptorTest {
   @Test
   public void shouldCreateObjectWithSpecifiedValues() {
     CmsRecordDescriptor cmsLegacyDescriptor =
-        new CmsRecordDescriptor(ID, UI_ID, LAST_UPDATED, TABLE_NAME, DESCRIPTION);
+        new CmsRecordDescriptor(ID, UI_ID, TABLE_NAME, DESCRIPTION);
     assertEquals(cmsLegacyDescriptor.getId(), ID);
     assertEquals(cmsLegacyDescriptor.getUiId(), UI_ID);
-    assertEquals(cmsLegacyDescriptor.getLastUpdated(), LAST_UPDATED);
     assertEquals(cmsLegacyDescriptor.getTableName(), TABLE_NAME);
     assertEquals(cmsLegacyDescriptor.getTableDescription(), DESCRIPTION);
   }
@@ -66,9 +63,9 @@ public class CmsRecordDescriptorTest {
   @Test
   public void shouldCompareEqualsToObjectWithSameValues() {
     CmsRecordDescriptor cmsLegacyDescriptor =
-        new CmsRecordDescriptor(ID, UI_ID, LAST_UPDATED, TABLE_NAME, DESCRIPTION);
+        new CmsRecordDescriptor(ID, UI_ID, TABLE_NAME, DESCRIPTION);
     CmsRecordDescriptor otherCmsRecordDescriptor =
-        new CmsRecordDescriptor(ID, UI_ID, LAST_UPDATED, TABLE_NAME, DESCRIPTION);
+        new CmsRecordDescriptor(ID, UI_ID, TABLE_NAME, DESCRIPTION);
 
     assertEquals(cmsLegacyDescriptor, otherCmsRecordDescriptor);
   }
@@ -79,9 +76,9 @@ public class CmsRecordDescriptorTest {
   @Test
   public void shouldFindSingleItemInHashSetWhenMultipleItemsAddedWithSameValue() {
     CmsRecordDescriptor cmsLegacyDescriptor =
-        new CmsRecordDescriptor(ID, UI_ID, LAST_UPDATED, TABLE_NAME, DESCRIPTION);
+        new CmsRecordDescriptor(ID, UI_ID, TABLE_NAME, DESCRIPTION);
     CmsRecordDescriptor otherCmsRecordDescriptor =
-        new CmsRecordDescriptor(ID, UI_ID, LAST_UPDATED, TABLE_NAME, DESCRIPTION);
+        new CmsRecordDescriptor(ID, UI_ID, TABLE_NAME, DESCRIPTION);
 
     Set<Object> items = new HashSet<>();
     items.add(cmsLegacyDescriptor);

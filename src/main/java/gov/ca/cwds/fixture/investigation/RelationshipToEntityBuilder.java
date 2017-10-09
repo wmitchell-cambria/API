@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture.investigation;
 
-import org.joda.time.DateTime;
-
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 
@@ -14,10 +12,9 @@ public class RelationshipToEntityBuilder {
   private String relationship = "Brother";
   private String relationshipToPerson = "Sister";
   private String relationshipContext = "step";
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
 
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", now, tableName, "Client");
+      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
 
   public RelationshipTo build() {
     return new RelationshipTo(relatedFirstName, relatedLastName, relationship, relationshipContext,
@@ -84,15 +81,6 @@ public class RelationshipToEntityBuilder {
 
   public RelationshipToEntityBuilder setRelationshipContext(String relationshipContext) {
     this.relationshipContext = relationshipContext;
-    return this;
-  }
-
-  public DateTime getNow() {
-    return now;
-  }
-
-  public RelationshipToEntityBuilder setNow(DateTime now) {
-    this.now = now;
     return this;
   }
 

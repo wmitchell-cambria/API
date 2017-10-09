@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture.investigation;
 
-import org.joda.time.DateTime;
-
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
 
@@ -13,11 +11,10 @@ public class InvestigationAddressEntityBuilder {
   protected Short state = 1828;
   protected String zip = "95757";
   protected Short type = 32;
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
 
   public InvestigationAddress build() {
     cmsRecordDescriptor =
-        new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", now, "CLIENT_T", "Client");
+        new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "CLIENT_T", "Client");
     return new InvestigationAddress(cmsRecordDescriptor, streetAddress, city, state, zip, type);
 
   }
