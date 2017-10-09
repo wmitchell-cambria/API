@@ -106,11 +106,11 @@ import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
-import gov.ca.cwds.rest.services.investigation.ContactService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
 import gov.ca.cwds.rest.services.investigation.RelationshipListService;
+import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 
 
 /**

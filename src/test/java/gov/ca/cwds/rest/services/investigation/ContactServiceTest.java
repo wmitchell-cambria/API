@@ -3,6 +3,12 @@ package gov.ca.cwds.rest.services.investigation;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import gov.ca.cwds.data.cms.AttorneyDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientDao;
@@ -15,24 +21,21 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.SubstituteCareProviderDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-
-import org.apache.commons.lang3.NotImplementedException;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import gov.ca.cwds.rest.services.investigation.contact.ContactService;
+import gov.ca.cwds.rest.services.investigation.contact.DeliveredService;
+import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
+import gov.ca.cwds.rest.services.investigation.contact.ReferralClientDeliveredService;
 
 public class ContactServiceTest {
 
   private static final String DEFAULT_KEY = "abc1234567";
 
-  DeliveredServiceDao deliveredServiceDao;
+  DeliveredService deliveredService;
   StaffPersonDao staffPersonDao;
   LongTextService longTextService;
   IndividualDeliveredServiceDao individualDeliveredServiceDao;
@@ -42,7 +45,7 @@ public class ContactServiceTest {
   ServiceProviderDao serviceProviderDao;
   SubstituteCareProviderDao substituteCareProviderDao;
   ReporterDao reporterDao;
-  ReferralClientDeliveredServiceDao referralClientDeliveredServiceDao;
+  ReferralClientDeliveredService referralClientDeliveredService;
   ContactPartyDeliveredServiceDao contactPartyDeliveredServiceDao;
   ReferralDao referralDao;
   ReferralClientDao referralClientDao;
@@ -66,23 +69,20 @@ public class ContactServiceTest {
     substituteCareProviderDao = mock(SubstituteCareProviderDao.class);
 
     individualDeliveredServiceDao = mock(IndividualDeliveredServiceDao.class);
-    deliveredServiceDao = mock(DeliveredServiceDao.class);
+    deliveredService = mock(DeliveredService.class);
     staffPersonDao = mock(StaffPersonDao.class);
     longTextService = mock(LongTextService.class);
-    referralClientDeliveredServiceDao = mock(ReferralClientDeliveredServiceDao.class);
+    referralClientDeliveredService = mock(ReferralClientDeliveredService.class);
     contactPartyDeliveredServiceDao = mock(ContactPartyDeliveredServiceDao.class);
     referralDao = mock(ReferralDao.class);
     referralClientDao = mock(ReferralClientDao.class);
     childClientDao = mock(ChildClientDao.class);
 
-    deliveredToIndividualService =
-        new DeliveredToIndividualService(clientDao, attorneyDao, collateralIndividualDao,
-            serviceProviderDao, substituteCareProviderDao, reporterDao,
-            individualDeliveredServiceDao);
-    target =
-        new ContactService(deliveredServiceDao, staffPersonDao, longTextService,
-            referralClientDeliveredServiceDao, contactPartyDeliveredServiceDao, referralDao,
-            referralClientDao, childClientDao, deliveredToIndividualService);
+    deliveredToIndividualService = new DeliveredToIndividualService(clientDao, attorneyDao,
+        collateralIndividualDao, serviceProviderDao, substituteCareProviderDao, reporterDao,
+        individualDeliveredServiceDao);
+    target = new ContactService(deliveredService, referralClientDeliveredService,
+        deliveredToIndividualService, contactPartyDeliveredServiceDao, referralDao);
   }
 
   @Test

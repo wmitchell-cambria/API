@@ -6,6 +6,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import gov.ca.cwds.data.cms.AttorneyDao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.CollateralIndividualDao;
@@ -17,10 +22,7 @@ import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
 
 public class DeliveredToIndividualServiceTest {
 
@@ -50,10 +52,9 @@ public class DeliveredToIndividualServiceTest {
     serviceProviderDao = mock(ServiceProviderDao.class);
     individualDeliveredServiceDao = mock(IndividualDeliveredServiceDao.class);
     substituteCareProviderDao = mock(SubstituteCareProviderDao.class);
-    deliveredToIndividualService =
-        new DeliveredToIndividualService(clientDao, attorneyDao, collateralIndividualDao,
-            serviceProviderDao, substituteCareProviderDao, reporterDao,
-            individualDeliveredServiceDao);
+    deliveredToIndividualService = new DeliveredToIndividualService(clientDao, attorneyDao,
+        collateralIndividualDao, serviceProviderDao, substituteCareProviderDao, reporterDao,
+        individualDeliveredServiceDao);
   }
 
   @Test
