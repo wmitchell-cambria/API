@@ -7,32 +7,39 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimpleScreeningEntityBuilder;
-import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
+import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class InvestigationTest {
 
+  private ObjectMapper MAPPER = new ObjectMapper();
+
   private String tableName = "REFERL_T";
   private String id = "1234567ABC";
   private String lastUpdatedBy = "OX5";
-  private DateTime lastUpdatedAt = new DateTime("2010-10-01T15:26:42.000-0700");
+  private String lastUpdatedAt = "2010-10-01T15:26:42.000-0700";
   private String incidentCounty = "20";
   private String incidentDate = "2017-08-20";
   private String locationType = "Home";
@@ -65,22 +72,26 @@ public class InvestigationTest {
   private HistoryOfInvolvement historyOfInvolvement =
       new HistoryOfInvolvementEntityBuilder().build();
 
-  private AllegationList allegations = new AllegationListEntityBuilder().build();
+  private Allegation allegation = new AllegationEntityBuilder().build();
+  private Set<Allegation> allegations = new HashSet<>();
+
+  // private AllegationList allegations = new AllegationListEntityBuilder().build();
 
   private Person person = new PersonEntityBuilder().build();
   private Set<Person> people = new HashSet<>();
 
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
-  private String safetyAlerts;
-  private String crossReports;
-  private ContactList contacts;
+  private Set<String> safetyAlerts = new HashSet<>();
+  private Set<String> crossReports = new HashSet<>();
+  private Set<Contact> contacts = new HashSet<>();
 
   @Before
   public void setup() {
     people.add(person);
     phoneNumbers.add(phoneNumber);
     relationships.add(relationship);
+    allegations.add(allegation);
   }
 
   @Test
@@ -134,6 +145,16 @@ public class InvestigationTest {
     Investigation otherInvestigation =
         new InvestigationEntityBuilder().setIncidentDate("2017-01-01").build();
     assertThat(investigation, is(not(equals(otherInvestigation))));
+  }
+
+  @Test
+  public void testSerilizedInvestigation()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    Investigation investigation = new InvestigationEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+    System.out.println(expected);
+
   }
 
   @Test

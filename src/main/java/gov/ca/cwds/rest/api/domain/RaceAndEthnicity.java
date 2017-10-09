@@ -46,6 +46,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   @Valid
   @JsonProperty("race_codes")
+  // @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "primary races",
       dataType = "java.util.List", example = EXAMPLE_RACE_CODES,
       allowableValues = EXAMPLE_RACE_CODES)
@@ -59,6 +60,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   @Valid
   @JsonProperty("hispanic_codes")
+  // @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "other (secondary) races",
       dataType = "java.util.List", example = "['3164']")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
