@@ -69,6 +69,7 @@ public class AllowableEnumValues implements AllowableValues {
     return items.isEmpty() ? null : new AllowableEnumValues(items);
   }
 
+  @SuppressWarnings("javadoc")
   public List<String> getItems() {
     return items;
   }
