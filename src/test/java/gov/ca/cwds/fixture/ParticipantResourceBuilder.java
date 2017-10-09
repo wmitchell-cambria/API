@@ -1,8 +1,9 @@
 package gov.ca.cwds.fixture;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -232,9 +233,9 @@ public class ParticipantResourceBuilder {
 
 
   public ParticipantResourceBuilder() {
-    this.roles = new HashSet<String>(Arrays.asList("Victim"));
-    LinkedHashSet<Short> racecodes = new LinkedHashSet<Short>();
-    LinkedHashSet<Short> hispaniccodes = new LinkedHashSet<Short>();
+    this.roles = new HashSet<>(Arrays.asList("Victim"));
+    List<Short> racecodes = new ArrayList<>();
+    List<Short> hispaniccodes = new ArrayList<>();
     racecodes.add((short) 841);
     hispaniccodes.add((short) 3164);
     RaceAndEthnicity raceAndEthnicity =
@@ -251,7 +252,7 @@ public class ParticipantResourceBuilder {
    * @return the Victim Participant
    */
   public Participant createVictimParticipant() {
-    this.roles = new HashSet<String>(Arrays.asList("Victim"));
+    this.roles = new HashSet<>(Arrays.asList("Victim"));
     return createParticipant();
   }
 
@@ -259,7 +260,7 @@ public class ParticipantResourceBuilder {
    * @return the Perp Participant
    */
   public Participant createPerpParticipant() {
-    this.roles = new HashSet<String>(Arrays.asList("Perpetrator"));
+    this.roles = new HashSet<>(Arrays.asList("Perpetrator"));
     return createParticipant();
   }
 
@@ -269,7 +270,7 @@ public class ParticipantResourceBuilder {
   public Participant createReporterParticipant() {
     // reporter only allows first initial
     this.middleName = middleName.substring(0, 1);
-    this.roles = new HashSet<String>(Arrays.asList("Non-mandated Reporter"));
+    this.roles = new HashSet<>(Arrays.asList("Non-mandated Reporter"));
     return createParticipant();
   }
 

@@ -4,7 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.ClassRule;
@@ -36,9 +37,9 @@ public class RaceAndEthnicityTest {
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  private LinkedHashSet<Short> raceCode = new LinkedHashSet<>();
+  private List<Short> raceCode = new ArrayList<>();
   private String unableToDetermineCode = "A";
-  private LinkedHashSet<Short> hispanicCode = new LinkedHashSet<>();
+  private List<Short> hispanicCode = new ArrayList<>();
   private String hispanicOriginCode = "X";
   private String hispanicUnableToDetermineCode = "A";
 

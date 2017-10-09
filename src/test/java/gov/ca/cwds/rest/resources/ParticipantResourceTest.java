@@ -4,8 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Validation;
@@ -45,11 +46,11 @@ public class ParticipantResourceTest {
   private String reporterEmployerName = "Employer Name";
   private boolean clientStaffPersonAdded = true;
   private String sensitivityIndicator = "R";
-  private Set<String> roles = new HashSet<String>();
-  private Set<Address> addresses = new HashSet<Address>();
+  private Set<String> roles = new HashSet<>();
+  private Set<Address> addresses = new HashSet<>();
 
-  LinkedHashSet<Short> racecodes = new LinkedHashSet<Short>();
-  LinkedHashSet<Short> hispaniccodes = new LinkedHashSet<Short>();
+  List<Short> racecodes = new ArrayList<>();
+  List<Short> hispaniccodes = new ArrayList<>();
   private RaceAndEthnicity raceAndEthnicity =
       new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");
 
@@ -118,9 +119,9 @@ public class ParticipantResourceTest {
     roles.add("victim");
     Address address = new Address("", "", "123 First St", "San Jose", 1828, "94321", 32);
     addresses.add(address);
-    LinkedHashSet<Short> racecodes = new LinkedHashSet<Short>();
+    List<Short> racecodes = new ArrayList<>();
     racecodes.add((short) 841);
-    LinkedHashSet<Short> hispaniccodes = new LinkedHashSet<Short>();
+    List<Short> hispaniccodes = new ArrayList<>();
     hispaniccodes.add((short) 3164);
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");

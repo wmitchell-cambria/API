@@ -13,9 +13,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -73,8 +73,8 @@ public class ParticipantTest implements PersistentTestTemplate {
   private String reporterEmployerName = "Employer Name";
   private boolean clientStaffPersonAdded = false;
   private String sensitivityIndicator = "N";
-  private Set<String> roles = new HashSet<String>();
-  private Set<Address> addresses = new HashSet<Address>();
+  private Set<String> roles = new HashSet<>();
+  private Set<Address> addresses = new HashSet<>();
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PARTICIPANTS + "/";;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -83,8 +83,8 @@ public class ParticipantTest implements PersistentTestTemplate {
   private static final ParticipantResource mockedParticipantResource =
       mock(ParticipantResource.class);
 
-  LinkedHashSet<Short> racecodes = new LinkedHashSet<Short>();
-  LinkedHashSet<Short> hispaniccodes = new LinkedHashSet<Short>();
+  List<Short> racecodes = new ArrayList<>();
+  List<Short> hispaniccodes = new ArrayList<>();
   private RaceAndEthnicity raceAndEthnicity =
       new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");
 
@@ -194,7 +194,8 @@ public class ParticipantTest implements PersistentTestTemplate {
       Participant participant =
           new ParticipantResourceBuilder().setGender(gender).createParticipant();
       String errorMessage = "Expected no validation error for gender value: " + gender;
-      assertEquals(errorMessage, 0, validator.validate(participant).size());
+      Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
+      assertEquals(errorMessage, 0, violations.size());
     });
   }
 
@@ -205,7 +206,8 @@ public class ParticipantTest implements PersistentTestTemplate {
       Participant participant =
           new ParticipantResourceBuilder().setGender(gender).createParticipant();
       String errorMessage = "Expected a validation error for gender value: " + gender;
-      assertEquals(errorMessage, 1, validator.validate(participant).size());
+      Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
+      assertEquals(errorMessage, 1, violations.size());
     });
 
   }
@@ -296,14 +298,14 @@ public class ParticipantTest implements PersistentTestTemplate {
 
   @Test
   public void testIsVictim() throws IOException {
-    Set<String> roles = new HashSet<String>(Arrays.asList("Victim"));
+    Set<String> roles = new HashSet<>(Arrays.asList("Victim"));
     Participant participant = createParticipantWithRoles(roles);
     assertTrue("Expected participant with a victim role to be a victim", participant.isVictim());
   }
 
   @Test
   public void testParticipantIsNotAVictimWhenVictimIsNotInRole() throws IOException {
-    Set<String> roles = new HashSet<String>();
+    Set<String> roles = new HashSet<>();
     Participant participant = createParticipantWithRoles(roles);
     assertFalse("Expected participant with out a victim role not to be a victim",
         participant.isVictim());
@@ -311,7 +313,7 @@ public class ParticipantTest implements PersistentTestTemplate {
 
   @Test
   public void testIsReporter() throws IOException {
-    Set<String> roles = new HashSet<String>(Arrays.asList("Mandated Reporter"));
+    Set<String> roles = new HashSet<>(Arrays.asList("Mandated Reporter"));
     Participant participant = createParticipantWithRoles(roles);
     assertTrue("Expected participant with a reporter role to be a reporter",
         participant.isReporter());
@@ -319,7 +321,7 @@ public class ParticipantTest implements PersistentTestTemplate {
 
   @Test
   public void testParticipantIsNotAReporterWhenReportersNotInRole() throws IOException {
-    Set<String> roles = new HashSet<String>();
+    Set<String> roles = new HashSet<>();
     Participant participant = createParticipantWithRoles(roles);
     assertFalse("Expected participant with out a reporter role not to be a reporter",
         participant.isReporter());
@@ -327,7 +329,7 @@ public class ParticipantTest implements PersistentTestTemplate {
 
   @Test
   public void testIsPerpetrator() throws IOException {
-    Set<String> roles = new HashSet<String>(Arrays.asList("Perpetrator"));
+    Set<String> roles = new HashSet<>(Arrays.asList("Perpetrator"));
     Participant participant = createParticipantWithRoles(roles);
     assertTrue("Expected participant with a perpetrator role to be a perpetrator",
         participant.isPerpetrator());
@@ -335,7 +337,7 @@ public class ParticipantTest implements PersistentTestTemplate {
 
   @Test
   public void testParticipantIsNotAReporterWhenPerpetratorNotInRole() throws IOException {
-    Set<String> roles = new HashSet<String>();
+    Set<String> roles = new HashSet<>();
     Participant participant = createParticipantWithRoles(roles);
     assertFalse("Expected participant with out a perpetrator role not to be a perpetrator",
         participant.isPerpetrator());

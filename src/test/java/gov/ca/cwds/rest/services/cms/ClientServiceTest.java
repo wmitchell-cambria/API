@@ -14,10 +14,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
@@ -175,7 +175,7 @@ public class ClientServiceTest {
 
       Address address = new AddressResourceBuilder().createAddress();
       RaceAndEthnicity raceAndEthnicity =
-          new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+          new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
       Set<Address> addresses = new HashSet<>(Arrays.asList(address));
       Participant participant = new ParticipantResourceBuilder().setAddresses(addresses)
           .setRaceAndEthnicity(raceAndEthnicity).createParticipant();

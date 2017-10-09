@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Person;
+import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
@@ -166,7 +168,7 @@ public class ParticipantService implements CrudsService {
               incomingParticipant.setLegacyId(savedReporter.getReferralId());
               incomingParticipant.setLegacySourceTable(REPORTER_TABLE_NAME);
               incomingParticipant.getLegacyDescriptor()
-                    .setLastUpdated(savedReporter.getLastUpdatedTime());
+                  .setLastUpdated(savedReporter.getLastUpdatedTime());
             } catch (ServiceException e) {
               String message = e.getMessage();
               messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -181,8 +183,7 @@ public class ParticipantService implements CrudsService {
                   || incomingParticipant.getLegacyId().isEmpty();
               if (newClient) {
                 clientId = createNewClient(screeningToReferral, dateStarted, timestamp,
-                    messageBuilder, incomingParticipant,
-                    genderCode);
+                    messageBuilder, incomingParticipant, genderCode);
               } else {
                 // legacy Id passed - check for existenct in CWS/CMS - no update yet
                 clientId = incomingParticipant.getLegacyId();
@@ -257,30 +258,31 @@ public class ParticipantService implements CrudsService {
     if (foundClient != null) {
       EntityChangedComparator comparator = new EntityChangedComparator();
       if (comparator.compare(incomingParticipant, foundClient)) {
-        foundClient
-            .applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
-        foundClient
-            .applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
-        Short raceCode = clientScpEthnicityService
-            .getRaceCode(incomingParticipant.getRaceAndEthnicity());
-        String unableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-            ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode() : "";
-        String hispanicUnableToDetermineCode =
-            incomingParticipant.getRaceAndEthnicity() != null ? incomingParticipant
-                .getRaceAndEthnicity().getHispanicUnableToDetermineCode() : "";
-        String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
-            ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode() : "";
+        foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
+        foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
 
-        foundClient.update(incomingParticipant.getFirstName(),
-            incomingParticipant.getMiddleName(), incomingParticipant.getLastName(),
-            incomingParticipant.getNameSuffix(), raceCode, unableToDetermineCode,
-            hispanicUnableToDetermineCode, hispanicOriginCode);
+        List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
+        Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
+        List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
+
+        String unableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
+            ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode()
+            : "";
+        String hispanicUnableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
+            ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
+            : "";
+        String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
+            ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode()
+            : "";
+
+        foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
+            incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
+            unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
 
         Client savedClient =
             this.clientService.update(incomingParticipant.getLegacyId(), foundClient);
-        clientScpEthnicityService.createOtherEthnicity(
-            foundClient.getExistingClientId(),
-            incomingParticipant.getRaceAndEthnicity());
+        clientScpEthnicityService.createOtherEthnicity(foundClient.getExistingClientId(),
+            otherRaceCodes);
         if (savedClient != null) {
           incomingParticipant.getLegacyDescriptor()
               .setLastUpdated(savedClient.getLastUpdatedTime());
@@ -290,9 +292,9 @@ public class ParticipantService implements CrudsService {
 
         }
       } else {
-        String message = String.format(
-            "Unable to Update %s %s Client. Client was previously modified",
-            incomingParticipant.getFirstName(), incomingParticipant.getLastName());
+        String message =
+            String.format("Unable to Update %s %s Client. Client was previously modified",
+                incomingParticipant.getFirstName(), incomingParticipant.getLastName());
         messageBuilder.addMessageAndLog(message, LOGGER);
       }
     } else {
@@ -309,22 +311,22 @@ public class ParticipantService implements CrudsService {
       Date timestamp, MessageBuilder messageBuilder, Participant incomingParticipant,
       String genderCode) {
     String clientId;
-    Short raceCode = clientScpEthnicityService
-        .getRaceCode(incomingParticipant.getRaceAndEthnicity());
-    Client client = Client.createWithDefaults(incomingParticipant, dateStarted,
-        genderCode, raceCode);
+
+    List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
+    Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
+    List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
+
+    Client client =
+        Client.createWithDefaults(incomingParticipant, dateStarted, genderCode, primaryRaceCode);
     client.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
     client.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
     messageBuilder.addDomainValidationError(validator.validate(client));
-    PostedClient postedClient =
-        this.clientService.createWithSingleTimestamp(client, timestamp);
+    PostedClient postedClient = this.clientService.createWithSingleTimestamp(client, timestamp);
     clientId = postedClient.getId();
     incomingParticipant.setLegacyId(clientId);
     incomingParticipant.setLegacySourceTable(CLIENT_TABLE_NAME);
-    incomingParticipant.getLegacyDescriptor()
-        .setLastUpdated(postedClient.getLastUpdatedTime());
-    clientScpEthnicityService.createOtherEthnicity(postedClient.getId(),
-        incomingParticipant.getRaceAndEthnicity());
+    incomingParticipant.getLegacyDescriptor().setLastUpdated(postedClient.getLastUpdatedTime());
+    clientScpEthnicityService.createOtherEthnicity(postedClient.getId(), otherRaceCodes);
     return clientId;
   }
 
@@ -490,5 +492,42 @@ public class ParticipantService implements CrudsService {
   public Response update(Serializable arg0, Request arg1) {
     return null;
   }
+
+  private Short getPrimaryRaceCode(List<Short> allRaceCodes) {
+    // first one in the list is primary;
+    Short primaryRaceCode = 0;
+    if (!allRaceCodes.isEmpty()) {
+      primaryRaceCode = allRaceCodes.get(0);
+    }
+    return primaryRaceCode;
+  }
+
+  private List<Short> getOtherRaceCodes(List<Short> allRaceCodes, Short primaryRaceCode) {
+    List<Short> otherRaceCodes = new ArrayList<>(allRaceCodes);
+    if (!otherRaceCodes.isEmpty()) {
+      otherRaceCodes.remove(primaryRaceCode);
+    }
+
+    return otherRaceCodes;
+  }
+
+
+  private List<Short> getAllRaceCodes(RaceAndEthnicity raceAndEthnicity) {
+    List<Short> allRaceCodes = new ArrayList<>();;
+
+    if (raceAndEthnicity != null) {
+      List<Short> raceCodes = raceAndEthnicity.getRaceCode();
+      if (raceCodes != null) {
+        allRaceCodes.addAll(raceCodes);
+      }
+
+      List<Short> hispanicCodes = raceAndEthnicity.getHispanicCode();
+      if (hispanicCodes != null) {
+        allRaceCodes.addAll(hispanicCodes);
+      }
+    }
+    return allRaceCodes;
+  }
+
 
 }

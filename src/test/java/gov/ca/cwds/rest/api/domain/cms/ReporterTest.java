@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -176,7 +176,7 @@ public class ReporterTest {
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
-    Reporter reporter = new Reporter(null,badgeNumber, cityName, colltrClientRptrReltnshpType,
+    Reporter reporter = new Reporter(null, badgeNumber, cityName, colltrClientRptrReltnshpType,
         communicationMethodType, confidentialWaiverIndicator, drmsMandatedRprtrFeedback,
         employerName, feedbackDate, feedbackRequiredIndicator, firstName, lastName,
         mandatedReporterIndicator, messagePhoneExtensionNumber, messagePhoneNumber,
@@ -229,7 +229,7 @@ public class ReporterTest {
         "legacy_source_table", "legacy_id", streetAddress, city, state, zipCode, type);
 
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     String referralId = "referralId";
     boolean isMandatedReporter = true;
@@ -295,7 +295,7 @@ public class ReporterTest {
         "legacy_source_table", "legacy_id", streetAddress, city, state, zipCode, type);
 
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
 
     String referralId = "referralId";
@@ -351,7 +351,7 @@ public class ReporterTest {
         "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
 
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
@@ -373,7 +373,7 @@ public class ReporterTest {
         "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
 
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
@@ -394,7 +394,7 @@ public class ReporterTest {
     gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
         "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
@@ -416,7 +416,7 @@ public class ReporterTest {
     gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
         "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
@@ -481,9 +481,8 @@ public class ReporterTest {
    */
   @Test
   public void testStreetNameNotCityNameFails() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/_classLevel/streetNameProvidedAndCityNameNot.json"),
+    Reporter toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Reporter/invalid/_classLevel/streetNameProvidedAndCityNameNot.json"),
         Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -790,9 +789,8 @@ public class ReporterTest {
 
   @Test
   public void failsWhenColltrClientRptrReltnshpTypeAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/colltrClientRptrReltnshpTypeAllWhiteSpace.json"),
+    Reporter toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Reporter/invalid/colltrClientRptrReltnshpTypeAllWhiteSpace.json"),
         Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -893,9 +891,8 @@ public class ReporterTest {
 
   @Test
   public void failsWhenConfidentialWaiverIndicatorAllWhitespace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/confidentialWaiverIndicatorAllWhitespace.json"),
+    Reporter toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Reporter/invalid/confidentialWaiverIndicatorAllWhitespace.json"),
         Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1298,9 +1295,8 @@ public class ReporterTest {
 
   @Test
   public void failWhenMessagePhoneExtensionNumberAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/messagePhoneExtensionNumberAllWhiteSpace.json"),
+    Reporter toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Reporter/invalid/messagePhoneExtensionNumberAllWhiteSpace.json"),
         Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)

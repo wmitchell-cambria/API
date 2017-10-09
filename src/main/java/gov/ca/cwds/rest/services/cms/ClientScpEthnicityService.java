@@ -1,11 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -18,7 +14,6 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.cms.ClientScpEthnicity;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -35,10 +30,7 @@ public class ClientScpEthnicityService
   private static final String CLIENT_ESTABLISHED_CODE = "C";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientScpEthnicityService.class);
-  private Set<Short> raceCodes = null;
   private ClientScpEthnicityDao clientScpEthnicityDao;
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
 
   /**
    * @param clientScpEthnicityDao The {@link Dao} handling
@@ -61,8 +53,9 @@ public class ClientScpEthnicityService
     try {
       gov.ca.cwds.data.persistence.cms.ClientScpEthnicity managed =
           new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(
-              CmsKeyIdGenerator.generate(lastUpdatedId), clientScpEthnicity, lastUpdatedId,
-              lastUpdatedTime);
+              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              clientScpEthnicity, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = clientScpEthnicityDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.ClientScpEthnicity(managed);
     } catch (EntityExistsException e) {
@@ -111,7 +104,7 @@ public class ClientScpEthnicityService
     try {
       gov.ca.cwds.data.persistence.cms.ClientScpEthnicity managed =
           new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(primaryKey, clientScpEthnicity,
-              primaryKey, lastUpdatedTime);
+              primaryKey, RequestExecutionContext.instance().getRequestStartTime());
       managed = clientScpEthnicityDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.ClientScpEthnicity(managed);
     } catch (EntityNotFoundException e) {
@@ -121,49 +114,23 @@ public class ClientScpEthnicityService
   }
 
   /**
-   * @param raceAndEthnicity - raceAndEthnicity
-   * @return the race And Ethnicity codes
-   */
-  public Short getRaceCode(RaceAndEthnicity raceAndEthnicity) {
-    raceCodes = new HashSet<>();
-    Short raceCode = 0;
-    if (raceAndEthnicity != null && !raceAndEthnicity.getRaceCode().isEmpty()) {
-
-      Iterator<Short> raceCodeIterator = raceAndEthnicity.getRaceCode().iterator();
-      raceCode = raceCodeIterator.next();
-      while (raceCodeIterator.hasNext()) {
-        raceCodes.add(raceCodeIterator.next());
-      }
-    }
-    if (raceAndEthnicity != null && !raceAndEthnicity.getHispanicCode().isEmpty()) {
-      Iterator<Short> hispanicCodeIterator = raceAndEthnicity.getHispanicCode().iterator();
-      if (raceCode == 0) {
-        raceCode = hispanicCodeIterator.next();
-      }
-      while (hispanicCodeIterator.hasNext()) {
-        raceCodes.add(hispanicCodeIterator.next());
-      }
-
-    }
-    return raceCode;
-  }
-
-  /**
    * If the client has more than one raceCode or hispanicCode it create a new record as secondary
    * ethnicity in the clientScpEthnicity table.
    * 
    * @param clientId - clientId
-   * @param raceAndEthnicity - race and ethnicity
+   * @param raceCodes - race codes
    */
-  public void createOtherEthnicity(String clientId, RaceAndEthnicity raceAndEthnicity) {
+  public void createOtherEthnicity(String clientId, List<Short> otherRaceCodes) {
     List<gov.ca.cwds.data.persistence.cms.ClientScpEthnicity> clientScpEthnicities =
         new ArrayList<>();
-    if (!raceCodes.isEmpty()) {
-      for (Short code : raceCodes) {
+    if (!otherRaceCodes.isEmpty()) {
+      for (Short code : otherRaceCodes) {
         gov.ca.cwds.data.persistence.cms.ClientScpEthnicity clientScpEthnicity =
             new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(
-                CmsKeyIdGenerator.generate(lastUpdatedId), CLIENT_ESTABLISHED_CODE, clientId, code,
-                lastUpdatedId, lastUpdatedTime);
+                CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+                CLIENT_ESTABLISHED_CODE, clientId, code,
+                RequestExecutionContext.instance().getStaffId(),
+                RequestExecutionContext.instance().getRequestStartTime());
         clientScpEthnicities.add(clientScpEthnicity);
       }
     }
@@ -172,7 +139,5 @@ public class ClientScpEthnicityService
         clientScpEthnicityDao.create(entity);
       }
     }
-
   }
-
 }

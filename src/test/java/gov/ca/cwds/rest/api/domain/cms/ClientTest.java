@@ -13,9 +13,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
@@ -396,7 +396,7 @@ public class ClientTest implements DomainTestTemplate {
   @Test
   public void testCreateWithDefaultCreatesWithValues() {
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant = new Participant(1, "sourceTable", "clientId", new LegacyDescriptor(),
         "firstName", "middleName", "lastName", "jr", "gender", "ssn", "dob", primaryLanguageType,
@@ -432,7 +432,7 @@ public class ClientTest implements DomainTestTemplate {
   public void shouldAllowClientNamesToBeUpdatedAfterInitialization() {
 
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant =
         new Participant(1, "sourceTable", "clientId", new LegacyDescriptor(), "Fred", "Wilson",
@@ -457,7 +457,7 @@ public class ClientTest implements DomainTestTemplate {
   @Test
   public void testCreateWithDefaultCreatesWithDefaultValues() {
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
     Participant participant = new Participant(1, "sourceTable", "clientId", new LegacyDescriptor(),
         "firstName", "middleName", "lastName", "", "gender", "ssn", "dob", primaryLanguageType,

@@ -1,15 +1,16 @@
 package gov.ca.cwds.fixture.investigation;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 
 @SuppressWarnings("javadoc")
 public class RaceAndEthnicityEntityBuilder {
 
-  private LinkedHashSet<Short> raceCode = new LinkedHashSet<>(820, 822);
+  private List<Short> raceCode = new ArrayList<>();
   private String unableToDetermineCode = "N";
-  private LinkedHashSet<Short> hispanicCode = new LinkedHashSet<>();
+  private List<Short> hispanicCode = new ArrayList<>();
   private String hispanicOriginCode = "N";
   private String hispanicUnableToDetermineCode = "";
 
@@ -18,11 +19,11 @@ public class RaceAndEthnicityEntityBuilder {
         hispanicUnableToDetermineCode);
   }
 
-  public LinkedHashSet<Short> getRaceCode() {
+  public List<Short> getRaceCode() {
     return raceCode;
   }
 
-  public RaceAndEthnicityEntityBuilder setRaceCode(LinkedHashSet<Short> raceCode) {
+  public RaceAndEthnicityEntityBuilder setRaceCode(List<Short> raceCode) {
     this.raceCode = raceCode;
     return this;
   }
@@ -36,11 +37,11 @@ public class RaceAndEthnicityEntityBuilder {
     return this;
   }
 
-  public LinkedHashSet<Short> getHispanicCode() {
+  public List<Short> getHispanicCode() {
     return hispanicCode;
   }
 
-  public RaceAndEthnicityEntityBuilder setHispanicCode(LinkedHashSet<Short> hispanicCode) {
+  public RaceAndEthnicityEntityBuilder setHispanicCode(List<Short> hispanicCode) {
     this.hispanicCode = hispanicCode;
     return this;
   }

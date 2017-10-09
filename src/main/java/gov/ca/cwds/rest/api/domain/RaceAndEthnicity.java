@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -50,7 +49,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
       dataType = "java.util.List", example = EXAMPLE_RACE_CODES,
       allowableValues = EXAMPLE_RACE_CODES)
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
-  private Set<Short> raceCode;
+  private List<Short> raceCode;
 
   @JsonProperty("unable_to_determine_code")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "A")
@@ -62,7 +61,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   @ApiModelProperty(required = false, readOnly = false, value = "other (secondary) races",
       dataType = "java.util.List", example = "['3164']")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
-  private Set<Short> hispanicCode;
+  private List<Short> hispanicCode;
 
   @OneOf(value = {"D", "N", "U", "X", "Y", "Z", ""}, ignoreCase = true, ignoreWhitespace = true)
   @JsonProperty("hispanic_origin_code")
@@ -89,9 +88,9 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
    * @param hispanicUnableToDetermineCode The hispanic unable to determine code
    */
   @JsonCreator
-  public RaceAndEthnicity(@JsonProperty("race_codes") LinkedHashSet<Short> raceCode,
+  public RaceAndEthnicity(@JsonProperty("race_codes") List<Short> raceCode,
       @JsonProperty("unable_to_determine_code") String unableToDetermineCode,
-      @JsonProperty("hispanic_codes") LinkedHashSet<Short> hispanicCode,
+      @JsonProperty("hispanic_codes") List<Short> hispanicCode,
       @JsonProperty("hispanic_orgin_code") String hispanicOriginCode,
       @JsonProperty("hispanic_unable_to_determine_code") String hispanicUnableToDetermineCode) {
     super();
@@ -105,7 +104,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   /**
    * @return the raceCode
    */
-  public Set<Short> getRaceCode() {
+  public List<Short> getRaceCode() {
     return raceCode;
   }
 
@@ -119,7 +118,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   /**
    * @return the hispanicCode
    */
-  public Set<Short> getHispanicCode() {
+  public List<Short> getHispanicCode() {
     return hispanicCode;
   }
 

@@ -9,12 +9,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.rest.api.domain.Role;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +35,7 @@ import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
@@ -240,8 +239,7 @@ public class ParticipantServiceTest {
 
     verify(addressService).find(eq(addressId1));
     verify(addressService).find(eq(addressId2));
-    verify(clientAddressService)
-        .findByAddressAndClient(address1, selfReportingVictim);
+    verify(clientAddressService).findByAddressAndClient(address1, selfReportingVictim);
     verify(clientAddressService).findByAddressAndClient(address2, perp);
   }
 
@@ -494,14 +492,13 @@ public class ParticipantServiceTest {
   }
 
   @Test
-  public void shouldNotProcessSelfReporterAsASeperateParticipant(){
+  public void shouldNotProcessSelfReporterAsASeperateParticipant() {
     Set roles = new HashSet<>();
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.SELF_REPORTED_ROLE.getType());
     Participant selfReporter =
         new ParticipantResourceBuilder().setFirstName("Sally").setRoles(roles).createParticipant();
-    Set participants =
-        new HashSet<>(Arrays.asList(selfReporter));
+    Set participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -517,14 +514,13 @@ public class ParticipantServiceTest {
   }
 
   @Test
-  public void shouldNotProcessAnonymousReporter(){
+  public void shouldNotProcessAnonymousReporter() {
     Set roles = new HashSet<>();
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
     Participant selfReporter =
         new ParticipantResourceBuilder().setFirstName("Sally").setRoles(roles).createParticipant();
-    Set participants =
-        new HashSet<>(Arrays.asList(selfReporter));
+    Set participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -535,8 +531,9 @@ public class ParticipantServiceTest {
     verify(clientService, never()).find(any());
     verify(clientService, times(0)).createWithSingleTimestamp(any(), any());
     assertEquals("Expected to have one error message", messageBuilder.getMessages().size(), 1);
-    assertEquals("Expected to have in compatible role error", messageBuilder.getMessages().get(0)
-        .getMessage().trim(), "Participant contains incompatiable roles" );
+    assertEquals("Expected to have in compatible role error",
+        messageBuilder.getMessages().get(0).getMessage().trim(),
+        "Participant contains incompatiable roles");
 
   }
 
@@ -586,10 +583,10 @@ public class ParticipantServiceTest {
 
     participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
         messageBuilder);
-    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", (short) 0, "A",
+    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", (short) 841, "A",
         "A", "X");
-    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", (short) 0, "A", "A",
-        "X");
+    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", (short) 841, "A",
+        "A", "X");
     verify(clientService).update(eq(existingPerpId), any());
   }
 
@@ -598,7 +595,7 @@ public class ParticipantServiceTest {
   public void shouldReturnErrorMessageWhenUnableToSaveClient() throws Exception {
     String existingPerpId = "1234567ABC";
     RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new LinkedHashSet<>(), "A", new LinkedHashSet<>(), "X", "A");
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
     Participant reporter =
         new ParticipantResourceBuilder().setFirstName("Barney").setLastName("Rubble")
             .setRoles(new HashSet<>(Arrays.asList("Non-mandated Reporter"))).createParticipant();
