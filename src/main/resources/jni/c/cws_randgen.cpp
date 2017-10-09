@@ -114,7 +114,6 @@
 */
 
 
-
 //-----------------------------------------------------------------------------
 //  Filename:       cws_randgen.cpp
 //-----------------------------------------------------------------------------
@@ -138,7 +137,6 @@
 // #include "KeyJNI.h"
 #include "gov_ca_cwds_rest_util_jni_KeyJNI.h"
 #endif
-
 
 
 // To generate an identifier, the current date/timestamp is rearranged as shown below, placing
@@ -373,9 +371,9 @@ typedef __int64_t LONG_PTR,    *PLONG_PTR;
 typedef __int64_t ULONG_PTR,  *PULONG_PTR;
 
 
-typedef char  CHAR;
+typedef char CHAR;
 typedef short SHORT;
-typedef long  LONG;
+typedef long LONG;
 
 typedef CHAR *PCHAR, *LPCH, *PCH;
 typedef CONST CHAR *LPCCH, *PCCH;
@@ -403,6 +401,7 @@ typedef struct _SYSTEMTIME {
 } SYSTEMTIME, *PSYSTEMTIME, *LPSYSTEMTIME;
 
 // Constants for days and weeks.
+
 typedef std::chrono::duration<int, std::ratio<60*60*24>> days;
 using weeks = std::chrono::duration<long, std::ratio_multiply<days::period, std::ratio<7>>>;
 
@@ -442,7 +441,7 @@ static SYSTEMTIME * g_win_tm = nullptr;
 // GETLOCALTIME:
 //==============================
 
-SYSTEMTIME std_time_to_win_time(const std::tm & a_tm, const int millis) {
+SYSTEMTIME standardTimeToWindowsTime(const std::tm & a_tm, const int millis) {
     SYSTEMTIME retval;
     
     retval.wYear         = 1900 + a_tm.tm_year;
@@ -457,52 +456,135 @@ SYSTEMTIME std_time_to_win_time(const std::tm & a_tm, const int millis) {
     return retval;
 }
 
-// Option: provide a start date/time for testing.
-void GetLocalTime (SYSTEMTIME * win_tm) {
+//
+// OPTION: provide a start date/time for testing.
+//
+void GetLocalTime (SYSTEMTIME * out_win_tm, SYSTEMTIME * in_win_tm = nullptr) {
     using namespace std;
     using namespace std::chrono;
 
-    if ( g_win_tm == nullptr ) {
-
-        // LIVE MODE: get current datetime.
+    if ( g_win_tm == nullptr && in_win_tm == nullptr ) {
+        // cout << "\nLIVE MODE: get current datetime" << endl;
         const auto tp  = system_clock::now();
         const auto tse = tp.time_since_epoch();
         const auto tt  = system_clock::to_time_t(tp);
         const tm *ltm  = localtime(&tt);
 
-        win_tm->wYear         = 1900 + ltm->tm_year;
-        win_tm->wMonth        = 1 + ltm->tm_mon;
-        win_tm->wDayOfWeek    = ltm->tm_wday;           // DRS: not used in this unit.
-        win_tm->wDay          = ltm->tm_mday;
-        win_tm->wHour         = ltm->tm_hour;
-        win_tm->wMinute       = ltm->tm_min;
-        win_tm->wSecond       = ltm->tm_sec;
-        win_tm->wMilliseconds = duration_cast<milliseconds>(tse).count() % 1000;
-        
+        out_win_tm->wYear         = 1900 + ltm->tm_year;
+        out_win_tm->wMonth        = 1 + ltm->tm_mon;
+        out_win_tm->wDayOfWeek    = ltm->tm_wday;           // DRS: not used in this unit.
+        out_win_tm->wDay          = ltm->tm_mday;
+        out_win_tm->wHour         = ltm->tm_hour;
+        out_win_tm->wMinute       = ltm->tm_min;
+        out_win_tm->wSecond       = ltm->tm_sec;
+        out_win_tm->wMilliseconds = duration_cast<milliseconds>(tse).count() % 1000;
+    } else if (in_win_tm != nullptr) {
+        // cout << "\nTEST MODE: pass in fixed datetime." << endl;
+        out_win_tm->wYear         = in_win_tm->wYear;
+        out_win_tm->wMonth        = in_win_tm->wMonth;
+        out_win_tm->wDayOfWeek    = in_win_tm->wDayOfWeek;   // DRS: not used in this unit.
+        out_win_tm->wDay          = in_win_tm->wDay;
+        out_win_tm->wHour         = in_win_tm->wHour;
+        out_win_tm->wMinute       = in_win_tm->wMinute;
+        out_win_tm->wSecond       = in_win_tm->wSecond;
+        out_win_tm->wMilliseconds = in_win_tm->wMilliseconds;
     } else {
-
-        // TEST MODE: pass in fixed datetime.
-        win_tm->wYear         = g_win_tm->wYear;
-        win_tm->wMonth        = g_win_tm->wMonth;
-        win_tm->wDayOfWeek    = g_win_tm->wDayOfWeek;   // DRS: not used in this unit.
-        win_tm->wDay          = g_win_tm->wDay;
-        win_tm->wHour         = g_win_tm->wHour;
-        win_tm->wMinute       = g_win_tm->wMinute;
-        win_tm->wSecond       = g_win_tm->wSecond;
-        win_tm->wMilliseconds = g_win_tm->wMilliseconds;
-        
+        // cout << "\nTEST MODE: pass in fixed datetime." << endl;
+        out_win_tm->wYear         = g_win_tm->wYear;
+        out_win_tm->wMonth        = g_win_tm->wMonth;
+        out_win_tm->wDayOfWeek    = g_win_tm->wDayOfWeek;   // DRS: not used in this unit.
+        out_win_tm->wDay          = g_win_tm->wDay;
+        out_win_tm->wHour         = g_win_tm->wHour;
+        out_win_tm->wMinute       = g_win_tm->wMinute;
+        out_win_tm->wSecond       = g_win_tm->wSecond;
+        out_win_tm->wMilliseconds = g_win_tm->wMilliseconds;
     }
 }
 
 inline void printWinTime(std::ostream & os, const SYSTEMTIME & win_tm) {
     using namespace std;
-    cout << "\nyear = "   << win_tm.wYear
-         << ", month = "  << win_tm.wMonth
-         << ", day = "    << win_tm.wDay
-         << ", hour = "   << win_tm.wHour
-         << ", minute = " << win_tm.wMinute
-         << ", second = " << win_tm.wSecond
-         << ", millis = " << win_tm.wMilliseconds;
+    cout << "\n\nWindows time:"
+    	 << "\nyear = "   << win_tm.wYear
+         << "\nmonth = "  << win_tm.wMonth
+         << "\nday = "    << win_tm.wDay
+         << "\nhour = "   << win_tm.wHour
+         << "\nminute = " << win_tm.wMinute
+         << "\nsecond = " << win_tm.wSecond
+         << "\nmillis = " << win_tm.wMilliseconds
+         << endl;
+}
+
+std::ostream & operator <<( std::ostream & os, const SYSTEMTIME & win_tm ) {
+	printWinTime(os, win_tm);
+	return os;
+}
+
+template<typename T>
+std::string timePointToString(T&& tp) {
+    using namespace std;
+    using namespace std::chrono;
+
+    auto ttime_t = system_clock::to_time_t(tp);
+    auto tp_sec = system_clock::from_time_t(ttime_t);
+    milliseconds ms = duration_cast<milliseconds>(tp - tp_sec);
+
+    std::tm * ttm = localtime(&ttime_t);
+    char date_time_fmt[] = "%Y.%m.%d-%H.%M.%S";
+    char time_str     [] = "yyyy.mm.dd.HH-MM.SS.fff";
+    strftime(time_str, strlen(time_str), date_time_fmt, ttm);
+
+    string result(time_str);
+    result.append(".");
+    result.append(to_string(ms.count()));
+
+    return result;
+}
+
+template<typename Clock, typename Duration>
+std::ostream &operator<<( std::ostream &stream, const std::chrono::time_point<Clock, Duration> &time_point ) {
+  const time_t time = Clock::to_time_t(time_point);
+#if __CRAPPY_COMPILER__ || __DAVE_IS_LOSING_IT__ || __GNUC__ > 4 || \
+    ((__GNUC__ == 4) && __GNUC_MINOR__ > 8 && __GNUC_REVISION__ > 1)
+  // Func put_time implemented in later versions of GNU g++. Prez Trump: "SAD!"
+  struct tm tm;
+  localtime_r(&time, &tm);
+  return stream << std::put_time(&tm, "c");
+#else
+  char buf[26];
+  ctime_r(&time, buf);
+  buf[24] = '\0';  // Removes the newline that is added
+  return stream << buf;
+#endif
+}
+
+//
+// ISO 8601 datetime format = "%Y-%m-%dT%H:%M:%SZ"
+// ex: "2016-06-30T00:02:51.721Z"
+//
+std::tm parseIso8601Date(const char * iso_8601, WORD * millis) {
+	using namespace std;
+    std::tm tm = {};
+    string s { iso_8601 };
+    const auto pos_1st_delim = s.find(".");
+    const auto first_segment = (pos_1st_delim == string::npos) ? s : s.substr(0, pos_1st_delim);
+
+    const auto str_millis = (pos_1st_delim == string::npos) ? s : s.substr(pos_1st_delim + 1, 3);
+    // cout << "str_millis=" << str_millis << endl;
+    
+	const auto i = atoi(str_millis.c_str());
+    // cout << "         i=" << i << endl;
+    
+	*millis = (WORD) i;
+    // cout << "   *millis=" << *millis << endl;
+
+    istringstream ss(first_segment);
+    ss >> get_time(&tm, "%Y-%m-%dT%H:%M:%SZ");
+
+    if ( ss.fail() ) {
+        cout << "Parse failed" << endl;
+    }
+    
+    return tm;
 }
 
 //==============================
@@ -579,7 +661,7 @@ static const char acConvTbl[] = {
 //==============================
 
 static void   BaseConvert        (char *szDstStr, int nDstBase, int nDstWidth, const char *szSrcStr, int nSrcBase);
-static char * CreateTimestampStr (char *szTimestampStr);
+static char * CreateTimestampStr (char *szTimestampStr, SYSTEMTIME * sysTime = nullptr);
 static void   DoubleToTimestamp  (double nTimestamp, struct tm *phNow, int *pnHSeconds);
 static char * DoubleToStrN       (char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec);
 static char * Itoa               (int nIn, char *szOut, int nOutputSize);
@@ -702,12 +784,12 @@ void WINAPI _export ckMakeNewKey(const char *szUIStaffId, char *szKey) {
 //-----------------------------------------------------------------------------
 void WINAPI _export MakeTimestampStr(char *szUITimestamp) {
     char szStaffId[6] = "123  ";
-    char szKey[10] = "xxx";
+    char szKey   [10] = "xxx";
 
-    // Make a key using a dummy staff Id
+    // Make a key using a dummy staff Id.
     NewKeyFromUIStaffId(szStaffId, szKey);
 
-    // Use the Key to generate the timestamp
+    // Use the Key to generate the timestamp.
     GetUITimestampFromKey(szKey, szUITimestamp);
 }
 
@@ -734,8 +816,8 @@ void WINAPI _export NewKeyFromStaffId(const char *szStaffId, char *szKey) {
 
         // Make the timestamp and add the staff person id to the end.
         strcat_s(const_cast<char*>(CreateTimestampStr(szKey)), nSZ_KEY + 1, szStaffId);
-    } catch (std::exception e) {
-        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+    } catch (exception e) {
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szKey[0] = '\0';
     }
 }
@@ -776,6 +858,7 @@ void WINAPI _export MakeKeyAndTimeStamp(const char *szStaffId, char *szKey, char
 //                RETURNS - <none>
 //-----------------------------------------------------------------------------
 void WINAPI _export NewKeyFromUIStaffId(const char *szUIStaffId, char *szKey) {
+    using namespace std;
     char szKeyStaffId[nSZ_KEYSTAFFID + 1];
 
     try {
@@ -788,8 +871,8 @@ void WINAPI _export NewKeyFromUIStaffId(const char *szUIStaffId, char *szKey) {
 
         // Make the timestamp and add the staff person id to the end.
         strcat_s(CreateTimestampStr(szKey), nSZ_KEY + 1, szKeyStaffId);
-    } catch (std::exception e) {
-        std::cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+    } catch (exception e) {
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szKey[0] = '\0';
     }
 }
@@ -814,7 +897,7 @@ void WINAPI _export GetStaffIdFromKey(const char *szKey, char *szStaffId) {
         // Copy out the staff person id.
         StrCpyN(szStaffId, szKey + nSZ_KEYTIMESTAMP, nSZ_KEYSTAFFID);
     } catch (std::exception e) {
-        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szStaffId[0] = '\0';
     }
 }
@@ -839,8 +922,8 @@ void WINAPI _export GetUIStaffIdFromKey(const char *szKey, char *szUIStaffId) {
 
         // Convert the staff person id of the key to the UI display (base 10).
         BaseConvert(szUIStaffId, 10, nSZ_UISTAFFID, szKey + nSZ_KEYTIMESTAMP, nDEFAULT_BASE);
-    } catch (std::exception e) {
-        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+    } catch (exception e) {
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szUIStaffId[0] = '\0';
     }
 }
@@ -858,27 +941,29 @@ void WINAPI _export GetUIStaffIdFromKey(const char *szKey, char *szUIStaffId) {
 //-----------------------------------------------------------------------------
 void WINAPI _export GetUIIdentifierFromKey(const char *szKey, char *szUIIdentifier) {
     using namespace std;
+
     char szTimestamp[nSZ_KEYTIMESTAMP + 1];
-    char szStaffId[nSZ_KEYSTAFFID + 1];
+    char szStaffId  [nSZ_KEYSTAFFID + 1];
     string sConvertKeyToUI;
 
     try {
         AssertTrace(strlen(szKey) == nSZ_KEY, "'%s' has an invalid key string length.", szKey);
         AssertTrace(AfxIsValidAddress(szUIIdentifier, nSZ_UIIDENTIFIER + 1), "Invalid address specified for szUIIdentifier.");
 
-        StrCpyN(szTimestamp, szKey, nSZ_KEYTIMESTAMP);
-        StrCpyN(szStaffId, szKey + nSZ_KEYTIMESTAMP, nSZ_KEYSTAFFID);
+		// Params: destination, source, length:
+        StrCpyN(szTimestamp, szKey                   , nSZ_KEYTIMESTAMP);
+        StrCpyN(szStaffId,   szKey + nSZ_KEYTIMESTAMP, nSZ_KEYSTAFFID);
 
-        // convert the entire key to a displayable string (base 10).
-        BaseConvert(szUIIdentifier, 10, nSZ_UIIDTIMESTAMP, szTimestamp, nDEFAULT_BASE);
-        BaseConvert(szUIIdentifier + nSZ_UIIDTIMESTAMP, 10, nSZ_UIIDSTAFFID, szStaffId, nDEFAULT_BASE);
+        // Convert the entire key to a displayable string (base 10).
+        BaseConvert(szUIIdentifier,                     10, nSZ_UIIDTIMESTAMP, szTimestamp, nDEFAULT_BASE);
+        BaseConvert(szUIIdentifier + nSZ_UIIDTIMESTAMP, 10, nSZ_UIIDSTAFFID,   szStaffId,   nDEFAULT_BASE);
 
         sConvertKeyToUI = szUIIdentifier;  // convert to std::string
         sConvertKeyToUI = sConvertKeyToUI.substr(0,4) + "-" + sConvertKeyToUI.substr(4, 4) + "-"
         + sConvertKeyToUI.substr(8, 4) + "-" + sConvertKeyToUI.substr(12);  // insert 3 dashes every 4th character
         StrCpyN(szUIIdentifier, sConvertKeyToUI.c_str(), nSZ_UIIDENTIFIER);
-    } catch (std::exception e) {
-        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+    } catch (exception e) {
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szUIIdentifier[0] = '\0';
     }
 }
@@ -896,6 +981,7 @@ void WINAPI _export GetUIIdentifierFromKey(const char *szKey, char *szUIIdentifi
 //-----------------------------------------------------------------------------
 void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szKey) {
 	using namespace std;
+	
     string sConvertUIToKey;
     string sTempKey;
     char szTimestamp[nSZ_UIIDTIMESTAMP + 1];
@@ -915,7 +1001,7 @@ void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szK
         StrCpyN(szTimestamp, szTempKey,  nSZ_UIIDTIMESTAMP);
         StrCpyN(szStaffId,   szTempKey + nSZ_UIIDTIMESTAMP,  nSZ_UIIDSTAFFID);
 
-        // convert the entire displayable string to a key (base 62).
+        // Convert the entire displayable string to a key (base 62).
         BaseConvert(szKey, nDEFAULT_BASE, nSZ_KEYTIMESTAMP, szTimestamp, 10);
         if (szKey[0] != '\0') { 
             // if the input string was not too big to convert
@@ -927,7 +1013,7 @@ void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szK
                 strcat_s(szKey, nSZ_KEY + 1, szKeyStaffId);
             }
         }
-    } catch (std::exception e) {
+    } catch (exception e) {
         cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szKey[0] = '\0';
     }
@@ -946,6 +1032,7 @@ void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szK
 //-----------------------------------------------------------------------------
 void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp) {
     using namespace std;
+
     char szTimestampStr[nSZ_KEYTIMESTAMP + 1];
     double nTsVal;
     struct tm hNow;
@@ -957,17 +1044,17 @@ void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp
 
         // Convert the key's timestamp segment to a number and then to date/time.
         StrCpyN(szTimestampStr, szKey, nSZ_KEYTIMESTAMP);
-        
-        // DRS: A C++ array decays to a pointer of the array's type. Love the syntax tho. :-)
-        nTsVal = StrToDouble(szTimestampStr, BASE_62_SIZE, std::decay_t<double *>(&anPowVec62[0]));
+
+        // DRS: A C++ array decays to a pointer of the array's type. Love the syntax. :-)
+        nTsVal = StrToDouble(szTimestampStr, BASE_62_SIZE, decay_t<double *>(&anPowVec62[0]));
         DoubleToTimestamp(nTsVal, &hNow, &nHSec);
 
         // Format the date/time in the default format of a DB2 timestamp.
         sprintf_s(szUITimestamp, nSZ_UITIMESTAMP + 2, "%04d-%02d-%02d-%02d.%02d.%02d.%06ld",
         hNow.tm_year + 1900, hNow.tm_mon + 1, hNow.tm_mday,
         hNow.tm_hour, hNow.tm_min, hNow.tm_sec, (long)((long)nHSec * 10000L));
-    } catch (std::exception e) {
-        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+    } catch (exception e) {
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szUITimestamp[0] = '\0';
     }
 }
@@ -985,6 +1072,7 @@ void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp
 //-----------------------------------------------------------------------------
 void WINAPI _export GetPTimeStampFromKey(const char *szKey, char *szPTimestamp) {
     using namespace std;
+    
     char szTimestampStr[nSZ_KEYTIMESTAMP + 1];
     double nTsVal;
     struct tm hNow;
@@ -1002,8 +1090,8 @@ void WINAPI _export GetPTimeStampFromKey(const char *szKey, char *szPTimestamp) 
 
         // Format the date/time in the default format of a DB2 timestamp.
         sprintf_s(szPTimestamp, nSZ_PTIMESTAMP + 1, "%02d.%02d.%02d.%02d\0", hNow.tm_hour, hNow.tm_min, hNow.tm_sec, nHSec);
-    } catch (std::exception e) {
-        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << std::endl;
+    } catch (exception e) {
+        cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szPTimestamp[0] = '\0';
     }
 }
@@ -1042,10 +1130,10 @@ static void BaseConvert(char *szDstStr, int nDstBase, int nDstWidth, const char 
     double nSrcVal = 0;
 
     // Error check the base values.
-    AssertTrace(nSrcBase == 10 || nSrcBase == BASE_62_SIZE, "A source base of '%d' is invalid.", nSrcBase);
+    AssertTrace(nSrcBase == 10 || nSrcBase == BASE_62_SIZE, "A source base of '%d' is invalid.",      nSrcBase);
     AssertTrace(nDstBase == 10 || nDstBase == BASE_62_SIZE, "A destination base of '%d' is invalid.", nDstBase);
 
-    // Convert the source string to a number.
+    // First, convert the source string to a number.
     switch (nSrcBase) {
     case 10:
         nSrcVal = atof(szSrcStr);
@@ -1055,7 +1143,7 @@ static void BaseConvert(char *szDstStr, int nDstBase, int nDstWidth, const char 
         break;
     }
 
-    // Convert the number to a string of specified base.
+    // Second, convert the number to a string of specified base.
     switch (nDstBase) {
     case 10:
         DoubleToStrN(szDstStr, nDstWidth, nSrcVal, const_cast<double*>(anPowVec10));
@@ -1077,28 +1165,37 @@ static void BaseConvert(char *szDstStr, int nDstBase, int nDstWidth, const char 
 //                RETURNS - a pointer to szTimestampStr
 //  WARNING:      This algorithm does NOT scale on modern hardware and compilers.
 //-----------------------------------------------------------------------------
-static char * CreateTimestampStr(char *szTimestampStr) {
-    SYSTEMTIME SystemTime;
+static char * CreateTimestampStr(char *szTimestampStr, SYSTEMTIME * sysTime) {
+	using namespace std;
+    SYSTEMTIME win_tm;
 
     int iterations = 0;
     double nTimestamp = 0;
     thread_local double nPreviousTimestamp = 0;   // previous value - used for UNIQUENESS!!!
 
-    while (TRUE) {
-        ++iterations;
-        GetLocalTime(&SystemTime);
+	if (sysTime != nullptr) {
+		g_win_tm = sysTime;
+		// cout << "\nDATETIME PROVIDED: " << *g_win_tm << endl;
+		GetLocalTime(&win_tm, sysTime);
+		nTimestamp = TimestampToDouble(&win_tm);
+		// cout << "\nnTimestamp: " << nTimestamp << endl;
+	} else {
+		while (TRUE) {
+			++iterations;
+			GetLocalTime(&win_tm);
 
-        // Convert to a number.
-        nTimestamp = TimestampToDouble(&SystemTime);
+			// Convert to a number.
+			nTimestamp = TimestampToDouble(&win_tm);
 
-        // If the timestamp hasn't changed, stay in the loop.
-        // Otherwise, break out since it is unique.
-        if (g_win_tm == nullptr && nTimestamp == nPreviousTimestamp) {
-            Yield();
-        } else {
-            break;
-        }
-    }
+			// If the timestamp hasn't changed, stay in the loop.
+			// Otherwise, break out since it is unique.
+			if (g_win_tm == nullptr && nTimestamp == nPreviousTimestamp) {
+				Yield(); // wait cuz it could loop tens of thousands of times. bad, original algorithm.
+			} else {
+				break;
+			}
+		}
+	}
 
     nPreviousTimestamp = nTimestamp;  // save the current timestamp
 
@@ -1122,7 +1219,7 @@ static char * CreateTimestampStr(char *szTimestampStr) {
 //-----------------------------------------------------------------------------
 static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec) {
     int i, nPower, nPad;
-    double nFraction, nInteger;
+    double nFraction, nIntegral;
 
     // Determine the number's largest power.
     nPower = 0;
@@ -1141,17 +1238,18 @@ static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, dou
 
         szDstStr[0] = '\0';  // null terminate
     } else {
-    
         for (i = 0; i < nPad; i++) {
             szDstStr[i] = acConvTbl[0];
         }
 
-		// TODO: more efficient algorithm?
         for (i = 0; i < nPower; i++) {
             // Break down the number and convert the integer portion to a character.
-            nFraction = modf(nSrcVal / pnPowVec[nPower - i - 1], &nInteger);
-            szDstStr[i + nPad] = acConvTbl[(int)nInteger];
-            nSrcVal -= (nInteger * pnPowVec[nPower - i - 1]);
+            const auto whatever_this_is = nSrcVal / pnPowVec[nPower - i - 1];
+            nFraction = modf(whatever_this_is, &nIntegral);
+            const auto integral = (int)nIntegral;
+
+            szDstStr[i + nPad] = acConvTbl[integral];
+            nSrcVal -= (nIntegral * pnPowVec[nPower - i - 1]);
         }
 
         szDstStr[nDstStrWidth] = '\0';  // null terminate
@@ -1191,7 +1289,7 @@ static void DoubleToTimestamp(double nTimestamp, struct tm *phNow, int *pnHSecon
     nTimestamp    -= ((double)phNow->tm_mday * nSHIFT_DAY);  // strip it off
 
     phNow->tm_mon = (int)(nTimestamp / nSHIFT_MONTH);        // MONTHS
-    nTimestamp   -= ((double)phNow->tm_mon * nSHIFT_MONTH);  // strip it off
+    nTimestamp   -= ((double)phNow->tm_mon * nSHIFT_MONTH);  // strip it off. OMG! I love saying that!
 
     phNow->tm_year = (int)(nTimestamp / nSHIFT_YEAR);        // YEARS
 }
@@ -1266,7 +1364,7 @@ static double TimestampToDouble(LPSYSTEMTIME lpTime) {
     double nTimestamp = 0;
 
     // PTS18039
-    // do the 'shifting' and make a double out of the sum of the pieces.
+    // "Shift" tp make a "double" out of the sum of the pieces.
     nTimestamp += (double)((double)(lpTime->wMilliseconds / 10) * nSHIFT_HSECOND);
     nTimestamp += (double)((double) lpTime->wSecond             * nSHIFT_SECOND);
     nTimestamp += (double)((double) lpTime->wMinute             * nSHIFT_MINUTE);
@@ -1351,10 +1449,8 @@ const auto build_base62_cartesian() {
 	// 		const auto & staff_id = s_staff_id;
 	// 		tm_str[0] = '\0';  // null out first char = dead string.
 	// 		MakeKeyAndTimeStamp( &staff_id[0], &key[0], &tm_str[0] );
-	// 		// cout << "\nstaff id=" << staff_id << ", ts_str=" << ts_str << ", key=" << key.get();
 	// 
 	// 		decomposeKey(key.get());
-	// 
 	// 		this_thread::sleep_for(milliseconds(11)); // Hundreds of a second ... OMG.
 	// 	}
 	// 	// }
@@ -1381,12 +1477,14 @@ void decomposeKey(const std::string & s_key) {
     char szUITimestamp[50] = {0};
     char szPTimestamp[12]  = {0};
     char timestampStr[50]  = {0};
+    char uiStr[50]         = {0};
     
     const char * k = s_key.c_str();
     
-    GetStaffIdFromKey(k, szStaffId);
-    GetUITimestampFromKey(k, szUITimestamp);
-    GetPTimeStampFromKey(k, szPTimestamp);
+    GetStaffIdFromKey     (k, szStaffId);
+    GetUITimestampFromKey (k, szUITimestamp);
+    GetPTimeStampFromKey  (k, szPTimestamp);
+	GetUIIdentifierFromKey(k, uiStr);
 
 #ifndef CWDS_BUILD_DLL
 	cerr << "\n\nC++ DECOMPOSE KEY:"
@@ -1397,12 +1495,14 @@ void decomposeKey(const std::string & s_key) {
          << "\nTimestamp (hr.min.sec.1/100 sec): "
          << szPTimestamp
          << "\nUI Timestamp:                     "
-         << szUITimestamp;
+         << szUITimestamp
+         << "\nUI 19-digit:                      "
+         << uiStr;
 #endif
 }
 
 //
-// Returns the *last* generated key. Only prints all others.
+// Return the *LAST* generated key. Only prints all others.
 //
 std::string generateKeys(const std::string & staff_id, int make_n_keys, const std::string & fixed_timestamp) {
     using namespace std;
@@ -1411,22 +1511,32 @@ std::string generateKeys(const std::string & staff_id, int make_n_keys, const st
     string retval;
 
     if ( !staff_id.empty() ) {
-
         char tm_str  [50] = {0};
         char key     [50] = {0};
         char ts_str  [50] = {0};
 
         for (int i = 0; i < make_n_keys; i++) {
-            tm_str[0] = '\0';  // null out first char = dead string.
-
             if ( fixed_timestamp.empty() ) {
-                MakeKeyAndTimeStamp( &staff_id[0], &key[0], &tm_str[0] );
+            	tm_str[0] = '\0';  // null out first char = dead string.
+				MakeKeyAndTimeStamp( &staff_id[0], &key[0], &tm_str[0] );
+
+				if ( i > 0 ) {
+					this_thread::sleep_for(milliseconds(11)); // DRS: Hundredths of a second ... OMG ...
+				}
             } else {
+            	cout << "\nFIXED TIMESTAMP: " << fixed_timestamp << endl;
+            	
+				WORD millis = 0;
+				const auto std_tm = parseIso8601Date(fixed_timestamp.c_str(), &millis);
+				auto win_time     = standardTimeToWindowsTime(std_tm, millis);
+				printWinTime(cout, win_time);
+
                 copy( fixed_timestamp.begin(), fixed_timestamp.end(), &tm_str[0] );
-            }
-            
-            if ( i > 0 ) {
-                this_thread::sleep_for(milliseconds(11)); // DRS: Hundredths of a second ... OMG ...
+                g_win_tm = &win_time;
+				MakeKeyAndTimeStamp( &staff_id[0], &key[0], &tm_str[0] );
+
+				// Make the timestamp and add the staff person id to the end.
+				strcat_s(CreateTimestampStr(tm_str, &win_time), nSZ_KEY + 1, &key[0]);
             }
         }
         
@@ -1617,7 +1727,7 @@ int main (int argc, char* argv[]) {
 
     bool opt_verbose      = false;
     bool quiet_mode       = false;
-    bool create_timestamp = false;
+    bool opt_create_timestamp = false;
     unsigned int make_n_keys = 1;
     string s_datetime, s_staff_id, s_key;
 
@@ -1643,7 +1753,7 @@ int main (int argc, char* argv[]) {
             opt_verbose = true;
             break;
         case 't': // create timestamp
-            create_timestamp = true;
+            opt_create_timestamp = true;
             break;
         default:
             return showUsageAndExit( argv[0] );
@@ -1660,21 +1770,24 @@ int main (int argc, char* argv[]) {
 
     auto tm_str = make_unique<char[]>(50);  // Is heap allocation necessary? Stack instead??
     auto key    = make_unique<char[]>(50);  // No need to set initial value; function call populates it.
-    auto ts_str = CreateTimestampStr(&tm_str[0]);
+    auto ts_str = CreateTimestampStr( &tm_str[0] );
 
-    if (create_timestamp) {
+    if (opt_create_timestamp) {
         cout << "\nNEW TIMESTAMP: ts_str=" << ts_str << endl;
     }
 
     if ( !s_staff_id.empty() ) {
-        generateKeys(s_staff_id, make_n_keys, "");
+        const auto answer   = opt_create_timestamp ? 
+        	generateKeys(s_staff_id, make_n_keys, "") : 
+        	generateKeys(s_staff_id, make_n_keys, s_datetime);
+    	cout << '\n' << answer << endl;
     }
 
     if ( !s_key.empty() ) {
         decomposeKey(s_key);
     }
 
-    cout << '\n' << endl;
+    cout << endl;
 
     return 0;
 }
