@@ -129,7 +129,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * 
    * @param referralId the Referral Id
    * @param contactId the Contact Id
-   * @return true if Contact Id is valid for the Referral Id
    */
   private void validateContactId(String referralId, String contactId) {
 
