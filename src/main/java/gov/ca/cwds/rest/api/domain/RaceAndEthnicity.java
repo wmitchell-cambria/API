@@ -45,11 +45,10 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   @Valid
   @JsonProperty("race_codes")
-  // @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "primary races",
       dataType = "java.util.List", example = EXAMPLE_RACE_CODES,
       allowableValues = EXAMPLE_RACE_CODES)
-  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
+  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY, ignoreable = true)
   private List<Short> raceCode;
 
   @JsonProperty("unable_to_determine_code")
@@ -59,10 +58,9 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   @Valid
   @JsonProperty("hispanic_codes")
-  // @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "other (secondary) races",
       dataType = "java.util.List", example = "['3164']")
-  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY)
+  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY, ignoreable = true)
   private List<Short> hispanicCode;
 
   @OneOf(value = {"D", "N", "U", "X", "Y", "Z", ""}, ignoreCase = true, ignoreWhitespace = true)

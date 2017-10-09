@@ -12,12 +12,15 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -26,7 +29,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;

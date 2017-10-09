@@ -5,15 +5,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+
 import java.util.Set;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+
 import org.assertj.core.util.Sets;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import io.dropwizard.jackson.Jackson;
 import nl.jqno.equalsverifier.EqualsVerifier;
