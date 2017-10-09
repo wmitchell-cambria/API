@@ -118,7 +118,7 @@ public class ClientScpEthnicityService
    * ethnicity in the clientScpEthnicity table.
    * 
    * @param clientId - clientId
-   * @param raceCodes - race codes
+   * @param otherRaceCodes - race codes
    */
   public void createOtherEthnicity(String clientId, List<Short> otherRaceCodes) {
     List<gov.ca.cwds.data.persistence.cms.ClientScpEthnicity> clientScpEthnicities =
