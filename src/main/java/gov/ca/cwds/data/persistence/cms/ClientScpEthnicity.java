@@ -25,9 +25,6 @@ import io.dropwizard.validation.OneOf;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientScpEthnicity extends CmsPersistentObject {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
