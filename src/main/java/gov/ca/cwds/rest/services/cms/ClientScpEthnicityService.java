@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -121,9 +120,7 @@ public class ClientScpEthnicityService
    * @param otherRaceCodes - race codes
    */
   public void createOtherEthnicity(String clientId, List<Short> otherRaceCodes) {
-    List<gov.ca.cwds.data.persistence.cms.ClientScpEthnicity> clientScpEthnicities =
-        new ArrayList<>();
-    if (!otherRaceCodes.isEmpty()) {
+    if (otherRaceCodes != null) {
       for (Short code : otherRaceCodes) {
         gov.ca.cwds.data.persistence.cms.ClientScpEthnicity clientScpEthnicity =
             new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(
@@ -131,12 +128,7 @@ public class ClientScpEthnicityService
                 CLIENT_ESTABLISHED_CODE, clientId, code,
                 RequestExecutionContext.instance().getStaffId(),
                 RequestExecutionContext.instance().getRequestStartTime());
-        clientScpEthnicities.add(clientScpEthnicity);
-      }
-    }
-    if (!clientScpEthnicities.isEmpty()) {
-      for (gov.ca.cwds.data.persistence.cms.ClientScpEthnicity entity : clientScpEthnicities) {
-        clientScpEthnicityDao.create(entity);
+        clientScpEthnicityDao.create(clientScpEthnicity);
       }
     }
   }
