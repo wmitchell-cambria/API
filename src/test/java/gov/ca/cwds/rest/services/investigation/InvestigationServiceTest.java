@@ -9,7 +9,6 @@ import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
-import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 
 public class InvestigationServiceTest {
@@ -43,12 +42,6 @@ public class InvestigationServiceTest {
     assertThat(target, notNullValue());
   }
 
-  @Test
-  public void find_Args__String() throws Exception {
-    final String primaryKey = DEFAULT_KEY;
-    Response actual = target.find(primaryKey);
-    assertThat(actual, notNullValue());
-  }
 
 
 }
