@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
-import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
@@ -39,9 +38,13 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
 
+
   /**
-   * @param InvestigationDao {@link Dao} handling
-   *        {@link gov.ca.cwds.rest.api.domain.investigation.Investigation} objects
+   * 
+   * @param investigationDao - investigationDao service
+   * @param staffPersonDao - staffPersonDao service
+   * @param addressDao - addressDao service
+   * @param longTextDao - longTextDao service
    */
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
