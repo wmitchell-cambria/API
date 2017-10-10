@@ -63,7 +63,7 @@ public class ScreeningToReferralTest {
   private Set<Allegation> allegations = new HashSet<Allegation>();
   private long id = 2;
   private boolean filedOutOfState = false;
-  private String countyId = "34";
+  private String countyId = "1101";
 
   int approvalStatus = 118;
   boolean familyAwarness = false;

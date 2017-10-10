@@ -14,8 +14,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +31,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -67,12 +66,14 @@ import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.helper.CmsIdGenerator;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
+import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.ClientAddress;
@@ -84,6 +85,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
@@ -115,7 +117,6 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import io.dropwizard.jackson.Jackson;
-import org.mockito.ArgumentCaptor;
 
 /**
  * 
@@ -190,7 +191,7 @@ public class ScreeningToReferralServiceTest {
   /**
    * Initialize system code cache
    */
-  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -199,6 +200,9 @@ public class ScreeningToReferralServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+
+    SystemCodeCache.global().getAllSystemCodes();
+
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
 
@@ -386,9 +390,9 @@ public class ScreeningToReferralServiceTest {
     Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports =
         new HashSet<gov.ca.cwds.rest.api.domain.CrossReport>();
     gov.ca.cwds.rest.api.domain.CrossReport sheriffCrossReport = new CrossReportResourceBuilder()
-        .setCountyId("34").setInformDate("2017-03-15").createCrossReport();
+        .setCountyId("1101").setInformDate("2017-03-15").createCrossReport();
     gov.ca.cwds.rest.api.domain.CrossReport daCrossReport = new CrossReportResourceBuilder()
-        .setCountyId("19").setInformDate("2017-04-15").createCrossReport();
+        .setFiledOutOfState(true).setInformDate("2017-04-15").createCrossReport();
     crossReports.add(sheriffCrossReport);
     crossReports.add(daCrossReport);
 
@@ -905,88 +909,82 @@ public class ScreeningToReferralServiceTest {
     verify(allegationService).find(eq(allegation.getLegacyId()));
     assertFalse(response.hasMessages());
   }
- @SuppressWarnings("javadoc")
-   @Test
-   public void shouldSaveAlligationPerpetratorHistoryDate() throws Exception {
-     int perpId = 999;
-     int vicId = 123;
-     String perpLegacyId = "perpIdABCD";
 
-     Date now = new Date();
+  @SuppressWarnings("javadoc")
+  @Test
+  public void shouldSaveAlligationPerpetratorHistoryDate() throws Exception {
+    int perpId = 999;
+    int vicId = 123;
+    String perpLegacyId = "perpIdABCD";
 
-     defaultPerpetrator = new ParticipantResourceBuilder().setId(perpId).setLegacyId(perpLegacyId)
-         .createPerpParticipant();
-     defaultVictim = new ParticipantResourceBuilder().setId(vicId).createVictimParticipant();
+    Date now = new Date();
 
-     Set participants = new HashSet<>(Arrays.asList(defaultPerpetrator, defaultReporter,
-         defaultVictim));
-     gov.ca.cwds.rest.api.domain.Allegation allegation =
-         new AllegationResourceBuilder()
-             .setVictimPersonId(vicId)
-             .setPerpetratorPersonId(perpId)
-             .createAllegation();
-     Set allegations = new HashSet<>(Arrays.asList(allegation));
-     ScreeningToReferral screeningToReferral = defaultReferralBuilder
-         .setReferralId("0987654321")
-         .setParticipants(participants)
-         .setAllegations(allegations)
-         .createScreeningToReferral();
-     mockParticipantService(screeningToReferral);
+    defaultPerpetrator = new ParticipantResourceBuilder().setId(perpId).setLegacyId(perpLegacyId)
+        .createPerpParticipant();
+    defaultVictim = new ParticipantResourceBuilder().setId(vicId).createVictimParticipant();
 
-     PostedAllegation postedAllegation = mock(PostedAllegation.class);
-     when(postedAllegation.getId()).thenReturn(perpLegacyId);
-     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
-     when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
-     when(referralService.createCmsReferralFromScreening(any(),any(),any(),any(),any())).thenReturn
-         (validReferralId);
+    Set participants =
+        new HashSet<>(Arrays.asList(defaultPerpetrator, defaultReporter, defaultVictim));
+    gov.ca.cwds.rest.api.domain.Allegation allegation = new AllegationResourceBuilder()
+        .setVictimPersonId(vicId).setPerpetratorPersonId(perpId).createAllegation();
+    Set allegations = new HashSet<>(Arrays.asList(allegation));
+    ScreeningToReferral screeningToReferral = defaultReferralBuilder.setReferralId("0987654321")
+        .setParticipants(participants).setAllegations(allegations).createScreeningToReferral();
+    mockParticipantService(screeningToReferral);
 
-     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory = ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
+    PostedAllegation postedAllegation = mock(PostedAllegation.class);
+    when(postedAllegation.getId()).thenReturn(perpLegacyId);
+    when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
+    when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+        .thenReturn(validReferralId);
 
-     Response response = screeningToReferralService.create(screeningToReferral);
+    ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
+        ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
 
-     verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(), any());
-     assertEquals(DomainChef.cookDate(now), perpHistory.getValue().getPerpetratorUpdateDate());
-   }
+    Response response = screeningToReferralService.create(screeningToReferral);
+
+    verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(),
+        any());
+    assertEquals(DomainChef.cookDate(now), perpHistory.getValue().getPerpetratorUpdateDate());
+  }
 
   @SuppressWarnings("javadoc")
   @Test
   public void shouldSavePerpetratorInAlligationPerpetratorHistory() throws Exception {
-     int perpId = 999;
-     int vicId = 123;
-     String perpLegacyId = "perpIdABCD";
+    int perpId = 999;
+    int vicId = 123;
+    String perpLegacyId = "perpIdABCD";
 
-     defaultPerpetrator = new ParticipantResourceBuilder().setId(perpId).setLegacyId(perpLegacyId)
-         .createPerpParticipant();
-     defaultVictim = new ParticipantResourceBuilder().setId(vicId).createVictimParticipant();
+    defaultPerpetrator = new ParticipantResourceBuilder().setId(perpId).setLegacyId(perpLegacyId)
+        .createPerpParticipant();
+    defaultVictim = new ParticipantResourceBuilder().setId(vicId).createVictimParticipant();
 
-     Set participants = new HashSet<>(Arrays.asList(defaultPerpetrator, defaultReporter, defaultVictim));
-     gov.ca.cwds.rest.api.domain.Allegation allegation =
-         new AllegationResourceBuilder()
-             .setVictimPersonId(vicId)
-             .setPerpetratorPersonId(perpId)
-             .createAllegation();
-     Set allegations = new HashSet<>(Arrays.asList(allegation));
-     ScreeningToReferral screeningToReferral = defaultReferralBuilder
-         .setReferralId("0987654321")
-         .setParticipants(participants)
-         .setAllegations(allegations)
-         .createScreeningToReferral();
-     mockParticipantService(screeningToReferral);
+    Set participants =
+        new HashSet<>(Arrays.asList(defaultPerpetrator, defaultReporter, defaultVictim));
+    gov.ca.cwds.rest.api.domain.Allegation allegation = new AllegationResourceBuilder()
+        .setVictimPersonId(vicId).setPerpetratorPersonId(perpId).createAllegation();
+    Set allegations = new HashSet<>(Arrays.asList(allegation));
+    ScreeningToReferral screeningToReferral = defaultReferralBuilder.setReferralId("0987654321")
+        .setParticipants(participants).setAllegations(allegations).createScreeningToReferral();
+    mockParticipantService(screeningToReferral);
 
-     PostedAllegation postedAllegation = mock(PostedAllegation.class);
-     when(postedAllegation.getId()).thenReturn(perpLegacyId);
-     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
-     when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
-     when(referralService.createCmsReferralFromScreening(any(),any(),any(),any(),any())).thenReturn
-         (validReferralId);
+    PostedAllegation postedAllegation = mock(PostedAllegation.class);
+    when(postedAllegation.getId()).thenReturn(perpLegacyId);
+    when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
+    when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+        .thenReturn(validReferralId);
 
-     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory = ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
+    ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
+        ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
 
-     Response response = screeningToReferralService.create(screeningToReferral);
+    Response response = screeningToReferralService.create(screeningToReferral);
 
-     verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(), any());
-     assertEquals(perpLegacyId, perpHistory.getValue().getPerpetratorClientId());
-   }
+    verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(),
+        any());
+    assertEquals(perpLegacyId, perpHistory.getValue().getPerpetratorClientId());
+  }
 
 
   @SuppressWarnings("javadoc")

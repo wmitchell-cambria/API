@@ -31,6 +31,10 @@ public class TestSystemCodeCache implements SystemCodeCache {
       return new SystemCode(systemCodeId.shortValue(), null, null, null, "California", "CA", null,
           null, null);
     }
+    if (1101 == systemCodeId.intValue()) {
+      return new SystemCode(systemCodeId.shortValue(), null, null, null, "California", "CA", "34",
+          null, null);
+    }
     return null;
   }
 
@@ -109,7 +113,7 @@ public class TestSystemCodeCache implements SystemCodeCache {
 
     if (SystemCodeCategoryId.COUNTY_CODE.equals(metaId)) {
       if (5542 == systemCodeId.intValue() || 5548 == systemCodeId.intValue()
-          || 5550 == systemCodeId.intValue()) {
+          || 5550 == systemCodeId.intValue() || 1101 == systemCodeId.intValue()) {
         return true;
       }
     }

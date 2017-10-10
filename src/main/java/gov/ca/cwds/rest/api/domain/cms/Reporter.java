@@ -27,7 +27,6 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.validation.IfThen;
 import gov.ca.cwds.rest.validation.MutuallyExclusive;
 import gov.ca.cwds.rest.validation.OnlyIf;
-// import gov.ca.cwds.rest.validation.Zipcode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

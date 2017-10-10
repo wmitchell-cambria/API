@@ -270,12 +270,12 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    */
   public static CrossReport createWithDefaults(String id,
       gov.ca.cwds.rest.api.domain.CrossReport crossReport, String referralId, String staffId,
-      String outStateLawEnforcementAddr, String lawEnforcementId,
+      String outStateLawEnforcementAddr, String lawEnforcementId, String countyId,
       Boolean outStateLawEnforcementIndicator, Boolean governmentOrgCrossRptIndicatorVar) {
     return new CrossReport(id, crossReport.getMethod().shortValue(),
         crossReport.isFiledOutOfState(), governmentOrgCrossRptIndicatorVar, "", "", DEFAULT_INT,
         DEFAULT_DECIMAL, crossReport.getInformDate(), "", "", referralId, lawEnforcementId, staffId,
-        "", "", outStateLawEnforcementAddr, crossReport.getCountyId(),
+        "", "", outStateLawEnforcementAddr, countyId,
         StringUtils.isBlank(lawEnforcementId) ? Boolean.FALSE : Boolean.TRUE,
         outStateLawEnforcementIndicator, Boolean.FALSE);
   }

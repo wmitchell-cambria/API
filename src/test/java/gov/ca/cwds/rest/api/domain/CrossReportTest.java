@@ -36,7 +36,7 @@ public class CrossReportTest {
   private String legacyId = "1234567ABC";
   private String id = "1234567ABC";
   private boolean filedOutOfState = false;
-  private String countyId = "34";
+  private String countyId = "1101";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private CrossReport crossReport;

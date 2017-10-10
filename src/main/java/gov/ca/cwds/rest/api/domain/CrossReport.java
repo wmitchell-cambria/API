@@ -18,7 +18,6 @@ import com.google.common.collect.Sets;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
-import gov.ca.cwds.rest.validation.ValidLogicalId;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
@@ -67,7 +66,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   @JsonProperty("county_id")
   @ApiModelProperty(required = true, readOnly = false, value = "County of the crossReport agency",
       example = "34")
-  @ValidLogicalId(required = true, category = SystemCodeCategoryId.COUNTY_CODE)
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.COUNTY_CODE)
   private String countyId;
 
   @JsonProperty("agencies")

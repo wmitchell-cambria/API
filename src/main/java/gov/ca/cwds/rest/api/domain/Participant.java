@@ -10,6 +10,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -242,7 +245,7 @@ public class Participant extends ReportingDomain implements Request, Response {
       reporter = ParticipantValidator.isReporterType(this);
       perpetrator = ParticipantValidator.isPerpetrator(this);
     } catch (Exception e) {
-      throw e;
+      throw new ServiceException();
     }
   }
 
@@ -504,150 +507,22 @@ public class Participant extends ReportingDomain implements Request, Response {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
   public final int hashCode() {
-    final int PRIME = 31;
-    int result = 1;
-    result = PRIME * result + ((addresses == null) ? 0 : addresses.hashCode());
-    result = PRIME * result + ((raceAndEthnicity == null) ? 0 : raceAndEthnicity.hashCode());
-    result = PRIME * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-    result = PRIME * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = PRIME * result + ((gender == null) ? 0 : gender.hashCode());
-    result = PRIME * result + (int) (id ^ (id >>> 32));
-    result = PRIME * result + ((middleName == null) ? 0 : middleName.hashCode());
-    result = PRIME * result + ((lastName == null) ? 0 : lastName.hashCode());
-    result = PRIME * result + ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
-    result =
-        PRIME * result + ((reporterEmployerName == null) ? 0 : reporterEmployerName.hashCode());
-    result = PRIME * result + ((reporterConfidentialWaiver == true) ? 1 : 0);
-    result = PRIME * result + ((clientStaffPersonAdded == true) ? 1 : 0);
-    result = PRIME * result + ((primaryLanguage == null) ? 0 : primaryLanguage.hashCode());
-    result = PRIME * result + ((secondaryLanguage == null) ? 0 : secondaryLanguage.hashCode());
-    result =
-        PRIME * result + ((sensitivityIndicator == null) ? 0 : sensitivityIndicator.hashCode());
-    result = PRIME * result + ((legacyId == null) ? 0 : legacyId.hashCode());
-    result = PRIME * result + ((legacySourceTable == null) ? 0 : legacySourceTable.hashCode());
-    result = PRIME * result + ((legacyDescriptor == null) ? 0 : legacyDescriptor.hashCode());
-    result = PRIME * result + ((roles == null) ? 0 : roles.hashCode());
-    result = PRIME * result + (int) (screeningId ^ (screeningId >>> 32));
-    result = PRIME * result + ((ssn == null) ? 0 : ssn.hashCode());
-    return result;
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
   public final boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (!(obj instanceof Participant))
-      return false;
-    Participant other = (Participant) obj;
-    if (addresses == null) {
-      if (other.addresses != null)
-        return false;
-    } else if (!addresses.equals(other.addresses))
-      return false;
-    if (raceAndEthnicity == null) {
-      if (other.raceAndEthnicity != null)
-        return false;
-    } else if (!raceAndEthnicity.equals(other.raceAndEthnicity))
-      return false;
-    if (dateOfBirth == null) {
-      if (other.dateOfBirth != null)
-        return false;
-    } else if (!dateOfBirth.equals(other.dateOfBirth))
-      return false;
-    if (firstName == null) {
-      if (other.firstName != null)
-        return false;
-    } else if (!firstName.equals(other.firstName))
-      return false;
-    if (gender == null) {
-      if (other.gender != null)
-        return false;
-    } else if (!gender.equals(other.gender))
-      return false;
-    if (id != other.id)
-      return false;
-    if (lastName == null) {
-      if (other.lastName != null)
-        return false;
-    } else if (!lastName.equals(other.lastName))
-      return false;
-    if (middleName == null) {
-      if (other.middleName != null)
-        return false;
-    } else if (!middleName.equals(other.middleName))
-      return false;
-    if (nameSuffix == null) {
-      if (other.nameSuffix != null)
-        return false;
-    } else if (!nameSuffix.equals(other.nameSuffix))
-      return false;
-    if (reporterEmployerName == null) {
-      if (other.reporterEmployerName != null)
-        return false;
-    } else if (!reporterEmployerName.equals(other.reporterEmployerName))
-      return false;
-    if (reporterConfidentialWaiver != other.reporterConfidentialWaiver) {
-      return false;
-    }
-    if (clientStaffPersonAdded != other.clientStaffPersonAdded) {
-      return false;
-    }
-    if (primaryLanguage == null) {
-      if (other.primaryLanguage != null)
-        return false;
-    } else if (!primaryLanguage.equals(other.primaryLanguage))
-      return false;
-    if (secondaryLanguage == null) {
-      if (other.secondaryLanguage != null)
-        return false;
-    } else if (!secondaryLanguage.equals(other.secondaryLanguage))
-      return false;
-    if (sensitivityIndicator == null) {
-      if (other.sensitivityIndicator != null)
-        return false;
-    } else if (!sensitivityIndicator.equals(other.sensitivityIndicator))
-      return false;
-    if (legacyId == null) {
-      if (other.legacyId != null)
-        return false;
-    } else if (!legacyId.equals(other.legacyId))
-      return false;
-    if (legacySourceTable == null) {
-      if (other.legacySourceTable != null)
-        return false;
-    } else if (!legacySourceTable.equals(other.legacySourceTable))
-      return false;
-    if (roles == null) {
-      if (other.roles != null)
-        return false;
-    } else if (!roles.equals(other.roles))
-      return false;
-    if (screeningId != other.screeningId)
-      return false;
-    if (ssn == null) {
-      if (other.ssn != null)
-        return false;
-    } else if (!ssn.equals(other.ssn))
-      return false;
-    if (legacyDescriptor == null) {
-      if (other.legacyDescriptor != null)
-        return false;
-    } else if (!legacyDescriptor.equals(other.legacyDescriptor))
-      return false;
-
-    return true;
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

@@ -14,9 +14,8 @@ import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport;
 import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
 
 /**
- * Verifies that a record refers to a valid referral, crossreport and
- * governmentOrganizationCrossReport. Returns true if all parent foreign keys exist when the
- * transaction commits, otherwise false.
+ * Verifies that a record refers to a valid referral, crossReport and governmentOrganization.
+ * Returns true if all parent foreign keys exist when the transaction commits, otherwise false.
  * 
  * <p>
  * Validate any other constraints or business rules here before committing a transaction to the

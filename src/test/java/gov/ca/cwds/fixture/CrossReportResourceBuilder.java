@@ -14,7 +14,7 @@ public class CrossReportResourceBuilder {
   boolean filedOutOfState = false;
   Integer method = 2095; // "electronic report"
   String informDate = "2017-03-15";
-  String countyId = "34";
+  String countyId = "1101";
 
   /**
    * @param id - id

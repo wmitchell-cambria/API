@@ -142,8 +142,7 @@ public class ParticipantTest implements PersistentTestTemplate {
 
   @Test
   public void testEqualsHashCodeWorks() {
-    EqualsVerifier.forClass(Participant.class).suppress(Warning.NONFINAL_FIELDS)
-        .withIgnoredFields("messages", "victim", "reporter", "perpetrator").verify();
+    EqualsVerifier.forClass(Participant.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   @Override

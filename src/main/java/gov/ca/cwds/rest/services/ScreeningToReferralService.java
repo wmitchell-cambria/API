@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +22,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.CrossReport;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.GovernmentAgency;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.Screening;
@@ -30,6 +30,8 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -365,10 +367,16 @@ public class ScreeningToReferralService implements CrudsService {
     String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
     Boolean governmentOrgCrossRptIndicatorVar = StringUtils.isNotBlank(agencyMap.get("OTHER"));
 
+    SystemCode systemCode =
+        SystemCodeCache.global().getSystemCode(Integer.valueOf(crossReport.getCountyId()));
+
+    String countyId = systemCode.getLogicalId();
+
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId, crossReport,
             referralId, LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID, outStateLawEnforcementAddr,
-            lawEnforcementId, outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
+            lawEnforcementId, countyId, outStateLawEnforcementIndicator,
+            governmentOrgCrossRptIndicatorVar);
 
     messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
 
@@ -517,7 +525,8 @@ public class ScreeningToReferralService implements CrudsService {
       PostedAllegation postedAllegation) {
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory cmsPerpHistory =
         new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(scr.getIncidentCounty(),
-            postedAllegation.getPerpetratorClientId(), postedAllegation.getId(), DomainChef.cookDate(timestamp));
+            postedAllegation.getPerpetratorClientId(), postedAllegation.getId(),
+            DomainChef.cookDate(timestamp));
 
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
