@@ -28,7 +28,6 @@ public class ClientScpEthnicityDao extends CrudsDaoImpl<ClientScpEthnicity> {
   }
 
   /**
-   * @param ethnicity - ethnicity
    * @param establishedId - establishedId
    * @return the list of race and hispanic codes
    */
