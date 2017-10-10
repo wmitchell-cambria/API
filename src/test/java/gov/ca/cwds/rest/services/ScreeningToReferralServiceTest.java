@@ -950,6 +950,47 @@ public class ScreeningToReferralServiceTest {
 
   @SuppressWarnings("javadoc")
   @Test
+  public void shouldSavePerpetratorInAlligationPerpetratorHistory() throws Exception {
+     int perpId = 999;
+     int vicId = 123;
+     String perpLegacyId = "perpIdABCD";
+
+     defaultPerpetrator = new ParticipantResourceBuilder().setId(perpId).setLegacyId(perpLegacyId)
+         .createPerpParticipant();
+     defaultVictim = new ParticipantResourceBuilder().setId(vicId).createVictimParticipant();
+
+     Set participants = new HashSet<>(Arrays.asList(defaultPerpetrator, defaultReporter, defaultVictim));
+     gov.ca.cwds.rest.api.domain.Allegation allegation =
+         new AllegationResourceBuilder()
+             .setVictimPersonId(vicId)
+             .setPerpetratorPersonId(perpId)
+             .createAllegation();
+     Set allegations = new HashSet<>(Arrays.asList(allegation));
+     ScreeningToReferral screeningToReferral = defaultReferralBuilder
+         .setReferralId("0987654321")
+         .setParticipants(participants)
+         .setAllegations(allegations)
+         .createScreeningToReferral();
+     mockParticipantService(screeningToReferral);
+
+     PostedAllegation postedAllegation = mock(PostedAllegation.class);
+     when(postedAllegation.getId()).thenReturn(perpLegacyId);
+     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
+     when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
+     when(referralService.createCmsReferralFromScreening(any(),any(),any(),any(),any())).thenReturn
+         (validReferralId);
+
+     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory = ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
+
+     Response response = screeningToReferralService.create(screeningToReferral);
+
+     verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(), any());
+     assertEquals(perpLegacyId, perpHistory.getValue().getPerpetratorClientId());
+   }
+
+
+  @SuppressWarnings("javadoc")
+  @Test
   public void shouldFailSavingWhenAllegationIdIsNotFound() throws Exception {
     Participant victim = new ParticipantResourceBuilder().setId(1234).createVictimParticipant();
     Set<Participant> participants = new HashSet<>(Arrays.asList(victim, defaultReporter));

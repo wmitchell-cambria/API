@@ -517,7 +517,7 @@ public class ScreeningToReferralService implements CrudsService {
       PostedAllegation postedAllegation) {
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory cmsPerpHistory =
         new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(scr.getIncidentCounty(),
-            postedAllegation.getVictimClientId(), postedAllegation.getId(), DomainChef.cookDate(timestamp));
+            postedAllegation.getPerpetratorClientId(), postedAllegation.getId(), DomainChef.cookDate(timestamp));
 
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
