@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -516,7 +517,8 @@ public class ScreeningToReferralService implements CrudsService {
       PostedAllegation postedAllegation) {
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory cmsPerpHistory =
         new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(scr.getIncidentCounty(),
-            postedAllegation.getVictimClientId(), postedAllegation.getId(), "2017-07-03");
+            postedAllegation.getVictimClientId(), postedAllegation.getId(), DomainChef.cookDate(timestamp));
+
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
 
