@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.domain.DomainObject;
@@ -31,9 +32,14 @@ public class AllegationPerson {
   @ApiModelProperty(required = false, readOnly = false, value = "Suffix")
   private String suffixTitle;
 
-  @JsonProperty("prefix_title")
-  @ApiModelProperty(required = false, readOnly = false, value = "Prefix")
-  private String prefixTitle;
+  @JsonFormat(shape = JsonFormat.Shape.STRING,
+      pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
+  @JsonProperty("date_of_birth")
+  @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT,
+      required = false)
+  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
+      example = "2012-04-01")
+  private String dateOfBirth;
 
   @JsonProperty("legacy_descriptor")
   private CmsRecordDescriptor legacyDescriptor;
@@ -51,64 +57,100 @@ public class AllegationPerson {
    * @param lastName - last name
    * @param middleName - middle name
    * @param suffixTitle - suffix
-   * @param prefixTitle - prefix
+   * @param dateOfBirth - birth date
    * @param legacyDescriptor - description of CMS record
    */
   public AllegationPerson(String firstName, String lastName, String middleName, String suffixTitle,
-      String prefixTitle, CmsRecordDescriptor legacyDescriptor) {
+      String dateOfBirth, CmsRecordDescriptor legacyDescriptor) {
     super();
     this.firstName = firstName;
     this.lastName = lastName;
     this.middleName = middleName;
     this.suffixTitle = suffixTitle;
-    this.prefixTitle = prefixTitle;
+    this.dateOfBirth = dateOfBirth;
     this.legacyDescriptor = legacyDescriptor;
   }
 
+  /**
+   * @return - first name of person
+   */
   public String getFirstName() {
     return firstName;
   }
 
+  /**
+   * @param firstName - first name of person
+   */
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
 
+  /**
+   * @return - last name
+   */
   public String getLastName() {
     return lastName;
   }
 
+  /**
+   * @param lastName - last name
+   */
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
 
+  /**
+   * @return - middle name
+   */
   public String getMiddleName() {
     return middleName;
   }
 
+  /**
+   * @param middleName - middle name
+   */
   public void setMiddleName(String middleName) {
     this.middleName = middleName;
   }
 
+  /**
+   * @return - suffix
+   */
   public String getSuffixTitle() {
     return suffixTitle;
   }
 
+  /**
+   * @param suffixTitle - suffix
+   */
   public void setSuffixTitle(String suffixTitle) {
     this.suffixTitle = suffixTitle;
   }
 
-  public String getPrefixTitle() {
-    return prefixTitle;
+  /**
+   * @return - date of birth
+   */
+  public String getDateOfBirth() {
+    return dateOfBirth;
   }
 
-  public void setPrefixTitle(String prefixTitle) {
-    this.prefixTitle = prefixTitle;
+  /**
+   * @param dateOfBirth - date of birth
+   */
+  public void setDateOfBirth(String dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
   }
 
+  /**
+   * @return - CMS record descriptor
+   */
   public CmsRecordDescriptor getLegacyDescriptor() {
     return legacyDescriptor;
   }
 
+  /**
+   * @param legacyDescriptor - CMS record descriptor
+   */
   public void setLegacyDescriptor(CmsRecordDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
@@ -121,7 +163,7 @@ public class AllegationPerson {
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((legacyDescriptor == null) ? 0 : legacyDescriptor.hashCode());
     result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
-    result = prime * result + ((prefixTitle == null) ? 0 : prefixTitle.hashCode());
+    result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
     result = prime * result + ((suffixTitle == null) ? 0 : suffixTitle.hashCode());
     return result;
   }
@@ -155,10 +197,10 @@ public class AllegationPerson {
         return false;
     } else if (!middleName.equals(other.middleName))
       return false;
-    if (prefixTitle == null) {
-      if (other.prefixTitle != null)
+    if (dateOfBirth == null) {
+      if (other.dateOfBirth != null)
         return false;
-    } else if (!prefixTitle.equals(other.prefixTitle))
+    } else if (!dateOfBirth.equals(other.dateOfBirth))
       return false;
     if (suffixTitle == null) {
       if (other.suffixTitle != null)

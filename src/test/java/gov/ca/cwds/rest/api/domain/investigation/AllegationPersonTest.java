@@ -19,7 +19,7 @@ public class AllegationPersonTest {
   protected String lastName = "Kenneson";
   protected String middleName = "";
   protected String suffixTitle = "phd";
-  protected String prefixTitle = "Ms";
+  protected String dateOfBirth = "2012-10-01";
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
   @Before
@@ -34,12 +34,12 @@ public class AllegationPersonTest {
   @Test
   public void domainConstrutorTest() {
     AllegationPerson domain = new AllegationPerson(firstName, lastName, middleName, suffixTitle,
-        prefixTitle, legacyDescriptor);
+        dateOfBirth, legacyDescriptor);
     assertThat(domain.getFirstName(), is(equalTo(firstName)));
     assertThat(domain.getLastName(), is(equalTo(lastName)));
     assertThat(domain.getMiddleName(), is(equalTo(middleName)));
     assertThat(domain.getSuffixTitle(), is(equalTo(suffixTitle)));
-    assertThat(domain.getPrefixTitle(), is(equalTo(prefixTitle)));
+    assertThat(domain.getDateOfBirth(), is(equalTo(dateOfBirth)));
     assertThat(domain.getLegacyDescriptor(), is(equalTo(legacyDescriptor)));
   }
 

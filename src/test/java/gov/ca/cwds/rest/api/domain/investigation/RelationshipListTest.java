@@ -7,17 +7,26 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
+import gov.ca.cwds.fixture.investigation.RelationshipListEntityBuilder;
 
 @SuppressWarnings("javadoc")
 public class RelationshipListTest {
 
+  private ObjectMapper MAPPER = new ObjectMapper();
   private Relationship relationship1 = new RelationshipEntityBuilder().build();
   private Relationship relationship2 = new RelationshipEntityBuilder().setFirstName("joe").build();
   private Relationship relationship3 = new RelationshipEntityBuilder().setLastName("utah").build();
@@ -60,4 +69,13 @@ public class RelationshipListTest {
     assertThat(relationshipList, is(not(equals(relationshipList1))));
   }
 
+  @Test
+  @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    RelationshipList relationshipList = new RelationshipListEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(relationshipList);
+    System.out.println(expected);
+  }
 }

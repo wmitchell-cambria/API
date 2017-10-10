@@ -42,7 +42,7 @@ public class Person extends ReportingDomain implements Request, Response {
   private String lastUpdatedBy;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-  @JsonProperty("last_udated_at")
+  @JsonProperty("last_updated_at")
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
       example = "2010-04-27T23:30:14.000Z")
   private String lastUpdatedAt;

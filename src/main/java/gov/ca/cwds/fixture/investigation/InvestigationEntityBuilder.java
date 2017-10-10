@@ -76,10 +76,10 @@ public class InvestigationEntityBuilder {
   private Set<Contact> contacts = new HashSet<>();
 
   public Investigation build() {
-    people.add(person);
+    // people.add(person);
     phoneNumbers.add(phoneNumber);
-    relationships.add(relationship);
-    allegations.add(allegation);
+    // relationships.add(relationship);
+    // allegations.add(allegation);
 
     return new Investigation(cmsRecordDescriptor, lastUpdatedBy, lastUpdatedAt, incidentCounty,
         incidentDate, locationType, communicationMethod, name, reportNarrative, reference,

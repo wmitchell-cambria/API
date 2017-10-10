@@ -8,11 +8,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationPersonEntityBuilder;
@@ -23,6 +30,7 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class AllegationTest {
 
+  private ObjectMapper MAPPER = new ObjectMapper();
   private Short injuryHarmType1 = 1372;
   private Short injuryHarmType2 = 1372;
   private Short injuryHarmSubType1 = 6;
@@ -118,6 +126,15 @@ public class AllegationTest {
     assertTrue(items.contains(allegation));
     assertTrue(items.contains(otherAllegation));
     assertEquals(2, items.size());
+  }
+
+  @Test
+  @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    Allegation allegation = new AllegationEntityBuilder().build();
+    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(allegation);
+    System.out.println(expected);
   }
 
   @Test
