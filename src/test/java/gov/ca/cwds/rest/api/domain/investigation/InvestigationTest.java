@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -49,7 +48,7 @@ public class InvestigationTest {
   private String reportNarrative = "Summary of an investigation would appear here.";
   private String reference = "REF-TEST";
   private Short responseTime = 1518;
-  private String startedAt = "2017-08-10";
+  private String startedAt = "2017-08-03T01:00:00.000Z";
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
@@ -149,7 +148,7 @@ public class InvestigationTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerilizedInvestigation()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Investigation investigation = new InvestigationEntityBuilder().build();

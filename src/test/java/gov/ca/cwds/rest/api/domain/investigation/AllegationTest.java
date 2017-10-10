@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -52,7 +51,7 @@ public class AllegationTest {
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
   private AllegationPerson victim = new AllegationPersonEntityBuilder().build();
   private AllegationPerson perpetrator = new AllegationPersonEntityBuilder().setFirstName("Jack")
-      .setLastName("Jones").setPrefixTitle("Mr").build();
+      .setLastName("Jones").setDateOfBirth("2001-09-30").build();
 
   @Before
   public void setup() {
@@ -129,7 +128,7 @@ public class AllegationTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerilizedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Allegation allegation = new AllegationEntityBuilder().build();

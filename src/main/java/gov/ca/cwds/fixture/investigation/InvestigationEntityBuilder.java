@@ -34,7 +34,7 @@ public class InvestigationEntityBuilder {
   String reportNarrative = "Summary of an investigation would appear here.";
   String reference = "REF-TEST";
   Short responseTime = 1518;
-  String startedAt = "2017-08-10";
+  String startedAt = "2017-08-03T01:00:00.000Z";
   String additionalInformation = "Additional information about the investigation.";
   Boolean sensitive = Boolean.FALSE;
   Boolean sealed = Boolean.FALSE;

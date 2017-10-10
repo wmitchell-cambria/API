@@ -10,11 +10,11 @@ public class AllegationPersonEntityBuilder {
   protected String lastName = "Kenneson";
   protected String middleName = "";
   protected String suffixTitle = "";
-  protected String prefixTitle = "Ms";
+  protected String dateOfBirth = "2010-10-31";
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
   public AllegationPerson build() {
-    return new AllegationPerson(firstName, lastName, middleName, suffixTitle, prefixTitle,
+    return new AllegationPerson(firstName, lastName, middleName, suffixTitle, dateOfBirth,
         legacyDescriptor);
   }
 
@@ -38,8 +38,8 @@ public class AllegationPersonEntityBuilder {
     return this;
   }
 
-  public AllegationPersonEntityBuilder setPrefixTitle(String prefixTitle) {
-    this.prefixTitle = prefixTitle;
+  public AllegationPersonEntityBuilder setDateOfBirth(String dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
     return this;
   }
 

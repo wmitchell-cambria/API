@@ -46,6 +46,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AllegationResource {
   private TypedResourceDelegate<String, AllegationList> typedResourceDelegate;
+  private TypedResourceDelegate<String, Allegation> typedResourceDelegateForUpdate;
 
   /**
    * Constructor
@@ -98,7 +99,7 @@ public class AllegationResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 409, message = "Conflict - already exists")})
   @ApiOperation(value = "Find allegations of investigation", code = HttpStatus.SC_OK,
-      response = Allegation.class)
+      response = AllegationList.class)
   public Response fine(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The CMS Id of the Case or Referral") String id) {
     return typedResourceDelegate.get(id);
@@ -109,12 +110,13 @@ public class AllegationResource {
    * Update {@link Allegation}.
    *
    * @param id - CMS Id of Case or Referral
-   * @param allegationsToUpdate - allegations to update
+   * @param allegationId - CMS Id of Allegation
+   * @param allegationToUpdate - allegations to update
    * @return - updated allegations
    */
   @UnitOfWork(value = "cms")
   @PUT
-  @Path("/{id}/allegations")
+  @Path("/{id}/allegations/{allegation_id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -125,7 +127,9 @@ public class AllegationResource {
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The CMS Id of the Referral or Case ") String id,
-      @Valid @ApiParam(hidden = false, required = true) AllegationList allegationsToUpdate) {
-    return typedResourceDelegate.update(id, allegationsToUpdate);
+      @PathParam("allegation_id") @ApiParam(required = true, name = "allegation_id",
+          value = "The CMS Id of the Allegation") String allegationId,
+      @Valid @ApiParam(hidden = false, required = true) Allegation allegationToUpdate) {
+    return typedResourceDelegateForUpdate.update(id, allegationToUpdate);
   }
 }

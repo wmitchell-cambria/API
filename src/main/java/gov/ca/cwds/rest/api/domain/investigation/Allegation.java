@@ -34,7 +34,8 @@ public class Allegation extends ReportingDomain implements Response {
 
   @JsonProperty("allegation_type")
   @JsonSerialize(using = SysIdSerializer.class)
-  @ApiModelProperty(required = false, readOnly = false, value = "Allegation Type", example = "2179")
+  @ApiModelProperty(required = false, readOnly = false, value = "Allegation Type", example = "2179",
+      dataType = "string")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE)
   private Short allegationType;
 
@@ -50,7 +51,8 @@ public class Allegation extends ReportingDomain implements Response {
 
   @JsonProperty("disposition")
   @JsonSerialize(using = SysIdSerializer.class)
-  @ApiModelProperty(required = false, readOnly = false)
+  @ApiModelProperty(required = false, readOnly = false, dataType = "string")
+  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ALLEGATION_DISPOSITION)
   private Short dispositionType;
 
   @JsonProperty("rationale")

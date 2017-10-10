@@ -31,7 +31,7 @@ public class AllegationEntityBuilder {
   private AllegationPerson victim = new AllegationPersonEntityBuilder().build();
   private AllegationPerson perpetrator =
       new AllegationPersonEntityBuilder().setFirstName("jack").setLastName("kennson")
-          .setPrefixTitle("").setSuffixTitle("III").setMiddleName("Bill").build();
+          .setDateOfBirth("2001-09-30").setSuffixTitle("III").setMiddleName("Bill").build();
 
 
   public Allegation build() {
