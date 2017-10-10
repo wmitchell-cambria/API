@@ -81,10 +81,6 @@ public class ScreeningToReferralService implements CrudsService {
 
   private ReferralDao referralDao;
 
-  private Short zipSuffix;
-
-  LegacyDefaultValues legacyDefaultValues = new LegacyDefaultValues();
-
   LegacyCodes legacyCodes = new LegacyCodes();
 
   /**
@@ -308,7 +304,7 @@ public class ScreeningToReferralService implements CrudsService {
    * CMS Cross Report
    */
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> processCrossReports(ScreeningToReferral scr,
-      String referralId, Date timestamp) throws ServiceException {
+      String referralId, Date timestamp) {
 
     String crossReportId = "";
     Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports = new HashSet<>();
@@ -341,27 +337,8 @@ public class ScreeningToReferralService implements CrudsService {
         }
 
         if (StringUtils.isBlank(crossReport.getLegacyId())) {
-          // create the cross report
-          Map<String, String> agencyMap = getLawEnforcement(crossReport.getAgencies());
-          String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
-          Boolean governmentOrgCrossRptIndicatorVar =
-              StringUtils.isNotBlank(agencyMap.get("OTHER"));
-
-          gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
-              gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId,
-                  crossReport, referralId, LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID,
-                  outStateLawEnforcementAddr, lawEnforcementId, outStateLawEnforcementIndicator,
-                  governmentOrgCrossRptIndicatorVar);
-
-          messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
-
-          gov.ca.cwds.rest.api.domain.cms.CrossReport postedCrossReport =
-              this.crossReportService.createWithSingleTimestamp(cmsCrossReport, timestamp);
-          governmentOrganizationCrossReportService.createDomainConstructor(postedCrossReport,
-              crossReport.getAgencies());
-          crossReport.setLegacyId(postedCrossReport.getThirdId());
-          crossReport.setLegacySourceTable(CROSS_REPORT_TABLE_NAME);
-          resultCrossReports.add(crossReport);
+          persistCrossReport(referralId, timestamp, crossReportId, resultCrossReports, crossReport,
+              outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
         } else {
           gov.ca.cwds.rest.api.domain.cms.CrossReport foundCrossReport =
               this.crossReportService.find(crossReport.getLegacyId());
@@ -377,6 +354,30 @@ public class ScreeningToReferralService implements CrudsService {
     }
 
     return resultCrossReports;
+  }
+
+  private void persistCrossReport(String referralId, Date timestamp, String crossReportId,
+      Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
+      Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
+    // create the cross report
+    Map<String, String> agencyMap = getLawEnforcement(crossReport.getAgencies());
+    String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
+    Boolean governmentOrgCrossRptIndicatorVar = StringUtils.isNotBlank(agencyMap.get("OTHER"));
+
+    gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
+        gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId, crossReport,
+            referralId, LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID, outStateLawEnforcementAddr,
+            lawEnforcementId, outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
+
+    messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
+
+    gov.ca.cwds.rest.api.domain.cms.CrossReport postedCrossReport =
+        this.crossReportService.createWithSingleTimestamp(cmsCrossReport, timestamp);
+    governmentOrganizationCrossReportService.createDomainConstructor(postedCrossReport,
+        crossReport.getAgencies());
+    crossReport.setLegacyId(postedCrossReport.getThirdId());
+    crossReport.setLegacySourceTable(CROSS_REPORT_TABLE_NAME);
+    resultCrossReports.add(crossReport);
   }
 
   private Map<String, String> getLawEnforcement(Set<GovernmentAgency> agencies) {
@@ -469,32 +470,8 @@ public class ScreeningToReferralService implements CrudsService {
       }
 
       if (allegation.getLegacyId() == null || allegation.getLegacyId().isEmpty()) {
-        // create an allegation in CMS legacy database
-        gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
-            new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
-                scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
-                Boolean.FALSE, ("").equals(perpatratorClientId) ? "U" : "N", Boolean.FALSE,
-                victimClientId, perpatratorClientId, referralId, scr.getIncidentCounty(),
-                Boolean.FALSE, LegacyDefaultValues.DEFAULT_CODE);
-
-        messageBuilder.addDomainValidationError(validator.validate(cmsAllegation));
-
-        PostedAllegation postedAllegation =
-            this.allegationService.createWithSingleTimestamp(cmsAllegation, timestamp);
-        allegation.setLegacyId(postedAllegation.getId());
-        allegation.setLegacySourceTable(ALLEGATION_TABLE_NAME);
-        processedAllegations.add(allegation);
-
-        // create the Allegation Perpetrator History
-        gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory cmsPerpHistory =
-            new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(
-                scr.getIncidentCounty(), postedAllegation.getVictimClientId(),
-                postedAllegation.getId(), "2017-07-03");
-
-        messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
-
-        this.allegationPerpetratorHistoryService.createWithSingleTimestamp(cmsPerpHistory,
-            timestamp);
+        persistAllegation(scr, referralId, timestamp, processedAllegations, victimClientId,
+            perpatratorClientId, allegationDispositionType, allegation);
 
       } else {
         gov.ca.cwds.rest.api.domain.cms.Allegation foundAllegation =
@@ -510,5 +487,39 @@ public class ScreeningToReferralService implements CrudsService {
       }
     }
     return processedAllegations;
+  }
+
+  private void persistAllegation(ScreeningToReferral scr, String referralId, Date timestamp,
+      Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
+      final Short allegationDispositionType, Allegation allegation) {
+    // create an allegation in CMS legacy database
+    gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
+        new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
+            scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
+            Boolean.FALSE, ("").equals(perpatratorClientId) ? "U" : "N", Boolean.FALSE,
+            victimClientId, perpatratorClientId, referralId, scr.getIncidentCounty(), Boolean.FALSE,
+            LegacyDefaultValues.DEFAULT_CODE);
+
+    messageBuilder.addDomainValidationError(validator.validate(cmsAllegation));
+
+    PostedAllegation postedAllegation =
+        this.allegationService.createWithSingleTimestamp(cmsAllegation, timestamp);
+    allegation.setLegacyId(postedAllegation.getId());
+    allegation.setLegacySourceTable(ALLEGATION_TABLE_NAME);
+    processedAllegations.add(allegation);
+
+    // create the Allegation Perpetrator History
+    processAllegationPerpetratorHistory(scr, timestamp, postedAllegation);
+  }
+
+  private void processAllegationPerpetratorHistory(ScreeningToReferral scr, Date timestamp,
+      PostedAllegation postedAllegation) {
+    gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory cmsPerpHistory =
+        new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(scr.getIncidentCounty(),
+            postedAllegation.getVictimClientId(), postedAllegation.getId(), "2017-07-03");
+
+    messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
+
+    this.allegationPerpetratorHistoryService.createWithSingleTimestamp(cmsPerpHistory, timestamp);
   }
 }
