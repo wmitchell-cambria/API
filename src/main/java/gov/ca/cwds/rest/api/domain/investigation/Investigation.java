@@ -1,26 +1,31 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.HashSet;
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import gov.ca.cwds.data.persistence.cms.Address;
+import gov.ca.cwds.data.persistence.cms.LongText;
+import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
+import gov.ca.cwds.rest.util.LegacyRecordUtils;
 import gov.ca.cwds.rest.util.SysIdSerializer;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
@@ -279,6 +284,77 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.safetyAlerts = safetyAlerts;
     this.crossReports = crossReports;
     this.contacts = contacts;
+  }
+
+  /**
+   * 
+   * @param referral - Referral instance
+   * @param address - Address instance
+   * @param staffPerson - Staff Person instance
+   * @param longText - Long Text instance
+   * @param addInfoLongText - Additional information long text instance
+   */
+  public Investigation(Referral referral, Address address, StaffPerson staffPerson,
+      LongText longText, LongText addInfoLongText) {
+
+
+    this.cmsRecordDescriptor =
+        LegacyRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
+    this.lastUpdatedBy = referral.getLastUpdatedId();
+    this.lastUpdatedAt = DomainChef.cookTimestamp(referral.getLastUpdatedTime());
+    this.incidentCounty = referral.getCountySpecificCode();
+    // this.incidentDate = ;
+    // this.locationType = null;
+    // this.reference = null;
+    this.communicationMethod = referral.getCommunicationMethodType();
+    this.name = referral.getReferralName();
+    this.reportNarrative = longText != null ? longText.getTextDescription() : "";
+    this.responseTime = referral.getReferralResponseType();
+    this.startedAt = DomainChef.cookTimestamp(referral.getReceivedDate());
+    this.additionalInformation =
+        addInfoLongText != null ? addInfoLongText.getTextDescription() : "";
+
+
+    this.sealed =
+        StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "R") ? Boolean.TRUE
+            : Boolean.FALSE;
+    this.sensitive =
+        StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "S") ? Boolean.TRUE
+            : Boolean.FALSE;
+    if (staffPerson != null) {
+      this.assignee = new Assignee(
+          staffPerson.getFirstName() + staffPerson.getMiddleInitial() + staffPerson.getLastName(),
+          staffPerson.getCountyCode(), staffPerson.getCwsOffice(), staffPerson.getId());
+    }
+
+    if (address != null) {
+      CmsRecordDescriptor addressRecDescriptor =
+          LegacyRecordUtils.createLegacyDescriptor(address.getId(), LegacyTable.ADDRESS);
+
+      this.populatePhoneNumbers(address, addressRecDescriptor);
+
+
+      this.address = new InvestigationAddress(addressRecDescriptor, address.getStreetAddress(),
+          address.getCity(), address.getStateCd(), address.getZip(),
+          address.getApiAdrAddressType());
+    }
+
+  }
+
+  /**
+   * populating address details
+   * 
+   * @param address - instance of address
+   * @param addressRecDescriptor - address Cms Record descriptor
+   */
+  private void populatePhoneNumbers(Address address, CmsRecordDescriptor addressRecDescriptor) {
+    this.phoneNumbers = new HashSet<PhoneNumber>();
+    phoneNumbers.add(new PhoneNumber(address.getPrimaryNumber(), address.getPrimaryExtension(),
+        null, addressRecDescriptor));
+    if (address.getEmergencyNumber() != null && address.getEmergencyNumber().longValueExact() > 0) {
+      phoneNumbers.add(new PhoneNumber(address.getEmergencyNumber(),
+          address.getEmergencyExtension(), null, addressRecDescriptor));
+    }
   }
 
   /**
