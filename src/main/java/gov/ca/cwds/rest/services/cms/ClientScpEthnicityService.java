@@ -121,6 +121,7 @@ public class ClientScpEthnicityService
    */
   public void createOtherEthnicity(String clientId, List<Short> otherRaceCodes) {
     if (otherRaceCodes != null) {
+      deleteExistingRecords(clientId);
       for (Short code : otherRaceCodes) {
         gov.ca.cwds.data.persistence.cms.ClientScpEthnicity clientScpEthnicity =
             new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(
@@ -132,4 +133,18 @@ public class ClientScpEthnicityService
       }
     }
   }
+
+  /**
+   * 
+   * @param code - race and hispanic codes
+   * @param clientId - clientId
+   */
+  private void deleteExistingRecords(String clientId) {
+    List<gov.ca.cwds.data.persistence.cms.ClientScpEthnicity> clientScpEthnicityList =
+        clientScpEthnicityDao.getClientScp(clientId);
+    for (gov.ca.cwds.data.persistence.cms.ClientScpEthnicity clientScpEthnicity : clientScpEthnicityList) {
+      clientScpEthnicityDao.delete(clientScpEthnicity.getPrimaryKey());
+    }
+  }
+
 }

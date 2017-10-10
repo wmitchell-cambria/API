@@ -39,6 +39,14 @@ public class GovernmentOrganizationCrossReportService implements
   private GovernmentOrganizationCrossReportDao governmentOrganizationCrossReportDao;
 
   private static Map<String, String> agencyCodeMap = new HashMap<>();
+  static {
+    agencyCodeMap.put("DISTRICT_ATTORNEY", "A");
+    agencyCodeMap.put("COUNTY_LICENSING", "C");
+    agencyCodeMap.put("DEPARTMENT_OF_JUSTICE", "D");
+    agencyCodeMap.put("COMMUNITY_CARE_LICENSING", "L");
+    agencyCodeMap.put("PROBATION", "P");
+
+  }
 
   @SuppressWarnings("unused")
   private RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport;
@@ -54,18 +62,6 @@ public class GovernmentOrganizationCrossReportService implements
       RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport) {
     this.governmentOrganizationCrossReportDao = governmentOrganizationCrossReportDao;
     this.riGovernmentOrganizationCrossReport = riGovernmentOrganizationCrossReport;
-    initializeCodeMap();
-  }
-
-  /**
-   * 
-   */
-  public final void initializeCodeMap() {
-    agencyCodeMap.put("DISTRICT_ATTORNEY", "A");
-    agencyCodeMap.put("COUNTY_LICENSING", "C");
-    agencyCodeMap.put("DEPARTMENT_OF_JUSTICE", "D");
-    agencyCodeMap.put("COMMUNITY_CARE_LICENSING", "L");
-    agencyCodeMap.put("PROBATION", "P");
   }
 
   /**
@@ -81,8 +77,9 @@ public class GovernmentOrganizationCrossReportService implements
     try {
       gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport managed =
           new gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport(
-              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), governmentOrganizationCrossReport,
-              RequestExecutionContext.instance().getStaffId(), RequestExecutionContext.instance().getRequestStartTime());
+              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              governmentOrganizationCrossReport, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = governmentOrganizationCrossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationCrossReport(managed);
     } catch (EntityExistsException e) {
@@ -163,7 +160,8 @@ public class GovernmentOrganizationCrossReportService implements
     try {
       gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport managed =
           new gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport(primaryKey,
-              governmentOrganizationCrossReport, RequestExecutionContext.instance().getStaffId(), RequestExecutionContext.instance().getRequestStartTime());
+              governmentOrganizationCrossReport, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = governmentOrganizationCrossReportDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationCrossReport(managed);
     } catch (EntityNotFoundException e) {

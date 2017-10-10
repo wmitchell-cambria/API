@@ -507,13 +507,12 @@ public class ParticipantService implements CrudsService {
     if (!otherRaceCodes.isEmpty()) {
       otherRaceCodes.remove(primaryRaceCode);
     }
-
     return otherRaceCodes;
   }
 
 
   private List<Short> getAllRaceCodes(RaceAndEthnicity raceAndEthnicity) {
-    List<Short> allRaceCodes = new ArrayList<>();;
+    List<Short> allRaceCodes = new ArrayList<>();
 
     if (raceAndEthnicity != null) {
       List<Short> raceCodes = raceAndEthnicity.getRaceCode();

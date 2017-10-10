@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQuery;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -19,6 +21,8 @@ import io.dropwizard.validation.OneOf;
  * 
  * @author CWDS API Team
  */
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientScpEthnicity.createOrUpdate",
+    query = "From ClientScpEthnicity cse where cse.establishedId = :establishedId")
 @Entity
 @Table(name = "CLSCP_ET")
 @JsonPropertyOrder(alphabetic = true)
