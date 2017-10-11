@@ -100,7 +100,7 @@ public class AllegationResource {
       @ApiResponse(code = 409, message = "Conflict - already exists")})
   @ApiOperation(value = "Find allegations of investigation", code = HttpStatus.SC_OK,
       response = AllegationList.class)
-  public Response fine(@PathParam("id") @ApiParam(required = true, name = "id",
+  public Response find(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The CMS Id of the Case or Referral") String id) {
     return typedResourceDelegate.get(id);
 
