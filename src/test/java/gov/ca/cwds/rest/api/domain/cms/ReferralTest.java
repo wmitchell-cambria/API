@@ -260,11 +260,11 @@ public class ReferralTest {
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
-        familyAwarenessIndicator, govtEntityType, referalName,
-        dateStarted, timeStarted, referralResponseTypeCode, allegesAbuseOccurredAtAddressId,
+        familyAwarenessIndicator, govtEntityType, referalName, dateStarted, timeStarted,
+        referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
         firstResponseDeterminedByStaffPersonId, longTextId, countyCode, approvalCode, staffId,
-        longTextId, responsibleAgencyCode, limitedAccessCode, limitedAccessDesc,
-        limitedAccessDate, limitedAccessGovtAgencyType);
+        longTextId, responsibleAgencyCode, limitedAccessCode, limitedAccessDesc, limitedAccessDate,
+        limitedAccessGovtAgencyType);
     assertEquals("Expected anonReporter field to have presetValues", anonReporter,
         referral.getAnonymousReporterIndicator());
     assertEquals("Expected communicationsMethodCode field to have presetValues",
@@ -290,8 +290,7 @@ public class ReferralTest {
         referral.getFirstResponseDeterminedByStaffPersonId());
     assertEquals(
         "Expected filedSuspectedChildAbuseReporttoLawEnforcementIndicator field to have presetValues",
-        filedCrossReport,
-        referral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
+        filedCrossReport, referral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
     assertEquals("Expected longTextId field to have presetValues", longTextId,
         referral.getScreenerNoteText());
     assertEquals("Expected longTextId field to have presetValues", longTextId,
@@ -365,11 +364,11 @@ public class ReferralTest {
     Set<Client> perpetratorClient = null;
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        filedCrossReport, familyAwarenessIndicator, govtEntityType, referalName,
-        dateStarted, timeStarted, referralResponseTypeCode, allegesAbuseOccurredAtAddressId,
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
+        familyAwarenessIndicator, govtEntityType, referalName, dateStarted, timeStarted,
+        referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
         firstResponseDeterminedByStaffPersonId, longTextId, countyCode, approvalCode, staffId,
-        responseRationaleText, responsibleAgencyCode, "N","", null, (short)0);
+        responseRationaleText, responsibleAgencyCode, "N", "", null, (short) 0);
     assertEquals("Expected additionalInfoIncludedCode field to have presetValues",
         additionalInfoIncludedCode, referral.getAdditionalInfoIncludedCode());
     assertEquals("Expected applicationForPetitionIndicator field to have presetValues",
@@ -448,14 +447,14 @@ public class ReferralTest {
   }
 
   @Test
-  public void shouldSetLimitedAccessCodeToNWhenNull(){
+  public void shouldSetLimitedAccessCodeToNWhenNull() {
     String limitedAccessCode = null;
 
-    Referral referral = Referral.createWithDefaults(null, (short)0,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        filedCrossReport, familyAwarenessIndicator, govtEntityType, "name", "", "",
-        (short)0, "", firstResponseDeterminedByStaffPersonId, "", "", (short)0, "",
-        responseRationaleText, responsibleAgencyCode, limitedAccessCode,"", null, (short)0);
+    Referral referral = Referral.createWithDefaults(null, (short) 0, drmsAllegationDescriptionDoc,
+        drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator,
+        govtEntityType, "name", "", "", (short) 0, (short) 0, "",
+        firstResponseDeterminedByStaffPersonId, "", "", (short) 0, "", responseRationaleText,
+        responsibleAgencyCode, limitedAccessCode, "", null, (short) 0);
 
     assertThat(referral.getLimitedAccessCode(), is(equalTo("N")));
   }
@@ -716,9 +715,8 @@ public class ReferralTest {
 
   @Test
   public void failsWhenApplicationForPetitionIndicatorAllWhitespace() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/applicationForPetitionIndicatorAllWhitespace.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/applicationForPetitionIndicatorAllWhitespace.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -972,9 +970,8 @@ public class ReferralTest {
   @Test
   public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementIndicatorMissing()
       throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorMissing.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorMissing.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -989,9 +986,8 @@ public class ReferralTest {
   @Test
   public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementIndicatorNull()
       throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorNull.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorNull.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1006,9 +1002,8 @@ public class ReferralTest {
   @Test
   public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementIndicatorEmpty()
       throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorEmpty.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorEmpty.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1023,9 +1018,8 @@ public class ReferralTest {
   @Test
   public void failsWhenFiledSuspectedChildAbuseReporttoLawEnforcementIndicatorAllWhitespace()
       throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorAllWhitespace.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/filedSuspectedChildAbuseReporttoLawEnforcementIndicatorAllWhitespace.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1337,9 +1331,8 @@ public class ReferralTest {
 
   @Test
   public void failsWhenMandatedCrossReportReceivedDateWrongFormat() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/mandatedCrossReportReceivedDateWrongFormat.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/mandatedCrossReportReceivedDateWrongFormat.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -2000,9 +1993,8 @@ public class ReferralTest {
    */
   @Test
   public void successWhenFirstResponseDeterminedByStaffPersonIdEmpty() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/valid/firstResponseDeterminedByStaffPersonIdEmpty.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/valid/firstResponseDeterminedByStaffPersonIdEmpty.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -2012,9 +2004,8 @@ public class ReferralTest {
 
   @Test
   public void successWhenFirstResponseDeterminedByStaffPersonIdNull() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/valid/firstResponseDeterminedByStaffPersonIdNull.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/valid/firstResponseDeterminedByStaffPersonIdNull.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -2024,9 +2015,8 @@ public class ReferralTest {
 
   @Test
   public void failsWhenFirstResponseDeterminedByStaffPersonIdTooLong() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/firstResponseDeterminedByStaffPersonIdTooLong.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/firstResponseDeterminedByStaffPersonIdTooLong.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -2199,9 +2189,8 @@ public class ReferralTest {
 
   @Test
   public void failsWhenSpecialProjectReferralIndicatorAllWhitespace() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/specialProjectReferralIndicatorAllWhitespace.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/specialProjectReferralIndicatorAllWhitespace.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -2369,9 +2358,8 @@ public class ReferralTest {
 
   @Test
   public void failsWhenFamilyRefusedServicesIndicatorAllWhitespace() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/familyRefusedServicesIndicatorAllWhitespace.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/familyRefusedServicesIndicatorAllWhitespace.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -2409,9 +2397,8 @@ public class ReferralTest {
 
   @Test
   public void failsWhenFirstEvaluatedOutApprovalDateWrongFormat() throws Exception {
-    Referral toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Referral/invalid/firstEvaluatedOutApprovalDateWrongFormat.json"),
+    Referral toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Referral/invalid/firstEvaluatedOutApprovalDateWrongFormat.json"),
         Referral.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)

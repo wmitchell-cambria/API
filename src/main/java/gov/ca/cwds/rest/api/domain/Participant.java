@@ -326,7 +326,7 @@ public class Participant extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * @return teh legacyDescriptor
+   * @return the legacyDescriptor
    */
   public LegacyDescriptor getLegacyDescriptor() {
     if (legacyDescriptor == null) {

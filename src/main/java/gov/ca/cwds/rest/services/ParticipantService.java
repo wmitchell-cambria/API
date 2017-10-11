@@ -398,7 +398,6 @@ public class ParticipantService implements CrudsService {
       if (address.getLegacyId() == null || address.getLegacyId().isEmpty()) {
         // add the Address row
         Address domainAddress = Address.createWithDefaults(address);
-        Short zipSuffix = domainAddress.getZip4();
 
         messageBuilder.addDomainValidationError(validator.validate(domainAddress));
 

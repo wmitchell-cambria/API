@@ -537,8 +537,9 @@ public class Referral extends ReportingDomain implements Request, Response {
         DomainChef.uncookBooleanString(persistedReferral.getFamilyRefusedServicesIndicator());
     this.firstEvaluatedOutApprovalDate =
         DomainChef.cookDate(persistedReferral.getFirstEvaluatedOutApprovalDate());
-    this.responsibleAgencyCode = StringUtils.isBlank(persistedReferral.getResponsibleAgencyCode())
-        ? "C" : persistedReferral.getResponsibleAgencyCode();
+    this.responsibleAgencyCode =
+        StringUtils.isBlank(persistedReferral.getResponsibleAgencyCode()) ? "C"
+            : persistedReferral.getResponsibleAgencyCode();
     this.limitedAccessGovtAgencyType = persistedReferral.getLimitedAccessGovtAgencyType();
     this.limitedAccessDate = DomainChef.cookDate(persistedReferral.getLimitedAccessDate());
     this.limitedAccessDesc = persistedReferral.getLimitedAccessDesc();
@@ -599,6 +600,7 @@ public class Referral extends ReportingDomain implements Request, Response {
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
    * @param referralResponseTypeCode - referralResponseTypeCode
+   * @param referredToResourceType
    * @param allegesAbuseOccurredAtAddressId - allegesAbuseOccurredAtAddressId
    * @param firstResponseDeterminedByStaffPersonId - firstResponseDeterminedByStaffPersonId
    * @param screenerNoteLongTextId - screenerNoteLongTextId
@@ -617,17 +619,17 @@ public class Referral extends ReportingDomain implements Request, Response {
       short communicationsMethodCode, String drmsAllegationDescriptionDoc, String drmsErReferralDoc,
       String drmsInvestigationDoc, boolean filedCrossReport, boolean familyAwareness,
       int governmentEntity, String referalName, String dateStarted, String timeStarted,
-      short referralResponseTypeCode, String allegesAbuseOccurredAtAddressId,
-      String firstResponseDeterminedByStaffPersonId, String screenerNoteLongTextId,
-      String countyCode, short approvalCode, String staffId, String responseRationalLongTextId,
-      String responsibleAgencyCode, String limitedAccessCode, String limitedAccessDesc,
-      String limitedAccessDate, Short limitedAccessGovtAgencyType) {
+      short referralResponseTypeCode, short referredToResourceType,
+      String allegesAbuseOccurredAtAddressId, String firstResponseDeterminedByStaffPersonId,
+      String screenerNoteLongTextId, String countyCode, short approvalCode, String staffId,
+      String responseRationalLongTextId, String responsibleAgencyCode, String limitedAccessCode,
+      String limitedAccessDesc, String limitedAccessDate, Short limitedAccessGovtAgencyType) {
 
     return new Referral(Boolean.FALSE, anonymousReporter, Boolean.FALSE, "", approvalCode,
         Boolean.FALSE, "", communicationsMethodCode, "", drmsAllegationDescriptionDoc,
         drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport, familyAwareness,
         (short) governmentEntity, DEFAULT_NO, Boolean.FALSE, limitedAccessCode, "", referalName, "",
-        dateStarted, timeStarted, referralResponseTypeCode, DEFAULT_CODE, "", "",
+        dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType, "", "",
         responseRationalLongTextId, screenerNoteLongTextId, DEFAULT_NO, DEFAULT_NO, DEFAULT_NO, "",
         allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, staffId,
         countyCode, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",

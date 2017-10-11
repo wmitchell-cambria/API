@@ -275,7 +275,7 @@ public class ParticipantResourceBuilder {
   }
 
   /**
-   * @return teh raceAndEthnicity
+   * @return the raceAndEthnicity
    */
   public RaceAndEthnicity getRaceAndEthnicity() {
     return raceAndEthnicity;
@@ -283,7 +283,7 @@ public class ParticipantResourceBuilder {
 
   /**
    * @param raceAndEthnicity the race and ethnicity
-   * @return teh raceAndEthnicity
+   * @return the raceAndEthnicity
    */
   public ParticipantResourceBuilder setRaceAndEthnicity(RaceAndEthnicity raceAndEthnicity) {
     this.raceAndEthnicity = raceAndEthnicity;

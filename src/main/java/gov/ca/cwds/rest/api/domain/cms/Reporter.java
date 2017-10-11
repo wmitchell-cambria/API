@@ -69,7 +69,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
 
   @NotNull
   @Size(max = 20, message = "size must be less than or equal to 20")
-  @ApiModelProperty(required = false, readOnly = false, value = "City name", example = "San Jose")
+  @ApiModelProperty(required = true, readOnly = false, value = "City name", example = "San Jose")
   private String cityName;
 
   @SystemCodeSerializer(logical = true, description = true)
@@ -104,17 +104,17 @@ public class Reporter extends ReportingDomain implements Request, Response {
   private String feedbackDate;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false)
+  @ApiModelProperty(required = true, readOnly = false)
   private Boolean feedbackRequiredIndicator;
 
   @NotEmpty
   @Size(min = 1, max = 20)
-  @ApiModelProperty(required = false, readOnly = false, value = "First name", example = "George")
+  @ApiModelProperty(required = true, readOnly = false, value = "First name", example = "George")
   private String firstName;
 
   @NotEmpty
   @Size(min = 1, max = 25)
-  @ApiModelProperty(required = false, readOnly = false, value = "Last name", example = "Jones")
+  @ApiModelProperty(required = true, readOnly = false, value = "Last name", example = "Jones")
   private String lastName;
 
   @NotNull
@@ -122,49 +122,49 @@ public class Reporter extends ReportingDomain implements Request, Response {
   private Boolean mandatedReporterIndicator;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "123")
+  @ApiModelProperty(required = true, readOnly = false, example = "123")
   private Integer messagePhoneExtensionNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234678")
+  @ApiModelProperty(required = true, readOnly = false, example = "1234678")
   private BigDecimal messagePhoneNumber;
 
   @Size(min = 0, max = 1)
-  @ApiModelProperty(required = true, readOnly = false, value = "Middle name", example = "A")
+  @ApiModelProperty(required = false, readOnly = false, value = "Middle name", example = "A")
   private String middleInitialName;
 
   @NotNull
   @Size(max = 6)
-  @ApiModelProperty(required = false, readOnly = false, value = "Name prefix", example = "ABC123")
+  @ApiModelProperty(required = true, readOnly = false, value = "Name prefix", example = "ABC123")
   private String namePrefixDescription;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234567")
+  @ApiModelProperty(required = true, readOnly = false, example = "1234567")
   private BigDecimal primaryPhoneNumber;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "123")
+  @ApiModelProperty(required = true, readOnly = false, example = "123")
   private Integer primaryPhoneExtensionNumber;
 
   @SystemCodeSerializer(logical = true, description = true)
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "12")
+  @ApiModelProperty(required = true, readOnly = false, example = "12")
   private Short stateCodeType;
 
   @NotNull
   @Size(max = 40, message = "size must be less than or equal to 40")
-  @ApiModelProperty(required = false, readOnly = false, value = "required if streetNumber provided",
+  @ApiModelProperty(required = true, readOnly = false, value = "required if streetNumber provided",
       example = "Main")
   private String streetName;
 
   @NotNull
   @Size(max = 10, message = "size must be less than or equal to 10")
-  @ApiModelProperty(required = false, readOnly = false, value = "Street number", example = "123")
+  @ApiModelProperty(required = true, readOnly = false, value = "Street number", example = "123")
   private String streetNumber;
 
   @NotNull
   @Size(max = 4)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "A1")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "A1")
   private String suffixTitleDescription;
 
   @NotNull
@@ -178,7 +178,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
   private String lawEnforcementId;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private Short zipSuffixNumber;
 
   @NotEmpty

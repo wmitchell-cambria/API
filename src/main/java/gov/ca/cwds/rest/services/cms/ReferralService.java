@@ -288,7 +288,8 @@ public class ReferralService implements
         screeningToReferral.getCommunicationMethod(), drmsAllegationDescriptionDoc,
         drmsErReferralDoc, drmsInvestigationDoc, screeningToReferral.isFiledWithLawEnforcement(),
         screeningToReferral.isFamilyAwareness(), govEnt, screeningToReferral.getName(), dateStarted,
-        timeStarted, screeningToReferral.getResponseTime(), allegesAbuseOccurredAtAddressId,
+        timeStarted, screeningToReferral.getResponseTime(),
+        referredToResourceType(screeningToReferral), allegesAbuseOccurredAtAddressId,
         firstResponseDeterminedByStaffPersonId(), longTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
         LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID, responseRationalLongTextId,
@@ -343,6 +344,27 @@ public class ReferralService implements
   private static String firstResponseDeterminedByStaffPersonId() {
     return RequestExecutionContext.instance().getStaffId();
 
+  }
+
+  /**
+   * <blockquote>
+   *
+   * <pre>
+   * BUSINESS RULE: "R - 00818"
+   *
+   * IF    referralResponseTypeCode is set to Evaluate Out
+   * THEN  referredToResourceType should be set to Not Referred
+   *
+   * </pre>
+   *
+   * </blockquote>
+   */
+  private static Short referredToResourceType(ScreeningToReferral screeningToReferral) {
+    Short referredToResourceType = 0;
+    if (screeningToReferral.getResponseTime() == 1519) {
+      referredToResourceType = 3225;
+    }
+    return referredToResourceType;
   }
 
   private String generateReportNarrative(ScreeningToReferral screeningToReferral,
