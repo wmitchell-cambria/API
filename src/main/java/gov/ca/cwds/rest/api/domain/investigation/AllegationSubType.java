@@ -19,11 +19,22 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 public class AllegationSubType extends ReportingDomain implements Response {
-
   /**
    * 
    */
   private static final long serialVersionUID = 1L;
+
+  @JsonProperty("injury_harm_type")
+  @ApiModelProperty(required = true, readOnly = false, value = "Injury/Harm Type", example = "1372")
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.INJURY_HARM_TYPE)
+  @JsonSerialize(using = SysIdSerializer.class)
+  private Short injuryHarmType;
+
+  @JsonProperty("injury_harm_sub_type")
+  @ApiModelProperty(required = false, readOnly = false, value = "Injury/Harm sub-typ")
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE)
+  @JsonSerialize(using = SysIdSerializer.class)
+  private Short injuryHarmSubType;
 
   /**
    * empty constructor
@@ -41,19 +52,6 @@ public class AllegationSubType extends ReportingDomain implements Response {
     this.injuryHarmType = injuryHarmType;
     this.injuryHarmSubType = injuryHarmSubType;
   }
-
-  @JsonProperty("injury_harm_type")
-  @ApiModelProperty(required = false, readOnly = false, value = "Injury/Harm Type",
-      example = "1372")
-  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.INJURY_HARM_TYPE)
-  @JsonSerialize(using = SysIdSerializer.class)
-  private Short injuryHarmType;
-
-  @JsonProperty("injury_harm_sub_type")
-  @ApiModelProperty(required = false, readOnly = false, value = "Injury/Harm sub-typ")
-  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE)
-  @JsonSerialize(using = SysIdSerializer.class)
-  private Short injuryHarmSubType;
 
   /**
    * @return - the injury harm type code
@@ -99,7 +97,4 @@ public class AllegationSubType extends ReportingDomain implements Response {
       return false;
     return true;
   }
-
-
-
 }

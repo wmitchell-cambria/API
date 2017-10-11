@@ -3,9 +3,11 @@ package gov.ca.cwds.rest.api.domain.investigation;
 import java.util.Set;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -34,13 +36,14 @@ public class Allegation extends ReportingDomain implements Response {
 
   @JsonProperty("allegation_type")
   @JsonSerialize(using = SysIdSerializer.class)
-  @ApiModelProperty(required = false, readOnly = false, value = "Allegation Type", example = "2179",
+  @ApiModelProperty(required = true, readOnly = false, value = "Allegation Type", example = "2179",
       dataType = "string")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE)
+  @NotEmpty
   private Short allegationType;
 
   @JsonProperty("created_by_screener")
-  @ApiModelProperty(required = true, readOnly = false,
+  @ApiModelProperty(required = false, readOnly = false,
       value = "allegation created during screening")
   private Boolean createdByScreener;
 
@@ -57,15 +60,19 @@ public class Allegation extends ReportingDomain implements Response {
 
   @JsonProperty("rationale")
   @ApiModelProperty(required = false, readOnly = false)
+  @Size(max = 254)
   private String rationale;
 
   @JsonProperty("legacy_descriptor")
   private CmsRecordDescriptor legacyDescriptor;
 
   @JsonProperty("victim")
+  @Valid
+  @NotEmpty
   private AllegationPerson victim;
 
   @JsonProperty("perpetrator")
+  @Valid
   private AllegationPerson perpetrator;
 
 

@@ -33,7 +33,6 @@ public class AllegationEntityBuilder {
       new AllegationPersonEntityBuilder().setFirstName("jack").setLastName("kennson")
           .setDateOfBirth("2001-09-30").setSuffixTitle("III").setMiddleName("Bill").build();
 
-
   public Allegation build() {
 
     allegationSubTypes.add(allegationSubType1);
