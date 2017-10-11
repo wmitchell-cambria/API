@@ -16,7 +16,6 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
-import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.jackson.Jackson;
 
@@ -68,9 +67,10 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     Referral referral = investigationDao.find(primaryKey);
 
     if (referral == null) {
-      throw new ServiceException("Referral/Investigation not found for provided id :" + primaryKey);
+      // throw new ServiceException("Referral/Investigation not found for provided id :" +
+      // primaryKey);
 
-      // validInvestigation = this.validInvestigation;
+      validInvestigation = this.validInvestigation;
 
     } else {
 
