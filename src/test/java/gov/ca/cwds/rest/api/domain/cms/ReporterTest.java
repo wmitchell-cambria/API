@@ -1721,27 +1721,23 @@ public class ReporterTest {
   }
 
   @Test
-  public void failsWhenZipcodeTooShort() throws Exception {
+  public void successWhenZipcodeTooShort() throws Exception {
     Reporter toCreate = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeTooShort.json"), Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipcode size must be between 5 and 5"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
-  public void failsWhenZipcodeTooLong() throws Exception {
+  public void successWhenZipcodeTooLong() throws Exception {
     Reporter toCreate = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeTooLong.json"), Reporter.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"zipcode size must be between 5 and 5\"]}")));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   // @Test
