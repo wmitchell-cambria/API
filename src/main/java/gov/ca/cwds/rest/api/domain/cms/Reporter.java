@@ -53,7 +53,6 @@ public class Reporter extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "Last Updated Time",
       example = "2004-03-31T09:45:58.000-0800")
 
-
   // TODO:ADD TESTS
   private DateTime lastUpdatedTime;
 
@@ -169,8 +168,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
   private String suffixTitleDescription;
 
   @NotNull
-  @Size(min = 5, max = 5)
-  @ApiModelProperty(required = false, readOnly = false, example = "08654")
+  @ApiModelProperty(required = true, readOnly = false, example = "08654")
   // @Zipcode(required=false)
   private String zipcode;
 
@@ -334,35 +332,39 @@ public class Reporter extends ReportingDomain implements Request, Response {
   public static Reporter createWithDefaults(String referralId, boolean isMandatedReporter,
       gov.ca.cwds.rest.api.domain.Address address, Participant participant, String countyCode) {
     // TODO: #141511573 address parsing - Smarty Streets Free Form display requires
-    // standardizing
     // parsing to fields in CMS
-    String zipCodeString = address.getZip();
-
+    String zipCodeString = "";
+    String streetNumber = "";
+    String streetName = "";
+    String city = "";
+    Short stateCodeType = 0;
     /**
      * Split the StreetAddress into separate streetNumber and StreetName objects, updates the
      * respective columns. If the streetAddress is entered only words, it will throw a validation
      * exception to enter the streetNumber.
      */
-    String streetNumber = null;
-    String streetName = null;
-    int index;
-    if ((index = address.getStreetAddress().indexOf(' ')) > 0) {
-      streetNumber = address.getStreetAddress().substring(0, index);
-      if (!streetNumber.chars().allMatch(Character::isDigit)) {
-        streetNumber = null;
-        streetName = address.getStreetAddress();
+    if (address != null) {
+      zipCodeString = address.getZip();
+      city = address.getCity();
+      stateCodeType = address.getState().shortValue();
+      int index;
+      if ((index = address.getStreetAddress().indexOf(' ')) > 0) {
+        streetNumber = address.getStreetAddress().substring(0, index);
+        if (!streetNumber.chars().allMatch(Character::isDigit)) {
+          streetNumber = null;
+          streetName = address.getStreetAddress();
+        } else {
+          streetName =
+              address.getStreetAddress().substring(index + 1, address.getStreetAddress().length());
+        }
       } else {
-        streetName =
-            address.getStreetAddress().substring(index + 1, address.getStreetAddress().length());
-      }
-    } else {
-      if (address.getStreetAddress().chars().allMatch(Character::isDigit)) {
-        streetNumber = address.getStreetAddress();
-      } else {
-        streetName = address.getStreetAddress();
+        if (address.getStreetAddress().chars().allMatch(Character::isDigit)) {
+          streetNumber = address.getStreetAddress();
+        } else {
+          streetName = address.getStreetAddress();
+        }
       }
     }
-    String city = address.getCity();
     DateTime updated = null;
     if (participant.getLegacyDescriptor() != null) {
       updated = participant.getLegacyDescriptor().getLastUpdated();
@@ -371,9 +373,8 @@ public class Reporter extends ReportingDomain implements Request, Response {
     return new Reporter(updated, "", city, DEFAULT_CODE, DEFAULT_CODE,
         participant.isReporterConfidentialWaiver(), "", participant.getReporterEmployerName(), "",
         Boolean.FALSE, participant.getFirstName(), participant.getLastName(), isMandatedReporter, 0,
-        DEFAULT_DECIMAL, participant.getMiddleName(), "", DEFAULT_DECIMAL, 0,
-        address.getState().shortValue(), streetName, streetNumber, "", zipCodeString, referralId,
-        "", DEFAULT_CODE, countyCode);
+        DEFAULT_DECIMAL, participant.getMiddleName(), "", DEFAULT_DECIMAL, 0, stateCodeType,
+        streetName, streetNumber, "", zipCodeString, referralId, "", DEFAULT_CODE, countyCode);
   }
 
   /**
