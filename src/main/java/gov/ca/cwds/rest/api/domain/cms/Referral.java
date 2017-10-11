@@ -600,7 +600,7 @@ public class Referral extends ReportingDomain implements Request, Response {
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
    * @param referralResponseTypeCode - referralResponseTypeCode
-   * @param referredToResourceType
+   * @param referredToResourceType - referredToResourceType
    * @param allegesAbuseOccurredAtAddressId - allegesAbuseOccurredAtAddressId
    * @param firstResponseDeterminedByStaffPersonId - firstResponseDeterminedByStaffPersonId
    * @param screenerNoteLongTextId - screenerNoteLongTextId
