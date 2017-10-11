@@ -3,9 +3,7 @@ package gov.ca.cwds.fixture.investigation;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.joda.time.DateTime;
-
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -76,10 +74,10 @@ public class InvestigationEntityBuilder {
   private Set<Contact> contacts = new HashSet<>();
 
   public Investigation build() {
-    // people.add(person);
+    people.add(person);
     phoneNumbers.add(phoneNumber);
-    // relationships.add(relationship);
-    // allegations.add(allegation);
+    relationships.add(relationship);
+    allegations.add(allegation);
 
     return new Investigation(cmsRecordDescriptor, lastUpdatedBy, lastUpdatedAt, incidentCounty,
         incidentDate, locationType, communicationMethod, name, reportNarrative, reference,
