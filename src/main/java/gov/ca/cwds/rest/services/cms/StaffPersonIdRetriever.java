@@ -32,7 +32,12 @@ public class StaffPersonIdRetriever {
    * @return the last updated id for persistence, this is the Staff Person Id of the current user
    */
   public String getStaffPersonId() {
-    return getPerryUserIdentity().getStaffId();
+    String staffId = null;
+    PerryUserIdentity perryUserIdentity = getPerryUserIdentity();
+    if (perryUserIdentity != null) {
+      staffId = perryUserIdentity.getStaffId();
+    }
+    return staffId;
   }
 
   /**
@@ -66,10 +71,10 @@ public class StaffPersonIdRetriever {
     }
 
     if (userIdentity == null) {
-      LOGGER.warn("======= PerryUserIdentity not found, using default staff ID: {}",
-          DEFAULT_STAFF_ID);
-      String localDevProp = "true"; // System.getenv("LOCAL_DEV");
+      String localDevProp = System.getenv("LOCAL_DEV");
       if (StringUtils.isNotBlank(localDevProp) && "true".equals(localDevProp)) {
+        LOGGER.warn("======= PerryUserIdentity not found, using default staff ID: {}",
+            DEFAULT_STAFF_ID);
         userIdentity = new PerryUserIdentity();
         userIdentity.setStaffId(DEFAULT_STAFF_ID);
         userIdentity.setUser(DEFAULT_USER_ID);

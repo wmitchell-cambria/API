@@ -8,7 +8,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.shiro.authz.AuthorizationException;
 
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
 import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
@@ -107,10 +106,6 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
    */
   static void startRequest() {
     PerryUserIdentity userIdentity = StaffPersonIdRetriever.getPerryUserIdentity();
-
-    if (userIdentity == null) {
-      throw new AuthorizationException("User identity not determined");
-    }
     RequestExecutionContextRegistry.register(new RequestExecutionContextImpl(userIdentity));
   }
 
