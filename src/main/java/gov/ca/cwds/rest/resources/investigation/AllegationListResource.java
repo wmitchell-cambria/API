@@ -46,16 +46,16 @@ import io.swagger.annotations.ApiResponses;
 public class AllegationListResource {
   private TypedResourceDelegate<String, AllegationList> typedResourceDelegate;
 
-  /**
-   * Constructor
-   *
-   * @param typedResourceDelegate The typedResourceDelegate to delegate to.
-   */
-  @Inject
-  public AllegationListResource(
-      @InvestigationAllegationServiceBackedResource TypedResourceDelegate<String, AllegationList> typedResourceDelegate) {
-    this.typedResourceDelegate = typedResourceDelegate;
-  }
+//  /**
+//   * Constructor
+//   *
+//   * @param typedResourceDelegate The typedResourceDelegate to delegate to.
+//   */
+//  @Inject
+//  public AllegationListResource(
+//      @InvestigationAllegationServiceBackedResource TypedResourceDelegate<String, AllegationList> typedResourceDelegate) {
+//    this.typedResourceDelegate = typedResourceDelegate;
+//  }
 
   /**
    * Create an {@link AllegationList}.
