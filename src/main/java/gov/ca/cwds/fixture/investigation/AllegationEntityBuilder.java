@@ -27,7 +27,8 @@ public class AllegationEntityBuilder {
   protected AllegationSubType allegationSubType;
   protected Short dispositionType = 46;
   protected String rational = "disposistion reason explained";
-  private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
+  private CmsRecordDescriptor legacyDescriptor =
+      new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "ALLGTN_T", "Allegation");
   private AllegationPerson victim = new AllegationPersonEntityBuilder().build();
   private AllegationPerson perpetrator =
       new AllegationPersonEntityBuilder().setFirstName("jack").setLastName("kennson")

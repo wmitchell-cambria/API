@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  * * @author CWDS API Team
  *
  */
-public class SysIdSerializer extends JsonSerializer<Short> {
+public class SysIdShortToStringSerializer extends JsonSerializer<Short> {
   @Override
   public void serialize(Short sysCode, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider) throws IOException {

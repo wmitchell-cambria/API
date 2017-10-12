@@ -35,10 +35,10 @@ public class PersonTest {
   private String gender = "M";
   private String birthDate = "1998-10-30";
   private String ssn = "999667777";
-  private Set<Short> languages = new LinkedHashSet<Short>();
+  private Set<String> languages = new LinkedHashSet<>();
 
-  private Short primaryLanguage = 1253;
-  private Short secondaryLanguage = 1255;
+  private String primaryLanguage = "1253";
+  private String secondaryLanguage = "1255";
   private RaceAndEthnicity raceAndEthnicity = new RaceAndEthnicityEntityBuilder().build();
   private Boolean sensitive = false;
   private Boolean sealed = false;

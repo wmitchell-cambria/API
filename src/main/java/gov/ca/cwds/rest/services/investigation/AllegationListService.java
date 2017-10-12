@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on Investigation People
+ * Business layer object to work on Investigation Allegations
  * 
  * @author CWDS API Team
  */
@@ -21,7 +21,7 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
 
   /**
    * @param allegationDao {@link Dao} handling
-   *        {@link gov.ca.cwds.rest.api.domain.investigation.Allegation} objects
+   *        {@link gov.ca.cwds.rest.api.domain.investigation.AllegationList} objects
    */
   @Inject
   public AllegationListService(AllegationsDao allegationDao) {
@@ -46,6 +46,6 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
 
   @Override
   public Response update(String primaryKey, AllegationList request) {
-    return validAllegations;
+    return null;
   }
 }

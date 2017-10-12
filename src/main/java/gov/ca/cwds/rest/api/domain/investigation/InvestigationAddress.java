@@ -13,7 +13,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
-import gov.ca.cwds.rest.util.SysIdSerializer;
+import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,7 +43,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   private String city;
 
   @JsonProperty("state")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(value = "State Code", example = "1828")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.STATE_CODE)
   private Short state;
@@ -54,7 +54,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   private String zip;
 
   @JsonProperty("type")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(example = "32")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ADDRESS_TYPE)
   private Short type;

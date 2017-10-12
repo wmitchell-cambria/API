@@ -32,7 +32,6 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryRequest;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryResponse;
-import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.People;
@@ -163,10 +162,11 @@ public class ResourcesModule extends AbstractModule {
     bind(gov.ca.cwds.rest.resources.investigation.ScreeningSummaryResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.AllegationListResource.class);
     bind(RelationshipListResource.class);
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
-    bind(AllegationResource.class);
+    // bind(AllegationResource.class);
   }
 
   @Provides
@@ -450,8 +450,19 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @InvestigationAllegationServiceBackedResource
-  public TypedResourceDelegate<String, AllegationList> allegationBackedResource(Injector injector) {
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.Allegation> allegationBackedResource(
+      Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(gov.ca.cwds.rest.services.investigation.AllegationService.class));
+  }
+
+  @Provides
+  @InvestigationAllegationListServiceBackedResource
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.AllegationList>
+
+      allegationListBackedResource(Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(AllegationListService.class));
+
   }
 }

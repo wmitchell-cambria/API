@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
-import gov.ca.cwds.rest.util.SysIdSerializer;
+import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,7 +35,7 @@ public class Allegation extends ReportingDomain implements Response {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("allegation_type")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(required = true, readOnly = false, value = "Allegation Type", example = "2179",
       dataType = "string")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE,
@@ -54,7 +54,7 @@ public class Allegation extends ReportingDomain implements Response {
   private Set<AllegationSubType> allegationSubType;
 
   @JsonProperty("disposition")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, dataType = "string")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ALLEGATION_DISPOSITION,
       checkCategoryIdValueIsZero = true)

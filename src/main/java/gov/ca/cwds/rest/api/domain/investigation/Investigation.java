@@ -26,7 +26,7 @@ import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.util.LegacyRecordUtils;
-import gov.ca.cwds.rest.util.SysIdSerializer;
+import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
@@ -88,7 +88,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   private String locationType;
 
   @JsonProperty("communication_method")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Communication Method",
       example = "409")
@@ -115,7 +115,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   private String reference;
 
   @JsonProperty("response_time")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Referral Response Type",
       example = "1520")

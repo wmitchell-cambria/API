@@ -7,7 +7,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
-import gov.ca.cwds.rest.util.SysIdSerializer;
+import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,13 +27,13 @@ public class AllegationSubType extends ReportingDomain implements Response {
   @JsonProperty("injury_harm_type")
   @ApiModelProperty(required = true, readOnly = false, value = "Injury/Harm Type", example = "1372")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.INJURY_HARM_TYPE)
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   private Short injuryHarmType;
 
   @JsonProperty("injury_harm_sub_type")
   @ApiModelProperty(required = false, readOnly = false, value = "Injury/Harm sub-typ")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE)
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   private Short injuryHarmSubType;
 
   /**

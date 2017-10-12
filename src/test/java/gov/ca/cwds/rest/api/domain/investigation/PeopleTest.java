@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -70,8 +69,8 @@ public class PeopleTest {
   }
 
   @Test
-  @Ignore
-  public void testSerilizedAllegation()
+  // @Ignore
+  public void testSerilizedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     People people = new PeopleEntityBuilder().build();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(people);

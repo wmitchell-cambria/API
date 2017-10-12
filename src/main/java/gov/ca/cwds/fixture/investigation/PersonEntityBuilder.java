@@ -26,10 +26,10 @@ public class PersonEntityBuilder {
   protected String gender = "M";
   protected String birthDate = "1998-10-30";
   protected String ssn = "999667777";
-  private Set<Short> languages = new LinkedHashSet<>();
+  private Set<String> languages = new LinkedHashSet<>();
 
-  protected Short primaryLanguage = 1253;
-  protected Short secondaryLanguage = 1255;
+  protected String primaryLanguage = "1253";
+  protected String secondaryLanguage = "1255";
   private RaceAndEthnicity raceAndEthnicity = new RaceAndEthnicityEntityBuilder().build();
   protected Boolean sensitive = Boolean.FALSE;
   protected Boolean sealed = Boolean.FALSE;
@@ -152,30 +152,12 @@ public class PersonEntityBuilder {
     return this;
   }
 
-  public Set<Short> getLanguages() {
+  public Set<String> getLanguages() {
     return languages;
   }
 
-  public PersonEntityBuilder setLanguages(Set<Short> languages) {
+  public PersonEntityBuilder setLanguages(Set<String> languages) {
     this.languages = languages;
-    return this;
-  }
-
-  public Short getPrimaryLanguage() {
-    return primaryLanguage;
-  }
-
-  public PersonEntityBuilder setPrimaryLanguage(Short primaryLanguage) {
-    this.primaryLanguage = primaryLanguage;
-    return this;
-  }
-
-  public Short getSecondaryLanguage() {
-    return secondaryLanguage;
-  }
-
-  public PersonEntityBuilder setSecondaryLanguage(Short secondaryLanguage) {
-    this.secondaryLanguage = secondaryLanguage;
     return this;
   }
 

@@ -93,7 +93,7 @@ public class Person extends ReportingDomain implements Request, Response {
   // @JsonSerialize(using = SysIdSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, value = "languages",
       dataType = "java.util.List", example = "['839', '840']")
-  private Set<Short> languages;
+  private Set<String> languages;
 
   @JsonProperty("race_codes")
   private RaceAndEthnicity raceAndEthnicity;
@@ -151,7 +151,7 @@ public class Person extends ReportingDomain implements Request, Response {
       String firstName, String middleName, String lastName, String nameSuffix,
       @OneOf(value = {"M", "F", "U"}, ignoreCase = true, ignoreWhitespace = true) String gender,
       @Date(format = "yyyy-MM-dd", required = false) String dateOfBirth, String ssn,
-      Set<Short> languages, RaceAndEthnicity raceAndEthnicity, Boolean sensitive, Boolean sealed,
+      Set<String> languages, RaceAndEthnicity raceAndEthnicity, Boolean sensitive, Boolean sealed,
       Set<PhoneNumber> phone, Set<String> roles, Set<InvestigationAddress> addresses) {
     super();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
@@ -256,7 +256,7 @@ public class Person extends ReportingDomain implements Request, Response {
   /**
    * @return - list of language codes
    */
-  public Set<Short> getLanguages() {
+  public Set<String> getLanguages() {
     return languages;
   }
 

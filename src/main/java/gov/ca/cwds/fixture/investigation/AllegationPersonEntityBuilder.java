@@ -11,7 +11,8 @@ public class AllegationPersonEntityBuilder {
   protected String middleName = "";
   protected String suffixTitle = "";
   protected String dateOfBirth = "2010-10-31";
-  private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
+  private CmsRecordDescriptor legacyDescriptor =
+      new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "CLIENT_T", "Client");
 
   public AllegationPerson build() {
     return new AllegationPerson(firstName, lastName, middleName, suffixTitle, dateOfBirth,

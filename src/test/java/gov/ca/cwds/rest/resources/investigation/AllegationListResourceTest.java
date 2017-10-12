@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.resources.investigation;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
@@ -16,7 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
-import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
 import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
@@ -31,8 +33,8 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
-public class AllegationsResourceTest {
-  private static final String ROOT_RESOURCE = "/investigations/";
+public class AllegationListResourceTest {
+  private static final String ROOT_RESOURCE = "/investigations/1/allegations";
 
   @After
   public void ensureServiceLocatorPopulated() {
@@ -50,12 +52,8 @@ public class AllegationsResourceTest {
       mock(TypedResourceDelegate.class);
 
   @ClassRule
-  public final static ResourceTestRule inMemoryResource =
-      ResourceTestRule.builder().addResource(new AllegationResource(typedResourceDelegate)).build();
-  /*
-   * Load system code cache
-   */
-  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+  public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
+      .addResource(new AllegationListResource(typedResourceDelegate)).build();
 
   @Before
   public void initMocks() {
@@ -65,9 +63,20 @@ public class AllegationsResourceTest {
   @Test
   public void findDelegatesToResourceDelegate() throws Exception {
 
-    inMemoryResource.client().target(ROOT_RESOURCE + "1/allegations").request()
-        .accept(MediaType.APPLICATION_JSON).get().getStatus();
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .get();
     verify(typedResourceDelegate, atLeastOnce()).get("1");
   }
 
+  /*
+   * Create Tests
+   */
+  @Test
+  public void createDelegatesToResourceDelegate() throws Exception {
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .post(Entity.entity(allegations, MediaType.APPLICATION_JSON));
+    verify(typedResourceDelegate).create(eq(allegations));
+  }
 }

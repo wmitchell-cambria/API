@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import gov.ca.cwds.rest.util.SysIdSerializer;
+import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -35,7 +35,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   private Integer phoneExtension;
 
   @JsonProperty("type")
-  @JsonSerialize(using = SysIdSerializer.class)
+  @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(required = true, readOnly = false, value = "phone number type",
       example = "1111")
   private Short phoneType;
