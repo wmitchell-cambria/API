@@ -2,29 +2,40 @@ package gov.ca.cwds.rest.services.referentialintegrity;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.CollateralIndividualDao;
-import gov.ca.cwds.data.persistence.cms.ClientCollateral;
+import gov.ca.cwds.data.persistence.cms.CollateralIndividual;
+import gov.ca.cwds.fixture.ClientCollateralResourceBuilder;
+import gov.ca.cwds.fixture.ClientResourceBuilder;
+import gov.ca.cwds.fixture.CollateralIndividualEntityBuilder;
+import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
 
 /**
- * @author Tabpcenc
- *
+ * 
+ * @author CWDS API Team
+ * 
  */
 public class RIClientCollateralTest {
+
+  private ClientDao clientDao;
+  private CollateralIndividualDao collateralIndividualDao;
 
   /**
    * 
    */
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
+  @Before
+  public void setup() {
+    clientDao = mock(ClientDao.class);
+    collateralIndividualDao = mock(CollateralIndividualDao.class);
+  }
 
   /**
    * @throws Exception on generic error
@@ -35,29 +46,75 @@ public class RIClientCollateralTest {
   }
 
   /**
-   * @throws Exception on generic error
+   * @throws Exception- exception
    */
   @Test
   public void instantiation() throws Exception {
-    ClientDao clientDao = null;
-    CollateralIndividualDao collateralIndividualDao = null;
     RIClientCollateral target = new RIClientCollateral(clientDao, collateralIndividualDao);
     assertThat(target, notNullValue());
   }
 
+  /**
+   * @throws Exception - Exception
+   */
+  @Test(expected = ReferentialIntegrityException.class)
+  public void riCheckFailureWhenClientNotFound() throws Exception {
+
+    gov.ca.cwds.rest.api.domain.cms.ClientCollateral domainClientCollateral =
+        new ClientCollateralResourceBuilder().buildClientCollateral();
+    gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral("ABC1234567", domainClientCollateral,
+            "0X5");
+
+    when(clientDao.find(any(String.class))).thenReturn(null);
+    RIClientCollateral target = new RIClientCollateral(clientDao, collateralIndividualDao);
+    target.apply(clientCollateral);
+  }
 
   /**
-   * @throws Exception Message
+   * @throws Exception - Exception
+   */
+  @Test(expected = ReferentialIntegrityException.class)
+  public void riCheckFailureWhenCollateralIndividualNotFound() throws Exception {
+
+    gov.ca.cwds.rest.api.domain.cms.ClientCollateral domainClientCollateral =
+        new ClientCollateralResourceBuilder().buildClientCollateral();
+    gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral("ABC1234567", domainClientCollateral,
+            "0X5");
+
+    Client clientDomain = new ClientResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Client client =
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+
+    when(clientDao.find(any(String.class))).thenReturn(client);
+    when(collateralIndividualDao.find(any(String.class))).thenReturn(null);
+    RIClientCollateral target = new RIClientCollateral(clientDao, collateralIndividualDao);
+    target.apply(clientCollateral);
+  }
+
+  /**
+   * @throws Exception - Exception
    */
   @Test
-  public void testExceptionMessage() throws Exception {
-    ClientDao clientDao = mock(ClientDao.class);
-    CollateralIndividualDao collateralIndividualDao = mock(CollateralIndividualDao.class);
+  public void riCheckPassWhenClientAndCollateralFound() throws Exception {
+
+    gov.ca.cwds.rest.api.domain.cms.ClientCollateral domainClientCollateral =
+        new ClientCollateralResourceBuilder().buildClientCollateral();
+    gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral("ABC1234567", domainClientCollateral,
+            "0X5");
+
+    Client clientDomain = new ClientResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Client client =
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+
+    CollateralIndividual collateralIndividual = new CollateralIndividualEntityBuilder().build();
+
+    when(clientDao.find(any(String.class))).thenReturn(client);
+    when(collateralIndividualDao.find(any(String.class))).thenReturn(collateralIndividual);
     RIClientCollateral target = new RIClientCollateral(clientDao, collateralIndividualDao);
-    ClientCollateral t = mock(ClientCollateral.class);
-    expectedException.expect(ReferentialIntegrityException.class);
-    when(target.apply(t)).thenThrow(new ReferentialIntegrityException(
-        "ClientCollateral => Client with given Identifier is not present in database1"));
+    target.apply(clientCollateral);
   }
 
 }

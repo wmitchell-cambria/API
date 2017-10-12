@@ -5,10 +5,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -26,6 +22,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.cms.CollateralIndividual;
+import gov.ca.cwds.fixture.CollateralIndividualEntityBuilder;
 import io.dropwizard.jackson.Jackson;
 
 /**
@@ -40,31 +37,6 @@ public class CollateralIndividualDaoIT {
   private static SessionFactory sessionFactory;
   private static CollateralIndividualDao collateralIndividualDao;
   private Session session;
-
-  String badgeNumber = "12345670";
-  Date birthDate = new Date();
-  String cityName = "Sacramento";
-  String commentDescription = "commentDescription";
-  String emailAddress = "abc@123.com";
-  String employerName = "EmployerName";
-  String establishedForCode = "564";
-  BigDecimal faxNumber = BigDecimal.ONE;
-  String firstName = "firstName";
-  String foreignAddressIndicatorVariable = "variableName";
-  String genderCode = "M";
-  String lastName = "lastName";
-  Short maritalStatus = (short) 12;
-  String middleInitialName = "middleName";
-  String namePrefixDescription = "PrefixDescription";
-  Integer primaryExtensionNumber = 123;
-  BigInteger primaryPhoneNo = BigInteger.ONE;
-  String residedOutOfStateIndicator = "Y";
-  Short stateCode = (short) 890;
-  String streetName = "West River";
-  String streetNumber = "2751";
-  String suffixTitleDescription = "Junior";
-  Integer zipNumber = 945833;
-  Short zipSuffixNumber = (short) 78;
 
   /**
    * id matches src/main/resources/db.cms/ci-seeds.sql
@@ -130,12 +102,8 @@ public class CollateralIndividualDaoIT {
   @Test
   public void testCreate() throws Exception {
 
-    CollateralIndividual collateralIndividual = new CollateralIndividual(badgeNumber, birthDate,
-        cityName, commentDescription, emailAddress, employerName, establishedForCode, faxNumber,
-        firstName, foreignAddressIndicatorVariable, genderCode, "ABC1234567", lastName,
-        maritalStatus, middleInitialName, namePrefixDescription, primaryExtensionNumber,
-        primaryPhoneNo, residedOutOfStateIndicator, stateCode, streetName, streetNumber,
-        suffixTitleDescription, zipNumber, zipSuffixNumber);
+    CollateralIndividual collateralIndividual =
+        new CollateralIndividualEntityBuilder().setId("ABC1234567").build();
 
     CollateralIndividual create = collateralIndividualDao.create(collateralIndividual);
     assertThat(collateralIndividual, is(create));
@@ -144,13 +112,7 @@ public class CollateralIndividualDaoIT {
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
 
-    CollateralIndividual collateralIndividual =
-        new CollateralIndividual(badgeNumber, birthDate, cityName, commentDescription, emailAddress,
-            employerName, establishedForCode, faxNumber, firstName, foreignAddressIndicatorVariable,
-            genderCode, id, lastName, maritalStatus, middleInitialName, namePrefixDescription,
-            primaryExtensionNumber, primaryPhoneNo, residedOutOfStateIndicator, stateCode,
-            streetName, streetNumber, suffixTitleDescription, zipNumber, zipSuffixNumber);
-
+    CollateralIndividual collateralIndividual = new CollateralIndividualEntityBuilder().build();
     collateralIndividualDao.create(collateralIndividual);
 
   }
@@ -181,11 +143,7 @@ public class CollateralIndividualDaoIT {
   public void testUpdate() throws Exception {
 
     CollateralIndividual collateralIndividual =
-        new CollateralIndividual(badgeNumber, birthDate, cityName, commentDescription, emailAddress,
-            employerName, establishedForCode, faxNumber, firstName, foreignAddressIndicatorVariable,
-            genderCode, id, lastName, maritalStatus, middleInitialName, namePrefixDescription,
-            primaryExtensionNumber, primaryPhoneNo, residedOutOfStateIndicator, stateCode,
-            streetName, streetNumber, suffixTitleDescription, zipNumber, zipSuffixNumber);
+        new CollateralIndividualEntityBuilder().setZipNumber(95833).build();
 
     CollateralIndividual updated = collateralIndividualDao.update(collateralIndividual);
     assertThat(collateralIndividual, is(updated));
@@ -195,16 +153,9 @@ public class CollateralIndividualDaoIT {
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
 
-    CollateralIndividual collateralIndividual = new CollateralIndividual(badgeNumber, birthDate,
-        cityName, commentDescription, emailAddress, employerName, establishedForCode, faxNumber,
-        firstName, foreignAddressIndicatorVariable, genderCode, "0pAiuNkf5r", lastName,
-        maritalStatus, middleInitialName, namePrefixDescription, primaryExtensionNumber,
-        primaryPhoneNo, residedOutOfStateIndicator, stateCode, streetName, streetNumber,
-        suffixTitleDescription, zipNumber, zipSuffixNumber);
-
+    CollateralIndividual collateralIndividual =
+        new CollateralIndividualEntityBuilder().setId("0ok7yhT54D").build();
     collateralIndividualDao.update(collateralIndividual);
-
-
   }
 
 }
