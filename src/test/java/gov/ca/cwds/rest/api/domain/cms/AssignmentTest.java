@@ -609,7 +609,7 @@ public class AssignmentTest {
     assertThat(pc.getSecondaryAssignmentRoleType(),
         is(equalTo(pa.getSecondaryAssignmentRoleType())));
     assertThat(pc.getStartDate(), is(equalTo(df.format(pa.getStartDate()))));
-    assertThat(pc.getStartTime(), is(equalTo(timeOnlyFormat.format(pa.getStartDate()))));
+    assertThat(pc.getStartTime(), is(equalTo(timeOnlyFormat.format(pa.getStartTime()))));
   }
 
   private Assignment validAssignment() {
