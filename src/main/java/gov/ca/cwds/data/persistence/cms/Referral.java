@@ -3,7 +3,6 @@ package gov.ca.cwds.data.persistence.cms;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,14 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import gov.ca.cwds.data.CmsSystemCodeDeserializer;
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.ApiException;
@@ -225,6 +221,10 @@ public class Referral extends CmsPersistentObject {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<Reporter> reporters = new HashSet<>();
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
+  private Set<ReferralClient> referralClients = new HashSet<>();
 
   /**
    * #147241489: referential integrity check.
@@ -459,8 +459,9 @@ public class Referral extends CmsPersistentObject {
           DomainChef.cookBoolean(referral.getCaretakersPerpetratorCode());
       this.closureDate = DomainChef.uncookDateString(referral.getClosureDate());
       this.communicationMethodType = referral.getCommunicationMethodType();
-      this.currentLocationOfChildren = StringUtils.isBlank(referral.getCurrentLocationOfChildren())
-          ? null : referral.getCurrentLocationOfChildren();
+      this.currentLocationOfChildren =
+          StringUtils.isBlank(referral.getCurrentLocationOfChildren()) ? null
+              : referral.getCurrentLocationOfChildren();
       this.drmsAllegationDescriptionDoc = referral.getDrmsAllegationDescriptionDoc();
       this.drmsErReferralDoc = referral.getDrmsErReferralDoc();
       this.drmsInvestigationDoc = referral.getDrmsInvestigationDoc();
@@ -490,8 +491,9 @@ public class Referral extends CmsPersistentObject {
       this.specificsIncludedCode = referral.getSpecificsIncludedCode();
       this.sufficientInformationCode = referral.getSufficientInformationCode();
       this.unfoundedSeriesCode = referral.getUnfoundedSeriesCode();
-      this.linkToPrimaryReferralId = StringUtils.isBlank(referral.getLinkToPrimaryReferralId())
-          ? null : referral.getLinkToPrimaryReferralId();
+      this.linkToPrimaryReferralId =
+          StringUtils.isBlank(referral.getLinkToPrimaryReferralId()) ? null
+              : referral.getLinkToPrimaryReferralId();
       this.allegesAbuseOccurredAtAddressId =
           StringUtils.isBlank(referral.getAllegesAbuseOccurredAtAddressId()) ? null
               : referral.getAllegesAbuseOccurredAtAddressId();
@@ -892,5 +894,13 @@ public class Referral extends CmsPersistentObject {
    */
   public Set<Reporter> getReporters() {
     return reporters;
+  }
+
+  /**
+   * 
+   * @return referralClients object
+   */
+  public Set<ReferralClient> getReferralClients() {
+    return referralClients;
   }
 }

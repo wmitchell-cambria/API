@@ -1,14 +1,12 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.io.Serializable;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
@@ -73,6 +71,20 @@ public class Assignee implements Serializable {
     this.countyCode = countyCode;
     this.office = office;
     this.staffId = staffId;
+  }
+
+  /**
+   * Constructing Assignee object.
+   * 
+   * @param staffPerson - staff person object
+   */
+  public Assignee(StaffPerson staffPerson) {
+    this.name =
+        staffPerson.getFirstName() + staffPerson.getMiddleInitial() + staffPerson.getLastName();
+
+    this.countyCode = staffPerson.getCountyCode();
+    this.office = staffPerson.getCwsOffice();
+    this.staffId = staffPerson.getId();
   }
 
   /**

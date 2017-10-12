@@ -1,17 +1,15 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
@@ -171,6 +169,28 @@ public class Person extends ReportingDomain implements Request, Response {
     this.phone = phone;
     this.roles = roles;
     this.addresses = addresses;
+  }
+
+  /**
+   * Constructing client object
+   * 
+   * @param client - client object
+   * @param languages - list of languages
+   */
+  public Person(Client client, Set<String> languages) {
+    this.lastUpdatedBy = client.getLastUpdatedId();
+    this.lastUpdatedAt =
+        client.getLastUpdatedTime() != null ? String.valueOf(client.getLastUpdatedTime()) : null;
+    this.firstName = client.getFirstName();
+    this.lastName = client.getLastName();
+    this.middleName = client.getMiddleName();
+    this.nameSuffix = client.getNameSuffix();
+    this.gender = client.getGender();
+    this.dateOfBirth = client.getBirthDate() != null ? String.valueOf(client.getBirthDate()) : null;
+    this.ssn = client.getSsn();
+    this.languages = languages;
+    this.sealed = StringUtils.equals(client.getSensitivityIndicator(), "R");
+    this.sensitive = StringUtils.equals(client.getSensitivityIndicator(), "S");
   }
 
   /**

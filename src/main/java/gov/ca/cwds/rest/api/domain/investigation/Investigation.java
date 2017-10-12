@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gov.ca.cwds.data.persistence.cms.Address;
-import gov.ca.cwds.data.persistence.cms.LongText;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.Request;
@@ -24,6 +23,7 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.util.LegacyRecordUtils;
 import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
@@ -293,9 +293,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param staffPerson - Staff Person instance
    * @param longText - Long Text instance
    * @param addInfoLongText - Additional information long text instance
+   * @param allegations - list of allegations
+   * @param peoples - list of peoples
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
-      LongText longText, LongText addInfoLongText) {
+      LongText longText, LongText addInfoLongText, Set<Allegation> allegations,
+      Set<Person> peoples) {
 
 
     this.cmsRecordDescriptor =
@@ -322,9 +325,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
         StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "S") ? Boolean.TRUE
             : Boolean.FALSE;
     if (staffPerson != null) {
-      this.assignee = new Assignee(
-          staffPerson.getFirstName() + staffPerson.getMiddleInitial() + staffPerson.getLastName(),
-          staffPerson.getCountyCode(), staffPerson.getCwsOffice(), staffPerson.getId());
+      this.assignee = new Assignee(staffPerson);
     }
 
     if (address != null) {
@@ -338,6 +339,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
           address.getCity(), address.getStateCd(), address.getZip(),
           address.getApiAdrAddressType());
     }
+
+    this.allegations = allegations;
+    this.people = peoples;
 
   }
 
@@ -356,6 +360,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
           address.getEmergencyExtension(), null, addressRecDescriptor));
     }
   }
+
 
   /**
    * @return - CMS record description

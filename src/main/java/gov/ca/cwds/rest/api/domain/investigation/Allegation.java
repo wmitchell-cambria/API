@@ -1,18 +1,14 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -77,7 +73,6 @@ public class Allegation extends ReportingDomain implements Response {
   @Valid
   private AllegationPerson perpetrator;
 
-
   /**
    * default constructor
    */
@@ -109,6 +104,20 @@ public class Allegation extends ReportingDomain implements Response {
     this.victim = victim;
     this.perpetrator = perpetrator;
   }
+
+  /**
+   * Constructing new Allegation object
+   * 
+   * @param persistedAllocation - persisted Allegation object
+   */
+  public Allegation(gov.ca.cwds.data.persistence.cms.Allegation persistedAllocation) {
+    super();
+    this.allegationType = persistedAllocation.getAllegationType();
+    this.dispositionType = persistedAllocation.getAllegationDispositionType();
+    this.victim = new AllegationPerson(persistedAllocation.getVictimClients());
+    this.perpetrator = new AllegationPerson(persistedAllocation.getPerpetratorClients());
+  }
+
 
 
   /**
