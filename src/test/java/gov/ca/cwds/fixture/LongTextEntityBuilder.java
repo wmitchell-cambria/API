@@ -2,10 +2,14 @@ package gov.ca.cwds.fixture;
 
 import gov.ca.cwds.data.persistence.cms.LongText;
 
+/**
+ * @author CWDS API Team
+ *
+ */
 public class LongTextEntityBuilder {
-  private String id;
-  private String countySpecificCode;
-  private String textDescription;
+  private String id = "AaoVZqNq27";
+  private String countySpecificCode = "99";
+  private String textDescription = "Some descrption about the child Location";
 
   /**
    *

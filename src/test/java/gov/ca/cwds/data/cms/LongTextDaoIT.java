@@ -1,12 +1,9 @@
 package gov.ca.cwds.data.cms;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -22,11 +19,9 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import gov.ca.cwds.data.junit.template.DaoTestTemplate;
 import gov.ca.cwds.data.persistence.cms.LongText;
+import gov.ca.cwds.fixture.LongTextEntityBuilder;
 
 /**
  * 
@@ -100,11 +95,7 @@ public class LongTextDaoIT implements DaoTestTemplate {
   @Override
   @Test
   public void testCreate() throws Exception {
-
-    gov.ca.cwds.rest.api.domain.cms.LongText vdlt = validDomainLongText();
-    LongText longText =
-        new LongText("ABC1234567", vdlt.getCountySpecificCode(), vdlt.getTextDescription());
-
+    LongText longText = new LongTextEntityBuilder().setId("ABc1234567").build();
     LongText create = longTextDao.create(longText);
     assertThat(longText, is(create));
   }
@@ -113,8 +104,7 @@ public class LongTextDaoIT implements DaoTestTemplate {
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
 
-    gov.ca.cwds.rest.api.domain.cms.LongText vdlt = validDomainLongText();
-    LongText longText = new LongText(id, vdlt.getCountySpecificCode(), vdlt.getTextDescription());
+    LongText longText = new LongTextEntityBuilder().build();
     longTextDao.create(longText);
   }
 
@@ -139,8 +129,7 @@ public class LongTextDaoIT implements DaoTestTemplate {
   @Test
   public void testUpdate() throws Exception {
 
-    gov.ca.cwds.rest.api.domain.cms.LongText vdlt = validDomainLongText();
-    LongText longText = new LongText(id, vdlt.getCountySpecificCode(), vdlt.getTextDescription());
+    LongText longText = new LongTextEntityBuilder().setCountySpecificCode("19").build();
     LongText updated = longTextDao.update(longText);
     assertThat(longText, is(updated));
 
@@ -150,9 +139,7 @@ public class LongTextDaoIT implements DaoTestTemplate {
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
 
-    gov.ca.cwds.rest.api.domain.cms.LongText vdlt = validDomainLongText();
-    LongText longText =
-        new LongText("ABC1234567", vdlt.getCountySpecificCode(), vdlt.getTextDescription());
+    LongText longText = new LongTextEntityBuilder().setId("KK8uh6G4r3").build();
     longTextDao.update(longText);
   }
 
@@ -167,15 +154,6 @@ public class LongTextDaoIT implements DaoTestTemplate {
   @Override
   public void testFindAllReturnsCorrectList() throws Exception {
 
-  }
-
-  private gov.ca.cwds.rest.api.domain.cms.LongText validDomainLongText()
-      throws JsonParseException, JsonMappingException, IOException {
-
-    gov.ca.cwds.rest.api.domain.cms.LongText validDomainLongText =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/LongText/valid/valid.json"),
-            gov.ca.cwds.rest.api.domain.cms.LongText.class);
-    return validDomainLongText;
   }
 
 }

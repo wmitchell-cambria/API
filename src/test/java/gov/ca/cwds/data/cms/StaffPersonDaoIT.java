@@ -4,8 +4,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -22,6 +20,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.data.junit.template.DaoTestTemplate;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 
 /**
  * @author CWDS API Team
@@ -82,9 +81,7 @@ public class StaffPersonDaoIT implements DaoTestTemplate {
   @Test
   public void testCreate() throws Exception {
     // TODO: id may already exist in database.
-    StaffPerson staffPerson = new StaffPerson("ZZp", null, "External Interface",
-        "external interface", "SCXCIN7", " ", "", BigDecimal.valueOf(9165672100L), 0, null, "    ",
-        "N", "MIZN02k00E", "  ", "    ", "99", "N", "3XPCP92q38", null);
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
     StaffPerson created = staffPersonDao.create(staffPerson);
     assertThat(created, is(staffPerson));
   }
@@ -92,9 +89,7 @@ public class StaffPersonDaoIT implements DaoTestTemplate {
   @Override
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
-    StaffPerson staffPerson = new StaffPerson("q1p", null, "External Interface",
-        "external interface", "SCXCIN7", " ", "", BigDecimal.valueOf(9165672100L), 0, null, "    ",
-        "N", "MIZN02k00E", "  ", "    ", "99", "N", "3XPCP92q38", null);
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
     staffPersonDao.create(staffPerson);
   }
 
@@ -118,9 +113,7 @@ public class StaffPersonDaoIT implements DaoTestTemplate {
   @Override
   @Test
   public void testUpdate() throws Exception {
-    StaffPerson staffPerson = new StaffPerson("q1p", null, "External Interface",
-        "external interface", "SCXCIN7", " ", "", BigDecimal.valueOf(9165672100L), 0, null, "    ",
-        "N", "MIZN02k00E", "  ", "    ", "99", "N", "3XPCP92q38", null);
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setCountyCode("19").build();
     StaffPerson updated = staffPersonDao.update(staffPerson);
     assertThat(updated, is(staffPerson));
   }
@@ -129,9 +122,7 @@ public class StaffPersonDaoIT implements DaoTestTemplate {
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
     // TODO: depends on an id not created by this unit test.
-    StaffPerson staffPerson = new StaffPerson("zzp", null, "External Interface",
-        "external interface", "SCXCIN7", " ", "", BigDecimal.valueOf(9165672100L), 0, null, "    ",
-        "N", "MIZN02k00E", "  ", "    ", "99", "N", "3XPCP92q38", null);
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("zzp").build();
     staffPersonDao.update(staffPerson);
   }
 
