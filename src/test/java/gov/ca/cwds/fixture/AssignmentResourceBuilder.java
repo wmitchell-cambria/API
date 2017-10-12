@@ -12,7 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.Assignment;
 public class AssignmentResourceBuilder {
   private String countySpecificCode = "20";
   private String endDate = "2018-06-01";
-  private String endTime = "12:01:00";
+  private String endTime = "12:01:00-0800";
   private String establishedForCode = "R";
   private String establishedForId = "1234567ABC";
   private String caseLoadId = "2345678ABC";
@@ -21,7 +21,7 @@ public class AssignmentResourceBuilder {
   private String responsibilityDescription = "Assignment responsibility description";
   private Short secondaryAssignmentRoleType = 0;
   private String startDate = "2017-06-20";
-  private String startTime = "16:41:49";
+  private String startTime = "16:41:49-0800";
   private String typeOfAssignmentCode = "P";
   private BigDecimal weightingNumber = new BigDecimal("0.0");
   private String staffId = "0X5";

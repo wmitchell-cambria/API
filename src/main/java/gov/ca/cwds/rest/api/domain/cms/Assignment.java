@@ -175,7 +175,7 @@ public class Assignment extends ReportingDomain implements Request, Response {
   public Assignment(gov.ca.cwds.data.persistence.cms.Assignment pa) {
     this.countySpecificCode = pa.getCountySpecificCode();
     this.endDate = DomainChef.cookDate(pa.getEndDate());
-    this.endTime = DomainChef.cookTime(pa.getEndTime());
+    this.endTime = new SimpleDateFormat("HH:mm:ssZ").format(pa.getEndTime());
     this.establishedForCode = pa.getEstablishedForCode();
     this.establishedForId = pa.getEstablishedForId();
     this.caseLoadId = pa.getFkCaseLoad();
@@ -183,7 +183,7 @@ public class Assignment extends ReportingDomain implements Request, Response {
     this.responsibilityDescription = pa.getResponsibilityDescription();
     this.secondaryAssignmentRoleType = pa.getSecondaryAssignmentRoleType();
     this.startDate = DomainChef.cookDate(pa.getStartDate());
-    this.startTime = DomainChef.cookTime(pa.getStartTime());
+    this.startTime = new SimpleDateFormat("HH:mm:ssZ").format(pa.getStartTime());
     this.typeOfAssignmentCode = pa.getTypeOfAssignmentCode();
     this.weightingNumber = pa.getWeightingNumber();
   }
@@ -209,7 +209,7 @@ public class Assignment extends ReportingDomain implements Request, Response {
     final java.util.Date date = new java.util.Date();
 
     final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    final DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
+    final DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ssZ");
 
     final String startDate = df.format(date);
     final String startTime = timeOnlyFormat.format(date);

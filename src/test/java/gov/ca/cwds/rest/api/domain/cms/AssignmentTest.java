@@ -45,7 +45,7 @@ public class AssignmentTest {
 
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
+  private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ssZ");
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private String countySpecificCode = "20";
@@ -609,7 +609,7 @@ public class AssignmentTest {
     assertThat(pc.getSecondaryAssignmentRoleType(),
         is(equalTo(pa.getSecondaryAssignmentRoleType())));
     assertThat(pc.getStartDate(), is(equalTo(df.format(pa.getStartDate()))));
-    assertThat(pc.getStartTime(), is(equalTo(timeOnlyFormat.format(pa.getStartTime()))));
+    assertThat(pc.getStartTime(), is(equalTo(timeOnlyFormat.format(pa.getStartDate()))));
   }
 
   private Assignment validAssignment() {
