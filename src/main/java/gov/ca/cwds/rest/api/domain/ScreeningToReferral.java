@@ -32,10 +32,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"id", "legacySourceTable", "referralId", "endedAt", "incidentCounty",
-    "incidentDate", "locationType", "communicationMethod", "email", "name", "reportNarrative",
-    "reference", "responseTime", "startedAt", "assignee", "assigneeStaffId",
-    "additionalInformation", "screeningDecision", "screeningDecisionDetail", "address",
-    "participants", "crossReports", "allegations"})
+    "incidentDate", "locationType", "communicationMethod", "currentLocationOfChildren", "email",
+    "name", "reportNarrative", "reference", "responseTime", "startedAt", "assignee",
+    "assigneeStaffId", "additionalInformation", "screeningDecision", "screeningDecisionDetail",
+    "address", "participants", "crossReports", "allegations"})
 public class ScreeningToReferral extends ReportingDomain implements Request {
 
   /**
@@ -91,6 +91,12 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
       allowableValues = "$ID:CMM_MTHC", example = "409")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.COMMUNICATION_METHOD)
   private Short communicationMethod;
+
+  @JsonProperty("current_location_of_children")
+  @ApiModelProperty(required = false, readOnly = false, value = "location of the child",
+      example = "At the school")
+  @Size(max = 254)
+  private String currentLocationOfChildren;
 
   @JsonProperty("name")
   @NotEmpty
@@ -239,6 +245,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param incidentDate - date of incident
    * @param locationType - location type
    * @param communicationMethod - communication method
+   * @param currentLocationOfChildren - currentLocationOfChildren
    * @param name - screening name
    * @param reportNarrative - narrative
    * @param reference - referrence
@@ -264,13 +271,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
       @Date String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
-      Short communicationMethod, String name, String reportNarrative, String reference,
-      Short responseTime, @Date String startedAt, String assignee, String assigneeStaffId,
-      String additionalInformation, String screeningDecision, String screeningDecisionDetail,
-      int approvalStatus, boolean familyAwareness, boolean filedWithLawEnforcement,
-      String responsibleAgency, String limitedAccessCode, String limitedAccessDescription,
-      String limitedAccessAgency, java.util.Date limitedAccessDate, Address address,
-      Set<Participant> participants, Set<CrossReport> crossReports, Set<Allegation> allegations) {
+      Short communicationMethod, String currentLocationOfChildren, String name,
+      String reportNarrative, String reference, Short responseTime, @Date String startedAt,
+      String assignee, String assigneeStaffId, String additionalInformation,
+      String screeningDecision, String screeningDecisionDetail, int approvalStatus,
+      boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
+      String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
+      java.util.Date limitedAccessDate, Address address, Set<Participant> participants,
+      Set<CrossReport> crossReports, Set<Allegation> allegations) {
     super();
     this.id = id;
     this.referralId = referralId;
@@ -280,6 +288,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.incidentDate = incidentDate;
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
+    this.currentLocationOfChildren = currentLocationOfChildren;
     this.name = name;
     this.reportNarrative = reportNarrative;
     this.reference = reference;
@@ -358,6 +367,13 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    */
   public Short getCommunicationMethod() {
     return communicationMethod;
+  }
+
+  /**
+   * @return the currentLocationOfChildren
+   */
+  public String getCurrentLocationOfChildren() {
+    return currentLocationOfChildren;
   }
 
   /**

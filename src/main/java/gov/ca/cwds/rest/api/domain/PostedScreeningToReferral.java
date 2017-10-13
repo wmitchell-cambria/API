@@ -40,6 +40,7 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
    * @param incidentDate - date of incident
    * @param locationType - location type
    * @param communicationMethod - communication method
+   * @param currentLocationOfChildren - currentLocationOfChildren
    * @param name - name
    * @param reportNarrative - report narrative
    * @param reference - reference
@@ -65,19 +66,20 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
    */
   public PostedScreeningToReferral(long id, String referralId, String legacySourceTable,
       @Date String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
-      Short communicationMethod, String name, String reportNarrative, String reference,
-      Short responseTime, @Date String startedAt, String assignee, String assigneeStaffId,
-      String additionalInformation, String screeningDecision, String screeningDecisionDetail,
-      int approvalStatus, boolean familyAwareness, boolean filedWithLawEnforcement,
-      String responsibleAgency, String limitedAccessCode, String limitedAccessDescription,
-      String limitedAccessAgency, java.util.Date limitedAccessDate, Address address,
-      Set<Participant> participants, Set<CrossReport> crossReports, Set<Allegation> allegations) {
+      Short communicationMethod, String currentLocationOfChildren, String name,
+      String reportNarrative, String reference, Short responseTime, @Date String startedAt,
+      String assignee, String assigneeStaffId, String additionalInformation,
+      String screeningDecision, String screeningDecisionDetail, int approvalStatus,
+      boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
+      String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
+      java.util.Date limitedAccessDate, Address address, Set<Participant> participants,
+      Set<CrossReport> crossReports, Set<Allegation> allegations) {
     super(id, legacySourceTable, referralId, endedAt, incidentCounty, incidentDate, locationType,
-        communicationMethod, name, reportNarrative, reference, responseTime, startedAt, assignee,
-        assigneeStaffId, additionalInformation, screeningDecision, screeningDecisionDetail,
-        approvalStatus, familyAwareness, filedWithLawEnforcement, responsibleAgency,
-        limitedAccessCode, limitedAccessDescription, limitedAccessAgency, limitedAccessDate,
-        address, participants, crossReports, allegations);
+        communicationMethod, currentLocationOfChildren, name, reportNarrative, reference,
+        responseTime, startedAt, assignee, assigneeStaffId, additionalInformation,
+        screeningDecision, screeningDecisionDetail, approvalStatus, familyAwareness,
+        filedWithLawEnforcement, responsibleAgency, limitedAccessCode, limitedAccessDescription,
+        limitedAccessAgency, limitedAccessDate, address, participants, crossReports, allegations);
   }
 
   /**
@@ -94,15 +96,15 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
 
     return new PostedScreeningToReferral(referral.getId(), id, REFERRAL_TABLE_NAME,
         referral.getEndedAt(), referral.getIncidentCounty(), referral.getIncidentDate(),
-        referral.getLocationType(), referral.getCommunicationMethod(), referral.getName(),
-        referral.getReportNarrative(), referral.getReference(), referral.getResponseTime(),
-        referral.getStartedAt(), referral.getAssignee(), referral.getAssigneeStaffId(),
-        referral.getAdditionalInformation(), referral.getScreeningDecision(),
-        referral.getScreeningDecisionDetail(), referral.getApprovalStatus(),
-        referral.isFamilyAwareness(), referral.isFiledWithLawEnforcement(),
-        referral.getResponsibleAgency(), referral.getLimitedAccessCode(),
-        referral.getLimitedAccessDescription(), referral.getLimitedAccessAgency(),
-        referral.getLimitedAccessDate(), referral.getAddress(), resultParticipants,
-        resultCrossReports, resultAllegations);
+        referral.getLocationType(), referral.getCommunicationMethod(),
+        referral.getCurrentLocationOfChildren(), referral.getName(), referral.getReportNarrative(),
+        referral.getReference(), referral.getResponseTime(), referral.getStartedAt(),
+        referral.getAssignee(), referral.getAssigneeStaffId(), referral.getAdditionalInformation(),
+        referral.getScreeningDecision(), referral.getScreeningDecisionDetail(),
+        referral.getApprovalStatus(), referral.isFamilyAwareness(),
+        referral.isFiledWithLawEnforcement(), referral.getResponsibleAgency(),
+        referral.getLimitedAccessCode(), referral.getLimitedAccessDescription(),
+        referral.getLimitedAccessAgency(), referral.getLimitedAccessDate(), referral.getAddress(),
+        resultParticipants, resultCrossReports, resultAllegations);
   }
 }

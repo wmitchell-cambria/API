@@ -261,6 +261,8 @@ public class ReferralService implements
     String longTextId = generateReportNarrative(screeningToReferral, messageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, messageBuilder);
+    String currentLocationOfChildrenLongTextId =
+        generateCurrentLocationOfChildren(screeningToReferral, messageBuilder);
 
     /*
      * create a three dummy records using generateDrmsDocumentId method
@@ -285,12 +287,12 @@ public class ReferralService implements
 
     return gov.ca.cwds.rest.api.domain.cms.Referral.createWithDefaults(
         ParticipantValidator.anonymousReporter(screeningToReferral),
-        screeningToReferral.getCommunicationMethod(), drmsAllegationDescriptionDoc,
-        drmsErReferralDoc, drmsInvestigationDoc, screeningToReferral.isFiledWithLawEnforcement(),
-        screeningToReferral.isFamilyAwareness(), govEnt, screeningToReferral.getName(), dateStarted,
-        timeStarted, screeningToReferral.getResponseTime(),
-        referredToResourceType(screeningToReferral), allegesAbuseOccurredAtAddressId,
-        firstResponseDeterminedByStaffPersonId(), longTextId,
+        screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
+        screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
+        govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
+        screeningToReferral.getResponseTime(), referredToResourceType(screeningToReferral),
+        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
         LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID, responseRationalLongTextId,
         screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
@@ -401,6 +403,24 @@ public class ReferralService implements
       }
     }
     return longTextId;
+  }
+
+  private String generateCurrentLocationOfChildren(ScreeningToReferral screeningToReferral,
+      MessageBuilder messageBuilder) {
+    String currentLocationOfChildren = null;
+    if (screeningToReferral.getCurrentLocationOfChildren() == null
+        || screeningToReferral.getCurrentLocationOfChildren().isEmpty()) {
+      currentLocationOfChildren = null;
+    } else {
+      try {
+        currentLocationOfChildren = createLongText(screeningToReferral.getIncidentCounty(),
+            screeningToReferral.getCurrentLocationOfChildren(), messageBuilder);
+      } catch (ServiceException e) {
+        String message = e.getMessage();
+        messageBuilder.addMessageAndLog(message, e, LOGGER);
+      }
+    }
+    return currentLocationOfChildren;
   }
 
   private String createLongText(String countySpecificCode, String textDescription,
