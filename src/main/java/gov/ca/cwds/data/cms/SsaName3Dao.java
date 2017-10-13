@@ -158,7 +158,7 @@ public class SsaName3Dao {
        * procedure 3=SQL failed, 4=Call to SSANAME3 DLL failed
        */
       if (returnCode != 0 && returnCode != 1) {
-        LOGGER.error("Stored Procedure return message - ", returnMessage);
+        LOGGER.error("Stored Procedure return message - {}", returnMessage);
         throw new DaoException("Stored Procedure returned with ERROR - {}" + returnMessage);
       }
 

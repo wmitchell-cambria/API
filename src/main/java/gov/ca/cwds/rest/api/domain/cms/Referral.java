@@ -35,10 +35,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 public class Referral extends ReportingDomain implements Request, Response {
-  private static final short DEFAULT_CODE = 0;
   private static final String DEFAULT_NO = "N";
   private static final String DEFAULT_LIMITIED_ACCESS_CODE = "N";
-  private static final String DEFAULT_RESPONSIBLE_AGENCY_CODE = "C";
 
   /**
    * Serialization version

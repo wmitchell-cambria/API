@@ -115,7 +115,6 @@ public class LegacyKeyResource {
       @ApiResponse(code = 400, message = "Unable to parse parameters")})
   @ApiOperation(value = "Convert legacy 10-char key to 19-digit UI identifier",
       code = HttpStatus.SC_OK, response = LegacyKeyResponse.class)
-  @Consumes(value = MediaType.TEXT_PLAIN)
   public Response legacyKeyToUIIdentifer(@Valid @NotNull @QueryParam("key") @ApiParam(
       hidden = false, required = true, example = "U2Gaygg0Ki") LegacyKeyRequest req) {
     Response ret = null;
