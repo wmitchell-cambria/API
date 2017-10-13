@@ -123,6 +123,7 @@ public class AddressResource {
    */
   @UnitOfWork(value = "ns")
   @PUT
+  @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "not found"),

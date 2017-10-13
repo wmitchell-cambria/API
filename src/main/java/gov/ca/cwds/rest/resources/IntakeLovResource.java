@@ -109,7 +109,6 @@ public class IntakeLovResource {
       @ApiResponse(code = 400, message = "Unable to parse parameters")})
   @ApiOperation(value = "Query ElasticSearch Persons on given search terms",
       code = HttpStatus.SC_OK, response = IntakeLovEntry[].class)
-  @Consumes(value = MediaType.TEXT_PLAIN)
   public Response getAll() {
     Response ret;
     try {

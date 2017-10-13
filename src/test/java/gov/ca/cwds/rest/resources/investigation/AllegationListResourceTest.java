@@ -51,32 +51,32 @@ public class AllegationListResourceTest {
   private final static TypedResourceDelegate<String, AllegationList> typedResourceDelegate =
       mock(TypedResourceDelegate.class);
 
-//  @ClassRule
-//  public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-//      .addResource(new AllegationListResource(typedResourceDelegate)).build();
+  @ClassRule
+  public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
+      .addResource(new AllegationListResource(typedResourceDelegate)).build();
 
   @Before
   public void initMocks() {
     MockitoAnnotations.initMocks(this);
   }
 
-//  @Test
-//  public void findDelegatesToResourceDelegate() throws Exception {
-//
-//    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-//        .get();
-//    verify(typedResourceDelegate, atLeastOnce()).get("1");
-//  }
+  @Test
+  public void findDelegatesToResourceDelegate() throws Exception {
+
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .get();
+    verify(typedResourceDelegate, atLeastOnce()).get("1");
+  }
 
   /*
    * Create Tests
    */
-//  @Test
-//  public void createDelegatesToResourceDelegate() throws Exception {
-//    AllegationList allegations = new AllegationListEntityBuilder().build();
-//
-//    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-//        .post(Entity.entity(allegations, MediaType.APPLICATION_JSON));
-//    verify(typedResourceDelegate).create(eq(allegations));
-//  }
+  @Test
+  public void createDelegatesToResourceDelegate() throws Exception {
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .post(Entity.entity(allegations, MediaType.APPLICATION_JSON));
+    verify(typedResourceDelegate).create(eq(allegations));
+  }
 }
