@@ -1,14 +1,11 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.math.BigDecimal;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -64,6 +61,21 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
     this.phoneExtension = phoneExtension;
     this.phoneType = phoneType;
     this.cmsRecordDescriptor = cmsRecordDescriptor;
+  }
+
+  /**
+   * constructing Phonenumber object.
+   * 
+   * @param address - address object
+   * @param cmsRecordDescriptor - legacy record Descriptor
+   */
+  public PhoneNumber(gov.ca.cwds.data.persistence.cms.Address address,
+      CmsRecordDescriptor cmsRecordDescriptor) {
+    this.phoneNumber = address.getPrimaryNumber();
+    this.phoneExtension = address.getPrimaryExtension();
+    this.phoneType = null;
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+
   }
 
   /**

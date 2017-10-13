@@ -176,8 +176,12 @@ public class Person extends ReportingDomain implements Request, Response {
    * 
    * @param client - client object
    * @param languages - list of languages
+   * @param cmsRecordDescriptor - cmsRecordDescriptor
+   * @param address - list of investigation address
+   * @param phoneNumbers - list of client phone numbers
    */
-  public Person(Client client, Set<String> languages) {
+  public Person(Client client, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
+      Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers) {
     this.lastUpdatedBy = client.getLastUpdatedId();
     this.lastUpdatedAt =
         client.getLastUpdatedTime() != null ? String.valueOf(client.getLastUpdatedTime()) : null;
@@ -191,6 +195,9 @@ public class Person extends ReportingDomain implements Request, Response {
     this.languages = languages;
     this.sealed = StringUtils.equals(client.getSensitivityIndicator(), "R");
     this.sensitive = StringUtils.equals(client.getSensitivityIndicator(), "S");
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+    this.addresses = address;
+    this.phone = phoneNumbers;
   }
 
   /**

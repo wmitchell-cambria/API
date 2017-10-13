@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 import gov.ca.cwds.data.cms.AddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
 import gov.ca.cwds.rest.services.cms.LongTextService;
@@ -17,7 +16,8 @@ public class InvestigationServiceTest {
   StaffPersonDao staffPersonDao;
   AddressDao addressDao;
   LongTextService longTextService;
-  ClientDao clientDao;
+  PeopleService peopleService;
+  AllegationService allegationService;
 
   InvestigationService target;
 
@@ -30,10 +30,14 @@ public class InvestigationServiceTest {
     this.staffPersonDao = mock(StaffPersonDao.class);
     this.addressDao = mock(AddressDao.class);
     this.longTextService = mock(LongTextService.class);
-    this.clientDao = mock(ClientDao.class);
+    this.peopleService = mock(PeopleService.class);
+    this.allegationService = mock(AllegationService.class);
+
 
     target = new InvestigationService(investigationDao, staffPersonDao, addressDao, longTextService,
-        clientDao);
+        peopleService, allegationService);
+
+
   }
 
   @Test

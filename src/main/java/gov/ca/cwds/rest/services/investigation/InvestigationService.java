@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.investigation;
 
-import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -8,16 +7,11 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.cms.AddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
 import gov.ca.cwds.data.persistence.cms.Address;
-import gov.ca.cwds.data.persistence.cms.Allegation;
-import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Referral;
-import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.data.std.ApiLanguageAware;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
@@ -43,7 +37,8 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private StaffPersonDao staffPersonDao;
   private AddressDao addressDao;
   private LongTextService longTextService;
-  private ClientDao clientDao;
+  private PeopleService peopleService;
+  private AllegationService allegationService;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
 
@@ -53,18 +48,21 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * @param investigationDao - investigationDao
    * @param staffPersonDao - staffPersonDao
    * @param addressDao - addressDao
-   * @param longTextService - longTextService service
-   * @param clientDao - ClientDao
+   * @param longTextService - longText Service
+   * @param peopleService - People Service
+   * @param allegationService - Allegation Service
    */
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
-      AddressDao addressDao, LongTextService longTextService, ClientDao clientDao) {
+      AddressDao addressDao, LongTextService longTextService, PeopleService peopleService,
+      AllegationService allegationService) {
     super();
     this.investigationDao = investigationDao;
     this.addressDao = addressDao;
     this.staffPersonDao = staffPersonDao;
     this.longTextService = longTextService;
-    this.clientDao = clientDao;
+    this.peopleService = peopleService;
+    this.allegationService = allegationService;
   }
 
   /**
@@ -92,11 +90,11 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       StaffPerson staffPerson = this.findStaffPersonById(referral.getPrimaryContactStaffPersonId());
       LongText rptNarrativeLongText =
           this.findLongTextById(referral.getCurrentLocationOfChildren());
-      LongText addInfoLongText = findLongTextById(referral.getResponseRationaleText());
+      LongText addInfoLongText = this.findLongTextById(referral.getResponseRationaleText());
 
       Set<gov.ca.cwds.rest.api.domain.investigation.Allegation> allegations =
-          this.populateAllegations(referral.getAllegations());
-      Set<Person> peoples = this.populatePeople(referral.getReferralClients());
+          this.allegationService.populateAllegations(referral.getAllegations());
+      Set<Person> peoples = this.peopleService.getInvestigationPeoples(referral);
 
       validInvestigation = new Investigation(referral, address, staffPerson, rptNarrativeLongText,
           addInfoLongText, allegations, peoples);
@@ -119,55 +117,6 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   @Override
   public Response update(String primaryKey, Investigation request) {
     return validInvestigation;
-  }
-
-  /**
-   * finding Allegations based on referral id
-   * 
-   * @param referralId - referral id
-   * @return - list of allegation
-   */
-  private Set<gov.ca.cwds.rest.api.domain.investigation.Allegation> populateAllegations(
-      Set<Allegation> allegationsEntity) {
-    Set<gov.ca.cwds.rest.api.domain.investigation.Allegation> apiAllegations = new HashSet<>();
-    for (Allegation persisterAllocation : allegationsEntity) {
-      apiAllegations
-          .add(new gov.ca.cwds.rest.api.domain.investigation.Allegation(persisterAllocation));
-
-    }
-    return apiAllegations;
-  }
-
-  /**
-   * 
-   * @param referralClients
-   */
-  private Set<Person> populatePeople(Set<ReferralClient> referralClients) {
-    Set<Person> persons = new HashSet<Person>();
-    Person person = null;
-    Client client = null;
-    for (ReferralClient refClient : referralClients) {
-      if (refClient != null) {
-        client = clientDao.find(refClient.getClientId());
-        person = new Person(client, getLanguages(client.getLanguages()));
-        persons.add(person);
-      }
-    }
-    return persons;
-  }
-
-  /**
-   * 
-   * @param apiLanguages - api languages
-   * @return list of languages
-   */
-  private Set<String> getLanguages(ApiLanguageAware[] apiLanguages) {
-    Set<String> languages = new HashSet<>();
-    for (ApiLanguageAware api : apiLanguages) {
-      languages.add(api.getLanguageSysId().toString());
-    }
-
-    return languages;
   }
 
 

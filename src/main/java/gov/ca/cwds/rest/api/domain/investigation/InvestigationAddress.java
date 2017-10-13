@@ -1,14 +1,11 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -85,6 +82,23 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
     this.state = state;
     this.zip = zip;
     this.type = type;
+  }
+
+  /**
+   * constructing InvestigationAddress object
+   * 
+   * @param address - address object
+   * @param cmsRecordDescriptor - legacy record descriptor
+   */
+  public InvestigationAddress(gov.ca.cwds.data.persistence.cms.Address address,
+      CmsRecordDescriptor cmsRecordDescriptor) {
+    this.streetAddress = address.getStreetAddress();
+    this.city = address.getCity();
+    this.state = address.getStateCd();
+    this.zip = address.getZip();
+    this.type = address.getContextAddressType();
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+
   }
 
 
