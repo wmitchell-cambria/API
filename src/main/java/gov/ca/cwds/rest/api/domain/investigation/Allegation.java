@@ -2,10 +2,10 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -36,7 +36,7 @@ public class Allegation extends ReportingDomain implements Response {
       dataType = "string")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE,
       checkCategoryIdValueIsZero = true)
-  @NotEmpty
+  @NotNull
   private Short allegationType;
 
   @JsonProperty("created_by_screener")
@@ -66,7 +66,7 @@ public class Allegation extends ReportingDomain implements Response {
 
   @JsonProperty("victim")
   @Valid
-  @NotEmpty
+  @NotNull
   private AllegationPerson victim;
 
   @JsonProperty("perpetrator")
