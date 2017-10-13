@@ -16,7 +16,7 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.InvestigationAllegationServiceBackedResource;
+import gov.ca.cwds.inject.InvestigationAllegationListServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
@@ -46,16 +46,16 @@ import io.swagger.annotations.ApiResponses;
 public class AllegationListResource {
   private TypedResourceDelegate<String, AllegationList> typedResourceDelegate;
 
-//  /**
-//   * Constructor
-//   *
-//   * @param typedResourceDelegate The typedResourceDelegate to delegate to.
-//   */
-//  @Inject
-//  public AllegationListResource(
-//      @InvestigationAllegationServiceBackedResource TypedResourceDelegate<String, AllegationList> typedResourceDelegate) {
-//    this.typedResourceDelegate = typedResourceDelegate;
-//  }
+  /**
+   * Constructor
+   *
+   * @param typedResourceDelegate The typedResourceDelegate to delegate to.
+   */
+  @Inject
+  public AllegationListResource(
+      @InvestigationAllegationListServiceBackedResource TypedResourceDelegate<String, AllegationList> typedResourceDelegate) {
+    this.typedResourceDelegate = typedResourceDelegate;
+  }
 
   /**
    * Create an {@link AllegationList}.
