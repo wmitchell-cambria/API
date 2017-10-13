@@ -64,7 +64,6 @@ public class RIClientCollateral implements ApiReferentialCheck<ClientCollateral>
     this.clientDao = clientDao;
     this.collateralIndividualDao = collateralIndividualDao;
     ApiHibernateInterceptor.addHandler(ClientCollateral.class, c -> apply((ClientCollateral) c));
-
   }
 
   /**
@@ -83,7 +82,6 @@ public class RIClientCollateral implements ApiReferentialCheck<ClientCollateral>
     } else if (collateralIndividualDao.find(t.getCollateralIndividualId()) == null) {
       throw new ReferentialIntegrityException(
           "ClientCollateral => Collateral Individual with given Identifier is not present in database");
-
     }
     return Boolean.TRUE;
   }

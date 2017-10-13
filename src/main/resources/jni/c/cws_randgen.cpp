@@ -81,6 +81,9 @@
 
 
 
+//==============================
+// CODE STARTS HERE:
+//==============================
 
 /**
  ______________________________________________________________________________
@@ -418,7 +421,7 @@ void Yield() {
 #endif
 
 // Low-level sanity checks for memory blocks.
-// DRS: in our case, sanity has never been a primary concern. Just return true. :-)
+// But sanity has never been our primary concern, so just return true. :-)
 inline BOOL AfxIsValidAddress(const void* lp, UINT_PTR nBytes, BOOL bReadWrite = TRUE) {
     return true;
 }
@@ -434,6 +437,8 @@ inline BOOL AfxIsValidString(LPCSTR lpsz, int nLength = -1) {
 //==============================
 // GLOBALS:
 //==============================
+
+static bool opt_verbose = false;
 
 static SYSTEMTIME * g_win_tm = nullptr;
 
@@ -472,14 +477,13 @@ void GetLocalTime (SYSTEMTIME * out_win_tm, SYSTEMTIME * in_win_tm = nullptr) {
 
         out_win_tm->wYear         = 1900 + ltm->tm_year;
         out_win_tm->wMonth        = 1 + ltm->tm_mon;
-        out_win_tm->wDayOfWeek    = ltm->tm_wday;           // DRS: not used in this unit.
+        out_win_tm->wDayOfWeek    = ltm->tm_wday;            // DRS: not used in this unit.
         out_win_tm->wDay          = ltm->tm_mday;
         out_win_tm->wHour         = ltm->tm_hour;
         out_win_tm->wMinute       = ltm->tm_min;
         out_win_tm->wSecond       = ltm->tm_sec;
         out_win_tm->wMilliseconds = duration_cast<milliseconds>(tse).count() % 1000;
     } else if (in_win_tm != nullptr) {
-        // cout << "\nTEST MODE: pass in fixed datetime." << endl;
         out_win_tm->wYear         = in_win_tm->wYear;
         out_win_tm->wMonth        = in_win_tm->wMonth;
         out_win_tm->wDayOfWeek    = in_win_tm->wDayOfWeek;   // DRS: not used in this unit.
@@ -489,10 +493,9 @@ void GetLocalTime (SYSTEMTIME * out_win_tm, SYSTEMTIME * in_win_tm = nullptr) {
         out_win_tm->wSecond       = in_win_tm->wSecond;
         out_win_tm->wMilliseconds = in_win_tm->wMilliseconds;
     } else {
-        // cout << "\nTEST MODE: pass in fixed datetime." << endl;
         out_win_tm->wYear         = g_win_tm->wYear;
         out_win_tm->wMonth        = g_win_tm->wMonth;
-        out_win_tm->wDayOfWeek    = g_win_tm->wDayOfWeek;   // DRS: not used in this unit.
+        out_win_tm->wDayOfWeek    = g_win_tm->wDayOfWeek;    // DRS: not used in this unit.
         out_win_tm->wDay          = g_win_tm->wDay;
         out_win_tm->wHour         = g_win_tm->wHour;
         out_win_tm->wMinute       = g_win_tm->wMinute;
@@ -504,10 +507,10 @@ void GetLocalTime (SYSTEMTIME * out_win_tm, SYSTEMTIME * in_win_tm = nullptr) {
 inline void printWinTime(std::ostream & os, const SYSTEMTIME & win_tm) {
     using namespace std;
     cout << "\n\nWindows time:"
-    	 << "\nyear = "   << win_tm.wYear
-         << "\nmonth = "  << win_tm.wMonth
-         << "\nday = "    << win_tm.wDay
-         << "\nhour = "   << win_tm.wHour
+    	 << "\nyear   = " << win_tm.wYear
+         << "\nmonth  = " << win_tm.wMonth
+         << "\nday    = " << win_tm.wDay
+         << "\nhour   = " << win_tm.wHour
          << "\nminute = " << win_tm.wMinute
          << "\nsecond = " << win_tm.wSecond
          << "\nmillis = " << win_tm.wMilliseconds
@@ -569,14 +572,9 @@ std::tm parseIso8601Date(const char * iso_8601, WORD * millis) {
     const auto first_segment = (pos_1st_delim == string::npos) ? s : s.substr(0, pos_1st_delim);
 
     const auto str_millis = (pos_1st_delim == string::npos) ? s : s.substr(pos_1st_delim + 1, 3);
-    // cout << "str_millis=" << str_millis << endl;
-    
 	const auto i = atoi(str_millis.c_str());
-    // cout << "         i=" << i << endl;
     
 	*millis = (WORD) i;
-    // cout << "   *millis=" << *millis << endl;
-
     istringstream ss(first_segment);
     ss >> get_time(&tm, "%Y-%m-%dT%H:%M:%SZ");
 
@@ -689,7 +687,7 @@ void WINAPI _export GetUITimestampFromKey (const char *szKey, char *szUITimestam
 void WINAPI _export GetPTimeStampFromKey  (const char *szKey, char *szPTimestamp);
 
 //==============================
-// TRACE/ASSERT:
+// LOG/ASSERT:
 //==============================
 
 // Convenient trace methods.
@@ -725,6 +723,18 @@ inline bool is_base62(char c) {
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
+void logVerbose(LPCSTR pszFormat, ...) {
+    if ( opt_verbose ) {
+        va_list arglist;
+        va_start( arglist, pszFormat );
+        vprintf( pszFormat, arglist );
+        va_end( arglist ); // must release the vargs.
+    }
+}
+
+//==============================
+// CODE STARTS HERE:
+//==============================
 
 //-----------------------------------------------------------------------------
 //  Function:     StrCpyN
@@ -1218,6 +1228,7 @@ static char * CreateTimestampStr(char *szTimestampStr, SYSTEMTIME * sysTime) {
 //                RETURNS - a pointer to szDstStr
 //-----------------------------------------------------------------------------
 static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec) {
+	using namespace std;
     int i, nPower, nPad;
     double nFraction, nIntegral;
 
@@ -1227,6 +1238,13 @@ static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, dou
 
     // use the destination string width to left-pad the string.
     nPad = nDstStrWidth - nPower;
+
+	if (opt_verbose) {
+		cout << "\nDoubleToStrN: BEFORE IF:"
+			 << "\nnPower:       " << nPower
+			 << "\nnDstStrWidth: " << nDstStrWidth
+			 << "\nnPad:         " << nPad;
+	}
 
     if (nPad < 0) {
         // Input number is too big to be stored in a string of width nDestStrWidth.
@@ -1240,20 +1258,48 @@ static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, dou
     } else {
         for (i = 0; i < nPad; i++) {
             szDstStr[i] = acConvTbl[0];
+			if (opt_verbose) {
+				cout << "\n\nDoubleToStrN: ELSE LOOP:"
+					 << "\ni:           " << i
+					 << "\nszDstStr[i]: " << szDstStr[i];
+			}
         }
 
         for (i = 0; i < nPower; i++) {
             // Break down the number and convert the integer portion to a character.
             const auto whatever_this_is = nSrcVal / pnPowVec[nPower - i - 1];
             nFraction = modf(whatever_this_is, &nIntegral);
-            const auto integral = (int)nIntegral;
+            const auto integral = (int) nIntegral;
 
             szDstStr[i + nPad] = acConvTbl[integral];
             nSrcVal -= (nIntegral * pnPowVec[nPower - i - 1]);
+
+			if (opt_verbose) {
+				cout << "\n\nDoubleToStrN: FOR LOOP:"
+					 << "\ni:           " << i
+					 << "\nszDstStr[i]: " << szDstStr[i];
+			}
         }
 
         szDstStr[nDstStrWidth] = '\0';  // null terminate
     }
+
+	if (opt_verbose) {
+		cout << "\n\nDoubleToStrN: DONE:"
+		     << "\nszDstStr:     "
+			 << szDstStr
+			 << "\nnDstStrWidth: "
+			 << nDstStrWidth
+			 << "\nnSrcVal:      "
+			 << nSrcVal
+			 << "\nnFraction:    "
+			 << nFraction
+			 << "\nnIntegral:    "
+			 << nIntegral << endl;
+	}
+    
+	// logVerbose("\n\nszDstStr: %s\nnDstStrWidth: %i\nnSrcVal: %d\nnFraction: %d\nnIntegral: %d", 
+	// 	szDstStr, nDstStrWidth, nSrcVal, nFraction, nIntegral);
 
     return szDstStr;
 }
@@ -1481,9 +1527,16 @@ void decomposeKey(const std::string & s_key) {
     
     const char * k = s_key.c_str();
     
+    logVerbose("\ncall GetStaffIdFromKey...");
     GetStaffIdFromKey     (k, szStaffId);
+
+    logVerbose("\ncall GetUITimestampFromKey...");
     GetUITimestampFromKey (k, szUITimestamp);
+
+    logVerbose("\ncall GetPTimeStampFromKey...");
     GetPTimeStampFromKey  (k, szPTimestamp);
+
+    logVerbose("\ncall GetUIIdentifierFromKey...");
 	GetUIIdentifierFromKey(k, uiStr);
 
 #ifndef CWDS_BUILD_DLL
@@ -1724,8 +1777,8 @@ int main (int argc, char* argv[]) {
     //=================
     // CMD LINE OPTS
     //=================
-
-    bool opt_verbose      = false;
+    
+	bool loc_opt_verbose  = false;
     bool quiet_mode       = false;
     bool opt_create_timestamp = false;
     unsigned int make_n_keys = 1;
@@ -1750,7 +1803,7 @@ int main (int argc, char* argv[]) {
             quiet_mode = true;
             break;
         case 'v': // verbose
-            opt_verbose = true;
+            loc_opt_verbose = true;
             break;
         case 't': // create timestamp
             opt_create_timestamp = true;
@@ -1768,13 +1821,18 @@ int main (int argc, char* argv[]) {
         parse_iso8601_date(s_datetime.c_str());
     }
 
-    auto tm_str = make_unique<char[]>(50);  // Is heap allocation necessary? Stack instead??
-    auto key    = make_unique<char[]>(50);  // No need to set initial value; function call populates it.
+    // auto tm_str = make_unique<char[]>(50);  // heap
+    // auto key    = make_unique<char[]>(50);  // No need to set initial value; function call populates it.
+
+    char tm_str[50]; // stack. no need for heap here.
+    char key   [50];
     auto ts_str = CreateTimestampStr( &tm_str[0] );
 
     if (opt_create_timestamp) {
         cout << "\nNEW TIMESTAMP: ts_str=" << ts_str << endl;
     }
+
+	opt_verbose = loc_opt_verbose;
 
     if ( !s_staff_id.empty() ) {
         const auto answer   = opt_create_timestamp ? 
@@ -1788,13 +1846,9 @@ int main (int argc, char* argv[]) {
     }
 
     cout << endl;
-
     return 0;
 }
 
 #endif
-
-
-
 
 
