@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain.cms;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import javax.validation.constraints.NotNull;
@@ -175,8 +174,8 @@ public class Assignment extends ReportingDomain implements Request, Response {
   public Assignment(gov.ca.cwds.data.persistence.cms.Assignment pa) {
     this.countySpecificCode = pa.getCountySpecificCode();
     this.endDate = DomainChef.cookDate(pa.getEndDate());
-    this.endTime = pa.getEndTime() == null ? null : new SimpleDateFormat("HH:mm:ssZ").format(pa
-        .getEndTime());
+    this.endTime =
+        pa.getEndTime() == null ? null : new SimpleDateFormat("HH:mm:ssZ").format(pa.getEndTime());
     this.establishedForCode = pa.getEstablishedForCode();
     this.establishedForId = pa.getEstablishedForId();
     this.caseLoadId = pa.getFkCaseLoad();
@@ -193,7 +192,8 @@ public class Assignment extends ReportingDomain implements Request, Response {
    * @param countyCode - county code for the assignment
    * @param referralId - referral Id
    * @param caseLoadId - CaseLoad Id
-   * @param date - The Date and Time entered for assignment start
+   * @param startDate - The Date entered for assignment start
+   * @param startTime - The Time entered for assignment start
    * @return Assignment
    */
   public Assignment createDefaultReferralAssignment(String countyCode, String referralId,

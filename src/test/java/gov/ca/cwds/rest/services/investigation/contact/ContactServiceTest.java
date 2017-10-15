@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.services.investigation;
+package gov.ca.cwds.rest.services.investigation.contact;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -23,13 +23,8 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import gov.ca.cwds.rest.services.investigation.contact.ContactService;
-import gov.ca.cwds.rest.services.investigation.contact.DeliveredService;
-import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
-import gov.ca.cwds.rest.services.investigation.contact.ReferralClientDeliveredService;
 
 public class ContactServiceTest {
 
@@ -106,14 +101,6 @@ public class ContactServiceTest {
   public void delete_Args__String() throws Exception {
     String primaryKey = null;
     target.delete(primaryKey);
-  }
-
-  @Test
-  public void update_Args__String__ContactRequestList() throws Exception {
-    String primaryKey = null;
-    final ContactReferralRequest request = mock(ContactReferralRequest.class);
-    Response actual = target.update(primaryKey, request);
-    assertThat(actual, notNullValue());
   }
 
 }

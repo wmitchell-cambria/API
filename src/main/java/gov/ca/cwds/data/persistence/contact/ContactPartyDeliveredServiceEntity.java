@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.contact;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,16 +7,22 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 
 /**
  * {@link CmsPersistentObject} Class representing an ContactPartyDeliveredService.
  * 
  * @author CWDS API Team
  */
+@NamedQuery(
+    name = "gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.findByDeliveredServiceId",
+    query = "FROM ContactPartyDeliveredServiceEntity WHERE FKDL_SVC_T = :deliveredServiceId")
 @Entity
 @Table(name = "CPTY_SVT")
 @JsonPropertyOrder(alphabetic = true)

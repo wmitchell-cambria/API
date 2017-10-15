@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,6 +24,10 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ChildClient.findVictimClients",
+    query = "SELECT C" + " FROM ChildClient C, ReferralClient R, Allegation A"
+        + " WHERE C.victimClientId = R.clientId " + " AND A.victimClientId = R.clientId"
+        + " AND R.referralId = :referralId")
 @Entity
 @Table(name = "CHLD_CLT")
 @JsonPropertyOrder(alphabetic = true)
