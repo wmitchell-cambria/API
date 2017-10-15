@@ -28,8 +28,8 @@ public class ReferralClientDeliveredService {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(ReferralClientDeliveredService.class);
 
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
+  private String currentUserStaffId = RequestExecutionContext.instance().getStaffId();
+  private Date currentRequestStartTime = RequestExecutionContext.instance().getRequestStartTime();
   private ReferralClientDeliveredServiceDao referralClientDeliveredServiceDao;
   private ReferralClientDao referralClientDao;
   private ChildClientDao childClientDao;
@@ -103,8 +103,9 @@ public class ReferralClientDeliveredService {
       ChildClient childClient = childClientDao.find(id);
       if (childClient != null) {
         atLeastOneOnBehalfOfExists = true;
-        ReferralClientDeliveredServiceEntity rcdse = new ReferralClientDeliveredServiceEntity(
-            deliveredServiceId, referralId, id, countySpecificCode, lastUpdatedId, lastUpdatedTime);
+        ReferralClientDeliveredServiceEntity rcdse =
+            new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId, id,
+                countySpecificCode, currentUserStaffId, currentRequestStartTime);
         referralClientDeliveredServiceDao.create(rcdse);
       }
     }
@@ -116,6 +117,40 @@ public class ReferralClientDeliveredService {
 
   public ReferralClientDeliveredServiceEntity[] findByReferralId(String referralId) {
     return referralClientDeliveredServiceDao.findByReferralId(referralId);
+  }
+
+
+  public void updateOnBehalfOfClients(String deliveredServiceId, String referralId,
+      String countySpecificCode) {
+
+    ReferralClient[] referralClients = referralClientDao.findByReferralId(referralId);
+    ReferralClientDeliveredServiceEntity[] referralClientDeliveredServices =
+        referralClientDeliveredServiceDao.findByReferralId(referralId);
+    boolean atLeastOneOnBehalfOfExists = false;
+    for (ReferralClient referralClient : referralClients) {
+      String id = referralClient.getClientId();
+      ChildClient childClient = childClientDao.find(id);
+      if (childClient != null) {
+        atLeastOneOnBehalfOfExists = true;
+        Boolean create = true;
+        for (ReferralClientDeliveredServiceEntity referralClientDeliveredService : referralClientDeliveredServices) {
+          if (referralClientDeliveredService.getPrimaryKey().getClientId().equals(id)) {
+            create = false;
+            break;
+          }
+        }
+        if (create) {
+          ReferralClientDeliveredServiceEntity rcdse =
+              new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId, id,
+                  countySpecificCode, currentUserStaffId, currentRequestStartTime);
+          referralClientDeliveredServiceDao.create(rcdse);
+        }
+      }
+    }
+    if (!atLeastOneOnBehalfOfExists) {
+      throw new ServiceException(
+          "An  On Behalf Of Client for the referral could not be found. At least one On Behalf Of Client should exist");
+    }
   }
 
 }

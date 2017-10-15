@@ -1,8 +1,10 @@
 package gov.ca.cwds.rest.services.investigation.contact;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,8 +37,8 @@ public class DeliveredToIndividualService {
 
   private EnumMap<Code, BaseDaoImpl<? extends ApiPersonAware>> codeToDaoImplememterMap;
   private IndividualDeliveredServiceDao individualDeliveredServiceDao;
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
+  private String currentUserStaffId = RequestExecutionContext.instance().getStaffId();
+  private Date currentRequestStartTime = RequestExecutionContext.instance().getRequestStartTime();
 
 
   /**
@@ -166,8 +168,6 @@ public class DeliveredToIndividualService {
     return people;
   }
 
-
-
   /**
    * Representing a Delivered To Individual Code
    * 
@@ -226,7 +226,6 @@ public class DeliveredToIndividualService {
       throw new ApiException("UNKNOWN DELIVERED TO INDIVIDUAL CODE: " + codeLiteral);
     }
 
-
     /**
      * Lookup by Value
      * 
@@ -245,8 +244,6 @@ public class DeliveredToIndividualService {
     }
 
   }
-
-
 
   /**
    * Creates a record in IndividualDeliveredService for each person in people
@@ -269,9 +266,81 @@ public class DeliveredToIndividualService {
       IndividualDeliveredServiceEntity ids =
           new IndividualDeliveredServiceEntity(deliveredServiceId, deliveredToIndividualCode,
               deliveredToIndividualId, countySpecificCode, endedAt, serviceContactType.shortValue(),
-              startedAt, lastUpdatedId, lastUpdatedTime);
+              startedAt, currentUserStaffId, currentRequestStartTime);
       individualDeliveredServiceDao.create(ids);
     }
   }
+
+  /**
+   * Updates the entries in IndividualDeliveredService This includes, creates a record in
+   * IndividualDeliveredService for each new person in people, deletes the records that were removed
+   * from people payload.
+   * 
+   * @param deliveredServiceId the identifier of the Delivered Service
+   * @param contactRequest the contact request
+   * @param countySpecificCode the county of the Referral
+   * 
+   */
+  public void updatePeopleToIndividualDeliveredService(String deliveredServiceId,
+      ContactRequest contactRequest, String countySpecificCode) {
+    Date endedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getEndedAt());
+    Date startedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getStartedAt());
+    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Set<PostedIndividualDeliveredService> people = contactRequest.getPeople();
+    IndividualDeliveredServiceEntity[] entities =
+        individualDeliveredServiceDao.findByDeliveredServiceId(deliveredServiceId);
+    deleteRemovedPeopleFromIndividualDeliveredService(people, entities);
+    List<PostedIndividualDeliveredService> peopleToAdd =
+        findNewPeopleToAddToIndividualDeliveredService(people, entities);
+    for (PostedIndividualDeliveredService newPerson : peopleToAdd) {
+      String deliveredToIndividualCode = DeliveredToIndividualService.Code
+          .lookupByValue(newPerson.getTableName()).getCodeLiteral();
+
+      IndividualDeliveredServiceEntity ids = new IndividualDeliveredServiceEntity(
+          deliveredServiceId, deliveredToIndividualCode, newPerson.getId(), countySpecificCode,
+          endedAt, serviceContactType.shortValue(), startedAt, currentUserStaffId, currentRequestStartTime);
+      individualDeliveredServiceDao.create(ids);
+    }
+
+  }
+
+  private List<PostedIndividualDeliveredService> findNewPeopleToAddToIndividualDeliveredService(
+      Set<PostedIndividualDeliveredService> people, IndividualDeliveredServiceEntity[] entities) {
+    List<PostedIndividualDeliveredService> newPeople = new ArrayList<>();
+    for (PostedIndividualDeliveredService person : people) {
+      Boolean createEntryInDeliveredToIndividualService = true;
+      String deliveredToIndividualId = person.getId();
+      for (IndividualDeliveredServiceEntity individualDeliveredService : entities) {
+        if (individualDeliveredService.getPrimaryKey().getDeliveredToIndividualId()
+            .equals(deliveredToIndividualId)) {
+          createEntryInDeliveredToIndividualService = false;
+          break;
+        }
+      }
+      if (createEntryInDeliveredToIndividualService) {
+        newPeople.add(person);
+      }
+    }
+    return newPeople;
+  }
+
+  private void deleteRemovedPeopleFromIndividualDeliveredService(
+      Set<PostedIndividualDeliveredService> people, IndividualDeliveredServiceEntity[] entities) {
+    for (IndividualDeliveredServiceEntity individualDeliveredService : entities) {
+      Boolean deleteRecordInDeliveredToIndividualService = true;
+      for (PostedIndividualDeliveredService person : people) {
+        String deliveredToIndividualId = person.getId();
+        if (individualDeliveredService.getPrimaryKey().getDeliveredToIndividualId()
+            .equals(deliveredToIndividualId)) {
+          deleteRecordInDeliveredToIndividualService = false;
+          break;
+        }
+      }
+      if (deleteRecordInDeliveredToIndividualService) {
+        individualDeliveredServiceDao.delete(individualDeliveredService.getPrimaryKey());
+      }
+    }
+  }
+
 
 }

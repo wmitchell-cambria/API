@@ -1,16 +1,6 @@
 package gov.ca.cwds.rest.api.contact;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
-import gov.ca.cwds.rest.validation.ValidSystemCodeId;
-import io.dropwizard.jackson.JsonSnakeCase;
-import io.dropwizard.validation.OneOf;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,6 +13,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.validation.ValidSystemCodeId;
+import io.dropwizard.jackson.JsonSnakeCase;
+import io.dropwizard.validation.OneOf;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing an DeliveredSevice
@@ -453,7 +455,7 @@ public class DeliveredServiceDomain extends ReportingDomain implements Request, 
   }
 
   /**
-   * Delivered Service Domain created with some default values to match UI Specificaton
+   * Delivered Service Domain Object created with some default values to match UI Specificaton
    * 
    * @param communicationMethod the communication method code
    * @param location the contact location code
@@ -468,15 +470,53 @@ public class DeliveredServiceDomain extends ReportingDomain implements Request, 
    * @param statusCode the status code
    * @return the Delivered Service Domain created with default values
    */
-  public static DeliveredServiceDomain createWithDefaults(Integer communicationMethod,
-      Integer location, String countySpecificCode, String longTextId,
+  public static DeliveredServiceDomain createWithDefaultsForFieldsNotPopulatedByUI(
+      Integer communicationMethod, Integer location, String countySpecificCode, String longTextId,
       String longTextContinuationId, String endDate, String endTime, Integer serviceContactType,
       String startDate, String startTime, String statusCode) {
 
     return new DeliveredServiceDomain("id", null, Boolean.FALSE, communicationMethod, location,
-        DEFAULT_CONTACT_VISIT_CODE, countySpecificCode, longTextId, longTextContinuationId,
-        endDate, endTime, "", DEFAULT_HARD_COPY_DOUMENT_ON_FILE_CODE, "", "", "",
-        serviceContactType, startDate, startTime, statusCode, "", Boolean.FALSE);
+        DEFAULT_CONTACT_VISIT_CODE, countySpecificCode, longTextId, longTextContinuationId, endDate,
+        endTime, "", DEFAULT_HARD_COPY_DOUMENT_ON_FILE_CODE, "", "", "", serviceContactType,
+        startDate, startTime, statusCode, "", Boolean.FALSE);
   }
+
+  /**
+   * Delivered Service Domain Object updated with some values provided by UI, and remaining fields
+   * populated from the persisted object. This is because the UI does not expose all the legacy
+   * fields to the user.
+   * 
+   * @param deliveredServiceEntity the persisted delivered service
+   * @param communicationMethod the communication method code
+   * @param location the contact location code
+   * @param countySpecificCode the county
+   * @param longTextId the long text id to detail text
+   * @param longTextContinuationId the long text id to detail text continuation
+   * @param endDate the end date
+   * @param endTime the end time
+   * @param serviceContactType the service contact type
+   * @param startDate the start date
+   * @param startTime the start time
+   * @param statusCode the status code
+   * @return the Delivered Service Domain created with default values
+   */
+  public static DeliveredServiceDomain updateWithDeliveredServiceEntityValuesForFieldsNotPopulatedByUI(
+      DeliveredServiceEntity deliveredServiceEntity, Integer communicationMethod, Integer location,
+      String countySpecificCode, String longTextId, String longTextContinuationId, String endDate,
+      String endTime, Integer serviceContactType, String startDate, String startTime,
+      String statusCode) {
+
+    return new DeliveredServiceDomain(deliveredServiceEntity.getId(), null,
+        DomainChef.uncookBooleanString(deliveredServiceEntity.getCoreServiceIndicator()),
+        communicationMethod, location, deliveredServiceEntity.getContactVisitCode(),
+        countySpecificCode, longTextId, longTextContinuationId, endDate, endTime,
+        deliveredServiceEntity.getPrimaryDeliveredServiceId(),
+        deliveredServiceEntity.getHardCopyDocumentOnFileCode(),
+        deliveredServiceEntity.getOtherParticipantsDesc(),
+        deliveredServiceEntity.getProvidedByCode(), deliveredServiceEntity.getProvidedById(),
+        serviceContactType, startDate, startTime, statusCode, "",
+        DomainChef.uncookBooleanString(deliveredServiceEntity.getWraparoundServiceIndicator()));
+  }
+
 
 }
