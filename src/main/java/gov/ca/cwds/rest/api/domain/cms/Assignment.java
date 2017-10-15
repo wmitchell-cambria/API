@@ -192,8 +192,8 @@ public class Assignment extends ReportingDomain implements Request, Response {
    * @param countyCode - county code for the assignment
    * @param referralId - referral Id
    * @param caseLoadId - CaseLoad Id
-   * @param startDate - The Date entered for assignment start
-   * @param startTime - The Time entered for assignment start
+   * @param startDate start date
+   * @param startTime start time
    * @return Assignment
    */
   public Assignment createDefaultReferralAssignment(String countyCode, String referralId,
