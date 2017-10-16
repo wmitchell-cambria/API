@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.services.investigation;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.dao.investigation.AllegationsDao;
+import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
@@ -16,7 +16,6 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  */
 public class AllegationListService implements TypedCrudsService<String, AllegationList, Response> {
 
-  private AllegationsDao allegationDao;
   private AllegationList validAllegations = new AllegationListEntityBuilder().build();
 
   /**
@@ -24,9 +23,8 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
    *        {@link gov.ca.cwds.rest.api.domain.investigation.AllegationList} objects
    */
   @Inject
-  public AllegationListService(AllegationsDao allegationDao) {
+  public AllegationListService(AllegationDao allegationDao) {
     super();
-    this.allegationDao = allegationDao;
   }
 
   @Override
