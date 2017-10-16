@@ -37,6 +37,7 @@ import gov.ca.cwds.fixture.investigation.PeopleEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimpleScreeningEntityBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -177,7 +178,25 @@ public class InvestigationTest {
     assertThat(investigation.getStartedAt(), is(equalTo(referral.getReceivedDate())));
     assertThat(investigation.getIncidentCounty(), is(equalTo(referral.getCountySpecificCode())));
     assertThat(investigation.getLastUpdatedBy(), is(equalTo(referral.getLastUpdatedId())));
+    assertThat(investigation.getLastUpdatedAt(),
+        is(equalTo(DomainChef.cookTimestamp(referral.getLastUpdatedTime()))));
 
+  }
+
+  @Test
+  public void testStaffPersonAssignmentSuccess() {
+    Referral referral = new ReferralEntityBuilder().setLimitedAccessCode("R").build();
+
+    Address address = new AddressEntityBuilder().build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
+        longText, allgationSet, personSet);
+    assertThat(investigation.getAssignee(), is(equalTo(referral.getPrimaryContactStaffPersonId())));
   }
 
   @Test

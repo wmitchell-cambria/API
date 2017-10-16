@@ -19,7 +19,7 @@ import gov.ca.cwds.rest.api.domain.investigation.People;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 import gov.ca.cwds.rest.services.TypedCrudsService;
-import gov.ca.cwds.rest.util.LegacyRecordUtils;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 
 /**
  * Business layer object to work on Investigation People
@@ -106,7 +106,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
    * @return CmsRecordDescriptor
    */
   private CmsRecordDescriptor getLegacyDescriptor(String id, LegacyTable legacyTable) {
-    return LegacyRecordUtils.createLegacyDescriptor(id, legacyTable);
+    return CmsRecordUtils.createLegacyDescriptor(id, legacyTable);
   }
 
   /**
