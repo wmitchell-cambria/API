@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.contact;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,6 +12,8 @@ import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 
 /**
  * {@link CmsPersistentObject} Class representing an IndividualDeliveredService.
@@ -62,8 +62,6 @@ public class IndividualDeliveredServiceEntity extends CmsPersistentObject {
       length = CmsPersistentObject.CMS_ID_LEN)
   private String deliveredToIndividualId;
 
-
-
   /**
    * Default constructor
    * 
@@ -98,10 +96,8 @@ public class IndividualDeliveredServiceEntity extends CmsPersistentObject {
     this.deliveredServiceId = deliveredServiceId;
     this.deliveredToIndividualCode = deliveredToIndividualCode;
     this.deliveredToIndividualId = deliveredToIndividualId;
-    this.individualDeliveredServiceEmbeddable =
-        new IndividualDeliveredServiceEmbeddable(deliveredServiceId, deliveredToIndividualCode,
-            deliveredToIndividualId);
-
+    this.individualDeliveredServiceEmbeddable = new IndividualDeliveredServiceEmbeddable(
+        deliveredServiceId, deliveredToIndividualCode, deliveredToIndividualId);
   }
 
   /**

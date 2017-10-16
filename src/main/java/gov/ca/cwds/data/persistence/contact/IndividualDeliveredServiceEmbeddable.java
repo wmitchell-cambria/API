@@ -22,7 +22,6 @@ import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
  * <p>
  * 
  * @author CWDS API Team
- * 
  */
 @Embeddable
 public class IndividualDeliveredServiceEmbeddable implements Serializable {
