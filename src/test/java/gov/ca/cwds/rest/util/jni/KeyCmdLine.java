@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.util.jni;
 import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
 
 /**
- * Command line tool to call the native CWDS key generation library.
+ * Command line tool to call the Java CWDS key generation library.
  * 
  * <h3>Command line arguments:</h3>
  * <h4>Compose/generate a key:</h4> <blockquote>
