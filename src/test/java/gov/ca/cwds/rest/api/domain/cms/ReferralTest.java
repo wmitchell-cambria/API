@@ -76,7 +76,7 @@ public class ReferralTest {
   private Boolean caretakersPerpetratorCode = Boolean.FALSE;
   private String closureDate = "1991-06-06";
   private Short communicationMethodType = 2;
-  private String currentLocationOfChildren = "e";
+  private String currentLocationOfChildren = "current Location Of Children";
   private String drmsAllegationDescriptionDoc = "f";
   private String drmsErReferralDoc = "g";
   private String drmsInvestigationDoc = "h";
@@ -238,6 +238,7 @@ public class ReferralTest {
   public void shouldSetValuesWhenPassedIntoConstructor() {
     boolean anonReporter = true;
     Short communicationsMethodCode = 44;
+    String currentLocationOfChildren = "currentLocationOfChildren";
     String drmsAllegationDescriptionDoc = "ABC1234569";
     String drmsErReferralDoc = "1234567ABC";
     String drmsInvestigationDoc = "ABD1234567";
@@ -259,16 +260,18 @@ public class ReferralTest {
 
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
-        familyAwarenessIndicator, govtEntityType, referalName, dateStarted, timeStarted,
-        referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
-        firstResponseDeterminedByStaffPersonId, longTextId, countyCode, approvalCode, staffId,
-        longTextId, responsibleAgencyCode, limitedAccessCode, limitedAccessDesc, limitedAccessDate,
-        limitedAccessGovtAgencyType);
+        currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
+        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
+        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
+        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
+        countyCode, approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode,
+        limitedAccessDesc, limitedAccessDate, limitedAccessGovtAgencyType);
     assertEquals("Expected anonReporter field to have presetValues", anonReporter,
         referral.getAnonymousReporterIndicator());
     assertEquals("Expected communicationsMethodCode field to have presetValues",
         communicationsMethodCode, referral.getCommunicationMethodType());
+    assertEquals("Expected currentLocationOfChildren field to have presetValues",
+        currentLocationOfChildren, referral.getCurrentLocationOfChildren());
     assertEquals("Expected drmsAllegationDescriptionDoc field to have presetValues",
         drmsAllegationDescriptionDoc, referral.getDrmsAllegationDescriptionDoc());
     assertEquals("Expected drmsErReferralDoc field to have presetValues", drmsErReferralDoc,
@@ -315,6 +318,7 @@ public class ReferralTest {
   public void shouldUseDefaultValuesForFieldsNotPassedToConstructor() {
     boolean anonReporter = true;
     short communicationsMethodCode = 44;
+    String currentLocationOfChildren = "currentLocationOfChildren";
     String drmsAllegationDescriptionDoc = "ABC1234569";
     String drmsErReferralDoc = "1234567ABC";
     String drmsInvestigationDoc = "ABD1234567";
@@ -334,7 +338,6 @@ public class ReferralTest {
     String approvalNumber = "";
     Boolean caretakersPerpetratorCode = false;
     String closureDate = "";
-    String currentLocationOfChildren = "";
     Boolean familyAwarenessIndicator = false;
     Short govtEntityType = 0;
     String legalDefinitionCode = "N";
@@ -364,11 +367,12 @@ public class ReferralTest {
     Set<Client> perpetratorClient = null;
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
-        familyAwarenessIndicator, govtEntityType, referalName, dateStarted, timeStarted,
-        referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
-        firstResponseDeterminedByStaffPersonId, longTextId, countyCode, approvalCode, staffId,
-        responseRationaleText, responsibleAgencyCode, "N", "", null, (short) 0);
+        currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
+        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
+        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
+        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
+        countyCode, approvalCode, staffId, responseRationaleText, responsibleAgencyCode, "N", "",
+        null, (short) 0);
     assertEquals("Expected additionalInfoIncludedCode field to have presetValues",
         additionalInfoIncludedCode, referral.getAdditionalInfoIncludedCode());
     assertEquals("Expected applicationForPetitionIndicator field to have presetValues",
@@ -450,9 +454,9 @@ public class ReferralTest {
   public void shouldSetLimitedAccessCodeToNWhenNull() {
     String limitedAccessCode = null;
 
-    Referral referral = Referral.createWithDefaults(null, (short) 0, drmsAllegationDescriptionDoc,
-        drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator,
-        govtEntityType, "name", "", "", (short) 0, (short) 0, "",
+    Referral referral = Referral.createWithDefaults(null, (short) 0, currentLocationOfChildren,
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
+        familyAwarenessIndicator, govtEntityType, "name", "", "", (short) 0, (short) 0, "",
         firstResponseDeterminedByStaffPersonId, "", "", (short) 0, "", responseRationaleText,
         responsibleAgencyCode, limitedAccessCode, "", null, (short) 0);
 
