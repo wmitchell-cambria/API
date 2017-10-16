@@ -358,7 +358,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void testForCreateAssignment() throws Exception {
+  public void shouldSaveNewAssignment() throws Exception {
 
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =

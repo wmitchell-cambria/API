@@ -83,8 +83,8 @@ public class ContactResource {
           value = "The id of the Referral ") String id,
       @Valid @ApiParam(hidden = false, required = true) ContactRequest contact) {
 
-    ContactReferralRequest crr = new ContactReferralRequest(id, contact);
-    return typedResourceDelegate.create(crr);
+    ContactReferralRequest contactReferralRequest = new ContactReferralRequest(id, contact);
+    return typedResourceDelegate.create(contactReferralRequest);
   }
 
   /**

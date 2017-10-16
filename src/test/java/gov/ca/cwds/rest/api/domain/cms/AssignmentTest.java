@@ -4,6 +4,7 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -610,6 +611,29 @@ public class AssignmentTest {
         is(equalTo(pa.getSecondaryAssignmentRoleType())));
     assertThat(pc.getStartDate(), is(equalTo(df.format(pa.getStartDate()))));
     assertThat(pc.getStartTime(), is(equalTo(timeOnlyFormat.format(pa.getStartTime()))));
+  }
+
+  @Test
+  public void shouldCreateADefaultReferralAssignment(){
+
+    Assignment assignment = validAssignment();
+    Assignment defaultAssignment = assignment.createDefaultReferralAssignment(countySpecificCode,
+        id,
+        caseLoadId,
+        startDate, startTime);
+    assertEquals(countySpecificCode,defaultAssignment.getCountySpecificCode());
+    assertEquals("",defaultAssignment.getEndDate());
+    assertEquals("",defaultAssignment.getEndTime());
+    assertEquals("R",defaultAssignment.getEstablishedForCode());
+    assertEquals(id,defaultAssignment.getEstablishedForId());
+    assertEquals(caseLoadId,defaultAssignment.getCaseLoadId());
+    assertEquals(null,defaultAssignment.getOutOfStateContactId());
+    assertEquals("",defaultAssignment.getResponsibilityDescription());
+    assertEquals((short)0, (short)defaultAssignment.getSecondaryAssignmentRoleType());
+    assertEquals(startDate,defaultAssignment.getStartDate());
+    assertEquals(startTime,defaultAssignment.getStartTime());
+    assertEquals("P",defaultAssignment.getTypeOfAssignmentCode());
+    assertEquals(new BigDecimal("0.0"),defaultAssignment.getWeightingNumber());
   }
 
   private Assignment validAssignment() {

@@ -1,10 +1,10 @@
 package gov.ca.cwds.rest.services.investigation.contact;
 
 import java.util.Date;
-import java.util.Optional;
 
 import javax.persistence.EntityExistsException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,13 +19,10 @@ import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
-import gov.ca.cwds.rest.api.domain.cms.LongText;
-import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.services.cms.LongTextService;
 
 /**
  * Business layer object to work on {@link DeliveredServiceEntity}
@@ -36,32 +33,29 @@ public class DeliveredService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DeliveredService.class);
 
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
+  private String currentUserStaffId = RequestExecutionContext.instance().getStaffId();
+  private Date currentRequestStartTime = RequestExecutionContext.instance().getRequestStartTime();
 
   private DeliveredServiceDao deliveredServiceDao;
   private StaffPersonDao staffPersonDao;
-  private LongTextService longTextService;
+  private LongTextHelper longTextHelper;
 
   /**
    * @param deliveredServiceDao the {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity} objects
    * @param staffPersonDao the {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
-   * @param longTextService the {@link Dao} handling
+   * @param longTextHelper the helper class handling
    *        {@link gov.ca.cwds.data.persistence.cms.LongText} objects
    * 
    */
   @Inject
   public DeliveredService(DeliveredServiceDao deliveredServiceDao, StaffPersonDao staffPersonDao,
-      LongTextService longTextService) {
+      LongTextHelper longTextHelper) {
     this.deliveredServiceDao = deliveredServiceDao;
     this.staffPersonDao = staffPersonDao;
-    this.longTextService = longTextService;
-
+    this.longTextHelper = longTextHelper;
   }
-
-
 
   /**
    * Find the Staff Person who last updated the deliveredServiceEntity persistence object
@@ -71,9 +65,12 @@ public class DeliveredService {
    */
   protected LastUpdatedBy getTheLastUpdatedByStaffPerson(
       DeliveredServiceEntity deliveredServiceEntity) {
-    StaffPerson lastUpdtatedId = staffPersonDao.find(deliveredServiceEntity.getLastUpdatedId());
-    if (lastUpdtatedId != null) {
-      return new LastUpdatedBy(lastUpdtatedId);
+    String lastUpdatedByStaffPersonId = deliveredServiceEntity.getLastUpdatedId();
+    if (StringUtils.isNotBlank(lastUpdatedByStaffPersonId)) {
+      StaffPerson lastUpdtatedId = staffPersonDao.find(lastUpdatedByStaffPersonId);
+      if (lastUpdtatedId != null) {
+        return new LastUpdatedBy(lastUpdtatedId);
+      }
     }
     return new LastUpdatedBy();
   }
@@ -88,79 +85,31 @@ public class DeliveredService {
   String combineDetailTextAndContinuation(DeliveredServiceEntity deliveredServiceEntity) {
     String detailText = deliveredServiceEntity.getDetailText();
     String detailTextContinuation = deliveredServiceEntity.getDetailTextContinuation();
-    return getLongText(detailText) + getLongText(detailTextContinuation);
+    return longTextHelper.getLongText(detailText)
+        + longTextHelper.getLongText(detailTextContinuation);
   }
 
-  /**
-   * Find from the Long Text table the text value of the Detail Text
-   * 
-   * @param detailText the Detail Text
-   * @return text value of the Detail Text
-   */
-  private String getLongText(String detailText) {
-    LongText detail = new LongText();
-    if (detailText != null) {
-      detail = longTextService.find(detailText);
-    }
-
-    return (Optional.of(detail)).map(LongText::getTextDescription).orElse("");
-  }
-
-  /**
-   * Creates Long Text Entity and returns the identifier
-   * 
-   * @param countySpecificCode the county of the referral
-   * @param textDescription the text
-   * @return identifier of the posted LongText entity
-   * @throws ServiceException
-   */
-  private String createLongText(String textDescription, String countySpecificCode)
-      throws ServiceException {
-
-    gov.ca.cwds.rest.api.domain.cms.LongText longText =
-        new gov.ca.cwds.rest.api.domain.cms.LongText(countySpecificCode, textDescription);
-    PostedLongText postedLongText = longTextService.create(longText);
-
-    return postedLongText.getId();
-
+  public DeliveredServiceEntity find(String contactId) {
+    return deliveredServiceDao.find(contactId);
   }
 
   /**
    * Creates a record in DeliveredService and returns the unique identifier
    * 
-   * @param contactRequest the request
-   * @param endDate the end date
-   * @param endTime the end time
-   * @param serviceContactType the service contact type
-   * @param startDate the start date
-   * @param startTime the start time
-   * @param countySpecificCode
-   * @return the identifier of the DeliveredService created
+   * @param request the request
+   * @param countySpecificCode the county of the referral
+   * @return the DeliveredServiceDomain
    */
-  private String createDeliveredService(ContactRequest contactRequest, String endDate,
-      String endTime, Integer serviceContactType, String startDate, String startTime,
-      String countySpecificCode) {
+  public String create(ContactReferralRequest request, String countySpecificCode) {
 
-    String note = contactRequest.getNote();
-    String noteContinuation = "";
-    if (note.length() > 4000) {
-      noteContinuation = note.substring(4000);
-      note = note.substring(0, 3999);
-    }
-    String longTextId = createLongText(note, countySpecificCode);
-    String longTextContinuationId = createLongText(noteContinuation, countySpecificCode);
-
-    DeliveredServiceDomain deliveredServiceDomain = DeliveredServiceDomain.createWithDefaults(
-        Integer.parseInt(contactRequest.getCommunicationMethod()),
-        Integer.parseInt(contactRequest.getLocation()), countySpecificCode, longTextId,
-        longTextContinuationId, endDate, endTime, serviceContactType, startDate, startTime,
-        contactRequest.getStatus());
+    DeliveredServiceDomain deliveredServiceDomain =
+        constructDeliveredServiceDomainForCreate(request, countySpecificCode);
 
     try {
       gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity persistedDeliveredService =
           new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(
-              CmsKeyIdGenerator.generate(lastUpdatedId), deliveredServiceDomain, lastUpdatedId,
-              lastUpdatedTime);
+              CmsKeyIdGenerator.generate(currentUserStaffId), deliveredServiceDomain,
+              currentUserStaffId, currentRequestStartTime);
       persistedDeliveredService = deliveredServiceDao.create(persistedDeliveredService);
       return new gov.ca.cwds.rest.api.contact.DeliveredServiceDomain(persistedDeliveredService)
           .getId();
@@ -171,22 +120,116 @@ public class DeliveredService {
 
   }
 
-
-  public DeliveredServiceEntity find(String contactId) {
-    return deliveredServiceDao.find(contactId);
-  }
-
-
-  public String create(ContactReferralRequest request, String countySpecificCode) {
+  /**
+   * Construct the DeliveredService object for create
+   *
+   * @param contactId the Delivered Service Identifier
+   * @param contactRequest the request
+   * @param countySpecificCode
+   * @return the DeliveredServiceDomain
+   */
+  private DeliveredServiceDomain constructDeliveredServiceDomainForCreate(
+      ContactReferralRequest request, String countySpecificCode) {
     ContactRequest contactRequest = request.getContactRequest();
-    Date endedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getEndedAt());
-    Date startedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getStartedAt());
     Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    String endDate = getDateStringFromDateTime(contactRequest.getEndedAt());
+    String endTime = getTimeStringFromDateTime(contactRequest.getEndedAt());
+    String startDate = getDateStringFromDateTime(contactRequest.getStartedAt());
+    String startTime = getTimeStringFromDateTime(contactRequest.getStartedAt());
+    String note = getNoteFromRequest(contactRequest.getNote());
+    String noteContinuation = getNoteContinuationFromRequest(contactRequest.getNote());
 
-    return createDeliveredService(contactRequest, DomainChef.cookDate(endedAt),
-        DomainChef.cookTime(endedAt), serviceContactType, DomainChef.cookDate(startedAt),
-        DomainChef.cookTime(startedAt), countySpecificCode);
+    String longTextId =
+        (StringUtils.isNotBlank(note)) ? longTextHelper.createLongText(note, countySpecificCode)
+            : null;
+    String longTextContinuationId = (StringUtils.isNotBlank(noteContinuation))
+        ? longTextHelper.createLongText(noteContinuation, countySpecificCode)
+        : null;
+
+    return DeliveredServiceDomain.createWithDefaultsForFieldsNotPopulatedByUI(
+        Integer.parseInt(contactRequest.getCommunicationMethod()),
+        Integer.parseInt(contactRequest.getLocation()), countySpecificCode, longTextId,
+        longTextContinuationId, endDate, endTime, serviceContactType, startDate, startTime,
+        contactRequest.getStatus());
 
   }
+
+  /**
+   * Update a record in DeliveredService and return the DeliveredServiceDomain object
+   *
+   * @param contactId the Delivered Service Identifier
+   * @param request the request
+   * @param countySpecificCode the county of the referral
+   * @return the DeliveredServiceDomain
+   */
+  public DeliveredServiceDomain update(String contactId, ContactReferralRequest request,
+      String countySpecificCode) {
+
+    DeliveredServiceDomain deliveredServiceDomain =
+        constructDeliveredServiceDomainForUpdate(contactId, request, countySpecificCode);
+
+    try {
+      gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity persistedDeliveredService =
+          new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(contactId,
+              deliveredServiceDomain, currentUserStaffId, currentRequestStartTime);
+      persistedDeliveredService = deliveredServiceDao.update(persistedDeliveredService);
+      return new gov.ca.cwds.rest.api.contact.DeliveredServiceDomain(persistedDeliveredService);
+
+    } catch (Exception e) {
+      LOGGER.info("deliveredServiceEntity Exception", deliveredServiceDomain);
+      throw new ServiceException(e);
+    }
+
+  }
+
+  /**
+   * Construct the DeliveredService object for update
+   *
+   * @param contactId the Delivered Service Identifier
+   * @param contactRequest the request
+   * @param countySpecificCode
+   * @return the DeliveredServiceDomain
+   */
+  private DeliveredServiceDomain constructDeliveredServiceDomainForUpdate(String contactId,
+      ContactReferralRequest request, String countySpecificCode) {
+    ContactRequest contactRequest = request.getContactRequest();
+    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    String endDate = getDateStringFromDateTime(contactRequest.getEndedAt());
+    String endTime = getTimeStringFromDateTime(contactRequest.getEndedAt());
+    String startDate = getDateStringFromDateTime(contactRequest.getStartedAt());
+    String startTime = getTimeStringFromDateTime(contactRequest.getStartedAt());
+    String note = getNoteFromRequest(contactRequest.getNote());
+    String noteContinuation = getNoteContinuationFromRequest(contactRequest.getNote());
+
+    DeliveredServiceEntity ds = deliveredServiceDao.find(contactId);
+
+    String longTextId = longTextHelper.updateLongText(ds.getDetailText(), note, countySpecificCode);
+
+    String longTextContinuationId = longTextHelper.updateLongText(ds.getDetailTextContinuation(),
+        noteContinuation, countySpecificCode);
+
+    return DeliveredServiceDomain.updateWithDeliveredServiceEntityValuesForFieldsNotPopulatedByUI(
+        ds, Integer.parseInt(contactRequest.getCommunicationMethod()),
+        Integer.parseInt(contactRequest.getLocation()), countySpecificCode, longTextId,
+        longTextContinuationId, endDate, endTime, serviceContactType, startDate, startTime,
+        contactRequest.getStatus());
+  }
+
+  private String getNoteFromRequest(String note) {
+    return (StringUtils.isNotBlank(note) && note.length() > 4000) ? note.substring(0, 3999) : note;
+  }
+
+  private String getNoteContinuationFromRequest(String note) {
+    return (StringUtils.isNotBlank(note) && note.length() > 4000) ? note.substring(4000) : null;
+  }
+
+  private String getTimeStringFromDateTime(String dateTime) {
+    return DomainChef.cookTime(DomainChef.uncookISO8601Timestamp(dateTime));
+  }
+
+  private String getDateStringFromDateTime(String dateTime) {
+    return DomainChef.cookDate(DomainChef.uncookISO8601Timestamp(dateTime));
+  }
+
 
 }
