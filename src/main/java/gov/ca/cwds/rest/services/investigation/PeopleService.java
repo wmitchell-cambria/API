@@ -12,6 +12,7 @@ import gov.ca.cwds.data.dao.investigation.PeopleDao;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
+import gov.ca.cwds.data.persistence.cms.ClientScpEthnicity;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
@@ -184,6 +185,12 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     List<Short> raceCode = new ArrayList<>();
     List<Short> hispanicCode = new ArrayList<>();
     raceCode.add(client.getPrimaryEthnicityType());
+    List<ClientScpEthnicity> clientScpEthnicityList =
+        clientScpEthnicityDao.getClientScp(client.getId());
+    for (ClientScpEthnicity clientScpEthnicity : clientScpEthnicityList) {
+      hispanicCode.add(clientScpEthnicity.getEthnicity());
+
+    }
     return new RaceAndEthnicity(client, raceCode, hispanicCode);
 
 
