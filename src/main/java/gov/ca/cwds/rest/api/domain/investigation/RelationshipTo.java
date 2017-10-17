@@ -11,7 +11,7 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
-import gov.ca.cwds.rest.util.LegacyRecordUtils;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -99,7 +99,7 @@ public final class RelationshipTo implements Serializable {
     this.relationshipToPerson = clientRelationship.getClientRelationshipType().toString();
     relationshipContext = " ";
     relatedPersonRelationship = " ";
-    this.cmsRecordDescriptor = LegacyRecordUtils.createLegacyDescriptor(clientRelationship.getId(),
+    this.cmsRecordDescriptor = CmsRecordUtils.createLegacyDescriptor(clientRelationship.getId(),
         LegacyTable.CLIENT_RELATIONSHIP);
   }
 

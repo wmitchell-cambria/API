@@ -6,21 +6,17 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -154,8 +150,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
     assertNotNull(investigation);
   }
 
@@ -169,8 +167,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
     assertThat(investigation.getCommunicationMethod(),
         is(equalTo(referral.getCommunicationMethodType())));
     assertThat(investigation.getName(), is(equalTo(referral.getReferralName())));
@@ -195,8 +195,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
 
     Assignee assignee = investigation.getAssignee();
 
@@ -213,8 +215,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
 
     Assignee assignee = investigation.getAssignee();
 
@@ -231,8 +235,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
 
     InvestigationAddress investigationAddress = investigation.getAddress();
     assertThat(investigationAddress.getStreetAddress(), is(equalTo(address.getStreetAddress())));
@@ -252,8 +258,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
     assertThat(investigation.getSealed(), is(equalTo(Boolean.TRUE)));
 
   }
@@ -269,8 +277,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
     assertThat(investigation.getSensitive(), is(equalTo(Boolean.TRUE)));
 
   }
@@ -286,8 +296,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
     assertThat(investigation.getSensitive(), is(equalTo(Boolean.FALSE)));
 
   }
@@ -305,8 +317,10 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet);
+        longText, allgationSet, personSet, relationshipList);
 
     Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
     phoneNumbers = investigation.getPhoneNumbers();
