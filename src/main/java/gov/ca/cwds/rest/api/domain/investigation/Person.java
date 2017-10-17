@@ -1,22 +1,19 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.validation.Date;
@@ -185,20 +182,23 @@ public class Person extends ReportingDomain implements Request, Response {
    * @param address - list of investigation address
    * @param phoneNumbers - list of client phone numbers
    * @param roles - list of roles
-   * @param raceAndEthnicity obvious
+   * @param raceAndEthnicity - race/ethnicity
    */
   public Person(Client client, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles,
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
-    this.lastUpdatedAt =
-        client.getLastUpdatedTime() != null ? String.valueOf(client.getLastUpdatedTime()) : null;
+    this.lastUpdatedAt = client.getLastUpdatedTime() != null
+        ? DomainChef.cookISO8601Timestamp(client.getLastUpdatedTime())
+        : null;
     this.firstName = client.getFirstName();
     this.lastName = client.getLastName();
     this.middleName = client.getMiddleName();
     this.nameSuffix = client.getNameSuffix();
     this.gender = client.getGender();
-    this.dateOfBirth = client.getBirthDate() != null ? String.valueOf(client.getBirthDate()) : null;
+    this.dateOfBirth =
+        client.getBirthDate() != null ? DomainChef.cookISO8601Timestamp(client.getBirthDate())
+            : null;
     this.ssn = client.getSsn();
     this.languages = languages;
     this.sealed = StringUtils.equals(client.getSensitivityIndicator(), "R");
@@ -223,8 +223,9 @@ public class Person extends ReportingDomain implements Request, Response {
   public Person(Reporter reporter, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles) {
     this.lastUpdatedBy = reporter.getLastUpdatedId();
-    this.lastUpdatedAt = reporter.getLastUpdatedTime() != null
-        ? String.valueOf(reporter.getLastUpdatedTime()) : null;
+    this.lastUpdatedAt =
+        reporter.getLastUpdatedTime() != null ? String.valueOf(reporter.getLastUpdatedTime())
+            : null;
     this.firstName = reporter.getFirstName();
     this.lastName = reporter.getLastName();
     this.middleName = reporter.getMiddleName();
