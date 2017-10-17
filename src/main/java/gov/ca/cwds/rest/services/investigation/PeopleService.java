@@ -1,17 +1,25 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import com.google.inject.Inject;
-import gov.ca.cwds.data.Dao;
+import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
+import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.dao.investigation.PeopleDao;
+import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
+import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.std.ApiLanguageAware;
 import gov.ca.cwds.fixture.investigation.PeopleEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
@@ -29,17 +37,24 @@ import gov.ca.cwds.rest.util.CmsRecordUtils;
 public class PeopleService implements TypedCrudsService<String, People, Response> {
 
   private PeopleDao peopleDao;
+  private ReporterDao reporterDao;
+  private ClientScpEthnicityDao clientScpEthnicityDao;
 
   private People validPeople = new PeopleEntityBuilder().build();
 
   /**
-   * @param peopleDao {@link Dao} handling {@link gov.ca.cwds.rest.api.domain.investigation.People}
-   *        objects
+   * 
+   * @param peopleDao - people Dao object
+   * @param reporterDao - reporter Dao object
+   * @param clientScpEthnicityDao - client SCP EthnicityDao
    */
   @Inject
-  public PeopleService(PeopleDao peopleDao) {
+  public PeopleService(PeopleDao peopleDao, ReporterDao reporterDao,
+      ClientScpEthnicityDao clientScpEthnicityDao) {
     super();
     this.peopleDao = peopleDao;
+    this.reporterDao = reporterDao;
+    this.clientScpEthnicityDao = clientScpEthnicityDao;
   }
 
   @Override
@@ -73,28 +88,106 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     Set<Person> persons = new HashSet<Person>();
     Set<InvestigationAddress> address = new HashSet<>();
     Set<PhoneNumber> phoneNunbers = new HashSet<>();
+    Set<String> victims = new HashSet<String>();
+    Set<String> perpetrators = new HashSet<String>();
+    // populating victims and perpetrators
+    for (Allegation allegation : referral.getAllegations()) {
+      victims.add(allegation.getVictimClientId());
+      perpetrators.add(allegation.getPerpetratorClientId());
+    }
+
     Person person = null;
     Client client = null;
     for (ReferralClient refClient : referral.getReferralClients()) {
-      if (refClient != null) {
+      client = peopleDao.find(refClient.getClientId());
+      for (ClientAddress clientAddress : client.getClientAddress()) {
 
-        client = peopleDao.find(refClient.getClientId());
-        for (ClientAddress clientAddress : client.getClientAddress()) {
-
-          address.add(new InvestigationAddress(clientAddress.getAddresses(),
-              this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
-          phoneNunbers.add(new PhoneNumber(clientAddress.getAddresses(),
-              this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
-
-        }
-
-        person = new Person(client, getLanguages(client.getLanguages()),
-            this.getLegacyDescriptor(client.getId(), LegacyTable.CLIENT), address, phoneNunbers);
-        persons.add(person);
+        address.add(new InvestigationAddress(clientAddress.getAddresses(),
+            this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
+        phoneNunbers.add(new PhoneNumber(clientAddress.getAddresses(),
+            this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
 
       }
+      Set<String> roles = this.pouplatePeopleRoles(refClient, victims, perpetrators);
+      RaceAndEthnicity raceAndEthnicity = this.populateRaceAndEthnicity(client);
+      person = new Person(client, getLanguages(client.getLanguages()),
+          this.getLegacyDescriptor(client.getId(), LegacyTable.CLIENT), address, phoneNunbers,
+          roles, raceAndEthnicity);
+      persons.add(person);
     }
+    this.populateReporters(persons, referral.getId());
     return persons;
+  }
+
+  /**
+   * 
+   * determining people roles
+   * 
+   * @param refClient - ReferralClient object
+   * @param victims - list of victims
+   * @param perpetrators - list of perpetrators
+   * @return list of people roles
+   */
+  private Set<String> pouplatePeopleRoles(ReferralClient refClient, Set<String> victims,
+      Set<String> perpetrators) {
+    Set<String> roles = new HashSet<String>();
+    if (StringUtils.equals("Y", refClient.getSelfReportedIndicator())) {
+      roles.add("Self Reported");
+
+    }
+    if (victims.contains(refClient.getClientId())) {
+      roles.add("Victim");
+    }
+    if (perpetrators.contains(refClient.getClientId())) {
+      roles.add("Perpetrator");
+    }
+    return roles;
+  }
+
+  /**
+   * populating reporters
+   * 
+   * @param persons - list of persons
+   * @param referralId - referral id
+   */
+  private void populateReporters(Set<Person> persons, String referralId) {
+    Set<InvestigationAddress> address = new HashSet<>();
+    Set<PhoneNumber> phoneNunbers = new HashSet<>();
+    Set<String> roles = new HashSet<String>();
+    Set<String> languages = new HashSet<>();
+    String role = null;
+    Person person = null;
+    Reporter[] reporters = this.reporterDao.findInvestigationReportersByReferralId(referralId);
+    for (Reporter reporter : reporters) {
+      address.add(new InvestigationAddress(reporter,
+          this.getLegacyDescriptor(reporter.getAddressId(), LegacyTable.ADDRESS)));
+      phoneNunbers.add(new PhoneNumber(reporter,
+          this.getLegacyDescriptor(reporter.getAddressId(), LegacyTable.ADDRESS)));
+      role = StringUtils.equals(reporter.getMandatedReporterIndicator(), "Y")
+          ? Role.MANDATED_REPORTER_ROLE.getType()
+          : Role.NON_MANDATED_REPORTER_ROLE.getType();
+      roles.add(role);
+      person = new Person(reporter, languages, null, address, phoneNunbers, roles);
+      persons.add(person);
+
+    }
+
+  }
+
+  /**
+   * populating RaceAndEthnicity
+   * 
+   * @param client - Client object
+   * @return constructed RaceAndEthnicity object
+   */
+  private RaceAndEthnicity populateRaceAndEthnicity(Client client) {
+    List<Short> raceCode = new ArrayList<>();
+    List<Short> hispanicCode = new ArrayList<>();
+    raceCode.add(client.getPrimaryEthnicityType());
+    return new RaceAndEthnicity(client, raceCode, hispanicCode);
+
+
+
   }
 
 

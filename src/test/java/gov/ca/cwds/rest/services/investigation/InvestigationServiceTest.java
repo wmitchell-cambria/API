@@ -18,6 +18,7 @@ public class InvestigationServiceTest {
   LongTextService longTextService;
   PeopleService peopleService;
   AllegationService allegationService;
+  RelationshipListService relationshipListService;
 
   InvestigationService target;
 
@@ -32,10 +33,11 @@ public class InvestigationServiceTest {
     this.longTextService = mock(LongTextService.class);
     this.peopleService = mock(PeopleService.class);
     this.allegationService = mock(AllegationService.class);
+    this.relationshipListService = mock(RelationshipListService.class);
 
 
     target = new InvestigationService(investigationDao, staffPersonDao, addressDao, longTextService,
-        peopleService, allegationService);
+        peopleService, allegationService, relationshipListService);
 
 
   }

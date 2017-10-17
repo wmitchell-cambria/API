@@ -1,16 +1,13 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.IfCollectionContainsShortThen;
@@ -99,6 +96,20 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
     this.hispanicCode = hispanicCode;
     this.hispanicOriginCode = hispanicOriginCode;
     this.hispanicUnableToDetermineCode = hispanicUnableToDetermineCode;
+  }
+
+  /**
+   * 
+   * @param client - client object
+   * @param raceCode -list of raceCode
+   * @param hispanicCode - list of hispanic Code
+   */
+  public RaceAndEthnicity(Client client, List<Short> raceCode, List<Short> hispanicCode) {
+    this.raceCode = raceCode;
+    this.hispanicCode = hispanicCode;
+    hispanicOriginCode = client.getHispanicOriginCode();
+    hispanicUnableToDetermineCode = client.getEthUnableToDetReasonCode();
+    unableToDetermineCode = client.getHispUnableToDetReasonCode();
   }
 
   /**

@@ -17,6 +17,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
+import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
@@ -39,6 +40,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
+  private RelationshipListService relationshipListService;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
 
@@ -51,11 +53,12 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * @param longTextService - longText Service
    * @param peopleService - People Service
    * @param allegationService - Allegation Service
+   * @param relationshipListService - RelationshipList Service
    */
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
       AddressDao addressDao, LongTextService longTextService, PeopleService peopleService,
-      AllegationService allegationService) {
+      AllegationService allegationService, RelationshipListService relationshipListService) {
     super();
     this.investigationDao = investigationDao;
     this.addressDao = addressDao;
@@ -63,6 +66,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     this.longTextService = longTextService;
     this.peopleService = peopleService;
     this.allegationService = allegationService;
+    this.relationshipListService = relationshipListService;
   }
 
   /**
@@ -95,9 +99,11 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<gov.ca.cwds.rest.api.domain.investigation.Allegation> allegations =
           this.allegationService.populateAllegations(referral.getAllegations());
       Set<Person> peoples = this.peopleService.getInvestigationPeoples(referral);
+      Set<Relationship> relationshipList =
+          this.relationshipListService.findRelationshipByReferralId(referral);;
 
       validInvestigation = new Investigation(referral, address, staffPerson, rptNarrativeLongText,
-          addInfoLongText, allegations, peoples);
+          addInfoLongText, allegations, peoples, relationshipList);
     }
 
     return validInvestigation;

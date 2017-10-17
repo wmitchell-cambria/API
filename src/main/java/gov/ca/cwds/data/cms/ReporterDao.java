@@ -1,9 +1,8 @@
 package gov.ca.cwds.data.cms;
 
 import org.hibernate.SessionFactory;
-
+import org.hibernate.query.Query;
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.inject.CmsSessionFactory;
@@ -24,5 +23,22 @@ public class ReporterDao extends BaseDaoImpl<Reporter> {
   public ReporterDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
+  /**
+   * finding reporters based on referral id
+   * 
+   * @param referralId - referral id
+   * @return - list of Reporters
+   */
+  public Reporter[] findInvestigationReportersByReferralId(String referralId) {
+
+    Query<Reporter> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(
+            "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId")
+        .setParameter("referralId", referralId);
+    return query.list().toArray(new Reporter[0]);
+
+  }
+
 
 }

@@ -297,12 +297,15 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param staffPerson - Staff Person instance
    * @param longText - Long Text instance
    * @param addInfoLongText - Additional information long text instance
-   * @param allegations - list of allegations
-   * @param people - list of people
+   * @param allegations - list of allegations 
+   * @param peoples - list of peoples
+   * @param relationshipList - list of relationship
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
-      LongText longText, LongText addInfoLongText, Set<Allegation> allegations,
-      Set<Person> people) {
+      LongText longText, LongText addInfoLongText, Set<Allegation> allegations, Set<Person> peoples,
+      Set<Relationship> relationshipList) {
+
+
 
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
@@ -339,8 +342,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
           address.getApiAdrAddressType());
     }
 
-    this.allegations = allegations;
-    this.people = people;
+    this.allegations = allegations; 
+    this.people = peoples;
+    this.relationships = relationshipList; 
 
   }
 
