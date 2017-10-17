@@ -136,7 +136,6 @@
 #include <cstdint>
 
 #ifdef CWDS_BUILD_DLL
-// #include "KeyJNI.h"
 #include "gov_ca_cwds_rest_util_jni_KeyJNI.h"
 #endif
 
@@ -208,8 +207,10 @@ constexpr const std::size_t BASE_62_SIZE {62};
 // WIN32/MFC TYPE PORT:
 //==============================
 
-// DRS: Look at all this Windows gooberness I had to port over.
-// I should get a medal. 
+//
+// DRS: I ported over all this **Windows gooberness**.
+// I deserve a medal. 
+//
 
 #ifndef BASETYPES
 #define BASETYPES
@@ -236,7 +237,7 @@ typedef UCHAR *PUCHAR;
 #endif
 
 #ifndef TRUE
-#define TRUE    1
+#define TRUE     1
 #endif
 
 #ifndef IN
@@ -251,7 +252,7 @@ typedef UCHAR *PUCHAR;
 #define OPTIONAL
 #endif
 
-#define WINAPI __stdcall
+#define WINAPI __stdcall	// Actually needed for DLL. Who cleans up the stack? Function caller or function itself?
 
 typedef wchar_t WCHAR;
 
@@ -265,7 +266,7 @@ typedef wchar_t WCHAR;
 #define CONST const
 #endif
 
-typedef CONST WCHAR *LPCWSTR, *PCWSTR;
+typedef CONST WCHAR *LPCWSTR, *PCWSTR ; // "Hungarian" for far pointer to constant, unicode, null-terminated character string.
 
 
 // AFXAPI is used on global public functions
@@ -342,6 +343,9 @@ typedef CONST WCHAR *LPCWSTR, *PCWSTR;
 #define CONST           const
 #endif
 
+//=====================
+// WINAPI TYPES: 
+//=====================
 
 typedef unsigned long               DWORD;
 typedef int                          BOOL;
@@ -420,7 +424,7 @@ void Yield() {
 #endif
 
 // Low-level sanity checks for memory blocks.
-// But sanity has never been our primary concern, so just return true. :-)
+// However, our sanity has never been major concern, so just return true. :-)
 inline BOOL AfxIsValidAddress(const void* lp, UINT_PTR nBytes, BOOL bReadWrite = TRUE) {
     return true;
 }
@@ -453,7 +457,6 @@ static SYSTEMTIME * g_win_tm = nullptr;
 
 SYSTEMTIME standardTimeToWindowsTime(const std::tm & a_tm, const int millis) {
     SYSTEMTIME retval;
-    
     logVerbose("\nstandardTimeToWindowsTime: a_tm.tm_hour: ", a_tm.tm_hour);
     
     retval.wYear         = 1900 + a_tm.tm_year;
@@ -572,14 +575,15 @@ std::ostream &operator<<( std::ostream &stream, const std::chrono::time_point<Cl
 //
 std::tm parseIso8601Date(const char * iso_8601, WORD * millis) {
 	using namespace std;
+
     std::tm tm = {};
     string s { iso_8601 };
     const auto pos_1st_delim = s.find(".");
     const auto first_segment = (pos_1st_delim == string::npos) ? s : s.substr(0, pos_1st_delim);
 
-    const auto str_millis = (pos_1st_delim == string::npos) ? s : s.substr(pos_1st_delim + 1, 3);
+    const auto str_millis    = (pos_1st_delim == string::npos) ? s : s.substr(pos_1st_delim + 1, 3);
 	const auto i = atoi(str_millis.c_str());
-    
+
 	*millis = (WORD) i;
     istringstream ss(first_segment);
     ss >> get_time(&tm, "%Y-%m-%dT%H:%M:%SZ");
@@ -587,7 +591,7 @@ std::tm parseIso8601Date(const char * iso_8601, WORD * millis) {
     if ( ss.fail() ) {
         cout << "Parse failed" << endl;
     }
-    
+
     return tm;
 }
 
@@ -664,33 +668,35 @@ static const char acConvTbl[] = {
 // FUNCTION PROTOTYPES:
 //==============================
 
-static void   BaseConvert        (char *szDstStr, int nDstBase, int nDstWidth, const char *szSrcStr, int nSrcBase);
-static char * CreateTimestampStr (char *szTimestampStr, SYSTEMTIME * sysTime = nullptr);
-static void   DoubleToTimestamp  (double nTimestamp, struct tm *phNow, int *pnHSeconds);
-static char * DoubleToStrN       (char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec);
-static char * Itoa               (int nIn, char *szOut, int nOutputSize);
-static double StrToDouble        (const char *szSrcStr, int nSrcBase, double *pnPowVec);
+static void         BaseConvert        (char *szDstStr, int nDstBase, int nDstWidth, const char *szSrcStr, int nSrcBase);
+static char *       CreateTimestampStr (char *szTimestampStr, SYSTEMTIME * sysTime = nullptr);
+static std::string  DoubleToTimestamp  (double nTimestamp, struct tm *phNow, int *pnHSeconds);
+static char *       DoubleToStrN       (char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec);
+static char *       Itoa               (int nIn, char *szOut, int nOutputSize);
+static double       StrToDouble        (const char *szSrcStr, int nSrcBase, double *pnPowVec);
 
 // DRS: linker error on some platforms: lstrcpynA redefinition.
 // inline static char * StrCpyN (char *szDst, const char *szSrc, int nLen);
 
 static double TimestampToDouble(LPSYSTEMTIME lpTime);
 
+std::string generateKeys(const std::string & staff_id, int make_n_keys, const std::string & fixed_timestamp);
+
 //==============================
 // DLL PUBLIC FUNCTIONS:
 //==============================
 
-void WINAPI _export ckMakeNewKey          (const char *szUIStaffId, char *szKey);
-void WINAPI _export MakeTimestampStr      (char *szUITimestamp);
-void WINAPI _export NewKeyFromStaffId     (const char *szStaffId, char *szKey);
-void WINAPI _export MakeKeyAndTimeStamp   (const char *szStaffId, char *szKey, char *szTimeStamp);
-void WINAPI _export NewKeyFromUIStaffId   (const char *szUIStaffId, char *szKey);
-void WINAPI _export GetStaffIdFromKey     (const char *szKey, char *szStaffId);
-void WINAPI _export GetUIStaffIdFromKey   (const char *szKey, char *szUIStaffId);
-void WINAPI _export GetUIIdentifierFromKey(const char *szKey, char *szUIIdentifier);
-void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szKey);
-void WINAPI _export GetUITimestampFromKey (const char *szKey, char *szUITimestamp);
-void WINAPI _export GetPTimeStampFromKey  (const char *szKey, char *szPTimestamp);
+void        WINAPI _export ckMakeNewKey           (const char *szUIStaffId, char *szKey);
+void        WINAPI _export MakeTimestampStr       (char *szUITimestamp);
+void        WINAPI _export NewKeyFromStaffId      (const char *szStaffId, char *szKey);
+void        WINAPI _export MakeKeyAndTimeStamp    (const char *szStaffId, char *szKey, char *szTimeStamp);
+void        WINAPI _export NewKeyFromUIStaffId    (const char *szUIStaffId, char *szKey);
+void        WINAPI _export GetStaffIdFromKey      (const char *szKey, char *szStaffId);
+void        WINAPI _export GetUIStaffIdFromKey    (const char *szKey, char *szUIStaffId);
+void        WINAPI _export GetUIIdentifierFromKey (const char *szKey, char *szUIIdentifier);
+void        WINAPI _export GetKeyFromUIIdentifier (const char *szUIIdentifier, char *szKey);
+std::string WINAPI _export GetUITimestampFromKey  (const char *szKey, char *szUITimestamp);
+void        WINAPI _export GetPTimeStampFromKey   (const char *szKey, char *szPTimestamp);
 
 //==============================
 // LOG/ASSERT:
@@ -756,7 +762,7 @@ void logVerbose(LPCSTR pszFormat, ...) {
 //                RETURNS - a pointer to the destination string.
 //----------------------------------------------------------------------------- 
 
-// DRS: Visual C++ linker error: lstrcpnA redefinition in Win64. Ok in Win32.
+// DRS: Visual C++ linker error in Win64: lstrcpnA redefinition. Ok in Win32.
 // OK in clang/gcc.
 inline static char * StrCpyN (char *szDst, const char *szSrc, int nLen) {
     memcpy (szDst, szSrc, nLen);  // copy
@@ -975,8 +981,11 @@ void WINAPI _export GetUIIdentifierFromKey(const char *szKey, char *szUIIdentifi
         BaseConvert(szUIIdentifier + nSZ_UIIDTIMESTAMP, 10, nSZ_UIIDSTAFFID,   szStaffId,   nDEFAULT_BASE);
 
         sConvertKeyToUI = szUIIdentifier;  // convert to std::string
-        sConvertKeyToUI = sConvertKeyToUI.substr(0,4) + "-" + sConvertKeyToUI.substr(4, 4) + "-"
-        + sConvertKeyToUI.substr(8, 4) + "-" + sConvertKeyToUI.substr(12);  // insert 3 dashes every 4th character
+        sConvertKeyToUI = 
+        	  sConvertKeyToUI.substr(0, 4) + "-" 
+        	+ sConvertKeyToUI.substr(4, 4) + "-"
+        	+ sConvertKeyToUI.substr(8, 4) + "-" 
+        	+ sConvertKeyToUI.substr(12);  // insert 3 dashes every 4th character
         StrCpyN(szUIIdentifier, sConvertKeyToUI.c_str(), nSZ_UIIDENTIFIER);
     } catch (exception e) {
         cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
@@ -1010,11 +1019,12 @@ void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szK
         AssertTrace(AfxIsValidAddress(szKey, nSZ_KEY + 1), "Invalid address specified for szKey.");
 
         sConvertUIToKey = szUIIdentifier;  // convert to std::string
-        sTempKey = sConvertUIToKey.substr(0,4) + sConvertUIToKey.substr(5, 4)
-        + sConvertUIToKey.substr(10, 4) + sConvertUIToKey.substr(15);  // removes 3 dashes every 4th character
+        sTempKey = 
+              sConvertUIToKey.substr(0,  4) + sConvertUIToKey.substr(5, 4)
+        	+ sConvertUIToKey.substr(10, 4) + sConvertUIToKey.substr(15);  // removes 3 dashes every 4th character
 
-        StrCpyN(szTempKey,   sTempKey.c_str(),   nSZ_UIIDTIMESTAMP + nSZ_UIIDSTAFFID + 1);
-        StrCpyN(szTimestamp, szTempKey,  nSZ_UIIDTIMESTAMP);
+        StrCpyN(szTempKey,   sTempKey.c_str(),               nSZ_UIIDTIMESTAMP + nSZ_UIIDSTAFFID + 1);
+        StrCpyN(szTimestamp, szTempKey,                      nSZ_UIIDTIMESTAMP);
         StrCpyN(szStaffId,   szTempKey + nSZ_UIIDTIMESTAMP,  nSZ_UIIDSTAFFID);
 
         // Convert the entire displayable string to a key (base 62).
@@ -1046,13 +1056,14 @@ void WINAPI _export GetKeyFromUIIdentifier(const char *szUIIdentifier, char *szK
 //                                An empty string on an error.
 //                RETURNS - <none>
 //-----------------------------------------------------------------------------
-void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp) {
+std::string WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp) {
     using namespace std;
 
     char szTimestampStr[nSZ_KEYTIMESTAMP + 1];
     double nTsVal;
     struct tm hNow;
     int nHSec;
+    string ret;
 
     try {
         AssertTrace(strlen(szKey) == nSZ_KEY, "'%s' has an invalid key string length.", szKey);
@@ -1063,16 +1074,18 @@ void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp
 
         // DRS: C++ arrays decay to pointers of the same type. Love the syntax. :-)
         nTsVal = StrToDouble(szTimestampStr, BASE_62_SIZE, decay_t<double *>(&anPowVec62[0]));
-        DoubleToTimestamp(nTsVal, &hNow, &nHSec);
+        ret = DoubleToTimestamp(nTsVal, &hNow, &nHSec);
 
         // Format the date/time in the default format of a DB2 timestamp.
         sprintf_s(szUITimestamp, nSZ_UITIMESTAMP + 2, "%04d-%02d-%02d-%02d.%02d.%02d.%06ld",
-        hNow.tm_year + 1900, hNow.tm_mon + 1, hNow.tm_mday,
-        hNow.tm_hour, hNow.tm_min, hNow.tm_sec, (long)((long)nHSec * 10000L));
+        	hNow.tm_year + 1900, hNow.tm_mon + 1, hNow.tm_mday,
+        	hNow.tm_hour, hNow.tm_min, hNow.tm_sec, (long)((long)nHSec * 10000L));
     } catch (exception e) {
         cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
         szUITimestamp[0] = '\0';
     }
+    
+    return ret;
 }
 
 //-----------------------------------------------------------------------------
@@ -1246,7 +1259,7 @@ static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, dou
     nPad = nDstStrWidth - nPower;
 
 	if (opt_verbose) {
-		cout << "\nDoubleToStrN: BEFORE IF:"
+		cout << "\n\nDoubleToStrN: BEFORE IF:"
 			 << "\nnPower:       " << nPower
 			 << "\nnDstStrWidth: " << nDstStrWidth
 			 << "\nnPad:         " << nPad;
@@ -1322,7 +1335,7 @@ static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, dou
 //                pnHSeconds - a pointer to the number of 1/100th of a second.
 //                RETURNS - <none>
 //-----------------------------------------------------------------------------
-static void DoubleToTimestamp(double nTimestamp, struct tm *phNow, int *pnHSeconds) {
+static std::string DoubleToTimestamp(double nTimestamp, struct tm *phNow, int *pnHSeconds) {
     memset(phNow, 0, sizeof(struct tm));  // initialize
 
     *pnHSeconds = (int)(nTimestamp / nSHIFT_HSECOND);        // 1/100 seconds
@@ -1344,6 +1357,12 @@ static void DoubleToTimestamp(double nTimestamp, struct tm *phNow, int *pnHSecon
     nTimestamp   -= ((double)phNow->tm_mon * nSHIFT_MONTH);  // strip it off. I love saying that!
 
     phNow->tm_year = (int)(nTimestamp / nSHIFT_YEAR);        // YEARS
+
+    char buf[25] = {0};
+	sprintf_s(buf, 24, "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ",
+		phNow->tm_year + 1900, phNow->tm_mon + 1, phNow->tm_mday,
+		phNow->tm_hour, phNow->tm_min, phNow->tm_sec, (long)((long)*pnHSeconds * 10L));
+	return buf;
 }
 
 //-----------------------------------------------------------------------------
@@ -1556,7 +1575,7 @@ void decomposeKey(const std::string & s_key) {
     GetStaffIdFromKey     (k, szStaffId);
 
     // logVerbose("\ncall GetUITimestampFromKey...");
-    GetUITimestampFromKey (k, szUITimestamp);
+    auto formattedDate = GetUITimestampFromKey (k, szUITimestamp);
 
     // logVerbose("\ncall GetPTimeStampFromKey...");
     GetPTimeStampFromKey  (k, szPTimestamp);
@@ -1565,23 +1584,35 @@ void decomposeKey(const std::string & s_key) {
 	GetUIIdentifierFromKey(k, uiStr);
 
 #ifndef CWDS_BUILD_DLL
-	cerr << "\nkey:                              "
-         << s_key
-         << "\nstaff id:                         "
-         << szStaffId 
-         << "\nTimestamp (hr.min.sec.1/100 sec): "
-         << szPTimestamp
-         << "\nUI Timestamp:                     "
-         << szUITimestamp
-         << "\nUI 19-digit:                      "
-         << uiStr;
-	// cerr << s_key
-	// 	 << "\t"
+
+	// Show results.
+
+	// cerr << "\nkey:                              "
+	// 	 << s_key
+	// 	 << "\nstaff id:                         "
 	// 	 << szStaffId 
-	// 	 << "\t"
+	// 	 << "\nTimestamp (hr.min.sec.1/100 sec): "
+	// 	 << szPTimestamp
+	// 	 << "\nUI Timestamp:                     "
 	// 	 << szUITimestamp
-	// 	 << "\t"
+	// 	 << "\nUI 19-digit:                      "
 	// 	 << uiStr;
+	
+	formattedDate += 'Z';
+	const auto newGeneratedKey = generateKeys(szStaffId, 1, formattedDate);
+	
+	cerr << s_key
+		 << "\t"
+		 << szStaffId 
+		 << "\t"
+		 << formattedDate
+		 << "\t"
+		 << szUITimestamp
+		 << "\t"
+		 << uiStr
+		 << "\t"
+		 << newGeneratedKey;
+		 
 #endif
 }
 
@@ -1608,12 +1639,10 @@ std::string generateKeys(const std::string & staff_id, int make_n_keys, const st
 					this_thread::sleep_for(milliseconds(11)); // DRS: Hundredths of a second ... OMG ...
 				}
             } else {
-            	cout << "\nFIXED TIMESTAMP: " << fixed_timestamp << endl;
-            	
 				WORD millis = 0;
 				const auto std_tm = parseIso8601Date(fixed_timestamp.c_str(), &millis);
 				auto win_time     = standardTimeToWindowsTime(std_tm, millis);
-				printWinTime(cout, win_time);
+				// printWinTime(cout, win_time);
 
                 copy( fixed_timestamp.begin(), fixed_timestamp.end(), &tm_str[0] );
                 g_win_tm = &win_time;
@@ -1636,7 +1665,7 @@ std::string generateKey(const std::string & staff_id) {
 
 int showUsageAndExit(const char * program_nm) {
     printf("\n\nUSAGE:"\
-        "\n\nOption: Generate Keys: -s <staff id> -n <# of keys> [-d datetime, ex: \"2016-06-30T00:02:51.721Z\"]"\
+        "\n\nOption: Generate Keys: [-v verbose] -s <staff id> -n <# of keys> [-d datetime, ex: \"2016-06-30T00:02:51.721Z\"]"\
         "\nEX: %s -s 0X5 -n50"
         "\n\nOption: Decompose Key: -k <key>"\
         "\nEX: %s -k 5Y3vKVs0X5\n\n"
@@ -1747,7 +1776,9 @@ JNIEXPORT void JNICALL Java_gov_ca_cwds_rest_util_jni_KeyJNI_decomposeKey(JNIEnv
 	// 	 << szUITimestamp
 	// 	 << endl;
 
-	// DRS: JNI magic starts here.
+	//=========================
+	// JNI magic starts here.
+	//=========================
 
     // RETURN FIELDS:
     // KEY: 
@@ -1851,9 +1882,6 @@ int main (int argc, char* argv[]) {
     if ( !s_datetime.empty() ) {
         parse_iso8601_date(s_datetime.c_str());
     }
-
-    // auto tm_str = make_unique<char[]>(50);  // heap
-    // auto key    = make_unique<char[]>(50);  // No need to set initial value; function call populates it.
 
     char tm_str[50];
     char key   [50];
