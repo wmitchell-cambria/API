@@ -16,7 +16,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
-import gov.ca.cwds.rest.util.LegacyRecordUtils;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -141,7 +141,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
         StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "S") ? Boolean.TRUE
             : Boolean.FALSE;
     this.cmsRecordDescriptor =
-        LegacyRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
+        CmsRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
     this.relatedTo = relationShipToList;
 
   }
