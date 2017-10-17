@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
@@ -179,9 +180,11 @@ public class Person extends ReportingDomain implements Request, Response {
    * @param cmsRecordDescriptor - cmsRecordDescriptor
    * @param address - list of investigation address
    * @param phoneNumbers - list of client phone numbers
+   * @param roles - list of roles
    */
   public Person(Client client, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
-      Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers) {
+      Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles,
+      RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
     this.lastUpdatedAt =
         client.getLastUpdatedTime() != null ? String.valueOf(client.getLastUpdatedTime()) : null;
@@ -198,6 +201,42 @@ public class Person extends ReportingDomain implements Request, Response {
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.addresses = address;
     this.phone = phoneNumbers;
+    this.roles = roles;
+    this.raceAndEthnicity = raceAndEthnicity;
+  }
+
+  /**
+   * Constructing client object
+   * 
+   * @param reporter - reporter object
+   * @param languages - list of languages
+   * @param cmsRecordDescriptor - cmsRecordDescriptor
+   * @param address - list of investigation address
+   * @param phoneNumbers - list of client phone numbers
+   * @param roles - list of person roles
+   */
+  public Person(Reporter reporter, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
+      Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles) {
+    this.lastUpdatedBy = reporter.getLastUpdatedId();
+    this.lastUpdatedAt =
+        reporter.getLastUpdatedTime() != null ? String.valueOf(reporter.getLastUpdatedTime())
+            : null;
+    this.firstName = reporter.getFirstName();
+    this.lastName = reporter.getLastName();
+    this.middleName = reporter.getMiddleName();
+    this.nameSuffix = reporter.getNameSuffix();
+    this.gender = reporter.getGender();
+    this.dateOfBirth =
+        reporter.getBirthDate() != null ? String.valueOf(reporter.getBirthDate()) : null;
+    this.ssn = reporter.getSsn();
+    this.languages = languages;
+    this.sealed = StringUtils.equals(reporter.getSensitivityIndicator(), "R");
+    this.sensitive = StringUtils.equals(reporter.getSensitivityIndicator(), "S");
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+    this.addresses = address;
+    this.phone = phoneNumbers;
+    this.roles = roles;
+
   }
 
   /**

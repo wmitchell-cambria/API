@@ -295,10 +295,11 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param addInfoLongText - Additional information long text instance
    * @param allegations - list of allegations
    * @param peoples - list of peoples
+   * @param relationshipList - list of relationship
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
-      LongText longText, LongText addInfoLongText, Set<Allegation> allegations,
-      Set<Person> peoples) {
+      LongText longText, LongText addInfoLongText, Set<Allegation> allegations, Set<Person> peoples,
+      Set<Relationship> relationshipList) {
 
 
     this.cmsRecordDescriptor =
@@ -342,6 +343,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
 
     this.allegations = allegations;
     this.people = peoples;
+    this.relationships = relationshipList;
 
   }
 

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -101,6 +102,20 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
 
   }
 
+  /**
+   * constructing InvestigationAddress object
+   * 
+   * @param reporter - reporter object
+   * @param cmsRecordDescriptor - legacy record descriptor
+   */
+  public InvestigationAddress(Reporter reporter, CmsRecordDescriptor cmsRecordDescriptor) {
+    this.streetAddress = reporter.getStreetAddress();
+    this.city = reporter.getCity();
+    this.state = reporter.getStateCd();
+    this.zip = reporter.getZip();
+    this.type = reporter.getApiAdrAddressType();
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+  }
 
   /**
    * @return - CMS record description

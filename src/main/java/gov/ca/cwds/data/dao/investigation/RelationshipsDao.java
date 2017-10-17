@@ -1,9 +1,8 @@
 package gov.ca.cwds.data.dao.investigation;
 
 import org.hibernate.SessionFactory;
-
+import org.hibernate.query.Query;
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.inject.CmsSessionFactory;
@@ -25,5 +24,21 @@ public class RelationshipsDao extends CrudsDaoImpl<ClientRelationship> {
   public RelationshipsDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
+  /**
+   * finds ClientRelationship objects by primary child id
+   * 
+   * @param primaryClientId - primary client id
+   * @return list of ClientRelationship object
+   */
+  public ClientRelationship[] findClientRelationshipByPrimaryClientId(String primaryClientId) {
+    Query<ClientRelationship> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
+        "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipByPrimaryClientId")
+        .setParameter("primaryClientId", primaryClientId);
+    return query.list().toArray(new ClientRelationship[0]);
+
+  }
+
+
 
 }

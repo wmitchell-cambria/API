@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,15 +12,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.data.ReadablePhone;
 import gov.ca.cwds.data.ns.NsPersistentObject;
 import gov.ca.cwds.data.std.ApiPhoneAware;
@@ -38,7 +34,10 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
             + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')"),
     @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findAllUpdatedAfterOLD",
         query = "FROM Reporter WHERE lastUpdatedTime > :after AND confidentialWaiverIndicator = 'Y' AND referralId IN "
-            + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')")})
+            + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')"),
+    @NamedQuery(
+        name = "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId",
+        query = "FROM Reporter WHERE confidentialWaiverIndicator = 'Y' AND referralId = :referralId")})
 @NamedNativeQueries({@NamedNativeQuery(
     name = "gov.ca.cwds.data.persistence.cms.Reporter.findPartitionedBuckets",
     query = "select trim(z.RPTR_BDGNO) as RPTR_BDGNO, trim(z.RPTR_CTYNM) as RPTR_CTYNM, "
@@ -194,8 +193,9 @@ public class Reporter extends BaseReporter {
     this.communicationMethodType = reporter.getCommunicationMethodType();
     this.confidentialWaiverIndicator =
         DomainChef.cookBoolean(reporter.getConfidentialWaiverIndicator());
-    this.drmsMandatedRprtrFeedback = StringUtils.isBlank(reporter.getDrmsMandatedRprtrFeedback())
-        ? null : reporter.getDrmsMandatedRprtrFeedback();
+    this.drmsMandatedRprtrFeedback =
+        StringUtils.isBlank(reporter.getDrmsMandatedRprtrFeedback()) ? null
+            : reporter.getDrmsMandatedRprtrFeedback();
     this.employerName = reporter.getEmployerName();
     this.feedbackDate = DomainChef.uncookDateString(reporter.getFeedbackDate());
     this.feedbackRequiredIndicator =
@@ -555,11 +555,10 @@ public class Reporter extends BaseReporter {
     }
 
     if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
-      phones
-          .add(new ReadablePhone(null,
-              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
-                  ? this.messagePhoneExtensionNumber.toString() : null,
-              ApiPhoneAware.PhoneType.Cell));
+      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
+          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
+              : null,
+          ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);

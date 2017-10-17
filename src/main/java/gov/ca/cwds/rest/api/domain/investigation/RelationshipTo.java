@@ -1,17 +1,17 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.io.Serializable;
-
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.util.LegacyRecordUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -87,6 +87,21 @@ public final class RelationshipTo implements Serializable {
     this.cmsRecordDescriptor = cmsRecordDescriptor;
   }
 
+  /**
+   * constructing RelationshipTo object
+   * 
+   * @param clientRelationship - client relationship object
+   * @param client - client object
+   */
+  public RelationshipTo(ClientRelationship clientRelationship, Client client) {
+    this.relatedFirstName = client.getFirstName();
+    this.relatedLastName = client.getLastName();
+    this.relationshipToPerson = clientRelationship.getClientRelationshipType().toString();
+    relationshipContext = " ";
+    relatedPersonRelationship = " ";
+    this.cmsRecordDescriptor = LegacyRecordUtils.createLegacyDescriptor(clientRelationship.getId(),
+        LegacyTable.CLIENT_RELATIONSHIP);
+  }
 
   /**
    * @return - related first name
