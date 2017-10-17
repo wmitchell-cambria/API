@@ -10,10 +10,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import gov.ca.cwds.data.ns.NsPersistentObject;
-
 /**
- * {@link NsPersistentObject} representing a Address Uppercase
+ * {@link CmsPersistentObject} representing a Address Uppercase
  * 
  * @author CWDS API Team
  */

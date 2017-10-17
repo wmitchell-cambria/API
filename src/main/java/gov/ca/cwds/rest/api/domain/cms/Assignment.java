@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain.cms;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import javax.validation.constraints.NotNull;
@@ -175,7 +174,8 @@ public class Assignment extends ReportingDomain implements Request, Response {
   public Assignment(gov.ca.cwds.data.persistence.cms.Assignment pa) {
     this.countySpecificCode = pa.getCountySpecificCode();
     this.endDate = DomainChef.cookDate(pa.getEndDate());
-    this.endTime = new SimpleDateFormat("HH:mm:ssZ").format(pa.getEndTime());
+    this.endTime =
+        pa.getEndTime() == null ? null : new SimpleDateFormat("HH:mm:ssZ").format(pa.getEndTime());
     this.establishedForCode = pa.getEstablishedForCode();
     this.establishedForId = pa.getEstablishedForId();
     this.caseLoadId = pa.getFkCaseLoad();
@@ -192,10 +192,12 @@ public class Assignment extends ReportingDomain implements Request, Response {
    * @param countyCode - county code for the assignment
    * @param referralId - referral Id
    * @param caseLoadId - CaseLoad Id
+   * @param startDate - The Date entered for assignment start
+   * @param startTime - The Time entered for assignment start
    * @return Assignment
    */
   public Assignment createDefaultReferralAssignment(String countyCode, String referralId,
-      String caseLoadId) {
+      String caseLoadId, String startDate, String startTime) {
 
     final String END_DATE = "";
     final String END_TIME = "";
@@ -205,14 +207,6 @@ public class Assignment extends ReportingDomain implements Request, Response {
     final Short SECONDARY_ASSIGNMENT_ROLE_TYPE = 0;
     final String TYPE_OF_ASSIGNMENT_CODE = "P";
     final BigDecimal WEIGHTING_NUMBER = new BigDecimal("0.0");
-
-    final java.util.Date date = new java.util.Date();
-
-    final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    final DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ssZ");
-
-    final String startDate = df.format(date);
-    final String startTime = timeOnlyFormat.format(date);
 
     return new Assignment(countyCode, END_DATE, END_TIME, ESTABLISHED_FOR_CODE, referralId,
         caseLoadId, OUT_OF_STATE_CONTACT_ID, RESPONSIBILITY_DESCRIPTION,

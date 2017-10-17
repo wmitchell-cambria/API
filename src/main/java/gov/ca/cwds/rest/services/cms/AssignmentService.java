@@ -211,7 +211,8 @@ public class AssignmentService implements
     }
 
     gov.ca.cwds.rest.api.domain.cms.Assignment da =
-        createDefaultAssignmentToCaseLoad(COUNTY_CODE, referralId, caseLoadId);
+        createDefaultAssignmentToCaseLoad(COUNTY_CODE, referralId, screeningToReferral.getStartedAt(),
+            caseLoadId);
     messageBuilder.addDomainValidationError(validator.validate(da));
 
     if ("R".equals(da.getEstablishedForCode())
@@ -230,19 +231,32 @@ public class AssignmentService implements
 
   /**
    * @param countyCode - county code
-   * @param referralId - referral Id
+   * @param referral - referral
    * @return - default Assignment
    */
   private gov.ca.cwds.rest.api.domain.cms.Assignment createDefaultAssignmentToCaseLoad(
-      String countyCode, String referralId, String caseLoadId) {
+      String countyCode, String referralId, String startDateTime, String
+      caseLoadId) {
     // #146713651 - BARNEY: Referrals require a default assignment
     // Default Assignment - referrals will be assigned to the '0X5' staff person ID.
     //
     // An assignment is the association between a Staff Person Case Load and the Referral
     //
+    String startDate = null;
+    String startTime = null;
+    if (startDateTime != null){
+      String [] dateTime = startDateTime.split("T");
+      final int DATE = 0;
+      final int TIME = 1;
+      if (dateTime.length == 2) {
+        startDate = dateTime[DATE];
+        startTime = dateTime[TIME];
+      }
+    }
     gov.ca.cwds.rest.api.domain.cms.Assignment assignment =
         new gov.ca.cwds.rest.api.domain.cms.Assignment();
-    return assignment.createDefaultReferralAssignment(countyCode, referralId, caseLoadId);
+    return assignment.createDefaultReferralAssignment(countyCode, referralId,
+        caseLoadId,startDate, startTime);
   }
 
   /**

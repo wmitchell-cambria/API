@@ -2,10 +2,16 @@ package gov.ca.cwds.fixture;
 
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class LongTextResourceBuilder {
 
   private String countySpecificCode = "57";
-  private String textDescription = "Arrange for parents to have demonstrating home maker come to the home twice a week";
+  private String textDescription =
+      "Arrange for parents to have demonstrating home maker come to the home twice a week";
 
 
   public LongTextResourceBuilder setCountySpecificCode(String countySpecificCode) {
@@ -18,7 +24,7 @@ public class LongTextResourceBuilder {
     return this;
   }
 
-  public LongText build(){
+  public LongText build() {
     return new LongText(countySpecificCode, textDescription);
   }
 }

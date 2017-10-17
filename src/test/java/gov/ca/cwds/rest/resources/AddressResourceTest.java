@@ -155,9 +155,9 @@ public class AddressResourceTest {
   public void testUpdate501NotImplemented() throws Exception {
     Address address =
         new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32);
-    int status =
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .put(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
+    int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
+        .accept(MediaType.APPLICATION_JSON).put(Entity.entity(address, MediaType.APPLICATION_JSON))
+        .getStatus();
     assertThat(status, is(501));
   }
 

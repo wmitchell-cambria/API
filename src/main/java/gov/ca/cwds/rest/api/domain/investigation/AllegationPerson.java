@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
-import gov.ca.cwds.rest.util.LegacyRecordUtils;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -88,7 +88,7 @@ public class AllegationPerson {
         persistedClient.getBirthDate() != null ? String.valueOf(persistedClient.getBirthDate())
             : null;
     this.legacyDescriptor =
-        LegacyRecordUtils.createLegacyDescriptor(persistedClient.getId(), LegacyTable.CLIENT);
+        CmsRecordUtils.createLegacyDescriptor(persistedClient.getId(), LegacyTable.CLIENT);
   }
 
   /**

@@ -72,7 +72,8 @@ public class AllegationResource {
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate allegation")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Update allegations", code = HttpStatus.SC_OK, response = Allegation.class)
+  @ApiOperation(value = "Update an allegation", code = HttpStatus.SC_OK,
+      response = Allegation.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The CMS Id of the Referral or Case ") String id,

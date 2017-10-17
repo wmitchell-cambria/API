@@ -69,13 +69,11 @@ public class RIReferralTest {
    * @throws Exception - Exception
    */
   @Test(expected = ReferentialIntegrityException.class)
-  public void riCheckFailureWhenFKSTFPERSTNotFound() throws Exception {
+  public void riCheckFailureWhenPrimaryContactStaffPersonIdNotFound() throws Exception {
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
         new gov.ca.cwds.data.persistence.cms.Referral("H5CMVTm00h", referralDomain, "0X5");
-
-    // StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
 
     when(staffPersonDao.find(any(String.class))).thenReturn(null);
     RIReferral target =
@@ -87,7 +85,7 @@ public class RIReferralTest {
    * @throws Exception - Exception
    */
   @Test(expected = ReferentialIntegrityException.class)
-  public void riCheckFailureWhenFKADDRS_TNotFound() throws Exception {
+  public void riCheckFailureWhenAllegesAbuseOccurredAtAddressIdNotFound() throws Exception {
 
     Referral referralDomain =
         new ReferralResourceBuilder().setAllegesAbuseOccurredAtAddressId("ABc1234567").build();
@@ -107,7 +105,7 @@ public class RIReferralTest {
    * @throws Exception - Exception
    */
   @Test(expected = ReferentialIntegrityException.class)
-  public void riCheckFailureWhenDrmsDocumentNotFound() throws Exception {
+  public void riCheckFailureWhenDrmsAllegationDescriptionDocNotFound() throws Exception {
 
     Referral referralDomain =
         new ReferralResourceBuilder().setDrmsAllegationDescriptionDoc("ABC1234567").build();
@@ -127,7 +125,47 @@ public class RIReferralTest {
    * @throws Exception - Exception
    */
   @Test(expected = ReferentialIntegrityException.class)
-  public void riCheckFailureWhenLongTextNotFound() throws Exception {
+  public void riCheckFailureWhenDrmsErReferralDocNotFound() throws Exception {
+
+    Referral referralDomain =
+        new ReferralResourceBuilder().setDrmsErReferralDoc("ABC0987h5t").build();
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new gov.ca.cwds.data.persistence.cms.Referral("H5CMVTm00h", referralDomain, "0X5");
+
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(drmsDocumentDao.find(any(String.class))).thenReturn(null);
+    RIReferral target =
+        new RIReferral(addressDao, staffPersonDao, drmsDocumentDao, longTextDao, referralDao);
+    target.apply(referral);
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test(expected = ReferentialIntegrityException.class)
+  public void riCheckFailureWhenDrmsInvestigationDocNotFound() throws Exception {
+
+    Referral referralDomain =
+        new ReferralResourceBuilder().setDrmsInvestigationDoc("ABC0987h5t").build();
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new gov.ca.cwds.data.persistence.cms.Referral("H5CMVTm00h", referralDomain, "0X5");
+
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(drmsDocumentDao.find(any(String.class))).thenReturn(null);
+    RIReferral target =
+        new RIReferral(addressDao, staffPersonDao, drmsDocumentDao, longTextDao, referralDao);
+    target.apply(referral);
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test(expected = ReferentialIntegrityException.class)
+  public void riCheckFailureWhenCurrentLocationOfChildrenNotFound() throws Exception {
 
     Referral referralDomain =
         new ReferralResourceBuilder().setCurrentLocationOfChildren("ABC1234567").build();
@@ -147,7 +185,47 @@ public class RIReferralTest {
    * @throws Exception - Exception
    */
   @Test(expected = ReferentialIntegrityException.class)
-  public void riCheckFailureWhenFKREFERL_TNotFound() throws Exception {
+  public void riCheckFailureWhenResponseRationaleTextNotFound() throws Exception {
+
+    Referral referralDomain =
+        new ReferralResourceBuilder().setResponseRationaleText("ABC1234567").build();
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new gov.ca.cwds.data.persistence.cms.Referral("H5CMVTm00h", referralDomain, "0X5");
+
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(longTextDao.find(any(String.class))).thenReturn(null);
+    RIReferral target =
+        new RIReferral(addressDao, staffPersonDao, drmsDocumentDao, longTextDao, referralDao);
+    target.apply(referral);
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test(expected = ReferentialIntegrityException.class)
+  public void riCheckFailureWhenScreenerNoteTextNotFound() throws Exception {
+
+    Referral referralDomain = new ReferralResourceBuilder().setResponseRationaleText(null)
+        .setScreenerNoteText("ABC1234567").build();
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new gov.ca.cwds.data.persistence.cms.Referral("H5CMVTm00h", referralDomain, "0X5");
+
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(longTextDao.find(any(String.class))).thenReturn(null);
+    RIReferral target =
+        new RIReferral(addressDao, staffPersonDao, drmsDocumentDao, longTextDao, referralDao);
+    target.apply(referral);
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test(expected = ReferentialIntegrityException.class)
+  public void riCheckFailureWhenLinkToPrimaryReferralIdNotFound() throws Exception {
 
     Referral referralDomain =
         new ReferralResourceBuilder().setLinkToPrimaryReferralId("ABc123459").build();

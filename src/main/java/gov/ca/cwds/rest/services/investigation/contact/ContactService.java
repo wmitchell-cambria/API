@@ -17,6 +17,7 @@ import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
+import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
@@ -30,7 +31,9 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on {@link DeliveredServiceEntity}
+ * Business layer object to work on {@link DeliveredServiceEntity} and related entities
+ * {@link IndividualDeliveredServiceEntity}, {@link ReferralClientDeliveredServiceEntity},
+ * {@link ContactPartyDeliveredServiceEntity}, {@link gov.ca.cwds.data.persistence.cms.LongText}
  * 
  * @author CWDS API Team
  */
@@ -38,8 +41,8 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ContactService.class);
 
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
+  private String currentUserStaffId = RequestExecutionContext.instance().getStaffId();
+  private Date currentRequestStartTime = RequestExecutionContext.instance().getRequestStartTime();
   private DeliveredService deliveredService;
   private ReferralClientDeliveredService referralClientDeliveredService;
   private DeliveredToIndividualService deliveredToIndividualService;
@@ -80,10 +83,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
   @Override
   public Response find(String primaryKey) {
     if (!primaryKey.contains(":")) {
-      Contact contact = validContact;
-      final Set<Contact> contacts = new HashSet<>();
-      contacts.add(contact);
-      return new ContactList(contacts);
+      return findAllContactsForTheReferral(primaryKey);
     } else {
       String contactId = retrieveContactId(primaryKey);
       final DeliveredServiceEntity deliveredServiceEntity = deliveredService.find(contactId);
@@ -100,9 +100,14 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
 
       return new Contact(deliveredServiceEntity, lastUpdatedBy, note,
           peopleInIndividualDeliveredService);
-
     }
+  }
 
+  private ContactList findAllContactsForTheReferral(String primaryKey) {
+    Contact contact = validContact;
+    final Set<Contact> contacts = new HashSet<>();
+    contacts.add(contact);
+    return new ContactList(contacts);
   }
 
   /**
@@ -112,9 +117,9 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * @return The contactId
    */
   private String retrieveContactId(String primaryKey) {
-    String[] ids = primaryKey.split(":");
-    String referralId = ids[0].trim();
-    String contactId = ids[1].trim();
+    String[] identifiers = primaryKey.split(":");
+    String referralId = identifiers[0].trim();
+    String contactId = identifiers[1].trim();
     validateContactId(referralId, contactId);
     return contactId;
   }
@@ -172,8 +177,8 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
         contactRequest, countySpecificCode);
 
     contactPartyDeliveredServiceDao.create(new ContactPartyDeliveredServiceEntity(
-        CmsKeyIdGenerator.generate(lastUpdatedId), serviceContactType.shortValue(),
-        countySpecificCode, deliveredServiceId, lastUpdatedId, lastUpdatedTime));
+        CmsKeyIdGenerator.generate(currentUserStaffId), serviceContactType.shortValue(),
+        countySpecificCode, deliveredServiceId, currentUserStaffId, currentRequestStartTime));
 
     return this.find(referralId + ":" + deliveredServiceId);
   }
@@ -194,6 +199,16 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
   }
 
   /**
+   * <pre>
+   * Update a Contact ... this includes the following,
+   * update the two records in LongText and update the record in DeliveredService
+   * creates a record in ReferralClientDeliveredService for each new Child Client associated with the Referral
+   * delete records in ReferralClientDeliveredService for each Child Client removed from association with the Referral
+   * create a record in IndividualDeliveredService for each new Person in persons 
+   * delete a record in IndividualDeliveredService for each Person removed from persons 
+   * update a record in ContactPartyDeliveredService
+   * </pre>
+   * 
    * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
@@ -201,7 +216,25 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    */
   @Override
   public Response update(String primaryKey, ContactReferralRequest request) {
-    return validContact;
+
+    ContactRequest contactRequest = request.getContactRequest();
+    Referral referral = validateReferral(request);
+    String referralId = referral.getId();
+    String countySpecificCode = referral.getCountySpecificCode();
+    deliveredService.update(primaryKey, request, countySpecificCode);
+    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    String deliveredServiceId = primaryKey;
+    referralClientDeliveredService.updateOnBehalfOfClients(deliveredServiceId, referralId,
+        countySpecificCode);
+    deliveredToIndividualService.updatePeopleToIndividualDeliveredService(deliveredServiceId,
+        contactRequest, countySpecificCode);
+    ContactPartyDeliveredServiceEntity entity =
+        contactPartyDeliveredServiceDao.findByDeliveredServiceId(primaryKey);
+    contactPartyDeliveredServiceDao.update(new ContactPartyDeliveredServiceEntity(
+        entity.getPrimaryKey(), serviceContactType.shortValue(), countySpecificCode,
+        deliveredServiceId, currentUserStaffId, currentRequestStartTime));
+
+    return this.find(referralId + ":" + deliveredServiceId);
   }
 
   /**

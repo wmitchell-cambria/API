@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.services.investigation;
+package gov.ca.cwds.rest.services.investigation.contact;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -22,7 +22,6 @@ import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
 
 public class DeliveredToIndividualServiceTest {
 

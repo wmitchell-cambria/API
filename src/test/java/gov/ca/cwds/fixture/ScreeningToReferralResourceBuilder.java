@@ -30,6 +30,7 @@ public class ScreeningToReferralResourceBuilder {
   private String incidentDate = DomainChef.cookDate(new Date());
   private String locationType = "Foster Home";
   private Short communicationMethod = 409;
+  private String currentLocationOfChildren = "Location of the child";
   private String name = "The Rocky Horror Show";
   private String reportNarrative = "Narrative 123 test";
   private String reference = "123ABC";
@@ -104,6 +105,14 @@ public class ScreeningToReferralResourceBuilder {
 
   public Short getCommunicationMethod() {
     return communicationMethod;
+  }
+
+  public String getCurrentLocationOfChildren() {
+    return currentLocationOfChildren;
+  }
+
+  public String getAssigneeStaffId() {
+    return assigneeStaffId;
   }
 
   public String getName() {
@@ -220,6 +229,14 @@ public class ScreeningToReferralResourceBuilder {
   public ScreeningToReferralResourceBuilder setCommunicationMethod(Short communicationMethod) {
     this.communicationMethod = communicationMethod;
     return this;
+  }
+
+  public void setCurrentLocationOfChildren(String currentLocationOfChildren) {
+    this.currentLocationOfChildren = currentLocationOfChildren;
+  }
+
+  public void setAssigneeStaffId(String assigneeStaffId) {
+    this.assigneeStaffId = assigneeStaffId;
   }
 
   public ScreeningToReferralResourceBuilder setName(String name) {
@@ -361,10 +378,11 @@ public class ScreeningToReferralResourceBuilder {
 
   public ScreeningToReferral createScreeningToReferral() {
     return new ScreeningToReferral(id, legacySourceTable, referralId, endedAt, incidentCounty,
-        incidentDate, locationType, communicationMethod, name, reportNarrative, reference,
-        responseTime, startedAt, assignee, assigneeStaffId, additionalInformation,
-        screeningDecision, screeningDecisionDetail, approvalStatus, familyAwareness,
-        filedWithLawEnforcement, responsibleAgency, limitedAccessCode, limitedAccessDescription,
-        limitedAccessAgency, limitedAccessDate, address, participants, crossReports, allegations);
+        incidentDate, locationType, communicationMethod, currentLocationOfChildren, name,
+        reportNarrative, reference, responseTime, startedAt, assignee, assigneeStaffId,
+        additionalInformation, screeningDecision, screeningDecisionDetail, approvalStatus,
+        familyAwareness, filedWithLawEnforcement, responsibleAgency, limitedAccessCode,
+        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, address, participants,
+        crossReports, allegations);
   }
 }

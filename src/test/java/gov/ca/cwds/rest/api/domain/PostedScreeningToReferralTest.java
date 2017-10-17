@@ -86,11 +86,13 @@ public class PostedScreeningToReferralTest {
   private ScreeningToReferral createScreeningReferral() {
     Short responseTime = (short) 1516;
     Short communicationMethod = 409;
+
     return new ScreeningToReferral(1235, "sourcetable", "referralId", "endedAt",
-        SACRAMENTO_COUNTY_CODE, "incidentDate", "locationType", communicationMethod, "name",
-        "reportNarrative", "reference", responseTime, "startedAt", "assignee", "0X5",
-        "additionalInformation", "screeningDecision", "screeningDecisionDetail", 118, false, false,
-        "C", "N", "", "", null, new Address(new gov.ca.cwds.data.persistence.ns.Address()),
-        new HashSet(), new HashSet(), new HashSet());
+        SACRAMENTO_COUNTY_CODE, "incidentDate", "locationType", communicationMethod,
+        "currentLocationOfChildren", "name", "reportNarrative", "reference", responseTime,
+        "startedAt", "assignee", "0X5", "additionalInformation", "screeningDecision",
+        "screeningDecisionDetail", 118, false, false, "C", "N", "", "", null,
+        new Address(new gov.ca.cwds.data.persistence.ns.Address()), new HashSet(), new HashSet(),
+        new HashSet());
   }
 }

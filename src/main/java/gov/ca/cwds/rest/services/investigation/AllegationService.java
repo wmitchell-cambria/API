@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import gov.ca.cwds.data.dao.investigation.AllegationsDao;
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
@@ -50,12 +51,12 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
    */
   public Set<Allegation> populateAllegations(
       Set<gov.ca.cwds.data.persistence.cms.Allegation> persistedAllegations) {
-    Set<Allegation> apiAllegations = new HashSet<>();
-    for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllocation : persistedAllegations) {
-      apiAllegations.add(new Allegation(persistedAllocation));
+    Set<Allegation> allegations = new HashSet<>();
+    for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllegation : persistedAllegations) {
+      allegations.add(new Allegation(persistedAllegation));
 
     }
-    return apiAllegations;
+    return allegations;
   }
 
 }
