@@ -1,14 +1,18 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
@@ -189,16 +193,14 @@ public class Person extends ReportingDomain implements Request, Response {
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
     this.lastUpdatedAt = client.getLastUpdatedTime() != null
-        ? DomainChef.cookISO8601Timestamp(client.getLastUpdatedTime())
-        : null;
+        ? DomainChef.cookISO8601Timestamp(client.getLastUpdatedTime()) : null;
     this.firstName = client.getFirstName();
     this.lastName = client.getLastName();
     this.middleName = client.getMiddleName();
     this.nameSuffix = client.getNameSuffix();
     this.gender = client.getGender();
-    this.dateOfBirth =
-        client.getBirthDate() != null ? DomainChef.cookISO8601Timestamp(client.getBirthDate())
-            : null;
+    this.dateOfBirth = client.getBirthDate() != null
+        ? DomainChef.cookISO8601Timestamp(client.getBirthDate()) : null;
     this.ssn = client.getSsn();
     this.languages = languages;
     this.sealed = StringUtils.equals(client.getSensitivityIndicator(), "R");
@@ -223,9 +225,8 @@ public class Person extends ReportingDomain implements Request, Response {
   public Person(Reporter reporter, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles) {
     this.lastUpdatedBy = reporter.getLastUpdatedId();
-    this.lastUpdatedAt =
-        reporter.getLastUpdatedTime() != null ? String.valueOf(reporter.getLastUpdatedTime())
-            : null;
+    this.lastUpdatedAt = reporter.getLastUpdatedTime() != null
+        ? String.valueOf(reporter.getLastUpdatedTime()) : null;
     this.firstName = reporter.getFirstName();
     this.lastName = reporter.getLastName();
     this.middleName = reporter.getMiddleName();
@@ -251,14 +252,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return cmsRecordDescriptor;
   }
 
-
   /**
    * @return last updated by staff Id
    */
   public String getLastUpdatedBy() {
     return lastUpdatedBy;
   }
-
 
   /**
    * @return last updated date/time
@@ -267,14 +266,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return lastUpdatedAt;
   }
 
-
   /**
    * @return first name
    */
   public String getFirstName() {
     return firstName;
   }
-
 
   /**
    * @return - middle name
@@ -283,14 +280,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return middleName;
   }
 
-
   /**
    * @return - last name
    */
   public String getLastName() {
     return lastName;
   }
-
 
   /**
    * @return - suffix
@@ -299,14 +294,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return nameSuffix;
   }
 
-
   /**
    * @return - gender code
    */
   public String getGender() {
     return gender;
   }
-
 
   /**
    * @return - date of birth
@@ -315,14 +308,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return dateOfBirth;
   }
 
-
   /**
    * @return - ssn
    */
   public String getSsn() {
     return ssn;
   }
-
 
   /**
    * @return - list of language codes
@@ -331,14 +322,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return languages;
   }
 
-
   /**
    * @return - list of race/ethnicity codes
    */
   public RaceAndEthnicity getRaceAndEthnicity() {
     return raceAndEthnicity;
   }
-
 
   /**
    * @return - contains sensitive information
@@ -347,14 +336,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return sensitive;
   }
 
-
   /**
    * @return - contains sealed information
    */
   public Boolean getSealed() {
     return sealed;
   }
-
 
   /**
    * @return - list of phone numbers
@@ -363,14 +350,12 @@ public class Person extends ReportingDomain implements Request, Response {
     return phone;
   }
 
-
   /**
    * @return - list of roles
    */
   public Set<String> getRoles() {
     return roles;
   }
-
 
   /**
    * @return - list of address information
