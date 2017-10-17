@@ -80,7 +80,6 @@
 // https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaNativeInterface.html
 
 
-
 //==============================
 // CODE STARTS HERE:
 //==============================
@@ -435,6 +434,12 @@ inline BOOL AfxIsValidString(LPCSTR lpsz, int nLength = -1) {
 }
 
 //==============================
+// DECLARATIONS:
+//==============================
+
+void logVerbose(LPCSTR pszFormat, ...);
+
+//==============================
 // GLOBALS:
 //==============================
 
@@ -448,6 +453,8 @@ static SYSTEMTIME * g_win_tm = nullptr;
 
 SYSTEMTIME standardTimeToWindowsTime(const std::tm & a_tm, const int millis) {
     SYSTEMTIME retval;
+    
+    logVerbose("\nstandardTimeToWindowsTime: a_tm.tm_hour: ", a_tm.tm_hour);
     
     retval.wYear         = 1900 + a_tm.tm_year;
     retval.wMonth        = 1 + a_tm.tm_mon;
@@ -469,7 +476,6 @@ void GetLocalTime (SYSTEMTIME * out_win_tm, SYSTEMTIME * in_win_tm = nullptr) {
     using namespace std::chrono;
 
     if ( g_win_tm == nullptr && in_win_tm == nullptr ) {
-        // cout << "\nLIVE MODE: get current datetime" << endl;
         const auto tp  = system_clock::now();
         const auto tse = tp.time_since_epoch();
         const auto tt  = system_clock::to_time_t(tp);
@@ -1055,7 +1061,7 @@ void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp
         // Convert the key's timestamp segment to a number and then to date/time.
         StrCpyN(szTimestampStr, szKey, nSZ_KEYTIMESTAMP);
 
-        // DRS: A C++ array decays to a pointer of the array's type. Love the syntax. :-)
+        // DRS: C++ arrays decay to pointers of the same type. Love the syntax. :-)
         nTsVal = StrToDouble(szTimestampStr, BASE_62_SIZE, decay_t<double *>(&anPowVec62[0]));
         DoubleToTimestamp(nTsVal, &hNow, &nHSec);
 
@@ -1335,7 +1341,7 @@ static void DoubleToTimestamp(double nTimestamp, struct tm *phNow, int *pnHSecon
     nTimestamp    -= ((double)phNow->tm_mday * nSHIFT_DAY);  // strip it off
 
     phNow->tm_mon = (int)(nTimestamp / nSHIFT_MONTH);        // MONTHS
-    nTimestamp   -= ((double)phNow->tm_mon * nSHIFT_MONTH);  // strip it off. OMG! I love saying that!
+    nTimestamp   -= ((double)phNow->tm_mon * nSHIFT_MONTH);  // strip it off. I love saying that!
 
     phNow->tm_year = (int)(nTimestamp / nSHIFT_YEAR);        // YEARS
 }
@@ -1407,17 +1413,36 @@ static double StrToDouble(const char *szSrcStr, int nSrcBase, double *pnPowVec) 
 //  			  RETURNS - a double representing the date/time
 //-----------------------------------------------------------------------------
 static double TimestampToDouble(LPSYSTEMTIME lpTime) {
+	using namespace std;
     double nTimestamp = 0;
+
+	logVerbose("\n\nTimestampToDouble:");
+	if (opt_verbose) {
+		printWinTime(cout, *lpTime);
+	}
 
     // PTS18039
     // "Shift" tp make a "double" out of the sum of the pieces.
     nTimestamp += (double)((double)(lpTime->wMilliseconds / 10) * nSHIFT_HSECOND);
+	logVerbose("\nwMilliseconds: %f", nTimestamp);
+
     nTimestamp += (double)((double) lpTime->wSecond             * nSHIFT_SECOND);
+	logVerbose("\nwSecond:       %f", nTimestamp);
+
     nTimestamp += (double)((double) lpTime->wMinute             * nSHIFT_MINUTE);
+	logVerbose("\nwMinute:       %f", nTimestamp);
+
     nTimestamp += (double)((double) lpTime->wHour               * nSHIFT_HOUR);
+	logVerbose("\nwHour:         %f", nTimestamp);
+
     nTimestamp += (double)((double) lpTime->wDay                * nSHIFT_DAY);
+	logVerbose("\nwDay:          %f", nTimestamp);
+
     nTimestamp += (double)((double)(lpTime->wMonth - 1)         * nSHIFT_MONTH);
+	logVerbose("\nwMonth:        %f", nTimestamp);
+
     nTimestamp += (double)((double)(lpTime->wYear - 1900)       * nSHIFT_YEAR);
+	logVerbose("\nwYear:         %f\n", nTimestamp);
 
     return nTimestamp;
 }
@@ -1527,21 +1552,20 @@ void decomposeKey(const std::string & s_key) {
     
     const char * k = s_key.c_str();
     
-    logVerbose("\ncall GetStaffIdFromKey...");
+    // logVerbose("\ncall GetStaffIdFromKey...");
     GetStaffIdFromKey     (k, szStaffId);
 
-    logVerbose("\ncall GetUITimestampFromKey...");
+    // logVerbose("\ncall GetUITimestampFromKey...");
     GetUITimestampFromKey (k, szUITimestamp);
 
-    logVerbose("\ncall GetPTimeStampFromKey...");
+    // logVerbose("\ncall GetPTimeStampFromKey...");
     GetPTimeStampFromKey  (k, szPTimestamp);
 
-    logVerbose("\ncall GetUIIdentifierFromKey...");
+    // logVerbose("\ncall GetUIIdentifierFromKey...");
 	GetUIIdentifierFromKey(k, uiStr);
 
 #ifndef CWDS_BUILD_DLL
-	cerr << "\n\nC++ DECOMPOSE KEY:"
-         << "\nkey:                              "
+	cerr << "\nkey:                              "
          << s_key
          << "\nstaff id:                         "
          << szStaffId 
@@ -1551,6 +1575,13 @@ void decomposeKey(const std::string & s_key) {
          << szUITimestamp
          << "\nUI 19-digit:                      "
          << uiStr;
+	// cerr << s_key
+	// 	 << "\t"
+	// 	 << szStaffId 
+	// 	 << "\t"
+	// 	 << szUITimestamp
+	// 	 << "\t"
+	// 	 << uiStr;
 #endif
 }
 
@@ -1605,7 +1636,7 @@ std::string generateKey(const std::string & staff_id) {
 
 int showUsageAndExit(const char * program_nm) {
     printf("\n\nUSAGE:"\
-        "\n\nOption: Generate Keys: -s <staff id> -n <# of keys> [-d datetime]"\
+        "\n\nOption: Generate Keys: -s <staff id> -n <# of keys> [-d datetime, ex: \"2016-06-30T00:02:51.721Z\"]"\
         "\nEX: %s -s 0X5 -n50"
         "\n\nOption: Decompose Key: -k <key>"\
         "\nEX: %s -k 5Y3vKVs0X5\n\n"
@@ -1824,7 +1855,7 @@ int main (int argc, char* argv[]) {
     // auto tm_str = make_unique<char[]>(50);  // heap
     // auto key    = make_unique<char[]>(50);  // No need to set initial value; function call populates it.
 
-    char tm_str[50]; // stack. no need for heap here.
+    char tm_str[50];
     char key   [50];
     auto ts_str = CreateTimestampStr( &tm_str[0] );
 
