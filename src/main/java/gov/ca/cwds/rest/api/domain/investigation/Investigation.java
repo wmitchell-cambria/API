@@ -304,7 +304,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
       LongText longText, LongText addInfoLongText, Set<Allegation> allegations,
       Set<Person> people) {
 
-
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
     this.lastUpdatedBy = referral.getLastUpdatedId();
@@ -320,7 +319,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.startedAt = DomainChef.cookTimestamp(referral.getReceivedDate());
     this.additionalInformation =
         addInfoLongText != null ? addInfoLongText.getTextDescription() : "";
-
 
     this.sealed = StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "R")
         ? Boolean.TRUE : Boolean.FALSE;

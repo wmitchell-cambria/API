@@ -185,10 +185,11 @@ public class InvestigationTest {
 
   @Test
   public void testStaffPersonAssignmentSuccess() {
-    Referral referral = new ReferralEntityBuilder().setLimitedAccessCode("R").build();
+    Referral referral = new ReferralEntityBuilder().build();
 
     Address address = new AddressEntityBuilder().build();
-    StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+    StaffPerson staffPerson =
+        new StaffPersonEntityBuilder().setId(referral.getPrimaryContactStaffPersonId()).build();
     LongText longText = new LongTextResourceBuilder().build();
     AllegationList allegations = new AllegationListEntityBuilder().build();
     Set<Allegation> allgationSet = allegations.getAllegations();
@@ -196,7 +197,48 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
         longText, allgationSet, personSet);
-    assertThat(investigation.getAssignee(), is(equalTo(referral.getPrimaryContactStaffPersonId())));
+
+    Assignee assignee = investigation.getAssignee();
+
+    assertThat(assignee.getStaffId(), is(equalTo(referral.getPrimaryContactStaffPersonId())));
+  }
+
+  @Test
+  public void testNullStaffPersonAssignmentSuccess() {
+    Referral referral = new ReferralEntityBuilder().build();
+    Address address = new AddressEntityBuilder().build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
+        longText, allgationSet, personSet);
+
+    Assignee assignee = investigation.getAssignee();
+
+    assertThat(assignee.getStaffId(), is(equalTo(referral.getPrimaryContactStaffPersonId())));
+  }
+
+  @Test
+  public void testReferralAddressIsSetOnInvestigationSuccess() {
+    Referral referral = new ReferralEntityBuilder().build();
+    Address address = new AddressEntityBuilder().build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
+        longText, allgationSet, personSet);
+
+    InvestigationAddress investigationAddress = investigation.getAddress();
+    assertThat(investigationAddress.getStreetAddress(), is(equalTo(address.getStreetAddress())));
+    assertThat(investigationAddress.getCity(), is(equalTo(address.getCity())));
+    assertThat(investigationAddress.getState().toString(), is(equalTo(address.getState())));
+    assertThat(investigationAddress.getZip(), is(equalTo(address.getZip())));
   }
 
   @Test
@@ -250,6 +292,35 @@ public class InvestigationTest {
 
   }
 
+  @Test
+  public void testReferralAddressPhoneMatchesInvestigationSuccess() {
+
+    BigDecimal primaryPhone = new BigDecimal(1234567);
+
+    Referral referral = new ReferralEntityBuilder().build();
+    Address address = new AddressEntityBuilder().setPrimaryNumber(primaryPhone).build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
+        longText, allgationSet, personSet);
+
+    Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
+    phoneNumbers = investigation.getPhoneNumbers();
+
+    BigDecimal addressPhoneNumber = address.getPrimaryNumber();
+    BigDecimal investigationPhoneNumber = new BigDecimal(0);
+
+    for (PhoneNumber phone : phoneNumbers) {
+      investigationPhoneNumber = phone.getPhoneNumber();
+    }
+
+    assertThat(addressPhoneNumber, is(equalTo(investigationPhoneNumber)));
+
+  }
 
   @Test
   public void shouldCompareEqualsToObjectWithSameValues() {
