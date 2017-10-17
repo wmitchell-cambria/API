@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.api.domain.investigation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
@@ -84,9 +85,9 @@ public class AllegationPerson {
     this.lastName = persistedClient.getLastName();
     this.middleName = persistedClient.getMiddleName();
     this.suffixTitle = persistedClient.getNameSuffix();
-    this.dateOfBirth =
-        persistedClient.getBirthDate() != null ? String.valueOf(persistedClient.getBirthDate())
-            : null;
+    this.dateOfBirth = persistedClient.getBirthDate() != null
+        ? DomainChef.cookISO8601Timestamp(persistedClient.getBirthDate())
+        : null;
     this.legacyDescriptor =
         CmsRecordUtils.createLegacyDescriptor(persistedClient.getId(), LegacyTable.CLIENT);
   }

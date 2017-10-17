@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -129,7 +130,9 @@ public final class Relationship extends ReportingDomain implements Request, Resp
    */
   public Relationship(Client client, Set<RelationshipTo> relationShipToList) {
     this.id = client.getId();
-    this.dateOfBirth = client.getBirthDate() != null ? String.valueOf(client.getBirthDate()) : null;
+    this.dateOfBirth =
+        client.getBirthDate() != null ? DomainChef.cookISO8601Timestamp(client.getBirthDate())
+            : null;
     this.firstName = client.getFirstName();
     this.middleName = client.getMiddleName();
     this.lastName = client.getLastName();
