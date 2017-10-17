@@ -43,22 +43,24 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.AddressEntityBuilder;
+import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
+import gov.ca.cwds.fixture.AssignmentEntityBuilder;
 import gov.ca.cwds.fixture.CaseLoadEntityBuilder;
+import gov.ca.cwds.fixture.ChildClientEntityBuilder;
+import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
+import gov.ca.cwds.fixture.CmsReporterResourceBuilder;
+import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
+import gov.ca.cwds.fixture.LongTextEntityBuilder;
+import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.helper.CmsIdGenerator;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
-import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
-import gov.ca.cwds.rest.api.domain.cms.Assignment;
-import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
-import gov.ca.cwds.rest.api.domain.cms.ClientAddress;
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
-import gov.ca.cwds.rest.api.domain.cms.LongText;
-import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
@@ -292,24 +294,20 @@ public class R00818ReferredResourceTypeSetDefault {
    */
   @Test
   public void testForReferredToResourceTypeSetDefault() throws Exception {
-    Referral referralDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validReferral.json"), Referral.class);
+
     gov.ca.cwds.data.persistence.cms.Referral referralToCreate =
-        new gov.ca.cwds.data.persistence.cms.Referral("0123456ABC", referralDomain, "2016-10-31");
+        new ReferralEntityBuilder().build();
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
         .thenReturn(referralToCreate);
 
-    DrmsDocument drmsDocumentDomain = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
+    DrmsDocument drmsDocumentDomain = new DrmsDocumentResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocumentToCreate =
         new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABD1234568", drmsDocumentDomain, "ABC");
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
         .thenReturn(drmsDocumentToCreate);
 
-    ChildClient childClient = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/childClient.json"), ChildClient.class);
     gov.ca.cwds.data.persistence.cms.ChildClient childClientToCreate =
-        new gov.ca.cwds.data.persistence.cms.ChildClient("1234567ABC", childClient, "0XA");
+        new ChildClientEntityBuilder().build();
     when(childClientDao.create(any(gov.ca.cwds.data.persistence.cms.ChildClient.class)))
         .thenReturn(childClientToCreate);
 
@@ -340,12 +338,8 @@ public class R00818ReferredResourceTypeSetDefault {
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
-    AllegationPerpetratorHistory allegationPerpHistoryDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validAllegationPerpetratorHistory.json"),
-        AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
-        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+        new AllegationPerpetratorHistoryEntityBuilder().build();
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -355,45 +349,32 @@ public class R00818ReferredResourceTypeSetDefault {
             new TypeReference<Set<CrossReport>>() {});
     gov.ca.cwds.data.persistence.cms.CrossReport crossReportToCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport("3456789ABC",
-            // ((CrossReport) crossReportDomain).getThirdId(),
             (CrossReport) crossReportDomain.toArray()[0], "OXA");
     when(crossReportDao.create(any(gov.ca.cwds.data.persistence.cms.CrossReport.class)))
         .thenReturn(crossReportToCreate);
 
-    Reporter reporterDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validReporter.json"), Reporter.class);
+    Reporter reporterDomain = new CmsReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter reporterToCreate =
         new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC");
     when(reporterDao.create(any(gov.ca.cwds.data.persistence.cms.Reporter.class)))
         .thenReturn(reporterToCreate);
 
-    Address addressDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
-    gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+    gov.ca.cwds.data.persistence.cms.Address addressToCreate = new AddressEntityBuilder().build();
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 
-    ClientAddress clientAddressDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
-        ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new ClientAddressEntityBuilder().buildClientAddress();
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 
-    LongText longTextDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validLongText.json"), LongText.class);
     gov.ca.cwds.data.persistence.cms.LongText longTextToCreate =
-        new gov.ca.cwds.data.persistence.cms.LongText("567890ABC", longTextDomain, "ABC");
+        new LongTextEntityBuilder().build();
     when(longTextDao.create(any(gov.ca.cwds.data.persistence.cms.LongText.class)))
         .thenReturn(longTextToCreate);
 
-    Assignment assignment =
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
-            Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new AssignmentEntityBuilder().build();
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     StaffPerson staffPerson = mock(StaffPerson.class);

@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -29,9 +27,6 @@ public class TickleService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(TickleService.class);
 
   private TickleDao tickleDao;
-  private String lastUpdatedId = RequestExecutionContext.instance().getStaffId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
-
 
   /**
    * @param tickleDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Tickle}
@@ -55,7 +50,9 @@ public class TickleService implements
 
     try {
       gov.ca.cwds.data.persistence.cms.Tickle managed = new gov.ca.cwds.data.persistence.cms.Tickle(
-          CmsKeyIdGenerator.generate(lastUpdatedId), tickle, lastUpdatedId, lastUpdatedTime);
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), tickle,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = tickleDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Tickle(managed);
     } catch (EntityExistsException e) {
@@ -108,7 +105,9 @@ public class TickleService implements
     gov.ca.cwds.rest.api.domain.cms.Tickle tickle = request;
 
     try {
-      Tickle managed = new Tickle(primaryKey, tickle, lastUpdatedId, lastUpdatedTime);
+      Tickle managed =
+          new Tickle(primaryKey, tickle, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = tickleDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Tickle(managed);
     } catch (EntityNotFoundException e) {
