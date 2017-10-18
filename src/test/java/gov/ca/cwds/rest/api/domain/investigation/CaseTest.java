@@ -5,11 +5,39 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import gov.ca.cwds.fixture.investigation.SimplePersonEntityBuilder;
+import gov.ca.cwds.fixture.investigation.SimplePersonWithRelationshipEntityBuilder;
+
+@SuppressWarnings("javadoc")
 public class CaseTest {
+  String endDate = null;
+  String countyName = null;
+  SimpleLegacyDescriptor legacyDescriptor = null;
+  SimplePerson focusChild = null;
+  String serviceComponent = "Emergency Response";
+  SimplePerson assignedSocialWorker = null;
+  String serviceComponentId = "1694";
+  String startDate = "2017-09-01";
+  Set<SimplePersonWithRelationship> parents = new HashSet<>();
+
+  @Before
+  public void setup() {
+    legacyDescriptor = new SimpleLegacyDescriptor("111-222-333-4444");
+    focusChild = new SimplePersonEntityBuilder().build();
+    assignedSocialWorker =
+        new SimplePersonEntityBuilder().setLastName("Smith").setFirstName("Joe").build();
+    SimplePersonWithRelationship parent1 = new SimplePersonWithRelationshipEntityBuilder().build();
+    SimplePersonWithRelationship parent2 =
+        new SimplePersonWithRelationshipEntityBuilder().setLastName("Smyth").build();
+    parents.add(parent1);
+    parents.add(parent2);
+  }
 
   @Test
   public void type() throws Exception {
@@ -18,244 +46,86 @@ public class CaseTest {
 
   @Test
   public void instantiation() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
+        assignedSocialWorker, serviceComponentId, startDate, parents);
     assertThat(target, notNullValue());
   }
 
   @Test
   public void getEndDate_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    String actual = target.getEndDate();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getEndDate(), is(equalTo(endDate)));
   }
 
   @Test
   public void getCountyName_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    String actual = target.getCountyName();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getCountyName(), is(equalTo(countyName)));
   }
 
   @Test
   public void getLegacyDescriptor_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    SimpleLegacyDescriptor actual = target.getLegacyDescriptor();
-    SimpleLegacyDescriptor expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getLegacyDescriptor(), is(equalTo(legacyDescriptor)));
   }
 
   @Test
   public void getFocusChild_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    SimplePerson actual = target.getFocusChild();
-    SimplePerson expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getFocusChild(), is(equalTo(focusChild)));
   }
 
   @Test
   public void getServiceComponent_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    String actual = target.getServiceComponent();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getServiceComponent(), is(equalTo(serviceComponent)));
   }
 
   @Test
   public void getAssignedSocialWorker_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    SimplePerson actual = target.getAssignedSocialWorker();
-    SimplePerson expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void getAccessLimitation_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
-    Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    LimitedAccess actual = target.getAccessLimitation();
-    LimitedAccess expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getAssignedSocialWorker(), is(equalTo(assignedSocialWorker)));
   }
 
   @Test
   public void getServiceComponentId_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    String actual = target.getServiceComponentId();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getServiceComponent(), is(equalTo(serviceComponent)));
   }
 
   @Test
   public void getStartDate_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
-    String actual = target.getStartDate();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+        assignedSocialWorker, serviceComponentId, startDate, parents);
+    assertThat(target.getStartDate(), is(equalTo(startDate)));
   }
 
   @Test
   public void getParents_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
+        assignedSocialWorker, serviceComponentId, startDate, parents);
     Set<SimplePersonWithRelationship> actual = target.getParents();
-    Set<SimplePersonWithRelationship> expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, is(equalTo(parents)));
   }
 
   @Test
   public void hashCode_Args__() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
-    Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
+    Case target = new Case(null, null, null, null, null, null, null, null, null);
     int actual = target.hashCode();
-    int expected = -1130789618;
+    int expected = -2120005430;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void equals_Args__Object() throws Exception {
-    String endDate = null;
-    String countyName = null;
-    SimpleLegacyDescriptor legacyDescriptor = null;
-    SimplePerson focusChild = null;
-    String serviceComponent = null;
-    SimplePerson assignedSocialWorker = null;
-    LimitedAccess accessLimitation = null;
-    String serviceComponentId = null;
-    String startDate = null;
-    Set<SimplePersonWithRelationship> parents = null;
-    Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, accessLimitation, serviceComponentId, startDate, parents);
+    Case target = new Case(null, null, null, null, null, null, null, null, null);
     Object obj = null;
     boolean actual = target.equals(obj);
     boolean expected = false;

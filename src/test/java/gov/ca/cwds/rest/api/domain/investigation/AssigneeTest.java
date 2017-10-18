@@ -7,8 +7,11 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -20,6 +23,8 @@ public class AssigneeTest {
   private String office = "Madera CWS Office";
   private String staffId = "0X5";
 
+  private StaffPerson staffPerson = new StaffPersonEntityBuilder().setLastName(name).build();
+
   @Test
   public void testEmptyConsturctorSuccess() {
     Assignee assignee = new Assignee();
@@ -27,12 +32,20 @@ public class AssigneeTest {
   }
 
   @Test
-  public void testConstructorTestSuccess() {
+  public void testConstructorSuccess() {
     Assignee assignee = new Assignee(name, countyCode, office, staffId);
     assertThat(assignee.getName(), is(equalTo(name)));
     assertThat(assignee.getCountyCode(), is(equalTo(countyCode)));
     assertThat(assignee.getOffice(), is(equalTo(office)));
     assertThat(assignee.getStaffId(), is(equalTo(staffId)));
+  }
+
+
+  @Test
+  @Ignore
+  public void testStaffPersonConstructorSuccess() {
+    Assignee assignee = new Assignee(staffPerson);
+
   }
 
   @Test

@@ -1,13 +1,5 @@
 package gov.ca.cwds.rest.services.investigation;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
-import gov.ca.cwds.rest.services.TypedCrudsService;
-import io.dropwizard.jackson.Jackson;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +7,21 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.Dao;
+import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
+import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
+import gov.ca.cwds.rest.services.TypedCrudsService;
+import io.dropwizard.jackson.Jackson;
+
 /**
  * Business layer object to work on History Of Involvement
  * 
  * @author CWDS API Team
  */
-public class HistoryOfInvolvementService implements
-    TypedCrudsService<String, HistoryOfInvolvement, Response> {
+public class HistoryOfInvolvementService
+    implements TypedCrudsService<String, HistoryOfInvolvement, Response> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoryOfInvolvementService.class);
 
@@ -48,14 +48,7 @@ public class HistoryOfInvolvementService implements
   @Override
   public Response find(String primaryKey) {
     HistoryOfInvolvement serialized = new HistoryOfInvolvement();
-    String fileLocation =
-        HistoryOfInvolvementService.class.getPackage().getName().replace('.', '/')
-            + "/historyOfInvolvement/valid/valid.json";
-    try {
-      serialized = MAPPER.readValue(fixture(fileLocation), HistoryOfInvolvement.class);
-    } catch (Exception e) {
-      LOGGER.error("Exception In HistoryOfInvolvement {}", e.getMessage());
-    }
+    serialized = new HistoryOfInvolvementEntityBuilder().build();
     return serialized;
   }
 

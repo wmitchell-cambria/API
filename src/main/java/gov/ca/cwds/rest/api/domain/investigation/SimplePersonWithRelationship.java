@@ -2,12 +2,10 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -45,26 +43,19 @@ public class SimplePersonWithRelationship extends ReportingDomain implements Res
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Bob")
   private String firstName;
 
-  @JsonIgnore
-  @Size(max = 1)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "R")
-  private String sensitivityIndicator;
-
   /**
    * Constructor
    * 
    * @param relationship the relationship
    * @param lastName last name
    * @param firstName first name
-   * @param sensitivityIndicator The Sensitivity Indicator
    */
   public SimplePersonWithRelationship(@JsonProperty("relationship") String relationship,
-      @JsonProperty("last_name") String lastName, @JsonProperty("first_name") String firstName,
-      @JsonProperty("sensitivity_indicator") String sensitivityIndicator) {
+      @JsonProperty("last_name") String lastName, @JsonProperty("first_name") String firstName) {
     this.relationship = relationship;
     this.lastName = lastName;
     this.firstName = firstName;
-    this.sensitivityIndicator = sensitivityIndicator;
+
   }
 
   /**
@@ -86,25 +77,6 @@ public class SimplePersonWithRelationship extends ReportingDomain implements Res
    */
   public String getLastName() {
     return lastName;
-  }
-
-  /**
-   * @return the sensitivityIndicator
-   */
-  public String getSensitivityIndicator() {
-    return sensitivityIndicator;
-  }
-
-  @SuppressWarnings("javadoc")
-  @JsonProperty("sealed")
-  public Boolean getSealed() {
-    return StringUtils.isNotBlank(sensitivityIndicator) && "R".equals(sensitivityIndicator);
-  }
-
-  @SuppressWarnings("javadoc")
-  @JsonProperty("sensitive")
-  public Boolean getSensitive() {
-    return StringUtils.isNotBlank(sensitivityIndicator) && "S".equals(sensitivityIndicator);
   }
 
   /**

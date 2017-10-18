@@ -42,7 +42,6 @@ public class InvestigationEntityBuilder {
   private Integer phoneExtension = 1122;
   private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
   private Short phoneType = 1111;
-
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
 
@@ -63,7 +62,6 @@ public class InvestigationEntityBuilder {
 
   private Allegation allegation = new AllegationEntityBuilder().build();
   private Set<Allegation> allegations = new HashSet<>();
-  // private AllegationList allegations = new AllegationListEntityBuilder().build();
 
   private Person person = new PersonEntityBuilder().build();
   private Set<Person> people = new HashSet<>();

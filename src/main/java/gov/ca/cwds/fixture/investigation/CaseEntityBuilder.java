@@ -4,7 +4,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import gov.ca.cwds.rest.api.domain.investigation.Case;
-import gov.ca.cwds.rest.api.domain.investigation.LimitedAccess;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleLegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.SimplePerson;
 import gov.ca.cwds.rest.api.domain.investigation.SimplePersonWithRelationship;
@@ -17,7 +16,6 @@ public class CaseEntityBuilder {
   private SimplePerson focusChild;
   protected String serviceComponent;
   private SimplePerson assignedSocialWorker;
-  private LimitedAccess limitedAccess;
   protected String serviceComponentId = "1234567ABC";
   protected String startDate = "2017-09-01";
   private Set<SimplePersonWithRelationship> parents = new LinkedHashSet<>();
@@ -27,7 +25,7 @@ public class CaseEntityBuilder {
     SimplePersonWithRelationship father = new SimplePersonWithRelationshipEntityBuilder().build();
     parents.add(father);
     return new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
-        assignedSocialWorker, limitedAccess, serviceComponentId, startDate, parents);
+        assignedSocialWorker, serviceComponentId, startDate, parents);
   }
 
   public CaseEntityBuilder setEndDate(String endDate) {
@@ -57,11 +55,6 @@ public class CaseEntityBuilder {
 
   public CaseEntityBuilder setAssignedSocialWorker(SimplePerson assignedSocialWorker) {
     this.assignedSocialWorker = assignedSocialWorker;
-    return this;
-  }
-
-  public CaseEntityBuilder setLimitedAccess(LimitedAccess limitedAccess) {
-    this.limitedAccess = limitedAccess;
     return this;
   }
 
@@ -102,10 +95,6 @@ public class CaseEntityBuilder {
 
   public SimplePerson getAssignedSocialWorker() {
     return assignedSocialWorker;
-  }
-
-  public LimitedAccess getLimitedAccess() {
-    return limitedAccess;
   }
 
   public String getServiceComponentId() {

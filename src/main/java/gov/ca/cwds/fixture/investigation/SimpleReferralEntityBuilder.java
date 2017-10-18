@@ -20,15 +20,15 @@ public class SimpleReferralEntityBuilder {
   private HistoryOfInvolvementAllegation allegation =
       new HistoryOfInvolvementAllegationEntityBuilder().build();
   private SimplePerson assignedSocialWorker = new SimplePersonEntityBuilder().build();
-  private LimitedAccess limitedAccess = new LimitedAccess("0", "N");
+  private LimitedAccess accessLimitation = new LimitedAccess("0", "N");
   private String responseTime = "3 day";
   private String startDate = "2017-09-01";
-  private Set<HistoryOfInvolvementAllegation> allegations = new LinkedHashSet();
+  private Set<HistoryOfInvolvementAllegation> allegations = new LinkedHashSet<>();
 
   public SimpleReferral build() {
     allegations.add(allegation);
     return new SimpleReferral(endDate, legacyDescriptor, reporter, countyName, responseTimeCode,
-        allegations, assignedSocialWorker, limitedAccess, responseTime, startDate);
+        allegations, assignedSocialWorker, accessLimitation, responseTime, startDate);
   }
 
   public SimpleReferralEntityBuilder setEndDate(String endDate) {
@@ -64,11 +64,6 @@ public class SimpleReferralEntityBuilder {
 
   public SimpleReferralEntityBuilder setAssignedSocialWorker(SimplePerson assignedSocialWorker) {
     this.assignedSocialWorker = assignedSocialWorker;
-    return this;
-  }
-
-  public SimpleReferralEntityBuilder setLimitedAccess(LimitedAccess limitedAccess) {
-    this.limitedAccess = limitedAccess;
     return this;
   }
 
@@ -108,10 +103,6 @@ public class SimpleReferralEntityBuilder {
 
   public SimplePerson getAssignedSocialWorker() {
     return assignedSocialWorker;
-  }
-
-  public LimitedAccess getLimitedAccess() {
-    return limitedAccess;
   }
 
   public String getResponseTime() {

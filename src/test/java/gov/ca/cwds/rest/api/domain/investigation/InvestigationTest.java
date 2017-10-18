@@ -359,7 +359,6 @@ public class InvestigationTest {
     final String expected =
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
     System.out.println(expected);
-
   }
 
   @Test

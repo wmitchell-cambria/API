@@ -36,7 +36,7 @@ public class PersonEntityBuilder {
   private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
   protected Short phoneType = 1111;
 
-  private BigDecimal phoneNumber = new BigDecimal(3219876);
+  private BigDecimal phoneNumber = new BigDecimal(1233219876);
   private CmsRecordDescriptor phoneCmsRecordDescriptor =
       new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "CLIENT_T", "Client");
 

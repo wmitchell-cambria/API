@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"end_date", "county_name", "legacy_descriptor", "focus_child",
-    "service_component", "assigned_social_worker", "access_limitation", "service_component_id",
-    "start_date", "parents",})
+    "service_component", "assigned_social_worker", "service_component_id", "start_date",
+    "parents",})
 public class Case extends ReportingDomain implements Response {
 
   private static final long serialVersionUID = 1L;
@@ -48,9 +48,6 @@ public class Case extends ReportingDomain implements Response {
   @JsonProperty("assigned_social_worker")
   private SimplePerson assignedSocialWorker;
 
-  @JsonProperty("access_limitation")
-  private LimitedAccess accessLimitation;
-
   @JsonProperty("service_component_id")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "1694")
   private String serviceComponentId;
@@ -71,7 +68,6 @@ public class Case extends ReportingDomain implements Response {
    * @param focusChild focus child
    * @param serviceComponent service component
    * @param assignedSocialWorker assigned social worker
-   * @param accessLimitation limited access
    * @param serviceComponentId service component id
    * @param startDate start date
    * @param parents parents
@@ -82,7 +78,6 @@ public class Case extends ReportingDomain implements Response {
       @JsonProperty("focus_child") SimplePerson focusChild,
       @JsonProperty("service_component") String serviceComponent,
       @JsonProperty("assigned_social_worker") SimplePerson assignedSocialWorker,
-      @JsonProperty("access_limitation") LimitedAccess accessLimitation,
       @JsonProperty("service_component_id") String serviceComponentId,
       @JsonProperty("start_date") String startDate,
       @JsonProperty("parents") Set<SimplePersonWithRelationship> parents) {
@@ -93,7 +88,6 @@ public class Case extends ReportingDomain implements Response {
     this.focusChild = focusChild;
     this.serviceComponent = serviceComponent;
     this.assignedSocialWorker = assignedSocialWorker;
-    this.accessLimitation = accessLimitation;
     this.serviceComponentId = serviceComponentId;
     this.startDate = startDate;
     this.parents = parents;
@@ -139,13 +133,6 @@ public class Case extends ReportingDomain implements Response {
    */
   public SimplePerson getAssignedSocialWorker() {
     return assignedSocialWorker;
-  }
-
-  /**
-   * @return the accessLimitation
-   */
-  public LimitedAccess getAccessLimitation() {
-    return accessLimitation;
   }
 
   /**

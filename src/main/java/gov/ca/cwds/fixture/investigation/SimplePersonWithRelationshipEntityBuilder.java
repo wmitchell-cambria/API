@@ -7,11 +7,9 @@ public class SimplePersonWithRelationshipEntityBuilder {
   private String relationship = "Father/Son";
   private String lastName = "Plimsoul";
   private String firstName = "Paul";
-  private String sensitivityIndicator = "N";
 
   public SimplePersonWithRelationship build() {
-    return new SimplePersonWithRelationship(relationship, lastName, firstName,
-        sensitivityIndicator);
+    return new SimplePersonWithRelationship(relationship, lastName, firstName);
   }
 
   public SimplePersonWithRelationshipEntityBuilder setRelationship(String relationship) {
@@ -29,12 +27,6 @@ public class SimplePersonWithRelationshipEntityBuilder {
     return this;
   }
 
-  public SimplePersonWithRelationshipEntityBuilder setSensitivityIndicator(
-      String sensitivityIndicator) {
-    this.sensitivityIndicator = sensitivityIndicator;
-    return this;
-  }
-
   public String getRelationship() {
     return relationship;
   }
@@ -45,10 +37,6 @@ public class SimplePersonWithRelationshipEntityBuilder {
 
   public String getFirstName() {
     return firstName;
-  }
-
-  public String getSensitivityIndicator() {
-    return sensitivityIndicator;
   }
 
 

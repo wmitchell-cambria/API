@@ -71,7 +71,7 @@ public class SimpleReferral extends ReportingDomain implements Response {
    * @param responseTimeId the response time id
    * @param allegations the allegations
    * @param assignedSocialWorker the assigned social worker
-   * @param accessLimitation the limited access
+   * @param accessLimitation - limited access flag of Referral
    * @param responseTime the response time
    * @param startDate the start date
    */
@@ -127,6 +127,13 @@ public class SimpleReferral extends ReportingDomain implements Response {
   }
 
   /**
+   * @return limited access code
+   */
+  public LimitedAccess getLimitedAccess() {
+    return accessLimitation;
+  }
+
+  /**
    * @return the responseTimeId
    */
   public String getResponseTimeId() {
@@ -145,13 +152,6 @@ public class SimpleReferral extends ReportingDomain implements Response {
    */
   public SimplePerson getAssignedSocialWorker() {
     return assignedSocialWorker;
-  }
-
-  /**
-   * @return the accessLimitation
-   */
-  public LimitedAccess getAccessLimitation() {
-    return accessLimitation;
   }
 
   /**

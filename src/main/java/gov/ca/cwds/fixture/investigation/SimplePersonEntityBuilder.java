@@ -7,10 +7,9 @@ public class SimplePersonEntityBuilder {
 
   private String lastName = "Smyth";
   private String firstName = "Susan";
-  private String sensitivityIndicator = "N";
 
   public SimplePerson build() {
-    return new SimplePerson(lastName, firstName, sensitivityIndicator);
+    return new SimplePerson(lastName, firstName);
   }
 
   public SimplePersonEntityBuilder setLastName(String lastName) {
@@ -23,11 +22,6 @@ public class SimplePersonEntityBuilder {
     return this;
   }
 
-  public SimplePersonEntityBuilder setSensitivityIndicator(String sensitivityIndicator) {
-    this.sensitivityIndicator = sensitivityIndicator;
-    return this;
-  }
-
   public String getLastName() {
     return lastName;
   }
@@ -35,10 +29,5 @@ public class SimplePersonEntityBuilder {
   public String getFirstName() {
     return firstName;
   }
-
-  public String getSensitivityIndicator() {
-    return sensitivityIndicator;
-  }
-
 
 }
