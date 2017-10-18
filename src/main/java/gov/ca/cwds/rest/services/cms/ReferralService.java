@@ -165,20 +165,29 @@ public class ReferralService implements
    */
   private PostedReferral create(gov.ca.cwds.rest.api.domain.cms.Referral referral, Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
+      String staffPersonId = staffPersonIdRetriever.getStaffPersonId();
+      StaffPerson staffperson;
+      if (staffPersonId == null){
+        LOGGER.error("Staff Person Id was not found");
+        throw new ServiceException("Staff Person Id was not found.");
+      }else{
+        staffperson = staffpersonDao.find(staffPersonId);
+      }
+
       Referral managed;
       if (timestamp == null) {
-        managed = new Referral(CmsKeyIdGenerator.generate(lastUpdatedId), referral, lastUpdatedId);
+        managed = new Referral(CmsKeyIdGenerator.generate(staffPersonId), referral, staffPersonId);
       } else {
-        managed = new Referral(CmsKeyIdGenerator.generate(lastUpdatedId), referral, lastUpdatedId,
+        managed = new Referral(CmsKeyIdGenerator.generate(staffPersonId), referral, staffPersonId,
             timestamp);
       }
+
       managed = referralDao.create(managed);
-      if (managed.getId() == null) {
-        throw new ServiceException("Referral ID cannot be null");
+      if (managed == null || managed.getId() == null) {
+        LOGGER.warn("Unable to save referral: " + referral );
+        throw new ServiceException("Referral Not successfully saved");
       }
       // checking the staffPerson county code
-      StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
       if (staffperson != null
           && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
         laCountyTrigger.createCountyTrigger(managed);

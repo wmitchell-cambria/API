@@ -109,6 +109,7 @@ public class ReferralServiceTest {
     longTextService = mock(LongTextService.class);
 
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
+    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
     riReferral = mock(RIReferral.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
@@ -562,7 +563,31 @@ public class ReferralServiceTest {
   }
 
 
+  @Test (expected = ServiceException.class)
+  public void shouldThrowErrorIfStaffPersonIdIsNotFound() throws Exception {
+    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn(null);
+    Referral referralDomain = new ReferralResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Referral toCreate =
+        new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
 
+    Referral request = new Referral(toCreate);
+
+    referralService.create(request);
+
+  }
+
+   @Test (expected = ServiceException.class)
+  public void shouldThrowErrorIfReferralIsNotSavedSuccessfully() throws Exception {
+    when(referralDao.create(any())).thenReturn(null);
+    Referral referralDomain = new ReferralResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Referral toCreate =
+        new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
+
+    Referral request = new Referral(toCreate);
+
+    referralService.create(request);
+
+  }
   // @Test
   // public void shouldCreateCmsReferralFromScreening(){
   // Date timestamp = new Date();

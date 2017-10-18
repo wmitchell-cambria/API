@@ -15,6 +15,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -910,5 +911,8 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return referralClients;
   }
 
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
 
 }
