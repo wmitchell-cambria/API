@@ -1,31 +1,31 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import gov.ca.cwds.ObjectMapperUtils;
+import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.dropwizard.jackson.JsonSnakeCase;
 
 /**
+ * Container of {@link Allegation} objects, represented as an unnamed array.
  *
+ * Jackson best practice: annotation, {@code @JsonValue}, on getter {@link #getAllegations()},
+ * serializes this object as an unnamed array of Allegation objects.
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-@JsonInclude(Include.ALWAYS)
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_ARRAY, use = JsonTypeInfo.Id.NONE)
-// @JsonTypeName(value = "user")
-// @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.MINIMAL_CLASS)
 public class AllegationList extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
@@ -48,8 +48,12 @@ public class AllegationList extends ReportingDomain implements Request, Response
   }
 
   /**
+   * Jackson best practice: annotation, {@code @JsonValue}, on this getter tells Jackson to
+   * serialize this object as an unnamed array of Allegation objects.
+   * 
    * @return - allegations of an investigation
    */
+  @JsonValue
   public Set<Allegation> getAllegations() {
     return allegations;
   }
@@ -77,6 +81,19 @@ public class AllegationList extends ReportingDomain implements Request, Response
     } else if (!allegations.equals(other.allegations))
       return false;
     return true;
+  }
+
+  public static void main(String[] args) throws IOException {
+    ObjectMapper mapper = ObjectMapperUtils.createObjectMapper();
+
+    Set<Allegation> allegations = new HashSet<>();
+    Allegation alg = new AllegationEntityBuilder().build();
+    allegations.add(alg);
+
+    AllegationList list = new AllegationList(allegations);
+
+    String serialized = mapper.writeValueAsString(list);
+    System.out.println(serialized);
   }
 
 }
