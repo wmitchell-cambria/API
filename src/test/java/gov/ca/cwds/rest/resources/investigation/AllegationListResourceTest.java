@@ -1,11 +1,9 @@
 package gov.ca.cwds.rest.resources.investigation;
 
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
@@ -19,7 +17,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
-import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
 import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
@@ -72,13 +69,4 @@ public class AllegationListResourceTest {
   /*
    * Create Tests
    */
-  @Test
-  @Ignore
-  public void createDelegatesToResourceDelegate() throws Exception {
-    AllegationList allegations = new AllegationListEntityBuilder().build();
-
-    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .post(Entity.entity(allegations, MediaType.APPLICATION_JSON));
-    verify(typedResourceDelegate).create(eq(allegations));
-  }
 }

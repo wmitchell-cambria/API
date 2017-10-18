@@ -34,7 +34,7 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
 
   @Override
   public Response create(AllegationList request) {
-    return validAllegations;
+    return null;
   }
 
   @Override

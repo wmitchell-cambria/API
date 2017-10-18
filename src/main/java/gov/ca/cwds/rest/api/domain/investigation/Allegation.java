@@ -2,19 +2,22 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
@@ -36,8 +39,6 @@ public class Allegation extends ReportingDomain implements Response {
   @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(required = true, readOnly = false, value = "Allegation Type", example = "2179",
       dataType = "string")
-  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ALLEGATION_TYPE,
-      checkCategoryIdValueIsZero = true)
   @NotNull
   private Short allegationType;
 
@@ -48,14 +49,12 @@ public class Allegation extends ReportingDomain implements Response {
 
   @JsonProperty("allegation_sub_types")
   @ApiModelProperty(required = false, readOnly = false)
-  @Valid
+  // @Valid
   private Set<AllegationSubType> allegationSubType;
 
   @JsonProperty("disposition")
   @JsonSerialize(using = SysIdShortToStringSerializer.class)
   @ApiModelProperty(required = false, readOnly = false, dataType = "string")
-  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ALLEGATION_DISPOSITION,
-      checkCategoryIdValueIsZero = true)
   private Short dispositionType;
 
   @JsonProperty("rationale")
@@ -64,6 +63,7 @@ public class Allegation extends ReportingDomain implements Response {
   private String rationale;
 
   @JsonProperty("legacy_descriptor")
+  @ApiModelProperty(required = false, readOnly = false)
   private CmsRecordDescriptor legacyDescriptor;
 
   @JsonProperty("victim")

@@ -71,4 +71,12 @@ public class AllegationResourceTest {
 
   }
 
+  @Test
+  public void createDelegatesToResourceDelegate() throws Exception {
+    Allegation allegation = new AllegationEntityBuilder().build();
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .post(Entity.entity(allegation, MediaType.APPLICATION_JSON));
+    verify(typedResourceDelegate).create(eq(allegation));
+  }
+
 }

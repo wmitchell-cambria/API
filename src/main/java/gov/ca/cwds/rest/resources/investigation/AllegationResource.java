@@ -4,6 +4,7 @@ import static gov.ca.cwds.rest.core.Api.RESOURCE_INVESTIGATIONS;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,6 +18,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.InvestigationAllegationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
+import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -53,6 +55,31 @@ public class AllegationResource {
   public AllegationResource(
       @InvestigationAllegationServiceBackedResource TypedResourceDelegate<String, Allegation> typedResourceDelegateForUpdate) {
     this.typedResourceDelegateForUpdate = typedResourceDelegateForUpdate;
+  }
+
+  /**
+   * Create an {@link AllegationList}.
+   *
+   * @param id - CMS Id of the Referral or Case the Allegation is for
+   * @param allegation - The allegation to create
+   * @return - The {@link Response}
+   */
+  @UnitOfWork(value = "cms")
+  @POST
+  @Path("/{id}/allegations")
+  @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
+      @ApiResponse(code = 401, message = "Not Authorized"),
+      @ApiResponse(code = 406, message = "Accept Header not supported"),
+      @ApiResponse(code = 409, message = "Conflict - already exists"),
+      @ApiResponse(code = 422, message = "Unable to validate allegation")})
+  @Consumes(value = MediaType.APPLICATION_JSON)
+  @ApiOperation(value = "Create allegation", code = HttpStatus.SC_CREATED,
+      response = Allegation.class)
+  public Response create(
+      @PathParam("id") @ApiParam(required = true, name = "id",
+          value = "The CMS id of the Referral or Case") String id,
+      @Valid @ApiParam(hidden = false, required = true) Allegation allegation) {
+    return typedResourceDelegateForUpdate.create(allegation);
   }
 
   /**

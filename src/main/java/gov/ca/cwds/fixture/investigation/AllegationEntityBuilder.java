@@ -73,6 +73,11 @@ public class AllegationEntityBuilder {
     return this;
   }
 
+  public AllegationEntityBuilder setRational(String rational) {
+    this.rational = rational;
+    return this;
+  }
+
   public AllegationEntityBuilder setPerpetrator(AllegationPerson perpetrator) {
     this.perpetrator = perpetrator;
     return this;

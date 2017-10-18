@@ -10,7 +10,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -20,6 +26,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationPersonEntityBuilder;
@@ -53,11 +60,15 @@ public class AllegationTest {
   private AllegationPerson victim = new AllegationPersonEntityBuilder().build();
   private AllegationPerson perpetrator = new AllegationPersonEntityBuilder().setFirstName("Jack")
       .setLastName("Jones").setDateOfBirth("2001-09-30").build();
+  private Validator validator;
 
   @Before
   public void setup() {
     allegationSubTypes.add(allegationSubType1);
     allegationSubTypes.add(allegationSubType2);
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
   }
 
   @Test
@@ -126,6 +137,81 @@ public class AllegationTest {
     assertTrue(items.contains(allegation));
     assertTrue(items.contains(otherAllegation));
     assertEquals(2, items.size());
+  }
+
+  @Test
+  public void shouldAllowNullDispositionType() {
+    Allegation allegation = new AllegationEntityBuilder().setDispositionType(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    Iterator<ConstraintViolation<Allegation>> itr = constraintViolations.iterator();
+    while (itr.hasNext()) {
+      ConstraintViolation<Allegation> cv = itr.next();
+      // System.out.println(cv.getMessage());
+    }
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowNullAllegationType() {
+    Allegation allegation = new AllegationEntityBuilder().setAllegationType(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowNullCreatedByScreener() {
+    Allegation allegation = new AllegationEntityBuilder().setCreatedByScreener(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowEmptyAllegationSubType() {
+    Set<AllegationSubType> allegationSubTypes = new HashSet<>();
+    Allegation allegation =
+        new AllegationEntityBuilder().setAllegationSubTypes(allegationSubTypes).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowNullRational() {
+    Set<AllegationSubType> allegationSubTypes = new HashSet<>();
+    Allegation allegation = new AllegationEntityBuilder().setRational(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotTooLongRational() {
+
+    String longRational = new String(new char[255]).replace('\0', ' ');
+    Allegation allegation = new AllegationEntityBuilder().setRational(longRational).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowEmptyVictim() {
+    Allegation allegation = new AllegationEntityBuilder().setVictim(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(1, constraintViolations.size());
+
+  }
+
+  @Test
+  public void showAllowEmptyPerpetrator() {
+    Allegation allegation = new AllegationEntityBuilder().setPerpetrator(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(0, constraintViolations.size());
+
+  }
+
+  @Test
+  public void shouldAllowNullCmsRecordDescriptor() {
+    Allegation allegation = new AllegationEntityBuilder().setLegacyDescriptor(null).build();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
+    assertEquals(0, constraintViolations.size());
   }
 
   @Test

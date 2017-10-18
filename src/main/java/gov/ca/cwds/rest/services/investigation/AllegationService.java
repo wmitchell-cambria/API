@@ -21,8 +21,7 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
 
   @Override
   public Response create(Allegation arg0) {
-    // TODO Auto-generated method stub
-    return null;
+    return validAllegation;
   }
 
   @Override
