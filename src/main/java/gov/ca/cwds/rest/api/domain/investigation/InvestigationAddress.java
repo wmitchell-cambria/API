@@ -88,7 +88,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   /**
    * constructing InvestigationAddress object
    * 
-   * @param address - address object
+   * @param persistedClientAddress - client address object
    * @param cmsRecordDescriptor - legacy record descriptor
    */
   public InvestigationAddress(gov.ca.cwds.data.persistence.cms.ClientAddress persistedClientAddress,
