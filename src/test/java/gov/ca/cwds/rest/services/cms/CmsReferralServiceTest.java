@@ -109,6 +109,7 @@ public class CmsReferralServiceTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
+    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
     assignmentService = mock(AssignmentService.class);
     drmsDocumentService = mock(DrmsDocumentService.class);
     addressService = mock(AddressService.class);

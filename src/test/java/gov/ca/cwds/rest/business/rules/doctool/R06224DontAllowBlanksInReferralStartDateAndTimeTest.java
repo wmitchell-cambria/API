@@ -171,6 +171,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
+    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
 
     clientDao = mock(ClientDao.class);

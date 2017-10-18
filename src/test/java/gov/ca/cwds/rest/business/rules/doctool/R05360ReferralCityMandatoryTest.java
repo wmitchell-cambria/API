@@ -174,6 +174,7 @@ public class R05360ReferralCityMandatoryTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
+    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
