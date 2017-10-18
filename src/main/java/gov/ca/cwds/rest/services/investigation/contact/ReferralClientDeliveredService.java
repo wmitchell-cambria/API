@@ -12,7 +12,6 @@ import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.persistence.cms.ChildClient;
-import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
@@ -96,20 +95,16 @@ public class ReferralClientDeliveredService {
    */
   protected void addOnBehalfOfClients(String deliveredServiceId, String referralId,
       String countySpecificCode) {
-    ReferralClient[] referralClients = referralClientDao.findByReferralId(referralId);
-    boolean atLeastOneOnBehalfOfExists = false;
-    for (ReferralClient referralClient : referralClients) {
-      String id = referralClient.getClientId();
-      ChildClient childClient = childClientDao.find(id);
-      if (childClient != null) {
-        atLeastOneOnBehalfOfExists = true;
-        ReferralClientDeliveredServiceEntity rcdse =
-            new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId, id,
-                countySpecificCode, currentUserStaffId, currentRequestStartTime);
-        referralClientDeliveredServiceDao.create(rcdse);
+    ChildClient[] childClients = childClientDao.findVictimClients(referralId);
+    if (childClients != null && childClients.length > 0) {
+      for (ChildClient childClient : childClients) {
+        ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity =
+            new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId,
+                childClient.getPrimaryKey(), countySpecificCode, currentUserStaffId,
+                currentRequestStartTime);
+        referralClientDeliveredServiceDao.create(referralClientDeliveredServiceEntity);
       }
-    }
-    if (!atLeastOneOnBehalfOfExists) {
+    } else {
       throw new ServiceException(
           "An  On Behalf Of Client for the referral could not be found. At least one On Behalf Of Client should exist");
     }
@@ -122,32 +117,29 @@ public class ReferralClientDeliveredService {
 
   public void updateOnBehalfOfClients(String deliveredServiceId, String referralId,
       String countySpecificCode) {
-
-    ReferralClient[] referralClients = referralClientDao.findByReferralId(referralId);
     ReferralClientDeliveredServiceEntity[] referralClientDeliveredServices =
         referralClientDeliveredServiceDao.findByReferralId(referralId);
-    boolean atLeastOneOnBehalfOfExists = false;
-    for (ReferralClient referralClient : referralClients) {
-      String id = referralClient.getClientId();
-      ChildClient childClient = childClientDao.find(id);
-      if (childClient != null) {
-        atLeastOneOnBehalfOfExists = true;
+
+    ChildClient[] childClients = childClientDao.findVictimClients(referralId);
+    if (childClients != null && childClients.length > 0) {
+      for (ChildClient childClient : childClients) {
         Boolean create = true;
         for (ReferralClientDeliveredServiceEntity referralClientDeliveredService : referralClientDeliveredServices) {
-          if (referralClientDeliveredService.getPrimaryKey().getClientId().equals(id)) {
+          if (referralClientDeliveredService.getPrimaryKey().getClientId()
+              .equals(childClient.getPrimaryKey())) {
             create = false;
             break;
           }
         }
         if (create) {
-          ReferralClientDeliveredServiceEntity rcdse =
-              new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId, id,
-                  countySpecificCode, currentUserStaffId, currentRequestStartTime);
-          referralClientDeliveredServiceDao.create(rcdse);
+          ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity =
+              new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId,
+                  childClient.getPrimaryKey(), countySpecificCode, currentUserStaffId,
+                  currentRequestStartTime);
+          referralClientDeliveredServiceDao.create(referralClientDeliveredServiceEntity);
         }
       }
-    }
-    if (!atLeastOneOnBehalfOfExists) {
+    } else {
       throw new ServiceException(
           "An  On Behalf Of Client for the referral could not be found. At least one On Behalf Of Client should exist");
     }

@@ -7,6 +7,9 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,6 +24,8 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
+import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 public class DeliveredToIndividualServiceTest {
@@ -121,6 +126,31 @@ public class DeliveredToIndividualServiceTest {
             .buildIndividualDeliveredServiceEntity();
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(substituteCareProviderDao, atLeastOnce()).find(any());
+  }
+
+  @Test
+  public void addPeopleToIndividualDeliveredService() throws Exception {
+    deliveredToIndividualService.addPeopleToIndividualDeliveredService("123", validContactRequest(),
+        "99");
+    verify(individualDeliveredServiceDao, atLeastOnce()).create(any());
+  }
+
+
+  private ContactRequest validContactRequest() {
+    final Set<PostedIndividualDeliveredService> people = validPeople();
+    return new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408", "C",
+        new HashSet<Integer>(), "415",
+        "some text describing the contact of up to 8000 characters can be stored in CMS", people);
+  }
+
+
+  private Set<PostedIndividualDeliveredService> validPeople() {
+    final Set<PostedIndividualDeliveredService> ret = new HashSet<>();
+    ret.add(new PostedIndividualDeliveredService("CLIENT_T", "3456789ABC", "John", "Bob", "Smith",
+        "Mr.", "Jr.", ""));
+    ret.add(new PostedIndividualDeliveredService("REPTR_T", "4567890ABC ", "Sam", "Bill", "Jones",
+        "Mr.", "III", "Reporter"));
+    return ret;
   }
 
 }
