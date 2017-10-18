@@ -2,11 +2,16 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import com.google.inject.Inject;
 import gov.ca.cwds.data.dao.investigation.AllegationsDao;
+import gov.ca.cwds.data.dao.investigation.InjuryBodyDetailDao;
+import gov.ca.cwds.data.dao.investigation.InjuryHarmDetailDao;
+import gov.ca.cwds.data.persistence.cms.InjuryBodyDetail;
+import gov.ca.cwds.data.persistence.cms.InjuryHarmDetail;
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
+import gov.ca.cwds.rest.api.domain.investigation.AllegationSubType;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
@@ -16,8 +21,22 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  */
 
 public class AllegationService implements TypedCrudsService<String, Allegation, Response> {
+
   private AllegationsDao allegationDao;
+  private InjuryBodyDetailDao injuryBodyDetailDao;
+  private InjuryHarmDetailDao injuryHarmDetailDao;
+
   private Allegation validAllegation = new AllegationEntityBuilder().build();
+
+  @Inject
+  public AllegationService(AllegationsDao allegationsDao, InjuryBodyDetailDao injuryBodyDetailDao,
+      InjuryHarmDetailDao injuryHarmDetailDao) {
+    super();
+    this.allegationDao = allegationsDao;
+    this.injuryBodyDetailDao = injuryBodyDetailDao;
+    this.injuryHarmDetailDao = injuryHarmDetailDao;
+
+  }
 
   @Override
   public Response create(Allegation arg0) {
@@ -52,10 +71,41 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
       Set<gov.ca.cwds.data.persistence.cms.Allegation> persistedAllegations) {
     Set<Allegation> allegations = new HashSet<>();
     for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllegation : persistedAllegations) {
-      allegations.add(new Allegation(persistedAllegation));
+      allegations.add(new Allegation(persistedAllegation,
+          this.populateAllegationSubTypes(persistedAllegation.getId())));
 
     }
     return allegations;
+  }
+
+  /**
+   * populating allegation sub types
+   * 
+   * @param allegationId -allegation id
+   * @return list of allegation sub types
+   */
+  private Set<AllegationSubType> populateAllegationSubTypes(String allegationId) {
+    Set<AllegationSubType> allegationSubTypes = new HashSet<AllegationSubType>();
+    AllegationSubType allegationSubType = null;
+    Short injuryHarmSubType = null;
+    InjuryHarmDetail[] injuryHarmDetails =
+        this.injuryHarmDetailDao.findInjuryHarmDetailsByAllegationId(allegationId);
+    InjuryBodyDetail[] injuryBodyDetails = null;
+    for (InjuryHarmDetail harmDetail : injuryHarmDetails) {
+      injuryBodyDetails =
+          this.injuryBodyDetailDao.findInjuryBodyDetailsByInjuryHarmDetailId(harmDetail.getId());
+
+      for (InjuryBodyDetail injuryBodyDetail : injuryBodyDetails) {
+        // TODO change it to list of values??
+        injuryHarmSubType = injuryBodyDetail.getPhysicalAbuseBodyPartType();
+      }
+
+      allegationSubType = new AllegationSubType(harmDetail.getInjuryHarmType(), injuryHarmSubType);
+      allegationSubTypes.add(allegationSubType);
+
+    }
+    return allegationSubTypes;
+
   }
 
 }

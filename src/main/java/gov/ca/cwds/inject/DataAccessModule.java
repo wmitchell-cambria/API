@@ -3,7 +3,6 @@ package gov.ca.cwds.inject;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -12,12 +11,10 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -99,6 +96,8 @@ import gov.ca.cwds.data.persistence.cms.EducationProviderContact;
 import gov.ca.cwds.data.persistence.cms.ExternalInterface;
 import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport;
 import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationEntity;
+import gov.ca.cwds.data.persistence.cms.InjuryBodyDetail;
+import gov.ca.cwds.data.persistence.cms.InjuryHarmDetail;
 import gov.ca.cwds.data.persistence.cms.LawEnforcementEntity;
 import gov.ca.cwds.data.persistence.cms.LongText;
 import gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome;
@@ -177,26 +176,25 @@ public class DataAccessModule extends AbstractModule {
   private Map<String, Client> clients;
 
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(
-          ImmutableList.<Class<?>>of(gov.ca.cwds.data.persistence.cms.Address.class,
-              Allegation.class, ClientAddress.class, ClientCollateral.class,
-              gov.ca.cwds.data.persistence.cms.Client.class, CmsDocReferralClient.class,
-              CmsDocument.class, CmsDocumentBlobSegment.class, CollateralIndividual.class,
-              CrossReport.class, EducationProviderContact.class, OtherAdultInPlacemtHome.class,
-              OtherChildInPlacemtHome.class, OtherClientName.class, Referral.class,
-              ReferralClient.class, Reporter.class, ServiceProvider.class, StaffPerson.class,
-              SubstituteCareProvider.class, LongText.class, AllegationPerpetratorHistory.class,
-              ClientUc.class, ChildClient.class, gov.ca.cwds.data.persistence.cms.Address.class,
-              ClientAddress.class, CountyOwnership.class, CountyTrigger.class,
-              CountyTriggerEmbeddable.class, SystemCode.class, SystemMeta.class, DrmsDocument.class,
-              Assignment.class, BaseAssignment.class, ReferralAssignment.class,
-              CaseAssignment.class, CmsCase.class, Tickle.class, ClientRelationship.class,
-              ClientCollateral.class, AddressUc.class, ExternalInterface.class,
-              DeliveredServiceEntity.class, ContactPartyDeliveredServiceEntity.class,
-              ReferralClientDeliveredServiceEntity.class, IndividualDeliveredServiceEntity.class,
-              LawEnforcementEntity.class, CaseLoad.class, StaffPersonCaseLoad.class,
-              ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
-              GovernmentOrganizationCrossReport.class),
+      new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
+          gov.ca.cwds.data.persistence.cms.Address.class, Allegation.class, ClientAddress.class,
+          ClientCollateral.class, gov.ca.cwds.data.persistence.cms.Client.class,
+          CmsDocReferralClient.class, CmsDocument.class, CmsDocumentBlobSegment.class,
+          CollateralIndividual.class, CrossReport.class, EducationProviderContact.class,
+          OtherAdultInPlacemtHome.class, OtherChildInPlacemtHome.class, OtherClientName.class,
+          Referral.class, ReferralClient.class, Reporter.class, ServiceProvider.class,
+          StaffPerson.class, SubstituteCareProvider.class, LongText.class,
+          AllegationPerpetratorHistory.class, ClientUc.class, ChildClient.class,
+          gov.ca.cwds.data.persistence.cms.Address.class, ClientAddress.class,
+          CountyOwnership.class, CountyTrigger.class, CountyTriggerEmbeddable.class,
+          SystemCode.class, SystemMeta.class, DrmsDocument.class, Assignment.class,
+          BaseAssignment.class, ReferralAssignment.class, CaseAssignment.class, CmsCase.class,
+          Tickle.class, ClientRelationship.class, ClientCollateral.class, AddressUc.class,
+          ExternalInterface.class, DeliveredServiceEntity.class,
+          ContactPartyDeliveredServiceEntity.class, ReferralClientDeliveredServiceEntity.class,
+          IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class, CaseLoad.class,
+          StaffPersonCaseLoad.class, ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
+          GovernmentOrganizationCrossReport.class, InjuryHarmDetail.class, InjuryBodyDetail.class),
           new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
 
         @Override
