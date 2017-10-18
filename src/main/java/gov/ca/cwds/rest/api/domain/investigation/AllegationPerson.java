@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.persistence.cms.Client;
@@ -81,13 +82,13 @@ public class AllegationPerson {
    */
   public AllegationPerson(Client persistedClient) {
 
-    this.firstName = persistedClient.getFirstName();
-    this.lastName = persistedClient.getLastName();
-    this.middleName = persistedClient.getMiddleName();
-    this.suffixTitle = persistedClient.getNameSuffix();
-    this.dateOfBirth = persistedClient.getBirthDate() != null
-        ? DomainChef.cookISO8601Timestamp(persistedClient.getBirthDate())
-        : null;
+    this.firstName = StringUtils.trim(persistedClient.getFirstName());
+    this.lastName = StringUtils.trim(persistedClient.getLastName());
+    this.middleName = StringUtils.trim(persistedClient.getMiddleName());
+    this.suffixTitle = StringUtils.trim(persistedClient.getNameSuffix());
+    this.dateOfBirth =
+        persistedClient.getBirthDate() != null ? DomainChef.cookDate(persistedClient.getBirthDate())
+            : null;
     this.legacyDescriptor =
         CmsRecordUtils.createLegacyDescriptor(persistedClient.getId(), LegacyTable.CLIENT);
   }

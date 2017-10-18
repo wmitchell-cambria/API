@@ -103,7 +103,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
       client = peopleDao.find(refClient.getClientId());
       for (ClientAddress clientAddress : client.getClientAddress()) {
 
-        address.add(new InvestigationAddress(clientAddress.getAddresses(),
+        address.add(new InvestigationAddress(clientAddress,
             this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
         phoneNunbers.add(new PhoneNumber(clientAddress.getAddresses(),
             this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));

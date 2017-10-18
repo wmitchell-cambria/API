@@ -1,11 +1,9 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
@@ -18,6 +16,7 @@ import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
+import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
@@ -92,10 +91,13 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
           this.allegationService.populateAllegations(referral.getAllegations());
       Set<Person> peoples = this.peopleService.getInvestigationPeoples(referral);
       Set<Relationship> relationshipList =
-          this.relationshipListService.findRelationshipByReferralId(referral);;
-
-      validInvestigation = new Investigation(referral, address, staffPerson, rptNarrativeLongText,
-          addInfoLongText, allegations, peoples, relationshipList);
+          this.relationshipListService.findRelationshipByReferralId(referral);
+      Set<String> safetyAlerts = new HashSet<String>();
+      Set<String> crossReports = new HashSet<String>();
+      Set<Contact> contacts = new HashSet<Contact>();
+      validInvestigation =
+          new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
+              allegations, peoples, relationshipList, safetyAlerts, crossReports, contacts);
     }
 
     return validInvestigation;
@@ -154,7 +156,8 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   private LongText findLongTextById(String responseRationaleTextId) {
     return StringUtils.isNotBlank(responseRationaleTextId)
-        ? longTextService.find(responseRationaleTextId) : null;
+        ? longTextService.find(responseRationaleTextId)
+        : null;
   }
 
 }

@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -118,6 +120,11 @@ public class Allegation extends ReportingDomain implements Response {
     if (persistedAllocation.getPerpetratorClients() != null) {
       this.perpetrator = new AllegationPerson(persistedAllocation.getPerpetratorClients());
     }
+
+    this.createdByScreener =
+        StringUtils.equals("Y", persistedAllocation.getStaffPersonAddedIndicator()) ? Boolean.TRUE
+            : Boolean.FALSE;
+    this.allegationSubType = new HashSet<AllegationSubType>();
   }
 
 
