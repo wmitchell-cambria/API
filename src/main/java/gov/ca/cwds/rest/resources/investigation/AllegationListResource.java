@@ -2,10 +2,8 @@ package gov.ca.cwds.rest.resources.investigation;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INVESTIGATIONS;
 
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -58,30 +56,6 @@ public class AllegationListResource {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
-  /**
-   * Create an {@link AllegationList}.
-   *
-   * @param id - CMS iId of the Referral or Case the Allegations are for
-   * @param allegations - The allegations to create
-   * @return - The {@link Response}
-   */
-  @UnitOfWork(value = "cms")
-  @POST
-  @Path("/{id}/allegations")
-  @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
-      @ApiResponse(code = 401, message = "Not Authorized"),
-      @ApiResponse(code = 406, message = "Accept Header not supported"),
-      @ApiResponse(code = 409, message = "Conflict - already exists"),
-      @ApiResponse(code = 422, message = "Unable to validate allegation")})
-  @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Create allegations", code = HttpStatus.SC_CREATED,
-      response = AllegationList.class)
-  public Response create(
-      @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The CMS id of the Referral or Case") String id,
-      @Valid @ApiParam(hidden = false, required = true) AllegationList allegations) {
-    return typedResourceDelegate.create(allegations);
-  }
 
   /**
    * Find {@link Allegation}.
