@@ -457,11 +457,10 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @InvestigationAllegationListServiceBackedResource
-  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.AllegationList>
-
-      allegationListBackedResource(Injector injector) {
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.AllegationList> allegationListBackedResource(
+      Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(AllegationListService.class));
-
   }
+
 }

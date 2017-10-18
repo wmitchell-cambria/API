@@ -46,13 +46,11 @@ public class IntakeLovEntry implements Request, Response, ApiMarker {
   private Long legacySystemCodeId;
 
   @JsonIgnore
-  // @JsonProperty("legacy_logical_code")
   @ApiModelProperty(example = "AK")
   @Size(max = 5)
   private String legacyLogicalCode;
 
   @JsonIgnore
-  // @JsonProperty("legacy_meta")
   @ApiModelProperty(example = "ACTV_RNC")
   @Size(max = 50)
   private String legacyMeta;
@@ -92,7 +90,6 @@ public class IntakeLovEntry implements Request, Response, ApiMarker {
    * use logical: whether to use the logical id, not the system code id
    */
   @JsonIgnore
-  // @JsonProperty("use_logical")
   @ApiModelProperty(example = "false")
   private boolean useLogical;
 
@@ -100,7 +97,6 @@ public class IntakeLovEntry implements Request, Response, ApiMarker {
    * sort_order: index position of sort order for this LOV object
    */
   @JsonIgnore
-  // @JsonProperty("sort_order")
   @ApiModelProperty(example = "2")
   private int sortOrder;
 
@@ -188,7 +184,6 @@ public class IntakeLovEntry implements Request, Response, ApiMarker {
     this.legacyMeta = legacyMeta;
   }
 
-  // @JsonProperty("code")
   public String getIntakeCode() {
     return intakeCode;
   }
@@ -197,7 +192,6 @@ public class IntakeLovEntry implements Request, Response, ApiMarker {
     this.intakeCode = intakeCode;
   }
 
-  // @JsonProperty("display")
   public String getIntakeValue() {
     return intakeValue;
   }
@@ -206,7 +200,6 @@ public class IntakeLovEntry implements Request, Response, ApiMarker {
     this.intakeValue = s;
   }
 
-  // @JsonProperty("type")
   public String getSubCategory() {
     return subCategory;
   }

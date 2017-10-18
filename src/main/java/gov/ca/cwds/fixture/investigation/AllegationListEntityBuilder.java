@@ -22,7 +22,6 @@ public class AllegationListEntityBuilder {
     return this;
   }
 
-
   public Set<Allegation> getAllegations() {
     return allegations;
   }
@@ -31,4 +30,5 @@ public class AllegationListEntityBuilder {
     this.allegations.add(allegation);
     return this;
   }
+
 }

@@ -46,4 +46,5 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
   public Response update(String primaryKey, AllegationList request) {
     return null;
   }
+
 }

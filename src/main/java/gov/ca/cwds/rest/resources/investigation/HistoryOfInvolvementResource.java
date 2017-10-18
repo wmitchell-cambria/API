@@ -54,7 +54,6 @@ public class HistoryOfInvolvementResource {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
-
   /**
    * Find an {@link HistoryOfInvolvement}.
    *
@@ -75,6 +74,5 @@ public class HistoryOfInvolvementResource {
       value = "The id of the Referral ") String id) {
     return typedResourceDelegate.get(id);
   }
-
 
 }

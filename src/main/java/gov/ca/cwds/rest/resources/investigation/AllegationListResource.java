@@ -44,6 +44,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AllegationListResource {
+
   private TypedResourceDelegate<String, AllegationList> typedResourceDelegate;
 
   /**
@@ -100,6 +101,6 @@ public class AllegationListResource {
   public Response find(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The CMS Id of the Case or Referral") String id) {
     return typedResourceDelegate.get(id);
-
   }
+
 }
