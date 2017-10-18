@@ -152,8 +152,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
     assertNotNull(investigation);
   }
 
@@ -169,8 +172,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
     assertThat(investigation.getCommunicationMethod(),
         is(equalTo(referral.getCommunicationMethodType())));
     assertThat(investigation.getName(), is(equalTo(referral.getReferralName())));
@@ -197,8 +203,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
 
     Assignee assignee = investigation.getAssignee();
 
@@ -217,8 +226,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
 
     Assignee assignee = investigation.getAssignee();
 
@@ -237,8 +249,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
 
     InvestigationAddress investigationAddress = investigation.getAddress();
     assertThat(investigationAddress.getStreetAddress(), is(equalTo(address.getStreetAddress())));
@@ -260,8 +275,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
     assertThat(investigation.getSealed(), is(equalTo(Boolean.TRUE)));
 
   }
@@ -279,8 +297,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
     assertThat(investigation.getSensitive(), is(equalTo(Boolean.TRUE)));
 
   }
@@ -298,8 +319,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
     assertThat(investigation.getSensitive(), is(equalTo(Boolean.FALSE)));
 
   }
@@ -319,8 +343,11 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet();
+    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
     Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList);
+        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
 
     Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
     phoneNumbers = investigation.getPhoneNumbers();

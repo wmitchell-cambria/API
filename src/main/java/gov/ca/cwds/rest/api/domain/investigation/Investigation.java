@@ -2,21 +2,17 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -300,14 +296,18 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param allegations - list of allegations
    * @param peoples - list of peoples
    * @param relationshipList - list of relationship
+   * @param safetyAlerts - safety alerts
+   * @param crossReports - crossReports
+   * @param contacts - contacts
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
       LongText longText, LongText addInfoLongText, Set<Allegation> allegations, Set<Person> peoples,
-      Set<Relationship> relationshipList) {
+      Set<Relationship> relationshipList, Set<String> safetyAlerts, Set<String> crossReports,
+      Set<Contact> contacts) {
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
     this.lastUpdatedBy = referral.getLastUpdatedId();
-    this.lastUpdatedAt = DomainChef.cookISO8601Timestamp(referral.getLastUpdatedTime());
+    this.lastUpdatedAt = DomainChef.cookStrictTimestamp(referral.getLastUpdatedTime());
     this.incidentCounty = referral.getCountySpecificCode();
 
     // this.incidentDate = ;
@@ -315,12 +315,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
     // this.reference = null;
 
     this.communicationMethod = referral.getCommunicationMethodType();
-    this.name = referral.getReferralName();
-    this.reportNarrative = longText != null ? longText.getTextDescription() : "";
+    this.name = StringUtils.trim(referral.getReferralName());
+    this.reportNarrative = longText != null ? StringUtils.trim(longText.getTextDescription()) : "";
     this.responseTime = referral.getReferralResponseType();
-    this.startedAt = DomainChef.cookISO8601Timestamp(referral.getReceivedDate());
+    this.startedAt = DomainChef.cookStrictTimestamp(referral.getReceivedDate());
     this.additionalInformation =
-        addInfoLongText != null ? addInfoLongText.getTextDescription() : "";
+        addInfoLongText != null ? StringUtils.trim(addInfoLongText.getTextDescription()) : "";
 
     this.sealed = StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "R");
     this.sensitive = StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "S");
@@ -341,6 +341,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.allegations = allegations;
     this.people = peoples;
     this.relationships = relationshipList;
+    this.safetyAlerts = safetyAlerts;
+    this.crossReports = crossReports;
+    this.contacts = contacts;
   }
 
   /**

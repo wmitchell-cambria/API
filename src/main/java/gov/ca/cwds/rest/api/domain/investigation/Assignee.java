@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -79,8 +80,9 @@ public class Assignee implements Serializable {
    * @param staffPerson - staff person object
    */
   public Assignee(StaffPerson staffPerson) {
-    this.name =
-        staffPerson.getFirstName() + staffPerson.getMiddleInitial() + staffPerson.getLastName();
+    this.name = StringUtils.trim(staffPerson.getFirstName())
+        + StringUtils.trim(staffPerson.getMiddleInitial())
+        + StringUtils.trim(staffPerson.getLastName());
 
     this.countyCode = staffPerson.getCountyCode();
     this.office = staffPerson.getCwsOffice();

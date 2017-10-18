@@ -131,8 +131,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
   public Relationship(Client client, Set<RelationshipTo> relationShipToList) {
     this.id = client.getId();
     this.dateOfBirth =
-        client.getBirthDate() != null ? DomainChef.cookISO8601Timestamp(client.getBirthDate())
-            : null;
+        client.getBirthDate() != null ? DomainChef.cookDate(client.getBirthDate()) : null;
     this.firstName = client.getFirstName();
     this.middleName = client.getMiddleName();
     this.lastName = client.getLastName();

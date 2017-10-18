@@ -91,13 +91,14 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
    * @param address - address object
    * @param cmsRecordDescriptor - legacy record descriptor
    */
-  public InvestigationAddress(gov.ca.cwds.data.persistence.cms.Address address,
+  public InvestigationAddress(gov.ca.cwds.data.persistence.cms.ClientAddress persistedClientAddress,
       CmsRecordDescriptor cmsRecordDescriptor) {
+    gov.ca.cwds.data.persistence.cms.Address address = persistedClientAddress.getAddresses();
     this.streetAddress = address.getStreetAddress();
     this.city = address.getCity();
     this.state = address.getStateCd();
     this.zip = address.getZip();
-    this.type = address.getContextAddressType();
+    this.type = persistedClientAddress.getAddressType();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
 
   }
