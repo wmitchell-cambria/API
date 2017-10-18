@@ -26,7 +26,7 @@ public class AllegationEntityBuilder {
   protected Boolean createdByScreener = Boolean.FALSE;
   protected AllegationSubType allegationSubType;
   protected Short dispositionType = 46;
-  protected String rational = "disposistion reason explained";
+  protected String rational = "disposition reason explained";
   private CmsRecordDescriptor legacyDescriptor =
       new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "ALLGTN_T", "Allegation");
   private AllegationPerson victim = new AllegationPersonEntityBuilder().build();
@@ -35,7 +35,6 @@ public class AllegationEntityBuilder {
           .setDateOfBirth("2001-09-30").setSuffixTitle("III").setMiddleName("Bill").build();
 
   public Allegation build() {
-
     allegationSubTypes.add(allegationSubType1);
     allegationSubTypes.add(allegationSubType2);
 

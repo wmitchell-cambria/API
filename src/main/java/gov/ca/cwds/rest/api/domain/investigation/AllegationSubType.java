@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -18,8 +19,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 public class AllegationSubType extends ReportingDomain implements Response {
+
   /**
-   * 
+   * Default.
    */
   private static final long serialVersionUID = 1L;
 
@@ -30,7 +32,7 @@ public class AllegationSubType extends ReportingDomain implements Response {
   private Short injuryHarmType;
 
   @JsonProperty("injury_harm_sub_type")
-  @ApiModelProperty(required = false, readOnly = false, value = "Injury/Harm sub-typ")
+  @ApiModelProperty(required = false, readOnly = false, value = "Injury/Harm sub-type")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.INJURY_TO_BODY_PART_TYPE)
   @JsonSerialize(using = SysIdShortToStringSerializer.class)
   private Short injuryHarmSubType;
