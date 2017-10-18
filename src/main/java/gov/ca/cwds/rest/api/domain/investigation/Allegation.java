@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import java.util.HashSet;
 import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -111,8 +110,10 @@ public class Allegation extends ReportingDomain implements Response {
    * Constructing new Allegation object
    * 
    * @param persistedAllocation - persisted Allegation object
+   * @param allegationSubType - allegation sub types
    */
-  public Allegation(gov.ca.cwds.data.persistence.cms.Allegation persistedAllocation) {
+  public Allegation(gov.ca.cwds.data.persistence.cms.Allegation persistedAllocation,
+      Set<AllegationSubType> allegationSubType) {
     super();
     this.allegationType = persistedAllocation.getAllegationType();
     this.dispositionType = persistedAllocation.getAllegationDispositionType();
@@ -124,7 +125,7 @@ public class Allegation extends ReportingDomain implements Response {
     this.createdByScreener =
         StringUtils.equals("Y", persistedAllocation.getStaffPersonAddedIndicator()) ? Boolean.TRUE
             : Boolean.FALSE;
-    this.allegationSubType = new HashSet<AllegationSubType>();
+    this.allegationSubType = allegationSubType;
   }
 
 
