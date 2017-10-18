@@ -329,7 +329,7 @@ public class InvestigationTest {
     BigDecimal investigationPhoneNumber = new BigDecimal(0);
 
     for (PhoneNumber phone : phoneNumbers) {
-      investigationPhoneNumber = phone.getPhoneNumber();
+      investigationPhoneNumber = phone.getNumber();
     }
 
     assertThat(addressPhoneNumber, is(equalTo(investigationPhoneNumber)));

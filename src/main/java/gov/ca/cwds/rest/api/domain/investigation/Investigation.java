@@ -2,17 +2,21 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -305,9 +309,11 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.lastUpdatedBy = referral.getLastUpdatedId();
     this.lastUpdatedAt = DomainChef.cookISO8601Timestamp(referral.getLastUpdatedTime());
     this.incidentCounty = referral.getCountySpecificCode();
+
     // this.incidentDate = ;
     // this.locationType = null;
     // this.reference = null;
+
     this.communicationMethod = referral.getCommunicationMethodType();
     this.name = referral.getReferralName();
     this.reportNarrative = longText != null ? longText.getTextDescription() : "";
@@ -316,22 +322,17 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.additionalInformation =
         addInfoLongText != null ? addInfoLongText.getTextDescription() : "";
 
-    this.sealed =
-        StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "R") ? Boolean.TRUE
-            : Boolean.FALSE;
-    this.sensitive =
-        StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "S") ? Boolean.TRUE
-            : Boolean.FALSE;
+    this.sealed = StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "R");
+    this.sensitive = StringUtils.equalsAnyIgnoreCase(referral.getLimitedAccessCode(), "S");
     if (staffPerson != null) {
       this.assignee = new Assignee(staffPerson);
     }
 
     if (address != null) {
-      CmsRecordDescriptor addressRecDescriptor =
+      final CmsRecordDescriptor addressRecDescriptor =
           CmsRecordUtils.createLegacyDescriptor(address.getId(), LegacyTable.ADDRESS);
 
       this.populatePhoneNumbers(address, addressRecDescriptor);
-
       this.address = new InvestigationAddress(addressRecDescriptor, address.getStreetAddress(),
           address.getCity(), address.getStateCd(), address.getZip(),
           address.getApiAdrAddressType());
@@ -340,7 +341,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.allegations = allegations;
     this.people = peoples;
     this.relationships = relationshipList;
-
   }
 
   /**
@@ -350,15 +350,15 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param addressRecDescriptor - address Cms Record descriptor
    */
   private void populatePhoneNumbers(Address address, CmsRecordDescriptor addressRecDescriptor) {
-    this.phoneNumbers = new HashSet<PhoneNumber>();
+    this.phoneNumbers = new HashSet<>();
     phoneNumbers.add(new PhoneNumber(address.getPrimaryNumber(), address.getPrimaryExtension(),
         null, addressRecDescriptor));
+
     if (address.getEmergencyNumber() != null && address.getEmergencyNumber().longValueExact() > 0) {
       phoneNumbers.add(new PhoneNumber(address.getEmergencyNumber(),
           address.getEmergencyExtension(), null, addressRecDescriptor));
     }
   }
-
 
   /**
    * @return - CMS record description

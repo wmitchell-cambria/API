@@ -9,11 +9,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.dropwizard.jackson.Jackson;
+import gov.ca.cwds.ObjectMapperUtils;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -23,11 +21,12 @@ import nl.jqno.equalsverifier.Warning;
  */
 @SuppressWarnings("javadoc")
 public class PhoneNumberTest {
+
   String number = "408 672-5583";
   String type = "Home";
 
 
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+  private static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
   /*
    * Serialization and de-serialization
@@ -49,7 +48,6 @@ public class PhoneNumberTest {
     PhoneNumber serialized = MAPPER
         .readValue(fixture("fixtures/domain/phoneNumber/valid/valid.json"), PhoneNumber.class);
     assertThat(serialized, is(expected));
-
   }
 
   @Test
@@ -79,22 +77,14 @@ public class PhoneNumberTest {
   }
 
   private PhoneNumber validPhoneNumber() {
-
     try {
       PhoneNumber validPhoneNumber = MAPPER
           .readValue(fixture("fixtures/domain/phoneNumber/valid/valid.json"), PhoneNumber.class);
-
       return validPhoneNumber;
-
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-      return null;
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-      return null;
     } catch (IOException e) {
       e.printStackTrace();
       return null;
     }
   }
+
 }

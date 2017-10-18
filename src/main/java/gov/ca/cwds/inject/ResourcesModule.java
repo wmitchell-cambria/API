@@ -166,7 +166,6 @@ public class ResourcesModule extends AbstractModule {
     bind(RelationshipListResource.class);
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
-    // bind(AllegationResource.class);
   }
 
   @Provides

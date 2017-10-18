@@ -1,10 +1,5 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import io.dropwizard.jackson.JsonSnakeCase;
-
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -14,6 +9,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import io.dropwizard.jackson.JsonSnakeCase;
 
 /**
  * {@link DomainObject} representing a History Of Involvement
@@ -40,13 +40,11 @@ public class HistoryOfInvolvement extends ReportingDomain implements Response {
   private Set<SimpleScreening> screenings;
 
   /**
-   * 
+   * Constructor
    */
   public HistoryOfInvolvement() {
     super();
   }
-
-
 
   /**
    * Constructor
@@ -64,16 +62,12 @@ public class HistoryOfInvolvement extends ReportingDomain implements Response {
     this.screenings = screenings;
   }
 
-
-
   /**
    * @return the cases
    */
   public Set<Case> getCases() {
     return cases;
   }
-
-
 
   /**
    * @return the referrals
@@ -82,16 +76,12 @@ public class HistoryOfInvolvement extends ReportingDomain implements Response {
     return referrals;
   }
 
-
-
   /**
    * @return the screenings
    */
   public Set<SimpleScreening> getScreenings() {
     return screenings;
   }
-
-
 
   /**
    * {@inheritDoc}

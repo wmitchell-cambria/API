@@ -17,15 +17,15 @@ import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 public class PersonEntityBuilder {
 
   private CmsRecordDescriptor cmsRecordDescriptor;
-  protected String lastUpdatedBy = "0X5";
-  protected String lastUpdatedAt = "2016-04-27T23:30:14.000Z";
-  protected String firstName = "Art";
-  protected String middleName = "Mike";
-  protected String lastName = "Griswald";
-  protected String suffixTitle = "bs";
-  protected String gender = "M";
-  protected String birthDate = "1998-10-30";
-  protected String ssn = "999667777";
+  private String lastUpdatedBy = "0X5";
+  private String lastUpdatedAt = "2016-04-27T23:30:14.000Z";
+  private String firstName = "Art";
+  private String middleName = "Mike";
+  private String lastName = "Griswald";
+  private String suffixTitle = "bs";
+  private String gender = "M";
+  private String birthDate = "1998-10-30";
+  private String ssn = "999667777";
   private Set<String> languages = new LinkedHashSet<>();
 
   protected String primaryLanguage = "1253";
@@ -49,7 +49,7 @@ public class PersonEntityBuilder {
   private Set<InvestigationAddress> addresses = new HashSet<>();
 
   public Person build() {
-    roles.add("Mandated reporter");
+    roles.add("MND_RPTR");
     addresses.add(address);
     languages.add(primaryLanguage);
     languages.add(secondaryLanguage);

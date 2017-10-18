@@ -49,7 +49,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
   private ContactPartyDeliveredServiceDao contactPartyDeliveredServiceDao;
   private ReferralDao referralDao;
 
-  private Contact validContact = validContact();
   private Set<Integer> services = new HashSet<>();
 
   /**
@@ -86,27 +85,38 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
       return findAllContactsForTheReferral(primaryKey);
     } else {
       String contactId = retrieveContactId(primaryKey);
-      final DeliveredServiceEntity deliveredServiceEntity = deliveredService.find(contactId);
-      if (deliveredServiceEntity == null) {
-        return null;
-      }
-      LastUpdatedBy lastUpdatedBy =
-          deliveredService.getTheLastUpdatedByStaffPerson(deliveredServiceEntity);
-      String note = deliveredService.combineDetailTextAndContinuation(deliveredServiceEntity);
-
-      Set<PostedIndividualDeliveredService> peopleInIndividualDeliveredService =
-          deliveredToIndividualService
-              .getPeopleInIndividualDeliveredService(deliveredServiceEntity);
-
-      return new Contact(deliveredServiceEntity, lastUpdatedBy, note,
-          peopleInIndividualDeliveredService);
+      return findSingleContact(contactId);
     }
   }
 
-  private ContactList findAllContactsForTheReferral(String primaryKey) {
-    Contact contact = validContact;
+  private Contact findSingleContact(String contactId) {
+    final DeliveredServiceEntity deliveredServiceEntity = deliveredService.find(contactId);
+    if (deliveredServiceEntity == null) {
+      return null;
+    }
+    LastUpdatedBy lastUpdatedBy =
+        deliveredService.getTheLastUpdatedByStaffPerson(deliveredServiceEntity);
+    String note = deliveredService.combineDetailTextAndContinuation(deliveredServiceEntity);
+
+    Set<PostedIndividualDeliveredService> peopleInIndividualDeliveredService =
+        deliveredToIndividualService.getPeopleInIndividualDeliveredService(deliveredServiceEntity);
+
+    return new Contact(deliveredServiceEntity, lastUpdatedBy, note,
+        peopleInIndividualDeliveredService);
+  }
+
+  private ContactList findAllContactsForTheReferral(String referralId) {
     final Set<Contact> contacts = new HashSet<>();
-    contacts.add(contact);
+    ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntities =
+        referralClientDeliveredService.findByReferralId(referralId.trim());
+    if (referralClientDeliveredServiceEntities.length == 0) {
+      throw new ServiceException("There are no Contacts For the Given ReferralId");
+    }
+    for (ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity : referralClientDeliveredServiceEntities) {
+      Contact contact = this.findSingleContact(referralClientDeliveredServiceEntity
+          .getReferralClientDeliveredServiceEmbeddable().getDeliveredServiceId());
+      contacts.add(contact);
+    }
     return new ContactList(contacts);
   }
 
@@ -244,24 +254,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
   @Override
   public Contact delete(String primaryKey) {
     throw new NotImplementedException("delete not implemented");
-  }
-
-  private Contact validContact() {
-    final Set<PostedIndividualDeliveredService> people = validPeople();
-    LastUpdatedBy lastUpdatedByPerson =
-        new LastUpdatedBy("0X5", "Joe", "M", "Friday", "Mr.", "Jr.");
-    return new Contact("1234567ABC", lastUpdatedByPerson, "2010-04-27T23:30:14.000Z", "", "433",
-        "408", "C", services, "415",
-        "some text describing the contact of up to 8000 characters can be stored in CMS", people);
-  }
-
-  private Set<PostedIndividualDeliveredService> validPeople() {
-    final Set<PostedIndividualDeliveredService> ret = new HashSet<>();
-    ret.add(new PostedIndividualDeliveredService("CLIENT_T", "3456789ABC", "John", "Bob", "Smith",
-        "Mr.", "Jr.", ""));
-    ret.add(new PostedIndividualDeliveredService("REPTR_T", "4567890ABC ", "Sam", "Bill", "Jones",
-        "Mr.", "III", "Reporter"));
-    return ret;
   }
 
 }
