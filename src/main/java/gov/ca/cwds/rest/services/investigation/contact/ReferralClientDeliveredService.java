@@ -102,7 +102,10 @@ public class ReferralClientDeliveredService {
             new ReferralClientDeliveredServiceEntity(deliveredServiceId, referralId,
                 childClient.getPrimaryKey(), countySpecificCode, currentUserStaffId,
                 currentRequestStartTime);
-        referralClientDeliveredServiceDao.create(referralClientDeliveredServiceEntity);
+        if (referralClientDeliveredServiceDao
+            .find(referralClientDeliveredServiceEntity.getPrimaryKey()) == null) {
+          referralClientDeliveredServiceDao.create(referralClientDeliveredServiceEntity);
+        }
       }
     } else {
       throw new ServiceException(
