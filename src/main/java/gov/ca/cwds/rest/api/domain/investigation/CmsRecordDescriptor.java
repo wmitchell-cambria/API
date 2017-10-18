@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,26 +9,55 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
+import gov.ca.cwds.data.std.ApiMarker;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * Describes a record in the CWS/CMS DB2 database.
+ * 
+ * <p>
+ * Fields
+ * </p>
+ * <table summary="">
+ * <tr>
+ * <th align="justify">Field</th>
+ * <th align="justify">Description</th>
+ * </tr>
+ * <tr>
+ * <td align="justify">legacy_id</td>
+ * <td align="justify">legacy, primary key for CRUD operations, a 10-character, base-62 encoded
+ * format. See {@link CmsKeyIdGenerator} for details.</td>
+ * </tr>
+ * <tr>
+ * <td>legacy_last_updated</td>
+ * <td>date time stamp</td>
+ * </tr>
+ * <tr>
+ * <td>legacy_table_name</td>
+ * <td>physical table name CMS database</td>
+ * </tr>
+ * <tr>
+ * <td>legacy_table_name</td>
+ * <td>physical table name CMS database. Identifies source table</td>
+ * </tr>
+ * <tr>
+ * <td>legacy_ui_id</td>
+ * <td>19 characters in base 10 (digits)</td>
+ * </tr>
+ * <tr>
+ * <td>legacy_table_description</td>
+ * <td>logical table name in CMS database</td>
+ * </tr>
+ * </table>
+ * 
  * @author CWDS API Team
- *
- *         a descriptor of a record in the CWS/CMS database
- * 
- *         can be used to identify a record in the CWS/CMS database for reading or updating
- *         legacy_id - 10 characters in base 62 legacy_last_updated - date time stamp
- *         legacy_table_name - physical name of table in CMS database
- * 
- *         can be used to identify a record by caller - legacy_ui_id - 19 characters in base 10
- *         (digits) legacy_table_description - logical table name in CMS database
- * 
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"legacy_id", "legacy_ui_id", "legacy_table_neme", "legacy_table_description"})
-public class CmsRecordDescriptor implements Serializable {
+public class CmsRecordDescriptor implements ApiMarker {
 
   private static final long serialVersionUID = 1L;
 

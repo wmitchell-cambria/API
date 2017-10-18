@@ -37,12 +37,10 @@ public class SimplePerson extends ReportingDomain implements Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "John")
   private String firstName;
 
-
   @JsonProperty("sensitivity_indicator")
   @Size(max = 4)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "R")
   private String sensitivityIndicator;
-
 
   /**
    * @param lastName last name
@@ -58,8 +56,6 @@ public class SimplePerson extends ReportingDomain implements Response {
     this.sensitivityIndicator = sensitivityIndicator;
   }
 
-
-
   /**
    * @return the firstName
    */
@@ -67,16 +63,12 @@ public class SimplePerson extends ReportingDomain implements Response {
     return firstName;
   }
 
-
-
   /**
    * @return the lastName
    */
   public String getLastName() {
     return lastName;
   }
-
-
 
   /**
    * @return the sensitivityIndicator

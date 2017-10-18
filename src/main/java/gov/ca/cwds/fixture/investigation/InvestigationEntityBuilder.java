@@ -3,7 +3,9 @@ package gov.ca.cwds.fixture.investigation;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.joda.time.DateTime;
+
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -20,26 +22,26 @@ import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 @SuppressWarnings("javadoc")
 public class InvestigationEntityBuilder {
 
-  String tableName = "REFERL_T";
-  String id = "1234567ABC";
-  String lastUpdatedBy = "0X5";
-  String lastUpdatedAt = "2016-08-03T01:00:00.000Z";
-  String incidentCounty = "20";
-  String incidentDate = "2017-08-20";
-  String locationType = "Home";
-  Short communicationMethod = 408;
-  String name = "The test invetigation";
-  String reportNarrative = "Summary of an investigation would appear here.";
-  String reference = "REF-TEST";
-  Short responseTime = 1518;
-  String startedAt = "2017-08-03T01:00:00.000Z";
-  String additionalInformation = "Additional information about the investigation.";
-  Boolean sensitive = Boolean.FALSE;
-  Boolean sealed = Boolean.FALSE;
-  BigDecimal phone = new BigDecimal(4445555);
-  Integer phoneExtension = 1122;
-  DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
-  Short phoneType = 1111;
+  private String tableName = "REFERL_T";
+  private String id = "1234567ABC";
+  private String lastUpdatedBy = "0X5";
+  private String lastUpdatedAt = "2016-08-03T01:00:00.000Z";
+  private String incidentCounty = "20";
+  private String incidentDate = "2017-08-20";
+  private String locationType = "Home";
+  private Short communicationMethod = 408;
+  private String name = "The test investigation";
+  private String reportNarrative = "Summary of an investigation would appear here.";
+  private String reference = "REF-TEST";
+  private Short responseTime = 1518;
+  private String startedAt = "2017-08-03T01:00:00.000Z";
+  private String additionalInformation = "Additional information about the investigation.";
+  private Boolean sensitive = Boolean.FALSE;
+  private Boolean sealed = Boolean.FALSE;
+  private BigDecimal phone = new BigDecimal("9164445555");
+  private Integer phoneExtension = 1122;
+  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
+  private Short phoneType = 1111;
 
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");

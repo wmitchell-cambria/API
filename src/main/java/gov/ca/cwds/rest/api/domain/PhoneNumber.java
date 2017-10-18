@@ -13,19 +13,20 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing an phone number
+ * {@link DomainObject} representing a phone number.
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
 public class PhoneNumber extends ReportingDomain implements Request, Response {
+
   /**
    * Serialization version
    */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("number")
-  @ApiModelProperty(example = "(408) 345-5678")
+  @ApiModelProperty(example = "4083455678")
   @Size(max = 50)
   String number;
 

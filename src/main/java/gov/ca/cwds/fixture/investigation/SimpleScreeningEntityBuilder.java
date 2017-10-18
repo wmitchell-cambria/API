@@ -8,6 +8,7 @@ import gov.ca.cwds.rest.api.domain.investigation.SimpleScreening;
 
 @SuppressWarnings("javadoc")
 public class SimpleScreeningEntityBuilder {
+
   private String endDate = null;
   private String decision = "promote to referral";
   private String serviceName = null;
@@ -27,7 +28,6 @@ public class SimpleScreeningEntityBuilder {
     this.endDate = endDate;
     return this;
   }
-
 
   public SimpleScreeningEntityBuilder setDecision(String decision) {
     this.decision = decision;
@@ -104,4 +104,5 @@ public class SimpleScreeningEntityBuilder {
   public String getStartDate() {
     return startDate;
   }
+
 }

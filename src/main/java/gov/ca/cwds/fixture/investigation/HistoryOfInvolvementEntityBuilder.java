@@ -10,6 +10,7 @@ import gov.ca.cwds.rest.api.domain.investigation.SimpleScreening;
 
 @SuppressWarnings("javadoc")
 public class HistoryOfInvolvementEntityBuilder {
+
   private Case caseInvestigation = new CaseEntityBuilder().build();
   private SimpleReferral referral = new SimpleReferralEntityBuilder().build();
   private SimpleScreening screening = new SimpleScreeningEntityBuilder().build();
@@ -22,8 +23,6 @@ public class HistoryOfInvolvementEntityBuilder {
     referrals.add(referral);
     screenings.add(screening);
     return new HistoryOfInvolvement(cases, referrals, screenings);
-
-
   }
 
   public HistoryOfInvolvementEntityBuilder setCases(Set<Case> cases) {
@@ -52,6 +51,5 @@ public class HistoryOfInvolvementEntityBuilder {
   public Set<SimpleScreening> getScreenings() {
     return screenings;
   }
-
 
 }

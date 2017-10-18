@@ -1,11 +1,11 @@
 package gov.ca.cwds.rest.services.investigation;
 
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
@@ -21,7 +21,6 @@ import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * Business layer object to work on Investigation
@@ -29,10 +28,6 @@ import io.dropwizard.jackson.Jackson;
  * @author CWDS API Team
  */
 public class InvestigationService implements TypedCrudsService<String, Investigation, Response> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(InvestigationService.class);
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private InvestigationDao investigationDao;
   private StaffPersonDao staffPersonDao;
@@ -43,7 +38,6 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private RelationshipListService relationshipListService;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
-
 
   /**
    * 
@@ -74,22 +68,20 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
-
   @Override
   public Response find(String primaryKey) {
-    Investigation validInvestigation = null;
+    Investigation validInvestigation;
 
     if (primaryKey.equals("999999")) {
+      // Stub data.
       return this.validInvestigation;
-
     }
 
-    Referral referral = investigationDao.find(primaryKey);
+    final Referral referral = investigationDao.find(primaryKey);
 
     if (referral == null) {
       throw new ServiceException("Referral/Investigation not found for provided id :" + primaryKey);
     } else {
-
       Address address = this.findIncidentAddress(referral.getAllegesAbuseOccurredAtAddressId());
       StaffPerson staffPerson = this.findStaffPersonById(referral.getPrimaryContactStaffPersonId());
       LongText rptNarrativeLongText =
@@ -125,8 +117,6 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     return validInvestigation;
   }
 
-
-
   /**
    * finding incident address details
    * 
@@ -156,8 +146,6 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     return staffPerson;
   }
 
-
-
   /**
    * finding LongText instance based on responseRationaleTextId
    * 
@@ -165,14 +153,8 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * @return instance of LongText
    */
   private LongText findLongTextById(String responseRationaleTextId) {
-    LongText longText = null;
-    if (StringUtils.isNotBlank(responseRationaleTextId)) {
-      longText = longTextService.find(responseRationaleTextId);
-    }
-    return longText;
-
+    return StringUtils.isNotBlank(responseRationaleTextId)
+        ? longTextService.find(responseRationaleTextId) : null;
   }
-
-
 
 }

@@ -1,21 +1,23 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.Set;
+
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.util.Set;
-
-import javax.validation.constraints.Size;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * {@link DomainObject} representing a Simple Person With Roles
@@ -31,9 +33,7 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
   @NotEmpty
   @JsonProperty("roles")
   @ApiModelProperty(required = false, readOnly = false, value = "")
-  // , example = "[Perpetrator]")
   private Set<String> roles;
-
 
   @NotEmpty
   @JsonProperty("last_name")
@@ -46,11 +46,11 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "John")
   private String firstName;
 
-  @JsonProperty("sensitivity_indicator")
-  @Size(max = 4)
+  // @JsonProperty("sensitivity_indicator")
+  @JsonIgnore
+  @Size(max = 1)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "R")
   private String sensitivityIndicator;
-
 
   /**
    * Constructor
@@ -69,16 +69,12 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
     this.sensitivityIndicator = sensitivityIndicator;
   }
 
-
-
   /**
    * @return the roles
    */
   public Set<String> getRoles() {
     return roles;
   }
-
-
 
   /**
    * @return the firstName
@@ -87,16 +83,12 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
     return firstName;
   }
 
-
-
   /**
    * @return the lastName
    */
   public String getLastName() {
     return lastName;
   }
-
-
 
   /**
    * @return the sensitivityIndicator
@@ -105,7 +97,15 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
     return sensitivityIndicator;
   }
 
+  @JsonProperty("sealed")
+  public Boolean getSealed() {
+    return StringUtils.isNotBlank(sensitivityIndicator) && "R".equals(sensitivityIndicator);
+  }
 
+  @JsonProperty("sensitive")
+  public Boolean getSensitive() {
+    return StringUtils.isNotBlank(sensitivityIndicator) && "S".equals(sensitivityIndicator);
+  }
 
   /**
    * {@inheritDoc}

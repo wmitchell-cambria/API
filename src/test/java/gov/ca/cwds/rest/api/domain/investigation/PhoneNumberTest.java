@@ -34,7 +34,7 @@ public class PhoneNumberTest {
   public void testDomainConstructorSuccess() {
     PhoneNumber phoneNumber =
         new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
-    assertThat(phoneNumber.getPhoneNumber(), is(equalTo(phone)));
+    assertThat(phoneNumber.getNumber(), is(equalTo(phone)));
     assertThat(phoneNumber.getPhoneExtension(), is(equalTo(phoneExtension)));
     assertThat(phoneNumber.getPhoneType(), is(equalTo(phoneType)));
     assertThat(phoneNumber.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
