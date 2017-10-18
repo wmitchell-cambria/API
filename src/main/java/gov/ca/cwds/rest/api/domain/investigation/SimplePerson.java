@@ -2,10 +2,12 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -16,12 +18,12 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a Simple Person
+ * {@link DomainObject} representing a Simple Person.
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"last_name", "first_name", "sensitivity_indicator"})
+@JsonPropertyOrder({"last_name", "first_name", "sealed", "sensitive"})
 public class SimplePerson extends ReportingDomain implements Response {
 
   private static final long serialVersionUID = 1L;
@@ -37,8 +39,8 @@ public class SimplePerson extends ReportingDomain implements Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "John")
   private String firstName;
 
-  @JsonProperty("sensitivity_indicator")
-  @Size(max = 4)
+  @JsonIgnore
+  @Size(max = 1)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "R")
   private String sensitivityIndicator;
 
@@ -73,8 +75,21 @@ public class SimplePerson extends ReportingDomain implements Response {
   /**
    * @return the sensitivityIndicator
    */
+  @JsonIgnore
   public String getSensitivityIndicator() {
     return sensitivityIndicator;
+  }
+
+  @SuppressWarnings("javadoc")
+  @JsonProperty("sealed")
+  public Boolean getSealed() {
+    return StringUtils.isNotBlank(sensitivityIndicator) && "R".equals(sensitivityIndicator);
+  }
+
+  @SuppressWarnings("javadoc")
+  @JsonProperty("sensitive")
+  public Boolean getSensitive() {
+    return StringUtils.isNotBlank(sensitivityIndicator) && "S".equals(sensitivityIndicator);
   }
 
   /**

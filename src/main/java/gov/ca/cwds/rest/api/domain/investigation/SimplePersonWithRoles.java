@@ -20,12 +20,12 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a Simple Person With Roles
+ * {@link DomainObject} representing a Simple Person With Roles.
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"roles", "last_name", "first_name", "sensitivity_indicator"})
+@JsonPropertyOrder({"roles", "last_name", "first_name", "sealed", "sensitive"})
 public class SimplePersonWithRoles extends ReportingDomain implements Response {
 
   private static final long serialVersionUID = 1L;
@@ -46,7 +46,6 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "John")
   private String firstName;
 
-  // @JsonProperty("sensitivity_indicator")
   @JsonIgnore
   @Size(max = 1)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "R")
