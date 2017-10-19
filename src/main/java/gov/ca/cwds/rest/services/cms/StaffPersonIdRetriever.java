@@ -9,6 +9,10 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
 
 /**
@@ -44,12 +48,11 @@ public class StaffPersonIdRetriever {
    * @return the perry user
    */
   public static PerryUserIdentity getPerryUserIdentity() {
-    PerryUserIdentity userIdentity = null;
+    PerryUserIdentity perryUserIdentity = null;
 
     Subject currentUser = SecurityUtils.getSubject();
     PrincipalCollection principalCollection = currentUser.getPrincipals();
-
-    LOGGER.info("======= PrincipalCollection= {}", principalCollection);
+    boolean perryStaffIdAvailable = false;
 
     if (principalCollection != null) {
       @SuppressWarnings("rawtypes")
@@ -57,31 +60,42 @@ public class StaffPersonIdRetriever {
       int principalCount = principals.size();
       Object currentPrincipal = principalCount > 1 ? principals.get(1) : null;
 
-      LOGGER.info("======= principalCount= {}", principalCount);
-
       if (currentPrincipal != null && currentPrincipal instanceof PerryUserIdentity) {
         PerryUserIdentity currentUserInfo = (PerryUserIdentity) currentPrincipal;
         String staffPersonId = currentUserInfo.getStaffId();
-        LOGGER.info("======= Current Staff ID = {}", staffPersonId);
 
-        if (!StringUtils.isBlank(staffPersonId)) {
-          userIdentity = currentUserInfo;
+        if (StringUtils.isBlank(staffPersonId)) {
+          handleMissingStaffId(perryUserIdentity);
+        } else {
+          perryUserIdentity = currentUserInfo;
+          LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
         }
       }
     }
 
-    if (userIdentity == null) {
+    if (perryUserIdentity == null) {
       String localDevProp = System.getenv("LOCAL_DEV");
       if (StringUtils.isNotBlank(localDevProp) && "true".equals(localDevProp)) {
-        LOGGER.warn("======= PerryUserIdentity not found, using default staff ID: {}",
+        perryUserIdentity = new PerryUserIdentity();
+        perryUserIdentity.setStaffId(DEFAULT_STAFF_ID);
+        perryUserIdentity.setUser(DEFAULT_USER_ID);
+        LOGGER.error("======= PerryUserIdentity not found, using default for local dev = {}",
             DEFAULT_STAFF_ID);
-        userIdentity = new PerryUserIdentity();
-        userIdentity.setStaffId(DEFAULT_STAFF_ID);
-        userIdentity.setUser(DEFAULT_USER_ID);
       }
     }
 
-    return userIdentity;
+    return perryUserIdentity;
   }
 
+  private static void handleMissingStaffId(PerryUserIdentity currentUserInfo) {
+    ObjectMapper objectMapper = ObjectMapperUtils.createObjectMapper();
+    String json = null;
+    try {
+      json = objectMapper.writeValueAsString(currentUserInfo);
+    } catch (JsonProcessingException e) {
+      LOGGER.error("======= Staff ID missing in PerryUserIdentity", e);
+    }
+
+    LOGGER.error("======= Staff ID missing in PerryUserIdentity: " + json);
+  }
 }
