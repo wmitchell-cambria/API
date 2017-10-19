@@ -39,7 +39,7 @@ public class AllegationListService implements TypedCrudsService<String, Allegati
 
   @Override
   public Response delete(String primaryKey) {
-    return validAllegations;
+    return null;
   }
 
   @Override
