@@ -65,7 +65,7 @@ public class StaffPersonIdRetriever {
         String staffPersonId = currentUserInfo.getStaffId();
 
         if (StringUtils.isBlank(staffPersonId)) {
-          handleMissingStaffId(perryUserIdentity);
+          handleMissingStaffId(currentUserInfo);
         } else {
           perryUserIdentity = currentUserInfo;
           LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
