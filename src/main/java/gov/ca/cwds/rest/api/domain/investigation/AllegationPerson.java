@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 public class AllegationPerson {
+  private static final int PRIME = 31;
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("first_name")
@@ -179,14 +180,13 @@ public class AllegationPerson {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
     int result = 1;
-    result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-    result = prime * result + ((legacyDescriptor == null) ? 0 : legacyDescriptor.hashCode());
-    result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
-    result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-    result = prime * result + ((suffixTitle == null) ? 0 : suffixTitle.hashCode());
+    result = PRIME * result + ((firstName == null) ? 0 : firstName.hashCode());
+    result = PRIME * result + ((lastName == null) ? 0 : lastName.hashCode());
+    result = PRIME * result + ((legacyDescriptor == null) ? 0 : legacyDescriptor.hashCode());
+    result = PRIME * result + ((middleName == null) ? 0 : middleName.hashCode());
+    result = PRIME * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+    result = PRIME * result + ((suffixTitle == null) ? 0 : suffixTitle.hashCode());
     return result;
   }
 

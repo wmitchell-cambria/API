@@ -24,6 +24,7 @@ public class AllegationSubType extends ReportingDomain implements Response {
    * Default.
    */
   private static final long serialVersionUID = 1L;
+  private static final int PRIME = 31;
 
   @JsonProperty("injury_harm_type")
   @ApiModelProperty(required = true, readOnly = false, value = "Injury/Harm Type", example = "1372")
@@ -70,10 +71,9 @@ public class AllegationSubType extends ReportingDomain implements Response {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
     int result = 1;
-    result = prime * result + ((injuryHarmSubType == null) ? 0 : injuryHarmSubType.hashCode());
-    result = prime * result + ((injuryHarmType == null) ? 0 : injuryHarmType.hashCode());
+    result = PRIME * result + ((injuryHarmSubType == null) ? 0 : injuryHarmSubType.hashCode());
+    result = PRIME * result + ((injuryHarmType == null) ? 0 : injuryHarmType.hashCode());
     return result;
   }
 

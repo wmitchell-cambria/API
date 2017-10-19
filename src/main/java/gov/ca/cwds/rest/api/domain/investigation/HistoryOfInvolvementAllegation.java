@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonPropertyOrder({"victim_last_name", "victim_first_name", "perpetrator_last_name",
     "perpetrator_first_name", "disposition_description", "allegation_description"})
 public class HistoryOfInvolvementAllegation {
+  private static final int PRIME = 31;
 
   @JsonProperty("victim_last_name")
   @ApiModelProperty(required = false, readOnly = false, value = "Victim's last name",
@@ -122,16 +123,15 @@ public class HistoryOfInvolvementAllegation {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
     int result = 1;
     result =
-        prime * result + ((allegationDescription == null) ? 0 : allegationDescription.hashCode());
+        PRIME * result + ((allegationDescription == null) ? 0 : allegationDescription.hashCode());
     result =
-        prime * result + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
-    result = prime * result + ((pereptratorFistName == null) ? 0 : pereptratorFistName.hashCode());
-    result = prime * result + ((perpetratorLastName == null) ? 0 : perpetratorLastName.hashCode());
-    result = prime * result + ((victimFirstName == null) ? 0 : victimFirstName.hashCode());
-    result = prime * result + ((victimLastName == null) ? 0 : victimLastName.hashCode());
+        PRIME * result + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
+    result = PRIME * result + ((pereptratorFistName == null) ? 0 : pereptratorFistName.hashCode());
+    result = PRIME * result + ((perpetratorLastName == null) ? 0 : perpetratorLastName.hashCode());
+    result = PRIME * result + ((victimFirstName == null) ? 0 : victimFirstName.hashCode());
+    result = PRIME * result + ((victimLastName == null) ? 0 : victimLastName.hashCode());
     return result;
   }
 

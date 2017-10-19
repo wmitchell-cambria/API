@@ -29,6 +29,7 @@ import io.dropwizard.jackson.JsonSnakeCase;
 public class AllegationList extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
+  private static final int PRIME = 31;
 
   private Set<Allegation> allegations;
 
@@ -60,9 +61,8 @@ public class AllegationList extends ReportingDomain implements Request, Response
 
   @Override
   public int hashCode() {
-    final int prime = 31;
     int result = 1;
-    result = prime * result + ((allegations == null) ? 0 : allegations.hashCode());
+    result = PRIME * result + ((allegations == null) ? 0 : allegations.hashCode());
     return result;
   }
 
