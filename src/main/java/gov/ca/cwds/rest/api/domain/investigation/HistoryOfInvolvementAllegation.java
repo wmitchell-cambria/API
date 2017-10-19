@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 
 /**
  * 
@@ -13,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 @JsonPropertyOrder({"victim_last_name", "victim_first_name", "perpetrator_last_name",
     "perpetrator_first_name", "disposition_description", "allegation_description"})
-public class HistoryOfInvolvementAllegation {
+public class HistoryOfInvolvementAllegation implements Serializable{
   private static final int PRIME = 31;
 
   @JsonProperty("victim_last_name")
