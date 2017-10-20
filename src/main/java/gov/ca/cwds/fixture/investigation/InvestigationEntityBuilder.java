@@ -3,9 +3,7 @@ package gov.ca.cwds.fixture.investigation;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.joda.time.DateTime;
-
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -16,7 +14,7 @@ import gov.ca.cwds.rest.api.domain.investigation.LimitedAccess;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
-import gov.ca.cwds.rest.api.domain.investigation.SimpleScreening;
+import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 
 @SuppressWarnings("javadoc")
@@ -55,7 +53,7 @@ public class InvestigationEntityBuilder {
 
   private InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
 
-  private SimpleScreening screening = new SimpleScreeningEntityBuilder().build();
+  private ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
 
   private HistoryOfInvolvement historyOfInvolvement =
       new HistoryOfInvolvementEntityBuilder().build();
@@ -82,8 +80,8 @@ public class InvestigationEntityBuilder {
     return new Investigation(cmsRecordDescriptor, lastUpdatedBy, lastUpdatedAt, incidentCounty,
         incidentDate, locationType, communicationMethod, name, reportNarrative, reference,
         responseTime, startedAt, assignee, additionalInformation, sensitive, sealed, phoneNumbers,
-        address, screening, historyOfInvolvement, allegations, people, relationships, safetyAlerts,
-        crossReports, contacts);
+        address, screeningSummary, historyOfInvolvement, allegations, people, relationships,
+        safetyAlerts, crossReports, contacts);
   }
 
   public String getTableName() {
@@ -312,14 +310,7 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public SimpleScreening getScreening() {
-    return screening;
-  }
 
-  public InvestigationEntityBuilder setScreening(SimpleScreening screening) {
-    this.screening = screening;
-    return this;
-  }
 
   public HistoryOfInvolvement getHistoryOfInvolvement() {
     return historyOfInvolvement;
@@ -374,6 +365,20 @@ public class InvestigationEntityBuilder {
   public InvestigationEntityBuilder setRelationships(Set<Relationship> relationships) {
     this.relationships = relationships;
     return this;
+  }
+
+  /**
+   * @return the screeningSummary
+   */
+  public ScreeningSummary getScreeningSummary() {
+    return screeningSummary;
+  }
+
+  /**
+   * @param screeningSummary the screeningSummary to set
+   */
+  public void setScreeningSummary(ScreeningSummary screeningSummary) {
+    this.screeningSummary = screeningSummary;
   }
 
 }

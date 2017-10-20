@@ -32,7 +32,7 @@ import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PeopleEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
-import gov.ca.cwds.fixture.investigation.SimpleScreeningEntityBuilder;
+import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
@@ -75,7 +75,7 @@ public class InvestigationTest {
 
   private InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
 
-  private SimpleScreening screening = new SimpleScreeningEntityBuilder().build();
+  private ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
 
   private HistoryOfInvolvement historyOfInvolvement =
       new HistoryOfInvolvementEntityBuilder().build();
@@ -113,8 +113,8 @@ public class InvestigationTest {
     Investigation investigation = new Investigation(cmsRecordDescriptor, lastUpdatedBy,
         lastUpdatedAt, incidentCounty, incidentDate, locationType, communicationMethod, name,
         reportNarrative, reference, responseTime, startedAt, assignee, additionalInformation,
-        sensitive, sealed, phoneNumbers, address, screening, historyOfInvolvement, allegations,
-        people, relationships, safetyAlerts, crossReports, contacts);
+        sensitive, sealed, phoneNumbers, address, screeningSummary, historyOfInvolvement,
+        allegations, people, relationships, safetyAlerts, crossReports, contacts);
     assertThat(cmsRecordDescriptor, is(equalTo(investigation.getCmsRecordDescriptor())));
     assertThat(lastUpdatedBy, is(equalTo(investigation.getLastUpdatedBy())));
     assertThat(lastUpdatedAt, is(equalTo(investigation.getLastUpdatedAt())));
@@ -133,7 +133,7 @@ public class InvestigationTest {
     assertThat(sealed, is(equalTo(investigation.getSealed())));
     assertThat(phoneNumbers, is(equalTo(investigation.getPhoneNumbers())));
     assertThat(address, is(equalTo(investigation.getAddress())));
-    assertThat(screening, is(equalTo(investigation.getScreening())));
+    assertThat(screeningSummary, is(equalTo(investigation.getScreeningSummary())));
     assertThat(historyOfInvolvement, is(equalTo(investigation.getHistoryOfInvolvement())));
     assertThat(allegations, is(equalTo(investigation.getAllegations())));
     assertThat(people, is(equalTo(investigation.getPeople())));
