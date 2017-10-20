@@ -150,7 +150,7 @@ public class ReferralClientTest {
     assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
     assertThat(totest.getMentalHealthIssuesIndicator(),
         is(equalTo(DomainChef.uncookBooleanString(persistent.getMentalHealthIssuesIndicator()))));
-    assertThat(totest.getAlcoholIndicator(), is(nullValue()));
+    assertThat(totest.getAlcoholIndicator(), is(Boolean.FALSE));
     assertThat(totest.getDrugIndicator(),
         is(equalTo(DomainChef.uncookBooleanString(persistent.getDrugIndicator()))));
   }
@@ -190,9 +190,10 @@ public class ReferralClientTest {
     String clientId = "clientId";
     String countyCode = "countyCode";
     Short approvalCode = 1;
+    String dispositionCode = "";
 
-    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported, staffPersonAddedIndicator, referralId,
-        clientId, countyCode, approvalCode);
+    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported,
+        staffPersonAddedIndicator, dispositionCode, referralId, clientId, countyCode, approvalCode);
 
     assertEquals("Expected selfReported field to be initialized with values", selfReported,
         referralClient.getSelfReportedIndicator());
@@ -226,8 +227,8 @@ public class ReferralClientTest {
     Boolean alcoholIndicator = false;
     Boolean drugIndicator = false;
 
-    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported, staffPersonAddedIndicator, referralId,
-        clientId, countyCode, approvalCode);
+    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported,
+        staffPersonAddedIndicator, dispositionCode, referralId, clientId, countyCode, approvalCode);
 
     assertEquals("Expected approvalNumber field to be initialized with default values",
         approvalNumber, referralClient.getApprovalNumber());
@@ -326,9 +327,8 @@ public class ReferralClientTest {
    */
   @Test
   public void failsWhenDispositionClosureReasonTypeMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeMissing.json"),
+    ReferralClient toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeMissing.json"),
         ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -356,9 +356,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionClosureReasonTypeAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeAllWhiteSpace.json"),
+    ReferralClient toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeAllWhiteSpace.json"),
         ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -435,7 +434,7 @@ public class ReferralClientTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -448,21 +447,19 @@ public class ReferralClientTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
-  public void failsWhenDispositionCodeEmpty() throws Exception {
+  public void successWhenDispositionCodeEmpty() throws Exception {
     ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeEmpty.json"),
+        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeEmpty.json"),
         ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   @Test
@@ -488,7 +485,7 @@ public class ReferralClientTest {
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf("dispositionCode must be one of [A, I, S, X]"),
+        response.readEntity(String.class).indexOf("dispositionCode must be one of [A, I, S, X, ]"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -618,9 +615,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenSelfReportedIndicatorAllWhitespace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorAllWhitespace.json"),
+    ReferralClient toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorAllWhitespace.json"),
         ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -679,9 +675,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenStaffPersonAddedIndicatorAllWhitespace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorAllWhitespace.json"),
+    ReferralClient toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorAllWhitespace.json"),
         ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
