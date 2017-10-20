@@ -14,7 +14,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -53,7 +52,7 @@ import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
 import gov.ca.cwds.fixture.CmsReporterResourceBuilder;
 import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
-import gov.ca.cwds.fixture.ReferralEntityBuilder;
+import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.helper.CmsIdGenerator;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -62,6 +61,7 @@ import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
@@ -100,11 +100,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.jackson.Jackson;
 
-/**
- * 
- * @author CWDS API Team
- */
-public class R00818ReferredResourceTypeSetDefault {
+public class R00824SetDispositionCode {
 
   private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -158,7 +154,7 @@ public class R00818ReferredResourceTypeSetDefault {
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
 
-  private gov.ca.cwds.data.persistence.cms.Referral referral;
+  private gov.ca.cwds.data.persistence.cms.ReferralClient referralClient;
   private Validator validator;
 
   @SuppressWarnings("javadoc")
@@ -282,10 +278,10 @@ public class R00818ReferredResourceTypeSetDefault {
    * <blockquote>
    *
    * <pre>
-   * BUSINESS RULE: "R - 00818"
+   * BUSINESS RULE: "R - 00824"
    *
-   * IF    referralResponseTypeCode is set to Evaluate Out
-   * THEN  referredToResourceType should be set to Not Referred
+   * IF    referralResponseTypeCode is set to Evaluate Out 
+   * THEN  referralClient - dispositionCode is set to the "A"
    *
    * </pre>
    *
@@ -294,11 +290,11 @@ public class R00818ReferredResourceTypeSetDefault {
    * @throws Exception - Exception
    */
   @Test
-  @Ignore
-  public void testForReferredToResourceTypeSetDefault() throws Exception {
+  public void testForSettingTheReferralClientDispositionCode() throws Exception {
 
+    Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referralToCreate =
-        new ReferralEntityBuilder().build();
+        new gov.ca.cwds.data.persistence.cms.Referral("ABC1234567", referralDomain, "0X5");
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
         .thenReturn(referralToCreate);
 
@@ -390,14 +386,15 @@ public class R00818ReferredResourceTypeSetDefault {
         .setResponseTime((short) 1519).createScreeningToReferral();
     when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
 
-    when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
-        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Referral>() {
+    when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
+        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.ReferralClient>() {
 
           @Override
-          public gov.ca.cwds.data.persistence.cms.Referral answer(InvocationOnMock invocation)
+          public gov.ca.cwds.data.persistence.cms.ReferralClient answer(InvocationOnMock invocation)
               throws Throwable {
-            referral = (gov.ca.cwds.data.persistence.cms.Referral) invocation.getArguments()[0];
-            return referral;
+            referralClient =
+                (gov.ca.cwds.data.persistence.cms.ReferralClient) invocation.getArguments()[0];
+            return referralClient;
           }
         });
 
@@ -413,7 +410,7 @@ public class R00818ReferredResourceTypeSetDefault {
         .thenReturn(clientParticipants);
 
     screeningToReferralService.create(screeningToReferral);
-    assertThat(referral.getReferredToResourceType(), is(equalTo((short) 3225)));
+    assertThat(referralClient.getDispositionCode(), is(equalTo("A")));
   }
 
 }

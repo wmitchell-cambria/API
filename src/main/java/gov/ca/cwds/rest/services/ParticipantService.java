@@ -193,8 +193,8 @@ public class ParticipantService implements CrudsService {
                 }
               }
 
-              processReferralClient(referralId, timestamp, messageBuilder, incomingParticipant,
-                  clientId);
+              processReferralClient(screeningToReferral, referralId, timestamp, messageBuilder,
+                  incomingParticipant, clientId);
 
               /*
                * determine other participant/roles attributes relating to CWS/CMS allegation
@@ -239,13 +239,14 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
-  private ReferralClient processReferralClient(String referralId, Date timestamp,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
+  private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
+      String referralId, Date timestamp, MessageBuilder messageBuilder,
+      Participant incomingParticipant, String clientId) {
     // CMS Referral Client
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
-            incomingParticipant.isClientStaffPersonAdded(), referralId, clientId,
-            LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
+            incomingParticipant.isClientStaffPersonAdded(), dispositionCode(screeningToReferral),
+            referralId, clientId, LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
             LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
     // validate referral client
@@ -257,6 +258,27 @@ public class ParticipantService implements CrudsService {
       messageBuilder.addMessageAndLog(se.getMessage(), se, LOGGER);
     }
     return referralClient;
+  }
+
+  /**
+   * <blockquote>
+   *
+   * <pre>
+   * BUSINESS RULE: "R - 00824"
+   *
+   * IF    referralResponseTypeCode is set to Evaluate Out 
+   * THEN  referralClient - dispositionCode is set to the "A"
+   *
+   * </pre>
+   *
+   * </blockquote>
+   */
+  private static String dispositionCode(ScreeningToReferral screeningToReferral) {
+    String dispositionCode = "";
+    if (screeningToReferral.getResponseTime() == 1519) {
+      dispositionCode = "A";
+    }
+    return dispositionCode;
   }
 
   private boolean updateClient(ScreeningToReferral screeningToReferral,

@@ -51,9 +51,9 @@ public class ReferralClient extends ReportingDomain implements Request, Response
   @ApiModelProperty(required = false, readOnly = false, example = "234")
   private Short dispositionClosureReasonType;
 
-  @NotEmpty
-  @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"A", "I", "S", "X"}, ignoreCase = true, ignoreWhitespace = true)
+  @NotNull
+  @Size(min = 0, max = 1, message = "size must be 1")
+  @OneOf(value = {"A", "I", "S", "X", ""}, ignoreCase = true, ignoreWhitespace = true)
   @ApiModelProperty(required = false, readOnly = false,
       value = "A = Assesment, I = In Person Investigation, S = In Person Investigation and Services, X = Erroneously Added",
       example = "A")
@@ -209,11 +209,11 @@ public class ReferralClient extends ReportingDomain implements Request, Response
    * @return the referralClient
    */
   public static ReferralClient createWithDefault(Boolean selfReported,
-      Boolean staffPersonAddedIndicator, String referralId, String clientId, String countyCode,
-      short approvalCode) {
-    return new ReferralClient("", approvalCode, DEFAULT_CODE, DEFAULT_DISPOSITION_CODE, "",
-        selfReported, staffPersonAddedIndicator, referralId, clientId, "", DEFAULT_CODE, "",
-        countyCode, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+      Boolean staffPersonAddedIndicator, String dispositionCode, String referralId, String clientId,
+      String countyCode, short approvalCode) {
+    return new ReferralClient("", approvalCode, DEFAULT_CODE, dispositionCode, "", selfReported,
+        staffPersonAddedIndicator, referralId, clientId, "", DEFAULT_CODE, "", countyCode,
+        Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
   }
 
   /**
