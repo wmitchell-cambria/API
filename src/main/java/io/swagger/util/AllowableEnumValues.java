@@ -45,28 +45,37 @@ public class AllowableEnumValues implements AllowableValues {
     if (isSysCodeId || isSysCodeLogical) {
       LOGGER.info("Dynamic LOV: {}", allowableValues);
 
-      if (SystemCodeCache.global() != null) {
-        final String category = allowableValues.substring(4);
-        final Set<SystemCode> sysCodes = SystemCodeCache.global().getSystemCodesForMeta(category);
-
-        if (sysCodes != null && !sysCodes.isEmpty()) {
-          items.addAll(sysCodes.stream().map(c -> isSysCodeId ? c.getSystemId() : c.getLogicalId())
-              .sorted().map(s -> s.toString()).collect(Collectors.toList()));
-        } else {
-          LOGGER.warn("NO SYSTEM CODES FOR CATEGORY {}", category);
-        }
-      }
+      addSysCodeItems(allowableValues, items, isSysCodeId);
     } else {
       LOGGER.info(allowableValues);
-      for (String value : allowableValues.split(",")) {
-        final String trimmed = value.trim();
-        if (!"".equals(trimmed)) {
-          items.add(trimmed);
-        }
-      }
+      AddNonSysCodeItems(allowableValues, items);
     }
 
     return items.isEmpty() ? null : new AllowableEnumValues(items);
+  }
+
+  private static void AddNonSysCodeItems(String allowableValues, List<String> items) {
+    for (String value : allowableValues.split(",")) {
+      final String trimmed = value.trim();
+      if (!"".equals(trimmed)) {
+        items.add(trimmed);
+      }
+    }
+  }
+
+  private static void addSysCodeItems(String allowableValues, List<String> items,
+      boolean isSysCodeId) {
+    if (SystemCodeCache.global() != null) {
+      final String category = allowableValues.substring(4);
+      final Set<SystemCode> sysCodes = SystemCodeCache.global().getSystemCodesForMeta(category);
+
+      if (sysCodes != null && !sysCodes.isEmpty()) {
+        items.addAll(sysCodes.stream().map(c -> isSysCodeId ? c.getSystemId() : c.getLogicalId())
+            .sorted().map(s -> s.toString()).collect(Collectors.toList()));
+      } else {
+        LOGGER.warn("NO SYSTEM CODES FOR CATEGORY {}", category);
+      }
+    }
   }
 
   @SuppressWarnings("javadoc")

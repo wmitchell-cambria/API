@@ -148,95 +148,125 @@ public class ParticipantService implements CrudsService {
         genderCode = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
       Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
+      processReporterRole(screeningToReferral, dateStarted, referralId, timestamp, messageBuilder,
+          clientParticipants, incomingParticipant, genderCode, roles);
 
-      /**
-       * process the roles of this participant
-       */
-      for (String role : roles) {
 
-        try {
-          if (ParticipantValidator.roleIsReporterType(role)
-              && (!ParticipantValidator.roleIsAnonymousReporter(role)
-                  && !ParticipantValidator.selfReported(incomingParticipant))) {
-            /*
-             * CMS Reporter - if role is 'mandated reporter' or 'non-mandated reporter' and not
-             * anonymous reporter or self-reported
-             */
-            try {
-              Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
-                  timestamp, screeningToReferral.getIncidentCounty(), messageBuilder);
-              incomingParticipant.setLegacyId(savedReporter.getReferralId());
-              incomingParticipant.setLegacySourceTable(REPORTER_TABLE_NAME);
-              incomingParticipant.getLegacyDescriptor()
-                  .setLastUpdated(savedReporter.getLastUpdatedTime());
-            } catch (ServiceException e) {
-              String message = e.getMessage();
-              messageBuilder.addMessageAndLog(message, e, LOGGER);
-              // next role
-              continue;
-            }
-          } else {
-            if (!ParticipantValidator.roleIsAnyReporter(role)) {
-              String clientId;
-
-              boolean newClient = incomingParticipant.getLegacyId() == null
-                  || incomingParticipant.getLegacyId().isEmpty();
-              if (newClient) {
-                clientId = createNewClient(screeningToReferral, dateStarted, timestamp,
-                    messageBuilder, incomingParticipant, genderCode);
-              } else {
-                // legacy Id passed - check for existence in CWS/CMS - no update yet
-                clientId = incomingParticipant.getLegacyId();
-                if (updateClient(screeningToReferral, messageBuilder, incomingParticipant,
-                    clientId)) {
-                  continue;
-                }
-              }
-
-              processReferralClient(screeningToReferral, referralId, timestamp, messageBuilder,
-                  incomingParticipant, clientId);
-
-              /*
-               * determine other participant/roles attributes relating to CWS/CMS allegation
-               */
-              if (ParticipantValidator.roleIsVictim(role)) {
-                clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
-                // since this is the victim - process the ChildClient
-                try {
-                  processChildClient(incomingParticipant, clientId, messageBuilder);
-                } catch (ServiceException e) {
-                  String message = e.getMessage();
-                  messageBuilder.addMessageAndLog(message, e, LOGGER);
-                  // next role
-                  continue;
-                }
-              }
-
-              if (ParticipantValidator.roleIsPerpetrator(role)) {
-                clientParticipants.addPerpetratorIds(incomingParticipant.getId(), clientId);
-              }
-
-              try {
-                // addresses associated with a client
-                processClientAddress(incomingParticipant, referralId, clientId, timestamp,
-                    messageBuilder);
-              } catch (ServiceException e) {
-                String message = e.getMessage();
-                messageBuilder.addMessageAndLog(message, e, LOGGER);
-                // next role
-                continue;
-              }
-            }
-          }
-        } catch (Exception e) {
-          String message = e.getMessage();
-          messageBuilder.addMessageAndLog(message, e, LOGGER);
-        }
-        clientParticipants.addParticipant(incomingParticipant);
-      } // next role
     } // next participant
 
     return clientParticipants;
+  }
+
+  private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
+      String referralId, Date timestamp, MessageBuilder messageBuilder,
+      ClientParticipants clientParticipants, Participant incomingParticipant, String genderCode,
+      Set<String> roles) {
+    /**
+     * process the roles of this participant
+     */
+    for (String role : roles) {
+
+      try {
+        if (ParticipantValidator.roleIsReporterType(role)
+            && (!ParticipantValidator.roleIsAnonymousReporter(role)
+                && !ParticipantValidator.selfReported(incomingParticipant))) {
+          if (saveReporter(screeningToReferral, referralId, timestamp, messageBuilder,
+              incomingParticipant, role)) {
+            continue;
+          }
+
+        } else {
+          if (!ParticipantValidator.roleIsAnyReporter(role)) {
+            if (saveClient(screeningToReferral, dateStarted, referralId, timestamp, messageBuilder,
+                clientParticipants, incomingParticipant, genderCode, role)) {
+              continue;
+            }
+          }
+        }
+      } catch (Exception e) {
+        String message = e.getMessage();
+        messageBuilder.addMessageAndLog(message, e, LOGGER);
+      }
+      clientParticipants.addParticipant(incomingParticipant);
+    } // next role
+  }
+
+  private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
+      String referralId, Date timestamp, MessageBuilder messageBuilder,
+      ClientParticipants clientParticipants, Participant incomingParticipant, String genderCode,
+      String role) {
+    String clientId;
+
+    boolean newClient = incomingParticipant.getLegacyId() == null
+        || incomingParticipant.getLegacyId().isEmpty();
+    if (newClient) {
+      clientId = createNewClient(screeningToReferral, dateStarted, timestamp,
+          messageBuilder, incomingParticipant, genderCode);
+    } else {
+      // legacy Id passed - check for existence in CWS/CMS - no update yet
+      clientId = incomingParticipant.getLegacyId();
+      if (updateClient(screeningToReferral, messageBuilder, incomingParticipant,
+          clientId)) {
+        return true;
+      }
+    }
+
+    processReferralClient(screeningToReferral,referralId, timestamp, messageBuilder,
+        incomingParticipant, clientId);
+
+            /*
+             * determine other participant/roles attributes relating to CWS/CMS allegation
+             */
+    if (ParticipantValidator.roleIsVictim(role)) {
+      clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
+      // since this is the victim - process the ChildClient
+      try {
+        processChildClient(incomingParticipant, clientId, messageBuilder);
+      } catch (ServiceException e) {
+        String message = e.getMessage();
+        messageBuilder.addMessageAndLog(message, e, LOGGER);
+        // next role
+        return true;
+      }
+    }
+
+    if (ParticipantValidator.roleIsPerpetrator(role)) {
+      clientParticipants.addPerpetratorIds(incomingParticipant.getId(), clientId);
+    }
+
+    try {
+      // addresses associated with a client
+      processClientAddress(incomingParticipant, referralId, clientId, timestamp,
+          messageBuilder);
+    } catch (ServiceException e) {
+      String message = e.getMessage();
+      messageBuilder.addMessageAndLog(message, e, LOGGER);
+      // next role
+      return true;
+    }
+    return false;
+  }
+
+  private boolean saveReporter(ScreeningToReferral screeningToReferral, String referralId,
+      Date timestamp, MessageBuilder messageBuilder, Participant incomingParticipant, String role) {
+  /*
+   * CMS Reporter - if role is 'mandated reporter' or 'non-mandated reporter' and not
+   * anonymous reporter or self-reported
+   */
+    try {
+      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
+          timestamp, screeningToReferral.getIncidentCounty(), messageBuilder);
+      incomingParticipant.setLegacyId(savedReporter.getReferralId());
+      incomingParticipant.setLegacySourceTable(REPORTER_TABLE_NAME);
+      incomingParticipant.getLegacyDescriptor()
+          .setLastUpdated(savedReporter.getLastUpdatedTime());
+    } catch (ServiceException e) {
+      String message = e.getMessage();
+      messageBuilder.addMessageAndLog(message, e, LOGGER);
+      // next role
+      return true;
+    }
+    return false;
   }
 
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,

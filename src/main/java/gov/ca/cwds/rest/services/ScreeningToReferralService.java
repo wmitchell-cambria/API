@@ -440,62 +440,91 @@ public class ScreeningToReferralService implements CrudsService {
 
     for (Allegation allegation : allegations) {
 
-      try {
-        if (!ParticipantValidator.isVictimParticipant(scr, allegation.getVictimPersonId())) {
-          String message =
-              " Allegation/Victim Person Id does not contain a Participant with a role of Victim ";
-          logError(message);
-        }
-      } catch (Exception e) {
-        logError(e.getMessage(), e);
-        // next allegation
+      if (validateAllegationHasVictim(scr, allegation)) {
         continue;
       }
-      if (victimClient.containsKey(allegation.getVictimPersonId())) {
-        // this is the legacy Id (CLIENT) of the victim
-        victimClientId = victimClient.get(allegation.getVictimPersonId());
-      }
+      victimClientId = getClientLegacyId(victimClient, victimClientId,
+          allegation.getVictimPersonId());
 
       boolean allegationHasPerpPersonId = allegation.getPerpetratorPersonId() != 0;
       boolean isNotPerpetrator =
           !ParticipantValidator.isPerpetratorParticipant(scr, allegation.getPerpetratorPersonId());
-      if (allegationHasPerpPersonId && isNotPerpetrator) {
-        String message =
-            "Allegation/Perpetrator Person Id does not contain a Participant with a role of Perpetrator";
-        ServiceException exception = new ServiceException(message);
-        logError(message, exception);
-      }
+      validateAllegationHasPerpetrator(allegationHasPerpPersonId, isNotPerpetrator);
 
-      if (perpatratorClient.containsKey(allegation.getPerpetratorPersonId())) {
-        // this is the legacy Id (CLIENT) of the perpetrator
-        perpatratorClientId = perpatratorClient.get(allegation.getPerpetratorPersonId());
-      }
-      if (victimClientId.isEmpty()) {
-        String message = "Victim could not be determined for an allegation";
-        ServiceException exception = new ServiceException(message);
-        logError(message, exception);
-        // next allegation
+      perpatratorClientId = getClientLegacyId(perpatratorClient, perpatratorClientId,
+          allegation.getPerpetratorPersonId());
+      if (validateAllegationVictimExists(victimClientId)) {
         continue;
       }
 
-      if (allegation.getLegacyId() == null || allegation.getLegacyId().isEmpty()) {
-        persistAllegation(scr, referralId, timestamp, processedAllegations, victimClientId,
-            perpatratorClientId, allegationDispositionType, allegation);
-
-      } else {
-        gov.ca.cwds.rest.api.domain.cms.Allegation foundAllegation =
-            this.allegationService.find(allegation.getLegacyId());
-        if (foundAllegation == null) {
-          String message =
-              "Legacy Id on Allegation does not correspond to an existing CMS/CWS Allegation";
-          ServiceException se = new ServiceException(message);
-          logError(message, se);
-          // next allegation
-          continue;
-        }
-      }
+      saveAllegation(scr, referralId, timestamp, processedAllegations, victimClientId,
+          perpatratorClientId, allegationDispositionType, allegation);
     }
     return processedAllegations;
+  }
+
+  private void saveAllegation(ScreeningToReferral scr, String referralId, Date timestamp,
+      Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
+      Short allegationDispositionType, Allegation allegation) {
+    if (allegation.getLegacyId() == null || allegation.getLegacyId().isEmpty()) {
+      persistAllegation(scr, referralId, timestamp, processedAllegations, victimClientId,
+          perpatratorClientId, allegationDispositionType, allegation);
+
+    } else {
+      gov.ca.cwds.rest.api.domain.cms.Allegation foundAllegation =
+          this.allegationService.find(allegation.getLegacyId());
+      if (foundAllegation == null) {
+        String message =
+            "Legacy Id on Allegation does not correspond to an existing CMS/CWS Allegation";
+        ServiceException se = new ServiceException(message);
+        logError(message, se);
+        // next allegation
+        return;
+      }
+    }
+  }
+
+  private boolean validateAllegationVictimExists(String victimClientId) {
+    if (victimClientId.isEmpty()) {
+      String message = "Victim could not be determined for an allegation";
+      ServiceException exception = new ServiceException(message);
+      logError(message, exception);
+      // next allegation
+      return true;
+    }
+    return false;
+  }
+
+  private void validateAllegationHasPerpetrator(boolean allegationHasPerpPersonId, boolean isNotPerpetrator) {
+    if (allegationHasPerpPersonId && isNotPerpetrator) {
+      String message =
+          "Allegation/Perpetrator Person Id does not contain a Participant with a role of Perpetrator";
+      ServiceException exception = new ServiceException(message);
+      logError(message, exception);
+    }
+  }
+
+  private String getClientLegacyId(HashMap<Long, String> client, String clientId,
+      long personId) {
+    if (client.containsKey(personId)) {
+      clientId = client.get(personId);
+    }
+    return clientId;
+  }
+
+  private boolean validateAllegationHasVictim(ScreeningToReferral scr, Allegation allegation) {
+    try {
+      if (!ParticipantValidator.isVictimParticipant(scr, allegation.getVictimPersonId())) {
+        String message =
+            " Allegation/Victim Person Id does not contain a Participant with a role of Victim ";
+        logError(message);
+      }
+    } catch (Exception e) {
+      logError(e.getMessage(), e);
+      // next allegation
+      return true;
+    }
+    return false;
   }
 
   private void persistAllegation(ScreeningToReferral scr, String referralId, Date timestamp,
