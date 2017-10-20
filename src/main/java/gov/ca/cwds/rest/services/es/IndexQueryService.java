@@ -31,7 +31,7 @@ public class IndexQueryService
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IndexQueryService.class);
 
-  private Map<String, ElasticsearchDao> elasticsearchDaos;
+  private transient Map<String, ElasticsearchDao> elasticsearchDaos;
   @SuppressWarnings("unused")
   private SystemCodeCache sysCodeCache;
 
