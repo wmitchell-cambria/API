@@ -272,14 +272,13 @@ public class ParticipantService implements CrudsService {
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
       String referralId, Date timestamp, MessageBuilder messageBuilder,
       Participant incomingParticipant, String clientId) {
-    // CMS Referral Client
+
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
             incomingParticipant.isClientStaffPersonAdded(), dispositionCode(screeningToReferral),
             referralId, clientId, LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
             LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
-    // validate referral client
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
     try {

@@ -321,48 +321,62 @@ public class ScreeningToReferralService implements CrudsService {
         Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
         String outStateLawEnforcementAddr = "";
 
-        /**
-         * <blockquote>
-         * 
-         * <pre>
-         * BUSINESS RULE: "R - 05930" - Out of State text Mandatory
-         * 
-         * IF    CrossReport out  StateLaw Enforcement Indicator is 'true'
-         * THEN  CrossReport outStateLawEnforcementAddr can't be blank
-         * </blockquote>
-         * </pre>
-         */
-        if (outStateLawEnforcementIndicator && StringUtils.isBlank(outStateLawEnforcementAddr)) {
-          String message =
-              "outStateLawEnforcementIndicator is set true, Then outStateLawEnforcementAddr can't be blank";
-          ServiceException se = new ServiceException(message);
-          logError(message, se);
-        }
+        outStateLawEnforcementIndicator(outStateLawEnforcementIndicator,
+            outStateLawEnforcementAddr);
 
-        if (StringUtils.isBlank(crossReport.getLegacyId())) {
-          persistCrossReport(referralId, timestamp, crossReportId, resultCrossReports, crossReport,
-              outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
-        } else {
-          gov.ca.cwds.rest.api.domain.cms.CrossReport foundCrossReport =
-              this.crossReportService.find(crossReport.getLegacyId());
-          if (foundCrossReport == null) {
-            String message =
-                " Legacy Id on Cross Report does not correspond to an existing CMS/CWS Cross Report ";
-            ServiceException se = new ServiceException(message);
-            logError(message, se);
-
-          }
-        }
+        validateCrossReport(referralId, timestamp, crossReportId, resultCrossReports, crossReport,
+            outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
       }
     }
 
     return resultCrossReports;
   }
 
+  private void validateCrossReport(String referralId, Date timestamp, String crossReportId,
+      Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
+      Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
+
+    if (StringUtils.isBlank(crossReport.getLegacyId())) {
+      persistCrossReport(referralId, timestamp, crossReportId, resultCrossReports, crossReport,
+          outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
+    } else {
+      gov.ca.cwds.rest.api.domain.cms.CrossReport foundCrossReport =
+          this.crossReportService.find(crossReport.getLegacyId());
+      if (foundCrossReport == null) {
+        String message =
+            " Legacy Id on Cross Report does not correspond to an existing CMS/CWS Cross Report ";
+        ServiceException se = new ServiceException(message);
+        logError(message, se);
+
+      }
+    }
+  }
+
+  /**
+   * <blockquote>
+   * 
+   * <pre>
+   * BUSINESS RULE: "R - 05930" - Out of State text Mandatory
+   * 
+   * IF    CrossReport out  StateLaw Enforcement Indicator is 'true'
+   * THEN  CrossReport outStateLawEnforcementAddr can't be blank
+   * </blockquote>
+   * </pre>
+   */
+  private void outStateLawEnforcementIndicator(Boolean outStateLawEnforcementIndicator,
+      String outStateLawEnforcementAddr) {
+    if (outStateLawEnforcementIndicator && StringUtils.isBlank(outStateLawEnforcementAddr)) {
+      String message =
+          "outStateLawEnforcementIndicator is set true, Then outStateLawEnforcementAddr can't be blank";
+      ServiceException se = new ServiceException(message);
+      logError(message, se);
+    }
+  }
+
   private void persistCrossReport(String referralId, Date timestamp, String crossReportId,
       Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
       Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
-    // create the cross report
+
     Map<String, String> agencyMap = getLawEnforcement(crossReport.getAgencies());
     String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
     Boolean governmentOrgCrossRptIndicatorVar = StringUtils.isNotBlank(agencyMap.get("OTHER"));
@@ -443,8 +457,8 @@ public class ScreeningToReferralService implements CrudsService {
       if (validateAllegationHasVictim(scr, allegation)) {
         continue;
       }
-      victimClientId = getClientLegacyId(victimClient, victimClientId,
-          allegation.getVictimPersonId());
+      victimClientId =
+          getClientLegacyId(victimClient, victimClientId, allegation.getVictimPersonId());
 
       boolean allegationHasPerpPersonId = allegation.getPerpetratorPersonId() != 0;
       boolean isNotPerpetrator =
@@ -478,7 +492,6 @@ public class ScreeningToReferralService implements CrudsService {
             "Legacy Id on Allegation does not correspond to an existing CMS/CWS Allegation";
         ServiceException se = new ServiceException(message);
         logError(message, se);
-        // next allegation
         return;
       }
     }
@@ -489,13 +502,13 @@ public class ScreeningToReferralService implements CrudsService {
       String message = "Victim could not be determined for an allegation";
       ServiceException exception = new ServiceException(message);
       logError(message, exception);
-      // next allegation
       return true;
     }
     return false;
   }
 
-  private void validateAllegationHasPerpetrator(boolean allegationHasPerpPersonId, boolean isNotPerpetrator) {
+  private void validateAllegationHasPerpetrator(boolean allegationHasPerpPersonId,
+      boolean isNotPerpetrator) {
     if (allegationHasPerpPersonId && isNotPerpetrator) {
       String message =
           "Allegation/Perpetrator Person Id does not contain a Participant with a role of Perpetrator";
@@ -504,8 +517,7 @@ public class ScreeningToReferralService implements CrudsService {
     }
   }
 
-  private String getClientLegacyId(HashMap<Long, String> client, String clientId,
-      long personId) {
+  private String getClientLegacyId(HashMap<Long, String> client, String clientId, long personId) {
     if (client.containsKey(personId)) {
       clientId = client.get(personId);
     }
@@ -521,7 +533,6 @@ public class ScreeningToReferralService implements CrudsService {
       }
     } catch (Exception e) {
       logError(e.getMessage(), e);
-      // next allegation
       return true;
     }
     return false;
@@ -530,7 +541,7 @@ public class ScreeningToReferralService implements CrudsService {
   private void persistAllegation(ScreeningToReferral scr, String referralId, Date timestamp,
       Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
       final Short allegationDispositionType, Allegation allegation) {
-    // create an allegation in CMS legacy database
+
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
             scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
@@ -556,7 +567,6 @@ public class ScreeningToReferralService implements CrudsService {
         new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(scr.getIncidentCounty(),
             postedAllegation.getPerpetratorClientId(), postedAllegation.getId(),
             DomainChef.cookDate(timestamp));
-
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
 
