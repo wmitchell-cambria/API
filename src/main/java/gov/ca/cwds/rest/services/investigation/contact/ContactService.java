@@ -3,14 +3,11 @@ package gov.ca.cwds.rest.services.investigation.contact;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
@@ -104,13 +101,16 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
         peopleInIndividualDeliveredService);
   }
 
-  private ContactList findAllContactsForTheReferral(String referralId) {
+  /**
+   * finding contacts by referral id
+   * 
+   * @param referralId - referral/investigation id
+   * @return - list of referral contacts
+   */
+  public ContactList findAllContactsForTheReferral(String referralId) {
     final Set<Contact> contacts = new HashSet<>();
     ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntities =
         referralClientDeliveredService.findByReferralId(referralId.trim());
-    if (referralClientDeliveredServiceEntities.length == 0) {
-      throw new ServiceException("There are no Contacts For the Given ReferralId");
-    }
     for (ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity : referralClientDeliveredServiceEntities) {
       Contact contact = this.findSingleContact(referralClientDeliveredServiceEntity
           .getReferralClientDeliveredServiceEmbeddable().getDeliveredServiceId());
