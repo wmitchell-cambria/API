@@ -14,7 +14,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -294,7 +293,6 @@ public class R00818ReferredResourceTypeSetDefault {
    * @throws Exception - Exception
    */
   @Test
-  @Ignore
   public void testForReferredToResourceTypeSetDefault() throws Exception {
 
     gov.ca.cwds.data.persistence.cms.Referral referralToCreate =
