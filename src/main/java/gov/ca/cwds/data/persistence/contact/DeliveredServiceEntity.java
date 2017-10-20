@@ -1,9 +1,5 @@
 package gov.ca.cwds.data.persistence.contact;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
-import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.domain.DomainChef;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,6 +15,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
  * {@link CmsPersistentObject} class representing a Delivered Service Entity
@@ -198,9 +198,8 @@ public class DeliveredServiceEntity extends CmsPersistentObject {
       this.contactLocationType = deliveredServiceDomain.getContactLocationType().shortValue();
       this.contactVisitCode = deliveredServiceDomain.getContactVisitCode();
       this.countySpecificCode = deliveredServiceDomain.getCountySpecificCode();
-      this.detailText =
-          StringUtils.isBlank(deliveredServiceDomain.getDetailText()) ? null
-              : deliveredServiceDomain.getDetailText();
+      this.detailText = StringUtils.isBlank(deliveredServiceDomain.getDetailText()) ? null
+          : deliveredServiceDomain.getDetailText();
       this.hardCopyDocumentOnFileCode = deliveredServiceDomain.getHardCopyDocumentOnFileCode();
       this.detailTextContinuation =
           StringUtils.isBlank(deliveredServiceDomain.getDetailTextContinuation()) ? null

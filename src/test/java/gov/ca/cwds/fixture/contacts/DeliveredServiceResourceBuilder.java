@@ -6,7 +6,6 @@ import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
  * @author CWDS API Team
  *
  */
-@SuppressWarnings("javadoc")
 public class DeliveredServiceResourceBuilder {
   String id = "ABC1234567";
   Short cftLeadAgencyType = (short) 4212;

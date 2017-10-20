@@ -257,7 +257,7 @@ public class DeliveredToIndividualService {
       ContactRequest contactRequest, String countySpecificCode) {
     Date endedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getEndedAt());
     Date startedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getStartedAt());
-    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     Set<PostedIndividualDeliveredService> people = contactRequest.getPeople();
     for (PostedIndividualDeliveredService person : people) {
       String deliveredToIndividualCode =
@@ -285,7 +285,7 @@ public class DeliveredToIndividualService {
       ContactRequest contactRequest, String countySpecificCode) {
     Date endedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getEndedAt());
     Date startedAt = DomainChef.uncookISO8601Timestamp(contactRequest.getStartedAt());
-    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     Set<PostedIndividualDeliveredService> people = contactRequest.getPeople();
     IndividualDeliveredServiceEntity[] entities =
         individualDeliveredServiceDao.findByDeliveredServiceId(deliveredServiceId);
@@ -296,9 +296,10 @@ public class DeliveredToIndividualService {
       String deliveredToIndividualCode = DeliveredToIndividualService.Code
           .lookupByValue(newPerson.getTableName()).getCodeLiteral();
 
-      IndividualDeliveredServiceEntity ids = new IndividualDeliveredServiceEntity(
-          deliveredServiceId, deliveredToIndividualCode, newPerson.getId(), countySpecificCode,
-          endedAt, serviceContactType.shortValue(), startedAt, currentUserStaffId, currentRequestStartTime);
+      IndividualDeliveredServiceEntity ids =
+          new IndividualDeliveredServiceEntity(deliveredServiceId, deliveredToIndividualCode,
+              newPerson.getId(), countySpecificCode, endedAt, serviceContactType.shortValue(),
+              startedAt, currentUserStaffId, currentRequestStartTime);
       individualDeliveredServiceDao.create(ids);
     }
 
@@ -308,12 +309,12 @@ public class DeliveredToIndividualService {
       Set<PostedIndividualDeliveredService> people, IndividualDeliveredServiceEntity[] entities) {
     List<PostedIndividualDeliveredService> newPeople = new ArrayList<>();
     for (PostedIndividualDeliveredService person : people) {
-      Boolean createEntryInDeliveredToIndividualService = true;
+      Boolean createEntryInDeliveredToIndividualService = Boolean.TRUE;
       String deliveredToIndividualId = person.getId();
       for (IndividualDeliveredServiceEntity individualDeliveredService : entities) {
         if (individualDeliveredService.getPrimaryKey().getDeliveredToIndividualId()
             .equals(deliveredToIndividualId)) {
-          createEntryInDeliveredToIndividualService = false;
+          createEntryInDeliveredToIndividualService = Boolean.FALSE;
           break;
         }
       }
@@ -327,12 +328,12 @@ public class DeliveredToIndividualService {
   private void deleteRemovedPeopleFromIndividualDeliveredService(
       Set<PostedIndividualDeliveredService> people, IndividualDeliveredServiceEntity[] entities) {
     for (IndividualDeliveredServiceEntity individualDeliveredService : entities) {
-      Boolean deleteRecordInDeliveredToIndividualService = true;
+      Boolean deleteRecordInDeliveredToIndividualService = Boolean.TRUE;
       for (PostedIndividualDeliveredService person : people) {
         String deliveredToIndividualId = person.getId();
         if (individualDeliveredService.getPrimaryKey().getDeliveredToIndividualId()
             .equals(deliveredToIndividualId)) {
-          deleteRecordInDeliveredToIndividualService = false;
+          deleteRecordInDeliveredToIndividualService = Boolean.FALSE;
           break;
         }
       }

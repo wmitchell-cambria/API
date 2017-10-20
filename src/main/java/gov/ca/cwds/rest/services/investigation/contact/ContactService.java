@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +49,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
   private DeliveredToIndividualService deliveredToIndividualService;
   private ContactPartyDeliveredServiceDao contactPartyDeliveredServiceDao;
   private ReferralDao referralDao;
-
-  private Set<Integer> services = new HashSet<>();
 
   /**
    * @param deliveredService the {@link gov.ca.cwds.rest.services.Service} handling
@@ -173,13 +172,13 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    */
   @Override
   public Response create(ContactReferralRequest request) {
-
+    validateCurrentUserStaffId(currentUserStaffId);
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
     String referralId = referral.getId();
     String countySpecificCode = referral.getCountySpecificCode();
     String deliveredServiceId = deliveredService.create(request, countySpecificCode);
-    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     referralClientDeliveredService.addOnBehalfOfClients(deliveredServiceId, referralId,
         countySpecificCode);
     deliveredToIndividualService.addPeopleToIndividualDeliveredService(deliveredServiceId,
@@ -192,6 +191,16 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     return this.find(referralId + ":" + deliveredServiceId);
   }
 
+  private void validateCurrentUserStaffId(String staffId) {
+    if (StringUtils.isBlank(staffId)) {
+      LOGGER.info(
+          "The Logged In User Staff Id is not Provided. We cannot create or update without this Identifier : {}",
+          staffId);
+      throw new ServiceException(
+          "The Logged In User Staff Id is not Provided. We cannot create or update without this Identifier");
+    }
+  }
+
   /**
    * Validates that there exists a Referral for the given identifier and returns the Referral
    * 
@@ -202,6 +211,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     String referralId = request.getReferralId();
     Referral referral = referralDao.find(referralId);
     if (referral == null) {
+      LOGGER.info("ReferralId is not Valid : {}", referralId);
       throw new ServiceException("ReferralId is not Valid");
     }
     return referral;
@@ -225,13 +235,13 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    */
   @Override
   public Response update(String primaryKey, ContactReferralRequest request) {
-
+    validateCurrentUserStaffId(currentUserStaffId);
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
     String referralId = referral.getId();
     String countySpecificCode = referral.getCountySpecificCode();
     deliveredService.update(primaryKey, request, countySpecificCode);
-    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     String deliveredServiceId = primaryKey;
     referralClientDeliveredService.updateOnBehalfOfClients(deliveredServiceId, referralId,
         countySpecificCode);

@@ -131,7 +131,7 @@ public class DeliveredService {
   private DeliveredServiceDomain constructDeliveredServiceDomainForCreate(
       ContactReferralRequest request, String countySpecificCode) {
     ContactRequest contactRequest = request.getContactRequest();
-    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     String endDate = getDateStringFromDateTime(contactRequest.getEndedAt());
     String endTime = getTimeStringFromDateTime(contactRequest.getEndedAt());
     String startDate = getDateStringFromDateTime(contactRequest.getStartedAt());
@@ -147,8 +147,8 @@ public class DeliveredService {
         : null;
 
     return DeliveredServiceDomain.createWithDefaultsForFieldsNotPopulatedByUI(
-        Integer.parseInt(contactRequest.getCommunicationMethod()),
-        Integer.parseInt(contactRequest.getLocation()), countySpecificCode, longTextId,
+        Integer.valueOf(contactRequest.getCommunicationMethod()),
+        Integer.valueOf(contactRequest.getLocation()), countySpecificCode, longTextId,
         longTextContinuationId, endDate, endTime, serviceContactType, startDate, startTime,
         contactRequest.getStatus());
 
@@ -176,7 +176,7 @@ public class DeliveredService {
       return new gov.ca.cwds.rest.api.contact.DeliveredServiceDomain(persistedDeliveredService);
 
     } catch (Exception e) {
-      LOGGER.info("deliveredServiceEntity Exception", deliveredServiceDomain);
+      LOGGER.info("deliveredServiceEntity Exception ", e);
       throw new ServiceException(e);
     }
 
@@ -193,7 +193,7 @@ public class DeliveredService {
   private DeliveredServiceDomain constructDeliveredServiceDomainForUpdate(String contactId,
       ContactReferralRequest request, String countySpecificCode) {
     ContactRequest contactRequest = request.getContactRequest();
-    Integer serviceContactType = Integer.parseInt(contactRequest.getPurpose());
+    Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     String endDate = getDateStringFromDateTime(contactRequest.getEndedAt());
     String endTime = getTimeStringFromDateTime(contactRequest.getEndedAt());
     String startDate = getDateStringFromDateTime(contactRequest.getStartedAt());
@@ -201,16 +201,17 @@ public class DeliveredService {
     String note = getNoteFromRequest(contactRequest.getNote());
     String noteContinuation = getNoteContinuationFromRequest(contactRequest.getNote());
 
-    DeliveredServiceEntity ds = deliveredServiceDao.find(contactId);
+    DeliveredServiceEntity deliveredServiceEntity = deliveredServiceDao.find(contactId);
 
-    String longTextId = longTextHelper.updateLongText(ds.getDetailText(), note, countySpecificCode);
+    String longTextId = longTextHelper.updateLongText(deliveredServiceEntity.getDetailText(), note,
+        countySpecificCode);
 
-    String longTextContinuationId = longTextHelper.updateLongText(ds.getDetailTextContinuation(),
-        noteContinuation, countySpecificCode);
+    String longTextContinuationId = longTextHelper.updateLongText(
+        deliveredServiceEntity.getDetailTextContinuation(), noteContinuation, countySpecificCode);
 
     return DeliveredServiceDomain.updateWithDeliveredServiceEntityValuesForFieldsNotPopulatedByUI(
-        ds, Integer.parseInt(contactRequest.getCommunicationMethod()),
-        Integer.parseInt(contactRequest.getLocation()), countySpecificCode, longTextId,
+        deliveredServiceEntity, Integer.valueOf(contactRequest.getCommunicationMethod()),
+        Integer.valueOf(contactRequest.getLocation()), countySpecificCode, longTextId,
         longTextContinuationId, endDate, endTime, serviceContactType, startDate, startTime,
         contactRequest.getStatus());
   }
