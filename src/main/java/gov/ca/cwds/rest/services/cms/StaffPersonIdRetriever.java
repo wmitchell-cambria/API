@@ -96,6 +96,6 @@ public class StaffPersonIdRetriever {
       LOGGER.error("======= Staff ID missing in PerryUserIdentity", e);
     }
 
-    LOGGER.error("======= Staff ID missing in PerryUserIdentity: " + json);
+    LOGGER.error("======= Staff ID missing in PerryUserIdentity: {}", json);
   }
 }

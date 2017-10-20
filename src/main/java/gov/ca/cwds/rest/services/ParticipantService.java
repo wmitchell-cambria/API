@@ -185,7 +185,7 @@ public class ParticipantService implements CrudsService {
                 clientId = createNewClient(screeningToReferral, dateStarted, timestamp,
                     messageBuilder, incomingParticipant, genderCode);
               } else {
-                // legacy Id passed - check for existenct in CWS/CMS - no update yet
+                // legacy Id passed - check for existence in CWS/CMS - no update yet
                 clientId = incomingParticipant.getLegacyId();
                 if (updateClient(screeningToReferral, messageBuilder, incomingParticipant,
                     clientId)) {
@@ -193,21 +193,8 @@ public class ParticipantService implements CrudsService {
                 }
               }
 
-              // CMS Referral Client
-              ReferralClient referralClient = ReferralClient.createWithDefault(
-                  ParticipantValidator.selfReported(incomingParticipant),
-                  incomingParticipant.isClientStaffPersonAdded(), referralId, clientId,
-                  LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
-                  LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
-
-              // validate referral client
-              messageBuilder.addDomainValidationError(validator.validate(referralClient));
-
-              try {
-                referralClientService.createWithSingleTimestamp(referralClient, timestamp);
-              } catch (ServiceException se) {
-                messageBuilder.addMessageAndLog(se.getMessage(), se, LOGGER);
-              }
+              processReferralClient(referralId, timestamp, messageBuilder, incomingParticipant,
+                  clientId);
 
               /*
                * determine other participant/roles attributes relating to CWS/CMS allegation
@@ -231,8 +218,8 @@ public class ParticipantService implements CrudsService {
 
               try {
                 // addresses associated with a client
-                Participant resultParticipant = processClientAddress(incomingParticipant,
-                    referralId, clientId, timestamp, messageBuilder);
+                processClientAddress(incomingParticipant, referralId, clientId, timestamp,
+                    messageBuilder);
               } catch (ServiceException e) {
                 String message = e.getMessage();
                 messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -250,6 +237,26 @@ public class ParticipantService implements CrudsService {
     } // next participant
 
     return clientParticipants;
+  }
+
+  private ReferralClient processReferralClient(String referralId, Date timestamp,
+      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
+    // CMS Referral Client
+    ReferralClient referralClient =
+        ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
+            incomingParticipant.isClientStaffPersonAdded(), referralId, clientId,
+            LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
+            LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
+
+    // validate referral client
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+
+    try {
+      referralClientService.createWithSingleTimestamp(referralClient, timestamp);
+    } catch (ServiceException se) {
+      messageBuilder.addMessageAndLog(se.getMessage(), se, LOGGER);
+    }
+    return referralClient;
   }
 
   private boolean updateClient(ScreeningToReferral screeningToReferral,
@@ -473,7 +480,8 @@ public class ParticipantService implements CrudsService {
 
   private boolean clientAddressExists(gov.ca.cwds.rest.api.domain.Address address,
       Participant client) {
-    List foundClientAddress = this.clientAddressService.findByAddressAndClient(address, client);
+    List<Response> foundClientAddress =
+        this.clientAddressService.findByAddressAndClient(address, client);
     return foundClientAddress != null && !foundClientAddress.isEmpty();
   }
 
