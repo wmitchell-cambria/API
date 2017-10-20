@@ -203,6 +203,7 @@ public class ReferralClient extends ReportingDomain implements Request, Response
    * @param selfReported - selfReported
    * @param referralId - referralId
    * @param staffPersonAddedIndicator - staffPersonAddedIndicatord
+   * @param dispositionCode - dispositionCode
    * @param clientId - clientId
    * @param countyCode - countyCode
    * @param approvalCode - approvalCode
