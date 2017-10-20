@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import com.google.common.base.Objects;
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -11,6 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * {@link DomainObject} representing an AllegationPerson
@@ -191,48 +193,21 @@ public class AllegationPerson implements Serializable{
     return result;
   }
 
+
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
-    if (obj == null)
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
-    if (getClass() != obj.getClass())
-      return false;
-    AllegationPerson other = (AllegationPerson) obj;
-    if (firstName == null) {
-      if (other.firstName != null)
-        return false;
-    } else if (!firstName.equals(other.firstName))
-      return false;
-    if (lastName == null) {
-      if (other.lastName != null)
-        return false;
-    } else if (!lastName.equals(other.lastName))
-      return false;
-    if (legacyDescriptor == null) {
-      if (other.legacyDescriptor != null)
-        return false;
-    } else if (!legacyDescriptor.equals(other.legacyDescriptor))
-      return false;
-    if (middleName == null) {
-      if (other.middleName != null)
-        return false;
-    } else if (!middleName.equals(other.middleName))
-      return false;
-    if (dateOfBirth == null) {
-      if (other.dateOfBirth != null)
-        return false;
-    } else if (!dateOfBirth.equals(other.dateOfBirth))
-      return false;
-    if (suffixTitle == null) {
-      if (other.suffixTitle != null)
-        return false;
-    } else if (!suffixTitle.equals(other.suffixTitle))
-      return false;
-    return true;
+    }
+    AllegationPerson that = (AllegationPerson) o;
+    return java.util.Objects.equals(firstName, that.firstName) &&
+        java.util.Objects.equals(lastName, that.lastName) &&
+        java.util.Objects.equals(middleName, that.middleName) &&
+        java.util.Objects.equals(suffixTitle, that.suffixTitle) &&
+        java.util.Objects.equals(dateOfBirth, that.dateOfBirth) &&
+        java.util.Objects.equals(legacyDescriptor, that.legacyDescriptor);
   }
-
-
-
 }

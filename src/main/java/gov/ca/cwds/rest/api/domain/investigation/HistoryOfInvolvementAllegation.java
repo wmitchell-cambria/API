@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * 
@@ -137,45 +138,19 @@ public class HistoryOfInvolvementAllegation implements Serializable{
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
-    if (obj == null)
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
-    if (getClass() != obj.getClass())
-      return false;
-    HistoryOfInvolvementAllegation other = (HistoryOfInvolvementAllegation) obj;
-    if (allegationDescription == null) {
-      if (other.allegationDescription != null)
-        return false;
-    } else if (!allegationDescription.equals(other.allegationDescription))
-      return false;
-    if (dispositionDescription == null) {
-      if (other.dispositionDescription != null)
-        return false;
-    } else if (!dispositionDescription.equals(other.dispositionDescription))
-      return false;
-    if (pereptratorFistName == null) {
-      if (other.pereptratorFistName != null)
-        return false;
-    } else if (!pereptratorFistName.equals(other.pereptratorFistName))
-      return false;
-    if (perpetratorLastName == null) {
-      if (other.perpetratorLastName != null)
-        return false;
-    } else if (!perpetratorLastName.equals(other.perpetratorLastName))
-      return false;
-    if (victimFirstName == null) {
-      if (other.victimFirstName != null)
-        return false;
-    } else if (!victimFirstName.equals(other.victimFirstName))
-      return false;
-    if (victimLastName == null) {
-      if (other.victimLastName != null)
-        return false;
-    } else if (!victimLastName.equals(other.victimLastName))
-      return false;
-    return true;
+    }
+    HistoryOfInvolvementAllegation that = (HistoryOfInvolvementAllegation) o;
+    return Objects.equals(victimLastName, that.victimLastName) &&
+        Objects.equals(victimFirstName, that.victimFirstName) &&
+        Objects.equals(perpetratorLastName, that.perpetratorLastName) &&
+        Objects.equals(pereptratorFistName, that.pereptratorFistName) &&
+        Objects.equals(dispositionDescription, that.dispositionDescription) &&
+        Objects.equals(allegationDescription, that.allegationDescription);
   }
-
 }
