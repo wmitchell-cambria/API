@@ -138,35 +138,35 @@ public class Person extends NsPersistentObject
     this.dateOfBirth = DomainChef.uncookDateString(person.getBirthDate());
     this.ssn = person.getSsn();
     Set<gov.ca.cwds.rest.api.domain.Address> address = person.getAddress();
-    if (address != null && !address.isEmpty()) {
+    if (address != null ) {
       for (gov.ca.cwds.rest.api.domain.Address addresses : address) {
         this.addPersonAddress(
             new PersonAddress(this, new Address(addresses, lastUpdatedId, createUserId)));
       }
     }
     Set<gov.ca.cwds.rest.api.domain.PhoneNumber> phoneNumber = person.getPhoneNumber();
-    if (phoneNumber != null && !phoneNumber.isEmpty()) {
+    if (phoneNumber != null) {
       for (gov.ca.cwds.rest.api.domain.PhoneNumber phoneNumbers : phoneNumber) {
         this.addPersonPhone(
             new PersonPhone(this, new PhoneNumber(phoneNumbers, lastUpdatedId, createUserId)));
       }
     }
     Set<gov.ca.cwds.rest.api.domain.Language> language = person.getLanguage();
-    if (language != null && !language.isEmpty()) {
+    if (language != null ) {
       for (gov.ca.cwds.rest.api.domain.Language languages : language) {
         this.addPersonLanguage(
             new PersonLanguage(this, new Language(languages, lastUpdatedId, createUserId)));
       }
     }
     Set<gov.ca.cwds.rest.api.domain.Ethnicity> ethnicity = person.getEthnicity();
-    if (ethnicity != null && !ethnicity.isEmpty()) {
+    if (ethnicity != null) {
       for (gov.ca.cwds.rest.api.domain.Ethnicity ethnicities : ethnicity) {
         this.addPersonEthnicity(
             new PersonEthnicity(this, new Ethnicity(ethnicities, lastUpdatedId, createUserId)));
       }
     }
     Set<gov.ca.cwds.rest.api.domain.Race> race = person.getRace();
-    if (race != null && !race.isEmpty()) {
+    if (race != null) {
       for (gov.ca.cwds.rest.api.domain.Race races : race) {
         this.addPersonRace(new PersonRace(this, new Race(races, lastUpdatedId, createUserId)));
       }

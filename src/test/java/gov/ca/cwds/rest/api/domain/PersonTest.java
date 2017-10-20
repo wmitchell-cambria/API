@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -8,6 +9,8 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+
+import gov.ca.cwds.fixture.PersonEntityBuilder;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -148,6 +151,20 @@ public class PersonTest {
     assertThat(domain.getLastName(), is(equalTo(lastName)));
     assertThat(domain.getSsn(), is(equalTo(ssn)));
 
+  }
+
+    @Test
+  public void shouldCreatePersonFromDomainPersonAndCollectionsAreEmpty(){
+    gov.ca.cwds.data.persistence.ns.Person person = new PersonEntityBuilder()
+        .setPersonAddress(new HashSet())
+        .setPersonPhone(new HashSet())
+        .setPersonLanguage(new HashSet())
+        .setPersonRace(new HashSet())
+        .setPersonEthnicity(new HashSet()).build();
+    assertTrue(person.getPersonAddress().isEmpty());
+    assertTrue(person.getPersonPhone().isEmpty());
+    assertTrue(person.getPersonLanguage().isEmpty());
+    assertTrue(person.getPersonEthnicity().isEmpty());
   }
 
   private Person validPerson() {

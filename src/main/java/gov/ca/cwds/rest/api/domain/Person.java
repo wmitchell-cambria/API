@@ -140,27 +140,27 @@ public class Person extends ReportingDomain implements Request, Response {
     this.language = new HashSet<>();
     this.race = new HashSet<>();
     this.ethnicity = new HashSet<>();
-    if (person.getPersonAddress() != null && !person.getPersonAddress().isEmpty()) {
+    if (person.getPersonAddress() != null ) {
       for (PersonAddress personAddress : person.getPersonAddress()) {
         this.address.add(new Address(personAddress.getAddress()));
       }
     }
-    if (person.getPersonPhone() != null && !person.getPersonPhone().isEmpty()) {
+    if (person.getPersonPhone() != null) {
       for (PersonPhone personPhone : person.getPersonPhone()) {
         this.phoneNumber.add(new PhoneNumber(personPhone.getPhoneNumber()));
       }
     }
-    if (person.getPersonLanguage() != null && !person.getPersonLanguage().isEmpty()) {
+    if (person.getPersonLanguage() != null ) {
       for (PersonLanguage personLanguage : person.getPersonLanguage()) {
         this.language.add(new Language(personLanguage.getLanguage()));
       }
-      if (person.getPersonRace() != null && !person.getPersonRace().isEmpty()) {
+      if (person.getPersonRace() != null ) {
         for (PersonRace personRace : person.getPersonRace()) {
           this.race.add(new Race(personRace.getRace()));
         }
       }
     }
-    if (person.getPersonEthnicity() != null && !person.getPersonEthnicity().isEmpty()) {
+    if (person.getPersonEthnicity() != null) {
       for (PersonEthnicity personEthnicity : person.getPersonEthnicity()) {
         this.ethnicity.add(new Ethnicity(personEthnicity.getEthnicity()));
       }
