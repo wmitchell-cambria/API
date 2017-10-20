@@ -70,8 +70,16 @@ public class StaffPersonIdRetriever {
           perryUserIdentity = currentUserInfo;
           LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
         }
+      } else {
+        LOGGER.info("======= currentPrinciple is null or not a PerryUserIdentity object{}",
+            currentPrincipal);
+
       }
+    } else{
+      LOGGER.info("======= current user has no principals for {}", currentUser);
+
     }
+
 
     if (perryUserIdentity == null) {
       String localDevProp = System.getenv("LOCAL_DEV");
