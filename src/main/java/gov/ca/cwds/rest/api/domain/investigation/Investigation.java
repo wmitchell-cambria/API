@@ -43,8 +43,9 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonPropertyOrder({"legacy_descriptor", "last_updated_by", "last_updated_at", "incidentCounty",
     "incident_date", "location_type", "communication_method", "name", "investigation_summary",
     "reference", "response_time", "started_at", "assignee", "additional_information", "sensitive",
-    "sealed", "incident_phone_number", "incident_address", "screening", "history_of_involvement",
-    "allegations", "people", "relationships", "safety_alerts", "cross_reports", "contacts"})
+    "sealed", "incident_phone_number", "incident_address", "screening_summary",
+    "history_of_involvement", "allegations", "people", "relationships", "safety_alerts",
+    "cross_reports", "contacts"})
 public class Investigation extends ReportingDomain implements Request, Response {
   private static final long serialVersionUID = 1L;
 
@@ -158,10 +159,10 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @Valid
   private InvestigationAddress address;
 
-  @JsonProperty("screening")
+  @JsonProperty("screening_summary")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
-  private SimpleScreening screening;
+  private ScreeningSummary screeningSummary;
 
   @JsonProperty("history_of_involvement")
   @ApiModelProperty(required = false, readOnly = false)
@@ -222,7 +223,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param sealed - contains sealed information
    * @param phoneNumbers - phone numbers
    * @param address - address
-   * @param screening - screening information
+   * @param screeningSummary - Screening Summary information
    * @param historyOfInvolvement - history of involvement
    * @param allegations - allegations
    * @param people - people of investigation
@@ -249,7 +250,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
       @JsonProperty("sensitive") Boolean sensitive, @JsonProperty("sealed") Boolean sealed,
       @JsonProperty("incident_phone_number") Set<PhoneNumber> phoneNumbers,
       @JsonProperty("incident_address") InvestigationAddress address,
-      @JsonProperty("screening") SimpleScreening screening,
+      @JsonProperty("screening") ScreeningSummary screeningSummary,
       @JsonProperty("history_of_involvement") HistoryOfInvolvement historyOfInvolvement,
       @JsonProperty("allegations") Set<Allegation> allegations,
       @JsonProperty("people") Set<Person> people,
@@ -276,7 +277,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.sealed = sealed;
     this.phoneNumbers = phoneNumbers;
     this.address = address;
-    this.screening = screening;
+    this.screeningSummary = screeningSummary;
     this.historyOfInvolvement = historyOfInvolvement;
     this.allegations = allegations;
     this.people = people;
@@ -489,12 +490,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     return address;
   }
 
-  /**
-   * @return - screening information
-   */
-  public SimpleScreening getScreening() {
-    return screening;
-  }
+
 
   /**
    * @return - history of involvement
@@ -563,6 +559,13 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  /**
+   * @return the screeningSummary
+   */
+  public ScreeningSummary getScreeningSummary() {
+    return screeningSummary;
   }
 
 }
