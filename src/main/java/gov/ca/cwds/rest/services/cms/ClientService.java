@@ -114,6 +114,7 @@ public class ClientService implements
   public gov.ca.cwds.rest.api.domain.cms.Client delete(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.delete(primaryKey);
     if (persistedClient != null) {
+      ssaname3Dao.deleteSsaname3("CLT_PHTT", primaryKey, "C");
       upperCaseTables.deleteClientUc(primaryKey);
       externalInterfaceTables.createExtInterForDelete(primaryKey, "CLIENT_T");
       return new gov.ca.cwds.rest.api.domain.cms.Client(persistedClient, true);
@@ -201,6 +202,7 @@ public class ClientService implements
       managed.setClientAddress(existingClient.getClientAddress());
       managed = clientDao.update(managed);
       savedEntity = new gov.ca.cwds.rest.api.domain.cms.Client(managed, true);
+      ssaname3Dao.clientSsaname3("U", managed);
       upperCaseTables.updateClientUc(managed);
       externalInterfaceTables.createExtInterClient(managed, "C");
     } catch (EntityNotFoundException e) {
