@@ -159,7 +159,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     String role = null;
     Person person = null;
     CmsRecordDescriptor cmsRecordDescriptor =
-        CmsRecordUtils.createLegacyDescriptor(referralId, LegacyTable.REFERRAL);
+        CmsRecordUtils.createLegacyDescriptor(referralId, LegacyTable.REPORTER);
     Reporter[] reporters = this.reporterDao.findInvestigationReportersByReferralId(referralId);
     for (Reporter reporter : reporters) {
       address.add(new InvestigationAddress(reporter, cmsRecordDescriptor));
