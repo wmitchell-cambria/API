@@ -176,7 +176,6 @@ public class AllegationTest {
 
   @Test
   public void shouldAllowNullRational() {
-    Set<AllegationSubType> allegationSubTypes = new HashSet<>();
     Allegation allegation = new AllegationEntityBuilder().setRational(null).build();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
     assertEquals(0, constraintViolations.size());

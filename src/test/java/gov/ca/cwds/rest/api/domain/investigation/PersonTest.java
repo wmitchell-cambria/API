@@ -8,13 +8,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
@@ -25,6 +38,9 @@ import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class PersonTest {
+  private ObjectMapper MAPPER = new ObjectMapper();
+  private Validator validator;
+
   private CmsRecordDescriptor cmsRecordDescriptor;
   private String lastUpdatedBy = "0X5";
   private String lastUpdatedAt = "2016-04-27T23:30:14.000Z";
@@ -66,6 +82,9 @@ public class PersonTest {
     cmsRecordDescriptor =
         new CmsRecordDescriptor("1234567ABC", "111-222-333-4444", "CLIENT_T", "Client");
     phoneNumbers.add(phone);
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
 
   }
 
@@ -147,4 +166,156 @@ public class PersonTest {
     EqualsVerifier.forClass(Person.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
+
+  @Test
+  public void shouldNotAllowBlankFirstName() {
+    Person person = new PersonEntityBuilder().setFirstName("").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    // Iterator<ConstraintViolation<Person>> itr = constraintViolations.iterator();
+    // while (itr.hasNext()) {
+    // ConstraintViolation<Person> cv = itr.next();
+    // System.out.println(cv.getMessage());
+    // }
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void sholdNotAllowNullFirstName() {
+    Person person = new PersonEntityBuilder().setFirstName(null).build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+
+  }
+
+  @Test
+  public void shouldNotAllowTooLongFirstName() {
+    String longFirstName = new String(new char[21]).replace('\0', ' ');
+    Person person = new PersonEntityBuilder().setFirstName(longFirstName).build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowBlankMiddleName() {
+    Person person = new PersonEntityBuilder().setMiddleName("").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+
+  }
+
+  @Test
+  public void shouldNotAllowBlankLastName() {
+    Person person = new PersonEntityBuilder().setLastName("").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowNullLastName() {
+    Person person = new PersonEntityBuilder().setLastName(null).build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowToLongLastName() {
+    String longLastName = new String(new char[51]).replace('\0', ' ');
+    Person person = new PersonEntityBuilder().setLastName(longLastName).build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowBlankNameSuffix() {
+    Person person = new PersonEntityBuilder().setSuffixTitle("").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowTooLongNameSuffixt() {
+    Person person = new PersonEntityBuilder().setSuffixTitle("12345").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowFemaleGender() {
+    Person person = new PersonEntityBuilder().setGender("F").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowMaleGender() {
+    Person person = new PersonEntityBuilder().setGender("M").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowUndefinedGender() {
+    Person person = new PersonEntityBuilder().setGender("U").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowInvalidGender() {
+    Person person = new PersonEntityBuilder().setGender("X").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowValidDateOfBirth() {
+    Person person = new PersonEntityBuilder().setBirthDate("2004-01-30").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowValidDateOfBirth() {
+    Person person = new PersonEntityBuilder().setBirthDate("01-30-2004").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowValidSsn() {
+    Person person = new PersonEntityBuilder().setSsn("111223333").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowInvalidSsn() {
+    Person person = new PersonEntityBuilder().setSsn("1112233334").build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldAllowEmptyLanguages() {
+    Set<String> languages = new HashSet<>();
+    Person person = new PersonEntityBuilder().setLanguages(languages).build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldNotAllowNullSensitive() {
+    Person person = new PersonEntityBuilder().setSensitive(null).build();
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    assertEquals(1, constraintViolations.size());
+  }
+
+  @Test
+  @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    Person display = new PersonEntityBuilder().build();
+    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(display);
+    System.out.println(expected);
+  }
 }

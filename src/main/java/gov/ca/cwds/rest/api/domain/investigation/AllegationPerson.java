@@ -3,8 +3,10 @@ package gov.ca.cwds.rest.api.domain.investigation;
 import com.google.common.base.Objects;
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
@@ -36,7 +38,7 @@ public class AllegationPerson implements Serializable{
   @ApiModelProperty(required = false, readOnly = false, value = "Middle Name")
   private String middleName;
 
-  @JsonProperty("suffix_title")
+  @JsonProperty("name_suffix")
   @ApiModelProperty(required = false, readOnly = false, value = "Suffix")
   private String suffixTitle;
 
@@ -90,9 +92,8 @@ public class AllegationPerson implements Serializable{
     this.lastName = StringUtils.trim(persistedClient.getLastName());
     this.middleName = StringUtils.trim(persistedClient.getMiddleName());
     this.suffixTitle = StringUtils.trim(persistedClient.getNameSuffix());
-    this.dateOfBirth =
-        persistedClient.getBirthDate() != null ? DomainChef.cookDate(persistedClient.getBirthDate())
-            : null;
+    this.dateOfBirth = persistedClient.getBirthDate() != null
+        ? DomainChef.cookDate(persistedClient.getBirthDate()) : null;
     this.legacyDescriptor =
         CmsRecordUtils.createLegacyDescriptor(persistedClient.getId(), LegacyTable.CLIENT);
   }

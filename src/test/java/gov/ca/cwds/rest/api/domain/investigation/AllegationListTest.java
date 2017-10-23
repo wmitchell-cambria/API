@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,6 +24,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
@@ -27,6 +33,7 @@ import gov.ca.cwds.fixture.investigation.AllegationPersonEntityBuilder;
 @SuppressWarnings("javadoc")
 public class AllegationListTest {
   private ObjectMapper MAPPER = new ObjectMapper();
+  private Validator validator;
 
   protected Short allegationType = 2179;
   protected Boolean createdByScreener = false;
@@ -48,6 +55,9 @@ public class AllegationListTest {
     allegations.add(allegation1);
     allegations.add(allegation2);
     differentAllegations.add(allegation3);
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
   }
 
   @Test
@@ -75,6 +85,22 @@ public class AllegationListTest {
     AllegationList allegationList = new AllegationList(allegations);
     AllegationList allegationList1 = new AllegationList(differentAllegations);
     assertThat(allegationList, is(not(equals(allegationList1))));
+  }
+
+  @Test
+  public void shouldValidateAllegationList() {
+    AllegationList allegationList = new AllegationList(allegations);
+    Set<ConstraintViolation<AllegationList>> constraintViolations =
+        validator.validate(allegationList);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void shouldValidateEmptyAllegationList() {
+    AllegationList allegationList = new AllegationList();
+    Set<ConstraintViolation<AllegationList>> constraintViolations =
+        validator.validate(allegationList);
+    assertEquals(0, constraintViolations.size());
   }
 
   @Test
