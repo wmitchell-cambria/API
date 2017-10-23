@@ -5,6 +5,9 @@ import java.util.Set;
 
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -140,7 +143,7 @@ public class Person extends ReportingDomain implements Request, Response {
     this.language = new HashSet<>();
     this.race = new HashSet<>();
     this.ethnicity = new HashSet<>();
-    if (person.getPersonAddress() != null ) {
+    if (person.getPersonAddress() != null) {
       for (PersonAddress personAddress : person.getPersonAddress()) {
         this.address.add(new Address(personAddress.getAddress()));
       }
@@ -150,11 +153,11 @@ public class Person extends ReportingDomain implements Request, Response {
         this.phoneNumber.add(new PhoneNumber(personPhone.getPhoneNumber()));
       }
     }
-    if (person.getPersonLanguage() != null ) {
+    if (person.getPersonLanguage() != null) {
       for (PersonLanguage personLanguage : person.getPersonLanguage()) {
         this.language.add(new Language(personLanguage.getLanguage()));
       }
-      if (person.getPersonRace() != null ) {
+      if (person.getPersonRace() != null) {
         for (PersonRace personRace : person.getPersonRace()) {
           this.race.add(new Race(personRace.getRace()));
         }
@@ -253,102 +256,22 @@ public class Person extends ReportingDomain implements Request, Response {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
   public final int hashCode() {
-    final int PRIME = 31;
-    int result = 1;
-    result = PRIME * result + ((address == null) ? 0 : address.hashCode());
-    result = PRIME * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-    result = PRIME * result + ((language == null) ? 0 : language.hashCode());
-    result = PRIME * result + ((ethnicity == null) ? 0 : ethnicity.hashCode());
-    result = PRIME * result + ((race == null) ? 0 : race.hashCode());
-    result = PRIME * result + ((birthDate == null) ? 0 : birthDate.hashCode());
-    result = PRIME * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = PRIME * result + ((gender == null) ? 0 : gender.hashCode());
-    result = PRIME * result + ((middleName == null) ? 0 : middleName.hashCode());
-    result = PRIME * result + ((lastName == null) ? 0 : lastName.hashCode());
-    result = PRIME * result + ((nameSuffix == null) ? 0 : nameSuffix.hashCode());
-    result = PRIME * result + ((ssn == null) ? 0 : ssn.hashCode());
-    return result;
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
   public final boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (!(getClass().isInstance(obj)))
-      return false;
-    Person other = (Person) obj;
-    if (address == null) {
-      if (other.address != null)
-        return false;
-    } else if (!address.equals(other.address))
-      return false;
-    if (phoneNumber == null) {
-      if (other.phoneNumber != null)
-        return false;
-    } else if (!phoneNumber.equals(other.phoneNumber))
-      return false;
-    if (language == null) {
-      if (other.language != null)
-        return false;
-    } else if (!language.equals(other.language))
-      return false;
-    if (race == null) {
-      if (other.race != null)
-        return false;
-    } else if (!race.equals(other.race))
-      return false;
-    if (ethnicity == null) {
-      if (other.ethnicity != null)
-        return false;
-    } else if (!ethnicity.equals(other.ethnicity))
-      return false;
-    if (birthDate == null) {
-      if (other.birthDate != null)
-        return false;
-    } else if (!birthDate.equals(other.birthDate))
-      return false;
-    if (firstName == null) {
-      if (other.firstName != null)
-        return false;
-    } else if (!firstName.equals(other.firstName))
-      return false;
-    if (gender == null) {
-      if (other.gender != null)
-        return false;
-    } else if (!gender.equals(other.gender))
-      return false;
-    if (lastName == null) {
-      if (other.lastName != null)
-        return false;
-    } else if (!lastName.equals(other.lastName))
-      return false;
-    if (middleName == null) {
-      if (other.middleName != null)
-        return false;
-    } else if (!middleName.equals(other.middleName))
-      return false;
-    if (nameSuffix == null) {
-      if (other.nameSuffix != null)
-        return false;
-    } else if (!nameSuffix.equals(other.nameSuffix))
-      return false;
-    if (ssn == null) {
-      if (other.ssn != null)
-        return false;
-    } else if (!ssn.equals(other.ssn))
-      return false;
-    return true;
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 }

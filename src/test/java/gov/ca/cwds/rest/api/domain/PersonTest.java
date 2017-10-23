@@ -9,8 +9,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
-import gov.ca.cwds.fixture.PersonEntityBuilder;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
+import gov.ca.cwds.fixture.PersonEntityBuilder;
 import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
@@ -108,8 +107,7 @@ public class PersonTest {
 
   @Test
   public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(Person.class).suppress(Warning.NONFINAL_FIELDS)
-        .withIgnoredFields("messages").verify();
+    EqualsVerifier.forClass(Person.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   /*
@@ -153,14 +151,12 @@ public class PersonTest {
 
   }
 
-    @Test
-  public void shouldCreatePersonFromDomainPersonAndCollectionsAreEmpty(){
-    gov.ca.cwds.data.persistence.ns.Person person = new PersonEntityBuilder()
-        .setPersonAddress(new HashSet())
-        .setPersonPhone(new HashSet())
-        .setPersonLanguage(new HashSet())
-        .setPersonRace(new HashSet())
-        .setPersonEthnicity(new HashSet()).build();
+  @Test
+  public void shouldCreatePersonFromDomainPersonAndCollectionsAreEmpty() {
+    gov.ca.cwds.data.persistence.ns.Person person =
+        new PersonEntityBuilder().setPersonAddress(new HashSet()).setPersonPhone(new HashSet())
+            .setPersonLanguage(new HashSet()).setPersonRace(new HashSet())
+            .setPersonEthnicity(new HashSet()).build();
     assertTrue(person.getPersonAddress().isEmpty());
     assertTrue(person.getPersonPhone().isEmpty());
     assertTrue(person.getPersonLanguage().isEmpty());

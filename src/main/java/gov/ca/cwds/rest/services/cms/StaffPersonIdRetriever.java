@@ -60,26 +60,11 @@ public class StaffPersonIdRetriever {
       int principalCount = principals.size();
       Object currentPrincipal = principalCount > 1 ? principals.get(1) : null;
 
-      if (currentPrincipal != null && currentPrincipal instanceof PerryUserIdentity) {
-        PerryUserIdentity currentUserInfo = (PerryUserIdentity) currentPrincipal;
-        String staffPersonId = currentUserInfo.getStaffId();
-
-        if (StringUtils.isBlank(staffPersonId)) {
-          handleMissingStaffId(currentUserInfo);
-        } else {
-          perryUserIdentity = currentUserInfo;
-          LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
-        }
-      } else {
-        LOGGER.info("======= currentPrinciple is null or not a PerryUserIdentity object{}",
-            currentPrincipal);
-
-      }
-    } else{
+      perryUserIdentity = getCurrentprincipal(perryUserIdentity, currentPrincipal);
+    } else {
       LOGGER.info("======= current user has no principals for {}", currentUser);
 
     }
-
 
     if (perryUserIdentity == null) {
       String localDevProp = System.getenv("LOCAL_DEV");
@@ -92,6 +77,26 @@ public class StaffPersonIdRetriever {
       }
     }
 
+    return perryUserIdentity;
+  }
+
+  private static PerryUserIdentity getCurrentprincipal(PerryUserIdentity perryUserIdentity,
+      Object currentPrincipal) {
+    if (currentPrincipal != null && currentPrincipal instanceof PerryUserIdentity) {
+      PerryUserIdentity currentUserInfo = (PerryUserIdentity) currentPrincipal;
+      String staffPersonId = currentUserInfo.getStaffId();
+
+      if (StringUtils.isBlank(staffPersonId)) {
+        handleMissingStaffId(currentUserInfo);
+      } else {
+        perryUserIdentity = currentUserInfo;
+        LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
+      }
+    } else {
+      LOGGER.info("======= currentPrinciple is null or not a PerryUserIdentity object{}",
+          currentPrincipal);
+
+    }
     return perryUserIdentity;
   }
 

@@ -30,7 +30,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ReferralClient extends ReportingDomain implements Request, Response {
   private static final short DEFAULT_CODE = 0;
-  private static final String DEFAULT_DISPOSITION_CODE = "A";
 
   /**
    * Serialization version
