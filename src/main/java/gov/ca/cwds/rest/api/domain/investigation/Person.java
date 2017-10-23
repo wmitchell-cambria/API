@@ -1,19 +1,15 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
@@ -197,7 +193,8 @@ public class Person extends ReportingDomain implements Request, Response {
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
     this.lastUpdatedAt = client.getLastUpdatedTime() != null
-        ? DomainChef.cookISO8601Timestamp(client.getLastUpdatedTime()) : null;
+        ? DomainChef.cookISO8601Timestamp(client.getLastUpdatedTime())
+        : null;
     this.firstName = StringUtils.trim(client.getFirstName());
     this.lastName = StringUtils.trim(client.getLastName());
     this.middleName = StringUtils.trim(client.getMiddleName());
@@ -230,14 +227,15 @@ public class Person extends ReportingDomain implements Request, Response {
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles) {
     this.lastUpdatedBy = reporter.getLastUpdatedId();
     this.lastUpdatedAt = reporter.getLastUpdatedTime() != null
-        ? String.valueOf(reporter.getLastUpdatedTime()) : null;
+        ? DomainChef.cookISO8601Timestamp(reporter.getLastUpdatedTime())
+        : null;
     this.firstName = reporter.getFirstName();
     this.lastName = reporter.getLastName();
     this.middleName = reporter.getMiddleName();
     this.nameSuffix = reporter.getNameSuffix();
     this.gender = reporter.getGender();
     this.dateOfBirth =
-        reporter.getBirthDate() != null ? String.valueOf(reporter.getBirthDate()) : null;
+        reporter.getBirthDate() != null ? DomainChef.cookDate(reporter.getBirthDate()) : null;
     this.ssn = reporter.getSsn();
     this.languages = languages;
     this.sealed = StringUtils.equals(reporter.getSensitivityIndicator(), "R");

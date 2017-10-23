@@ -99,14 +99,14 @@ public class PeopleService implements TypedCrudsService<String, People, Response
 
     Person person = null;
     Client client = null;
+    CmsRecordDescriptor cmsRecordDescriptor = null;
     for (ReferralClient refClient : referral.getReferralClients()) {
       client = peopleDao.find(refClient.getClientId());
       for (ClientAddress clientAddress : client.getClientAddress()) {
-
-        address.add(new InvestigationAddress(clientAddress,
-            this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
-        phoneNunbers.add(new PhoneNumber(clientAddress.getAddresses(),
-            this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS)));
+        cmsRecordDescriptor =
+            this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS);
+        address.add(new InvestigationAddress(clientAddress, cmsRecordDescriptor));
+        phoneNunbers.add(new PhoneNumber(clientAddress.getAddresses(), cmsRecordDescriptor));
 
       }
       Set<String> roles = this.pouplatePeopleRoles(refClient, victims, perpetrators);
@@ -158,17 +158,17 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     Set<String> languages = new HashSet<>();
     String role = null;
     Person person = null;
+    CmsRecordDescriptor cmsRecordDescriptor =
+        CmsRecordUtils.createLegacyDescriptor(referralId, LegacyTable.REFERRAL);
     Reporter[] reporters = this.reporterDao.findInvestigationReportersByReferralId(referralId);
     for (Reporter reporter : reporters) {
-      address.add(new InvestigationAddress(reporter,
-          this.getLegacyDescriptor(reporter.getAddressId(), LegacyTable.ADDRESS)));
-      phoneNunbers.add(new PhoneNumber(reporter,
-          this.getLegacyDescriptor(reporter.getAddressId(), LegacyTable.ADDRESS)));
+      address.add(new InvestigationAddress(reporter, cmsRecordDescriptor));
+      phoneNunbers.add(new PhoneNumber(reporter, cmsRecordDescriptor));
       role = StringUtils.equals(reporter.getMandatedReporterIndicator(), "Y")
           ? Role.MANDATED_REPORTER_ROLE.getType()
           : Role.NON_MANDATED_REPORTER_ROLE.getType();
       roles.add(role);
-      person = new Person(reporter, languages, null, address, phoneNunbers, roles);
+      person = new Person(reporter, languages, cmsRecordDescriptor, address, phoneNunbers, roles);
       persons.add(person);
 
     }

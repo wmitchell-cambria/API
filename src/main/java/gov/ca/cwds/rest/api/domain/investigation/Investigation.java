@@ -308,7 +308,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
     this.lastUpdatedBy = referral.getLastUpdatedId();
-    this.lastUpdatedAt = DomainChef.cookStrictTimestamp(referral.getLastUpdatedTime());
+    this.lastUpdatedAt = DomainChef.cookISO8601Timestamp(referral.getLastUpdatedTime());
     this.incidentCounty = referral.getCountySpecificCode();
 
     // this.incidentDate = ;
@@ -319,7 +319,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.name = StringUtils.trim(referral.getReferralName());
     this.reportNarrative = longText != null ? StringUtils.trim(longText.getTextDescription()) : "";
     this.responseTime = referral.getReferralResponseType();
-    this.startedAt = DomainChef.cookStrictTimestamp(referral.getReceivedDate());
+    this.startedAt = DomainChef.cookISO8601Timestamp(referral.getReceivedDate());
     this.additionalInformation =
         addInfoLongText != null ? StringUtils.trim(addInfoLongText.getTextDescription()) : "";
 
