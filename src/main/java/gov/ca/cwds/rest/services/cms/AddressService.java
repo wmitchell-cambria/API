@@ -149,6 +149,7 @@ public class AddressService implements
 
     gov.ca.cwds.data.persistence.cms.Address persistedAddress = addressDao.delete(primaryKey);
     if (persistedAddress != null) {
+      ssaname3Dao.deleteSsaname3("ADR_PHTT", primaryKey, "A");
       upperCaseTables.deleteAddressUc(primaryKey);
       return new gov.ca.cwds.rest.api.domain.cms.Address(persistedAddress, true);
     }
@@ -174,6 +175,7 @@ public class AddressService implements
       String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       Address managed = new Address(primaryKey, address, lastUpdatedId);
       managed = addressDao.update(managed);
+      ssaname3Dao.addressSsaname3("U", managed);
       upperCaseTables.updateAddressUc(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Address(managed, true);
     } catch (EntityNotFoundException e) {

@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.cms;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.ParameterMode;
@@ -19,6 +18,7 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.OtherClientName;
 import gov.ca.cwds.data.persistence.cms.SubstituteCareProvider;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
  * Hibernate DAO for DB2 Stored Procedure.
@@ -89,6 +89,17 @@ public class SsaName3Dao {
   }
 
   /**
+   * @param phttTable phonetic table name
+   * @param primaryKey primary key
+   * @param nameCode defines type of entity
+   */
+
+  public void deleteSsaname3(String phttTable, String primaryKey, String nameCode) {
+    callStoredProc(phttTable, "D", primaryKey, nameCode, " ", " ", " ", " ", " ", s,
+        DomainChef.uncookDateString(" "), " ");
+  }
+
+  /**
    * Call DB2 stored procedure SPSSANAME3 to insert soundex records for client search. Story
    * #146481759.
    * 
@@ -112,7 +123,6 @@ public class SsaName3Dao {
     final String STORED_PROC_NAME = "SPSSANAME3";
     final String schema =
         (String) session.getSessionFactory().getProperties().get("hibernate.default_schema");
-    String strdtts = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS").format(updateTimeStamp);
 
     try {
       ProcedureCall q = session.createStoredProcedureCall(schema + "." + STORED_PROC_NAME);
@@ -142,7 +152,7 @@ public class SsaName3Dao {
       q.setParameter("STREETNUM", streettNumber);
       q.setParameter("STREETNAME", streetName);
       q.setParameter("GVRENTC", String.valueOf(gvrEntc));
-      q.setParameter("LASTUPDTM", strdtts);
+      q.setParameter("LASTUPDTM", DomainChef.cookTimestamp(updateTimeStamp));
       q.setParameter("LASTUPDID", updateId);
 
       q.execute();
