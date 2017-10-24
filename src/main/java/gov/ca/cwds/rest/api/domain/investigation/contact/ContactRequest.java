@@ -1,14 +1,5 @@
 package gov.ca.cwds.rest.api.domain.investigation.contact;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
-import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
-import gov.ca.cwds.rest.validation.ValidSystemCodeId;
-import io.dropwizard.jackson.JsonSnakeCase;
-import io.dropwizard.validation.OneOf;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Set;
 
 import javax.validation.constraints.Size;
@@ -21,6 +12,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.validation.ValidSystemCodeId;
+import io.dropwizard.jackson.JsonSnakeCase;
+import io.dropwizard.validation.OneOf;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing a Contact Request
@@ -53,14 +53,14 @@ public class ContactRequest implements Request {
   private String endedAt;
 
   @JsonProperty("purpose")
-  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.CONTACT_TYPE)
-  @ApiModelProperty(required = false, readOnly = false,
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.CONTACT_TYPE)
+  @ApiModelProperty(required = true, readOnly = false,
       value = "Delivered service contact type system code ID e.g)  -> ", example = "433")
   private String purpose;
 
   @JsonProperty("communication_method")
-  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.COMMUNICATION_METHOD)
-  @ApiModelProperty(required = false, readOnly = false,
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.COMMUNICATION_METHOD)
+  @ApiModelProperty(required = true, readOnly = false,
       value = "Delivered service communication method type system code ID e.g) 408 -> In-Person",
       example = "408")
   private String communicationMethod;
@@ -69,7 +69,7 @@ public class ContactRequest implements Request {
   @JsonProperty("status")
   @Size(min = 1, max = 1)
   @OneOf(value = {"C", "A", "S"}, ignoreCase = false, ignoreWhitespace = true)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "C")
+  @ApiModelProperty(required = true, readOnly = false, value = "", example = "C")
   private String status;
 
 
@@ -78,8 +78,8 @@ public class ContactRequest implements Request {
   private Set<Integer> services;
 
   @JsonProperty("location")
-  @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.CONTACT_LOCATION)
-  @ApiModelProperty(required = false, readOnly = false,
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.CONTACT_LOCATION)
+  @ApiModelProperty(required = true, readOnly = false,
       value = "Delivered service contact location type system code ID e.g) 415 -> CWS Office",
       example = "415")
   private String location;
@@ -89,7 +89,8 @@ public class ContactRequest implements Request {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "detail text")
   private String note;
 
-  @ApiModelProperty(required = false, readOnly = false)
+  @NotEmpty
+  @ApiModelProperty(required = true, readOnly = false)
   @JsonProperty("people")
   // ("contact_participants") INDIVIDUAL_DELIVERED_SERVICE
   private Set<PostedIndividualDeliveredService> people;

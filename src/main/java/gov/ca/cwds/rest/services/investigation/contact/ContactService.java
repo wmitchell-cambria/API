@@ -18,6 +18,7 @@ import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
@@ -175,6 +176,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     validateCurrentUserStaffId(currentUserStaffId);
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
+    validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate());
     String referralId = referral.getId();
     String countySpecificCode = referral.getCountySpecificCode();
     String deliveredServiceId = deliveredService.create(request, countySpecificCode);
@@ -238,6 +240,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     validateCurrentUserStaffId(currentUserStaffId);
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
+    validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate());
     String referralId = referral.getId();
     String countySpecificCode = referral.getCountySpecificCode();
     deliveredService.update(primaryKey, request, countySpecificCode);
@@ -254,6 +257,13 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
         deliveredServiceId, currentUserStaffId, currentRequestStartTime));
 
     return this.find(referralId + ":" + deliveredServiceId);
+  }
+
+  private void validateContactStartDate(String startedAt, Date receivedDate) {
+    if (DomainChef.uncookISO8601Timestamp(startedAt).before(receivedDate)) {
+      throw new ServiceException("Contact Started At is before the Referral Received Date");
+    }
+    return;
   }
 
   /**
