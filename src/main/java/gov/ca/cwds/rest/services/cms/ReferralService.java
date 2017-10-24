@@ -31,7 +31,6 @@ import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.LegacyDefaultValues;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
@@ -167,10 +166,10 @@ public class ReferralService implements
     try {
       String staffPersonId = staffPersonIdRetriever.getStaffPersonId();
       StaffPerson staffperson;
-      if (staffPersonId == null){
+      if (staffPersonId == null) {
         LOGGER.error("Staff Person Id was not found");
         throw new ServiceException("Staff Person Id was not found.");
-      }else{
+      } else {
         staffperson = staffpersonDao.find(staffPersonId);
       }
 
@@ -184,7 +183,7 @@ public class ReferralService implements
 
       managed = referralDao.create(managed);
       if (managed == null || managed.getId() == null) {
-        LOGGER.warn("Unable to save referral: " + referral );
+        LOGGER.warn("Unable to save referral: " + referral);
         throw new ServiceException("Referral Not successfully saved");
       }
       // checking the staffPerson county code
@@ -303,7 +302,7 @@ public class ReferralService implements
         screeningToReferral.getResponseTime(), referredToResourceType(screeningToReferral),
         allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
-        LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID, responseRationalLongTextId,
+        screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
         screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
         screeningToReferral.getLimitedAccessDescription(), limitedAccessDate, agencyCode);
   }

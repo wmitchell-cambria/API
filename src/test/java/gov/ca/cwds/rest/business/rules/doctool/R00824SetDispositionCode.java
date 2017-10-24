@@ -14,7 +14,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -41,6 +40,7 @@ import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -55,7 +55,6 @@ import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
-import gov.ca.cwds.helper.CmsIdGenerator;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
@@ -63,7 +62,6 @@ import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
-import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
@@ -81,6 +79,7 @@ import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
+import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
@@ -101,6 +100,10 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.jackson.Jackson;
 
+/**
+ * 
+ * @author CWDS API Team
+ */
 public class R00824SetDispositionCode {
 
   private ScreeningToReferralService screeningToReferralService;
@@ -130,6 +133,7 @@ public class R00824SetDispositionCode {
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+  private ClientScpEthnicityService clientScpEthnicityService;
 
   private ReferralDao referralDao;
   private ClientDao clientDao;
@@ -257,10 +261,26 @@ public class R00824SetDispositionCode {
     reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);
 
-    participantService = mock(ParticipantService.class);
-    ClientParticipants referralParticipants = new ClientParticipants();
-    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
-        .thenReturn(referralParticipants);
+    ParticipantDao participantDao = mock(ParticipantDao.class);
+    when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
+        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.ReferralClient>() {
+
+          @Override
+          public gov.ca.cwds.data.persistence.cms.ReferralClient answer(InvocationOnMock invocation)
+              throws Throwable {
+            referralClient =
+                (gov.ca.cwds.data.persistence.cms.ReferralClient) invocation.getArguments()[0];
+            return referralClient;
+          }
+        });
+
+    clientScpEthnicityService = mock(ClientScpEthnicityService.class);
+    referralClientService =
+        new ReferralClientService(referralClientDao, nonLACountyTriggers, laCountyTrigger,
+            triggerTablesDao, staffpersonDao, staffPersonIdRetriever, riReferralClient);
+    participantService = new ParticipantService(participantDao, clientService,
+        referralClientService, reporterService, childClientService, addressService,
+        clientAddressService, validator, clientScpEthnicityService);
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
@@ -291,7 +311,6 @@ public class R00824SetDispositionCode {
    * @throws Exception - Exception
    */
   @Test
-  @Ignore
   public void testForSettingTheReferralClientDispositionCode() throws Exception {
 
     Referral referralDomain = new ReferralResourceBuilder().build();
@@ -319,15 +338,6 @@ public class R00824SetDispositionCode {
             (Client) clientDomain.toArray()[0], "2016-10-31");
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenReturn(clientToCreate);
-
-    Set<ReferralClient> referralClientDomain = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validReferralClient.json"),
-        new TypeReference<Set<ReferralClient>>() {});
-    gov.ca.cwds.data.persistence.cms.ReferralClient referralClientToCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(
-            (ReferralClient) referralClientDomain.toArray()[0], "2016-10-31");
-    when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
-        .thenReturn(referralClientToCreate);
 
     Set<Allegation> allegationDomain =
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAllegation.json"),
@@ -388,28 +398,12 @@ public class R00824SetDispositionCode {
         .setResponseTime((short) 1519).createScreeningToReferral();
     when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
 
-    when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
-        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.ReferralClient>() {
-
-          @Override
-          public gov.ca.cwds.data.persistence.cms.ReferralClient answer(InvocationOnMock invocation)
-              throws Throwable {
-            referralClient =
-                (gov.ca.cwds.data.persistence.cms.ReferralClient) invocation.getArguments()[0];
-            return referralClient;
-          }
-        });
-
     ClientParticipants clientParticipants = new ClientParticipants();
     Set<Participant> participants = screeningToReferral.getParticipants();
 
-    CmsIdGenerator generator = new CmsIdGenerator();
-    for (Participant participant : participants) {
-      participant.setLegacyId(generator.generate());
-    }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
-        .thenReturn(clientParticipants);
+    // when(participantService.saveParticipants(any(), any(), any(), any(), any()))
+    // .thenReturn(clientParticipants);
 
     screeningToReferralService.create(screeningToReferral);
     assertThat(referralClient.getDispositionCode(), is(equalTo("A")));
