@@ -62,8 +62,8 @@ elasticsearch:
     elasticsearch.cluster: ${ES_CLUSTER_PEOPLE:-taborda-dev-es}
     elasticsearch.alias: ${ES_ALIAS_PEOPLE:-people}
     elasticsearch.doctype: ${ES_DOCTYPE_PEOPLE:-person}  
-    elasticsearch.xpack.user: ${XPACK_USER_PEOPLE:-elastic}
-    elasticsearch.xpack.password: ${XPACK_PASSWORD_PEOPLE:-changeme}
+    elasticsearch.xpack.user: ${XPACK_USER_PEOPLE}
+    elasticsearch.xpack.password: ${XPACK_PASSWORD_PEOPLE}
     
   # Screenings index
   screeningsIndex:
@@ -72,8 +72,8 @@ elasticsearch:
     elasticsearch.cluster: ${ES_CLUSTER_SCREENINGS:-taborda-dev-es}
     elasticsearch.alias: ${ES_ALIAS_SCREENINGS:-screenings}
     elasticsearch.doctype: ${ES_DOCTYPE:-screening}
-    elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-elastic}
-    elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS:-changeme}
+    elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS}
+    elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS}
     
 smartystreets:
   clientId: ${SS_ID:-8721f357-6381-1001-4633-5157e84b68cb}
