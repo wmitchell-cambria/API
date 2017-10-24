@@ -64,7 +64,6 @@ public class SsaName3Dao {
         client.getLastUpdatedId());
   }
 
-
   /**
    * @param crudOperation I/U/D
    * @param otherClientName other client name object

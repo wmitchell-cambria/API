@@ -81,7 +81,6 @@ public class AddressService implements
     return create(address, timestamp);
   }
 
-
   /**
    * This private method is created to handle to single address and referral address with single
    * timestamp
@@ -146,7 +145,6 @@ public class AddressService implements
 
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Address delete(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Address persistedAddress = addressDao.delete(primaryKey);
     if (persistedAddress != null) {
       ssaname3Dao.deleteSsaname3("ADR_PHTT", primaryKey, "A");
