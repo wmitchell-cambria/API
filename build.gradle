@@ -2,8 +2,8 @@ buildscript {
     repositories {
         jcenter()
         maven {
-      		url "https://plugins.gradle.org/m2/"
-    	}
+      		url "https://plugins.gradle.org/m2/"      		
+    	    }
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
@@ -39,7 +39,7 @@ project.ext {
     metricsVersion = "3.1.0"
     dropwizardSwaggerVersion = "1.0.0-1"
     mainclass = "gov.ca.cwds.rest.ApiApplication" 
-    elasticsearchVersion = "5.4.0"
+    elasticsearchVersion = "5.5.0"
     log4jVersion = "2.8.2"
 }
 
@@ -52,6 +52,9 @@ repositories {
     maven {
         url "http://maven2.cwds.tabordasolutions.net"
         // url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        url "https://artifacts.elastic.co/maven"
     }
 }
 
@@ -140,6 +143,7 @@ dependencies {
     // ES 5.x:
     compile group: 'org.elasticsearch', name: 'elasticsearch', version: elasticsearchVersion
     compile group: 'org.elasticsearch.client', name: 'transport', version: elasticsearchVersion
+    compile ("org.elasticsearch.client:x-pack-transport:" + elasticsearchVersion)
 
 	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 	// Exclude transitive dependencies.

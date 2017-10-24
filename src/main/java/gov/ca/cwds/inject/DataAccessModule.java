@@ -3,18 +3,23 @@ package gov.ca.cwds.inject;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -438,8 +443,7 @@ public class DataAccessModule extends AbstractModule {
          */
 
         try {
-          TransportClient transportClient = new PreBuiltTransportClient(
-              Settings.builder().put("cluster.name", config.getElasticsearchCluster()).build());
+          TransportClient transportClient = makeESTransportClient(config);
           transportClient.addTransportAddress(
               new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
                   Integer.parseInt(config.getElasticsearchPort())));
@@ -452,5 +456,25 @@ public class DataAccessModule extends AbstractModule {
     }
 
     return clients;
+  }
+
+  private static TransportClient makeESTransportClient(final ElasticsearchConfiguration config) {
+    TransportClient esClient = null;
+    String cluster = config.getElasticsearchCluster();
+    String user = config.getUser();
+    String password = config.getPassword();
+    boolean secureClient = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(password);
+
+    if (secureClient) {
+      LOGGER.info("ENABLE X-PACK - cluster: " + cluster);
+      final Settings.Builder settings = Settings.builder().put("cluster.name", cluster);
+      settings.put("xpack.security.user", user + ":" + password);
+      esClient = new PreBuiltXPackTransportClient(settings.build());
+    } else {
+      LOGGER.info("DISABLE X-PACK - cluster:" + cluster);
+      esClient =
+          new PreBuiltTransportClient(Settings.builder().put("cluster.name", cluster).build());
+    }
+    return esClient;
   }
 }
