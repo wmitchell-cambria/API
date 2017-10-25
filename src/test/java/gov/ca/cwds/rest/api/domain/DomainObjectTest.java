@@ -66,12 +66,12 @@ public class DomainObjectTest {
 
   @Test
   public void uncookBooleanstringReturnsNullOnNull() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(null), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(null), is(Boolean.FALSE));
   }
 
   @Test
   public void uncookBooleanstringReturnsNullOnEmpty() throws Exception {
-    assertThat(DomainChef.uncookBooleanString("  "), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString("  "), is(Boolean.FALSE));
   }
 
   @Test

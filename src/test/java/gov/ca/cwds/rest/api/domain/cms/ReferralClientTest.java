@@ -150,7 +150,7 @@ public class ReferralClientTest {
     assertThat(totest.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
     assertThat(totest.getMentalHealthIssuesIndicator(),
         is(equalTo(DomainChef.uncookBooleanString(persistent.getMentalHealthIssuesIndicator()))));
-    assertThat(totest.getAlcoholIndicator(), is(nullValue()));
+    assertThat(totest.getAlcoholIndicator(), is(Boolean.FALSE));
     assertThat(totest.getDrugIndicator(),
         is(equalTo(DomainChef.uncookBooleanString(persistent.getDrugIndicator()))));
   }
