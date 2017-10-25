@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#", 
+  "definitions": {}, 
+  "id": "http://example.com/example.json", 
+  "properties": {
+    "relationships": {
+      "id": "/properties/relationships", 
+      "items": {
+        "id": "/properties/relationships/items", 
+        "properties": {
+          "indexed_person_relationship": {
+            "default": "Daughter", 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "Daughter"
+            ], 
+            "id": "/properties/relationships/items/properties/indexed_person_relationship", 
+            "title": "The Indexed_person_relationship Schema.", 
+            "type": "string"
+          }, 
+          "legacy_descriptor": {
+            "id": "/properties/relationships/items/properties/legacy_descriptor", 
+            "properties": {
+              "legacy_id": {
+                "default": "QkaLLuc00I", 
+                "description": "An explanation about the purpose of this instance.", 
+                "examples": [
+                  "QkaLLuc00I"
+                ], 
+                "id": "/properties/relationships/items/properties/legacy_descriptor/properties/legacy_id", 
+                "title": "The Legacy_id Schema.", 
+                "type": "string"
+              }, 
+              "legacy_last_updated": {
+                "default": "1998-03-20T16:34:51.000-0800", 
+                "description": "An explanation about the purpose of this instance.", 
+                "examples": [
+                  "1998-03-20T16:34:51.000-0800"
+                ], 
+                "id": "/properties/relationships/items/properties/legacy_descriptor/properties/legacy_last_updated", 
+                "title": "The Legacy_last_updated Schema.", 
+                "type": "string"
+              }, 
+              "legacy_table_description": {
+                "default": "Client", 
+                "description": "An explanation about the purpose of this instance.", 
+                "examples": [
+                  "Client"
+                ], 
+                "id": "/properties/relationships/items/properties/legacy_descriptor/properties/legacy_table_description", 
+                "title": "The Legacy_table_description Schema.", 
+                "type": "string"
+              }, 
+              "legacy_table_name": {
+                "default": "CLIENT_T", 
+                "description": "An explanation about the purpose of this instance.", 
+                "examples": [
+                  "CLIENT_T"
+                ], 
+                "id": "/properties/relationships/items/properties/legacy_descriptor/properties/legacy_table_name", 
+                "title": "The Legacy_table_name Schema.", 
+                "type": "string"
+              }, 
+              "legacy_ui_id": {
+                "default": "1519-4852-7267-4000018", 
+                "description": "An explanation about the purpose of this instance.", 
+                "examples": [
+                  "1519-4852-7267-4000018"
+                ], 
+                "id": "/properties/relationships/items/properties/legacy_descriptor/properties/legacy_ui_id", 
+                "title": "The Legacy_ui_id Schema.", 
+                "type": "string"
+              }
+            }, 
+            "required": [
+              "legacy_table_description", 
+              "legacy_ui_id", 
+              "legacy_last_updated", 
+              "legacy_id", 
+              "legacy_table_name"
+            ], 
+            "type": "object"
+          }, 
+          "related_person_first_name": {
+            "default": null, 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "R3.28.16 C1"
+            ], 
+            "id": "/properties/relationships/items/properties/related_person_first_name", 
+            "title": "The Related_person_first_name Schema.", 
+            "type": "string"
+          }, 
+          "related_person_id": {
+            "default": null, 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "None"
+            ], 
+            "id": "/properties/relationships/items/properties/related_person_id", 
+            "title": "The Related_person_id Schema.", 
+            "type": "null"
+          }, 
+          "related_person_last_name": {
+            "default": "Allderidge", 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "Allderidge"
+            ], 
+            "id": "/properties/relationships/items/properties/related_person_last_name", 
+            "title": "The Related_person_last_name Schema.", 
+            "type": "string"
+          }, 
+          "related_person_legacy_id": {
+            "default": "QkaLLuc00I", 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "QkaLLuc00I"
+            ], 
+            "id": "/properties/relationships/items/properties/related_person_legacy_id", 
+            "title": "The Related_person_legacy_id Schema.", 
+            "type": "string"
+          }, 
+          "related_person_legacy_source_table": {
+            "default": null, 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "None"
+            ], 
+            "id": "/properties/relationships/items/properties/related_person_legacy_source_table", 
+            "title": "The Related_person_legacy_source_table Schema.", 
+            "type": "null"
+          }, 
+          "related_person_relationship": {
+            "default": "Father", 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "Father"
+            ], 
+            "id": "/properties/relationships/items/properties/related_person_relationship", 
+            "title": "The Related_person_relationship Schema.", 
+            "type": "string"
+          }, 
+          "relationship_context": {
+            "default": "Birth", 
+            "description": "An explanation about the purpose of this instance.", 
+            "examples": [
+              "Birth"
+            ], 
+            "id": "/properties/relationships/items/properties/relationship_context", 
+            "title": "The Relationship_context Schema.", 
+            "type": "string"
+          }
+        }, 
+        "required": [
+          "related_person_relationship", 
+          "related_person_id", 
+          "relationship_context", 
+          "related_person_first_name", 
+          "indexed_person_relationship", 
+          "related_person_legacy_source_table", 
+          "related_person_legacy_id", 
+          "related_person_last_name", 
+          "legacy_descriptor"
+        ], 
+        "type": "object"
+      }, 
+      "type": "array"
+    }
+  }, 
+  "required": [
+    "relationships"
+  ], 
+  "type": "object"
+}
