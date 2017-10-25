@@ -94,6 +94,7 @@ import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueType;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -200,7 +201,7 @@ public class ScreeningToReferralServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
-
+    new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -292,7 +293,6 @@ public class ScreeningToReferralServiceTest {
     messageBuilder = new MessageBuilder();
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-
     screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
         allegationService, crossReportService, referralClientService, reporterService,
         addressService, clientAddressService, childClientService, assignmentService,
@@ -301,7 +301,6 @@ public class ScreeningToReferralServiceTest {
         governmentOrganizationCrossReportService);
 
   }
-
 
   @SuppressWarnings("javadoc")
   @Test(expected = NotImplementedException.class)

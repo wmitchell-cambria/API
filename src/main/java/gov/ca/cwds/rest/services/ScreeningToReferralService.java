@@ -35,6 +35,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -388,7 +389,7 @@ public class ScreeningToReferralService implements CrudsService {
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId, crossReport,
-            referralId, LegacyDefaultValues.DEFAULT_STAFF_PERSON_ID, outStateLawEnforcementAddr,
+            referralId, getStaffIdCreatedCrossreport(), outStateLawEnforcementAddr,
             lawEnforcementId, countyId, outStateLawEnforcementIndicator,
             governmentOrgCrossRptIndicatorVar);
 
@@ -401,6 +402,10 @@ public class ScreeningToReferralService implements CrudsService {
     crossReport.setLegacyId(postedCrossReport.getThirdId());
     crossReport.setLegacySourceTable(CROSS_REPORT_TABLE_NAME);
     resultCrossReports.add(crossReport);
+  }
+
+  private static String getStaffIdCreatedCrossreport() {
+    return RequestExecutionContext.instance().getStaffId();
   }
 
   private Map<String, String> getLawEnforcement(Set<GovernmentAgency> agencies) {
