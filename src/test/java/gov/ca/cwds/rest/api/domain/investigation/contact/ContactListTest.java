@@ -18,8 +18,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.contacts.ContactListEntityBuilder;
+import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -37,10 +39,16 @@ public class ContactListTest {
   public void jsonCreatorConstructorTest() throws Exception {
     Set<Integer> services = new HashSet<>();
     final Set<PostedIndividualDeliveredService> people = validPeople();
+    CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().setId("0X5")
+        .setUiId("0X5").setTableName("STFPERST").setTableDescription("Staff").build();
+    CmsRecordDescriptor contactLegacyDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setId("ABC1234567").setUiId("1111-2222-3333-4444555")
+            .setTableName("DL_SVC_T").setTableDescription("Delivered Service").build();
+
     LastUpdatedBy lastUpdatedByPerson =
-        new LastUpdatedBy("0X5", "Joe", "M", "Friday", "Mr.", "Jr.");
-    Contact contact = new Contact("1234567ABC", lastUpdatedByPerson, "2010-04-27T23:30:14.000Z", "",
-        "433", "408", "C", services, "415",
+        new LastUpdatedBy(legacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr.");
+    Contact contact = new Contact(contactLegacyDescriptor, lastUpdatedByPerson,
+        "2010-04-27T23:30:14.000Z", "", "433", "408", "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
     Set<Contact> contacts = new HashSet<>();
     contacts.add(contact);
@@ -57,9 +65,16 @@ public class ContactListTest {
 
   private Set<PostedIndividualDeliveredService> validPeople() {
     final Set<PostedIndividualDeliveredService> ret = new HashSet<>();
-    ret.add(new PostedIndividualDeliveredService("CLIENT_T", "3456789ABC", "John", "Bob", "Smith",
+    CmsRecordDescriptor person1LegacyDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setId("3456789ABC").setUiId("2222-2222-3333-4444555")
+            .setTableName("CLIENT_T").setTableDescription("Client").build();
+    CmsRecordDescriptor person2LegacyDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setId("4567890ABC").setUiId("3333-2222-3333-4444555")
+            .setTableName("REPTR_T").setTableDescription("Reporter").build();
+
+    ret.add(new PostedIndividualDeliveredService(person1LegacyDescriptor, "John", "Bob", "Smith",
         "Mr.", "Jr.", ""));
-    ret.add(new PostedIndividualDeliveredService("REPTR_T", "4567890ABC ", "Sam", "Bill", "Jones",
+    ret.add(new PostedIndividualDeliveredService(person2LegacyDescriptor, "Sam", "Bill", "Jones",
         "Mr.", "III", "Reporter"));
     return ret;
   }

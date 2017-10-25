@@ -24,7 +24,9 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
+import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
@@ -146,9 +148,16 @@ public class DeliveredToIndividualServiceTest {
 
   private Set<PostedIndividualDeliveredService> validPeople() {
     final Set<PostedIndividualDeliveredService> ret = new HashSet<>();
-    ret.add(new PostedIndividualDeliveredService("CLIENT_T", "3456789ABC", "John", "Bob", "Smith",
+    CmsRecordDescriptor person1LegacyDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setId("3456789ABC").setUiId("2222-2222-3333-4444555")
+            .setTableName("CLIENT_T").setTableDescription("Client").build();
+    CmsRecordDescriptor person2LegacyDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setId("4567890ABC").setUiId("3333-2222-3333-4444555")
+            .setTableName("REPTR_T").setTableDescription("Reporter").build();
+
+    ret.add(new PostedIndividualDeliveredService(person1LegacyDescriptor, "John", "Bob", "Smith",
         "Mr.", "Jr.", ""));
-    ret.add(new PostedIndividualDeliveredService("REPTR_T", "4567890ABC ", "Sam", "Bill", "Jones",
+    ret.add(new PostedIndividualDeliveredService(person2LegacyDescriptor, "Sam", "Bill", "Jones",
         "Mr.", "III", "Reporter"));
     return ret;
   }

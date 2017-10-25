@@ -1,10 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import io.swagger.annotations.ApiModelProperty;
-
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,6 +8,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing a last updated by person.
@@ -25,10 +29,9 @@ public class LastUpdatedBy extends ReportingDomain implements Request, Response 
    */
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("id")
-  @ApiModelProperty(example = "0X5")
-  @Size(min = 3, max = 3)
-  private String id;
+  @NotNull
+  @JsonProperty("legacy_descriptor")
+  private CmsRecordDescriptor legacyDescriptor;
 
   @JsonProperty("first_name")
   @Size(min = 1, max = 20)
@@ -55,11 +58,10 @@ public class LastUpdatedBy extends ReportingDomain implements Request, Response 
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "MR.")
   private String prefixTitle;
 
-
   /**
    * Constructor
    * 
-   * @param id The id
+   * @param legacyDescriptor The CmsRecordDescriptor
    * @param firstName The first name
    * @param lastName The last name
    * @param middleInitial The middle name
@@ -67,12 +69,13 @@ public class LastUpdatedBy extends ReportingDomain implements Request, Response 
    * @param prefixTitle The prefix_title
    */
   @JsonCreator
-  public LastUpdatedBy(@JsonProperty("id") String id, @JsonProperty("first_name") String firstName,
+  public LastUpdatedBy(@JsonProperty("legacy_descriptor") CmsRecordDescriptor legacyDescriptor,
+      @JsonProperty("first_name") String firstName,
       @JsonProperty("middle_initial") String middleInitial,
       @JsonProperty("last_name") String lastName, @JsonProperty("suffix_title") String suffixTitle,
       @JsonProperty("prefix_title") String prefixTitle) {
     super();
-    this.id = id;
+    this.legacyDescriptor = legacyDescriptor;
     this.firstName = firstName;
     this.middleInitial = middleInitial;
     this.lastName = lastName;
@@ -83,7 +86,8 @@ public class LastUpdatedBy extends ReportingDomain implements Request, Response 
 
   public LastUpdatedBy(StaffPerson persistedStaffPerson) {
     super();
-    this.id = persistedStaffPerson.getPrimaryKey();
+    this.legacyDescriptor = CmsRecordUtils
+        .createLegacyDescriptor(persistedStaffPerson.getPrimaryKey(), LegacyTable.STAFF_PERSON);
     this.firstName = persistedStaffPerson.getFirstName();
     this.middleInitial = persistedStaffPerson.getMiddleInitial();
     this.lastName = persistedStaffPerson.getLastName();
@@ -98,10 +102,10 @@ public class LastUpdatedBy extends ReportingDomain implements Request, Response 
 
 
   /**
-   * @return the id
+   * @return the legacyDescriptor
    */
-  public String getId() {
-    return id;
+  public CmsRecordDescriptor getLegacyDescriptor() {
+    return legacyDescriptor;
   }
 
 

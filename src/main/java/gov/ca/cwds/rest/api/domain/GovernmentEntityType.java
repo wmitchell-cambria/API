@@ -1,9 +1,9 @@
 package gov.ca.cwds.rest.api.domain;
 
-import gov.ca.cwds.data.ApiSysCodeAware;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import gov.ca.cwds.data.ApiSysCodeAware;
 
 
 /**
@@ -313,6 +313,9 @@ public enum GovernmentEntityType implements ApiSysCodeAware {
    */
   STATE_OF_CALIFORNIA(1126, "State of California", "99");
 
+  private static final Map<Integer, GovernmentEntityType> mapBySysId = new HashMap<>();
+  private static final Map<String, GovernmentEntityType> mapByCountyCd = new HashMap<>();
+
   private final int sysId;
   private final String description;
   private final String countyCd;
@@ -351,11 +354,6 @@ public enum GovernmentEntityType implements ApiSysCodeAware {
     return mapByCountyCd.containsKey(countyCd) ? mapByCountyCd.get(countyCd)
         : GovernmentEntityType.NONE;
   }
-
-
-  private static final Map<Integer, GovernmentEntityType> mapBySysId = new HashMap<>();
-  private static final Map<String, GovernmentEntityType> mapByCountyCd = new HashMap<>();
-
 
   static {
     for (GovernmentEntityType e : GovernmentEntityType.values()) {

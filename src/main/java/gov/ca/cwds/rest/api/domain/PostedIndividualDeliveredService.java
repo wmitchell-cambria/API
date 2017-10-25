@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -13,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -22,21 +22,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"table_name", "id", "first_name", "last_name", "relationship"})
+@JsonPropertyOrder({"legacy_descriptor", "first_name", "last_name", "relationship"})
 public class PostedIndividualDeliveredService extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
 
-  @NotEmpty
-  @JsonProperty("table_name")
-  @Size(min = 1, max = 10)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "REPTR_T")
-  private String tableName;
-
-  @Size(max = CMS_ID_LEN)
-  // @NotNull
-  @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC1234567")
-  private String id;
+  @NotNull
+  @JsonProperty("legacy_descriptor")
+  private CmsRecordDescriptor legacyDescriptor;
 
   @NotEmpty
   @JsonProperty("first_name")
@@ -76,8 +69,7 @@ public class PostedIndividualDeliveredService extends ReportingDomain implements
 
 
   /**
-   * @param tableName legacy table name
-   * @param id id in legacy table
+   * @param legacyDescriptor the CmsRecordDescriptor
    * @param firstName first name
    * @param middleName middle name
    * @param lastName last name
@@ -85,15 +77,14 @@ public class PostedIndividualDeliveredService extends ReportingDomain implements
    * @param prefixTitle The prefix_title
    * @param relationship relationship
    */
-  public PostedIndividualDeliveredService(@JsonProperty("table_name") String tableName,
-      @JsonProperty("id") String id, @JsonProperty("first_name") String firstName,
-      @JsonProperty("middle_name") String middleName, @JsonProperty("last_name") String lastName,
-      @JsonProperty("suffix_title") String suffixTitle,
+  public PostedIndividualDeliveredService(
+      @JsonProperty("legacy_descriptor") CmsRecordDescriptor legacyDescriptor,
+      @JsonProperty("first_name") String firstName, @JsonProperty("middle_name") String middleName,
+      @JsonProperty("last_name") String lastName, @JsonProperty("suffix_title") String suffixTitle,
       @JsonProperty("prefix_title") String prefixTitle,
       @JsonProperty("relationship") String relationship) {
     super();
-    this.tableName = tableName;
-    this.id = id;
+    this.legacyDescriptor = legacyDescriptor;
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
@@ -110,19 +101,10 @@ public class PostedIndividualDeliveredService extends ReportingDomain implements
 
 
   /**
-   * @return the tableName
+   * @return the legacyDescriptor
    */
-  public String getTableName() {
-    return tableName;
-  }
-
-
-
-  /**
-   * @return the id
-   */
-  public String getId() {
-    return id;
+  public CmsRecordDescriptor getLegacyDescriptor() {
+    return legacyDescriptor;
   }
 
 

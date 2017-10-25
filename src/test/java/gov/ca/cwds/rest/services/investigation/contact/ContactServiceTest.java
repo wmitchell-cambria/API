@@ -25,10 +25,12 @@ import gov.ca.cwds.fixture.contacts.ContactRequestBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceResourceBuilder;
 import gov.ca.cwds.fixture.contacts.ReferralClientDeliveredServiceEntityBuilder;
+import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
@@ -61,10 +63,13 @@ public class ContactServiceTest {
 
     target = new ContactService(deliveredService, referralClientDeliveredService,
         deliveredToIndividualService, contactPartyDeliveredServiceDao, referralDao);
+    CmsRecordDescriptor staffLegacyDescriptor = new CmsRecordDescriptorEntityBuilder().setId("0X5")
+        .setUiId("0X5").setTableName("STFPERST").setTableDescription("Staff").build();
+
     when(deliveredService.find(any()))
         .thenReturn(new DeliveredServiceEntityBuilder().buildDeliveredServiceEntity());
     when(deliveredService.getTheLastUpdatedByStaffPerson(any()))
-        .thenReturn(new LastUpdatedBy("0X5", "Joe", "M", "Friday", "Mr.", "Jr."));
+        .thenReturn(new LastUpdatedBy(staffLegacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr."));
     when(deliveredService.combineDetailTextAndContinuation(any())).thenReturn("this is a test");
     when(deliveredToIndividualService.getPeopleInIndividualDeliveredService(any()))
         .thenReturn(new HashSet<PostedIndividualDeliveredService>());

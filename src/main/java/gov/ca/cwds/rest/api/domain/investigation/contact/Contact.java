@@ -1,12 +1,11 @@
 package gov.ca.cwds.rest.api.domain.investigation.contact;
 
-import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -29,6 +28,9 @@ import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
@@ -40,8 +42,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"id", "lastUpdatedBy", "staffName", "startedAt", "endedAt", "purpose",
-    "communicationMethod", "status", "services", "location", "note", "people"})
+@JsonPropertyOrder({"legacy_descriptor", "lastUpdatedBy", "staffName", "startedAt", "endedAt",
+    "purpose", "communicationMethod", "status", "services", "location", "note", "people"})
 public class Contact extends ReportingDomain implements Request, Response {
 
   /**
@@ -49,24 +51,20 @@ public class Contact extends ReportingDomain implements Request, Response {
    */
   private static final long serialVersionUID = 1L;
 
-  @Size(max = CMS_ID_LEN)
-  // @NotNull
-  @JsonProperty("id")
-  @ApiModelProperty(required = true, readOnly = true, value = "", example = "ABC1234567")
-  private String id;
+  @NotNull
+  @JsonProperty("legacy_descriptor")
+  private CmsRecordDescriptor legacyDescriptor;
 
   @JsonProperty("last_updated_by")
-  @ApiModelProperty(required = false, readOnly = false)
-  // , value = "primary contact staff person id")
+  @ApiModelProperty(required = false, readOnly = false// )
+      , value = "primary contact staff person legacy_descriptor")
   private LastUpdatedBy lastUpdatedBy;
 
 
   @NotEmpty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-  // datetime
   @JsonProperty("started_at")
   @gov.ca.cwds.rest.validation.Date(format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", required = true)
-  // "2017-08-28T14:30:00.000Z"
   @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
       example = "2010-04-27T23:30:14.000Z")
   private String startedAt;
@@ -80,10 +78,9 @@ public class Contact extends ReportingDomain implements Request, Response {
   private String endedAt;
 
   @JsonProperty("purpose")
-  // "service_contact" delivered service serviceContactType
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.CONTACT_TYPE)
   @ApiModelProperty(required = false, readOnly = false,
-      value = "Delivered service contact type system code ID e.g)  -> 433 Conduct Client Evaluation ",
+      value = "Delivered Service serviceContactType system code ID e.g)  -> 433 Conduct Client Evaluation ",
       example = "433")
   private String purpose;
 
@@ -108,27 +105,25 @@ public class Contact extends ReportingDomain implements Request, Response {
   private Set<Integer> services;
 
   @JsonProperty("location")
-  // ("contact_location")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.CONTACT_LOCATION)
   @ApiModelProperty(required = false, readOnly = false,
-      value = "Delivered service contact location type system code ID e.g) 415 -> CWS Office",
+      value = "Delivered Service contactLocationType system code ID e.g) 415 -> CWS Office",
       example = "415")
   private String location;
 
   @JsonProperty("note")
-  // ("detail_text")
-  // a row in LONG_TEXT with content of contact_narrative
   @Size(max = 8000)
-  @ApiModelProperty(required = false, readOnly = false, value = "", example = "detail text")
+  @ApiModelProperty(required = false, readOnly = false,
+      value = "The contact narrative that is entered in two rows in Long Text Table",
+      example = "detail text")
   private String note;
 
   @ApiModelProperty(required = false, readOnly = false)
   @JsonProperty("people")
-  // ("contact_participants") INDIVIDUAL_DELIVERED_SERVICE
   private Set<PostedIndividualDeliveredService> people;
 
   /**
-   * @param id id
+   * @param legacyDescriptor the CmsRecordDescriptor
    * @param lastUpdatedBy last updated by staff
    * @param startedAt started at
    * @param endedAt ended at
@@ -141,7 +136,7 @@ public class Contact extends ReportingDomain implements Request, Response {
    * @param people people
    */
   @JsonCreator
-  public Contact(@JsonProperty("id") String id,
+  public Contact(@JsonProperty("legacy_descriptor") CmsRecordDescriptor legacyDescriptor,
       @JsonProperty("last_updated_by") LastUpdatedBy lastUpdatedBy,
       @JsonProperty("started_at") String startedAt, @JsonProperty("ended_at") String endedAt,
       @JsonProperty("purpose") String purpose,
@@ -150,7 +145,7 @@ public class Contact extends ReportingDomain implements Request, Response {
       @JsonProperty("location") String location, @JsonProperty("note") String note,
       @JsonProperty("people") Set<PostedIndividualDeliveredService> people) {
     super();
-    this.id = id;
+    this.legacyDescriptor = legacyDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
     this.startedAt = startedAt;
     this.endedAt = endedAt;
@@ -172,7 +167,8 @@ public class Contact extends ReportingDomain implements Request, Response {
   public Contact(DeliveredServiceEntity persistedDeliverdService, LastUpdatedBy lastUpdatedBy,
       String note, Set<PostedIndividualDeliveredService> people) {
     super();
-    this.id = persistedDeliverdService.getId();
+    this.legacyDescriptor = CmsRecordUtils.createLegacyDescriptor(persistedDeliverdService.getId(),
+        LegacyTable.DELIVERED_SERVICE);
     this.lastUpdatedBy = lastUpdatedBy;
     String startDate = DomainChef.cookDate(persistedDeliverdService.getStartDate());
     if (StringUtils.isNotEmpty(startDate)) {
@@ -199,8 +195,8 @@ public class Contact extends ReportingDomain implements Request, Response {
   public Contact(DeliveredServiceDomain deliverdServiceDomain, String note,
       Set<PostedIndividualDeliveredService> people) {
     super();
-    this.id = deliverdServiceDomain.getId();
-    this.lastUpdatedBy = lastUpdatedBy;
+    this.legacyDescriptor = CmsRecordUtils.createLegacyDescriptor(deliverdServiceDomain.getId(),
+        LegacyTable.DELIVERED_SERVICE);
     String startDate = deliverdServiceDomain.getStartDate();
     if (StringUtils.isNotEmpty(startDate)) {
       this.startedAt = startDate + "T" + deliverdServiceDomain.getStartTime() + "Z";
@@ -235,10 +231,10 @@ public class Contact extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * @return the id
+   * @return the legacy_descriptor
    */
-  public String getId() {
-    return id;
+  public CmsRecordDescriptor getLegacyDescriptor() {
+    return legacyDescriptor;
   }
 
 

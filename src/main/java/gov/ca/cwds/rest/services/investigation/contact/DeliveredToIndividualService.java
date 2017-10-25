@@ -25,8 +25,11 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 
 /**
  * Business layer object
@@ -130,24 +133,26 @@ public class DeliveredToIndividualService {
   protected PostedIndividualDeliveredService addPersonDetails(
       final BaseDaoImpl<? extends ApiPersonAware> dao, final Code code, final String id) {
     final ApiPersonAware person = dao.find(id);
+    CmsRecordDescriptor legacyDescriptor =
+        CmsRecordUtils.createLegacyDescriptor(id, LegacyTable.lookupByName(code.getValue()));
     return (person != null)
-        ? new PostedIndividualDeliveredService(code.getValue(), id, person.getFirstName(),
+        ? new PostedIndividualDeliveredService(legacyDescriptor, person.getFirstName(),
             person.getMiddleName(), person.getLastName(), person.getNameSuffix(),
             person.getNameSuffix(), code.getDescription())
-        : defaultPostedIndividualDeliveredService(code, id);
+        : defaultPostedIndividualDeliveredService(code, legacyDescriptor);
   }
 
   /**
    * Create a default Person when name information is unknown
    * 
    * @param deliveredToIndividualCode the deliveredToIndividualCode
-   * @param id the id
+   * @param legacyDescriptor the id
    * @return default IndividualDeliveredService with no name info
    */
   private PostedIndividualDeliveredService defaultPostedIndividualDeliveredService(
-      Code deliveredToIndividualCode, String id) {
-    return new PostedIndividualDeliveredService(deliveredToIndividualCode.getValue(), id, "", "",
-        "", "", "", deliveredToIndividualCode.getDescription());
+      Code deliveredToIndividualCode, CmsRecordDescriptor legacyDescriptor) {
+    return new PostedIndividualDeliveredService(legacyDescriptor, "", "", "", "", "",
+        deliveredToIndividualCode.getDescription());
   }
 
   /**
@@ -260,9 +265,9 @@ public class DeliveredToIndividualService {
     Integer serviceContactType = Integer.valueOf(contactRequest.getPurpose());
     Set<PostedIndividualDeliveredService> people = contactRequest.getPeople();
     for (PostedIndividualDeliveredService person : people) {
-      String deliveredToIndividualCode =
-          DeliveredToIndividualService.Code.lookupByValue(person.getTableName()).getCodeLiteral();
-      String deliveredToIndividualId = person.getId();
+      String deliveredToIndividualCode = DeliveredToIndividualService.Code
+          .lookupByValue(person.getLegacyDescriptor().getTableName()).getCodeLiteral();
+      String deliveredToIndividualId = person.getLegacyDescriptor().getId();
       IndividualDeliveredServiceEntity ids =
           new IndividualDeliveredServiceEntity(deliveredServiceId, deliveredToIndividualCode,
               deliveredToIndividualId, countySpecificCode, endedAt, serviceContactType.shortValue(),
@@ -294,12 +299,12 @@ public class DeliveredToIndividualService {
         findNewPeopleToAddToIndividualDeliveredService(people, entities);
     for (PostedIndividualDeliveredService newPerson : peopleToAdd) {
       String deliveredToIndividualCode = DeliveredToIndividualService.Code
-          .lookupByValue(newPerson.getTableName()).getCodeLiteral();
+          .lookupByValue(newPerson.getLegacyDescriptor().getTableName()).getCodeLiteral();
 
-      IndividualDeliveredServiceEntity ids =
-          new IndividualDeliveredServiceEntity(deliveredServiceId, deliveredToIndividualCode,
-              newPerson.getId(), countySpecificCode, endedAt, serviceContactType.shortValue(),
-              startedAt, currentUserStaffId, currentRequestStartTime);
+      IndividualDeliveredServiceEntity ids = new IndividualDeliveredServiceEntity(
+          deliveredServiceId, deliveredToIndividualCode, newPerson.getLegacyDescriptor().getId(),
+          countySpecificCode, endedAt, serviceContactType.shortValue(), startedAt,
+          currentUserStaffId, currentRequestStartTime);
       individualDeliveredServiceDao.create(ids);
     }
 
@@ -310,7 +315,7 @@ public class DeliveredToIndividualService {
     List<PostedIndividualDeliveredService> newPeople = new ArrayList<>();
     for (PostedIndividualDeliveredService person : people) {
       Boolean createEntryInDeliveredToIndividualService = Boolean.TRUE;
-      String deliveredToIndividualId = person.getId();
+      String deliveredToIndividualId = person.getLegacyDescriptor().getId();
       for (IndividualDeliveredServiceEntity individualDeliveredService : entities) {
         if (individualDeliveredService.getPrimaryKey().getDeliveredToIndividualId()
             .equals(deliveredToIndividualId)) {
@@ -330,7 +335,7 @@ public class DeliveredToIndividualService {
     for (IndividualDeliveredServiceEntity individualDeliveredService : entities) {
       Boolean deleteRecordInDeliveredToIndividualService = Boolean.TRUE;
       for (PostedIndividualDeliveredService person : people) {
-        String deliveredToIndividualId = person.getId();
+        String deliveredToIndividualId = person.getLegacyDescriptor().getId();
         if (individualDeliveredService.getPrimaryKey().getDeliveredToIndividualId()
             .equals(deliveredToIndividualId)) {
           deleteRecordInDeliveredToIndividualService = Boolean.FALSE;

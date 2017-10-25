@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.services.investigation.contact;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -19,8 +17,6 @@ import gov.ca.cwds.rest.services.cms.LongTextService;
  * @author CWDS API Team
  */
 public class LongTextHelper {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(LongTextHelper.class);
 
   private LongTextService longTextService;
 
