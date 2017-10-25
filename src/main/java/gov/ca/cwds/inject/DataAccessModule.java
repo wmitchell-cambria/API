@@ -466,12 +466,12 @@ public class DataAccessModule extends AbstractModule {
     boolean secureClient = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(password);
 
     if (secureClient) {
-      LOGGER.info("ENABLE X-PACK - cluster: " + cluster);
+      LOGGER.info("ENABLE X-PACK - cluster: {}", cluster);
       final Settings.Builder settings = Settings.builder().put("cluster.name", cluster);
       settings.put("xpack.security.user", user + ":" + password);
       esClient = new PreBuiltXPackTransportClient(settings.build());
     } else {
-      LOGGER.info("DISABLE X-PACK - cluster:" + cluster);
+      LOGGER.info("DISABLE X-PACK - cluster: {}", cluster);
       esClient =
           new PreBuiltTransportClient(Settings.builder().put("cluster.name", cluster).build());
     }
