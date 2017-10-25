@@ -39,6 +39,7 @@ public class ApplicationModule extends AbstractModule {
     install(new ResourcesModule());
     install(new FiltersModule());
     install(new AuditingModule());
+    install(new HealthCheckModule());
   }
 
 }
