@@ -1,4 +1,4 @@
-package gov.ca.cwds.fixture.investigation;
+package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
    * 
    */
   public SafetyAlerts() {
-    // default
+    super();
   }
 
   /**

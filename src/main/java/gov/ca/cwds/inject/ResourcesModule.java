@@ -36,6 +36,7 @@ import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.People;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.AddressValidationResource;
@@ -74,6 +75,7 @@ import gov.ca.cwds.rest.resources.investigation.ContactResource;
 import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
 import gov.ca.cwds.rest.resources.investigation.RelationshipListResource;
+import gov.ca.cwds.rest.resources.investigation.SafetyAlertsResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.AddressValidationService;
 import gov.ca.cwds.rest.services.IntakeLovService;
@@ -109,6 +111,7 @@ import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
 import gov.ca.cwds.rest.services.investigation.RelationshipListService;
+import gov.ca.cwds.rest.services.investigation.SafetyAlertsService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 
 
@@ -166,6 +169,7 @@ public class ResourcesModule extends AbstractModule {
     bind(RelationshipListResource.class);
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
+    bind(SafetyAlertsResource.class);
   }
 
   @Provides
@@ -461,6 +465,13 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(AllegationListService.class));
+  }
+
+  @Provides
+  @SafetyAlertsServiceBackedResource
+  public TypedResourceDelegate<String, SafetyAlerts> safetyAlerts(Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(SafetyAlertsService.class));
   }
 
 }

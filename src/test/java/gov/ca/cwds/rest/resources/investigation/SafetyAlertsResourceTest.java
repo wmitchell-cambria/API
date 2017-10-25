@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.resources.investigation;
 
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -18,23 +19,18 @@ import org.mockito.MockitoAnnotations;
 
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
-import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
-import gov.ca.cwds.rest.api.domain.investigation.Allegation;
-import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
+import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /****
- * NOTE:The CWDS API Team has taken the pattern of delegating Resource functions to
- * 
- * {@link ServiceBackedResourceDelegate}. As such the tests in here reflect that assumption.
- *
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
-public class AllegationResourceTest {
-  private static final String ROOT_RESOURCE = "/investigations/1/allegations";
+public class SafetyAlertsResourceTest {
+  private static final String ROOT_RESOURCE = "/investigations/1/safety_alerts";
 
   @After
   public void ensureServiceLocatorPopulated() {
@@ -48,34 +44,45 @@ public class AllegationResourceTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @SuppressWarnings("unchecked")
-  private final static TypedResourceDelegate<String, Allegation> typedResourceDelegate =
+  private final static TypedResourceDelegate<String, SafetyAlerts> typedResourceDelegate =
       mock(TypedResourceDelegate.class);
 
   @ClassRule
-  public final static ResourceTestRule inMemoryResource =
-      ResourceTestRule.builder().addResource(new AllegationResource(typedResourceDelegate)).build();
+  public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
+      .addResource(new SafetyAlertsResource(typedResourceDelegate)).build();
 
   @Before
   public void initMocks() {
     MockitoAnnotations.initMocks(this);
   }
 
+  // create
   @Test
   @Ignore
   public void updateDelegatesToResourceDelegate() throws Exception {
-    Allegation allegation = new AllegationEntityBuilder().build();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .put(Entity.entity(allegation, MediaType.APPLICATION_JSON));
-    verify(typedResourceDelegate).update(eq("1"), eq(allegation));
+        .put(Entity.entity(safetyAlerts, MediaType.APPLICATION_JSON));
+    verify(typedResourceDelegate).update(eq("1"), eq(safetyAlerts));
 
   }
 
+  // find
+  @Test
+  public void findDelgatesToResourceDelegate() throws Exception {
+    inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+        .get().getStatus();
+    verify(typedResourceDelegate, atLeastOnce()).get("1");
+  }
+
+  // update
   @Test
   public void createDelegatesToResourceDelegate() throws Exception {
-    Allegation allegation = new AllegationEntityBuilder().build();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-        .post(Entity.entity(allegation, MediaType.APPLICATION_JSON));
-    verify(typedResourceDelegate).create(eq(allegation));
+        .post(Entity.entity(safetyAlerts, MediaType.APPLICATION_JSON));
+    verify(typedResourceDelegate).create(safetyAlerts);
+
   }
 
 }

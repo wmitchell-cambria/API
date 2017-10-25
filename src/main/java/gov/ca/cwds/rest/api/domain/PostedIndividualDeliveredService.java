@@ -1,10 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import io.dropwizard.jackson.JsonSnakeCase;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Size;
 
@@ -14,6 +10,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import io.dropwizard.jackson.JsonSnakeCase;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing an PostedIndividualDeliveredSevice
@@ -56,7 +57,7 @@ public class PostedIndividualDeliveredService extends ReportingDomain implements
   private String lastName;
 
 
-  @JsonProperty("suffix_title")
+  @JsonProperty("name_suffix")
   @Size(max = 4)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "SR.")
   private String suffixTitle;
