@@ -22,6 +22,7 @@ public class SafetyAlertsService implements TypedCrudsService<String, SafetyAler
   private SafetyAlertsDao safetyAlertsDao;
 
   /**
+   * @param safetyAlertsDao - safety alert data access object
    */
   @Inject
   public SafetyAlertsService(SafetyAlertsDao safetyAlertsDao) {
