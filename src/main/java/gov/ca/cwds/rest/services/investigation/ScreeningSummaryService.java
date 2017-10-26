@@ -1,9 +1,9 @@
 package gov.ca.cwds.rest.services.investigation;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
@@ -18,8 +18,6 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  */
 public class ScreeningSummaryService
     implements TypedCrudsService<String, ScreeningSummary, Response> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningSummaryService.class);
 
   private DeliveredServiceDao deliveredServiceDao;
 

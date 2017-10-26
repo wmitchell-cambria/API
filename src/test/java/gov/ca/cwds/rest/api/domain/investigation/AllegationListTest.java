@@ -29,6 +29,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationPersonEntityBuilder;
+import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class AllegationListTest {
@@ -112,4 +115,10 @@ public class AllegationListTest {
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(allegationList);
     System.out.println(expected);
   }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(ContactList.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
 }

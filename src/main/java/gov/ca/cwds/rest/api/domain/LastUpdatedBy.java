@@ -48,7 +48,7 @@ public class LastUpdatedBy extends ReportingDomain implements Request, Response 
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Smith")
   private String lastName;
 
-  @JsonProperty("suffix_title")
+  @JsonProperty("name_suffix")
   @Size(max = 4)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "SR.")
   private String suffixTitle;

@@ -3,6 +3,9 @@ package gov.ca.cwds.rest.services.investigation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,6 +29,7 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("javadoc")
 public class SafetyAlertsServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+  private Set<String> alerts = new HashSet<>();
 
   private SafetyAlertsService safetyAlertsService;
   private SafetyAlertsDao safetyAlertsDao;
@@ -37,12 +41,14 @@ public class SafetyAlertsServiceTest {
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
     safetyAlertsService = new SafetyAlertsService(safetyAlertsDao);
+    alerts.add("6401");
+    alerts.add("6402");
   }
 
   // find test
   @Test
   public void findReturnsExpectedSafetyAlerts() throws Exception {
-    SafetyAlerts expected = new SafetyAlertsEntityBuilder().build();
+    SafetyAlerts expected = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
     Response returned = safetyAlertsService.find("1234567ABC");
     assertThat(returned, is(expected));
   }
@@ -65,7 +71,7 @@ public class SafetyAlertsServiceTest {
   // create test
   @Test
   public void createReturnsExpectedSafetyAlerts() throws Exception {
-    SafetyAlerts request = new SafetyAlertsEntityBuilder().build();
+    SafetyAlerts request = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
     Response returned = safetyAlertsService.create(request);
     assertThat(returned, is(request));
   }

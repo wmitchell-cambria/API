@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -16,6 +19,8 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * @author CWDS API Team
  */
 public class SafetyAlertsService implements TypedCrudsService<String, SafetyAlerts, Response> {
+
+  private Set<String> alerts = new HashSet<>();
 
   private static SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
 
@@ -37,11 +42,18 @@ public class SafetyAlertsService implements TypedCrudsService<String, SafetyAler
    */
   @Override
   public Response find(String primaryKey) {
+
+    alerts.add("6401");
+    alerts.add("6402");
+    safetyAlerts.setSafetyAlerts(alerts);
     return safetyAlerts;
   }
 
   @Override
   public Response create(SafetyAlerts request) {
+    alerts.add("6401");
+    alerts.add("6402");
+    safetyAlerts.setSafetyAlerts(alerts);
     return safetyAlerts;
   }
 
