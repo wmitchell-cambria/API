@@ -56,10 +56,10 @@ public class LongTextHelperTest {
 
 
   @Test
-  public void getLongTextReturnsEmptyWhenIdentifierIsNull() throws Exception {
+  public void getLongTextReturnsNullWhenIdentifierIsNull() throws Exception {
     String detailText = null;
     String found = longTextHelper.getLongText(detailText);
-    String expected = "";
+    String expected = null;
     assertThat(found, is(expected));
 
   }

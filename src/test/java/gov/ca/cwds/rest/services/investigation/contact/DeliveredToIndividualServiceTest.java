@@ -6,6 +6,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,9 @@ import gov.ca.cwds.data.cms.ServiceProviderDao;
 import gov.ca.cwds.data.cms.SubstituteCareProviderDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
+import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
+import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
@@ -131,11 +134,37 @@ public class DeliveredToIndividualServiceTest {
   }
 
   @Test
+  public void getPeopleInIndividualDeliveredService() throws Exception {
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().buildIndividualDeliveredServiceEntity();
+    IndividualDeliveredServiceEntity[] entities = {individualDeliveredService};
+
+    DeliveredServiceEntity deliveredServiceEntity =
+        new DeliveredServiceEntityBuilder().buildDeliveredServiceEntity();
+    when(individualDeliveredServiceDao.findByDeliveredServiceId("ABC1234567")).thenReturn(entities);
+
+    deliveredToIndividualService.getPeopleInIndividualDeliveredService(deliveredServiceEntity);
+    verify(individualDeliveredServiceDao, atLeastOnce()).findByDeliveredServiceId(any());
+  }
+
+  @Test
   public void addPeopleToIndividualDeliveredService() throws Exception {
     deliveredToIndividualService.addPeopleToIndividualDeliveredService("123", validContactRequest(),
         "99");
     verify(individualDeliveredServiceDao, atLeastOnce()).create(any());
   }
+
+  @Test
+  public void updatePeopleToIndividualDeliveredService() throws Exception {
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().buildIndividualDeliveredServiceEntity();
+    IndividualDeliveredServiceEntity[] entities = {individualDeliveredService};
+    when(individualDeliveredServiceDao.findByDeliveredServiceId("123")).thenReturn(entities);
+    deliveredToIndividualService.updatePeopleToIndividualDeliveredService("123",
+        validContactRequest(), "99");
+    verify(individualDeliveredServiceDao, atLeastOnce()).delete(any());
+  }
+
 
 
   private ContactRequest validContactRequest() {
