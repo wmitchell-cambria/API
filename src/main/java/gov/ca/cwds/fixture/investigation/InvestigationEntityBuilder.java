@@ -1,9 +1,11 @@
 package gov.ca.cwds.fixture.investigation;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import org.joda.time.DateTime;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -23,16 +25,17 @@ public class InvestigationEntityBuilder {
   private String tableName = "REFERL_T";
   private String id = "1234567ABC";
   private String lastUpdatedBy = "0X5";
-  private String lastUpdatedAt = "2016-08-03T01:00:00.000Z";
+  private Date lastUpdatedAt =
+      DomainChef.uncookStrictTimestampString("2016-08-03T01:00:00.000-0700");
   private String incidentCounty = "20";
-  private String incidentDate = "2017-08-20";
+  private Date incidentDate = DomainChef.uncookDateString("2017-08-20");
   private String locationType = "Home";
   private Short communicationMethod = 408;
   private String name = "The test investigation";
   private String reportNarrative = "Summary of an investigation would appear here.";
   private String reference = "REF-TEST";
   private Short responseTime = 1518;
-  private String startedAt = "2017-08-03T01:00:00.000Z";
+  private Date startedAt = DomainChef.uncookStrictTimestampString("2017-08-03T01:00:00.000-0000");
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
@@ -111,11 +114,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public String getLastUpdatedAt() {
+  public Date getLastUpdatedAt() {
     return lastUpdatedAt;
   }
 
-  public InvestigationEntityBuilder setLastUpdatedAt(String lastUpdatedAt) {
+  public InvestigationEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {
     this.lastUpdatedAt = lastUpdatedAt;
     return this;
   }
@@ -129,11 +132,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public String getIncidentDate() {
+  public Date getIncidentDate() {
     return incidentDate;
   }
 
-  public InvestigationEntityBuilder setIncidentDate(String incidentDate) {
+  public InvestigationEntityBuilder setIncidentDate(Date incidentDate) {
     this.incidentDate = incidentDate;
     return this;
   }
@@ -192,11 +195,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public String getStartedAt() {
+  public Date getStartedAt() {
     return startedAt;
   }
 
-  public InvestigationEntityBuilder setStartedAt(String startedAt) {
+  public InvestigationEntityBuilder setStartedAt(Date startedAt) {
     this.startedAt = startedAt;
     return this;
   }

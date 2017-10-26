@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Before;
@@ -47,16 +48,17 @@ public class InvestigationTest {
   private String tableName = "REFERL_T";
   private String id = "1234567ABC";
   private String lastUpdatedBy = "OX5";
-  private String lastUpdatedAt = "2010-10-01T15:26:42.000-0700";
+  private Date lastUpdatedAt =
+      DomainChef.uncookStrictTimestampString("2010-10-01T15:26:42.000-0700");
   private String incidentCounty = "20";
-  private String incidentDate = "2017-08-20";
+  private Date incidentDate = DomainChef.uncookDateString("2017-08-20");
   private String locationType = "Home";
   private Short communicationMethod = 408;
   private String name = "The test invetigation";
   private String reportNarrative = "Summary of an investigation would appear here.";
   private String reference = "REF-TEST";
   private Short responseTime = 1518;
-  private String startedAt = "2017-08-03T01:00:00.000Z";
+  private Date startedAt = DomainChef.uncookStrictTimestampString("2017-08-03T01:00:00.000-0000");
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
@@ -373,8 +375,8 @@ public class InvestigationTest {
   @Test
   public void shouldCompareNotEqualsToObjectWithDifferentValues() {
     Investigation investigation = new InvestigationEntityBuilder().build();
-    Investigation otherInvestigation =
-        new InvestigationEntityBuilder().setIncidentDate("2017-01-01").build();
+    Investigation otherInvestigation = new InvestigationEntityBuilder()
+        .setIncidentDate(DomainChef.uncookDateString("2017-01-01")).build();
     assertThat(investigation, is(not(equals(otherInvestigation))));
   }
 
