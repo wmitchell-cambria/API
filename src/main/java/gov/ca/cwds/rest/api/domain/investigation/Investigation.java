@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,6 @@ import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
-import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
@@ -69,9 +69,10 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @ApiModelProperty(required = false, readOnly = false, value = "Last Updated Time",
       example = "2010-10-01T15:26:42.000-0700")
   @JsonProperty("last_updated_at")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
+      timezone = "UTC")
   @gov.ca.cwds.rest.validation.Date(format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", required = true)
-  private String lastUpdatedAt;
+  private Date lastUpdatedAt;
 
   @JsonProperty("incident_county")
   @NotEmpty
@@ -81,12 +82,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
   private String incidentCounty;
 
   @NotNull
-  @Date
+  @gov.ca.cwds.rest.validation.Date
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty("incident_date")
   @ApiModelProperty(required = false, readOnly = false, value = "Incident date",
       example = "2017-01-13")
-  private String incidentDate;
+  private Date incidentDate;
 
   @JsonProperty("location_type")
   @NotNull
@@ -134,7 +135,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false, value = "Date/time incident started",
       example = "2016-08-03T01:00:00.000Z")
-  private String startedAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
+      timezone = "UTC")
+  private Date startedAt;
 
   @JsonProperty("assignee")
   @NotNull
@@ -241,10 +244,10 @@ public class Investigation extends ReportingDomain implements Request, Response 
    */
   public Investigation(@JsonProperty("legacy_descriptor") CmsRecordDescriptor cmsRecordDescriptor,
       @JsonProperty("last_updated_by") String lastUpdatedBy,
-      @JsonProperty("last_updated_at") String lastUpdatedAt,
+      @JsonProperty("last_updated_at") Date lastUpdatedAt,
       @JsonProperty("incident_county") @ValidLogicalId(required = true,
           category = "GVR_ENTC") String incidentCounty,
-      @JsonProperty("location_date") @Date String incidentDate,
+      @JsonProperty("location_date") Date incidentDate,
       @JsonProperty("location_type") String locationType,
       @JsonProperty("communication_method") @ValidSystemCodeId(required = true,
           category = "CMM_MTHC") Short communicationMethod,
@@ -252,7 +255,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
       @JsonProperty("referrence") String reference,
       @JsonProperty("response_time") @ValidSystemCodeId(required = true,
           category = "RFR_RSPC") Short responseTime,
-      @JsonProperty("started_at") String startedAt, @JsonProperty("assignee") Assignee assignee,
+      @JsonProperty("started_at") Date startedAt, @JsonProperty("assignee") Assignee assignee,
       @JsonProperty("additional_information") String additionalInformation,
       @JsonProperty("sensitive") Boolean sensitive, @JsonProperty("sealed") Boolean sealed,
       @JsonProperty("incident_phone_number") Set<PhoneNumber> phoneNumbers,
@@ -315,7 +318,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
     this.lastUpdatedBy = referral.getLastUpdatedId();
-    this.lastUpdatedAt = DomainChef.cookISO8601Timestamp(referral.getLastUpdatedTime());
+    this.lastUpdatedAt = referral.getLastUpdatedTime();
     this.incidentCounty = referral.getCountySpecificCode();
 
     // this.incidentDate = ;
@@ -326,7 +329,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.name = StringUtils.trim(referral.getReferralName());
     this.reportNarrative = longText != null ? StringUtils.trim(longText.getTextDescription()) : "";
     this.responseTime = referral.getReferralResponseType();
-    this.startedAt = DomainChef.cookISO8601Timestamp(referral.getReceivedDate());
+
+    this.startedAt = this.populateInvestigationStartAt(referral);
+
     this.additionalInformation =
         addInfoLongText != null ? StringUtils.trim(addInfoLongText.getTextDescription()) : "";
 
@@ -354,6 +359,8 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.contacts = contacts;
   }
 
+
+
   /**
    * populating address details
    * 
@@ -372,6 +379,22 @@ public class Investigation extends ReportingDomain implements Request, Response 
   }
 
   /**
+   * populating investigation started date/time.
+   * 
+   * @param referral - referral object
+   * @return Date objects - concatenates date and time.
+   */
+  private Date populateInvestigationStartAt(Referral referral) {
+    Date startedAt = null;
+    if (referral.getReceivedDate() != null && referral.getReceivedTime() != null) {
+      startedAt =
+          DomainChef.concatenateDateAndTime(referral.getReceivedDate(), referral.getReceivedTime());
+    }
+    return startedAt;
+  }
+
+
+  /**
    * @return - CMS record description
    */
   public CmsRecordDescriptor getCmsRecordDescriptor() {
@@ -388,7 +411,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @return - last updated date/time
    */
-  public String getLastUpdatedAt() {
+  public Date getLastUpdatedAt() {
     return lastUpdatedAt;
   }
 
@@ -402,7 +425,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @return - date of incident
    */
-  public String getIncidentDate() {
+  public Date getIncidentDate() {
     return incidentDate;
   }
 
@@ -451,7 +474,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @return - started at
    */
-  public String getStartedAt() {
+  public Date getStartedAt() {
     return startedAt;
   }
 

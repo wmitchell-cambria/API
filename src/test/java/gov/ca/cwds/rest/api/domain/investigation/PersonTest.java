@@ -7,31 +7,28 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RaceAndEthnicityEntityBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -43,7 +40,8 @@ public class PersonTest {
 
   private CmsRecordDescriptor cmsRecordDescriptor;
   private String lastUpdatedBy = "0X5";
-  private String lastUpdatedAt = "2016-04-27T23:30:14.000Z";
+  private Date lastUpdatedAt =
+      DomainChef.uncookStrictTimestampString("2016-04-27T23:30:14.000-0000");
   private String firstName = "Art";
   private String middleName = "Mike";
   private String lastName = "Griswald";

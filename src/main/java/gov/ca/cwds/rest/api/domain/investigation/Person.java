@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 
+import java.util.Date; 
+
 import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.util.Set;
@@ -22,9 +24,9 @@ import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
@@ -49,11 +51,12 @@ public class Person extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "staff person Id")
   private String lastUpdatedBy;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
+      timezone = "UTC")
   @JsonProperty("last_updated_at")
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
       example = "2010-04-27T23:30:14.000Z")
-  private String lastUpdatedAt;
+  private Date lastUpdatedAt;
 
   @JsonProperty("first_name")
   @ApiModelProperty(required = true, readOnly = false, value = "first name", example = "Gerry")
@@ -158,12 +161,12 @@ public class Person extends ReportingDomain implements Request, Response {
    * @param roles - roles
    * @param addresses - address information
    */
-  public Person(CmsRecordDescriptor cmsRecordDescriptor, String lastUpdatedBy, String lastUpdatedAt,
+  public Person(CmsRecordDescriptor cmsRecordDescriptor, String lastUpdatedBy, Date lastUpdatedAt,
       String firstName, String middleName, String lastName, String nameSuffix,
       @OneOf(value = {"M", "F", "U"}, ignoreCase = true, ignoreWhitespace = true) String gender,
-      @Date(format = "yyyy-MM-dd", required = false) String dateOfBirth, String ssn,
-      Set<String> languages, RaceAndEthnicity raceAndEthnicity, Boolean sensitive, Boolean sealed,
-      Set<PhoneNumber> phone, Set<String> roles, Set<InvestigationAddress> addresses) {
+      String dateOfBirth, String ssn, Set<String> languages, RaceAndEthnicity raceAndEthnicity,
+      Boolean sensitive, Boolean sealed, Set<PhoneNumber> phone, Set<String> roles,
+      Set<InvestigationAddress> addresses) {
     super();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
@@ -199,8 +202,9 @@ public class Person extends ReportingDomain implements Request, Response {
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles,
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
-    this.lastUpdatedAt = client.getLastUpdatedTime() != null
-        ? DomainChef.cookISO8601Timestamp(client.getLastUpdatedTime()) : null;
+
+    this.lastUpdatedAt = client.getLastUpdatedTime() != null ? client.getLastUpdatedTime() : null;
+
     this.firstName = StringUtils.trim(client.getFirstName());
     this.lastName = StringUtils.trim(client.getLastName());
     this.middleName = StringUtils.trim(client.getMiddleName());
@@ -232,8 +236,9 @@ public class Person extends ReportingDomain implements Request, Response {
   public Person(Reporter reporter, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles) {
     this.lastUpdatedBy = reporter.getLastUpdatedId();
-    this.lastUpdatedAt = reporter.getLastUpdatedTime() != null
-        ? DomainChef.cookISO8601Timestamp(reporter.getLastUpdatedTime()) : null;
+    this.lastUpdatedAt =
+        reporter.getLastUpdatedTime() != null ? reporter.getLastUpdatedTime() : null;
+
     this.firstName = reporter.getFirstName();
     this.lastName = reporter.getLastName();
     this.middleName = reporter.getMiddleName();
@@ -268,7 +273,7 @@ public class Person extends ReportingDomain implements Request, Response {
   /**
    * @return last updated date/time
    */
-  public String getLastUpdatedAt() {
+  public Date getLastUpdatedAt() {
     return lastUpdatedAt;
   }
 

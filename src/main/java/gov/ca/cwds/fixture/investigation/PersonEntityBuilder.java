@@ -1,12 +1,12 @@
 package gov.ca.cwds.fixture.investigation;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.joda.time.DateTime;
-
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
@@ -18,7 +18,8 @@ public class PersonEntityBuilder {
 
   private CmsRecordDescriptor cmsRecordDescriptor;
   private String lastUpdatedBy = "0X5";
-  private String lastUpdatedAt = "2016-04-27T23:30:14.000Z";
+  private Date lastUpdatedAt =
+      DomainChef.uncookStrictTimestampString("2016-04-27T23:30:14.000-0000");
   private String firstName = "Art";
   private String middleName = "Mike";
   private String lastName = "Griswald";
@@ -80,11 +81,11 @@ public class PersonEntityBuilder {
     return this;
   }
 
-  public String getLastUpdatedAt() {
+  public Date getLastUpdatedAt() {
     return lastUpdatedAt;
   }
 
-  public PersonEntityBuilder setLastUpdatedAt(String lastUpdatedAt) {
+  public PersonEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {
     this.lastUpdatedAt = lastUpdatedAt;
     return this;
   }
