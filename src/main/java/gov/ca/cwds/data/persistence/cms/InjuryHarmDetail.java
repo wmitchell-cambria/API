@@ -1,17 +1,18 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * {@link CmsPersistentObject} representing a Referral.
+ * {@link CmsPersistentObject} representing a Injury Harm Detail.
  * 
  * @author CWDS API Team
  */
@@ -24,9 +25,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InjuryHarmDetail extends CmsPersistentObject {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   @Id
   @Column(name = "THIRD_ID", length = CMS_ID_LEN)
-  private String id;
+  private String thirdId;
 
   @Type(type = "short")
   @Column(name = "INJR_HMC")
@@ -42,16 +48,45 @@ public class InjuryHarmDetail extends CmsPersistentObject {
   @Column(name = "CNTY_SPFCD")
   private String countySpecificCode;
 
-  @Override
-  public Serializable getPrimaryKey() {
-    return this.getId();
+  /**
+   * Default constructor
+   */
+  public InjuryHarmDetail() {
+    super();
   }
 
   /**
-   * @return the id
+   * @param thirdId - thirdId
+   * @param injuryHarmType - injuryHarmType
+   * @param injuryToBodyDetailIndicator - injuryToBodyDetailIndicator
+   * @param allegationId - allegationId
+   * @param countySpecificCode - countySpecificCode
    */
-  public String getId() {
-    return id;
+  public InjuryHarmDetail(String thirdId, Short injuryHarmType, String injuryToBodyDetailIndicator,
+      String allegationId, String countySpecificCode) {
+    super();
+    this.thirdId = thirdId;
+    this.injuryHarmType = injuryHarmType;
+    this.injuryToBodyDetailIndicator = injuryToBodyDetailIndicator;
+    this.allegationId = allegationId;
+    this.countySpecificCode = countySpecificCode;
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
+   */
+  @Override
+  public String getPrimaryKey() {
+    return this.getThirdId();
+  }
+
+  /**
+   * @return the thirdId
+   */
+  public String getThirdId() {
+    return thirdId;
   }
 
   /**

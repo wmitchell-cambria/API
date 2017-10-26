@@ -2,7 +2,9 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.dao.investigation.AllegationsDao;
 import gov.ca.cwds.data.dao.investigation.InjuryBodyDetailDao;
 import gov.ca.cwds.data.dao.investigation.InjuryHarmDetailDao;
@@ -92,8 +94,8 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
         this.injuryHarmDetailDao.findInjuryHarmDetailsByAllegationId(allegationId);
     InjuryBodyDetail[] injuryBodyDetails = null;
     for (InjuryHarmDetail harmDetail : injuryHarmDetails) {
-      injuryBodyDetails =
-          this.injuryBodyDetailDao.findInjuryBodyDetailsByInjuryHarmDetailId(harmDetail.getId());
+      injuryBodyDetails = this.injuryBodyDetailDao
+          .findInjuryBodyDetailsByInjuryHarmDetailId(harmDetail.getThirdId());
 
       for (InjuryBodyDetail injuryBodyDetail : injuryBodyDetails) {
         // TODO change it to list of values??
