@@ -13,9 +13,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import gov.ca.cwds.data.persistence.cms.Address;
@@ -169,9 +171,10 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @Valid
   private ScreeningSummary screeningSummary;
 
-  @JsonProperty("history_of_involvement")
+  // @JsonProperty("history_of_involvement")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
+  @JsonIgnore
   private HistoryOfInvolvement historyOfInvolvement;
 
   @JsonProperty("allegations")
@@ -200,7 +203,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @JsonProperty("contacts")
   @ApiModelProperty(required = false, readOnly = false)
   private Set<Contact> contacts;
-
 
   /**
    * empty constructor
@@ -495,14 +497,14 @@ public class Investigation extends ReportingDomain implements Request, Response 
     return address;
   }
 
-
-
   /**
    * @return - history of involvement
    */
-  @JsonValue
+  // @JsonValue
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonUnwrapped
   public HistoryOfInvolvement getHistoryOfInvolvement() {
-    return historyOfInvolvement;
+    return historyOfInvolvement != null ? historyOfInvolvement : new HistoryOfInvolvement();
   }
 
   /**

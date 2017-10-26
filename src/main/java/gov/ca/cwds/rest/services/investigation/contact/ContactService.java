@@ -3,11 +3,14 @@ package gov.ca.cwds.rest.services.investigation.contact;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
@@ -141,12 +144,12 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * @param contactId the Contact Id
    */
   private void validateContactId(String referralId, String contactId) {
-
     ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntities =
         referralClientDeliveredService.findByReferralId(referralId);
     if (referralClientDeliveredServiceEntities.length == 0) {
       throw new ServiceException("There are no Contacts For the Given ReferralId");
     }
+
     for (ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity : referralClientDeliveredServiceEntities) {
       if (referralClientDeliveredServiceEntity.getReferralClientDeliveredServiceEmbeddable()
           .getDeliveredServiceId().equals(contactId)) {
@@ -168,8 +171,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
-   * 
-   * 
    */
   @Override
   public Response create(ContactReferralRequest request) {
@@ -195,7 +196,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
 
   private void validateCurrentUserStaffId(String staffId) {
     if (StringUtils.isBlank(staffId)) {
-      LOGGER.info(
+      LOGGER.error(
           "The Logged In User Staff Id is not Provided. We cannot create or update without this Identifier : {}",
           staffId);
       throw new ServiceException(
@@ -212,10 +213,12 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
   Referral validateReferral(ContactReferralRequest request) {
     String referralId = request.getReferralId();
     Referral referral = referralDao.find(referralId);
+
     if (referral == null) {
-      LOGGER.info("ReferralId is not Valid : {}", referralId);
+      LOGGER.error("ReferralId is not Valid : {}", referralId);
       throw new ServiceException("ReferralId is not Valid");
     }
+
     return referral;
   }
 
@@ -263,7 +266,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     if (DomainChef.uncookISO8601Timestamp(startedAt).before(receivedDate)) {
       throw new ServiceException("Contact Started At is before the Referral Received Date");
     }
-    return;
   }
 
   /**

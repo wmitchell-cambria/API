@@ -2,8 +2,11 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
@@ -97,10 +100,12 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
           this.allegationService.populateAllegations(referral.getAllegations());
       Set<Person> peoples = this.peopleService.getInvestigationPeoples(referral);
       Set<Relationship> relationshipList = new HashSet<>();
+
       // TODO - uncomment below when its needed
       // this.relationshipListService.findRelationshipByReferralId(referral);
-      Set<String> safetyAlerts = new HashSet<String>();
-      Set<String> crossReports = new HashSet<String>();
+
+      Set<String> safetyAlerts = new HashSet<>();
+      Set<String> crossReports = new HashSet<>();
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
       validInvestigation =
           new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
@@ -163,8 +168,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   private LongText findLongTextById(String responseRationaleTextId) {
     return StringUtils.isNotBlank(responseRationaleTextId)
-        ? longTextService.find(responseRationaleTextId)
-        : null;
+        ? longTextService.find(responseRationaleTextId) : null;
   }
 
   /**
@@ -175,8 +179,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   private Set<Contact> findContactsByReferralId(String referralId) {
     ContactList contactList = this.contactService.findAllContactsForTheReferral(referralId);
-    return contactList.getContacts() != null ? contactList.getContacts() : new HashSet<Contact>();
-
+    return contactList.getContacts() != null ? contactList.getContacts() : new HashSet<>();
   }
 
 }
