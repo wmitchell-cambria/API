@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.investigation.contact;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
@@ -14,6 +15,7 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import gov.ca.cwds.data.cms.AttorneyDao;
 import gov.ca.cwds.data.cms.ClientDao;
@@ -25,9 +27,11 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
+import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
@@ -165,7 +169,73 @@ public class DeliveredToIndividualServiceTest {
     verify(individualDeliveredServiceDao, atLeastOnce()).delete(any());
   }
 
+  @Test
+  public void updatePeopleToIndividualDeliveredServiceWhen() throws Exception {
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualId("3456789ABC")
+            .buildIndividualDeliveredServiceEntity();
+    IndividualDeliveredServiceEntity[] entities = {individualDeliveredService};
+    when(individualDeliveredServiceDao.findByDeliveredServiceId("123")).thenReturn(entities);
+    deliveredToIndividualService.updatePeopleToIndividualDeliveredService("123",
+        validContactRequest(), "99");
+    verify(individualDeliveredServiceDao, Mockito.times(0)).delete(any());
 
+  }
+
+  @Test
+  public void addPersonDetailsClient() throws Exception {
+    when(clientDao.find("A0YcYQV0AB")).thenReturn(
+        new ClientEntityBuilder().setCommonFirstName("John").setId("A0YcYQV0AB").build());
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("C")
+            .buildIndividualDeliveredServiceEntity();
+    PostedIndividualDeliveredService person =
+        deliveredToIndividualService.findPerson(individualDeliveredService);
+    String expected = person.getFirstName();
+    assertEquals(expected, "John");
+  }
+
+  @Test(expected = ApiException.class)
+  public void findPersonWhenCodeIsEmpty() throws Exception {
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("")
+            .buildIndividualDeliveredServiceEntity();
+    deliveredToIndividualService.findPerson(individualDeliveredService);
+  }
+
+  @Test(expected = ApiException.class)
+  public void findPersonWhenCodeIsNull() throws Exception {
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode(null)
+            .buildIndividualDeliveredServiceEntity();
+    deliveredToIndividualService.findPerson(individualDeliveredService);
+  }
+
+  @Test(expected = ApiException.class)
+  public void lookupByValueWhenValueIsNotValid() throws Exception {
+    DeliveredToIndividualService.Code.lookupByValue("unknown");
+  }
+
+  @Test(expected = ApiException.class)
+  public void lookupByValueWhenValueIsNull() throws Exception {
+    DeliveredToIndividualService.Code.lookupByValue(null);
+  }
+
+  @Test(expected = ApiException.class)
+  public void lookupByCodeLiteralWhenItIsNull() throws Exception {
+    DeliveredToIndividualService.Code.lookupByCodeLiteral(null);
+  }
+
+  @Test(expected = ApiException.class)
+  public void lookupByCodeLiteralWhenItIsNotValid() throws Exception {
+    DeliveredToIndividualService.Code.lookupByCodeLiteral("Z");
+  }
+
+  @Test
+  public void valueOfCode() throws Exception {
+    DeliveredToIndividualService.Code test = DeliveredToIndividualService.Code.valueOf("CLIENT");
+    assertEquals(test, DeliveredToIndividualService.Code.CLIENT);
+  }
 
   private ContactRequest validContactRequest() {
     final Set<PostedIndividualDeliveredService> people = validPeople();

@@ -86,6 +86,12 @@ public class LongTextHelperTest {
   }
 
   @Test
+  public void updateLongTextCallsLongTextDaoDeleteWhenNonEmptyIdAndEmptyText() throws Exception {
+    longTextHelper.updateLongText("ABC1234567", "", "99");
+    verify(longTextDao, atLeastOnce()).delete(any());
+  }
+
+  @Test
   public void updateLongTextCallsLongTextDaoUpdateWhenNonEmptyId() throws Exception {
     longTextHelper.updateLongText("ABC1234567", "some test", "99");
     verify(longTextDao, atLeastOnce()).update(any());
