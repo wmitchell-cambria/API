@@ -523,7 +523,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @return - history of involvement
    */
-  // @JsonValue
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @JsonUnwrapped
   public HistoryOfInvolvement getHistoryOfInvolvement() {
