@@ -79,20 +79,26 @@ public class RIReporter implements ApiReferentialCheck<Reporter> {
 
   @Override
   public Boolean apply(Reporter t) {
+    String getLawEnforcementId = t.getLawEnforcementId();
+    String getDrmsMandatedRprtrFeedback = t.getDrmsMandatedRprtrFeedback();
     LOGGER.debug("RI: Reporter");
     if (referralDao.find(t.getReferralId()) == null) {
       throw new ReferentialIntegrityException(
           "Reporter => Referral with given Identifier is not present in database");
 
-    } else if (StringUtils.isNotBlank(t.getLawEnforcementId())
-        && lawEnforcementDao.find(t.getLawEnforcementId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Reporter => LawEnforcement with given Identifier is not present in database");
+    } else {
+      if (StringUtils.isNotBlank(getLawEnforcementId)
+          && lawEnforcementDao.find(getLawEnforcementId) == null) {
+        throw new ReferentialIntegrityException(
+            "Reporter => LawEnforcement with given Identifier is not present in database");
 
-    } else if (StringUtils.isNotBlank(t.getDrmsMandatedRprtrFeedback())
-        && drmsDocumentDao.find(t.getDrmsMandatedRprtrFeedback()) == null) {
-      throw new ReferentialIntegrityException(
-          "Reporter => DrmsReporterDocument with given Identifier is not present in database");
+      } else {
+        if (StringUtils.isNotBlank(getDrmsMandatedRprtrFeedback)
+            && drmsDocumentDao.find(getDrmsMandatedRprtrFeedback) == null) {
+          throw new ReferentialIntegrityException(
+              "Reporter => DrmsReporterDocument with given Identifier is not present in database");
+        }
+      }
     }
     return Boolean.TRUE;
   }
