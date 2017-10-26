@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -31,13 +32,13 @@ public class HistoryOfInvolvement extends ReportingDomain implements Response {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("cases")
-  private Set<Case> cases;
+  private Set<Case> cases = new HashSet<>();
 
   @JsonProperty("referrals")
-  private Set<SimpleReferral> referrals;
+  private Set<SimpleReferral> referrals = new HashSet<>();
 
   @JsonProperty("screenings")
-  private Set<SimpleScreening> screenings;
+  private Set<SimpleScreening> screenings = new HashSet<>();
 
   /**
    * Constructor

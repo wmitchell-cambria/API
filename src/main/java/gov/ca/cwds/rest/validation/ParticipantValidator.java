@@ -34,9 +34,9 @@ public class ParticipantValidator {
    */
   public static final int MINIMUM_NUMBER_OF_VICTIMS = 1;
   @SuppressWarnings("javadoc")
-  public static final boolean INVALID_PARTICIPANTS = Boolean.FALSE;
+  public static final Boolean INVALID_PARTICIPANTS = Boolean.FALSE;
   @SuppressWarnings("javadoc")
-  public static final boolean VALID_PARTICIPANTS = Boolean.TRUE;
+  public static final Boolean VALID_PARTICIPANTS = Boolean.TRUE;
 
   /**
    * default constructor

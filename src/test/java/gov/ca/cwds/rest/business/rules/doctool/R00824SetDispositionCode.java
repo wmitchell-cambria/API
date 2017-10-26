@@ -402,9 +402,6 @@ public class R00824SetDispositionCode {
     Set<Participant> participants = screeningToReferral.getParticipants();
 
     clientParticipants.addParticipants(participants);
-    // when(participantService.saveParticipants(any(), any(), any(), any(), any()))
-    // .thenReturn(clientParticipants);
-
     screeningToReferralService.create(screeningToReferral);
     assertThat(referralClient.getDispositionCode(), is(equalTo("A")));
   }

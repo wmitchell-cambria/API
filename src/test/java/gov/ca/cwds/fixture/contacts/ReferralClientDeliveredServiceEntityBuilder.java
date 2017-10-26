@@ -30,7 +30,7 @@ public class ReferralClientDeliveredServiceEntityBuilder {
    * @param deliveredServiceId the deliveredServiceId to set
    * @return the builder
    */
-  public ReferralClientDeliveredServiceEntityBuilder setdeliveredServiceId(
+  public ReferralClientDeliveredServiceEntityBuilder setDeliveredServiceId(
       String deliveredServiceId) {
     this.deliveredServiceId = deliveredServiceId;
     return this;
@@ -40,7 +40,7 @@ public class ReferralClientDeliveredServiceEntityBuilder {
    * @param referralId the referralId to set
    * @return the builder
    */
-  public ReferralClientDeliveredServiceEntityBuilder setreferralId(String referralId) {
+  public ReferralClientDeliveredServiceEntityBuilder setReferralId(String referralId) {
     this.referralId = referralId;
     return this;
   }
@@ -59,7 +59,7 @@ public class ReferralClientDeliveredServiceEntityBuilder {
    * @param currentTime the currentTime to set
    * @return the builder
    */
-  public ReferralClientDeliveredServiceEntityBuilder setcurrentTime(Date currentTime) {
+  public ReferralClientDeliveredServiceEntityBuilder setCurrentTime(Date currentTime) {
     this.currentTime = currentTime;
     return this;
   }
@@ -68,8 +68,17 @@ public class ReferralClientDeliveredServiceEntityBuilder {
    * @param staffId the staffId to set
    * @return the builder
    */
-  public ReferralClientDeliveredServiceEntityBuilder setstaffId(String staffId) {
+  public ReferralClientDeliveredServiceEntityBuilder setStaffId(String staffId) {
     this.staffId = staffId;
+    return this;
+  }
+
+  /**
+   * @param clientId the clientId to set
+   * @return the builder
+   */
+  public ReferralClientDeliveredServiceEntityBuilder setClientId(String clientId) {
+    this.clientId = clientId;
     return this;
   }
 

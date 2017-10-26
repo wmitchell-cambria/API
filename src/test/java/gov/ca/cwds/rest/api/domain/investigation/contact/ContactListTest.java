@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -80,7 +79,7 @@ public class ContactListTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerilizedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     ContactList contactList = new ContactListEntityBuilder().build();

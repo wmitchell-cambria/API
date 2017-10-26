@@ -13,6 +13,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
@@ -22,6 +23,7 @@ import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity
 import gov.ca.cwds.fixture.ChildClientEntityBuilder;
 import gov.ca.cwds.fixture.contacts.ReferralClientDeliveredServiceEntityBuilder;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.services.ServiceException;
 
 public class ReferralClientDeliveredServiceTest {
 
@@ -72,6 +74,26 @@ public class ReferralClientDeliveredServiceTest {
     verify(referralClientDeliveredServiceDao, atLeastOnce()).findByReferralId(any());
   }
 
+  @Test(expected = ServiceException.class)
+  public void checkContactIdValidForGivenReferralIdWhenNoReferralClientDeliveredServiceEntities()
+      throws Exception {
+    ReferralClientDeliveredServiceEntity[] entity = {};
+    when(referralClientDeliveredServiceDao.findByReferralId(referralId)).thenReturn(entity);
+    target.checkContactIdValidForGivenReferralId(referralId, deliveredServiceId);
+  }
+
+  @Test(expected = ServiceException.class)
+  public void checkContactIdValidForGivenReferralIdWhenContactIdNotValid() throws Exception {
+    target.checkContactIdValidForGivenReferralId(referralId, "DEF1234567");
+    verify(referralClientDeliveredServiceDao, atLeastOnce()).findByReferralId(any());
+  }
+
+  @Test
+  public void findByReferralIdCallsReferralClientDeliveredServiceDao() throws Exception {
+    target.findByReferralId(referralId);
+    verify(referralClientDeliveredServiceDao, atLeastOnce()).findByReferralId(any());
+  }
+
   @Test
   public void addOnBehalfOfClientsForGivenReferralIdCallsReferralClientDeliveredServiceDao()
       throws Exception {
@@ -81,6 +103,14 @@ public class ReferralClientDeliveredServiceTest {
     verify(referralClientDeliveredServiceDao, atLeastOnce()).create(any());
   }
 
+  @Test(expected = ServiceException.class)
+  public void addOnBehalfOfClientsForGivenReferralIdThrowsExceptionWhenNoVictimClients()
+      throws Exception {
+    ChildClient[] childClients = {};
+    when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
+    target.addOnBehalfOfClients(deliveredServiceId, referralId, "99");
+  }
+
   @Test
   public void updateOnBehalfOfClientsForGivenReferralIdCallsReferralClientDeliveredServiceDao()
       throws Exception {
@@ -88,6 +118,26 @@ public class ReferralClientDeliveredServiceTest {
     when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
     target.updateOnBehalfOfClients(deliveredServiceId, referralId, "99");
     verify(referralClientDeliveredServiceDao, atLeastOnce()).create(any());
+  }
+
+  @Test(expected = ServiceException.class)
+  public void updateOnBehalfOfClientsForGivenReferralIdWhenNoVictimClients() throws Exception {
+    ChildClient[] childClients = {};
+    when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
+    target.updateOnBehalfOfClients(deliveredServiceId, referralId, "99");
+  }
+
+  @Test
+  public void updateOnBehalfOfClientsForGivenReferralIdWhenNotExistsReferralClientDeliveredServiceEntity()
+      throws Exception {
+    ChildClient[] childClients =
+        {new ChildClientEntityBuilder().setVictimClientId("APc109852u").build()};
+    when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
+    ReferralClientDeliveredServiceEntity[] entity =
+        {new ReferralClientDeliveredServiceEntityBuilder().build()};
+    when(referralClientDeliveredServiceDao.findByReferralId(referralId)).thenReturn(entity);
+    target.updateOnBehalfOfClients(deliveredServiceId, referralId, "99");
+    verify(referralClientDeliveredServiceDao, Mockito.times(0)).create(any());
   }
 
 }

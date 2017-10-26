@@ -9,19 +9,20 @@ import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 
+@SuppressWarnings("javadoc")
 public class ContactEntityBuilder {
 
-
-  private LastUpdatedBy lastUpdatedBy;
+  private String id = "1234567ABC";
+  private LastUpdatedBy lastUpdatedBy = new LastUpdatedByEntityBuilder().build();
   private String startedAt = "2010-04-27T23:30:14.000Z";
   private String endedAt = "2010-04-28T23:30:14.000Z";
   private Integer purpose = 433;
   private Integer communicationMetod = 408;
   private String status = "C";
-  private Set<Integer> services = new HashSet();
+  private Set<Integer> services = new HashSet<>();
   private Integer location = 415;
   private String note = "contact description";
-  private Set<PostedIndividualDeliveredService> people = new HashSet();
+  private Set<PostedIndividualDeliveredService> people = new HashSet<>();
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
   private PostedIndividualDeliveredService person = new PostedIndividualDeliveredService(

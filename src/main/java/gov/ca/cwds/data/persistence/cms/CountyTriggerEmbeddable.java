@@ -124,5 +124,4 @@ public class CountyTriggerEmbeddable implements Serializable {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
-
 }

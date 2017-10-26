@@ -1,20 +1,26 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import gov.ca.cwds.data.CmsSystemCodeDeserializer;
 import gov.ca.cwds.data.SystemCodeSerializer;
 
-
+/**
+ * {@link CmsPersistentObject} representing a Injury Body Detail.
+ * 
+ * @author CWDS API Team
+ */
 @NamedQueries({@NamedQuery(
     name = "gov.ca.cwds.data.dao.investigation.InjuryBodyDetail.findInjuryBodyDetailsByInjuryHarmDetailId",
     query = "FROM InjuryBodyDetail WHERE secondaryInjuryHarmDetailId = :secondaryInjuryHarmDetailId"),
@@ -27,9 +33,10 @@ import gov.ca.cwds.data.SystemCodeSerializer;
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InjuryBodyDetail extends CmsPersistentObject {
+
   @Id
   @Column(name = "THIRD_ID", length = CMS_ID_LEN)
-  private String id;
+  private String thirdId;
 
   @SystemCodeSerializer(logical = true, description = true)
   @JsonDeserialize(using = CmsSystemCodeDeserializer.class)
@@ -46,16 +53,46 @@ public class InjuryBodyDetail extends CmsPersistentObject {
   @Column(name = "CNTY_SPFCD")
   private String countySpecificCode;
 
+  /**
+   * Default constructor
+   */
+  public InjuryBodyDetail() {
+    super();
+  }
+
+  /**
+   * @param thirdId - thirdId
+   * @param physicalAbuseBodyPartType - physicalAbuseBodyPartType
+   * @param primaryInjuryHarmDetailId - primaryInjuryHarmDetailId
+   * @param secondaryInjuryHarmDetailId - secondaryInjuryHarmDetailId
+   * @param countySpecificCode - countySpecificCode
+   */
+  public InjuryBodyDetail(String thirdId, Short physicalAbuseBodyPartType,
+      String primaryInjuryHarmDetailId, String secondaryInjuryHarmDetailId,
+      String countySpecificCode) {
+    super();
+    this.thirdId = thirdId;
+    this.physicalAbuseBodyPartType = physicalAbuseBodyPartType;
+    this.primaryInjuryHarmDetailId = primaryInjuryHarmDetailId;
+    this.secondaryInjuryHarmDetailId = secondaryInjuryHarmDetailId;
+    this.countySpecificCode = countySpecificCode;
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
+   */
   @Override
-  public Serializable getPrimaryKey() {
-    return this.getId();
+  public String getPrimaryKey() {
+    return this.getThirdId();
   }
 
   /**
    * @return the id
    */
-  public String getId() {
-    return id;
+  public String getThirdId() {
+    return thirdId;
   }
 
   /**

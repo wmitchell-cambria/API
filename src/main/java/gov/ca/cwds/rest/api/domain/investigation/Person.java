@@ -1,16 +1,24 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import java.util.Date;
+
+import java.util.Date; 
+
+import static org.apache.commons.lang3.StringUtils.trim;
+
 import java.util.Set;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
@@ -163,13 +171,13 @@ public class Person extends ReportingDomain implements Request, Response {
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
     this.lastUpdatedAt = lastUpdatedAt;
-    this.firstName = firstName;
-    this.middleName = middleName;
-    this.lastName = lastName;
-    this.nameSuffix = nameSuffix;
-    this.gender = gender;
+    this.firstName = trim(firstName);
+    this.middleName = trim(middleName);
+    this.lastName = trim(lastName);
+    this.nameSuffix = trim(nameSuffix);
+    this.gender = trim(gender);
     this.dateOfBirth = dateOfBirth;
-    this.ssn = ssn;
+    this.ssn = trim(ssn);
     this.languages = languages;
     this.raceAndEthnicity = raceAndEthnicity;
     this.sensitive = sensitive;
@@ -194,7 +202,9 @@ public class Person extends ReportingDomain implements Request, Response {
       Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles,
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
+
     this.lastUpdatedAt = client.getLastUpdatedTime() != null ? client.getLastUpdatedTime() : null;
+
     this.firstName = StringUtils.trim(client.getFirstName());
     this.lastName = StringUtils.trim(client.getLastName());
     this.middleName = StringUtils.trim(client.getMiddleName());
@@ -228,6 +238,7 @@ public class Person extends ReportingDomain implements Request, Response {
     this.lastUpdatedBy = reporter.getLastUpdatedId();
     this.lastUpdatedAt =
         reporter.getLastUpdatedTime() != null ? reporter.getLastUpdatedTime() : null;
+
     this.firstName = reporter.getFirstName();
     this.lastName = reporter.getLastName();
     this.middleName = reporter.getMiddleName();
@@ -243,7 +254,6 @@ public class Person extends ReportingDomain implements Request, Response {
     this.addresses = address;
     this.phone = phoneNumbers;
     this.roles = roles;
-
   }
 
   /**

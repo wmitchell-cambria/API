@@ -56,10 +56,10 @@ public class LongTextHelperTest {
 
 
   @Test
-  public void getLongTextReturnsEmptyWhenIdentifierIsNull() throws Exception {
+  public void getLongTextReturnsNullWhenIdentifierIsNull() throws Exception {
     String detailText = null;
     String found = longTextHelper.getLongText(detailText);
-    String expected = "";
+    String expected = null;
     assertThat(found, is(expected));
 
   }
@@ -83,6 +83,12 @@ public class LongTextHelperTest {
   public void updateLongTextCallsLongTextDaoCreateWhenEmptyIdAndNonEmptyText() throws Exception {
     longTextHelper.updateLongText("", "some test", "99");
     verify(longTextDao, atLeastOnce()).create(any());
+  }
+
+  @Test
+  public void updateLongTextCallsLongTextDaoDeleteWhenNonEmptyIdAndEmptyText() throws Exception {
+    longTextHelper.updateLongText("ABC1234567", "", "99");
+    verify(longTextDao, atLeastOnce()).delete(any());
   }
 
   @Test

@@ -41,7 +41,7 @@ public class LongTextHelper {
     if (detailText != null) {
       detail = longTextService.find(detailText);
     }
-    return (Optional.of(detail)).map(LongText::getTextDescription).orElse("");
+    return (Optional.of(detail)).map(LongText::getTextDescription).orElse(null);
   }
 
   /**
@@ -74,15 +74,21 @@ public class LongTextHelper {
     if (StringUtils.isBlank(longTextId)) {
       return handleEmptyLongTextId(longTextId, note, countySpecificCode);
     } else {
-      handleExistingLongTextId(longTextId, note, countySpecificCode);
-      return longTextId;
+      return handleExistingLongTextId(longTextId, note, countySpecificCode);
     }
   }
 
-  private void handleExistingLongTextId(String longTextId, String note, String countySpecificCode) {
+  private String handleExistingLongTextId(String longTextId, String note,
+      String countySpecificCode) {
+    if (StringUtils.isBlank(note)) {
+      longTextService.delete(longTextId);
+      return null;
+    }
+
     gov.ca.cwds.rest.api.domain.cms.LongText longText =
         new gov.ca.cwds.rest.api.domain.cms.LongText(countySpecificCode, note);
     longTextService.update(longTextId, longText);
+    return longTextId;
   }
 
   private String handleEmptyLongTextId(String longTextId, String note, String countySpecificCode) {

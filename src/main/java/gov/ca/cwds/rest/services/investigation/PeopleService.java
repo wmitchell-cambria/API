@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.dao.investigation.PeopleDao;
@@ -78,19 +81,19 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     return validPeople;
   }
 
-
   /**
-   * populating peoples who are related to investigations/referral
+   * Populate peoples who are related to investigations/referral.
    * 
    * @param referral - referral object
    * @return list of persons
    */
   public Set<Person> getInvestigationPeoples(Referral referral) {
-    Set<Person> persons = new HashSet<Person>();
+    Set<Person> persons = new HashSet<>();
     Set<InvestigationAddress> address = new HashSet<>();
-    Set<PhoneNumber> phoneNunbers = new HashSet<>();
-    Set<String> victims = new HashSet<String>();
-    Set<String> perpetrators = new HashSet<String>();
+    Set<PhoneNumber> phoneNumbers = new HashSet<>();
+    Set<String> victims = new HashSet<>();
+    Set<String> perpetrators = new HashSet<>();
+
     // populating victims and perpetrators
     for (Allegation allegation : referral.getAllegations()) {
       victims.add(allegation.getVictimClientId());
@@ -106,16 +109,17 @@ public class PeopleService implements TypedCrudsService<String, People, Response
         cmsRecordDescriptor =
             this.getLegacyDescriptor(clientAddress.getAddresses().getId(), LegacyTable.ADDRESS);
         address.add(new InvestigationAddress(clientAddress, cmsRecordDescriptor));
-        phoneNunbers.add(new PhoneNumber(clientAddress.getAddresses(), cmsRecordDescriptor));
-
+        phoneNumbers.add(new PhoneNumber(clientAddress.getAddresses(), cmsRecordDescriptor));
       }
-      Set<String> roles = this.pouplatePeopleRoles(refClient, victims, perpetrators);
+
+      final Set<String> roles = this.pouplatePeopleRoles(refClient, victims, perpetrators);
       RaceAndEthnicity raceAndEthnicity = this.populateRaceAndEthnicity(client);
       person = new Person(client, getLanguages(client.getLanguages()),
-          this.getLegacyDescriptor(client.getId(), LegacyTable.CLIENT), address, phoneNunbers,
+          this.getLegacyDescriptor(client.getId(), LegacyTable.CLIENT), address, phoneNumbers,
           roles, raceAndEthnicity);
       persons.add(person);
     }
+
     this.populateReporters(persons, referral.getId());
     return persons;
   }
@@ -131,10 +135,9 @@ public class PeopleService implements TypedCrudsService<String, People, Response
    */
   private Set<String> pouplatePeopleRoles(ReferralClient refClient, Set<String> victims,
       Set<String> perpetrators) {
-    Set<String> roles = new HashSet<String>();
+    Set<String> roles = new HashSet<>();
     if (StringUtils.equals("Y", refClient.getSelfReportedIndicator())) {
       roles.add("Self Reported");
-
     }
     if (victims.contains(refClient.getClientId())) {
       roles.add("Victim");
@@ -154,7 +157,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
   private void populateReporters(Set<Person> persons, String referralId) {
     Set<InvestigationAddress> address = new HashSet<>();
     Set<PhoneNumber> phoneNunbers = new HashSet<>();
-    Set<String> roles = new HashSet<String>();
+    Set<String> roles = new HashSet<>();
     Set<String> languages = new HashSet<>();
     String role = null;
     Person person = null;
@@ -165,14 +168,11 @@ public class PeopleService implements TypedCrudsService<String, People, Response
       address.add(new InvestigationAddress(reporter, cmsRecordDescriptor));
       phoneNunbers.add(new PhoneNumber(reporter, cmsRecordDescriptor));
       role = StringUtils.equals(reporter.getMandatedReporterIndicator(), "Y")
-          ? Role.MANDATED_REPORTER_ROLE.getType()
-          : Role.NON_MANDATED_REPORTER_ROLE.getType();
+          ? Role.MANDATED_REPORTER_ROLE.getType() : Role.NON_MANDATED_REPORTER_ROLE.getType();
       roles.add(role);
       person = new Person(reporter, languages, cmsRecordDescriptor, address, phoneNunbers, roles);
       persons.add(person);
-
     }
-
   }
 
   /**
@@ -192,11 +192,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
 
     }
     return new RaceAndEthnicity(client, raceCode, hispanicCode);
-
-
-
   }
-
 
   /**
    * finding legacy record descriptor object.
@@ -222,4 +218,5 @@ public class PeopleService implements TypedCrudsService<String, People, Response
 
     return languages;
   }
+
 }

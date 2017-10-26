@@ -15,6 +15,8 @@ import org.jadira.usertype.spi.utils.lang.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -42,6 +44,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
+@JsonInclude(Include.ALWAYS)
 @JsonPropertyOrder({"legacy_descriptor", "lastUpdatedBy", "staffName", "startedAt", "endedAt",
     "purpose", "communicationMethod", "status", "services", "location", "note", "people"})
 public class Contact extends ReportingDomain implements Request, Response {

@@ -83,10 +83,15 @@ public class DeliveredService {
    * @return the combined DetailText And DetailTextContinuation
    */
   String combineDetailTextAndContinuation(DeliveredServiceEntity deliveredServiceEntity) {
-    String detailText = deliveredServiceEntity.getDetailText();
-    String detailTextContinuation = deliveredServiceEntity.getDetailTextContinuation();
-    return longTextHelper.getLongText(detailText)
-        + longTextHelper.getLongText(detailTextContinuation);
+    String detailText = longTextHelper.getLongText(deliveredServiceEntity.getDetailText());
+    String detailTextContinuation =
+        longTextHelper.getLongText(deliveredServiceEntity.getDetailTextContinuation());
+    if (detailText == null && detailTextContinuation == null) {
+      return null;
+    }
+    detailText = detailText != null ? detailText : "";
+    detailTextContinuation = detailTextContinuation != null ? detailTextContinuation : "";
+    return detailText + detailTextContinuation;
   }
 
   public DeliveredServiceEntity find(String contactId) {
