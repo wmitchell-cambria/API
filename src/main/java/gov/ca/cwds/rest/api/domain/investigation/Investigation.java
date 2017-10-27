@@ -359,8 +359,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.contacts = contacts;
   }
 
-
-
   /**
    * populating address details
    * 

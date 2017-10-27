@@ -1,11 +1,16 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static org.apache.commons.lang3.StringUtils.trim;
+
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -78,10 +83,10 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
       String zip, @ValidSystemCodeId(required = true, category = "ADDR_TPC") Short type) {
     super();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
-    this.streetAddress = streetAddress;
-    this.city = city;
+    this.streetAddress = trim(streetAddress);
+    this.city = trim(city);
     this.state = state;
-    this.zip = zip;
+    this.zip = trim(zip);
     this.type = type;
   }
 
@@ -94,13 +99,12 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   public InvestigationAddress(gov.ca.cwds.data.persistence.cms.ClientAddress persistedClientAddress,
       CmsRecordDescriptor cmsRecordDescriptor) {
     gov.ca.cwds.data.persistence.cms.Address address = persistedClientAddress.getAddresses();
-    this.streetAddress = address.getStreetAddress();
-    this.city = address.getCity();
+    this.streetAddress = trim(address.getStreetAddress());
+    this.city = trim(address.getCity());
     this.state = address.getStateCd();
-    this.zip = address.getZip();
+    this.zip = trim(address.getZip());
     this.type = persistedClientAddress.getAddressType();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
-
   }
 
   /**
@@ -110,10 +114,10 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
    * @param cmsRecordDescriptor - legacy record descriptor
    */
   public InvestigationAddress(Reporter reporter, CmsRecordDescriptor cmsRecordDescriptor) {
-    this.streetAddress = reporter.getStreetAddress();
-    this.city = reporter.getCity();
+    this.streetAddress = trim(reporter.getStreetAddress());
+    this.city = trim(reporter.getCity());
     this.state = reporter.getStateCd();
-    this.zip = reporter.getZip();
+    this.zip = trim(reporter.getZip());
     this.type = reporter.getApiAdrAddressType();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
   }
@@ -125,14 +129,12 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
     return cmsRecordDescriptor;
   }
 
-
   /**
    * @return - street name and number
    */
   public String getStreetAddress() {
     return streetAddress;
   }
-
 
   /**
    * @return - city
@@ -141,7 +143,6 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
     return city;
   }
 
-
   /**
    * @return - state code
    */
@@ -149,14 +150,12 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
     return state;
   }
 
-
   /**
    * @return - zip code
    */
   public String getZip() {
     return zip;
   }
-
 
   /**
    * @return - address type code

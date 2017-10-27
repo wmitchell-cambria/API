@@ -1,10 +1,9 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 
-import java.util.Date; 
-
 import static org.apache.commons.lang3.StringUtils.trim;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -205,10 +204,10 @@ public class Person extends ReportingDomain implements Request, Response {
 
     this.lastUpdatedAt = client.getLastUpdatedTime() != null ? client.getLastUpdatedTime() : null;
 
-    this.firstName = StringUtils.trim(client.getFirstName());
-    this.lastName = StringUtils.trim(client.getLastName());
-    this.middleName = StringUtils.trim(client.getMiddleName());
-    this.nameSuffix = StringUtils.trim(client.getNameSuffix());
+    this.firstName = trim(client.getFirstName());
+    this.lastName = trim(client.getLastName());
+    this.middleName = trim(client.getMiddleName());
+    this.nameSuffix = trim(client.getNameSuffix());
     this.gender = client.getGender();
     this.dateOfBirth =
         client.getBirthDate() != null ? DomainChef.cookDate(client.getBirthDate()) : null;
@@ -239,11 +238,11 @@ public class Person extends ReportingDomain implements Request, Response {
     this.lastUpdatedAt =
         reporter.getLastUpdatedTime() != null ? reporter.getLastUpdatedTime() : null;
 
-    this.firstName = reporter.getFirstName();
-    this.lastName = reporter.getLastName();
-    this.middleName = reporter.getMiddleName();
-    this.nameSuffix = reporter.getNameSuffix();
-    this.gender = reporter.getGender();
+    this.firstName = trim(reporter.getFirstName());
+    this.lastName = trim(reporter.getLastName());
+    this.middleName = trim(reporter.getMiddleName());
+    this.nameSuffix = trim(reporter.getNameSuffix());
+    this.gender = trim(reporter.getGender());
     this.dateOfBirth =
         reporter.getBirthDate() != null ? DomainChef.cookDate(reporter.getBirthDate()) : null;
     this.ssn = reporter.getSsn();
