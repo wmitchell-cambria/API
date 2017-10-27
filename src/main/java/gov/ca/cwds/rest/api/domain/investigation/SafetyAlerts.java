@@ -2,6 +2,9 @@ package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.util.Set;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
@@ -21,7 +24,7 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
 
   @JsonProperty("alerts")
   @ApiModelProperty(required = false, readOnly = false, value = "Safety Alert Type")
-  private Set<String> safetyAlerts;
+  private Set<String> alerts;
 
   @JsonProperty("alert_information")
   @ApiModelProperty(required = false, readOnly = false, value = "Alert Information")
@@ -35,11 +38,11 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * @param safetyAlerts - set of safety alert types
+   * @param alerts - set of safety alert types
    * @param alertInformation - alert information
    */
-  public SafetyAlerts(Set<String> safetyAlerts, String alertInformation) {
-    this.safetyAlerts = safetyAlerts;
+  public SafetyAlerts(Set<String> alerts, String alertInformation) {
+    this.alerts = alerts;
     this.alertInformation = alertInformation;
   }
 
@@ -47,14 +50,14 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
    * @return - set of safety alert types
    */
   public Set<String> getSafetyAlerts() {
-    return safetyAlerts;
+    return alerts;
   }
 
   /**
-   * @param safetyAlerts - set of safety alert types
+   * @param alerts - set of safety alert types
    */
-  public void setSafetyAlerts(Set<String> safetyAlerts) {
-    this.safetyAlerts = safetyAlerts;
+  public void setSafetyAlerts(Set<String> alerts) {
+    this.alerts = alerts;
   }
 
   /**
@@ -71,37 +74,25 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
     this.alertInformation = alertInformation;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((alertInformation == null) ? 0 : alertInformation.hashCode());
-    result = prime * result + ((safetyAlerts == null) ? 0 : safetyAlerts.hashCode());
-    return result;
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    SafetyAlerts other = (SafetyAlerts) obj;
-    if (alertInformation == null) {
-      if (other.alertInformation != null)
-        return false;
-    } else if (!alertInformation.equals(other.alertInformation))
-      return false;
-    if (safetyAlerts == null) {
-      if (other.safetyAlerts != null)
-        return false;
-    } else if (!safetyAlerts.equals(other.safetyAlerts))
-      return false;
-    return true;
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
-
 
 }
 

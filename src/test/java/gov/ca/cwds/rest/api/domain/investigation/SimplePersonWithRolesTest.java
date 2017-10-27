@@ -6,10 +6,10 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Set;
 
+import org.junit.Test;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-
-import org.junit.Test;
 
 @SuppressWarnings("javadoc")
 public class SimplePersonWithRolesTest {
@@ -32,6 +32,36 @@ public class SimplePersonWithRolesTest {
     assertThat(domain.getLastName(), is(equalTo(lastName)));
     assertThat(domain.getFirstName(), is(equalTo(firstName)));
     assertThat(domain.getSensitivityIndicator(), is(equalTo(sensitivityIndicator)));
+  }
+
+  @Test
+  public void testGetSealedTrue() {
+    SimplePersonWithRoles domain =
+        new SimplePersonWithRoles(roles, lastName, firstName, sensitivityIndicator);
+    assertThat(domain.getSealed(), is(equalTo(Boolean.TRUE)));
+
+  }
+
+  @Test
+  public void testGetSealedFalse() {
+    SimplePersonWithRoles domain = new SimplePersonWithRoles(roles, lastName, firstName, "S");
+    assertThat(domain.getSealed(), is(equalTo(Boolean.FALSE)));
+
+  }
+
+  @Test
+  public void testGetSenstiveTrue() {
+    SimplePersonWithRoles domain = new SimplePersonWithRoles(roles, lastName, firstName, "S");
+    assertThat(domain.getSensitive(), is(equalTo(Boolean.TRUE)));
+
+  }
+
+  @Test
+  public void testGetSensitiveFalse() {
+    SimplePersonWithRoles domain =
+        new SimplePersonWithRoles(roles, lastName, firstName, sensitivityIndicator);
+    assertThat(domain.getSensitive(), is(equalTo(Boolean.FALSE)));
+
   }
 
 }

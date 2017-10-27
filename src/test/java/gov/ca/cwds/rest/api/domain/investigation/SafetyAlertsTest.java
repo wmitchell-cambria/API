@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class SafetyAlertsTest {
@@ -75,6 +77,11 @@ public class SafetyAlertsTest {
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
     Set<ConstraintViolation<SafetyAlerts>> constraintViolations = validator.validate(safetyAlerts);
     assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(SafetyAlerts.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   @Test

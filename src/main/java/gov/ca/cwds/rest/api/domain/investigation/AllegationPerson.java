@@ -1,8 +1,10 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import com.google.common.base.Objects;
 import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +16,6 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * {@link DomainObject} representing an AllegationPerson
@@ -22,8 +23,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-public class AllegationPerson implements Serializable{
-  private static final int PRIME = 31;
+public class AllegationPerson implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("first_name")
@@ -182,33 +182,24 @@ public class AllegationPerson implements Serializable{
     this.legacyDescriptor = legacyDescriptor;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
   @Override
-  public int hashCode() {
-    int result = 1;
-    result = PRIME * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = PRIME * result + ((lastName == null) ? 0 : lastName.hashCode());
-    result = PRIME * result + ((legacyDescriptor == null) ? 0 : legacyDescriptor.hashCode());
-    result = PRIME * result + ((middleName == null) ? 0 : middleName.hashCode());
-    result = PRIME * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-    result = PRIME * result + ((suffixTitle == null) ? 0 : suffixTitle.hashCode());
-    return result;
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    AllegationPerson that = (AllegationPerson) o;
-    return java.util.Objects.equals(firstName, that.firstName) &&
-        java.util.Objects.equals(lastName, that.lastName) &&
-        java.util.Objects.equals(middleName, that.middleName) &&
-        java.util.Objects.equals(suffixTitle, that.suffixTitle) &&
-        java.util.Objects.equals(dateOfBirth, that.dateOfBirth) &&
-        java.util.Objects.equals(legacyDescriptor, that.legacyDescriptor);
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }

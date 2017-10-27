@@ -2,6 +2,7 @@ package gov.ca.cwds.fixture.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleAllegation;
 
@@ -24,7 +25,7 @@ public class ScreeningSummaryEntityBuilder {
   private Set<SimpleAllegation> allegations = validAllegationsSet();
 
   private Set<String> validSafetyAletrs() {
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<String> safetyAlerts = new HashSet<>();
     safetyAlerts.add("Dangerous Animal on Premises");
     safetyAlerts.add("Firearms in Home");
     safetyAlerts.add("Severe Mental Health Status");
@@ -32,14 +33,14 @@ public class ScreeningSummaryEntityBuilder {
   }
 
   private Set<SimpleAllegation> validAllegationsSet() {
-    Set<SimpleAllegation> validAllegations = new HashSet<SimpleAllegation>();
+    Set<SimpleAllegation> validAllegations = new HashSet<>();
     SimpleAllegation allegation = new SimpleAllegation(victimId, perpetratorId, allegationTypes);
     validAllegations.add(allegation);
     return validAllegations;
   }
 
   private Set<String> validAllegationTypes() {
-    Set<String> allegationTypes = new HashSet<String>();
+    Set<String> allegationTypes = new HashSet<>();
     allegationTypes.add("General neglect");
     allegationTypes.add("Physical abuse");
     return allegationTypes;

@@ -30,6 +30,11 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
 
   private Allegation validAllegation = new AllegationEntityBuilder().build();
 
+  /**
+   * @param allegationsDao - allegations data access object
+   * @param injuryBodyDetailDao - injury body detail data access object
+   * @param injuryHarmDetailDao - injury harm detail data access object
+   */
   @Inject
   public AllegationService(AllegationsDao allegationsDao, InjuryBodyDetailDao injuryBodyDetailDao,
       InjuryHarmDetailDao injuryHarmDetailDao) {

@@ -4,17 +4,36 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationPersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 
 
 @SuppressWarnings("javadoc")
 public class AllegationPersonTest {
+  private ObjectMapper MAPPER = new ObjectMapper();
+  private Validator validator;
+
   protected String firstName = "Joanna";
   protected String lastName = "Kenneson";
   protected String middleName = "";
@@ -23,7 +42,11 @@ public class AllegationPersonTest {
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
   @Before
-  public void setup() {}
+  public void setup() {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
+  }
 
   @Test
   public void shouldCreateObjectWithDefaultConstructor() {
@@ -41,6 +64,36 @@ public class AllegationPersonTest {
     assertThat(domain.getSuffixTitle(), is(equalTo(suffixTitle)));
     assertThat(domain.getDateOfBirth(), is(equalTo(dateOfBirth)));
     assertThat(domain.getLegacyDescriptor(), is(equalTo(legacyDescriptor)));
+  }
+
+  @Test
+  public void testClientConstructorSuccess() {
+    Client client = new ClientEntityBuilder().build();
+    CmsRecordDescriptor clientLegacyDescriptor =
+        CmsRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
+    AllegationPerson domain = new AllegationPerson(client);
+    assertThat(domain.getFirstName(), is(equalTo(client.getFirstName())));
+    assertThat(domain.getLastName(), is(equalTo(client.getLastName())));
+    assertThat(domain.getMiddleName(), is(equalTo(client.getMiddleName())));
+    assertThat(domain.getSuffixTitle(), is(equalTo(client.getSuffixTitleDescription())));
+    assertThat(domain.getLegacyDescriptor(), is(equalTo(clientLegacyDescriptor)));
+    assertThat(domain.getDateOfBirth(), is(equalTo(DomainChef.cookDate(client.getBirthDate()))));
+  }
+
+  @Test
+  public void testClientConstructorWithNullDateOfBirthSuccess() {
+    Client client = new ClientEntityBuilder().setBirthDate(null).build();
+    AllegationPerson domain = new AllegationPerson(client);
+    assertThat(domain.getDateOfBirth(), is(equalTo(null)));
+  }
+
+  @Test
+  public void testInvalidDateOfBirthFormatFailure() {
+    AllegationPerson allegationPerson = new AllegationPerson(firstName, lastName, middleName,
+        suffixTitle, "04-01-2012", legacyDescriptor);
+    Set<ConstraintViolation<AllegationPerson>> constraintViolations =
+        validator.validate(allegationPerson);
+    assertEquals(1, constraintViolations.size());
   }
 
   @Test
