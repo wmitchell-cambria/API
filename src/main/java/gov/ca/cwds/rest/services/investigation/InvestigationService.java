@@ -16,6 +16,7 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
+import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
@@ -36,13 +37,16 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private InvestigationDao investigationDao;
   private StaffPersonDao staffPersonDao;
   private AddressDao addressDao;
+
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
   private RelationshipListService relationshipListService;
   private ContactService contactService;
+  private HistoryOfInvolvementService hoiSvc;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
+  private HistoryOfInvolvement stubHoi;
 
   /**
    * 
@@ -54,12 +58,13 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * @param allegationService - Allegation Service
    * @param relationshipListService - RelationshipList Service
    * @param contactService - contact service
+   * @param hoiSvc service for history of involvement
    */
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
       AddressDao addressDao, LongTextService longTextService, PeopleService peopleService,
       AllegationService allegationService, RelationshipListService relationshipListService,
-      ContactService contactService) {
+      ContactService contactService, HistoryOfInvolvementService hoiSvc) {
     super();
     this.investigationDao = investigationDao;
     this.addressDao = addressDao;
@@ -69,6 +74,13 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     this.allegationService = allegationService;
     this.relationshipListService = relationshipListService;
     this.contactService = contactService;
+    this.hoiSvc = hoiSvc;
+  }
+
+  private synchronized Investigation stubby() {
+    // Stub data.
+    this.validInvestigation.setHistoryOfInvolvement((HistoryOfInvolvement) hoiSvc.find("STUB"));
+    return this.validInvestigation;
   }
 
   /**
@@ -78,11 +90,10 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   @Override
   public Response find(String referralId) {
-    Investigation validInvestigation;
+    Investigation ret;
 
     if (referralId.equals("999999")) {
-      // Stub data.
-      return this.validInvestigation;
+      return stubby();
     }
 
     final Referral referral = investigationDao.find(referralId);
@@ -107,12 +118,12 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<String> safetyAlerts = new HashSet<>();
       Set<String> crossReports = new HashSet<>();
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
-      validInvestigation =
+      ret =
           new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
               allegations, peoples, relationshipList, safetyAlerts, crossReports, contacts);
     }
 
-    return validInvestigation;
+    return ret;
   }
 
 
