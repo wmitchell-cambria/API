@@ -1,9 +1,10 @@
 package gov.ca.cwds.fixture.contacts;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -14,8 +15,8 @@ public class ContactEntityBuilder {
 
   private String id = "1234567ABC";
   private LastUpdatedBy lastUpdatedBy = new LastUpdatedByEntityBuilder().build();
-  private String startedAt = "2010-04-27T23:30:14.000Z";
-  private String endedAt = "2010-04-28T23:30:14.000Z";
+  private Date startedAt = DomainChef.uncookStrictTimestampString("2010-04-27T23:30:14.000-0000");
+  private Date endedAt = DomainChef.uncookStrictTimestampString("2010-04-28T23:30:14.000-0000");
   private Integer purpose = 433;
   private Integer communicationMetod = 408;
   private String status = "C";
