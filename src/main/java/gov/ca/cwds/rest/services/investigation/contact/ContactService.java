@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services.investigation.contact;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -144,12 +146,12 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * @param contactId the Contact Id
    */
   private void validateContactId(String referralId, String contactId) {
+
     ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntities =
         referralClientDeliveredService.findByReferralId(referralId);
     if (referralClientDeliveredServiceEntities.length == 0) {
       throw new ServiceException("There are no Contacts For the Given ReferralId");
     }
-
     for (ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity : referralClientDeliveredServiceEntities) {
       if (referralClientDeliveredServiceEntity.getReferralClientDeliveredServiceEmbeddable()
           .getDeliveredServiceId().equals(contactId)) {
@@ -177,7 +179,8 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     validateCurrentUserStaffId(currentUserStaffId);
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
-    validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate());
+    validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate(),
+        referral.getReceivedTime());
     String referralId = referral.getId();
     String countySpecificCode = referral.getCountySpecificCode();
     String deliveredServiceId = deliveredService.create(request, countySpecificCode);
@@ -243,7 +246,8 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     validateCurrentUserStaffId(currentUserStaffId);
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
-    validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate());
+    validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate(),
+        referral.getReceivedTime());
     String referralId = referral.getId();
     String countySpecificCode = referral.getCountySpecificCode();
     deliveredService.update(primaryKey, request, countySpecificCode);
@@ -262,10 +266,27 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     return this.find(referralId + ":" + deliveredServiceId);
   }
 
-  private void validateContactStartDate(String startedAt, Date receivedDate) {
-    if (DomainChef.uncookISO8601Timestamp(startedAt).before(receivedDate)) {
+  private void validateContactStartDate(String contactStartedAt, Date referralReceivedDate,
+      Date referralReceivedTime) {
+    String referralReceivedDateTime = "";
+    String receivedDate = DomainChef.cookDate(referralReceivedDate);
+    String receivedTime = cookTime(referralReceivedTime);
+
+    if (StringUtils.isNotEmpty(receivedDate)) {
+      referralReceivedDateTime = receivedDate + "T" + receivedTime + "Z";
+    }
+    if (DomainChef.uncookISO8601Timestamp(contactStartedAt)
+        .before(DomainChef.uncookISO8601Timestamp(referralReceivedDateTime))) {
       throw new ServiceException("Contact Started At is before the Referral Received Date");
     }
+  }
+
+  public static String cookTime(Date date) {
+    if (date != null) {
+      DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
+      return df.format(date);
+    }
+    return "00:00:00.000";
   }
 
   /**

@@ -127,7 +127,6 @@ public class DeliveredServiceTest {
   public void getTheLastUpdatedByStaffPersonAddressesNullStaffPersonId() throws Exception {
     DeliveredServiceDomain deliveredServiceDomain =
         new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
-
     gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
             deliveredServiceDomain, null, new Date());
@@ -146,6 +145,48 @@ public class DeliveredServiceTest {
             deliveredServiceDomain, "ABC", new Date());
     target.combineDetailTextAndContinuation(toTest);
     verify(longTextHelper, times(2)).getLongText(any());
+  }
+
+  @Test
+  public void combineDetailTextAndContinuationHandlesNulls() throws Exception {
+    DeliveredServiceDomain deliveredServiceDomain =
+        new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
+    when(longTextHelper.getLongText("ABC1234567")).thenReturn(null);
+    when(longTextHelper.getLongText("ABC12345t7")).thenReturn(null);
+
+    gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
+        new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
+            deliveredServiceDomain, "ABC", new Date());
+    String actual = target.combineDetailTextAndContinuation(toTest);
+    assertEquals(actual, null);
+  }
+
+  @Test
+  public void combineDetailTextAndContinuationHandlesDetailTextNull() throws Exception {
+    DeliveredServiceDomain deliveredServiceDomain =
+        new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
+    when(longTextHelper.getLongText("ABC1234567")).thenReturn(null);
+    when(longTextHelper.getLongText("ABC12345t7")).thenReturn("test");
+
+    gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
+        new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
+            deliveredServiceDomain, "ABC", new Date());
+    String actual = target.combineDetailTextAndContinuation(toTest);
+    assertEquals(actual, "test");
+  }
+
+  @Test
+  public void combineDetailTextAndContinuationHandlesDetailTextContinuationNull() throws Exception {
+    DeliveredServiceDomain deliveredServiceDomain =
+        new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
+    when(longTextHelper.getLongText("ABC1234567")).thenReturn("test");
+    when(longTextHelper.getLongText("ABC12345t7")).thenReturn(null);
+
+    gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
+        new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
+            deliveredServiceDomain, "ABC", new Date());
+    String actual = target.combineDetailTextAndContinuation(toTest);
+    assertEquals(actual, "test");
   }
 
   @Test
