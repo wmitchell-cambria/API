@@ -26,9 +26,6 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonPropertyOrder({"cases", "referrals", "screenings"})
 public class HistoryOfInvolvement extends ReportingDomain implements Response {
 
-  /**
-   * Default
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("cases")

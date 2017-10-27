@@ -14,11 +14,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import gov.ca.cwds.data.persistence.cms.Address;
@@ -174,10 +172,11 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @Valid
   private ScreeningSummary screeningSummary;
 
-  // @JsonProperty("history_of_involvement")
+  @JsonProperty("history_of_involvement")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
-  @JsonIgnore
+  // @JsonIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private HistoryOfInvolvement historyOfInvolvement;
 
   @JsonProperty("allegations")
@@ -224,12 +223,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param communicationMethod - communication method code
    * @param name - name
    * @param reportNarrative - report narrative
-   * @param reference - referrence
+   * @param reference - reference
    * @param responseTime - response time
    * @param startedAt - started at
-   * @param assignee - asignment info
+   * @param assignee - assignment info
    * @param additionalInformation - additional information
-   * @param sensitive - contains senstive information
+   * @param sensitive - contains sensitive information
    * @param sealed - contains sealed information
    * @param phoneNumbers - phone numbers
    * @param address - address
@@ -522,7 +521,8 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return - history of involvement
    */
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  @JsonUnwrapped
+  // @JsonUnwrapped
+  // @JsonProperty("history_of_involvement")
   public HistoryOfInvolvement getHistoryOfInvolvement() {
     return historyOfInvolvement != null ? historyOfInvolvement : new HistoryOfInvolvement();
   }
