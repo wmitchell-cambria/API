@@ -4,20 +4,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.fixture.contacts.ContactListEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -47,7 +44,9 @@ public class ContactListTest {
     LastUpdatedBy lastUpdatedByPerson =
         new LastUpdatedBy(legacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr.");
     Contact contact = new Contact(contactLegacyDescriptor, lastUpdatedByPerson,
-        "2010-04-27T23:30:14.000Z", "", "433", "408", "C", services, "415",
+        DomainChef.uncookStrictTimestampString("2010-04-27T23:30:14.000-0000"),
+        DomainChef.uncookStrictTimestampString("2010-04-28T05:30:14.000-0000"), "433", "408", "C",
+        services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
     Set<Contact> contacts = new HashSet<>();
     contacts.add(contact);

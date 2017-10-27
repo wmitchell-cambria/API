@@ -4,22 +4,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jadira.usertype.spi.utils.lang.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -65,20 +61,22 @@ public class Contact extends ReportingDomain implements Request, Response {
 
 
   @NotEmpty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
+      timezone = "UTC")
   @JsonProperty("started_at")
   @gov.ca.cwds.rest.validation.Date(format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", required = true)
   @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
       example = "2010-04-27T23:30:14.000Z")
-  private String startedAt;
+  private Date startedAt;
 
   @NotEmpty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
+      timezone = "UTC")
   @JsonProperty("ended_at")
   @gov.ca.cwds.rest.validation.Date(format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", required = true)
   @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
       example = "2010-04-28T23:30:14.000Z")
-  private String endedAt;
+  private Date endedAt;
 
   @JsonProperty("purpose")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.CONTACT_TYPE)
@@ -141,7 +139,7 @@ public class Contact extends ReportingDomain implements Request, Response {
   @JsonCreator
   public Contact(@JsonProperty("legacy_descriptor") CmsRecordDescriptor legacyDescriptor,
       @JsonProperty("last_updated_by") LastUpdatedBy lastUpdatedBy,
-      @JsonProperty("started_at") String startedAt, @JsonProperty("ended_at") String endedAt,
+      @JsonProperty("started_at") Date startedAt, @JsonProperty("ended_at") Date endedAt,
       @JsonProperty("purpose") String purpose,
       @JsonProperty("communication_method") String communicationMethod,
       @JsonProperty("status") String status, @JsonProperty("services") Set<Integer> services,
@@ -173,13 +171,15 @@ public class Contact extends ReportingDomain implements Request, Response {
     this.legacyDescriptor = CmsRecordUtils.createLegacyDescriptor(persistedDeliverdService.getId(),
         LegacyTable.DELIVERED_SERVICE);
     this.lastUpdatedBy = lastUpdatedBy;
-    String startDate = DomainChef.cookDate(persistedDeliverdService.getStartDate());
-    if (StringUtils.isNotEmpty(startDate)) {
-      this.startedAt = startDate + "T" + cookTime(persistedDeliverdService.getStartTime()) + "Z";
+    Date startDate = persistedDeliverdService.getStartDate();
+    if (startDate != null) {
+      this.startedAt =
+          DomainChef.concatenateDateAndTime(startDate, persistedDeliverdService.getStartTime());
     }
-    String endDate = DomainChef.cookDate(persistedDeliverdService.getEndDate());
-    if (StringUtils.isNotEmpty(endDate)) {
-      this.endedAt = endDate + "T" + cookTime(persistedDeliverdService.getEndTime()) + "Z";
+    Date endDate = persistedDeliverdService.getEndDate();
+    if (endDate != null) {
+      this.endedAt =
+          DomainChef.concatenateDateAndTime(endDate, persistedDeliverdService.getEndTime());
     }
     this.purpose = persistedDeliverdService.getServiceContactType().toString();
     this.communicationMethod = persistedDeliverdService.getCommunicationMethodType().toString();
@@ -202,11 +202,13 @@ public class Contact extends ReportingDomain implements Request, Response {
         LegacyTable.DELIVERED_SERVICE);
     String startDate = deliverdServiceDomain.getStartDate();
     if (StringUtils.isNotEmpty(startDate)) {
-      this.startedAt = startDate + "T" + deliverdServiceDomain.getStartTime() + "Z";
+      this.startedAt = DomainChef.concatenateDateAndTime(DomainChef.uncookDateString(startDate),
+          DomainChef.uncookISO8601Timestamp(deliverdServiceDomain.getStartTime()));
     }
     String endDate = deliverdServiceDomain.getEndDate();
     if (StringUtils.isNotEmpty(endDate)) {
-      this.endedAt = endDate + "T" + deliverdServiceDomain.getEndTime() + "Z";
+      this.endedAt = DomainChef.concatenateDateAndTime(DomainChef.uncookDateString(endDate),
+          DomainChef.uncookISO8601Timestamp(deliverdServiceDomain.getEndTime()));
     }
     this.purpose = deliverdServiceDomain.getServiceContactType().toString();
     this.communicationMethod = deliverdServiceDomain.getCommunicationMethodType().toString();
@@ -254,7 +256,7 @@ public class Contact extends ReportingDomain implements Request, Response {
   /**
    * @return the startedAt
    */
-  public String getStartedAt() {
+  public Date getStartedAt() {
     return startedAt;
   }
 
@@ -263,7 +265,7 @@ public class Contact extends ReportingDomain implements Request, Response {
   /**
    * @return the endedAt
    */
-  public String getEndedAt() {
+  public Date getEndedAt() {
     return endedAt;
   }
 
