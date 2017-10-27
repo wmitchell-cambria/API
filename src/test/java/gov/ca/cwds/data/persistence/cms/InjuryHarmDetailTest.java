@@ -15,8 +15,6 @@ import gov.ca.cwds.fixture.InjuryHarmDetailEntityBuilder;
  */
 public class InjuryHarmDetailTest {
 
-  private String thirdId = "1234567ABC";
-
   /**
    * Constructor test
    * 
@@ -37,12 +35,12 @@ public class InjuryHarmDetailTest {
 
     InjuryHarmDetail validInjuryHarmDetail = new InjuryHarmDetailEntityBuilder().build();
 
-    InjuryHarmDetail persistent =
-        new InjuryHarmDetail(thirdId, validInjuryHarmDetail.getInjuryHarmType(),
-            validInjuryHarmDetail.getInjuryToBodyDetailIndicator(),
-            validInjuryHarmDetail.getAllegationId(), validInjuryHarmDetail.getCountySpecificCode());
+    InjuryHarmDetail persistent = new InjuryHarmDetail(validInjuryHarmDetail.getThirdId(),
+        validInjuryHarmDetail.getInjuryHarmType(),
+        validInjuryHarmDetail.getInjuryToBodyDetailIndicator(),
+        validInjuryHarmDetail.getAllegationId(), validInjuryHarmDetail.getCountySpecificCode());
 
-    assertThat(persistent.getThirdId(), is(equalTo(thirdId)));
+    assertThat(persistent.getThirdId(), is(equalTo(validInjuryHarmDetail.getThirdId())));
     assertThat(persistent.getInjuryToBodyDetailIndicator(),
         is(equalTo(validInjuryHarmDetail.getInjuryToBodyDetailIndicator())));
     assertThat(persistent.getAllegationId(), is(equalTo(validInjuryHarmDetail.getAllegationId())));
