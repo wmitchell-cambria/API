@@ -44,7 +44,7 @@
           <collectionProp name="Arguments.arguments">
             <elementProp name="USER_COUNT" elementType="Argument">
               <stringProp name="Argument.name">USER_COUNT</stringProp>
-              <stringProp name="Argument.value">10</stringProp>
+              <stringProp name="Argument.value">${__P(user.count)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="RAMP_UP_TIME" elementType="Argument">
@@ -54,42 +54,42 @@
             </elementProp>
             <elementProp name="LOOP_COUNT" elementType="Argument">
               <stringProp name="Argument.name">LOOP_COUNT</stringProp>
-              <stringProp name="Argument.value">1</stringProp>
+              <stringProp name="Argument.value">${__P(loop.count)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="ES_HOST" elementType="Argument">
               <stringProp name="Argument.name">ES_HOST</stringProp>
-              <stringProp name="Argument.value">localhost</stringProp>
+              <stringProp name="Argument.value">${__P(es.host)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="ES_PORT" elementType="Argument">
               <stringProp name="Argument.name">ES_PORT</stringProp>
-              <stringProp name="Argument.value">9200</stringProp>
+              <stringProp name="Argument.value">${__P(es.port)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="ES_INDEX" elementType="Argument">
               <stringProp name="Argument.name">ES_INDEX</stringProp>
-              <stringProp name="Argument.value">people</stringProp>
+              <stringProp name="Argument.value">${__P(es.index)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="ES_DOC_TYPE" elementType="Argument">
               <stringProp name="Argument.name">ES_DOC_TYPE</stringProp>
-              <stringProp name="Argument.value">person</stringProp>
-              <stringProp name="Argument.metadata">=</stringProp>
-            </elementProp>
-            <elementProp name="CROSS_FIELD_QUERY_DATA" elementType="Argument">
-              <stringProp name="Argument.name">CROSS_FIELD_QUERY_DATA</stringProp>
-              <stringProp name="Argument.value">/Users/saleemis/work/git/API/src/test/resources/jmeter/elasticsearch/cross-field-query-data.csv</stringProp>
+              <stringProp name="Argument.value">${__P(es.doc.type)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="ES_AUTH_TOKEN" elementType="Argument">
               <stringProp name="Argument.name">ES_AUTH_TOKEN</stringProp>
-              <stringProp name="Argument.value">ZWxhc3RpYzpjaGFuZ2VtZQ==</stringProp>
+              <stringProp name="Argument.value">${__P(es.auth.token)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="ID_QUERY_DATA" elementType="Argument">
               <stringProp name="Argument.name">ID_QUERY_DATA</stringProp>
-              <stringProp name="Argument.value">/Users/saleemis/work/git/API/src/test/resources/jmeter/elasticsearch/id-query-data.csv</stringProp>
+              <stringProp name="Argument.value">${__P(id.query.data)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="CROSS_FIELD_QUERY_DATA" elementType="Argument">
+              <stringProp name="Argument.name">CROSS_FIELD_QUERY_DATA</stringProp>
+              <stringProp name="Argument.value">${__P(cross.field.query.data)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
@@ -105,7 +105,7 @@
         </HeaderManager>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Cross Field Query Data" enabled="true">
-          <stringProp name="delimiter">\n</stringProp>
+          <stringProp name="delimiter">\t</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="filename">${CROSS_FIELD_QUERY_DATA}</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
@@ -117,7 +117,7 @@
         </CSVDataSet>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="ID Query Data" enabled="true">
-          <stringProp name="delimiter">\n</stringProp>
+          <stringProp name="delimiter">\t</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="filename">${ID_QUERY_DATA}</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
