@@ -1,8 +1,9 @@
 package gov.ca.cwds.fixture.investigation;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleAllegation;
 
@@ -19,7 +20,7 @@ public class ScreeningSummaryEntityBuilder {
   private String decisionDetail = "immediate";
   private String name = "Henderson Screening";
   private Set<String> safetyAlerts = validSafetyAletrs();
-  private String startedAt = "2017-09-01T16:48:05.457Z";
+  private Date startedAt = DomainChef.uncookStrictTimestampString("2010-10-01T15:26:42.000-0700");
   private String safetyInformation = "The animal at residence is a lion";
   private String id = "1";
   private Set<SimpleAllegation> allegations = validAllegationsSet();

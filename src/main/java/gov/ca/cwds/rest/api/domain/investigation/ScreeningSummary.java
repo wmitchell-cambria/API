@@ -1,15 +1,14 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.Date;
 import java.util.Set;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -66,7 +65,9 @@ public class ScreeningSummary extends ReportingDomain implements Response {
   @JsonProperty("started_at")
   @ApiModelProperty(required = false, readOnly = false, value = "",
       example = "2017-09-01T16:48:05.457Z")
-  private String startedAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
+      timezone = "UTC")
+  private Date startedAt;
 
   @JsonProperty("allegations")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "")
@@ -98,7 +99,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
       @JsonProperty("safety_alerts") Set<String> safetyAlerts,
       @JsonProperty("safety_information") String safetyInformation,
       @JsonProperty("additional_information") String additionalInformation,
-      @JsonProperty("started_at") String startedAt,
+      @JsonProperty("started_at") Date startedAt,
       @JsonProperty("allegations") Set<SimpleAllegation> allegations) {
     super();
     this.id = id;
@@ -171,7 +172,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
   /**
    * @return the startedAt
    */
-  public String getStartedAt() {
+  public Date getStartedAt() {
     return startedAt;
   }
 
