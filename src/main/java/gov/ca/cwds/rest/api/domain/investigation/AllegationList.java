@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -59,30 +62,28 @@ public class AllegationList extends ReportingDomain implements Request, Response
     return allegations;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
   @Override
-  public int hashCode() {
-    int result = 1;
-    result = PRIME * result + ((allegations == null) ? 0 : allegations.hashCode());
-    return result;
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    AllegationList other = (AllegationList) obj;
-    if (allegations == null) {
-      if (other.allegations != null)
-        return false;
-    } else if (!allegations.equals(other.allegations))
-      return false;
-    return true;
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
+  @SuppressWarnings("javadoc")
   public static void main(String[] args) throws IOException {
     ObjectMapper mapper = ObjectMapperUtils.createObjectMapper();
 

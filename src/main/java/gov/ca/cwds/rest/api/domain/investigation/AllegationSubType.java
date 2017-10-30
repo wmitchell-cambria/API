@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -69,33 +72,24 @@ public class AllegationSubType extends ReportingDomain implements Response {
     return injuryHarmSubType;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
   @Override
-  public int hashCode() {
-    int result = 1;
-    result = PRIME * result + ((injuryHarmSubType == null) ? 0 : injuryHarmSubType.hashCode());
-    result = PRIME * result + ((injuryHarmType == null) ? 0 : injuryHarmType.hashCode());
-    return result;
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    AllegationSubType other = (AllegationSubType) obj;
-    if (injuryHarmSubType == null) {
-      if (other.injuryHarmSubType != null)
-        return false;
-    } else if (!injuryHarmSubType.equals(other.injuryHarmSubType))
-      return false;
-    if (injuryHarmType == null) {
-      if (other.injuryHarmType != null)
-        return false;
-    } else if (!injuryHarmType.equals(other.injuryHarmType))
-      return false;
-    return true;
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }

@@ -1,83 +1,86 @@
 package gov.ca.cwds.fixture;
 
-import gov.ca.cwds.data.persistence.cms.Client;
-import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
+
+@SuppressWarnings("javadoc")
 public class ClientEntityBuilder {
 
   protected String adjudicatedDelinquentIndicator = "";
-  protected String adoptionStatusCode  = "";
-  protected String alienRegistrationNumber  = "";
-  protected String birthCity  = "";
-  protected Short birthCountryCodeType  = 0;
-  protected Date birthDate  = new Date();
-  protected String birthFacilityName  = "";
-  protected Short birthStateCodeType  = 0;
-  protected String birthplaceVerifiedIndicator  = "";
-  protected String childClientIndicatorVar  = "";
-  protected String clientIndexNumber  = "";
-  protected String commentDescription  = "";
-  protected String commonFirstName  = "";
-  protected String commonLastName  = "";
-  protected String commonMiddleName  = "";
-  protected Date confidentialityActionDate  = new Date();
-  protected String confidentialityInEffectIndicator  = "";
-  protected Date creationDate  = new Date();
-  protected String currCaChildrenServIndicator  = "";
-  protected String currentlyOtherDescription  = "";
-  protected String currentlyRegionalCenterIndicator  = "";
-  protected Date deathDate  = new Date();
-  protected String deathDateVerifiedIndicator  = "";
-  protected String deathPlace  = "";
-  protected String deathReasonText  = "";
-  protected String driverLicenseNumber  = "";
-  protected Short driverLicenseStateCodeType  = 0;
-  protected String emailAddress  = "";
-  protected String estimatedDobCode  = "";
-  protected String ethUnableToDetReasonCode  = "";
-  protected Date fatherParentalRightTermDate  = new Date();
-  protected String genderCode  = "";
-  protected String healthSummaryText  = "";
-  protected String hispUnableToDetReasonCode  = "";
-  protected String hispanicOriginCode  = "";
-  protected String id  = "";
-  protected Short immigrationCountryCodeType  = 0;
-  protected Short immigrationStatusType  = 0;
-  protected String incapacitatedParentCode  = "";
-  protected String individualHealthCarePlanIndicator  = "";
-  protected String limitationOnScpHealthIndicator  = "";
-  protected String literateCode  = "";
-  protected String maritalCohabitatnHstryIndicatorVar  = "";
-  protected Short maritalStatusType  = 0;
-  protected String militaryStatusCode  = "";
-  protected Date motherParentalRightTermDate  = new Date();
-  protected String namePrefixDescription  = "";
-  protected Short nameType  = 0;
-  protected String outstandingWarrantIndicator  = "";
-  protected String prevCaChildrenServIndicator  = "";
-  protected String prevOtherDescription  = "";
-  protected String prevRegionalCenterIndicator  = "";
-  protected Short primaryEthnicityType  = 0;
-  protected Short primaryLanguageType  = 0;
-  protected Short religionType  = 0;
-  protected Short secondaryLanguageType  = 0;
-  protected String sensitiveHlthInfoOnFileIndicator  = "";
-  protected String sensitivityIndicator  = "";
-  protected String soc158PlacementCode  = "";
-  protected String soc158SealedClientIndicator  = "";
-  protected String socialSecurityNumChangedCode  = "";
-  protected String socialSecurityNumber  = "";
-  protected String suffixTitleDescription  = "";
-  protected String tribalAncestryClientIndicatorVar  = "";
-  protected String tribalMembrshpVerifctnIndicatorVar  = "";
-  protected String unemployedParentCode  = "";
-  protected String zippyCreatedIndicator  = "";
+  protected String adoptionStatusCode = "";
+  protected String alienRegistrationNumber = "";
+  protected String birthCity = "";
+  protected Short birthCountryCodeType = 0;
+  protected Date birthDate = new Date();
+  protected String birthFacilityName = "";
+  protected Short birthStateCodeType = 0;
+  protected String birthplaceVerifiedIndicator = "";
+  protected String childClientIndicatorVar = "";
+  protected String clientIndexNumber = "";
+  protected String commentDescription = "";
+  protected String commonFirstName = "";
+  protected String commonLastName = "";
+  protected String commonMiddleName = "";
+  protected Date confidentialityActionDate = new Date();
+  protected String confidentialityInEffectIndicator = "";
+  protected Date creationDate = new Date();
+  protected String currCaChildrenServIndicator = "";
+  protected String currentlyOtherDescription = "";
+  protected String currentlyRegionalCenterIndicator = "";
+  protected Date deathDate = new Date();
+  protected String deathDateVerifiedIndicator = "";
+  protected String deathPlace = "";
+  protected String deathReasonText = "";
+  protected String driverLicenseNumber = "";
+  protected Short driverLicenseStateCodeType = 0;
+  protected String emailAddress = "";
+  protected String estimatedDobCode = "";
+  protected String ethUnableToDetReasonCode = "";
+  protected Date fatherParentalRightTermDate = new Date();
+  protected String genderCode = "";
+  protected String healthSummaryText = "";
+  protected String hispUnableToDetReasonCode = "";
+  protected String hispanicOriginCode = "";
+  protected String id = "";
+  protected Short immigrationCountryCodeType = 0;
+  protected Short immigrationStatusType = 0;
+  protected String incapacitatedParentCode = "";
+  protected String individualHealthCarePlanIndicator = "";
+  protected String limitationOnScpHealthIndicator = "";
+  protected String literateCode = "";
+  protected String maritalCohabitatnHstryIndicatorVar = "";
+  protected Short maritalStatusType = 0;
+  protected String militaryStatusCode = "";
+  protected Date motherParentalRightTermDate = new Date();
+  protected String namePrefixDescription = "";
+  protected Short nameType = 0;
+  protected String outstandingWarrantIndicator = "";
+  protected String prevCaChildrenServIndicator = "";
+  protected String prevOtherDescription = "";
+  protected String prevRegionalCenterIndicator = "";
+  protected Short primaryEthnicityType = 0;
+  protected Short primaryLanguageType = 0;
+  protected Short religionType = 0;
+  protected Short secondaryLanguageType = 0;
+  protected String sensitiveHlthInfoOnFileIndicator = "";
+  protected String sensitivityIndicator = "";
+  protected String soc158PlacementCode = "";
+  protected String soc158SealedClientIndicator = "";
+  protected String socialSecurityNumChangedCode = "";
+  protected String socialSecurityNumber = "";
+  protected String suffixTitleDescription = "";
+  protected String tribalAncestryClientIndicatorVar = "";
+  protected String tribalMembrshpVerifctnIndicatorVar = "";
+  protected String unemployedParentCode = "";
+  protected String zippyCreatedIndicator = "";
   private Set<ClientAddress> clientAddress = new HashSet<>();
 
-  public ClientEntityBuilder setAdjudicatedDelinquentIndicator(String adjudicatedDelinquentIndicator) {
+  public ClientEntityBuilder setAdjudicatedDelinquentIndicator(
+      String adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
     return this;
   }
@@ -157,7 +160,8 @@ public class ClientEntityBuilder {
     return this;
   }
 
-  public ClientEntityBuilder setConfidentialityInEffectIndicator(String confidentialityInEffectIndicator) {
+  public ClientEntityBuilder setConfidentialityInEffectIndicator(
+      String confidentialityInEffectIndicator) {
     this.confidentialityInEffectIndicator = confidentialityInEffectIndicator;
     return this;
   }
@@ -177,7 +181,8 @@ public class ClientEntityBuilder {
     return this;
   }
 
-  public ClientEntityBuilder setCurrentlyRegionalCenterIndicator(String currentlyRegionalCenterIndicator) {
+  public ClientEntityBuilder setCurrentlyRegionalCenterIndicator(
+      String currentlyRegionalCenterIndicator) {
     this.currentlyRegionalCenterIndicator = currentlyRegionalCenterIndicator;
     return this;
   }
@@ -278,7 +283,8 @@ public class ClientEntityBuilder {
     return this;
   }
 
-  public ClientEntityBuilder setLimitationOnScpHealthIndicator(String limitationOnScpHealthIndicator) {
+  public ClientEntityBuilder setLimitationOnScpHealthIndicator(
+      String limitationOnScpHealthIndicator) {
     this.limitationOnScpHealthIndicator = limitationOnScpHealthIndicator;
     return this;
   }
@@ -359,7 +365,8 @@ public class ClientEntityBuilder {
     return this;
   }
 
-  public ClientEntityBuilder setSensitiveHlthInfoOnFileIndicator(String sensitiveHlthInfoOnFileIndicator) {
+  public ClientEntityBuilder setSensitiveHlthInfoOnFileIndicator(
+      String sensitiveHlthInfoOnFileIndicator) {
     this.sensitiveHlthInfoOnFileIndicator = sensitiveHlthInfoOnFileIndicator;
     return this;
   }
@@ -394,7 +401,8 @@ public class ClientEntityBuilder {
     return this;
   }
 
-  public ClientEntityBuilder setTribalAncestryClientIndicatorVar(String tribalAncestryClientIndicatorVar) {
+  public ClientEntityBuilder setTribalAncestryClientIndicatorVar(
+      String tribalAncestryClientIndicatorVar) {
     this.tribalAncestryClientIndicatorVar = tribalAncestryClientIndicatorVar;
     return this;
   }
@@ -415,80 +423,31 @@ public class ClientEntityBuilder {
     return this;
   }
 
-  public ClientEntityBuilder setClientAddress(
-      Set<ClientAddress> clientAddress) {
+  public ClientEntityBuilder setClientAddress(Set<ClientAddress> clientAddress) {
     this.clientAddress = clientAddress;
     return this;
   }
 
-  public Client build(){
-    return new Client(adjudicatedDelinquentIndicator,
-    adoptionStatusCode ,
-    alienRegistrationNumber ,
-    birthCity ,
-    birthCountryCodeType ,
-    birthDate ,
-    birthFacilityName ,
-    birthStateCodeType ,
-    birthplaceVerifiedIndicator ,
-    childClientIndicatorVar ,
-    clientIndexNumber ,
-    commentDescription ,
-    commonFirstName ,
-    commonMiddleName ,
-    commonLastName ,
-    confidentialityActionDate ,
-    confidentialityInEffectIndicator ,
-    creationDate ,
-    currCaChildrenServIndicator ,
-    currentlyOtherDescription ,
-    currentlyRegionalCenterIndicator ,
-    deathDate ,
-    deathDateVerifiedIndicator ,
-    deathPlace ,
-    deathReasonText ,
-    driverLicenseNumber ,
-    driverLicenseStateCodeType ,
-    emailAddress ,
-    estimatedDobCode ,
-    ethUnableToDetReasonCode ,
-    fatherParentalRightTermDate ,
-    genderCode ,
-    healthSummaryText ,
-    hispUnableToDetReasonCode ,
-    hispanicOriginCode ,
-    id ,
-    immigrationCountryCodeType ,
-    immigrationStatusType ,
-    incapacitatedParentCode ,
-    individualHealthCarePlanIndicator ,
-    limitationOnScpHealthIndicator ,
-    literateCode ,
-    maritalCohabitatnHstryIndicatorVar ,
-    maritalStatusType ,
-    militaryStatusCode ,
-    motherParentalRightTermDate ,
-    namePrefixDescription ,
-    nameType ,
-    outstandingWarrantIndicator ,
-    prevCaChildrenServIndicator ,
-    prevOtherDescription ,
-    prevRegionalCenterIndicator ,
-    primaryEthnicityType ,
-    primaryLanguageType ,
-    religionType ,
-    secondaryLanguageType ,
-    sensitiveHlthInfoOnFileIndicator ,
-    sensitivityIndicator ,
-    soc158PlacementCode ,
-    soc158SealedClientIndicator ,
-    socialSecurityNumChangedCode ,
-    socialSecurityNumber ,
-    suffixTitleDescription ,
-    tribalAncestryClientIndicatorVar ,
-    tribalMembrshpVerifctnIndicatorVar ,
-    unemployedParentCode ,
-    zippyCreatedIndicator ,
-    clientAddress );
+  public Client build() {
+    return new Client(adjudicatedDelinquentIndicator, adoptionStatusCode, alienRegistrationNumber,
+        birthCity, birthCountryCodeType, birthDate, birthFacilityName, birthStateCodeType,
+        birthplaceVerifiedIndicator, childClientIndicatorVar, clientIndexNumber, commentDescription,
+        commonFirstName, commonMiddleName, commonLastName, confidentialityActionDate,
+        confidentialityInEffectIndicator, creationDate, currCaChildrenServIndicator,
+        currentlyOtherDescription, currentlyRegionalCenterIndicator, deathDate,
+        deathDateVerifiedIndicator, deathPlace, deathReasonText, driverLicenseNumber,
+        driverLicenseStateCodeType, emailAddress, estimatedDobCode, ethUnableToDetReasonCode,
+        fatherParentalRightTermDate, genderCode, healthSummaryText, hispUnableToDetReasonCode,
+        hispanicOriginCode, id, immigrationCountryCodeType, immigrationStatusType,
+        incapacitatedParentCode, individualHealthCarePlanIndicator, limitationOnScpHealthIndicator,
+        literateCode, maritalCohabitatnHstryIndicatorVar, maritalStatusType, militaryStatusCode,
+        motherParentalRightTermDate, namePrefixDescription, nameType, outstandingWarrantIndicator,
+        prevCaChildrenServIndicator, prevOtherDescription, prevRegionalCenterIndicator,
+        primaryEthnicityType, primaryLanguageType, religionType, secondaryLanguageType,
+        sensitiveHlthInfoOnFileIndicator, sensitivityIndicator, soc158PlacementCode,
+        soc158SealedClientIndicator, socialSecurityNumChangedCode, socialSecurityNumber,
+        suffixTitleDescription, tribalAncestryClientIndicatorVar,
+        tribalMembrshpVerifctnIndicatorVar, unemployedParentCode, zippyCreatedIndicator,
+        clientAddress);
   }
 }

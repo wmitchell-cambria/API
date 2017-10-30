@@ -8,6 +8,9 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+
 
 @SuppressWarnings("javadoc")
 public class AllegationSubTypeTest {
@@ -32,4 +35,8 @@ public class AllegationSubTypeTest {
     assertThat(domain.getInjuryHarmSubType(), is(equalTo(injuryHarmSubType1)));
   }
 
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(AllegationSubType.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
 }

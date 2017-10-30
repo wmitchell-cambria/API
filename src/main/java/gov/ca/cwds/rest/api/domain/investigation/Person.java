@@ -187,7 +187,7 @@ public class Person extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * Constructing client object
+   * Constructing Person object from participant (Client)
    * 
    * @param client - client object
    * @param languages - list of languages
@@ -223,7 +223,7 @@ public class Person extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * Constructing client object
+   * Constructing Person object from reporter participant
    * 
    * @param reporter - reporter object
    * @param languages - list of languages

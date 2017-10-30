@@ -27,6 +27,8 @@ import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 
 @SuppressWarnings("javadoc")
@@ -102,6 +104,11 @@ public class AllegationPersonTest {
     AllegationPerson otherAllegationPerson =
         new AllegationPersonEntityBuilder().setFirstName("Jerry").build();
     assertThat(allegationPerson, is(not(equals(otherAllegationPerson))));
+  }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(AllegationPerson.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
 }

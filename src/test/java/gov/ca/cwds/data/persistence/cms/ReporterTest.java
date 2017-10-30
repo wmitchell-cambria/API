@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -23,6 +24,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 /**
  * @author CWDS API Team
  */
+@SuppressWarnings("javadoc")
 public class ReporterTest implements PersistentTestTemplate {
   private static final ObjectMapper MAPPER = SystemCodeTestHarness.MAPPER;
   private String lastUpdatedId = "0XA";
@@ -83,38 +85,44 @@ public class ReporterTest implements PersistentTestTemplate {
   @Override
   @Test
   public void testPersistentConstructor() throws Exception {
-    Reporter vp = validReporter();
 
-    Reporter persistent = new Reporter(vp.getReferralId(), vp.getBadgeNumber(), vp.getCity(),
+    gov.ca.cwds.rest.api.domain.cms.Reporter vp = new ReporterResourceBuilder().build();
+
+    Reporter persistent = new Reporter(vp.getReferralId(), vp.getBadgeNumber(), vp.getCityName(),
         vp.getColltrClientRptrReltnshpType(), vp.getCommunicationMethodType(),
-        vp.getConfidentialWaiverIndicator(), vp.getDrmsMandatedRprtrFeedback(),
-        vp.getEmployerName(), vp.getFeedbackDate(), vp.getFeedbackRequiredIndicator(),
-        vp.getFirstName(), vp.getLastName(), vp.getMandatedReporterIndicator(),
+        DomainChef.cookBoolean(vp.getConfidentialWaiverIndicator()),
+        vp.getDrmsMandatedRprtrFeedback(), vp.getEmployerName(),
+        DomainChef.uncookDateString(vp.getFeedbackDate()),
+        DomainChef.cookBoolean(vp.getFeedbackRequiredIndicator()), vp.getFirstName(),
+        vp.getLastName(), DomainChef.cookBoolean(vp.getMandatedReporterIndicator()),
         vp.getMessagePhoneExtensionNumber(), vp.getMessagePhoneNumber(), vp.getMiddleInitialName(),
         vp.getNamePrefixDescription(), vp.getPrimaryPhoneNumber(),
         vp.getPrimaryPhoneExtensionNumber(), vp.getStateCodeType(), vp.getStreetName(),
-        vp.getStreetNumber(), vp.getSuffixTitleDescription(), vp.getZipNumber(),
-        vp.getLawEnforcementId(), vp.getZipSuffixNumber(), vp.getCountySpecificCode());
+        vp.getStreetNumber(), vp.getSuffixTitleDescription(),
+        DomainChef.uncookZipcodeString(vp.getZipcode()), vp.getLawEnforcementId(),
+        vp.getZipSuffixNumber(), vp.getCountySpecificCode());
 
     assertThat(persistent.getReferralId(), is(equalTo(vp.getReferralId())));
     assertThat(persistent.getBadgeNumber(), is(equalTo(vp.getBadgeNumber())));
-    assertThat(persistent.getCity(), is(equalTo(vp.getCityName())));
+    assertThat(persistent.getCityName(), is(equalTo(vp.getCityName())));
+    assertThat(persistent.getCity(), is(equalTo(persistent.getCityName())));
     assertThat(persistent.getColltrClientRptrReltnshpType(),
         is(equalTo(vp.getColltrClientRptrReltnshpType())));
     assertThat(persistent.getCommunicationMethodType(),
         is(equalTo(vp.getCommunicationMethodType())));
     assertThat(persistent.getConfidentialWaiverIndicator(),
-        is(equalTo(vp.getConfidentialWaiverIndicator())));
+        is(equalTo(DomainChef.cookBoolean(vp.getConfidentialWaiverIndicator()))));
     assertThat(persistent.getDrmsMandatedRprtrFeedback(),
         is(equalTo(vp.getDrmsMandatedRprtrFeedback())));
     assertThat(persistent.getEmployerName(), is(equalTo(vp.getEmployerName())));
-    assertThat(persistent.getFeedbackDate(), is(equalTo(vp.getFeedbackDate())));
+    assertThat(persistent.getFeedbackDate(),
+        is(equalTo(DomainChef.uncookDateString(vp.getFeedbackDate()))));
     assertThat(persistent.getFeedbackRequiredIndicator(),
-        is(equalTo(vp.getFeedbackRequiredIndicator())));
+        is(equalTo(DomainChef.cookBoolean(vp.getFeedbackRequiredIndicator()))));
     assertThat(persistent.getFirstName(), is(equalTo(vp.getFirstName())));
     assertThat(persistent.getLastName(), is(equalTo(vp.getLastName())));
     assertThat(persistent.getMandatedReporterIndicator(),
-        is(equalTo(vp.getMandatedReporterIndicator())));
+        is(equalTo(DomainChef.cookBoolean(vp.getMandatedReporterIndicator()))));
     assertThat(persistent.getMessagePhoneExtensionNumber(),
         is(equalTo(vp.getMessagePhoneExtensionNumber())));
     assertThat(persistent.getMessagePhoneNumber(), is(equalTo(vp.getMessagePhoneNumber())));
@@ -124,21 +132,58 @@ public class ReporterTest implements PersistentTestTemplate {
     assertThat(persistent.getPrimaryPhoneExtensionNumber(),
         is(equalTo(vp.getPrimaryPhoneExtensionNumber())));
     assertThat(persistent.getStateCodeType(), is(equalTo(vp.getStateCodeType())));
+    assertThat(persistent.getState(), is(equalTo(persistent.getStateCodeType())));
     assertThat(persistent.getStreetName(), is(equalTo(vp.getStreetName())));
     assertThat(persistent.getStreetNumber(), is(equalTo(vp.getStreetNumber())));
+    assertThat(persistent.getStreetAddress(),
+        is(equalTo(StringUtils.trimToEmpty(persistent.getStreetNumber()) + " "
+            + StringUtils.trimToEmpty(persistent.getStreetName()))));
     assertThat(persistent.getSuffixTitleDescription(), is(equalTo(vp.getSuffixTitleDescription())));
-    assertThat(persistent.getZipNumber(), is(equalTo(vp.getZipNumber())));
+    assertThat(persistent.getNameSuffix(), is(equalTo(vp.getSuffixTitleDescription())));
+    assertThat(persistent.getZipNumber(),
+        is(equalTo(DomainChef.uncookZipcodeString(vp.getZipcode()))));
     assertThat(persistent.getLawEnforcementId(), is(equalTo(vp.getLawEnforcementId())));
     assertThat(persistent.getZipSuffixNumber(), is(equalTo(vp.getZipSuffixNumber())));
     assertThat(persistent.getCountySpecificCode(), is(equalTo(vp.getCountySpecificCode())));
+    assertThat(persistent.getCounty(), is(equalTo(persistent.getCountySpecificCode())));
 
+  }
+
+
+  @Test
+  public void testZipCodeSuccess() {
+    gov.ca.cwds.rest.api.domain.cms.Reporter vp = new ReporterResourceBuilder().build();
+
+    Reporter persistent = new Reporter(vp.getReferralId(), vp.getBadgeNumber(), vp.getCityName(),
+        vp.getColltrClientRptrReltnshpType(), vp.getCommunicationMethodType(),
+        DomainChef.cookBoolean(vp.getConfidentialWaiverIndicator()),
+        vp.getDrmsMandatedRprtrFeedback(), vp.getEmployerName(),
+        DomainChef.uncookDateString(vp.getFeedbackDate()),
+        DomainChef.cookBoolean(vp.getFeedbackRequiredIndicator()), vp.getFirstName(),
+        vp.getLastName(), DomainChef.cookBoolean(vp.getMandatedReporterIndicator()),
+        vp.getMessagePhoneExtensionNumber(), vp.getMessagePhoneNumber(), vp.getMiddleInitialName(),
+        vp.getNamePrefixDescription(), vp.getPrimaryPhoneNumber(),
+        vp.getPrimaryPhoneExtensionNumber(), vp.getStateCodeType(), vp.getStreetName(),
+        vp.getStreetNumber(), vp.getSuffixTitleDescription(),
+        DomainChef.uncookZipcodeString(vp.getZipcode()), vp.getLawEnforcementId(),
+        vp.getZipSuffixNumber(), vp.getCountySpecificCode());
+
+    StringBuilder buf = new StringBuilder();
+
+    if (persistent.getZipNumber() != null) {
+      buf.append(persistent.getZipNumber());
+    }
+    if (persistent.getZipSuffixNumber() != null) {
+      buf.append('-').append(persistent.getZipSuffixNumber());
+    }
+
+    assertThat(persistent.getZip(), is(equalTo(buf.toString())));
   }
 
   @SuppressWarnings("javadoc")
   @Test
   public void testSerializeAndDeserialize()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-
     Reporter vp = validReporter();
     Reporter persistent = new Reporter(vp.getReferralId(), vp.getBadgeNumber(), vp.getCity(),
         vp.getColltrClientRptrReltnshpType(), vp.getCommunicationMethodType(),

@@ -1,12 +1,15 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 
@@ -15,8 +18,9 @@ import java.util.Objects;
 @JsonSnakeCase
 @JsonPropertyOrder({"victim_last_name", "victim_first_name", "perpetrator_last_name",
     "perpetrator_first_name", "disposition_description", "allegation_description"})
-public class HistoryOfInvolvementAllegation implements Serializable{
-  private static final int PRIME = 31;
+public class HistoryOfInvolvementAllegation implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @JsonProperty("victim_last_name")
   @ApiModelProperty(required = false, readOnly = false, value = "Victim's last name",
@@ -75,82 +79,108 @@ public class HistoryOfInvolvementAllegation implements Serializable{
     this.allegationDescription = allegationDescription;
   }
 
+  /**
+   * @return - victims last name
+   */
   public String getVictimLastName() {
     return victimLastName;
   }
 
+  /**
+   * @param victimLastName - victims last name
+   */
   public void setVictimLastName(String victimLastName) {
     this.victimLastName = victimLastName;
   }
 
+  /**
+   * @return - victims first name
+   */
   public String getVictimFirstName() {
     return victimFirstName;
   }
 
+  /**
+   * @param victimFirstName - victims first name
+   */
   public void setVictimFirstName(String victimFirstName) {
     this.victimFirstName = victimFirstName;
   }
 
+  /**
+   * @return - perpetrator last name
+   */
   public String getPerpetratorLastName() {
     return perpetratorLastName;
   }
 
+  /**
+   * @param perpetratorLastName - perpetrator last name
+   */
   public void setPerpetratorLastName(String perpetratorLastName) {
     this.perpetratorLastName = perpetratorLastName;
   }
 
+  /**
+   * @return - perpetrator first name
+   */
   public String getPereptratorFistName() {
     return pereptratorFistName;
   }
 
-  public void setPereptratorFistName(String pereptratorFistName) {
-    this.pereptratorFistName = pereptratorFistName;
+  /**
+   * @param perpetratorFirstName - perpetrator last name
+   */
+  public void setPereptratorFistName(String perpetratorFirstName) {
+    this.pereptratorFistName = perpetratorFirstName;
   }
 
+  /**
+   * @return - disposition description
+   */
   public String getDispositionDescription() {
     return dispositionDescription;
   }
 
+  /**
+   * @param dispositionDescription - disposition description
+   */
   public void setDispositionDescription(String dispositionDescription) {
     this.dispositionDescription = dispositionDescription;
   }
 
+  /**
+   * @return - allegation description
+   */
   public String getAllegationDescription() {
     return allegationDescription;
   }
 
+  /**
+   * @param allegationDescription - allegation description
+   */
   public void setAllegationDescription(String allegationDescription) {
     this.allegationDescription = allegationDescription;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
   @Override
-  public int hashCode() {
-    int result = 1;
-    result =
-        PRIME * result + ((allegationDescription == null) ? 0 : allegationDescription.hashCode());
-    result =
-        PRIME * result + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
-    result = PRIME * result + ((pereptratorFistName == null) ? 0 : pereptratorFistName.hashCode());
-    result = PRIME * result + ((perpetratorLastName == null) ? 0 : perpetratorLastName.hashCode());
-    result = PRIME * result + ((victimFirstName == null) ? 0 : victimFirstName.hashCode());
-    result = PRIME * result + ((victimLastName == null) ? 0 : victimLastName.hashCode());
-    return result;
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    HistoryOfInvolvementAllegation that = (HistoryOfInvolvementAllegation) o;
-    return Objects.equals(victimLastName, that.victimLastName) &&
-        Objects.equals(victimFirstName, that.victimFirstName) &&
-        Objects.equals(perpetratorLastName, that.perpetratorLastName) &&
-        Objects.equals(pereptratorFistName, that.pereptratorFistName) &&
-        Objects.equals(dispositionDescription, that.dispositionDescription) &&
-        Objects.equals(allegationDescription, that.allegationDescription);
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }
