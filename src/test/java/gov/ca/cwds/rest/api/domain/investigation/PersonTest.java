@@ -32,7 +32,7 @@ import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RaceAndEthnicityEntityBuilder;
-improt gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
+import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -164,20 +164,22 @@ public class PersonTest {
     assertEquals(1, items.size());
   }
 
-  @Test void testConstructorWithClientSuccess() {
+  @Test
+  void testConstructorWithClientSuccess() {
     Client client = new ClientEntityBuilder().build();
     Set<String> languages = new HashSet<>();
-    CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptorEntityBuilder().setTableDescription("CLIENT_T").build();
+    CmsRecordDescriptor cmsRecordDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setTableDescription("CLIENT_T").build();
     Set<InvestigationAddress> addresses = new HashSet<>();
     Set<PhoneNumber> phoneNumbers = new HashSet<>();
     Set<String> roles = new HashSet<>();
     RaceAndEthnicity raceAndEnthnicity = new RaceAndEthnicityEntityBuilder().build();
-    
+
     languages.add("1253");
     InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
     addresses.add(address);
   }
-  
+
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(Person.class).suppress(Warning.NONFINAL_FIELDS).verify();
