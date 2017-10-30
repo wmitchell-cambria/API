@@ -61,8 +61,6 @@ public class DeliveredServiceTest {
     deliveredServiceDao = mock(DeliveredServiceDao.class);
     staffPersonDao = mock(StaffPersonDao.class);
     longTextHelper = mock(LongTextHelper.class);
-
-
     target = new DeliveredService(deliveredServiceDao, staffPersonDao, longTextHelper);
     timestamp = new Date();
   }
@@ -81,7 +79,6 @@ public class DeliveredServiceTest {
   public void getTheLastUpdatedByStaffPersonCallsStaffPersonDaoFind() throws Exception {
     DeliveredServiceDomain deliveredServiceDomain =
         new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
-
     gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
             deliveredServiceDomain, "ABC", new Date());
@@ -121,7 +118,6 @@ public class DeliveredServiceTest {
     assertEquals(actual.getLegacyDescriptor().getId(),
         lastUpdatedByPerson.getLegacyDescriptor().getId());
   }
-
 
   @Test
   public void getTheLastUpdatedByStaffPersonAddressesNullStaffPersonId() throws Exception {
@@ -167,7 +163,6 @@ public class DeliveredServiceTest {
         new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
     when(longTextHelper.getLongText("ABC1234567")).thenReturn(null);
     when(longTextHelper.getLongText("ABC12345t7")).thenReturn("test");
-
     gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
             deliveredServiceDomain, "ABC", new Date());
@@ -214,7 +209,6 @@ public class DeliveredServiceTest {
   public void updateWhenExceptionThrownWhenPersistingToDatabase() throws Exception {
     DeliveredServiceDomain deliveredServiceDomain =
         new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
-
     gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
             deliveredServiceDomain, "ABC", new Date());
@@ -233,7 +227,6 @@ public class DeliveredServiceTest {
   public void createCallsDeliveredServiceDaoCreate() throws Exception {
     DeliveredServiceDomain deliveredServiceDomain =
         new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
-
     gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(DEFAULT_KEY,
             deliveredServiceDomain, "ABC", new Date());
@@ -254,15 +247,9 @@ public class DeliveredServiceTest {
 
   @Test(expected = ServiceException.class)
   public void createWhenEntityExists() throws Exception {
-    DeliveredServiceDomain deliveredServiceDomain =
-        new DeliveredServiceResourceBuilder().buildDeliveredServiceResource();
-
-    gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity toTest =
-        new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(DEFAULT_KEY,
-            deliveredServiceDomain, "ABC", new Date());
     Set<Integer> services = new HashSet<>();
     final Set<PostedIndividualDeliveredService> people = new HashSet<>();
-    ContactRequest contactRequest = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408",
+    ContactRequest contactRequest = new ContactRequest("2010-04-27T20:20:14.000Z", "", "433", "408",
         "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
     ContactReferralRequest request = new ContactReferralRequest("referralid", contactRequest);
@@ -272,12 +259,10 @@ public class DeliveredServiceTest {
     target.create(request, "99");
   }
 
-
   @Test
   public void findCallsDeliveredServiceDaoFind() throws Exception {
     target.find("1234567");
     verify(deliveredServiceDao, atLeastOnce()).find("1234567");
   }
-
 
 }

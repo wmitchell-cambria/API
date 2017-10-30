@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.investigation.contact;
 
+import java.time.Instant;
 import java.util.Date;
 
 import javax.persistence.EntityExistsException;
@@ -230,11 +231,17 @@ public class DeliveredService {
   }
 
   private String getTimeStringFromDateTime(String dateTime) {
-    return DomainChef.cookTime(DomainChef.uncookISO8601Timestamp(dateTime));
+    String trimmedDateTime = dateTime.trim();
+    return StringUtils.isNotBlank(trimmedDateTime)
+        ? DomainChef.cookTime(Date.from(Instant.parse(trimmedDateTime)))
+        : null;
   }
 
   private String getDateStringFromDateTime(String dateTime) {
-    return DomainChef.cookDate(DomainChef.uncookISO8601Timestamp(dateTime));
+    String trimmedDateTime = dateTime.trim();
+    return StringUtils.isNotBlank(trimmedDateTime)
+        ? DomainChef.cookDate(Date.from(Instant.parse(trimmedDateTime)))
+        : null;
   }
 
 

@@ -8,6 +8,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -27,7 +29,6 @@ import gov.ca.cwds.fixture.contacts.DeliveredServiceResourceBuilder;
 import gov.ca.cwds.fixture.contacts.ReferralClientDeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -38,13 +39,14 @@ import gov.ca.cwds.rest.services.ServiceException;
 
 public class ContactServiceTest {
 
-  private static final String DEFAULT_KEY = "abc1234567";
+  private static final String DEFAULT_KEY = "ABC1234567";
 
   DeliveredService deliveredService;
   ReferralClientDeliveredService referralClientDeliveredService;
   ContactPartyDeliveredServiceDao contactPartyDeliveredServiceDao;
   ReferralDao referralDao;
   DeliveredToIndividualService deliveredToIndividualService;
+  Referral referral;
   ContactService target;
 
   @BeforeClass
@@ -78,6 +80,12 @@ public class ContactServiceTest {
         {new ReferralClientDeliveredServiceEntityBuilder().build()};
     when(referralClientDeliveredService.findByReferralId(any())).thenReturn(entity);
 
+    referral = mock(Referral.class);
+    when(referral.getReceivedDate())
+        .thenReturn(Date.from(Instant.parse("2006-04-27T23:30:14.000Z")));
+    when(referral.getReceivedTime())
+        .thenReturn(Date.from(Instant.parse("2006-04-27T23:30:14.000Z")));
+    when(referralDao.find(DEFAULT_KEY)).thenReturn(referral);
   }
 
   @Test
@@ -99,8 +107,7 @@ public class ContactServiceTest {
 
   @Test
   public void findAllContactsForAReferral() throws Exception {
-    final String primaryKey = "ABC1234567";
-    Response actual = target.find(primaryKey);
+    Response actual = target.find(DEFAULT_KEY);
     assertThat(actual, notNullValue());
   }
 
@@ -118,7 +125,6 @@ public class ContactServiceTest {
     when(referralClientDeliveredService.findByReferralId(any()))
         .thenReturn(new ReferralClientDeliveredServiceEntity[0]);
     target.find(primaryKey);
-
   }
 
   @Test(expected = ServiceException.class)
@@ -128,25 +134,27 @@ public class ContactServiceTest {
     target.find(primaryKey);
   }
 
-
-
   @Test(expected = ServiceException.class)
-  public void createContactStartedAtDateAfterReferralDate() throws Exception {
-    final String primaryKey = "ABC1234567";
+  public void createContactStartedAtDateBeforeReferralDate() throws Exception {
     ContactRequest contactRequest =
         new ContactRequestBuilder().setStartedAt("2000-04-27T23:30:14.000Z").build();
     ContactReferralRequest contactReferralRequest =
-        new ContactReferralRequest(primaryKey, contactRequest);
-    Referral referral = mock(Referral.class);
-    when(referral.getReceivedDate())
-        .thenReturn(DomainChef.uncookISO8601Timestamp("2006-04-27T23:30:14.000Z"));
-    when(referralDao.find(primaryKey)).thenReturn(referral);
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
+    target.create(contactReferralRequest);
+  }
+
+  @Test(expected = ServiceException.class)
+  public void createContactStartedAtDateEqualsReferralDate() throws Exception {
+    ContactRequest contactRequest =
+        new ContactRequestBuilder().setStartedAt("2003-04-27T23:30:14.000Z").build();
+    ContactReferralRequest contactReferralRequest =
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
     target.create(contactReferralRequest);
   }
 
   @Test(expected = ServiceException.class)
   public void updateContactWhenNoEntriesinReferralClientDeliveredService() throws Exception {
-    final String primaryKey = "ABC1234567";
+    final String primaryKey = "ABC1234568";
     final String contactId = "APc109852u";
     ContactRequest contactRequest = new ContactRequestBuilder().build();
     ContactReferralRequest contactReferralRequest =
@@ -157,43 +165,40 @@ public class ContactServiceTest {
 
   @Test(expected = ServiceException.class)
   public void updateContactStartedAtDateAfterReferralDate() throws Exception {
-    final String primaryKey = "ABC1234567";
     final String contactId = "APc109852u";
     ContactRequest contactRequest =
         new ContactRequestBuilder().setStartedAt("2000-04-27T23:30:14.000Z").build();
     ContactReferralRequest contactReferralRequest =
-        new ContactReferralRequest(primaryKey, contactRequest);
-    Referral referral = mock(Referral.class);
-    when(referral.getReceivedDate())
-        .thenReturn(DomainChef.uncookISO8601Timestamp("2006-04-27T23:30:14.000Z"));
-    when(referralDao.find(primaryKey)).thenReturn(referral);
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
+    target.update(contactId, contactReferralRequest);
+  }
+
+  @Test(expected = ServiceException.class)
+  public void updateContactStartedAtDateEqualsReferralDate() throws Exception {
+    final String contactId = "APc109852u";
+    ContactRequest contactRequest =
+        new ContactRequestBuilder().setStartedAt("2003-04-27T23:30:14.000Z").build();
+    ContactReferralRequest contactReferralRequest =
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
     target.update(contactId, contactReferralRequest);
   }
 
   @Test(expected = ServiceException.class)
   public void validateReferralWhenReferralDoesNotExist() throws Exception {
-    final String primaryKey = "ABC1234567";
     ContactRequest contactRequest = new ContactRequestBuilder().build();
     ContactReferralRequest contactReferralRequest =
-        new ContactReferralRequest(primaryKey, contactRequest);
-    when(referralDao.find(primaryKey)).thenReturn(null);
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
+    when(referralDao.find(DEFAULT_KEY)).thenReturn(null);
     target.create(contactReferralRequest);
-
   }
 
   @Test
   public void createContact() throws Exception {
-    final String primaryKey = "ABC1234567";
     ContactRequest contactRequest =
         new ContactRequestBuilder().setStartedAt("2007-04-27T23:30:14.000Z").build();
     ContactReferralRequest contactReferralRequest =
-        new ContactReferralRequest(primaryKey, contactRequest);
-    Referral referral = mock(Referral.class);
-    when(referral.getReceivedDate())
-        .thenReturn(DomainChef.uncookISO8601Timestamp("2006-04-27T23:30:14.000Z"));
-    when(referralDao.find(primaryKey)).thenReturn(referral);
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
     when(deliveredService.create(any(), any())).thenReturn("ABC1234567");
-
     doNothing().when(referralClientDeliveredService).addOnBehalfOfClients(any(), any(), any());
     doNothing().when(deliveredToIndividualService).addPeopleToIndividualDeliveredService(any(),
         any(), any());
@@ -205,17 +210,12 @@ public class ContactServiceTest {
 
   @Test
   public void updateContact() throws Exception {
-    final String primaryKey = "ABC1234567";
     final String contactId = "ABC1234567";
     ContactRequest contactRequest =
         new ContactRequestBuilder().setStartedAt("2007-04-27T23:30:14.000Z").build();
     ContactReferralRequest contactReferralRequest =
-        new ContactReferralRequest(primaryKey, contactRequest);
-    Referral referral = mock(Referral.class);
-    when(referral.getReceivedDate())
-        .thenReturn(DomainChef.uncookISO8601Timestamp("2006-04-27T23:30:14.000Z"));
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
     when(referral.getId()).thenReturn("ABC1234567");
-    when(referralDao.find(primaryKey)).thenReturn(referral);
     when(deliveredService.update(any(), any(), any()))
         .thenReturn(new DeliveredServiceResourceBuilder().buildDeliveredServiceResource());
     doNothing().when(referralClientDeliveredService).updateOnBehalfOfClients(any(), any(), any());
@@ -231,12 +231,11 @@ public class ContactServiceTest {
 
   @Test(expected = ServiceException.class)
   public void createWithNoStaffId() throws Exception {
-    final String primaryKey = "ABC1234567";
     new TestingRequestExecutionContext("");
     ContactRequest contactRequest =
         new ContactRequestBuilder().setStartedAt("2000-04-27T23:30:14.000Z").build();
     ContactReferralRequest contactReferralRequest =
-        new ContactReferralRequest(primaryKey, contactRequest);
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
     target.create(contactReferralRequest);
   }
 

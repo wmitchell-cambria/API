@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.investigation.contact;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -268,16 +269,13 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
 
   private void validateContactStartDate(String contactStartedAt, Date referralReceivedDate,
       Date referralReceivedTime) {
-    String referralReceivedDateTime = "";
-    String receivedDate = DomainChef.cookDate(referralReceivedDate);
-    String receivedTime = cookTime(referralReceivedTime);
+    Date referralReceivedDateTime;
+    referralReceivedDateTime =
+        DomainChef.concatenateDateAndTime(referralReceivedDate, referralReceivedTime);
 
-    if (StringUtils.isNotEmpty(receivedDate)) {
-      referralReceivedDateTime = receivedDate + "T" + receivedTime + "Z";
-    }
-    if (DomainChef.uncookISO8601Timestamp(contactStartedAt)
-        .before(DomainChef.uncookISO8601Timestamp(referralReceivedDateTime))) {
-      throw new ServiceException("Contact Started At is before the Referral Received Date");
+    if (!Date.from(Instant.parse(contactStartedAt.trim())).after(referralReceivedDateTime)) {
+      throw new ServiceException(
+          "Contact Started At is the same or before the Referral Received Date");
     }
   }
 
