@@ -19,7 +19,7 @@ public class ScreeningSummaryTest {
   private String decisionDetail = "immediate";
   private String name = "henderson screening";
   private Set<String> safetyAlerts = validSafetyAletrs();
-  private Date startedAt = DomainChef.uncookStrictTimestampString("2010-10-01T15:26:42.000-0000");
+  private Date startedAt = DomainChef.uncookStrictTimestampString("2017-09-01T16:48:05.457-0000");
   private String safetyInformation = "the animal at residence is a lion";
   private String id = "1";
 

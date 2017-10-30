@@ -20,7 +20,7 @@ public class ScreeningSummaryEntityBuilder {
   private String decisionDetail = "immediate";
   private String name = "Henderson Screening";
   private Set<String> safetyAlerts = validSafetyAletrs();
-  private Date startedAt = DomainChef.uncookStrictTimestampString("2010-10-01T15:26:42.000-0700");
+  private Date startedAt = DomainChef.uncookStrictTimestampString("2017-09-01T16:48:05.457-0000");
   private String safetyInformation = "The animal at residence is a lion";
   private String id = "1";
   private Set<SimpleAllegation> allegations = validAllegationsSet();
