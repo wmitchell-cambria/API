@@ -132,7 +132,7 @@ public class ReporterTest implements PersistentTestTemplate {
     assertThat(persistent.getPrimaryPhoneExtensionNumber(),
         is(equalTo(vp.getPrimaryPhoneExtensionNumber())));
     assertThat(persistent.getStateCodeType(), is(equalTo(vp.getStateCodeType())));
-    assertThat(persistent.getState(), is(equalTo(persistent.getStateCodeType())));
+    assertThat(persistent.getState(), is(equalTo(persistent.getStateCodeType().toString())));
     assertThat(persistent.getStreetName(), is(equalTo(vp.getStreetName())));
     assertThat(persistent.getStreetNumber(), is(equalTo(vp.getStreetNumber())));
     assertThat(persistent.getStreetAddress(),
