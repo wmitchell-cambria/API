@@ -30,8 +30,6 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.api.domain.cms.SystemCode;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -325,21 +323,23 @@ public class ScreeningToReferralService implements CrudsService {
         outStateLawEnforcementIndicator(outStateLawEnforcementIndicator,
             outStateLawEnforcementAddr);
 
-        validateCrossReport(referralId, timestamp, crossReportId, resultCrossReports, crossReport,
-            outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
+        validateCrossReport(scr, referralId, timestamp, crossReportId, resultCrossReports,
+            crossReport, outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
       }
     }
 
     return resultCrossReports;
   }
 
-  private void validateCrossReport(String referralId, Date timestamp, String crossReportId,
+  private void validateCrossReport(ScreeningToReferral screeningToReferral, String referralId,
+      Date timestamp, String crossReportId,
       Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
       Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
 
     if (StringUtils.isBlank(crossReport.getLegacyId())) {
-      persistCrossReport(referralId, timestamp, crossReportId, resultCrossReports, crossReport,
-          outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
+      persistCrossReport(screeningToReferral, referralId, timestamp, crossReportId,
+          resultCrossReports, crossReport, outStateLawEnforcementIndicator,
+          outStateLawEnforcementAddr);
     } else {
       gov.ca.cwds.rest.api.domain.cms.CrossReport foundCrossReport =
           this.crossReportService.find(crossReport.getLegacyId());
@@ -374,7 +374,8 @@ public class ScreeningToReferralService implements CrudsService {
     }
   }
 
-  private void persistCrossReport(String referralId, Date timestamp, String crossReportId,
+  private void persistCrossReport(ScreeningToReferral screeningToReferral, String referralId,
+      Date timestamp, String crossReportId,
       Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
       Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
 
@@ -382,16 +383,11 @@ public class ScreeningToReferralService implements CrudsService {
     String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
     Boolean governmentOrgCrossRptIndicatorVar = StringUtils.isNotBlank(agencyMap.get("OTHER"));
 
-    SystemCode systemCode =
-        SystemCodeCache.global().getSystemCode(Integer.valueOf(crossReport.getCountyId()));
-
-    String countyId = systemCode.getLogicalId();
-
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults(crossReportId, crossReport,
             referralId, getStaffIdCreatedCrossreport(), outStateLawEnforcementAddr,
-            lawEnforcementId, countyId, outStateLawEnforcementIndicator,
-            governmentOrgCrossRptIndicatorVar);
+            lawEnforcementId, screeningToReferral.getIncidentCounty(),
+            outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
 
     messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
 
