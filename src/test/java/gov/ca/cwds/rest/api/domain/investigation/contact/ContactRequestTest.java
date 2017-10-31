@@ -10,13 +10,13 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import gov.ca.cwds.fixture.contacts.ContactRequestBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-@SuppressWarnings("javadoc")
 public class ContactRequestTest {
 
   @Test
@@ -29,9 +29,7 @@ public class ContactRequestTest {
   public void jsonCreatorConstructorTest() throws Exception {
     Set<Integer> services = new HashSet<>();
     final Set<PostedIndividualDeliveredService> people = validPeople();
-    ContactRequest domain = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408", "C",
-        services, "415",
-        "some text describing the contact of up to 8000 characters can be stored in CMS", people);
+    ContactRequest domain = new ContactRequestBuilder().setEndedAt("").setPeople(people).build();
     assertThat(domain.getStartedAt(), is(equalTo("2010-04-27T23:30:14.000Z")));
     assertThat(domain.getEndedAt(), is(equalTo("")));
     assertThat(domain.getPurpose(), is(equalTo("433")));
@@ -43,7 +41,6 @@ public class ContactRequestTest {
         equalTo("some text describing the contact of up to 8000 characters can be stored in CMS")));
     assertThat(domain.getPeople(), is(equalTo(people)));
   }
-
 
   @Test
   public void equalsHashCodeWork() {
@@ -65,7 +62,5 @@ public class ContactRequestTest {
         "Mr.", "III", "Reporter"));
     return ret;
   }
-
-
 
 }

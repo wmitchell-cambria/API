@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,13 +13,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
-import gov.ca.cwds.fixture.contacts.ContactEntityBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -30,9 +23,7 @@ import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-@SuppressWarnings("javadoc")
 public class ContactTest {
-  private ObjectMapper MAPPER = new ObjectMapper();
 
   @Test
   public void defaultConstructorTest() {
@@ -75,6 +66,37 @@ public class ContactTest {
   }
 
   @Test
+  public void createFromDeliveredServiceConstructorWithNullDates() throws Exception {
+    DeliveredServiceEntity persistedDeliveredService = new DeliveredServiceEntityBuilder()
+        .setStartDate(null).setEndDate(null).buildDeliveredServiceEntity();
+    final Set<PostedIndividualDeliveredService> people = validPeople();
+    CmsRecordDescriptor staffLegacyDescriptor = new CmsRecordDescriptorEntityBuilder().setId("0X5")
+        .setUiId("0X5").setTableName("STFPERST").setTableDescription("Staff").build();
+
+    LastUpdatedBy lastUpdatedByPerson =
+        new LastUpdatedBy(staffLegacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr.");
+    Contact domain = new Contact(persistedDeliveredService, lastUpdatedByPerson,
+        "some text describing the contact of up to 8000 characters can be stored in CMS", people);
+    assertThat(domain.getLegacyDescriptor().getId(),
+        is(equalTo(persistedDeliveredService.getId())));
+    assertThat(domain.getLastUpdatedBy(), is(equalTo(lastUpdatedByPerson)));
+    assertNull(domain.getStartedAt());
+    assertNull(domain.getEndedAt());
+    assertThat(domain.getPurpose(),
+        is(equalTo(persistedDeliveredService.getServiceContactType().toString())));
+    assertThat(domain.getCommunicationMethod(),
+        is(persistedDeliveredService.getCommunicationMethodType().toString()));
+    assertThat(domain.getStatus(), is(equalTo(persistedDeliveredService.getStatusCode())));
+    assertThat(domain.getServices(), is(equalTo(null)));
+    assertThat(domain.getLocation(),
+        is(equalTo(persistedDeliveredService.getContactLocationType().toString())));
+    assertThat(domain.getNote(), is(
+        equalTo("some text describing the contact of up to 8000 characters can be stored in CMS")));
+    assertThat(domain.getPeople(), is(equalTo(people)));
+  }
+
+
+  @Test
   public void jsonCreatorConstructorTest() throws Exception {
     Set<Integer> services = new HashSet<>();
     final Set<PostedIndividualDeliveredService> people = validPeople();
@@ -87,14 +109,16 @@ public class ContactTest {
     LastUpdatedBy lastUpdatedByPerson =
         new LastUpdatedBy(staffLegacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr.");
     Contact domain = new Contact(contactLegacyDescriptor, lastUpdatedByPerson,
-        DomainChef.uncookStrictTimestampString("2010-04-27T23:30:14.000-0000"), null, "433", "408",
-        "C", services, "415",
+        DomainChef.uncookStrictTimestampString("2010-04-27T23:30:14.000-0000"),
+        DomainChef.uncookStrictTimestampString("2012-04-27T03:30:00.000-0000"), "433", "408", "C",
+        services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
     assertThat(domain.getLegacyDescriptor().getId(), is(equalTo("1234567ABC")));
     assertThat(domain.getLastUpdatedBy(), is(equalTo(lastUpdatedByPerson)));
     assertThat(domain.getStartedAt(),
         is(equalTo(Date.from(Instant.parse("2010-04-27T23:30:14.000Z")))));
-    assertNull(domain.getEndedAt());
+    assertThat(domain.getEndedAt(),
+        is(equalTo(Date.from(Instant.parse("2012-04-27T03:30:00.000Z")))));
     assertThat(domain.getPurpose(), is(equalTo("433")));
     assertThat(domain.getCommunicationMethod(), is(equalTo("408")));
     assertThat(domain.getStatus(), is(equalTo("C")));
@@ -105,6 +129,34 @@ public class ContactTest {
     assertThat(domain.getPeople(), is(equalTo(people)));
   }
 
+  @Test
+  public void jsonCreatorConstructorWithNullDates() throws Exception {
+    Set<Integer> services = new HashSet<>();
+    final Set<PostedIndividualDeliveredService> people = validPeople();
+    CmsRecordDescriptor staffLegacyDescriptor = new CmsRecordDescriptorEntityBuilder().setId("0X5")
+        .setUiId("0X5").setTableName("STFPERST").setTableDescription("Staff").build();
+    CmsRecordDescriptor contactLegacyDescriptor =
+        new CmsRecordDescriptorEntityBuilder().setId("1234567ABC").setUiId("1111-2222-3333-4444555")
+            .setTableName("DL_SVC_T").setTableDescription("Delivered Service").build();
+
+    LastUpdatedBy lastUpdatedByPerson =
+        new LastUpdatedBy(staffLegacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr.");
+    Contact domain = new Contact(contactLegacyDescriptor, lastUpdatedByPerson, null, null, "433",
+        "408", "C", services, "415",
+        "some text describing the contact of up to 8000 characters can be stored in CMS", people);
+    assertThat(domain.getLegacyDescriptor().getId(), is(equalTo("1234567ABC")));
+    assertThat(domain.getLastUpdatedBy(), is(equalTo(lastUpdatedByPerson)));
+    assertNull(domain.getStartedAt());
+    assertNull(domain.getEndedAt());
+    assertThat(domain.getPurpose(), is(equalTo("433")));
+    assertThat(domain.getCommunicationMethod(), is(equalTo("408")));
+    assertThat(domain.getStatus(), is(equalTo("C")));
+    assertThat(domain.getServices(), is(equalTo(services)));
+    assertThat(domain.getLocation(), is(equalTo("415")));
+    assertThat(domain.getNote(), is(
+        equalTo("some text describing the contact of up to 8000 characters can be stored in CMS")));
+    assertThat(domain.getPeople(), is(equalTo(people)));
+  }
 
   @Test
   public void equalsHashCodeWork() {
@@ -126,14 +178,5 @@ public class ContactTest {
         "Mr.", "III", "Reporter"));
     return ret;
   }
-
-  @Test
-  public void testSerilizedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    Contact contact = new ContactEntityBuilder().build();
-    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(contact);
-    System.out.println(expected);
-  }
-
 
 }

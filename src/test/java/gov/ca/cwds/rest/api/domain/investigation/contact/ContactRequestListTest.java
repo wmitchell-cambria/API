@@ -16,7 +16,6 @@ import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-@SuppressWarnings("javadoc")
 public class ContactRequestListTest {
 
   @Test
@@ -42,7 +41,7 @@ public class ContactRequestListTest {
 
   @Test
   public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(ContactList.class).suppress(Warning.NONFINAL_FIELDS).verify();
+    EqualsVerifier.forClass(ContactRequestList.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
   private Set<PostedIndividualDeliveredService> validPeople() {

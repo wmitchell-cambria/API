@@ -4,14 +4,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.junit.Test;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.fixture.contacts.ContactListEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -21,7 +25,6 @@ import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-@SuppressWarnings("javadoc")
 public class ContactListTest {
   private ObjectMapper MAPPER = new ObjectMapper();
 

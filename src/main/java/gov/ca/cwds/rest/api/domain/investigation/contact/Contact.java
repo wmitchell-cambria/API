@@ -1,25 +1,25 @@
 package gov.ca.cwds.rest.api.domain.investigation.contact;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.jadira.usertype.spi.utils.lang.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
@@ -190,49 +190,8 @@ public class Contact extends ReportingDomain implements Request, Response {
     this.people = people;
   }
 
-  /**
-   * @param deliverdServiceDomain - DeliverdServiceDomain
-   * @param note - note
-   * @param people - people
-   */
-  public Contact(DeliveredServiceDomain deliverdServiceDomain, String note,
-      Set<PostedIndividualDeliveredService> people) {
-    super();
-    this.legacyDescriptor = CmsRecordUtils.createLegacyDescriptor(deliverdServiceDomain.getId(),
-        LegacyTable.DELIVERED_SERVICE);
-    String startDate = deliverdServiceDomain.getStartDate();
-    if (StringUtils.isNotEmpty(startDate)) {
-      this.startedAt = DomainChef.concatenateDateAndTime(DomainChef.uncookDateString(startDate),
-          DomainChef.uncookISO8601Timestamp(deliverdServiceDomain.getStartTime()));
-    }
-    String endDate = deliverdServiceDomain.getEndDate();
-    if (StringUtils.isNotEmpty(endDate)) {
-      this.endedAt = DomainChef.concatenateDateAndTime(DomainChef.uncookDateString(endDate),
-          DomainChef.uncookISO8601Timestamp(deliverdServiceDomain.getEndTime()));
-    }
-    this.purpose = deliverdServiceDomain.getServiceContactType().toString();
-    this.communicationMethod = deliverdServiceDomain.getCommunicationMethodType().toString();
-    this.status = deliverdServiceDomain.getStatusCode();
-    this.services = null;
-    this.location = deliverdServiceDomain.getContactLocationType().toString();
-    this.note = note;
-    this.people = people;
-  }
-
   public Contact() {
     // default
-  }
-
-  /**
-   * @param date date to cook
-   * @return String in TIME_FORMAT
-   */
-  public static String cookTime(Date date) {
-    if (date != null) {
-      DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
-      return df.format(date);
-    }
-    return "00:00:00.000";
   }
 
   /**

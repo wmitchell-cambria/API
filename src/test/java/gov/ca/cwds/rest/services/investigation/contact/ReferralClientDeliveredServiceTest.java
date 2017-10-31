@@ -103,6 +103,22 @@ public class ReferralClientDeliveredServiceTest {
     verify(referralClientDeliveredServiceDao, atLeastOnce()).create(any());
   }
 
+  @Test
+  public void addOnBehalfOfClientsForGivenReferralIdWhenNoClientsToAdd() throws Exception {
+    ChildClient[] childClients = {new ChildClientEntityBuilder().build()};
+    when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
+    ReferralClientDeliveredServiceEntity entity =
+        new ReferralClientDeliveredServiceEntityBuilder().setClientId("ABC12345ll")
+            .setReferralId(referralId).setDeliveredServiceId(deliveredServiceId).build();
+    ReferralClientDeliveredServiceEntity[] entities = {entity};
+    when(referralClientDeliveredServiceDao.findByReferralId(referralId)).thenReturn(entities);
+
+    when(referralClientDeliveredServiceDao.find(entity.getPrimaryKey())).thenReturn(entity);
+
+    target.addOnBehalfOfClients(deliveredServiceId, referralId, "99");
+    verify(referralClientDeliveredServiceDao, Mockito.times(0)).create(any());
+  }
+
   @Test(expected = ServiceException.class)
   public void addOnBehalfOfClientsForGivenReferralIdThrowsExceptionWhenNoVictimClients()
       throws Exception {
@@ -110,6 +126,15 @@ public class ReferralClientDeliveredServiceTest {
     when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
     target.addOnBehalfOfClients(deliveredServiceId, referralId, "99");
   }
+
+  @Test(expected = ServiceException.class)
+  public void addOnBehalfOfClientsForGivenReferralIdThrowsExceptionWhenVictimClientsNull()
+      throws Exception {
+    ChildClient[] childClients = null;
+    when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
+    target.addOnBehalfOfClients(deliveredServiceId, referralId, "99");
+  }
+
 
   @Test
   public void updateOnBehalfOfClientsForGivenReferralIdCallsReferralClientDeliveredServiceDao()
@@ -126,6 +151,15 @@ public class ReferralClientDeliveredServiceTest {
     when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
     target.updateOnBehalfOfClients(deliveredServiceId, referralId, "99");
   }
+
+
+  @Test(expected = ServiceException.class)
+  public void updateOnBehalfOfClientsForGivenReferralIdWhenVictimClientsNull() throws Exception {
+    ChildClient[] childClients = null;
+    when(childClientDao.findVictimClients(referralId)).thenReturn(childClients);
+    target.updateOnBehalfOfClients(deliveredServiceId, referralId, "99");
+  }
+
 
   @Test
   public void updateOnBehalfOfClientsForGivenReferralIdWhenNotExistsReferralClientDeliveredServiceEntity()

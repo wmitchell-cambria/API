@@ -43,4 +43,50 @@ public class ContactRequestBuilder {
     return this;
   }
 
+  public ContactRequestBuilder setEndedAt(String endedAt) {
+    this.endedAt = endedAt;
+    return this;
+  }
+
+  public ContactRequestBuilder setPurpose(String purpose) {
+    this.purpose = purpose;
+    return this;
+  }
+
+  public ContactRequestBuilder setCommunicationMetod(String communicationMetod) {
+    this.communicationMetod = communicationMetod;
+    return this;
+  }
+
+  public ContactRequestBuilder setStatus(String status) {
+    this.status = status;
+    return this;
+  }
+
+  public ContactRequestBuilder setServices(Set<Integer> services) {
+    this.services = services;
+    return this;
+  }
+
+  public ContactRequestBuilder setNote(String note) {
+    this.note = note;
+    return this;
+  }
+
+  public ContactRequestBuilder setPeople(Set<PostedIndividualDeliveredService> people) {
+    this.people = people;
+    return this;
+  }
+
+  public ContactRequestBuilder setPersonLegacyDescriptor(
+      CmsRecordDescriptor personLegacyDescriptor) {
+    this.personLegacyDescriptor = personLegacyDescriptor;
+    return this;
+  }
+
+  public ContactRequestBuilder setPerson(PostedIndividualDeliveredService person) {
+    this.person = person;
+    return this;
+  }
+
 }
