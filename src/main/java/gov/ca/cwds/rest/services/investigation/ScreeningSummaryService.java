@@ -1,11 +1,14 @@
 package gov.ca.cwds.rest.services.investigation;
 
 import org.apache.commons.lang3.NotImplementedException;
-
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import com.google.inject.Inject;
-
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
+import gov.ca.cwds.data.DaoException;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.Screening;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
@@ -19,16 +22,16 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 public class ScreeningSummaryService
     implements TypedCrudsService<String, ScreeningSummary, Response> {
 
-  private DeliveredServiceDao deliveredServiceDao;
+  private ScreeningDao screeningDao;
 
   /**
-   * @param deliveredServiceDao {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity} objects
+   * 
+   * @param screeningDao - screening dao
    */
   @Inject
-  public ScreeningSummaryService(DeliveredServiceDao deliveredServiceDao) {
+  public ScreeningSummaryService(ScreeningDao screeningDao) {
     super();
-    this.deliveredServiceDao = deliveredServiceDao;
+    this.screeningDao = screeningDao;
   }
 
 
@@ -40,10 +43,32 @@ public class ScreeningSummaryService
 
   @Override
   public Response find(String primaryKey) {
+    if (StringUtils.equals(primaryKey, "STUB")) {
+      return new ScreeningSummaryEntityBuilder().build();
 
-    ScreeningSummary serialized = new ScreeningSummaryEntityBuilder().build();
+    }
+
+    Transaction txn = null;
+    final Session session = this.screeningDao.getSessionFactory().getCurrentSession();
+    try {
+      txn = session.beginTransaction();
+    } catch (Exception e) {
+      txn = session.getTransaction();
+    }
+    try {
+      Screening screening = this.screeningDao.find(primaryKey);
+
+      session.clear();
+
+    } catch (HibernateException he) {
+      txn.rollback();
+      throw new DaoException(he);
+    }
+
+    ScreeningSummary serialized = new ScreeningSummary();
     return serialized;
   }
+
 
 
   @Override

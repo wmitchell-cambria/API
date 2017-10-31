@@ -157,8 +157,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
     assertNotNull(investigation);
   }
 
@@ -177,8 +179,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
     assertThat(investigation.getCommunicationMethod(),
         is(equalTo(referral.getCommunicationMethodType())));
     assertThat(investigation.getName(), is(equalTo(referral.getReferralName())));
@@ -208,8 +212,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
 
     Assignee assignee = investigation.getAssignee();
 
@@ -231,8 +237,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
 
     Assignee assignee = investigation.getAssignee();
 
@@ -254,8 +262,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
 
     InvestigationAddress investigationAddress = investigation.getAddress();
     assertThat(investigationAddress.getStreetAddress(), is(equalTo(address.getStreetAddress())));
@@ -280,8 +290,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
     assertThat(investigation.getSealed(), is(equalTo(Boolean.TRUE)));
 
   }
@@ -302,8 +314,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
     assertThat(investigation.getSensitive(), is(equalTo(Boolean.TRUE)));
 
   }
@@ -324,8 +338,10 @@ public class InvestigationTest {
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
     assertThat(investigation.getSensitive(), is(equalTo(Boolean.FALSE)));
 
   }
@@ -344,12 +360,14 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
+    Set<Relationship> relationshipList = new HashSet<Relationship>();
     Set<String> safetyAlerts = new HashSet<String>();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
-    Investigation investigation = new Investigation(referral, address, staffPerson, longText,
-        longText, allgationSet, personSet, relationshipList, safetyAlerts, crossReports, contacts);
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
 
     Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
     phoneNumbers = investigation.getPhoneNumbers();
