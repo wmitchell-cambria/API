@@ -117,7 +117,7 @@
             <stringProp name="queryType">Select Statement</stringProp>
             <stringProp name="query">SELECT IDENTIFIER AS CLIENT_ID_TERM, 
 (RTRIM(COM_FST_NM) || &apos; &apos; || RTRIM(COM_LST_NM) || &apos; &apos; || RTRIM(SS_NO) || &apos; &apos; || VARCHAR_FORMAT(BIRTH_DT, &apos;mmddyyyy&apos;)) AS CROSS_FIELD_TERM 
-FROM ${__P(schema)}.CLIENT_T ORDER BY RAND() FETCH FIRST 100 ROWS ONLY</stringProp>
+FROM ${__P(schema)}.CLIENT_T FETCH FIRST 100 ROWS ONLY</stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
             <stringProp name="variableNames">IDENTIFIER, CROSS_FIELD_TERM</stringProp>
