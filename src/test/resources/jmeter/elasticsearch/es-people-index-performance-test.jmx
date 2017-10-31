@@ -26,6 +26,74 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${ES_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${ES_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="USER_COUNT" elementType="Argument">
+              <stringProp name="Argument.name">USER_COUNT</stringProp>
+              <stringProp name="Argument.value">${__P(user.count)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="RAMP_UP_TIME" elementType="Argument">
+              <stringProp name="Argument.name">RAMP_UP_TIME</stringProp>
+              <stringProp name="Argument.value">50</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="LOOP_COUNT" elementType="Argument">
+              <stringProp name="Argument.name">LOOP_COUNT</stringProp>
+              <stringProp name="Argument.value">${__P(loop.count)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="ES_HOST" elementType="Argument">
+              <stringProp name="Argument.name">ES_HOST</stringProp>
+              <stringProp name="Argument.value">${__P(es.host)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="ES_PORT" elementType="Argument">
+              <stringProp name="Argument.name">ES_PORT</stringProp>
+              <stringProp name="Argument.value">${__P(es.port)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="ES_INDEX" elementType="Argument">
+              <stringProp name="Argument.name">ES_INDEX</stringProp>
+              <stringProp name="Argument.value">${__P(es.index)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="ES_DOC_TYPE" elementType="Argument">
+              <stringProp name="Argument.name">ES_DOC_TYPE</stringProp>
+              <stringProp name="Argument.value">${__P(es.doc.type)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="ES_AUTH_TOKEN" elementType="Argument">
+              <stringProp name="Argument.name">ES_AUTH_TOKEN</stringProp>
+              <stringProp name="Argument.value">${__P(es.auth.token)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Basic ${ES_AUTH_TOKEN}</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="JDBC Controller" enabled="true"/>
         <hashTree>
           <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
@@ -47,10 +115,12 @@
           <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
             <stringProp name="dataSource">performance</stringProp>
             <stringProp name="queryType">Select Statement</stringProp>
-            <stringProp name="query">SELECT IDENTIFIER FROM CWSINT.CLIENT_T FETCH FIRST 100 ROWS ONLY</stringProp>
+            <stringProp name="query">SELECT IDENTIFIER AS CLIENT_ID_TERM, 
+(RTRIM(COM_FST_NM) || &apos; &apos; || RTRIM(COM_LST_NM) || &apos; &apos; || RTRIM(SS_NO) || &apos; &apos; || VARCHAR_FORMAT(BIRTH_DT, &apos;mmddyyyy&apos;)) AS CROSS_FIELD_TERM 
+FROM ${__P(schema)}.CLIENT_T ORDER BY RAND() FETCH FIRST 100 ROWS ONLY</stringProp>
             <stringProp name="queryArguments"></stringProp>
             <stringProp name="queryArgumentsTypes"></stringProp>
-            <stringProp name="variableNames">clientRecords</stringProp>
+            <stringProp name="variableNames">IDENTIFIER, CROSS_FIELD_TERM</stringProp>
             <stringProp name="resultVariable">clientRecords</stringProp>
             <stringProp name="queryTimeout"></stringProp>
             <stringProp name="resultSetHandler">Store as Object</stringProp>
@@ -103,102 +173,184 @@
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller" enabled="true">
-          <stringProp name="ForeachController.inputVal">clientRecords</stringProp>
+        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="IDSearch Controller" enabled="true">
+          <stringProp name="ForeachController.inputVal">IDENTIFIER</stringProp>
           <stringProp name="ForeachController.returnVal">identifier</stringProp>
           <boolProp name="ForeachController.useSeparator">true</boolProp>
         </ForeachController>
         <hashTree>
-          <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-              <collectionProp name="Arguments.arguments"/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - ID Query" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+  &quot;query&quot;: {&#xd;
+    &quot;bool&quot;: {&#xd;
+      &quot;must&quot;: [&#xd;
+        {&#xd;
+          &quot;match&quot;: {&#xd;
+            &quot;id&quot;: &quot;${identifier}&quot;&#xd;
+          }&#xd;
+        }&#xd;
+      ]&#xd;
+    }&#xd;
+  },&#xd;
+  &quot;_source&quot;: [&#xd;
+    &quot;id&quot;,&#xd;
+    &quot;relationships&quot;,&#xd;
+    &quot;screenings&quot;,&#xd;
+    &quot;referrals&quot;,&#xd;
+    &quot;cases&quot;&#xd;
+  ]&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">${ES_HOST}</stringProp>
-            <stringProp name="HTTPSampler.port">${ES_PORT}</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <stringProp name="HTTPSampler.path">/${ES_INDEX}/${ES_DOC_TYPE}/_search</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          </ConfigTestElement>
+          </HTTPSamplerProxy>
           <hashTree/>
-          <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="USER_COUNT" elementType="Argument">
-                <stringProp name="Argument.name">USER_COUNT</stringProp>
-                <stringProp name="Argument.value">${__P(user.count)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="RAMP_UP_TIME" elementType="Argument">
-                <stringProp name="Argument.name">RAMP_UP_TIME</stringProp>
-                <stringProp name="Argument.value">50</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="LOOP_COUNT" elementType="Argument">
-                <stringProp name="Argument.name">LOOP_COUNT</stringProp>
-                <stringProp name="Argument.value">${__P(loop.count)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="ES_HOST" elementType="Argument">
-                <stringProp name="Argument.name">ES_HOST</stringProp>
-                <stringProp name="Argument.value">${__P(es.host)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="ES_PORT" elementType="Argument">
-                <stringProp name="Argument.name">ES_PORT</stringProp>
-                <stringProp name="Argument.value">${__P(es.port)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="ES_INDEX" elementType="Argument">
-                <stringProp name="Argument.name">ES_INDEX</stringProp>
-                <stringProp name="Argument.value">${__P(es.index)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="ES_DOC_TYPE" elementType="Argument">
-                <stringProp name="Argument.name">ES_DOC_TYPE</stringProp>
-                <stringProp name="Argument.value">${__P(es.doc.type)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="ES_AUTH_TOKEN" elementType="Argument">
-                <stringProp name="Argument.name">ES_AUTH_TOKEN</stringProp>
-                <stringProp name="Argument.value">${__P(es.auth.token)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="ID_QUERY_DATA" elementType="Argument">
-                <stringProp name="Argument.name">ID_QUERY_DATA</stringProp>
-                <stringProp name="Argument.value">${__P(id.query.data)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="CROSS_FIELD_QUERY_DATA" elementType="Argument">
-                <stringProp name="Argument.name">CROSS_FIELD_QUERY_DATA</stringProp>
-                <stringProp name="Argument.value">${__P(cross.field.query.data)}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-733631846">successful</stringProp>
+              <stringProp name="1372468121">&quot;failed&quot;:0</stringProp>
+              <stringProp name="2139691751">&quot;timed_out&quot;:false</stringProp>
+              <stringProp name="3202880">hits</stringProp>
             </collectionProp>
-          </Arguments>
+            <stringProp name="Assertion.test_field">Assertion.response_data_as_document</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
           <hashTree/>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">Authorization</stringProp>
-                <stringProp name="Header.value">Basic ${ES_AUTH_TOKEN}</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
+          <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+            <boolProp name="ResultCollector.error_logging">true</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
           <hashTree/>
-          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Cross Field Query Data" enabled="true">
-            <stringProp name="delimiter">\t</stringProp>
-            <stringProp name="fileEncoding"></stringProp>
-            <stringProp name="filename">${CROSS_FIELD_QUERY_DATA}</stringProp>
-            <boolProp name="ignoreFirstLine">false</boolProp>
-            <boolProp name="quotedData">true</boolProp>
-            <boolProp name="recycle">true</boolProp>
-            <stringProp name="shareMode">shareMode.all</stringProp>
-            <boolProp name="stopThread">false</boolProp>
-            <stringProp name="variableNames">CROSS_FIELD_SEARCH_TERM</stringProp>
-          </CSVDataSet>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
           <hashTree/>
+          <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="CrossField Search Controller" enabled="true">
+          <stringProp name="ForeachController.inputVal">CROSS_FIELD_TERM</stringProp>
+          <stringProp name="ForeachController.returnVal">crossFieldTerm</stringProp>
+          <boolProp name="ForeachController.useSeparator">true</boolProp>
+        </ForeachController>
+        <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - Cross Field Query" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -211,7 +363,7 @@
       &quot;must&quot;: [&#xd;
         {&#xd;
           &quot;multi_match&quot;: {&#xd;
-            &quot;query&quot;: &quot;${__eval(${CROSS_FIELD_SEARCH_TERM})}&quot;,&#xd;
+            &quot;query&quot;: &quot;${crossFieldTerm}&quot;,&#xd;
             &quot;type&quot;: &quot;cross_fields&quot;,&#xd;
             &quot;operator&quot;: &quot;and&quot;,&#xd;
             &quot;fields&quot;: [&#xd;
@@ -260,51 +412,6 @@
       &quot;*&quot;: {}&#xd;
     }&#xd;
   }&#xd;
-}</stringProp>
-                  <stringProp name="Argument.metadata">=</stringProp>
-                </elementProp>
-              </collectionProp>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/${ES_INDEX}/${ES_DOC_TYPE}/_search</stringProp>
-            <stringProp name="HTTPSampler.method">GET</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-            <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          </HTTPSamplerProxy>
-          <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - ID Query" enabled="true">
-            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments">
-                <elementProp name="" elementType="HTTPArgument">
-                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">{&#xd;
-  &quot;query&quot;: {&#xd;
-    &quot;bool&quot;: {&#xd;
-      &quot;must&quot;: [&#xd;
-        {&#xd;
-          &quot;match&quot;: {&#xd;
-            &quot;id&quot;: &quot;${identifier}&quot;&#xd;
-          }&#xd;
-        }&#xd;
-      ]&#xd;
-    }&#xd;
-  },&#xd;
-  &quot;_source&quot;: [&#xd;
-    &quot;id&quot;,&#xd;
-    &quot;relationships&quot;,&#xd;
-    &quot;screenings&quot;,&#xd;
-    &quot;referrals&quot;,&#xd;
-    &quot;cases&quot;&#xd;
-  ]&#xd;
 }</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
