@@ -26,20 +26,6 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain">${ES_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${ES_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path"></stringProp>
-          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-        </ConfigTestElement>
-        <hashTree/>
         <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="USER_COUNT" elementType="Argument">
@@ -82,6 +68,21 @@
               <stringProp name="Argument.value">${__P(es.auth.token)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
+            <elementProp name="DATABASE_URL" elementType="Argument">
+              <stringProp name="Argument.name">DATABASE_URL</stringProp>
+              <stringProp name="Argument.value">${__P(jdbc.uri)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="USER_NAME" elementType="Argument">
+              <stringProp name="Argument.name">USER_NAME</stringProp>
+              <stringProp name="Argument.value">${__P(username)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="PASSWORD" elementType="Argument">
+              <stringProp name="Argument.name">PASSWORD</stringProp>
+              <stringProp name="Argument.value">${__P(password)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
           </collectionProp>
         </Arguments>
         <hashTree/>
@@ -106,10 +107,10 @@
             <boolProp name="keepAlive">true</boolProp>
             <stringProp name="connectionAge">5000</stringProp>
             <stringProp name="checkQuery"></stringProp>
-            <stringProp name="dbUrl">${__P(jdbc.uri)}</stringProp>
+            <stringProp name="dbUrl">${DATABASE_URL}</stringProp>
             <stringProp name="driver">com.ibm.db2.jcc.DB2Driver</stringProp>
-            <stringProp name="username">${__P(username)}</stringProp>
-            <stringProp name="password">${__P(password)}</stringProp>
+            <stringProp name="username">${USER_NAME}</stringProp>
+            <stringProp name="password">${PASSWORD}</stringProp>
           </JDBCDataSource>
           <hashTree/>
           <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
@@ -206,8 +207,8 @@ FETCH FIRST 100 ROWS ONLY</stringProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.domain">${ES_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${ES_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
             <stringProp name="HTTPSampler.path">/${ES_INDEX}/${ES_DOC_TYPE}/_search</stringProp>
@@ -414,8 +415,8 @@ FETCH FIRST 100 ROWS ONLY</stringProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.domain">${ES_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${ES_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
             <stringProp name="HTTPSampler.path">/${ES_INDEX}/${ES_DOC_TYPE}/_search</stringProp>
