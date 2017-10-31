@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.investigation.contact;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
@@ -277,14 +275,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
       throw new ServiceException(
           "Contact Started At is the same or before the Referral Received Date");
     }
-  }
-
-  public static String cookTime(Date date) {
-    if (date != null) {
-      DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
-      return df.format(date);
-    }
-    return "00:00:00.000";
   }
 
   /**

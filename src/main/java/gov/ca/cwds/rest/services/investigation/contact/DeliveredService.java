@@ -231,14 +231,14 @@ public class DeliveredService {
   }
 
   private String getTimeStringFromDateTime(String dateTime) {
-    String trimmedDateTime = dateTime.trim();
+    String trimmedDateTime = StringUtils.isNotBlank(dateTime) ? dateTime.trim() : null;
     return StringUtils.isNotBlank(trimmedDateTime)
         ? DomainChef.cookTime(Date.from(Instant.parse(trimmedDateTime)))
         : null;
   }
 
   private String getDateStringFromDateTime(String dateTime) {
-    String trimmedDateTime = dateTime.trim();
+    String trimmedDateTime = StringUtils.isNotBlank(dateTime) ? dateTime.trim() : null;
     return StringUtils.isNotBlank(trimmedDateTime)
         ? DomainChef.cookDate(Date.from(Instant.parse(trimmedDateTime)))
         : null;

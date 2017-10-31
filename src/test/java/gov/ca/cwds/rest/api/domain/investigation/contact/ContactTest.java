@@ -4,16 +4,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Ignore;
+
 import org.junit.Test;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.fixture.contacts.ContactEntityBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
@@ -36,13 +41,11 @@ public class ContactTest {
   }
 
   @Test
-  @Ignore
   public void createFromDeliveredServiceConstructorTest() throws Exception {
     DeliveredServiceEntity persistedDeliveredService =
         new DeliveredServiceEntityBuilder().setStartDate(new Date(1506543120))
             .setStartTime(new Date(1506543120)).setEndDate(new Date(1506543120))
             .setEndTime(new Date(1506543120)).buildDeliveredServiceEntity();
-    Set<Integer> services = new HashSet<>();
     final Set<PostedIndividualDeliveredService> people = validPeople();
     CmsRecordDescriptor staffLegacyDescriptor = new CmsRecordDescriptorEntityBuilder().setId("0X5")
         .setUiId("0X5").setTableName("STFPERST").setTableDescription("Staff").build();
@@ -54,8 +57,10 @@ public class ContactTest {
     assertThat(domain.getLegacyDescriptor().getId(),
         is(equalTo(persistedDeliveredService.getId())));
     assertThat(domain.getLastUpdatedBy(), is(equalTo(lastUpdatedByPerson)));
-    assertThat(domain.getStartedAt(), is(equalTo("1970-01-18T02:29:03.120Z")));
-    assertThat(domain.getEndedAt(), is(equalTo("1970-01-18T02:29:03.120Z")));
+    assertThat(domain.getStartedAt(),
+        is(equalTo(Date.from(Instant.parse("1970-01-18T10:29:03.120Z")))));
+    assertThat(domain.getEndedAt(),
+        is(equalTo(Date.from(Instant.parse("1970-01-18T10:29:03.120Z")))));
     assertThat(domain.getPurpose(),
         is(equalTo(persistedDeliveredService.getServiceContactType().toString())));
     assertThat(domain.getCommunicationMethod(),
@@ -70,7 +75,6 @@ public class ContactTest {
   }
 
   @Test
-  @Ignore
   public void jsonCreatorConstructorTest() throws Exception {
     Set<Integer> services = new HashSet<>();
     final Set<PostedIndividualDeliveredService> people = validPeople();
@@ -83,14 +87,14 @@ public class ContactTest {
     LastUpdatedBy lastUpdatedByPerson =
         new LastUpdatedBy(staffLegacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr.");
     Contact domain = new Contact(contactLegacyDescriptor, lastUpdatedByPerson,
-        DomainChef.uncookStrictTimestampString("2010-04-27T23:30:14.000-0000"),
-        DomainChef.uncookStrictTimestampString("2010-04-28T05:30:14.000-0000"), "433", "408", "C",
-        services, "415",
+        DomainChef.uncookStrictTimestampString("2010-04-27T23:30:14.000-0000"), null, "433", "408",
+        "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
     assertThat(domain.getLegacyDescriptor().getId(), is(equalTo("1234567ABC")));
     assertThat(domain.getLastUpdatedBy(), is(equalTo(lastUpdatedByPerson)));
-    assertThat(domain.getStartedAt(), is(equalTo("2010-04-27T23:30:14.000Z")));
-    assertThat(domain.getEndedAt(), is(equalTo("")));
+    assertThat(domain.getStartedAt(),
+        is(equalTo(Date.from(Instant.parse("2010-04-27T23:30:14.000Z")))));
+    assertNull(domain.getEndedAt());
     assertThat(domain.getPurpose(), is(equalTo("433")));
     assertThat(domain.getCommunicationMethod(), is(equalTo("408")));
     assertThat(domain.getStatus(), is(equalTo("C")));
@@ -124,7 +128,6 @@ public class ContactTest {
   }
 
   @Test
-  // @Ignore
   public void testSerilizedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Contact contact = new ContactEntityBuilder().build();
