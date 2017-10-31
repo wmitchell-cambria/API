@@ -1,15 +1,20 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
 import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -126,9 +131,9 @@ public final class Relationship extends ReportingDomain implements Request, Resp
    * Constructing relationship object
    * 
    * @param client - client object
-   * @param relationShipToList - list of relationship
+   * @param relationshipToList - list of relationship
    */
-  public Relationship(Client client, Set<RelationshipTo> relationShipToList) {
+  public Relationship(Client client, Set<RelationshipTo> relationshipToList) {
     this.id = client.getId();
     this.dateOfBirth =
         client.getBirthDate() != null ? DomainChef.cookDate(client.getBirthDate()) : null;
@@ -136,15 +141,13 @@ public final class Relationship extends ReportingDomain implements Request, Resp
     this.middleName = client.getMiddleName();
     this.lastName = client.getLastName();
     this.suffixName = client.getNameSuffix();
-    this.sealed =
-        StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "R") ? Boolean.TRUE
-            : Boolean.FALSE;
-    this.sensitive =
-        StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "S") ? Boolean.TRUE
-            : Boolean.FALSE;
+    this.sealed = StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "R")
+        ? Boolean.TRUE : Boolean.FALSE;
+    this.sensitive = StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "S")
+        ? Boolean.TRUE : Boolean.FALSE;
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
-    this.relatedTo = relationShipToList;
+    this.relatedTo = relationshipToList;
 
   }
 

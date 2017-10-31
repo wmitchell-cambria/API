@@ -1,0 +1,4 @@
+{
+  "alerts" : [ "6401", "6402" ],
+  "alert_information" : "information about the safety alert on this referral"
+}

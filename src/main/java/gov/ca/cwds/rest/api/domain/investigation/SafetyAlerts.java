@@ -5,7 +5,9 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -18,6 +20,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
+@JsonPropertyOrder({"alerts", "alert_information"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SafetyAlerts extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
@@ -31,6 +35,7 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
   private String alertInformation;
 
   /**
+   * 
    * 
    */
   public SafetyAlerts() {
@@ -49,14 +54,14 @@ public class SafetyAlerts extends ReportingDomain implements Request, Response {
   /**
    * @return - set of safety alert types
    */
-  public Set<String> getSafetyAlerts() {
+  public Set<String> getAlerts() {
     return alerts;
   }
 
   /**
    * @param alerts - set of safety alert types
    */
-  public void setSafetyAlerts(Set<String> alerts) {
+  public void setAlerts(Set<String> alerts) {
     this.alerts = alerts;
   }
 

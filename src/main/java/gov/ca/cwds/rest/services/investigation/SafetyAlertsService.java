@@ -45,7 +45,7 @@ public class SafetyAlertsService implements TypedCrudsService<String, SafetyAler
 
     alerts.add("6401");
     alerts.add("6402");
-    safetyAlerts.setSafetyAlerts(alerts);
+    safetyAlerts.setAlerts(alerts);
     return safetyAlerts;
   }
 
@@ -53,7 +53,7 @@ public class SafetyAlertsService implements TypedCrudsService<String, SafetyAler
   public Response create(SafetyAlerts request) {
     alerts.add("6401");
     alerts.add("6402");
-    safetyAlerts.setSafetyAlerts(alerts);
+    safetyAlerts.setAlerts(alerts);
     return safetyAlerts;
   }
 

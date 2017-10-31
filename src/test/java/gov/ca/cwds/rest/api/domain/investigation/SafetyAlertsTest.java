@@ -1,10 +1,10 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -44,16 +44,16 @@ public class SafetyAlertsTest {
     validator = factory.getValidator();
   }
 
-  @Test
-  public void testEmptyConstructorSuccess() {
-    SafetyAlerts safetyAlerts = new SafetyAlerts();
-    assertNotNull(safetyAlerts);
-  }
+  // @Test
+  // public void testEmptyConstructorSuccess() {
+  // SafetyAlerts safetyAlerts = new SafetyAlerts();
+  // assertNotNull(safetyAlerts);
+  // }
 
   @Test
   public void testDomainConstructor() {
     SafetyAlerts safetyAlerts = new SafetyAlerts(alerts, alertInformation);
-    assertThat(alerts, is(equalTo(safetyAlerts.getSafetyAlerts())));
+    assertThat(alerts, is(equalTo(safetyAlerts.getAlerts())));
     assertThat(alertInformation, is(equalTo(safetyAlerts.getAlertInformation())));
   }
 
@@ -92,6 +92,13 @@ public class SafetyAlertsTest {
     final String expected =
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(safetyAlerts);
     System.out.println(expected);
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/investigation/safetyAlerts/valid.json"),
+        SafetyAlerts.class), is(equalTo(safetyAlerts)));
   }
 
 }

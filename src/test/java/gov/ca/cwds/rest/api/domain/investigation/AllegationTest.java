@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -19,7 +20,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -91,6 +91,22 @@ public class AllegationTest {
     assertThat(domain.getVictim(), is(equalTo(victim)));
     assertThat(domain.getPerpetrator(), is(equalTo(perpetrator)));
 
+  }
+
+  @Test
+  public void testPersistentConstructor() {
+    gov.ca.cwds.data.persistence.cms.Allegation persistentAllegation =
+        new gov.ca.cwds.fixture.AllegationEntityBuilder().build();
+    Allegation allegation = new Allegation(persistentAllegation, allegationSubTypes);
+    AllegationPerson victim = new AllegationPerson(persistentAllegation.getVictimClients());
+    AllegationPerson perpetrator =
+        new AllegationPerson(persistentAllegation.getPerpetratorClients());
+    assertThat(allegation.getAllegationType(),
+        is(equalTo(persistentAllegation.getAllegationType())));
+    assertThat(allegation.getDispositionType(),
+        is(equalTo(persistentAllegation.getAllegationDispositionType())));
+    assertThat(allegation.getVictim(), is(equalTo(victim)));
+    assertThat(allegation.getPerpetrator(), is(equalTo(perpetrator)));
   }
 
   @Test
@@ -214,7 +230,7 @@ public class AllegationTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerilizedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Allegation allegation = new AllegationEntityBuilder().build();
@@ -225,6 +241,13 @@ public class AllegationTest {
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(Allegation.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    Allegation allegation = new AllegationEntityBuilder().build();
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/investigation/allegation/valid.json"),
+        Allegation.class), is(equalTo(allegation)));
   }
 
 }

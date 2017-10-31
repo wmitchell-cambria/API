@@ -353,7 +353,7 @@ public class AddressTest {
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
     final String expected = MAPPER.writeValueAsString(MAPPER.readValue(
         fixture("fixtures/domain/legacy/Address/valid/validAddress.json"), Address.class));
-    System.out.println(expected);
+    // System.out.println(expected);
     assertThat(MAPPER.writeValueAsString(validAddress()), is(equalTo(expected)));
   }
 

@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -8,20 +9,31 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipToEntityBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class RelationshipTest {
 
+  private ObjectMapper MAPPER = new ObjectMapper();
   private String tableName = "CLIENT_T";
   private String id = "1234567ABC";
 
@@ -39,6 +51,7 @@ public class RelationshipTest {
 
   @Before
   public void setup() {
+    relationshipsTo.add(relationshipTo);
 
   }
 
@@ -62,6 +75,43 @@ public class RelationshipTest {
     assertThat(sealed, is(equalTo(relationship.getSealed())));
     assertThat(cmsRecordDescriptor, is(equalTo(relationship.getCmsRecordDescriptor())));
     assertThat(relationshipsTo, is(equalTo(relationship.getRelatedTo())));
+  }
+
+  @Test
+  public void testPersistentClientConstructor() {
+    Client client = new ClientEntityBuilder().build();
+    Relationship relationship = new Relationship(client, relationshipsTo);
+    assertThat(relationship.getId(), is(equalTo(client.getId())));
+    assertThat(relationship.getDateOfBirth(),
+        is(equalTo(DomainChef.cookDate(client.getBirthDate()))));
+    assertThat(relationship.getFirstName(), is(equalTo(client.getFirstName())));
+    assertThat(relationship.getMiddleName(), is(equalTo(client.getMiddleName())));
+    assertThat(relationship.getLastName(), is(equalTo(client.getLastName())));
+    assertThat(relationship.getRelatedTo(), is(equalTo(relationshipsTo)));
+
+  }
+
+  @Test
+  public void testSealedIsTrue() {
+    Client client = new ClientEntityBuilder().setSensitivityIndicator("R").build();
+    Relationship relationship = new Relationship(client, relationshipsTo);
+    assertThat(relationship.getSealed(), is(equalTo(Boolean.TRUE)));
+    assertThat(relationship.getSensitive(), is(equalTo(Boolean.FALSE)));
+  }
+
+  @Test
+  public void tesetSensitiveIsTrue() {
+    Client client = new ClientEntityBuilder().setSensitivityIndicator("S").build();
+    Relationship relationship = new Relationship(client, relationshipsTo);
+    assertThat(relationship.getSealed(), is(equalTo(Boolean.FALSE)));
+    assertThat(relationship.getSensitive(), is(equalTo(Boolean.TRUE)));
+  }
+
+  @Test
+  public void testDateOfBirthNull() {
+    Client client = new ClientEntityBuilder().setBirthDate(null).build();
+    Relationship relationship = new Relationship(client, relationshipsTo);
+    assertThat(relationship.getDateOfBirth(), is(equalTo(null)));
   }
 
   @Test
@@ -111,6 +161,23 @@ public class RelationshipTest {
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(Relationship.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
+  @Test
+  @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    Relationship safetyAlerts = new RelationshipEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(safetyAlerts);
+    System.out.println(expected);
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    Relationship relationship = new RelationshipEntityBuilder().build();
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/investigation/relationship/valid.json"),
+        Relationship.class), is(equalTo(relationship)));
   }
 
 }

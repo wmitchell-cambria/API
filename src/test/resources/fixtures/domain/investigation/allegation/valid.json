@@ -1,0 +1,45 @@
+{
+  "allegation_type" : "2179",
+  "created_by_screener" : false,
+  "allegation_sub_types" : [ {
+    "injury_harm_type" : "1372",
+    "injury_harm_sub_type" : "6"
+  }, {
+    "injury_harm_type" : "1372",
+    "injury_harm_sub_type" : "7"
+  } ],
+  "disposition" : "46",
+  "rationale" : "disposition reason explained",
+  "legacy_descriptor" : {
+    "legacy_id" : "1234567ABC",
+    "legacy_ui_id" : "001-2000-3399-415790",
+    "legacy_table_description" : "Allegation",
+    "legacy_table_name" : "ALLGTN_T"
+  },
+  "victim" : {
+    "first_name" : "Joanna",
+    "last_name" : "Kenneson",
+    "middle_name" : "",
+    "name_suffix" : "",
+    "date_of_birth" : "2010-10-31",
+    "legacy_descriptor" : {
+      "legacy_id" : "1234567ABC",
+      "legacy_ui_id" : "001-2000-3399-415790",
+      "legacy_table_description" : "Client",
+      "legacy_table_name" : "CLIENT_T"
+    }
+  },
+  "perpetrator" : {
+    "first_name" : "jack",
+    "last_name" : "kennson",
+    "middle_name" : "Bill",
+    "name_suffix" : "III",
+    "date_of_birth" : "2001-09-30",
+    "legacy_descriptor" : {
+      "legacy_id" : "1234567ABC",
+      "legacy_ui_id" : "001-2000-3399-415790",
+      "legacy_table_description" : "Client",
+      "legacy_table_name" : "CLIENT_T"
+    }
+  }
+}
