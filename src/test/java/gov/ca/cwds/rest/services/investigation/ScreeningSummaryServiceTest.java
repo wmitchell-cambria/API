@@ -45,7 +45,7 @@ public class ScreeningSummaryServiceTest {
     serialized =
         MAPPER.readValue(fixture("fixtures/domain/investigation/screening/valid/valid.json"),
             ScreeningSummary.class);
-    Response returned = screeningSummaryService.find("STUB");
+    Response returned = screeningSummaryService.find("999999");
     assertThat(returned, is(serialized));
   }
 

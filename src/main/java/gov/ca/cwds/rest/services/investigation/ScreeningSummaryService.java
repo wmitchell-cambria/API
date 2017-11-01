@@ -46,7 +46,7 @@ public class ScreeningSummaryService
   @Override
   public Response find(String referralId) {
     ScreeningSummary screeningSummary = null;
-    if (StringUtils.equals(referralId, "STUB")) {
+    if (StringUtils.equals(referralId, "999999")) {
       return new ScreeningSummaryEntityBuilder().build();
 
     }
