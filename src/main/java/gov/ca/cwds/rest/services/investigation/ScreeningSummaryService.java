@@ -45,29 +45,37 @@ public class ScreeningSummaryService
 
   @Override
   public Response find(String referralId) {
-    ScreeningSummary screeningSummary = null;
     if (StringUtils.equals(referralId, "999999")) {
       return new ScreeningSummaryEntityBuilder().build();
 
     }
 
-    this.bindHibernateSession();
+    return this.findScreeningSummaryByReferralId(referralId);
+
+  }
+
+  /**
+   * finding screening summary by referral id
+   * 
+   * @param referralId - referral id
+   * @return - Screening Summary object.
+   */
+  private ScreeningSummary findScreeningSummaryByReferralId(String referralId) {
+
+    ScreeningSummary screeningSummary = null;
+    // SessionFactory from postgres DB and need to open session in order to execute.
+    SessionFactory sessionFactory = screeningDao.getSessionFactory();
+    org.hibernate.Session session = sessionFactory.openSession();
+    ManagedSessionContext.bind(session);
+
     Screening[] screenings = screeningDao.findScreeningsByReferralId(referralId);
     Screening screening = screenings.length > 0 ? screenings[0] : null;
     screeningSummary = screening != null
         ? new ScreeningSummary(screening, this.populateSimpleAllegations(screening))
         : new ScreeningSummary();
-
+    session.close();
     return screeningSummary;
-  }
 
-  /**
-   * biding Hibernate session
-   */
-  private void bindHibernateSession() {
-    SessionFactory sessionFactory = screeningDao.getSessionFactory();
-    org.hibernate.Session session = sessionFactory.openSession();
-    ManagedSessionContext.bind(session);
   }
 
   /**

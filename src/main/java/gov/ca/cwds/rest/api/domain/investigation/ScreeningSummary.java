@@ -171,7 +171,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
    * @return the safetyAlerts
    */
   public Set<String> getSafetyAlerts() {
-    return safetyAlerts;
+    return safetyAlerts != null ? safetyAlerts : new HashSet<String>();
   }
 
 
@@ -203,7 +203,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
    * @return the allegations
    */
   public Set<SimpleAllegation> getAllegations() {
-    return allegations;
+    return this.allegations != null ? this.allegations : new HashSet<SimpleAllegation>();
   }
 
   /**
