@@ -68,8 +68,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
   @JsonProperty("started_at")
   @ApiModelProperty(required = false, readOnly = false, value = "",
       example = "2017-09-01T16:48:05.457Z")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
-      timezone = "UTC")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT)
   private Date startedAt;
 
   @JsonProperty("allegations")

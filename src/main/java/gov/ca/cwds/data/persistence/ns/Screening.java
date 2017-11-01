@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 import gov.ca.cwds.data.ns.NsPersistentObject;
@@ -58,7 +60,7 @@ public class Screening implements PersistentObject {
   private String screeningDecision;
 
   @Column(name = "started_at")
-  @Type(type = "date")
+  @Temporal(TemporalType.TIMESTAMP)
   private Date startedAt;
 
   @Column(name = "report_narrative")
