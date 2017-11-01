@@ -2,7 +2,6 @@ package gov.ca.cwds.fixture.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 
 @SuppressWarnings("javadoc")
@@ -12,6 +11,8 @@ public class SafetyAlertsEntityBuilder {
   private String alertInformation = "information about the safety alert on this referral";
 
   public SafetyAlerts build() {
+    alerts.add("6401");
+    alerts.add("6402");
 
     return new SafetyAlerts(alerts, alertInformation);
 
