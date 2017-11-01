@@ -1,13 +1,13 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import gov.ca.cwds.data.persistence.ns.Allegation;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -51,6 +51,16 @@ public class SimpleAllegation extends ReportingDomain implements Response {
     this.victimId = victimId;
     this.perpetratorId = perpetratorId;
     this.allegationTypes = allegationTypes;
+  }
+
+
+  public SimpleAllegation(Allegation allegation) {
+    super();
+    this.allegationTypes = new HashSet<>();
+    this.victimId = allegation.getVictimId();
+    this.perpetratorId = allegation.getPerpetratorId();
+    Collections.addAll(this.allegationTypes, allegation.getAllegationTypes());
+
   }
 
 

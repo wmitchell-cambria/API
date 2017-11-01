@@ -1,17 +1,19 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
 import com.google.inject.Inject;
-import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.Allegation;
 import gov.ca.cwds.data.persistence.ns.Screening;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
+import gov.ca.cwds.rest.api.domain.investigation.SimpleAllegation;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
@@ -42,31 +44,48 @@ public class ScreeningSummaryService
    */
 
   @Override
-  public Response find(String primaryKey) {
-    if (StringUtils.equals(primaryKey, "STUB")) {
+  public Response find(String referralId) {
+    ScreeningSummary screeningSummary = null;
+    if (StringUtils.equals(referralId, "STUB")) {
       return new ScreeningSummaryEntityBuilder().build();
 
     }
 
-    Transaction txn = null;
-    final Session session = this.screeningDao.getSessionFactory().getCurrentSession();
-    try {
-      txn = session.beginTransaction();
-    } catch (Exception e) {
-      txn = session.getTransaction();
+    this.bindHibernateSession();
+    Screening[] screenings = screeningDao.findScreeningsByReferralId(referralId);
+    Screening screening = screenings.length > 0 ? screenings[0] : null;
+    screeningSummary = screening != null
+        ? new ScreeningSummary(screening, this.populateSimpleAllegations(screening))
+        : new ScreeningSummary();
+
+    return screeningSummary;
+  }
+
+  /**
+   * biding Hibernate session
+   */
+  private void bindHibernateSession() {
+    SessionFactory sessionFactory = screeningDao.getSessionFactory();
+    org.hibernate.Session session = sessionFactory.openSession();
+    ManagedSessionContext.bind(session);
+  }
+
+  /**
+   * populating list of Simple Allegation
+   * 
+   * @param screening - Screening object
+   * @return - list of simple allegations.
+   */
+  private Set<SimpleAllegation> populateSimpleAllegations(Screening screening) {
+    Set<SimpleAllegation> allegations = new HashSet<>();
+    if (screening != null && screening.getAllegations() != null) {
+      for (Allegation allegation : screening.getAllegations()) {
+        allegations.add(new SimpleAllegation(allegation));
+
+      }
     }
-    try {
-      Screening screening = this.screeningDao.find(primaryKey);
+    return allegations;
 
-      session.clear();
-
-    } catch (HibernateException he) {
-      txn.rollback();
-      throw new DaoException(he);
-    }
-
-    ScreeningSummary serialized = new ScreeningSummary();
-    return serialized;
   }
 
 

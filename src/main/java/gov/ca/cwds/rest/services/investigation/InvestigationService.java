@@ -120,7 +120,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<String> safetyAlerts = new HashSet<>();
       Set<String> crossReports = new HashSet<>();
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
-      ScreeningSummary screeningSummary = this.findScreeningSummaryServiceByReferralId("1");
+      ScreeningSummary screeningSummary = this.findScreeningSummaryServiceByReferralId(referralId);
 
       ret = new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
           allegations, peoples, relationshipList, safetyAlerts, crossReports, contacts,
@@ -199,9 +199,10 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   }
 
   /**
+   * populating screening summary by referral id
    * 
-   * @param referralId
-   * @return
+   * @param referralId - referral id
+   * @return - ScreeningSummary object
    */
   private ScreeningSummary findScreeningSummaryServiceByReferralId(String referralId) {
     return (ScreeningSummary) this.screeningSummaryService.find(referralId);

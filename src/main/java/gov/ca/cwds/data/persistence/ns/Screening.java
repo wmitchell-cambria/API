@@ -1,33 +1,34 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 import gov.ca.cwds.data.ns.NsPersistentObject;
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * {@link NsPersistentObject} representing a Person.
  * 
  * @author CWDS API Team
  */
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.Screening.findScreeningsByReferralId",
+    query = "FROM Screening WHERE referralId = :referralId")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "screenings")
-public class Screening extends NsPersistentObject {
+public class Screening implements PersistentObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screenings_id_seq")
-  @SequenceGenerator(name = "screenings_id_seq", sequenceName = "screenings_id_seq",
-      allocationSize = 50)
   @Column(name = "id")
-  private Long id;
+  private String id;
 
   @Column(name = "reference")
   private String reference;
@@ -52,8 +53,6 @@ public class Screening extends NsPersistentObject {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "response_time")
-  private String responseTime;
 
   @Column(name = "screening_decision")
   private String screeningDecision;
@@ -78,7 +77,9 @@ public class Screening extends NsPersistentObject {
   private String safetyInformation;
 
   @Column(name = "safety_alerts")
+  @Type(type = "gov.ca.cwds.rest.util.StringArrayType")
   private String[] safetyAlerts;
+
 
   @Column(name = "referral_id")
   private String referralId;
@@ -101,15 +102,9 @@ public class Screening extends NsPersistentObject {
   @Column(name = "indexable")
   private boolean indexable;
 
+  @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL)
+  private Set<gov.ca.cwds.data.persistence.ns.Allegation> allegations = new HashSet<>();
 
-  /*
-   * @OneToOne(cascade = CascadeType.ALL)
-   * 
-   * @JoinColumn(name = "contact_address_id") private Address contactAddress;
-   * 
-   * @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "screening") private
-   * Set<Participant> participants = new HashSet<>(0);
-   */
 
   /**
    * Default constructor
@@ -158,7 +153,7 @@ public class Screening extends NsPersistentObject {
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
     this.name = name;
-    this.responseTime = responseTime;
+    // this.responseTime = responseTime;
     this.screeningDecision = screeningDecision;
     this.startedAt = startedAt;
     this.narrative = narrative;
@@ -173,14 +168,14 @@ public class Screening extends NsPersistentObject {
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
-  public Long getPrimaryKey() {
+  public String getPrimaryKey() {
     return getId();
   }
 
   /**
    * @return the id
    */
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
@@ -233,12 +228,6 @@ public class Screening extends NsPersistentObject {
     return name;
   }
 
-  /**
-   * @return the responseTime
-   */
-  public String getResponseTime() {
-    return responseTime;
-  }
 
   /**
    * @return the screeningDecision
@@ -262,15 +251,96 @@ public class Screening extends NsPersistentObject {
   }
 
   /**
-   * @return the contactAddress
+   * @return the assignee
    */
-  /*
-   * public Address getContactAddress() { return contactAddress; }
-   * 
-   *//**
-      * @return the participants
-      *//*
-         * public Set<Participant> getParticipants() { return participants; }
-         */
+  public String getAssignee() {
+    return assignee;
+  }
+
+  /**
+   * @return the additionalInformation
+   */
+  public String getAdditionalInformation() {
+    return additionalInformation;
+  }
+
+  /**
+   * @return the screeningDecisionDetail
+   */
+  public String getScreeningDecisionDetail() {
+    return screeningDecisionDetail;
+  }
+
+  /**
+   * @return the safetyInformation
+   */
+  public String getSafetyInformation() {
+    return safetyInformation;
+  }
+
+  /**
+   * @return the safetyAlerts
+   */
+  public String[] getSafetyAlerts() {
+    return safetyAlerts;
+  }
+
+  /**
+   * @return the referralId
+   */
+  public String getReferralId() {
+    return referralId;
+  }
+
+  /**
+   * @return the assigneeStaffId
+   */
+  public String getAssigneeStaffId() {
+    return assigneeStaffId;
+  }
+
+  /**
+   * @return the accessRestrictions
+   */
+  public String getAccessRestrictions() {
+    return accessRestrictions;
+  }
+
+  /**
+   * @return the restrictionsRationale
+   */
+  public String getRestrictionsRationale() {
+    return restrictionsRationale;
+  }
+
+  /**
+   * @return the userCountyCode
+   */
+  public String getUserCountyCode() {
+    return userCountyCode;
+  }
+
+  /**
+   * @return the restrictionsDate
+   */
+  public Date getRestrictionsDate() {
+    return restrictionsDate;
+  }
+
+  /**
+   * @return the indexable
+   */
+  public boolean isIndexable() {
+    return indexable;
+  }
+
+  /**
+   * @return the allegations
+   */
+  public Set<Allegation> getAllegations() {
+    return allegations;
+  }
+
+
 
 }

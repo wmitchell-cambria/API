@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import gov.ca.cwds.data.persistence.ns.Screening;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -112,6 +115,26 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     this.startedAt = startedAt;
     this.allegations = allegations;
   }
+
+  /**
+   * Constructor - assigning Screening summary values
+   * 
+   * @param screening - Screening object
+   * @param allegations - list of allegations
+   */
+  public ScreeningSummary(Screening screening, Set<SimpleAllegation> allegations) {
+    safetyAlerts = new HashSet<>();
+    this.name = screening.getName();
+    Collections.addAll(this.safetyAlerts, screening.getSafetyAlerts());
+    this.decision = screening.getScreeningDecision();
+    this.additionalInformation = screening.getAdditionalInformation();
+    this.decisionDetail = screening.getScreeningDecisionDetail();
+    this.id = screening.getId();
+    this.safetyInformation = screening.getSafetyInformation();
+    this.startedAt = screening.getStartedAt();
+    this.allegations = allegations;
+  }
+
 
   /**
    * @return the id
