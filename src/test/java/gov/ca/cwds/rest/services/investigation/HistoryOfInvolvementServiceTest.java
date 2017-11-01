@@ -13,6 +13,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
+import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
@@ -42,11 +43,11 @@ public class HistoryOfInvolvementServiceTest {
   // find test
   @Test
   public void findReturnsExpectedContact() throws Exception {
-    HistoryOfInvolvement serialized = new HistoryOfInvolvement();
-    serialized = MAPPER.readValue(
-        fixture("fixtures/domain/investigation/historyOfInvolvement/valid/valid.json"),
-        HistoryOfInvolvement.class);
-    Response returned = historyOfInvolvementService.find("string");
+    HistoryOfInvolvement serialized = new HistoryOfInvolvementEntityBuilder().build();
+    serialized =
+        MAPPER.readValue(fixture("fixtures/domain/investigation/historyOfInvolvement/valid.json"),
+            HistoryOfInvolvement.class);
+    Response returned = historyOfInvolvementService.find("999999");
     assertThat(returned, is(serialized));
   }
 

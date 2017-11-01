@@ -107,6 +107,15 @@ public class AllegationTest {
         is(equalTo(persistentAllegation.getAllegationDispositionType())));
     assertThat(allegation.getVictim(), is(equalTo(victim)));
     assertThat(allegation.getPerpetrator(), is(equalTo(perpetrator)));
+    assertThat(allegation.getAllegationSubType(), is(equalTo(allegationSubTypes)));
+  }
+
+  @Test
+  public void testNullPerpetratorClient() {
+    gov.ca.cwds.data.persistence.cms.Allegation persistentAllegation =
+        new gov.ca.cwds.fixture.AllegationEntityBuilder().setPerpetratorClients(null).build();
+    Allegation allegation = new Allegation(persistentAllegation, allegationSubTypes);
+    assertThat(allegation.getPerpetrator(), is(equalTo(null)));
   }
 
   @Test

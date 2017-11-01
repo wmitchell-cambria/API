@@ -129,7 +129,7 @@ public class SimpleReferral extends ReportingDomain implements Response {
   /**
    * @return limited access code
    */
-  public LimitedAccess getLimitedAccess() {
+  public LimitedAccess getAccessLimitation() {
     return accessLimitation;
   }
 

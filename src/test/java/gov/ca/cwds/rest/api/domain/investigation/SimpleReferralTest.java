@@ -4,20 +4,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementAllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimplePersonEntityBuilder;
+import gov.ca.cwds.fixture.investigation.SimpleReferralEntityBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class SimpleReferralTest {
 
+  private ObjectMapper MAPPER = new ObjectMapper();
   private String endDate = "2000-02-01";
   private Set<HistoryOfInvolvementAllegation> allegations = new HashSet<>();
   private SimplePerson assignedSocialWorker;
@@ -58,9 +66,19 @@ public class SimpleReferralTest {
     assertThat(domain.getResponseTimeId(), is(equalTo(responseTimeId)));
     assertThat(domain.getAllegations(), is(equalTo(allegations)));
     assertThat(domain.getAssignedSocialWorker(), is(equalTo(assignedSocialWorker)));
-    assertThat(domain.getLimitedAccess(), is(equalTo(limitedAccess)));
+    assertThat(domain.getAccessLimitation(), is(equalTo(limitedAccess)));
     assertThat(domain.getResponseTime(), is(equalTo(responseTime)));
     assertThat(domain.getStartDate(), is(equalTo(startDate)));
+  }
+
+  @Test
+  // @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    SimpleReferral smipleReferral = new SimpleReferralEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(smipleReferral);
+    System.out.println(expected);
   }
 
 }

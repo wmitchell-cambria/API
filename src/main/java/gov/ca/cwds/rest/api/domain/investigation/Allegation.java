@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -122,13 +121,16 @@ public class Allegation extends ReportingDomain implements Response {
       this.perpetrator = new AllegationPerson(persistedAllocation.getPerpetratorClients());
     }
 
-    this.createdByScreener =
-        StringUtils.equals("Y", persistedAllocation.getStaffPersonAddedIndicator()) ? Boolean.TRUE
-            : Boolean.FALSE;
+    // TODO: must determine whether allegation was created during Screening or Investigation
+    // createdByScreener - was allegation created during Screening (true) or during Investigation
+    // (false)
+    // this.createdByScreener =
+    // StringUtils.equals("Y", persistedAllocation.getStaffPersonAddedIndicator()) ? Boolean.TRUE
+    // : Boolean.FALSE;
+    this.createdByScreener = Boolean.FALSE;
+
     this.allegationSubType = allegationSubType;
   }
-
-
 
   /**
    * @return - the Allegation type

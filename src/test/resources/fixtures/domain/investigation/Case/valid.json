@@ -1,0 +1,23 @@
+{
+  "end_date" : "2017-10-30",
+  "county_name" : "Sacramento",
+  "legacy_descriptor" : {
+    "legacy_ui_id" : "3456789ABC"
+  },
+  "focus_child" : {
+    "last_name" : "Smyth",
+    "first_name" : "Susan"
+  },
+  "service_component" : null,
+  "assigned_social_worker" : {
+    "last_name" : "social worker",
+    "first_name" : "Susan"
+  },
+  "service_component_id" : "1234567ABC",
+  "start_date" : "2017-09-01",
+  "parents" : [ {
+    "relationship" : "Father/Son",
+    "last_name" : "Plimsoul",
+    "first_name" : "Paul"
+  } ]
+}

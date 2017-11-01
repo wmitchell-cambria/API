@@ -1,30 +1,41 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.ca.cwds.fixture.investigation.CaseEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimplePersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimplePersonWithRelationshipEntityBuilder;
 
 @SuppressWarnings("javadoc")
 public class CaseTest {
-  String endDate = null;
-  String countyName = null;
-  SimpleLegacyDescriptor legacyDescriptor = null;
-  SimplePerson focusChild = null;
-  String serviceComponent = "Emergency Response";
-  SimplePerson assignedSocialWorker = null;
-  String serviceComponentId = "1694";
-  String startDate = "2017-09-01";
-  Set<SimplePersonWithRelationship> parents = new HashSet<>();
+  private ObjectMapper MAPPER = new ObjectMapper();
+
+  private String endDate = null;
+  private String countyName = null;
+  private SimpleLegacyDescriptor legacyDescriptor = null;
+  private SimplePerson focusChild = null;
+  private String serviceComponent = "Emergency Response";
+  private SimplePerson assignedSocialWorker = null;
+  private String serviceComponentId = "1694";
+  private String startDate = "2017-09-01";
+  private Set<SimplePersonWithRelationship> parents = new HashSet<>();
 
   @Before
   public void setup() {
@@ -130,6 +141,23 @@ public class CaseTest {
     boolean actual = target.equals(obj);
     boolean expected = false;
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    Case validCase = new CaseEntityBuilder().build();
+    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(validCase);
+    System.out.println(expected);
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    Case validCase = new CaseEntityBuilder().build();
+    assertThat(
+        MAPPER.readValue(fixture("fixtures/domain/investigation/Case/valid.json"), Case.class),
+        is(equalTo(validCase)));
   }
 
 }

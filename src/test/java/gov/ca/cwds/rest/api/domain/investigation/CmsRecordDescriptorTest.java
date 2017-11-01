@@ -1,9 +1,14 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,12 +20,19 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class CmsRecordDescriptorTest {
+
+  private ObjectMapper MAPPER = new ObjectMapper();
 
   private static final String ID = "1234567ABC";
   private static final String UI_ID = "111122223333444455";
@@ -120,6 +132,25 @@ public class CmsRecordDescriptorTest {
     // System.out.println(violation.getMessage());
     // }
 
+  }
+
+  @Test
+  // @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptorEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(cmsRecordDescriptor);
+    System.out.println(expected);
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptorEntityBuilder().build();
+    assertThat(
+        MAPPER.readValue(fixture("fixtures/domain/investigation/cmsRecordDescriptor/valid.json"),
+            CmsRecordDescriptor.class),
+        is(equalTo(cmsRecordDescriptor)));
   }
 
 }

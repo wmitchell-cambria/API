@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -7,6 +8,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -15,8 +17,12 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -107,8 +113,27 @@ public class AllegationPersonTest {
   }
 
   @Test
+  @Ignore
+  public void testSerilizedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    AllegationPerson allegationPerson = new AllegationPersonEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(allegationPerson);
+    System.out.println(expected);
+  }
+
+  @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(AllegationPerson.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
+  @Test
+  public void deserializesFromJSON() throws Exception {
+    AllegationPerson allegationPerson = new AllegationPersonEntityBuilder().build();
+    assertThat(
+        MAPPER.readValue(fixture("fixtures/domain/investigation/allegationPerson/valid.json"),
+            AllegationPerson.class),
+        is(equalTo(allegationPerson)));
   }
 
 }

@@ -49,10 +49,10 @@ public class HistoryOfInvolvementService
   public Response find(String primaryKey) {
     HistoryOfInvolvement serialized = new HistoryOfInvolvement();
     // please do not change this code until we are ready to replace stubbed data with data from db2
-    String fileLocation = HistoryOfInvolvementService.class.getPackage().getName().replace('.', '/')
-        + "/historyOfInvolvement/valid/valid.json";
     try {
-      serialized = MAPPER.readValue(fixture(fileLocation), HistoryOfInvolvement.class);
+      serialized =
+          MAPPER.readValue(fixture("fixtures/domain/investigation/historyOfInvolvement/valid.json"),
+              HistoryOfInvolvement.class);
     } catch (Exception e) {
       LOGGER.error("Exception In HistoryOfInvolvement {}", e.getMessage());
     }

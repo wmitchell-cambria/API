@@ -12,10 +12,12 @@ import gov.ca.cwds.rest.api.domain.investigation.SimplePersonWithRelationship;
 public class CaseEntityBuilder {
   protected String endDate = "2017-10-30";
   protected String countyName = "Sacramento";
-  private SimpleLegacyDescriptor legacyDescriptor;
-  private SimplePerson focusChild;
+  private SimpleLegacyDescriptor legacyDescriptor = new SimpleLegacyDescriptor("3456789ABC");
+
+  private SimplePerson focusChild = new SimplePersonEntityBuilder().build();
   protected String serviceComponent;
-  private SimplePerson assignedSocialWorker;
+  private SimplePerson assignedSocialWorker =
+      new SimplePersonEntityBuilder().setLastName("social worker").build();
   protected String serviceComponentId = "1234567ABC";
   protected String startDate = "2017-09-01";
   private Set<SimplePersonWithRelationship> parents = new LinkedHashSet<>();

@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -44,8 +45,14 @@ public class AssigneeTest {
   @Test
   @Ignore
   public void testStaffPersonConstructorSuccess() {
+    String name = StringUtils.trim(staffPerson.getFirstName())
+        + StringUtils.trim(staffPerson.getMiddleInitial())
+        + StringUtils.trim(staffPerson.getLastName());
     Assignee assignee = new Assignee(staffPerson);
-
+    assertThat(assignee.getName(), is(equalTo(name)));
+    assertThat(assignee.getCountyCode(), is(equalTo(staffPerson.getCountyCode())));
+    assertThat(assignee.getOffice(), is(equalTo(staffPerson.getCwsOffice())));
+    assertThat(assignee.getStaffId(), is(equalTo(staffPerson.getId())));
   }
 
   @Test

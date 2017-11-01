@@ -1,0 +1,66 @@
+{
+  "cases" : [ {
+    "end_date" : "2017-10-30",
+    "county_name" : "Sacramento",
+    "legacy_descriptor" : {
+      "legacy_ui_id" : "3456789ABC"
+    },
+    "focus_child" : {
+      "last_name" : "Smyth",
+      "first_name" : "Susan"
+    },
+    "service_component" : null,
+    "assigned_social_worker" : {
+      "last_name" : "social worker",
+      "first_name" : "Susan"
+    },
+    "service_component_id" : "1234567ABC",
+    "start_date" : "2017-09-01",
+    "parents" : [ {
+      "relationship" : "Father/Son",
+      "last_name" : "Plimsoul",
+      "first_name" : "Paul"
+    } ]
+  } ],
+  "referrals" : [ {
+    "end_date" : "2017-10-30",
+    "legacy_descriptor" : {
+      "legacy_ui_id" : "0426-8977-4115-400591"
+    },
+    "reporter" : {
+      "last_name" : "Smyth",
+      "first_name" : "Susan"
+    },
+    "county_name" : "Sacramento",
+    "response_time_id" : "1525",
+    "allegations" : [ {
+      "victim_last_name" : "Smith",
+      "victim_first_name" : "Cody",
+      "perpetrator_last_name" : "Berk",
+      "perpetrator_first_name" : "Jeremy",
+      "disposition_description" : "Substantiated",
+      "allegation_description" : "Physical abuse"
+    } ],
+    "assigned_social_worker" : {
+      "last_name" : "Smyth",
+      "first_name" : "Susan"
+    },
+    "access_limitation" : {
+      "limited_access_government_entity_id" : "0",
+      "limited_access_code" : "N"
+    },
+    "response_time" : "3 day",
+    "start_date" : "2017-09-01"
+  } ],
+  "screenings" : [ {
+    "id" : "1234567ABC",
+    "end_date" : null,
+    "reporter" : null,
+    "county_name" : "Fresno",
+    "decision" : "promote to referral",
+    "service_name" : null,
+    "all_people" : null,
+    "assigned_social_worker" : null,
+    "start_date" : "2017-08-31"
+  } ]
+}
