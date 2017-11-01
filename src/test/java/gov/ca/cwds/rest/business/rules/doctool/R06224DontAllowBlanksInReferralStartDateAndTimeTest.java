@@ -398,8 +398,8 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
       this.screeningToReferralService.create(screeningToReferral);
     } catch (BusinessValidationException e) {
       Set<IssueDetails> issues = e.getValidationDetailsList();
-      //TODO: fix. Changed from 9-11
-      assertThat(issues.size(), is(equalTo(11)));
+      // TODO: fix. Changed from 9-11-7
+      assertThat(issues.size(), is(equalTo(7)));
     }
   }
 

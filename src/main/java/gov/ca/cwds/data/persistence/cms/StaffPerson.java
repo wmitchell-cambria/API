@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.ApiException;
@@ -37,18 +38,22 @@ public class StaffPerson extends CmsPersistentObject {
   private Date endDate;
 
   @Column(name = "FIRST_NM", length = 20, nullable = false)
+  @ColumnTransformer(read = ("trim(FIRST_NM)"))
   private String firstName;
 
   @Column(name = "JOB_TL_DSC")
   private String jobTitle;
 
   @Column(name = "LAST_NM", length = 25, nullable = false)
+  @ColumnTransformer(read = ("trim(LAST_NM)"))
   private String lastName;
 
   @Column(name = "MID_INI_NM")
+  @ColumnTransformer(read = ("trim(MID_INI_NM)"))
   private String middleInitial;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   private String namePrefix;
 
   @Column(name = "PHONE_NO")
@@ -63,6 +68,7 @@ public class StaffPerson extends CmsPersistentObject {
   private Date startDate;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   private String nameSuffix;
 
   @Column(name = "TLCMTR_IND")
