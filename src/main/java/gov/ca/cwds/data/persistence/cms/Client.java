@@ -33,9 +33,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @Table(name = "CLIENT_T")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class Client extends BaseClient
-// implements ApiMultipleAddressesAware
-{
+public class Client extends BaseClient {
 
   /**
    * Default.
