@@ -19,6 +19,7 @@ public class ScreeningSummaryTest {
   private String decisionDetail = "immediate";
   private String name = "henderson screening";
   private Set<String> safetyAlerts = validSafetyAletrs();
+  Set<SimpleAllegation> allegations = new HashSet<>();
   private Date startedAt = DomainChef.uncookStrictTimestampString("2017-09-01T16:48:05.457-0000");
   private String safetyInformation = "the animal at residence is a lion";
   private String id = "1";
@@ -48,7 +49,7 @@ public class ScreeningSummaryTest {
     assertThat(domain.getSafetyInformation(), is(equalTo(safetyInformation)));
     assertThat(domain.getAdditionalInformation(), is(equalTo(additionalInformation)));
     assertThat(domain.getStartedAt(), is(equalTo(startedAt)));
-    assertThat(domain.getAllegations(), is(equalTo(null)));
+    assertThat(domain.getAllegations(), is(equalTo(allegations)));
   }
 
 }
