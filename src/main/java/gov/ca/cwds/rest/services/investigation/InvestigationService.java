@@ -2,8 +2,11 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
@@ -11,12 +14,14 @@ import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
+import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
@@ -117,7 +122,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       // TODO - uncomment below when its needed
       // this.relationshipListService.findRelationshipByReferralId(referral);
 
-      Set<String> safetyAlerts = new HashSet<>();
+      SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
       Set<String> crossReports = new HashSet<>();
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
       ScreeningSummary screeningSummary = this.findScreeningSummaryServiceByReferralId(referralId);
@@ -183,8 +188,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   private LongText findLongTextById(String responseRationaleTextId) {
     return StringUtils.isNotBlank(responseRationaleTextId)
-        ? longTextService.find(responseRationaleTextId)
-        : null;
+        ? longTextService.find(responseRationaleTextId) : null;
   }
 
   /**

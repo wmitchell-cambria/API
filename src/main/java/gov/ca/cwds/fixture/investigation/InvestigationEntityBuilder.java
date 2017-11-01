@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.joda.time.DateTime;
+
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
@@ -16,6 +18,7 @@ import gov.ca.cwds.rest.api.domain.investigation.LimitedAccess;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 
@@ -70,7 +73,7 @@ public class InvestigationEntityBuilder {
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
 
-  private Set<String> safetyAlerts = new HashSet<>();
+  private SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
   private Set<String> crossReports = new HashSet<>();
   private Set<Contact> contacts = new HashSet<>();
 
@@ -370,18 +373,21 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  /**
-   * @return the screeningSummary
-   */
   public ScreeningSummary getScreeningSummary() {
     return screeningSummary;
   }
 
-  /**
-   * @param screeningSummary the screeningSummary to set
-   */
-  public void setScreeningSummary(ScreeningSummary screeningSummary) {
+  public InvestigationEntityBuilder setScreeningSummary(ScreeningSummary screeningSummary) {
     this.screeningSummary = screeningSummary;
+    return this;
   }
 
+  public InvestigationEntityBuilder setSafetyAlerts(SafetyAlerts safetyAlerts) {
+    this.safetyAlerts = safetyAlerts;
+    return this;
+  }
+
+  public SafetyAlerts getSafetyAlerts() {
+    return safetyAlerts;
+  }
 }

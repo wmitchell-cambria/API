@@ -3,18 +3,22 @@ package gov.ca.cwds.rest.api.domain.investigation;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -192,7 +196,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
 
   @JsonProperty("safety_alerts")
   @ApiModelProperty(required = false, readOnly = false)
-  private Set<String> safetyAlerts;
+  private SafetyAlerts safetyAlerts;
 
   @JsonProperty("cross_reports")
   @ApiModelProperty(required = false, readOnly = false)
@@ -260,7 +264,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
       @JsonProperty("allegations") Set<Allegation> allegations,
       @JsonProperty("people") Set<Person> people,
       @JsonProperty("relationships") Set<Relationship> relationships,
-      @JsonProperty("safety_alerts") Set<String> safetyAlerts,
+      @JsonProperty("safety_alerts") SafetyAlerts safetyAlerts,
       @JsonProperty("cross_reports") Set<String> crossReports,
       @JsonProperty("contacts") Set<Contact> contacts) {
     super();
@@ -309,7 +313,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
       LongText longText, LongText addInfoLongText, Set<Allegation> allegations, Set<Person> peoples,
-      Set<Relationship> relationshipList, Set<String> safetyAlerts, Set<String> crossReports,
+      Set<Relationship> relationshipList, SafetyAlerts safetyAlerts, Set<String> crossReports,
       Set<Contact> contacts, ScreeningSummary screeningSummary) {
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
@@ -549,7 +553,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @return - safety alerts
    */
-  public Set<String> getSafetyAlerts() {
+  public SafetyAlerts getSafetyAlerts() {
     return safetyAlerts;
   }
 

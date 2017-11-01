@@ -6,18 +6,22 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -33,6 +37,7 @@ import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PeopleEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
+import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
@@ -92,7 +97,7 @@ public class InvestigationTest {
 
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
-  private Set<String> safetyAlerts = new HashSet<>();
+  private SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
   private Set<String> crossReports = new HashSet<>();
   private Set<Contact> contacts = new HashSet<>();
 
@@ -143,6 +148,19 @@ public class InvestigationTest {
   }
 
   @Test
+  public void testDomainConstructorWithNullHoiSuccess() {
+    HistoryOfInvolvement nullHoi = null;
+    HistoryOfInvolvement hoi = new HistoryOfInvolvement();
+
+    Investigation investigation = new Investigation(cmsRecordDescriptor, lastUpdatedBy,
+        lastUpdatedAt, incidentCounty, incidentDate, locationType, communicationMethod, name,
+        reportNarrative, reference, responseTime, startedAt, assignee, additionalInformation,
+        sensitive, sealed, phoneNumbers, address, screeningSummary, nullHoi, allegations, people,
+        relationships, safetyAlerts, crossReports, contacts);
+    assertThat(investigation.getHistoryOfInvolvement(), is(equalTo(hoi)));
+  }
+
+  @Test
   public void testObjectConstructorSuccess() {
     Referral referral = new ReferralEntityBuilder().build();
     Address address = new AddressEntityBuilder().build();
@@ -153,8 +171,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -175,8 +193,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -192,6 +210,7 @@ public class InvestigationTest {
     assertThat(investigation.getLastUpdatedBy(), is(equalTo(referral.getLastUpdatedId())));
     assertThat(investigation.getLastUpdatedAt(),
         is(equalTo(DomainChef.cookTimestamp(referral.getLastUpdatedTime()))));
+    assertThat(investigation.getContacts(), is(equalTo(contacts)));
 
   }
 
@@ -208,8 +227,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -233,8 +252,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -258,8 +277,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -286,8 +305,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -310,8 +329,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -334,8 +353,8 @@ public class InvestigationTest {
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
     // TODO
-    Set<Relationship> relationshipList = new HashSet();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -361,7 +380,7 @@ public class InvestigationTest {
     Set<Person> personSet = people.getPersons();
     // TODO
     Set<Relationship> relationshipList = new HashSet<Relationship>();
-    Set<String> safetyAlerts = new HashSet<String>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
     Set<Contact> contacts = new HashSet<Contact>();
     ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
@@ -402,7 +421,12 @@ public class InvestigationTest {
   @Ignore
   public void testSerilizedInvestigation()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    Investigation investigation = new InvestigationEntityBuilder().build();
+    Set<String> alerts = new HashSet<>();
+    alerts.add("6401");
+    alerts.add("6402");
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
+    Investigation investigation =
+        new InvestigationEntityBuilder().setSafetyAlerts(safetyAlerts).build();
     final String expected =
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
     System.out.println(expected);
