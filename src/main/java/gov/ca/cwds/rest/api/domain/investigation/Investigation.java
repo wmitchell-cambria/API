@@ -305,11 +305,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param safetyAlerts - safety alerts
    * @param crossReports - crossReports
    * @param contacts - contacts
+   * @param screeningSummary - Screening Summary
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
       LongText longText, LongText addInfoLongText, Set<Allegation> allegations, Set<Person> peoples,
       Set<Relationship> relationshipList, Set<String> safetyAlerts, Set<String> crossReports,
-      Set<Contact> contacts) {
+      Set<Contact> contacts, ScreeningSummary screeningSummary) {
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
     this.lastUpdatedBy = referral.getLastUpdatedId();
@@ -352,6 +353,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.safetyAlerts = safetyAlerts;
     this.crossReports = crossReports;
     this.contacts = contacts;
+    this.screeningSummary = screeningSummary;
   }
 
   /**

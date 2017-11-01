@@ -1,14 +1,19 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.lang3.NotImplementedException;
-
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
 import com.google.inject.Inject;
-
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.Allegation;
+import gov.ca.cwds.data.persistence.ns.Screening;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
+import gov.ca.cwds.rest.api.domain.investigation.SimpleAllegation;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
@@ -19,16 +24,16 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 public class ScreeningSummaryService
     implements TypedCrudsService<String, ScreeningSummary, Response> {
 
-  private DeliveredServiceDao deliveredServiceDao;
+  private ScreeningDao screeningDao;
 
   /**
-   * @param deliveredServiceDao {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity} objects
+   * 
+   * @param screeningDao - screening dao
    */
   @Inject
-  public ScreeningSummaryService(DeliveredServiceDao deliveredServiceDao) {
+  public ScreeningSummaryService(ScreeningDao screeningDao) {
     super();
-    this.deliveredServiceDao = deliveredServiceDao;
+    this.screeningDao = screeningDao;
   }
 
 
@@ -39,11 +44,50 @@ public class ScreeningSummaryService
    */
 
   @Override
-  public Response find(String primaryKey) {
+  public Response find(String referralId) {
+    ScreeningSummary screeningSummary = null;
+    if (StringUtils.equals(referralId, "STUB")) {
+      return new ScreeningSummaryEntityBuilder().build();
 
-    ScreeningSummary serialized = new ScreeningSummaryEntityBuilder().build();
-    return serialized;
+    }
+
+    this.bindHibernateSession();
+    Screening[] screenings = screeningDao.findScreeningsByReferralId(referralId);
+    Screening screening = screenings.length > 0 ? screenings[0] : null;
+    screeningSummary = screening != null
+        ? new ScreeningSummary(screening, this.populateSimpleAllegations(screening))
+        : new ScreeningSummary();
+
+    return screeningSummary;
   }
+
+  /**
+   * biding Hibernate session
+   */
+  private void bindHibernateSession() {
+    SessionFactory sessionFactory = screeningDao.getSessionFactory();
+    org.hibernate.Session session = sessionFactory.openSession();
+    ManagedSessionContext.bind(session);
+  }
+
+  /**
+   * populating list of Simple Allegation
+   * 
+   * @param screening - Screening object
+   * @return - list of simple allegations.
+   */
+  private Set<SimpleAllegation> populateSimpleAllegations(Screening screening) {
+    Set<SimpleAllegation> allegations = new HashSet<>();
+    if (screening != null && screening.getAllegations() != null) {
+      for (Allegation allegation : screening.getAllegations()) {
+        allegations.add(new SimpleAllegation(allegation));
+
+      }
+    }
+    return allegations;
+
+  }
+
 
 
   @Override

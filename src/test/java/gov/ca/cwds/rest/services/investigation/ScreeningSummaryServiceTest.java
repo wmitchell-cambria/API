@@ -3,19 +3,18 @@ package gov.ca.cwds.rest.services.investigation;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
-import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import io.dropwizard.jackson.Jackson;
-
+import static org.mockito.Mockito.mock;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import io.dropwizard.jackson.Jackson;
 
 /***
  * 
@@ -27,7 +26,7 @@ public class ScreeningSummaryServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private ScreeningSummaryService screeningSummaryService;
-  private DeliveredServiceDao deliveredServiceDao;
+  private ScreeningDao screeningDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -35,7 +34,8 @@ public class ScreeningSummaryServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    screeningSummaryService = new ScreeningSummaryService(deliveredServiceDao);
+    this.screeningDao = mock(ScreeningDao.class);
+    screeningSummaryService = new ScreeningSummaryService(screeningDao);
   }
 
   // find test
@@ -45,7 +45,7 @@ public class ScreeningSummaryServiceTest {
     serialized =
         MAPPER.readValue(fixture("fixtures/domain/investigation/screening/valid/valid.json"),
             ScreeningSummary.class);
-    Response returned = screeningSummaryService.find("string");
+    Response returned = screeningSummaryService.find("STUB");
     assertThat(returned, is(serialized));
   }
 

@@ -3,83 +3,108 @@ package gov.ca.cwds.data.persistence.ns;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
-
 import gov.ca.cwds.data.ns.NsPersistentObject;
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * {@link NsPersistentObject} representing a Person.
  * 
  * @author CWDS API Team
  */
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.Screening.findScreeningsByReferralId",
+    query = "FROM Screening WHERE referralId = :referralId")
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "hotline_contact")
-public class Screening extends NsPersistentObject {
+@Table(name = "screenings")
+public class Screening implements PersistentObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_hotline_contact_id")
-  @SequenceGenerator(name = "seq_hotline_contact_id", sequenceName = "seq_hotline_contact_id",
-      allocationSize = 50)
-  @Column(name = "hotline_contact_id")
-  private Long id;
+  @Column(name = "id")
+  private String id;
 
-  @Column(name = "hotline_contact_reference")
+  @Column(name = "reference")
   private String reference;
 
-  @Column(name = "screening_end_datetime")
+  @Column(name = "ended_at")
   @Type(type = "date")
   private Date endedAt;
 
-  @Column(name = "hotline_contact_county")
+  @Column(name = "incident_county")
   private String incidentCounty;
 
-  @Column(name = "incident_datetime")
+  @Column(name = "incident_date")
   @Type(type = "date")
   private Date incidentDate;
 
   @Column(name = "location_type")
   private String locationType;
 
-  @Column(name = "hotline_communication_method")
+  @Column(name = "communication_method")
   private String communicationMethod;
 
-  @Column(name = "hotline_contact_name")
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "response_time")
-  private String responseTime;
 
-  @Column(name = "screening_result")
+  @Column(name = "screening_decision")
   private String screeningDecision;
 
-  @Column(name = "screening_start_datetime")
+  @Column(name = "started_at")
   @Type(type = "date")
   private Date startedAt;
 
-  @Column(name = "screening_report_narrative")
+  @Column(name = "report_narrative")
   private String narrative;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "contact_address_id")
-  private Address contactAddress;
+  @Column(name = "assignee")
+  private String assignee;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "screening")
-  private Set<Participant> participants = new HashSet<>(0);
+  @Column(name = "additional_information")
+  private String additionalInformation;
+
+  @Column(name = "screening_decision_detail")
+  private String screeningDecisionDetail;
+
+  @Column(name = "safety_information")
+  private String safetyInformation;
+
+  @Column(name = "safety_alerts")
+  @Type(type = "gov.ca.cwds.rest.util.StringArrayType")
+  private String[] safetyAlerts;
+
+
+  @Column(name = "referral_id")
+  private String referralId;
+
+  @Column(name = "assignee_staff_id")
+  private String assigneeStaffId;
+
+  @Column(name = "access_restrictions")
+  private String accessRestrictions;
+
+  @Column(name = "restrictions_rationale")
+  private String restrictionsRationale;
+
+  @Column(name = "user_county_code")
+  private String userCountyCode;
+
+  @Column(name = "restrictions_date")
+  private Date restrictionsDate;
+
+  @Column(name = "indexable")
+  private boolean indexable;
+
+  @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL)
+  private Set<gov.ca.cwds.data.persistence.ns.Allegation> allegations = new HashSet<>();
+
 
   /**
    * Default constructor
@@ -128,48 +153,14 @@ public class Screening extends NsPersistentObject {
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
     this.name = name;
-    this.responseTime = responseTime;
+    // this.responseTime = responseTime;
     this.screeningDecision = screeningDecision;
     this.startedAt = startedAt;
     this.narrative = narrative;
-    this.contactAddress = contactAddress;
 
-    if (participants != null && !participants.isEmpty()) {
-      this.participants.addAll(participants);
-    }
   }
 
-  /**
-   * Constructor
-   * 
-   * @param id The id
-   * @param screening The screening
-   * @param address The address
-   * @param participants The set of participants
-   * @param lastUpdatedId the id of the last person to update this object
-   * @param createUserId the id of the person created the record
-   */
-  // public Screening(Long id, gov.ca.cwds.rest.api.domain.Screening screening, Address address,
-  // Set<Participant> participants, String lastUpdatedId, String createUserId) {
-  // super(lastUpdatedId, createUserId);
-  //
-  // this.id = id;
-  // this.reference = screening.getReference();
-  // this.endedAt = DomainChef.uncookDateString(screening.getEndedAt());
-  // this.incidentCounty = screening.getIncidentCounty();
-  // this.incidentDate = DomainChef.uncookDateString(screening.getIncidentDate());
-  // this.locationType = screening.getLocationType();
-  // this.communicationMethod = screening.getCommunicationMethod();
-  // this.name = screening.getName();
-  // this.responseTime = screening.getResponseTime();
-  // this.screeningDecision = screening.getScreeningDecision();
-  // this.startedAt = DomainChef.uncookDateString(screening.getStartedAt());
-  // this.narrative = screening.getNarrative();
-  // this.contactAddress = address;
-  // if (participants != null) {
-  // this.participants.addAll(participants);
-  // }
-  // }
+
 
   /**
    * {@inheritDoc}
@@ -177,14 +168,14 @@ public class Screening extends NsPersistentObject {
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
-  public Long getPrimaryKey() {
+  public String getPrimaryKey() {
     return getId();
   }
 
   /**
    * @return the id
    */
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
@@ -237,12 +228,6 @@ public class Screening extends NsPersistentObject {
     return name;
   }
 
-  /**
-   * @return the responseTime
-   */
-  public String getResponseTime() {
-    return responseTime;
-  }
 
   /**
    * @return the screeningDecision
@@ -266,17 +251,96 @@ public class Screening extends NsPersistentObject {
   }
 
   /**
-   * @return the contactAddress
+   * @return the assignee
    */
-  public Address getContactAddress() {
-    return contactAddress;
+  public String getAssignee() {
+    return assignee;
   }
 
   /**
-   * @return the participants
+   * @return the additionalInformation
    */
-  public Set<Participant> getParticipants() {
-    return participants;
+  public String getAdditionalInformation() {
+    return additionalInformation;
   }
+
+  /**
+   * @return the screeningDecisionDetail
+   */
+  public String getScreeningDecisionDetail() {
+    return screeningDecisionDetail;
+  }
+
+  /**
+   * @return the safetyInformation
+   */
+  public String getSafetyInformation() {
+    return safetyInformation;
+  }
+
+  /**
+   * @return the safetyAlerts
+   */
+  public String[] getSafetyAlerts() {
+    return safetyAlerts;
+  }
+
+  /**
+   * @return the referralId
+   */
+  public String getReferralId() {
+    return referralId;
+  }
+
+  /**
+   * @return the assigneeStaffId
+   */
+  public String getAssigneeStaffId() {
+    return assigneeStaffId;
+  }
+
+  /**
+   * @return the accessRestrictions
+   */
+  public String getAccessRestrictions() {
+    return accessRestrictions;
+  }
+
+  /**
+   * @return the restrictionsRationale
+   */
+  public String getRestrictionsRationale() {
+    return restrictionsRationale;
+  }
+
+  /**
+   * @return the userCountyCode
+   */
+  public String getUserCountyCode() {
+    return userCountyCode;
+  }
+
+  /**
+   * @return the restrictionsDate
+   */
+  public Date getRestrictionsDate() {
+    return restrictionsDate;
+  }
+
+  /**
+   * @return the indexable
+   */
+  public boolean isIndexable() {
+    return indexable;
+  }
+
+  /**
+   * @return the allegations
+   */
+  public Set<Allegation> getAllegations() {
+    return allegations;
+  }
+
+
 
 }

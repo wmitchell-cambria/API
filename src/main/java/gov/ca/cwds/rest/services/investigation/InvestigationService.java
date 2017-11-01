@@ -2,11 +2,8 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
@@ -20,6 +17,7 @@ import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
+import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -44,6 +42,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private RelationshipListService relationshipListService;
   private ContactService contactService;
   private HistoryOfInvolvementService hoiSvc;
+  private ScreeningSummaryService screeningSummaryService;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
   private HistoryOfInvolvement stubHoi;
@@ -59,12 +58,14 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * @param relationshipListService - RelationshipList Service
    * @param contactService - contact service
    * @param hoiSvc service for history of involvement
+   * @param screeningSummaryService - Screening Summary Service
    */
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
       AddressDao addressDao, LongTextService longTextService, PeopleService peopleService,
       AllegationService allegationService, RelationshipListService relationshipListService,
-      ContactService contactService, HistoryOfInvolvementService hoiSvc) {
+      ContactService contactService, HistoryOfInvolvementService hoiSvc,
+      ScreeningSummaryService screeningSummaryService) {
     super();
     this.investigationDao = investigationDao;
     this.addressDao = addressDao;
@@ -75,6 +76,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     this.relationshipListService = relationshipListService;
     this.contactService = contactService;
     this.hoiSvc = hoiSvc;
+    this.screeningSummaryService = screeningSummaryService;
   }
 
   private synchronized Investigation stubby() {
@@ -118,9 +120,11 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<String> safetyAlerts = new HashSet<>();
       Set<String> crossReports = new HashSet<>();
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
-      ret =
-          new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
-              allegations, peoples, relationshipList, safetyAlerts, crossReports, contacts);
+      ScreeningSummary screeningSummary = this.findScreeningSummaryServiceByReferralId(referralId);
+
+      ret = new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
+          allegations, peoples, relationshipList, safetyAlerts, crossReports, contacts,
+          screeningSummary);
     }
 
     return ret;
@@ -179,7 +183,8 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   private LongText findLongTextById(String responseRationaleTextId) {
     return StringUtils.isNotBlank(responseRationaleTextId)
-        ? longTextService.find(responseRationaleTextId) : null;
+        ? longTextService.find(responseRationaleTextId)
+        : null;
   }
 
   /**
@@ -191,6 +196,17 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private Set<Contact> findContactsByReferralId(String referralId) {
     ContactList contactList = this.contactService.findAllContactsForTheReferral(referralId);
     return contactList.getContacts() != null ? contactList.getContacts() : new HashSet<>();
+  }
+
+  /**
+   * populating screening summary by referral id
+   * 
+   * @param referralId - referral id
+   * @return - ScreeningSummary object
+   */
+  private ScreeningSummary findScreeningSummaryServiceByReferralId(String referralId) {
+    return (ScreeningSummary) this.screeningSummaryService.find(referralId);
+
   }
 
 }

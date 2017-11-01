@@ -3,7 +3,6 @@ package gov.ca.cwds.inject;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -14,12 +13,10 @@ import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -218,7 +215,8 @@ public class DataAccessModule extends AbstractModule {
           Participant.class, PersonAddressId.class, PersonAddress.class, PersonPhoneId.class,
           PhoneNumber.class, PersonPhone.class, PersonLanguageId.class, Language.class,
           PersonLanguage.class, PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class,
-          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class) {
+          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class,
+          gov.ca.cwds.data.persistence.ns.Allegation.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();

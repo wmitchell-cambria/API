@@ -3,10 +3,8 @@ package gov.ca.cwds.rest.services.investigation;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.investigation.InvestigationDao;
@@ -23,6 +21,7 @@ public class InvestigationServiceTest {
   RelationshipListService relationshipListService;
   ContactService contactService;
   HistoryOfInvolvementService hoiService;
+  ScreeningSummaryService screeningSummaryService;
 
   InvestigationService target;
 
@@ -40,9 +39,11 @@ public class InvestigationServiceTest {
     this.relationshipListService = mock(RelationshipListService.class);
     this.contactService = mock(ContactService.class);
     this.hoiService = mock(HistoryOfInvolvementService.class);
+    this.screeningSummaryService = mock(ScreeningSummaryService.class);
 
     target = new InvestigationService(investigationDao, staffPersonDao, addressDao, longTextService,
-        peopleService, allegationService, relationshipListService, contactService, hoiService);
+        peopleService, allegationService, relationshipListService, contactService, hoiService,
+        screeningSummaryService);
   }
 
   @Test
