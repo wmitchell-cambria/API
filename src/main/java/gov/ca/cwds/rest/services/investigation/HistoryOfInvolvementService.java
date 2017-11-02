@@ -1,14 +1,11 @@
 package gov.ca.cwds.rest.services.investigation;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.rest.api.Response;
@@ -50,9 +47,10 @@ public class HistoryOfInvolvementService
     HistoryOfInvolvement serialized = new HistoryOfInvolvement();
     // please do not change this code until we are ready to replace stubbed data with data from db2
     try {
-      serialized =
-          MAPPER.readValue(fixture("fixtures/domain/investigation/historyOfInvolvement/valid.json"),
-              HistoryOfInvolvement.class);
+
+      serialized = MAPPER.readValue(
+          fixture("gov/ca/cwds/rest/services/investigation/historyOfInvolvement/valid/valid.json"),
+          HistoryOfInvolvement.class);
     } catch (Exception e) {
       LOGGER.error("Exception In HistoryOfInvolvement {}", e.getMessage());
     }
