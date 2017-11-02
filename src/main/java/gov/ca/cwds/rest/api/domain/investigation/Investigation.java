@@ -598,6 +598,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
     return screeningSummary;
   }
 
+  /**
+   * @param historyOfInvolvement - the history of involement
+   */
   public void setHistoryOfInvolvement(HistoryOfInvolvement historyOfInvolvement) {
     this.historyOfInvolvement = historyOfInvolvement;
   }

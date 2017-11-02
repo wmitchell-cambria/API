@@ -334,7 +334,7 @@ public class PersonTest {
 
   @Test
   @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Person display = new PersonEntityBuilder().build();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(display);

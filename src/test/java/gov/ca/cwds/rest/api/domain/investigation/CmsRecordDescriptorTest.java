@@ -136,7 +136,7 @@ public class CmsRecordDescriptorTest {
 
   @Test
   // @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptorEntityBuilder().build();
     final String expected =

@@ -114,7 +114,7 @@ public class AllegationPersonTest {
 
   @Test
   @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     AllegationPerson allegationPerson = new AllegationPersonEntityBuilder().build();
     final String expected =

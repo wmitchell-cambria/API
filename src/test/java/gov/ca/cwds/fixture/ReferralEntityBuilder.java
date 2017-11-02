@@ -63,7 +63,7 @@ public class ReferralEntityBuilder {
   Date limitedAccessDate;
   String limitedAccessDesc;
   Date originalClosureDate;
-  Address addresses;
+  private Address addresses = new AddressEntityBuilder().build();
   Set<Allegation> allegations;
   Set<CrossReport> crossReports;
   Set<Reporter> reporters;

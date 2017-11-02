@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -91,7 +92,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   }
 
   /**
-   * constructing InvestigationAddress object
+   * constructing InvestigationAddress object from ClientAddress(CMS) persistenced object
    * 
    * @param persistedClientAddress - client address object
    * @param cmsRecordDescriptor - legacy record descriptor
@@ -108,17 +109,34 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   }
 
   /**
-   * constructing InvestigationAddress object
+   * constructing InvestigationAddress object from Reporter(CMS) object
    * 
    * @param reporter - reporter object
    * @param cmsRecordDescriptor - legacy record descriptor
    */
   public InvestigationAddress(Reporter reporter, CmsRecordDescriptor cmsRecordDescriptor) {
+
     this.streetAddress = trim(reporter.getStreetAddress());
     this.city = trim(reporter.getCity());
     this.state = reporter.getStateCd();
     this.zip = trim(reporter.getZip());
     this.type = reporter.getApiAdrAddressType();
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+  }
+
+  /**
+   * constructing InvestigationAddress - object from Referral(CMS) object
+   * 
+   * @param referral - persistent referral
+   * @param cmsRecordDescriptor
+   */
+  public InvestigationAddress(Referral referral, CmsRecordDescriptor cmsRecordDescriptor) {
+    gov.ca.cwds.data.persistence.cms.Address address = referral.getAddresses();
+    this.streetAddress = trim(address.getStreetAddress());
+    this.city = trim(address.getCity());
+    this.state = address.getStateCd();
+    this.zip = trim(address.getZip());
+    this.type = address.getApiAdrAddressType();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
   }
 

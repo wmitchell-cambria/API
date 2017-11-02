@@ -165,7 +165,7 @@ public class RelationshipTest {
 
   @Test
   @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Relationship safetyAlerts = new RelationshipEntityBuilder().build();
     final String expected =

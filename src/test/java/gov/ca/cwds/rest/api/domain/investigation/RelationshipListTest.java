@@ -71,7 +71,7 @@ public class RelationshipListTest {
 
   @Test
   @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     RelationshipList relationshipList = new RelationshipListEntityBuilder().build();
     final String expected =

@@ -145,7 +145,7 @@ public class CaseTest {
 
   @Test
   @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Case validCase = new CaseEntityBuilder().build();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(validCase);

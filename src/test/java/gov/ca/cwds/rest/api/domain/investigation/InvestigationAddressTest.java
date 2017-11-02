@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static org.apache.commons.lang3.StringUtils.trim;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -9,7 +10,12 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
+import gov.ca.cwds.fixture.ReferralEntityBuilder;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -42,6 +48,52 @@ public class InvestigationAddressTest {
     assertThat(state, is(equalTo(investigationAddress.getState())));
     assertThat(type, is(equalTo(investigationAddress.getType())));
 
+  }
+
+  @Test
+  public void testClientAddressConstructorSuccess() {
+    gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
+        new ClientAddressEntityBuilder().buildClientAddress();
+    gov.ca.cwds.data.persistence.cms.Address address = clientAddress.getAddresses();
+    InvestigationAddress investigationAddress =
+        new InvestigationAddress(clientAddress, cmsRecordDescriptor);
+    assertThat(investigationAddress.getStreetAddress(),
+        is(equalTo(trim(address.getStreetAddress()))));
+    assertThat(investigationAddress.getCity(), is(equalTo(trim(address.getCity()))));
+    assertThat(investigationAddress.getZip(), is(equalTo(trim(address.getZip()))));
+    assertThat(investigationAddress.getType(), is(equalTo(clientAddress.getAddressType())));
+    assertThat(investigationAddress.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
+  }
+
+  @Test
+  public void testReporterAddressConstructorSuccess() {
+    Reporter reporter = new ReporterResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Reporter persistentReporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5");
+    InvestigationAddress investigationAddress =
+        new InvestigationAddress(persistentReporter, cmsRecordDescriptor);
+    assertThat(investigationAddress.getStreetAddress(),
+        is(equalTo(trim(persistentReporter.getStreetAddress()))));
+    assertThat(investigationAddress.getCity(), is(equalTo(trim(persistentReporter.getCity()))));
+    assertThat(investigationAddress.getState(), is(equalTo(persistentReporter.getStateCd())));
+    assertThat(investigationAddress.getZip(), is(equalTo(trim(persistentReporter.getZip()))));
+    assertThat(investigationAddress.getType(),
+        is(equalTo(persistentReporter.getApiAdrAddressType())));
+    assertThat(investigationAddress.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
+  }
+
+  @Test
+  public void testReferralAddressConstructorSuccess() {
+    Referral referral = new ReferralEntityBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Address address = referral.getAddresses();
+    InvestigationAddress investigationAddress =
+        new InvestigationAddress(referral, cmsRecordDescriptor);
+    assertThat(investigationAddress.getStreetAddress(),
+        is(equalTo(trim(address.getStreetAddress()))));
+    assertThat(investigationAddress.getCity(), is(equalTo(trim(address.getCity()))));
+    assertThat(investigationAddress.getZip(), is(equalTo(trim(address.getZip()))));
+    assertThat(investigationAddress.getType(), is(equalTo(address.getApiAdrAddressType())));
+    assertThat(investigationAddress.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
   }
 
   @Test

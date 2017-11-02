@@ -5,6 +5,7 @@ import java.util.Date;
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 
+@SuppressWarnings("javadoc")
 public class ClientAddressEntityBuilder {
   String id = "CLNTADDRID";
   Short addressType = 2;
@@ -15,7 +16,7 @@ public class ClientAddressEntityBuilder {
   String fkClient = "FKCLIENTXX";
   String homelessInd = "";
   String fkReferral = "FKREFERRAL";
-  Address addresses = null;
+  Address addresses = new AddressEntityBuilder().build();
   String lastUpdatedId = "0X5";
 
   public ClientAddress buildClientAddress() {

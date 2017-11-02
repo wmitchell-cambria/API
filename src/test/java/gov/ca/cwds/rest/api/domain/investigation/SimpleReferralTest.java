@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -72,8 +73,8 @@ public class SimpleReferralTest {
   }
 
   @Test
-  // @Ignore
-  public void testSerilizedOutput()
+  @Ignore
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     SimpleReferral smipleReferral = new SimpleReferralEntityBuilder().build();
     final String expected =

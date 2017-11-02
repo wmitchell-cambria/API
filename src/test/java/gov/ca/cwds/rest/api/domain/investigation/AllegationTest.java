@@ -240,7 +240,7 @@ public class AllegationTest {
 
   @Test
   // @Ignore
-  public void testSerilizedOutput()
+  public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Allegation allegation = new AllegationEntityBuilder().build();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(allegation);
