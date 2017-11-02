@@ -69,7 +69,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * constructing Phonenumber object.
+   * constructing PhoneNumber object from Address(CMS).
    * 
    * @param address - address object
    * @param cmsRecordDescriptor - legacy record Descriptor
@@ -83,7 +83,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * constructing cmsRecordDescriptor object.
+   * constructing PhoneNumber object from Reporter(CMS).
    * 
    * @param reporter - reporter object
    * @param cmsRecordDescriptor - legacy record Descriptor

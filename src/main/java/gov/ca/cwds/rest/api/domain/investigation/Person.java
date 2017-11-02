@@ -187,18 +187,18 @@ public class Person extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * Constructing Person object from participant (Client)
+   * Constructing Person object from Client (CMS)
    * 
    * @param client - client object
    * @param languages - list of languages
    * @param cmsRecordDescriptor - cmsRecordDescriptor
-   * @param address - list of investigation address
+   * @param addresses - list of investigation address
    * @param phoneNumbers - list of client phone numbers
    * @param roles - list of roles
    * @param raceAndEthnicity - race/ethnicity
    */
   public Person(Client client, Set<String> languages, CmsRecordDescriptor cmsRecordDescriptor,
-      Set<InvestigationAddress> address, Set<PhoneNumber> phoneNumbers, Set<String> roles,
+      Set<InvestigationAddress> addresses, Set<PhoneNumber> phoneNumbers, Set<String> roles,
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
 
@@ -216,14 +216,14 @@ public class Person extends ReportingDomain implements Request, Response {
     this.sealed = StringUtils.equals(client.getSensitivityIndicator(), "R");
     this.sensitive = StringUtils.equals(client.getSensitivityIndicator(), "S");
     this.cmsRecordDescriptor = cmsRecordDescriptor;
-    this.addresses = address;
+    this.addresses = addresses;
     this.phone = phoneNumbers;
     this.roles = roles;
     this.raceAndEthnicity = raceAndEthnicity;
   }
 
   /**
-   * Constructing Person object from reporter participant
+   * Constructing Person object from reporter(CMS)
    * 
    * @param reporter - reporter object
    * @param languages - list of languages

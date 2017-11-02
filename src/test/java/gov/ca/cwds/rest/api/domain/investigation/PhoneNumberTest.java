@@ -11,6 +11,10 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
+import gov.ca.cwds.data.persistence.cms.Address;
+import gov.ca.cwds.fixture.AddressEntityBuilder;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
+import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -37,6 +41,29 @@ public class PhoneNumberTest {
     assertThat(phoneNumber.getNumber(), is(equalTo(phone)));
     assertThat(phoneNumber.getPhoneExtension(), is(equalTo(phoneExtension)));
     assertThat(phoneNumber.getPhoneType(), is(equalTo(phoneType)));
+    assertThat(phoneNumber.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
+  }
+
+  @Test
+  public void testPhoneNumberConstructorUsingAddressSuccess() {
+    Address address = new AddressEntityBuilder().build();
+    PhoneNumber phoneNumber = new PhoneNumber(address, cmsRecordDescriptor);
+    assertThat(phoneNumber.getNumber(), is(equalTo(address.getPrimaryNumber())));
+    assertThat(phoneNumber.getPhoneExtension(), is(equalTo(address.getPrimaryExtension())));
+    assertThat(phoneNumber.getPhoneType(), is(equalTo(null)));
+    assertThat(phoneNumber.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
+  }
+
+  @Test
+  public void testPhoneNumberConstructorUsingReporterSuccess() {
+    Reporter reporter = new ReporterResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Reporter persistentReporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5");
+    PhoneNumber phoneNumber = new PhoneNumber(persistentReporter, cmsRecordDescriptor);
+    assertThat(phoneNumber.getNumber(), is(equalTo(persistentReporter.getPrimaryPhoneNumber())));
+    assertThat(phoneNumber.getPhoneExtension(),
+        is(equalTo(persistentReporter.getPrimaryPhoneExtensionNumber())));
+    assertThat(phoneNumber.getPhoneType(), is(equalTo(null)));
     assertThat(phoneNumber.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
   }
 

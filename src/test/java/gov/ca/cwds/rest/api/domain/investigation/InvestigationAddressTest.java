@@ -51,7 +51,7 @@ public class InvestigationAddressTest {
   }
 
   @Test
-  public void testClientAddressConstructorSuccess() {
+  public void testAddressConstructorUsingClientSuccess() {
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
         new ClientAddressEntityBuilder().buildClientAddress();
     gov.ca.cwds.data.persistence.cms.Address address = clientAddress.getAddresses();
@@ -66,7 +66,7 @@ public class InvestigationAddressTest {
   }
 
   @Test
-  public void testReporterAddressConstructorSuccess() {
+  public void testAddressConstructorUsingReporterSuccess() {
     Reporter reporter = new ReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter persistentReporter =
         new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5");
@@ -83,7 +83,7 @@ public class InvestigationAddressTest {
   }
 
   @Test
-  public void testReferralAddressConstructorSuccess() {
+  public void testAddressConstructorUsingReferralSuccess() {
     Referral referral = new ReferralEntityBuilder().build();
     gov.ca.cwds.data.persistence.cms.Address address = referral.getAddresses();
     InvestigationAddress investigationAddress =

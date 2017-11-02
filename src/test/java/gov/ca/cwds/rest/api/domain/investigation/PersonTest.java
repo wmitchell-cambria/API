@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static org.apache.commons.lang3.StringUtils.trim;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +33,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
-import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RaceAndEthnicityEntityBuilder;
@@ -126,6 +127,50 @@ public class PersonTest {
   }
 
   @Test
+  public void testClientConstructorSuccess() {
+    Client client = new ClientEntityBuilder().build();
+    Person person = new Person(client, languages, cmsRecordDescriptor, addresses, phoneNumbers,
+        roles, raceAndEthnicity);
+    assertThat(person.getLastUpdatedBy(), is(equalTo(client.getLastUpdatedId())));
+    assertThat(person.getLastUpdatedAt(), is(equalTo(client.getLastUpdatedTime())));
+    assertThat(person.getFirstName(), is(equalTo(trim(client.getFirstName()))));
+    assertThat(person.getLastName(), is(equalTo(trim(client.getLastName()))));
+    assertThat(person.getMiddleName(), is(equalTo(trim(client.getMiddleName()))));
+    assertThat(person.getNameSuffix(), is(equalTo(trim(client.getNameSuffix()))));
+    assertThat(person.getGender(), is(equalTo(trim(client.getGender()))));
+    assertThat(person.getDateOfBirth(),
+        is(equalTo(trim(DomainChef.cookDate(client.getBirthDate())))));
+    assertThat(person.getSsn(), is(equalTo(client.getSsn())));
+    assertThat(person.getLanguages(), is(equalTo(languages)));
+    assertThat(person.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
+    assertThat(person.getAddresses(), is(equalTo(addresses)));
+    assertThat(person.getPhone(), is(equalTo(phoneNumbers)));
+    assertThat(person.getRaceAndEthnicity(), is(equalTo(raceAndEthnicity)));
+  }
+
+  @Test
+  public void testReporterConstructorSuccess() {
+    gov.ca.cwds.rest.api.domain.cms.Reporter domainReporter = new ReporterResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Reporter reporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, "0X5");
+    Person person =
+        new Person(reporter, languages, cmsRecordDescriptor, addresses, phoneNumbers, roles);
+    assertThat(person.getLastUpdatedBy(), is(equalTo(reporter.getLastUpdatedId())));
+    assertThat(person.getLastUpdatedAt(), is(equalTo(reporter.getLastUpdatedTime())));
+    assertThat(person.getFirstName(), is(equalTo(trim(reporter.getFirstName()))));
+    assertThat(person.getLastName(), is(equalTo(trim(reporter.getLastName()))));
+    assertThat(person.getMiddleName(), is(equalTo(trim(reporter.getMiddleName()))));
+    assertThat(person.getNameSuffix(), is(equalTo(trim(reporter.getNameSuffix()))));
+    assertThat(person.getGender(), is(equalTo(trim(reporter.getGender()))));
+    assertThat(person.getDateOfBirth(),
+        is(equalTo(trim(DomainChef.cookDate(reporter.getBirthDate())))));
+    assertThat(person.getLanguages(), is(equalTo(languages)));
+    assertThat(person.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
+    assertThat(person.getAddresses(), is(equalTo(addresses)));
+    assertThat(person.getPhone(), is(equalTo(phoneNumbers)));
+  }
+
+  @Test
   public void shouldCompareEqualsToObjectWithSameValues() {
     Person person = new PersonEntityBuilder().build();
     Person otherPerson = new PersonEntityBuilder().build();
@@ -167,21 +212,21 @@ public class PersonTest {
     assertEquals(1, items.size());
   }
 
-  @Test
-  public void testConstructorWithClientSuccess() {
-    Client client = new ClientEntityBuilder().build();
-    Set<String> languages = new HashSet<>();
-    CmsRecordDescriptor cmsRecordDescriptor =
-        new CmsRecordDescriptorEntityBuilder().setTableDescription("CLIENT_T").build();
-    Set<InvestigationAddress> addresses = new HashSet<>();
-    Set<PhoneNumber> phoneNumbers = new HashSet<>();
-    Set<String> roles = new HashSet<>();
-    RaceAndEthnicity raceAndEnthnicity = new RaceAndEthnicityEntityBuilder().build();
-
-    languages.add("1253");
-    InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
-    addresses.add(address);
-  }
+  // @Test
+  // public void testConstructorWithClientSuccess() {
+  // Client client = new ClientEntityBuilder().build();
+  // Set<String> languages = new HashSet<>();
+  // CmsRecordDescriptor cmsRecordDescriptor =
+  // new CmsRecordDescriptorEntityBuilder().setTableDescription("CLIENT_T").build();
+  // Set<InvestigationAddress> addresses = new HashSet<>();
+  // Set<PhoneNumber> phoneNumbers = new HashSet<>();
+  // Set<String> roles = new HashSet<>();
+  // RaceAndEthnicity raceAndEnthnicity = new RaceAndEthnicityEntityBuilder().build();
+  //
+  // languages.add("1253");
+  // InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
+  // addresses.add(address);
+  // }
 
   @Test
   public void equalsHashCodeWork() {
