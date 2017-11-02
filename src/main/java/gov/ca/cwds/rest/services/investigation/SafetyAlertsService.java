@@ -44,9 +44,6 @@ public class SafetyAlertsService implements TypedCrudsService<String, SafetyAler
 
   @Override
   public Response create(SafetyAlerts request) {
-    alerts.add("6401");
-    alerts.add("6402");
-    safetyAlerts.setAlerts(alerts);
     return safetyAlerts;
   }
 

@@ -73,6 +73,7 @@ public class InvestigationEntityBuilder {
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
 
+
   private SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
   private Set<String> crossReports = new HashSet<>();
   private Set<Contact> contacts = new HashSet<>();

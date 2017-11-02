@@ -16,6 +16,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -37,8 +38,6 @@ public class SafetyAlertsTest {
 
   @Before
   public void setup() {
-    alerts.add("6401");
-    alerts.add("6402");
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
   }
@@ -84,10 +83,10 @@ public class SafetyAlertsTest {
   }
 
   @Test
-  // @Ignore
+  @Ignore
   public void testSerilizedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     final String expected =
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(safetyAlerts);
     System.out.println(expected);

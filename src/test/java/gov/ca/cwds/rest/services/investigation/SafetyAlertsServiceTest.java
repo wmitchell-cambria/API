@@ -41,8 +41,6 @@ public class SafetyAlertsServiceTest {
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
     safetyAlertsService = new SafetyAlertsService(safetyAlertsDao);
-    alerts.add("6401");
-    alerts.add("6402");
   }
 
   // find test

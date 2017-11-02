@@ -9,12 +9,14 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -49,6 +51,8 @@ import nl.jqno.equalsverifier.Warning;
 public class InvestigationTest {
 
   private ObjectMapper MAPPER = new ObjectMapper();
+  private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
+  private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   private String tableName = "REFERL_T";
   private String id = "1234567ABC";
@@ -145,6 +149,7 @@ public class InvestigationTest {
     assertThat(allegations, is(equalTo(investigation.getAllegations())));
     assertThat(people, is(equalTo(investigation.getPeople())));
     assertThat(relationships, is(equalTo(investigation.getRelationships())));
+    assertThat(crossReports, is(equalTo(investigation.getCrossReports())));
   }
 
   @Test
@@ -183,8 +188,20 @@ public class InvestigationTest {
   }
 
   @Test
-  public void testInvestigationToReferralMappingSuccess() {
-    Referral referral = new ReferralEntityBuilder().build();
+  public void testInvestigationToReferralMappingSuccess() throws ParseException {
+
+    Date receivedDate;
+    receivedDate = df.parse("2017-10-31");
+    Date receivedTime;
+    receivedTime = tf.parse("12:01:01");
+
+    // construct the referral with the received date and time
+    Referral referral = new ReferralEntityBuilder().setReceivedDate(receivedDate)
+        .setReceivedTime(receivedTime).build();
+    // reconstruct the started at date/time using the referral
+    Date startedAt =
+        DomainChef.concatenateDateAndTime(referral.getReceivedDate(), referral.getReceivedTime());
+
     Address address = new AddressEntityBuilder().build();
     StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
     LongText longText = new LongTextResourceBuilder().build();
@@ -205,13 +222,60 @@ public class InvestigationTest {
         is(equalTo(referral.getCommunicationMethodType())));
     assertThat(investigation.getName(), is(equalTo(referral.getReferralName())));
     assertThat(investigation.getResponseTime(), is(equalTo(referral.getReferralResponseType())));
-    assertThat(investigation.getStartedAt(), is(equalTo(referral.getReceivedDate())));
+    assertThat(investigation.getStartedAt(), is(equalTo(startedAt)));
     assertThat(investigation.getIncidentCounty(), is(equalTo(referral.getCountySpecificCode())));
     assertThat(investigation.getLastUpdatedBy(), is(equalTo(referral.getLastUpdatedId())));
     assertThat(investigation.getLastUpdatedAt(),
         is(equalTo(DomainChef.cookTimestamp(referral.getLastUpdatedTime()))));
     assertThat(investigation.getContacts(), is(equalTo(contacts)));
 
+  }
+
+  @Test
+  public void testWithNullReferralReceivedDateHasNullStartedAt() {
+    Referral referral = new ReferralEntityBuilder().build();
+
+    Address address = new AddressEntityBuilder().build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
+    assertThat(investigation.getStartedAt(), is(equalTo(null)));
+
+  }
+
+  @Test
+  public void testObjectConstructorWithNullLongText() {
+    Referral referral = new ReferralEntityBuilder().build();
+    Address address = new AddressEntityBuilder().build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+    LongText longText = null;
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
+    assertThat(investigation.getAdditionalInformation(), is(equalTo("")));
+    assertThat(investigation.getReportNarrative(), is(equalTo("")));
   }
 
   @Test
@@ -264,6 +328,51 @@ public class InvestigationTest {
     Assignee assignee = investigation.getAssignee();
 
     assertThat(assignee.getStaffId(), is(equalTo(referral.getPrimaryContactStaffPersonId())));
+  }
+
+  @Test
+  public void testNullStaffPerson() {
+    Referral referral = new ReferralEntityBuilder().build();
+    Address address = new AddressEntityBuilder().build();
+    StaffPerson staffPerson = null;
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
+    assertThat(investigation.getAssignee(), is(equalTo(null)));
+
+  }
+
+  @Test
+  public void testNullAddress() {
+    Referral referral = new ReferralEntityBuilder().build();
+    Address address = null;
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId(null).build();
+    LongText longText = new LongTextResourceBuilder().build();
+    AllegationList allegations = new AllegationListEntityBuilder().build();
+    Set<Allegation> allgationSet = allegations.getAllegations();
+    People people = new PeopleEntityBuilder().build();
+    Set<Person> personSet = people.getPersons();
+    // TODO
+    Set<Relationship> relationshipList = new HashSet<>();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+    Set<String> crossReports = new HashSet<String>();
+    Set<Contact> contacts = new HashSet<Contact>();
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    Investigation investigation =
+        new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+            personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
+    assertThat(investigation.getAddress(), is(equalTo(null)));
   }
 
   @Test
@@ -418,13 +527,10 @@ public class InvestigationTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerilizedInvestigation()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    Set<String> alerts = new HashSet<>();
-    alerts.add("6401");
-    alerts.add("6402");
-    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().setAlerts(alerts).build();
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Investigation investigation =
         new InvestigationEntityBuilder().setSafetyAlerts(safetyAlerts).build();
     final String expected =
