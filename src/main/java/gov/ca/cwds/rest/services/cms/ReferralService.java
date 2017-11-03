@@ -183,7 +183,7 @@ public class ReferralService implements
 
       managed = referralDao.create(managed);
       if (managed == null || managed.getId() == null) {
-        LOGGER.warn("Unable to save referral: " + referral);
+        LOGGER.warn("Unable to save referral: {}", referral);
         throw new ServiceException("Referral Not successfully saved");
       }
       // checking the staffPerson county code

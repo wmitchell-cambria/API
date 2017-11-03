@@ -44,7 +44,7 @@ public class PingableServer implements Pingable {
     } else {
 
       LOGGER.warn("Unable to ping resource: url: {}", url);
-      LOGGER.warn("Received status of: " + response.getStatus());
+      LOGGER.warn("Received status of: {}" + response.getStatus());
       message = "Status:" + response.getStatus();
     }
     return ok;

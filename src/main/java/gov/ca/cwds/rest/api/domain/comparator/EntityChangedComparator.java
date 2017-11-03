@@ -45,15 +45,15 @@ public class EntityChangedComparator {
     StringBuilder builder = new StringBuilder();
     builder.append("Date comparison failed. ParticipantDate: ");
     builder.append(particpantDate);
-    builder.append(" ");
+    builder.append(' ');
     builder.append(particpantDate.getZone());
-    builder.append(" ");
+    builder.append(' ');
     builder.append(particpantDate.getMillis());
     builder.append(" clientDate: ");
     builder.append(clientDate);
-    builder.append(" ");
+    builder.append(' ');
     builder.append(clientDate.getZone());
-    builder.append(" ");
+    builder.append(' ');
     builder.append(clientDate.getMillis());
     LOGGER.warn(builder.toString());
   }
