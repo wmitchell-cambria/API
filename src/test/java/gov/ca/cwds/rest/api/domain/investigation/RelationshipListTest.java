@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipListEntityBuilder;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class RelationshipListTest {
@@ -78,4 +80,10 @@ public class RelationshipListTest {
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(relationshipList);
     System.out.println(expected);
   }
+
+  @Test
+  public void equalsHashCodeWork() {
+    EqualsVerifier.forClass(RelationshipList.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+
 }

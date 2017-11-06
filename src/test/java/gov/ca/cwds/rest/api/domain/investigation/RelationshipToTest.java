@@ -12,6 +12,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.ClientRelationshipResourceBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipToEntityBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -42,6 +45,24 @@ public class RelationshipToTest {
     assertThat(relationship, is(equalTo(relationshipTo.getRelationshipToPerson())));
     assertThat(relationshipToPerson, is(equalTo(relationshipTo.getRelatedPersonRelationship())));
     assertThat(cmsRecordDescriptor, is(equalTo(relationshipTo.getCmsRecordDescriptor())));
+  }
+
+  @Test
+  public void testConstrutorUsingClientSuccess() {
+    gov.ca.cwds.rest.api.domain.cms.ClientRelationship domainClientRelationship =
+        new ClientRelationshipResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.ClientRelationship clientRelationship =
+        new gov.ca.cwds.data.persistence.cms.ClientRelationship("1234567ABC",
+            domainClientRelationship, "0XA");
+
+    Client client = new ClientEntityBuilder().build();
+
+    RelationshipTo relationshipTo = new RelationshipTo(clientRelationship, client);
+
+    assertThat(relationshipTo.getRelatedFirstName(), is(equalTo(client.getFirstName())));
+    assertThat(relationshipTo.getRelatedLastName(), is(equalTo(client.getLastName())));
+    assertThat(relationshipTo.getRelationshipToPerson(),
+        is(equalTo(clientRelationship.getClientRelationshipType().toString())));
   }
 
   @Test

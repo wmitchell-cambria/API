@@ -115,6 +115,6 @@ public class InvestigationAddressTest {
 
   @Test
   public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(Relationship.class).suppress(Warning.NONFINAL_FIELDS).verify();
+    EqualsVerifier.forClass(InvestigationAddress.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 }
