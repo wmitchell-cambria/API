@@ -15,6 +15,7 @@ import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegationPerpetratorHistory;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
@@ -31,25 +32,20 @@ public class AllegationPerpetratorHistoryService implements
       LoggerFactory.getLogger(AllegationPerpetratorHistoryService.class);
 
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
-
 
   /**
    * Constructor
    * 
    * @param allegationPerpetratorHistoryDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param riAllegationPerpetratorHistory the riAllegationPerpetratorHistory
    */
   @Inject
   public AllegationPerpetratorHistoryService(
       AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao,
-      StaffPersonIdRetriever staffPersonIdRetriever,
       RIAllegationPerpetratorHistory riAllegationPerpetratorHistory) {
     this.allegationPerpetratorHistoryDao = allegationPerpetratorHistoryDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.riAllegationPerpetratorHistory = riAllegationPerpetratorHistory;
 
   }
@@ -129,15 +125,17 @@ public class AllegationPerpetratorHistoryService implements
       Date timestamp) {
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       AllegationPerpetratorHistory managed;
       if (timestamp == null) {
-        managed = new AllegationPerpetratorHistory(CmsKeyIdGenerator.generate(lastUpdatedId),
-            allegationPerpetratorHistory, lastUpdatedId);
+        managed = new AllegationPerpetratorHistory(
+            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+            allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId());
 
       } else {
-        managed = new AllegationPerpetratorHistory(CmsKeyIdGenerator.generate(lastUpdatedId),
-            allegationPerpetratorHistory, lastUpdatedId, timestamp);
+        managed = new AllegationPerpetratorHistory(
+            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+            allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId(),
+            timestamp);
       }
       managed = allegationPerpetratorHistoryDao.create(managed);
       return new PostedAllegationPerpetratorHistory(managed);
@@ -161,9 +159,8 @@ public class AllegationPerpetratorHistoryService implements
         request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      AllegationPerpetratorHistory managed =
-          new AllegationPerpetratorHistory(primaryKey, allegationPerpetratorHistory, lastUpdatedId);
+      AllegationPerpetratorHistory managed = new AllegationPerpetratorHistory(primaryKey,
+          allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId());
       managed = allegationPerpetratorHistoryDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(managed);
     } catch (EntityNotFoundException e) {

@@ -204,7 +204,7 @@ public class R05360ReferralCityMandatoryTest {
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
     allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
-        allegationPerpetratorHistoryDao, staffPersonIdRetriever, riAllegationPerpetratorHistory);
+        allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
 
     crossReportDao = mock(CrossReportDao.class);
     riCrossReport = mock(RICrossReport.class);
@@ -246,8 +246,7 @@ public class R05360ReferralCityMandatoryTest {
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
-    childClientService =
-        new ChildClientService(childClientDao, staffPersonIdRetriever, riChildClient);
+    childClientService = new ChildClientService(childClientDao, riChildClient);
 
     reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);

@@ -202,7 +202,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
     allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
-        allegationPerpetratorHistoryDao, staffPersonIdRetriever, riAllegationPerpetratorHistory);
+        allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
 
     crossReportDao = mock(CrossReportDao.class);
     riCrossReport = mock(RICrossReport.class);
@@ -234,8 +234,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
-    childClientService =
-        new ChildClientService(childClientDao, staffPersonIdRetriever, riChildClient);
+    childClientService = new ChildClientService(childClientDao, riChildClient);
 
     assignmentDao = mock(AssignmentDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
