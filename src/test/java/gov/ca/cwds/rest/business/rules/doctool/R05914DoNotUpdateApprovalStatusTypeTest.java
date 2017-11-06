@@ -210,9 +210,8 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     staffpersonDao = mock(StaffPersonDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     riClientAddress = mock(RIClientAddress.class);
-    clientAddressService =
-        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
-            laCountyTrigger, staffPersonIdRetriever, nonLACountyTriggers, riClientAddress);
+    clientAddressService = new ClientAddressService(clientAddressDao, staffpersonDao,
+        triggerTablesDao, laCountyTrigger, nonLACountyTriggers, riClientAddress);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
