@@ -128,7 +128,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
    * constructing InvestigationAddress - object from Referral(CMS) object
    * 
    * @param referral - persistent referral
-   * @param cmsRecordDescriptor - cmsRecordDescriptor
+   * @param cmsRecordDescriptor table/key descriptor
    */
   public InvestigationAddress(Referral referral, CmsRecordDescriptor cmsRecordDescriptor) {
     gov.ca.cwds.data.persistence.cms.Address address = referral.getAddresses();

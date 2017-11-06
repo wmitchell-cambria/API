@@ -13,12 +13,16 @@ import javax.sql.XADataSource;
 
 import org.postgresql.PGProperty;
 import org.postgresql.xa.PGXADataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ibm.db2.jcc.DB2XADataSource;
 
 import gov.ca.cwds.rest.api.ApiException;
 
 public class XASample {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(XASample.class);
 
   javax.sql.XADataSource xaDS1;
   javax.sql.XADataSource xaDS2;
@@ -29,14 +33,9 @@ public class XASample {
   java.sql.Connection conn1;
   java.sql.Connection conn2;
 
-  public static void main(String args[]) throws java.sql.SQLException {
-    XASample xat = new XASample();
-    xat.runThis(args);
-  }
-
   private static DB2XADataSource buildDB2DataSource(String user, String password, String serverName,
       int port, String databaseName) {
-    DB2XADataSource ds = new DB2XADataSource();
+    final DB2XADataSource ds = new DB2XADataSource();
     ds.setUser(user);
     ds.setPassword(password);
     ds.setServerName(serverName);
@@ -50,23 +49,33 @@ public class XASample {
       ds.getProperties().setProperty(DB2XADataSource.propertyKey_databaseName, databaseName);
       ds.getProperties().setProperty(DB2XADataSource.propertyKey_driverType, "4");
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.error("ERROR BUILDING DB2 DATASOURCE!", e);
       throw new ApiException("datasource property error", e);
     }
 
     return ds;
   }
 
+  /**
+   * <a href=
+   * "https://www.postgresql.org/docs/current/static/runtime-config-resource.html#GUC-MAX-PREPARED-TRANSACTIONS">Postgres
+   * distributed transactions</a>.
+   * 
+   * @param user obvious
+   * @param password obvious
+   * @param serverName obvious
+   * @param port obvious
+   * @param databaseName obvious
+   * @return Postgres datasource
+   */
   private static PGXADataSource buildPGDataSource(String user, String password, String serverName,
       int port, String databaseName) {
-    PGXADataSource ds = new PGXADataSource();
+    final PGXADataSource ds = new PGXADataSource();
     ds.setUser(user);
     ds.setPassword(password);
     ds.setServerName(serverName);
     ds.setPortNumber(port);
     ds.setDatabaseName(databaseName);
-
-    // https://www.postgresql.org/docs/current/static/runtime-config-resource.html#GUC-MAX-PREPARED-TRANSACTIONS
 
     try {
       ds.setProperty("user", user);
@@ -75,11 +84,11 @@ public class XASample {
       ds.setProperty(PGProperty.PG_HOST, serverName);
       ds.setProperty(PGProperty.PG_PORT, String.valueOf(port));
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.error("ERROR BUILDING PG DATASOURCE!", e);
       throw new ApiException("datasource property error", e);
     }
 
-    System.out.println("pgxa data source");
+    LOGGER.info("pgxa data source");
     return ds;
   }
 
@@ -147,7 +156,7 @@ public class XASample {
       Class.forName("com.ibm.db2.jcc.DB2Driver");
       Class.forName("org.postgresql.Driver");
       setupInitialContext();
-      System.out.println("setupInitialContext();");
+      LOGGER.info("setupInitialContext();");
       // Note that javax.sql.XADataSource is used instead of a specific driver implementation such
       // as com.ibm.db2.jcc.DB2XADataSource.
       xaDS1 = (javax.sql.XADataSource) InitialContext.doLookup("jdbc/postgres");
@@ -205,7 +214,7 @@ public class XASample {
       // here to wait until the connection 2 work is done.
 
       try {
-        System.out.println("try");// Now prepare both branches of the distributed transaction.
+        LOGGER.info("try");// Now prepare both branches of the distributed transaction.
         // Both branches must prepare successfully before changes can be committed.
         // If the distributed transaction fails, an XAException is thrown.
         rc1 = xares1.prepare(xid1);
@@ -236,25 +245,25 @@ public class XASample {
         }
       } catch (javax.transaction.xa.XAException xae) {
         // Distributed transaction failed, so roll it back. Report XAException on prepare/commit.
-        System.out.println("Distributed transaction prepare/commit failed. " + "Rolling it back.");
-        System.out.println("XAException error code = " + xae.errorCode);
-        System.out.println("XAException message = " + xae.getMessage());
+        LOGGER.info("Distributed transaction prepare/commit failed. " + "Rolling it back.");
+        LOGGER.info("XAException error code = " + xae.errorCode);
+        LOGGER.info("XAException message = " + xae.getMessage());
         xae.printStackTrace();
 
         try {
           xares1.rollback(xid1);
         } catch (javax.transaction.xa.XAException xae1) { // Report failure of rollback.
-          System.out.println("distributed Transaction rollback xares1 failed");
-          System.out.println("XAException error code = " + xae1.errorCode);
-          System.out.println("XAException message = " + xae1.getMessage());
+          LOGGER.warn("distributed Transaction rollback xares1 failed");
+          LOGGER.warn("XAException error code = " + xae1.errorCode);
+          LOGGER.warn("XAException message = " + xae1.getMessage());
         }
 
         try {
           xares2.rollback(xid1);
         } catch (javax.transaction.xa.XAException xae2) { // Report failure of rollback.
-          System.out.println("distributed Transaction rollback xares2 failed");
-          System.out.println("XAException error code = " + xae2.errorCode);
-          System.out.println("XAException message = " + xae2.getMessage());
+          LOGGER.warn("distributed Transaction rollback xares2 failed");
+          LOGGER.warn("XAException error code = " + xae2.errorCode);
+          LOGGER.warn("XAException message = " + xae2.getMessage());
         }
       }
 
@@ -262,32 +271,30 @@ public class XASample {
         conn1.close();
         xaconn1.close();
       } catch (Exception e) {
-        System.out.println("Failed to close connection 1: " + e.toString());
-        e.printStackTrace();
+        LOGGER.warn("Failed to close connection 1: {}", e.toString(), e);
       }
 
       try {
         conn2.close();
         xaconn2.close();
       } catch (Exception e) {
-        System.out.println("Failed to close connection 2: " + e.toString());
-        e.printStackTrace();
+        LOGGER.warn("Failed to close connection 2: {}", e.toString(), e);
       }
 
     } catch (java.sql.SQLException sqe) {
-      System.out.println("SQLException caught: " + sqe.getMessage());
-      sqe.printStackTrace();
+      LOGGER.error("SQLException caught: {}", sqe.getMessage(), sqe);
     } catch (javax.transaction.xa.XAException xae) {
-      System.out.println("XA error is " + xae.getMessage());
-      xae.printStackTrace();
+      LOGGER.error("XA error is {}", xae.getMessage(), xae);
     } catch (javax.naming.NamingException nme) {
-      System.out.println(" Naming Exception: " + nme.getMessage());
-      nme.printStackTrace();
+      LOGGER.error("Naming Exception: {}", nme.getMessage(), nme);
     } catch (ClassNotFoundException cnfe) {
-      System.out.println(" Class Not Found Exception: " + cnfe.getMessage());
-      cnfe.printStackTrace();
+      LOGGER.error("Class Not Found Exception: {}", cnfe.getMessage(), cnfe);
     }
+  }
 
+  public static void main(String args[]) throws java.sql.SQLException {
+    XASample xat = new XASample();
+    xat.runThis(args);
   }
 
 }
