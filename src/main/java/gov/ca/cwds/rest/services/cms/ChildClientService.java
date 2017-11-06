@@ -27,7 +27,6 @@ public class ChildClientService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(ChildClientService.class);
 
   private ChildClientDao childClientDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIChildClient riChildClient;
 
   /**
@@ -39,10 +38,8 @@ public class ChildClientService implements
    * @param riChildClient referential integrity checker
    */
   @Inject
-  public ChildClientService(ChildClientDao childClientDao,
-      StaffPersonIdRetriever staffPersonIdRetriever, RIChildClient riChildClient) {
+  public ChildClientService(ChildClientDao childClientDao, RIChildClient riChildClient) {
     this.childClientDao = childClientDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.riChildClient = riChildClient;
   }
 

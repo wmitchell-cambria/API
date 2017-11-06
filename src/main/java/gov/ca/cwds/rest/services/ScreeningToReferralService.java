@@ -147,7 +147,7 @@ public class ScreeningToReferralService implements CrudsService {
     /**
      * For the referral transaction all the persisted objects lastupdatedTime should be unique
      */
-    Date timestamp = new Date();
+    Date timestamp = RequestExecutionContext.instance().getRequestStartTime();
 
     /**
      * <blockquote>

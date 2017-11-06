@@ -29,6 +29,7 @@ import gov.ca.cwds.fixture.AllegationPerpetratorHistoryResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegationPerpetratorHistory;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.junit.template.ServiceTestTemplate;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
@@ -42,7 +43,6 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
 
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private Date timestamp;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
 
@@ -53,11 +53,11 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
   @Override
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
     allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
-        allegationPerpetratorHistoryDao, staffPersonIdRetriever, riAllegationPerpetratorHistory);
+        allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
     timestamp = new Date();
   }
 

@@ -24,6 +24,7 @@ import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.fixture.ChildClientResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 
@@ -44,10 +45,10 @@ public class ChildClientServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     childClientDao = mock(ChildClientDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     ri = mock(RIChildClient.class);
-    childClientService = new ChildClientService(childClientDao, staffPersonIdRetriever, ri);
+    childClientService = new ChildClientService(childClientDao, ri);
   }
 
 
