@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.persistence.cms.ChildClient;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
@@ -62,9 +63,8 @@ public class ChildClientService implements
     }
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      ChildClient managed =
-          new ChildClient(childClient.getVictimClientId(), childClient, lastUpdatedId);
+      ChildClient managed = new ChildClient(childClient.getVictimClientId(), childClient,
+          RequestExecutionContext.instance().getStaffId());
       managed = childClientDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.ChildClient(managed);
     } catch (EntityExistsException e) {
@@ -117,9 +117,8 @@ public class ChildClientService implements
     gov.ca.cwds.rest.api.domain.cms.ChildClient childClient = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      ChildClient managed =
-          new ChildClient(childClient.getVictimClientId(), childClient, lastUpdatedId);
+      ChildClient managed = new ChildClient(childClient.getVictimClientId(), childClient,
+          RequestExecutionContext.instance().getStaffId());
       managed = childClientDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.ChildClient(managed);
     } catch (EntityNotFoundException e) {

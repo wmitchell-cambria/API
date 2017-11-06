@@ -38,6 +38,7 @@ import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 
@@ -64,17 +65,16 @@ public class ClientAddressServiceTest {
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     clientAddressDao = mock(ClientAddressDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     riClientAddress = mock(RIClientAddress.class);
 
-    clientAddressService =
-        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
-            laCountyTrigger, staffPersonIdRetriever, nonLACountyTriggers, riClientAddress);
+    clientAddressService = new ClientAddressService(clientAddressDao, staffpersonDao,
+        triggerTablesDao, laCountyTrigger, nonLACountyTriggers, riClientAddress);
   }
 
   /**

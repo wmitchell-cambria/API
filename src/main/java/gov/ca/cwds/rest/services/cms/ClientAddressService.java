@@ -17,6 +17,7 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.Request;
@@ -24,10 +25,10 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
-import gov.ca.cwds.rest.util.IdGenerator;
 
 /**
  * Business layer object to work on {@link ClientAddress}
@@ -43,7 +44,6 @@ public class ClientAddressService implements
   private TriggerTablesDao triggerTablesDao;
   private LACountyTrigger laCountyTrigger;
   private NonLACountyTriggers nonLaTriggers;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIClientAddress riClientAddress;
 
   /**
@@ -57,7 +57,6 @@ public class ClientAddressService implements
    *        {@link gov.ca.cwds.data.rules.TriggerTablesDao} objects
    * @param staffpersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param nonLaTriggers The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.business.rules.NonLACountyTriggers} objects.
    * @param riClientAddress - riClientAddress
@@ -65,13 +64,11 @@ public class ClientAddressService implements
   @Inject
   public ClientAddressService(ClientAddressDao clientAddressDao, StaffPersonDao staffpersonDao,
       TriggerTablesDao triggerTablesDao, LACountyTrigger laCountyTrigger,
-      StaffPersonIdRetriever staffPersonIdRetriever, NonLACountyTriggers nonLaTriggers,
-      RIClientAddress riClientAddress) {
+      NonLACountyTriggers nonLaTriggers, RIClientAddress riClientAddress) {
     this.clientAddressDao = clientAddressDao;
     this.staffpersonDao = staffpersonDao;
     this.triggerTablesDao = triggerTablesDao;
     this.laCountyTrigger = laCountyTrigger;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.nonLaTriggers = nonLaTriggers;
     this.riClientAddress = riClientAddress;
   }
@@ -151,14 +148,15 @@ public class ClientAddressService implements
   private gov.ca.cwds.rest.api.domain.cms.ClientAddress create(
       gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress, Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       ClientAddress managedClientAddress;
       if (timestamp == null) {
-        managedClientAddress =
-            new ClientAddress(IdGenerator.randomString(10), clientAddress, lastUpdatedId);
+        managedClientAddress = new ClientAddress(
+            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+            clientAddress, RequestExecutionContext.instance().getStaffId());
       } else {
-        managedClientAddress = new ClientAddress(IdGenerator.randomString(10), clientAddress,
-            lastUpdatedId, timestamp);
+        managedClientAddress = new ClientAddress(
+            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+            clientAddress, RequestExecutionContext.instance().getStaffId(), timestamp);
       }
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managedClientAddress.getLastUpdatedId());
@@ -182,8 +180,8 @@ public class ClientAddressService implements
     gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      ClientAddress managed = new ClientAddress(primaryKey, clientAddress, lastUpdatedId);
+      ClientAddress managed = new ClientAddress(primaryKey, clientAddress,
+          RequestExecutionContext.instance().getStaffId());
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
       if (staffperson != null
