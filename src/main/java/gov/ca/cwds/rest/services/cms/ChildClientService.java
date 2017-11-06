@@ -34,7 +34,6 @@ public class ChildClientService implements
    * 
    * @param childClientDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.ChildClient} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param riChildClient referential integrity checker
    */
   @Inject

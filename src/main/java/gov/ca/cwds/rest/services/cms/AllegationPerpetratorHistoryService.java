@@ -34,13 +34,11 @@ public class AllegationPerpetratorHistoryService implements
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
 
-
   /**
    * Constructor
    * 
    * @param allegationPerpetratorHistoryDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param riAllegationPerpetratorHistory the riAllegationPerpetratorHistory
    */
   @Inject
