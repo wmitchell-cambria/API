@@ -55,8 +55,9 @@ public class ScreeningResponseTest {
   @SuppressWarnings("javadoc")
   @Test
   public void testPesistentObjectConstructor() throws Exception {
-
-    Address addressDomain = new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32);
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
+    Address addressDomain =
+        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
     addresses.add(addressDomain);
     roles.add("victim");
 

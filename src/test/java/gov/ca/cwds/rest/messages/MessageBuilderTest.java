@@ -11,15 +11,23 @@ import javax.validation.Validator;
 import org.junit.Before;
 import org.junit.Test;
 
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 
+/**
+ * @author CWDS API Team
+ *
+ */
 public class MessageBuilderTest {
 
 
   MessageBuilder builder;
 
+  /**
+   * 
+   */
   @Before
   public void setup() {
     builder = new MessageBuilder();
@@ -60,9 +68,10 @@ public class MessageBuilderTest {
   @Test
   public void shouldContainValidationErrorMessageForDomainObject() {
     String longWelshCityName = "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
     Address address = Address.createWithDefaults(new gov.ca.cwds.rest.api.domain.Address(null, null,
-        "1 main", longWelshCityName, 1828, "123435", 32));
+        "1 main", longWelshCityName, 1828, "123435", 32, legacyDescriptor));
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     builder.addDomainValidationError(validator.validate(address));

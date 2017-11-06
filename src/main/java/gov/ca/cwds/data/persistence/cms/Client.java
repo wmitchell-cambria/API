@@ -40,7 +40,7 @@ public class Client extends BaseClient {
    */
   private static final long serialVersionUID = 1L;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.DETACH)
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
   private Set<ClientAddress> clientAddress = new HashSet<>();
 
@@ -292,14 +292,16 @@ public class Client extends BaseClient {
       this.driverLicenseStateCodeType = client.getDriverLicenseStateCodeType();
       this.emailAddress = client.getEmailAddress();
       this.estimatedDobCode = client.getEstimatedDobCode();
-      this.ethUnableToDetReasonCode = StringUtils.isBlank(client.getEthUnableToDetReasonCode())
-          ? null : client.getEthUnableToDetReasonCode();
+      this.ethUnableToDetReasonCode =
+          StringUtils.isBlank(client.getEthUnableToDetReasonCode()) ? null
+              : client.getEthUnableToDetReasonCode();
       this.fatherParentalRightTermDate =
           DomainChef.uncookDateString(client.getFatherParentalRightTermDate());
       this.genderCode = client.getGenderCode();
       this.healthSummaryText = client.getHealthSummaryText();
-      this.hispUnableToDetReasonCode = StringUtils.isBlank(client.getHispUnableToDetReasonCode())
-          ? null : client.getHispUnableToDetReasonCode();
+      this.hispUnableToDetReasonCode =
+          StringUtils.isBlank(client.getHispUnableToDetReasonCode()) ? null
+              : client.getHispUnableToDetReasonCode();
       this.hispanicOriginCode =
           StringUtils.isBlank(client.getHispanicOriginCode()) ? "" : client.getHispanicOriginCode();
       this.immigrationCountryCodeType = client.getImmigrationCountryCodeType();

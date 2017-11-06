@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.validation.SmartyStreetsDao;
 import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 
 /**
  * @author CWDS API Team
@@ -18,8 +19,8 @@ import gov.ca.cwds.rest.api.domain.Address;
 @SuppressWarnings("javadoc")
 public class AddressValidationServiceTest {
   private AddressValidationService addressValidationService;
-
   private SmartyStreetsDao smartyStreetDao;
+  private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
 
   @Rule
@@ -46,8 +47,8 @@ public class AddressValidationServiceTest {
   @Test
   public void createThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    addressValidationService
-        .create(new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32));
+    addressValidationService.create(new Address("", "", "742 Evergreen Terrace", "Springfield",
+        1828, "98700", 32, legacyDescriptor));
   }
 
   /*
@@ -66,15 +67,16 @@ public class AddressValidationServiceTest {
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
 
-    addressValidationService.update(1L, new Address("", "", "street", "city", 1828, "95555", 32));
+    addressValidationService.update(1L,
+        new Address("", "", "street", "city", 1828, "95555", 32, legacyDescriptor));
   }
 
   @Test
   public void testfetchValidatedAddressesThrowsExceptionWhenSmartyStreetsConfigurationNotProvided()
       throws Exception {
     thrown.expect(Exception.class);
-    addressValidationService
-        .fetchValidatedAddresses(new Address("", "", "street", "city", 1828, "95555", 32));
+    addressValidationService.fetchValidatedAddresses(
+        new Address("", "", "street", "city", 1828, "95555", 32, legacyDescriptor));
   }
 
 }

@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
@@ -35,6 +36,7 @@ public class AddressResourceTest {
   private static final String ROOT_RESOURCE = "/addresses/";
   private static final String FOUND_RESOURCE = "/addresses/1";
   private static final String NOT_FOUND_RESOURCE = "/addresses/X";
+  private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
   @SuppressWarnings("javadoc")
   @After
@@ -102,8 +104,8 @@ public class AddressResourceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void testPostDelegatesToResourceDelegate() throws Exception {
-    Address address =
-        new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32);
+    Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
+        legacyDescriptor);
     inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
     verify(resourceDelegate, atLeastOnce()).create(eq(address));
@@ -113,7 +115,7 @@ public class AddressResourceTest {
   @Test
   public void testPostValidatesEntity() throws Exception {
     Address address = new Address("", "", "123456789012345678901234567890123456789012345678901",
-        "Springfield", 1828, "98700", 32);
+        "Springfield", 1828, "98700", 32, legacyDescriptor);
     int status =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
@@ -124,8 +126,8 @@ public class AddressResourceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void testPost200ResourceSuccess() throws Exception {
-    Address address =
-        new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32);
+    Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
+        legacyDescriptor);
     int status =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
@@ -153,8 +155,8 @@ public class AddressResourceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void testUpdate501NotImplemented() throws Exception {
-    Address address =
-        new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32);
+    Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
+        legacyDescriptor);
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
         .accept(MediaType.APPLICATION_JSON).put(Entity.entity(address, MediaType.APPLICATION_JSON))
         .getStatus();

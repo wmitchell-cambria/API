@@ -5,5 +5,7 @@
   "city": "Sacramento",
   "state": 1828,
   "zip": 95757,
-  "type": 32
+  "type": 32,
+  "legacy_descriptor":{
+         }
 }

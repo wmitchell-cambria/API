@@ -35,7 +35,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.data.persistence.junit.template.PersistentTestTemplate;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.core.Api;
@@ -51,7 +50,7 @@ import nl.jqno.equalsverifier.Warning;
  *
  */
 @SuppressWarnings({"javadoc"})
-public class ParticipantTest implements PersistentTestTemplate {
+public class ParticipantTest {
 
   private final Short primaryLanguage = 1253;
   private final Short secondaryLanguage = 1271;
@@ -75,6 +74,7 @@ public class ParticipantTest implements PersistentTestTemplate {
   private String sensitivityIndicator = "N";
   private Set<String> roles = new HashSet<>();
   private Set<Address> addresses = new HashSet<>();
+  private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PARTICIPANTS + "/";;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -109,7 +109,8 @@ public class ParticipantTest implements PersistentTestTemplate {
     roles.add("Victim");
     racecodes.add((short) 841);
     hispaniccodes.add((short) 3164);
-    Address address = new Address("", "", "123 First St", "San Jose", 1828, "94321", 32);
+    Address address =
+        new Address("", "", "123 First St", "San Jose", 1828, "94321", 32, legacyDescriptor);
     addresses.add(address);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
 
@@ -145,21 +146,17 @@ public class ParticipantTest implements PersistentTestTemplate {
     EqualsVerifier.forClass(Participant.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
-  @Override
   @Test
   public void testEmptyConstructor() throws Exception {
     Participant empty = new Participant();
     assertThat(empty.getClass(), is(Participant.class));
   }
 
-
-  @Override
   public void testPersistentConstructor() throws Exception {
     // no persistent constructor yet
 
   }
 
-  @Override
   @Test
   public void testConstructorUsingDomain() throws Exception {
 

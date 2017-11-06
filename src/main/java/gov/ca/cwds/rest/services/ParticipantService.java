@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.validation.Validator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -197,26 +198,24 @@ public class ParticipantService implements CrudsService {
       String role) {
     String clientId;
 
-    boolean newClient = incomingParticipant.getLegacyId() == null
-        || incomingParticipant.getLegacyId().isEmpty();
+    boolean newClient = StringUtils.isBlank(incomingParticipant.getLegacyId());
     if (newClient) {
-      clientId = createNewClient(screeningToReferral, dateStarted, timestamp,
-          messageBuilder, incomingParticipant, genderCode);
+      clientId = createNewClient(screeningToReferral, dateStarted, timestamp, messageBuilder,
+          incomingParticipant, genderCode);
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      if (updateClient(screeningToReferral, messageBuilder, incomingParticipant,
-          clientId)) {
+      if (updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId)) {
         return true;
       }
     }
 
-    processReferralClient(screeningToReferral,referralId, timestamp, messageBuilder,
+    processReferralClient(screeningToReferral, referralId, timestamp, messageBuilder,
         incomingParticipant, clientId);
 
-            /*
-             * determine other participant/roles attributes relating to CWS/CMS allegation
-             */
+    /*
+     * determine other participant/roles attributes relating to CWS/CMS allegation
+     */
     if (ParticipantValidator.roleIsVictim(role)) {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
@@ -236,8 +235,7 @@ public class ParticipantService implements CrudsService {
 
     try {
       // addresses associated with a client
-      processClientAddress(incomingParticipant, referralId, clientId, timestamp,
-          messageBuilder);
+      processClientAddress(incomingParticipant, referralId, clientId, timestamp, messageBuilder);
     } catch (ServiceException e) {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -249,17 +247,16 @@ public class ParticipantService implements CrudsService {
 
   private boolean saveReporter(ScreeningToReferral screeningToReferral, String referralId,
       Date timestamp, MessageBuilder messageBuilder, Participant incomingParticipant, String role) {
-  /*
-   * CMS Reporter - if role is 'mandated reporter' or 'non-mandated reporter' and not
-   * anonymous reporter or self-reported
-   */
+    /*
+     * CMS Reporter - if role is 'mandated reporter' or 'non-mandated reporter' and not anonymous
+     * reporter or self-reported
+     */
     try {
-      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
-          timestamp, screeningToReferral.getIncidentCounty(), messageBuilder);
+      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId, timestamp,
+          screeningToReferral.getIncidentCounty(), messageBuilder);
       incomingParticipant.setLegacyId(savedReporter.getReferralId());
       incomingParticipant.setLegacySourceTable(REPORTER_TABLE_NAME);
-      incomingParticipant.getLegacyDescriptor()
-          .setLastUpdated(savedReporter.getLastUpdatedTime());
+      incomingParticipant.getLegacyDescriptor().setLastUpdated(savedReporter.getLastUpdatedTime());
     } catch (ServiceException e) {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -453,27 +450,27 @@ public class ParticipantService implements CrudsService {
     }
 
     for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-      if (address.getLegacyId() == null || address.getLegacyId().isEmpty()) {
+
+      Address domainAddress = Address.createWithDefaults(address);
+      messageBuilder.addDomainValidationError(validator.validate(domainAddress));
+      if (StringUtils.isBlank(address.getLegacyId())) {
         // add the Address row
-        Address domainAddress = Address.createWithDefaults(address);
-
-        messageBuilder.addDomainValidationError(validator.validate(domainAddress));
-
         PostedAddress postedAddress =
             this.addressService.createWithSingleTimestamp(domainAddress, timestamp);
         addressId = postedAddress.getExistingAddressId();
       } else {
-        // verify that Address row exist - no update for now
         Address foundAddress = this.addressService.find(address.getLegacyId());
         if (foundAddress == null) {
           String message =
               " Legacy Id on Address does not correspond to an existing CMS/CWS Address ";
           ServiceException se = new ServiceException(message);
           messageBuilder.addMessageAndLog(message, se, LOGGER);
-          // next address
           continue;
+        } else {
+          addressId = address.getLegacyId();
+          this.addressService.update(address.getLegacyId(), foundAddress);
         }
-        addressId = foundAddress.getExistingAddressId();
+
       }
 
       /*
@@ -494,8 +491,7 @@ public class ParticipantService implements CrudsService {
         continue;
       }
 
-      boolean createNewClientAddress =
-          address.getLegacyId() == null || address.getLegacyId().isEmpty();
+      boolean createNewClientAddress = StringUtils.isBlank(address.getLegacyId());
       if (createNewClientAddress) {
         if (!clientAddressExists(address, clientParticipant)) {
           Short addressType = address.getType() != null ? address.getType().shortValue()
