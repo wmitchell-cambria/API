@@ -1,14 +1,14 @@
 package gov.ca.cwds.fixture.investigation;
 
-import gov.ca.cwds.rest.api.domain.investigation.CrossReportAgencyTest;
+import gov.ca.cwds.rest.api.domain.investigation.CrossReportAgency;
 
 @SuppressWarnings("javadoc")
 public class CrossReportAgencyEntityBuilder {
   protected String type = "DEPARTMENT_OF_JUSTICE";
   protected String name = "County Sheriff Dept";
 
-  public CrossReportAgencyTest build() {
-    return new CrossReportAgencyTest(type, name);
+  public CrossReportAgency build() {
+    return new CrossReportAgency(type, name);
   }
 
   public CrossReportAgencyEntityBuilder setType(String type) {

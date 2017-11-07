@@ -34,7 +34,7 @@ public class CrossReportTest {
   protected Date reportedOn;
   protected String communicationMethod;
   protected String county;
-  private Set<CrossReportAgencyTest> crossReportAgencies = new HashSet<>();
+  private Set<CrossReportAgency> crossReportAgencies = new HashSet<>();
 
   @Before
   public void setup() {
@@ -43,8 +43,8 @@ public class CrossReportTest {
     reportedOn = DomainChef.uncookDateString("2017-10-31");
     communicationMethod = "408";
     county = "20";
-    CrossReportAgencyTest crossReportAgency1 = new CrossReportAgencyEntityBuilder().build();
-    CrossReportAgencyTest crossReportAgency2 =
+    CrossReportAgency crossReportAgency1 = new CrossReportAgencyEntityBuilder().build();
+    CrossReportAgency crossReportAgency2 =
         new CrossReportAgencyEntityBuilder().setName("County Public Safety").build();
     crossReportAgencies.add(crossReportAgency2);
     crossReportAgencies.add(crossReportAgency1);

@@ -59,7 +59,7 @@ public class CrossReport {
   @ValidLogicalId(required = true, category = SystemCodeCategoryId.COUNTY_CODE)
   private String county;
 
-  private Set<CrossReportAgencyTest> crossReportAgencies;
+  private Set<CrossReportAgency> crossReportAgencies;
 
   /**
    * empty constructor
@@ -80,7 +80,7 @@ public class CrossReport {
       @gov.ca.cwds.rest.validation.Date Date reportedOn,
       @ValidSystemCodeId(required = false, category = "CMM_MTHC") String communicationMethod,
       @ValidLogicalId(required = true, category = "GVR_ENTC") String county,
-      Set<CrossReportAgencyTest> crossReportAgencies) {
+      Set<CrossReportAgency> crossReportAgencies) {
     super();
     this.legacyDescriptor = legacyDescriptor;
     this.readOnly = readOnly;
@@ -128,7 +128,7 @@ public class CrossReport {
   /**
    * @return - array of cross report agencies
    */
-  public Set<CrossReportAgencyTest> getCrossReportAgencies() {
+  public Set<CrossReportAgency> getCrossReportAgencies() {
     return crossReportAgencies;
   }
 

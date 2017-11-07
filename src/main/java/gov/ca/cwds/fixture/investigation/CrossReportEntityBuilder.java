@@ -7,7 +7,7 @@ import java.util.Set;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.CrossReport;
-import gov.ca.cwds.rest.api.domain.investigation.CrossReportAgencyTest;
+import gov.ca.cwds.rest.api.domain.investigation.CrossReportAgency;
 
 @SuppressWarnings("javadoc")
 public class CrossReportEntityBuilder {
@@ -17,10 +17,10 @@ public class CrossReportEntityBuilder {
   protected String communicationMethod = "409";
   protected String county = "20";
 
-  private CrossReportAgencyTest crossReportAgency = new CrossReportAgencyEntityBuilder().build();
+  private CrossReportAgency crossReportAgency = new CrossReportAgencyEntityBuilder().build();
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
-  private Set<CrossReportAgencyTest> crossReportAgencies = new HashSet<>();
+  private Set<CrossReportAgency> crossReportAgencies = new HashSet<>();
 
   public CrossReport build() {
     crossReportAgencies.add(crossReportAgency);
@@ -54,7 +54,7 @@ public class CrossReportEntityBuilder {
   }
 
   public CrossReportEntityBuilder setCrossReportAgencies(
-      Set<CrossReportAgencyTest> crossReportAgencies) {
+      Set<CrossReportAgency> crossReportAgencies) {
     this.crossReportAgencies = crossReportAgencies;
     return this;
   }
