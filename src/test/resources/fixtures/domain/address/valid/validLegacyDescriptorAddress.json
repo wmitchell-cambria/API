@@ -1,0 +1,16 @@
+{
+  "legacy_source_table" : "",
+  "legacy_id" : "",
+  "street_address": "123 Main",
+  "city": "Sacramento",
+  "state": 1828,
+  "zip": 95757,
+  "type": 32,
+   "legacy_descriptor": {
+                "legacy_id": null,
+                "legacy_ui_id": null,
+                "legacy_last_updated": null,
+                "legacy_table_name": null,
+                "legacy_table_description": null
+           }
+}

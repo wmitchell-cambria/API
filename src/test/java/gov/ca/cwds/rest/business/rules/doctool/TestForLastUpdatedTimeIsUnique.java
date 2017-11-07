@@ -251,8 +251,9 @@ public class TestForLastUpdatedTimeIsUnique {
     staffpersonDao = mock(StaffPersonDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     riClientAddress = mock(RIClientAddress.class);
-    clientAddressService = new ClientAddressService(clientAddressDao, staffpersonDao,
-        triggerTablesDao, laCountyTrigger, nonLACountyTriggers, riClientAddress);
+    clientAddressService =
+        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
+            laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
@@ -462,7 +463,8 @@ public class TestForLastUpdatedTimeIsUnique {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
 
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.ClientAddress>() {

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -245,7 +246,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ClientAddress clientAddress = new ClientAddress("1234567ABC", validDomainClientAddress, "BTr");
+    ClientAddress clientAddress =
+        new ClientAddress("1234567ABC", validDomainClientAddress, "BTr", new Date());
     laCountyTrigger.createClientAddressCountyTrigger(clientAddress);
     assertThat(countyTrigger.getCountyTriggerEmbeddable().getCountyOwnershipT(),
         is(equalTo("1234567ABC")));
@@ -274,7 +276,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ClientAddress clientAddress = new ClientAddress("ABC1234567", validDomainClientAddress, "BTr");
+    ClientAddress clientAddress =
+        new ClientAddress("ABC1234567", validDomainClientAddress, "BTr", new Date());
     laCountyTrigger.createClientAddressCountyTrigger(clientAddress);
     assertThat(countyTrigger, is(equalTo(null)));
   }
@@ -302,7 +305,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ClientAddress clientAddress = new ClientAddress("ABC1234567", validDomainClientAddress, "BTr");
+    ClientAddress clientAddress =
+        new ClientAddress("ABC1234567", validDomainClientAddress, "BTr", new Date());
     laCountyTrigger.createClientAddressCountyTrigger(clientAddress);
     assertThat(countyTrigger, is(equalTo(null)));
   }
@@ -330,7 +334,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ClientAddress clientAddress = new ClientAddress("ABC1234567", validDomainClientAddress, "BTr");
+    ClientAddress clientAddress =
+        new ClientAddress("ABC1234567", validDomainClientAddress, "BTr", new Date());
     laCountyTrigger.createClientAddressCountyTrigger(clientAddress);
     assertThat(countyTrigger, is(equalTo(null)));
   }
@@ -358,7 +363,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ClientAddress clientAddress = new ClientAddress("ABC1234567", validDomainClientAddress, "BTr");
+    ClientAddress clientAddress =
+        new ClientAddress("ABC1234567", validDomainClientAddress, "BTr", new Date());
     laCountyTrigger.createClientAddressCountyTrigger(clientAddress);
     assertThat(countyTrigger, is(equalTo(null)));
   }

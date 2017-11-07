@@ -336,17 +336,19 @@ public class ParticipantServiceTest {
   public void shouldFailSavingWhenAddressIdDoesNotExist() throws Exception {
     gov.ca.cwds.rest.api.domain.Address perpAddress =
         new AddressResourceBuilder().setLegacyId("1234567ABC").createAddress();
-    Set perpAddresses = new HashSet();
+    Set<gov.ca.cwds.rest.api.domain.Address> perpAddresses =
+        new HashSet<gov.ca.cwds.rest.api.domain.Address>();
     perpAddresses.add(perpAddress);
     Participant perp =
         new ParticipantResourceBuilder().setAddresses(perpAddresses).createPerpParticipant();
     gov.ca.cwds.rest.api.domain.Address victimAddress =
         new AddressResourceBuilder().setLegacyId("1234567ABC").createAddress();
-    Set victimAddresses = new HashSet();
+    Set<gov.ca.cwds.rest.api.domain.Address> victimAddresses =
+        new HashSet<gov.ca.cwds.rest.api.domain.Address>();
     victimAddresses.add(victimAddress);
     Participant victim =
         new ParticipantResourceBuilder().setAddresses(victimAddresses).createVictimParticipant();
-    Set participants = new HashSet<>(Arrays.asList(victim, perp, defaultReporter));
+    Set<Participant> participants = new HashSet<>(Arrays.asList(victim, perp, defaultReporter));
 
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -446,7 +448,7 @@ public class ParticipantServiceTest {
 
   @SuppressWarnings("javadoc")
   @Test
-  public void testClientDoesNotExsitFail() throws Exception {
+  public void testClientDoesNotExistFail() throws Exception {
     String badLegacyId = "IUKNOWNIDI";
 
     Participant perp = new ParticipantResourceBuilder().setLegacyId(badLegacyId)

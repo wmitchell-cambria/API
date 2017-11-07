@@ -15,10 +15,12 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Validator;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -57,6 +59,8 @@ public class ClientAddressServiceTest {
   NonLACountyTriggers nonLACountyTriggers;
   StaffPersonIdRetriever staffPersonIdRetriever;
   RIClientAddress riClientAddress;
+  Validator validator;
+  AddressService addressService;
 
   private static Boolean isLaCountyTrigger = false;
 
@@ -72,9 +76,12 @@ public class ClientAddressServiceTest {
     laCountyTrigger = mock(LACountyTrigger.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     riClientAddress = mock(RIClientAddress.class);
+    validator = mock(Validator.class);
+    addressService = mock(AddressService.class);
 
-    clientAddressService = new ClientAddressService(clientAddressDao, staffpersonDao,
-        triggerTablesDao, laCountyTrigger, nonLACountyTriggers, riClientAddress);
+    clientAddressService =
+        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
+            laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
   }
 
   /**
@@ -135,7 +142,7 @@ public class ClientAddressServiceTest {
     gov.ca.cwds.rest.api.domain.cms.ClientAddress expected =
         new ClientAddressResourceBuilder().buildClientAddress();
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, expected, "0XA", new Date());
 
     when(clientAddressDao.delete(id)).thenReturn(clientAddress);
     gov.ca.cwds.rest.api.domain.cms.ClientAddress found = clientAddressService.delete(id);
@@ -150,7 +157,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().setEffEndDt("2017-01-10").buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC",
+            new Date());
 
     when(clientAddressDao.find("ABC1234567")).thenReturn(clientAddress);
     when(clientAddressDao.update(any())).thenReturn(clientAddress);
@@ -181,7 +189,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC",
+            new Date());
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress request =
         new gov.ca.cwds.rest.api.domain.cms.ClientAddress(toCreate, false);
@@ -199,7 +208,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC",
+            new Date());
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress request =
         new gov.ca.cwds.rest.api.domain.cms.ClientAddress(toCreate, false);
@@ -217,7 +227,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress(id, clientAddressDomain, "ABC",
+            new Date());
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress request =
         new gov.ca.cwds.rest.api.domain.cms.ClientAddress(toCreate, false);
@@ -250,7 +261,8 @@ public class ClientAddressServiceTest {
           new ClientAddressResourceBuilder().buildClientAddress();
 
       gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-          new gov.ca.cwds.data.persistence.cms.ClientAddress(null, clientAddressDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.ClientAddress(null, clientAddressDomain, "ABC",
+              new Date());
 
       when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
           .thenReturn(toCreate);
@@ -269,7 +281,8 @@ public class ClientAddressServiceTest {
           new ClientAddressResourceBuilder().buildClientAddress();
 
       gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-          new gov.ca.cwds.data.persistence.cms.ClientAddress("  ", clientAddressDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.ClientAddress("  ", clientAddressDomain, "ABC",
+              new Date());
 
       when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
           .thenReturn(toCreate);
@@ -286,8 +299,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", clientAddressDomain,
-            "BTr");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", clientAddressDomain, "BTr",
+            new Date());
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress request =
         new gov.ca.cwds.rest.api.domain.cms.ClientAddress(toCreate, false);
@@ -325,8 +338,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", clientAddressDomain,
-            "q1p");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", clientAddressDomain, "q1p",
+            new Date());
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress request =
         new gov.ca.cwds.rest.api.domain.cms.ClientAddress(toCreate, false);
@@ -364,8 +377,8 @@ public class ClientAddressServiceTest {
         new ClientAddressResourceBuilder().buildClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", clientAddressDomain,
-            "BTr");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", clientAddressDomain, "BTr",
+            new Date());
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress request =
         new gov.ca.cwds.rest.api.domain.cms.ClientAddress(toCreate, false);

@@ -9,6 +9,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -187,7 +189,8 @@ public class NonLACountyTriggersTest {
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddressDomain =
         new ClientAddressResourceBuilder().buildClientAddress();
-    ClientAddress toCreate = new ClientAddress("ABC1234567", clientAddressDomain, "ABC");
+    ClientAddress toCreate =
+        new ClientAddress("ABC1234567", clientAddressDomain, "ABC", new Date());
 
     ReferralClient referralClientDomain =
         new ReferralClientResourceBuilder().setCountySpecificCode("55").buildReferralClient();
@@ -224,7 +227,8 @@ public class NonLACountyTriggersTest {
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddressDomain =
         new ClientAddressResourceBuilder().buildClientAddress();
-    ClientAddress toCreate = new ClientAddress("ABC1234567", clientAddressDomain, "ABC");
+    ClientAddress toCreate =
+        new ClientAddress("ABC1234567", clientAddressDomain, "ABC", new Date());
 
     ReferralClient referralClientDomain =
         new ReferralClientResourceBuilder().setCountySpecificCode("100").buildReferralClient();
@@ -256,7 +260,8 @@ public class NonLACountyTriggersTest {
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddressDomain =
         new ClientAddressResourceBuilder().buildClientAddress();
-    ClientAddress toCreate = new ClientAddress("ABC1234567", clientAddressDomain, "ABC");
+    ClientAddress toCreate =
+        new ClientAddress("ABC1234567", clientAddressDomain, "ABC", new Date());
 
     ReferralClient referralClientDomain =
         new ReferralClientResourceBuilder().setCountySpecificCode("54").buildReferralClient();

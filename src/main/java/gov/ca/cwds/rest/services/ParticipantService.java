@@ -26,8 +26,6 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
-import gov.ca.cwds.rest.api.domain.cms.ClientAddress;
-import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
@@ -440,96 +438,8 @@ public class ParticipantService implements CrudsService {
   private Participant processClientAddress(Participant clientParticipant, String referralId,
       String clientId, Date timestamp, MessageBuilder messageBuilder) throws ServiceException {
 
-    String addressId;
-    Set<gov.ca.cwds.rest.api.domain.Address> addresses;
-    Set<gov.ca.cwds.rest.api.domain.Address> newAddresses = new HashSet<>();
-    addresses = clientParticipant.getAddresses();
-
-    if (addresses == null) {
-      return null;
-    }
-
-    for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-
-      Address domainAddress = Address.createWithDefaults(address);
-      messageBuilder.addDomainValidationError(validator.validate(domainAddress));
-      if (StringUtils.isBlank(address.getLegacyId())) {
-        // add the Address row
-        PostedAddress postedAddress =
-            this.addressService.createWithSingleTimestamp(domainAddress, timestamp);
-        addressId = postedAddress.getExistingAddressId();
-      } else {
-        Address foundAddress = this.addressService.find(address.getLegacyId());
-        if (foundAddress == null) {
-          String message =
-              " Legacy Id on Address does not correspond to an existing CMS/CWS Address ";
-          ServiceException se = new ServiceException(message);
-          messageBuilder.addMessageAndLog(message, se, LOGGER);
-          continue;
-        } else {
-          addressId = address.getLegacyId();
-          this.addressService.update(address.getLegacyId(), foundAddress);
-        }
-
-      }
-
-      /*
-       * CMS Client Address
-       */
-      if (addressId.isEmpty()) {
-        String message = " ADDRESS/IDENTIFIER is required for CLIENT_ADDRESS table ";
-        ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
-        // next address
-        continue;
-      }
-      if (clientId.isEmpty()) {
-        String message = " CLIENT/IDENTIFIER is required for CLIENT_ADDRESS ";
-        ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
-        // next address
-        continue;
-      }
-
-      boolean createNewClientAddress = StringUtils.isBlank(address.getLegacyId());
-      if (createNewClientAddress) {
-        if (!clientAddressExists(address, clientParticipant)) {
-          Short addressType = address.getType() != null ? address.getType().shortValue()
-              : LegacyDefaultValues.DEFAULT_ADDRESS_TYPE;
-          ClientAddress clientAddress =
-              new ClientAddress(addressType, "", "", "", addressId, clientId, "", referralId);
-
-          messageBuilder.addDomainValidationError(validator.validate(clientAddress));
-          clientAddressService.createWithSingleTimestamp(clientAddress, timestamp);
-
-          messageBuilder.addDomainValidationError(validator.validate(clientAddress));
-
-          // update the addresses of the participant
-          address.setLegacySourceTable(CLIENT_ADDRESS_TABLE_NAME);
-          address.setLegacyId(addressId);
-          newAddresses.add(address);
-        }
-      } else {
-        // verify that ClientAddress exists - no update for now
-        if (!clientAddressExists(address, clientParticipant)) {
-          String message =
-              " Legacy Id on Address does not correspond to an existing CMS/CWS Client Address ";
-          ServiceException se = new ServiceException(message);
-          messageBuilder.addMessageAndLog(message, se, LOGGER);
-          // next address
-          continue;
-        }
-      }
-    }
-
-    return clientParticipant;
-  }
-
-  private boolean clientAddressExists(gov.ca.cwds.rest.api.domain.Address address,
-      Participant client) {
-    List<Response> foundClientAddress =
-        this.clientAddressService.findByAddressAndClient(address, client);
-    return foundClientAddress != null && !foundClientAddress.isEmpty();
+    return clientAddressService.saveClientAddress(clientParticipant, referralId, clientId,
+        timestamp, messageBuilder);
   }
 
   @Override

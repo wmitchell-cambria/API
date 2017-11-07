@@ -36,8 +36,13 @@
   			"city" : "San Jose",
   			"zip" : "94321",
   			"type": 32,
-  			 "legacy_descriptor": {
-  			 }
+  			"legacy_descriptor": {
+                "legacy_id": null,
+                "legacy_ui_id": null,
+                "legacy_last_updated": null,
+                "legacy_table_name": null,
+                "legacy_table_description": null
+           }
   		}
     ],
   	    "race_ethnicity":{  

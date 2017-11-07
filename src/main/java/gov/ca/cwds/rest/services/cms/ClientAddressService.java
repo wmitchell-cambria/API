@@ -3,11 +3,15 @@ package gov.ca.cwds.rest.services.cms;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Validator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +24,15 @@ import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.cms.Address;
+import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.services.LegacyDefaultValues;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
@@ -39,12 +46,16 @@ public class ClientAddressService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.ClientAddress, gov.ca.cwds.rest.api.domain.cms.ClientAddress> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientAddressService.class);
 
+  private static final String CLIENT_ADDRESS_TABLE_NAME = "ADDRS_T";
+
   private ClientAddressDao clientAddressDao;
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
   private LACountyTrigger laCountyTrigger;
   private NonLACountyTriggers nonLaTriggers;
   private RIClientAddress riClientAddress;
+  private Validator validator;
+  private AddressService addressService;
 
   /**
    * Constructor
@@ -60,17 +71,22 @@ public class ClientAddressService implements
    * @param nonLaTriggers The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.business.rules.NonLACountyTriggers} objects.
    * @param riClientAddress - riClientAddress
+   * @param validator - validator
+   * @param addressService - addressService
    */
   @Inject
   public ClientAddressService(ClientAddressDao clientAddressDao, StaffPersonDao staffpersonDao,
       TriggerTablesDao triggerTablesDao, LACountyTrigger laCountyTrigger,
-      NonLACountyTriggers nonLaTriggers, RIClientAddress riClientAddress) {
+      NonLACountyTriggers nonLaTriggers, RIClientAddress riClientAddress, Validator validator,
+      AddressService addressService) {
     this.clientAddressDao = clientAddressDao;
     this.staffpersonDao = staffpersonDao;
     this.triggerTablesDao = triggerTablesDao;
     this.laCountyTrigger = laCountyTrigger;
     this.nonLaTriggers = nonLaTriggers;
     this.riClientAddress = riClientAddress;
+    this.validator = validator;
+    this.addressService = addressService;
   }
 
   @Override
@@ -120,44 +136,13 @@ public class ClientAddressService implements
       gov.ca.cwds.rest.api.domain.cms.ClientAddress request) {
 
     gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress = request;
-    return create(clientAddress, null);
-
-  }
-
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public Response createWithSingleTimestamp(Request request, Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress =
-        (gov.ca.cwds.rest.api.domain.cms.ClientAddress) request;
-    return create(clientAddress, timestamp);
-
-  }
-
-  /**
-   * This private method is created to handle to single clientAddress and referrals with single
-   * timestamp
-   * 
-   */
-  private gov.ca.cwds.rest.api.domain.cms.ClientAddress create(
-      gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress, Date timestamp) {
     try {
       ClientAddress managedClientAddress;
-      if (timestamp == null) {
-        managedClientAddress = new ClientAddress(
-            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-            clientAddress, RequestExecutionContext.instance().getStaffId());
-      } else {
-        managedClientAddress = new ClientAddress(
-            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-            clientAddress, RequestExecutionContext.instance().getStaffId(), timestamp);
-      }
+      managedClientAddress = new ClientAddress(
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+          clientAddress, RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
+
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managedClientAddress.getLastUpdatedId());
       if (staffperson != null
@@ -181,7 +166,8 @@ public class ClientAddressService implements
 
     try {
       ClientAddress managed = new ClientAddress(primaryKey, clientAddress,
-          RequestExecutionContext.instance().getStaffId());
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
       if (staffperson != null
@@ -194,6 +180,82 @@ public class ClientAddressService implements
       LOGGER.info("ClientAddress not found : {}", clientAddress);
       throw new ServiceException(e);
     }
+  }
+
+  /**
+   * @param clientParticipant - clientParticipant
+   * @param referralId - referralId
+   * @param clientId - clientId
+   * @param timestamp - timestamp
+   * @param messageBuilder - messageBuilder
+   * @return the savedClientAddress
+   */
+  public Participant saveClientAddress(Participant clientParticipant, String referralId,
+      String clientId, Date timestamp, MessageBuilder messageBuilder) {
+
+    String addressId;
+    Set<gov.ca.cwds.rest.api.domain.Address> addresses;
+    Set<gov.ca.cwds.rest.api.domain.Address> newAddresses = new HashSet<>();
+    addresses = clientParticipant.getAddresses();
+
+    if (addresses == null) {
+      return null;
+    }
+
+    for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
+
+      Address domainAddress = Address.createWithDefaults(address);
+      messageBuilder.addDomainValidationError(validator.validate(domainAddress));
+      if (StringUtils.isBlank(address.getLegacyId())) {
+        PostedAddress postedAddress =
+            this.addressService.createWithSingleTimestamp(domainAddress, timestamp);
+        addressId = postedAddress.getExistingAddressId();
+      } else {
+        Address foundAddress = this.addressService.find(address.getLegacyId());
+        if (foundAddress == null) {
+          String message =
+              " Legacy Id on Address does not correspond to an existing CMS/CWS Address ";
+          ServiceException se = new ServiceException(message);
+          messageBuilder.addMessageAndLog(message, se, LOGGER);
+          continue;
+        } else {
+          addressId = address.getLegacyId();
+          this.addressService.update(address.getLegacyId(), domainAddress);
+        }
+
+      }
+
+      /*
+       * CMS Client Address
+       */
+      if (addressId.isEmpty()) {
+        String message = " ADDRESS/IDENTIFIER is required for CLIENT_ADDRESS table ";
+        ServiceException se = new ServiceException(message);
+        messageBuilder.addMessageAndLog(message, se, LOGGER);
+        continue;
+      }
+      if (clientId.isEmpty()) {
+        String message = " CLIENT/IDENTIFIER is required for CLIENT_ADDRESS ";
+        ServiceException se = new ServiceException(message);
+        messageBuilder.addMessageAndLog(message, se, LOGGER);
+        continue;
+      }
+
+      Short addressType = address.getType() != null ? address.getType().shortValue()
+          : LegacyDefaultValues.DEFAULT_ADDRESS_TYPE;
+      gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress =
+          new gov.ca.cwds.rest.api.domain.cms.ClientAddress(addressType, "", "", "", addressId,
+              clientId, "", referralId);
+
+      messageBuilder.addDomainValidationError(validator.validate(clientAddress));
+      create(clientAddress);
+      messageBuilder.addDomainValidationError(validator.validate(clientAddress));
+      address.setLegacySourceTable(CLIENT_ADDRESS_TABLE_NAME);
+      address.setLegacyId(addressId);
+      newAddresses.add(address);
+    }
+
+    return clientParticipant;
   }
 
 }

@@ -65,8 +65,8 @@ public class AddressTest {
     String expected = MAPPER.writeValueAsString(
         new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor));
 
-    String serialized = MAPPER.writeValueAsString(
-        MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class));
+    String serialized = MAPPER.writeValueAsString(MAPPER.readValue(
+        fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class));
 
     assertThat(serialized, is(expected));
   }
@@ -76,8 +76,8 @@ public class AddressTest {
     Address expected =
         new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
 
-    Address serialized =
-        MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class);
+    Address serialized = MAPPER.readValue(
+        fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class);
     assertThat(serialized, is(expected));
 
   }
