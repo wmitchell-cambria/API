@@ -151,6 +151,7 @@ public class InvestigationTest {
     assertThat(people, is(equalTo(investigation.getPeople())));
     assertThat(relationships, is(equalTo(investigation.getRelationships())));
     assertThat(crossReports, is(equalTo(investigation.getCrossReports())));
+    assertThat(safetyAlerts, is(equalTo(investigation.getSafetyAlerts())));
   }
 
   @Test
@@ -231,6 +232,30 @@ public class InvestigationTest {
     assertThat(investigation.getContacts(), is(equalTo(contacts)));
 
   }
+
+  // @Test
+  // public void testWithNullEmergencyNumber() {
+  // Referral referral = new ReferralEntityBuilder().build();
+  // Address address = new AddressEntityBuilder().setEmergencyNumber(null).build();
+  // StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+  // LongText longText = new LongTextResourceBuilder().build();
+  // AllegationList allegations = new AllegationListEntityBuilder().build();
+  // Set<Allegation> allgationSet = allegations.getAllegations();
+  // People people = new PeopleEntityBuilder().build();
+  // Set<Person> personSet = people.getPersons();
+  // // TODO
+  // Set<Relationship> relationshipList = new HashSet<>();
+  // SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+  // Set<String> crossReports = new HashSet<String>();
+  // Set<Contact> contacts = new HashSet<Contact>();
+  // ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+  // Investigation investigation =
+  // new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
+  // personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
+  // Set<PhoneNumber> ip = investigation.getPhoneNumbers();
+  //
+  // assertThat(investigation.getPhoneNumbers())
+  // }
 
   @Test
   public void testWithNullReferralReceivedDateHasNullStartedAt() {
@@ -541,7 +566,7 @@ public class InvestigationTest {
 
   @Test
   public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(Relationship.class).suppress(Warning.NONFINAL_FIELDS).verify();
+    EqualsVerifier.forClass(Investigation.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
 }

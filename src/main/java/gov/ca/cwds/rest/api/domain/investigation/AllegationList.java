@@ -1,19 +1,14 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import gov.ca.cwds.ObjectMapperUtils;
-import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -32,7 +27,6 @@ import io.dropwizard.jackson.JsonSnakeCase;
 public class AllegationList extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
-  private static final int PRIME = 31;
 
   private Set<Allegation> allegations;
 
@@ -81,20 +75,6 @@ public class AllegationList extends ReportingDomain implements Request, Response
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
-
-  @SuppressWarnings("javadoc")
-  public static void main(String[] args) throws IOException {
-    ObjectMapper mapper = ObjectMapperUtils.createObjectMapper();
-
-    Set<Allegation> allegations = new HashSet<>();
-    Allegation alg = new AllegationEntityBuilder().build();
-    allegations.add(alg);
-
-    AllegationList list = new AllegationList(allegations);
-
-    String serialized = mapper.writeValueAsString(list);
-    System.out.println(serialized);
   }
 
 }

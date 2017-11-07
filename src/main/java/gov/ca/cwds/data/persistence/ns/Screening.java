@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.ns;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +12,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
+
 import gov.ca.cwds.data.ns.NsPersistentObject;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
@@ -159,6 +162,8 @@ public class Screening implements PersistentObject {
     this.screeningDecision = screeningDecision;
     this.startedAt = startedAt;
     this.narrative = narrative;
+
+    this.safetyAlerts = new String[1];
 
   }
 
