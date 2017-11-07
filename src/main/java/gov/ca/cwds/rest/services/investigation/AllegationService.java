@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.services.investigation;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.dao.investigation.AllegationsDao;
@@ -46,24 +48,22 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
   }
 
   @Override
-  public Response create(Allegation arg0) {
+  public Response create(Allegation allegation) {
     return validAllegation;
   }
 
   @Override
-  public Response delete(String arg0) {
-    // TODO Auto-generated method stub
-    return null;
+  public Response delete(String primaryKey) {
+    throw new NotImplementedException("delete not implemented");
   }
 
   @Override
-  public Response find(String arg0) {
-    // TODO Auto-generated method stub
-    return null;
+  public Response find(String primaryKey) {
+    throw new NotImplementedException("find not implemented");
   }
 
   @Override
-  public Response update(String investigationId, Allegation request) {
+  public Response update(String investigationId, Allegation allegation) {
     return validAllegation;
 
   }
@@ -92,7 +92,7 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
    * @return list of allegation sub types
    */
   private Set<AllegationSubType> populateAllegationSubTypes(String allegationId) {
-    Set<AllegationSubType> allegationSubTypes = new HashSet<AllegationSubType>();
+    Set<AllegationSubType> allegationSubTypes = new HashSet<>();
     AllegationSubType allegationSubType = null;
     Short injuryHarmSubType = null;
     InjuryHarmDetail[] injuryHarmDetails =
