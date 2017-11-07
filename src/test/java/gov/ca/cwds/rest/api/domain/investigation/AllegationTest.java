@@ -207,7 +207,7 @@ public class AllegationTest {
   }
 
   @Test
-  public void shouldNotTooLongRational() {
+  public void shouldNotAllowTooLongRational() {
 
     String longRational = new String(new char[255]).replace('\0', ' ');
     Allegation allegation = new AllegationEntityBuilder().setRational(longRational).build();

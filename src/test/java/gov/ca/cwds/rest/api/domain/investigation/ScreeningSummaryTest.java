@@ -3,10 +3,20 @@ package gov.ca.cwds.rest.api.domain.investigation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.junit.Before;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import gov.ca.cwds.data.persistence.ns.Address;
+import gov.ca.cwds.data.persistence.ns.Participant;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -19,10 +29,13 @@ public class ScreeningSummaryTest {
   private String decisionDetail = "immediate";
   private String name = "henderson screening";
   private Set<String> safetyAlerts = validSafetyAletrs();
-  Set<SimpleAllegation> allegations = new HashSet<>();
+  private Set<SimpleAllegation> allegations = new HashSet<>();
   private Date startedAt = DomainChef.uncookStrictTimestampString("2017-09-01T16:48:05.457-0000");
   private String safetyInformation = "the animal at residence is a lion";
   private String id = "1";
+  private Set<SimpleAllegation> simpleAllegations = new HashSet<>();
+  private String[] allegationType = new String[2];
+
 
   private Set<String> validSafetyAletrs() {
     Set<String> safetyAlerts = new HashSet<String>();
@@ -32,6 +45,19 @@ public class ScreeningSummaryTest {
     return safetyAlerts;
   }
 
+  @Before
+  public void setup() {
+    allegationType[0] = "allegation 1";
+    allegationType[1] = "allegation 2";
+    gov.ca.cwds.data.persistence.ns.Allegation allegation =
+        new gov.ca.cwds.data.persistence.ns.Allegation("1234567ABC", "screening id", "perpetrator",
+            "victim", "10-30-2017", "10-30-2017", allegationType);
+
+    SimpleAllegation simpleAllegation = new SimpleAllegation(allegation);
+
+    simpleAllegations.add(simpleAllegation);
+  }
+
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(ScreeningSummary.class).suppress(Warning.NONFINAL_FIELDS).verify();
@@ -39,8 +65,10 @@ public class ScreeningSummaryTest {
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
+
     ScreeningSummary domain = new ScreeningSummary(id, name, decision, decisionDetail, safetyAlerts,
-        safetyInformation, additionalInformation, startedAt, null);
+        safetyInformation, additionalInformation, startedAt, simpleAllegations);
+
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getName(), is(equalTo(name)));
     assertThat(domain.getDecision(), is(equalTo(decision)));
@@ -49,7 +77,62 @@ public class ScreeningSummaryTest {
     assertThat(domain.getSafetyInformation(), is(equalTo(safetyInformation)));
     assertThat(domain.getAdditionalInformation(), is(equalTo(additionalInformation)));
     assertThat(domain.getStartedAt(), is(equalTo(startedAt)));
-    assertThat(domain.getAllegations(), is(equalTo(allegations)));
+    assertThat(domain.getAllegations(), is(equalTo(simpleAllegations)));
   }
 
+  @Test
+  public void testConstructorUsingScreening()
+      throws JsonParseException, JsonMappingException, IOException {
+
+    String referrence = "screeing referrence";
+    Date endedAt = new Date();
+    String incidentCounty = "20";
+    Date incidentDate = new Date();
+    String locationType = "";
+    String communicationMethod = "1234";
+    String name = "screening name";
+    String responseTime = "2345";
+    String screeningDecision = "3456";
+    Date startedAt = new Date();
+    String narrative = "screening narrative";
+    Address screeningAddress = new Address();
+    Set<Participant> participants = new HashSet<>();
+    Participant participant = new Participant();
+    participants.add(participant);
+    gov.ca.cwds.data.persistence.ns.Screening screening =
+        new gov.ca.cwds.data.persistence.ns.Screening(referrence, endedAt, incidentCounty,
+            incidentDate, locationType, communicationMethod, name, responseTime, screeningDecision,
+            startedAt, narrative, screeningAddress, participants);
+
+    ScreeningSummary screeningSummary = new ScreeningSummary(screening, simpleAllegations);
+    assertThat(screeningSummary.getName(), is(equalTo(screening.getName())));
+    assertThat(screeningSummary.getDecision(), is(equalTo(screening.getScreeningDecision())));
+    assertThat(screeningSummary.getAdditionalInformation(),
+        is(equalTo(screening.getAdditionalInformation())));
+    assertThat(screeningSummary.getDecisionDetail(),
+        is(equalTo(screening.getScreeningDecisionDetail())));
+    assertThat(screeningSummary.getId(), is(equalTo(screening.getId())));
+    assertThat(screeningSummary.getSafetyInformation(),
+        is(equalTo(screening.getSafetyInformation())));
+    assertThat(screeningSummary.getStartedAt(), is(equalTo(screening.getStartedAt())));
+    assertThat(screeningSummary.getAllegations(), is(equalTo(simpleAllegations)));
+  }
+
+  @Test
+  public void testNullSafetyAlerts() {
+    Set<String> safetyAlerts = new HashSet<>();
+    // pass null for safety alerts to constructor
+    ScreeningSummary domain = new ScreeningSummary(id, name, decision, decisionDetail, null,
+        safetyInformation, additionalInformation, startedAt, null);
+    assertThat(domain.getSafetyAlerts(), is(equalTo(safetyAlerts)));
+  }
+
+  @Test
+  public void testNullAllegations() {
+    Set<SimpleAllegation> simpleAllegations = new HashSet<>();
+    // pass null for allegations to constructor
+    ScreeningSummary domain = new ScreeningSummary(id, name, decision, decisionDetail, null,
+        safetyInformation, additionalInformation, startedAt, null);
+    assertThat(domain.getAllegations(), is(equalTo(simpleAllegations)));
+  }
 }

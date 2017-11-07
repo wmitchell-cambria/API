@@ -149,6 +149,26 @@ public class PersonTest {
   }
 
   @Test
+  public void testClientConstructorWithNotNullLastUpdatedTime() {
+    Client client = new ClientEntityBuilder().build();
+    client.setLastUpdatedTime(new Date());
+    Person person = new Person(client, languages, cmsRecordDescriptor, addresses, phoneNumbers,
+        roles, raceAndEthnicity);
+    assertThat(person.getLastUpdatedAt(), is(equalTo(client.getLastUpdatedTime())));
+  }
+
+  @Test
+  public void testClientConstructorWithNullDateOfBirth() {
+    Client client = new ClientEntityBuilder().build();
+    client.setBirthDate(null);
+    Person person = new Person(client, languages, cmsRecordDescriptor, addresses, phoneNumbers,
+        roles, raceAndEthnicity);
+    assertThat(person.getDateOfBirth(),
+        is(equalTo(trim(DomainChef.cookDate(client.getBirthDate())))));
+
+  }
+
+  @Test
   public void testReporterConstructorSuccess() {
     gov.ca.cwds.rest.api.domain.cms.Reporter domainReporter = new ReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
@@ -162,12 +182,22 @@ public class PersonTest {
     assertThat(person.getMiddleName(), is(equalTo(trim(reporter.getMiddleName()))));
     assertThat(person.getNameSuffix(), is(equalTo(trim(reporter.getNameSuffix()))));
     assertThat(person.getGender(), is(equalTo(trim(reporter.getGender()))));
-    assertThat(person.getDateOfBirth(),
-        is(equalTo(trim(DomainChef.cookDate(reporter.getBirthDate())))));
     assertThat(person.getLanguages(), is(equalTo(languages)));
     assertThat(person.getCmsRecordDescriptor(), is(equalTo(cmsRecordDescriptor)));
     assertThat(person.getAddresses(), is(equalTo(addresses)));
     assertThat(person.getPhone(), is(equalTo(phoneNumbers)));
+  }
+
+  @Test
+  public void testReporterConstructorWithNullLastUpdatedAt() {
+    gov.ca.cwds.rest.api.domain.cms.Reporter domainReporter = new ReporterResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Reporter reporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, "0X5");
+    reporter.setLastUpdatedTime(null);
+    Person person =
+        new Person(reporter, languages, cmsRecordDescriptor, addresses, phoneNumbers, roles);
+    assertThat(person.getLastUpdatedAt(), is(equalTo(reporter.getLastUpdatedTime())));
+
   }
 
   @Test
@@ -212,27 +242,10 @@ public class PersonTest {
     assertEquals(1, items.size());
   }
 
-  // @Test
-  // public void testConstructorWithClientSuccess() {
-  // Client client = new ClientEntityBuilder().build();
-  // Set<String> languages = new HashSet<>();
-  // CmsRecordDescriptor cmsRecordDescriptor =
-  // new CmsRecordDescriptorEntityBuilder().setTableDescription("CLIENT_T").build();
-  // Set<InvestigationAddress> addresses = new HashSet<>();
-  // Set<PhoneNumber> phoneNumbers = new HashSet<>();
-  // Set<String> roles = new HashSet<>();
-  // RaceAndEthnicity raceAndEnthnicity = new RaceAndEthnicityEntityBuilder().build();
-  //
-  // languages.add("1253");
-  // InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
-  // addresses.add(address);
-  // }
-
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(Person.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
-
 
   @Test
   public void shouldNotAllowBlankFirstName() {

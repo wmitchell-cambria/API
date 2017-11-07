@@ -243,12 +243,11 @@ public class Person extends ReportingDomain implements Request, Response {
     this.middleName = trim(reporter.getMiddleName());
     this.nameSuffix = trim(reporter.getNameSuffix());
     this.gender = trim(reporter.getGender());
-    this.dateOfBirth =
-        reporter.getBirthDate() != null ? DomainChef.cookDate(reporter.getBirthDate()) : null;
     this.ssn = reporter.getSsn();
+    this.dateOfBirth = null;
     this.languages = languages;
-    this.sealed = StringUtils.equals(reporter.getSensitivityIndicator(), "R");
-    this.sensitive = StringUtils.equals(reporter.getSensitivityIndicator(), "S");
+    this.sealed = false;
+    this.sensitive = false;
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.addresses = address;
     this.phone = phoneNumbers;

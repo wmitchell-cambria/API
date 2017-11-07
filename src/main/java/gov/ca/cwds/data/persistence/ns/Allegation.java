@@ -1,13 +1,16 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.Type;
+
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 @Entity
@@ -41,6 +44,27 @@ public class Allegation implements PersistentObject {
   @ManyToOne
   @JoinColumn(name = "screening_id", insertable = false, updatable = false)
   private gov.ca.cwds.data.persistence.ns.Screening screening;
+
+  /**
+   * @param id - id
+   * @param screeningId - screening id
+   * @param perpetratorId - perpetrator id
+   * @param victimId - victim id
+   * @param createdAt - date created
+   * @param updatedAt - date updated
+   * @param allegationType - allegation type array
+   */
+  public Allegation(String id, String screeningId, String perpetratorId, String victimId,
+      String createdAt, String updatedAt, String[] allegationType) {
+    this.id = id;
+    this.screeningId = screeningId;
+    this.perpetratorId = perpetratorId;
+    this.victimId = victimId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.allegationTypes = allegationType;
+    this.screening = null;
+  }
 
   @Override
   public Serializable getPrimaryKey() {
