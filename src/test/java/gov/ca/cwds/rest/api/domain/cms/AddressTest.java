@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
@@ -160,9 +161,11 @@ public class AddressTest {
     Short zipExtension = 9876;
     String zipCode = "123459876";
     Integer type = 32;
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, city, state, zipCode, type);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            city, state, zipCode, type, legacyDescriptor);
 
     Address cmsAddr = Address.createWithDefaults(nsAddress);
     assertEquals("Expected field to be initialized with values", city, cmsAddr.getCity());
@@ -190,9 +193,11 @@ public class AddressTest {
     Short zipExtension = 9876;
     String zipCode = "123459876";
     Integer type = 32;
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, city, state, zipCode, type);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            city, state, zipCode, type, legacyDescriptor);
     Short stateCode = 5;
 
     Address cmsAddr = Address.createWithDefaults(nsAddress);
@@ -243,9 +248,10 @@ public class AddressTest {
   public void zipExtensionShouldContainNoValueWhenZipIsOnly5Characters() {
     Short zipExtension = 0;
     String zipCode = "12345";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
     gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", " 1 main", "city", 1828, zipCode, 32);
+        "legacy_source_table", "legacy_id", " 1 main", "city", 1828, zipCode, 32, legacyDescriptor);
 
     Address cmsAddr = Address.createWithDefaults(nsAddress);
     assertEquals("Expected zip field to contain 5 digits", zipCode, cmsAddr.getZip().toString());
@@ -257,9 +263,10 @@ public class AddressTest {
   public void zipExtensionShouldContainRemaingDigitsWhenZipIsGreaterThan5Characters() {
     Short zipExtension = new Short("32767");
     String zipCode = "1234532767";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
     gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", " 1 main", "city", 1828, zipCode, 32);
+        "legacy_source_table", "legacy_id", " 1 main", "city", 1828, zipCode, 32, legacyDescriptor);
 
     Address cmsAddr = Address.createWithDefaults(nsAddress);
     assertEquals("Expected zipExtension field to contain no digits", zipExtension,
@@ -270,9 +277,10 @@ public class AddressTest {
   public void zipShouldContainAllDigitsWhenZipIsGreaterThan5Characters() {
     Short zipExtension = new Short("32767");
     String zipCode = "1234532767";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
     gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", " 1 main", "city", 1828, zipCode, 32);
+        "legacy_source_table", "legacy_id", " 1 main", "city", 1828, zipCode, 32, legacyDescriptor);
 
     Address cmsAddr = Address.createWithDefaults(nsAddress);
     assertEquals("Expected zip field to contain all the digits", zipCode,
@@ -285,9 +293,11 @@ public class AddressTest {
   public void zipShouldThrowExceptionWhenZipIsTooLarge() {
     Short zipExtension = new Short("32768");
     String zipCode = "1234532767";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", "streetAddress", "city", 1828, zipCode, 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", "streetAddress",
+            "city", 1828, zipCode, 32, legacyDescriptor);
 
     Address cmsAddr = Address.createWithDefaults(nsAddress);
   }
@@ -295,9 +305,11 @@ public class AddressTest {
   @Test
   public void streetNumberShouldBeParsedFromStreetAddress() {
     String streetAddress = "1 main";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     Address address = Address.createWithDefaults(nsAddress);
     assertEquals("Street Number not parsed from street address", "1", address.getStreetNumber());
@@ -306,9 +318,11 @@ public class AddressTest {
   @Test
   public void streetNameShouldBeParsedFromStreetAddress() {
     String streetAddress = "1 main";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     Address address = Address.createWithDefaults(nsAddress);
     assertEquals("Street Number not parsed from street address", "main", address.getStreetName());
@@ -317,9 +331,11 @@ public class AddressTest {
   @Test
   public void streetNameShouldNotIncludeTypeOfStreetsOrMultiPartStreetNames() {
     String streetAddress = "1 San Andreas Blvd";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     Address address = Address.createWithDefaults(nsAddress);
     assertEquals("Street Number not parsed from street address", "San Andreas Blvd",
@@ -329,9 +345,11 @@ public class AddressTest {
   @Test
   public void testForStreetAddressContainOnlyWordWhereStreetNumberisNull() {
     String streetAddress = "Main St";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     Address address = Address.createWithDefaults(nsAddress);
     assertThat(address.getStreetNumber(), is(equalTo(null)));
@@ -340,9 +358,11 @@ public class AddressTest {
   @Test
   public void testForStreetAddressContainOnlyWordIsStreetName() {
     String streetAddress = "Main St";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     Address address = Address.createWithDefaults(nsAddress);
     assertThat(address.getStreetName(), is(equalTo("Main St")));

@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
@@ -95,7 +96,7 @@ public class ClientAddressTest {
     ClientAddress dca = validClientAddress();
 
     gov.ca.cwds.data.persistence.cms.ClientAddress pca =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", dca, "OX5");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("1234567ABC", dca, "OX5", new Date());
 
     assertThat(dca.getAddressType(), is(equalTo(pca.getAddressType())));
     assertThat(dca.getBookingOrInmateId(), is(equalTo(pca.getBkInmtId())));

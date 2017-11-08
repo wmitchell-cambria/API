@@ -8,6 +8,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,8 +68,8 @@ public class RIClientAddressTest {
   public void riCheckForReferentialIntegrityException() throws Exception {
     ClientAddress clientAddressDomain = new ClientAddressResourceBuilder().buildClientAddress();
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain,
-            "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain, "0X5",
+            new Date());
 
     when(addressDao.find(any(String.class))).thenReturn(null);
     when(clientDao.find(any(String.class))).thenReturn(null);
@@ -81,8 +83,8 @@ public class RIClientAddressTest {
     ClientAddress clientAddressDomain = new ClientAddressResourceBuilder()
         .setFkAddress("ABC1234560").setFkClient("ABC123456k").buildClientAddress();
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain,
-            "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain, "0X5",
+            new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address address =
@@ -104,8 +106,8 @@ public class RIClientAddressTest {
     ClientAddress clientAddressDomain =
         new ClientAddressResourceBuilder().setFkReferral(null).buildClientAddress();
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain,
-            "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain, "0X5",
+            new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address address =
@@ -135,8 +137,8 @@ public class RIClientAddressTest {
     ClientAddress clientAddressDomain =
         new ClientAddressResourceBuilder().setFkReferral(null).buildClientAddress();
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain,
-            "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain, "0X5",
+            new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address address =
@@ -159,8 +161,8 @@ public class RIClientAddressTest {
     ClientAddress clientAddressDomain =
         new ClientAddressResourceBuilder().setFkClient(null).buildClientAddress();
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddress =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain,
-            "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("ABC1234567", clientAddressDomain, "0X5",
+            new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address address =

@@ -8,6 +8,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.validation.Validation;
@@ -235,8 +236,9 @@ public class R05360ReferralCityMandatoryTest {
     staffpersonDao = mock(StaffPersonDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     riClientAddress = mock(RIClientAddress.class);
-    clientAddressService = new ClientAddressService(clientAddressDao, staffpersonDao,
-        triggerTablesDao, laCountyTrigger, nonLACountyTriggers, riClientAddress);
+    clientAddressService =
+        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
+            laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
     longTextDao = mock(LongTextDao.class);
     longTextService = new LongTextService(longTextDao, staffPersonIdRetriever);
@@ -370,7 +372,8 @@ public class R05360ReferralCityMandatoryTest {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 
@@ -496,7 +499,8 @@ public class R05360ReferralCityMandatoryTest {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 
@@ -623,7 +627,8 @@ public class R05360ReferralCityMandatoryTest {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 
@@ -749,7 +754,8 @@ public class R05360ReferralCityMandatoryTest {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 
@@ -875,7 +881,8 @@ public class R05360ReferralCityMandatoryTest {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 
@@ -1000,7 +1007,8 @@ public class R05360ReferralCityMandatoryTest {
         fixture("fixtures/domain/ScreeningToReferral/valid/validClientAddress.json"),
         ClientAddress.class);
     gov.ca.cwds.data.persistence.cms.ClientAddress clientAddressToCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ClientAddress("456789ABC", clientAddressDomain, "ABC",
+            new Date());
     when(clientAddressDao.create(any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
         .thenReturn(clientAddressToCreate);
 

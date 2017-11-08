@@ -224,9 +224,11 @@ public class ReporterTest {
     Integer state = 1828; // "ca";
     String zipCode = "12345";
     Integer type = 32;
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, city, state, zipCode, type);
+    gov.ca.cwds.rest.api.domain.Address address =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            city, state, zipCode, type, legacyDescriptor);
 
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
@@ -290,9 +292,11 @@ public class ReporterTest {
     Integer state = 1828; // "ca";
     String zipCode = "12345";
     Integer type = 32;
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, city, state, zipCode, type);
+    gov.ca.cwds.rest.api.domain.Address address =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            city, state, zipCode, type, legacyDescriptor);
 
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
@@ -346,9 +350,11 @@ public class ReporterTest {
   @Test
   public void streetNumberShouldBeParsedFromStreetAddress() {
     String streetAddress = "1 main";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address address =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
@@ -368,9 +374,11 @@ public class ReporterTest {
   @Test
   public void streetNameShouldBeParsedFromStreetAddress() {
     String streetAddress = "1 main";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address address =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
@@ -390,9 +398,11 @@ public class ReporterTest {
   @Test
   public void streetNameShouldNotIncludeTypeOfStreetsOrMultiPartStreetNames() {
     String streetAddress = "1 San Andreas Blvd";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address address =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
@@ -412,9 +422,11 @@ public class ReporterTest {
   @Test
   public void streetNameShouldContainSecondWordWhenOnlyNoStreetNumberIsPresent() {
     String streetAddress = "Main St";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address address = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address address =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
     RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
 
@@ -434,9 +446,11 @@ public class ReporterTest {
   @Test
   public void testForStreetAddressContainOnlyWordWhereStreetNumberisNull() {
     String streetAddress = "Main St";
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-    gov.ca.cwds.rest.api.domain.Address nsAddress = new gov.ca.cwds.rest.api.domain.Address(
-        "legacy_source_table", "legacy_id", streetAddress, "city", 1828, "12345", 32);
+    gov.ca.cwds.rest.api.domain.Address nsAddress =
+        new gov.ca.cwds.rest.api.domain.Address("legacy_source_table", "legacy_id", streetAddress,
+            "city", 1828, "12345", 32, legacyDescriptor);
 
     Address address = Address.createWithDefaults(nsAddress);
     assertThat(address.getStreetNumber(), is(equalTo(null)));

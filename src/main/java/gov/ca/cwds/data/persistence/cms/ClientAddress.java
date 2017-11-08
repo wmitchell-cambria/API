@@ -131,37 +131,15 @@ public class ClientAddress extends BaseClientAddress {
     this.addresses = addresses;
   }
 
-
   /**
    * @param id - ClientAddress Id
    * @param clientAddress - domain ClientAddress object
-   * @param lastUpdateId - staff Id
+   * @param lastUpdateId - the Id of the last person update this object
+   * @param lastUpdatedTime - The time when this object is last updated
    */
   public ClientAddress(String id, gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress,
-      String lastUpdateId) {
-    super(lastUpdateId);
-    init(id, clientAddress);
-  }
-
-  /**
-   * Constructor
-   * 
-   * @param id The id
-   * @param clientAddress The domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
-   * @param lastUpdatedTime the time of last person to update this object
-   */
-  public ClientAddress(String id, gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress,
-      String lastUpdatedId, Date lastUpdatedTime) {
-    super(lastUpdatedId, lastUpdatedTime);
-    init(id, clientAddress);
-  }
-
-  /**
-   * @param id the id
-   * @param clientAddress - clientAddress
-   */
-  private void init(String id, gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress) {
+      String lastUpdateId, Date lastUpdatedTime) {
+    super(lastUpdateId, lastUpdatedTime);
     try {
       this.id = id;
       this.addressType = clientAddress.getAddressType();

@@ -41,6 +41,7 @@ public class AddressTest {
   private Integer type = 32; // "Residence"
   private String legacySourceTable = "CLIENT_T";
   private String legacyId = "1234567ABC";
+  private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
   private Validator validator;
 
@@ -61,21 +62,22 @@ public class AddressTest {
    */
   @Test
   public void serializesToJSON() throws Exception {
-    String expected =
-        MAPPER.writeValueAsString(new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32));
+    String expected = MAPPER.writeValueAsString(
+        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor));
 
-    String serialized = MAPPER.writeValueAsString(
-        MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class));
+    String serialized = MAPPER.writeValueAsString(MAPPER.readValue(
+        fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class));
 
     assertThat(serialized, is(expected));
   }
 
   @Test
   public void testDeserializesFromJSON() throws Exception {
-    Address expected = new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32);
+    Address expected =
+        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
 
-    Address serialized =
-        MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class);
+    Address serialized = MAPPER.readValue(
+        fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class);
     assertThat(serialized, is(expected));
 
   }
@@ -103,7 +105,8 @@ public class AddressTest {
 
   @Test
   public void testJSONConstructorTest() throws Exception {
-    Address domain = new Address("CLIENT_T", "1234567ABC", street_name, city, state, zip, type);
+    Address domain = new Address("CLIENT_T", "1234567ABC", street_name, city, state, zip, type,
+        legacyDescriptor);
 
     assertThat(domain.getCity(), is(equalTo(city)));
     assertThat(domain.getState(), is(equalTo(state)));

@@ -69,7 +69,14 @@
       "city" : "San Jose",
       "state": 1828,
       "zip" : 94321,
-      "type": 32
+      "type": 32,
+       "legacy_descriptor": {
+                "legacy_id": null,
+                "legacy_ui_id": null,
+                "legacy_last_updated": null,
+                "legacy_table_name": null,
+                "legacy_table_description": null
+           }
     } ],
     "race_ethnicity":{  
             "race_codes":[  

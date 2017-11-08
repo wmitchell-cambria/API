@@ -32,10 +32,11 @@ public class PostedAddress extends Address {
    * @param state The state
    * @param zip The zip
    * @param type - address type
+   * @param legacyDescriptor - legacyDescriptor
    */
   public PostedAddress(long id, String legacySourceTable, String legacyId, String streetAddress,
-      String city, Integer state, String zip, Integer type) {
-    super(legacySourceTable, legacyId, streetAddress, city, state, zip, type);
+      String city, Integer state, String zip, Integer type, LegacyDescriptor legacyDescriptor) {
+    super(legacySourceTable, legacyId, streetAddress, city, state, zip, type, legacyDescriptor);
     this.id = id;
   }
 

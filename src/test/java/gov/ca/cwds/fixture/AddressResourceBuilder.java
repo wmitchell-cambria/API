@@ -1,5 +1,7 @@
 package gov.ca.cwds.fixture;
 
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
+
 /**
  * 
  * @author CWDS API Team
@@ -13,6 +15,7 @@ public class AddressResourceBuilder {
   Integer state = 1828; // "CA";
   String zip = "95757";
   Integer type = 32;
+  LegacyDescriptor legacyDescriptor;
 
   /**
    * @param legacySourceTable - legacySourceTable
@@ -78,10 +81,17 @@ public class AddressResourceBuilder {
   }
 
   /**
+   * @param legacyDescriptor
+   */
+  public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
+    this.legacyDescriptor = legacyDescriptor;
+  }
+
+  /**
    * @return the Address
    */
   public gov.ca.cwds.rest.api.domain.Address createAddress() {
     return new gov.ca.cwds.rest.api.domain.Address(legacySourceTable, legacyId, streetAddress, city,
-        state, zip, type);
+        state, zip, type, legacyDescriptor);
   }
 }

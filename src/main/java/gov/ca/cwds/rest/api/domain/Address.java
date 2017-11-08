@@ -33,7 +33,8 @@ public class Address extends ReportingDomain implements Request, Response {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("legacy_source_table")
-  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Source Table", example = "")
+  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Source Table",
+      example = "ADDRS_T")
   private String legacySourceTable;
 
   @JsonProperty("legacy_id")
@@ -83,13 +84,15 @@ public class Address extends ReportingDomain implements Request, Response {
    * @param state - state
    * @param zip - zip code
    * @param type the address type
+   * @param legacyDescriptor - legacyDescriptor
    */
   @JsonCreator
   public Address(@JsonProperty("legacy_source_table") String legacySourceTable,
       @JsonProperty("legacy_id") String addressId,
       @JsonProperty("street_address") String streetAddress, @JsonProperty("city") String city,
       @JsonProperty("state") Integer state, @JsonProperty("zip") String zip,
-      @JsonProperty("type") Integer type) {
+      @JsonProperty("type") Integer type,
+      @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor) {
     super();
     this.legacySourceTable = legacySourceTable;
     this.legacyId = addressId;
@@ -98,6 +101,7 @@ public class Address extends ReportingDomain implements Request, Response {
     this.state = state;
     this.zip = zip;
     this.type = type;
+    this.legacyDescriptor = legacyDescriptor;
   }
 
   /**
@@ -113,6 +117,7 @@ public class Address extends ReportingDomain implements Request, Response {
     this.state = address.getState() != null ? Integer.valueOf(address.getState()) : null;
     this.zip = address.getZip();
     this.type = address.getType() != null ? Integer.valueOf(address.getType()) : null;
+    this.legacyDescriptor = new LegacyDescriptor();
 
   }
 
