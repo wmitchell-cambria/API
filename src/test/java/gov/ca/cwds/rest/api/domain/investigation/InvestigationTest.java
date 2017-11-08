@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -553,7 +552,7 @@ public class InvestigationTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerializedInvestigation()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();

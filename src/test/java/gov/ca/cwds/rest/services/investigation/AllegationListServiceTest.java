@@ -21,10 +21,10 @@ import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 public class AllegationListServiceTest {
   private static final String DEFAULT_KEY = "1234567ABC";
 
-  AllegationList stubAllegationList;
+  private AllegationList stubAllegationList;
 
-  AllegationListService allegationListService;
-  AllegationsDao allegationsDao;
+  private AllegationListService allegationListService;
+  private AllegationsDao allegationsDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

@@ -84,9 +84,9 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     this.screeningSummaryService = screeningSummaryService;
   }
 
-  private synchronized Investigation stubby() {
+  private synchronized Investigation returnInvestigationStub() {
     // Stub data.
-    this.validInvestigation.setHistoryOfInvolvement((HistoryOfInvolvement) hoiSvc.find("STUB"));
+    // this.validInvestigation.setHistoryOfInvolvement((HistoryOfInvolvement) hoiSvc.find("STUB"));
     return this.validInvestigation;
   }
 
@@ -97,10 +97,10 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   @Override
   public Response find(String referralId) {
-    Investigation ret;
+    Investigation investigation;
 
     if (referralId.equals("999999")) {
-      return stubby();
+      return returnInvestigationStub();
     }
 
     final Referral referral = investigationDao.find(referralId);
@@ -116,7 +116,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
 
       Set<gov.ca.cwds.rest.api.domain.investigation.Allegation> allegations =
           this.allegationService.populateAllegations(referral.getAllegations());
-      Set<Person> peoples = this.peopleService.getInvestigationPeoples(referral);
+      Set<Person> peoples = this.peopleService.getInvestigationPeople(referral);
       Set<Relationship> relationshipList = new HashSet<>();
 
       // TODO - uncomment below when its needed
@@ -127,12 +127,12 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
       ScreeningSummary screeningSummary = this.findScreeningSummaryServiceByReferralId(referralId);
 
-      ret = new Investigation(referral, address, staffPerson, rptNarrativeLongText, addInfoLongText,
-          allegations, peoples, relationshipList, safetyAlerts, crossReports, contacts,
-          screeningSummary);
+      investigation = new Investigation(referral, address, staffPerson, rptNarrativeLongText,
+          addInfoLongText, allegations, peoples, relationshipList, safetyAlerts, crossReports,
+          contacts, screeningSummary);
     }
 
-    return ret;
+    return investigation;
   }
 
 

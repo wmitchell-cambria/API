@@ -87,7 +87,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
    * @param referral - referral object
    * @return list of persons
    */
-  public Set<Person> getInvestigationPeoples(Referral referral) {
+  public Set<Person> getInvestigationPeople(Referral referral) {
     Set<Person> persons = new HashSet<>();
     Set<InvestigationAddress> address = new HashSet<>();
     Set<PhoneNumber> phoneNumbers = new HashSet<>();
