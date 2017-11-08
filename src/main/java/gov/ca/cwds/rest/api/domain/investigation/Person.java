@@ -246,8 +246,8 @@ public class Person extends ReportingDomain implements Request, Response {
     this.ssn = reporter.getSsn();
     this.dateOfBirth = null;
     this.languages = languages;
-    this.sealed = false;
-    this.sensitive = false;
+    this.sealed = Boolean.FALSE;
+    this.sensitive = Boolean.FALSE;
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.addresses = address;
     this.phone = phoneNumbers;

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -101,7 +102,7 @@ public class HistoryOfInvolvementTest {
   }
 
   @Test
-  // @Ignore
+  @Ignore
   public void testSerializedAllegation()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     HistoryOfInvolvement historyOfInvolement = new HistoryOfInvolvementEntityBuilder().build();

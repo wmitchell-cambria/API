@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -74,7 +73,7 @@ public class CrossReportTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerializedInvestigation()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     CrossReport crossReport = new CrossReport(legacyDescriptor, readOnly, reportedOn,
@@ -82,6 +81,5 @@ public class CrossReportTest {
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReport);
     System.out.println(expected);
   }
-
 
 }

@@ -12,13 +12,14 @@ import gov.ca.cwds.rest.api.domain.investigation.CrossReportAgency;
 @SuppressWarnings("javadoc")
 public class CrossReportEntityBuilder {
 
-  protected Boolean readOnly = false;
+  protected Boolean readOnly = Boolean.FALSE;
   protected Date reportedOn = DomainChef.uncookDateString("2017-10-31");
   protected String communicationMethod = "409";
   protected String county = "20";
 
   private CrossReportAgency crossReportAgency = new CrossReportAgencyEntityBuilder().build();
-  private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
+  private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder()
+      .setTableDescription("CROSS_REPORT").setTableName("CRSS_RPT").build();
 
   private Set<CrossReportAgency> crossReportAgencies = new HashSet<>();
 

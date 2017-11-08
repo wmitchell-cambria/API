@@ -37,6 +37,8 @@ import gov.ca.cwds.rest.services.investigation.contact.ContactService;
  */
 public class InvestigationService implements TypedCrudsService<String, Investigation, Response> {
 
+  private static final String STUB_DATA_KEY = "999999";
+
   private InvestigationDao investigationDao;
   private StaffPersonDao staffPersonDao;
   private AddressDao addressDao;
@@ -85,8 +87,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   }
 
   private synchronized Investigation returnInvestigationStub() {
-    // Stub data.
-    // this.validInvestigation.setHistoryOfInvolvement((HistoryOfInvolvement) hoiSvc.find("STUB"));
+    // Stub data from the InvestigationEntityBuilder
     return this.validInvestigation;
   }
 
@@ -99,7 +100,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   public Response find(String referralId) {
     Investigation investigation;
 
-    if (referralId.equals("999999")) {
+    if (referralId.equals(STUB_DATA_KEY)) {
       return returnInvestigationStub();
     }
 

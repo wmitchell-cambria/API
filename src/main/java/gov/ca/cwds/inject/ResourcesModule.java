@@ -166,6 +166,8 @@ public class ResourcesModule extends AbstractModule {
     bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.AllegationListResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.CrossReportResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.CrossReportListResource.class);
     bind(RelationshipListResource.class);
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
@@ -474,4 +476,20 @@ public class ResourcesModule extends AbstractModule {
         injector.getInstance(SafetyAlertsService.class));
   }
 
+  @Provides
+  @InvestigationCrossReportServiceBackedResource
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.CrossReport> crossReportBackedResource(
+      Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(gov.ca.cwds.rest.services.investigation.CrossReportService.class));
+  }
+
+  @Provides
+  @InvestigationCrossReportListServiceBackedResource
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.investigation.CrossReportList> crossReportListBackedResource(
+      Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(gov.ca.cwds.rest.services.investigation.CrossReportListService.class));
+  }
 }
+
