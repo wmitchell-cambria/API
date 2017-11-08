@@ -42,7 +42,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("2016-11-25T14:32:23.123-0700");
     client = createClient("2016-11-25T14:32:23.123-0700");
 
-    assertTrue(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertTrue(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   @Test
@@ -50,7 +51,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("2016-11-25T14:32:00.999-0700");
     client = createClient("2016-11-25T14:32:00.001-0700");
 
-    assertTrue(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertTrue(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   @Test
@@ -58,7 +60,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("2016-11-25T14:32:00.123-0700");
     client = createClient("2016-11-25T14:32:59.123-0700");
 
-    assertFalse(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertFalse(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   @Test
@@ -66,7 +69,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("2016-11-25T14:32:00.000-0700");
     client = createClient("2016-11-25T14:32:59.000-0700");
 
-    assertFalse(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertFalse(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   @Test
@@ -74,7 +78,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("2016-11-02T14:32:00.123-0700");
     client = createClient("2016-11-01T14:32:00.123-0700");
 
-    assertFalse(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertFalse(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -82,7 +87,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("Bad.Date");
     client = createClient("2016-11-01-14.32.00.123");
 
-    assertFalse(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertFalse(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -90,7 +96,8 @@ public class DateTimeComparatorTest {
     participant = createParticipant("BadDate");
     client = createClient("2016-11-01-14.32.00.123");
 
-    assertFalse(comparator.compare(participant.getLegacyDescriptor(), client.getLastUpdatedTime()));
+    assertFalse(comparator.compare(participant.getLegacyDescriptor().getLastUpdated(),
+        client.getLastUpdatedTime()));
   }
 
   private Client createClient(String clientDate) {

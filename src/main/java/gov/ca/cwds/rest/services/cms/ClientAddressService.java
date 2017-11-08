@@ -214,7 +214,7 @@ public class ClientAddressService implements
         Address foundAddress = this.addressService.find(address.getLegacyId());
         if (foundAddress != null) {
           DateTimeComparatorInterface comparator = new DateTimeComparator();
-          if (comparator.compare(address.getLegacyDescriptor(),
+          if (comparator.compare(address.getLegacyDescriptor().getLastUpdated(),
               foundAddress.getLastUpdatedTime())) {
             addressId = updateAddress(messageBuilder, address, domainAddress);
           } else {

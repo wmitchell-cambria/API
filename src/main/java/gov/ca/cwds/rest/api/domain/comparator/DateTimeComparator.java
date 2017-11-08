@@ -4,31 +4,33 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-
 /**
+ * <p>
+ * Compares the last update time stamp of the incoming domain object and the existing object
+ * dateTime. Both objects are different representations of the same object at different parts of
+ * application flow.
+ * 
+ * Joda time is used to handle
+ * <p>
+ * 
  * @author CWDS API Team
  *
+ * 
  */
 public class DateTimeComparator implements DateTimeComparatorInterface {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DateTimeComparator.class);
 
   /**
-   * Compares the last update time stamp of the incoming domain object and the existing object
-   * dateTime. Both objects are different representations of the same object at different parts of
-   * application flow.
    *
-   * Joda time is used to handle
-   *
-   * @param participant The participant to compare last updated time with
-   * @param client the Client to compare last updated time with
+   * @param incomingDateTime the incoming DateTime object
+   * @param savedDateTime the dateTime of the same other object
    * @return returns true if the date is equal to the second resolution
    */
   @Override
-  public boolean compare(LegacyDescriptor legacyDescriptor, DateTime datetime) {
-    DateTime incomingDate = trimMilliseconds(legacyDescriptor.getLastUpdated());
-    DateTime savedDate = trimMilliseconds(datetime);
+  public boolean compare(DateTime incomingDateTime, DateTime savedDateTime) {
+    DateTime incomingDate = trimMilliseconds(incomingDateTime);
+    DateTime savedDate = trimMilliseconds(savedDateTime);
     boolean isSameDate = incomingDate.getMillis() == savedDate.getMillis();
     if (!isSameDate) {
       logDateNotEqual(incomingDate, savedDate);
@@ -46,8 +48,8 @@ public class DateTimeComparator implements DateTimeComparatorInterface {
   }
 
   /**
-   * @param incomingDate
-   * @param savedDate
+   * @param incomingDate - incomingDate
+   * @param savedDate - savedDate
    */
   public void logDateNotEqual(DateTime incomingDate, DateTime savedDate) {
     StringBuilder builder = new StringBuilder();

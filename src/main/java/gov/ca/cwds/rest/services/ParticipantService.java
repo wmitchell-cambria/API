@@ -311,7 +311,7 @@ public class ParticipantService implements CrudsService {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
       DateTimeComparatorInterface comparator = new DateTimeComparator();
-      if (comparator.compare(incomingParticipant.getLegacyDescriptor(),
+      if (comparator.compare(incomingParticipant.getLegacyDescriptor().getLastUpdated(),
           foundClient.getLastUpdatedTime())) {
         foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
         foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
