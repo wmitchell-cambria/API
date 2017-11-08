@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.Validation;
@@ -25,9 +24,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import gov.ca.cwds.data.cms.ClientAddressDao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.fixture.AddressResourceBuilder;
+import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
@@ -45,6 +46,8 @@ import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.business.rules.LACountyTrigger;
+import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
@@ -53,7 +56,12 @@ import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 
+/**
+ * @author CWDS API Team
+ *
+ */
 public class ParticipantServiceTest {
   private ParticipantService participantService;
 
@@ -77,6 +85,12 @@ public class ParticipantServiceTest {
   private String referralId;
   private Date timestamp;
   private MessageBuilder messageBuilder;
+  private ClientAddressDao clientAddressDao;
+  private NonLACountyTriggers nonLACountyTriggers;
+  private LACountyTrigger laCountyTrigger;
+  private TriggerTablesDao triggerTablesDao;
+  private StaffPersonDao staffpersonDao;
+  private RIClientAddress riClientAddress;
 
   private Validator validator;
 
@@ -187,64 +201,6 @@ public class ParticipantServiceTest {
 
   @SuppressWarnings("javadoc")
   @Test
-  public void testClientAddressExistSuccess() throws Exception {
-    String addressId1 = "1111111111";
-    gov.ca.cwds.rest.api.domain.Address address1 =
-        new AddressResourceBuilder().setLegacyId("1111111111").setLegacySourceTable("ADDRS_T")
-            .setStreetAddress("123 First St").createAddress();
-    String addressId2 = "2222222222";
-    gov.ca.cwds.rest.api.domain.Address address2 =
-        new AddressResourceBuilder().setLegacyId("2222222222").setLegacySourceTable("ADDRS_T")
-            .setStreetAddress("123 First St").createAddress();
-
-    Participant selfReportingVictim = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<>(Arrays.asList("Non-mandated Reporter", "Victim")))
-        .setAddresses(new HashSet<>(Arrays.asList(address1))).createParticipant();
-    LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
-    selfReportingVictim.setLegacyDescriptor(descriptor);
-    Participant perp = new ParticipantResourceBuilder()
-        .setAddresses(new HashSet<>(Arrays.asList(address2))).createPerpParticipant();
-    Set participants = new HashSet<>(Arrays.asList(selfReportingVictim, perp));
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(participants).createScreeningToReferral();
-
-    ClientAddress clientAddress = mock(ClientAddress.class);
-    ClientAddress foundClientAddress = mock(ClientAddress.class);
-    List foundClientAddresses = new ArrayList<ClientAddress>();
-    foundClientAddresses.add(foundClientAddress);
-    Client updatedClient = mock(Client.class);
-    PostedClient savedClient = mock(PostedClient.class);
-    when(savedClient.getId()).thenReturn("ASDFGHHYTR");
-    when(savedClient.getLastUpdatedTime()).thenReturn(modifiedLastUpdateDate);
-    when(clientAddressService.find(any())).thenReturn(clientAddress);
-
-    when(clientAddressService.findByAddressAndClient(any(), any()))
-        .thenReturn(foundClientAddresses);
-    when(clientService.find(any())).thenReturn(savedClient);
-    when(clientService.create(any())).thenReturn(savedClient);
-    when(clientService.createWithSingleTimestamp(any(), any())).thenReturn(savedClient);
-    when(clientService.update(any(), any())).thenReturn(updatedClient);
-
-    Address foundAddress = mock(Address.class);
-    when(foundAddress.getExistingAddressId()).thenReturn("ZXCVBNMKJH");
-    PostedAddress postedAddress = mock(PostedAddress.class);
-    when(postedAddress.getExistingAddressId()).thenReturn("ZXCVBNMKJH");
-
-    when(addressService.find(any())).thenReturn(foundAddress);
-    when(addressService.create(any())).thenReturn(postedAddress);
-    when(addressService.createWithSingleTimestamp(any(), any())).thenReturn(postedAddress);
-
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
-
-    verify(addressService).find(eq(addressId1));
-    verify(addressService).find(eq(addressId2));
-    verify(clientAddressService).findByAddressAndClient(address1, selfReportingVictim);
-    verify(clientAddressService).findByAddressAndClient(address2, perp);
-  }
-
-  @SuppressWarnings("javadoc")
-  @Test
   public void shouldUpdateClientWhenClientIdIsPresent() throws Exception {
     String victimClientLegacyId = "ABC123DSAF";
 
@@ -329,80 +285,6 @@ public class ParticipantServiceTest {
         "Unable to Update John Smith Client. Client was previously modified";
     assertEquals("Expected client previously modified message to have been recorded",
         expectedErrorMessage, message);
-  }
-
-  @SuppressWarnings("javadoc")
-  @Test
-  public void shouldFailSavingWhenAddressIdDoesNotExist() throws Exception {
-    gov.ca.cwds.rest.api.domain.Address perpAddress =
-        new AddressResourceBuilder().setLegacyId("1234567ABC").createAddress();
-    Set<gov.ca.cwds.rest.api.domain.Address> perpAddresses =
-        new HashSet<gov.ca.cwds.rest.api.domain.Address>();
-    perpAddresses.add(perpAddress);
-    Participant perp =
-        new ParticipantResourceBuilder().setAddresses(perpAddresses).createPerpParticipant();
-    gov.ca.cwds.rest.api.domain.Address victimAddress =
-        new AddressResourceBuilder().setLegacyId("1234567ABC").createAddress();
-    Set<gov.ca.cwds.rest.api.domain.Address> victimAddresses =
-        new HashSet<gov.ca.cwds.rest.api.domain.Address>();
-    victimAddresses.add(victimAddress);
-    Participant victim =
-        new ParticipantResourceBuilder().setAddresses(victimAddresses).createVictimParticipant();
-    Set<Participant> participants = new HashSet<>(Arrays.asList(victim, perp, defaultReporter));
-
-    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(participants).createScreeningToReferral();
-
-    participantService.saveParticipants(screeningToReferral, dateStarted, referralId, timestamp,
-        messageBuilder);
-
-    String expectedErrorMessage =
-        "Legacy Id on Address does not correspond to an existing CMS/CWS Address";
-    assertEquals("Expected Legacy Id error messages to have been recorded for both Addresses",
-        messageBuilder.getMessages().size(), 2);
-    String message = messageBuilder.getMessages().get(0).getMessage().trim();
-    assertEquals("Expected Address Legacy Id error message to have been recorded",
-        expectedErrorMessage, message);
-    message = messageBuilder.getMessages().get(1).getMessage().trim();
-    assertEquals("Expected Address Legacy Id error message to have been recorded",
-        expectedErrorMessage, message);
-  }
-
-  @SuppressWarnings("javadoc")
-  @Test
-  public void testAddressExistSuccess() throws Exception {
-    gov.ca.cwds.rest.api.domain.Address address =
-        new AddressResourceBuilder().setLegacyId("ASDFGHJKLQ").createAddress();
-    Participant victim =
-        new ParticipantResourceBuilder().setRoles(new HashSet<>(Arrays.asList("Victim")))
-            .setAddresses(new HashSet<>(Arrays.asList(address))).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(victim, defaultPerpetrator, defaultReporter));
-
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(participants).createScreeningToReferral();
-
-    gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocument =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234560", null, null, null, null,
-            null);
-    Address victimFoundAddress = mock(Address.class);
-    when(victimFoundAddress.getExistingAddressId()).thenReturn("ADDRESS_ID");
-    PostedAddress perpCreatedAddress = mock(PostedAddress.class);
-    when(perpCreatedAddress.getExistingAddressId()).thenReturn("PERPADDRID");
-    ClientAddress clientAddress = new ClientAddress();
-    List clientAddresses = new ArrayList();
-    clientAddresses.add(clientAddress);
-    when(addressService.find(address.getLegacyId())).thenReturn(victimFoundAddress);
-    when(addressService.create(any())).thenReturn(perpCreatedAddress);
-    when(addressService.createWithSingleTimestamp(any(), any())).thenReturn(perpCreatedAddress);
-
-    when(clientAddressService.find(address.getLegacyId())).thenReturn(mock(ClientAddress.class));
-    when(clientAddressService.findByAddressAndClient(any(), any())).thenReturn(clientAddresses);
-    MessageBuilder messageBuilder = new MessageBuilder();
-
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
-
-    verify(addressService).find(eq(address.getLegacyId()));
   }
 
   @SuppressWarnings("javadoc")

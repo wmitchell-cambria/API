@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.rest.api.Request;
@@ -50,6 +51,10 @@ public class Address extends ReportingDomain implements Request, Response {
    * Base serialization value. Increment by version
    */
   private static final long serialVersionUID = 1L;
+
+  @ApiModelProperty(required = false, readOnly = false, value = "Last Updated Time",
+      example = "2004-03-31T09:45:58.000-0800")
+  private DateTime lastUpdatedTime;
 
   @Size(max = CmsPersistentObject.CMS_ID_LEN)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
@@ -139,6 +144,7 @@ public class Address extends ReportingDomain implements Request, Response {
 
   /**
    * @param existingAddressId = Address Id
+   * @param lastUpdatedTime - lastUpdatedTime
    * @param city The city
    * @param emergencyNumber city emergencyNumber
    * @param emergencyExtension city emergencyExtension
@@ -161,14 +167,16 @@ public class Address extends ReportingDomain implements Request, Response {
    * @param unitDesignationCd city unitDesignationCd
    * @param unitNumber city unitNumber
    */
-  public Address(String existingAddressId, String city, BigDecimal emergencyNumber,
-      Integer emergencyExtension, Boolean frgAdrtB, Short governmentEntityCd,
-      BigDecimal messageNumber, Integer messageExtension, String headerAddress,
-      BigDecimal primaryNumber, Integer primaryExtension, Short state, String streetName,
-      String streetNumber, Integer zip, String addressDescription, Short zip4, String postDirCd,
-      String preDirCd, Short streetSuffixCd, Short unitDesignationCd, String unitNumber) {
+  public Address(String existingAddressId, DateTime lastUpdatedTime, String city,
+      BigDecimal emergencyNumber, Integer emergencyExtension, Boolean frgAdrtB,
+      Short governmentEntityCd, BigDecimal messageNumber, Integer messageExtension,
+      String headerAddress, BigDecimal primaryNumber, Integer primaryExtension, Short state,
+      String streetName, String streetNumber, Integer zip, String addressDescription, Short zip4,
+      String postDirCd, String preDirCd, Short streetSuffixCd, Short unitDesignationCd,
+      String unitNumber) {
     super();
     this.existingAddressId = existingAddressId;
+    this.lastUpdatedTime = lastUpdatedTime;
     this.city = city;
     this.emergencyNumber = emergencyNumber;
     this.emergencyExtension = emergencyExtension;
@@ -201,6 +209,7 @@ public class Address extends ReportingDomain implements Request, Response {
    */
   public Address(gov.ca.cwds.data.persistence.cms.Address persistedAddress, boolean isExist) {
     this.existingAddressId = isExist ? persistedAddress.getId() : "";
+    this.lastUpdatedTime = new DateTime(persistedAddress.getLastUpdatedTime());
     this.city = persistedAddress.getCity();
     this.emergencyNumber = persistedAddress.getEmergencyNumber();
     this.emergencyExtension = persistedAddress.getEmergencyExtension();
@@ -267,10 +276,10 @@ public class Address extends ReportingDomain implements Request, Response {
       }
     }
 
-    return new Address(" ", address.getCity(), DEFAULT_DECIMAL, DEFAULT_INT, false, DEFAULT_CODE,
-        DEFAULT_DECIMAL, DEFAULT_INT, " ", DEFAULT_DECIMAL, DEFAULT_INT,
-        address.getState().shortValue(), streetName, streetNumber, zipCode, " ", zipSuffix, " ",
-        " ", DEFAULT_CODE, DEFAULT_CODE, " ");
+    return new Address(" ", address.getLegacyDescriptor().getLastUpdated(), address.getCity(),
+        DEFAULT_DECIMAL, DEFAULT_INT, false, DEFAULT_CODE, DEFAULT_DECIMAL, DEFAULT_INT, " ",
+        DEFAULT_DECIMAL, DEFAULT_INT, address.getState().shortValue(), streetName, streetNumber,
+        zipCode, " ", zipSuffix, " ", " ", DEFAULT_CODE, DEFAULT_CODE, " ");
   }
 
   /**
@@ -278,6 +287,13 @@ public class Address extends ReportingDomain implements Request, Response {
    */
   public String getExistingAddressId() {
     return existingAddressId;
+  }
+
+  /**
+   * @return the lastUpdatedTime
+   */
+  public DateTime getLastUpdatedTime() {
+    return lastUpdatedTime;
   }
 
   /**
