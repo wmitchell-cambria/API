@@ -2,6 +2,9 @@ package gov.ca.cwds.fixture;
 
 import java.math.BigDecimal;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
 /**
  * @author CWDS API Team
  *
@@ -10,6 +13,8 @@ import java.math.BigDecimal;
 public class CmsAddressResourceBuilder {
 
   String existingAddressId = "ABC1234567";
+  DateTime lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+      .parseDateTime("2004-03-31T09:45:58.000-0800");
   String city = "Sacramento";
   BigDecimal emergencyNumber = new BigDecimal("123456789");
   Integer emergencyExtension = 1234;
@@ -33,11 +38,11 @@ public class CmsAddressResourceBuilder {
   String unitNumber = "120";
 
   public gov.ca.cwds.rest.api.domain.cms.Address buildCmsAddress() {
-    return new gov.ca.cwds.rest.api.domain.cms.Address(existingAddressId, city, emergencyNumber,
-        emergencyExtension, frgAdrtB, governmentEntityCd, messageNumber, messageExtension,
-        headerAddress, primaryNumber, primaryExtension, state, streetName, streetNumber, zip,
-        addressDescription, zip4, postDirCd, preDirCd, streetSuffixCd, unitDesignationCd,
-        unitNumber);
+    return new gov.ca.cwds.rest.api.domain.cms.Address(existingAddressId, lastUpdatedTime, city,
+        emergencyNumber, emergencyExtension, frgAdrtB, governmentEntityCd, messageNumber,
+        messageExtension, headerAddress, primaryNumber, primaryExtension, state, streetName,
+        streetNumber, zip, addressDescription, zip4, postDirCd, preDirCd, streetSuffixCd,
+        unitDesignationCd, unitNumber);
   }
 
   public String getExistingAddressId() {
@@ -46,6 +51,15 @@ public class CmsAddressResourceBuilder {
 
   public CmsAddressResourceBuilder setExistingAddressId(String existingAddressId) {
     this.existingAddressId = existingAddressId;
+    return this;
+  }
+
+  public DateTime getLastUpdatedTime() {
+    return lastUpdatedTime;
+  }
+
+  public CmsAddressResourceBuilder setLastUpdatedTime(DateTime lastUpdatedTime) {
+    this.lastUpdatedTime = lastUpdatedTime;
     return this;
   }
 

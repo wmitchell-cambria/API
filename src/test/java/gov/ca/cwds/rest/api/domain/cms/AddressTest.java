@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -57,6 +59,8 @@ public class AddressTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   private String id = "0123456ABC";
+  private DateTime lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+      .parseDateTime("2004-03-31T09:45:58.000-0800");
   private String cityName = "Sacramento";
   private String description = "test CWS address";
   private int emergencyPhoneExtension = 1234;
@@ -87,10 +91,10 @@ public class AddressTest {
    */
   @Test
   public void testDomainConstructorSuccess() throws Exception {
-    Address address = new Address(id, cityName, emergencyPhoneNumber, emergencyPhoneExtension,
-        foreignAddressIndicator, governmentEntityType, messagePhoneNumber, messagePhoneExtension,
-        otherHeaderAddress, primaryPhoneNumber, primaryPhoneNumberExtension, stateCodeType,
-        streetName, streetNumber, zip, description, zipSuffix, postDirectionTextCode,
+    Address address = new Address(id, lastUpdatedTime, cityName, emergencyPhoneNumber,
+        emergencyPhoneExtension, foreignAddressIndicator, governmentEntityType, messagePhoneNumber,
+        messagePhoneExtension, otherHeaderAddress, primaryPhoneNumber, primaryPhoneNumberExtension,
+        stateCodeType, streetName, streetNumber, zip, description, zipSuffix, postDirectionTextCode,
         preDirectionTextCode, streetSuffixType, unitDesignatorType, unitNumber);
 
     assertThat(address.getCity(), is(equalTo(cityName)));

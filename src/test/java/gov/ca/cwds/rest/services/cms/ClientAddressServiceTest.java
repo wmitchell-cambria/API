@@ -15,7 +15,9 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -34,13 +36,17 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ClientAddressResourceBuilder;
+import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 
@@ -61,6 +67,7 @@ public class ClientAddressServiceTest {
   RIClientAddress riClientAddress;
   Validator validator;
   AddressService addressService;
+  private MessageBuilder messageBuilder;
 
   private static Boolean isLaCountyTrigger = false;
 
@@ -78,6 +85,7 @@ public class ClientAddressServiceTest {
     riClientAddress = mock(RIClientAddress.class);
     validator = mock(Validator.class);
     addressService = mock(AddressService.class);
+    messageBuilder = mock(MessageBuilder.class);
 
     clientAddressService =
         new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
@@ -396,8 +404,6 @@ public class ClientAddressServiceTest {
     when(laCountyTrigger.createClientAddressCountyTrigger(
         any(gov.ca.cwds.data.persistence.cms.ClientAddress.class)))
             .thenAnswer(new Answer<Boolean>() {
-
-
               @Override
               public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 isLaCountyTrigger = true;
@@ -407,6 +413,23 @@ public class ClientAddressServiceTest {
 
     clientAddressService.update("1234567ABC", request);
     assertThat(isLaCountyTrigger, is(true));
+  }
+
+  @Test
+  public void testForAddressCreate() {
+    Address adddress1 = new AddressResourceBuilder().createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().buildCmsAddress();
+    gov.ca.cwds.data.persistence.cms.Address address =
+        new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5");
+    gov.ca.cwds.rest.api.domain.cms.PostedAddress postedAddress =
+        new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, false);
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.createWithSingleTimestamp(any(), any())).thenReturn(postedAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", new Date(),
+        messageBuilder);
+    verify(addressService, times(1)).createWithSingleTimestamp(any(), any());
 
   }
 

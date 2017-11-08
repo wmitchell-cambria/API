@@ -29,7 +29,8 @@ import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.api.domain.comparator.EntityChangedComparator;
+import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
+import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
@@ -309,8 +310,9 @@ public class ParticipantService implements CrudsService {
       MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
-      EntityChangedComparator comparator = new EntityChangedComparator();
-      if (comparator.compare(incomingParticipant, foundClient)) {
+      DateTimeComparatorInterface comparator = new DateTimeComparator();
+      if (comparator.compare(incomingParticipant.getLegacyDescriptor().getLastUpdated(),
+          foundClient.getLastUpdatedTime())) {
         foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
         foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
 

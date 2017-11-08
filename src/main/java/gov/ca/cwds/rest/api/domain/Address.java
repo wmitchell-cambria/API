@@ -153,6 +153,9 @@ public class Address extends ReportingDomain implements Request, Response {
    * @return - CMS record description
    */
   public LegacyDescriptor getLegacyDescriptor() {
+    if (legacyDescriptor == null) {
+      legacyDescriptor = new LegacyDescriptor();
+    }
     return this.legacyDescriptor;
   }
 

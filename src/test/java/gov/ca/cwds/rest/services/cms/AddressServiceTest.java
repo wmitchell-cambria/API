@@ -11,11 +11,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -64,16 +68,20 @@ public class AddressServiceTest {
   @Test
   public void addressServiceFindReturnsCorrectEntity() throws Exception {
     String id = "AaNli340MV";
-    gov.ca.cwds.rest.api.domain.cms.Address expected =
-        new CmsAddressResourceBuilder().setExistingAddressId("AaNli340MV").buildCmsAddress();
+    Date updated = new Date();
+    DateTime lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        .parseDateTime("2004-03-31T09:45:58.000-0800");
+
+    gov.ca.cwds.rest.api.domain.cms.Address expected = new CmsAddressResourceBuilder()
+        .setExistingAddressId("AaNli340MV").setLastUpdatedTime(lastUpdatedTime).buildCmsAddress();
 
     gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.Address(id, expected, "04Z", updated);
 
     // gov.ca.cwds.rest.api.domain.cms.Address request = new Address(persistedAddress, isExist);
     when(addressDao.find(id)).thenReturn(address);
-    Response found = addressService.find(id);
-    assertThat(found, is(expected));
+    Address found = addressService.find(id);
+    assertThat(found.getExistingAddressId(), is(expected.getExistingAddressId()));
   }
 
   @Test
@@ -104,8 +112,8 @@ public class AddressServiceTest {
         new gov.ca.cwds.data.persistence.cms.Address(id, expected, "0XA");
 
     when(addressDao.delete(id)).thenReturn(address);
-    Response found = addressService.delete(id);
-    assertThat(found, is(expected));
+    Address found = addressService.delete(id);
+    assertThat(found.getExistingAddressId(), is(expected.getExistingAddressId()));
   }
 
   // update test
