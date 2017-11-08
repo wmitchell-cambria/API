@@ -46,8 +46,11 @@ public class UpperCaseTablesTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  /**
+   * 
+   */
   @Before
-  public void setup() throws Exception {
+  public void setup() {
     clientUcDao = mock(ClientUcDao.class);
     addressUcDao = mock(AddressUcDao.class);
 
@@ -61,10 +64,9 @@ public class UpperCaseTablesTest {
   public void testForClientUpperCaseCreated() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     upperCaseTables.createClientUc(client);
     verify(clientUcDao, times(1)).create(any());
-
   }
 
   /**
@@ -75,9 +77,8 @@ public class UpperCaseTablesTest {
     when(clientUcDao.create(any())).thenThrow(new ServiceException());
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     upperCaseTables.createClientUc(client);
-
   }
 
   /**
@@ -87,7 +88,7 @@ public class UpperCaseTablesTest {
   public void testForClientUpperCase() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
 
     when(clientUcDao.create(any(ClientUc.class))).thenAnswer(new Answer<ClientUc>() {
       @Override
@@ -100,7 +101,6 @@ public class UpperCaseTablesTest {
     });
     upperCaseTables.createClientUc(client);
     assertThat(clientUc.getCommonFirstName(), is(equalTo("BILLY")));
-
   }
 
   /**
@@ -110,10 +110,9 @@ public class UpperCaseTablesTest {
   public void testForClientUpperCaseUpdated() throws Exception {
     Client clientDomain = new ClientResourceBuilder().setCommonFirstName("BILLYS").build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     upperCaseTables.updateClientUc(client);
     verify(clientUcDao, times(1)).update(any());
-
   }
 
   /**
@@ -124,9 +123,8 @@ public class UpperCaseTablesTest {
     when(clientUcDao.update(any())).thenThrow(new ServiceException());
     Client clientDomain = new ClientResourceBuilder().setCommonFirstName("BILLYS").build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     upperCaseTables.updateClientUc(client);
-
   }
 
   /**
@@ -137,9 +135,8 @@ public class UpperCaseTablesTest {
     Client clientDomain = new ClientResourceBuilder().setCommonFirstName(null).build();
 
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     upperCaseTables.updateClientUc(client);
-
   }
 
   /**
@@ -149,7 +146,7 @@ public class UpperCaseTablesTest {
   public void testForClientUpperCaseUpdate() throws Exception {
     Client clientDomain = new ClientResourceBuilder().setCommonFirstName("BILLYS").build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
 
     when(clientUcDao.update(any(ClientUc.class))).thenAnswer(new Answer<ClientUc>() {
       @Override
@@ -162,7 +159,6 @@ public class UpperCaseTablesTest {
     });
     upperCaseTables.updateClientUc(client);
     assertThat(clientUc.getCommonFirstName(), is(equalTo("BILLYS")));
-
   }
 
   /**
@@ -175,7 +171,6 @@ public class UpperCaseTablesTest {
         "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.createAddressUc(address);
     verify(addressUcDao, times(1)).create(any());
-
   }
 
   /**
@@ -188,7 +183,6 @@ public class UpperCaseTablesTest {
     gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
         "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.createAddressUc(address);
-
   }
 
   /**
@@ -211,7 +205,6 @@ public class UpperCaseTablesTest {
     });
     upperCaseTables.createAddressUc(address);
     assertThat(addressUc.getStreetName(), is(equalTo("2870")));
-
   }
 
   /**
@@ -224,7 +217,6 @@ public class UpperCaseTablesTest {
         "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.updateAddressUc(address);
     verify(addressUcDao, times(1)).update(any());
-
   }
 
   /**
@@ -237,7 +229,6 @@ public class UpperCaseTablesTest {
     gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
         "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.updateAddressUc(address);
-
   }
 
   /**
@@ -260,7 +251,6 @@ public class UpperCaseTablesTest {
     });
     upperCaseTables.updateAddressUc(address);
     assertThat(addressUc.getStreetName(), is(equalTo("2860")));
-
   }
 
   /**

@@ -8,6 +8,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -177,7 +178,7 @@ public class CmsReferralServiceTest {
             new TypeReference<Set<Client>>() {});
     gov.ca.cwds.data.persistence.cms.Client clientToCreate =
         new gov.ca.cwds.data.persistence.cms.Client("ABC1234567",
-            (Client) clientDomain.toArray()[0], "2016-10-31");
+            (Client) clientDomain.toArray()[0], "2016-10-31", new Date());
 
     Set<ReferralClient> referralClientDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/referralClientCmsReferral.json"),
@@ -283,7 +284,7 @@ public class CmsReferralServiceTest {
             new TypeReference<Set<Client>>() {});
     gov.ca.cwds.data.persistence.cms.Client clientToCreate =
         new gov.ca.cwds.data.persistence.cms.Client("ABC1234567",
-            (Client) clientDomain.toArray()[0], "2016-10-31");
+            (Client) clientDomain.toArray()[0], "2016-10-31", new Date());
 
     Set<ReferralClient> referralClientDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/referralClientCmsReferral.json"),
@@ -393,7 +394,7 @@ public class CmsReferralServiceTest {
             new TypeReference<Set<Client>>() {});
     gov.ca.cwds.data.persistence.cms.Client clientToCreate =
         new gov.ca.cwds.data.persistence.cms.Client("ABC1234567",
-            (Client) clientDomain.toArray()[0], "2016-10-31");
+            (Client) clientDomain.toArray()[0], "2016-10-31", new Date());
 
     Referral referralRequest = new Referral(referralToCreate);
     ReferralClient referralClientRequest = new ReferralClient(referralClientToCreate);

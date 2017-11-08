@@ -162,7 +162,7 @@ public class NonLACountyTriggersTest {
   public void testForClientCreatedCountyOwnership() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Client ClientDomain = new ClientResourceBuilder().build();
 
-    Client toCreate = new Client("ABC1234567", ClientDomain, "ABC");
+    Client toCreate = new Client("ABC1234567", ClientDomain, "ABC", new Date());
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
         .thenAnswer(new Answer<CountyOwnership>() {
 

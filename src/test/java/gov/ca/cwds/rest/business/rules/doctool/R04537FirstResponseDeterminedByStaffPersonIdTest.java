@@ -317,7 +317,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
             new TypeReference<Set<Client>>() {});
     gov.ca.cwds.data.persistence.cms.Client clientToCreate =
         new gov.ca.cwds.data.persistence.cms.Client("1234567ABC",
-            (Client) clientDomain.toArray()[0], "2016-10-31");
+            (Client) clientDomain.toArray()[0], "2016-10-31", new Date());
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenReturn(clientToCreate);
 

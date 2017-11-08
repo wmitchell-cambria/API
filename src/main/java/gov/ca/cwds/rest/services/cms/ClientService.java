@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -24,6 +23,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
@@ -129,57 +129,35 @@ public class ClientService implements
    */
   @Override
   public PostedClient create(gov.ca.cwds.rest.api.domain.cms.Client request) {
-
     gov.ca.cwds.rest.api.domain.cms.Client client = request;
-    return create(client, null);
 
-  }
-
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public PostedClient createWithSingleTimestamp(gov.ca.cwds.rest.api.domain.cms.Client request,
-      Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.Client client = request;
-    return create(client, timestamp);
-  }
-
-  /**
-   * This private method is created to handle to single client and referrals with single timestamp
-   * 
-   */
-  private PostedClient create(gov.ca.cwds.rest.api.domain.cms.Client client, Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Client managed;
-      if (timestamp == null) {
-        managed = new Client(CmsKeyIdGenerator.generate(lastUpdatedId), client, lastUpdatedId);
-      } else {
-        managed =
-            new Client(CmsKeyIdGenerator.generate(lastUpdatedId), client, lastUpdatedId, timestamp);
-      }
+      Client managed =
+          new Client(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              client, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
+
       managed = clientDao.create(managed);
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
-      if (staffperson != null
-          && !(triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
-        nonLaCountyTriggers.createClientCountyTrigger(managed);
-      }
-      ssaname3Dao.clientSsaname3("I", managed);
-      upperCaseTables.createClientUc(managed);
-      externalInterfaceTables.createExtInterClient(managed, "N");
+      createDownStreamEntity(managed, staffperson);
 
       return new PostedClient(managed, false);
     } catch (EntityExistsException e) {
       LOGGER.info("Client already exists : {}", client);
       throw new ServiceException(e);
     }
+
+  }
+
+  private void createDownStreamEntity(Client managed, StaffPerson staffperson) {
+    if (staffperson != null
+        && !(triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
+      nonLaCountyTriggers.createClientCountyTrigger(managed);
+    }
+    ssaname3Dao.clientSsaname3("I", managed);
+    upperCaseTables.createClientUc(managed);
+    externalInterfaceTables.createExtInterClient(managed, "N");
   }
 
   /**
@@ -195,9 +173,10 @@ public class ClientService implements
 
     gov.ca.cwds.rest.api.domain.cms.Client savedEntity;
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       Client existingClient = clientDao.find(primaryKey);
-      Client managed = new Client(primaryKey, client, lastUpdatedId);
+      Client managed =
+          new Client(primaryKey, client, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
 
       managed.setClientAddress(existingClient.getClientAddress());
       managed = clientDao.update(managed);

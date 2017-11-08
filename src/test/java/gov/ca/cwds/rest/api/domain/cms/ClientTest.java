@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -74,6 +75,7 @@ public class ClientTest implements DomainTestTemplate {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private String lastUpdatedId = "0X5";
+  private Date lastUpdatedTime1 = new Date();
 
   private String existingClientId = "ABC1234567";
   private DateTime lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
@@ -191,7 +193,7 @@ public class ClientTest implements DomainTestTemplate {
         tribalMembrshpVerifctnIndicatorVar, unemployedParentCode, zippyCreatedIndicator, null);
 
     gov.ca.cwds.data.persistence.cms.Client persistent =
-        new gov.ca.cwds.data.persistence.cms.Client(id, domain, lastUpdatedId);
+        new gov.ca.cwds.data.persistence.cms.Client(id, domain, lastUpdatedId, lastUpdatedTime1);
 
     assertThat(persistent.getAdjudicatedDelinquentIndicator(),
         is(equalTo(DomainChef.cookBoolean(adjudicatedDelinquentIndicator))));

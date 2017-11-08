@@ -8,6 +8,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,7 +71,7 @@ public class RIReferralClientTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ljnSt7KxnV", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ljnSt7KxnV", clientDomain, "0X5", new Date());
 
     RIReferralClient target = new RIReferralClient(clientDao, referralDao);
     when(clientDao.find(any(String.class))).thenReturn(client);
@@ -90,7 +92,7 @@ public class RIReferralClientTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ljnSt7KxnV", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ljnSt7KxnV", clientDomain, "0X5", new Date());
 
     RIReferralClient target = new RIReferralClient(clientDao, referralDao);
     when(referralDao.find(any(String.class))).thenReturn(referral);

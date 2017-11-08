@@ -92,7 +92,7 @@ public class RIClientAddressTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5", new Date());
 
     when(addressDao.find(any(String.class))).thenReturn(address);
     when(clientDao.find(any(String.class))).thenReturn(client);
@@ -115,7 +115,7 @@ public class RIClientAddressTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -146,7 +146,7 @@ public class RIClientAddressTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5", new Date());
 
     when(addressDao.find(any(String.class))).thenReturn(address);
     when(clientDao.find(any(String.class))).thenReturn(client);

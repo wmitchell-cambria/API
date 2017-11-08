@@ -8,6 +8,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -90,7 +92,7 @@ public class RIAllegationTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ljnSt7KxnV", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ljnSt7KxnV", clientDomain, "0X5", new Date());
 
     RIAllegation target = new RIAllegation(clientDao, referralDao);
     when(referralDao.find(any(String.class))).thenReturn(referral);

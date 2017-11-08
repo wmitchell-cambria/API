@@ -232,7 +232,7 @@ public class ScreeningToReferralServiceTest {
         new ClientEntityBuilder().setId("1234567ABC").build();
     PostedClient savedClient = new PostedClient(savedEntityClient, false);
     clientService = mock(ClientService.class);
-    when(clientService.createWithSingleTimestamp(any(), any())).thenReturn(savedClient);
+    when(clientService.create(any())).thenReturn(savedClient);
 
     clientAddressService = mock(ClientAddressService.class);
     when(clientAddressService.find(any())).thenReturn(mock(ClientAddress.class));
@@ -704,7 +704,7 @@ public class ScreeningToReferralServiceTest {
     when(clientService.update(any(), any()))
         .thenReturn(mock(gov.ca.cwds.rest.api.domain.cms.Client.class));
     when(clientService.create(any())).thenReturn(savedClient);
-    when(clientService.createWithSingleTimestamp(any(), any())).thenReturn(savedClient);
+    when(clientService.create(any())).thenReturn(savedClient);
 
     Client foundVictimClient = mock(Client.class);
     when(foundVictimClient.getLastUpdatedTime()).thenReturn(updatedTime);

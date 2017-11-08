@@ -143,7 +143,7 @@ public class ClientServiceTest {
     String id = "LOmv8Jp0Nu";
     gov.ca.cwds.rest.api.domain.cms.Client expected = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.Client(id, expected, "0XA", new Date());
 
     when(clientDao.delete(id)).thenReturn(client);
     gov.ca.cwds.rest.api.domain.cms.Client found = clientService.delete(id);
@@ -158,7 +158,7 @@ public class ClientServiceTest {
         .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
 
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client(id, expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Client(id, expected, "ABC", new Date());
 
     when(clientDao.find("ABC1234567")).thenReturn(client);
     when(clientDao.update(any())).thenReturn(client);
@@ -181,7 +181,7 @@ public class ClientServiceTest {
           .setRaceAndEthnicity(raceAndEthnicity).createParticipant();
       Client domainClient = Client.createWithDefaults(participant, "", "m", (short) 0);
       gov.ca.cwds.data.persistence.cms.Client savedClient =
-          new gov.ca.cwds.data.persistence.cms.Client("123", domainClient, "OX5");
+          new gov.ca.cwds.data.persistence.cms.Client("123", domainClient, "OX5", new Date());
       when(clientDao.find(any())).thenReturn(savedClient);
       when(clientDao.update(any())).thenThrow(EntityNotFoundException.class);
 
@@ -199,7 +199,7 @@ public class ClientServiceTest {
     Client clientDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
-        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
     Client request = new Client(toCreate, false);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class))).thenReturn(toCreate);
@@ -214,7 +214,7 @@ public class ClientServiceTest {
     Client clientDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
-        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
     when(clientDao.find(any(String.class))).thenReturn(toCreate);
 
@@ -243,7 +243,7 @@ public class ClientServiceTest {
     Client clientDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
-        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
     Client request = new Client(toCreate, false);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class))).thenReturn(toCreate);
@@ -259,7 +259,7 @@ public class ClientServiceTest {
     Client clientDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
-        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
     Client request = new Client(toCreate, false);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class))).thenReturn(toCreate);
@@ -275,7 +275,7 @@ public class ClientServiceTest {
       Client clientDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
       gov.ca.cwds.data.persistence.cms.Client toCreate =
-          new gov.ca.cwds.data.persistence.cms.Client(null, clientDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.Client(null, clientDomain, "ABC", new Date());
 
       when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
           .thenReturn(toCreate);
@@ -293,7 +293,7 @@ public class ClientServiceTest {
       Client clientDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
       gov.ca.cwds.data.persistence.cms.Client toCreate =
-          new gov.ca.cwds.data.persistence.cms.Client("    ", clientDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.Client("    ", clientDomain, "ABC", new Date());
 
       when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
           .thenReturn(toCreate);
@@ -334,7 +334,7 @@ public class ClientServiceTest {
   public void testCreateNonLACountyTriggerForClient() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client toCreate =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "q1p", new Date());
 
     Client request = new Client(toCreate, false);
 
@@ -355,7 +355,7 @@ public class ClientServiceTest {
   public void testCreateNonLACountyTriggerForClientNotCreated() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client toCreate =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "BTr");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "BTr", new Date());
 
     Client request = new Client(toCreate, false);
 

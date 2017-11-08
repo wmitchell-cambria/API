@@ -9,6 +9,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,7 +57,7 @@ public class ExternalInterfaceTablesTest {
   public void testForClientExternalInterfaceCreated() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     externalInterfaceTables.createExtInterClient(client, "N");
     verify(externalInterfaceDao, times(1)).create(any());
 
@@ -66,7 +68,7 @@ public class ExternalInterfaceTablesTest {
     when(externalInterfaceDao.create(any())).thenThrow(new ServiceException());
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
     externalInterfaceTables.createExtInterClient(client, "N");
 
   }
@@ -85,7 +87,7 @@ public class ExternalInterfaceTablesTest {
   public void testForCreateClientExternalInterface() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", clientDomain, "0X5", new Date());
 
     when(externalInterfaceDao.create(any(ExternalInterface.class)))
         .thenAnswer(new Answer<ExternalInterface>() {
@@ -110,11 +112,11 @@ public class ExternalInterfaceTablesTest {
   public void testForCreateMultipleClientExternalInterface() throws Exception {
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client1 =
-        new gov.ca.cwds.data.persistence.cms.Client("VICTIM1111", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("VICTIM1111", clientDomain, "0X5", new Date());
     gov.ca.cwds.data.persistence.cms.Client client2 =
-        new gov.ca.cwds.data.persistence.cms.Client("VICTIM2222", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("VICTIM2222", clientDomain, "0X5", new Date());
     gov.ca.cwds.data.persistence.cms.Client client3 =
-        new gov.ca.cwds.data.persistence.cms.Client("PERPET1111", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("PERPET1111", clientDomain, "0X5", new Date());
 
     when(externalInterfaceDao.create(any(ExternalInterface.class)))
         .thenAnswer(new Answer<ExternalInterface>() {

@@ -84,7 +84,8 @@ public class ClientAddressDaoIT {
     Participant participant =
         new ParticipantResourceBuilder().setLegacyId(CLIENT_ID).createParticipant();
     Client domainClient = Client.createWithDefaults(participant, DEFAULT_DATE, "M", (short) 0);
-    entityClient = new gov.ca.cwds.data.persistence.cms.Client(CLIENT_ID, domainClient, "0X5");
+    entityClient =
+        new gov.ca.cwds.data.persistence.cms.Client(CLIENT_ID, domainClient, "0X5", new Date());
     entityClient.setClientAddress(clientAddresses);
 
     gov.ca.cwds.data.persistence.cms.Client savedClient =

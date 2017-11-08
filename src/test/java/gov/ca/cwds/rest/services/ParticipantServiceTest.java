@@ -97,6 +97,9 @@ public class ParticipantServiceTest {
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
   private String savedAddressId;
 
+  /**
+   * 
+   */
   @Before
   public void setup() {
     defaultVictim = new ParticipantResourceBuilder().createVictimParticipant();
@@ -111,7 +114,7 @@ public class ParticipantServiceTest {
     gov.ca.cwds.data.persistence.cms.Client savedEntityClient =
         new ClientEntityBuilder().setId("1234567ABC").build();
     PostedClient savedClient = new PostedClient(savedEntityClient, false);
-    when(clientService.createWithSingleTimestamp(any(), any())).thenReturn(savedClient);
+    when(clientService.create(any())).thenReturn(savedClient);
 
     referralClientService = mock(ReferralClientService.class);
 
@@ -160,7 +163,8 @@ public class ParticipantServiceTest {
     Participant mandatedNonMandatedReporter = new ParticipantResourceBuilder()
         .setRoles(new HashSet<>(Arrays.asList("Mandated Reporter", "Non-mandated Reporter")))
         .createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(mandatedNonMandatedReporter, defaultVictim));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(mandatedNonMandatedReporter, defaultVictim));
 
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -184,7 +188,8 @@ public class ParticipantServiceTest {
     Participant anonymousSelfReporter = new ParticipantResourceBuilder()
         .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Self Reported")))
         .createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(anonymousSelfReporter, defaultVictim));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(anonymousSelfReporter, defaultVictim));
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
@@ -207,7 +212,8 @@ public class ParticipantServiceTest {
     LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     Participant victim = new ParticipantResourceBuilder().setLegacyId(victimClientLegacyId)
         .setLegacyDescriptor(descriptor).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -235,7 +241,8 @@ public class ParticipantServiceTest {
   public void shouldFailWhenVictimHasIncompatiableRoles_AnonymousVictim() throws Exception {
     Participant reporterVictim = new ParticipantResourceBuilder()
         .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Victim"))).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(reporterVictim, defaultPerpetrator));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(reporterVictim, defaultPerpetrator));
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
@@ -261,7 +268,8 @@ public class ParticipantServiceTest {
     Participant victim = new ParticipantResourceBuilder().setLegacyId(victimClientLegacyId)
         .setLegacyDescriptor(descriptor).createParticipant();
 
-    Set participants = new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
@@ -292,7 +300,8 @@ public class ParticipantServiceTest {
   public void shouldFailWhenVictimIsIncompatiableRoles_VictimPerpetrator() throws Exception {
     Participant perpVictim = new ParticipantResourceBuilder()
         .setRoles(new HashSet<>(Arrays.asList("Perpetrator", "Victim"))).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(perpVictim, defaultMandatedReporter));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(perpVictim, defaultMandatedReporter));
 
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -313,7 +322,8 @@ public class ParticipantServiceTest {
     Participant anonymousNonMandatedReporter = new ParticipantResourceBuilder()
         .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Non-mandated Reporter")))
         .createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(anonymousNonMandatedReporter, defaultVictim));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(anonymousNonMandatedReporter, defaultVictim));
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
@@ -335,7 +345,8 @@ public class ParticipantServiceTest {
 
     Participant perp = new ParticipantResourceBuilder().setLegacyId(badLegacyId)
         .setRoles(new HashSet<>(Arrays.asList("Perpetrator"))).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(perp, defaultReporter, defaultVictim));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(perp, defaultReporter, defaultVictim));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -360,7 +371,7 @@ public class ParticipantServiceTest {
         new ParticipantResourceBuilder().setFirstName("Sally").createVictimParticipant();
     Participant victim2 =
         new ParticipantResourceBuilder().setFirstName("Fred").createVictimParticipant();
-    Set participants =
+    Set<Participant> participants =
         new HashSet<>(Arrays.asList(victim1, victim2, defaultReporter, defaultVictim));
     int numberOfClientsThatAreNotReporters = 3;
 
@@ -371,10 +382,10 @@ public class ParticipantServiceTest {
         messageBuilder);
 
     assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
-    verify(clientService, times(numberOfClientsThatAreNotReporters))
-        .createWithSingleTimestamp(any(), any());
+    verify(clientService, times(numberOfClientsThatAreNotReporters)).create(any());
   }
 
+  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotProcessSelfReporterAsASeperateParticipant() {
     Set roles = new HashSet<>();
@@ -382,7 +393,7 @@ public class ParticipantServiceTest {
     roles.add(Role.SELF_REPORTED_ROLE.getType());
     Participant selfReporter =
         new ParticipantResourceBuilder().setFirstName("Sally").setRoles(roles).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(selfReporter));
+    Set<Participant> participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -393,10 +404,11 @@ public class ParticipantServiceTest {
     assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
 
     verify(clientService, never()).find(any());
-    verify(clientService, times(1)).createWithSingleTimestamp(any(), any());
+    verify(clientService, times(1)).create(any());
 
   }
 
+  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotProcessAnonymousReporter() {
     Set roles = new HashSet<>();
@@ -404,7 +416,7 @@ public class ParticipantServiceTest {
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
     Participant selfReporter =
         new ParticipantResourceBuilder().setFirstName("Sally").setRoles(roles).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(selfReporter));
+    Set<Participant> participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -413,7 +425,7 @@ public class ParticipantServiceTest {
         messageBuilder);
 
     verify(clientService, never()).find(any());
-    verify(clientService, times(0)).createWithSingleTimestamp(any(), any());
+    verify(clientService, times(0)).create(any());
     assertEquals("Expected to have one error message", messageBuilder.getMessages().size(), 1);
     assertEquals("Expected to have in compatible role error",
         messageBuilder.getMessages().get(0).getMessage().trim(),
@@ -437,7 +449,7 @@ public class ParticipantServiceTest {
         .setRoles(new HashSet<>(Arrays.asList("Perpetrator"))).createParticipant();
     descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     perp.setLegacyDescriptor(descriptor);
-    Set participants = new HashSet<>(Arrays.asList(reporter, perp));
+    Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, perp));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -460,7 +472,7 @@ public class ParticipantServiceTest {
     when(savedVictim.getLastUpdatedTime()).thenReturn(updatedTime);
     when(clientService.update(eq(existingPerpId), any())).thenReturn(updatedPerp);
     when(clientService.create(any())).thenReturn(savedVictim);
-    when(clientService.createWithSingleTimestamp(any(), any())).thenReturn(savedVictim);
+    when(clientService.create(any())).thenReturn(savedVictim);
     when(clientService.update(eq(victimId), any())).thenReturn(updatedReporter);
     when(clientService.find(victimId)).thenReturn(foundVictim);
     when(clientService.find(existingPerpId)).thenReturn(foundPerp);
@@ -491,7 +503,7 @@ public class ParticipantServiceTest {
     Participant victim = new ParticipantResourceBuilder().createVictimParticipant();
     descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     perp.setLegacyDescriptor(descriptor);
-    Set participants = new HashSet<>(Arrays.asList(reporter, perp, victim));
+    Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, perp, victim));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
@@ -531,10 +543,9 @@ public class ParticipantServiceTest {
         message);
   }
 
-
   @Test
   public void shouldApplySensitivityIndicatorFromReferralWhenSavingNewClient() {
-    Set participants =
+    Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultVictim, defaultReporter, defaultPerpetrator));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -548,7 +559,7 @@ public class ParticipantServiceTest {
     participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
         messageBuilder);
 
-    verify(clientService, times(2)).createWithSingleTimestamp(clientArgCaptor.capture(), any());
+    verify(clientService, times(2)).create(clientArgCaptor.capture());
     assertEquals("Expected client to have sensitivty indicator applied",
         referral.getLimitedAccessCode(), clientArgCaptor.getValue().getSensitivityIndicator());
   }
@@ -557,7 +568,7 @@ public class ParticipantServiceTest {
   public void shouldApplySensitivityIndicatorFromClientWhenSavingNewClient() {
     Participant victim =
         new ParticipantResourceBuilder().setSensitivityIndicator("S").createVictimParticipant();
-    Set participants =
+    Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultVictim, defaultReporter, defaultPerpetrator));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -571,7 +582,7 @@ public class ParticipantServiceTest {
     participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
         messageBuilder);
 
-    verify(clientService, times(2)).createWithSingleTimestamp(clientArgCaptor.capture(), any());
+    verify(clientService, times(2)).create(clientArgCaptor.capture());
     assertEquals("Expected client to have sensitivty indicator applied",
         defaultVictim.getSensitivityIndicator(),
         clientArgCaptor.getValue().getSensitivityIndicator());
@@ -584,7 +595,8 @@ public class ParticipantServiceTest {
     LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     Participant victim = new ParticipantResourceBuilder().setLegacyId(victimClientLegacyId)
         .setLegacyDescriptor(descriptor).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode("S").setParticipants(participants).createScreeningToReferral();
@@ -613,7 +625,8 @@ public class ParticipantServiceTest {
     LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     Participant victim = new ParticipantResourceBuilder().setSensitivityIndicator("R")
         .setLegacyId(victimClientLegacyId).setLegacyDescriptor(descriptor).createParticipant();
-    Set participants = new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode("N").setParticipants(participants).createScreeningToReferral();

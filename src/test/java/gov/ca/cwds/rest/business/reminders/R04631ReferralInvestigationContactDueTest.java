@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -103,7 +104,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0);
     gov.ca.cwds.data.persistence.cms.Client savedClient =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", DEFAULT_CODE, "",
@@ -176,7 +177,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0);
     gov.ca.cwds.data.persistence.cms.Client savedClient =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", DEFAULT_CODE, "",
@@ -253,7 +254,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0);
     gov.ca.cwds.data.persistence.cms.Client savedClient =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", DEFAULT_CODE, "",
@@ -328,7 +329,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
     Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0);
     gov.ca.cwds.data.persistence.cms.Client savedClient =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", DEFAULT_CODE, "",

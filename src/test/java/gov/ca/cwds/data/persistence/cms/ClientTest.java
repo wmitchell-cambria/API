@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -29,6 +30,7 @@ public class ClientTest implements PersistentTestTemplate {
 
   private String id = "1234567ABC";
   private String lastUpdatedId = "0X5";
+  private Date lastUpdatedTime = new Date();
   private static final ObjectMapper MAPPER = SystemCodeTestHarness.MAPPER;
 
   /*
@@ -198,7 +200,7 @@ public class ClientTest implements PersistentTestTemplate {
   @Test
   public void testConstructorUsingDomain() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Client vc = validDomainClient();
-    Client pers = new Client(id, vc, lastUpdatedId);
+    Client pers = new Client(id, vc, lastUpdatedId, lastUpdatedTime);
     assertThat(pers.getId(), is(equalTo(id)));
     assertThat(pers.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
     assertThat((pers.getAdjudicatedDelinquentIndicator()),

@@ -8,6 +8,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -100,7 +102,7 @@ public class RIAllegationPerpetratorHistoryTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5", new Date());
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
@@ -125,7 +127,7 @@ public class RIAllegationPerpetratorHistoryTest {
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
-        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Client("ABC123456k", clientDomain, "0X5", new Date());
 
     when(clientDao.find(any(String.class))).thenReturn(client);
     when(allegationDao.find(any(String.class))).thenReturn(null);
