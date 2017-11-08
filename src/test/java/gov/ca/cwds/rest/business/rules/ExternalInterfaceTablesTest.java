@@ -41,6 +41,7 @@ public class ExternalInterfaceTablesTest {
   private static ExternalInterface externalInterface;
 
   private static final String DEFAULT_USER_ID = "0X5";
+  private Date lastUpdatedTime = new Date();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -78,7 +79,8 @@ public class ExternalInterfaceTablesTest {
     when(externalInterfaceDao.create(any())).thenThrow(new ServiceException());
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "BTr");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "BTr",
+            lastUpdatedTime);
     externalInterfaceTables.createExtInterAssignment(assignment, "N");
 
   }
@@ -154,7 +156,8 @@ public class ExternalInterfaceTablesTest {
   public void testForCreateAssignmentExternalInterface() throws Exception {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5",
+            lastUpdatedTime);
 
     when(externalInterfaceDao.create(any(ExternalInterface.class)))
         .thenAnswer(new Answer<ExternalInterface>() {

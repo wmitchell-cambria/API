@@ -72,6 +72,7 @@ public class AssignmentServiceTest {
   private MessageBuilder messageBuilder;
   private ScreeningToReferral screeningToReferral;
   private CaseLoadDao caseLoadDao;
+  private Date lastUpdatedTime = new Date();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -94,9 +95,8 @@ public class AssignmentServiceTest {
     caseLoadDao = mock(CaseLoadDao.class);
     nonLACountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
-    assignmentService =
-        new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao, triggerTablesDao,
-            staffPersonIdRetriever, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
 
   }
 
@@ -107,7 +107,7 @@ public class AssignmentServiceTest {
     Assignment expected = new AssignmentResourceBuilder().buildAssignment();
 
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, expected, "0XA", lastUpdatedTime);
 
     when(assignmentDao.find(id)).thenReturn(assignment);
     Assignment found = assignmentService.find(id);
@@ -139,7 +139,7 @@ public class AssignmentServiceTest {
     String id = "AabekZX00F";
     Assignment expected = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, expected, "0XA", lastUpdatedTime);
 
     when(assignmentDao.delete(id)).thenReturn(assignment);
     Assignment found = assignmentService.delete(id);
@@ -154,7 +154,7 @@ public class AssignmentServiceTest {
         new AssignmentResourceBuilder().setCountySpecificCode("45").buildAssignment();
 
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, expected, "ABC", lastUpdatedTime);
 
     when(assignmentDao.find("ABC1234567")).thenReturn(assignment);
     when(assignmentDao.update(any())).thenReturn(assignment);
@@ -184,7 +184,8 @@ public class AssignmentServiceTest {
     Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, domainAssignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, domainAssignment, "ABC",
+            lastUpdatedTime);
 
     PostedAssignment request = new PostedAssignment(toCreate);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
@@ -200,7 +201,8 @@ public class AssignmentServiceTest {
     Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, domainAssignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, domainAssignment, "ABC",
+            lastUpdatedTime);
 
     PostedAssignment request = new PostedAssignment(toCreate);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
@@ -216,7 +218,8 @@ public class AssignmentServiceTest {
     Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, domainAssignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, domainAssignment, "ABC",
+            lastUpdatedTime);
 
     PostedAssignment request = new PostedAssignment(toCreate);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
@@ -246,7 +249,8 @@ public class AssignmentServiceTest {
       Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
       gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-          new gov.ca.cwds.data.persistence.cms.Assignment(null, domainAssignment, "ABC");
+          new gov.ca.cwds.data.persistence.cms.Assignment(null, domainAssignment, "ABC",
+              lastUpdatedTime);
 
       when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
           .thenReturn(toCreate);
@@ -263,7 +267,8 @@ public class AssignmentServiceTest {
     try {
       Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
       gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-          new gov.ca.cwds.data.persistence.cms.Assignment("   ", domainAssignment, "ABC");
+          new gov.ca.cwds.data.persistence.cms.Assignment("   ", domainAssignment, "ABC",
+              lastUpdatedTime);
 
       when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
           .thenReturn(toCreate);
@@ -305,7 +310,8 @@ public class AssignmentServiceTest {
   public void testCreateNonLACountyTriggerForAssignment() throws Exception {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
+            lastUpdatedTime);
 
     Referral domainReferral = new ReferralResourceBuilder().setCountySpecificCode("00").build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -333,7 +339,8 @@ public class AssignmentServiceTest {
   public void testNotCreateNonLACountyTriggerForAssignment() throws Exception {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "BTr");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "BTr",
+            lastUpdatedTime);
 
     Referral domainReferral = new ReferralResourceBuilder().setCountySpecificCode("00").build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -362,7 +369,8 @@ public class AssignmentServiceTest {
 
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
+            lastUpdatedTime);
 
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(toCreate);

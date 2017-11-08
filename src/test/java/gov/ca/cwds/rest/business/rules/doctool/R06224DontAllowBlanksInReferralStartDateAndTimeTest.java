@@ -243,9 +243,8 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riAssignment = mock(RIAssignment.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    assignmentService =
-        new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao, triggerTablesDao,
-            staffPersonIdRetriever, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
 
     reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);
@@ -373,7 +372,8 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            new Date());
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
 
@@ -382,7 +382,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("123PHERAVQ",
-            allegationPerpetratorHistory, "ABC");
+            allegationPerpetratorHistory, "ABC", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpetratorHistoryToCreate);

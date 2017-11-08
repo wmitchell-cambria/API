@@ -76,7 +76,7 @@ public class AssignmentTest {
     gov.ca.cwds.rest.api.domain.cms.Assignment validDomain =
         new AssignmentResourceBuilder().buildAssignment();
 
-    Assignment persistent = new Assignment(id, validDomain, lastUpdatedId);
+    Assignment persistent = new Assignment(id, validDomain, lastUpdatedId, lastUpdatedTime);
 
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getCountySpecificCode(),

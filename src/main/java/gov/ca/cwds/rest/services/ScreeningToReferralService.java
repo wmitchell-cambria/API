@@ -571,6 +571,6 @@ public class ScreeningToReferralService implements CrudsService {
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
 
-    this.allegationPerpetratorHistoryService.createWithSingleTimestamp(cmsPerpHistory, timestamp);
+    this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
 }

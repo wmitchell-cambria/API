@@ -46,6 +46,7 @@ public class NonLACountyTriggersTest {
   private NonLACountyTriggers nonLaCountyTriggers;
 
   private static CountyOwnership countyOwnership;
+  private Date lastUpdatedTime = new Date();
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -299,7 +300,8 @@ public class NonLACountyTriggersTest {
 
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC",
+            lastUpdatedTime);
 
     Referral referralClientDomain =
         new ReferralResourceBuilder().setCountySpecificCode("55").build();
@@ -335,7 +337,8 @@ public class NonLACountyTriggersTest {
     Assignment assignmentDomain =
         new AssignmentResourceBuilder().setTypeOfAssignmentCode("S").buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC",
+            lastUpdatedTime);
 
     Referral referralClientDomain =
         new ReferralResourceBuilder().setCountySpecificCode("62").build();
@@ -369,7 +372,8 @@ public class NonLACountyTriggersTest {
     Assignment assignmentDomain =
         new AssignmentResourceBuilder().setEstablishedForCode("C").buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC",
+            lastUpdatedTime);
 
     Referral referralClientDomain =
         new ReferralResourceBuilder().setCountySpecificCode("62").build();
@@ -428,7 +432,8 @@ public class NonLACountyTriggersTest {
 
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC",
+            lastUpdatedTime);
 
     Referral referralClientDomain =
         new ReferralResourceBuilder().setCountySpecificCode("99").build();
@@ -460,7 +465,8 @@ public class NonLACountyTriggersTest {
 
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC",
+            lastUpdatedTime);
 
     Referral referralClientDomain =
         new ReferralResourceBuilder().setCountySpecificCode("100").build();
@@ -492,7 +498,8 @@ public class NonLACountyTriggersTest {
 
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "ABC",
+            lastUpdatedTime);
 
     Referral referralClientDomain =
         new ReferralResourceBuilder().setCountySpecificCode("54").build();

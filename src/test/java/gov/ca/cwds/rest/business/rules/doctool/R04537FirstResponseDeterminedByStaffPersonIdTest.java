@@ -249,9 +249,8 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riAssignment = mock(RIAssignment.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    assignmentService =
-        new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao, triggerTablesDao,
-            staffPersonIdRetriever, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
 
     reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);
@@ -344,7 +343,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -393,7 +392,8 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            new Date());
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     StaffPerson staffPerson = mock(StaffPerson.class);

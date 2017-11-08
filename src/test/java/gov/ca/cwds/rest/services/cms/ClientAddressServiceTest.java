@@ -430,7 +430,6 @@ public class ClientAddressServiceTest {
     clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", new Date(),
         messageBuilder);
     verify(addressService, times(1)).create(any());
-
   }
 
 }

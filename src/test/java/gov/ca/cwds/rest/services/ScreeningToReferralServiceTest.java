@@ -253,8 +253,7 @@ public class ScreeningToReferralServiceTest {
     PostedAllegationPerpetratorHistory postedAllegationPerpHistory =
         new PostedAllegationPerpetratorHistory(allegationPerpetratorHistory);
     allegationPerpetratorHistoryService = mock(AllegationPerpetratorHistoryService.class);
-    when(allegationPerpetratorHistoryService.createWithSingleTimestamp(any(), any()))
-        .thenReturn(postedAllegationPerpHistory);
+    when(allegationPerpetratorHistoryService.create(any())).thenReturn(postedAllegationPerpHistory);
 
     CrossReport mockLegacyCrossReport = mock(CrossReport.class);
     CrossReport crossReport = new CmsCrossReportResourceBuilder().build();
@@ -943,8 +942,7 @@ public class ScreeningToReferralServiceTest {
 
     Response response = screeningToReferralService.create(screeningToReferral);
 
-    verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(),
-        any());
+    verify(allegationPerpetratorHistoryService).create(perpHistory.capture());
     assertEquals(DomainChef.cookDate(now), perpHistory.getValue().getPerpetratorUpdateDate());
   }
 
@@ -980,8 +978,7 @@ public class ScreeningToReferralServiceTest {
 
     Response response = screeningToReferralService.create(screeningToReferral);
 
-    verify(allegationPerpetratorHistoryService).createWithSingleTimestamp(perpHistory.capture(),
-        any());
+    verify(allegationPerpetratorHistoryService).create(perpHistory.capture());
     assertEquals(perpLegacyId, perpHistory.getValue().getPerpetratorClientId());
   }
 

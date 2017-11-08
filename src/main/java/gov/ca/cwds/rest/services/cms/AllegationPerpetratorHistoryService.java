@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -92,57 +90,25 @@ public class AllegationPerpetratorHistoryService implements
   @Override
   public PostedAllegationPerpetratorHistory create(
       gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory request) {
-
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory allegationPerpetratoryHistory =
         request;
-    return create(allegationPerpetratoryHistory, null);
-
-  }
-
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the Posted Allegation Perpetrator History
-   */
-  public PostedAllegationPerpetratorHistory createWithSingleTimestamp(
-      gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory request, Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory allegationPerpetratoryHistory =
-        request;
-    return create(allegationPerpetratoryHistory, timestamp);
-
-  }
-
-  /**
-   * 
-   * This private method is used by createWithSingleTimestamp()
-   */
-  private PostedAllegationPerpetratorHistory create(
-      gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory allegationPerpetratorHistory,
-      Date timestamp) {
 
     try {
-      AllegationPerpetratorHistory managed;
-      if (timestamp == null) {
-        managed = new AllegationPerpetratorHistory(
-            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-            allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId());
+      AllegationPerpetratorHistory managed = new AllegationPerpetratorHistory(
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+          allegationPerpetratoryHistory, RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
 
-      } else {
-        managed = new AllegationPerpetratorHistory(
-            CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-            allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId(),
-            timestamp);
-      }
       managed = allegationPerpetratorHistoryDao.create(managed);
       return new PostedAllegationPerpetratorHistory(managed);
-    } catch (EntityExistsException e) {
-      LOGGER.info("AllegationPerpetratorHistory already exists : {}", allegationPerpetratorHistory);
+    } catch (
+
+    EntityExistsException e) {
+      LOGGER.info("AllegationPerpetratorHistory already exists : {}",
+          allegationPerpetratoryHistory);
       throw new ServiceException(e);
     }
+
   }
 
   /**
@@ -160,7 +126,8 @@ public class AllegationPerpetratorHistoryService implements
 
     try {
       AllegationPerpetratorHistory managed = new AllegationPerpetratorHistory(primaryKey,
-          allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId());
+          allegationPerpetratorHistory, RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = allegationPerpetratorHistoryDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(managed);
     } catch (EntityNotFoundException e) {

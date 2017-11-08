@@ -61,7 +61,7 @@ public class RIAllegationPerpetratorHistoryTest {
         new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("ABC1234567",
-            allegationPerpetratorHistoryDomain, "0X5");
+            allegationPerpetratorHistoryDomain, "0X5", new Date());
 
     when(clientDao.find(any(String.class))).thenReturn(null);
     when(allegationDao.find(any(String.class))).thenReturn(null);
@@ -77,7 +77,7 @@ public class RIAllegationPerpetratorHistoryTest {
             .createAllegationPerpetratorHistory();
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("ABC1234567",
-            allegationPerpetratorHistoryDomain, "0X5");
+            allegationPerpetratorHistoryDomain, "0X5", new Date());
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
@@ -98,7 +98,7 @@ public class RIAllegationPerpetratorHistoryTest {
             .createAllegationPerpetratorHistory();
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("ABC1234567",
-            allegationPerpetratorHistoryDomain, "0X5");
+            allegationPerpetratorHistoryDomain, "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
@@ -123,7 +123,7 @@ public class RIAllegationPerpetratorHistoryTest {
             .createAllegationPerpetratorHistory();
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("ABC1234567",
-            allegationPerpetratorHistoryDomain, "0X5");
+            allegationPerpetratorHistoryDomain, "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =

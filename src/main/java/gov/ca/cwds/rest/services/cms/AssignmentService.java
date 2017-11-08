@@ -21,11 +21,11 @@ import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
@@ -45,7 +45,6 @@ public class AssignmentService implements
   private NonLACountyTriggers nonLACountyTriggers;
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private ExternalInterfaceTables externalInterfaceTables;
   private RIAssignment riAssignment;
   private CaseLoadDao caseLoadDao;
@@ -62,7 +61,6 @@ public class AssignmentService implements
    * @param staffpersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
    * @param triggerTablesDao - triggerTablesDao
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param validator the validator to use to validate validatable objects
    * @param externalInterfaceTables external interface table
    * @param riAssignment - riAssignment
@@ -70,15 +68,13 @@ public class AssignmentService implements
    */
   @Inject
   public AssignmentService(AssignmentDao assignmentDao, NonLACountyTriggers nonLACountyTriggers,
-      StaffPersonDao staffpersonDao, TriggerTablesDao triggerTablesDao,
-      StaffPersonIdRetriever staffPersonIdRetriever, Validator validator,
+      StaffPersonDao staffpersonDao, TriggerTablesDao triggerTablesDao, Validator validator,
       ExternalInterfaceTables externalInterfaceTables, RIAssignment riAssignment,
       CaseLoadDao caseLoadDao) {
     this.assignmentDao = assignmentDao;
     this.nonLACountyTriggers = nonLACountyTriggers;
     this.staffpersonDao = staffpersonDao;
     this.triggerTablesDao = triggerTablesDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.validator = validator;
     this.externalInterfaceTables = externalInterfaceTables;
     this.riAssignment = riAssignment;
@@ -125,57 +121,32 @@ public class AssignmentService implements
   @Override
   public PostedAssignment create(gov.ca.cwds.rest.api.domain.cms.Assignment request) {
     gov.ca.cwds.rest.api.domain.cms.Assignment assignment = request;
-    return create(assignment, null);
-  }
 
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the PostedAssignment
-   */
-  public PostedAssignment createWithSingleTimestamp(Request request, Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.Assignment assignment =
-        (gov.ca.cwds.rest.api.domain.cms.Assignment) request;
-    return create(assignment, timestamp);
-
-  }
-
-  /**
-   * This private method is created to handle to single referral and referrals with single timestamp
-   * 
-   */
-  private PostedAssignment create(gov.ca.cwds.rest.api.domain.cms.Assignment assignment,
-      Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Assignment managed;
-      if (timestamp == null) {
-        managed =
-            new Assignment(CmsKeyIdGenerator.generate(lastUpdatedId), assignment, lastUpdatedId);
-      } else {
-        managed = new Assignment(CmsKeyIdGenerator.generate(lastUpdatedId), assignment,
-            lastUpdatedId, timestamp);
-      }
+      Assignment managed = new Assignment(
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), assignment,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = assignmentDao.create(managed);
       if (managed.getId() == null) {
         throw new ServiceException("Assignment ID cannot be null");
       }
-      // checking the staffPerson county code
-      StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
-      if (staffperson != null
-          && !(triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
-        nonLACountyTriggers.createAndUpdateReferralCoutyOwnership(managed);
-      }
-      externalInterfaceTables.createExtInterAssignment(managed, "N");
+      createDownStreamEntity(managed);
       return new PostedAssignment(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Assignment already exists : {}", assignment);
       throw new ServiceException(e);
     }
+  }
+
+  private void createDownStreamEntity(Assignment managed) {
+    // checking the staffPerson county code
+    StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
+    if (staffperson != null
+        && !(triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
+      nonLACountyTriggers.createAndUpdateReferralCoutyOwnership(managed);
+    }
+    externalInterfaceTables.createExtInterAssignment(managed, "N");
   }
 
   /**
@@ -210,9 +181,8 @@ public class AssignmentService implements
       COUNTY_CODE = caseLoad.getCountySpecificCode();
     }
 
-    gov.ca.cwds.rest.api.domain.cms.Assignment da =
-        createDefaultAssignmentToCaseLoad(COUNTY_CODE, referralId, screeningToReferral.getStartedAt(),
-            caseLoadId);
+    gov.ca.cwds.rest.api.domain.cms.Assignment da = createDefaultAssignmentToCaseLoad(COUNTY_CODE,
+        referralId, screeningToReferral.getStartedAt(), caseLoadId);
     messageBuilder.addDomainValidationError(validator.validate(da));
 
     if ("R".equals(da.getEstablishedForCode())
@@ -222,7 +192,7 @@ public class AssignmentService implements
     }
 
     try {
-      this.createWithSingleTimestamp(da, timestamp);
+      this.create(da);
     } catch (ServiceException e) {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -235,8 +205,7 @@ public class AssignmentService implements
    * @return - default Assignment
    */
   private gov.ca.cwds.rest.api.domain.cms.Assignment createDefaultAssignmentToCaseLoad(
-      String countyCode, String referralId, String startDateTime, String
-      caseLoadId) {
+      String countyCode, String referralId, String startDateTime, String caseLoadId) {
     // #146713651 - BARNEY: Referrals require a default assignment
     // Default Assignment - referrals will be assigned to the '0X5' staff person ID.
     //
@@ -244,8 +213,8 @@ public class AssignmentService implements
     //
     String startDate = null;
     String startTime = null;
-    if (startDateTime != null){
-      String [] dateTime = startDateTime.split("T");
+    if (startDateTime != null) {
+      String[] dateTime = startDateTime.split("T");
       final int DATE = 0;
       final int TIME = 1;
       if (dateTime.length == 2) {
@@ -255,8 +224,8 @@ public class AssignmentService implements
     }
     gov.ca.cwds.rest.api.domain.cms.Assignment assignment =
         new gov.ca.cwds.rest.api.domain.cms.Assignment();
-    return assignment.createDefaultReferralAssignment(countyCode, referralId,
-        caseLoadId,startDate, startTime);
+    return assignment.createDefaultReferralAssignment(countyCode, referralId, caseLoadId, startDate,
+        startTime);
   }
 
   /**
@@ -271,8 +240,9 @@ public class AssignmentService implements
     gov.ca.cwds.rest.api.domain.cms.Assignment assignment = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Assignment managed = new Assignment(primaryKey, assignment, lastUpdatedId);
+      Assignment managed =
+          new Assignment(primaryKey, assignment, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = assignmentDao.update(managed);
       externalInterfaceTables.createExtInterAssignment(managed, "C");
       return new gov.ca.cwds.rest.api.domain.cms.Assignment(managed);

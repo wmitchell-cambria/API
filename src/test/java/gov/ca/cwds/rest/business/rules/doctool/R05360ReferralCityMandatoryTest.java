@@ -157,6 +157,7 @@ public class R05360ReferralCityMandatoryTest {
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
+  private Date lastUpdatedTime = new Date();
 
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
@@ -225,9 +226,8 @@ public class R05360ReferralCityMandatoryTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riAssignment = mock(RIAssignment.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    assignmentService =
-        new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao, triggerTablesDao,
-            staffPersonIdRetriever, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
 
     clientAddressDao = mock(ClientAddressDao.class);
     laCountyTrigger = mock(LACountyTrigger.class);
@@ -338,7 +338,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -387,7 +387,8 @@ public class R05360ReferralCityMandatoryTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            lastUpdatedTime);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
@@ -465,7 +466,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -514,7 +515,8 @@ public class R05360ReferralCityMandatoryTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            lastUpdatedTime);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
@@ -593,7 +595,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -642,7 +644,8 @@ public class R05360ReferralCityMandatoryTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            lastUpdatedTime);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
@@ -720,7 +723,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -769,7 +772,8 @@ public class R05360ReferralCityMandatoryTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            lastUpdatedTime);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
@@ -847,7 +851,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -896,7 +900,8 @@ public class R05360ReferralCityMandatoryTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            lastUpdatedTime);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
 
@@ -973,7 +978,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -1022,7 +1027,8 @@ public class R05360ReferralCityMandatoryTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            lastUpdatedTime);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();

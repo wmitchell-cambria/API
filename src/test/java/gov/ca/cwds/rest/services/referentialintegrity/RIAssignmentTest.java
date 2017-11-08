@@ -8,6 +8,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,7 +53,8 @@ public class RIAssignmentTest {
   public void riCheckForReferentialIntegrityException() throws Exception {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5",
+            new Date());
     when(referralDao.find(any(String.class))).thenReturn(null);
     RIAssignment target = new RIAssignment(referralDao);
     target.apply(assignment);
@@ -64,7 +67,8 @@ public class RIAssignmentTest {
   public void riCheckPass() throws Exception {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5",
+            new Date());
     Referral domain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
         new gov.ca.cwds.data.persistence.cms.Referral("ABC1234567", domain, "0X5");
@@ -83,7 +87,8 @@ public class RIAssignmentTest {
     Assignment assignmentDomain =
         new AssignmentResourceBuilder().setEstablishedForCode("C").buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
-        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "0X5",
+            new Date());
     Referral domain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
         new gov.ca.cwds.data.persistence.cms.Referral("ABC1234567", domain, "0X5");

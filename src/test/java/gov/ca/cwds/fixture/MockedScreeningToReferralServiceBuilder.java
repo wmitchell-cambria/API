@@ -162,9 +162,8 @@ public class MockedScreeningToReferralServiceBuilder {
     when(allegationPerpetratorHistoryService.create(any(AllegationPerpetratorHistory.class)))
         .thenReturn(postedAllegationPerpetratorHistory);
 
-    when(allegationPerpetratorHistoryService
-        .createWithSingleTimestamp(any(AllegationPerpetratorHistory.class), any(Date.class)))
-            .thenReturn(postedAllegationPerpetratorHistory);
+    when(allegationPerpetratorHistoryService.create(any(AllegationPerpetratorHistory.class)))
+        .thenReturn(postedAllegationPerpetratorHistory);
 
   }
 

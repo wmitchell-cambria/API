@@ -76,7 +76,8 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
         new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
 
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
-        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id, expected, "0XA",
+            new Date());
 
     when(allegationPerpetratorHistoryDao.find(id)).thenReturn(allegationPerpetratorHistory);
     AllegationPerpetratorHistory found = allegationPerpetratorHistoryService.find(id);
@@ -120,7 +121,8 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
         new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
 
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
-        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id, expected, "0XA",
+            new Date());
 
     when(allegationPerpetratorHistoryDao.delete(id)).thenReturn(allegationPerpetratorHistory);
     AllegationPerpetratorHistory found = allegationPerpetratorHistoryService.delete(id);
@@ -153,7 +155,8 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
         new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
 
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
-        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id, expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id, expected, "ABC",
+            new Date());
 
     when(allegationPerpetratorHistoryDao.find("ABC1234567"))
         .thenReturn(allegationPerpetratorHistory);
@@ -203,7 +206,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
 
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory toCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id,
-            allegationPerpetratorHistoryDomain, "ABC");
+            allegationPerpetratorHistoryDomain, "ABC", new Date());
 
     AllegationPerpetratorHistory request = new AllegationPerpetratorHistory(toCreate);
     when(allegationPerpetratorHistoryDao
@@ -238,7 +241,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
 
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory toCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id,
-            allegationPerpetratorHistoryDomain, "ABC");
+            allegationPerpetratorHistoryDomain, "ABC", new Date());
 
     AllegationPerpetratorHistory request = new AllegationPerpetratorHistory(toCreate);
     when(allegationPerpetratorHistoryDao
@@ -259,7 +262,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
 
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory toCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id,
-            allegationPerpetratorHistoryDomain, "ABC");
+            allegationPerpetratorHistoryDomain, "ABC", new Date());
 
     AllegationPerpetratorHistory request = new AllegationPerpetratorHistory(toCreate);
     when(allegationPerpetratorHistoryDao
@@ -280,7 +283,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
         new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory toCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(id,
-            allegationPerpetratorHistoryDomain, "ABC");
+            allegationPerpetratorHistoryDomain, "ABC", new Date());
 
     AllegationPerpetratorHistory request = new AllegationPerpetratorHistory(toCreate);
     when(allegationPerpetratorHistoryDao
@@ -289,7 +292,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
 
     PostedAllegationPerpetratorHistory expected = new PostedAllegationPerpetratorHistory(toCreate);
     PostedAllegationPerpetratorHistory returned =
-        allegationPerpetratorHistoryService.createWithSingleTimestamp(request, timestamp);
+        allegationPerpetratorHistoryService.create(request);
     assertThat(returned, is(expected));
   }
 
@@ -301,7 +304,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
           new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
       gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory toCreate =
           new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(null,
-              allegationPerpetratorHistoryDomain, "ABC");
+              allegationPerpetratorHistoryDomain, "ABC", new Date());
 
       when(allegationPerpetratorHistoryDao
           .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
@@ -324,7 +327,7 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
 
       gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory toCreate =
           new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory(" ",
-              allegationPerpetratorHistoryDomain, "ABC");
+              allegationPerpetratorHistoryDomain, "ABC", new Date());
 
       when(allegationPerpetratorHistoryDao
           .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))

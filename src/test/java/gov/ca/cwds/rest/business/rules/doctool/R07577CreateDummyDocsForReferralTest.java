@@ -246,9 +246,8 @@ public class R07577CreateDummyDocsForReferralTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riAssignment = mock(RIAssignment.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    assignmentService =
-        new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao, triggerTablesDao,
-            staffPersonIdRetriever, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
     reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);
 
@@ -344,7 +343,7 @@ public class R07577CreateDummyDocsForReferralTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -393,7 +392,8 @@ public class R07577CreateDummyDocsForReferralTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            new Date());
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
@@ -486,7 +486,7 @@ public class R07577CreateDummyDocsForReferralTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -535,7 +535,8 @@ public class R07577CreateDummyDocsForReferralTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            new Date());
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
@@ -628,7 +629,7 @@ public class R07577CreateDummyDocsForReferralTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03");
+            allegationPerpHistoryDomain, "2017-07-03", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);
@@ -677,7 +678,8 @@ public class R07577CreateDummyDocsForReferralTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validAssignment.json"),
             Assignment.class);
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
-        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
+            new Date());
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
     when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");

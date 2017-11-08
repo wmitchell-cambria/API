@@ -253,9 +253,8 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riAssignment = mock(RIAssignment.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    assignmentService =
-        new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao, triggerTablesDao,
-            staffPersonIdRetriever, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
 
     reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);

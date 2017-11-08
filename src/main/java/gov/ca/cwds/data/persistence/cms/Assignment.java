@@ -149,37 +149,14 @@ public class Assignment extends CmsPersistentObject {
   }
 
   /**
-   * @param id - Assignment Id
-   * @param pa - persisted Assignment object
-   * @param lastUpdateId - staff person id
-   */
-  public Assignment(String id, gov.ca.cwds.rest.api.domain.cms.Assignment pa, String lastUpdateId) {
-    super(lastUpdateId);
-    this.id = id;
-    this.countySpecificCode = pa.getCountySpecificCode();
-    this.endDate = DomainChef.uncookDateString(pa.getEndDate());
-    this.endTime = DomainChef.uncookTimeString(pa.getEndTime());
-    this.establishedForCode = pa.getEstablishedForCode();
-    this.establishedForId = pa.getEstablishedForId();
-    this.fkCaseLoad = pa.getCaseLoadId();
-    this.fkOutOfStateContactParty = pa.getOutOfStateContactId();
-    this.responsibilityDescription = pa.getResponsibilityDescription();
-    this.secondaryAssignmentRoleType = pa.getSecondaryAssignmentRoleType();
-    this.startDate = DomainChef.uncookDateString(pa.getStartDate());
-    this.startTime = DomainChef.uncookTimeString(pa.getStartTime());
-    this.typeOfAssignmentCode = pa.getTypeOfAssignmentCode();
-    this.weightingNumber = pa.getWeightingNumber();
-  }
-
-  /**
    * @param id - IDENTIFIER
    * @param pa - domain ASSIGNMENT
    * @param lastUpdateId - staff person id
-   * @param timestamp - Date/time of transaction
+   * @param lastUpdateTime - the time of last update this object
    */
   public Assignment(String id, gov.ca.cwds.rest.api.domain.cms.Assignment pa, String lastUpdateId,
-      Date timestamp) {
-    super(lastUpdateId, timestamp);
+      Date lastUpdateTime) {
+    super(lastUpdateId, lastUpdateTime);
     this.id = id;
     this.countySpecificCode = pa.getCountySpecificCode();
     this.endDate = DomainChef.uncookDateString(pa.getEndDate());

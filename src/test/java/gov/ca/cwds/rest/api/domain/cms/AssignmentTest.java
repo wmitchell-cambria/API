@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -64,6 +65,7 @@ public class AssignmentTest {
   private String typeOfAssignmentCode = "P";
   private BigDecimal weightingNumber = new BigDecimal("0.0");
   private String staffId = "0X5";
+  private Date lastUpdatedTime = new Date();
 
   private MessageBuilder messageBuilder;
   private Validator validator;
@@ -595,7 +597,7 @@ public class AssignmentTest {
     Assignment vda = validAssignment();
 
     gov.ca.cwds.data.persistence.cms.Assignment pa =
-        new gov.ca.cwds.data.persistence.cms.Assignment(id, vda, staffId);
+        new gov.ca.cwds.data.persistence.cms.Assignment(id, vda, staffId, lastUpdatedTime);
 
     Assignment pc = new Assignment(pa);
 
@@ -614,26 +616,24 @@ public class AssignmentTest {
   }
 
   @Test
-  public void shouldCreateADefaultReferralAssignment(){
+  public void shouldCreateADefaultReferralAssignment() {
 
     Assignment assignment = validAssignment();
     Assignment defaultAssignment = assignment.createDefaultReferralAssignment(countySpecificCode,
-        id,
-        caseLoadId,
-        startDate, startTime);
-    assertEquals(countySpecificCode,defaultAssignment.getCountySpecificCode());
-    assertEquals("",defaultAssignment.getEndDate());
-    assertEquals("",defaultAssignment.getEndTime());
-    assertEquals("R",defaultAssignment.getEstablishedForCode());
-    assertEquals(id,defaultAssignment.getEstablishedForId());
-    assertEquals(caseLoadId,defaultAssignment.getCaseLoadId());
-    assertEquals(null,defaultAssignment.getOutOfStateContactId());
-    assertEquals("",defaultAssignment.getResponsibilityDescription());
-    assertEquals((short)0, (short)defaultAssignment.getSecondaryAssignmentRoleType());
-    assertEquals(startDate,defaultAssignment.getStartDate());
-    assertEquals(startTime,defaultAssignment.getStartTime());
-    assertEquals("P",defaultAssignment.getTypeOfAssignmentCode());
-    assertEquals(new BigDecimal("0.0"),defaultAssignment.getWeightingNumber());
+        id, caseLoadId, startDate, startTime);
+    assertEquals(countySpecificCode, defaultAssignment.getCountySpecificCode());
+    assertEquals("", defaultAssignment.getEndDate());
+    assertEquals("", defaultAssignment.getEndTime());
+    assertEquals("R", defaultAssignment.getEstablishedForCode());
+    assertEquals(id, defaultAssignment.getEstablishedForId());
+    assertEquals(caseLoadId, defaultAssignment.getCaseLoadId());
+    assertEquals(null, defaultAssignment.getOutOfStateContactId());
+    assertEquals("", defaultAssignment.getResponsibilityDescription());
+    assertEquals((short) 0, (short) defaultAssignment.getSecondaryAssignmentRoleType());
+    assertEquals(startDate, defaultAssignment.getStartDate());
+    assertEquals(startTime, defaultAssignment.getStartTime());
+    assertEquals("P", defaultAssignment.getTypeOfAssignmentCode());
+    assertEquals(new BigDecimal("0.0"), defaultAssignment.getWeightingNumber());
   }
 
   private Assignment validAssignment() {

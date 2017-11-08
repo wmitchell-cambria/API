@@ -42,8 +42,8 @@ public class AllegationPerpetratorHistoryTest {
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory domainAllegationPerpetratorHistory =
         new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
 
-    AllegationPerpetratorHistory constructed =
-        new AllegationPerpetratorHistory(id, domainAllegationPerpetratorHistory, staffId);
+    AllegationPerpetratorHistory constructed = new AllegationPerpetratorHistory(id,
+        domainAllegationPerpetratorHistory, staffId, lastUpdateDateTime);
 
     assertThat(constructed.getPrimaryKey(), is(equalTo(id)));
     assertThat(constructed.getId(), is(equalTo(id)));
