@@ -131,7 +131,7 @@ public class ParticipantServiceTest {
     PostedAddress postedAddress = mock(PostedAddress.class);
     savedAddressId = "ZXCVBNMKJH";
     when(postedAddress.getExistingAddressId()).thenReturn(savedAddressId);
-    when(addressService.createWithSingleTimestamp(any(), any())).thenReturn(postedAddress);
+    when(addressService.create(any())).thenReturn(postedAddress);
 
     clientAddressService = mock(ClientAddressService.class);
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);

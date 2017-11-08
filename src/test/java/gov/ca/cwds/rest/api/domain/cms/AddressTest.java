@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -126,7 +127,7 @@ public class AddressTest {
     Address domain = validAddress();
 
     gov.ca.cwds.data.persistence.cms.Address pa =
-        new gov.ca.cwds.data.persistence.cms.Address(id, domain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Address(id, domain, "0X5", new Date());
 
     Address da = new Address(pa, false);
     assertThat(pa.getAddressDescription(), is(equalTo(da.getAddressDescription())));

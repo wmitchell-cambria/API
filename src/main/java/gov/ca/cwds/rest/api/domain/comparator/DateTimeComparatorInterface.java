@@ -15,7 +15,6 @@ import org.joda.time.DateTime;
  */
 public interface DateTimeComparatorInterface {
 
-
   /**
    * @param incomingDateTime - incomingDateTime
    * @param savedDateTime - savedDateTime

@@ -60,8 +60,7 @@ public class AddressServiceTest {
     ssaname3Dao = mock(SsaName3Dao.class);
     upperCaseTables = mock(UpperCaseTables.class);
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-    addressService = new AddressService(addressDao, staffPersonIdRetriever, ssaname3Dao,
-        upperCaseTables, validator);
+    addressService = new AddressService(addressDao, ssaname3Dao, upperCaseTables, validator);
   }
 
   // find
@@ -109,7 +108,7 @@ public class AddressServiceTest {
     gov.ca.cwds.rest.api.domain.cms.Address expected =
         new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.Address(id, expected, "0XA", new Date());
 
     when(addressDao.delete(id)).thenReturn(address);
     Address found = addressService.delete(id);
@@ -124,7 +123,7 @@ public class AddressServiceTest {
         new CmsAddressResourceBuilder().setCity("Fremont").buildCmsAddress();
 
     gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address(id, addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address(id, addressDomain, "ABC", new Date());
 
     when(addressDao.find("ABC1234567")).thenReturn(address);
     when(addressDao.update(any())).thenReturn(address);
@@ -155,7 +154,7 @@ public class AddressServiceTest {
         new CmsAddressResourceBuilder().buildCmsAddress();
 
     gov.ca.cwds.data.persistence.cms.Address toCreate =
-        new gov.ca.cwds.data.persistence.cms.Address(id, addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address(id, addressDomain, "ABC", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.Address request = new Address(toCreate, false);
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
@@ -172,7 +171,7 @@ public class AddressServiceTest {
         new CmsAddressResourceBuilder().buildCmsAddress();
 
     gov.ca.cwds.data.persistence.cms.Address toCreate =
-        new gov.ca.cwds.data.persistence.cms.Address(id, addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address(id, addressDomain, "ABC", new Date());
 
     Address request = new Address(toCreate, false);
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
@@ -203,7 +202,7 @@ public class AddressServiceTest {
           new CmsAddressResourceBuilder().buildCmsAddress();
 
       gov.ca.cwds.data.persistence.cms.Address toCreate =
-          new gov.ca.cwds.data.persistence.cms.Address(null, addressDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.Address(null, addressDomain, "ABC", new Date());
 
       when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
           .thenReturn(toCreate);
@@ -222,7 +221,7 @@ public class AddressServiceTest {
           new CmsAddressResourceBuilder().buildCmsAddress();
 
       gov.ca.cwds.data.persistence.cms.Address toCreate =
-          new gov.ca.cwds.data.persistence.cms.Address("  ", addressDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.Address("  ", addressDomain, "ABC", new Date());
 
       when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
           .thenReturn(toCreate);

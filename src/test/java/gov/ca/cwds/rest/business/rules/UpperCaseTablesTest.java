@@ -9,6 +9,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -169,8 +171,8 @@ public class UpperCaseTablesTest {
   @Test
   public void testForAddressUpperCaseCreated() throws Exception {
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234567", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.createAddressUc(address);
     verify(addressUcDao, times(1)).create(any());
 
@@ -183,8 +185,8 @@ public class UpperCaseTablesTest {
   public void testForAddressUpperCaseCreateThrowsDaoException() throws Exception {
     when(addressUcDao.create(any())).thenThrow(new ServiceException());
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234567", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.createAddressUc(address);
 
   }
@@ -195,8 +197,8 @@ public class UpperCaseTablesTest {
   @Test
   public void testForAddressUpperCase() throws Exception {
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234567", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234567", addressDomain, "0X5", new Date());
 
     when(addressUcDao.create(any(AddressUc.class))).thenAnswer(new Answer<AddressUc>() {
       @Override
@@ -218,8 +220,8 @@ public class UpperCaseTablesTest {
   @Test
   public void testForAddressUpperCaseUpdated() throws Exception {
     Address addressDomain = new CmsAddressResourceBuilder().setStreetName("2860").buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234567", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.updateAddressUc(address);
     verify(addressUcDao, times(1)).update(any());
 
@@ -232,8 +234,8 @@ public class UpperCaseTablesTest {
   public void testForAddressUpperCaseUpdateThrowsDaoException() throws Exception {
     when(addressUcDao.update(any())).thenThrow(new ServiceException());
     Address addressDomain = new CmsAddressResourceBuilder().setStreetName("2860").buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234567", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234567", addressDomain, "0X5", new Date());
     upperCaseTables.updateAddressUc(address);
 
   }
@@ -244,8 +246,8 @@ public class UpperCaseTablesTest {
   @Test
   public void testForAddressUpperCaseUpdate() throws Exception {
     Address addressDomain = new CmsAddressResourceBuilder().setStreetName("2860").buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234567", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234567", addressDomain, "0X5", new Date());
 
     when(addressUcDao.update(any(AddressUc.class))).thenAnswer(new Answer<AddressUc>() {
       @Override

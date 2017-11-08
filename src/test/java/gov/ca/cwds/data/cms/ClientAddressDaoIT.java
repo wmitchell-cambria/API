@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +74,7 @@ public class ClientAddressDaoIT {
     Address address = new AddressEntityBuilder().setId(ADDRESS_ID).build();
     gov.ca.cwds.rest.api.domain.cms.Address cmsDomainAddress =
         new gov.ca.cwds.rest.api.domain.cms.Address(address, false);
-    Address entityAddress = new Address(ADDRESS_ID, cmsDomainAddress, "OX5");
+    Address entityAddress = new Address(ADDRESS_ID, cmsDomainAddress, "OX5", new Date());
 
     ClientAddress clientAddress =
         new ClientAddressEntityBuilder().setFkAddress(ADDRESS_ID).setFkClient(CLIENT_ID)

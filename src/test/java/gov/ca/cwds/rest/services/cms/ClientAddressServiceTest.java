@@ -421,15 +421,15 @@ public class ClientAddressServiceTest {
     gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
         new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5", new Date());
     gov.ca.cwds.rest.api.domain.cms.PostedAddress postedAddress =
         new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, false);
     Participant particpant = new ParticipantResourceBuilder()
         .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
-    when(addressService.createWithSingleTimestamp(any(), any())).thenReturn(postedAddress);
+    when(addressService.create(any())).thenReturn(postedAddress);
     clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", new Date(),
         messageBuilder);
-    verify(addressService, times(1)).createWithSingleTimestamp(any(), any());
+    verify(addressService, times(1)).create(any());
 
   }
 

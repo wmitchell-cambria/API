@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -88,7 +89,7 @@ public class AddressTest implements PersistentTestTemplate {
   public void testConstructorUsingDomain() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Address da = new CmsAddressResourceBuilder().buildCmsAddress();
     gov.ca.cwds.data.persistence.cms.Address pa =
-        new gov.ca.cwds.data.persistence.cms.Address(id, da, lastUpdatedId);
+        new gov.ca.cwds.data.persistence.cms.Address(id, da, lastUpdatedId, new Date());
 
     assertThat(pa.getId(), is(equalTo(id)));
     assertThat(pa.getLastUpdatedId(), is(equalTo(lastUpdatedId)));

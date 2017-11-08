@@ -179,8 +179,7 @@ public class R00796ScreeningToReferralDeleteTest {
     reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
 
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao, staffPersonIdRetriever, ssaName3Dao,
-        upperCaseTables, validator);
+    addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     clientAddressDao = mock(ClientAddressDao.class);
     laCountyTrigger = mock(LACountyTrigger.class);

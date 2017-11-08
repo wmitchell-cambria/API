@@ -223,8 +223,7 @@ public class MockedScreeningToReferralServiceBuilder {
     PostedAddress postedAddress = mock(PostedAddress.class);
     when(postedAddress.getExistingAddressId()).thenReturn("6783345677");
     when(addressService.create(any(Address.class))).thenReturn(postedAddress);
-    when(addressService.createWithSingleTimestamp(any(Address.class), any(Date.class)))
-        .thenReturn(postedAddress);
+    when(addressService.create(any(Address.class))).thenReturn(postedAddress);
   }
 
   /**

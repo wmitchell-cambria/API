@@ -270,8 +270,7 @@ public class ClientAddressService implements
   private String createNewAddress(Date timestamp, gov.ca.cwds.rest.api.domain.Address address,
       Address domainAddress) {
     String addressId;
-    PostedAddress postedAddress =
-        this.addressService.createWithSingleTimestamp(domainAddress, timestamp);
+    PostedAddress postedAddress = this.addressService.create(domainAddress);
     addressId = postedAddress.getExistingAddressId();
     address.getLegacyDescriptor().setLastUpdated(postedAddress.getLastUpdatedTime());
     return addressId;

@@ -16,10 +16,10 @@ import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.LegacyDefaultValues;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -35,7 +35,6 @@ public class AddressService implements
 
 
   private AddressDao addressDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private SsaName3Dao ssaname3Dao;
   private UpperCaseTables upperCaseTables;
 
@@ -46,16 +45,14 @@ public class AddressService implements
   /**
    * 
    * @param addressDao the address DAO
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param ssaname3Dao the stored procedure call
    * @param upperCaseTables the address upper case
    * @param validator the validator object used to validate validatable objects
    */
   @Inject
-  public AddressService(AddressDao addressDao, StaffPersonIdRetriever staffPersonIdRetriever,
-      SsaName3Dao ssaname3Dao, UpperCaseTables upperCaseTables, Validator validator) {
+  public AddressService(AddressDao addressDao, SsaName3Dao ssaname3Dao,
+      UpperCaseTables upperCaseTables, Validator validator) {
     this.addressDao = addressDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.ssaname3Dao = ssaname3Dao;
     this.upperCaseTables = upperCaseTables;
     this.validator = validator;
@@ -64,38 +61,13 @@ public class AddressService implements
   @Override
   public PostedAddress create(gov.ca.cwds.rest.api.domain.cms.Address request) {
     gov.ca.cwds.rest.api.domain.cms.Address address = request;
-    return create(address, null);
-  }
 
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public PostedAddress createWithSingleTimestamp(Request request, Date timestamp) {
-    gov.ca.cwds.rest.api.domain.cms.Address address =
-        (gov.ca.cwds.rest.api.domain.cms.Address) request;
-    return create(address, timestamp);
-  }
-
-  /**
-   * This private method is created to handle to single address and referral address with single
-   * timestamp
-   * 
-   */
-  private PostedAddress create(gov.ca.cwds.rest.api.domain.cms.Address address, Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Address managed;
-      if (timestamp == null) {
-        managed = new Address(CmsKeyIdGenerator.generate(lastUpdatedId), address, lastUpdatedId);
-      } else {
-        managed = new Address(CmsKeyIdGenerator.generate(lastUpdatedId), address, lastUpdatedId,
-            timestamp);
-      }
+      Address managed =
+          new Address(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              address, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
+
       managed = addressDao.create(managed);
       if (managed.getId() == null) {
         throw new ServiceException("Address ID cannot be null");
@@ -131,7 +103,7 @@ public class AddressService implements
 
       messageBuilder.addDomainValidationError(validator.validate(domainAddress));
 
-      PostedAddress postedAddress = this.createWithSingleTimestamp(domainAddress, timestamp);
+      PostedAddress postedAddress = this.create(domainAddress);
 
       address.setLegacyId(postedAddress.getExistingAddressId());
       address.setLegacySourceTable("ADDRS_T");
@@ -170,8 +142,9 @@ public class AddressService implements
     gov.ca.cwds.rest.api.domain.cms.Address address = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Address managed = new Address(primaryKey, address, lastUpdatedId);
+      Address managed =
+          new Address(primaryKey, address, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = addressDao.update(managed);
       ssaname3Dao.addressSsaname3("U", managed);
       upperCaseTables.updateAddressUc(managed);

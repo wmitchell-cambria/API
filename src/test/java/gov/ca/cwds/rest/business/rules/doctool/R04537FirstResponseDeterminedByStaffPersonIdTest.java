@@ -221,8 +221,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
 
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao, staffPersonIdRetriever, ssaName3Dao,
-        upperCaseTables, validator);
+    addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     clientAddressDao = mock(ClientAddressDao.class);
     laCountyTrigger = mock(LACountyTrigger.class);
@@ -370,7 +369,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 

@@ -158,8 +158,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao, staffPersonIdRetriever);
 
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao, staffPersonIdRetriever, ssaName3Dao,
-        upperCaseTables, validator);
+    addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     riReferral = mock(RIReferral.class);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,

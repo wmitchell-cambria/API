@@ -217,8 +217,7 @@ public class R05360ReferralCityMandatoryTest {
     reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
 
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao, staffPersonIdRetriever, ssaName3Dao,
-        upperCaseTables, validator);
+    addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     assignmentDao = mock(AssignmentDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
@@ -364,7 +363,7 @@ public class R05360ReferralCityMandatoryTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 
@@ -491,7 +490,7 @@ public class R05360ReferralCityMandatoryTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 
@@ -619,7 +618,7 @@ public class R05360ReferralCityMandatoryTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 
@@ -746,7 +745,7 @@ public class R05360ReferralCityMandatoryTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 
@@ -873,7 +872,7 @@ public class R05360ReferralCityMandatoryTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 
@@ -999,7 +998,7 @@ public class R05360ReferralCityMandatoryTest {
     Address addressDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validAddress.json"), Address.class);
     gov.ca.cwds.data.persistence.cms.Address addressToCreate =
-        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Address("345678ABC", addressDomain, "ABC", new Date());
     when(addressDao.create(any(gov.ca.cwds.data.persistence.cms.Address.class)))
         .thenReturn(addressToCreate);
 

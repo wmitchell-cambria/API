@@ -109,32 +109,11 @@ public class Address extends BaseAddress {
    * @param id - Address identifier
    * @param address - domain Address object
    * @param lastUpdateId - staff person Id
-   */
-  public Address(String id, gov.ca.cwds.rest.api.domain.cms.Address address, String lastUpdateId) {
-    super(lastUpdateId);
-    init(id, address);
-  }
-
-  /**
-   * Constructor
-   * 
-   * @param id -Address identifier
-   * @param address - domain Address object
-   * @param lastUpdateId - staff person Id
-   * @param lastUpdatedTime - timestamp
+   * @param lastUpdatedTime - The time when this object is last updated
    */
   public Address(String id, gov.ca.cwds.rest.api.domain.cms.Address address, String lastUpdateId,
       Date lastUpdatedTime) {
     super(lastUpdateId, lastUpdatedTime);
-    init(id, address);
-  }
-
-  /**
-   * 
-   * @param id - id
-   * @param address - address
-   */
-  private void init(String id, gov.ca.cwds.rest.api.domain.cms.Address address) {
     try {
       this.id = id;
       this.city = address.getCity();

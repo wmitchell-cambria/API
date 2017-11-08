@@ -87,8 +87,8 @@ public class RIClientAddressTest {
             new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234560", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234560", addressDomain, "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
@@ -110,8 +110,8 @@ public class RIClientAddressTest {
             new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234560", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234560", addressDomain, "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
@@ -141,8 +141,8 @@ public class RIClientAddressTest {
             new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234560", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234560", addressDomain, "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
@@ -165,8 +165,8 @@ public class RIClientAddressTest {
             new Date());
 
     Address addressDomain = new CmsAddressResourceBuilder().buildCmsAddress();
-    gov.ca.cwds.data.persistence.cms.Address address =
-        new gov.ca.cwds.data.persistence.cms.Address("ABC1234560", addressDomain, "0X5");
+    gov.ca.cwds.data.persistence.cms.Address address = new gov.ca.cwds.data.persistence.cms.Address(
+        "ABC1234560", addressDomain, "0X5", new Date());
 
     when(addressDao.find(any(String.class))).thenReturn(address);
     when(clientDao.find(any(String.class))).thenReturn(null);
