@@ -234,7 +234,7 @@ public class ParticipantService implements CrudsService {
 
     try {
       // addresses associated with a client
-      processClientAddress(incomingParticipant, referralId, clientId, timestamp, messageBuilder);
+      processClientAddress(incomingParticipant, referralId, clientId, messageBuilder);
     } catch (ServiceException e) {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -438,10 +438,10 @@ public class ParticipantService implements CrudsService {
    * CMS Address - create ADDRESS and CLIENT_ADDRESS for each address of the participant
    */
   private Participant processClientAddress(Participant clientParticipant, String referralId,
-      String clientId, Date timestamp, MessageBuilder messageBuilder) throws ServiceException {
+      String clientId, MessageBuilder messageBuilder) throws ServiceException {
 
     return clientAddressService.saveClientAddress(clientParticipant, referralId, clientId,
-        timestamp, messageBuilder);
+        messageBuilder);
   }
 
   @Override

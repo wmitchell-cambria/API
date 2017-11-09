@@ -18,12 +18,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,11 +41,13 @@ import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
+import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
 import gov.ca.cwds.fixture.ClientAddressResourceBuilder;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
@@ -85,7 +91,7 @@ public class ClientAddressServiceTest {
     riClientAddress = mock(RIClientAddress.class);
     validator = mock(Validator.class);
     addressService = mock(AddressService.class);
-    messageBuilder = mock(MessageBuilder.class);
+    messageBuilder = new MessageBuilder();
 
     clientAddressService =
         new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
@@ -423,13 +429,118 @@ public class ClientAddressServiceTest {
     gov.ca.cwds.data.persistence.cms.Address address =
         new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5", new Date());
     gov.ca.cwds.rest.api.domain.cms.PostedAddress postedAddress =
-        new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, false);
+        new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, true);
     Participant particpant = new ParticipantResourceBuilder()
         .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
     when(addressService.create(any())).thenReturn(postedAddress);
-    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", new Date(),
-        messageBuilder);
+
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
     verify(addressService, times(1)).create(any());
+  }
+
+  @Test
+  public void testForAddressUpdate() {
+    DateTime dateTime = new DateTime();
+    Address adddress1 = new AddressResourceBuilder().setLegacyId("ABC0987654").setCity("fremont")
+        .setLegacyDescriptor(new LegacyDescriptor(null, null, dateTime, null, null))
+        .createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().setLastUpdatedTime(dateTime).buildCmsAddress();
+
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.find(any())).thenReturn(cmsAddress);
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
+    Set<Address> savedAddresses = particpant.getAddresses();
+    Iterator<Address> it = savedAddresses.iterator();
+    Address updatedAddress = it.next();
+    verify(addressService, times(1)).update(any(), any());
+    assertThat(updatedAddress.getLegacyId(), is(equalTo("ABC0987654")));
+    assertThat(updatedAddress.getCity(), is(equalTo("fremont")));
+  }
+
+  @Test
+  public void testFailureWhenLastUpdatedTimeDiffer() {
+    DateTime dateTime = new DateTime();
+    DateTime dateTime1 = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        .parseDateTime("2004-03-31T09:45:58.000-0800");
+    Address adddress1 = new AddressResourceBuilder().setLegacyId("ABC0987654").setCity("fremont")
+        .setLegacyDescriptor(new LegacyDescriptor(null, null, dateTime, null, null))
+        .createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().setLastUpdatedTime(dateTime1).buildCmsAddress();
+
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.find(any())).thenReturn(cmsAddress);
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
+    verify(addressService, times(0)).update(any(), any());
+  }
+
+  @Test
+  public void testFailureWhenGivenAddressNotFound() {
+    DateTime dateTime = new DateTime();
+    Address adddress1 = new AddressResourceBuilder().setLegacyId("ABC0987654").setCity("fremont")
+        .setLegacyDescriptor(new LegacyDescriptor(null, null, dateTime, null, null))
+        .createAddress();
+
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.find(any())).thenReturn(null);
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
+    verify(addressService, times(0)).update(any(), any());
+  }
+
+  @Test
+  public void testForClientAddressCreateWhenNewAddressCreated() {
+    Address adddress1 = new AddressResourceBuilder().createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().buildCmsAddress();
+    gov.ca.cwds.data.persistence.cms.Address address =
+        new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5", new Date());
+    gov.ca.cwds.rest.api.domain.cms.PostedAddress postedAddress =
+        new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, true);
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.create(any())).thenReturn(postedAddress);
+
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
+    verify(addressService, times(1)).create(any());
+    verify(clientAddressDao, times(1)).create(any());
+  }
+
+  @Test
+  public void testForClientAddressCreateForExistingAddress() {
+    DateTime dateTime = new DateTime();
+    Address adddress1 = new AddressResourceBuilder().setLegacyId("ABC0987654").setCity("fremont")
+        .setLegacyDescriptor(new LegacyDescriptor(null, null, dateTime, null, null))
+        .createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().setLastUpdatedTime(dateTime).buildCmsAddress();
+
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.find(any())).thenReturn(cmsAddress);
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
+    Set<Address> savedAddresses = particpant.getAddresses();
+    Iterator<Address> it = savedAddresses.iterator();
+    Address updatedAddress = it.next();
+    verify(addressService, times(1)).update(any(), any());
+    assertThat(updatedAddress.getLegacyId(), is(equalTo("ABC0987654")));
+    assertThat(updatedAddress.getCity(), is(equalTo("fremont")));
+    verify(clientAddressDao, times(1)).create(any());
   }
 
 }

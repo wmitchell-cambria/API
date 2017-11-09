@@ -82,9 +82,11 @@ public class AddressResourceBuilder {
 
   /**
    * @param legacyDescriptor
+   * @return the legacyDescriptor
    */
-  public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
+  public AddressResourceBuilder setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
+    return this;
   }
 
   /**

@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.services.cms;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -188,12 +187,11 @@ public class ClientAddressService implements
    * @param clientParticipant - clientParticipant
    * @param referralId - referralId
    * @param clientId - clientId
-   * @param timestamp - timestamp
    * @param messageBuilder - messageBuilder
    * @return the savedClientAddress
    */
   public Participant saveClientAddress(Participant clientParticipant, String referralId,
-      String clientId, Date timestamp, MessageBuilder messageBuilder) {
+      String clientId, MessageBuilder messageBuilder) {
 
     String addressId = "";
     Set<gov.ca.cwds.rest.api.domain.Address> addresses;
@@ -209,7 +207,7 @@ public class ClientAddressService implements
       Address domainAddress = Address.createWithDefaults(address);
       messageBuilder.addDomainValidationError(validator.validate(domainAddress));
       if (StringUtils.isBlank(address.getLegacyId())) {
-        addressId = createNewAddress(timestamp, address, domainAddress);
+        addressId = createNewAddress(address, domainAddress);
       } else {
         Address foundAddress = this.addressService.find(address.getLegacyId());
         if (foundAddress != null) {
@@ -267,7 +265,7 @@ public class ClientAddressService implements
     return clientParticipant;
   }
 
-  private String createNewAddress(Date timestamp, gov.ca.cwds.rest.api.domain.Address address,
+  private String createNewAddress(gov.ca.cwds.rest.api.domain.Address address,
       Address domainAddress) {
     String addressId;
     PostedAddress postedAddress = this.addressService.create(domainAddress);
