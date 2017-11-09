@@ -152,8 +152,8 @@ public class ParticipantServiceTest {
     timestamp = new Date();
 
     participantService = new ParticipantService(participantDao, clientService,
-        referralClientService, reporterService, childClientService, addressService,
-        clientAddressService, validator, clientScpEthnicityService);
+        referralClientService, reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService);
   }
 
   @SuppressWarnings("javadoc")

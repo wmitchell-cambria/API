@@ -33,7 +33,7 @@ public class ReminderHelper {
 
   /**
    * @param dateOfBirth - dateOfBirth
-   * @return the ageDiffernce
+   * @return the ageDifference
    */
   public static int checkForAgeDiffernce(String dateOfBirth) {
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -41,7 +41,7 @@ public class ReminderHelper {
     int years = 0;
     try {
       /*
-       * check for the age differnce by using the Java Calender
+       * check for the age difference by using the Java Calendar
        */
       Date dob = dateFormat.parse(dateOfBirth);
       Calendar present = Calendar.getInstance();
@@ -62,7 +62,7 @@ public class ReminderHelper {
   }
 
   /**
-   * Mapped all the Referaal Response Type Code
+   * Mapped all the Referral Response Type Code
    * 
    * @return the number of days the dueDate to set
    */

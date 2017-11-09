@@ -277,8 +277,8 @@ public class R00824SetDispositionCode {
         new ReferralClientService(referralClientDao, nonLACountyTriggers, laCountyTrigger,
             triggerTablesDao, staffpersonDao, staffPersonIdRetriever, riReferralClient);
     participantService = new ParticipantService(participantDao, clientService,
-        referralClientService, reporterService, childClientService, addressService,
-        clientAddressService, validator, clientScpEthnicityService);
+        referralClientService, reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService);
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
@@ -393,7 +393,7 @@ public class R00824SetDispositionCode {
     when(caseLoadDao.find(any())).thenReturn(caseload);
 
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
-        .setResponseTime((short) 1519).createScreeningToReferral();
+        .setResponseTime((short) 1519).setApprovalStatus(122).createScreeningToReferral();
     when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
 
     ClientParticipants clientParticipants = new ClientParticipants();

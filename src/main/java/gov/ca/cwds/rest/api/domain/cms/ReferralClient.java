@@ -52,7 +52,7 @@ public class ReferralClient extends ReportingDomain implements Request, Response
 
   @NotNull
   @Size(min = 0, max = 1, message = "size must be 1")
-  @OneOf(value = {"A", "I", "S", "X", ""}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"A", "I", "S", "X", ""}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = false, readOnly = false,
       value = "A = Assesment, I = In Person Investigation, S = In Person Investigation and Services, X = Erroneously Added",
       example = "A")

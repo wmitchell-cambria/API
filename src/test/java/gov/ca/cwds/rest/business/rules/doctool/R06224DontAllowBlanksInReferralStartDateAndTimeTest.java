@@ -252,8 +252,8 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
 
     ParticipantDao participantDao = mock(ParticipantDao.class);
     participantService = new ParticipantService(participantDao, clientService,
-        referralClientService, reporterService, childClientService, addressService,
-        clientAddressService, validator, clientScpEthnicityService);
+        referralClientService, reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,

@@ -32,7 +32,6 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
@@ -62,7 +61,6 @@ public class ParticipantService implements CrudsService {
   private ReferralClientService referralClientService;
   private ReporterService reporterService;
   private ChildClientService childClientService;
-  private AddressService addressService;
   private ClientAddressService clientAddressService;
   private ClientScpEthnicityService clientScpEthnicityService;
 
@@ -83,16 +81,14 @@ public class ParticipantService implements CrudsService {
   @Inject
   public ParticipantService(ParticipantDao participantDao, ClientService clientService,
       ReferralClientService referralClientService, ReporterService reporterService,
-      ChildClientService childClientService, AddressService addressService,
-      ClientAddressService clientAddressService, Validator validator,
-      ClientScpEthnicityService clientScpEthnicityService) {
+      ChildClientService childClientService, ClientAddressService clientAddressService,
+      Validator validator, ClientScpEthnicityService clientScpEthnicityService) {
     this.participantDao = participantDao;
     this.validator = validator;
     this.clientService = clientService;
     this.referralClientService = referralClientService;
     this.reporterService = reporterService;
     this.childClientService = childClientService;
-    this.addressService = addressService;
     this.clientAddressService = clientAddressService;
     this.clientScpEthnicityService = clientScpEthnicityService;
   }
@@ -300,7 +296,8 @@ public class ParticipantService implements CrudsService {
    */
   private static String dispositionCode(ScreeningToReferral screeningToReferral) {
     String dispositionCode = "";
-    if (screeningToReferral.getResponseTime() == 1519) {
+    if (screeningToReferral.getResponseTime() == 1519
+        && screeningToReferral.getApprovalStatus() == 122) {
       dispositionCode = "A";
     }
     return dispositionCode;
