@@ -39,8 +39,8 @@ public class CrossReportServiceTest {
 
   @Test
   public void testFindReturnsCrossReportStub() {
-    Response response = crossReportService.find(DEFAULT_KEY);
-    assertThat(response, is(equalTo(crossReportStub)));
+    thrown.expect(NotImplementedException.class);
+    crossReportService.find(DEFAULT_KEY);
   }
 
   @Test
