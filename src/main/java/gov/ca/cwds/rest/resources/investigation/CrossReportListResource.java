@@ -56,7 +56,7 @@ public class CrossReportListResource {
   }
 
   /**
-   * Find {@link CrossReport}.
+   * Find {@link CrossReportList}.
    *
    * @param id - CMS Id of Case or Referral
    * @return - cross reports of investigation

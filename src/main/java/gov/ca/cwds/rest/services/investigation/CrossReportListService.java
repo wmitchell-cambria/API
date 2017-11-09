@@ -23,7 +23,6 @@ public class CrossReportListService
 
   /**
    * @param crossReportDao {@link Dao} handling
-   *        {@link gov.ca.cwds.rest.api.domain.investigation.CrossReportList} objects
    */
   @Inject
   public CrossReportListService(CrossReportDao crossReportDao) {

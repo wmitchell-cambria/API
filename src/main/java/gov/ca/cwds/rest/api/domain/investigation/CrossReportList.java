@@ -16,7 +16,7 @@ import io.dropwizard.jackson.JsonSnakeCase;
 /**
  * Container of {@link CrossReport} objects, represented as an unnamed array.
  *
- * Jackson best practice: annotation, {@code @JsonValue}, on getter {@link #getCrossReportList()},
+ * Jackson best practice: annotation, {@code @JsonValue}, on getter {@link #getCrossReports()},
  * serializes this object as an unnamed array of CrossReport objects.
  * 
  * @author CWDS API Team
@@ -44,8 +44,6 @@ public class CrossReportList extends ReportingDomain implements Request, Respons
   }
 
   /**
-   * Jackson best practice: annotation, {@code @JsonValue}, on this getter tells Jackson to
-   * serialize this object as an unnamed array of CrossReport objects.
    * 
    * @return - cross reports of an investigation
    */
