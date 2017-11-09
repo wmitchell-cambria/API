@@ -441,6 +441,44 @@ public class ClientAddressServiceTest {
   }
 
   @Test
+  public void testFailureWhenAddressIdEmpty() {
+    Address adddress1 = new AddressResourceBuilder().createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().buildCmsAddress();
+    gov.ca.cwds.data.persistence.cms.Address address =
+        new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5", new Date());
+    gov.ca.cwds.rest.api.domain.cms.PostedAddress postedAddress =
+        new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, false);
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.create(any())).thenReturn(postedAddress);
+
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "ABC1234568", messageBuilder);
+    verify(clientAddressDao, times(0)).create(any());
+  }
+
+  @Test
+  public void testFailureWhenClientIdEmpty() {
+    Address adddress1 = new AddressResourceBuilder().createAddress();
+    gov.ca.cwds.rest.api.domain.cms.Address cmsAddress =
+        new CmsAddressResourceBuilder().buildCmsAddress();
+    gov.ca.cwds.data.persistence.cms.Address address =
+        new gov.ca.cwds.data.persistence.cms.Address("ABC124569", cmsAddress, "0X5", new Date());
+    gov.ca.cwds.rest.api.domain.cms.PostedAddress postedAddress =
+        new gov.ca.cwds.rest.api.domain.cms.PostedAddress(address, true);
+    Participant particpant = new ParticipantResourceBuilder()
+        .setAddresses(new HashSet<>(Arrays.asList(adddress1))).createParticipant();
+    when(addressService.create(any())).thenReturn(postedAddress);
+
+    ClientAddress clientAddress = new ClientAddressEntityBuilder().buildClientAddress();
+    when(clientAddressDao.create(any())).thenReturn(clientAddress);
+    clientAddressService.saveClientAddress(particpant, "ABC1234567", "", messageBuilder);
+    verify(clientAddressDao, times(0)).create(any());
+  }
+
+  @Test
   public void testForAddressUpdate() {
     DateTime dateTime = new DateTime();
     Address adddress1 = new AddressResourceBuilder().setLegacyId("ABC0987654").setCity("fremont")
