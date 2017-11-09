@@ -10,19 +10,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.ns.Address;
 import gov.ca.cwds.data.persistence.ns.Participant;
+import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class ScreeningSummaryTest {
+
+  private ObjectMapper MAPPER = new ObjectMapper();
 
   private String additionalInformation = "there was excessive evidence of abuse";
   private String decision = "promoteToReferral";
@@ -135,4 +141,16 @@ public class ScreeningSummaryTest {
         safetyInformation, additionalInformation, startedAt, null);
     assertThat(domain.getAllegations(), is(equalTo(simpleAllegations)));
   }
+
+  @Test
+  @Ignore
+  public void testSerializedOutput()
+      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+    ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
+    final String expected =
+        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(screeningSummary);
+    System.out.println(expected);
+  }
+
+
 }

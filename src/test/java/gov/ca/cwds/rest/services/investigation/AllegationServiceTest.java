@@ -64,13 +64,13 @@ public class AllegationServiceTest {
   @Test
   public void deleteThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    allegationService.find(DEFAULT_KEY);
+    allegationService.delete(DEFAULT_KEY);
 
   }
 
   @Test
   public void updateReturnsStubAllegation() {
-    Response response = allegationService.create(stubAllegation);
+    Response response = allegationService.update(DEFAULT_KEY, stubAllegation);
     assertThat(response, is(equalTo(stubAllegation)));
 
   }

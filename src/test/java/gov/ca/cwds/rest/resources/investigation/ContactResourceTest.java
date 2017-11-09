@@ -11,6 +11,7 @@ import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 
 
+@SuppressWarnings("javadoc")
 public class ContactResourceTest {
 
   private ContactResource resource;

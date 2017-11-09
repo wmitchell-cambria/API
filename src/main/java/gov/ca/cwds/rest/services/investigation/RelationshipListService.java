@@ -2,10 +2,14 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.dao.investigation.RelationshipsDao;
 import gov.ca.cwds.data.persistence.cms.Client;
@@ -57,17 +61,17 @@ public class RelationshipListService
 
   @Override
   public RelationshipList delete(String primaryKey) {
-    return validRelationshipList;
+    throw new NotImplementedException("delete not implemented");
   }
 
   @Override
   public Response create(RelationshipList request) {
-    return validRelationshipList;
+    throw new NotImplementedException("create not implemented");
   }
 
   @Override
   public Response update(String primaryKey, RelationshipList request) {
-    return validRelationshipList;
+    throw new NotImplementedException("update not implemented");
   }
 
   /**
