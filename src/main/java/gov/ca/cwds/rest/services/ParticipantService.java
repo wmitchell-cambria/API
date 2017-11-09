@@ -73,7 +73,6 @@ public class ParticipantService implements CrudsService {
    * @param referralClientService the referralClientService
    * @param reporterService the reporterService
    * @param childClientService the childClientService
-   * @param addressService the addressService
    * @param clientAddressService the clientAddressService
    * @param validator - the validator
    * @param clientScpEthnicityService - clientScpEthnicityService
