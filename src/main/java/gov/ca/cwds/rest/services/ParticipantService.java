@@ -31,6 +31,8 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
+import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -264,9 +266,11 @@ public class ParticipantService implements CrudsService {
       String referralId, Date timestamp, MessageBuilder messageBuilder,
       Participant incomingParticipant, String clientId) {
 
+    RuleValidatator ruleValidator =
+        new R00824SetDispositionCode(screeningToReferral, incomingParticipant);
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
-            incomingParticipant.isClientStaffPersonAdded(), dispositionCode(screeningToReferral),
+            incomingParticipant.isClientStaffPersonAdded(), ruleValidator.isValid() ? "A" : "",
             referralId, clientId, LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
             LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
@@ -278,28 +282,6 @@ public class ParticipantService implements CrudsService {
       messageBuilder.addMessageAndLog(se.getMessage(), se, LOGGER);
     }
     return referralClient;
-  }
-
-  /**
-   * <blockquote>
-   *
-   * <pre>
-   * BUSINESS RULE: "R - 00824"
-   *
-   * IF    referralResponseTypeCode is set to Evaluate Out 
-   * THEN  referralClient - dispositionCode is set to the "A"
-   *
-   * </pre>
-   *
-   * </blockquote>
-   */
-  private static String dispositionCode(ScreeningToReferral screeningToReferral) {
-    String dispositionCode = "";
-    if (screeningToReferral.getResponseTime() == 1519
-        && screeningToReferral.getApprovalStatus() == 122) {
-      dispositionCode = "A";
-    }
-    return dispositionCode;
   }
 
   private boolean updateClient(ScreeningToReferral screeningToReferral,
