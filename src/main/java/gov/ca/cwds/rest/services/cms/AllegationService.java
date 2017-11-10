@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -14,8 +12,8 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
@@ -31,7 +29,6 @@ public class AllegationService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(AllegationService.class);
 
   private AllegationDao allegationDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIAllegation riAllegation;
 
   /**
@@ -39,14 +36,11 @@ public class AllegationService implements
    * 
    * @param allegationDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.Allegation} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param riAllegation the ri for allegation
    */
   @Inject
-  public AllegationService(AllegationDao allegationDao,
-      StaffPersonIdRetriever staffPersonIdRetriever, RIAllegation riAllegation) {
+  public AllegationService(AllegationDao allegationDao, RIAllegation riAllegation) {
     this.allegationDao = allegationDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.riAllegation = riAllegation;
   }
 
@@ -89,52 +83,19 @@ public class AllegationService implements
    */
   @Override
   public PostedAllegation create(gov.ca.cwds.rest.api.domain.cms.Allegation request) {
-
     gov.ca.cwds.rest.api.domain.cms.Allegation allegation = request;
-    return create(allegation, null);
 
-  }
-
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public PostedAllegation createWithSingleTimestamp(Request request, Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.Allegation allegation =
-        (gov.ca.cwds.rest.api.domain.cms.Allegation) request;
-    return create(allegation, timestamp);
-
-  }
-
-  /**
-   * This private method is created to handle to single allegation and referrals with single
-   * timestamp
-   * 
-   */
-  private PostedAllegation create(gov.ca.cwds.rest.api.domain.cms.Allegation allegation,
-      Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Allegation managed;
-      if (timestamp == null) {
-        managed =
-            new Allegation(CmsKeyIdGenerator.generate(lastUpdatedId), allegation, lastUpdatedId);
-      } else {
-        managed = new Allegation(CmsKeyIdGenerator.generate(lastUpdatedId), allegation,
-            lastUpdatedId, timestamp);
-      }
+      Allegation managed = new Allegation(
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), allegation,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = allegationDao.create(managed);
       return new PostedAllegation(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Allegation already exists : {}", allegation);
       throw new ServiceException(e);
     }
-
   }
 
   /**
@@ -149,8 +110,9 @@ public class AllegationService implements
     gov.ca.cwds.rest.api.domain.cms.Allegation allegation = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Allegation managed = new Allegation(primaryKey, allegation, lastUpdatedId);
+      Allegation managed =
+          new Allegation(primaryKey, allegation, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = allegationDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Allegation(managed);
     } catch (EntityNotFoundException e) {

@@ -193,19 +193,6 @@ public class Allegation extends CmsPersistentObject {
   }
 
   /**
-   * Constructor using domain
-   * 
-   * @param id The id
-   * @param persistedAllegation The domain object to construct this object from
-   * @param lastUpdatedId the id of the last user to update this object
-   */
-  public Allegation(String id, gov.ca.cwds.rest.api.domain.cms.Allegation persistedAllegation,
-      String lastUpdatedId) {
-    super(lastUpdatedId);
-    init(id, persistedAllegation);
-  }
-
-  /**
    * Constructor
    * 
    * @param id The id
@@ -216,14 +203,6 @@ public class Allegation extends CmsPersistentObject {
   public Allegation(String id, gov.ca.cwds.rest.api.domain.cms.Allegation persistedAllegation,
       String lastUpdatedId, Date lastUpdatedTime) {
     super(lastUpdatedId, lastUpdatedTime);
-    init(id, persistedAllegation);
-  }
-
-  /**
-   * @param id the id
-   * @param persistedAllegation - persistedAllegation
-   */
-  private void init(String id, gov.ca.cwds.rest.api.domain.cms.Allegation persistedAllegation) {
     this.id = id;
     this.abuseEndDate = DomainChef.uncookDateString(persistedAllegation.getAbuseEndDate());
     this.abuseStartDate = DomainChef.uncookDateString(persistedAllegation.getAbuseStartDate());
@@ -242,8 +221,9 @@ public class Allegation extends CmsPersistentObject {
     this.staffPersonAddedIndicator =
         DomainChef.cookBoolean(persistedAllegation.getStaffPersonAddedIndicator());
     this.victimClientId = persistedAllegation.getVictimClientId();
-    this.perpetratorClientId = StringUtils.isBlank(persistedAllegation.getPerpetratorClientId())
-        ? null : persistedAllegation.getPerpetratorClientId();
+    this.perpetratorClientId =
+        StringUtils.isBlank(persistedAllegation.getPerpetratorClientId()) ? null
+            : persistedAllegation.getPerpetratorClientId();
     this.referralId = persistedAllegation.getReferralId();
     this.countySpecificCode = persistedAllegation.getCountySpecificCode();
     this.zippyCreatedIndicator =

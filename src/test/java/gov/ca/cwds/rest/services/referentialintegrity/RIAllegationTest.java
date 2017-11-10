@@ -55,7 +55,8 @@ public class RIAllegationTest {
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5",
+            new Date());
 
     RIAllegation target = new RIAllegation(clientDao, referralDao);
     when(referralDao.find(any(String.class))).thenReturn(null);
@@ -67,7 +68,8 @@ public class RIAllegationTest {
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -84,7 +86,8 @@ public class RIAllegationTest {
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =

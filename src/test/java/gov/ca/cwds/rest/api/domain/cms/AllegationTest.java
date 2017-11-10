@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -108,7 +109,7 @@ public class AllegationTest {
         countySpecificCode, zippyCreatedIndicator, placementFacilityType);
 
     gov.ca.cwds.data.persistence.cms.Allegation persistent =
-        new gov.ca.cwds.data.persistence.cms.Allegation(id, domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.Allegation(id, domain, "lastUpdatedId", new Date());
 
     Allegation totest = new Allegation(persistent);
     assertThat(totest.getAbuseEndDate(), is(equalTo(df.format(persistent.getAbuseEndDate()))));
@@ -873,9 +874,8 @@ public class AllegationTest {
    */
   @Test
   public void failsWhenInjuryHarmDetailIndicatorAllWhitespace() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Allegation/invalid/injuryHarmDetailIndicatorAllWhitespace.json"),
+    Allegation toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Allegation/invalid/injuryHarmDetailIndicatorAllWhitespace.json"),
         Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -1116,9 +1116,8 @@ public class AllegationTest {
    */
   @Test
   public void failsWhenStaffPersonAddedIndicatorAllWhitespace() throws Exception {
-    Allegation toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Allegation/invalid/staffPersonAddedIndicatorAllWhitespace.json"),
+    Allegation toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/Allegation/invalid/staffPersonAddedIndicatorAllWhitespace.json"),
         Allegation.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)

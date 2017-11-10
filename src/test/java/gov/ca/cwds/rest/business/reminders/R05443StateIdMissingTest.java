@@ -112,7 +112,8 @@ public class R05443StateIdMissingTest {
             DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
     Reporter reporterDomain =
@@ -173,7 +174,8 @@ public class R05443StateIdMissingTest {
             DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
     Reporter reporterDomain =
@@ -233,7 +235,8 @@ public class R05443StateIdMissingTest {
             DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -297,7 +300,8 @@ public class R05443StateIdMissingTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -361,7 +365,8 @@ public class R05443StateIdMissingTest {
             DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
     Reporter reporterDomain =

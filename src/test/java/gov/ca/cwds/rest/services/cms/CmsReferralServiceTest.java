@@ -143,7 +143,7 @@ public class CmsReferralServiceTest {
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
-    allegationService = new AllegationService(allegationDao, staffPersonIdRetriever, riAllegation);
+    allegationService = new AllegationService(allegationDao, riAllegation);
 
     crossReportDao = mock(CrossReportDao.class);
     riCrossReport = mock(RICrossReport.class);
@@ -192,7 +192,7 @@ public class CmsReferralServiceTest {
         new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234567",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
 
     Set<CrossReport> crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/crossReportCmsReferral.json"),
@@ -298,7 +298,7 @@ public class CmsReferralServiceTest {
         new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234567",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
 
     Set<CrossReport> crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/crossReportCmsReferral.json"),
@@ -375,7 +375,7 @@ public class CmsReferralServiceTest {
         new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234567",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
 
     Set<CrossReport> crossReportDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/crossReportCmsReferral.json"),

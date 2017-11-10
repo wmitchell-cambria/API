@@ -118,7 +118,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -197,7 +198,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -268,7 +270,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -347,7 +350,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -427,7 +431,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -506,7 +511,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -585,7 +591,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -663,7 +670,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -741,7 +749,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Reporter reporterDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
@@ -817,7 +826,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 
@@ -896,7 +906,8 @@ public class R04464CrossReportLawEnforcementDueTest {
             "123ABC1235", DEFAULT_COUNTY_SPECIFIC_CODE, false, DEFAULT_CODE);
 
     gov.ca.cwds.data.persistence.cms.Allegation savedAllegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("123ABC1236", cmsAllegation, "0X5",
+            new Date());
 
     Address address = new AddressResourceBuilder().createAddress();
 

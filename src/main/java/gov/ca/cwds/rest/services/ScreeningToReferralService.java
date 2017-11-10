@@ -552,8 +552,7 @@ public class ScreeningToReferralService implements CrudsService {
 
     messageBuilder.addDomainValidationError(validator.validate(cmsAllegation));
 
-    PostedAllegation postedAllegation =
-        this.allegationService.createWithSingleTimestamp(cmsAllegation, timestamp);
+    PostedAllegation postedAllegation = this.allegationService.create(cmsAllegation);
     allegation.setLegacyId(postedAllegation.getId());
     allegation.setLegacySourceTable(ALLEGATION_TABLE_NAME);
     processedAllegations.add(allegation);

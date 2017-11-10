@@ -81,7 +81,8 @@ public class RIAllegationPerpetratorHistoryTest {
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5",
+            new Date());
 
     when(clientDao.find(any(String.class))).thenReturn(null);
     when(allegationDao.find(any(String.class))).thenReturn(allegation);
@@ -106,7 +107,8 @@ public class RIAllegationPerpetratorHistoryTest {
 
     Allegation allegationDomain = new CmsAllegationResourceBuilder().buildCmsAllegation();
     gov.ca.cwds.data.persistence.cms.Allegation allegation =
-        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Allegation("ABC1234plo", allegationDomain, "0X5",
+            new Date());
 
     when(clientDao.find(any(String.class))).thenReturn(client);
     when(allegationDao.find(any(String.class))).thenReturn(allegation);

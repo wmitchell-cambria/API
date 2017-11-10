@@ -201,7 +201,7 @@ public class R05360ReferralCityMandatoryTest {
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
-    allegationService = new AllegationService(allegationDao, staffPersonIdRetriever, riAllegation);
+    allegationService = new AllegationService(allegationDao, riAllegation);
 
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
@@ -329,7 +329,7 @@ public class R05360ReferralCityMandatoryTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
@@ -457,7 +457,7 @@ public class R05360ReferralCityMandatoryTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
@@ -586,7 +586,7 @@ public class R05360ReferralCityMandatoryTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
@@ -714,7 +714,7 @@ public class R05360ReferralCityMandatoryTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
@@ -842,7 +842,7 @@ public class R05360ReferralCityMandatoryTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
@@ -969,7 +969,7 @@ public class R05360ReferralCityMandatoryTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 
@@ -978,7 +978,7 @@ public class R05360ReferralCityMandatoryTest {
         AllegationPerpetratorHistory.class);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
         new gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory("567890ABC",
-            allegationPerpHistoryDomain, "2017-07-03", new Date());
+            allegationPerpHistoryDomain, "ABC", new Date());
     when(allegationPerpetratorHistoryDao
         .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
             .thenReturn(allegationPerpHistoryToCreate);

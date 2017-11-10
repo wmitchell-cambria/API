@@ -187,7 +187,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
-    allegationService = new AllegationService(allegationDao, staffPersonIdRetriever, riAllegation);
+    allegationService = new AllegationService(allegationDao, riAllegation);
 
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);

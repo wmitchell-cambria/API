@@ -247,7 +247,7 @@ public class ScreeningToReferralServiceTest {
     allegationService = mock(AllegationService.class);
     gov.ca.cwds.data.persistence.cms.Allegation allegation = new AllegationEntityBuilder().build();
     PostedAllegation postedAllegation = new PostedAllegation(allegation);
-    when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
+    when(allegationService.create(any())).thenReturn(postedAllegation);
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
         new AllegationPerpetratorHistoryEntityBuilder().build();
     PostedAllegationPerpetratorHistory postedAllegationPerpHistory =
@@ -933,7 +933,7 @@ public class ScreeningToReferralServiceTest {
     PostedAllegation postedAllegation = mock(PostedAllegation.class);
     when(postedAllegation.getId()).thenReturn(perpLegacyId);
     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
-    when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
+    when(allegationService.create(any())).thenReturn(postedAllegation);
     when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
         .thenReturn(validReferralId);
 
@@ -969,7 +969,7 @@ public class ScreeningToReferralServiceTest {
     PostedAllegation postedAllegation = mock(PostedAllegation.class);
     when(postedAllegation.getId()).thenReturn(perpLegacyId);
     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
-    when(allegationService.createWithSingleTimestamp(any(), any())).thenReturn(postedAllegation);
+    when(allegationService.create(any())).thenReturn(postedAllegation);
     when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
         .thenReturn(validReferralId);
 

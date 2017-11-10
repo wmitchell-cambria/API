@@ -198,7 +198,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
-    allegationService = new AllegationService(allegationDao, staffPersonIdRetriever, riAllegation);
+    allegationService = new AllegationService(allegationDao, riAllegation);
 
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
@@ -324,7 +324,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
             new TypeReference<Set<Allegation>>() {});
     gov.ca.cwds.data.persistence.cms.Allegation allegationToCreate =
         new gov.ca.cwds.data.persistence.cms.Allegation("2345678ABC",
-            (Allegation) allegationDomain.toArray()[0], "2016-10-31");
+            (Allegation) allegationDomain.toArray()[0], "ABC", new Date());
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
         .thenReturn(allegationToCreate);
 

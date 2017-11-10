@@ -103,7 +103,7 @@ public class AllegationTest implements PersistentTestTemplate {
     gov.ca.cwds.rest.api.domain.cms.Allegation domainAllegation =
         new CmsAllegationResourceBuilder().buildCmsAllegation();
 
-    Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId);
+    Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId, lastUpdatedTime);
 
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getAbuseEndDate(),
@@ -196,7 +196,7 @@ public class AllegationTest implements PersistentTestTemplate {
     gov.ca.cwds.rest.api.domain.cms.Allegation domainAllegation =
         new CmsAllegationResourceBuilder().buildCmsAllegation();
 
-    Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId);
+    Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId, lastUpdatedTime);
 
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getAbuseEndDate(),
