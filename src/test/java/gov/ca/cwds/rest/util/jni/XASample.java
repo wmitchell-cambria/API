@@ -96,6 +96,7 @@ public class XASample {
   }
 
   private static void setupInitialContext() {
+    LOGGER.info("setupInitialContext();");
     try {
       NamingManager.setInitialContextFactoryBuilder(new InitialContextFactoryBuilder() {
 
@@ -160,7 +161,6 @@ public class XASample {
       Class.forName("com.ibm.db2.jcc.DB2Driver");
       Class.forName("org.postgresql.Driver");
       setupInitialContext();
-      LOGGER.info("setupInitialContext();");
 
       // Note that javax.sql.XADataSource is used instead of a specific driver implementation such
       // as com.ibm.db2.jcc.DB2XADataSource.
@@ -196,14 +196,8 @@ public class XASample {
       // ===================
 
       // Run DML on connection 1.
-      conn1.prepareStatement(
-          // "update CWSNS1.CLIENT_T c set c.BR_FAC_NM = 'conn 1' where c.IDENTIFIER =
-          // 'AaiU7IW0Rt'")
-          // "update CWSINT.ALLGTN_T c set c.LOC_DSC = 'test 1' where c.IDENTIFIER =
-          // 'AAABG3EMNL'")
-          // "update CWSINT.CLIENT_T c set c.BR_FAC_NM = 'conn 6' where c.IDENTIFIER =
-          // 'AaiU7IW0Rt'")
-          "UPDATE public.people SET first_name='bart201' WHERE id = '50'").executeUpdate();
+      conn1.prepareStatement("UPDATE public.people SET first_name='bart201' WHERE id = '50'")
+          .executeUpdate();
 
       // Run DML on connection 2.
       conn2
