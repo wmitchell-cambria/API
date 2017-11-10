@@ -169,10 +169,10 @@ public class AllegationTest {
     Allegation allegation = new AllegationEntityBuilder().setDispositionType(null).build();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(allegation);
     Iterator<ConstraintViolation<Allegation>> itr = constraintViolations.iterator();
-    while (itr.hasNext()) {
-      ConstraintViolation<Allegation> cv = itr.next();
-      // System.out.println(cv.getMessage());
-    }
+    // while (itr.hasNext()) {
+    // ConstraintViolation<Allegation> cv = itr.next();
+    // System.out.println(cv.getMessage());
+    // }
     assertEquals(0, constraintViolations.size());
   }
 

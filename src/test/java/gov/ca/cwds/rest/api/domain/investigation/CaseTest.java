@@ -108,7 +108,7 @@ public class CaseTest {
   public void getServiceComponentId_Args__() throws Exception {
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
         assignedSocialWorker, serviceComponentId, startDate, parents);
-    assertThat(target.getServiceComponent(), is(equalTo(serviceComponent)));
+    assertThat(target.getServiceComponentId(), is(equalTo(serviceComponentId)));
   }
 
   @Test
