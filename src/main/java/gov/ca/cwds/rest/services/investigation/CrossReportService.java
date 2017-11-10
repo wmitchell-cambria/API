@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 public class CrossReportService implements TypedCrudsService<String, CrossReport, Response> {
 
   private static CrossReport crossReportStub = new CrossReportEntityBuilder().build();
-  // private CrossReportDao crossReportDao;
+  private CrossReportDao crossReportDao;
 
   /**
    * @param crossReportDao - cross report data access object

@@ -17,7 +17,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -106,13 +105,13 @@ public class AllegationListTest {
   }
 
   @Test
-  @Ignore
+  // @Ignore
   public void testSerializedOutput()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     AllegationList allegationList = new AllegationListEntityBuilder().build();
     final String expected =
         MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(allegationList);
-    System.out.println(expected);
+    // System.out.println(expected);
   }
 
   @Test

@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -43,7 +42,7 @@ public class AssigneeTest {
 
 
   @Test
-  @Ignore
+  // @Ignore
   public void testStaffPersonConstructorSuccess() {
     String name = StringUtils.trim(staffPerson.getFirstName())
         + StringUtils.trim(staffPerson.getMiddleInitial())

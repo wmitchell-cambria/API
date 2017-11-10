@@ -15,9 +15,7 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class AllegationSubTypeTest {
   private Short injuryHarmType1 = 1372;
-  private Short injuryHarmType2 = 1372;
   private Short injuryHarmSubType1 = 6;
-  private Short injuryHarmSubType2 = 7;
 
   @Before
   public void setup() {}

@@ -244,7 +244,7 @@ public class AllegationTest {
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
     Allegation allegation = new AllegationEntityBuilder().build();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(allegation);
-    System.out.println(expected);
+    // System.out.println(expected);
   }
 
   @Test
