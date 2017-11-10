@@ -7,17 +7,12 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.PeopleEntityBuilder;
@@ -69,14 +64,14 @@ public class PeopleTest {
     assertThat(persons1, is(not(equals(persons2))));
   }
 
-  @Test
-  @Ignore
-  public void testSerializedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    People people = new PeopleEntityBuilder().build();
-    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(people);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // People people = new PeopleEntityBuilder().build();
+  // final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(people);
+  // System.out.println(expected);
+  // }
 
   @Test
   public void equalsHashCodeWork() {

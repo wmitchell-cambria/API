@@ -2,9 +2,10 @@ package gov.ca.cwds.data.persistence.cms;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertTrue;
 
@@ -433,6 +434,26 @@ public class ClientTest implements PersistentTestTemplate {
     final Client target = validBean();
     final ApiLanguageAware[] actual = target.getLanguages();
     assertTrue(actual.length > 0);
+  }
+
+  @SuppressWarnings("javadoc")
+  @Test
+  public void testConstructorWithNullSuffixTitleDescription() throws Exception {
+    gov.ca.cwds.rest.api.domain.cms.Client vc = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Client/valid/nullSuffixTitleDescription.json"),
+        gov.ca.cwds.rest.api.domain.cms.Client.class);
+    Client pers = new Client(id, vc, lastUpdatedId, lastUpdatedTime);
+    assertThat(pers.getSuffixTitleDescription(), is(equalTo("")));
+
+  }
+
+  @SuppressWarnings("javadoc")
+  @Test
+  public void testToString() throws Exception {
+    gov.ca.cwds.rest.api.domain.cms.Client vc = validDomainClient();
+    Client pers = new Client(id, vc, lastUpdatedId, lastUpdatedTime);
+    assertThat(pers.toString(), is(not(equalTo(""))));
+
   }
 
   // @SuppressWarnings("javadoc")

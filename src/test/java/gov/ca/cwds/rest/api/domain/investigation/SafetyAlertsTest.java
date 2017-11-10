@@ -5,8 +5,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,12 +16,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
@@ -42,11 +38,11 @@ public class SafetyAlertsTest {
     validator = factory.getValidator();
   }
 
-  // @Test
-  // public void testEmptyConstructorSuccess() {
-  // SafetyAlerts safetyAlerts = new SafetyAlerts();
-  // assertNotNull(safetyAlerts);
-  // }
+  @Test
+  public void testEmptyConstructorSuccess() {
+    SafetyAlerts safetyAlerts = new SafetyAlerts();
+    assertNotNull(safetyAlerts);
+  }
 
   @Test
   public void testDomainConstructor() {
@@ -82,15 +78,15 @@ public class SafetyAlertsTest {
     EqualsVerifier.forClass(SafetyAlerts.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
-  @Test
-  @Ignore
-  public void testSerilizedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(safetyAlerts);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerilizedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(safetyAlerts);
+  // System.out.println(expected);
+  // }
 
   @Test
   public void deserializesFromJSON() throws Exception {
