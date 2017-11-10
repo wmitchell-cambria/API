@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,12 +21,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -390,12 +385,12 @@ public class PersonTest {
     assertEquals(1, constraintViolations.size());
   }
 
-  @Test
-  @Ignore
-  public void testSerializedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    Person display = new PersonEntityBuilder().build();
-    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(display);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // Person display = new PersonEntityBuilder().build();
+  // final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(display);
+  // System.out.println(expected);
+  // }
 }

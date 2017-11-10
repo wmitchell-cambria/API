@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,12 +16,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.cms.Address;
@@ -177,7 +172,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -211,7 +205,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -268,7 +261,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -291,7 +283,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -316,7 +307,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -341,7 +331,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -366,7 +355,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -389,7 +377,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -411,7 +398,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -439,7 +425,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -463,7 +448,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -487,7 +471,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -513,7 +496,6 @@ public class InvestigationTest {
     Set<Allegation> allgationSet = allegations.getAllegations();
     People people = new PeopleEntityBuilder().build();
     Set<Person> personSet = people.getPersons();
-    // TODO
     Set<Relationship> relationshipList = new HashSet<Relationship>();
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     Set<String> crossReports = new HashSet<String>();
@@ -552,17 +534,17 @@ public class InvestigationTest {
     assertThat(investigation, is(not(equals(otherInvestigation))));
   }
 
-  @Test
-  @Ignore
-  public void testSerializedInvestigation()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
-    Investigation investigation =
-        new InvestigationEntityBuilder().setSafetyAlerts(safetyAlerts).build();
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedInvestigation()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+  // Investigation investigation =
+  // new InvestigationEntityBuilder().setSafetyAlerts(safetyAlerts).build();
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+  // System.out.println(expected);
+  // }
 
   @Test
   public void equalsHashCodeWork() {

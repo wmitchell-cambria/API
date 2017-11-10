@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +19,6 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
@@ -134,15 +130,15 @@ public class CmsRecordDescriptorTest {
 
   }
 
-  @Test
+  // @Test
   // @Ignore
-  public void testSerializedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptorEntityBuilder().build();
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(cmsRecordDescriptor);
-    System.out.println(expected);
-  }
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptorEntityBuilder().build();
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(cmsRecordDescriptor);
+  // System.out.println(expected);
+  // }
 
   @Test
   public void deserializesFromJSON() throws Exception {

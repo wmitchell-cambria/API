@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,9 +12,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
@@ -72,14 +68,15 @@ public class CrossReportTest {
     EqualsVerifier.forClass(CrossReport.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
-  @Test
+  // @Test
   // @Ignore
-  public void testSerializedInvestigation()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    CrossReport crossReport = new CrossReport(legacyDescriptor, readOnly, reportedOn,
-        communicationMethod, county, crossReportAgencies);
-    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReport);
-    System.out.println(expected);
-  }
+  // public void testSerializedInvestigation()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // CrossReport crossReport = new CrossReport(legacyDescriptor, readOnly, reportedOn,
+  // communicationMethod, county, crossReportAgencies);
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReport);
+  // System.out.println(expected);
+  // }
 
 }
