@@ -112,8 +112,8 @@ public class ReferralServiceTest {
     when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
     riReferral = mock(RIReferral.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     mockMessageBuilder = mock(MessageBuilder.class);
     dateStarted = "2009-12-20";
@@ -427,7 +427,7 @@ public class ReferralServiceTest {
     when(drmsDocumentService.create(any())).thenReturn(drmsDocument);
 
     addressService = mock(AddressService.class);
-    when(addressService.createAddressFromScreening(eq(screeningToReferral), any(), any()))
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
         .thenReturn(address);
 
     longTextService = mock(LongTextService.class);
@@ -436,8 +436,8 @@ public class ReferralServiceTest {
     when(longTextService.create(any())).thenReturn(postedLongText);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     Referral referralCreated = referralService.createReferralWithDefaults(screeningToReferral,
         dateStarted, timeStarted, lastUpdatedTimeStamp, mockMessageBuilder);
@@ -455,8 +455,8 @@ public class ReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.Referral savedReferral = new ReferralEntityBuilder().build();
     when(referralDao.find(referralId)).thenReturn(savedReferral);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     MessageBuilder messageBuilder = new MessageBuilder();
     String response = referralService.createCmsReferralFromScreening(screeningToReferral,
@@ -474,8 +474,8 @@ public class ReferralServiceTest {
         .setReferralId(nonExistingReferralId).createScreeningToReferral();
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     MessageBuilder messageBuilder = mock(MessageBuilder.class);
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
@@ -496,7 +496,7 @@ public class ReferralServiceTest {
 
     Address address = new AddressResourceBuilder().createAddress();
     addressService = mock(AddressService.class);
-    when(addressService.createAddressFromScreening(eq(screeningToReferral), any(), any()))
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
         .thenReturn(address);
 
     longTextService = mock(LongTextService.class);
@@ -505,8 +505,8 @@ public class ReferralServiceTest {
     when(longTextService.create(any())).thenReturn(postedLongText);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral =
         new ReferralEntityBuilder().setId("1234567890").build();
@@ -535,7 +535,7 @@ public class ReferralServiceTest {
     when(drmsDocumentService.create(any())).thenReturn(drmsDocument);
 
     addressService = mock(AddressService.class);
-    when(addressService.createAddressFromScreening(eq(screeningToReferral), any(), any()))
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
         .thenReturn(address);
 
     longTextService = mock(LongTextService.class);
@@ -544,8 +544,8 @@ public class ReferralServiceTest {
     when(longTextService.create(any())).thenReturn(postedLongText);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral =
         new ReferralEntityBuilder().setId("1234567890").build();
@@ -563,7 +563,7 @@ public class ReferralServiceTest {
   }
 
 
-  @Test (expected = ServiceException.class)
+  @Test(expected = ServiceException.class)
   public void shouldThrowErrorIfStaffPersonIdIsNotFound() throws Exception {
     when(staffPersonIdRetriever.getStaffPersonId()).thenReturn(null);
     Referral referralDomain = new ReferralResourceBuilder().build();
@@ -576,7 +576,7 @@ public class ReferralServiceTest {
 
   }
 
-   @Test (expected = ServiceException.class)
+  @Test(expected = ServiceException.class)
   public void shouldThrowErrorIfReferralIsNotSavedSuccessfully() throws Exception {
     when(referralDao.create(any())).thenReturn(null);
     Referral referralDomain = new ReferralResourceBuilder().build();

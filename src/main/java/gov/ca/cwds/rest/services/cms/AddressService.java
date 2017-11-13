@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
@@ -83,12 +81,11 @@ public class AddressService implements
 
   /**
    * @param scr - scr
-   * @param timestamp - timestamp
    * @param messageBuilder - messageBuilder
    * @return the AddressFromScreening
    */
   public gov.ca.cwds.rest.api.domain.Address createAddressFromScreening(ScreeningToReferral scr,
-      Date timestamp, MessageBuilder messageBuilder) {
+      MessageBuilder messageBuilder) {
     gov.ca.cwds.rest.api.domain.Address address = scr.getAddress();
     if (address == null || address.getZip() == null
         || StringUtils.isBlank(address.getStreetAddress()) || address.getType() == null) {

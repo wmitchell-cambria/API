@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -49,7 +50,6 @@ public class ReferralClientServiceTest {
   private LACountyTrigger laCountyTrigger;
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIReferralClient riReferralClient;
 
   private static Boolean isLaCountyTrigger = false;
@@ -66,11 +66,9 @@ public class ReferralClientServiceTest {
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     riReferralClient = mock(RIReferralClient.class);
-    referralClientService =
-        new ReferralClientService(referralClientDao, nonLACountyTriggers, laCountyTrigger,
-            triggerTablesDao, staffpersonDao, staffPersonIdRetriever, riReferralClient);
+    referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
+        laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
   }
 
   // find test
@@ -82,7 +80,7 @@ public class ReferralClientServiceTest {
     ReferralClient expected = new ReferralClientResourceBuilder().buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC", new Date());
 
     when(referralClientDao.find(referralClient.getPrimaryKey())).thenReturn(referralClient);
     ReferralClient found = referralClientService.find(referralClient.getPrimaryKey().toString());
@@ -95,7 +93,7 @@ public class ReferralClientServiceTest {
     ReferralClient expected = new ReferralClientResourceBuilder().buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC", new Date());
 
     Response found = referralClientService.find(referralClient.getPrimaryKey().toString());
     assertThat(found, is(nullValue()));
@@ -107,7 +105,7 @@ public class ReferralClientServiceTest {
     ReferralClient expected = new ReferralClientResourceBuilder().buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC", new Date());
     referralClientService.delete(referralClient.getPrimaryKey().toString());
     verify(referralClientDao, times(1)).delete(referralClient.getPrimaryKey());
   }
@@ -126,7 +124,7 @@ public class ReferralClientServiceTest {
     ReferralClient expected = new ReferralClientResourceBuilder().buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC", new Date());
 
     when(referralClientDao.delete(any())).thenReturn(referralClient);
     Object retval = referralClientService.delete(referralClient.getPrimaryKey().toString());
@@ -140,7 +138,7 @@ public class ReferralClientServiceTest {
     ReferralClient expected = new ReferralClientResourceBuilder().buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(expected, "ABC", new Date());
 
     when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
         .thenReturn(referralClient);
@@ -157,7 +155,8 @@ public class ReferralClientServiceTest {
         new ReferralClientResourceBuilder().buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientRequest, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientRequest, "ABC",
+            new Date());
 
     when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
         .thenReturn(referralClient);
@@ -194,7 +193,8 @@ public class ReferralClientServiceTest {
           new ReferralClientResourceBuilder().buildReferralClient();
 
       gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-          new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientRequest, "ABC");
+          new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientRequest, "ABC",
+              new Date());
 
       when(referralClientDao.find(referralClient.getPrimaryKey().toString()))
           .thenReturn(referralClient);
@@ -226,7 +226,8 @@ public class ReferralClientServiceTest {
   public void createReturnsPostedReferralClient() throws Exception {
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     ReferralClient request = new ReferralClient(toCreate);
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
@@ -241,7 +242,8 @@ public class ReferralClientServiceTest {
   public void createReturnsNonNull() throws Exception {
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     ReferralClient request = new ReferralClient(toCreate);
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
@@ -256,7 +258,8 @@ public class ReferralClientServiceTest {
   public void createReturnsPostedReferralClientClass() throws Exception {
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     ReferralClient request = new ReferralClient(toCreate);
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
@@ -271,7 +274,8 @@ public class ReferralClientServiceTest {
   public void createReturnsCorrectPostedPerson() throws Exception {
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     ReferralClient request = new ReferralClient(toCreate);
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
@@ -290,7 +294,8 @@ public class ReferralClientServiceTest {
   public void testCreateLACountyTriggerForReferralClientCreate() throws Exception {
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "BTr");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "BTr",
+            new Date());
 
     ReferralClient request = new ReferralClient(toCreate);
 
@@ -325,7 +330,8 @@ public class ReferralClientServiceTest {
   public void testCreateLACountyTriggerForReferralClientUpdate() throws Exception {
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "BTr");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "BTr",
+            new Date());
 
     ReferralClient request = new ReferralClient(toCreate);
 

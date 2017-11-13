@@ -96,7 +96,8 @@ public class RIGovernmentOrganizationCrossReportTest {
 
     CrossReport crossReportDomain = new CmsCrossReportResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234567", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234567", crossReportDomain, "0X5",
+            new Date());
 
     when(crossReportDao.find(any(String.class))).thenReturn(crossReport);
     when(referralDao.find(any(String.class))).thenReturn(null);
@@ -121,7 +122,8 @@ public class RIGovernmentOrganizationCrossReportTest {
 
     CrossReport crossReportDomain = new CmsCrossReportResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234567", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234567", crossReportDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -150,7 +152,8 @@ public class RIGovernmentOrganizationCrossReportTest {
 
     CrossReport crossReportDomain = new CmsCrossReportResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234567", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234567", crossReportDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =

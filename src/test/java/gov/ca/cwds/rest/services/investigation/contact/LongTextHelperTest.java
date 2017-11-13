@@ -16,14 +16,13 @@ import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.persistence.cms.LongText;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 
 public class LongTextHelperTest {
 
   LongTextDao longTextDao;
   LongTextService longTextService;
-  StaffPersonIdRetriever staffPersonIdRetriever;
   LongTextHelper longTextHelper;
 
   @Rule
@@ -31,9 +30,9 @@ public class LongTextHelperTest {
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("02f");
     longTextDao = mock(LongTextDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-    longTextService = new LongTextService(longTextDao, staffPersonIdRetriever);
+    longTextService = new LongTextService(longTextDao);
     longTextHelper = new LongTextHelper(longTextService);
 
     when(longTextDao.create(any(gov.ca.cwds.data.persistence.cms.LongText.class)))

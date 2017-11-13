@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -127,7 +128,7 @@ public class ReferralClientTest {
             referralId, clientId, dispositionClosureDescription, ageNumber, agePeriodCode,
             countySpecificCode, mentalHealthIssuesIndicator, alcoholIndicator, drugIndicator);
     gov.ca.cwds.data.persistence.cms.ReferralClient persistent =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(domain, "lastUpdatedId", new Date());
 
     ReferralClient totest = new ReferralClient(persistent);
     assertThat(totest.getReferralId(), is(equalTo(persistent.getReferralId())));

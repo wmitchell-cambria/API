@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -112,13 +111,12 @@ public class ParticipantService implements CrudsService {
    * @param screeningToReferral - screeningToReferral
    * @param dateStarted - dateStarted
    * @param referralId - referralId
-   * @param timestamp - timestamp
    * @param messageBuilder - messageBuilder
    * 
    * @return the savedParticioants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
-      String dateStarted, String referralId, Date timestamp, MessageBuilder messageBuilder) {
+      String dateStarted, String referralId, MessageBuilder messageBuilder) {
     ClientParticipants clientParticipants = new ClientParticipants();
 
     Set<Participant> participants = screeningToReferral.getParticipants();
@@ -143,7 +141,7 @@ public class ParticipantService implements CrudsService {
         genderCode = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
       Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
-      processReporterRole(screeningToReferral, dateStarted, referralId, timestamp, messageBuilder,
+      processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
           clientParticipants, incomingParticipant, genderCode, roles);
 
 
@@ -153,9 +151,8 @@ public class ParticipantService implements CrudsService {
   }
 
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
-      String referralId, Date timestamp, MessageBuilder messageBuilder,
-      ClientParticipants clientParticipants, Participant incomingParticipant, String genderCode,
-      Set<String> roles) {
+      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
+      Participant incomingParticipant, String genderCode, Set<String> roles) {
     /**
      * process the roles of this participant
      */
@@ -165,14 +162,14 @@ public class ParticipantService implements CrudsService {
         if (ParticipantValidator.roleIsReporterType(role)
             && (!ParticipantValidator.roleIsAnonymousReporter(role)
                 && !ParticipantValidator.selfReported(incomingParticipant))) {
-          if (saveReporter(screeningToReferral, referralId, timestamp, messageBuilder,
-              incomingParticipant, role)) {
+          if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
+              role)) {
             continue;
           }
 
         } else {
           if (!ParticipantValidator.roleIsAnyReporter(role)) {
-            if (saveClient(screeningToReferral, dateStarted, referralId, timestamp, messageBuilder,
+            if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
                 clientParticipants, incomingParticipant, genderCode, role)) {
               continue;
             }
@@ -187,14 +184,13 @@ public class ParticipantService implements CrudsService {
   }
 
   private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      String referralId, Date timestamp, MessageBuilder messageBuilder,
-      ClientParticipants clientParticipants, Participant incomingParticipant, String genderCode,
-      String role) {
+      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
+      Participant incomingParticipant, String genderCode, String role) {
     String clientId;
 
     boolean newClient = StringUtils.isBlank(incomingParticipant.getLegacyId());
     if (newClient) {
-      clientId = createNewClient(screeningToReferral, dateStarted, timestamp, messageBuilder,
+      clientId = createNewClient(screeningToReferral, dateStarted, messageBuilder,
           incomingParticipant, genderCode);
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
@@ -204,8 +200,8 @@ public class ParticipantService implements CrudsService {
       }
     }
 
-    processReferralClient(screeningToReferral, referralId, timestamp, messageBuilder,
-        incomingParticipant, clientId);
+    processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
+        clientId);
 
     /*
      * determine other participant/roles attributes relating to CWS/CMS allegation
@@ -240,13 +236,13 @@ public class ParticipantService implements CrudsService {
   }
 
   private boolean saveReporter(ScreeningToReferral screeningToReferral, String referralId,
-      Date timestamp, MessageBuilder messageBuilder, Participant incomingParticipant, String role) {
+      MessageBuilder messageBuilder, Participant incomingParticipant, String role) {
     /*
      * CMS Reporter - if role is 'mandated reporter' or 'non-mandated reporter' and not anonymous
      * reporter or self-reported
      */
     try {
-      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId, timestamp,
+      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
           screeningToReferral.getIncidentCounty(), messageBuilder);
       incomingParticipant.setLegacyId(savedReporter.getReferralId());
       incomingParticipant.setLegacySourceTable(REPORTER_TABLE_NAME);
@@ -261,8 +257,8 @@ public class ParticipantService implements CrudsService {
   }
 
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
-      String referralId, Date timestamp, MessageBuilder messageBuilder,
-      Participant incomingParticipant, String clientId) {
+      String referralId, MessageBuilder messageBuilder, Participant incomingParticipant,
+      String clientId) {
 
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
@@ -273,7 +269,7 @@ public class ParticipantService implements CrudsService {
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
     try {
-      referralClientService.createWithSingleTimestamp(referralClient, timestamp);
+      referralClientService.create(referralClient);
     } catch (ServiceException se) {
       messageBuilder.addMessageAndLog(se.getMessage(), se, LOGGER);
     }
@@ -359,8 +355,7 @@ public class ParticipantService implements CrudsService {
   }
 
   private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      Date timestamp, MessageBuilder messageBuilder, Participant incomingParticipant,
-      String genderCode) {
+      MessageBuilder messageBuilder, Participant incomingParticipant, String genderCode) {
     String clientId;
 
     List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -381,7 +376,7 @@ public class ParticipantService implements CrudsService {
     return clientId;
   }
 
-  private Reporter saveReporter(Participant ip, String role, String referralId, Date timestamp,
+  private Reporter saveReporter(Participant ip, String role, String referralId,
       String countySpecificCode, MessageBuilder messageBuilder) throws ServiceException {
 
     gov.ca.cwds.rest.api.domain.Address reporterAddress = null;

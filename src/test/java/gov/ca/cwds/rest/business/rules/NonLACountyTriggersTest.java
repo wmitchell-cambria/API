@@ -76,7 +76,8 @@ public class NonLACountyTriggersTest {
         new ReferralClientResourceBuilder().setCountySpecificCode("54").buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(countyOwnershipDao.find(any(String.class))).thenReturn(null);
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
@@ -107,7 +108,8 @@ public class NonLACountyTriggersTest {
         new ReferralClientResourceBuilder().setCountySpecificCode("100").buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(countyOwnershipDao.find(any(String.class))).thenReturn(null);
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
@@ -135,7 +137,8 @@ public class NonLACountyTriggersTest {
         new ReferralClientResourceBuilder().setCountySpecificCode("55").buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(countyOwnershipDao.find(any(String.class))).thenReturn(new CountyOwnership());
     when(countyOwnershipDao.update(any(CountyOwnership.class)))
@@ -196,7 +199,8 @@ public class NonLACountyTriggersTest {
     ReferralClient referralClientDomain =
         new ReferralClientResourceBuilder().setCountySpecificCode("55").buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(referralClientDao.find(any(String.class))).thenReturn(referralClient);
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
@@ -234,7 +238,8 @@ public class NonLACountyTriggersTest {
     ReferralClient referralClientDomain =
         new ReferralClientResourceBuilder().setCountySpecificCode("100").buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(referralClientDao.find(any(String.class))).thenReturn(referralClient);
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
@@ -267,7 +272,8 @@ public class NonLACountyTriggersTest {
     ReferralClient referralClientDomain =
         new ReferralClientResourceBuilder().setCountySpecificCode("54").buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(referralClientDao.find(any(String.class))).thenReturn(referralClient);
 
@@ -406,7 +412,8 @@ public class NonLACountyTriggersTest {
         new ReferralClientResourceBuilder().setCountySpecificCode("99").buildReferralClient();
 
     gov.ca.cwds.data.persistence.cms.ReferralClient toCreate =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
+            new Date());
 
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
         .thenAnswer(new Answer<CountyOwnership>() {

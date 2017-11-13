@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -85,7 +86,7 @@ public class ReferralClientTest implements PersistentTestTemplate {
 
     gov.ca.cwds.rest.api.domain.cms.ReferralClient domain = validDomainReferralClient();
 
-    ReferralClient persistent = new ReferralClient(domain, lastUpdatedId);
+    ReferralClient persistent = new ReferralClient(domain, lastUpdatedId, new Date());
 
     assertThat(persistent.getReferralId(), is(equalTo(domain.getReferralId())));
     assertThat(persistent.getClientId(), is(equalTo(domain.getClientId())));

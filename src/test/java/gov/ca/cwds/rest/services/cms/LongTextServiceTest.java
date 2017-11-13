@@ -29,6 +29,7 @@ import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.jackson.Jackson;
 
@@ -41,16 +42,15 @@ public class LongTextServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private LongTextService longTextService;
   private LongTextDao longTextDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("02f");
     longTextDao = mock(LongTextDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-    longTextService = new LongTextService(longTextDao, staffPersonIdRetriever);
+    longTextService = new LongTextService(longTextDao);
   }
 
   // find test

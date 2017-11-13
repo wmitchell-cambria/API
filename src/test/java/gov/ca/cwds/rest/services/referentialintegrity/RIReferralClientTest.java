@@ -55,7 +55,8 @@ public class RIReferralClientTest {
 
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "0X5",
+            new Date());
 
     RIReferralClient target = new RIReferralClient(clientDao, referralDao);
     when(clientDao.find(any(String.class))).thenReturn(null);
@@ -67,7 +68,8 @@ public class RIReferralClientTest {
 
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "0X5",
+            new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
@@ -84,7 +86,8 @@ public class RIReferralClientTest {
 
     ReferralClient referralClientDomain = new ReferralClientResourceBuilder().buildReferralClient();
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =

@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -14,6 +12,7 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.CrossReport;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
@@ -29,7 +28,6 @@ public class CrossReportService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossReportService.class);
 
   private CrossReportDao crossReportDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RICrossReport riCrossReport;
 
   /**
@@ -37,14 +35,11 @@ public class CrossReportService implements
    * 
    * @param crossReportDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.CrossReport} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param riCrossReport the ri for cross report
    */
   @Inject
-  public CrossReportService(CrossReportDao crossReportDao,
-      StaffPersonIdRetriever staffPersonIdRetriever, RICrossReport riCrossReport) {
+  public CrossReportService(CrossReportDao crossReportDao, RICrossReport riCrossReport) {
     this.crossReportDao = crossReportDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.riCrossReport = riCrossReport;
   }
 
@@ -87,43 +82,12 @@ public class CrossReportService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.CrossReport create(
       gov.ca.cwds.rest.api.domain.cms.CrossReport request) {
-
     gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport = request;
-    return create(crossReport, null);
-  }
-
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public gov.ca.cwds.rest.api.domain.cms.CrossReport createWithSingleTimestamp(
-      gov.ca.cwds.rest.api.domain.cms.CrossReport request, Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport = request;
-    return create(crossReport, timestamp);
-  }
-
-  /**
-   * This private method is created to handle to single crossReport and referrals with single
-   * timestamp
-   * 
-   */
-  private gov.ca.cwds.rest.api.domain.cms.CrossReport create(
-      gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport, Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      CrossReport managed;
-      if (timestamp == null) {
-        managed =
-            new CrossReport(CmsKeyIdGenerator.generate(lastUpdatedId), crossReport, lastUpdatedId);
-      } else {
-        managed = new CrossReport(CmsKeyIdGenerator.generate(lastUpdatedId), crossReport,
-            lastUpdatedId, timestamp);
-      }
+      CrossReport managed = new CrossReport(
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), crossReport,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = crossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityExistsException e) {
@@ -131,6 +95,7 @@ public class CrossReportService implements
       throw new ServiceException("CrossReport already exists : {}" + crossReport, e);
     }
   }
+
 
   /**
    * {@inheritDoc}
@@ -144,8 +109,9 @@ public class CrossReportService implements
     gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      CrossReport managed = new CrossReport(crossReport.getThirdId(), crossReport, lastUpdatedId);
+      CrossReport managed = new CrossReport(crossReport.getThirdId(), crossReport,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = crossReportDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityNotFoundException e) {

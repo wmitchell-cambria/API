@@ -169,7 +169,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(screeningToReferral, dateStarted, referralId, timestamp,
+    participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
         messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
@@ -193,7 +193,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(screeningToReferral, dateStarted, referralId, timestamp,
+    participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
         messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
@@ -229,8 +229,7 @@ public class ParticipantServiceTest {
     Client updatedClient = mock(Client.class);
     when(clientService.update(eq(victimClientLegacyId), any())).thenReturn(updatedClient);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(clientService).update(eq(victim.getLegacyId()), any());
   }
@@ -246,7 +245,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(screeningToReferral, dateStarted, referralId, timestamp,
+    participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
         messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
@@ -283,8 +282,7 @@ public class ParticipantServiceTest {
     when(clientService.create(any())).thenReturn(createdClient);
     when(clientService.update(eq(victimClientLegacyId), any())).thenReturn(updatedClient);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
@@ -305,7 +303,7 @@ public class ParticipantServiceTest {
 
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
-    participantService.saveParticipants(screeningToReferral, dateStarted, referralId, timestamp,
+    participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
         messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
@@ -327,7 +325,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(screeningToReferral, dateStarted, referralId, timestamp,
+    participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
         messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
@@ -351,8 +349,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
@@ -378,8 +375,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
     verify(clientService, times(numberOfClientsThatAreNotReporters)).create(any());
@@ -398,8 +394,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
 
@@ -421,8 +416,7 @@ public class ParticipantServiceTest {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(clientService, never()).find(any());
     verify(clientService, times(0)).create(any());
@@ -477,8 +471,7 @@ public class ParticipantServiceTest {
     when(clientService.find(victimId)).thenReturn(foundVictim);
     when(clientService.find(existingPerpId)).thenReturn(foundPerp);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
     verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", (short) 841, "A",
         "A", "X");
     verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", (short) 841, "A",
@@ -532,8 +525,7 @@ public class ParticipantServiceTest {
     addresses.add(clientAddress);
     when(clientAddressService.findByAddressAndClient(any(), eq(reporter))).thenReturn(addresses);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertEquals("Expected only one error to have been recorded", 1,
         messageBuilder.getMessages().size());
@@ -556,8 +548,7 @@ public class ParticipantServiceTest {
 
     ArgumentCaptor<Client> clientArgCaptor = ArgumentCaptor.forClass(Client.class);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(clientService, times(2)).create(clientArgCaptor.capture());
     assertEquals("Expected client to have sensitivty indicator applied",
@@ -579,8 +570,7 @@ public class ParticipantServiceTest {
 
     ArgumentCaptor<Client> clientArgCaptor = ArgumentCaptor.forClass(Client.class);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(clientService, times(2)).create(clientArgCaptor.capture());
     assertEquals("Expected client to have sensitivty indicator applied",
@@ -612,8 +602,7 @@ public class ParticipantServiceTest {
     Client updatedClient = mock(Client.class);
     when(clientService.update(eq(victimClientLegacyId), any())).thenReturn(updatedClient);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(foundClient).applySensitivityIndicator(eq(referral.getLimitedAccessCode()));
   }
@@ -642,8 +631,7 @@ public class ParticipantServiceTest {
     Client updatedClient = mock(Client.class);
     when(clientService.update(eq(victimClientLegacyId), any())).thenReturn(updatedClient);
 
-    participantService.saveParticipants(referral, dateStarted, referralId, timestamp,
-        messageBuilder);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(foundClient, times(1)).applySensitivityIndicator(eq(victim.getSensitivityIndicator()));
   }

@@ -55,6 +55,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.jackson.Jackson;
 
@@ -70,7 +71,6 @@ public class ClientServiceTest {
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
   private NonLACountyTriggers nonLaCountyTriggers;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private SsaName3Dao ssaName3Dao;
   private UpperCaseTables upperCaseTables;
   private ExternalInterfaceTables externalInterfaceTables;
@@ -83,6 +83,7 @@ public class ClientServiceTest {
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("02f");
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
@@ -91,14 +92,12 @@ public class ClientServiceTest {
     referralClientDao = mock(ReferralClientDao.class);
     nonLaCountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     ssaName3Dao = mock(SsaName3Dao.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
 
-    clientService =
-        new ClientService(clientDao, staffpersonDao, triggerTablesDao, nonLaCountyTriggers,
-            staffPersonIdRetriever, ssaName3Dao, upperCaseTables, externalInterfaceTables);
+    clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
+        nonLaCountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
   }
 
   // find test
