@@ -29,8 +29,8 @@ public class R05904ContactStartedAt implements RuleValidatator {
 
   public R05904ContactStartedAt(Date contactStartedAtDateTime, Date referralReceivedDateTime) {
     super();
-    this.contactStartedAtDateTime = contactStartedAtDateTime;
-    this.referralReceivedDateTime = referralReceivedDateTime;
+    this.contactStartedAtDateTime = new Date(contactStartedAtDateTime.getTime());
+    this.referralReceivedDateTime = new Date(referralReceivedDateTime.getTime());
   }
 
 
