@@ -395,7 +395,7 @@ public class ParticipantService implements CrudsService {
           reporterAddress, ip, countySpecificCode);
 
       messageBuilder.addDomainValidationError(validator.validate(reporter));
-      theReporter = reporterService.createWithSingleTimestamp(reporter, timestamp);
+      theReporter = reporterService.create(reporter);
     }
     return theReporter;
   }

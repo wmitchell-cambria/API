@@ -6,6 +6,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,7 +66,7 @@ public class RIReporterTest {
   public void riCheckFailureWhenReferralIdNotFound() throws Exception {
     Reporter reporterDomain = new CmsReporterResourceBuilder().setReferralId("abpI86Te1V").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     when(referralDao.find(any())).thenReturn(null);
     when(lawEnforcementDao.find(any())).thenReturn(null);
@@ -78,7 +80,7 @@ public class RIReporterTest {
     Reporter reporterDomain = new CmsReporterResourceBuilder().setReferralId("AB0751Gthu")
         .setLawEnforcementId("lpourfGe7V").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -96,7 +98,7 @@ public class RIReporterTest {
     Reporter reporterDomain =
         new CmsReporterResourceBuilder().setDrmsMandatedRprtrFeedback("ABC1234lll").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -118,7 +120,7 @@ public class RIReporterTest {
     Reporter reporterDomain =
         new CmsReporterResourceBuilder().setLawEnforcementId("lpourfGe7V").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -137,7 +139,7 @@ public class RIReporterTest {
   public void riCheckPassWhenLawEnforcemntNull() throws Exception {
     Reporter reporterDomain = new CmsReporterResourceBuilder().setLawEnforcementId(null).build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -160,7 +162,7 @@ public class RIReporterTest {
   public void riCheckPassWhenLawEnforcemntEmpty() throws Exception {
     Reporter reporterDomain = new CmsReporterResourceBuilder().setLawEnforcementId("").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -184,7 +186,7 @@ public class RIReporterTest {
     Reporter reporterDomain = new CmsReporterResourceBuilder().setLawEnforcementId("ABC1234lll")
         .setDrmsMandatedRprtrFeedback(null).build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -208,7 +210,7 @@ public class RIReporterTest {
     Reporter reporterDomain = new CmsReporterResourceBuilder().setLawEnforcementId("ABC1234lll")
         .setDrmsMandatedRprtrFeedback("").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -232,7 +234,7 @@ public class RIReporterTest {
     Reporter reporterDomain =
         new CmsReporterResourceBuilder().setDrmsMandatedRprtrFeedback("ABC1234lll").build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =

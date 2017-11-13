@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -3363,6 +3364,49 @@ public class ClientTest implements DomainTestTemplate {
     assertEquals("Expected indicator to not be unchanged", LimitedAccessType.NONE.getValue(),
         client.getSensitivityIndicator());
   }
+
+  @Test
+  public void testConstructorWithNullPrimaryLanguage() throws Exception {
+    Short zero = 0;
+    gov.ca.cwds.data.persistence.cms.Client persistent =
+        new ClientEntityBuilder().setPrimaryLanguageType(null).build();
+
+    Client domain = new Client(persistent, Boolean.FALSE);
+    assertThat(domain.getPrimaryLanguage(), is(equalTo(zero)));
+  }
+
+  @Test
+  public void testConstructorWithNullSecondaryLanguage() throws Exception {
+    Short zero = 0;
+    gov.ca.cwds.data.persistence.cms.Client persistent =
+        new ClientEntityBuilder().setSecondaryLanguageType(null).build();
+    Client domain = new Client(persistent, Boolean.FALSE);
+    assertThat(domain.getSecondaryLanguage(), is(equalTo(zero)));
+  }
+
+  // @Test
+  // public void testConstructorWithNonNullClientAddresses() throws Exception {
+  // gov.ca.cwds.data.persistence.cms.ClientAddress persistentClientAddress =
+  // new ClientAddressEntityBuilder().buildClientAddress();
+  // Set<ClientAddress> persistentClientAddresses = new HashSet<>();
+  // persistentClientAddresses.add(persistentClientAddress);
+  // Address address = new Address(persistentClientAddress.getAddresses(), Boolean.TRUE);
+  //
+  // Set<Address> addresses = new HashSet<>();
+  // addresses.add(address);
+  // List<Address> persistentAddresses = new ArrayList<Address>(addresses);
+  //
+  // gov.ca.cwds.data.persistence.cms.Client persistent =
+  // new ClientEntityBuilder().setClientAddress(persistentClientAddresses).build();
+  //
+  // Client domain = new Client(persistent, Boolean.FALSE);
+  //
+  // List<Address> domainAddresses = new ArrayList<Address>(domain.getAddress());
+  // Boolean addressesEqual = domainAddresses.containsAll(persistentAddresses)
+  // && persistentAddresses.containsAll(domainAddresses);
+  //
+  // assertThat(addressesEqual, is(equalTo(Boolean.TRUE)));
+  // }
 
   private Client validClient() throws JsonParseException, JsonMappingException, IOException {
     Client vc =

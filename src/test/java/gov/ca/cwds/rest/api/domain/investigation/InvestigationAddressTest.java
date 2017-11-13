@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Date;
+
 import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -69,7 +71,7 @@ public class InvestigationAddressTest {
   public void testAddressConstructorUsingReporterSuccess() {
     Reporter reporter = new ReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter persistentReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5", new Date());
     InvestigationAddress investigationAddress =
         new InvestigationAddress(persistentReporter, cmsRecordDescriptor);
     assertThat(investigationAddress.getStreetAddress(),

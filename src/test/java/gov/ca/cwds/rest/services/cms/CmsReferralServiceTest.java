@@ -152,7 +152,7 @@ public class CmsReferralServiceTest {
 
     reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);
-    reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
+    reporterService = new ReporterService(reporterDao, riReporter);
 
     clientUcDao = mock(ClientUcDao.class);
 
@@ -205,7 +205,7 @@ public class CmsReferralServiceTest {
     Reporter reporterDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/reporterCmsReferral.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter reporterToCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "OXA");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "OXA", new Date());
 
     Referral referralRequest = new Referral(referralToCreate);
 
@@ -305,12 +305,12 @@ public class CmsReferralServiceTest {
         new TypeReference<Set<CrossReport>>() {});
     gov.ca.cwds.data.persistence.cms.CrossReport crossReportToCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport("1234ABC123",
-            (CrossReport) crossReportDomain.toArray()[0], "2016-10-31");
+            (CrossReport) crossReportDomain.toArray()[0], "ABC");
 
     Reporter reporterDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/reporterCmsReferral.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter reporterToCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "2016-10-31");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
     Referral referralRequest = new Referral(referralToCreate);
     ReferralClient referralClientRequest = new ReferralClient(referralClientToCreate);
@@ -387,7 +387,7 @@ public class CmsReferralServiceTest {
     Reporter reporterDomain = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/reporterCmsReferral.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter reporterToCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "2016-10-31");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
     Set<Client> clientDomain =
         MAPPER.readValue(fixture("fixtures/domain/cms/CmsReferral/valid/clientCmsReferral.json"),

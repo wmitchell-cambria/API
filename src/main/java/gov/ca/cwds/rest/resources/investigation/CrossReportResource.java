@@ -67,6 +67,7 @@ public class CrossReportResource {
    */
   @UnitOfWork(value = "cms")
   @POST
+  @Path("/{id}/cross_report}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
