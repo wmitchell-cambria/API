@@ -51,7 +51,6 @@ public class ReferralService implements
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private StaffPersonDao staffpersonDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   private Validator validator;
   private AssignmentService assignmentService;
@@ -73,7 +72,6 @@ public class ReferralService implements
    *        {@link gov.ca.cwds.data.rules.TriggerTablesDao} objects
    * @param staffpersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
    * @param drmsDocumentService the service for generating DRMS Documents
@@ -84,8 +82,7 @@ public class ReferralService implements
   @Inject
   public ReferralService(final ReferralDao referralDao, NonLACountyTriggers nonLaTriggers,
       LACountyTrigger laCountyTrigger, TriggerTablesDao triggerTablesDao,
-      StaffPersonDao staffpersonDao, StaffPersonIdRetriever staffPersonIdRetriever,
-      AssignmentService assignmentService, Validator validator,
+      StaffPersonDao staffpersonDao, AssignmentService assignmentService, Validator validator,
       DrmsDocumentService drmsDocumentService, AddressService addressService,
       LongTextService longTextService, RIReferral riReferral) {
     this.referralDao = referralDao;
@@ -93,7 +90,6 @@ public class ReferralService implements
     this.laCountyTrigger = laCountyTrigger;
     this.triggerTablesDao = triggerTablesDao;
     this.staffpersonDao = staffpersonDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.assignmentService = assignmentService;
     this.validator = validator;
     this.drmsDocumentService = drmsDocumentService;
@@ -140,62 +136,44 @@ public class ReferralService implements
   public PostedReferral create(gov.ca.cwds.rest.api.domain.cms.Referral request) {
 
     gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
-    return create(referral, null);
-  }
-
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public PostedReferral createWithSingleTimestamp(gov.ca.cwds.rest.api.domain.cms.Referral request,
-      Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
-    return create(referral, timestamp);
-  }
-
-  /**
-   * This private method is created to handle to single referral and referrals with single timestamp
-   * 
-   */
-  private PostedReferral create(gov.ca.cwds.rest.api.domain.cms.Referral referral, Date timestamp) {
     try {
-      String staffPersonId = staffPersonIdRetriever.getStaffPersonId();
-      StaffPerson staffperson;
-      if (staffPersonId == null) {
-        LOGGER.error("Staff Person Id was not found");
-        throw new ServiceException("Staff Person Id was not found.");
-      } else {
-        staffperson = staffpersonDao.find(staffPersonId);
-      }
-
-      Referral managed;
-      if (timestamp == null) {
-        managed = new Referral(CmsKeyIdGenerator.generate(staffPersonId), referral, staffPersonId);
-      } else {
-        managed = new Referral(CmsKeyIdGenerator.generate(staffPersonId), referral, staffPersonId,
-            timestamp);
-      }
+      StaffPerson staffperson =
+          staffPersonValidate(RequestExecutionContext.instance().getStaffId());
+      Referral managed =
+          new Referral(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              referral, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
 
       managed = referralDao.create(managed);
       if (managed == null || managed.getId() == null) {
         LOGGER.warn("Unable to save referral: {}", referral);
         throw new ServiceException("Referral Not successfully saved");
       }
-      // checking the staffPerson county code
-      if (staffperson != null
-          && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
-        laCountyTrigger.createCountyTrigger(managed);
-      }
+      createLACountyTrigger(staffperson, managed);
       return new PostedReferral(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Referral already exists : {}", referral);
       throw new ServiceException(e);
     }
+  }
+
+  private void createLACountyTrigger(StaffPerson staffperson, Referral managed) {
+    // checking the staffPerson county code
+    if (staffperson != null
+        && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
+      laCountyTrigger.createCountyTrigger(managed);
+    }
+  }
+
+  private StaffPerson staffPersonValidate(String staffPersonId) {
+    StaffPerson staffperson;
+    if (staffPersonId == null) {
+      LOGGER.error("Staff Person Id was not found");
+      throw new ServiceException("Staff Person Id was not found.");
+    } else {
+      staffperson = staffpersonDao.find(staffPersonId);
+    }
+    return staffperson;
   }
 
   /**
@@ -233,7 +211,7 @@ public class ReferralService implements
 
       messageBuilder.addDomainValidationError(validator.validate(referral));
 
-      PostedReferral postedReferral = this.createWithSingleTimestamp(referral, timestamp);
+      PostedReferral postedReferral = this.create(referral);
       referralId = postedReferral.getId();
 
       // when creating a referral - create the default assignment to 0XA staff person
@@ -330,7 +308,7 @@ public class ReferralService implements
       MessageBuilder messageBuilder) {
     try {
       gov.ca.cwds.rest.api.domain.Address referralAddress =
-          addressService.createAddressFromScreening(screeningToReferral, timestamp, messageBuilder);
+          addressService.createAddressFromScreening(screeningToReferral, messageBuilder);
       screeningToReferral.setAddress(referralAddress);
     } catch (ServiceException e1) {
       String message = e1.getMessage();
@@ -455,15 +433,13 @@ public class ReferralService implements
     gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      Referral managed = new Referral(primaryKey, referral, lastUpdatedId);
+      Referral managed =
+          new Referral(primaryKey, referral, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = referralDao.update(managed);
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
-      if (staffperson != null
-          && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
-        laCountyTrigger.createCountyTrigger(managed);
-      }
+      createLACountyTrigger(staffperson, managed);
       return new gov.ca.cwds.rest.api.domain.cms.Referral(managed);
     } catch (EntityNotFoundException e) {
       final String msg = "Referral not found : " + referral;

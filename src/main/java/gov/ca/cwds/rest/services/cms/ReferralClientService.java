@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.EntityExistsException;
@@ -20,6 +19,7 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
@@ -43,9 +43,7 @@ public class ReferralClientService implements
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private StaffPersonDao staffpersonDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIReferralClient riReferralClient;
-
 
   /**
    * Constructor
@@ -60,20 +58,18 @@ public class ReferralClientService implements
    *        {@link gov.ca.cwds.data.rules.TriggerTablesDao} objects
    * @param staffpersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param riReferralClient the ri for referral client
    */
   @Inject
   public ReferralClientService(ReferralClientDao referralClientDao,
       NonLACountyTriggers nonLaTriggers, LACountyTrigger laCountyTrigger,
       TriggerTablesDao triggerTablesDao, StaffPersonDao staffpersonDao,
-      StaffPersonIdRetriever staffPersonIdRetriever, RIReferralClient riReferralClient) {
+      RIReferralClient riReferralClient) {
     this.referralClientDao = referralClientDao;
     this.nonLaTriggers = nonLaTriggers;
     this.laCountyTrigger = laCountyTrigger;
     this.triggerTablesDao = triggerTablesDao;
     this.staffpersonDao = staffpersonDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.riReferralClient = riReferralClient;
   }
 
@@ -114,54 +110,29 @@ public class ReferralClientService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.ReferralClient create(
       gov.ca.cwds.rest.api.domain.cms.ReferralClient request) {
-
     gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient = request;
-    return create(referralClient, null);
-  }
 
-  /**
-   * This createWithSingleTimestamp is used for the referrals to maintian the same timestamp for the
-   * whole transaction
-   * 
-   * @param request - request
-   * @param timestamp - timestamp
-   * @return the single timestamp
-   */
-  public gov.ca.cwds.rest.api.domain.cms.ReferralClient createWithSingleTimestamp(
-      gov.ca.cwds.rest.api.domain.cms.ReferralClient request, Date timestamp) {
-
-    gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient = request;
-    return create(referralClient, timestamp);
-  }
-
-  /**
-   * This private method is created to handle to single referralClient and referrals with single
-   * timestamp
-   * 
-   */
-  private gov.ca.cwds.rest.api.domain.cms.ReferralClient create(
-      gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient, Date timestamp) {
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      ReferralClient managed;
-      if (timestamp == null) {
-        managed = new ReferralClient(referralClient, lastUpdatedId);
-      } else {
-        managed = new ReferralClient(referralClient, lastUpdatedId, timestamp);
-      }
+      ReferralClient managed =
+          new ReferralClient(referralClient, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = referralClientDao.create(managed);
-      // checking the staffPerson county code
-      StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
-      if (staffperson != null
-          && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
-        laCountyTrigger.createCountyTrigger(managed);
-      } else {
-        nonLaTriggers.createAndUpdateReferralClientCoutyOwnership(managed);
-      }
+      createDownStreamEntity(managed);
       return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Referral Client already exists : {}", referralClient);
       throw new ServiceException(e);
+    }
+  }
+
+  private void createDownStreamEntity(ReferralClient managed) {
+    // checking the staffPerson county code
+    StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
+    if (staffperson != null
+        && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
+      laCountyTrigger.createCountyTrigger(managed);
+    } else {
+      nonLaTriggers.createAndUpdateReferralClientCoutyOwnership(managed);
     }
   }
 
@@ -171,17 +142,11 @@ public class ReferralClientService implements
     gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      ReferralClient managed = new ReferralClient(referralClient, lastUpdatedId);
+      ReferralClient managed =
+          new ReferralClient(referralClient, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = referralClientDao.update(managed);
-      // checking the staffPerson county code
-      StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
-      if (staffperson != null
-          && (triggerTablesDao.getLaCountySpecificCode().equals(staffperson.getCountyCode()))) {
-        laCountyTrigger.createCountyTrigger(managed);
-      } else {
-        nonLaTriggers.createAndUpdateReferralClientCoutyOwnership(managed);
-      }
+      createDownStreamEntity(managed);
       return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("Referral not found : {}", referralClient);

@@ -164,8 +164,8 @@ public class ScreeningToReferralService implements CrudsService {
 
     String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted, timestamp);
 
-    ClientParticipants clientParticipants = processParticipants(screeningToReferral, dateStarted,
-        referralId, timestamp, messageBuilder);
+    ClientParticipants clientParticipants =
+        processParticipants(screeningToReferral, dateStarted, referralId, messageBuilder);
 
     Set<CrossReport> resultCrossReports =
         createCrossReports(screeningToReferral, referralId, timestamp);
@@ -224,10 +224,10 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private ClientParticipants processParticipants(ScreeningToReferral screeningToReferral,
-      String dateStarted, String referralId, Date timestamp, MessageBuilder messageBuilder) {
+      String dateStarted, String referralId, MessageBuilder messageBuilder) {
 
     return participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
-        timestamp, messageBuilder);
+        messageBuilder);
   }
 
   private String createCmsReferral(ScreeningToReferral screeningToReferral, String dateStarted,
@@ -337,9 +337,8 @@ public class ScreeningToReferralService implements CrudsService {
       Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
 
     if (StringUtils.isBlank(crossReport.getLegacyId())) {
-      persistCrossReport(screeningToReferral, referralId, timestamp, crossReportId,
-          resultCrossReports, crossReport, outStateLawEnforcementIndicator,
-          outStateLawEnforcementAddr);
+      persistCrossReport(screeningToReferral, referralId, crossReportId, resultCrossReports,
+          crossReport, outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
     } else {
       gov.ca.cwds.rest.api.domain.cms.CrossReport foundCrossReport =
           this.crossReportService.find(crossReport.getLegacyId());
@@ -375,9 +374,9 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private void persistCrossReport(ScreeningToReferral screeningToReferral, String referralId,
-      Date timestamp, String crossReportId,
-      Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
-      Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
+      String crossReportId, Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports,
+      CrossReport crossReport, Boolean outStateLawEnforcementIndicator,
+      String outStateLawEnforcementAddr) {
 
     Map<String, String> agencyMap = getLawEnforcement(crossReport.getAgencies());
     String lawEnforcementId = agencyMap.get(AgencyType.LAW_ENFORCEMENT.name());
@@ -392,7 +391,7 @@ public class ScreeningToReferralService implements CrudsService {
     messageBuilder.addDomainValidationError(validator.validate(cmsCrossReport));
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport postedCrossReport =
-        this.crossReportService.createWithSingleTimestamp(cmsCrossReport, timestamp);
+        this.crossReportService.create(cmsCrossReport);
     governmentOrganizationCrossReportService.createDomainConstructor(postedCrossReport,
         crossReport.getAgencies());
     crossReport.setLegacyId(postedCrossReport.getThirdId());

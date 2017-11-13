@@ -129,7 +129,8 @@ public class R04631ReferralInvestigationContactDueTest {
             "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "", "1101", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5",
+            new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);
@@ -203,7 +204,8 @@ public class R04631ReferralInvestigationContactDueTest {
             "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "", "1101", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5",
+            new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);
@@ -281,7 +283,8 @@ public class R04631ReferralInvestigationContactDueTest {
             "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "ABc1qf56yi", "1101", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5",
+            new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);
@@ -357,7 +360,8 @@ public class R04631ReferralInvestigationContactDueTest {
             "123ABC1235", DEFAULT_STAFF_PERSON_ID, "", "ABc1qf56yi", "1101", false, false);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("123ABp1235", cmsCrossReport, "0X5",
+            new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);

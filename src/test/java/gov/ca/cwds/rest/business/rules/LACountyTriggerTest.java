@@ -161,7 +161,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ReferralClient referralClient = new ReferralClient(validDomainReferralClient, "BTr");
+    ReferralClient referralClient =
+        new ReferralClient(validDomainReferralClient, "BTr", new Date());
     laCountyTrigger.createCountyTrigger(referralClient);
     assertThat(countyTrigger.getCountyTriggerEmbeddable().getCountyOwnershipT(),
         is(equalTo("ABC1234567")));
@@ -190,7 +191,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ReferralClient referralClient = new ReferralClient(validDomainReferralClient, "BTr");
+    ReferralClient referralClient =
+        new ReferralClient(validDomainReferralClient, "BTr", new Date());
     laCountyTrigger.createCountyTrigger(referralClient);
     assertThat(countyTrigger, is(equalTo(null)));
   }
@@ -218,7 +220,8 @@ public class LACountyTriggerTest {
       }
     });
 
-    ReferralClient referralClient = new ReferralClient(validDomainReferralClient, "BTr");
+    ReferralClient referralClient =
+        new ReferralClient(validDomainReferralClient, "BTr", new Date());
     laCountyTrigger.createCountyTrigger(referralClient);
     assertThat(countyTrigger, is(equalTo(null)));
   }

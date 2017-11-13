@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,8 @@ public class RICrossReportTest {
 
     CrossReport crossReportDomain = new CmsCrossReportResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5",
+            new Date());
 
     RICrossReport target = new RICrossReport(referralDao, staffPersonDao, lawEnforcementDao);
     when(referralDao.find(any(String.class))).thenReturn(null);
@@ -72,7 +74,8 @@ public class RICrossReportTest {
     CrossReport crossReportDomain =
         new CmsCrossReportResourceBuilder().setReferralId("H5CMVTm00k").build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -90,7 +93,8 @@ public class RICrossReportTest {
     CrossReport crossReportDomain = new CmsCrossReportResourceBuilder().setReferralId("H5CMVTm00k")
         .setStaffPersonId("q1p").setLawEnforcementId("FDIp2i90kk").build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -114,7 +118,8 @@ public class RICrossReportTest {
     CrossReport crossReportDomain = new CmsCrossReportResourceBuilder().setReferralId("H5CMVTm00k")
         .setStaffPersonId("q1p").setLawEnforcementId("FDIp2i90kk").build();
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
-        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.CrossReport("ABC1234plo", crossReportDomain, "0X5",
+            new Date());
 
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral referral =

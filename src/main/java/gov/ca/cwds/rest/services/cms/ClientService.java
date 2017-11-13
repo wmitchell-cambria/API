@@ -41,7 +41,6 @@ public class ClientService implements
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
   private NonLACountyTriggers nonLaCountyTriggers;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private SsaName3Dao ssaname3Dao;
   private UpperCaseTables upperCaseTables;
   private ExternalInterfaceTables externalInterfaceTables;
@@ -57,7 +56,6 @@ public class ClientService implements
    *        {@link gov.ca.cwds.data.rules.TriggerTablesDao} objects
    * @param nonLaCountyTriggers The {@link Dao} handling
    *        {@link gov.ca.cwds.rest.business.rules.NonLACountyTriggers} objects
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param ssaname3Dao dao the stored procedure call
    * @param upperCaseTables the downstream tables
    * @param externalInterfaceTables the external interface table
@@ -65,13 +63,12 @@ public class ClientService implements
   @Inject
   public ClientService(ClientDao clientDao, StaffPersonDao staffpersonDao,
       TriggerTablesDao triggerTablesDao, NonLACountyTriggers nonLaCountyTriggers,
-      StaffPersonIdRetriever staffPersonIdRetriever, SsaName3Dao ssaname3Dao,
-      UpperCaseTables upperCaseTables, ExternalInterfaceTables externalInterfaceTables) {
+      SsaName3Dao ssaname3Dao, UpperCaseTables upperCaseTables,
+      ExternalInterfaceTables externalInterfaceTables) {
     this.clientDao = clientDao;
     this.staffpersonDao = staffpersonDao;
     this.triggerTablesDao = triggerTablesDao;
     this.nonLaCountyTriggers = nonLaCountyTriggers;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.ssaname3Dao = ssaname3Dao;
     this.upperCaseTables = upperCaseTables;
     this.externalInterfaceTables = externalInterfaceTables;

@@ -4,8 +4,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-
 import javax.validation.Validation;
 
 import gov.ca.cwds.data.cms.ReferralDao;
@@ -82,8 +80,7 @@ public class MockedScreeningToReferralServiceBuilder {
     PostedReferral postedReferral = mock(PostedReferral.class);
     when(postedReferral.getId()).thenReturn("3456765433");
     when(referralService.create(any(Referral.class))).thenReturn(postedReferral);
-    when(referralService.createWithSingleTimestamp(any(Referral.class), any(Date.class)))
-        .thenReturn(postedReferral);
+    when(referralService.create(any(Referral.class))).thenReturn(postedReferral);
   }
 
   /**
@@ -181,8 +178,7 @@ public class MockedScreeningToReferralServiceBuilder {
     CrossReport postedCrossReport = mock(CrossReport.class);
     when(postedCrossReport.getThirdId()).thenReturn("4565678905");
     when(crossReportService.create(any(CrossReport.class))).thenReturn(postedCrossReport);
-    when(crossReportService.createWithSingleTimestamp(any(CrossReport.class), any(Date.class)))
-        .thenReturn(postedCrossReport);
+    when(crossReportService.create(any(CrossReport.class))).thenReturn(postedCrossReport);
   }
 
   /**

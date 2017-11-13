@@ -257,16 +257,6 @@ public class ReferralClient extends CmsPersistentObject {
   }
 
   /**
-   * @param referralClient - ID of Client
-   * @param lastUpdateId - ID of Staff
-   */
-  public ReferralClient(gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient,
-      String lastUpdateId) {
-    super(lastUpdateId);
-    init(referralClient);
-  }
-
-  /**
    * Constructor
    * 
    * @param referralClient The domain object to construct this object from
@@ -276,13 +266,6 @@ public class ReferralClient extends CmsPersistentObject {
   public ReferralClient(gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient,
       String lastUpdatedId, Date lastUpdatedTime) {
     super(lastUpdatedId, lastUpdatedTime);
-    init(referralClient);
-  }
-
-  /**
-   * @param referralClient - referralClient
-   */
-  private void init(gov.ca.cwds.rest.api.domain.cms.ReferralClient referralClient) {
     try {
       this.referralId = referralClient.getReferralId();
       this.clientId = referralClient.getClientId();

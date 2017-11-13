@@ -258,7 +258,7 @@ public class ScreeningToReferralServiceTest {
     CrossReport mockLegacyCrossReport = mock(CrossReport.class);
     CrossReport crossReport = new CmsCrossReportResourceBuilder().build();
     crossReportService = mock(CrossReportService.class);
-    when(crossReportService.createWithSingleTimestamp(any(), any())).thenReturn(crossReport);
+    when(crossReportService.create(any())).thenReturn(crossReport);
     when(crossReportService.find(any())).thenReturn(mockLegacyCrossReport);
 
     PostedDrmsDocument drmsDocument = mock(PostedDrmsDocument.class);
@@ -1206,7 +1206,7 @@ public class ScreeningToReferralServiceTest {
       participant.setLegacyId(generator.generate());
     }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any()))
         .thenReturn(clientParticipants);
   }
 }

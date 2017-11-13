@@ -185,9 +185,8 @@ public class R07577CreateDummyDocsForReferralTest {
     ssaName3Dao = mock(SsaName3Dao.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
-    clientService =
-        new ClientService(clientDao, staffpersonDao, triggerTablesDao, nonLACountyTriggers,
-            staffPersonIdRetriever, ssaName3Dao, upperCaseTables, externalInterfaceTables);
+    clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
+        nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
 
     referralClientDao = mock(ReferralClientDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
@@ -195,9 +194,8 @@ public class R07577CreateDummyDocsForReferralTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     riReferralClient = mock(RIReferralClient.class);
-    referralClientService =
-        new ReferralClientService(referralClientDao, nonLACountyTriggers, laCountyTrigger,
-            triggerTablesDao, staffpersonDao, staffPersonIdRetriever, riReferralClient);
+    referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
+        laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
@@ -210,8 +208,7 @@ public class R07577CreateDummyDocsForReferralTest {
 
     crossReportDao = mock(CrossReportDao.class);
     riCrossReport = mock(RICrossReport.class);
-    crossReportService =
-        new CrossReportService(crossReportDao, staffPersonIdRetriever, riCrossReport);
+    crossReportService = new CrossReportService(crossReportDao, riCrossReport);
 
     reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);
@@ -231,7 +228,7 @@ public class R07577CreateDummyDocsForReferralTest {
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
     longTextDao = mock(LongTextDao.class);
-    longTextService = new LongTextService(longTextDao, staffPersonIdRetriever);
+    longTextService = new LongTextService(longTextDao);
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao, staffPersonIdRetriever);
@@ -255,8 +252,8 @@ public class R07577CreateDummyDocsForReferralTest {
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
         allegationService, crossReportService, referralClientService, reporterService,
@@ -316,7 +313,7 @@ public class R07577CreateDummyDocsForReferralTest {
             new TypeReference<Set<Client>>() {});
     gov.ca.cwds.data.persistence.cms.Client clientToCreate =
         new gov.ca.cwds.data.persistence.cms.Client("1234567ABC",
-            (Client) clientDomain.toArray()[0], "2016-10-31", new Date());
+            (Client) clientDomain.toArray()[0], "ABC", new Date());
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenReturn(clientToCreate);
 
@@ -325,7 +322,7 @@ public class R07577CreateDummyDocsForReferralTest {
         new TypeReference<Set<ReferralClient>>() {});
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClientToCreate =
         new gov.ca.cwds.data.persistence.cms.ReferralClient(
-            (ReferralClient) referralClientDomain.toArray()[0], "2016-10-31");
+            (ReferralClient) referralClientDomain.toArray()[0], "ABC", new Date());
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
         .thenReturn(referralClientToCreate);
 
@@ -354,7 +351,7 @@ public class R07577CreateDummyDocsForReferralTest {
     gov.ca.cwds.data.persistence.cms.CrossReport crossReportToCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport("3456789ABC",
             // ((CrossReport) crossReportDomain).getThirdId(),
-            (CrossReport) crossReportDomain.toArray()[0], "OXA");
+            (CrossReport) crossReportDomain.toArray()[0], "OXA", new Date());
     when(crossReportDao.create(any(gov.ca.cwds.data.persistence.cms.CrossReport.class)))
         .thenReturn(crossReportToCreate);
 
@@ -459,7 +456,7 @@ public class R07577CreateDummyDocsForReferralTest {
             new TypeReference<Set<Client>>() {});
     gov.ca.cwds.data.persistence.cms.Client clientToCreate =
         new gov.ca.cwds.data.persistence.cms.Client("1234567ABC",
-            (Client) clientDomain.toArray()[0], "2016-10-31", new Date());
+            (Client) clientDomain.toArray()[0], "ABC", new Date());
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenReturn(clientToCreate);
 
@@ -468,7 +465,7 @@ public class R07577CreateDummyDocsForReferralTest {
         new TypeReference<Set<ReferralClient>>() {});
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClientToCreate =
         new gov.ca.cwds.data.persistence.cms.ReferralClient(
-            (ReferralClient) referralClientDomain.toArray()[0], "2016-10-31");
+            (ReferralClient) referralClientDomain.toArray()[0], "ABC", new Date());
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
         .thenReturn(referralClientToCreate);
 
@@ -497,7 +494,7 @@ public class R07577CreateDummyDocsForReferralTest {
     gov.ca.cwds.data.persistence.cms.CrossReport crossReportToCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport("3456789ABC",
             // ((CrossReport) crossReportDomain).getThirdId(),
-            (CrossReport) crossReportDomain.toArray()[0], "OXA");
+            (CrossReport) crossReportDomain.toArray()[0], "OXA", new Date());
     when(crossReportDao.create(any(gov.ca.cwds.data.persistence.cms.CrossReport.class)))
         .thenReturn(crossReportToCreate);
 
@@ -611,7 +608,7 @@ public class R07577CreateDummyDocsForReferralTest {
         new TypeReference<Set<ReferralClient>>() {});
     gov.ca.cwds.data.persistence.cms.ReferralClient referralClientToCreate =
         new gov.ca.cwds.data.persistence.cms.ReferralClient(
-            (ReferralClient) referralClientDomain.toArray()[0], "2016-10-31");
+            (ReferralClient) referralClientDomain.toArray()[0], "ABC", new Date());
     when(referralClientDao.create(any(gov.ca.cwds.data.persistence.cms.ReferralClient.class)))
         .thenReturn(referralClientToCreate);
 
@@ -640,7 +637,7 @@ public class R07577CreateDummyDocsForReferralTest {
     gov.ca.cwds.data.persistence.cms.CrossReport crossReportToCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport("3456789ABC",
             // ((CrossReport) crossReportDomain).getThirdId(),
-            (CrossReport) crossReportDomain.toArray()[0], "OXA");
+            (CrossReport) crossReportDomain.toArray()[0], "OXA", new Date());
     when(crossReportDao.create(any(gov.ca.cwds.data.persistence.cms.CrossReport.class)))
         .thenReturn(crossReportToCreate);
 
@@ -722,9 +719,8 @@ public class R07577CreateDummyDocsForReferralTest {
       participant.setLegacyId(generator.generate());
     }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any()))
         .thenReturn(clientParticipants);
   }
-
 
 }

@@ -146,7 +146,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
 
     longTextDao = mock(LongTextDao.class);
-    longTextService = new LongTextService(longTextDao, staffPersonIdRetriever);
+    longTextService = new LongTextService(longTextDao);
 
     referralDao = mock(ReferralDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
@@ -162,8 +162,8 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     riReferral = mock(RIReferral.class);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-        drmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
+        addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
@@ -171,9 +171,8 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
-    clientService =
-        new ClientService(clientDao, staffpersonDao, triggerTablesDao, nonLACountyTriggers,
-            staffPersonIdRetriever, ssaName3Dao, upperCaseTables, externalInterfaceTables);
+    clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
+        nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
 
     referralClientDao = mock(ReferralClientDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
@@ -181,9 +180,8 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     riReferralClient = mock(RIReferralClient.class);
-    referralClientService =
-        new ReferralClientService(referralClientDao, nonLACountyTriggers, laCountyTrigger,
-            triggerTablesDao, staffpersonDao, staffPersonIdRetriever, riReferralClient);
+    referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
+        laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
@@ -196,8 +194,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
 
     crossReportDao = mock(CrossReportDao.class);
     riCrossReport = mock(RICrossReport.class);
-    crossReportService =
-        new CrossReportService(crossReportDao, staffPersonIdRetriever, riCrossReport);
+    crossReportService = new CrossReportService(crossReportDao, riCrossReport);
 
     reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);

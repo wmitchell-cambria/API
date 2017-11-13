@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -48,7 +49,8 @@ public class CrossReportTest implements PersistentTestTemplate {
     gov.ca.cwds.rest.api.domain.cms.CrossReport domain =
         new CmsCrossReportResourceBuilder().build();
 
-    CrossReport persistent = new CrossReport(domain.getThirdId(), domain, lastUpdatedId);
+    CrossReport persistent =
+        new CrossReport(domain.getThirdId(), domain, lastUpdatedId, new Date());
 
     assertThat(persistent.getThirdId(), is(equalTo(domain.getThirdId())));
     assertThat(persistent.getCrossReportMethodType(),

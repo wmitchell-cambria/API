@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -120,7 +121,8 @@ public class CrossReportTest {
         outStateLawEnforcementAddr, countySpecificCode, lawEnforcementIndicator,
         outStateLawEnforcementIndicator, satisfyCrossReportIndicator);
     gov.ca.cwds.data.persistence.cms.CrossReport persistent =
-        new gov.ca.cwds.data.persistence.cms.CrossReport(thirdId, domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.CrossReport(thirdId, domain, "lastUpdatedId",
+            new Date());
 
     CrossReport totest = new CrossReport(persistent);
     assertThat(totest.getThirdId(), is(equalTo(persistent.getThirdId())));

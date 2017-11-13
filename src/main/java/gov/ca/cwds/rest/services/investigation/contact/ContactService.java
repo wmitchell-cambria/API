@@ -29,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
+import gov.ca.cwds.rest.business.rules.R05904ContactStartedAt;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
@@ -270,8 +271,8 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     Date referralReceivedDateTime;
     referralReceivedDateTime =
         DomainChef.concatenateDateAndTime(referralReceivedDate, referralReceivedTime);
-
-    if (!Date.from(Instant.parse(contactStartedAt.trim())).after(referralReceivedDateTime)) {
+    Date contactStartedAtDateTime = Date.from(Instant.parse(contactStartedAt.trim()));
+    if (!new R05904ContactStartedAt(contactStartedAtDateTime, referralReceivedDateTime).isValid()) {
       throw new ServiceException(
           "Contact Started At is the same or before the Referral Received Date");
     }
