@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
@@ -185,7 +184,7 @@ public class ReferralService implements
    * @return the cmsReferral
    */
   public String createCmsReferralFromScreening(ScreeningToReferral screeningToReferral,
-      String dateStarted, String timeStarted, Date timestamp, MessageBuilder messageBuilder) {
+      String dateStarted, String timeStarted, MessageBuilder messageBuilder) {
 
     String referralId = null;
 
@@ -196,7 +195,7 @@ public class ReferralService implements
       gov.ca.cwds.rest.api.domain.cms.Referral referral = null;
       try {
         referral = createReferralWithDefaults(screeningToReferral, dateStarted, timeStarted,
-            timestamp, messageBuilder);
+            messageBuilder);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -216,7 +215,7 @@ public class ReferralService implements
 
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
-          timestamp, messageBuilder);
+          messageBuilder);
       // TODO: R - 01054 Prmary Assignment Adding
 
     } else {
@@ -243,7 +242,7 @@ public class ReferralService implements
    */
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
-      Date timestamp, MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) throws ServiceException {
     String longTextId = generateReportNarrative(screeningToReferral, messageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, messageBuilder);
@@ -262,7 +261,7 @@ public class ReferralService implements
      * create the referralAddress and assign the value to the
      * allegesAbuseOccurredAtAddressId(FKADDRS_T)
      */
-    createReferralAddress(screeningToReferral, timestamp, messageBuilder);
+    createReferralAddress(screeningToReferral, messageBuilder);
     String allegesAbuseOccurredAtAddressId = screeningToReferral.getAddress().getLegacyId();
 
     String limitedAccessDate = DomainChef.cookDate(screeningToReferral.getLimitedAccessDate());
@@ -304,7 +303,7 @@ public class ReferralService implements
   }
 
 
-  private void createReferralAddress(ScreeningToReferral screeningToReferral, Date timestamp,
+  private void createReferralAddress(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     try {
       gov.ca.cwds.rest.api.domain.Address referralAddress =

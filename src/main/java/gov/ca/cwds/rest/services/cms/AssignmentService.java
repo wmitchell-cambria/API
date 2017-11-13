@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
@@ -159,7 +157,7 @@ public class AssignmentService implements
   // R - 02473 Default Referral Assignment
   // R - 02160 Assignment - Caseload Access
   public void createDefaultAssignmentForNewReferral(ScreeningToReferral screeningToReferral,
-      String referralId, Date timestamp, MessageBuilder messageBuilder) {
+      String referralId, MessageBuilder messageBuilder) {
 
     String caseLoadId = "";
     String COUNTY_CODE = "00";
