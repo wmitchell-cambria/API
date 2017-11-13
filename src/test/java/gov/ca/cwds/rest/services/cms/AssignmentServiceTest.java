@@ -378,7 +378,7 @@ public class AssignmentServiceTest {
     when(caseLoadDao.find(any())).thenReturn(caseload);
 
     assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, "ABC1234567",
-        new Date(), messageBuilder);
+        messageBuilder);
     verify(assignmentDao, times(1)).create(any());
   }
 

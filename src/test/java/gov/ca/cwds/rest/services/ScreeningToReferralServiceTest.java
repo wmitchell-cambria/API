@@ -274,7 +274,7 @@ public class ScreeningToReferralServiceTest {
     ScreeningToReferral screeningToReferral = defaultReferralBuilder.createScreeningToReferral();
     referralService = mock(ReferralService.class);
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     reporterService = mock(ReporterService.class);
     Reporter savedReporter = new ReporterResourceBuilder().build();
@@ -373,7 +373,7 @@ public class ScreeningToReferralServiceTest {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
-    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any()))
         .thenReturn("REFERRALID");
 
     mockParticipantService(referral);
@@ -397,7 +397,7 @@ public class ScreeningToReferralServiceTest {
     ScreeningToReferral screeningToReferral =
         defaultReferralBuilder.setCrossReports(crossReports).createScreeningToReferral();
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -448,7 +448,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -480,7 +480,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -507,7 +507,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -524,7 +524,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -552,7 +552,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -629,7 +629,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -651,7 +651,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -712,7 +712,7 @@ public class ScreeningToReferralServiceTest {
     when(clientService.find(eq(victimId))).thenReturn(foundVictimClient);
     when(clientService.find(eq(perpId))).thenReturn(foundPerpClient);
 
-    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any()))
         .thenReturn("REFERRALID");
 
     mockParticipantService(referral);
@@ -730,7 +730,7 @@ public class ScreeningToReferralServiceTest {
         new ScreeningToReferralResourceBuilder().setAllegations(null).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -762,7 +762,7 @@ public class ScreeningToReferralServiceTest {
         .setAllegations(allegations).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -790,7 +790,7 @@ public class ScreeningToReferralServiceTest {
         .setAllegations(allegations).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -824,7 +824,7 @@ public class ScreeningToReferralServiceTest {
         .setAllegations(allegations).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -897,7 +897,7 @@ public class ScreeningToReferralServiceTest {
 
     when(allegationService.find(allegation.getLegacyId())).thenReturn(mock(Allegation.class));
     MessageBuilder messageBuilder = new MessageBuilder();
-    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any()))
         .thenReturn("REFERRALID");
 
     mockParticipantService(referral);
@@ -934,7 +934,7 @@ public class ScreeningToReferralServiceTest {
     when(postedAllegation.getId()).thenReturn(perpLegacyId);
     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
     when(allegationService.create(any())).thenReturn(postedAllegation);
-    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any()))
         .thenReturn(validReferralId);
 
     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
@@ -970,7 +970,7 @@ public class ScreeningToReferralServiceTest {
     when(postedAllegation.getId()).thenReturn(perpLegacyId);
     when(postedAllegation.getPerpetratorClientId()).thenReturn(perpLegacyId);
     when(allegationService.create(any())).thenReturn(postedAllegation);
-    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any(), any()))
+    when(referralService.createCmsReferralFromScreening(any(), any(), any(), any()))
         .thenReturn(validReferralId);
 
     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
@@ -999,7 +999,7 @@ public class ScreeningToReferralServiceTest {
         .setAllegations(allegations).setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -1027,7 +1027,7 @@ public class ScreeningToReferralServiceTest {
         .setCrossReports(crossReports).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     when(crossReportService.find(eq(crossReport.getLegacyId()))).thenReturn(null);
 
@@ -1072,7 +1072,7 @@ public class ScreeningToReferralServiceTest {
         .setCrossReports(crossReports).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
     when(crossReportService.find(eq(crossReport.getLegacyId()))).thenReturn(null);
 
     mockParticipantService(screeningToReferral);
@@ -1115,7 +1115,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     Address victimLegacyAddress = new Address().createWithDefaults(victimAddress);
     Set victimLegacyAddresses = new HashSet<Object>();
@@ -1164,7 +1164,7 @@ public class ScreeningToReferralServiceTest {
     when(reporterService.find(any())).thenReturn(savedReporter);
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 
@@ -1187,7 +1187,7 @@ public class ScreeningToReferralServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
-        any(), any())).thenReturn(validReferralId);
+        any())).thenReturn(validReferralId);
 
     mockParticipantService(screeningToReferral);
 

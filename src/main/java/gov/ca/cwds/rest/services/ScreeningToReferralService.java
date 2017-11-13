@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -145,11 +144,6 @@ public class ScreeningToReferralService implements CrudsService {
     verifyReferralHasValidParticipants(screeningToReferral);
 
     /**
-     * For the referral transaction all the persisted objects lastupdatedTime should be unique
-     */
-    Date timestamp = RequestExecutionContext.instance().getRequestStartTime();
-
-    /**
      * <blockquote>
      * 
      * <pre>
@@ -162,16 +156,15 @@ public class ScreeningToReferralService implements CrudsService {
     String dateStarted = ParticipantValidator.extractStartDate(screeningToReferral, messageBuilder);
     String timeStarted = ParticipantValidator.extractStartTime(screeningToReferral, messageBuilder);
 
-    String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted, timestamp);
+    String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 
     ClientParticipants clientParticipants =
         processParticipants(screeningToReferral, dateStarted, referralId, messageBuilder);
 
-    Set<CrossReport> resultCrossReports =
-        createCrossReports(screeningToReferral, referralId, timestamp);
+    Set<CrossReport> resultCrossReports = createCrossReports(screeningToReferral, referralId);
 
     Set<Allegation> resultAllegations = createAllegations(screeningToReferral, referralId,
-        clientParticipants.getVictimIds(), clientParticipants.getPerpetratorIds(), timestamp);
+        clientParticipants.getVictimIds(), clientParticipants.getPerpetratorIds());
 
     PostedScreeningToReferral pstr =
         PostedScreeningToReferral.createWithDefaults(referralId, screeningToReferral,
@@ -199,11 +192,11 @@ public class ScreeningToReferralService implements CrudsService {
 
   private Set<Allegation> createAllegations(ScreeningToReferral screeningToReferral,
       String referralId, HashMap<Long, String> victimClient,
-      HashMap<Long, String> perpatratorClient, Date timestamp) {
+      HashMap<Long, String> perpatratorClient) {
     Set<Allegation> resultAllegations = null;
     try {
-      resultAllegations = processAllegations(screeningToReferral, referralId, perpatratorClient,
-          victimClient, timestamp);
+      resultAllegations =
+          processAllegations(screeningToReferral, referralId, perpatratorClient, victimClient);
     } catch (ServiceException e) {
       String message = e.getMessage();
       logError(message, e);
@@ -212,10 +205,10 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private Set<CrossReport> createCrossReports(ScreeningToReferral screeningToReferral,
-      String referralId, Date timestamp) {
+      String referralId) {
     Set<CrossReport> resultCrossReports = null;
     try {
-      resultCrossReports = processCrossReports(screeningToReferral, referralId, timestamp);
+      resultCrossReports = processCrossReports(screeningToReferral, referralId);
     } catch (ServiceException e) {
       String message = e.getMessage();
       logError(message, e);
@@ -231,9 +224,9 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private String createCmsReferral(ScreeningToReferral screeningToReferral, String dateStarted,
-      String timeStarted, Date timestamp) {
+      String timeStarted) {
     return referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted,
-        timeStarted, timestamp, messageBuilder);
+        timeStarted, messageBuilder);
   }
 
   private void verifyReferralHasValidParticipants(ScreeningToReferral screeningToReferral) {
@@ -306,7 +299,7 @@ public class ScreeningToReferralService implements CrudsService {
    * CMS Cross Report
    */
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> processCrossReports(ScreeningToReferral scr,
-      String referralId, Date timestamp) {
+      String referralId) {
 
     String crossReportId = "";
     Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports = new HashSet<>();
@@ -323,8 +316,8 @@ public class ScreeningToReferralService implements CrudsService {
         outStateLawEnforcementIndicator(outStateLawEnforcementIndicator,
             outStateLawEnforcementAddr);
 
-        validateCrossReport(scr, referralId, timestamp, crossReportId, resultCrossReports,
-            crossReport, outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
+        validateCrossReport(scr, referralId, crossReportId, resultCrossReports, crossReport,
+            outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
       }
     }
 
@@ -332,9 +325,9 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private void validateCrossReport(ScreeningToReferral screeningToReferral, String referralId,
-      Date timestamp, String crossReportId,
-      Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports, CrossReport crossReport,
-      Boolean outStateLawEnforcementIndicator, String outStateLawEnforcementAddr) {
+      String crossReportId, Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports,
+      CrossReport crossReport, Boolean outStateLawEnforcementIndicator,
+      String outStateLawEnforcementAddr) {
 
     if (StringUtils.isBlank(crossReport.getLegacyId())) {
       persistCrossReport(screeningToReferral, referralId, crossReportId, resultCrossReports,
@@ -421,7 +414,7 @@ public class ScreeningToReferralService implements CrudsService {
    * CMS Allegation - one for each allegation
    */
   private Set<Allegation> processAllegations(ScreeningToReferral scr, String referralId,
-      HashMap<Long, String> perpatratorClient, HashMap<Long, String> victimClient, Date timestamp)
+      HashMap<Long, String> perpatratorClient, HashMap<Long, String> victimClient)
       throws ServiceException {
 
     Set<Allegation> processedAllegations = new HashSet<>();
@@ -471,18 +464,18 @@ public class ScreeningToReferralService implements CrudsService {
         continue;
       }
 
-      saveAllegation(scr, referralId, timestamp, processedAllegations, victimClientId,
-          perpatratorClientId, allegationDispositionType, allegation);
+      saveAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
+          allegationDispositionType, allegation);
     }
     return processedAllegations;
   }
 
-  private void saveAllegation(ScreeningToReferral scr, String referralId, Date timestamp,
+  private void saveAllegation(ScreeningToReferral scr, String referralId,
       Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
       Short allegationDispositionType, Allegation allegation) {
     if (allegation.getLegacyId() == null || allegation.getLegacyId().isEmpty()) {
-      persistAllegation(scr, referralId, timestamp, processedAllegations, victimClientId,
-          perpatratorClientId, allegationDispositionType, allegation);
+      persistAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
+          allegationDispositionType, allegation);
 
     } else {
       gov.ca.cwds.rest.api.domain.cms.Allegation foundAllegation =
@@ -538,7 +531,7 @@ public class ScreeningToReferralService implements CrudsService {
     return false;
   }
 
-  private void persistAllegation(ScreeningToReferral scr, String referralId, Date timestamp,
+  private void persistAllegation(ScreeningToReferral scr, String referralId,
       Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
       final Short allegationDispositionType, Allegation allegation) {
 
@@ -557,15 +550,15 @@ public class ScreeningToReferralService implements CrudsService {
     processedAllegations.add(allegation);
 
     // create the Allegation Perpetrator History
-    processAllegationPerpetratorHistory(scr, timestamp, postedAllegation);
+    processAllegationPerpetratorHistory(scr, postedAllegation);
   }
 
-  private void processAllegationPerpetratorHistory(ScreeningToReferral scr, Date timestamp,
+  private void processAllegationPerpetratorHistory(ScreeningToReferral scr,
       PostedAllegation postedAllegation) {
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory cmsPerpHistory =
         new gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory(scr.getIncidentCounty(),
             postedAllegation.getPerpetratorClientId(), postedAllegation.getId(),
-            DomainChef.cookDate(timestamp));
+            DomainChef.cookDate(RequestExecutionContext.instance().getRequestStartTime()));
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
 

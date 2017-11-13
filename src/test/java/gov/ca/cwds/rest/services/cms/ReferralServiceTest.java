@@ -13,7 +13,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -80,7 +79,6 @@ public class ReferralServiceTest {
   private MessageBuilder mockMessageBuilder;
   private String dateStarted;
   private String timeStarted;
-  private Date lastUpdatedTimeStamp;
 
   private static Boolean isLaCountyTrigger = false;
 
@@ -118,7 +116,6 @@ public class ReferralServiceTest {
     mockMessageBuilder = mock(MessageBuilder.class);
     dateStarted = "2009-12-20";
     timeStarted = "07:00:00";
-    lastUpdatedTimeStamp = new Date();
   }
 
   // find test
@@ -440,7 +437,7 @@ public class ReferralServiceTest {
         addressService, longTextService, riReferral);
 
     Referral referralCreated = referralService.createReferralWithDefaults(screeningToReferral,
-        dateStarted, timeStarted, lastUpdatedTimeStamp, mockMessageBuilder);
+        dateStarted, timeStarted, mockMessageBuilder);
 
     assertEquals("Expected the approval status type to be 118", (short) 118,
         (short) referralCreated.getApprovalStatusType());
@@ -460,7 +457,7 @@ public class ReferralServiceTest {
 
     MessageBuilder messageBuilder = new MessageBuilder();
     String response = referralService.createCmsReferralFromScreening(screeningToReferral,
-        dateStarted, timeStarted, lastUpdatedTimeStamp, messageBuilder);
+        dateStarted, timeStarted, messageBuilder);
 
     assertEquals("Expected the reponse to be the referral ID", referralId, response);
     assertEquals("Expected there not to be any error messages", 0,
@@ -479,7 +476,7 @@ public class ReferralServiceTest {
 
     MessageBuilder messageBuilder = mock(MessageBuilder.class);
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
-        lastUpdatedTimeStamp, mockMessageBuilder);
+        mockMessageBuilder);
 
     verify(mockMessageBuilder).addMessageAndLog(
         eq("Legacy Id does not correspond to an existing CMS/CWS Referral"), any(), any());
@@ -515,7 +512,7 @@ public class ReferralServiceTest {
     MessageBuilder messageBuilder = new MessageBuilder();
 
     referralService.createCmsReferralFromScreening(screeningToReferral, "01-30-2019", timeStarted,
-        lastUpdatedTimeStamp, messageBuilder);
+        messageBuilder);
 
     assertEquals("Expected a single error message", 1, messageBuilder.getMessages().size());
     assertEquals("ExpectedDate Error message", "receivedDate must be in the format of yyyy-MM-dd",
@@ -552,7 +549,7 @@ public class ReferralServiceTest {
     when(referralDao.create(any())).thenReturn(savedReferral);
 
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
-        lastUpdatedTimeStamp, mockMessageBuilder);
+        mockMessageBuilder);
 
     ArgumentCaptor<gov.ca.cwds.data.persistence.cms.Referral> referralCaptor =
         ArgumentCaptor.forClass(gov.ca.cwds.data.persistence.cms.Referral.class);
