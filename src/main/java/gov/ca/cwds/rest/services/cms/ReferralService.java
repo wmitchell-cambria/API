@@ -29,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.R00818SetReferredResourceType;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -277,7 +278,8 @@ public class ReferralService implements
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
         screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
         govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(), referredToResourceType(screeningToReferral),
+        screeningToReferral.getResponseTime(),
+        new R00818SetReferredResourceType(screeningToReferral).isValid() ? (short) 3225 : 0,
         allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
         screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
@@ -332,27 +334,6 @@ public class ReferralService implements
   private static String firstResponseDeterminedByStaffPersonId() {
     return RequestExecutionContext.instance().getStaffId();
 
-  }
-
-  /**
-   * <blockquote>
-   *
-   * <pre>
-   * BUSINESS RULE: "R - 00818"
-   *
-   * IF    referralResponseTypeCode is set to Evaluate Out
-   * THEN  referredToResourceType should be set to Not Referred
-   *
-   * </pre>
-   *
-   * </blockquote>
-   */
-  private static Short referredToResourceType(ScreeningToReferral screeningToReferral) {
-    Short referredToResourceType = 0;
-    if (screeningToReferral.getResponseTime() == 1519) {
-      referredToResourceType = 3225;
-    }
-    return referredToResourceType;
   }
 
   private String generateReportNarrative(ScreeningToReferral screeningToReferral,
