@@ -80,6 +80,7 @@ public class ReporterTest implements PersistentTestTemplate {
     assertThat(pers.getLawEnforcementId(), is(equalTo(domain.getLawEnforcementId())));
     assertThat(pers.getZipSuffixNumber(), is(equalTo(domain.getZipSuffixNumber())));
     assertThat(pers.getCountySpecificCode(), is(equalTo(domain.getCountySpecificCode())));
+    assertThat(pers.getBirthDate(), is(equalTo(null)));
   }
 
   @Override
@@ -180,7 +181,6 @@ public class ReporterTest implements PersistentTestTemplate {
     assertThat(persistent.getZip(), is(equalTo(buf.toString())));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testSerializeAndDeserialize()
       throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
@@ -200,6 +200,15 @@ public class ReporterTest implements PersistentTestTemplate {
         fixture("fixtures/persistent/Reporter/valid/validWithSysCodes.json"), Reporter.class)));
 
     assertThat(MAPPER.writeValueAsString(persistent)).isEqualTo(expected);
+  }
+
+  @Test
+  public void testNullStateCodeReturnsNull() throws Exception {
+    gov.ca.cwds.rest.api.domain.cms.Reporter domain =
+        new ReporterResourceBuilder().setStateCodeType(null).build();
+    Reporter pers = new Reporter(domain, lastUpdatedId);
+    assertThat(pers.getState(), is(equalTo(null)));
+
   }
 
   private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {

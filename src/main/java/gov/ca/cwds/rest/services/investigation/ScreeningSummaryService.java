@@ -2,11 +2,14 @@ package gov.ca.cwds.rest.services.investigation;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.Allegation;
 import gov.ca.cwds.data.persistence.ns.Screening;
@@ -23,6 +26,8 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  */
 public class ScreeningSummaryService
     implements TypedCrudsService<String, ScreeningSummary, Response> {
+
+  private static final String DEFAULT_STUB_KEY = "999999";
 
   private ScreeningDao screeningDao;
 
@@ -45,7 +50,7 @@ public class ScreeningSummaryService
 
   @Override
   public Response find(String referralId) {
-    if (StringUtils.equals(referralId, "999999")) {
+    if (StringUtils.equals(referralId, DEFAULT_STUB_KEY)) {
       return new ScreeningSummaryEntityBuilder().build();
 
     }

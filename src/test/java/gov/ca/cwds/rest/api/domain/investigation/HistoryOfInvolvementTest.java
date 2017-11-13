@@ -8,16 +8,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.CaseEntityBuilder;
@@ -101,13 +96,13 @@ public class HistoryOfInvolvementTest {
 
   }
 
-  @Test
-  @Ignore
-  public void testSerializedAllegation()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    HistoryOfInvolvement historyOfInvolement = new HistoryOfInvolvementEntityBuilder().build();
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(historyOfInvolement);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedAllegation()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // HistoryOfInvolvement historyOfInvolement = new HistoryOfInvolvementEntityBuilder().build();
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(historyOfInvolement);
+  // System.out.println(expected);
+  // }
 }

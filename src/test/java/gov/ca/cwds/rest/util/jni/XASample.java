@@ -26,10 +26,13 @@ public class XASample {
 
   javax.sql.XADataSource xaDS1;
   javax.sql.XADataSource xaDS2;
+
   javax.sql.XAConnection xaconn1;
   javax.sql.XAConnection xaconn2;
+
   javax.transaction.xa.XAResource xares1;
   javax.transaction.xa.XAResource xares2;
+
   java.sql.Connection conn1;
   java.sql.Connection conn2;
 
@@ -93,6 +96,7 @@ public class XASample {
   }
 
   private static void setupInitialContext() {
+    LOGGER.info("setupInitialContext();");
     try {
       NamingManager.setInitialContextFactoryBuilder(new InitialContextFactoryBuilder() {
 
@@ -109,15 +113,16 @@ public class XASample {
 
                 @Override
                 public Object lookup(String name) throws NamingException {
-
                   if (dataSources.isEmpty()) { // init datasources
                     dataSources.put("jdbc/postgres",
-                        buildPGDataSource(System.getenv("NS_DOCKER_USER"),
-                            System.getenv("NS_DOCKER_PASSWORD"), "localhost", 5400, "postgres"));
+                        buildPGDataSource(System.getenv("NS_USER"), System.getenv("NS_PASSWORD"),
+                            System.getenv("NS_HOST"), Integer.parseInt(System.getenv("NS_PORT")),
+                            System.getenv("NS_SERVICE")));
 
                     dataSources.put("jdbc/docker",
-                        buildDB2DataSource(System.getenv("DB2_DOCKER_USER"),
-                            System.getenv("DB2_DOCKER_PASSWORD"), "localhost", 50000, "DB0TDEV"));
+                        buildDB2DataSource(System.getenv("DB2_USER"), System.getenv("DB2_PASSWORD"),
+                            System.getenv("DB2_HOST"), Integer.parseInt(System.getenv("DB2_PORT")),
+                            System.getenv("DB2_SERVICE")));
                   }
 
                   if (dataSources.containsKey(name)) {
@@ -143,7 +148,7 @@ public class XASample {
    * qualifier. The global transaction ID and the branch qualifier must not be equal to each other,
    * and the combination must be unique for this transaction manager.
    * 
-   * @param args dunno
+   * @param args command line
    */
   public void runThis(String[] args) {
 
@@ -156,7 +161,7 @@ public class XASample {
       Class.forName("com.ibm.db2.jcc.DB2Driver");
       Class.forName("org.postgresql.Driver");
       setupInitialContext();
-      LOGGER.info("setupInitialContext();");
+
       // Note that javax.sql.XADataSource is used instead of a specific driver implementation such
       // as com.ibm.db2.jcc.DB2XADataSource.
       xaDS1 = (javax.sql.XADataSource) InitialContext.doLookup("jdbc/postgres");
@@ -174,6 +179,7 @@ public class XASample {
       // Get the XAResource object from each XAConnection
       xares1 = xaconn1.getXAResource();
       xares2 = xaconn2.getXAResource();
+
       // Create the Xid object for this distributed transaction.
       // This example uses the com.ibm.db2.jcc.DB2Xid implementation of the Xid interface. This Xid
       // can be used with any JDBC driver that supports JTA.
@@ -185,17 +191,12 @@ public class XASample {
       xares1.start(xid1, javax.transaction.xa.XAResource.TMNOFLAGS);
       xares2.start(xid1, javax.transaction.xa.XAResource.TMNOFLAGS);
 
-      // TODO: ADD SQL HERE!
+      // ===================
+      // ADD SQL HERE!
+      // ===================
+
       // Run DML on connection 1.
-      conn1
-          .prepareStatement(
-              // "update CWSNS1.CLIENT_T c set c.BR_FAC_NM = 'conn 1' where c.IDENTIFIER =
-              // 'AaiU7IW0Rt'")
-              // "update CWSINT.ALLGTN_T c set c.LOC_DSC = 'test 1' where c.IDENTIFIER =
-              // 'AAABG3EMNL'")
-              // "update CWSINT.CLIENT_T c set c.BR_FAC_NM = 'conn 6' where c.IDENTIFIER =
-              // 'AaiU7IW0Rt'")
-              "UPDATE public.person SET first_name='bart201' WHERE person_id = '50'")
+      conn1.prepareStatement("UPDATE public.people SET first_name='bart201' WHERE id = '50'")
           .executeUpdate();
 
       // Run DML on connection 2.
@@ -203,7 +204,7 @@ public class XASample {
           .prepareStatement(
               // "update CWSINT.CLIENT_T c set c.BR_FAC_NM = 'conn 2' where c.IDENTIFIER =
               // 'AaiU7IW0Rt'")
-              "update CWSINT.ALLGTN_T c set c.LOC_DSC = 'test 6' where c.IDENTIFIER = 'AAABG3EMNL'")
+              "update CWSNS1.ALLGTN_T c set c.LOC_DSC = 'test 6' where c.IDENTIFIER = 'AAABG3EMNL'")
           .executeUpdate();
 
       // Now end the distributed transaction on the two connections.
@@ -214,12 +215,13 @@ public class XASample {
       // here to wait until the connection 2 work is done.
 
       try {
-        LOGGER.info("try");// Now prepare both branches of the distributed transaction.
+        LOGGER.info("try");
+        // Now prepare both branches of the distributed transaction.
         // Both branches must prepare successfully before changes can be committed.
         // If the distributed transaction fails, an XAException is thrown.
         rc1 = xares1.prepare(xid1);
         if (rc1 == javax.transaction.xa.XAResource.XA_OK) {
-          // Prepare was successful. Prepare the second connection.
+          // Prepare succeeded. Prepare the second connection.
           rc2 = xares2.prepare(xid1);
 
           if (rc2 == javax.transaction.xa.XAResource.XA_OK) {
@@ -245,25 +247,24 @@ public class XASample {
         }
       } catch (javax.transaction.xa.XAException xae) {
         // Distributed transaction failed, so roll it back. Report XAException on prepare/commit.
-        LOGGER.info("Distributed transaction prepare/commit failed. " + "Rolling it back.");
-        LOGGER.info("XAException error code = " + xae.errorCode);
-        LOGGER.info("XAException message = " + xae.getMessage());
-        xae.printStackTrace();
+        LOGGER.info("Distributed transaction prepare/commit failed. Roll back.");
+        LOGGER.error("XAException: error code = {}, message = {}", xae.errorCode, xae.getMessage(),
+            xae);
 
         try {
           xares1.rollback(xid1);
         } catch (javax.transaction.xa.XAException xae1) { // Report failure of rollback.
           LOGGER.warn("distributed Transaction rollback xares1 failed");
-          LOGGER.warn("XAException error code = " + xae1.errorCode);
-          LOGGER.warn("XAException message = " + xae1.getMessage());
+          LOGGER.error("XAException: error code = {}, message = {}", xae1.errorCode,
+              xae1.getMessage(), xae1);
         }
 
         try {
           xares2.rollback(xid1);
         } catch (javax.transaction.xa.XAException xae2) { // Report failure of rollback.
           LOGGER.warn("distributed Transaction rollback xares2 failed");
-          LOGGER.warn("XAException error code = " + xae2.errorCode);
-          LOGGER.warn("XAException message = " + xae2.getMessage());
+          LOGGER.error("XAException: error code = {}, message = {}", xae2.errorCode,
+              xae2.getMessage(), xae2);
         }
       }
 
@@ -293,8 +294,7 @@ public class XASample {
   }
 
   public static void main(String args[]) throws java.sql.SQLException {
-    XASample xat = new XASample();
-    xat.runThis(args);
+    new XASample().runThis(args);
   }
 
 }

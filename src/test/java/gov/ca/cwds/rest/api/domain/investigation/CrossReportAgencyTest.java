@@ -5,14 +5,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -49,14 +44,14 @@ public class CrossReportAgencyTest {
     EqualsVerifier.forClass(CrossReportAgency.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
-  @Test
+  // @Test
   // @Ignore
-  public void testSerializedInvestigation()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    CrossReportAgency crossReportAgency = new CrossReportAgency(type, name);
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReportAgency);
-    System.out.println(expected);
-  }
+  // public void testSerializedInvestigation()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // CrossReportAgency crossReportAgency = new CrossReportAgency(type, name);
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReportAgency);
+  // System.out.println(expected);
+  // }
 
 }

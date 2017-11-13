@@ -81,8 +81,8 @@ public class AddressResourceBuilder {
   }
 
   /**
-   * @param legacyDescriptor
-   * @return the legacyDescriptor
+   * @param legacyDescriptor common legacy descriptor
+   * @return the legacyDescriptor common legacy descriptor
    */
   public AddressResourceBuilder setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;

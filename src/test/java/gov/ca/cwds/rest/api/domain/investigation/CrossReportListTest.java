@@ -5,22 +5,16 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.fixture.investigation.CrossReportEntityBuilder;
-import gov.ca.cwds.fixture.investigation.CrossReportListEntityBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -54,14 +48,14 @@ public class CrossReportListTest {
     EqualsVerifier.forClass(CrossReportList.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
-  @Test
-  @Ignore
-  public void testSerializedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    CrossReportList crossReportList = new CrossReportListEntityBuilder().build();
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReportList);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // CrossReportList crossReportList = new CrossReportListEntityBuilder().build();
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(crossReportList);
+  // System.out.println(expected);
+  // }
 
 }

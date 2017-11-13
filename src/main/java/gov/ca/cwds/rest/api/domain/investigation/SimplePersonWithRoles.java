@@ -96,11 +96,17 @@ public class SimplePersonWithRoles extends ReportingDomain implements Response {
     return sensitivityIndicator;
   }
 
+  /**
+   * @return - true/false
+   */
   @JsonProperty("sealed")
   public Boolean getSealed() {
     return StringUtils.isNotBlank(sensitivityIndicator) && "R".equals(sensitivityIndicator);
   }
 
+  /**
+   * @return - true/false
+   */
   @JsonProperty("sensitive")
   public Boolean getSensitive() {
     return StringUtils.isNotBlank(sensitivityIndicator) && "S".equals(sensitivityIndicator);

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
@@ -236,6 +237,17 @@ public class AllegationTest implements PersistentTestTemplate {
 
   @SuppressWarnings("javadoc")
   @Test
+  public void testConstructorUsingDomainWithBlankLocationDescription() throws Exception {
+    gov.ca.cwds.rest.api.domain.cms.Allegation domainAllegation =
+        new CmsAllegationResourceBuilder().setAbuseLocationDescription("").buildCmsAllegation();
+
+    Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId, lastUpdatedTime);
+    assertThat(persistent.getAbuseLocationDescription(), is(equalTo("")));
+
+  }
+
+  @SuppressWarnings("javadoc")
+  @Test
   public void testSerializeAndDeserialize() throws Exception {
     Allegation validPersistent = validAllegation();
 
@@ -257,6 +269,17 @@ public class AllegationTest implements PersistentTestTemplate {
     final String expected = MAPPER.writeValueAsString((MAPPER.readValue(
         fixture("fixtures/persistent/Allegation/valid/validWithSysCodes.json"), Allegation.class)));
     assertThat(MAPPER.writeValueAsString(persistent)).isEqualTo(expected);
+  }
+
+  @SuppressWarnings("javadoc")
+  @Test
+  public void testToString() throws Exception {
+    gov.ca.cwds.rest.api.domain.cms.Allegation domainAllegation =
+        new CmsAllegationResourceBuilder().buildCmsAllegation();
+
+    Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId, lastUpdatedTime);
+    assertThat(persistent.toString(), is(not(equalTo(""))));
+
   }
 
   private Allegation validAllegation()

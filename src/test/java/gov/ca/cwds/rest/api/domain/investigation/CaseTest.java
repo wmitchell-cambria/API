@@ -6,17 +6,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.CaseEntityBuilder;
@@ -108,7 +103,7 @@ public class CaseTest {
   public void getServiceComponentId_Args__() throws Exception {
     Case target = new Case(endDate, countyName, legacyDescriptor, focusChild, serviceComponent,
         assignedSocialWorker, serviceComponentId, startDate, parents);
-    assertThat(target.getServiceComponent(), is(equalTo(serviceComponent)));
+    assertThat(target.getServiceComponentId(), is(equalTo(serviceComponentId)));
   }
 
   @Test
@@ -143,14 +138,14 @@ public class CaseTest {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @Test
-  @Ignore
-  public void testSerializedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    Case validCase = new CaseEntityBuilder().build();
-    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(validCase);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // Case validCase = new CaseEntityBuilder().build();
+  // final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(validCase);
+  // System.out.println(expected);
+  // }
 
   @Test
   public void deserializesFromJSON() throws Exception {

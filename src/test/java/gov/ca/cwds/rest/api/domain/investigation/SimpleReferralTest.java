@@ -4,22 +4,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementAllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimplePersonEntityBuilder;
-import gov.ca.cwds.fixture.investigation.SimpleReferralEntityBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -72,14 +66,14 @@ public class SimpleReferralTest {
     assertThat(domain.getStartDate(), is(equalTo(startDate)));
   }
 
-  @Test
-  @Ignore
-  public void testSerializedOutput()
-      throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-    SimpleReferral smipleReferral = new SimpleReferralEntityBuilder().build();
-    final String expected =
-        MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(smipleReferral);
-    System.out.println(expected);
-  }
+  // @Test
+  // @Ignore
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // SimpleReferral smipleReferral = new SimpleReferralEntityBuilder().build();
+  // final String expected =
+  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(smipleReferral);
+  // System.out.println(expected);
+  // }
 
 }
