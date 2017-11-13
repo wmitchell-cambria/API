@@ -150,7 +150,6 @@ public class AssignmentService implements
   /**
    * @param screeningToReferral - screeningToReferral
    * @param referralId - referralId
-   * @param timestamp - timestamp
    * @param messageBuilder - messageBuilder
    */
   // create a default assignment

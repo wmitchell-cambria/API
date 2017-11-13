@@ -179,7 +179,6 @@ public class ReferralService implements
    * @param screeningToReferral - screeningToReferral
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
-   * @param timestamp - timestamp
    * @param messageBuilder - messageBuilder
    * @return the cmsReferral
    */
@@ -235,7 +234,6 @@ public class ReferralService implements
    * @param screeningToReferral - screeningToReferral
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
-   * @param timestamp - timestamp
    * @param messageBuilder - the messageBuilder object responsible for handling errors
    * @return the referral
    * @throws ServiceException - ServiceException
