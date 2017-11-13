@@ -201,7 +201,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
 
     reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);
-    reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
+    reporterService = new ReporterService(reporterDao, riReporter);
 
     clientAddressDao = mock(ClientAddressDao.class);
     laCountyTrigger = mock(LACountyTrigger.class);

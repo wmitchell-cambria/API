@@ -167,7 +167,7 @@ public class PersonTest {
   public void testReporterConstructorSuccess() {
     gov.ca.cwds.rest.api.domain.cms.Reporter domainReporter = new ReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, "0X5", new Date());
     Person person =
         new Person(reporter, languages, cmsRecordDescriptor, addresses, phoneNumbers, roles);
     assertThat(person.getLastUpdatedBy(), is(equalTo(reporter.getLastUpdatedId())));
@@ -187,7 +187,7 @@ public class PersonTest {
   public void testReporterConstructorWithNullLastUpdatedAt() {
     gov.ca.cwds.rest.api.domain.cms.Reporter domainReporter = new ReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, "0X5", new Date());
     reporter.setLastUpdatedTime(null);
     Person person =
         new Person(reporter, languages, cmsRecordDescriptor, addresses, phoneNumbers, roles);

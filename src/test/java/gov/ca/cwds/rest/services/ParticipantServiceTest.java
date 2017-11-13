@@ -121,10 +121,10 @@ public class ParticipantServiceTest {
     // TODO: ReporterEntityBuilder Requires name change, and move rest of code to builder
     Reporter reporter = new ReporterResourceBuilder().setReferralId("1234567ABC").build();
     gov.ca.cwds.data.persistence.cms.Reporter savedEntityReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "1234567ABC");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "1234567ABC", new Date());
     PostedReporter savedReporter = new PostedReporter(savedEntityReporter);
     ReporterService reporterService = mock(ReporterService.class);
-    when(reporterService.createWithSingleTimestamp(any(), any())).thenReturn(savedReporter);
+    when(reporterService.create(any())).thenReturn(savedReporter);
 
     childClientService = mock(ChildClientService.class);
     ChildClient childClient = mock(ChildClient.class);

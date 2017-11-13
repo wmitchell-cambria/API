@@ -122,7 +122,7 @@ public class R04631ReferralInvestigationContactDueTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
@@ -196,7 +196,7 @@ public class R04631ReferralInvestigationContactDueTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
@@ -274,7 +274,7 @@ public class R04631ReferralInvestigationContactDueTest {
         Reporter.createWithDefaults("123ABC1235", true, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,
@@ -350,7 +350,7 @@ public class R04631ReferralInvestigationContactDueTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
         gov.ca.cwds.rest.api.domain.cms.CrossReport.createWithDefaults("123ABC1K35", crossReport,

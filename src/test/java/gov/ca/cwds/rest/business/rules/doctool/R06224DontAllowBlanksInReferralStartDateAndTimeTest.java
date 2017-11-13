@@ -212,7 +212,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
 
     reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);
-    reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
+    reporterService = new ReporterService(reporterDao, riReporter);
 
     addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
@@ -341,7 +341,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     Reporter reporterDomain = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/validReporter.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter reporterToCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
     when(reporterDao.create(any(gov.ca.cwds.data.persistence.cms.Reporter.class)))
         .thenReturn(reporterToCreate);
 

@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -28,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 public class ReporterTest implements PersistentTestTemplate {
   private static final ObjectMapper MAPPER = SystemCodeTestHarness.MAPPER;
   private String lastUpdatedId = "0XA";
+  private Date lastUpdatedTime = new Date();
 
   /*
    * Constructor test
@@ -42,7 +44,7 @@ public class ReporterTest implements PersistentTestTemplate {
   @Test
   public void testConstructorUsingDomain() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Reporter domain = new ReporterResourceBuilder().build();
-    Reporter pers = new Reporter(domain, lastUpdatedId);
+    Reporter pers = new Reporter(domain, lastUpdatedId, lastUpdatedTime);
 
     assertThat(pers.getReferralId(), is(equalTo(domain.getReferralId())));
     assertThat(pers.getBadgeNumber(), is(equalTo(domain.getBadgeNumber())));
@@ -206,7 +208,7 @@ public class ReporterTest implements PersistentTestTemplate {
   public void testNullStateCodeReturnsNull() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Reporter domain =
         new ReporterResourceBuilder().setStateCodeType(null).build();
-    Reporter pers = new Reporter(domain, lastUpdatedId);
+    Reporter pers = new Reporter(domain, lastUpdatedId, lastUpdatedTime);
     assertThat(pers.getState(), is(equalTo(null)));
 
   }

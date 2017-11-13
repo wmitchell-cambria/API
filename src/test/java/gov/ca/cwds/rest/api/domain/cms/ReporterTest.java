@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
 import javax.ws.rs.client.Entity;
@@ -131,7 +132,7 @@ public class ReporterTest {
         stateCodeType, streetName, streetNumber, suffixTitleDescription, zipcode, referralId,
         lawEnforcementId, zipSuffixNumber, countySpecificCode);
     gov.ca.cwds.data.persistence.cms.Reporter persistent =
-        new gov.ca.cwds.data.persistence.cms.Reporter(domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.Reporter(domain, "lastUpdatedId", new Date());
 
     Reporter totest = new Reporter(persistent);
     assertThat(totest.getReferralId(), is(equalTo(persistent.getReferralId())));

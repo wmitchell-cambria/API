@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,12 +13,15 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.ReadablePhone;
 import gov.ca.cwds.data.ns.NsPersistentObject;
 import gov.ca.cwds.data.std.ApiPhoneAware;
@@ -162,30 +166,11 @@ public class Reporter extends BaseReporter {
    * 
    * @param reporter The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
-   */
-  public Reporter(gov.ca.cwds.rest.api.domain.cms.Reporter reporter, String lastUpdatedId) {
-    super(lastUpdatedId);
-    init(reporter);
-  }
-
-  /**
-   * Constructor
-   * 
-   * @param reporter The domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
    * @param lastUpdatedTime the time of last person to update this object
    */
   public Reporter(gov.ca.cwds.rest.api.domain.cms.Reporter reporter, String lastUpdatedId,
       Date lastUpdatedTime) {
     super(lastUpdatedId, lastUpdatedTime);
-    init(reporter);
-  }
-
-  /**
-   * @param id the id
-   * @param reporter - reporter
-   */
-  private void init(gov.ca.cwds.rest.api.domain.cms.Reporter reporter) {
     this.referralId = reporter.getReferralId();
     this.badgeNumber = reporter.getBadgeNumber();
     this.cityName = reporter.getCityName();

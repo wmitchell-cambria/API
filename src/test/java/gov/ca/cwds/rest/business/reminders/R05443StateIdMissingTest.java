@@ -120,7 +120,7 @@ public class R05443StateIdMissingTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);
@@ -182,7 +182,7 @@ public class R05443StateIdMissingTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);
@@ -244,7 +244,7 @@ public class R05443StateIdMissingTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);
@@ -309,7 +309,7 @@ public class R05443StateIdMissingTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
@@ -373,7 +373,7 @@ public class R05443StateIdMissingTest {
         Reporter.createWithDefaults("123ABC1235", false, address, reporter, "62");
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     when(referralDao.find(any(String.class))).thenReturn(savedReferral);
     when(clientDao.find(any(String.class))).thenReturn(savedClient);

@@ -176,7 +176,7 @@ public class R00796ScreeningToReferralDeleteTest {
 
     reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);
-    reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
+    reporterService = new ReporterService(reporterDao, riReporter);
 
     addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);

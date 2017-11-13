@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class PhoneNumberTest {
   public void testPhoneNumberConstructorUsingReporterSuccess() {
     Reporter reporter = new ReporterResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Reporter persistentReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "OX5", new Date());
     PhoneNumber phoneNumber = new PhoneNumber(persistentReporter, cmsRecordDescriptor);
     assertThat(phoneNumber.getNumber(), is(equalTo(persistentReporter.getPrimaryPhoneNumber())));
     assertThat(phoneNumber.getPhoneExtension(),

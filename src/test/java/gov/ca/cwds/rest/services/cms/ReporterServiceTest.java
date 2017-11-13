@@ -13,6 +13,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -53,7 +55,7 @@ public class ReporterServiceTest {
     reporterDao = mock(ReporterDao.class);
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     riReporter = mock(RIReporter.class);
-    reporterService = new ReporterService(reporterDao, staffPersonIdRetriever, riReporter);
+    reporterService = new ReporterService(reporterDao, riReporter);
   }
 
   // find test
@@ -99,7 +101,7 @@ public class ReporterServiceTest {
     Reporter expected = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(expected, "0Hj");
+        new gov.ca.cwds.data.persistence.cms.Reporter(expected, "0Hj", new Date());
 
     when(reporterDao.delete(referralId)).thenReturn(reporter);
     Reporter found = reporterService.delete(referralId);
@@ -114,7 +116,7 @@ public class ReporterServiceTest {
         .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
 
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(expected, "ABC");
+        new gov.ca.cwds.data.persistence.cms.Reporter(expected, "ABC", new Date());
 
     when(reporterDao.find("ABC1234567")).thenReturn(reporter);
     when(reporterDao.update(any())).thenReturn(reporter);
@@ -162,7 +164,7 @@ public class ReporterServiceTest {
     Reporter reporterDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter toCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "last_update");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
     Reporter request = new Reporter(toCreate);
 
@@ -180,7 +182,7 @@ public class ReporterServiceTest {
     Reporter reporterDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter toCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "last_update");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
     Reporter request = new Reporter(toCreate);
 
@@ -198,7 +200,7 @@ public class ReporterServiceTest {
     Reporter reporterDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter toCreate =
-        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "last_update");
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
     Reporter request = new Reporter(toCreate);
 
@@ -220,7 +222,7 @@ public class ReporterServiceTest {
           fixture("fixtures/domain/legacy/Reporter/invalid/referralIdEmpty.json"), Reporter.class);
 
       gov.ca.cwds.data.persistence.cms.Reporter toCreate =
-          new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "last_update");
+          new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
       when(reporterDao.create(any(gov.ca.cwds.data.persistence.cms.Reporter.class)))
           .thenReturn(toCreate);
@@ -240,7 +242,7 @@ public class ReporterServiceTest {
       Reporter reporterDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/Reporter/invalid/referralIdNull.json"), Reporter.class);
       gov.ca.cwds.data.persistence.cms.Reporter toCreate =
-          new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "last_update");
+          new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
       when(reporterDao.create(any(gov.ca.cwds.data.persistence.cms.Reporter.class)))
           .thenReturn(toCreate);
