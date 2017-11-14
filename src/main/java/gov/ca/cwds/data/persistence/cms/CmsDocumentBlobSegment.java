@@ -13,7 +13,6 @@ import org.hibernate.annotations.ColumnTransformer;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.TypedPersistentObject;
 
-
 /**
  * {@link PersistentObject} represents a record in TSBLOBT.
  * 
@@ -46,7 +45,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
 
   @NotNull
   @Size(min = 1, max = 4000)
-  @ColumnTransformer(read = "blob(DOC_BLOB)")
+  @ColumnTransformer(read = "blob(DOC_BLOB)", write = "x'?'")
   private String docBlob;
 
   /**
@@ -95,7 +94,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     result = PRIME * result + ((docHandle == null) ? 0 : docHandle.hashCode());
     result = PRIME * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
 
-    // 1) NOT part of unique key, 2) potentially large and waste of processing to compute.
+    // 1) NOT part of unique key, 2) potentially large waste of processing to compute.
     // 3) if you got this far, well ... ;)
     result = PRIME * result + ((docBlob == null) ? 0 : docBlob.hashCode());
 
