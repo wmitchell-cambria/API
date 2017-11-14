@@ -176,74 +176,128 @@ public class CmsDocReferralClient extends CmsPersistentObject {
     return this.docHandle;
   }
 
+  /**
+   * @return referral Id
+   */
   public String getReferlId() {
     return referlId;
   }
 
+  /**
+   * @param referlId - referral Id
+   */
   public void setReferlId(String referlId) {
     this.referlId = referlId;
   }
 
+  /**
+   * @return client Id
+   */
   public String getClientId() {
     return clientId;
   }
 
+  /**
+   * @param clientId - client Id
+   */
   public void setClientId(String clientId) {
     this.clientId = clientId;
   }
 
+  /**
+   * @return document handle
+   */
   public String getDocHandle() {
     return docHandle;
   }
 
+  /**
+   * @param docHandle - document handle
+   */
   public void setDocHandle(String docHandle) {
     this.docHandle = docHandle;
   }
 
+  /**
+   * @return - document name
+   */
   public String getDocName() {
     return docName;
   }
 
+  /**
+   * @param docName - document name
+   */
   public void setDocName(String docName) {
     this.docName = docName;
   }
 
+  /**
+   * @return - document add date
+   */
   public Date getDocAddedDate() {
     return docAddedDate;
   }
 
+  /**
+   * @param docAddedDate - document add date
+   */
   public void setDocAddedDate(Date docAddedDate) {
     this.docAddedDate = docAddedDate;
   }
 
+  /**
+   * @return - first name
+   */
   public String getCommonFirstName() {
     return commonFirstName;
   }
 
+  /**
+   * @param commonFirstName - first name
+   */
   public void setCommonFirstName(String commonFirstName) {
     this.commonFirstName = commonFirstName;
   }
 
+  /**
+   * @return - middle name
+   */
   public String getCommonMiddleName() {
     return commonMiddleName;
   }
 
+  /**
+   * @param commonMiddleName - middle name
+   */
   public void setCommonMiddleName(String commonMiddleName) {
     this.commonMiddleName = commonMiddleName;
   }
 
+  /**
+   * @return - last name
+   */
   public String getCommonLastName() {
     return commonLastName;
   }
 
+  /**
+   * @param commonLastName - last name
+   */
   public void setCommonLastName(String commonLastName) {
     this.commonLastName = commonLastName;
   }
 
+  /**
+   * @return - date of birth
+   */
   public Date getBirthDate() {
     return birthDate;
   }
 
+  /**
+   * @param birthDate - date of birth
+   */
   public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }

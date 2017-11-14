@@ -10,7 +10,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.core.Response;
@@ -25,6 +27,7 @@ import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.fixture.CmsDocReferralClientEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient.CmsDocReferralClientDetail;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient.CmsDocReferralClientDocument;
@@ -35,6 +38,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+@SuppressWarnings("javadoc")
 public class CmsDocReferralClientTest {
   private static final CmsDocReferralClientResource mockedCmsDocReferralClientResource =
       mock(CmsDocReferralClientResource.class);
@@ -95,10 +99,8 @@ public class CmsDocReferralClientTest {
 
   @Test
   public void equalsHashCodeWork() {
-    EqualsVerifier.forClass(CmsDocReferralClient.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .withIgnoredFields("messages")
-            .verify();
+    EqualsVerifier.forClass(CmsDocReferralClient.class).suppress(Warning.NONFINAL_FIELDS)
+        .withIgnoredFields("messages").verify();
   }
 
   /*
@@ -147,5 +149,29 @@ public class CmsDocReferralClientTest {
     return new CmsDocReferralClient("0131351421120020*JONESMF 00004", "MJS000.DOC", "2015-01-01",
         cd, details);
   }
+
+  @Test
+  public void testMultipleCmsDocReferralClientConstructor() throws Exception {
+    List<gov.ca.cwds.data.persistence.cms.CmsDocReferralClient> documents =
+        new ArrayList<gov.ca.cwds.data.persistence.cms.CmsDocReferralClient>();
+    gov.ca.cwds.data.persistence.cms.CmsDocReferralClient persistentDoc1 =
+        new CmsDocReferralClientEntityBuilder().build();
+    gov.ca.cwds.data.persistence.cms.CmsDocReferralClient persistentDoc2 =
+        new CmsDocReferralClientEntityBuilder().setReferralId("5678901ABC").build();
+    documents.add(persistentDoc1);
+    documents.add(persistentDoc2);
+    gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient domainDocument =
+        new gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient(documents);
+    assertThat(domainDocument.getId(), is(equalTo(persistentDoc1.getId())));
+  }
+
+  // @Test
+  // @Ignore
+  // public void testSerializedOutput()
+  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
+  // CmsDocReferralClient display = validCmsDocReferralClient();
+  // final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(display);
+  // System.out.println(expected);
+  // }
 
 }
