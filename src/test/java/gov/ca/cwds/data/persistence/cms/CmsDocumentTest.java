@@ -9,9 +9,12 @@ import static org.mockito.Mockito.mock;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class CmsDocumentTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
@@ -26,6 +29,21 @@ public class CmsDocumentTest {
   private String docName = "1234";
   private String compressionMethod = "CWSCMP01";
   private String baseBlob = "string";
+  Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
+  private CmsDocumentBlobSegment blobSegment;
+  private String docHandle = "0131351421120020*JONESMF 00004";
+  private String segmentSequence = "0001";
+  private String docBlob = "test document blob";
+
+  private String newCompressionMethod = "CMSXXX";
+  private String newDocAuth = "CWSD";
+  private String newDocDate = "2007-10-01";
+  private String newDocTime = "02:59:07";
+  private String newId = "0131351421120020*JONESMF 99999";
+  private String newDocServ = "D7706999";
+  private Long newDocLength = (long) 1111;
+  private String newDocName = "2345";
+  private Short newSegmentCount = 1244;
 
   /*
    * Constructor test
@@ -92,4 +110,40 @@ public class CmsDocumentTest {
     target.addBlobSegment(blobSegment);
   }
 
+  @Test
+  public void testGetBlobSegment() throws Exception {
+    blobSegment = new CmsDocumentBlobSegment(docHandle, segmentSequence, docBlob);
+    blobSegments.add(blobSegment);
+    CmsDocument persistent = new CmsDocument(id, segmentCount, docLength, docAuth, docServ,
+        df.parse(docDate), tf.parse(docTime), docName, compressionMethod);
+    persistent.setBlobSegments(blobSegments);
+    assertThat(persistent.getBlobSegments(), is(equalTo(blobSegments)));
+
+  }
+
+  @Test
+  public void testSetters() throws Exception {
+    blobSegment = new CmsDocumentBlobSegment(docHandle, segmentSequence, docBlob);
+    blobSegments.add(blobSegment);
+    CmsDocument persistent = new CmsDocument(id, segmentCount, docLength, docAuth, docServ,
+        df.parse(docDate), tf.parse(docTime), docName, compressionMethod);
+    persistent.setCompressionMethod(newCompressionMethod);
+    assertThat(persistent.getCompressionMethod(), is(equalTo(newCompressionMethod)));
+    persistent.setDocAuth(newDocAuth);
+    assertThat(persistent.getDocAuth(), is(equalTo(newDocAuth)));
+    persistent.setDocDate(df.parse(newDocDate));
+    assertThat(persistent.getDocDate(), is(equalTo(df.parse(newDocDate))));
+    persistent.setDocTime(tf.parse(newDocTime));
+    assertThat(persistent.getDocTime(), is(equalTo(tf.parse(newDocTime))));
+    persistent.setId(newId);
+    assertThat(persistent.getId(), is(equalTo(newId)));
+    persistent.setDocServ(newDocServ);
+    assertThat(persistent.getDocServ(), is(equalTo(newDocServ)));
+    persistent.setDocLength(newDocLength);
+    assertThat(persistent.getDocLength(), is(equalTo(newDocLength)));
+    persistent.setDocName(newDocName);
+    assertThat(persistent.getDocName(), is(equalTo(newDocName)));
+    persistent.setSegmentCount(newSegmentCount);
+    assertThat(persistent.getSegmentCount(), is(equalTo(newSegmentCount)));
+  }
 }

@@ -16,11 +16,10 @@ import javax.validation.ValidatorFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
-import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+@SuppressWarnings("javadoc")
 public class CmsDocumentBlobSegmentTest {
 
   private static Validator validator;
@@ -28,6 +27,10 @@ public class CmsDocumentBlobSegmentTest {
   private String docHandle = "0131351421120020*JONESMF 00004";
   private String segmentSequence = "0001";
   private String docBlob = "test document blob";
+
+  private String newDocBlob = "new test document blob";
+  private String newDocHandle = "0131351421120020*JONESMF 99999";
+  private String newSegmentSequence = "0002";
 
   @BeforeClass
   public static void setUp() {
@@ -171,5 +174,16 @@ public class CmsDocumentBlobSegmentTest {
     VarargPrimaryKey pk = new VarargPrimaryKey(docHandle, segmentSequence);
     CmsDocumentBlobSegment blob = new CmsDocumentBlobSegment(docHandle, segmentSequence, docBlob);
     assertThat(blob.getPrimaryKey().toString(), is(equalTo(pk.toString())));
+  }
+
+  @Test
+  public void tesSetters() throws Exception {
+    CmsDocumentBlobSegment blob = new CmsDocumentBlobSegment(docHandle, segmentSequence, docBlob);
+    blob.setDocBlob(newDocBlob);
+    assertThat(blob.getDocBlob(), is(equalTo(newDocBlob)));
+    blob.setDocHandle(newDocHandle);
+    assertThat(blob.getDocHandle(), is(equalTo(newDocHandle)));
+    blob.setSegmentSequence(newSegmentSequence);
+    assertThat(blob.getSegmentSequence(), is(equalTo(newSegmentSequence)));
   }
 }

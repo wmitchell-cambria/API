@@ -65,7 +65,7 @@ public class StaffPersonCaseLoadTest {
     assertThat(builder.getFkStaffPerson(), is(equalTo(persistent.getFkStaffPerson())));
     assertThat(builder.getStartDate(), is(equalTo(df.format(persistent.getStartDate()))));
     assertThat(builder.getThirdId(), is(equalTo(persistent.getThirdId())));
-
+    assertThat(builder.getThirdId(), is(equalTo(persistent.getPrimaryKey())));
   }
 }
 

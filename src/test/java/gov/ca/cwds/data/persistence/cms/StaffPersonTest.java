@@ -78,5 +78,6 @@ public class StaffPersonTest {
     assertThat(persistent.getCwsOfficeAddress(), is(equalTo(cwsOfficeAddress)));
     assertThat(persistent.getEmailAddress(), is(equalTo(emailAddress)));
     assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
+    assertThat(persistent.getPrimaryKey(), is(equalTo(id)));
   }
 }
