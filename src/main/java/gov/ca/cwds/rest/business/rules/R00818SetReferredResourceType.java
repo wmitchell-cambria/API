@@ -17,6 +17,8 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  */
 public class R00818SetReferredResourceType implements RuleValidatator {
 
+  private static final short EVALUATE_OUT = 1519;
+
   private ScreeningToReferral screeningToReferral;
 
   /**
@@ -30,7 +32,7 @@ public class R00818SetReferredResourceType implements RuleValidatator {
   @Override
   public boolean isValid() {
     Boolean referredToResourceType = Boolean.FALSE;
-    if (screeningToReferral.getResponseTime() == 1519) {
+    if (screeningToReferral.getResponseTime() == EVALUATE_OUT) {
       referredToResourceType = Boolean.TRUE;
     }
     return referredToResourceType;

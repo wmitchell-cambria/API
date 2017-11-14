@@ -269,14 +269,16 @@ public class ReferralService implements
         convertLogicalIdToSystemCodeFor(screeningToReferral.getIncidentCounty(), "GVR_ENTC");
     Short agencyCode = convertLimitedAccessAgencyToNumericCode(screeningToReferral);
 
+    boolean referredToResourceType =
+        new R00818SetReferredResourceType(screeningToReferral).isValid();
+
     return gov.ca.cwds.rest.api.domain.cms.Referral.createWithDefaults(
         ParticipantValidator.anonymousReporter(screeningToReferral),
         screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
         screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
         govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(),
-        new R00818SetReferredResourceType(screeningToReferral).isValid() ? (short) 3225 : 0,
+        screeningToReferral.getResponseTime(), referredToResourceType ? (short) 3225 : 0,
         allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
         screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,

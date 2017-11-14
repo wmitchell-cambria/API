@@ -25,6 +25,10 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  */
 public class R00824SetDispositionCode implements RuleValidatator {
 
+  private static final int APPROVED = 122;
+  private static final int ADULT = 19;
+  private static final short EVALUATE_OUT = 1519;
+
   private ScreeningToReferral screeningToReferral;
   private Participant incomingParticipant;
 
@@ -41,17 +45,17 @@ public class R00824SetDispositionCode implements RuleValidatator {
 
   @Override
   public boolean isValid() {
-    return clientAge() < 19 && screeningToReferral.getResponseTime() == 1519
-        && screeningToReferral.getApprovalStatus() == 122;
+    return clientAge() < ADULT && screeningToReferral.getResponseTime() == EVALUATE_OUT
+        && screeningToReferral.getApprovalStatus() == APPROVED;
   }
 
   private int clientAge() {
     String date = screeningToReferral.getStartedAt().split("T")[0];
     String dob = incomingParticipant.getDateOfBirth();
     DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-    DateTime time1 = formatter.parseDateTime(date);
-    DateTime time2 = formatter.parseDateTime(dob);
-    return Years.yearsBetween(time1, time2).getYears();
+    DateTime receivedDate = formatter.parseDateTime(date);
+    DateTime clientDob = formatter.parseDateTime(dob);
+    return Years.yearsBetween(receivedDate, clientDob).getYears();
   }
 
 }
