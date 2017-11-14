@@ -26,6 +26,12 @@ public class CmsDocReferralClientTest {
   private String addressType = "Home";
 
   @Test
+  public void defaultConstructorTest() throws Exception {
+    CmsDocReferralClient document = new CmsDocReferralClient();
+    assertThat(document.getClass(), is(equalTo(CmsDocReferralClient.class)));
+  }
+
+  @Test
   public void constructorTest() throws Exception {
     CmsDocReferralClient document =
         new CmsDocReferralClient(docHandle, referralId, clientId, commonFirstName, commonMiddleName,
@@ -66,11 +72,18 @@ public class CmsDocReferralClientTest {
     String newNameType = "also know as";
     String newAddress = "123 First St";
     String newAddressType = "School";
+    String newDocName = "new doc name";
+    Date newDocAddedDate = DomainChef.uncookDateString("2002-10-31");
+
     CmsDocReferralClient document =
         new CmsDocReferralClient(docHandle, referralId, clientId, commonFirstName, commonMiddleName,
             commonLastName, birthDate, otherName, nameType, address, addressType);
     document.setDocHandle(newDocHandle);
     assertThat(document.getDocHandle(), is(equalTo(newDocHandle)));
+    document.setDocName(newDocName);
+    assertThat(document.getDocName(), is(equalTo(newDocName)));
+    document.setDocAddedDate(newDocAddedDate);
+    assertThat(document.getDocAddedDate(), is(equalTo(newDocAddedDate)));
     document.setReferlId(newReferralId);
     assertThat(document.getReferlId(), is(equalTo(newReferralId)));
     document.setClientId(newClientId);
