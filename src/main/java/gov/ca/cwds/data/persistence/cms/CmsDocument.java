@@ -123,7 +123,6 @@ public class CmsDocument extends CmsPersistentObject {
     this.docLength = cmsDocument.getDocLength();
     this.docTime = DomainChef.uncookTimeString(cmsDocument.getDocTime());
     this.compressionMethod = cmsDocument.getCompressionMethod();
-
   }
 
   /**

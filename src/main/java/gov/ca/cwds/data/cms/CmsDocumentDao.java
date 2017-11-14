@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
 /**
- * Data Access Object (DAO) for legacy CMS documents.
+ * Data Access Object (DAO) for compressed, legacy CMS documents.
  * 
  * @author CWDS API Team
  */
@@ -32,9 +32,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
 
   /**
-   * Constructor
+   * Constructor.
    * 
-   * @param sessionFactory The sessionFactory
+   * @param sessionFactory Hibernate session factory
    */
   @Inject
   public CmsDocumentDao(@CmsSessionFactory SessionFactory sessionFactory) {
@@ -83,13 +83,13 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     CmsPKCompressor pk = new CmsPKCompressor();
 
     try {
-      StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
+      final StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         buf.append(seg.getDocBlob().trim());
       }
 
       final byte[] bytes = pk.decompressHex(buf.toString());
-      LOGGER.info("DAO: bytes len={}", bytes.length);
+      LOGGER.debug("DAO: bytes len={}", bytes.length);
       retval = DatatypeConverter.printBase64Binary(bytes);
     } catch (Exception e) {
       LOGGER.error("ERROR DECOMPRESSING PK! {}", e.getMessage());
@@ -111,17 +111,17 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
     File src = null;
     File tgt = null;
-    try{
+    try {
       src = File.createTempFile("src", ".lzw");
       src.deleteOnExit();
       tgt = File.createTempFile("tgt", ".doc");
       tgt.deleteOnExit();
 
-    } catch (IOException e){
+    } catch (IOException e) {
       errorDecompressing(e);
     }
 
-    try ( FileOutputStream fos = new FileOutputStream(src); ){
+    try (FileOutputStream fos = new FileOutputStream(src);) {
 
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         final byte[] bytes = DatatypeConverter.parseHexBinary(seg.getDocBlob().trim());
@@ -132,23 +132,22 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       // TODO: Trap std::exception in shared library and return error code.
       // The LZW library currently returns a blank when decompression fails, for safety, since
       // unhandled C++ exceptions kill the JVM.
-      LZWEncoder lzw = new LZWEncoder();
+      final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
 
       retval =
           DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
 
       // For security reasons, remove temporary documents immediately.
-      // TODO: pass bytes to C++ library instead of file names.
-      boolean srcDeletedSuccessfully = src.delete();
-      if(!srcDeletedSuccessfully){
-        LOGGER.warn("Unable to delete compressed file {}", src.getAbsolutePath() );
+      // OPTION: pass bytes to C++ library instead of file names.
+      final boolean srcDeletedSuccessfully = src.delete();
+      if (!srcDeletedSuccessfully) {
+        LOGGER.warn("Unable to delete compressed file {}", src.getAbsolutePath());
       }
 
-      boolean tgtDeletedSuccessfully = tgt.delete();
-
-      if(!tgtDeletedSuccessfully){
-        LOGGER.warn("Unable to delete doc file {}", tgt.getAbsolutePath() );
+      final boolean tgtDeletedSuccessfully = tgt.delete();
+      if (!tgtDeletedSuccessfully) {
+        LOGGER.warn("Unable to delete doc file {}", tgt.getAbsolutePath());
       }
 
     } catch (Exception e) {
@@ -158,8 +157,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     return retval;
   }
 
-  private void errorDecompressing(Exception e){
-    LOGGER.error("ERROR DECOMPRESSING LZW! {}",e.getMessage(), e);
+  private void errorDecompressing(Exception e) {
+    LOGGER.error("ERROR DECOMPRESSING LZW! {}", e.getMessage(), e);
     throw new ServiceException("ERROR DECOMPRESSING LZW! " + e.getMessage(), e);
   }
 
