@@ -40,13 +40,11 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   @Override
   public CmsDocument find(String primaryKey) {
     LOGGER.info("primaryKey={}", primaryKey);
-
     CmsDocument retval = null;
     String base64Doc;
 
     gov.ca.cwds.data.persistence.cms.CmsDocument doc = dao.find(primaryKey);
     if (doc != null) {
-      // Trim strings.
       doc.setCompressionMethod(
           doc.getCompressionMethod() != null ? doc.getCompressionMethod().trim() : "");
       doc.setDocAuth(doc.getDocAuth() != null ? doc.getDocAuth().trim() : "");

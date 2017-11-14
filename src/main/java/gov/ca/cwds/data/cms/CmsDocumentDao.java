@@ -42,7 +42,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   }
 
   /**
-   * De-compress (inflate) a document by determining the compression type, assembling blob segments,
+   * Decompress (inflate) a document by determining the compression type, assembling blob segments,
    * and calling appropriate library.
    * 
    * @param doc LZW or PK archive to decompress
@@ -122,7 +122,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     }
 
     try (FileOutputStream fos = new FileOutputStream(src);) {
-
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         final byte[] bytes = DatatypeConverter.parseHexBinary(seg.getDocBlob().trim());
         fos.write(bytes, 0, bytes.length);
@@ -149,7 +148,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       if (!tgtDeletedSuccessfully) {
         LOGGER.warn("Unable to delete doc file {}", tgt.getAbsolutePath());
       }
-
     } catch (Exception e) {
       errorDecompressing(e);
     }
