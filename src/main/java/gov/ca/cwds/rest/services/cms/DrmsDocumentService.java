@@ -13,6 +13,7 @@ import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
@@ -28,20 +29,16 @@ public class DrmsDocumentService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(DrmsDocumentService.class);
 
   private DrmsDocumentDao drmsDocumentDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   /**
    * @param drmsDocumentDao {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.DrmsDocument} objects
    *        {@link gov.ca.cwds.data.persistence.cms.DrmsDocument} objects
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    */
   @Inject
-  public DrmsDocumentService(DrmsDocumentDao drmsDocumentDao,
-      StaffPersonIdRetriever staffPersonIdRetriever) {
+  public DrmsDocumentService(DrmsDocumentDao drmsDocumentDao) {
     super();
     this.drmsDocumentDao = drmsDocumentDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
   }
 
   /**
@@ -55,9 +52,10 @@ public class DrmsDocumentService implements
     gov.ca.cwds.rest.api.domain.cms.DrmsDocument drmsDocument = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
-      DrmsDocument managed =
-          new DrmsDocument(CmsKeyIdGenerator.generate(lastUpdatedId), drmsDocument, lastUpdatedId);
+      DrmsDocument managed = new DrmsDocument(
+          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), drmsDocument,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       managed = drmsDocumentDao.create(managed);
       return new PostedDrmsDocument(managed);
     } catch (EntityExistsException e) {
@@ -104,9 +102,9 @@ public class DrmsDocumentService implements
   public String generateDrmsDocumentId(MessageBuilder messageBuilder) {
     PostedDrmsDocument postedDrmsDocument = null;
     try {
-      String staffPersonId = staffPersonIdRetriever.getStaffPersonId();
       gov.ca.cwds.rest.api.domain.cms.DrmsDocument drmsDocument =
-          gov.ca.cwds.rest.api.domain.cms.DrmsDocument.createDefaults(staffPersonId);
+          gov.ca.cwds.rest.api.domain.cms.DrmsDocument
+              .createDefaults(RequestExecutionContext.instance().getStaffId());
       postedDrmsDocument = create(drmsDocument);
     } catch (ServiceException e) {
       String message = e.getMessage();

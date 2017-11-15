@@ -91,7 +91,7 @@ public class DrmsDocumentTest {
         fingerprintStaffPerson, staffPersonId, handleName);
 
     gov.ca.cwds.data.persistence.cms.DrmsDocument persistent =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, domain, "lastUpdatedId", new Date());
 
     DrmsDocument totest = new DrmsDocument(persistent);
     assertThat(totest.getCreationTimeStamp(), is(equalTo(persistent.getCreationTimeStamp())));

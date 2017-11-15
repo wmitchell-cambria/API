@@ -78,10 +78,11 @@ public class DrmsDocument extends CmsPersistentObject {
    * @param id The id
    * @param persisedDrmsDocument The domain object to construct this object from
    * @param lastUpdatedId The id of the last person to update this object
+   * @param lastUpdatedTime the time when this object is last updated
    */
   public DrmsDocument(String id, gov.ca.cwds.rest.api.domain.cms.DrmsDocument persisedDrmsDocument,
-      String lastUpdatedId) {
-    super(lastUpdatedId);
+      String lastUpdatedId, Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
     this.id = id;
     this.creationTimeStamp = persisedDrmsDocument.getCreationTimeStamp();
     this.drmsDocumentTemplateId = persisedDrmsDocument.getDrmsDocumentTemplateId();

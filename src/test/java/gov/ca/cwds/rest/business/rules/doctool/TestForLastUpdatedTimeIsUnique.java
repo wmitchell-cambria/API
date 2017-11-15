@@ -83,7 +83,6 @@ import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
@@ -143,7 +142,6 @@ public class TestForLastUpdatedTimeIsUnique {
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentDao drmsDocumentDao;
   private AssignmentDao assignmentDao;
@@ -187,14 +185,13 @@ public class TestForLastUpdatedTimeIsUnique {
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
 
     longTextDao = mock(LongTextDao.class);
     longTextService = new LongTextService(longTextDao);
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
-    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao, staffPersonIdRetriever);
+    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     assignmentDao = mock(AssignmentDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
@@ -309,7 +306,8 @@ public class TestForLastUpdatedTimeIsUnique {
     DrmsDocument drmsDocumentDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocumentToCreate =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABD1234568", drmsDocumentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABD1234568", drmsDocumentDomain, "ABC",
+            new Date());
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
         .thenReturn(drmsDocumentToCreate);
 

@@ -106,7 +106,8 @@ public class RIReporterTest {
 
     DrmsDocument drmsDocumentDomain = new DrmsDocumentResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocument =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5",
+            new Date());
 
     when(referralDao.find(any())).thenReturn(referral);
     when(lawEnforcementDao.find(any())).thenReturn(null);
@@ -147,7 +148,8 @@ public class RIReporterTest {
 
     DrmsDocument drmsDocumentDomain = new DrmsDocumentResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocument =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5",
+            new Date());
 
     LawEnforcementEntity lawEnforcemnt = new LawEnforcementEntityBuilder().build();
 
@@ -170,7 +172,8 @@ public class RIReporterTest {
 
     DrmsDocument drmsDocumentDomain = new DrmsDocumentResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocument =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5",
+            new Date());
 
     LawEnforcementEntity lawEnforcemnt = new LawEnforcementEntityBuilder().build();
 
@@ -194,7 +197,8 @@ public class RIReporterTest {
 
     DrmsDocument drmsDocumentDomain = new DrmsDocumentResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocument =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5",
+            new Date());
 
     LawEnforcementEntity lawEnforcemnt = new LawEnforcementEntityBuilder().build();
 
@@ -218,7 +222,8 @@ public class RIReporterTest {
 
     DrmsDocument drmsDocumentDomain = new DrmsDocumentResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocument =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABC1234lll", drmsDocumentDomain, "0X5",
+            new Date());
 
     LawEnforcementEntity lawEnforcemnt = new LawEnforcementEntityBuilder().build();
 

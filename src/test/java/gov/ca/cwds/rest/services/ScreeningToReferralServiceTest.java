@@ -210,7 +210,7 @@ public class ScreeningToReferralServiceTest {
     StaffPersonIdRetriever staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
 
     DrmsDocumentDao drmsDocumentDao = mock(DrmsDocumentDao.class);
-    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao, staffPersonIdRetriever);
+    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     reminders = mock(Reminders.class);
 
@@ -412,7 +412,6 @@ public class ScreeningToReferralServiceTest {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setCrossReports(new HashSet<>()).createScreeningToReferral();
 
-    when(drmsDocumentService.create(any())).thenReturn(null);
     screeningToReferralService = new MockedScreeningToReferralServiceBuilder()
         .addReferralService(referralService).createScreeningToReferralService();
     Response response = screeningToReferralService.create(referral);

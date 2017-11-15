@@ -83,7 +83,6 @@ import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
@@ -144,7 +143,6 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentDao drmsDocumentDao;
   private SsaName3Dao ssaName3Dao;
@@ -171,8 +169,6 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
 
     clientDao = mock(ClientDao.class);
@@ -228,7 +224,7 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     longTextService = new LongTextService(longTextDao);
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
-    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao, staffPersonIdRetriever);
+    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
@@ -287,7 +283,8 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
     DrmsDocument drmsDocumentDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
     gov.ca.cwds.data.persistence.cms.DrmsDocument drmsDocumentToCreate =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABD1234568", drmsDocumentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("ABD1234568", drmsDocumentDomain, "ABC",
+            new Date());
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
         .thenReturn(drmsDocumentToCreate);
 

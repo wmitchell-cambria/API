@@ -13,6 +13,7 @@ import gov.ca.cwds.data.cms.ClientCollateralDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.cms.ClientCollateral;
 import gov.ca.cwds.rest.api.domain.cms.PostedClientCollateral;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientCollateral;
@@ -28,7 +29,6 @@ public class ClientCollateralService
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientCollateralService.class);
 
   private ClientCollateralDao clientCollateralDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIClientCollateral ri;
 
   /**
@@ -36,14 +36,11 @@ public class ClientCollateralService
    * 
    * @param clientCollateralDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.ClientCollateral} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    * @param ri referential integrity checker
    */
   @Inject
-  public ClientCollateralService(ClientCollateralDao clientCollateralDao,
-      StaffPersonIdRetriever staffPersonIdRetriever, RIClientCollateral ri) {
+  public ClientCollateralService(ClientCollateralDao clientCollateralDao, RIClientCollateral ri) {
     this.clientCollateralDao = clientCollateralDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
     this.ri = ri;
   }
 
@@ -82,10 +79,11 @@ public class ClientCollateralService
     ClientCollateral clientCollateral = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       gov.ca.cwds.data.persistence.cms.ClientCollateral managed =
           new gov.ca.cwds.data.persistence.cms.ClientCollateral(
-              CmsKeyIdGenerator.generate(lastUpdatedId), clientCollateral, lastUpdatedId);
+              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              clientCollateral, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = clientCollateralDao.create(managed);
       return new PostedClientCollateral(managed);
     } catch (EntityExistsException e) {

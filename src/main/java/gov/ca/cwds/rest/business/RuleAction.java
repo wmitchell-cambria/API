@@ -6,5 +6,9 @@ package gov.ca.cwds.rest.business;
  * Validators perform some sort of Business Rule action and does not return a value.
  */
 public interface RuleAction {
+
+  /**
+   * 
+   */
   public void execute();
 }

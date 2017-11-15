@@ -100,7 +100,7 @@ public class ScreeningToReferralService implements CrudsService {
    * @param participantService CMS participantService service
    * @param validator - the validator
    * @param referralDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
-   *        objects. {@link gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever} objects.
+   *        objects.
    * @param messageBuilder log message
    * @param allegationPerpetratorHistoryService the allegationPerpetratorHistoryService
    * @param reminders - reminders

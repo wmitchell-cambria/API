@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -61,7 +62,7 @@ public class DrmsDocumentTest implements PersistentTestTemplate {
 
     gov.ca.cwds.rest.api.domain.cms.DrmsDocument domain = new DrmsDocumentResourceBuilder().build();
 
-    DrmsDocument persistent = new DrmsDocument(id, domain, lastUpdatedId);
+    DrmsDocument persistent = new DrmsDocument(id, domain, lastUpdatedId, new Date());
 
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getCreationTimeStamp(), is(equalTo(domain.getCreationTimeStamp())));

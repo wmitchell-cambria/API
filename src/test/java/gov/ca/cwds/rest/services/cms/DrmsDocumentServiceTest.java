@@ -9,6 +9,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import javax.persistence.EntityExistsException;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -26,6 +28,7 @@ import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.jackson.Jackson;
 
@@ -37,7 +40,6 @@ public class DrmsDocumentServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentDao drmsDocumentDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -46,9 +48,9 @@ public class DrmsDocumentServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("02f");
     drmsDocumentDao = mock(DrmsDocumentDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao, staffPersonIdRetriever);
+    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
   }
 
   // create
@@ -74,7 +76,8 @@ public class DrmsDocumentServiceTest {
     DrmsDocument drmsDocumentDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
     gov.ca.cwds.data.persistence.cms.DrmsDocument toCreate =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, drmsDocumentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, drmsDocumentDomain, "ABC",
+            new Date());
 
     DrmsDocument request = new DrmsDocument(toCreate);
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
@@ -91,7 +94,8 @@ public class DrmsDocumentServiceTest {
     DrmsDocument drmsDocumentDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
     gov.ca.cwds.data.persistence.cms.DrmsDocument toCreate =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, drmsDocumentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, drmsDocumentDomain, "ABC",
+            new Date());
 
     DrmsDocument request = new DrmsDocument(toCreate);
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
@@ -108,7 +112,8 @@ public class DrmsDocumentServiceTest {
     DrmsDocument drmsDocumentDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
     gov.ca.cwds.data.persistence.cms.DrmsDocument toCreate =
-        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, drmsDocumentDomain, "ABC");
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument(id, drmsDocumentDomain, "ABC",
+            new Date());
 
     DrmsDocument request = new DrmsDocument(toCreate);
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
@@ -126,7 +131,8 @@ public class DrmsDocumentServiceTest {
       DrmsDocument drmsDocumentDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
       gov.ca.cwds.data.persistence.cms.DrmsDocument toCreate =
-          new gov.ca.cwds.data.persistence.cms.DrmsDocument(null, drmsDocumentDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.DrmsDocument(null, drmsDocumentDomain, "ABC",
+              new Date());
 
       when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
           .thenReturn(toCreate);
@@ -144,7 +150,8 @@ public class DrmsDocumentServiceTest {
       DrmsDocument drmsDocumentDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
       gov.ca.cwds.data.persistence.cms.DrmsDocument toCreate =
-          new gov.ca.cwds.data.persistence.cms.DrmsDocument("  ", drmsDocumentDomain, "ABC");
+          new gov.ca.cwds.data.persistence.cms.DrmsDocument("  ", drmsDocumentDomain, "ABC",
+              new Date());
 
       when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
           .thenReturn(toCreate);

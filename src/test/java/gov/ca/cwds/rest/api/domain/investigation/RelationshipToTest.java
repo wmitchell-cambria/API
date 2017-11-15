@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class RelationshipToTest {
         new ClientRelationshipResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.ClientRelationship clientRelationship =
         new gov.ca.cwds.data.persistence.cms.ClientRelationship("1234567ABC",
-            domainClientRelationship, "0XA");
+            domainClientRelationship, "0XA", new Date());
 
     Client client = new ClientEntityBuilder().build();
 

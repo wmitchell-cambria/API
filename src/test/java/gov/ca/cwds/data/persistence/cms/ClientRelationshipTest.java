@@ -4,6 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+
+import java.util.Date;
+
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -42,7 +45,7 @@ public class ClientRelationshipTest {
         new gov.ca.cwds.rest.api.domain.cms.ClientRelationship("N", (short) 172, "2017-01-07",
             "SECCLIENT", "PRICLIENT", "Y", "2017-01-07");
 
-    ClientRelationship persistent = new ClientRelationship(id, domain, lastUpdatedId);
+    ClientRelationship persistent = new ClientRelationship(id, domain, lastUpdatedId, new Date());
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getEndDate(), is(equalTo(DomainChef.uncookDateString(endDate))));
     assertThat(persistent.getAbsentParentCode(), is(equalTo(absentParentCode)));

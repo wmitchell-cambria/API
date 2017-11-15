@@ -9,6 +9,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import javax.persistence.EntityExistsException;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,6 +27,7 @@ import gov.ca.cwds.fixture.ClientCollateralResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.ClientCollateral;
 import gov.ca.cwds.rest.api.domain.cms.PostedClientCollateral;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientCollateral;
 
@@ -35,7 +38,6 @@ public class ClientCollateralServiceTest {
 
   private ClientCollateralService clientCollateralService;
   private ClientCollateralDao clientCollateralDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIClientCollateral ri;
 
   @Rule
@@ -44,12 +46,11 @@ public class ClientCollateralServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     clientCollateralDao = mock(ClientCollateralDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     ri = mock(RIClientCollateral.class);
 
-    clientCollateralService =
-        new ClientCollateralService(clientCollateralDao, staffPersonIdRetriever, ri);
+    clientCollateralService = new ClientCollateralService(clientCollateralDao, ri);
   }
 
   // find test
@@ -59,7 +60,7 @@ public class ClientCollateralServiceTest {
     String id = "ABC";
     PostedClientCollateral expected = validClientCollateralDomainObject();
     gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
-        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, expected, "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, expected, "0X5", new Date());
 
     when(clientCollateralDao.find(id)).thenReturn(clientCollateral);
     ClientCollateral found = clientCollateralService.find(id);
@@ -111,8 +112,8 @@ public class ClientCollateralServiceTest {
     ClientCollateral clientCollateralDomain =
         new ClientCollateralResourceBuilder().buildClientCollateral();
     gov.ca.cwds.data.persistence.cms.ClientCollateral toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, clientCollateralDomain,
-            "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, clientCollateralDomain, "ABC",
+            new Date());
 
     ClientCollateral request = new ClientCollateral(toCreate);
     when(clientCollateralDao.create(any(gov.ca.cwds.data.persistence.cms.ClientCollateral.class)))
@@ -129,8 +130,8 @@ public class ClientCollateralServiceTest {
     ClientCollateral clientCollateralDomain =
         new ClientCollateralResourceBuilder().buildClientCollateral();
     gov.ca.cwds.data.persistence.cms.ClientCollateral toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, clientCollateralDomain,
-            "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, clientCollateralDomain, "ABC",
+            new Date());
 
     ClientCollateral request = new ClientCollateral(toCreate);
     when(clientCollateralDao.create(any(gov.ca.cwds.data.persistence.cms.ClientCollateral.class)))
@@ -147,8 +148,8 @@ public class ClientCollateralServiceTest {
     ClientCollateral clientCollateralDomain =
         new ClientCollateralResourceBuilder().buildClientCollateral();
     gov.ca.cwds.data.persistence.cms.ClientCollateral toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, clientCollateralDomain,
-            "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral(id, clientCollateralDomain, "ABC",
+            new Date());
 
     ClientCollateral request = new ClientCollateral(toCreate);
     when(clientCollateralDao.create(any(gov.ca.cwds.data.persistence.cms.ClientCollateral.class)))
@@ -167,7 +168,7 @@ public class ClientCollateralServiceTest {
           new ClientCollateralResourceBuilder().buildClientCollateral();
       gov.ca.cwds.data.persistence.cms.ClientCollateral toCreate =
           new gov.ca.cwds.data.persistence.cms.ClientCollateral("   ", clientCollateralDomain,
-              "2017-01-07");
+              "ABC", new Date());
 
       when(clientCollateralDao.create(any(gov.ca.cwds.data.persistence.cms.ClientCollateral.class)))
           .thenReturn(toCreate);
@@ -187,8 +188,8 @@ public class ClientCollateralServiceTest {
       ClientCollateral clientCollateralDomain =
           new ClientCollateralResourceBuilder().buildClientCollateral();
       gov.ca.cwds.data.persistence.cms.ClientCollateral toCreate =
-          new gov.ca.cwds.data.persistence.cms.ClientCollateral(null, clientCollateralDomain,
-              "2017-01-07");
+          new gov.ca.cwds.data.persistence.cms.ClientCollateral(null, clientCollateralDomain, "ABC",
+              new Date());
 
       when(clientCollateralDao.create(any(gov.ca.cwds.data.persistence.cms.ClientCollateral.class)))
           .thenReturn(toCreate);
@@ -208,8 +209,8 @@ public class ClientCollateralServiceTest {
       ClientCollateral clientCollateralDomain =
           new ClientCollateralResourceBuilder().buildClientCollateral();
       gov.ca.cwds.data.persistence.cms.ClientCollateral toCreate =
-          new gov.ca.cwds.data.persistence.cms.ClientCollateral("", clientCollateralDomain,
-              "2017-01-07");
+          new gov.ca.cwds.data.persistence.cms.ClientCollateral("", clientCollateralDomain, "ABC",
+              new Date());
 
       when(clientCollateralDao.create(any(gov.ca.cwds.data.persistence.cms.ClientCollateral.class)))
           .thenReturn(toCreate);

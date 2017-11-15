@@ -66,7 +66,7 @@ public class RIClientCollateralTest {
         new ClientCollateralResourceBuilder().buildClientCollateral();
     gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
         new gov.ca.cwds.data.persistence.cms.ClientCollateral("ABC1234567", domainClientCollateral,
-            "0X5");
+            "0X5", new Date());
 
     when(clientDao.find(any(String.class))).thenReturn(null);
     RIClientCollateral target = new RIClientCollateral(clientDao, collateralIndividualDao);
@@ -83,7 +83,7 @@ public class RIClientCollateralTest {
         new ClientCollateralResourceBuilder().buildClientCollateral();
     gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
         new gov.ca.cwds.data.persistence.cms.ClientCollateral("ABC1234567", domainClientCollateral,
-            "0X5");
+            "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
@@ -105,7 +105,7 @@ public class RIClientCollateralTest {
         new ClientCollateralResourceBuilder().buildClientCollateral();
     gov.ca.cwds.data.persistence.cms.ClientCollateral clientCollateral =
         new gov.ca.cwds.data.persistence.cms.ClientCollateral("ABC1234567", domainClientCollateral,
-            "0X5");
+            "0X5", new Date());
 
     Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =

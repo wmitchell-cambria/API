@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -111,10 +113,12 @@ public class ClientCollateral extends CmsPersistentObject {
    * @param thirdId unique key
    * @param clientCollateral the domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
+   * @param lastUpdatedTime the time when this object is last updated
    */
   public ClientCollateral(String thirdId,
-      gov.ca.cwds.rest.api.domain.cms.ClientCollateral clientCollateral, String lastUpdatedId) {
-    super(lastUpdatedId);
+      gov.ca.cwds.rest.api.domain.cms.ClientCollateral clientCollateral, String lastUpdatedId,
+      Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
     this.activeIndicator = clientCollateral.getActiveIndicator();
     this.collateralClientReporterRelationshipType =
         clientCollateral.getCollateralClientReporterRelationshipType();

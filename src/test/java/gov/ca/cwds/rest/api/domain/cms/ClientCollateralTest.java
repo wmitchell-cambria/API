@@ -7,17 +7,12 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.cms.ClientCollateralResource;
-import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import io.dropwizard.testing.junit.ResourceTestRule;
+
+import java.util.Date;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +20,13 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
+
+import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.resources.cms.ClientCollateralResource;
+import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
+import io.dropwizard.testing.junit.ResourceTestRule;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class ClientCollateralTest {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CLIENT_COLLATERALS + "/";
@@ -44,8 +46,8 @@ public class ClientCollateralTest {
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
   @ClassRule
-  public static final ResourceTestRule resources = ResourceTestRule.builder()
-      .addResource(mockedResource).build();
+  public static final ResourceTestRule resources =
+      ResourceTestRule.builder().addResource(mockedResource).build();
   private ClientCollateral validClientCollateral = validClientCollateral();
 
 
@@ -58,8 +60,8 @@ public class ClientCollateralTest {
 
   @Before
   public void setup() {
-    when(mockedResource.create(eq(validClientCollateral))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    when(mockedResource.create(eq(validClientCollateral)))
+        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
   @Test
@@ -70,7 +72,8 @@ public class ClientCollateralTest {
             commentDescription, clientId, collateralIndividualId);
 
     gov.ca.cwds.data.persistence.cms.ClientCollateral pt =
-        new gov.ca.cwds.data.persistence.cms.ClientCollateral(thirdId, domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.ClientCollateral(thirdId, domain, "lastUpdatedId",
+            new Date());
 
     assertThat(domain.getActiveIndicator(), is(equalTo(pt.getActiveIndicator())));
     assertThat(domain.getCollateralClientReporterRelationshipType(),
@@ -117,9 +120,8 @@ public class ClientCollateralTest {
 
   @Test
   public void successfulWithOptionalsNotIncluded() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType, null,
-            clientId, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, null, clientId, collateralIndividualId);
     assertThat(
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
@@ -131,9 +133,8 @@ public class ClientCollateralTest {
    */
   @Test
   public void failsWhenActiveIndicatorNull() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(null, collateralClientReporterRelationshipType, commentDescription,
-            clientId, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(null, collateralClientReporterRelationshipType,
+        commentDescription, clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -144,9 +145,8 @@ public class ClientCollateralTest {
 
   @Test
   public void failsWhenActiveIndicatorEmpty() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral("", collateralClientReporterRelationshipType, commentDescription,
-            clientId, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral("", collateralClientReporterRelationshipType,
+        commentDescription, clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -157,9 +157,8 @@ public class ClientCollateralTest {
 
   @Test
   public void failsWhenActiveIndicatorTooLong() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral("AB", collateralClientReporterRelationshipType, commentDescription,
-            clientId, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral("AB", collateralClientReporterRelationshipType,
+        commentDescription, clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -173,31 +172,29 @@ public class ClientCollateralTest {
    */
   @Test
   public void failsWhenCollateralClientReporterRelationshipTypeNull() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, null, commentDescription, clientId,
-            collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator, null, commentDescription,
+        clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf(
-            "collateralClientReporterRelationshipType may not be null"),
+        response.readEntity(String.class)
+            .indexOf("collateralClientReporterRelationshipType may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
   public void failsWhenCollateralClientReporterRelationshipTypeEmpty() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, null, commentDescription, clientId,
-            collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator, null, commentDescription,
+        clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
-        response.readEntity(String.class).indexOf(
-            "collateralClientReporterRelationshipType may not be null"),
+        response.readEntity(String.class)
+            .indexOf("collateralClientReporterRelationshipType may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -206,9 +203,8 @@ public class ClientCollateralTest {
    */
   @Test
   public void successWhenCommentDescriptionNull() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType, null,
-            clientId, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, null, clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -218,9 +214,8 @@ public class ClientCollateralTest {
 
   @Test
   public void successWhenCommentDescriptionEmpty() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType, "",
-            clientId, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, "", clientId, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -237,9 +232,8 @@ public class ClientCollateralTest {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf(
-            "commentDescription size must be between 0 and 50"), is(greaterThanOrEqualTo(0)));
+    assertThat(response.readEntity(String.class)
+        .indexOf("commentDescription size must be between 0 and 50"), is(greaterThanOrEqualTo(0)));
   }
 
   /*
@@ -247,9 +241,8 @@ public class ClientCollateralTest {
    */
   @Test
   public void failsWhenClientIdNull() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType,
-            commentDescription, null, collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, commentDescription, null, collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -260,9 +253,8 @@ public class ClientCollateralTest {
 
   @Test
   public void failsWhenClientIdEmpty() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType,
-            commentDescription, "", collateralIndividualId);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, commentDescription, "", collateralIndividualId);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -289,44 +281,38 @@ public class ClientCollateralTest {
    */
   @Test
   public void failsWhenCollateralIndividualIdNull() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType,
-            commentDescription, clientId, null);
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, commentDescription, clientId, null);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("collateralIndividualId may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("collateralIndividualId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
   public void failsWhenCollateralIndividualIdEmpty() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType,
-            commentDescription, clientId, "");
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, commentDescription, clientId, "");
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("collateralIndividualId may not be empty"),
+    assertThat(response.readEntity(String.class).indexOf("collateralIndividualId may not be empty"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
   public void failsWhenCollateralIndividualIdTooLong() throws Exception {
-    ClientCollateral toCreate =
-        new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType,
-            commentDescription, clientId, "123456789012");
+    ClientCollateral toCreate = new ClientCollateral(activeIndicator,
+        collateralClientReporterRelationshipType, commentDescription, clientId, "123456789012");
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf(
-            "collateralIndividualId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+    assertThat(response.readEntity(String.class).indexOf(
+        "collateralIndividualId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
   }
 
   /*

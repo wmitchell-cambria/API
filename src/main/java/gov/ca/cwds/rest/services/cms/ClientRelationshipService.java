@@ -13,6 +13,7 @@ import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.cms.PostedClientRelationship;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
@@ -27,20 +28,16 @@ public class ClientRelationshipService
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientRelationshipService.class);
 
   private ClientRelationshipDao clientRelationshipDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   /**
    * Constructor
    * 
    * @param clientRelationshipDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.ClientRelationship} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    */
   @Inject
-  public ClientRelationshipService(ClientRelationshipDao clientRelationshipDao,
-      StaffPersonIdRetriever staffPersonIdRetriever) {
+  public ClientRelationshipService(ClientRelationshipDao clientRelationshipDao) {
     this.clientRelationshipDao = clientRelationshipDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
   }
 
   /**
@@ -79,10 +76,11 @@ public class ClientRelationshipService
     ClientRelationship clientRelationship = request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       gov.ca.cwds.data.persistence.cms.ClientRelationship managed =
           new gov.ca.cwds.data.persistence.cms.ClientRelationship(
-              CmsKeyIdGenerator.generate(lastUpdatedId), clientRelationship, lastUpdatedId);
+              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              clientRelationship, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = clientRelationshipDao.create(managed);
       return new PostedClientRelationship(managed);
     } catch (EntityExistsException e) {

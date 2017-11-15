@@ -109,10 +109,12 @@ public class ClientRelationship extends CmsPersistentObject {
    * @param id unique key
    * @param clientRelationship the domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
+   * @param lastUpdatedTime the time when this object is last updated
    */
   public ClientRelationship(String id,
-      gov.ca.cwds.rest.api.domain.cms.ClientRelationship clientRelationship, String lastUpdatedId) {
-    super(lastUpdatedId);
+      gov.ca.cwds.rest.api.domain.cms.ClientRelationship clientRelationship, String lastUpdatedId,
+      Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
     this.absentParentCode = clientRelationship.getAbsentParentCode();
     this.clientRelationshipType = clientRelationship.getClientRelationshipType();
     this.endDate = DomainChef.uncookDateString(clientRelationship.getEndDate());

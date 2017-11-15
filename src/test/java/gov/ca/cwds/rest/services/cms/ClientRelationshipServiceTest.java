@@ -9,6 +9,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import javax.persistence.EntityExistsException;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,6 +27,7 @@ import gov.ca.cwds.fixture.ClientRelationshipResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.cms.PostedClientRelationship;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -42,11 +45,11 @@ public class ClientRelationshipServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     clientRelationshipDao = mock(ClientRelationshipDao.class);
     staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
 
-    clientRelationshipService =
-        new ClientRelationshipService(clientRelationshipDao, staffPersonIdRetriever);
+    clientRelationshipService = new ClientRelationshipService(clientRelationshipDao);
 
   }
 
@@ -57,7 +60,7 @@ public class ClientRelationshipServiceTest {
     String id = "ABC";
     PostedClientRelationship expected = validClientRelationshipDomainObject();
     gov.ca.cwds.data.persistence.cms.ClientRelationship clientRelationship =
-        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, expected, "0X5");
+        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, expected, "0X5", new Date());
 
     when(clientRelationshipDao.find(id)).thenReturn(clientRelationship);
 
@@ -110,8 +113,8 @@ public class ClientRelationshipServiceTest {
     String id = "ABC";
     ClientRelationship clientRelationshipDomain = new ClientRelationshipResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.ClientRelationship toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, clientRelationshipDomain,
-            "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, clientRelationshipDomain, "Abc",
+            new Date());
 
     ClientRelationship request = new ClientRelationship(toCreate);
 
@@ -130,8 +133,8 @@ public class ClientRelationshipServiceTest {
     String id = "ABC";
     ClientRelationship clientRelationshipDomain = new ClientRelationshipResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.ClientRelationship toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, clientRelationshipDomain,
-            "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, clientRelationshipDomain, "abc",
+            new Date());
 
     ClientRelationship request = new ClientRelationship(toCreate);
 
@@ -150,8 +153,8 @@ public class ClientRelationshipServiceTest {
     String id = "ABC";
     ClientRelationship clientRelationshipDomain = new ClientRelationshipResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.ClientRelationship toCreate =
-        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, clientRelationshipDomain,
-            "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.ClientRelationship(id, clientRelationshipDomain, "abc",
+            new Date());
 
     ClientRelationship request = new ClientRelationship(toCreate);
 
@@ -173,7 +176,7 @@ public class ClientRelationshipServiceTest {
       ClientRelationship clientRelationshipDomain = new ClientRelationshipResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.ClientRelationship toCreate =
           new gov.ca.cwds.data.persistence.cms.ClientRelationship("   ", clientRelationshipDomain,
-              "2017-01-07");
+              "Abc", new Date());
 
       when(clientRelationshipDao
           .create(any(gov.ca.cwds.data.persistence.cms.ClientRelationship.class)))
@@ -194,7 +197,7 @@ public class ClientRelationshipServiceTest {
       ClientRelationship clientRelationshipDomain = new ClientRelationshipResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.ClientRelationship toCreate =
           new gov.ca.cwds.data.persistence.cms.ClientRelationship(null, clientRelationshipDomain,
-              "2017-01-07");
+              "Abc", new Date());
 
       when(clientRelationshipDao
           .create(any(gov.ca.cwds.data.persistence.cms.ClientRelationship.class)))
@@ -215,7 +218,7 @@ public class ClientRelationshipServiceTest {
       ClientRelationship clientRelationshipDomain = new ClientRelationshipResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.ClientRelationship toCreate =
           new gov.ca.cwds.data.persistence.cms.ClientRelationship("", clientRelationshipDomain,
-              "2017-01-07");
+              "Abc", new Date());
 
       when(clientRelationshipDao
           .create(any(gov.ca.cwds.data.persistence.cms.ClientRelationship.class)))
