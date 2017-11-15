@@ -21,7 +21,6 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 import io.dropwizard.jackson.Jackson;
 
 /**
@@ -32,7 +31,6 @@ public class StaffPersonServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private StaffPersonService staffPersonService;
   private StaffPersonDao staffPersonDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -41,9 +39,7 @@ public class StaffPersonServiceTest {
   @Before
   public void setup() throws Exception {
     staffPersonDao = mock(StaffPersonDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-
-    staffPersonService = new StaffPersonService(staffPersonDao, staffPersonIdRetriever);
+    staffPersonService = new StaffPersonService(staffPersonDao);
 
   }
 

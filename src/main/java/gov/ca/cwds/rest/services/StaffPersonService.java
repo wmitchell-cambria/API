@@ -10,7 +10,6 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 
 /**
  * Business layer object to work on {@link StaffPerson}
@@ -22,20 +21,16 @@ public class StaffPersonService implements TypedCrudsService<String, StaffPerson
   private static final Logger LOGGER = LoggerFactory.getLogger(StaffPersonService.class);
 
   private StaffPersonDao staffPersonDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   /**
    * Constructor
    * 
    * @param staffPersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    */
   @Inject
-  public StaffPersonService(StaffPersonDao staffPersonDao,
-      StaffPersonIdRetriever staffPersonIdRetriever) {
+  public StaffPersonService(StaffPersonDao staffPersonDao) {
     this.staffPersonDao = staffPersonDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
   }
 
   /**

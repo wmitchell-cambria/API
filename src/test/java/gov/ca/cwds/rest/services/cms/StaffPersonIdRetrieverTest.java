@@ -10,11 +10,14 @@ import java.util.List;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import io.dropwizard.jackson.Jackson;
 
 
@@ -31,6 +34,11 @@ public class StaffPersonIdRetrieverTest extends AbstractShiroTest {
     clearSubject();
   }
 
+  @Before
+  public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
+  }
+
   @SuppressWarnings({"javadoc", "unchecked", "rawtypes"})
   @Test
   public void getStaffPersonIdReturnsHardCodedValueWhenUserInfoIsNotPassedIn() {
@@ -42,7 +50,7 @@ public class StaffPersonIdRetrieverTest extends AbstractShiroTest {
     when(principalCollection.asList()).thenReturn(list);
     when(mockSubject.getPrincipals()).thenReturn(principalCollection);
     setSubject(mockSubject);
-    String actual = new StaffPersonIdRetriever().getStaffPersonId();
+    String actual = RequestExecutionContext.instance().getStaffId();
     String expected = "0X5";
     assertEquals(actual, expected);
   }
@@ -52,7 +60,7 @@ public class StaffPersonIdRetrieverTest extends AbstractShiroTest {
   public void getStaffPersonIdReturnsHardCodedValueWhenPerryIsNotEnabled() {
     Subject mockSubject = mock(Subject.class);
     setSubject(mockSubject);
-    String actual = new StaffPersonIdRetriever().getStaffPersonId();
+    String actual = RequestExecutionContext.instance().getStaffId();
     String expected = "0X5";
     assertEquals(actual, expected);
   }
@@ -68,7 +76,7 @@ public class StaffPersonIdRetrieverTest extends AbstractShiroTest {
     when(pc.asList()).thenReturn(list);
     when(mockSubject.getPrincipals()).thenReturn(pc);
     setSubject(mockSubject);
-    String actual = new StaffPersonIdRetriever().getStaffPersonId();
+    String actual = RequestExecutionContext.instance().getStaffId();
     String expected = "0X5";
     assertEquals(actual, expected);
   }

@@ -1,14 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.cms.PostedStaffPerson;
-import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
-import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.util.IdGenerator;
-
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -18,6 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+
+import gov.ca.cwds.data.Dao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.domain.cms.PostedStaffPerson;
+import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.util.IdGenerator;
 
 /**
  * Business layer object to work on {@link StaffPerson}
@@ -29,20 +30,16 @@ public class StaffPersonService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(StaffPersonService.class);
 
   private StaffPersonDao staffPersonDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   /**
    * Constructor
    * 
    * @param staffPersonDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
-   * @param staffPersonIdRetriever the staffPersonIdRetriever
    */
   @Inject
-  public StaffPersonService(StaffPersonDao staffPersonDao,
-      StaffPersonIdRetriever staffPersonIdRetriever) {
+  public StaffPersonService(StaffPersonDao staffPersonDao) {
     this.staffPersonDao = staffPersonDao;
-    this.staffPersonIdRetriever = staffPersonIdRetriever;
   }
 
   /**
@@ -88,10 +85,10 @@ public class StaffPersonService implements CrudsService {
     StaffPerson staffPerson = (StaffPerson) request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       gov.ca.cwds.data.persistence.cms.StaffPerson managed =
-          new gov.ca.cwds.data.persistence.cms.StaffPerson(IdGenerator.randomString(3),
-              staffPerson, lastUpdatedId);
+          new gov.ca.cwds.data.persistence.cms.StaffPerson(IdGenerator.randomString(3), staffPerson,
+              RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
 
       managed = staffPersonDao.create(managed);
       return new PostedStaffPerson(managed);
@@ -115,10 +112,10 @@ public class StaffPersonService implements CrudsService {
         (gov.ca.cwds.rest.api.domain.cms.StaffPerson) request;
 
     try {
-      String lastUpdatedId = staffPersonIdRetriever.getStaffPersonId();
       gov.ca.cwds.data.persistence.cms.StaffPerson managed =
           new gov.ca.cwds.data.persistence.cms.StaffPerson((String) primaryKey, staffPerson,
-              lastUpdatedId);
+              RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
 
       managed = staffPersonDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.StaffPerson(managed);

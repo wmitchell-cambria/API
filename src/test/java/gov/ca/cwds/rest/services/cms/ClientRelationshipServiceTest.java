@@ -37,7 +37,6 @@ import gov.ca.cwds.rest.services.ServiceException;
 public class ClientRelationshipServiceTest {
   private ClientRelationshipService clientRelationshipService;
   private ClientRelationshipDao clientRelationshipDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -47,8 +46,6 @@ public class ClientRelationshipServiceTest {
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
     clientRelationshipDao = mock(ClientRelationshipDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-
     clientRelationshipService = new ClientRelationshipService(clientRelationshipDao);
 
   }

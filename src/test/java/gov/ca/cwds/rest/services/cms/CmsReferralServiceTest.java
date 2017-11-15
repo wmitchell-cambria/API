@@ -86,7 +86,6 @@ public class CmsReferralServiceTest {
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private SsaName3Dao ssaName3Dao;
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
@@ -109,8 +108,6 @@ public class CmsReferralServiceTest {
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-    when(staffPersonIdRetriever.getStaffPersonId()).thenReturn("0X5");
     assignmentService = mock(AssignmentService.class);
     drmsDocumentService = mock(DrmsDocumentService.class);
     addressService = mock(AddressService.class);

@@ -31,6 +31,7 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import io.dropwizard.jackson.Jackson;
@@ -44,7 +45,6 @@ public class AllegationServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private AllegationService allegationService;
   private AllegationDao allegationDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIAllegation riAllegation;
 
   @Rule
@@ -53,8 +53,8 @@ public class AllegationServiceTest {
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     allegationDao = mock(AllegationDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
   }

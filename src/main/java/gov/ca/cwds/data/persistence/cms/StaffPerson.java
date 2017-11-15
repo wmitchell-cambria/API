@@ -160,10 +160,11 @@ public class StaffPerson extends CmsPersistentObject {
    * @param id The id
    * @param staffPerson The domain object to construct this object from
    * @param lastUpdatedId the id of the last person to update this object
+   * @param lastUpdatedTime the time when this object is last updated
    */
   public StaffPerson(String id, gov.ca.cwds.rest.api.domain.cms.StaffPerson staffPerson,
-      String lastUpdatedId) {
-    super(lastUpdatedId);
+      String lastUpdatedId, Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
 
     try {
       this.id = id;

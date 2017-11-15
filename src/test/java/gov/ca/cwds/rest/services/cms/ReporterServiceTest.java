@@ -30,6 +30,7 @@ import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.jackson.Jackson;
@@ -42,7 +43,6 @@ public class ReporterServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private ReporterService reporterService;
   private ReporterDao reporterDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIReporter riReporter;
 
   @SuppressWarnings("javadoc")
@@ -52,8 +52,8 @@ public class ReporterServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     reporterDao = mock(ReporterDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
   }

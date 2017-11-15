@@ -12,6 +12,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -27,6 +29,7 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.StaffPerson;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.jackson.Jackson;
 
@@ -38,7 +41,6 @@ public class StaffPersonServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private StaffPersonService staffPersonService;
   private StaffPersonDao staffPersonDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -46,10 +48,9 @@ public class StaffPersonServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     staffPersonDao = mock(StaffPersonDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
-
-    staffPersonService = new StaffPersonService(staffPersonDao, staffPersonIdRetriever);
+    staffPersonService = new StaffPersonService(staffPersonDao);
 
   }
 
@@ -73,7 +74,7 @@ public class StaffPersonServiceTest {
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.data.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, expected, "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, expected, "Abc", new Date());
 
     when(staffPersonDao.find(id)).thenReturn(staffPerson);
 
@@ -122,7 +123,7 @@ public class StaffPersonServiceTest {
     StaffPerson expected = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.data.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, expected, "0XA", new Date());
 
     when(staffPersonDao.delete(id)).thenReturn(staffPerson);
     StaffPerson found = staffPersonService.delete(id);
@@ -150,7 +151,7 @@ public class StaffPersonServiceTest {
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.data.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, expected, "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, expected, "Abc", new Date());
 
     when(staffPersonDao.find(id)).thenReturn(staffPerson);
     when(staffPersonDao.update(any())).thenReturn(staffPerson);
@@ -167,7 +168,7 @@ public class StaffPersonServiceTest {
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
 
     gov.ca.cwds.data.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonRequest, "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonRequest, "Abc", new Date());
 
     when(staffPersonDao.find(id)).thenReturn(staffPerson);
     when(staffPersonDao.update(any())).thenReturn(staffPerson);
@@ -216,7 +217,7 @@ public class StaffPersonServiceTest {
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.data.persistence.cms.StaffPerson toCreate =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonDomain, "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonDomain, "Abc", new Date());
 
     StaffPerson request = new StaffPerson(toCreate);
 
@@ -250,7 +251,7 @@ public class StaffPersonServiceTest {
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.data.persistence.cms.StaffPerson toCreate =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonDomain, "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonDomain, "Abc", new Date());
 
     StaffPerson request = new StaffPerson(toCreate);
 
@@ -269,7 +270,7 @@ public class StaffPersonServiceTest {
     StaffPerson staffPersonDomain = MAPPER.readValue(
         fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
     gov.ca.cwds.data.persistence.cms.StaffPerson toCreate =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonDomain, "2017-01-07");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, staffPersonDomain, "Abc", new Date());
 
     StaffPerson request = new StaffPerson(toCreate);
 
@@ -290,7 +291,8 @@ public class StaffPersonServiceTest {
       StaffPerson staffPersonDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
       gov.ca.cwds.data.persistence.cms.StaffPerson toCreate =
-          new gov.ca.cwds.data.persistence.cms.StaffPerson("   ", staffPersonDomain, "2017-01-07");
+          new gov.ca.cwds.data.persistence.cms.StaffPerson("   ", staffPersonDomain, "Abc",
+              new Date());
 
       when(staffPersonDao.create(any(gov.ca.cwds.data.persistence.cms.StaffPerson.class)))
           .thenReturn(toCreate);
@@ -310,7 +312,8 @@ public class StaffPersonServiceTest {
       StaffPerson staffPersonDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
       gov.ca.cwds.data.persistence.cms.StaffPerson toCreate =
-          new gov.ca.cwds.data.persistence.cms.StaffPerson(null, staffPersonDomain, "2017-01-07");
+          new gov.ca.cwds.data.persistence.cms.StaffPerson(null, staffPersonDomain, "Abc",
+              new Date());
 
       when(staffPersonDao.create(any(gov.ca.cwds.data.persistence.cms.StaffPerson.class)))
           .thenReturn(toCreate);
@@ -330,7 +333,8 @@ public class StaffPersonServiceTest {
       StaffPerson staffPersonDomain = MAPPER.readValue(
           fixture("fixtures/domain/legacy/StaffPerson/valid/valid.json"), StaffPerson.class);
       gov.ca.cwds.data.persistence.cms.StaffPerson toCreate =
-          new gov.ca.cwds.data.persistence.cms.StaffPerson("", staffPersonDomain, "2017-01-07");
+          new gov.ca.cwds.data.persistence.cms.StaffPerson("", staffPersonDomain, "Abc",
+              new Date());
 
       when(staffPersonDao.create(any(gov.ca.cwds.data.persistence.cms.StaffPerson.class)))
           .thenReturn(toCreate);

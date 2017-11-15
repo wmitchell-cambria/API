@@ -35,7 +35,6 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 public class ChildClientServiceTest {
   private ChildClientService childClientService;
   private ChildClientDao childClientDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RIChildClient ri;
 
   @SuppressWarnings("javadoc")

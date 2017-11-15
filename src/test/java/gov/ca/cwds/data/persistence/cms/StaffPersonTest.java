@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -56,7 +57,7 @@ public class StaffPersonTest {
             telecommuterIndicator, cwsOffice, availabilityAndLocationDescription,
             ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator, cwsOfficeAddress, emailAddress);
 
-    StaffPerson persistent = new StaffPerson(id, domain, lastUpdatedId);
+    StaffPerson persistent = new StaffPerson(id, domain, lastUpdatedId, new Date());
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getEndDate(), is(equalTo(DomainChef.uncookDateString(endDate))));
     assertThat(persistent.getFirstName(), is(equalTo(firstName)));

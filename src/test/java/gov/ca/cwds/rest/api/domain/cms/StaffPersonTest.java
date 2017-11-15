@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -95,7 +96,7 @@ public class StaffPersonTest {
         availabilityAndLocationDescription, ssrsLicensingWorkerId, countyCode, dutyWorkerIndicator,
         cwsOfficeAddress, emailAddress);
     gov.ca.cwds.data.persistence.cms.StaffPerson persistent =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, domain, "lastUpdatedId");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson(id, domain, "lastUpdatedId", new Date());
 
     assertThat(domain.getEndDate(),
         is(equalTo(persistent.getEndDate() == null ? "" : df.format(persistent.getEndDate()))));
@@ -781,9 +782,8 @@ public class StaffPersonTest {
    */
   @Test
   public void failsWhenAvailabilityAndLocationDescriptionMissing() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/StaffPerson/invalid/availabilityAndLocationDescriptionMissing.json"),
+    StaffPerson toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/StaffPerson/invalid/availabilityAndLocationDescriptionMissing.json"),
         StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -795,9 +795,8 @@ public class StaffPersonTest {
 
   @Test
   public void testAvailabilityAndLocationDescriptionEmptySuccess() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/StaffPerson/valid/availabilityAndLocationDescriptionEmpty.json"),
+    StaffPerson toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/StaffPerson/valid/availabilityAndLocationDescriptionEmpty.json"),
         StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -807,9 +806,8 @@ public class StaffPersonTest {
 
   @Test
   public void failsWhenAvailabilityAndLocationDescriptionNull() throws Exception {
-    StaffPerson toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/StaffPerson/invalid/availabilityAndLocationDescriptionNull.json"),
+    StaffPerson toCreate = MAPPER.readValue(fixture(
+        "fixtures/domain/legacy/StaffPerson/invalid/availabilityAndLocationDescriptionNull.json"),
         StaffPerson.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)

@@ -32,6 +32,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -45,7 +46,6 @@ public class AddressServiceTest {
   private AddressDao addressDao;
   private SsaName3Dao ssaname3Dao;
   private UpperCaseTables upperCaseTables;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private Validator validator;
 
 
@@ -54,12 +54,12 @@ public class AddressServiceTest {
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     addressService = mock(AddressService.class);
     addressDao = mock(AddressDao.class);
     ssaname3Dao = mock(SsaName3Dao.class);
     upperCaseTables = mock(UpperCaseTables.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     addressService = new AddressService(addressDao, ssaname3Dao, upperCaseTables, validator);
   }
 

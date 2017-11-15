@@ -46,6 +46,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
@@ -62,7 +63,6 @@ public class AssignmentServiceTest {
   private NonLACountyTriggers nonLACountyTriggers;
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private CountyOwnershipDao countyOwnershipDao;
@@ -79,9 +79,9 @@ public class AssignmentServiceTest {
 
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     assignmentDao = mock(AssignmentDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     staffpersonDao = mock(StaffPersonDao.class);
     triggerTablesDao = mock(TriggerTablesDao.class);

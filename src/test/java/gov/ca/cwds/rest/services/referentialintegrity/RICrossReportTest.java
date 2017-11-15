@@ -104,7 +104,8 @@ public class RICrossReportTest {
         "John", "CEO", "Doe", "C", "Mr", new BigDecimal(9165551212L), 22, "2016-10-31", "III", true,
         "MIZN02k11B", "abc", "def", "99", false, "3XPCP92b24", "john.doe@anyco.com");
     gov.ca.cwds.data.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson("q1p", staffPersonDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson("q1p", staffPersonDomain, "0X5",
+            new Date());
 
     RICrossReport target = new RICrossReport(referralDao, staffPersonDao, lawEnforcementDao);
     when(referralDao.find(any(String.class))).thenReturn(referral);
@@ -129,7 +130,8 @@ public class RICrossReportTest {
         "John", "CEO", "Doe", "C", "Mr", new BigDecimal(9165551212L), 22, "2016-10-31", "III", true,
         "MIZN02k11B", "abc", "def", "99", false, "3XPCP92b24", "john.doe@anyco.com");
     gov.ca.cwds.data.persistence.cms.StaffPerson staffPerson =
-        new gov.ca.cwds.data.persistence.cms.StaffPerson("q1p", staffPersonDomain, "0X5");
+        new gov.ca.cwds.data.persistence.cms.StaffPerson("q1p", staffPersonDomain, "0X5",
+            new Date());
 
     LawEnforcementEntity lawEnforcement = new LawEnforcementEntityBuilder().build();
 

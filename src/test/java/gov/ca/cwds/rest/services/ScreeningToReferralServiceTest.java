@@ -110,7 +110,6 @@ import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
-import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
@@ -206,8 +205,6 @@ public class ScreeningToReferralServiceTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
-
-    StaffPersonIdRetriever staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
 
     DrmsDocumentDao drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);

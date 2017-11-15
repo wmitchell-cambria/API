@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import io.dropwizard.jackson.Jackson;
@@ -43,7 +44,6 @@ public class CrossReportServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private CrossReportService crossReportService;
   private CrossReportDao crossReportDao;
-  private StaffPersonIdRetriever staffPersonIdRetriever;
   private RICrossReport riCrossReport;
 
   @Rule
@@ -52,8 +52,8 @@ public class CrossReportServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("0X5");
     crossReportDao = mock(CrossReportDao.class);
-    staffPersonIdRetriever = mock(StaffPersonIdRetriever.class);
     crossReportService = new CrossReportService(crossReportDao, riCrossReport);
   }
 

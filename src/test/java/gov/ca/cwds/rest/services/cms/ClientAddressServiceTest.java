@@ -69,7 +69,6 @@ public class ClientAddressServiceTest {
   TriggerTablesDao triggerTablesDao;
   LACountyTrigger laCountyTrigger;
   NonLACountyTriggers nonLACountyTriggers;
-  StaffPersonIdRetriever staffPersonIdRetriever;
   RIClientAddress riClientAddress;
   Validator validator;
   AddressService addressService;
