@@ -104,7 +104,7 @@ import io.dropwizard.jackson.Jackson;
  * 
  * @author CWDS API Team
  */
-public class R00818ReferredResourceTypeSetDefault {
+public class R00818SetReferredResourceTypeTest {
 
   private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();

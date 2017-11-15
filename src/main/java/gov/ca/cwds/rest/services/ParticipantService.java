@@ -30,6 +30,7 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
+import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -47,7 +48,6 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 public class ParticipantService implements CrudsService {
   private static final String REPORTER_TABLE_NAME = "REPTR_T";
   private static final String CLIENT_TABLE_NAME = "CLIENT_T";
-  private static final String CLIENT_ADDRESS_TABLE_NAME = "ADDRS_T";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
 
@@ -135,7 +135,6 @@ public class ParticipantService implements CrudsService {
         // next participant
         continue;
       }
-
       String genderCode = "";
       if (!incomingParticipant.getGender().isEmpty()) {
         genderCode = incomingParticipant.getGender().toUpperCase().substring(0, 1);
@@ -143,8 +142,6 @@ public class ParticipantService implements CrudsService {
       Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
       processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
           clientParticipants, incomingParticipant, genderCode, roles);
-
-
     } // next participant
 
     return clientParticipants;
@@ -259,11 +256,13 @@ public class ParticipantService implements CrudsService {
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
       String referralId, MessageBuilder messageBuilder, Participant incomingParticipant,
       String clientId) {
+    boolean dispositionCode =
+        new R00824SetDispositionCode(screeningToReferral, incomingParticipant).isValid();
 
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
-            incomingParticipant.isClientStaffPersonAdded(), dispositionCode(screeningToReferral),
-            referralId, clientId, LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
+            incomingParticipant.isClientStaffPersonAdded(), dispositionCode ? "A" : "", referralId,
+            clientId, LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
             LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
@@ -274,28 +273,6 @@ public class ParticipantService implements CrudsService {
       messageBuilder.addMessageAndLog(se.getMessage(), se, LOGGER);
     }
     return referralClient;
-  }
-
-  /**
-   * <blockquote>
-   *
-   * <pre>
-   * BUSINESS RULE: "R - 00824"
-   *
-   * IF    referralResponseTypeCode is set to Evaluate Out 
-   * THEN  referralClient - dispositionCode is set to the "A"
-   *
-   * </pre>
-   *
-   * </blockquote>
-   */
-  private static String dispositionCode(ScreeningToReferral screeningToReferral) {
-    String dispositionCode = "";
-    if (screeningToReferral.getResponseTime() == 1519
-        && screeningToReferral.getApprovalStatus() == 122) {
-      dispositionCode = "A";
-    }
-    return dispositionCode;
   }
 
   private boolean updateClient(ScreeningToReferral screeningToReferral,
