@@ -55,7 +55,7 @@ public class R00824SetDispositionCode implements RuleValidatator {
     DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
     DateTime receivedDate = formatter.parseDateTime(date);
     DateTime clientDob = formatter.parseDateTime(dob);
-    return Years.yearsBetween(receivedDate, clientDob).getYears();
+    return Years.yearsBetween(clientDob, receivedDate).getYears();
   }
 
 }
