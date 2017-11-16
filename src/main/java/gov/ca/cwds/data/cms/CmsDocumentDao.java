@@ -41,6 +41,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   private static final String COMPRESSION_TYPE_LZW = "01";
   private static final String COMPRESSION_TYPE_PK = "02";
 
+  public static final String COMPRESSION_TYPE_LZW_FULL = "CWSCMP01";
+  public static final String COMPRESSION_TYPE_PK_FULL = "CWSCMP02";
+
   /**
    * Constructor.
    * 
@@ -51,26 +54,35 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     super(sessionFactory);
   }
 
-  public CmsDocument compressPK(CmsDocument doc, String base64) {
-    // Assumes that doc already has a doc handle.
+  /**
+   * Compress document blob segments.
+   * 
+   * <p>
+   * NOTE: Assumes that doc already has a doc handle.
+   * </p>
+   * 
+   * @param doc the document record
+   * @param base64 base64 encoded bytes
+   * @return same document with new blob segments
+   */
+  public CmsDocument compressPK(final CmsDocument doc, String base64) {
     try {
-      List<String> list = new ArrayList<>();
-      final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
-      Splitter.fixedLength(4000).split(hex).forEach(list::add);
-
       final Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
       int i = 0;
+      final List<String> list = new ArrayList<>();
+      final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
+      Splitter.fixedLength(4000).split(hex).forEach(list::add);
 
       for (String docBlob : list) {
         final String segmentSequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
         blobSegments.add(new CmsDocumentBlobSegment(doc.getId(), segmentSequence, docBlob));
       }
 
-      doc.setCompressionMethod("02");
-      doc.setDocLength((long) hex.length()); // the number of *chars*, not actual charset width
+      doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
+      doc.setDocLength((long) hex.length()); // the number of *chars*, not charset width
       doc.setSegmentCount((short) i);
       doc.setBlobSegments(blobSegments);
-      doc.setLastUpdatedTime(new Date()); // BETTER: take request start from RequestExecutionContext
+      doc.setLastUpdatedTime(new Date()); // BETTER: use "request start" in RequestExecutionContext
 
     } catch (Exception e) {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
@@ -97,7 +109,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       } else {
         retval = decompressLZW(doc);
       }
-    } else if (doc.getCompressionMethod().endsWith("02")) {
+    } else if (doc.getCompressionMethod().endsWith(COMPRESSION_TYPE_PK)) {
       retval = decompressPK(doc);
     } else {
       LOGGER.error("UNSUPPORTED COMPRESSION METHOD! {}", doc.getCompressionMethod());
@@ -121,6 +133,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     String retval = "";
 
     try {
+      // charset width multiplier * 2.
       final StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         buf.append(seg.getDocBlob().trim());
