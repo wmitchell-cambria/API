@@ -36,8 +36,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 @IfThenNot(ifProperty = "applicationForPetitionIndicator", thenProperty = "referralResponseType",
-    required = false, ifValue = true, thenNotValue = 1519)
+    required = false, ifValue = true, thenNotValue = Referral.EVALUATE_OUT)
 public class Referral extends ReportingDomain implements Request, Response {
+  static final int EVALUATE_OUT = 1519;
   private static final String DEFAULT_NO = "N";
   private static final String DEFAULT_LIMITIED_ACCESS_CODE = "N";
 

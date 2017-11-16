@@ -69,7 +69,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"T", "P", "N", "A"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"T", "P", "N", "A"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false,
       value = "T=totally free - P=partially free - N=not free - A=not applicable", example = "N")
   private String adoptionStatusCode;
@@ -207,11 +207,11 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"Y", "N", "U"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"Y", "N", "U"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Y")
   private String estimatedDobCode;
 
-  @OneOf(value = {"A", "I", "K", ""}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"A", "I", "K", ""}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "K")
   private String ethUnableToDetReasonCode;
 
@@ -224,7 +224,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"M", "F", "U"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"M", "F", "U"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String genderCode;
 
@@ -254,7 +254,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @OneOf(value = {"N", "NA", "U", "Y"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"N", "NA", "U", "Y"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String incapacitatedParentCode;
 
@@ -268,7 +268,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"Y", "N", "U", "D"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"Y", "N", "U", "D"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String literateCode;
 
@@ -283,7 +283,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"D", "A", "V", "N"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"D", "A", "V", "N"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String militaryStatusCode;
 
@@ -353,7 +353,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"Y", "M", "N"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"Y", "M", "N"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String soc158PlacementCode;
 
@@ -363,7 +363,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotNull
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"Y", "N"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"Y", "N"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "N")
   private String socialSecurityNumChangedCode;
 
@@ -387,7 +387,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 2)
-  @OneOf(value = {"N", "NA", "U", "Y"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"N", "NA", "U", "Y"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String unemployedParentCode;
 
@@ -692,11 +692,13 @@ public class Client extends ReportingDomain implements Request, Response {
     this.prevRegionalCenterIndicator =
         DomainChef.uncookBooleanString(persistedClient.getPrevRegionalCenterIndicator());
     this.primaryEthnicityType = persistedClient.getPrimaryEthnicityType();
-    this.primaryLanguage = persistedClient.getPrimaryLanguageType() != null
-        ? persistedClient.getPrimaryLanguageType() : 0;
+    this.primaryLanguage =
+        persistedClient.getPrimaryLanguageType() != null ? persistedClient.getPrimaryLanguageType()
+            : 0;
     this.religionType = persistedClient.getReligionType();
     this.secondaryLanguage = persistedClient.getSecondaryLanguageType() != null
-        ? persistedClient.getSecondaryLanguageType() : 0;
+        ? persistedClient.getSecondaryLanguageType()
+        : 0;
     this.sensitiveHlthInfoOnFileIndicator =
         DomainChef.uncookBooleanString(persistedClient.getSensitiveHlthInfoOnFileIndicator());
     this.sensitivityIndicator = persistedClient.getSensitivityIndicator();
@@ -735,11 +737,14 @@ public class Client extends ReportingDomain implements Request, Response {
       String genderCode, Short raceCode) {
 
     String unableToDetermineCode = participant.getRaceAndEthnicity() != null
-        ? participant.getRaceAndEthnicity().getUnableToDetermineCode() : "";
+        ? participant.getRaceAndEthnicity().getUnableToDetermineCode()
+        : "";
     String hispanicUnableToDetermineCode = participant.getRaceAndEthnicity() != null
-        ? participant.getRaceAndEthnicity().getHispanicUnableToDetermineCode() : "";
+        ? participant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
+        : "";
     String hispanicOriginCode = participant.getRaceAndEthnicity() != null
-        ? participant.getRaceAndEthnicity().getHispanicOriginCode() : "";
+        ? participant.getRaceAndEthnicity().getHispanicOriginCode()
+        : "";
 
     return new Client("", participant.getLegacyDescriptor().getLastUpdated(), Boolean.FALSE,
         DEFAULT_ADOPTION_STATUS_CODE, "", "", DEFAULT_CODE, participant.getDateOfBirth(), "",
@@ -1638,15 +1643,17 @@ public class Client extends ReportingDomain implements Request, Response {
     result = 31 * result + (commonLastName != null ? commonLastName.hashCode() : 0);
     result = 31 * result
         + (confidentialityActionDate != null ? confidentialityActionDate.hashCode() : 0);
-    result = 31 * result + (confidentialityInEffectIndicator != null
-        ? confidentialityInEffectIndicator.hashCode() : 0);
+    result = 31 * result
+        + (confidentialityInEffectIndicator != null ? confidentialityInEffectIndicator.hashCode()
+            : 0);
     result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
     result = 31 * result
         + (currCaChildrenServIndicator != null ? currCaChildrenServIndicator.hashCode() : 0);
     result = 31 * result
         + (currentlyOtherDescription != null ? currentlyOtherDescription.hashCode() : 0);
-    result = 31 * result + (currentlyRegionalCenterIndicator != null
-        ? currentlyRegionalCenterIndicator.hashCode() : 0);
+    result = 31 * result
+        + (currentlyRegionalCenterIndicator != null ? currentlyRegionalCenterIndicator.hashCode()
+            : 0);
     result = 31 * result + (deathDate != null ? deathDate.hashCode() : 0);
     result = 31 * result
         + (deathDateVerifiedIndicator != null ? deathDateVerifiedIndicator.hashCode() : 0);
@@ -1671,13 +1678,15 @@ public class Client extends ReportingDomain implements Request, Response {
     result = 31 * result + (immigrationStatusType != null ? immigrationStatusType.hashCode() : 0);
     result =
         31 * result + (incapacitatedParentCode != null ? incapacitatedParentCode.hashCode() : 0);
-    result = 31 * result + (individualHealthCarePlanIndicator != null
-        ? individualHealthCarePlanIndicator.hashCode() : 0);
+    result = 31 * result
+        + (individualHealthCarePlanIndicator != null ? individualHealthCarePlanIndicator.hashCode()
+            : 0);
     result = 31 * result
         + (limitationOnScpHealthIndicator != null ? limitationOnScpHealthIndicator.hashCode() : 0);
     result = 31 * result + (literateCode != null ? literateCode.hashCode() : 0);
     result = 31 * result + (maritalCohabitatnHstryIndicatorVar != null
-        ? maritalCohabitatnHstryIndicatorVar.hashCode() : 0);
+        ? maritalCohabitatnHstryIndicatorVar.hashCode()
+        : 0);
     result = 31 * result + (maritalStatusType != null ? maritalStatusType.hashCode() : 0);
     result = 31 * result + (militaryStatusCode != null ? militaryStatusCode.hashCode() : 0);
     result = 31 * result
@@ -1695,8 +1704,9 @@ public class Client extends ReportingDomain implements Request, Response {
     result = 31 * result + (primaryLanguage != null ? primaryLanguage.hashCode() : 0);
     result = 31 * result + (religionType != null ? religionType.hashCode() : 0);
     result = 31 * result + (secondaryLanguage != null ? secondaryLanguage.hashCode() : 0);
-    result = 31 * result + (sensitiveHlthInfoOnFileIndicator != null
-        ? sensitiveHlthInfoOnFileIndicator.hashCode() : 0);
+    result = 31 * result
+        + (sensitiveHlthInfoOnFileIndicator != null ? sensitiveHlthInfoOnFileIndicator.hashCode()
+            : 0);
     result = 31 * result + (sensitivityIndicator != null ? sensitivityIndicator.hashCode() : 0);
     result = 31 * result + (soc158PlacementCode != null ? soc158PlacementCode.hashCode() : 0);
     result = 31 * result
@@ -1705,10 +1715,12 @@ public class Client extends ReportingDomain implements Request, Response {
         + (socialSecurityNumChangedCode != null ? socialSecurityNumChangedCode.hashCode() : 0);
     result = 31 * result + (socialSecurityNumber != null ? socialSecurityNumber.hashCode() : 0);
     result = 31 * result + (suffixTitleDescription != null ? suffixTitleDescription.hashCode() : 0);
-    result = 31 * result + (tribalAncestryClientIndicatorVar != null
-        ? tribalAncestryClientIndicatorVar.hashCode() : 0);
+    result = 31 * result
+        + (tribalAncestryClientIndicatorVar != null ? tribalAncestryClientIndicatorVar.hashCode()
+            : 0);
     result = 31 * result + (tribalMembrshpVerifctnIndicatorVar != null
-        ? tribalMembrshpVerifctnIndicatorVar.hashCode() : 0);
+        ? tribalMembrshpVerifctnIndicatorVar.hashCode()
+        : 0);
     result = 31 * result + (unemployedParentCode != null ? unemployedParentCode.hashCode() : 0);
     result = 31 * result + (zippyCreatedIndicator != null ? zippyCreatedIndicator.hashCode() : 0);
     result = 31 * result + (address != null ? address.hashCode() : 0);

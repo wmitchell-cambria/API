@@ -1,12 +1,16 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -26,13 +30,14 @@ import io.swagger.annotations.ApiModelProperty;
     "hispanicUnableToDetermineCode"})
 @IfCollectionContainsShortThen.List({
     @IfCollectionContainsShortThen(ifProperty = "raceCode", thenProperty = "unableToDetermineCode",
-        ifValue = 6351,
+        ifValue = RaceAndEthnicity.UNABLE_TO_DETERMINE,
         message = "Unable to determine code must be set if race codes include 6351"),
     @IfCollectionContainsShortThen(ifProperty = "hispanicCode",
-        thenProperty = "hispanicUnableToDetermineCode", ifValue = 6351,
+        thenProperty = "hispanicUnableToDetermineCode",
+        ifValue = RaceAndEthnicity.UNABLE_TO_DETERMINE,
         message = "Hispanic unable to determine code must be set if hispanic codes include 6351")})
 public class RaceAndEthnicity extends ReportingDomain implements Request, Response {
-
+  static final short UNABLE_TO_DETERMINE = 6351;
   /**
    * Serialization version.
    */
@@ -50,7 +55,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
 
   @JsonProperty("unable_to_determine_code")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "A")
-  @OneOf(value = {"A", "I", "K", ""}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"A", "I", "K", ""}, ignoreCase = false, ignoreWhitespace = true)
   private String unableToDetermineCode;
 
   @Valid
@@ -60,12 +65,12 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY, ignoreable = true)
   private List<Short> hispanicCode;
 
-  @OneOf(value = {"D", "N", "U", "X", "Y", "Z", ""}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"D", "N", "U", "X", "Y", "Z", ""}, ignoreCase = false, ignoreWhitespace = true)
   @JsonProperty("hispanic_origin_code")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "X")
   private String hispanicOriginCode;
 
-  @OneOf(value = {"A", "I", "K", ""}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"A", "I", "K", ""}, ignoreCase = false, ignoreWhitespace = true)
   @JsonProperty("hispanic_unable_to_determine_code")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "A")
   private String hispanicUnableToDetermineCode;
