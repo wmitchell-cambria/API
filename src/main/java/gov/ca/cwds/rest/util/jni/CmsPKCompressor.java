@@ -89,11 +89,9 @@ public class CmsPKCompressor {
     final FileOutputStream fos = new FileOutputStream(createFile(outputFileName));
 
     IOUtils.copy(iis, fos);
-
     fis.close();
     fos.close();
   }
-
 
   /**
    * Decompress (inflate) raw bytes of a PK-compressed document.
@@ -112,7 +110,6 @@ public class CmsPKCompressor {
     final ByteArrayOutputStream bos = new ByteArrayOutputStream(DEFAULT_OUTPUT_SIZE);
 
     IOUtils.copy(iis, bos);
-
     iis.close();
     bis.close();
     bos.flush();
@@ -172,6 +169,7 @@ public class CmsPKCompressor {
     if (StringUtils.isBlank(hex)) {
       throw new IOException("REQUIRED: hex to decompress cannot be null");
     }
+
     final byte[] bytes = decompressBytes(DatatypeConverter.parseHexBinary(hex.trim()));
     LOGGER.debug("CmsPKCompressor.decompressHex(String): bytes len={}", bytes.length);
     return bytes;
@@ -191,13 +189,17 @@ public class CmsPKCompressor {
     }
 
     final FileInputStream fis = new FileInputStream(createFile(inputFileName));
-    final OutputStream fos = new DeflateOutputStream(new FileOutputStream(createFile(outputFileName)),
-        DEFAULT_COMPRESSION_LEVEL, true);
+    final OutputStream fos = new DeflateOutputStream(
+        new FileOutputStream(createFile(outputFileName)), DEFAULT_COMPRESSION_LEVEL, true);
 
     IOUtils.copy(fis, fos);
-
     fis.close();
     fos.close();
+  }
+
+  public String compressBase64ToHex(String base64) throws IOException {
+    return DatatypeConverter
+        .printHexBinary(compressBytes(DatatypeConverter.parseBase64Binary(base64)));
   }
 
   /**
@@ -217,15 +219,14 @@ public class CmsPKCompressor {
     final OutputStream dos = new DeflateOutputStream(bos, DEFAULT_COMPRESSION_LEVEL, true);
 
     IOUtils.copy(bis, dos);
-
     bis.close();
     dos.close();
 
     return bos.toByteArray();
   }
 
-  private File createFile(String file){
-    return new File( FilenameUtils.getFullPath(file), FilenameUtils.getName(file));
+  private File createFile(String file) {
+    return new File(FilenameUtils.getFullPath(file), FilenameUtils.getName(file));
   }
 
 }

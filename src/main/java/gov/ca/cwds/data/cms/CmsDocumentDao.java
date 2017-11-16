@@ -5,13 +5,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
@@ -23,7 +30,7 @@ import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
 /**
- * Data Access Object (DAO) for compressed, legacy CMS documents.
+ * Data Access Object (DAO) for legacy, compressed CMS documents.
  * 
  * @author CWDS API Team
  */
@@ -41,6 +48,32 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     super(sessionFactory);
   }
 
+  public CmsDocument compressPK(CmsDocument doc, String base64) {
+    try {
+      List<String> list = new ArrayList<>();
+      Splitter.fixedLength(4000).split(new CmsPKCompressor().compressBase64ToHex(base64))
+          .forEach(list::add);
+
+      final Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
+      int i = 0;
+
+      for (String docBlob : list) {
+        final String segmentSequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
+        blobSegments.add(new CmsDocumentBlobSegment(doc.getId(), segmentSequence, docBlob));
+      }
+
+      doc.setSegmentCount((short) i);
+      doc.setBlobSegments(blobSegments);
+      doc.setLastUpdatedTime(new Date()); // BETTER: take request start from RequestExecutionContext
+
+    } catch (Exception e) {
+      LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
+      throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);
+    }
+
+    return doc;
+  }
+
   /**
    * Decompress (inflate) a document by determining the compression type, assembling blob segments,
    * and calling appropriate library.
@@ -48,7 +81,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW or PK archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  public String decompressDoc(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
+  public String decompressDoc(CmsDocument doc) {
     String retval = "";
 
     if (doc.getCompressionMethod().endsWith("01")) {
@@ -78,7 +111,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc PK archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressPK(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
+  protected String decompressPK(CmsDocument doc) {
     String retval = "";
     CmsPKCompressor pk = new CmsPKCompressor();
 
@@ -106,7 +139,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressLZW(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
+  protected String decompressLZW(CmsDocument doc) {
     String retval = "";
 
     File src = null;
