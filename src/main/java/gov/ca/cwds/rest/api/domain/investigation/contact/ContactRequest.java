@@ -1,18 +1,14 @@
 package gov.ca.cwds.rest.api.domain.investigation.contact;
 
 import java.util.Set;
-
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
@@ -85,7 +81,6 @@ public class ContactRequest implements Request {
   private String location;
 
   @JsonProperty("note")
-  @Size(max = 8000)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "detail text")
   private String note;
 
