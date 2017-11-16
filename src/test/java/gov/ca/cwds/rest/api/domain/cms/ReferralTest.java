@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -1557,6 +1558,17 @@ public class ReferralTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("referralResponseType may not be null"),
         is(greaterThanOrEqualTo(0)));
+  }
+
+  // Rule R-00807
+  @Test
+  public void TestForRule00807WhenReferrralResponseTypeIsEvaluateOut() throws Exception {
+    Referral toCreate = new ReferralResourceBuilder().setApplicationForPetitionIndicator(true)
+        .setReferralResponseType((short) 1519).build();
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
   }
 
   /*

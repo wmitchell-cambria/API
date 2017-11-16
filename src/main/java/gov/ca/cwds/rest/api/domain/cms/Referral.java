@@ -23,6 +23,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import gov.ca.cwds.rest.validation.IfThenNot;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,6 +35,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
+@IfThenNot(ifProperty = "applicationForPetitionIndicator", thenProperty = "referralResponseType",
+    required = false, ifValue = true, thenNotValue = 1519)
 public class Referral extends ReportingDomain implements Request, Response {
   private static final String DEFAULT_NO = "N";
   private static final String DEFAULT_LIMITIED_ACCESS_CODE = "N";
@@ -164,7 +167,7 @@ public class Referral extends ReportingDomain implements Request, Response {
   private String receivedTime;
 
   @NotNull
-  @ApiModelProperty(required = false, readOnly = false, example = "1234")
+  @ApiModelProperty(required = true, readOnly = false, example = "1234")
   private Short referralResponseType;
 
   @NotNull
@@ -508,7 +511,8 @@ public class Referral extends ReportingDomain implements Request, Response {
     this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
     this.receivedDate = DomainChef.cookDate(persistedReferral.getReceivedDate());
     this.receivedTime = DomainChef.cookTime(persistedReferral.getReceivedTime());
-    this.referralResponseType = persistedReferral.getReferralResponseType();
+    this.referralResponseType = persistedReferral.getReferralResponseType() == null ? 0
+        : persistedReferral.getReferralResponseType();
     this.referredToResourceType = persistedReferral.getReferredToResourceType();
     this.responseDeterminationDate =
         DomainChef.cookDate(persistedReferral.getResponseDeterminationDate());
