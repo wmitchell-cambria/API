@@ -38,6 +38,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
 
+  private static final String COMPRESSION_TYPE_LZW = "01";
+  private static final String COMPRESSION_TYPE_PK = "02";
+
   /**
    * Constructor.
    * 
@@ -87,7 +90,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   public String decompressDoc(CmsDocument doc) {
     String retval = "";
 
-    if (doc.getCompressionMethod().endsWith("01")) {
+    if (doc.getCompressionMethod().endsWith(COMPRESSION_TYPE_LZW)) {
       LZWEncoder lzw = new LZWEncoder();
       if (!lzw.didLibraryLoad()) {
         LOGGER.warn("LZW compression not enabled!");
@@ -104,11 +107,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   }
 
   /**
-   * Decompress (inflate) an PKWare-compressed document by assembling blob segments and calling Java
+   * Decompress (inflate) a PKWare-compressed document by assembling blob segments and calling Java
    * PKWare SDK.
    * 
    * <p>
-   * The DB2 SQL returns blob segments as hexadecimal.
+   * DB2 SQL returns blob segments as hexadecimal using the DB2 {@code blob()} function.
    * </p>
    * 
    * @param doc PK archive to decompress
@@ -116,7 +119,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    */
   protected String decompressPK(CmsDocument doc) {
     String retval = "";
-    CmsPKCompressor pk = new CmsPKCompressor();
 
     try {
       final StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
@@ -124,7 +126,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
         buf.append(seg.getDocBlob().trim());
       }
 
-      final byte[] bytes = pk.decompressHex(buf.toString());
+      final byte[] bytes = new CmsPKCompressor().decompressHex(buf.toString());
       LOGGER.debug("DAO: bytes len={}", bytes.length);
       retval = DatatypeConverter.printBase64Binary(bytes);
     } catch (Exception e) {
@@ -164,7 +166,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       }
 
       // DECOMPRESS!
-      // TODO: Trap std::exception in shared library and return error code.
+      // OPTION: Trap std::exception in shared library and return error code.
       // The LZW library currently returns a blank when decompression fails, for safety, since
       // unhandled C++ exceptions kill the JVM.
       final LZWEncoder lzw = new LZWEncoder();
