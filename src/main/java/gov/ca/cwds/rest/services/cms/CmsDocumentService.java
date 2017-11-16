@@ -11,7 +11,6 @@ import gov.ca.cwds.data.cms.CmsDocumentDao;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
-import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 
 /**
  * Business layer object to work on {@link CmsDocument}.
@@ -66,16 +65,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
 
   protected String compressPK(CmsDocument doc) {
     String retval = "";
-    CmsPKCompressor pk = new CmsPKCompressor();
 
     try {
-      // final StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
-      // for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
-      // buf.append(seg.getDocBlob().trim());
-      // }
-
-      // final byte[] bytes = pk.decompressHex(buf.toString());
-      // retval = DatatypeConverter.printBase64Binary(bytes);
+      // dao.compressPK(doc, base64)
     } catch (Exception e) {
       LOGGER.error("ERROR DECOMPRESSING PK! {}", e.getMessage());
       throw new ServiceException("ERROR DECOMPRESSING PK! " + e.getMessage(), e);

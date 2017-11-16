@@ -49,10 +49,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   }
 
   public CmsDocument compressPK(CmsDocument doc, String base64) {
+    // Assumes that doc already has a doc handle.
     try {
       List<String> list = new ArrayList<>();
-      Splitter.fixedLength(4000).split(new CmsPKCompressor().compressBase64ToHex(base64))
-          .forEach(list::add);
+      final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
+      Splitter.fixedLength(4000).split(hex).forEach(list::add);
 
       final Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
       int i = 0;
@@ -62,6 +63,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
         blobSegments.add(new CmsDocumentBlobSegment(doc.getId(), segmentSequence, docBlob));
       }
 
+      doc.setCompressionMethod("02");
+      doc.setDocLength((long) hex.length()); // the number of *chars*, not actual charset width
       doc.setSegmentCount((short) i);
       doc.setBlobSegments(blobSegments);
       doc.setLastUpdatedTime(new Date()); // BETTER: take request start from RequestExecutionContext
@@ -94,7 +97,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     } else if (doc.getCompressionMethod().endsWith("02")) {
       retval = decompressPK(doc);
     } else {
-      LOGGER.warn("UNSUPPORTED compression method {}", doc.getCompressionMethod());
+      LOGGER.error("UNSUPPORTED COMPRESSION METHOD! {}", doc.getCompressionMethod());
     }
 
     return retval;
