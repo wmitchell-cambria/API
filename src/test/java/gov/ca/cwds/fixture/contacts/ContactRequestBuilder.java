@@ -2,7 +2,6 @@ package gov.ca.cwds.fixture.contacts;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -86,6 +85,18 @@ public class ContactRequestBuilder {
 
   public ContactRequestBuilder setPerson(PostedIndividualDeliveredService person) {
     this.person = person;
+    return this;
+  }
+
+
+  public ContactRequestBuilder setLongNote() {
+    StringBuilder sb = new StringBuilder();
+    int length = 10000;
+    while (sb.length() < length) {
+      sb.append(
+          "Test Data: Some text describing the contact of up to 8000 characters can be stored in CMS ex: Police brought in Margie  Child upset and had bruises and other contusions on her face and back area.");
+    }
+    this.note = sb.toString();
     return this;
   }
 

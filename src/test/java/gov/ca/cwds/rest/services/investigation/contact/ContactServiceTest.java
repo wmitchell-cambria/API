@@ -7,16 +7,13 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
@@ -193,6 +190,24 @@ public class ContactServiceTest {
   }
 
   @Test
+  public void createLongTextContact() throws Exception {
+
+    ContactRequest contactRequest = new ContactRequestBuilder().setLongNote().build();
+
+    ContactReferralRequest contactReferralRequest =
+        new ContactReferralRequest(DEFAULT_KEY, contactRequest);
+    when(deliveredService.create(any(), any())).thenReturn("ABC1234567");
+    doNothing().when(referralClientDeliveredService).addOnBehalfOfClients(any(), any(), any());
+    doNothing().when(deliveredToIndividualService).addPeopleToIndividualDeliveredService(any(),
+        any(), any());
+    when(contactPartyDeliveredServiceDao.create(any())).thenReturn(
+        new ContactPartyDeliverdServiceEntityBuilder().buildContactPartyDeliveredService());
+    Response actual = target.create(contactReferralRequest);
+    assertThat(actual, notNullValue());
+
+  }
+
+  @Test
   public void createContact() throws Exception {
     ContactRequest contactRequest =
         new ContactRequestBuilder().setStartedAt("2007-04-27T23:30:14.000Z").build();
@@ -207,6 +222,8 @@ public class ContactServiceTest {
     Response actual = target.create(contactReferralRequest);
     assertThat(actual, notNullValue());
   }
+
+
 
   @Test
   public void updateContact() throws Exception {

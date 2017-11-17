@@ -3,9 +3,7 @@ package gov.ca.cwds.rest.services.investigation.contact;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityExistsException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -94,7 +92,7 @@ public class DeliveredService {
     detailText = detailText != null ? detailText : "";
     detailTextContinuation = detailTextContinuation != null ? detailTextContinuation : "";
     detailText = detailText.startsWith("Part")
-        ? detailText.substring(detailText.indexOf(":") + 2, detailText.length())
+        ? detailText.substring(detailText.indexOf(':') + 2, detailText.length())
         : detailText;
     return detailText + detailTextContinuation;
   }
@@ -114,7 +112,8 @@ public class DeliveredService {
 
     List<DeliveredServiceDomain> deliveredServiceDomains =
         constructDeliveredServiceDomainForCreate(request, countySpecificCode);
-    Set<String> deliveredServiceEntityIds = new HashSet<>();
+    // TODO use below list to store contact id's into Postgres.
+    // Set<String> deliveredServiceEntityIds = new HashSet<>();
     String primaryDeliveredServiceId = null;
 
     try {
@@ -130,7 +129,7 @@ public class DeliveredService {
           primaryDeliveredServiceId = persistedDeliveredService.getId();
 
         }
-        deliveredServiceEntityIds.add(persistedDeliveredService.getId());
+        // deliveredServiceEntityIds.add(persistedDeliveredService.getId());
       }
     } catch (EntityExistsException e) {
       LOGGER.info("Internal Error : deliveredServiceEntity couldn't create it for Referral id : {}",
@@ -304,14 +303,15 @@ public class DeliveredService {
    * @param note - complete full long text which comes from UI.
    * @return list of split text
    */
-  private List<String> extractLongText(String note) {
+  private List<String> extractLongText(String longNote) {
     List<String> lengthTexts = new ArrayList<>();
-    note = note + " ";
+    String note = longNote;
 
     int beginIndex = 0;
     int count = 3800;
     int endIndex = count;
-    String tempText = null, longText = null;
+    String tempText = null;
+    String longText = null;
     while (beginIndex < note.length()) {
 
       tempText = getTextCertainRange(note, beginIndex, endIndex);
@@ -362,12 +362,12 @@ public class DeliveredService {
       return endIndex;
     }
     // if period (.) found, then consider that position as end point
-    if (temptext.lastIndexOf(".") > -1) {
-      tempEndIndex = temptext.lastIndexOf(".");
+    if (temptext.lastIndexOf('.') > -1) {
+      tempEndIndex = temptext.lastIndexOf('.');
     }
     // if space (" ") found, then consider that position as end point
-    else if (temptext.lastIndexOf(" ") > -1) {
-      tempEndIndex = temptext.lastIndexOf(" ");
+    else if (temptext.lastIndexOf(' ') > -1) {
+      tempEndIndex = temptext.lastIndexOf(' ');
 
     }
     return tempEndIndex > 0 ? tempEndIndex : endIndex;
@@ -382,10 +382,8 @@ public class DeliveredService {
    * @return note based on index count
    */
   private String getNextText(int index, List<String> splitNotes) {
-    String returnText = null;
-    returnText = (splitNotes.size() > index) ? splitNotes.get(index) : null;
+    return (splitNotes.size() > index) ? splitNotes.get(index) : null;
 
-    return returnText;
   }
 
 

@@ -4,9 +4,7 @@ package gov.ca.cwds.health.resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.inject.CmsSessionFactory;
 
 /**
@@ -25,8 +23,7 @@ public class DB2Database implements Pingable {
   @Override
   public boolean ping() {
     boolean connectionOK = true;
-    try {
-      Session session = sessionFactory.openSession();
+    try (Session session = sessionFactory.openSession()) {
       Query query = session.createNativeQuery("values 1");
       if (query.list().get(0) == null) {
         connectionOK = false;
