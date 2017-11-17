@@ -140,9 +140,9 @@ public class CmsDocumentResource {
   @ApiOperation(hidden = true, value = "Update Document", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
   public Response update(
-      @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of the Document to update") String id,
+      @PathParam("id") @ApiParam(required = true, name = "id", value = "Document id") String id,
       @ApiParam(hidden = true) CmsDocument doc) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+    return resourceDelegate.update(id, doc);
   }
+
 }
