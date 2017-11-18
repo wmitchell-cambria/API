@@ -138,7 +138,8 @@ public class TestSystemCodeCache implements SystemCodeCache {
     }
 
     if (SystemCodeCategoryId.ETHNICITY.equals(metaId)) {
-      if (841 == systemCodeId.intValue() || 3164 == systemCodeId.intValue()) {
+      if (841 == systemCodeId.intValue() || 3164 == systemCodeId.intValue()
+          || 6351 == systemCodeId.intValue()) {
         return true;
       }
     }

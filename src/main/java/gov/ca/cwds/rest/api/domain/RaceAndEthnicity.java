@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.api.domain;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -65,6 +66,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.ETHNICITY, ignoreable = true)
   private List<Short> hispanicCode;
 
+  @NotNull
   @OneOf(value = {"D", "N", "U", "X", "Y", "Z", ""}, ignoreCase = false, ignoreWhitespace = true)
   @JsonProperty("hispanic_origin_code")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "X")

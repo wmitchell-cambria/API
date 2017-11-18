@@ -9,7 +9,7 @@ import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 public class RaceAndEthnicityEntityBuilder {
 
   private List<Short> raceCode = new ArrayList<>();
-  private String unableToDetermineCode = "N";
+  private String unableToDetermineCode = "A";
   private List<Short> hispanicCode = new ArrayList<>();
   private String hispanicOriginCode = "N";
   private String hispanicUnableToDetermineCode = "";
