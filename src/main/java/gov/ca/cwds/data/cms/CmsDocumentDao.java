@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -75,7 +74,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       }
 
       // In with the new ...
-      final Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
+      final Set<CmsDocumentBlobSegment> blobSegments = doc.getBlobSegments();
+      blobSegments.clear();
       int i = 0;
       final List<String> list = new ArrayList<>();
       final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
@@ -92,7 +92,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       doc.setSegmentCount((short) i);
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
-      doc.setBlobSegments(blobSegments);
 
     } catch (Exception e) {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
