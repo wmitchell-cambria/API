@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +13,7 @@ import java.util.Set;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,7 @@ import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
@@ -67,6 +68,13 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    */
   public CmsDocument compressPK(final CmsDocument doc, String base64) {
     try {
+      // Out with the old ...
+      final Session session = this.getSessionFactory().getCurrentSession();
+      for (CmsDocumentBlobSegment segment : doc.getBlobSegments()) {
+        session.remove(segment);
+      }
+
+      // In with the new ...
       final Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
       int i = 0;
       final List<String> list = new ArrayList<>();
@@ -78,11 +86,13 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
         blobSegments.add(new CmsDocumentBlobSegment(doc.getId(), segmentSequence, docBlob));
       }
 
+      final RequestExecutionContext ctx = RequestExecutionContext.instance();
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
-      doc.setDocLength((long) hex.length()); // the number of *chars*, not charset width
+      doc.setDocLength((long) hex.length() * 2); // char count times charset width
       doc.setSegmentCount((short) i);
+      doc.setLastUpdatedTime(ctx.getRequestStartTime());
+      doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
       doc.setBlobSegments(blobSegments);
-      doc.setLastUpdatedTime(new Date()); // BETTER: use "request start" in RequestExecutionContext
 
     } catch (Exception e) {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
