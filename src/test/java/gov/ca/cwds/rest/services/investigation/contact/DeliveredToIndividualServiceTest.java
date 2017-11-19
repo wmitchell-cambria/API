@@ -25,9 +25,14 @@ import gov.ca.cwds.data.cms.ServiceProviderDao;
 import gov.ca.cwds.data.cms.SubstituteCareProviderDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
+import gov.ca.cwds.data.persistence.cms.Attorney;
+import gov.ca.cwds.data.persistence.cms.Reporter;
+import gov.ca.cwds.data.persistence.cms.ServiceProvider;
+import gov.ca.cwds.data.persistence.cms.SubstituteCareProvider;
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.CollateralIndividualEntityBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
@@ -36,10 +41,11 @@ import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.services.ServiceException;
 
 public class DeliveredToIndividualServiceTest {
 
-
+  private static final String deliveredToIndividualId = "A0YcYQV0AB";
   ClientDao clientDao;
   AttorneyDao attorneyDao;
   CollateralIndividualDao collateralIndividualDao;
@@ -57,7 +63,6 @@ public class DeliveredToIndividualServiceTest {
 
   @Before
   public void setup() throws Exception {
-
     attorneyDao = mock(AttorneyDao.class);
     clientDao = mock(ClientDao.class);
     collateralIndividualDao = mock(CollateralIndividualDao.class);
@@ -85,6 +90,8 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("O")
             .buildIndividualDeliveredServiceEntity();
+    when(collateralIndividualDao.find(deliveredToIndividualId))
+        .thenReturn(new CollateralIndividualEntityBuilder().build());
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(collateralIndividualDao, atLeastOnce()).find(any());
   }
@@ -94,6 +101,7 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("C")
             .buildIndividualDeliveredServiceEntity();
+    when(clientDao.find(deliveredToIndividualId)).thenReturn(new ClientEntityBuilder().build());
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(clientDao, atLeastOnce()).find(any());
 
@@ -104,6 +112,7 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("A")
             .buildIndividualDeliveredServiceEntity();
+    when(attorneyDao.find(deliveredToIndividualId)).thenReturn(new Attorney());
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(attorneyDao, atLeastOnce()).find(any());
   }
@@ -113,6 +122,7 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("R")
             .buildIndividualDeliveredServiceEntity();
+    when(reporterDao.find(deliveredToIndividualId)).thenReturn(new Reporter());
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(reporterDao, atLeastOnce()).find(any());
   }
@@ -123,6 +133,7 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("P")
             .buildIndividualDeliveredServiceEntity();
+    when(serviceProviderDao.find(deliveredToIndividualId)).thenReturn(new ServiceProvider());
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(serviceProviderDao, atLeastOnce()).find(any());
   }
@@ -133,8 +144,20 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("S")
             .buildIndividualDeliveredServiceEntity();
+    when(substituteCareProviderDao.find(deliveredToIndividualId))
+        .thenReturn(new SubstituteCareProvider());
     deliveredToIndividualService.findPerson(individualDeliveredService);
     verify(substituteCareProviderDao, atLeastOnce()).find(any());
+  }
+
+  @Test(expected = ServiceException.class)
+  public void findPersonWhenNotFoundInClientTable() throws Exception {
+    IndividualDeliveredServiceEntity individualDeliveredService =
+        new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("C")
+            .buildIndividualDeliveredServiceEntity();
+    when(clientDao.find(deliveredToIndividualId)).thenReturn(null);
+    deliveredToIndividualService.findPerson(individualDeliveredService);
+
   }
 
   @Test
@@ -142,11 +165,10 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().buildIndividualDeliveredServiceEntity();
     IndividualDeliveredServiceEntity[] entities = {individualDeliveredService};
-
     DeliveredServiceEntity deliveredServiceEntity =
         new DeliveredServiceEntityBuilder().buildDeliveredServiceEntity();
     when(individualDeliveredServiceDao.findByDeliveredServiceId("ABC1234567")).thenReturn(entities);
-
+    when(clientDao.find(deliveredToIndividualId)).thenReturn(new ClientEntityBuilder().build());
     deliveredToIndividualService.getPeopleInIndividualDeliveredService(deliveredServiceEntity);
     verify(individualDeliveredServiceDao, atLeastOnce()).findByDeliveredServiceId(any());
   }

@@ -29,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 
 /**
@@ -135,24 +136,27 @@ public class DeliveredToIndividualService {
     final ApiPersonAware person = dao.find(id);
     CmsRecordDescriptor legacyDescriptor =
         CmsRecordUtils.createLegacyDescriptor(id, LegacyTable.lookupByName(code.getValue()));
-    return (person != null)
-        ? new PostedIndividualDeliveredService(legacyDescriptor, person.getFirstName(),
-            person.getMiddleName(), person.getLastName(), person.getNameSuffix(),
-            person.getNameSuffix(), code.getDescription())
-        : defaultPostedIndividualDeliveredService(code, legacyDescriptor);
+    return createPostedIndividualDeliveredService(person, code, legacyDescriptor);
   }
 
+
   /**
-   * Create a default Person when name information is unknown
+   * Create a PostedIndividualDeliveredService object that includes Person information
    * 
+   * @param person the ApiPersonAware person
    * @param deliveredToIndividualCode the deliveredToIndividualCode
    * @param legacyDescriptor the id
    * @return default IndividualDeliveredService with no name info
    */
-  private PostedIndividualDeliveredService defaultPostedIndividualDeliveredService(
-      Code deliveredToIndividualCode, CmsRecordDescriptor legacyDescriptor) {
-    return new PostedIndividualDeliveredService(legacyDescriptor, "", "", "", "", "",
-        deliveredToIndividualCode.getDescription());
+  private PostedIndividualDeliveredService createPostedIndividualDeliveredService(
+      ApiPersonAware person, Code deliveredToIndividualCode, CmsRecordDescriptor legacyDescriptor) {
+    if (person == null) {
+      throw new ServiceException("There is no Participant associated with the legacy id "
+          + legacyDescriptor.getId() + " in Legacy Table " + legacyDescriptor.getTableName());
+    }
+    return new PostedIndividualDeliveredService(legacyDescriptor, person.getFirstName(),
+        person.getMiddleName(), person.getLastName(), person.getNameSuffix(),
+        person.getNameSuffix(), deliveredToIndividualCode.getDescription());
   }
 
   /**
