@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
@@ -368,6 +369,7 @@ public class Client extends ReportingDomain implements Request, Response {
   private String socialSecurityNumChangedCode;
 
   @Size(min = 0, max = 9)
+  @Pattern(regexp = "^(|[0-9]{9})$")
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "123456789")
   private String socialSecurityNumber;
 

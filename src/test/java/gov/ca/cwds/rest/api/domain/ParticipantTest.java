@@ -76,7 +76,7 @@ public class ParticipantTest {
   private Set<Address> addresses = new HashSet<>();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PARTICIPANTS + "/";;
+  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PARTICIPANTS + "/";
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private Validator validator;
 
@@ -270,26 +270,6 @@ public class ParticipantTest {
     assertEquals("size must be between 0 and 10",
         constraintViolations.iterator().next().getMessage());
     // System.out.println(constraintViolations.iterator().next().getMessage());
-  }
-
-  @Test
-  public void testParticipantSsnTooLongFail() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/invalid/ssnTooLong.json"), Participant.class);
-    Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("must match \"^(|[0-9]{9})$\"",
-        constraintViolations.iterator().next().getMessage());
-  }
-
-  @Test
-  public void testParticipantSsnNonNumericFail() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/invalid/ssnNonNumeric.json"), Participant.class);
-    Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("must match \"^(|[0-9]{9})$\"",
-        constraintViolations.iterator().next().getMessage());
   }
 
   @Test

@@ -3149,6 +3149,33 @@ public class ClientTest implements DomainTestTemplate {
   }
 
   /*
+   * socialSecurityNumber test
+   */
+  @Test
+  public void testFailsocialSecurityNumberInvalid() throws Exception {
+
+    Client validClient = new ClientResourceBuilder().setSocialSecurityNumber("123456kk9").build();
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("must match \\\"^(|[0-9]{9})$\\\""),
+        is(greaterThanOrEqualTo(0)));
+  }
+
+  @Test
+  public void testFailsocialSecurityNumberTooLong() throws Exception {
+
+    Client validClient = new ClientResourceBuilder().setSocialSecurityNumber("1234567890").build();
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("must match \\\"^(|[0-9]{9})$\\\""),
+        is(greaterThanOrEqualTo(0)));
+  }
+
+  /*
    * unemployedParentCode test
    */
   @Test
