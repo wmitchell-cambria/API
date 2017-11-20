@@ -25,7 +25,7 @@ import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
@@ -189,7 +189,7 @@ public class DeliveredServiceTest {
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
             deliveredServiceDomain, "ABC", new Date());
     Set<Integer> services = new HashSet<>();
-    final Set<PostedIndividualDeliveredService> people = new HashSet<>();
+    final Set<IndividualDeliveredService> people = new HashSet<>();
     ContactRequest contactRequest = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408",
         "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
@@ -209,7 +209,7 @@ public class DeliveredServiceTest {
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity("id",
             deliveredServiceDomain, "ABC", new Date());
     Set<Integer> services = new HashSet<>();
-    final Set<PostedIndividualDeliveredService> people = new HashSet<>();
+    final Set<IndividualDeliveredService> people = new HashSet<>();
     ContactRequest contactRequest = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408",
         "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
@@ -227,7 +227,7 @@ public class DeliveredServiceTest {
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(DEFAULT_KEY,
             deliveredServiceDomain, "ABC", new Date());
     Set<Integer> services = new HashSet<>();
-    final Set<PostedIndividualDeliveredService> people = new HashSet<>();
+    final Set<IndividualDeliveredService> people = new HashSet<>();
     ContactRequest contactRequest = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408",
         "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
@@ -256,7 +256,7 @@ public class DeliveredServiceTest {
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(DEFAULT_KEY,
             deliveredServiceDomain, "ABC", new Date());
     Set<Integer> services = new HashSet<>();
-    final Set<PostedIndividualDeliveredService> people = new HashSet<>();
+    final Set<IndividualDeliveredService> people = new HashSet<>();
     ContactRequest contactRequest = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408",
         "C", services, "415", sb.toString(), people);
     ContactReferralRequest request = new ContactReferralRequest("referralid", contactRequest);
@@ -277,7 +277,7 @@ public class DeliveredServiceTest {
         new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(DEFAULT_KEY,
             deliveredServiceDomain, "ABC", new Date());
     Set<Integer> services = new HashSet<>();
-    final Set<PostedIndividualDeliveredService> people = new HashSet<>();
+    final Set<IndividualDeliveredService> people = new HashSet<>();
     ContactRequest contactRequest = new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408",
         "C", services, "415", null, people);
     ContactReferralRequest request = new ContactReferralRequest("referralid", contactRequest);
@@ -293,7 +293,7 @@ public class DeliveredServiceTest {
   @Test(expected = ServiceException.class)
   public void createWhenEntityExists() throws Exception {
     Set<Integer> services = new HashSet<>();
-    final Set<PostedIndividualDeliveredService> people = new HashSet<>();
+    final Set<IndividualDeliveredService> people = new HashSet<>();
     ContactRequest contactRequest = new ContactRequest("2010-04-27T20:20:14.000Z", "", "433", "408",
         "C", services, "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);

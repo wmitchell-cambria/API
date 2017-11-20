@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -121,7 +121,7 @@ public class Contact extends ReportingDomain implements Request, Response {
 
   @ApiModelProperty(required = false, readOnly = false)
   @JsonProperty("people")
-  private Set<PostedIndividualDeliveredService> people;
+  private Set<IndividualDeliveredService> people;
 
   /**
    * @param legacyDescriptor the CmsRecordDescriptor
@@ -144,7 +144,7 @@ public class Contact extends ReportingDomain implements Request, Response {
       @JsonProperty("communication_method") String communicationMethod,
       @JsonProperty("status") String status, @JsonProperty("services") Set<Integer> services,
       @JsonProperty("location") String location, @JsonProperty("note") String note,
-      @JsonProperty("people") Set<PostedIndividualDeliveredService> people) {
+      @JsonProperty("people") Set<IndividualDeliveredService> people) {
     super();
     this.legacyDescriptor = legacyDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
@@ -166,7 +166,7 @@ public class Contact extends ReportingDomain implements Request, Response {
    * @param people - people
    */
   public Contact(DeliveredServiceEntity persistedDeliverdService, LastUpdatedBy lastUpdatedBy,
-      String note, Set<PostedIndividualDeliveredService> people) {
+      String note, Set<IndividualDeliveredService> people) {
     super();
     this.legacyDescriptor = CmsRecordUtils.createLegacyDescriptor(persistedDeliverdService.getId(),
         LegacyTable.DELIVERED_SERVICE);
@@ -287,7 +287,7 @@ public class Contact extends ReportingDomain implements Request, Response {
   /**
    * @return the people
    */
-  public Set<PostedIndividualDeliveredService> getPeople() {
+  public Set<IndividualDeliveredService> getPeople() {
     return people;
   }
 

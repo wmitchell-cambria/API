@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"legacy_descriptor", "first_name", "last_name", "relationship"})
-public class PostedIndividualDeliveredService extends ReportingDomain implements Request, Response {
+public class IndividualDeliveredService extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
 
@@ -77,7 +77,7 @@ public class PostedIndividualDeliveredService extends ReportingDomain implements
    * @param prefixTitle The prefix_title
    * @param relationship relationship
    */
-  public PostedIndividualDeliveredService(
+  public IndividualDeliveredService(
       @JsonProperty("legacy_descriptor") CmsRecordDescriptor legacyDescriptor,
       @JsonProperty("first_name") String firstName, @JsonProperty("middle_name") String middleName,
       @JsonProperty("last_name") String lastName, @JsonProperty("suffix_title") String suffixTitle,
@@ -94,7 +94,7 @@ public class PostedIndividualDeliveredService extends ReportingDomain implements
   }
 
 
-  public PostedIndividualDeliveredService() {
+  public IndividualDeliveredService() {
     // default
   }
 

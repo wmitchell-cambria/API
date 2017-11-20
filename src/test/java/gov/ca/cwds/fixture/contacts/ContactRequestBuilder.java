@@ -3,7 +3,7 @@ package gov.ca.cwds.fixture.contacts;
 import java.util.HashSet;
 import java.util.Set;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 
@@ -18,12 +18,12 @@ public class ContactRequestBuilder {
   private String location = "415";
   private String note =
       "some text describing the contact of up to 8000 characters can be stored in CMS";
-  private Set<PostedIndividualDeliveredService> people = new HashSet();
+  private Set<IndividualDeliveredService> people = new HashSet();
   CmsRecordDescriptor personLegacyDescriptor =
       new CmsRecordDescriptorEntityBuilder().setId("1234567ABC").setUiId("3333-2222-3333-4444555")
           .setTableName("CLIENT_T").setTableDescription("Client").build();
 
-  private PostedIndividualDeliveredService person = new PostedIndividualDeliveredService(
+  private IndividualDeliveredService person = new IndividualDeliveredService(
       personLegacyDescriptor, "first", "middle", "last", "phd", "Mr", "teacher");
 
   public ContactRequest build() {
@@ -72,7 +72,7 @@ public class ContactRequestBuilder {
     return this;
   }
 
-  public ContactRequestBuilder setPeople(Set<PostedIndividualDeliveredService> people) {
+  public ContactRequestBuilder setPeople(Set<IndividualDeliveredService> people) {
     this.people = people;
     return this;
   }
@@ -83,7 +83,7 @@ public class ContactRequestBuilder {
     return this;
   }
 
-  public ContactRequestBuilder setPerson(PostedIndividualDeliveredService person) {
+  public ContactRequestBuilder setPerson(IndividualDeliveredService person) {
     this.person = person;
     return this;
   }

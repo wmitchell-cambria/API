@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
  * @author CWDS API Team
  *
  */
-public class IndividualDeliveredServiceTest {
+public class IndividualDeliveredServiceEntityTest {
 
   private String deliveredServiceId = "ABC1234567";
   private String deliveredToIndividualCode = "C";

@@ -37,7 +37,7 @@ import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.contacts.IndividualDeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
@@ -211,7 +211,7 @@ public class DeliveredToIndividualServiceTest {
     IndividualDeliveredServiceEntity individualDeliveredService =
         new IndividualDeliveredServiceEntityBuilder().setDeliveredToIndividualCode("C")
             .buildIndividualDeliveredServiceEntity();
-    PostedIndividualDeliveredService person =
+    IndividualDeliveredService person =
         deliveredToIndividualService.findPerson(individualDeliveredService);
     String expected = person.getFirstName();
     assertEquals(expected, "John");
@@ -260,15 +260,15 @@ public class DeliveredToIndividualServiceTest {
   }
 
   private ContactRequest validContactRequest() {
-    final Set<PostedIndividualDeliveredService> people = validPeople();
+    final Set<IndividualDeliveredService> people = validPeople();
     return new ContactRequest("2010-04-27T23:30:14.000Z", "", "433", "408", "C",
         new HashSet<Integer>(), "415",
         "some text describing the contact of up to 8000 characters can be stored in CMS", people);
   }
 
 
-  private Set<PostedIndividualDeliveredService> validPeople() {
-    final Set<PostedIndividualDeliveredService> ret = new HashSet<>();
+  private Set<IndividualDeliveredService> validPeople() {
+    final Set<IndividualDeliveredService> ret = new HashSet<>();
     CmsRecordDescriptor person1LegacyDescriptor =
         new CmsRecordDescriptorEntityBuilder().setId("3456789ABC").setUiId("2222-2222-3333-4444555")
             .setTableName("CLIENT_T").setTableDescription("Client").build();
@@ -276,9 +276,9 @@ public class DeliveredToIndividualServiceTest {
         new CmsRecordDescriptorEntityBuilder().setId("4567890ABC").setUiId("3333-2222-3333-4444555")
             .setTableName("REPTR_T").setTableDescription("Reporter").build();
 
-    ret.add(new PostedIndividualDeliveredService(person1LegacyDescriptor, "John", "Bob", "Smith",
+    ret.add(new IndividualDeliveredService(person1LegacyDescriptor, "John", "Bob", "Smith",
         "Mr.", "Jr.", ""));
-    ret.add(new PostedIndividualDeliveredService(person2LegacyDescriptor, "Sam", "Bill", "Jones",
+    ret.add(new IndividualDeliveredService(person2LegacyDescriptor, "Sam", "Bill", "Jones",
         "Mr.", "III", "Reporter"));
     return ret;
   }
