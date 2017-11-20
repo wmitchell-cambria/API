@@ -369,6 +369,8 @@ public class Client extends ReportingDomain implements Request, Response {
   private String socialSecurityNumChangedCode;
 
   @Size(min = 0, max = 9)
+  // This regualr expression(regexp) validates the socialSecurityNumber should be only numeric and
+  // length 9
   @Pattern(regexp = "^(|[0-9]{9})$")
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "123456789")
   private String socialSecurityNumber;
