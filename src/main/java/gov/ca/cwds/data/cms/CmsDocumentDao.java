@@ -12,7 +12,6 @@ import java.util.Set;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,10 +67,10 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   public CmsDocument compressPK(final CmsDocument doc, String base64) {
     try {
       // Out with the old ...
-      final Session session = this.getSessionFactory().getCurrentSession();
-      for (CmsDocumentBlobSegment segment : doc.getBlobSegments()) {
-        session.remove(segment);
-      }
+      // final Session session = this.getSessionFactory().getCurrentSession();
+      // for (CmsDocumentBlobSegment segment : doc.getBlobSegments()) {
+      // session.remove(segment);
+      // }
 
       // In with the new ...
       final Set<CmsDocumentBlobSegment> blobSegments = doc.getBlobSegments();
@@ -93,6 +92,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
 
+      // for (CmsDocumentBlobSegment segment : doc.getBlobSegments()) {
+      // session.save(segment);
+      // }
     } catch (Exception e) {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
       throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);
