@@ -2,9 +2,6 @@ package gov.ca.cwds.rest.business.rules.doctool;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -17,8 +14,6 @@ import org.junit.Test;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
-import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 
 /**
@@ -28,15 +23,7 @@ import gov.ca.cwds.rest.api.domain.Participant;
 public class R06238SsnShouldBeNumericTest {
 
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
-
-  private Set<String> roles = new HashSet<>();
-  private Set<Address> addresses = new HashSet<>();
-  private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
-
   private Validator validator;
-
-  List<Short> racecodes = new ArrayList<>();
-  List<Short> hispaniccodes = new ArrayList<>();
 
   /**
    * 
@@ -45,13 +32,6 @@ public class R06238SsnShouldBeNumericTest {
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
-    roles.add("Victim");
-    racecodes.add((short) 841);
-    hispaniccodes.add((short) 3164);
-    Address address =
-        new Address("", "", "123 First St", "San Jose", 1828, "94321", 32, legacyDescriptor);
-    addresses.add(address);
-
   }
 
   /**
