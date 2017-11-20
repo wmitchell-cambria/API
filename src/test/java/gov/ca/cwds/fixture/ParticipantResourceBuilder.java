@@ -26,7 +26,7 @@ public class ParticipantResourceBuilder {
   String middleName = "S";
   String lastName = "Smith";
   String suffix = "Jr.";
-  String gender = "male";
+  String gender = "M";
   String dateOfBirth = "2001-03-15";
   String ssn = "123456789";
   Short primaryLanguage = 1271;

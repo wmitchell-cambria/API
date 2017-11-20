@@ -23,6 +23,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import gov.ca.cwds.rest.validation.AfterDateValid;
 import gov.ca.cwds.rest.validation.IfThenNot;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
@@ -37,6 +38,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 @IfThenNot(ifProperty = "applicationForPetitionIndicator", thenProperty = "referralResponseType",
     required = false, ifValue = true, thenNotValue = Referral.EVALUATE_OUT)
+@AfterDateValid(ifProperty = "receivedDate", thenProperty = "limitedAccessDate")
 public class Referral extends ReportingDomain implements Request, Response {
   static final int EVALUATE_OUT = 1519;
   private static final String DEFAULT_NO = "N";
