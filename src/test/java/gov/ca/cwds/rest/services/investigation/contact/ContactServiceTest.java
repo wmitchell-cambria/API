@@ -27,7 +27,7 @@ import gov.ca.cwds.fixture.contacts.ReferralClientDeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactRequest;
@@ -71,7 +71,7 @@ public class ContactServiceTest {
         .thenReturn(new LastUpdatedBy(staffLegacyDescriptor, "Joe", "M", "Friday", "Mr.", "Jr."));
     when(deliveredService.combineDetailTextAndContinuation(any())).thenReturn("this is a test");
     when(deliveredToIndividualService.getPeopleInIndividualDeliveredService(any()))
-        .thenReturn(new HashSet<PostedIndividualDeliveredService>());
+        .thenReturn(new HashSet<IndividualDeliveredService>());
 
     ReferralClientDeliveredServiceEntity[] entity =
         {new ReferralClientDeliveredServiceEntityBuilder().build()};

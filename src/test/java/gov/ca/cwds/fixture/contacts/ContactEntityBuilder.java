@@ -6,7 +6,7 @@ import java.util.Set;
 import gov.ca.cwds.fixture.investigation.CmsRecordDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 
@@ -23,10 +23,10 @@ public class ContactEntityBuilder {
   private Set<Integer> services = new HashSet<>();
   private Integer location = 415;
   private String note = "contact description";
-  private Set<PostedIndividualDeliveredService> people = new HashSet<>();
+  private Set<IndividualDeliveredService> people = new HashSet<>();
   private CmsRecordDescriptor legacyDescriptor = new CmsRecordDescriptorEntityBuilder().build();
 
-  private PostedIndividualDeliveredService person = new PostedIndividualDeliveredService(
+  private IndividualDeliveredService person = new IndividualDeliveredService(
       legacyDescriptor, "first", "middle", "last", "phd", "Mr", "teacher");
 
   public Contact build() {

@@ -24,7 +24,7 @@ import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
@@ -100,7 +100,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
         deliveredService.getTheLastUpdatedByStaffPerson(deliveredServiceEntity);
     String note = deliveredService.combineDetailTextAndContinuation(deliveredServiceEntity);
 
-    Set<PostedIndividualDeliveredService> peopleInIndividualDeliveredService =
+    Set<IndividualDeliveredService> peopleInIndividualDeliveredService =
         deliveredToIndividualService.getPeopleInIndividualDeliveredService(deliveredServiceEntity);
 
     return new Contact(deliveredServiceEntity, lastUpdatedBy, note,

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.PostedIndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
@@ -88,7 +88,7 @@ public class ContactRequest implements Request {
   @ApiModelProperty(required = true, readOnly = false)
   @JsonProperty("people")
   // ("contact_participants") INDIVIDUAL_DELIVERED_SERVICE
-  private Set<PostedIndividualDeliveredService> people;
+  private Set<IndividualDeliveredService> people;
 
   /**
    * @param startedAt started at
@@ -107,7 +107,7 @@ public class ContactRequest implements Request {
       @JsonProperty("communication_method") String communicationMethod,
       @JsonProperty("status") String status, @JsonProperty("services") Set<Integer> services,
       @JsonProperty("location") String location, @JsonProperty("note") String note,
-      @JsonProperty("people") Set<PostedIndividualDeliveredService> people) {
+      @JsonProperty("people") Set<IndividualDeliveredService> people) {
     this.startedAt = startedAt;
     this.endedAt = endedAt;
     this.purpose = purpose;
@@ -195,7 +195,7 @@ public class ContactRequest implements Request {
   /**
    * @return the people
    */
-  public Set<PostedIndividualDeliveredService> getPeople() {
+  public Set<IndividualDeliveredService> getPeople() {
     return people;
   }
 
