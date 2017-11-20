@@ -1,18 +1,18 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import org.junit.Before;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class PersonEthnicityTest {
 
   PersonEthnicity personEthnicity;
 
   @Before
-  public void setup(){
+  public void setup() {
     personEthnicity = new PersonEthnicity();
 
   }
@@ -31,8 +31,10 @@ public class PersonEthnicityTest {
   public void equalsShouldBeFalseWhenOtherObjectIsADifferentClass() throws Exception {
     assertFalse(personEthnicity.equals("A Different Class"));
   }
+
   @Test
-  public void equalsShouldBeFalseWhenPersonEthnicityDoesNotEqualOtherPersonEthnicity() throws Exception {
+  public void equalsShouldBeFalseWhenPersonEthnicityDoesNotEqualOtherPersonEthnicity()
+      throws Exception {
     PersonEthnicity otherPersonEthnicity = new PersonEthnicity(new Person(), new Ethnicity());
     assertFalse(personEthnicity.equals(otherPersonEthnicity));
   }

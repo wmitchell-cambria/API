@@ -7,28 +7,28 @@ import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
  *
  */
 public class DeliveredServiceResourceBuilder {
-  String id = "ABC1234567";
-  Short cftLeadAgencyType = (short) 4212;
-  Boolean coreServiceIndicator = false;
-  Integer communicationMethodType = 409;
-  Integer contactLocationType = 415;
-  String contactVisitCode = "C";
-  String countySpecificCode = "99";
-  String detailText = "ABC1234567";
-  String detailTextContinuation = "ABC12345t7";
-  String endDate = "2000-01-01";
-  String endTime = "16:41:49";
-  String primaryDeliveredServiceId = "ABC1at0875";
-  String hardCopyDocumentOnFileCode = "N";
-  String otherParticipantsDesc = "description of the world";
-  String providedByCode = "S";
-  String providedById = "ABC097r534";
-  Integer serviceContactType = 408;
-  String startDate = "1992-01-01";
-  String startTime = "16:41:49";
-  String statusCode = "C";
-  String supervisionCode = "C";
-  Boolean wraparoundServiceIndicator = false;
+  private String id = "ABC1234567";
+  private Short cftLeadAgencyType = (short) 4212;
+  private Boolean coreServiceIndicator = false;
+  private Integer communicationMethodType = 409;
+  private Integer contactLocationType = 415;
+  private String contactVisitCode = "C";
+  private String countySpecificCode = "99";
+  private String detailText = "ABC1234567";
+  private String detailTextContinuation = "ABC12345t7";
+  private String endDate = "2000-01-01";
+  private String endTime = "16:41:49";
+  private String primaryDeliveredServiceId = "ABC1at0875";
+  private String hardCopyDocumentOnFileCode = "N";
+  private String otherParticipantsDesc = "description of the world";
+  private String providedByCode = "S";
+  private String providedById = "ABC097r534";
+  private Integer serviceContactType = 408;
+  private String startDate = "1992-01-01";
+  private String startTime = "16:41:49";
+  private String statusCode = "C";
+  private String supervisionCode = "C";
+  private Boolean wraparoundServiceIndicator = false;
 
   public DeliveredServiceDomain buildDeliveredServiceResource() {
     return new DeliveredServiceDomain(id, cftLeadAgencyType, coreServiceIndicator,

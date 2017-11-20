@@ -68,6 +68,7 @@ public class AssignmentTest {
     assertThat(persistent.getTypeOfAssignmentCode(),
         is(equalTo(validPersistent.getTypeOfAssignmentCode())));
     assertThat(persistent.getWeightingNumber(), is(equalTo(validPersistent.getWeightingNumber())));
+    assertThat(persistent.getPrimaryKey(), is(equalTo(id)));
   }
 
   @Test
@@ -102,6 +103,7 @@ public class AssignmentTest {
     assertThat(persistent.getTypeOfAssignmentCode(),
         is(equalTo(validDomain.getTypeOfAssignmentCode())));
     assertThat(persistent.getWeightingNumber(), is(equalTo(validDomain.getWeightingNumber())));
+    assertThat(persistent.getPrimaryKey(), is(equalTo(id)));
   }
 
   @Test

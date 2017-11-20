@@ -9,7 +9,6 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import gov.ca.cwds.fixture.contacts.DeliveredServiceEntityBuilder;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceResourceBuilder;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -20,6 +19,28 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  *
  */
 public class DeliveredServiceEntityTest {
+
+  private Short cftLeadAgencyType = (short) 12;
+  private String coreServiceIndicator = "N";
+  private Short communicationMethodType = (short) 408;
+  private Short contactLocationType = (short) 415;
+  private String contactVisitCode = "C";
+  private String countySpecificCode = "99";
+  private String detailText = "ABC12345679";
+  private String hardCopyDocumentOnFileCode = "N";
+  private String detailTextContinuation = "ABC12345t7";
+  private Date endDate = new Date();
+  private Date endTime = new Date();
+  private String primaryDeliveredServiceId = "ABC1at0875";
+  private String otherParticipantsDesc = "description of the world";
+  private String providedByCode = "S";
+  private String providedById = "ABC097r534";
+  private Date startDate = new Date();
+  private Date startTime = new Date();
+  private String statusCode = "C";
+  private String supervisionCode = "C";
+  private Short serviceContactType = (short) 408;
+  private String wraparoundServiceIndicator = "N";
 
   private String id = "1234567ABC";
   private String lastUpdatedId = "0X5";
@@ -35,63 +56,39 @@ public class DeliveredServiceEntityTest {
     assertThat(DeliveredServiceEntity.class.newInstance(), is(notNullValue()));
   }
 
+  @SuppressWarnings("javadoc")
   @Test
   public void testPersistentConstructor() throws Exception {
-    DeliveredServiceEntity deliverdServiceEntity =
-        new DeliveredServiceEntityBuilder().buildDeliveredServiceEntity();
+    DeliveredServiceEntity persistent = new DeliveredServiceEntity(cftLeadAgencyType,
+        coreServiceIndicator, communicationMethodType, contactLocationType, contactVisitCode,
+        countySpecificCode, detailText, hardCopyDocumentOnFileCode, detailTextContinuation, endDate,
+        endTime, primaryDeliveredServiceId, id, otherParticipantsDesc, providedByCode, providedById,
+        startDate, startTime, statusCode, supervisionCode, serviceContactType,
+        wraparoundServiceIndicator);
 
-    DeliveredServiceEntity persistent = new DeliveredServiceEntity(
-        deliverdServiceEntity.getCftLeadAgencyType(),
-        deliverdServiceEntity.getCoreServiceIndicator(),
-        deliverdServiceEntity.getCommunicationMethodType(),
-        deliverdServiceEntity.getContactLocationType(), deliverdServiceEntity.getContactVisitCode(),
-        deliverdServiceEntity.getCountySpecificCode(), deliverdServiceEntity.getDetailText(),
-        deliverdServiceEntity.getHardCopyDocumentOnFileCode(),
-        deliverdServiceEntity.getDetailTextContinuation(), deliverdServiceEntity.getEndDate(),
-        deliverdServiceEntity.getEndTime(), deliverdServiceEntity.getPrimaryDeliveredServiceId(),
-        deliverdServiceEntity.getId(), deliverdServiceEntity.getOtherParticipantsDesc(),
-        deliverdServiceEntity.getProvidedByCode(), deliverdServiceEntity.getProvidedById(),
-        deliverdServiceEntity.getStartDate(), deliverdServiceEntity.getStartTime(),
-        deliverdServiceEntity.getStatusCode(), deliverdServiceEntity.getSupervisionCode(),
-        deliverdServiceEntity.getServiceContactType(),
-        deliverdServiceEntity.getWraparoundServiceIndicator());
-
-    assertThat(persistent.getCftLeadAgencyType(),
-        is(equalTo(deliverdServiceEntity.getCftLeadAgencyType())));
-    assertThat(persistent.getCoreServiceIndicator(),
-        is(equalTo(deliverdServiceEntity.getCoreServiceIndicator())));
-    assertThat(persistent.getCommunicationMethodType(),
-        is(equalTo(deliverdServiceEntity.getCommunicationMethodType())));
-    assertThat(persistent.getContactLocationType(),
-        is(equalTo(deliverdServiceEntity.getContactLocationType())));
-    assertThat(persistent.getContactVisitCode(),
-        is(equalTo(deliverdServiceEntity.getContactVisitCode())));
-    assertThat(persistent.getCountySpecificCode(),
-        is(equalTo(deliverdServiceEntity.getCountySpecificCode())));
-    assertThat(persistent.getDetailText(), is(equalTo(deliverdServiceEntity.getDetailText())));
-    assertThat(persistent.getHardCopyDocumentOnFileCode(),
-        is(equalTo(deliverdServiceEntity.getHardCopyDocumentOnFileCode())));
-    assertThat(persistent.getDetailTextContinuation(),
-        is(equalTo(deliverdServiceEntity.getDetailTextContinuation())));
-    assertThat(persistent.getEndDate(), is(equalTo(deliverdServiceEntity.getEndDate())));
-    assertThat(persistent.getEndTime(), is(equalTo(deliverdServiceEntity.getEndTime())));
-    assertThat(persistent.getPrimaryDeliveredServiceId(),
-        is(equalTo(deliverdServiceEntity.getPrimaryDeliveredServiceId())));
-    assertThat(persistent.getId(), is(equalTo(deliverdServiceEntity.getId())));
-    assertThat(persistent.getOtherParticipantsDesc(),
-        is(equalTo(deliverdServiceEntity.getOtherParticipantsDesc())));
-    assertThat(persistent.getProvidedByCode(),
-        is(equalTo(deliverdServiceEntity.getProvidedByCode())));
-    assertThat(persistent.getProvidedById(), is(equalTo(deliverdServiceEntity.getProvidedById())));
-    assertThat(persistent.getStartDate(), is(equalTo(deliverdServiceEntity.getStartDate())));
-    assertThat(persistent.getStartTime(), is(equalTo(deliverdServiceEntity.getStartTime())));
-    assertThat(persistent.getStatusCode(), is(equalTo(deliverdServiceEntity.getStatusCode())));
-    assertThat(persistent.getSupervisionCode(),
-        is(equalTo(deliverdServiceEntity.getSupervisionCode())));
-    assertThat(persistent.getServiceContactType(),
-        is(equalTo(deliverdServiceEntity.getServiceContactType())));
-    assertThat(persistent.getWraparoundServiceIndicator(),
-        is(equalTo(deliverdServiceEntity.getWraparoundServiceIndicator())));
+    assertThat(persistent.getCftLeadAgencyType(), is(equalTo(cftLeadAgencyType)));
+    assertThat(persistent.getCoreServiceIndicator(), is(equalTo(coreServiceIndicator)));
+    assertThat(persistent.getCommunicationMethodType(), is(equalTo(communicationMethodType)));
+    assertThat(persistent.getContactLocationType(), is(equalTo(contactLocationType)));
+    assertThat(persistent.getContactVisitCode(), is(equalTo(contactVisitCode)));
+    assertThat(persistent.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+    assertThat(persistent.getDetailText(), is(equalTo(detailText)));
+    assertThat(persistent.getHardCopyDocumentOnFileCode(), is(equalTo(hardCopyDocumentOnFileCode)));
+    assertThat(persistent.getDetailTextContinuation(), is(equalTo(detailTextContinuation)));
+    assertThat(persistent.getEndDate(), is(equalTo(endDate)));
+    assertThat(persistent.getEndTime(), is(equalTo(endTime)));
+    assertThat(persistent.getPrimaryDeliveredServiceId(), is(equalTo(primaryDeliveredServiceId)));
+    assertThat(persistent.getId(), is(equalTo(id)));
+    assertThat(persistent.getOtherParticipantsDesc(), is(equalTo(otherParticipantsDesc)));
+    assertThat(persistent.getProvidedByCode(), is(equalTo(providedByCode)));
+    assertThat(persistent.getProvidedById(), is(equalTo(providedById)));
+    assertThat(persistent.getStartDate(), is(equalTo(startDate)));
+    assertThat(persistent.getStartTime(), is(equalTo(startTime)));
+    assertThat(persistent.getStatusCode(), is(equalTo(statusCode)));
+    assertThat(persistent.getSupervisionCode(), is(equalTo(supervisionCode)));
+    assertThat(persistent.getServiceContactType(), is(equalTo(serviceContactType)));
+    assertThat(persistent.getWraparoundServiceIndicator(), is(equalTo(wraparoundServiceIndicator)));
+    assertThat(persistent.getPrimaryKey(), is(equalTo(id)));
   }
 
   /**
@@ -149,6 +146,7 @@ public class DeliveredServiceEntityTest {
         is(equalTo(deliveredServiceDomain.getServiceContactType().shortValue())));
     assertThat(deliveredServiceEntity.getWraparoundServiceIndicator(), is(
         equalTo(DomainChef.cookBoolean(deliveredServiceDomain.getWraparoundServiceIndicator()))));
+    assertThat(deliveredServiceEntity.getPrimaryKey(), is(equalTo(id)));
 
   }
 

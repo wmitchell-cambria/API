@@ -68,6 +68,14 @@ public class CrossReportTest {
     EqualsVerifier.forClass(CrossReport.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
+  @Test
+  public void testNullAgencies() throws Exception {
+    Set<CrossReportAgency> crossReportAgencies = new HashSet<>();
+    CrossReport crossReport = new CrossReport(legacyDescriptor, readOnly, reportedOn,
+        communicationMethod, county, crossReportAgencies);
+    assertThat(crossReport.getCrossReportAgencies(), is(equalTo(crossReportAgencies)));
+  }
+
   // @Test
   // @Ignore
   // public void testSerializedInvestigation()

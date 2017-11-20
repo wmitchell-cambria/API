@@ -69,4 +69,14 @@ public class CaseAssignment extends BaseAssignment {
     setEstablishedForCode(FOLDED_KEY_CODE);
   }
 
+  /**
+   * @param id - CMS Id
+   * @param assignment - CMS domain assignment
+   * @param lastUpdatedBy - last updated by Staff Id
+   */
+  public CaseAssignment(String id, gov.ca.cwds.rest.api.domain.cms.Assignment assignment,
+      String lastUpdatedBy) {
+    super(id, assignment, lastUpdatedBy);
+  }
+
 }

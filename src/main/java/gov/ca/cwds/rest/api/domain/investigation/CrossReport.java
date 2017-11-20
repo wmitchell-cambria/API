@@ -61,6 +61,8 @@ public class CrossReport extends ReportingDomain implements Response {
   @ValidLogicalId(required = true, category = SystemCodeCategoryId.COUNTY_CODE)
   private String county;
 
+  @JsonProperty("agencies")
+  @ApiModelProperty(required = false, readOnly = false)
   private Set<CrossReportAgency> crossReportAgencies;
 
   /**

@@ -12,20 +12,20 @@ import gov.ca.cwds.data.persistence.cms.Assignment;
 @SuppressWarnings("javadoc")
 public class AssignmentEntityBuilder {
 
-  String id = "SlCAr46088";
-  String countySpecificCode = "99";
-  Date endDate = new Date();
-  Date endTime = new Date();
-  String establishedForCode = "C";
-  String establishedForId = "0iiVVuE088";
-  String fkCaseLoad = "Aci1N2I00E";
-  String fkOutOfStateContactParty = null;
-  String responsibilityDescription = "some kind of descrption";
-  Short secondaryAssignmentRoleType = (short) 0;
-  Date startDate = new Date();
-  Date startTime = new Date();
-  String typeOfAssignmentCode = "P";
-  BigDecimal weightingNumber = new BigDecimal(0.00);
+  private String id = "SlCAr46088";
+  private String countySpecificCode = "99";
+  private Date endDate = new Date();
+  private Date endTime = new Date();
+  private String establishedForCode = "C";
+  private String establishedForId = "0iiVVuE088";
+  private String fkCaseLoad = "Aci1N2I00E";
+  private String fkOutOfStateContactParty = null;
+  private String responsibilityDescription = "some kind of descrption";
+  private Short secondaryAssignmentRoleType = (short) 0;
+  private Date startDate = new Date();
+  private Date startTime = new Date();
+  private String typeOfAssignmentCode = "P";
+  private BigDecimal weightingNumber = new BigDecimal(0.00);
 
   public Assignment build() {
     return new Assignment(id, countySpecificCode, endDate, endTime, establishedForCode,
