@@ -61,7 +61,7 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "DOC_HANDLE", nullable = false)
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();

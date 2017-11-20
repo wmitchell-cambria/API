@@ -151,7 +151,6 @@ public class XASample {
    * @param args command line
    */
   public void runThis(String[] args) {
-
     byte[] gtrid = new byte[] {0x44, 0x11, 0x55, 0x66};
     byte[] bqual = new byte[] {0x00, 0x22, 0x00};
     int rc1 = 0;

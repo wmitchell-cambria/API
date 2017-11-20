@@ -178,7 +178,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       src.deleteOnExit();
       tgt = File.createTempFile("tgt", ".doc");
       tgt.deleteOnExit();
-
     } catch (IOException e) {
       errorDecompressing(e);
     }
