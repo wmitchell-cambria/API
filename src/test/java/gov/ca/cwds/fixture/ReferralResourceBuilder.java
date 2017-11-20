@@ -37,8 +37,8 @@ public class ReferralResourceBuilder {
   String mandatedCrossReportReceivedDate = "";
   String referralName = "";
   String openAdequateCaseCode = "";
-  String receivedDate = "";
-  String receivedTime = "";
+  String receivedDate = "2017-01-01";
+  String receivedTime = "16:41:49";
   Short referralResponseType = 1520;
   Short referredToResourceType = 0;
   String responseDeterminationDate = "";
@@ -51,8 +51,8 @@ public class ReferralResourceBuilder {
   String linkToPrimaryReferralId = null;
   String allegesAbuseOccurredAtAddressId = null;
   String firstResponseDeterminedByStaffPersonId = null;
-  String primaryContactStaffPersonId = null;
-  String countySpecificCode = "";
+  String primaryContactStaffPersonId = "0X5";
+  String countySpecificCode = "99";
   Boolean specialProjectReferralIndicator = false;
   Boolean zippyCreatedIndicator = false;
   Boolean homelessIndicator = false;
@@ -63,7 +63,7 @@ public class ReferralResourceBuilder {
   String limitedAccessDate = "";
   String limitedAccessDesc = "";
   String originalClosureDate = "";
-  String uiIdentifier = "";
+  String uiIdentifier = "1706-0845-6765-4001284";
   Set<Address> address = new HashSet<>();
   Set<Reporter> reporter = new HashSet<>();
   Set<CrossReport> crossReport = new HashSet<>();
