@@ -22,6 +22,7 @@ import gov.ca.cwds.rest.validation.IfThenNot;
  */
 public class R00807ReferralResponseTypeCantBeEvaluateOutTest {
 
+  private static final short EVALUATE_OUT = (short) 1519;
   private Validator validator;
 
   /**
@@ -42,9 +43,9 @@ public class R00807ReferralResponseTypeCantBeEvaluateOutTest {
    * @throws Exception - Exception
    */
   @Test
-  public void failsWhenPetitionIndicatorTrueAndResponeType1519() throws Exception {
+  public void failsWhenPetitionIndicatorTrueAndResponeTypeEvaluateOut() throws Exception {
     Referral toValidate = new ReferralResourceBuilder().setApplicationForPetitionIndicator(true)
-        .setReferralResponseType((short) 1519).build();
+        .setReferralResponseType(EVALUATE_OUT).build();
     Set<ConstraintViolation<Referral>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
     assertEquals("is not valid since applicationForPetitionIndicator is set to true",
@@ -55,9 +56,9 @@ public class R00807ReferralResponseTypeCantBeEvaluateOutTest {
    * @throws Exception - Exception
    */
   @Test
-  public void successWhenPetitionIndicatorFalseAndResponeType1519() throws Exception {
+  public void successWhenPetitionIndicatorFalseAndResponeTypeEvaluateOut() throws Exception {
     Referral toValidate = new ReferralResourceBuilder().setApplicationForPetitionIndicator(false)
-        .setReferralResponseType((short) 1519).build();
+        .setReferralResponseType(EVALUATE_OUT).build();
     Set<ConstraintViolation<Referral>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
