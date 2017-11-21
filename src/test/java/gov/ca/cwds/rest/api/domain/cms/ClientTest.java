@@ -3406,6 +3406,28 @@ public class ClientTest implements DomainTestTemplate {
     assertThat(domain.getSecondaryLanguage(), is(equalTo(zero)));
   }
 
+  @Test
+  /**
+   * Rule - 06998
+   */
+  public void testZippyClientCreation() {
+
+    RaceAndEthnicity raceAndEthnicity =
+        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
+
+    Participant participant = new Participant(1, "sourceTable", "clientId", new LegacyDescriptor(),
+        "firstName", "middleName", "lastName", "", "gender", "ssn", "dob", primaryLanguageType,
+        secondaryLanguageType, 3, 4, reporterConfidentialWaiver, reporterEmployerName,
+        clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(), new HashSet<>(),
+        raceAndEthnicity);
+
+    Client client = Client.createWithDefaults(participant, "", "", (short) 0);
+
+    assertEquals("Expected zippyCreatedIndicator field to be initialized as  True", Boolean.TRUE,
+        client.getZippyCreatedIndicator());
+
+  }
+
   // @Test
   // public void testConstructorWithNonNullClientAddresses() throws Exception {
   // gov.ca.cwds.data.persistence.cms.ClientAddress persistentClientAddress =

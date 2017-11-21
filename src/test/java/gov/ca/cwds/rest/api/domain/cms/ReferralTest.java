@@ -2707,6 +2707,46 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
+  /**
+   * Rule - 06998
+   */
+  @Test
+  public void testZippyReferralCreation() {
+
+    boolean anonReporter = true;
+    Short communicationsMethodCode = 44;
+    String currentLocationOfChildren = "currentLocationOfChildren";
+    String drmsAllegationDescriptionDoc = "ABC1234569";
+    String drmsErReferralDoc = "1234567ABC";
+    String drmsInvestigationDoc = "ABD1234567";
+    String referalName = "zippy referral";
+    String dateStarted = "may 22";
+    String timeStarted = "6 o'clock";
+    Short referralResponseTypeCode = 4;
+    String allegesAbuseOccurredAtAddressId = "ABC1234567";
+    String firstResponseDeterminedByStaffPersonId = "0X5";
+    String longTextId = "LongText";
+    String countyCode = "sacramento";
+    Short approvalCode = 4;
+    String staffId = "098";
+    String limitedAccessCode = "N";
+    Short limitedAccessGovtAgencyType = 123;
+    String limitedAccessDate = "2019-10-20";
+    String limitedAccessDesc = "Some description";
+    boolean filedCrossReport = true;
+
+
+    Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
+        currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
+        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
+        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
+        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
+        countyCode, approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode,
+        limitedAccessDesc, limitedAccessDate, limitedAccessGovtAgencyType);
+    assertEquals("Expected anonReporter field to have presetValues", Boolean.TRUE,
+        referral.getZippyCreatedIndicator());
+  }
+
   /*
    * Utils
    */
