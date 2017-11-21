@@ -2743,7 +2743,7 @@ public class ReferralTest {
         allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
         countyCode, approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode,
         limitedAccessDesc, limitedAccessDate, limitedAccessGovtAgencyType);
-    assertEquals("Expected anonReporter field to have presetValues", Boolean.TRUE,
+    assertEquals("Expected zippyCreatedIndicator field to be initialized as  True", Boolean.TRUE,
         referral.getZippyCreatedIndicator());
   }
 
