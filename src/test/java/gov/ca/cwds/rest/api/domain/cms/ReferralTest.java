@@ -10,23 +10,18 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Set;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -354,7 +349,7 @@ public class ReferralTest {
     String unfoundedSeriesCode = "N";
     String linkToPrimaryReferralId = "";
     Boolean specialProjectReferralIndicator = false;
-    Boolean zippyCreatedIndicator = false;
+    Boolean zippyCreatedIndicator = true;
     Boolean homelessIndicator = false;
     Boolean familyRefusedServicesIndicator = false;
     String firstEvaluatedOutApprovalDate = "";

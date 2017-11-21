@@ -1,28 +1,24 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
 import gov.ca.cwds.rest.validation.AfterDateValid;
 import gov.ca.cwds.rest.validation.IfThenNot;
 import io.dropwizard.validation.OneOf;
@@ -639,9 +635,9 @@ public class Referral extends ReportingDomain implements Request, Response {
         referalName, "", dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
         "", "", responseRationalLongTextId, screenerNoteLongTextId, DEFAULT_NO, DEFAULT_NO,
         DEFAULT_NO, "", allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId,
-        staffId, countyCode, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
-        responsibleAgencyCode, limitedAccessGovtAgencyType, limitedAccessDate, limitedAccessDesc,
-        "", null, null, null, null, null, null, null);
+        staffId, countyCode, Boolean.FALSE, R06998ZippyIndicator.Yes.getCode(), Boolean.FALSE,
+        Boolean.FALSE, "", responsibleAgencyCode, limitedAccessGovtAgencyType, limitedAccessDate,
+        limitedAccessDesc, "", null, null, null, null, null, null, null);
   }
 
   /**

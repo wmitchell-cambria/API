@@ -11,29 +11,24 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
@@ -588,8 +583,8 @@ public class ClientTest implements DomainTestTemplate {
         false, client.getTribalMembrshpVerifctnIndicatorVar());
     assertEquals("Expected unemployedParentCode field to be initialized with default values", "U",
         client.getUnemployedParentCode());
-    assertEquals("Expected zippyCreatedIndicator field to be initialized with default values",
-        false, client.getZippyCreatedIndicator());
+    assertEquals("Expected zippyCreatedIndicator field to be initialized with default values", true,
+        client.getZippyCreatedIndicator());
     assertEquals("Expected address field to be initialized with default values", null,
         client.getAddress());
   }

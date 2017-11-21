@@ -5,16 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import javax.validation.Validator;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
@@ -30,6 +26,7 @@ import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
@@ -155,6 +152,7 @@ public class ScreeningToReferralService implements CrudsService {
      */
     String dateStarted = ParticipantValidator.extractStartDate(screeningToReferral, messageBuilder);
     String timeStarted = ParticipantValidator.extractStartTime(screeningToReferral, messageBuilder);
+
 
     String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 
@@ -539,8 +537,8 @@ public class ScreeningToReferralService implements CrudsService {
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
             scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
             Boolean.FALSE, ("").equals(perpatratorClientId) ? "U" : "N", Boolean.FALSE,
-            victimClientId, perpatratorClientId, referralId, scr.getIncidentCounty(), Boolean.FALSE,
-            LegacyDefaultValues.DEFAULT_CODE);
+            victimClientId, perpatratorClientId, referralId, scr.getIncidentCounty(),
+            R06998ZippyIndicator.Yes.getCode(), LegacyDefaultValues.DEFAULT_CODE);
 
     messageBuilder.addDomainValidationError(validator.validate(cmsAllegation));
 
