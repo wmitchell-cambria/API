@@ -6,12 +6,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -228,6 +231,21 @@ public class ReferralTest {
     assertThat(totest.getLimitedAccessDesc(), is(equalTo(persistent.getLimitedAccessDesc())));
     assertThat(totest.getOriginalClosureDate(),
         is(equalTo(df.format(persistent.getOriginalClosureDate()))));
+  }
+
+  @Test
+  public void shouldCreateReferralWithEmptySetsFromPersistedReferralWhenCollectionsAreEmpty() {
+    gov.ca.cwds.data.persistence.cms.Referral savedReferral = new ReferralEntityBuilder()
+            .setAddresses(null)
+            .setReporters(null)
+            .setCrossReports(null)
+            .setAllegations(null)
+        .build();
+    Referral referral = new Referral(savedReferral);
+    assertTrue(referral.getAddress().isEmpty());
+    assertTrue(referral.getReporter().isEmpty());
+    assertTrue(referral.getCrossReport().isEmpty());
+    assertTrue(referral.getAllegation().isEmpty());
   }
 
   @Test

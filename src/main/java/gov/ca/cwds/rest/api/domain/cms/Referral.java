@@ -554,34 +554,31 @@ public class Referral extends ReportingDomain implements Request, Response {
       this.address.add(new Address(persistedReferral.getAddresses(), true));
     }
     this.reporter = new HashSet<>();
-    if (persistedReferral.getReporters() != null && !persistedReferral.getReporters().isEmpty()) {
-      for (gov.ca.cwds.data.persistence.cms.Reporter persistedReporter : persistedReferral
-          .getReporters()) {
-        this.reporter.add(new Reporter(persistedReporter));
-      }
+    Set<gov.ca.cwds.data.persistence.cms.Reporter> savedReporters = persistedReferral.getReporters();
+    if (savedReporters == null) { savedReporters = new HashSet<>(); }
+    for (gov.ca.cwds.data.persistence.cms.Reporter persistedReporter : savedReporters){
+      this.reporter.add(new Reporter(persistedReporter));
     }
     this.crossReport = new HashSet<>();
-    if (persistedReferral.getCrossReports() != null
-        && !persistedReferral.getCrossReports().isEmpty()) {
-      for (gov.ca.cwds.data.persistence.cms.CrossReport persistedCrossReport : persistedReferral
-          .getCrossReports()) {
-        this.crossReport.add(new CrossReport(persistedCrossReport));
-      }
+    Set<gov.ca.cwds.data.persistence.cms.CrossReport> savedCrossReports = persistedReferral.getCrossReports();
+    if (savedCrossReports == null ) { savedCrossReports = new HashSet(); }
+    for (gov.ca.cwds.data.persistence.cms.CrossReport persistedCrossReport : savedCrossReports) {
+      this.crossReport.add(new CrossReport(persistedCrossReport));
     }
     this.allegation = new HashSet<>();
     this.victimClient = new HashSet<>();
     this.perpetratorClient = new HashSet<>();
-    if (persistedReferral.getAllegations() != null
-        && !persistedReferral.getAllegations().isEmpty()) {
-      for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllegation : persistedReferral
-          .getAllegations()) {
-        this.allegation.add(new Allegation(persistedAllegation));
-        if (persistedAllegation.getVictimClients() != null) {
-          this.victimClient.add(new Client(persistedAllegation.getVictimClients(), true));
-        }
-        if (persistedAllegation.getPerpetratorClients() != null) {
-          this.perpetratorClient.add(new Client(persistedAllegation.getPerpetratorClients(), true));
-        }
+
+    Set<gov.ca.cwds.data.persistence.cms.Allegation> savedAllegations = persistedReferral
+        .getAllegations();
+    if (savedAllegations == null ) { savedAllegations = new HashSet(); }
+    for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllegation : savedAllegations) {
+      this.allegation.add(new Allegation(persistedAllegation));
+      if (persistedAllegation.getVictimClients() != null) {
+        this.victimClient.add(new Client(persistedAllegation.getVictimClients(), true));
+      }
+      if (persistedAllegation.getPerpetratorClients() != null) {
+        this.perpetratorClient.add(new Client(persistedAllegation.getPerpetratorClients(), true));
       }
     }
   }

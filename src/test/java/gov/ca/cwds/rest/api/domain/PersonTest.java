@@ -1,10 +1,12 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -155,14 +157,20 @@ public class PersonTest {
 
   @Test
   public void shouldCreatePersonFromDomainPersonAndCollectionsAreEmpty() {
-    gov.ca.cwds.data.persistence.ns.Person person =
-        new PersonEntityBuilder().setPersonAddress(new HashSet()).setPersonPhone(new HashSet())
-            .setPersonLanguage(new HashSet()).setPersonRace(new HashSet())
-            .setPersonEthnicity(new HashSet()).build();
-    assertTrue(person.getPersonAddress().isEmpty());
-    assertTrue(person.getPersonPhone().isEmpty());
-    assertTrue(person.getPersonLanguage().isEmpty());
-    assertTrue(person.getPersonEthnicity().isEmpty());
+    gov.ca.cwds.data.persistence.ns.Person savedPerson =
+        new PersonEntityBuilder()
+            .setPersonAddress(null)
+            .setPersonPhone(null)
+            .setPersonLanguage(null)
+            .setPersonRace(null)
+            .setPersonEthnicity(null)
+            .build();
+
+    Person domain = new Person(savedPerson);
+    assertTrue(domain.getAddress().isEmpty());
+    assertTrue(domain.getPhoneNumber().isEmpty());
+    assertTrue(domain.getLanguage().isEmpty());
+    assertTrue(domain.getEthnicity().isEmpty());
   }
 
   private Person validPerson() {

@@ -143,32 +143,39 @@ public class Person extends ReportingDomain implements Request, Response {
     this.language = new HashSet<>();
     this.race = new HashSet<>();
     this.ethnicity = new HashSet<>();
-    if (person.getPersonAddress() != null) {
-      for (PersonAddress personAddress : person.getPersonAddress()) {
-        this.address.add(new Address(personAddress.getAddress()));
-      }
+
+    Set<PersonAddress> addresses = person.getPersonAddress();
+    if (addresses == null) { addresses = new HashSet(); };
+    for (PersonAddress personAddress : addresses) {
+      this.address.add(new Address(personAddress.getAddress()));
     }
-    if (person.getPersonPhone() != null) {
-      for (PersonPhone personPhone : person.getPersonPhone()) {
-        this.phoneNumber.add(new PhoneNumber(personPhone.getPhoneNumber()));
-      }
+
+    Set<PersonPhone> phoneNumbers = person.getPersonPhone();
+    if (phoneNumbers == null) { phoneNumbers = new HashSet(); };
+    for (PersonPhone personPhone : phoneNumbers) {
+      this.phoneNumber.add(new PhoneNumber(personPhone.getPhoneNumber()));
     }
-    if (person.getPersonLanguage() != null) {
-      for (PersonLanguage personLanguage : person.getPersonLanguage()) {
-        this.language.add(new Language(personLanguage.getLanguage()));
-      }
-      if (person.getPersonRace() != null) {
-        for (PersonRace personRace : person.getPersonRace()) {
-          this.race.add(new Race(personRace.getRace()));
-        }
-      }
+
+    Set<PersonLanguage> languages = person.getPersonLanguage();
+    if (languages == null) { languages = new HashSet(); };
+    for (PersonLanguage personLanguage : languages) {
+      this.language.add(new Language(personLanguage.getLanguage()));
     }
-    if (person.getPersonEthnicity() != null) {
-      for (PersonEthnicity personEthnicity : person.getPersonEthnicity()) {
+
+    Set<PersonRace> races = person.getPersonRace();
+    if (races == null) { races = new HashSet(); };
+    for (PersonRace personRace : races) {
+      this.race.add(new Race(personRace.getRace()));
+    }
+
+    Set<PersonEthnicity> enthnicities = person.getPersonEthnicity();
+    if (enthnicities == null) { enthnicities = new HashSet(); };
+      for (PersonEthnicity personEthnicity : enthnicities) {
         this.ethnicity.add(new Ethnicity(personEthnicity.getEthnicity()));
       }
-    }
   }
+
+
 
   /**
    * @return the first_name
