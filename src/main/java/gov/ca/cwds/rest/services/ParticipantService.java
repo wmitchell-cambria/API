@@ -148,6 +148,7 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
+  //TODO:Techdebt simplify processing roles
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, Set<String> roles) {
@@ -155,30 +156,51 @@ public class ParticipantService implements CrudsService {
      * process the roles of this participant
      */
     for (String role : roles) {
+      boolean saved = false;
 
-      try {
-        if (ParticipantValidator.roleIsReporterType(role)
-            && (!ParticipantValidator.roleIsAnonymousReporter(role)
-                && !ParticipantValidator.selfReported(incomingParticipant))) {
-          if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
-              role)) {
-            continue;
-          }
+      try{
 
-        } else {
-          if (!ParticipantValidator.roleIsAnyReporter(role)) {
-            if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
-                clientParticipants, incomingParticipant, genderCode, role)) {
-              continue;
-            }
-          }
+        boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
+              && (!ParticipantValidator.roleIsAnonymousReporter(role)
+                  && !ParticipantValidator.selfReported(incomingParticipant));
+        if (isRegularReporter) {
+          saved = saveRegularReporter(screeningToReferral, referralId, messageBuilder,
+              incomingParticipant, role,
+              saved);
+
+        } else if(!ParticipantValidator.roleIsAnyReporter(role)){
+          saved = saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
+              clientParticipants,
+              incomingParticipant, genderCode, role, saved);
         }
-      } catch (Exception e) {
+      } catch(Exception e){
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
       }
-      clientParticipants.addParticipant(incomingParticipant);
+
+      if(!saved) {
+        clientParticipants.addParticipant(incomingParticipant);
+      }
     } // next role
+  }
+
+  private boolean saveRegularReporter(ScreeningToReferral screeningToReferral, String referralId,
+      MessageBuilder messageBuilder, Participant incomingParticipant, String role, boolean saved) {
+    if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
+        role)) {
+      saved = true;
+    }
+    return saved;
+  }
+
+  private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
+      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
+      Participant incomingParticipant, String genderCode, String role, boolean saved) {
+    if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
+        clientParticipants, incomingParticipant, genderCode, role)) {
+      saved = true;
+    }
+    return saved;
   }
 
   private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
@@ -280,48 +302,7 @@ public class ParticipantService implements CrudsService {
       MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
-      DateTimeComparatorInterface comparator = new DateTimeComparator();
-      if (comparator.compare(incomingParticipant.getLegacyDescriptor().getLastUpdated(),
-          foundClient.getLastUpdatedTime())) {
-        foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
-        foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
-
-        List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
-        Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
-        List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
-
-        String unableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-            ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode()
-            : "";
-        String hispanicUnableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-            ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
-            : "";
-        String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
-            ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode()
-            : "";
-
-        foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
-            incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
-            unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
-
-        Client savedClient =
-            this.clientService.update(incomingParticipant.getLegacyId(), foundClient);
-        clientScpEthnicityService.createOtherEthnicity(foundClient.getExistingClientId(),
-            otherRaceCodes);
-        if (savedClient != null) {
-          incomingParticipant.getLegacyDescriptor()
-              .setLastUpdated(savedClient.getLastUpdatedTime());
-        } else {
-          String message = "Unable to save Client";
-          messageBuilder.addMessageAndLog(message, LOGGER);
-
-        }
-      } else {
-        String message =
-            String.format("Unable to Update %s %s Client. Client was previously modified",
-                incomingParticipant.getFirstName(), incomingParticipant.getLastName());
-        messageBuilder.addMessageAndLog(message, LOGGER);
-      }
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient);
     } else {
       String message =
           " Legacy Id of Participant does not correspond to an existing CWS/CMS Client ";
@@ -330,6 +311,63 @@ public class ParticipantService implements CrudsService {
       return true;
     }
     return false;
+  }
+
+  private void updateClient(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder,
+      Participant incomingParticipant, Client foundClient) {
+    DateTimeComparatorInterface comparator = new DateTimeComparator();
+    if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
+      foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
+      foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
+
+      List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
+      Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
+      List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
+
+      String unableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
+          ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode()
+          : "";
+      String hispanicUnableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
+          ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
+          : "";
+      String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
+          ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode()
+          : "";
+
+      foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
+          incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
+
+      update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
+    } else {
+      String message =
+          String.format("Unable to Update %s %s Client. Client was previously modified",
+              incomingParticipant.getFirstName(), incomingParticipant.getLastName());
+      messageBuilder.addMessageAndLog(message, LOGGER);
+    }
+  }
+
+  private boolean okToUpdateClient(Participant incomingParticipant, Client foundClient,
+      DateTimeComparatorInterface comparator) {
+    return comparator.compare(incomingParticipant.getLegacyDescriptor()
+          .getLastUpdated(),
+          foundClient.getLastUpdatedTime());
+  }
+
+  private void update(MessageBuilder messageBuilder, Participant incomingParticipant,
+      Client foundClient, List<Short> otherRaceCodes) {
+    Client savedClient =
+        this.clientService.update(incomingParticipant.getLegacyId(), foundClient);
+    clientScpEthnicityService.createOtherEthnicity(foundClient.getExistingClientId(),
+        otherRaceCodes);
+    if (savedClient != null) {
+      incomingParticipant.getLegacyDescriptor()
+          .setLastUpdated(savedClient.getLastUpdatedTime());
+    } else {
+      String message = "Unable to save Client";
+      messageBuilder.addMessageAndLog(message, LOGGER);
+
+    }
   }
 
   private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,

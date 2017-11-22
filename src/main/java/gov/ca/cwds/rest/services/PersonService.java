@@ -208,55 +208,76 @@ public class PersonService implements CrudsService {
    */
   private void populatePersonDetails(Person person,
       gov.ca.cwds.data.persistence.ns.Person managedPerson) {
-    if (person.getAddress() != null && !person.getAddress().isEmpty()) {
-      for (Address address : person.getAddress()) {
-        gov.ca.cwds.data.persistence.ns.Address managedAddress =
-            new gov.ca.cwds.data.persistence.ns.Address(address, null, null);
-        PersonAddress personAddress = new PersonAddress(managedPerson, managedAddress);
-        managedPerson.addPersonAddress(personAddress);
-        addressDao.create(managedAddress);
-        personAddressDao.create(personAddress);
-      }
+    if (person.getAddress() != null ) {
+      saveAddress(person, managedPerson);
     }
-    if (person.getPhoneNumber() != null && !person.getPhoneNumber().isEmpty()) {
-      for (PhoneNumber phoneNumber : person.getPhoneNumber()) {
-        gov.ca.cwds.data.persistence.ns.PhoneNumber managedPhoneNumber =
-            new gov.ca.cwds.data.persistence.ns.PhoneNumber(phoneNumber, null, null);
-        PersonPhone personPhone = new PersonPhone(managedPerson, managedPhoneNumber);
-        managedPerson.addPersonPhone(personPhone);
-        phoneNumberDao.create(managedPhoneNumber);
-        personPhoneDao.create(personPhone);
-      }
+    if (person.getPhoneNumber() != null ) {
+      savePhoneNumber(person, managedPerson);
     }
-    if (person.getLanguage() != null && !person.getLanguage().isEmpty()) {
-      for (Language language : person.getLanguage()) {
-        gov.ca.cwds.data.persistence.ns.Language managedLanguage =
-            new gov.ca.cwds.data.persistence.ns.Language(language, null, null);
-        PersonLanguage personLanguage = new PersonLanguage(managedPerson, managedLanguage);
-        managedPerson.addPersonLanguage(personLanguage);
-        languageDao.create(managedLanguage);
-        personLanguageDao.create(personLanguage);
-      }
+    if (person.getLanguage() != null ) {
+      saveLanguages(person, managedPerson);
     }
-    if (person.getRace() != null && !person.getRace().isEmpty()) {
-      for (Race race : person.getRace()) {
-        gov.ca.cwds.data.persistence.ns.Race managedRace =
-            new gov.ca.cwds.data.persistence.ns.Race(race, null, null);
-        PersonRace personRace = new PersonRace(managedPerson, managedRace);
-        managedPerson.addPersonRace(personRace);
-        raceDao.create(managedRace);
-        personRaceDao.create(personRace);
-      }
+    if (person.getRace() != null) {
+      saveRaces(person, managedPerson);
     }
-    if (person.getEthnicity() != null && !person.getEthnicity().isEmpty()) {
-      for (Ethnicity ethnicity : person.getEthnicity()) {
-        gov.ca.cwds.data.persistence.ns.Ethnicity managedEthnicity =
-            new gov.ca.cwds.data.persistence.ns.Ethnicity(ethnicity, null, null);
-        PersonEthnicity personEthnicity = new PersonEthnicity(managedPerson, managedEthnicity);
-        managedPerson.addPersonEthnicity(personEthnicity);
-        ethnicityDao.create(managedEthnicity);
-        personEthnicityDao.create(personEthnicity);
-      }
+    if (person.getEthnicity() != null ) {
+      saveEthnicity(person, managedPerson);
+    }
+  }
+
+  private void saveEthnicity(Person person, gov.ca.cwds.data.persistence.ns.Person managedPerson) {
+    for (Ethnicity ethnicity : person.getEthnicity()) {
+      gov.ca.cwds.data.persistence.ns.Ethnicity managedEthnicity =
+          new gov.ca.cwds.data.persistence.ns.Ethnicity(ethnicity, null, null);
+      PersonEthnicity personEthnicity = new PersonEthnicity(managedPerson, managedEthnicity);
+      managedPerson.addPersonEthnicity(personEthnicity);
+      ethnicityDao.create(managedEthnicity);
+      personEthnicityDao.create(personEthnicity);
+    }
+  }
+
+  private void saveRaces(Person person, gov.ca.cwds.data.persistence.ns.Person managedPerson) {
+    for (Race race : person.getRace()) {
+      gov.ca.cwds.data.persistence.ns.Race managedRace =
+          new gov.ca.cwds.data.persistence.ns.Race(race, null, null);
+      PersonRace personRace = new PersonRace(managedPerson, managedRace);
+      managedPerson.addPersonRace(personRace);
+      raceDao.create(managedRace);
+      personRaceDao.create(personRace);
+    }
+  }
+
+  private void saveLanguages(Person person, gov.ca.cwds.data.persistence.ns.Person managedPerson) {
+    for (Language language : person.getLanguage()) {
+      gov.ca.cwds.data.persistence.ns.Language managedLanguage =
+          new gov.ca.cwds.data.persistence.ns.Language(language, null, null);
+      PersonLanguage personLanguage = new PersonLanguage(managedPerson, managedLanguage);
+      managedPerson.addPersonLanguage(personLanguage);
+      languageDao.create(managedLanguage);
+      personLanguageDao.create(personLanguage);
+    }
+  }
+
+  private void savePhoneNumber(Person person,
+      gov.ca.cwds.data.persistence.ns.Person managedPerson) {
+    for (PhoneNumber phoneNumber : person.getPhoneNumber()) {
+      gov.ca.cwds.data.persistence.ns.PhoneNumber managedPhoneNumber =
+          new gov.ca.cwds.data.persistence.ns.PhoneNumber(phoneNumber, null, null);
+      PersonPhone personPhone = new PersonPhone(managedPerson, managedPhoneNumber);
+      managedPerson.addPersonPhone(personPhone);
+      phoneNumberDao.create(managedPhoneNumber);
+      personPhoneDao.create(personPhone);
+    }
+  }
+
+  private void saveAddress(Person person, gov.ca.cwds.data.persistence.ns.Person managedPerson) {
+    for (Address address : person.getAddress()) {
+      gov.ca.cwds.data.persistence.ns.Address managedAddress =
+          new gov.ca.cwds.data.persistence.ns.Address(address, null, null);
+      PersonAddress personAddress = new PersonAddress(managedPerson, managedAddress);
+      managedPerson.addPersonAddress(personAddress);
+      addressDao.create(managedAddress);
+      personAddressDao.create(personAddress);
     }
   }
 
