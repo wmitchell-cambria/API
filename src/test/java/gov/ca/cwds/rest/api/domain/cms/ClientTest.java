@@ -11,24 +11,29 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
+
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
@@ -405,8 +410,10 @@ public class ClientTest implements DomainTestTemplate {
     String genderCode = "male";
     String dateStarted = "now";
     Short raceCode = (short) 0;
+    Boolean childClientIndicatorVar = Boolean.TRUE;
 
-    Client client = Client.createWithDefaults(participant, dateStarted, genderCode, raceCode);
+    Client client = Client.createWithDefaults(participant, dateStarted, genderCode, raceCode,
+        childClientIndicatorVar);
 
     assertEquals("Expected BirthDate field to be initialized with values",
         participant.getDateOfBirth(), client.getBirthDate());
@@ -438,7 +445,7 @@ public class ClientTest implements DomainTestTemplate {
             reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
             sensitivityIndicator, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
-    Client client = Client.createWithDefaults(participant, "", "", (short) 0);
+    Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 
     client.update("Barney", "middlestone", "Rubble", "jr", (short) 0, "A", "A", "X");
 
@@ -466,8 +473,10 @@ public class ClientTest implements DomainTestTemplate {
     String genderCode = "male";
     String dateStarted = "now";
     Short raceCode = (short) 0;
+    Boolean childClientIndicatorVar = Boolean.TRUE;
 
-    Client client = Client.createWithDefaults(participant, dateStarted, genderCode, raceCode);
+    Client client = Client.createWithDefaults(participant, dateStarted, genderCode, raceCode,
+        childClientIndicatorVar);
 
     assertEquals("Expected existingClientId field to be initialized with default values", "",
         client.getExistingClientId());
@@ -488,8 +497,6 @@ public class ClientTest implements DomainTestTemplate {
         new Short("0"), client.getBirthStateCodeType());
     assertEquals("Expected birthplaceVerifiedIndicator field to be initialized with default values",
         false, client.getBirthplaceVerifiedIndicator());
-    assertEquals("Expected childClientIndicatorVar field to be initialized with default values",
-        false, client.getChildClientIndicatorVar());
     assertEquals("Expected clientIndexNumber field to be initialized with default values", "",
         client.getClientIndexNumber());
     assertEquals("Expected commentDescription field to be initialized with default values", "",
@@ -3421,7 +3428,7 @@ public class ClientTest implements DomainTestTemplate {
         clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(), new HashSet<>(),
         raceAndEthnicity);
 
-    Client client = Client.createWithDefaults(participant, "", "", (short) 0);
+    Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 
     assertEquals("Expected zippyCreatedIndicator field to be initialized as  True", Boolean.TRUE,
         client.getZippyCreatedIndicator());
