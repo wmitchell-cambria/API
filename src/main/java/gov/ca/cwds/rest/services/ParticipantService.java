@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
+import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -338,9 +339,10 @@ public class ParticipantService implements CrudsService {
     List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
     Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
     List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
+    boolean childClientIndicatorVar = new R02265ChildClientExists(incomingParticipant).isValid();
 
-    Client client =
-        Client.createWithDefaults(incomingParticipant, dateStarted, genderCode, primaryRaceCode);
+    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, genderCode,
+        primaryRaceCode, childClientIndicatorVar);
     client.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
     client.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
     messageBuilder.addDomainValidationError(validator.validate(client));

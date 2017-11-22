@@ -1,18 +1,23 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -731,10 +736,11 @@ public class Client extends ReportingDomain implements Request, Response {
    * @param dateStarted - dateStarted
    * @param genderCode - genderCode
    * @param raceCode - raceCode
+   * @param childClientIndicatorVar - childClientIndicatorVar
    * @return the client
    */
   public static Client createWithDefaults(Participant participant, String dateStarted,
-      String genderCode, Short raceCode) {
+      String genderCode, Short raceCode, Boolean childClientIndicatorVar) {
 
     String unableToDetermineCode = participant.getRaceAndEthnicity() != null
         ? participant.getRaceAndEthnicity().getUnableToDetermineCode()
@@ -748,10 +754,10 @@ public class Client extends ReportingDomain implements Request, Response {
 
     return new Client("", participant.getLegacyDescriptor().getLastUpdated(), Boolean.FALSE,
         DEFAULT_ADOPTION_STATUS_CODE, "", "", DEFAULT_CODE, participant.getDateOfBirth(), "",
-        DEFAULT_CODE, Boolean.FALSE, DEFAULT_CHILD_CLIENT_INDICATOR, "", "",
-        participant.getFirstName(), participant.getMiddleName(), participant.getLastName(), "",
-        Boolean.FALSE, dateStarted, Boolean.FALSE, "", Boolean.FALSE, "", Boolean.FALSE, "", "", "",
-        DEFAULT_CODE, "", DEFAULT_ESTIMATED_DOB_CODE, unableToDetermineCode, "", genderCode, "",
+        DEFAULT_CODE, Boolean.FALSE, childClientIndicatorVar, "", "", participant.getFirstName(),
+        participant.getMiddleName(), participant.getLastName(), "", Boolean.FALSE, dateStarted,
+        Boolean.FALSE, "", Boolean.FALSE, "", Boolean.FALSE, "", "", "", DEFAULT_CODE, "",
+        DEFAULT_ESTIMATED_DOB_CODE, unableToDetermineCode, "", genderCode, "",
         hispanicUnableToDetermineCode, hispanicOriginCode, DEFAULT_CODE, DEFAULT_CODE,
         DEFAULT_INCAPCITATED_PARENT_CODE, Boolean.FALSE, Boolean.FALSE, DEFAULT_LITERATE_CODE,
         Boolean.FALSE, DEFAULT_CODE, DEFAULT_MILITARY_STATUS_CODE, "", "", DEFAULT_NAME_TYPE,
