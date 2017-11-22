@@ -5,26 +5,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.fixture.CmsAllegationResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.core.Api;
@@ -1581,6 +1577,24 @@ public class AllegationTest {
 
     assertThat(allegation.getNonProtectingParentCode(), is("N"));
 
+  }
+
+  /**
+   * Rule - 06998
+   */
+  @Test
+  public void testZippyAllegationCreation() {
+
+
+    Allegation domain = new gov.ca.cwds.rest.api.domain.cms.Allegation(abuseEndDate, abuseFrequency,
+        abuseFrequencyPeriodCode, abuseLocationDescription, abuseStartDate,
+        allegationDispositionType, allegationType, dispositionDescription, dispositionDate,
+        injuryHarmDetailIndicator, nonProtectingParentCode, staffPersonAddedIndicator,
+        victimClientId, perpetratorClientId, referralId, countySpecificCode, zippyCreatedIndicator,
+        placementFacilityType);
+
+    assertEquals("Expected zippyCreatedIndicator field to be initialized as  True", Boolean.TRUE,
+        domain.getZippyCreatedIndicator());
   }
 
   /*

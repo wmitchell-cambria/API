@@ -10,23 +10,18 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Set;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -354,7 +349,7 @@ public class ReferralTest {
     String unfoundedSeriesCode = "N";
     String linkToPrimaryReferralId = "";
     Boolean specialProjectReferralIndicator = false;
-    Boolean zippyCreatedIndicator = false;
+    Boolean zippyCreatedIndicator = true;
     Boolean homelessIndicator = false;
     Boolean familyRefusedServicesIndicator = false;
     String firstEvaluatedOutApprovalDate = "";
@@ -2710,6 +2705,46 @@ public class ReferralTest {
         response.readEntity(String.class)
             .indexOf("originalClosureDate must be in the format of yyyy-MM-dd"),
         is(greaterThanOrEqualTo(0)));
+  }
+
+  /**
+   * Rule - 06998
+   */
+  @Test
+  public void testZippyReferralCreation() {
+
+    boolean anonReporter = true;
+    Short communicationsMethodCode = 44;
+    String currentLocationOfChildren = "currentLocationOfChildren";
+    String drmsAllegationDescriptionDoc = "ABC1234569";
+    String drmsErReferralDoc = "1234567ABC";
+    String drmsInvestigationDoc = "ABD1234567";
+    String referalName = "zippy referral";
+    String dateStarted = "may 22";
+    String timeStarted = "6 o'clock";
+    Short referralResponseTypeCode = 4;
+    String allegesAbuseOccurredAtAddressId = "ABC1234567";
+    String firstResponseDeterminedByStaffPersonId = "0X5";
+    String longTextId = "LongText";
+    String countyCode = "sacramento";
+    Short approvalCode = 4;
+    String staffId = "098";
+    String limitedAccessCode = "N";
+    Short limitedAccessGovtAgencyType = 123;
+    String limitedAccessDate = "2019-10-20";
+    String limitedAccessDesc = "Some description";
+    boolean filedCrossReport = true;
+
+
+    Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
+        currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
+        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
+        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
+        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
+        countyCode, approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode,
+        limitedAccessDesc, limitedAccessDate, limitedAccessGovtAgencyType);
+    assertEquals("Expected zippyCreatedIndicator field to be initialized as  True", Boolean.TRUE,
+        referral.getZippyCreatedIndicator());
   }
 
   /*
