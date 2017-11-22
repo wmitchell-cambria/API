@@ -538,7 +538,7 @@ public class ScreeningToReferralService implements CrudsService {
             scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
             Boolean.FALSE, ("").equals(perpatratorClientId) ? "U" : "N", Boolean.FALSE,
             victimClientId, perpatratorClientId, referralId, scr.getIncidentCounty(),
-            R06998ZippyIndicator.Yes.getCode(), LegacyDefaultValues.DEFAULT_CODE);
+            R06998ZippyIndicator.YES.getCode(), LegacyDefaultValues.DEFAULT_CODE);
 
     messageBuilder.addDomainValidationError(validator.validate(cmsAllegation));
 

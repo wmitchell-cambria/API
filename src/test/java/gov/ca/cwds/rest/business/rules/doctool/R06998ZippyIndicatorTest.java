@@ -16,7 +16,7 @@ public class R06998ZippyIndicatorTest {
   @Test
   public void testTrueIndicator() {
 
-    assertThat(R06998ZippyIndicator.Yes.getCode(), is(notNullValue()));
+    assertThat(R06998ZippyIndicator.YES.getCode(), is(notNullValue()));
 
 
   }
@@ -24,7 +24,7 @@ public class R06998ZippyIndicatorTest {
   @Test
   public void testFalseIndicator() {
 
-    assertThat(R06998ZippyIndicator.No.getCode(), is(notNullValue()));
+    assertThat(R06998ZippyIndicator.NO.getCode(), is(notNullValue()));
 
 
   }

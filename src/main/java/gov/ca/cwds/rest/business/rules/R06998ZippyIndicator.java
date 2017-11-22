@@ -10,7 +10,7 @@ package gov.ca.cwds.rest.business.rules;
  */
 public enum R06998ZippyIndicator {
 
-  Yes(Boolean.TRUE), No(Boolean.FALSE);
+  YES(Boolean.TRUE), NO(Boolean.FALSE);
 
   Boolean code;
 
@@ -26,12 +26,6 @@ public enum R06998ZippyIndicator {
     return code;
   }
 
-  /**
-   * @param code the code to set
-   */
-  public void setCode(Boolean code) {
-    this.code = code;
-  }
 
 
 }

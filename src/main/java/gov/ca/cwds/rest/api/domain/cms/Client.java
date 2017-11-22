@@ -1,23 +1,18 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -766,7 +761,7 @@ public class Client extends ReportingDomain implements Request, Response {
         DEFAULT_SENSITIVITY_INDICATOR, DEFAULT_SOC158_PLACEMENT_CODE, Boolean.FALSE,
         DEFAULT_SOCIAL_SECURITY_NUM_CHANGE_CODE, participant.getSsn(), participant.getNameSuffix(),
         Boolean.FALSE, Boolean.FALSE, DEFAULT_UNEMPLOYED_PARENT_CODE,
-        R06998ZippyIndicator.Yes.getCode(), null);
+        R06998ZippyIndicator.YES.getCode(), null);
   }
 
   /**

@@ -554,14 +554,20 @@ public class Referral extends ReportingDomain implements Request, Response {
       this.address.add(new Address(persistedReferral.getAddresses(), true));
     }
     this.reporter = new HashSet<>();
-    Set<gov.ca.cwds.data.persistence.cms.Reporter> savedReporters = persistedReferral.getReporters();
-    if (savedReporters == null) { savedReporters = new HashSet<>(); }
-    for (gov.ca.cwds.data.persistence.cms.Reporter persistedReporter : savedReporters){
+    Set<gov.ca.cwds.data.persistence.cms.Reporter> savedReporters =
+        persistedReferral.getReporters();
+    if (savedReporters == null) {
+      savedReporters = new HashSet<>();
+    }
+    for (gov.ca.cwds.data.persistence.cms.Reporter persistedReporter : savedReporters) {
       this.reporter.add(new Reporter(persistedReporter));
     }
     this.crossReport = new HashSet<>();
-    Set<gov.ca.cwds.data.persistence.cms.CrossReport> savedCrossReports = persistedReferral.getCrossReports();
-    if (savedCrossReports == null ) { savedCrossReports = new HashSet(); }
+    Set<gov.ca.cwds.data.persistence.cms.CrossReport> savedCrossReports =
+        persistedReferral.getCrossReports();
+    if (savedCrossReports == null) {
+      savedCrossReports = new HashSet();
+    }
     for (gov.ca.cwds.data.persistence.cms.CrossReport persistedCrossReport : savedCrossReports) {
       this.crossReport.add(new CrossReport(persistedCrossReport));
     }
@@ -569,9 +575,11 @@ public class Referral extends ReportingDomain implements Request, Response {
     this.victimClient = new HashSet<>();
     this.perpetratorClient = new HashSet<>();
 
-    Set<gov.ca.cwds.data.persistence.cms.Allegation> savedAllegations = persistedReferral
-        .getAllegations();
-    if (savedAllegations == null ) { savedAllegations = new HashSet(); }
+    Set<gov.ca.cwds.data.persistence.cms.Allegation> savedAllegations =
+        persistedReferral.getAllegations();
+    if (savedAllegations == null) {
+      savedAllegations = new HashSet();
+    }
     for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllegation : savedAllegations) {
       this.allegation.add(new Allegation(persistedAllegation));
       if (persistedAllegation.getVictimClients() != null) {
@@ -632,7 +640,7 @@ public class Referral extends ReportingDomain implements Request, Response {
         referalName, "", dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
         "", "", responseRationalLongTextId, screenerNoteLongTextId, DEFAULT_NO, DEFAULT_NO,
         DEFAULT_NO, "", allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId,
-        staffId, countyCode, Boolean.FALSE, R06998ZippyIndicator.Yes.getCode(), Boolean.FALSE,
+        staffId, countyCode, Boolean.FALSE, R06998ZippyIndicator.YES.getCode(), Boolean.FALSE,
         Boolean.FALSE, "", responsibleAgencyCode, limitedAccessGovtAgencyType, limitedAccessDate,
         limitedAccessDesc, "", null, null, null, null, null, null, null);
   }
