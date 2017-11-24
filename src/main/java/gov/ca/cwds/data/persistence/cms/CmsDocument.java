@@ -102,8 +102,22 @@ public class CmsDocument extends CmsPersistentObject {
     this.compressionMethod = compressionMethod;
   }
 
+  public CmsDocument(CmsDocument copy) {
+    super();
+    this.id = copy.id;
+    this.docAuth = copy.docAuth;
+    this.docServ = copy.docServ;
+    this.docName = copy.docName;
+    this.segmentCount = copy.segmentCount;
+    this.docDate = copy.docDate;
+    this.docLength = copy.docLength;
+    this.docTime = copy.docTime;
+    this.compressionMethod = copy.compressionMethod;
+    this.blobSegments = copy.blobSegments;
+  }
+
   /**
-   * Pseudo copy constructor. Build a persistence document from a domain document.
+   * Domain copy constructor. Build a persistence document from a domain document.
    * 
    * <p>
    * This constructor doesn't populate blob segments directly from a base64-encoded, decompressed
