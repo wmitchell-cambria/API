@@ -1,11 +1,7 @@
 package gov.ca.cwds.rest.resources.investigation;
 
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.After;
@@ -58,17 +54,6 @@ public class CrossReportResourceTest {
   @Before
   public void setup() {
     resource = new CrossReportResource(service);
-  }
-
-  @Test
-  public void callCrossReportServiceOnCreate() throws Exception {
-    crossReport = new CrossReportEntityBuilder().build();
-    System.out.println(ROOT_RESOURCE);
-    int status =
-        inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(crossReport, MediaType.APPLICATION_JSON)).getStatus();
-    System.out.println(status);
-    verify(service).create(eq(crossReport));
   }
 
   @Test
