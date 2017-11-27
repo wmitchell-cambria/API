@@ -35,8 +35,6 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Allegation extends CmsPersistentObject {
 
-  protected static final String DATE_FORMAT = "yyyy-MM-dd";
-
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
   private String id;

@@ -6,8 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -211,6 +215,42 @@ public class ReporterTest implements PersistentTestTemplate {
     Reporter pers = new Reporter(domain, lastUpdatedId, lastUpdatedTime);
     assertThat(pers.getState(), is(equalTo(null)));
 
+  }
+
+  @Test
+  public void shouldNotContainPhoneNumbersWhenBlank(){
+    BigDecimal phoneNumber = new BigDecimal("0");
+    Integer extension = new Integer(0);
+    gov.ca.cwds.rest.api.domain.cms.Reporter domain =
+        new ReporterResourceBuilder()
+            .setPrimaryPhoneNumber(phoneNumber)
+            .setPrimaryPhoneExtensionNumber(extension)
+            .setMessagePhoneNumber(phoneNumber)
+            .setMessagePhoneExtensionNumber(extension)
+            .build();
+
+    Reporter reporterEntity = new Reporter(domain, lastUpdatedId, lastUpdatedTime);
+    assertEquals(0, reporterEntity.getPhones().length);
+  }
+
+  @Test
+  public void shouldContainBothPhoneNumbersWhenNotBlank(){
+    BigDecimal primaryPhoneNumber = new BigDecimal("123");
+    BigDecimal messagePhoneNumber = new BigDecimal("987");
+    Integer primaryExtension = new Integer(0);
+    Integer messageExtension = new Integer(0);
+    gov.ca.cwds.rest.api.domain.cms.Reporter domain =
+        new ReporterResourceBuilder()
+            .setPrimaryPhoneNumber(primaryPhoneNumber)
+            .setPrimaryPhoneExtensionNumber(primaryExtension)
+            .setMessagePhoneNumber(messagePhoneNumber)
+            .setMessagePhoneExtensionNumber(messageExtension)
+            .build();
+
+    Reporter reporterEntity = new Reporter(domain, lastUpdatedId, lastUpdatedTime);
+    assertEquals(2, reporterEntity.getPhones().length);
+    assertEquals(reporterEntity.getPhones()[0].getPhoneNumber(), "123");
+    assertEquals(reporterEntity.getPhones()[1].getPhoneNumber(), "987");
   }
 
   private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {

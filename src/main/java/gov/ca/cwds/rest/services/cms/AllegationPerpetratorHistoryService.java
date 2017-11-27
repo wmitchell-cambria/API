@@ -30,6 +30,7 @@ public class AllegationPerpetratorHistoryService implements
       LoggerFactory.getLogger(AllegationPerpetratorHistoryService.class);
 
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
+  //TODO: Make RI check explicit. Used to implicitly check for referential Integrity.
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
 
   /**

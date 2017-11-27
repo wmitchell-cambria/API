@@ -48,6 +48,7 @@ public class GovernmentOrganizationCrossReportService implements
 
   }
 
+  //TODO: Make RI check explicit. Used to implicitly check for referential Integrity.
   @SuppressWarnings("unused")
   private RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport;
 

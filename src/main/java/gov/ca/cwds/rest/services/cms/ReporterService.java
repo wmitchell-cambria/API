@@ -27,6 +27,7 @@ public class ReporterService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(ReporterService.class);
 
   private ReporterDao reporterDao;
+  //TODO: Make RI check explicit. Used to implicitly check for referential Integrity.
   private RIReporter riReporter;
 
   /**

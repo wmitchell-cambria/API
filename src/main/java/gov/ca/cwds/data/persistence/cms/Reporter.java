@@ -76,10 +76,24 @@ public class Reporter extends BaseReporter {
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
 
+  /**
+   * #147241489: referential integrity check.
+   * <p>
+   * Doesn't actually load the data. Just checks the existence of the parent referral,
+   * lawEnforcement and reporterDrmsDocument record.
+   * </p>
+   */
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKLAW_ENFT", nullable = true, updatable = false, insertable = false)
   private LawEnforcementEntity lawEnforcement;
 
+  /**
+   * #147241489: referential integrity check.
+   * <p>
+   * Doesn't actually load the data. Just checks the existence of the parent referral,
+   * lawEnforcement and reporterDrmsDocument record.
+   * </p>
+   */
   @ManyToOne(optional = true)
   @JoinColumn(name = "FDBACK_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument;
@@ -532,14 +546,13 @@ public class Reporter extends BaseReporter {
   @Override
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null && !BigDecimal.ZERO.equals(this.primaryPhoneNumber)) {
-      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
-          this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
-              : null,
-          null));
+    if (this.primaryPhoneNumber != null && primaryPhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
+      String extension = this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString() : null;
+
+      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),extension, null));
     }
 
-    if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
+    if (this.messagePhoneNumber != null && messagePhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
       phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
           this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
               : null,

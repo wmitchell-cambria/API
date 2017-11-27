@@ -59,6 +59,13 @@ public class ClientAddress extends BaseClientAddress {
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
 
+  /**
+   * referential integrity check.
+   * <p>
+   * Doesn't actually load the data. Just checks the existence of the parent address, client and
+   * referral records.
+   * </p>
+   */
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral referral;

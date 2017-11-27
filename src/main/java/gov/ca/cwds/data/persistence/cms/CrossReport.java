@@ -115,10 +115,22 @@ public class CrossReport extends CmsPersistentObject {
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
 
+  /**
+   * #147241489: referential integrity check.
+   * <p>
+   * Doesn't actually load the data. Just checks the existence of the parent referral record.
+   * </p>
+   */
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKLAW_ENFT", nullable = true, updatable = false, insertable = false)
   private LawEnforcementEntity lawEnforcement;
 
+  /**
+   * #147241489: referential integrity check.
+   * <p>
+   * Doesn't actually load the data. Just checks the existence of the parent referral record.
+   * </p>
+   */
   @ManyToOne(optional = false)
   @JoinColumn(name = "FKSTFPERST", nullable = false, updatable = false, insertable = false)
   private StaffPerson staffPerson;

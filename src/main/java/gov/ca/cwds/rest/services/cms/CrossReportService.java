@@ -28,6 +28,7 @@ public class CrossReportService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossReportService.class);
 
   private CrossReportDao crossReportDao;
+  //TODO: Make RI check explicit. Used to implicitly check for referential Integrity.
   private RICrossReport riCrossReport;
 
   /**
