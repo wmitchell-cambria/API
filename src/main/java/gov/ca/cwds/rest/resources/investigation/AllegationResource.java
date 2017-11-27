@@ -18,7 +18,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.InvestigationAllegationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
-import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -59,7 +58,7 @@ public class AllegationResource {
   }
 
   /**
-   * Create an {@link AllegationList}.
+   * Create an {@link Allegation}.
    *
    * @param id - CMS Id of the Referral or Case the Allegation is for
    * @param allegation - The allegation to create
@@ -88,7 +87,7 @@ public class AllegationResource {
    *
    * @param id - CMS Id of Case or Referral
    * @param allegationId - CMS Id of Allegation
-   * @param allegationToUpdate - allegations to update
+   * @param allegationToUpdate - allegation to update
    * @return - updated allegations
    */
   @UnitOfWork(value = "cms")

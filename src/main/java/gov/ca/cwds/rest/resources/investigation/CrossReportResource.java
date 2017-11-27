@@ -60,6 +60,8 @@ public class CrossReportResource {
 
   /**
    * Create a {@link CrossReport}.
+   * 
+   * @param id - CMS Id of Case or Referral
    *
    * @param crossReport The {@link CrossReport}
    *
@@ -67,7 +69,7 @@ public class CrossReportResource {
    */
   @UnitOfWork(value = "cms")
   @POST
-  @Path("/{id}/cross_report}")
+  @Path("/{id}/cross_report")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
@@ -77,6 +79,8 @@ public class CrossReportResource {
   @ApiOperation(value = "Create Cross Report", code = HttpStatus.SC_CREATED,
       response = CrossReport.class)
   public Response create(
+      @PathParam("id") @ApiParam(required = true, name = "id",
+          value = "The CMS id of the Referral or Case") String id,
       @Valid @ApiParam(hidden = false, required = true) CrossReport crossReport) {
     return typedResourceDelegate.create(crossReport);
   }

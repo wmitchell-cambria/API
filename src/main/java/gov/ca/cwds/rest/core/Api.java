@@ -5,7 +5,14 @@ package gov.ca.cwds.rest.core;
  * 
  * @author CDWS API Tea "secondaryLanguage":1255,m
  */
-public interface Api {
+public final class Api {
+
+  /**
+   * Default private constructor
+   */
+  private Api() {
+    // Default private constructor
+  }
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_APPLICATION} API..
