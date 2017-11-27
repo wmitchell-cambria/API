@@ -17,6 +17,10 @@ import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.validation.OnlyIf;
 
+/**
+ * @author CWDS API Team
+ *
+ */
 public class R00743SecondaryLanguageMustbeBlank {
 
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
@@ -42,9 +46,9 @@ public class R00743SecondaryLanguageMustbeBlank {
   @Test
   public void failsWhenSecondayLanguageSetWithoutPrimaryLanguage() throws Exception {
     Participant toValidate = new ParticipantResourceBuilder().setPrimaryLanguage(null)
-        .setSecondaryLanguage((short) 1258).createParticipant();
+        .setSecondaryLanguage((short) 1271).createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
-    assertEquals(2, constraintViolations.size());
+    assertEquals(1, constraintViolations.size());
     assertEquals("can only be set if primaryLanguage is set",
         constraintViolations.iterator().next().getMessage());
   }
