@@ -38,6 +38,9 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIAssignment implements ApiReferentialCheck<Assignment> {
 
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "Assignment => Referral with given Identifier is not present in database";
+
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RIAssignment.class);
@@ -64,13 +67,11 @@ public class RIAssignment implements ApiReferentialCheck<Assignment> {
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(Assignment t) {
+  public Boolean apply(Assignment assignment) {
     LOGGER.debug("RI: Assignment");
-    if ("R".equals(t.getEstablishedForCode())
-        && referralDao.find(t.getEstablishedForId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Assignment => Referral with given Identifier is not present in database");
-
+    if ("R".equals(assignment.getEstablishedForCode())
+        && referralDao.find(assignment.getEstablishedForId()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }

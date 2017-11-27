@@ -42,6 +42,11 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIClientCollateral implements ApiReferentialCheck<ClientCollateral> {
 
+  private static final String COLLATERAL_ID_MISSING_ERROR =
+      "ClientCollateral => Collateral Individual with given Identifier is not present in database";
+  private static final String CLIENT_ID_MISSING_ERROR =
+      "ClientCollateral => Client with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -73,15 +78,13 @@ public class RIClientCollateral implements ApiReferentialCheck<ClientCollateral>
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(ClientCollateral t) {
+  public Boolean apply(ClientCollateral clientCollateral) {
     LOGGER.debug("RI: ClientCollateral");
-    if (clientDao.find(t.getClientId()) == null) {
-      throw new ReferentialIntegrityException(
-          "ClientCollateral => Client with given Identifier is not present in database");
+    if (clientDao.find(clientCollateral.getClientId()) == null) {
+      throw new ReferentialIntegrityException(CLIENT_ID_MISSING_ERROR);
 
-    } else if (collateralIndividualDao.find(t.getCollateralIndividualId()) == null) {
-      throw new ReferentialIntegrityException(
-          "ClientCollateral => Collateral Individual with given Identifier is not present in database");
+    } else if (collateralIndividualDao.find(clientCollateral.getCollateralIndividualId()) == null) {
+      throw new ReferentialIntegrityException(COLLATERAL_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }

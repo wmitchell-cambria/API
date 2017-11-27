@@ -42,6 +42,12 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIReferralClient implements ApiReferentialCheck<ReferralClient> {
 
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "ReferralClient => Referral with given Identifier is not present in database";
+
+  private static final String CLIENT_ID_MISSING_ERROR =
+      "ReferralClient => Client with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -73,16 +79,12 @@ public class RIReferralClient implements ApiReferentialCheck<ReferralClient> {
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(ReferralClient t) {
+  public Boolean apply(ReferralClient referralClient) {
     LOGGER.debug("RI: ReferralClient");
-    if (clientDao.find(t.getClientId()) == null) {
-      throw new ReferentialIntegrityException(
-          "ReferralClient => Client with given Identifier is not present in database");
-
-    } else if (referralDao.find(t.getReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "ReferralClient => Referral with given Identifier is not present in database");
-
+    if (clientDao.find(referralClient.getClientId()) == null) {
+      throw new ReferentialIntegrityException(CLIENT_ID_MISSING_ERROR);
+    } else if (referralDao.find(referralClient.getReferralId()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }

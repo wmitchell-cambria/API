@@ -49,6 +49,13 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
 public class RIGovernmentOrganizationCrossReport
     implements ApiReferentialCheck<GovernmentOrganizationCrossReport> {
 
+  private static final String GOVERNMENT_ORGANIZATION_ID_MISSING_ERROR =
+      "GovernmentOrganizationCrossReport => GovernmentOrganization with given Identifier is not present in database";
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "GovernmentOrganizationCrossReport => Referral with given Identifier is not present in database";
+  private static final String CROSSREPORT_ID_MISSING_ERROR =
+      "GovernmentOrganizationCrossReport => CrossReport with given Identifier is not present in database";
+
   /**
    * 
    */
@@ -81,18 +88,18 @@ public class RIGovernmentOrganizationCrossReport
   }
 
   @Override
-  public Boolean apply(GovernmentOrganizationCrossReport t) {
+  public Boolean apply(GovernmentOrganizationCrossReport governmentOrganizationCrossReport) {
     LOGGER.debug("RI: GovernmentOrganizationCrossReport");
-    if (crossReportDao.find(t.getCrossReportThirdId()) == null) {
-      throw new ReferentialIntegrityException(
-          "GovernmentOrganizationCrossReport => CrossReport with given Identifier is not present in database");
-    } else if (referralDao.find(t.getReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "GovernmentOrganizationCrossReport => Referral with given Identifier is not present in database");
-    } else if (t.getGovernmentOrganizationId() != null
-        && governmentOrganizationDao.find(t.getGovernmentOrganizationId()) == null) {
-      throw new ReferentialIntegrityException(
-          "GovernmentOrganizationCrossReport => GovernmentOrganization with given Identifier is not present in database");
+    if (crossReportDao.find(governmentOrganizationCrossReport.getCrossReportThirdId()) == null) {
+      throw new ReferentialIntegrityException(CROSSREPORT_ID_MISSING_ERROR);
+
+    } else if (referralDao.find(governmentOrganizationCrossReport.getReferralId()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
+
+    } else if (governmentOrganizationCrossReport.getGovernmentOrganizationId() != null
+        && governmentOrganizationDao
+            .find(governmentOrganizationCrossReport.getGovernmentOrganizationId()) == null) {
+      throw new ReferentialIntegrityException(GOVERNMENT_ORGANIZATION_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }

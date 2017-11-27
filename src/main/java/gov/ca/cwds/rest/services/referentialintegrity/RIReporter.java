@@ -49,6 +49,13 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIReporter implements ApiReferentialCheck<Reporter> {
 
+  private static final String DRMS_REPORTER_DOCUMENT_ID_MISSING_ERROR =
+      "Reporter => DrmsReporterDocument with given Identifier is not present in database";
+  private static final String LAWENFORCEMENT_ID_MISSING_ERROR =
+      "Reporter => LawEnforcement with given Identifier is not present in database";
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "Reporter => Referral with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -78,25 +85,20 @@ public class RIReporter implements ApiReferentialCheck<Reporter> {
   }
 
   @Override
-  public Boolean apply(Reporter t) {
-    String getLawEnforcementId = t.getLawEnforcementId();
-    String getDrmsMandatedRprtrFeedback = t.getDrmsMandatedRprtrFeedback();
+  public Boolean apply(Reporter reporter) {
+    String getLawEnforcementId = reporter.getLawEnforcementId();
+    String getDrmsMandatedRprtrFeedback = reporter.getDrmsMandatedRprtrFeedback();
     LOGGER.debug("RI: Reporter");
-    if (referralDao.find(t.getReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Reporter => Referral with given Identifier is not present in database");
-
+    if (referralDao.find(reporter.getReferralId()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
     } else {
       if (StringUtils.isNotBlank(getLawEnforcementId)
           && lawEnforcementDao.find(getLawEnforcementId) == null) {
-        throw new ReferentialIntegrityException(
-            "Reporter => LawEnforcement with given Identifier is not present in database");
-
+        throw new ReferentialIntegrityException(LAWENFORCEMENT_ID_MISSING_ERROR);
       } else {
         if (StringUtils.isNotBlank(getDrmsMandatedRprtrFeedback)
             && drmsDocumentDao.find(getDrmsMandatedRprtrFeedback) == null) {
-          throw new ReferentialIntegrityException(
-              "Reporter => DrmsReporterDocument with given Identifier is not present in database");
+          throw new ReferentialIntegrityException(DRMS_REPORTER_DOCUMENT_ID_MISSING_ERROR);
         }
       }
     }

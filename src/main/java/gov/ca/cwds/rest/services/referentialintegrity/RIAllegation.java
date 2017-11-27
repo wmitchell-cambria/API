@@ -40,6 +40,15 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIAllegation implements ApiReferentialCheck<Allegation> {
 
+  private static final String PERPETRATOR_CLIENT_ID_MISSING_ERROR =
+      "Allegation => Perpetrator Client with given Identifier is not present in database";
+
+  private static final String VICTIM_CLIENT_ID_MISSING_ERROR =
+      "Allegation => Victim Client with given Identifier is not present in database";
+
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "Allegation => Referral with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -70,20 +79,17 @@ public class RIAllegation implements ApiReferentialCheck<Allegation> {
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(Allegation t) {
+  public Boolean apply(Allegation allegation) {
     LOGGER.debug("RI: Allegation");
-    if (referralDao.find(t.getReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Allegation => Referral with given Identifier is not present in database");
+    if (referralDao.find(allegation.getReferralId()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
 
-    } else if (clientDao.find(t.getVictimClientId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Allegation => Victim Client with given Identifier is not present in database");
+    } else if (clientDao.find(allegation.getVictimClientId()) == null) {
+      throw new ReferentialIntegrityException(VICTIM_CLIENT_ID_MISSING_ERROR);
 
-    } else if (StringUtils.isNotBlank(t.getPerpetratorClientId())
-        && clientDao.find(t.getPerpetratorClientId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Allegation => Perpetrator Client with given Identifier is not present in database");
+    } else if (StringUtils.isNotBlank(allegation.getPerpetratorClientId())
+        && clientDao.find(allegation.getPerpetratorClientId()) == null) {
+      throw new ReferentialIntegrityException(PERPETRATOR_CLIENT_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }
