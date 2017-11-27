@@ -20,10 +20,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class ParticipantValidator {
 
-  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-  private static final DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-  private static final DateFormat dateTimeFormat =
-      new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+  private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
+  private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
 
   /**
    * CWS/CMS Referral must have on reporter
@@ -200,6 +199,8 @@ public class ParticipantValidator {
   public static String extractStartTime(ScreeningToReferral screeningToReferral,
       MessageBuilder builder) {
     String timeStarted = null;
+    DateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.US);
+    DateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT_PATTERN);
     try {
       Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
       timeStarted = timeFormat.format(dateTime);
@@ -218,6 +219,8 @@ public class ParticipantValidator {
    */
   public static String extractStartDate(ScreeningToReferral screeningToReferral,
       MessageBuilder builder) {
+    DateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN);
     String dateStarted = null;
     try {
       Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
