@@ -48,6 +48,13 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIClientAddress implements ApiReferentialCheck<ClientAddress> {
 
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "ClientAddress => Referral with given Identifier is not present in database";
+  private static final String CLIENT_ID_MISSING_ERROR =
+      "ClientAddress => Client with given Identifier is not present in database";
+  private static final String ADDRESS_ID_MISSING_ERROR =
+      "ClientAddress => Address with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -77,19 +84,17 @@ public class RIClientAddress implements ApiReferentialCheck<ClientAddress> {
   }
 
   @Override
-  public Boolean apply(ClientAddress t) {
+  public Boolean apply(ClientAddress clientAddress) {
     LOGGER.debug("RI: ClientAddress");
-    if (addressDao.find(t.getFkAddress()) == null) {
-      throw new ReferentialIntegrityException(
-          "ClientAddress => Address with given Identifier is not present in database");
+    if (addressDao.find(clientAddress.getFkAddress()) == null) {
+      throw new ReferentialIntegrityException(ADDRESS_ID_MISSING_ERROR);
 
-    } else if (clientDao.find(t.getFkClient()) == null) {
-      throw new ReferentialIntegrityException(
-          "ClientAddress => Client with given Identifier is not present in database");
+    } else if (clientDao.find(clientAddress.getFkClient()) == null) {
+      throw new ReferentialIntegrityException(CLIENT_ID_MISSING_ERROR);
 
-    } else if (t.getFkReferral() != null && referralDao.find(t.getFkReferral()) == null) {
-      throw new ReferentialIntegrityException(
-          "ClientAddress => Referral with given Identifier is not present in database");
+    } else if (clientAddress.getFkReferral() != null
+        && referralDao.find(clientAddress.getFkReferral()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }

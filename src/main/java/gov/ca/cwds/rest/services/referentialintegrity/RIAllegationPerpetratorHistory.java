@@ -44,6 +44,12 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
 public class RIAllegationPerpetratorHistory
     implements ApiReferentialCheck<AllegationPerpetratorHistory> {
 
+  private static final String ALLEGATION_ID_MISSING_ERROR =
+      "AllegationPerpetratorHistory => Allegation with given Identifier is not present in database";
+
+  private static final String CLIENT_ID_MISSING_ERROR =
+      "AllegationPerpetratorHistory => Client with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -77,15 +83,13 @@ public class RIAllegationPerpetratorHistory
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(AllegationPerpetratorHistory t) {
+  public Boolean apply(AllegationPerpetratorHistory allegationPerpetratorHistory) {
     LOGGER.debug("RI: AllegationPerpetratorHistory");
-    if (t.getPerpetratorClientId() != null && clientDao.find(t.getPerpetratorClientId()) == null) {
-      throw new ReferentialIntegrityException(
-          "AllegationPerpetratorHistory => Client with given Identifier is not present in database");
-
-    } else if (allegationDao.find(t.getAllegationId()) == null) {
-      throw new ReferentialIntegrityException(
-          "AllegationPerpetratorHistory => Allegation with given Identifier is not present in database");
+    if (allegationPerpetratorHistory.getPerpetratorClientId() != null
+        && clientDao.find(allegationPerpetratorHistory.getPerpetratorClientId()) == null) {
+      throw new ReferentialIntegrityException(CLIENT_ID_MISSING_ERROR);
+    } else if (allegationDao.find(allegationPerpetratorHistory.getAllegationId()) == null) {
+      throw new ReferentialIntegrityException(ALLEGATION_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }

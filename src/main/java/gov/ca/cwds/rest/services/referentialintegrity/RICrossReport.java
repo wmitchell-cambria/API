@@ -42,6 +42,13 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RICrossReport implements ApiReferentialCheck<CrossReport> {
 
+  private static final String LAWENFORCEMENT_ID_MISSING_ERROR =
+      "CrossReport => Law enforcement with given Identifier is not present in database";
+  private static final String STAFFPERSON_ID_MISSING_ERROR =
+      "CrossReport => Staff Person with given Identifier is not present in database";
+  private static final String REFERRAL_ID_MISSING_ERROR =
+      "CrossReport => Referral with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -76,20 +83,16 @@ public class RICrossReport implements ApiReferentialCheck<CrossReport> {
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(CrossReport t) {
+  public Boolean apply(CrossReport crossReport) {
     LOGGER.debug("RI: CrossReport");
-    if (referralDao.find(t.getReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "CrossReport => Referral with given Identifier is not present in database");
-    } else if (staffPersonDao.find(t.getStaffPersonId()) == null) {
-      throw new ReferentialIntegrityException(
-          "CrossReport => Staff Person with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getLawEnforcementId())
-        && lawEnforcementDao.find(t.getLawEnforcementId()) == null) {
-      throw new ReferentialIntegrityException(
-          "CrossReport => Law enforcement with given Identifier is not present in database");
+    if (referralDao.find(crossReport.getReferralId()) == null) {
+      throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
+    } else if (staffPersonDao.find(crossReport.getStaffPersonId()) == null) {
+      throw new ReferentialIntegrityException(STAFFPERSON_ID_MISSING_ERROR);
+    } else if (StringUtils.isNotBlank(crossReport.getLawEnforcementId())
+        && lawEnforcementDao.find(crossReport.getLawEnforcementId()) == null) {
+      throw new ReferentialIntegrityException(LAWENFORCEMENT_ID_MISSING_ERROR);
     }
-
     return Boolean.TRUE;
   }
 

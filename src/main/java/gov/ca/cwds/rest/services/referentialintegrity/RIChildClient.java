@@ -38,6 +38,9 @@ import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
  */
 public class RIChildClient implements ApiReferentialCheck<ChildClient> {
 
+  private static final String VICTIM_CLIENT_ID_MISSING_ERROR =
+      "ChildClient => Victim Client with given Identifier is not present in database";
+
   /**
    * Default.
    */
@@ -66,11 +69,10 @@ public class RIChildClient implements ApiReferentialCheck<ChildClient> {
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(ChildClient t) {
+  public Boolean apply(ChildClient childClient) {
     LOGGER.debug("RI: ChildClient");
-    if (clientDao.find(t.getVictimClientId()) == null) {
-      throw new ReferentialIntegrityException(
-          "ChildClient => Victim Client with given Identifier is not present in database");
+    if (clientDao.find(childClient.getVictimClientId()) == null) {
+      throw new ReferentialIntegrityException(VICTIM_CLIENT_ID_MISSING_ERROR);
     }
     return Boolean.TRUE;
   }
