@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
@@ -20,6 +19,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.core.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,30 +50,24 @@ public class CmsDocument extends ReportingDomain implements Request, Response, S
       example = "2000-01-01")
   private String docDate;
 
-  @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1000")
+  @ApiModelProperty(required = false, readOnly = false, example = "1000")
   private Long docLength;
 
-  @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private Short segmentCount;
 
-  @NotEmpty
   @Size(min = 1, max = 8)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "RAMESHA")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "RAMESHA")
   private String docAuth;
 
-  @NotEmpty
   @Size(min = 8, max = 8)
-  @ApiModelProperty(required = true, readOnly = false, value = "", example = "D7706001")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "D7706001")
   private String docServ;
 
-  @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "CWSCMP01")
+  @ApiModelProperty(required = false, readOnly = false, example = "CWSCMP01")
   private String compressionMethod;
 
-  @NotNull
-  @ApiModelProperty(required = true, readOnly = false, example = "1234")
+  @ApiModelProperty(required = false, readOnly = false, example = "1234")
   private String docName;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)

@@ -103,7 +103,7 @@ public class CmsDocument extends CmsPersistentObject {
   }
 
   public CmsDocument(CmsDocument copy) {
-    super();
+    super(copy.getLastUpdatedId(), copy.getLastUpdatedTime());
     this.id = copy.id;
     this.docAuth = copy.docAuth;
     this.docServ = copy.docServ;

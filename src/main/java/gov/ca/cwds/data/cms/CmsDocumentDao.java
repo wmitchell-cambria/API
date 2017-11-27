@@ -85,10 +85,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
         blobSegments.add(new CmsDocumentBlobSegment(doc.getId(), segmentSequence, docBlob));
       }
 
-      final RequestExecutionContext ctx = RequestExecutionContext.instance();
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
-      doc.setDocLength((long) hex.length() * 2); // char count times charset width
+      doc.setDocLength((long) hex.length()); // char count times charset width
       doc.setSegmentCount((short) i);
+
+      final RequestExecutionContext ctx = RequestExecutionContext.instance();
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
 
@@ -144,7 +145,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     String retval = "";
 
     try {
-      // charset width multiplier * 2.
+      // Charset width multiplier = 2.
       final StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         buf.append(seg.getDocBlob().trim());
