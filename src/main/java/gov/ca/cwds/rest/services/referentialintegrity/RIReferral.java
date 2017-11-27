@@ -57,6 +57,17 @@ public class RIReferral implements ApiReferentialCheck<Referral> {
   private transient LongTextDao longTextDao;
   private transient ReferralDao referralDao;
 
+  private static final String STAFF_PERSON_ID_MISSING_ERROR = "Referral => Staff Person with given Identifier is not present in database";
+  private static final String FIRST_RESPONSE_ID_MISSING_ERROR = "Referral => First Response Determined Staff Person with given Identifier is not present in database";
+  private static final String ADDRESS_ID_MISSING_ERROR = "Referral => Address with given Identifier is not present in database";
+  private static final String PRIMARY_REFERRAL_ID_MISSING_ERROR = "Referral => LinkToPrimaryReferralId with given Identifier is not present in database";
+  private static final String DRMS_ALLEGATION_DOC_ID_MISSING_ERROR = "Referral => Drms Allegation DescriptionDoc with given Identifier is not present in database";
+  private static final String DRMS_REFFERAL_DOC_MISSING_ERROR = "Referral => Drms Referral Doc with given Identifier is not present in database";
+  private static final String DRMS_INVESTIGATION_DOC_MISSING_ERROR = "Referral => Drms Investigation Doc with given Identifier is not present in database";
+  private static final String CHILDREN_ID_MISSING_ERROR = "Referral => Current Location Of Children with given Identifier is not present in database";
+  private static final String RATIONAL_TEXT_ID_MISSING_ERROR = "Referral => Response Rationale Text with given Identifier is not present in database";
+  private static final String NOTE_TEXT_ID_MISSING_ERROR = "Referral => Screener Note Text with given Identifier is not present in database";
+
   /**
    * Constructor.
    * 
@@ -84,49 +95,60 @@ public class RIReferral implements ApiReferentialCheck<Referral> {
    * @return true if all parent foreign keys exist
    */
   @Override
-  public Boolean apply(Referral t) {
+  public Boolean apply(Referral referral) {
     LOGGER.debug("RI: Referral");
-    if (staffPersonDao.find(t.getPrimaryContactStaffPersonId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Staff Person with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getFirstResponseDeterminedByStaffPersonId())
-        && staffPersonDao.find(t.getFirstResponseDeterminedByStaffPersonId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => First Response Determined Staff Person with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getAllegesAbuseOccurredAtAddressId())
-        && addressDao.find(t.getAllegesAbuseOccurredAtAddressId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Address with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getLinkToPrimaryReferralId())
-        && referralDao.find(t.getLinkToPrimaryReferralId()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => LinkToPrimaryReferralId with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getDrmsAllegationDescriptionDoc())
-        && drmsDocumentDao.find(t.getDrmsAllegationDescriptionDoc()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Drms Allegation DescriptionDoc with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getDrmsErReferralDoc())
-        && drmsDocumentDao.find(t.getDrmsErReferralDoc()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Drms Referral Doc with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getDrmsInvestigationDoc())
-        && drmsDocumentDao.find(t.getDrmsInvestigationDoc()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Drms Investigation Doc with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getCurrentLocationOfChildren())
-        && longTextDao.find(t.getCurrentLocationOfChildren()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Current Location Of Children with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getResponseRationaleText())
-        && longTextDao.find(t.getResponseRationaleText()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Response Rationale Text with given Identifier is not present in database");
-    } else if (StringUtils.isNotBlank(t.getScreenerNoteText())
-        && longTextDao.find(t.getScreenerNoteText()) == null) {
-      throw new ReferentialIntegrityException(
-          "Referral => Screener Note Text with given Identifier is not present in database");
-    }
+    checkStaffPersonReferentialIntegrity(referral);
+    checkAddressReferentialIntegrity(referral);
+    checkReferralReferentialIntegrity(referral);
+    checkDocumentReferentialIntegrity(referral);
+    checkLongTextReferentialIntegrity(referral);
+
     return Boolean.TRUE;
   }
 
+  private void checkStaffPersonReferentialIntegrity(Referral referral){
+    if (staffPersonDao.find(referral.getPrimaryContactStaffPersonId()) == null) {
+      throw new ReferentialIntegrityException( STAFF_PERSON_ID_MISSING_ERROR);
+    } else if (StringUtils.isNotBlank(referral.getFirstResponseDeterminedByStaffPersonId())
+        && staffPersonDao.find(referral.getFirstResponseDeterminedByStaffPersonId()) == null) {
+      throw new ReferentialIntegrityException( FIRST_RESPONSE_ID_MISSING_ERROR);
+    }
+  }
+  private void checkAddressReferentialIntegrity(Referral referral){
+    if (StringUtils.isNotBlank(referral.getAllegesAbuseOccurredAtAddressId())
+        && addressDao.find(referral.getAllegesAbuseOccurredAtAddressId()) == null) {
+      throw new ReferentialIntegrityException( ADDRESS_ID_MISSING_ERROR);
+    }
+  }
+
+  private void checkReferralReferentialIntegrity(Referral referral){
+    if (StringUtils.isNotBlank(referral.getLinkToPrimaryReferralId())
+        && referralDao.find(referral.getLinkToPrimaryReferralId()) == null) {
+      throw new ReferentialIntegrityException( PRIMARY_REFERRAL_ID_MISSING_ERROR);
+    }
+  }
+  private void checkDocumentReferentialIntegrity(Referral referral){
+    if (StringUtils.isNotBlank(referral.getDrmsAllegationDescriptionDoc())
+        && drmsDocumentDao.find(referral.getDrmsAllegationDescriptionDoc()) == null) {
+      throw new ReferentialIntegrityException( DRMS_ALLEGATION_DOC_ID_MISSING_ERROR);
+    } else if (StringUtils.isNotBlank(referral.getDrmsErReferralDoc())
+        && drmsDocumentDao.find(referral.getDrmsErReferralDoc()) == null) {
+      throw new ReferentialIntegrityException( DRMS_REFFERAL_DOC_MISSING_ERROR);
+    } else if (StringUtils.isNotBlank(referral.getDrmsInvestigationDoc())
+        && drmsDocumentDao.find(referral.getDrmsInvestigationDoc()) == null) {
+      throw new ReferentialIntegrityException( DRMS_INVESTIGATION_DOC_MISSING_ERROR);
+    }
+  }
+  private void checkLongTextReferentialIntegrity(Referral referral){
+    if (StringUtils.isNotBlank(referral.getCurrentLocationOfChildren())
+        && longTextDao.find(referral.getCurrentLocationOfChildren()) == null) {
+      throw new ReferentialIntegrityException( CHILDREN_ID_MISSING_ERROR);
+    } else if (StringUtils.isNotBlank(referral.getResponseRationaleText())
+        && longTextDao.find(referral.getResponseRationaleText()) == null) {
+      throw new ReferentialIntegrityException( RATIONAL_TEXT_ID_MISSING_ERROR);
+    } else if (StringUtils.isNotBlank(referral.getScreenerNoteText())
+        && longTextDao.find(referral.getScreenerNoteText()) == null) {
+      throw new ReferentialIntegrityException( NOTE_TEXT_ID_MISSING_ERROR);
+    }
+  }
 }
