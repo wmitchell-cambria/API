@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.validation.OnlyIf;
  * @author CWDS API Team
  *
  */
-public class R00743SecondaryLanguageMustbeBlank {
+public class R00743SecondaryLanguageMustbeBlankTest {
 
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
   private Validator validator;

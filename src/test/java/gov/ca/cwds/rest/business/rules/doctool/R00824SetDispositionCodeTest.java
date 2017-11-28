@@ -104,7 +104,7 @@ import io.dropwizard.jackson.Jackson;
  * 
  * @author CWDS API Team
  */
-public class R00824SetDispositionCode {
+public class R00824SetDispositionCodeTest {
 
   private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();

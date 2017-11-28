@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.validation.IfThen;
  * @see Address
  *
  */
-public class R00725StreetNameExigency {
+public class R00725StreetNameExigencyTest {
 
   private Validator validator;
 
