@@ -46,6 +46,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
   @Column(name = "DOC_BLOB", length = 4003, insertable = true, updatable = true)
   @NotNull
   @Size(min = 1, max = 4003) // allow for DB2 hex syntax (x'abc123...')
+  // @ColumnTransformer(read = "blob(DOC_BLOB)", write = "x'?'")
   @ColumnTransformer(read = "blob(DOC_BLOB)")
   private String docBlob;
 
