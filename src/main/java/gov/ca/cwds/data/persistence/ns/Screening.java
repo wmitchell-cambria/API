@@ -58,7 +58,6 @@ public class Screening implements PersistentObject {
   @Column(name = "name")
   private String name;
 
-
   @Column(name = "screening_decision")
   private String screeningDecision;
 
@@ -109,7 +108,6 @@ public class Screening implements PersistentObject {
 
   @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL)
   private Set<gov.ca.cwds.data.persistence.ns.Allegation> allegations = new HashSet<>();
-
 
   /**
    * Default constructor
