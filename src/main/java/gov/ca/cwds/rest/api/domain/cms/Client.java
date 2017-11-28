@@ -38,7 +38,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
-@AfterDateValid(ifProperty = "birthDate", thenProperty = "creationDate")
+@AfterDateValid.List({@AfterDateValid(ifProperty = "birthDate", thenProperty = "creationDate"),
+    @AfterDateValid(ifProperty = "birthDate", thenProperty = "deathDate")})
 public class Client extends ReportingDomain implements Request, Response {
 
   public static final String DEFAULT_ADOPTION_STATUS_CODE = "N";
