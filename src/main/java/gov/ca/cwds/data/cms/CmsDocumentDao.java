@@ -42,7 +42,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   private static final String COMPRESSION_TYPE_PK = "02";
 
   public static final String COMPRESSION_TYPE_LZW_FULL = "CWSCMP01";
-  public static final String COMPRESSION_TYPE_PK_FULL = "CWSCMP02";
+  public static final String COMPRESSION_TYPE_PK_FULL = "PKWare02";
 
   /**
    * Constructor.
