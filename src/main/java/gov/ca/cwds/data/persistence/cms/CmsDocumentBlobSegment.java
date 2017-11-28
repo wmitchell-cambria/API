@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ColumnTransformer;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -48,7 +47,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
   @NotNull
   @Size(min = 1, max = 4003) // allow for x'abc123...'
   @ColumnTransformer(read = "blob(DOC_BLOB)")
-  @Cascade(value = {org.hibernate.annotations.CascadeType.ALL})
+  // @Cascade(value = {org.hibernate.annotations.CascadeType.ALL})
   // @ManyToOne(fetch=FetchType.EAGER)
   // @JoinColumn(name = "DOC_HANDLE", nullable = false, updatable = true, insertable = true)
   private String docBlob;
