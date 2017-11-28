@@ -1,16 +1,18 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class PersonAddressIdTest {
 
   PersonAddressId personAddressId;
 
   @Before
-  public void setup(){
+  public void setup() {
     personAddressId = new PersonAddressId();
 
   }
@@ -29,8 +31,10 @@ public class PersonAddressIdTest {
   public void equalsShouldBeFalseWhenOtherObjectIsADifferentClass() throws Exception {
     assertFalse(personAddressId.equals("A Different Class"));
   }
+
   @Test
-  public void equalsShouldBeFalseWhenPersonIsNullInThisClassAndNotNullInOtherClass() throws Exception {
+  public void equalsShouldBeFalseWhenPersonIsNullInThisClassAndNotNullInOtherClass()
+      throws Exception {
     PersonAddressId otherPersonAddressId = new PersonAddressId();
     otherPersonAddressId.setPerson(new Person());
     personAddressId.setPerson(null);
@@ -38,7 +42,8 @@ public class PersonAddressIdTest {
   }
 
   @Test
-  public void equalsShouldBeFalseWhenAddressIsNullInThisClassAndNotNullInOtherClass() throws Exception {
+  public void equalsShouldBeFalseWhenAddressIsNullInThisClassAndNotNullInOtherClass()
+      throws Exception {
     PersonAddressId otherPersonAddressId = new PersonAddressId();
     otherPersonAddressId.setAddress(new Address());
     personAddressId.setPerson(null);

@@ -32,5 +32,17 @@ public class AllegationTest {
     assertThat(allegation.getUpdatedAt(), is(equalTo(updatedAt)));
     assertThat(allegation.getAllegationTypes(), is(equalTo(allegationTypes)));
     assertThat(allegation.getPrimaryKey(), is(equalTo(id)));
+    assertThat(allegation.getScreening(), is(equalTo(null)));
+  }
+
+  @Test
+  public void testSetAllegationTypes() throws Exception {
+    allegationTypes[0] = "Physical abuse";
+
+    Allegation allegation = new Allegation(id, screeningId, perpetratorId, victimId, createdAt,
+        updatedAt, allegationTypes);
+    allegationTypes[0] = "modified";
+    allegation.setAllegationTypes(allegationTypes);
+    assertThat(allegation.getAllegationTypes(), is(equalTo(allegationTypes)));
   }
 }
