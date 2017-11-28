@@ -142,7 +142,8 @@ public class CmsDocumentResource {
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id", value = "Document id") String id,
       @ApiParam(hidden = false, required = true) CmsDocument doc) {
-    return resourceDelegate.update(id, doc);
+    final Response response = resourceDelegate.update(id, doc);
+    return response;
   }
 
 }
