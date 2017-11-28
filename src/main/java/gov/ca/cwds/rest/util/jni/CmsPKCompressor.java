@@ -199,7 +199,7 @@ public class CmsPKCompressor {
 
   public String compressBase64ToHex(String base64) throws IOException {
     return DatatypeConverter
-        .printHexBinary(compressBytes(DatatypeConverter.parseBase64Binary(base64)));
+        .printHexBinary(compressBytes(DatatypeConverter.parseBase64Binary(base64))).toLowerCase();
   }
 
   /**

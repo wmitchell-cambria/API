@@ -7,7 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -66,23 +67,24 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    */
   public CmsDocument compressPK(final CmsDocument doc, String base64) {
     try {
-      // Out with the old ...
-      // final Session session = this.getSessionFactory().getCurrentSession();
-      // for (CmsDocumentBlobSegment segment : doc.getBlobSegments()) {
-      // session.remove(segment);
-      // }
+      final Map<String, CmsDocumentBlobSegment> oldSegments = doc.getBlobSegments().stream()
+          .collect(Collectors.toMap(CmsDocumentBlobSegment::getSegmentSequence, a -> a));
 
-      // In with the new ...
-      final Set<CmsDocumentBlobSegment> blobSegments = doc.getBlobSegments();
-      blobSegments.clear();
-      int i = 0;
-      final List<String> list = new ArrayList<>();
+      final List<String> newSegments = new ArrayList<>();
       final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
-      Splitter.fixedLength(4000).split(hex).forEach(list::add);
+      Splitter.fixedLength(4000).split(hex).forEach(newSegments::add);
 
-      for (String docBlob : list) {
+      int i = 0;
+      for (String docBlob : newSegments) {
         final String segmentSequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        blobSegments.add(new CmsDocumentBlobSegment(doc.getId(), segmentSequence, docBlob));
+        final String hexBlob = "x'" + docBlob + '\'';
+
+        if (oldSegments.containsKey(segmentSequence)) {
+          oldSegments.get(segmentSequence).setDocBlob(hexBlob);
+        } else {
+          oldSegments.put(segmentSequence,
+              new CmsDocumentBlobSegment(doc.getId(), segmentSequence, hexBlob));
+        }
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
@@ -93,9 +95,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
 
-      // for (CmsDocumentBlobSegment segment : doc.getBlobSegments()) {
-      // session.save(segment);
-      // }
     } catch (Exception e) {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
       throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);

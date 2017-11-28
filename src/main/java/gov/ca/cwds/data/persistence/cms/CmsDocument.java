@@ -102,6 +102,11 @@ public class CmsDocument extends CmsPersistentObject {
     this.compressionMethod = compressionMethod;
   }
 
+  /**
+   * Copy constructor.
+   * 
+   * @param copy deep copy from this
+   */
   public CmsDocument(CmsDocument copy) {
     super(copy.getLastUpdatedId(), copy.getLastUpdatedTime());
     this.id = copy.id;
