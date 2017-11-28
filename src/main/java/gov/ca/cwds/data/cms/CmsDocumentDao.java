@@ -55,11 +55,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   }
 
   /**
-   * Compress document blob segments.
-   * 
-   * <p>
-   * NOTE: Assumes that doc already has a doc handle.
-   * </p>
+   * Compress document blob segments with PKWare.
    * 
    * @param doc the document record
    * @param base64 base64 encoded bytes

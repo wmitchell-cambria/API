@@ -113,38 +113,38 @@ public class ServicesModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(AddressService.class);
-    bind(PersonService.class);
-    bind(ScreeningService.class);
     bind(gov.ca.cwds.rest.services.cms.AddressService.class);
+    bind(gov.ca.cwds.rest.services.StaffPersonService.class);
 
+    bind(AddressService.class);
+    bind(AddressValidationService.class);
     bind(AllegationService.class);
+    bind(AssignmentService.class);
+    bind(ClientCollateralService.class);
+    bind(ClientRelationshipService.class);
     bind(CmsDocReferralClientService.class);
     bind(CmsDocumentService.class);
+    bind(CmsNSReferralService.class);
     bind(CmsReferralService.class);
+    bind(ContactService.class);
+    bind(CrossReportService.class);
+    bind(DeliveredService.class);
+    bind(DeliveredToIndividualService.class);
+    bind(DrmsDocumentService.class);
+    bind(GovernmentOrganizationCrossReportService.class);
+    bind(IndexQueryService.class);
+    bind(LegacyKeyService.class);
+    bind(PersonService.class);
     bind(ReferralClientService.class);
     bind(ReferralService.class);
     bind(ReporterService.class);
-    bind(StaffPersonService.class);
-    bind(AddressValidationService.class);
-    bind(CrossReportService.class);
-    bind(CmsNSReferralService.class);
+    bind(ScreeningService.class);
     bind(ScreeningToReferral.class);
-    bind(IndexQueryService.class);
     bind(StaffPersonIdRetriever.class);
-    bind(DrmsDocumentService.class);
-    bind(LegacyKeyService.class);
-    bind(AssignmentService.class);
+    bind(StaffPersonService.class);
     bind(TickleService.class);
-    bind(ClientRelationshipService.class);
-    bind(ClientCollateralService.class);
-    bind(gov.ca.cwds.rest.services.StaffPersonService.class);
-    bind(DeliveredService.class);
-    bind(ContactService.class);
-    bind(DeliveredToIndividualService.class);
-    bind(GovernmentOrganizationCrossReportService.class);
 
-    UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
+    final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
     requestInjection(interceptor);
 
@@ -152,41 +152,17 @@ public class ServicesModule extends AbstractModule {
     p.setProperty("something", "Some String");
     Names.bindProperties(binder(), p);
 
-    // Singleton does not work with DropWizard Guice.
+    // @Singleton does not work with DropWizard Guice.
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
-
-    // bind(GovernmentOrganizationService.class).annotatedWith(Names.named("govt_org_svc"))
-    // .to(GovernmentOrganizationService.class).in(Scopes.SINGLETON);
-
-    // bind(GovernmentOrganizationService.class).annotatedWith(Names.named("govt_org_svc"))
-    // .in(Singleton.class);
-
-    // bind(GovernmentOrganizationService.class).in(Scopes.SINGLETON);
-    // bind(GovernmentOrganizationService.class).in(Singleton.class);
-    // bind(GovernmentOrganizationService.class).asEagerSingleton();
   }
 
-  // /**
-  // * @param governmentOrganizationDao - governmentOrganizationDao
-  // * @param lawEnforcementDao - lawEnforcementDao
-  // * @return the cross report agencies
-  // */
-  // @Provides
-  // @Singleton
-  // @GovernmentOrganizationServiceSingleton
-  // @Named("govt_org_svc")
+  /**
+   * @param governmentOrganizationDao - governmentOrganizationDao
+   * @param lawEnforcementDao - lawEnforcementDao
+   * @return the cross report agencies
+   */
   public GovernmentOrganizationService provideGovernmentOrganizationService(
-      // @CmsSessionFactory SessionFactory sessionFactory,
       GovernmentOrganizationDao governmentOrganizationDao, LawEnforcementDao lawEnforcementDao) {
-    // public GovernmentOrganizationService provideGovernmentOrganizationService(Injector injector)
-    // {
-    // if (governmentOrganizationService == null && governmentOrganizationDao != null
-    // && lawEnforcementDao != null) {
-    // governmentOrganizationService =
-    // new GovernmentOrganizationService(governmentOrganizationDao, lawEnforcementDao);
-    // }
-    // return governmentOrganizationService;
-    // return injector.getInstance(GovernmentOrganizationService.class);
     return new GovernmentOrganizationService(governmentOrganizationDao, lawEnforcementDao);
   }
 
@@ -206,7 +182,6 @@ public class ServicesModule extends AbstractModule {
    * @return the systemCodes
    */
   @Provides
-  // @Singleton
   public SystemCodeService provideSystemCodeService(SystemCodeDao systemCodeDao,
       SystemMetaDao systemMetaDao) {
     LOGGER.debug("provide syscode service");

@@ -14,11 +14,11 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.TypedPersistentObject;
 
 /**
- * {@link PersistentObject} represents a record in TSBLOBT.
+ * {@link PersistentObject} represents a document blob record in TSBLOBT.
  * 
  * <p>
- * Note that this entity class does not extend {@link CmsPersistentObject}, because table TSBLOBT
- * lacks the last update timestamp and last update user id fields.
+ * Note that this entity class <strong>does not extend {@link CmsPersistentObject}</strong>, because
+ * table TSBLOBT lacks the last update timestamp and last update user id fields.
  * </p>
  * 
  * @author CWDS API Team
@@ -45,11 +45,8 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
 
   @Column(name = "DOC_BLOB", length = 4003, insertable = true, updatable = true)
   @NotNull
-  @Size(min = 1, max = 4003) // allow for x'abc123...'
+  @Size(min = 1, max = 4003) // allow for DB2 hex syntax (x'abc123...')
   @ColumnTransformer(read = "blob(DOC_BLOB)")
-  // @Cascade(value = {org.hibernate.annotations.CascadeType.ALL})
-  // @ManyToOne(fetch=FetchType.EAGER)
-  // @JoinColumn(name = "DOC_HANDLE", nullable = false, updatable = true, insertable = true)
   private String docBlob;
 
   /**

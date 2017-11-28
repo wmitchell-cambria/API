@@ -62,8 +62,6 @@ public class CmsDocument extends CmsPersistentObject {
   private String compressionMethod;
 
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "docHandle")
-  // @Cascade({org.hibernate.annotations.CascadeType.ALL})
-  // @JoinColumn(name = "DOC_HANDLE")
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
 
