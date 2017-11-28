@@ -43,9 +43,9 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
   @Pattern(regexp = "\\d{4}")
   private String segmentSequence;
 
-  @Column(name = "DOC_BLOB", length = 4005)
+  @Column(name = "DOC_BLOB", length = 4003)
   @NotNull
-  @Size(min = 1, max = 4005) // allow for x'abc123...'
+  @Size(min = 1, max = 4003) // allow for x'abc123...'
   @ColumnTransformer(read = "blob(DOC_BLOB)")
   private String docBlob;
 
