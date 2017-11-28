@@ -31,8 +31,8 @@ public class CmsAddressResourceBuilder {
   Integer zip = 95833;
   String addressDescription = "Resident";
   Short zip4 = (short) 12;
-  String postDirCd = "code";
-  String preDirCd = "PreCode";
+  String postDirCd = "NE";
+  String preDirCd = "NE";
   Short streetSuffixCd = (short) 99;
   Short unitDesignationCd = (short) 140;
   String unitNumber = "120";
