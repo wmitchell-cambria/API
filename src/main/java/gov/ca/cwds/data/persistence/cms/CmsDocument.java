@@ -10,12 +10,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -63,9 +61,9 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-  @JoinColumn(name = "DOC_HANDLE")
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "docHandle")
+  // @Cascade({org.hibernate.annotations.CascadeType.ALL})
+  // @JoinColumn(name = "DOC_HANDLE")
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
 
