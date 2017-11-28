@@ -46,7 +46,6 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
   @Column(name = "DOC_BLOB", length = 4005)
   @NotNull
   @Size(min = 1, max = 4005)
-  // @ColumnTransformer(read = "blob(DOC_BLOB)", write = "x'?'")
   @ColumnTransformer(read = "blob(DOC_BLOB)")
   private String docBlob;
 

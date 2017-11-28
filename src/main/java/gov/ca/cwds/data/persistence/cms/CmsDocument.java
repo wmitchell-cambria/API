@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,7 +62,7 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
-  @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+  @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "DOC_HANDLE", nullable = false)
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();

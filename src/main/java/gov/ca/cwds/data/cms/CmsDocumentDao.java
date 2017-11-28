@@ -69,21 +69,22 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     try {
       final Map<String, CmsDocumentBlobSegment> oldSegments = doc.getBlobSegments().stream()
           .collect(Collectors.toMap(CmsDocumentBlobSegment::getSegmentSequence, a -> a));
-
       final List<String> newSegments = new ArrayList<>();
       final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
       Splitter.fixedLength(4000).split(hex).forEach(newSegments::add);
 
       int i = 0;
       for (String docBlob : newSegments) {
-        final String segmentSequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        final String hexBlob = "x'" + docBlob + '\'';
+        final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
+        final String hexBlob = "x'" + docBlob + '\''; // DB2 hex to binary conversion.
 
-        if (oldSegments.containsKey(segmentSequence)) {
-          oldSegments.get(segmentSequence).setDocBlob(hexBlob);
+        if (oldSegments.containsKey(sequence)) {
+          oldSegments.get(sequence).setDocBlob(hexBlob);
         } else {
-          oldSegments.put(segmentSequence,
-              new CmsDocumentBlobSegment(doc.getId(), segmentSequence, hexBlob));
+          final CmsDocumentBlobSegment segment =
+              new CmsDocumentBlobSegment(doc.getId(), sequence, hexBlob);
+          oldSegments.put(sequence, segment);
+          doc.getBlobSegments().add(segment);
         }
       }
 
