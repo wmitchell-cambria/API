@@ -22,6 +22,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.validation.Date;
+import gov.ca.cwds.rest.validation.NotEqual;
 import gov.ca.cwds.rest.validation.OnlyIf;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
@@ -36,6 +37,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @OnlyIf(ifProperty = "primaryLanguage", property = "secondaryLanguage")
+@NotEqual(ifProperty = "primaryLanguage", thenProperty = "secondaryLanguage")
 @JsonPropertyOrder({"id", "legacySourceTable", "legacyId", "firstName", "lastName", "gender", "ssn",
     "dateOfBirth", "roles", "addresses", "race_ethnicity"})
 public class Participant extends ReportingDomain implements Request, Response {
