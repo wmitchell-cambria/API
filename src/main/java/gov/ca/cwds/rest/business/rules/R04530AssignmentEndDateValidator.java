@@ -11,6 +11,16 @@ public class R04530AssignmentEndDateValidator implements RuleValidatator {
   Assignment assignment = null;
 
   /**
+   * constructor to set assignment object
+   * 
+   * @param assignment - assignment object
+   */
+  public R04530AssignmentEndDateValidator(Assignment assignment) {
+    this.assignment = assignment;
+
+  }
+
+  /**
    * Rule - R04530 - validating assignment end date
    */
   @Override
@@ -38,7 +48,9 @@ public class R04530AssignmentEndDateValidator implements RuleValidatator {
 
   private boolean isCurrentDateBeforeOrEqualAssignmentEndDate(Date assignemntEndDate) {
     Date currentDate = new Date();
-    return (currentDate.before(assignemntEndDate) || currentDate.equals(assignemntEndDate));
+    // return (currentDate.before(assignemntEndDate) || currentDate.equals(assignemntEndDate));
+    return (currentDate.compareTo(assignemntEndDate) <= 0);
+
 
   }
 
@@ -50,7 +62,8 @@ public class R04530AssignmentEndDateValidator implements RuleValidatator {
    * @return
    */
   private boolean isAssignmentStartDateBeforeOrEqualsEndDate(Date startDate, Date endDate) {
-    return (startDate.before(endDate) || (startDate.equals(endDate)));
+    // return (startDate.before(endDate) || (startDate.equals(endDate)));
+    return (startDate.compareTo(endDate) <= 0);
 
   }
 
@@ -77,15 +90,7 @@ public class R04530AssignmentEndDateValidator implements RuleValidatator {
 
   }
 
-  /**
-   * constructor to set assignment object
-   * 
-   * @param assignment - assignment object
-   */
-  public R04530AssignmentEndDateValidator(Assignment assignment) {
-    this.assignment = assignment;
 
-  }
 
   /**
    * service to convert strong to date object.
