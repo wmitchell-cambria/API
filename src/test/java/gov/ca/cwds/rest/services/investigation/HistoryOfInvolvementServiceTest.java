@@ -12,7 +12,6 @@ import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
@@ -29,7 +28,6 @@ public class HistoryOfInvolvementServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private HistoryOfInvolvementService historyOfInvolvementService;
-  private DeliveredServiceDao deliveredServiceDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -37,7 +35,7 @@ public class HistoryOfInvolvementServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    historyOfInvolvementService = new HistoryOfInvolvementService(deliveredServiceDao);
+    historyOfInvolvementService = new HistoryOfInvolvementService();
   }
 
   // find test

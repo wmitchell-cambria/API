@@ -9,10 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.jackson.Jackson;
 
@@ -28,16 +27,9 @@ public class HistoryOfInvolvementService
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private DeliveredServiceDao deliveredServiceDao;
-
-  /**
-   * @param deliveredServiceDao {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity} objects
-   */
   @Inject
-  public HistoryOfInvolvementService(DeliveredServiceDao deliveredServiceDao) {
+  public HistoryOfInvolvementService() {
     super();
-    this.deliveredServiceDao = deliveredServiceDao;
   }
 
   /**
@@ -55,7 +47,8 @@ public class HistoryOfInvolvementService
           fixture("gov/ca/cwds/rest/services/investigation/historyOfInvolvement/valid/valid.json"),
           HistoryOfInvolvement.class);
     } catch (Exception e) {
-      LOGGER.error("Exception In HistoryOfInvolvement {}", e.getMessage());
+      LOGGER.error("Exception in finding stubbed data for HistoryOfInvolvement {}", e.getMessage());
+      throw new ServiceException("Exception In finding stubbed data for HistoryOfInvolvement", e);
     }
     return serialized;
   }
