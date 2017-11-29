@@ -162,6 +162,17 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * Decompress (inflate) an LZW-compressed document by assembling blob segments and calling native
    * library.
    * 
+   * <p>
+   * OPTION: Trap std::exception in shared library and return error code. The LZW library currently
+   * returns a blank when decompression fails, for safety, since unhandled C++ exceptions kill the
+   * JVM.
+   * </p>
+   * 
+   * <p>
+   * For security reasons, remove temporary documents immediately. OPTION: pass bytes to C++ library
+   * instead of file names.
+   * </p>
+   * 
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
@@ -186,17 +197,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       }
 
       // DECOMPRESS!
-      // OPTION: Trap std::exception in shared library and return error code.
-      // The LZW library currently returns a blank when decompression fails, for safety, since
-      // unhandled C++ exceptions kill the JVM.
       final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
-
       retval =
           DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
 
-      // For security reasons, remove temporary documents immediately.
-      // OPTION: pass bytes to C++ library instead of file names.
       final boolean srcDeletedSuccessfully = src.delete();
       if (!srcDeletedSuccessfully) {
         LOGGER.warn("Unable to delete compressed file {}", src.getAbsolutePath());
