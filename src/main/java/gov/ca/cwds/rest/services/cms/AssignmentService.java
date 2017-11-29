@@ -3,13 +3,10 @@ package gov.ca.cwds.rest.services.cms;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
@@ -23,6 +20,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.R04530AssignmentEndDateValidator;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -125,6 +123,7 @@ public class AssignmentService implements
           CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), assignment,
           RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
+      this.validateAssignmentEndDate(assignment);
       managed = assignmentDao.create(managed);
       if (managed.getId() == null) {
         throw new ServiceException("Assignment ID cannot be null");
@@ -240,6 +239,7 @@ public class AssignmentService implements
       Assignment managed =
           new Assignment(primaryKey, assignment, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
+      this.validateAssignmentEndDate(assignment);
       managed = assignmentDao.update(managed);
       externalInterfaceTables.createExtInterAssignment(managed, "C");
       return new gov.ca.cwds.rest.api.domain.cms.Assignment(managed);
@@ -247,6 +247,14 @@ public class AssignmentService implements
       LOGGER.info("Assignment not found : {}", assignment);
       throw new ServiceException(e);
     }
+  }
+
+  private void validateAssignmentEndDate(gov.ca.cwds.rest.api.domain.cms.Assignment assignment) {
+    if (!new R04530AssignmentEndDateValidator(assignment).isValid()) {
+      throw new ServiceException(
+          "Rule : R - 04530 - Assignment End Date and Time must be less than or equal to the current system date and time AND must be greater than or equal to Assignment Start Date and Time");
+    }
+
   }
 
 }
