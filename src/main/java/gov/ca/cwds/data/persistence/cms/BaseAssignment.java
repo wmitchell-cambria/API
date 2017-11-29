@@ -240,7 +240,7 @@ public abstract class BaseAssignment extends CmsPersistentObject {
   }
 
   @SuppressWarnings("javadoc")
-  public void setEstablishedForId(String establishedForId) {
+  public final void setEstablishedForId(String establishedForId) {
     this.establishedForId = establishedForId;
   }
 

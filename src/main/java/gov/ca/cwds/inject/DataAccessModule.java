@@ -386,12 +386,11 @@ public class DataAccessModule extends AbstractModule {
     }
 
     Map<String, ElasticsearchDao> esDaos = new HashMap<>();
-    for (String esKey : clients.keySet()) {
-      Client client = clients.get(esKey);
+    for (Map.Entry<String, Client> esKey : clients.entrySet()) {
       ElasticsearchConfiguration config =
-          apiConfiguration.getElasticsearchConfigurations().get(esKey);
-      ElasticsearchDao dao = new ElasticsearchDao(client, config);
-      esDaos.put(esKey, dao);
+          apiConfiguration.getElasticsearchConfigurations().get(esKey.getKey());
+      ElasticsearchDao dao = new ElasticsearchDao(esKey.getValue(), config);
+      esDaos.put(esKey.getKey(), dao);
     }
     return esDaos;
   }
@@ -420,8 +419,8 @@ public class DataAccessModule extends AbstractModule {
       Map<String, ElasticsearchConfiguration> esConfigs =
           apiConfiguration.getElasticsearchConfigurations();
 
-      for (String esConfigKey : esConfigs.keySet()) {
-        ElasticsearchConfiguration config = esConfigs.get(esConfigKey);
+      for (Map.Entry<String, ElasticsearchConfiguration> esConfigKey : esConfigs.entrySet()) {
+        ElasticsearchConfiguration config = esConfigs.get(esConfigKey.getKey());
 
         /*
          * NOTE: This will close the transportClient because of auto closable...
@@ -445,7 +444,7 @@ public class DataAccessModule extends AbstractModule {
           transportClient.addTransportAddress(
               new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
                   Integer.parseInt(config.getElasticsearchPort())));
-          clients.put(esConfigKey, transportClient);
+          clients.put(esConfigKey.getKey(), transportClient);
         } catch (Exception e) {
           LOGGER.error("Error initializing Elasticsearch client: {}", e.getMessage(), e);
           throw new ApiException("Error initializing Elasticsearch client: " + e.getMessage(), e);

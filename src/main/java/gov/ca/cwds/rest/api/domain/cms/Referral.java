@@ -651,7 +651,7 @@ public class Referral extends ReportingDomain implements Request, Response {
    * @param key key to convert
    * @return 19-digit, hyphen delimited UI identifier.
    */
-  protected String legacyIdToUIIdentifier(String key) {
+  protected final String legacyIdToUIIdentifier(String key) {
     String ret = null;
     if (StringUtils.isNotBlank(key)) {
       ret = CmsKeyIdGenerator.getUIIdentifierFromKey(key.trim());

@@ -172,17 +172,15 @@ public class ScreeningToReferralService implements CrudsService {
 
     StringBuilder errorMessage = new StringBuilder();
     boolean foundError = false;
-    if (!messageBuilder.getMessages().isEmpty()) {
-      for (ErrorMessage message : messageBuilder.getMessages()) {
-        if (StringUtils.isNotBlank(message.getMessage())) {
-          foundError = true;
-          errorMessage.append(message.getMessage());
-          errorMessage.append("&&");
-        }
+    for (ErrorMessage message : messageBuilder.getMessages()) {
+      if (StringUtils.isNotBlank(message.getMessage())) {
+        foundError = true;
+        errorMessage.append(message.getMessage());
+        errorMessage.append("&&");
       }
-      if (foundError) {
-        throw new BusinessValidationException(messageBuilder.getIssues());
-      }
+    }
+    if (foundError) {
+      throw new BusinessValidationException(messageBuilder.getIssues());
     }
 
     return pstr;

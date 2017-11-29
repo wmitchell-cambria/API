@@ -635,7 +635,7 @@ public class CmsDocReferralClient extends ReportingDomain
    * 
    * @param docName document name
    */
-  public void setDocName(String docName) {
+  public final void setDocName(String docName) {
     this.docName = docName;
   }
 

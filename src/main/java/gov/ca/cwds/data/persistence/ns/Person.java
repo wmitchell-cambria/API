@@ -176,7 +176,7 @@ public class Person extends NsPersistentObject
   /**
    * @param personAddress - The personAddress
    */
-  public void addPersonAddress(PersonAddress personAddress) {
+  public final void addPersonAddress(PersonAddress personAddress) {
     this.personAddress.add(personAddress);
   }
 

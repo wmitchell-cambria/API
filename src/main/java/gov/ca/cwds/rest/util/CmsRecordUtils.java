@@ -24,9 +24,9 @@ public class CmsRecordUtils {
     final CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptor();
 
     if (!StringUtils.isBlank(CmsId)) {
-      cmsRecordDescriptor.setId(CmsId.trim());
-
       final String cmsUiId = CmsId.trim();
+      cmsRecordDescriptor.setId(cmsUiId);
+
       if (cmsUiId.length() == CMS_ID_LEN) {
         cmsRecordDescriptor.setUiId(CmsKeyIdGenerator.getUIIdentifierFromKey(cmsUiId));
       } else {

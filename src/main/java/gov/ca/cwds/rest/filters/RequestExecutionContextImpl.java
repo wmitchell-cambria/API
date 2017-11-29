@@ -43,7 +43,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
    * @param value Parameter value
    */
   @Override
-  public void put(Parameter parameter, Object value) {
+  public final void put(Parameter parameter, Object value) {
     contextParameters.put(parameter, value);
   }
 
