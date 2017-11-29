@@ -39,18 +39,15 @@ public class HistoryOfInvolvementService
    */
   @Override
   public Response find(String primaryKey) {
-    HistoryOfInvolvement serialized = new HistoryOfInvolvement();
     // please do not change this code until we are ready to replace stubbed data with data from db2
     try {
-
-      serialized = MAPPER.readValue(
+      return MAPPER.readValue(
           fixture("gov/ca/cwds/rest/services/investigation/historyOfInvolvement/valid/valid.json"),
           HistoryOfInvolvement.class);
     } catch (Exception e) {
       LOGGER.error("Exception in finding stubbed data for HistoryOfInvolvement {}", e.getMessage());
       throw new ServiceException("Exception In finding stubbed data for HistoryOfInvolvement", e);
     }
-    return serialized;
   }
 
   @Override
