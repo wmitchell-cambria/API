@@ -6,6 +6,9 @@ The CWDS API provides RESTful services for the CWDS Modules.
 
 The development team is actively using the [Github Wiki](https://github.com/ca-cwds/API/wiki).  
 
+## Commiting to Code Base
+Code commits are submitted via pull request for authorized developers. Code is expected to follow best practices and styles found at [Coding Standards](https://github.com/ca-cwds/API/wiki/Coding-Standards).
+
 ## Documentation
 
 The development team uses [Swagger](http://swagger.io/) for documenting the API.  
