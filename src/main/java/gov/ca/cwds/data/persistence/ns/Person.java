@@ -183,7 +183,7 @@ public class Person extends NsPersistentObject
   /**
    * @param personPhone - The personPhone
    */
-  public void addPersonPhone(PersonPhone personPhone) {
+  public final void addPersonPhone(PersonPhone personPhone) {
     this.personPhone.add(personPhone);
   }
 

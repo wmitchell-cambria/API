@@ -617,7 +617,7 @@ public class CmsDocReferralClient extends ReportingDomain
    * 
    * @param id doc handle
    */
-  public void setId(String id) {
+  public final void setId(String id) {
     this.id = id;
   }
 

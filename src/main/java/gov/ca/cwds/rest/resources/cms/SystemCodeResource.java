@@ -117,7 +117,6 @@ public class SystemCodeResource {
   /**
    * Create a {@link SystemCode}.
    * 
-   * @param id The id of the {@link SystemCode}
    * @param acceptHeader The accept header
    * @return The {@link Response}
    */
@@ -126,7 +125,6 @@ public class SystemCodeResource {
   @ApiOperation(hidden = true, value = "Delete SystemCode - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
   public Response create(
-      @PathParam("id") @ApiParam(required = true, value = "id of SystemCode to create") long id,
       @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
@@ -140,6 +138,7 @@ public class SystemCodeResource {
    * @return The {@link Response}
    */
   @PUT
+  @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(hidden = true, value = "Delete SystemCode - not currently implemented",

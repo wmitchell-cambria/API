@@ -195,7 +195,6 @@ public class ClientAddressService implements
 
     String addressId = "";
     Set<gov.ca.cwds.rest.api.domain.Address> addresses;
-    Set<gov.ca.cwds.rest.api.domain.Address> newAddresses = new HashSet<>();
     addresses = clientParticipant.getAddresses();
 
     if (addresses == null) {
@@ -239,7 +238,6 @@ public class ClientAddressService implements
       messageBuilder.addDomainValidationError(validator.validate(clientAddress));
       address.setLegacySourceTable(CLIENT_ADDRESS_TABLE_NAME);
       address.setLegacyId(addressId);
-      newAddresses.add(address);
     }
 
     return clientParticipant;

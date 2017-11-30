@@ -82,7 +82,7 @@ public class StaffPersonIdRetriever {
 
   private static PerryUserIdentity getCurrentprincipal(PerryUserIdentity perryUserIdentity,
       Object currentPrincipal) {
-    if (currentPrincipal != null && currentPrincipal instanceof PerryUserIdentity) {
+    if ( currentPrincipal instanceof PerryUserIdentity) {
       PerryUserIdentity currentUserInfo = (PerryUserIdentity) currentPrincipal;
       String staffPersonId = currentUserInfo.getStaffId();
 

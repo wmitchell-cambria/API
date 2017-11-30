@@ -29,7 +29,7 @@ public class R02265ChildClientExists implements RuleValidatator {
 
   @Override
   public boolean isValid() {
-    boolean childClientIndicatorVar = Boolean.FALSE;
+    boolean childClientIndicatorVar = false;
     if (incomingParticipant.getRoles().contains("Victim")) {
       return true;
     }

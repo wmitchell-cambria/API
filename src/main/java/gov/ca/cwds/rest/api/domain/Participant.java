@@ -250,7 +250,7 @@ public class Participant extends ReportingDomain implements Request, Response {
       reporter = ParticipantValidator.isReporterType(this);
       perpetrator = ParticipantValidator.isPerpetrator(this);
     } catch (Exception e) {
-      throw new ServiceException();
+      throw new ServiceException("An Error Occured while validating participant roles", e);
     }
   }
 
