@@ -9,6 +9,8 @@ The development team is actively using the [Github Wiki](https://github.com/ca-c
 ## Commiting to Code Base
 Code commits are submitted via pull request for authorized developers. Code is expected to Coding standards that include Coding practices, API Standards, best practices found at [Commiting Code](https://github.com/ca-cwds/API/wiki/Committing-Code).
 
+Pull requests should contain information to help provide context around code. Should include any special details or why something abnormal was done. If tests are not part of check in, then an explination is expected.
+
 ## Documentation
 
 The development team uses [Swagger](http://swagger.io/) for documenting the API.  
