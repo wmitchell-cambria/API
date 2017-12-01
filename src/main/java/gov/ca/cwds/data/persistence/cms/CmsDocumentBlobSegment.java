@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.util.Comparator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,7 +27,8 @@ import gov.ca.cwds.data.persistence.TypedPersistentObject;
  */
 @Entity
 @Table(name = "TSBLOBT")
-public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrimaryKey> {
+public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrimaryKey>,
+    Comparator<CmsDocumentBlobSegment>, Comparable<CmsDocumentBlobSegment> {
 
   private static final long serialVersionUID = -6101861394294752291L;
 
@@ -205,6 +208,19 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    */
   public void setDocHandle(String docHandle) {
     this.docHandle = docHandle;
+  }
+
+  @Override
+  public int compare(CmsDocumentBlobSegment o1, CmsDocumentBlobSegment o2) {
+    final int first = o1.getDocHandle().compareTo(o2.getDocHandle());
+    return first == 0 ? first
+        : Integer.valueOf(o1.getSegmentSequence())
+            .compareTo(Integer.valueOf(o2.getSegmentSequence()));
+  }
+
+  @Override
+  public int compareTo(CmsDocumentBlobSegment o) {
+    return compare(this, o);
   }
 
 }

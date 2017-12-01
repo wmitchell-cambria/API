@@ -1,7 +1,15 @@
 package gov.ca.cwds.rest.services.cms;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Set;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +17,9 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.CmsDocumentDao;
+import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
@@ -84,13 +94,13 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         doc.setDocServ(request.getDocServ().trim());
       }
 
-      doc = dao.compressPK(doc, request.getBase64Blob().trim());
+      dao.compressPK(doc, request.getBase64Blob().trim());
       gov.ca.cwds.data.persistence.cms.CmsDocument managed =
           new gov.ca.cwds.data.persistence.cms.CmsDocument(doc);
       try {
         dao.update(managed);
       } catch (Exception e) {
-        LOGGER.error("HUH??? {}", e.getMessage(), e);
+        LOGGER.error("FAILED TO SAVE DOCUMENT MAIN: {}", e.getMessage(), e);
       }
 
       request.setCompressionMethod(managed.getCompressionMethod());
@@ -103,6 +113,47 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
 
     return request;
+  }
+
+  protected String blobToInsert(CmsDocumentBlobSegment blob) {
+    return new StringBuilder().append("('").append(blob.getDocHandle()).append("','")
+        .append(blob.getSegmentSequence()).append("',x'").append(blob.getDocBlob()).append("')")
+        .toString();
+  }
+
+  protected String getCurrentSchema() {
+    return ((SessionFactoryImplementor) dao.getSessionFactory()).getSettings()
+        .getDefaultSchemaName();
+  }
+
+  protected void insertBlobs(Set<CmsDocumentBlobSegment> blobs) throws SQLException {
+    final CmsDocumentBlobSegment[] array = blobs.toArray(new CmsDocumentBlobSegment[0]);
+    Arrays.sort(array);
+
+    final StringBuilder buf = new StringBuilder();
+    buf.append("INSERT INTO ").append(getCurrentSchema())
+        .append(".TSBLOBT(DOC_HANDLE, DOC_SEGSEQ, DOC_BLOB) VALUES\n")
+        .append(StringUtils.join(array, ','));
+
+    try (final Connection con = getConnection()) {
+      con.setAutoCommit(false);
+      try (final Statement stmt = con.createStatement()) {
+        stmt.executeUpdate(buf.toString());
+      }
+    } catch (Exception e) {
+      throw new ServiceException("FAILED TO INSERT DOCUMENT SEGMENTS", e);
+    }
+  }
+
+  /**
+   * Synchronize grabbing connections from the connection pool to prevent deadlocks in C3P0.
+   * 
+   * @return a connection
+   * @throws SQLException on database error
+   */
+  protected synchronized Connection getConnection() throws SQLException {
+    return dao.getSessionFactory().getSessionFactoryOptions().getServiceRegistry()
+        .getService(ConnectionProvider.class).getConnection();
   }
 
   /**
