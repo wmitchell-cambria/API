@@ -36,7 +36,6 @@ import com.google.inject.Inject;
 import gov.ca.cwds.logging.AuditLogger;
 import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.logging.LoggingContext.LogParameter;
-import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
@@ -101,7 +100,7 @@ public class RequestResponseLoggingFilter implements Filter {
       } catch (Exception e) {
         String msg = "Unable to handle request: " + uniqueId;
         LOGGER.error(msg, e);
-        throw new ApiException(msg, e);
+        throw e;
       } finally {
         loggingContext.close();
       }

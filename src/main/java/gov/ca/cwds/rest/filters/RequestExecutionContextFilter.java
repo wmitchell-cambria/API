@@ -33,8 +33,7 @@ import gov.ca.cwds.security.shiro.web.PerryAuthenticatingFilter;
 @WebFilter
 public class RequestExecutionContextFilter implements Filter {
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(RequestExecutionContextFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequestExecutionContextFilter.class);
 
   /**
    * Constructor
@@ -52,18 +51,16 @@ public class RequestExecutionContextFilter implements Filter {
       final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
       final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
       RequestExecutionContextImpl.startRequest();
+
+      LOGGER.info("started request at {}", new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
+          .format(RequestExecutionContext.instance().get(Parameter.REQUEST_START_TIME)));
+
       try {
-        LOGGER.info("started request at {}", new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
-            .format(RequestExecutionContext.instance().get(Parameter.REQUEST_START_TIME)));
         chain.doFilter(httpServletRequest, httpServletResponse);
-      } catch (Exception e) {
-        LOGGER.error(e.getMessage(), e);
-        throw e;
       } finally {
         RequestExecutionContextImpl.stopRequest();
       }
     }
-
   }
 
   @Override
