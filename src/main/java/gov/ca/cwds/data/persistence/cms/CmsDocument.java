@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -61,8 +61,8 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
-  @OneToMany(fetch = FetchType.EAGER)
-  @JoinColumn(name = "DOC_HANDLE", nullable = false)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "docHandle")
+  // @OneToMany(fetch = FetchType.LAZY, mappedBy = "docHandle")
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
 
@@ -103,7 +103,26 @@ public class CmsDocument extends CmsPersistentObject {
   }
 
   /**
-   * Pseudo copy constructor. Build a persistence document from a domain document.
+   * Copy constructor.
+   * 
+   * @param copy deep copy from this
+   */
+  public CmsDocument(CmsDocument copy) {
+    super(copy.getLastUpdatedId(), copy.getLastUpdatedTime());
+    this.id = copy.id;
+    this.docAuth = copy.docAuth;
+    this.docServ = copy.docServ;
+    this.docName = copy.docName;
+    this.segmentCount = copy.segmentCount;
+    this.docDate = copy.docDate;
+    this.docLength = copy.docLength;
+    this.docTime = copy.docTime;
+    this.compressionMethod = copy.compressionMethod;
+    this.blobSegments = new LinkedHashSet<>(copy.blobSegments);
+  }
+
+  /**
+   * Domain copy constructor. Build a persistence document from a domain document.
    * 
    * <p>
    * This constructor doesn't populate blob segments directly from a base64-encoded, decompressed
@@ -123,7 +142,6 @@ public class CmsDocument extends CmsPersistentObject {
     this.docLength = cmsDocument.getDocLength();
     this.docTime = DomainChef.uncookTimeString(cmsDocument.getDocTime());
     this.compressionMethod = cmsDocument.getCompressionMethod();
-
   }
 
   /**

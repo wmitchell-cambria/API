@@ -5,25 +5,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.util.jni.CmsPKCompressor;
 import gov.ca.cwds.rest.util.jni.LZWEncoder;
 
 /**
- * Data Access Object (DAO) for legacy CMS documents.
+ * Data Access Object (DAO) for legacy, compressed CMS documents.
  * 
  * @author CWDS API Team
  */
@@ -31,10 +36,16 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
 
+  private static final String COMPRESSION_TYPE_LZW = "01";
+  private static final String COMPRESSION_TYPE_PK = "02";
+
+  public static final String COMPRESSION_TYPE_LZW_FULL = "CWSCMP01";
+  public static final String COMPRESSION_TYPE_PK_FULL = "PKWare02";
+
   /**
-   * Constructor
+   * Constructor.
    * 
-   * @param sessionFactory The sessionFactory
+   * @param sessionFactory Hibernate session factory
    */
   @Inject
   public CmsDocumentDao(@CmsSessionFactory SessionFactory sessionFactory) {
@@ -42,54 +53,90 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   }
 
   /**
-   * De-compress (inflate) a document by determining the compression type, assembling blob segments,
+   * Compress document blob segments with PKWare.
+   * 
+   * @param doc the document record
+   * @param base64 base64 encoded bytes
+   * @return new blobs in order
+   */
+  public List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
+    final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
+    try {
+      final List<String> segments = new ArrayList<>();
+      final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
+      Splitter.fixedLength(4000).split(hex).forEach(segments::add);
+
+      int i = 0;
+      for (String docBlob : segments) {
+        final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
+        blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence, docBlob));
+      }
+
+      doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
+      doc.setDocLength((long) hex.length()); // num chars multiplied by charset width?
+      doc.setSegmentCount((short) i);
+
+      final RequestExecutionContext ctx = RequestExecutionContext.instance();
+      doc.setLastUpdatedTime(ctx.getRequestStartTime());
+      doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
+
+    } catch (Exception e) {
+      LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
+      throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);
+    }
+
+    return blobs;
+  }
+
+  /**
+   * Decompress (inflate) a document by determining the compression type, assembling blob segments,
    * and calling appropriate library.
    * 
    * @param doc LZW or PK archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  public String decompressDoc(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
+  public String decompressDoc(CmsDocument doc) {
     String retval = "";
 
-    if (doc.getCompressionMethod().endsWith("01")) {
+    if (doc.getCompressionMethod().endsWith(COMPRESSION_TYPE_LZW)) {
       LZWEncoder lzw = new LZWEncoder();
       if (!lzw.didLibraryLoad()) {
         LOGGER.warn("LZW compression not enabled!");
       } else {
         retval = decompressLZW(doc);
       }
-    } else if (doc.getCompressionMethod().endsWith("02")) {
+    } else if (doc.getCompressionMethod().endsWith(COMPRESSION_TYPE_PK)) {
       retval = decompressPK(doc);
     } else {
-      LOGGER.warn("UNSUPPORTED compression method {}", doc.getCompressionMethod());
+      LOGGER.error("UNSUPPORTED COMPRESSION METHOD! {}", doc.getCompressionMethod());
     }
 
     return retval;
   }
 
   /**
-   * Decompress (inflate) an PKWare-compressed document by assembling blob segments and calling Java
+   * Decompress (inflate) a PKWare-compressed document by assembling blob segments and calling Java
    * PKWare SDK.
    * 
    * <p>
-   * The DB2 SQL returns blob segments as hexadecimal.
+   * DB2 SQL returns blob segments as hexadecimal using the DB2 {@code blob()} function.
    * </p>
    * 
    * @param doc PK archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressPK(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
+  protected String decompressPK(CmsDocument doc) {
     String retval = "";
-    CmsPKCompressor pk = new CmsPKCompressor();
 
     try {
-      StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
+      // Charset width multiplier = 2.
+      final StringBuilder buf = new StringBuilder(doc.getDocLength().intValue() * 2);
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         buf.append(seg.getDocBlob().trim());
       }
 
-      final byte[] bytes = pk.decompressHex(buf.toString());
-      LOGGER.info("DAO: bytes len={}", bytes.length);
+      final byte[] bytes = new CmsPKCompressor().decompressHex(buf.toString());
+      LOGGER.debug("DAO: bytes len={}", bytes.length);
       retval = DatatypeConverter.printBase64Binary(bytes);
     } catch (Exception e) {
       LOGGER.error("ERROR DECOMPRESSING PK! {}", e.getMessage());
@@ -103,54 +150,55 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * Decompress (inflate) an LZW-compressed document by assembling blob segments and calling native
    * library.
    * 
+   * <p>
+   * OPTION: Trap std::exception in shared library and return error code. The LZW library currently
+   * returns a blank when decompression fails, for safety, since unhandled C++ exceptions kill the
+   * JVM.
+   * </p>
+   * 
+   * <p>
+   * For security reasons, remove temporary documents immediately. OPTION: pass bytes to C++ library
+   * instead of file names.
+   * </p>
+   * 
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressLZW(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
+  protected String decompressLZW(CmsDocument doc) {
     String retval = "";
 
     File src = null;
     File tgt = null;
-    try{
+    try {
       src = File.createTempFile("src", ".lzw");
       src.deleteOnExit();
       tgt = File.createTempFile("tgt", ".doc");
       tgt.deleteOnExit();
-
-    } catch (IOException e){
+    } catch (IOException e) {
       errorDecompressing(e);
     }
 
-    try ( FileOutputStream fos = new FileOutputStream(src); ){
-
+    try (FileOutputStream fos = new FileOutputStream(src);) {
       for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
         final byte[] bytes = DatatypeConverter.parseHexBinary(seg.getDocBlob().trim());
         fos.write(bytes, 0, bytes.length);
       }
 
       // DECOMPRESS!
-      // TODO: Trap std::exception in shared library and return error code.
-      // The LZW library currently returns a blank when decompression fails, for safety, since
-      // unhandled C++ exceptions kill the JVM.
-      LZWEncoder lzw = new LZWEncoder();
+      final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
-
       retval =
           DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
 
-      // For security reasons, remove temporary documents immediately.
-      // TODO: pass bytes to C++ library instead of file names.
-      boolean srcDeletedSuccessfully = src.delete();
-      if(!srcDeletedSuccessfully){
-        LOGGER.warn("Unable to delete compressed file {}", src.getAbsolutePath() );
+      final boolean srcDeletedSuccessfully = src.delete();
+      if (!srcDeletedSuccessfully) {
+        LOGGER.warn("Unable to delete compressed file {}", src.getAbsolutePath());
       }
 
-      boolean tgtDeletedSuccessfully = tgt.delete();
-
-      if(!tgtDeletedSuccessfully){
-        LOGGER.warn("Unable to delete doc file {}", tgt.getAbsolutePath() );
+      final boolean tgtDeletedSuccessfully = tgt.delete();
+      if (!tgtDeletedSuccessfully) {
+        LOGGER.warn("Unable to delete doc file {}", tgt.getAbsolutePath());
       }
-
     } catch (Exception e) {
       errorDecompressing(e);
     }
@@ -158,8 +206,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     return retval;
   }
 
-  private void errorDecompressing(Exception e){
-    LOGGER.error("ERROR DECOMPRESSING LZW! {}",e.getMessage(), e);
+  private void errorDecompressing(Exception e) {
+    LOGGER.error("ERROR DECOMPRESSING LZW! {}", e.getMessage(), e);
     throw new ServiceException("ERROR DECOMPRESSING LZW! " + e.getMessage(), e);
   }
 

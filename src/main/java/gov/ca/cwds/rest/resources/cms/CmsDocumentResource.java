@@ -137,12 +137,12 @@ public class CmsDocumentResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 422, message = "Unable to validate Document")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(hidden = true, value = "Update Document", code = HttpStatus.SC_NO_CONTENT,
-      response = Object.class)
+  @ApiOperation(value = "Update Document", code = HttpStatus.SC_NO_CONTENT,
+      response = CmsDocument.class)
   public Response update(
-      @PathParam("id") @ApiParam(required = true, name = "id",
-          value = "The id of the Document to update") String id,
-      @ApiParam(hidden = true) CmsDocument doc) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+      @PathParam("id") @ApiParam(required = true, name = "id", value = "Document id") String id,
+      @ApiParam(hidden = false, required = true) CmsDocument doc) {
+    return resourceDelegate.update(id, doc);
   }
+
 }

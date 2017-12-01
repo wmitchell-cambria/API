@@ -37,6 +37,7 @@ import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class CmsDocumentTest {
+
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CMS_DOCUMENT + "/";
 
   private static final CmsDocumentResource mockedCmsDocumentResource =
@@ -218,7 +219,7 @@ public class CmsDocumentTest {
     assertThat(
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(422)));
+        is(equalTo(204)));
   }
 
   @Test
@@ -229,7 +230,7 @@ public class CmsDocumentTest {
     assertThat(
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(422)));
+        is(equalTo(204)));
   }
 
   @Test
@@ -239,7 +240,7 @@ public class CmsDocumentTest {
     assertThat(
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(422)));
+        is(equalTo(204)));
   }
 
   @Test
@@ -250,7 +251,7 @@ public class CmsDocumentTest {
     assertThat(
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(422)));
+        is(equalTo(204)));
   }
 
   @Test
@@ -260,7 +261,7 @@ public class CmsDocumentTest {
     assertThat(
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(422)));
+        is(equalTo(204)));
   }
 
   private CmsDocument validCmsDocument() {

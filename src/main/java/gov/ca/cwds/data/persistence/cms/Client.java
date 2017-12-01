@@ -12,7 +12,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -27,8 +26,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Client.findAll",
-    query = "FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Client.findAll",
+    query = "FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'")
 @Entity
 @Table(name = "CLIENT_T")
 @JsonPropertyOrder(alphabetic = true)
@@ -272,16 +271,14 @@ public class Client extends BaseClient {
       this.driverLicenseStateCodeType = client.getDriverLicenseStateCodeType();
       this.emailAddress = client.getEmailAddress();
       this.estimatedDobCode = client.getEstimatedDobCode();
-      this.ethUnableToDetReasonCode =
-          StringUtils.isBlank(client.getEthUnableToDetReasonCode()) ? null
-              : client.getEthUnableToDetReasonCode();
+      this.ethUnableToDetReasonCode = StringUtils.isBlank(client.getEthUnableToDetReasonCode())
+          ? null : client.getEthUnableToDetReasonCode();
       this.fatherParentalRightTermDate =
           DomainChef.uncookDateString(client.getFatherParentalRightTermDate());
       this.genderCode = client.getGenderCode();
       this.healthSummaryText = client.getHealthSummaryText();
-      this.hispUnableToDetReasonCode =
-          StringUtils.isBlank(client.getHispUnableToDetReasonCode()) ? null
-              : client.getHispUnableToDetReasonCode();
+      this.hispUnableToDetReasonCode = StringUtils.isBlank(client.getHispUnableToDetReasonCode())
+          ? null : client.getHispUnableToDetReasonCode();
       this.hispanicOriginCode =
           StringUtils.isBlank(client.getHispanicOriginCode()) ? "" : client.getHispanicOriginCode();
       this.immigrationCountryCodeType = client.getImmigrationCountryCodeType();

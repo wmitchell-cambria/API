@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.util.Comparator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,20 +15,20 @@ import org.hibernate.annotations.ColumnTransformer;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.TypedPersistentObject;
 
-
 /**
- * {@link PersistentObject} represents a record in TSBLOBT.
+ * {@link PersistentObject} represents a document blob record in TSBLOBT.
  * 
  * <p>
- * Note that this entity class does not extend {@link CmsPersistentObject}, because table TSBLOBT
- * lacks the last update timestamp and last update user id fields.
+ * Note that this entity class <strong>does not extend {@link CmsPersistentObject}</strong>, because
+ * table TSBLOBT lacks the last update timestamp and last update user id fields.
  * </p>
  * 
  * @author CWDS API Team
  */
 @Entity
 @Table(name = "TSBLOBT")
-public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrimaryKey> {
+public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrimaryKey>,
+    Comparator<CmsDocumentBlobSegment>, Comparable<CmsDocumentBlobSegment> {
 
   private static final long serialVersionUID = -6101861394294752291L;
 
@@ -44,8 +46,10 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
   @Pattern(regexp = "\\d{4}")
   private String segmentSequence;
 
+  @Column(name = "DOC_BLOB", length = 4000, insertable = true, updatable = true)
   @NotNull
   @Size(min = 1, max = 4000)
+  // @ColumnTransformer(read = "blob(DOC_BLOB)", write = "x'?'")
   @ColumnTransformer(read = "blob(DOC_BLOB)")
   private String docBlob;
 
@@ -89,16 +93,15 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    */
   @Override
   public final int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
 
-    result = PRIME * result + ((docHandle == null) ? 0 : docHandle.hashCode());
-    result = PRIME * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
+    result = prime * result + ((docHandle == null) ? 0 : docHandle.hashCode());
+    result = prime * result + ((segmentSequence == null) ? 0 : segmentSequence.hashCode());
 
-    // 1) NOT part of unique key, 2) potentially large and waste of processing to compute.
+    // 1) NOT part of unique key, 2) potentially large waste of processing to compute.
     // 3) if you got this far, well ... ;)
-    result = PRIME * result + ((docBlob == null) ? 0 : docBlob.hashCode());
-
+    result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
     return result;
   }
 
@@ -205,6 +208,19 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    */
   public void setDocHandle(String docHandle) {
     this.docHandle = docHandle;
+  }
+
+  @Override
+  public int compare(CmsDocumentBlobSegment o1, CmsDocumentBlobSegment o2) {
+    final int first = o1.getDocHandle().compareTo(o2.getDocHandle());
+    return first == 0 ? first
+        : Integer.valueOf(o1.getSegmentSequence())
+            .compareTo(Integer.valueOf(o2.getSegmentSequence()));
+  }
+
+  @Override
+  public int compareTo(CmsDocumentBlobSegment o) {
+    return compare(this, o);
   }
 
 }

@@ -47,7 +47,6 @@ public class PKCompressionTest {
   // ===================
 
   @Test
-  @Ignore
   public void testDecompressFileToFile1() {
     try {
       final String src = PKCompressionTest.class.getResource(ZIP_PK_1).getPath();
@@ -108,7 +107,6 @@ public class PKCompressionTest {
   }
 
   @Test
-  @Ignore
   public void testDecompressBase64Hex3() {
     try {
       final String src = PKCompressionTest.class.getResource(ZIP_HEX_3).getPath();
@@ -134,7 +132,6 @@ public class PKCompressionTest {
   // ===================
 
   @Test
-  @Ignore
   public void testCompressFile1() {
     try {
       final String src = PKCompressionTest.class.getResource(ZIP_DOC_1).getPath();
