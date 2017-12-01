@@ -132,8 +132,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     final List<CmsDocumentBlobSegment> blobs =
         doc.getBlobSegments().stream().sorted().collect(Collectors.toList());
 
+    dao.getSessionFactory().getCurrentSession().clear();
     try (final Connection con = getConnection()) {
-      con.setAutoCommit(false);
       try (
           final PreparedStatement delStmt = con.prepareStatement(
               "DELETE FROM " + getCurrentSchema() + ".TSBLOBT WHERE DOC_HANDLE = ?");
