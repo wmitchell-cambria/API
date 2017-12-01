@@ -135,28 +135,32 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
+  private void insertBlobsJdbc(final Connection con,
+      gov.ca.cwds.data.persistence.cms.CmsDocument doc, List<CmsDocumentBlobSegment> blobs)
+      throws SQLException {
+    try (
+        final PreparedStatement delStmt = con.prepareStatement(
+            "DELETE FROM " + getCurrentSchema() + ".TSBLOBT WHERE DOC_HANDLE = ?");
+        final Statement stmt = con.createStatement()) {
+
+      delStmt.setString(1, doc.getId());
+      delStmt.executeUpdate();
+
+      for (CmsDocumentBlobSegment blob : blobs) {
+        stmt.executeUpdate(blobToInsert(blob));
+      }
+
+      con.commit(); // WARNING: deadlock without this.
+    } catch (Exception e) {
+      con.rollback();
+    }
+  }
+
   protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc,
       List<CmsDocumentBlobSegment> blobs) {
-    // dao.getSessionFactory().getCurrentSession().clear();
     try (final Connection con = getConnection()) {
-      try (
-          final PreparedStatement delStmt = con.prepareStatement(
-              "DELETE FROM " + getCurrentSchema() + ".TSBLOBT WHERE DOC_HANDLE = ?");
-          final Statement stmt = con.createStatement()) {
-
-        delStmt.setString(1, doc.getId());
-        delStmt.executeUpdate();
-
-        for (CmsDocumentBlobSegment blob : blobs) {
-          stmt.executeUpdate(blobToInsert(blob));
-        }
-
-        con.commit();
-      } catch (Exception e) {
-        con.rollback();
-        throw e;
-      }
-    } catch (Exception e) {
+      insertBlobsJdbc(con, doc, blobs);
+    } catch (SQLException e) {
       throw new ServiceException("FAILED TO INSERT DOCUMENT SEGMENTS", e);
     }
   }
