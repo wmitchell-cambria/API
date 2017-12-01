@@ -129,7 +129,7 @@ public class RequestResponseLoggingFilter implements Filter {
     InputStream bodyInputStream = request.getInputStream();
     sb.append(new String(IOUtils.toByteArray(bodyInputStream)));
 
-    return sb.toString().replace("\n", " ");
+    return sb.toString().replace('\n', ' ');
   }
 
   private class RequestResponseLoggingHttpServletRequest extends HttpServletRequestWrapper {

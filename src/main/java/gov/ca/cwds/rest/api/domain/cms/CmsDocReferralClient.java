@@ -653,7 +653,7 @@ public class CmsDocReferralClient extends ReportingDomain
    * 
    * @param docAddedDate When the document was first added
    */
-  public void setDocAddedDate(String docAddedDate) {
+  public final void setDocAddedDate(String docAddedDate) {
     this.docAddedDate = docAddedDate;
   }
 

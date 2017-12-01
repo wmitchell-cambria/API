@@ -190,7 +190,7 @@ public class Person extends NsPersistentObject
   /**
    * @param personLanguage - The person language
    */
-  public void addPersonLanguage(PersonLanguage personLanguage) {
+  public final void addPersonLanguage(PersonLanguage personLanguage) {
     this.personLanguage.add(personLanguage);
   }
 

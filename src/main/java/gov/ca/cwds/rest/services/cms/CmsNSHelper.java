@@ -62,8 +62,9 @@ public class CmsNSHelper {
 
       ManagedSessionContext.bind(sessionNS); // NOSONAR
       Transaction transactionNS = sessionNS.beginTransaction();
-      for (CrudsService service : nsRequests.keySet()) {
+      for (Entry<CrudsService, Request> nsRequestsService : nsRequests.entrySet()) {
         try {
+          CrudsService service = nsRequestsService.getKey();
           person = service.create(nsRequests.get(service));
           nsResponse.put(service, person);
           sessionNS.flush();
