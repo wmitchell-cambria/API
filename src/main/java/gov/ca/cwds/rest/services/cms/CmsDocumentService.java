@@ -1,10 +1,11 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
@@ -116,9 +117,10 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   protected String blobToInsert(CmsDocumentBlobSegment blob) {
-    return new StringBuilder().append("('").append(blob.getDocHandle()).append("','")
-        .append(blob.getSegmentSequence()).append("',x'").append(blob.getDocBlob()).append("')")
-        .toString();
+    return new StringBuilder().append("INSERT INTO ").append(getCurrentSchema())
+        .append(".TSBLOBT(DOC_HANDLE, DOC_SEGSEQ, DOC_BLOB) VALUES").append("('")
+        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence()).append("',x'")
+        .append(blob.getDocBlob()).append("')").toString();
   }
 
   protected String getCurrentSchema() {
@@ -126,19 +128,24 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
-  protected void insertBlobs(Set<CmsDocumentBlobSegment> blobs) throws SQLException {
-    final CmsDocumentBlobSegment[] array = blobs.toArray(new CmsDocumentBlobSegment[0]);
-    Arrays.sort(array);
-
-    final StringBuilder buf = new StringBuilder();
-    buf.append("INSERT INTO ").append(getCurrentSchema())
-        .append(".TSBLOBT(DOC_HANDLE, DOC_SEGSEQ, DOC_BLOB) VALUES\n")
-        .append(StringUtils.join(array, ','));
+  protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc) throws SQLException {
+    final List<CmsDocumentBlobSegment> blobs =
+        doc.getBlobSegments().stream().sorted().collect(Collectors.toList());
 
     try (final Connection con = getConnection()) {
       con.setAutoCommit(false);
-      try (final Statement stmt = con.createStatement()) {
-        stmt.executeUpdate(buf.toString());
+      try (
+          final PreparedStatement delStmt = con.prepareStatement(
+              "DELETE FROM " + getCurrentSchema() + ".TSBLOBT WHERE DOC_HANDLE = ?");
+          final Statement stmt = con.createStatement()) {
+
+        delStmt.setString(1, doc.getId());
+        delStmt.executeUpdate();
+
+        for (CmsDocumentBlobSegment blob : blobs) {
+          stmt.executeUpdate(blobToInsert(blob));
+        }
+
       }
     } catch (Exception e) {
       throw new ServiceException("FAILED TO INSERT DOCUMENT SEGMENTS", e);

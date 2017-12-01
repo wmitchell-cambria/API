@@ -7,8 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -59,33 +57,22 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * 
    * @param doc the document record
    * @param base64 base64 encoded bytes
-   * @return same document with new blob segments
    */
-  public CmsDocument compressPK(final CmsDocument doc, String base64) {
+  public void compressPK(final CmsDocument doc, String base64) {
+    final List<String> segments = new ArrayList<>();
     try {
-      final Map<String, CmsDocumentBlobSegment> oldSegments = doc.getBlobSegments().stream()
-          .collect(Collectors.toMap(CmsDocumentBlobSegment::getSegmentSequence, a -> a));
-      final List<String> newSegments = new ArrayList<>();
       final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
-      Splitter.fixedLength(4000).split(hex).forEach(newSegments::add);
+      Splitter.fixedLength(4000).split(hex).forEach(segments::add);
+      doc.getBlobSegments().clear();
 
       int i = 0;
-      for (String docBlob : newSegments) {
+      for (String docBlob : segments) {
         final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        final String hexBlob = "x'" + docBlob + '\''; // DB2 hex to binary conversion.
-
-        if (oldSegments.containsKey(sequence)) {
-          oldSegments.get(sequence).setDocBlob(hexBlob);
-        } else {
-          final CmsDocumentBlobSegment segment =
-              new CmsDocumentBlobSegment(doc.getId(), sequence, hexBlob);
-          oldSegments.put(sequence, segment);
-          doc.getBlobSegments().add(segment);
-        }
+        doc.getBlobSegments().add(new CmsDocumentBlobSegment(doc.getId(), sequence, docBlob));
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
-      doc.setDocLength((long) hex.length()); // char count times charset width
+      doc.setDocLength((long) hex.length()); // num chars multiplied by charset width?
       doc.setSegmentCount((short) i);
 
       final RequestExecutionContext ctx = RequestExecutionContext.instance();
@@ -96,8 +83,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
       throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);
     }
-
-    return doc;
   }
 
   /**
