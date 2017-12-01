@@ -18,6 +18,8 @@ import gov.ca.cwds.rest.validation.AfterDateValid;
 
 /**
  * @author CWDS API Team
+ * 
+ * @see Client
  *
  */
 public class R00738BirthDateRestrictionTest {
@@ -33,8 +35,7 @@ public class R00738BirthDateRestrictionTest {
   }
 
   /**
-   * Test when client creationdate date is below the referral birth date, using the
-   * AfterDateValidator
+   * Test when client creationdate date is below the client birth date, using the AfterDateValidator
    * 
    * @see AfterDateValid
    * 
