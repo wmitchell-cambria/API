@@ -57,18 +57,19 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * 
    * @param doc the document record
    * @param base64 base64 encoded bytes
+   * @return new blobs in order
    */
-  public void compressPK(final CmsDocument doc, String base64) {
-    final List<String> segments = new ArrayList<>();
+  public List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
+    final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
     try {
+      final List<String> segments = new ArrayList<>();
       final String hex = new CmsPKCompressor().compressBase64ToHex(base64);
       Splitter.fixedLength(4000).split(hex).forEach(segments::add);
-      doc.getBlobSegments().clear();
 
       int i = 0;
       for (String docBlob : segments) {
         final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        doc.getBlobSegments().add(new CmsDocumentBlobSegment(doc.getId(), sequence, docBlob));
+        blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence, docBlob));
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
@@ -83,6 +84,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
       throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);
     }
+
+    return blobs;
   }
 
   /**

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
@@ -95,11 +94,19 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         doc.setDocServ(request.getDocServ().trim());
       }
 
-      dao.compressPK(doc, request.getBase64Blob().trim());
+      final List<CmsDocumentBlobSegment> blobs =
+          dao.compressPK(doc, request.getBase64Blob().trim());
+      doc.getBlobSegments().clear();
+      // doc.setBlobSegments(new LinkedHashSet<>());
+
+      insertBlobs(doc, blobs);
+
       gov.ca.cwds.data.persistence.cms.CmsDocument managed =
           new gov.ca.cwds.data.persistence.cms.CmsDocument(doc);
+
       try {
         dao.update(managed);
+        // dao.getSessionFactory().getCurrentSession().
       } catch (Exception e) {
         LOGGER.error("FAILED TO SAVE DOCUMENT MAIN: {}", e.getMessage(), e);
       }
@@ -128,11 +135,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
-  protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc) throws SQLException {
-    final List<CmsDocumentBlobSegment> blobs =
-        doc.getBlobSegments().stream().sorted().collect(Collectors.toList());
-
-    dao.getSessionFactory().getCurrentSession().clear();
+  protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc,
+      List<CmsDocumentBlobSegment> blobs) {
+    // dao.getSessionFactory().getCurrentSession().clear();
     try (final Connection con = getConnection()) {
       try (
           final PreparedStatement delStmt = con.prepareStatement(

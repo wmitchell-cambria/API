@@ -61,7 +61,8 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "CMPRS_PRG")
   private String compressionMethod;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "docHandle")
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "docHandle")
+  // @OneToMany(fetch = FetchType.LAZY, mappedBy = "docHandle")
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
 
@@ -117,7 +118,7 @@ public class CmsDocument extends CmsPersistentObject {
     this.docLength = copy.docLength;
     this.docTime = copy.docTime;
     this.compressionMethod = copy.compressionMethod;
-    this.blobSegments = copy.blobSegments;
+    this.blobSegments = new LinkedHashSet<>(copy.blobSegments);
   }
 
   /**
