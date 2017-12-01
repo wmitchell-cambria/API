@@ -99,8 +99,9 @@ public class RequestResponseLoggingFilter implements Filter {
         auditLogger
             .audit(reponseStringBuilder.toString().replaceAll("\n", " ").replaceAll("\r", ""));
       } catch (Exception e) {
-        LOGGER.error(e.getMessage(), e);
-        throw new ApiException("Unable to handle request:" + uniqueId, e);
+        String msg = "Unable to handle request: " + uniqueId;
+        LOGGER.error(msg, e);
+        throw new ApiException(msg, e);
       } finally {
         loggingContext.close();
       }
@@ -246,7 +247,7 @@ public class RequestResponseLoggingFilter implements Filter {
       return wrappedResponse.toString();
     }
 
-    private class TeeServletOutputStream extends ServletOutputStream {
+    private static class TeeServletOutputStream extends ServletOutputStream {
 
       private final TeeOutputStream targetStream;
 
