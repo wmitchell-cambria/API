@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 
 import javax.servlet.Filter;
@@ -127,12 +128,12 @@ public class RequestResponseLoggingFilter implements Filter {
       }
     }
     InputStream bodyInputStream = request.getInputStream();
-    sb.append(new String(IOUtils.toByteArray(bodyInputStream)));
+    sb.append(new String(IOUtils.toByteArray(bodyInputStream), StandardCharsets.UTF_8.name()));
 
     return sb.toString().replace('\n', ' ');
   }
 
-  private class RequestResponseLoggingHttpServletRequest extends HttpServletRequestWrapper {
+  private static class RequestResponseLoggingHttpServletRequest extends HttpServletRequestWrapper {
     private final byte[] body;
     private final HttpServletRequest wrappedRequest;
 
@@ -179,13 +180,13 @@ public class RequestResponseLoggingFilter implements Filter {
 
         @Override
         public void setReadListener(ReadListener arg0) {
-          //No use for this method
+          // No use for this method
         }
       };
     }
   }
 
-  private class RequestResponseLoggingHttpServletResponseWrapper
+  private static class RequestResponseLoggingHttpServletResponseWrapper
       extends HttpServletResponseWrapper {
 
     private TeeServletOutputStream teeStream;
@@ -202,14 +203,15 @@ public class RequestResponseLoggingFilter implements Filter {
     }
 
     public String getContent() throws IOException {
-      return bos == null ? "" : bos.toString();
+      return bos == null ? "" : bos.toString(StandardCharsets.UTF_8.name());
     }
 
     @Override
     public PrintWriter getWriter() throws IOException {
 
       if (this.teeWriter == null) {
-        this.teeWriter = new PrintWriter(new OutputStreamWriter(getOutputStream()));
+        this.teeWriter =
+            new PrintWriter(new OutputStreamWriter(getOutputStream(), StandardCharsets.UTF_8));
       }
       return this.teeWriter;
     }
@@ -276,7 +278,7 @@ public class RequestResponseLoggingFilter implements Filter {
 
       @Override
       public void setWriteListener(WriteListener writeListener) {
-        //No use for this method currently
+        // No use for this method currently
       }
     }
   }
