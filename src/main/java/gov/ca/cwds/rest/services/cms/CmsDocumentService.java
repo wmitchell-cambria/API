@@ -151,8 +151,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       }
 
       con.commit(); // WARNING: deadlock without this.
-    } catch (Exception e) {
+    } catch (SQLException e) {
       con.rollback();
+      throw e;
     }
   }
 
