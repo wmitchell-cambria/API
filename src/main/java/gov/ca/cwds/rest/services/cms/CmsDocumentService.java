@@ -97,8 +97,6 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       final List<CmsDocumentBlobSegment> blobs =
           dao.compressPK(doc, request.getBase64Blob().trim());
       doc.getBlobSegments().clear();
-      // doc.setBlobSegments(new LinkedHashSet<>());
-
       insertBlobs(doc, blobs);
 
       gov.ca.cwds.data.persistence.cms.CmsDocument managed =
@@ -106,7 +104,6 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
 
       try {
         dao.update(managed);
-        // dao.getSessionFactory().getCurrentSession().
       } catch (Exception e) {
         LOGGER.error("FAILED TO SAVE DOCUMENT MAIN: {}", e.getMessage(), e);
       }
