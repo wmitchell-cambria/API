@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
+import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
@@ -148,7 +149,7 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
-  //TODO:Techdebt simplify processing roles
+  // TODO:Techdebt simplify processing roles
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, Set<String> roles) {
@@ -158,27 +159,25 @@ public class ParticipantService implements CrudsService {
     for (String role : roles) {
       boolean saved = false;
 
-      try{
+      try {
 
         boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
-              && (!ParticipantValidator.roleIsAnonymousReporter(role)
-                  && !ParticipantValidator.selfReported(incomingParticipant));
+            && (!ParticipantValidator.roleIsAnonymousReporter(role)
+                && !ParticipantValidator.selfReported(incomingParticipant));
         if (isRegularReporter) {
           saved = saveRegularReporter(screeningToReferral, referralId, messageBuilder,
-              incomingParticipant, role,
-              saved);
+              incomingParticipant, role, saved);
 
-        } else if(!ParticipantValidator.roleIsAnyReporter(role)){
+        } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
           saved = saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
-              clientParticipants,
-              incomingParticipant, genderCode, role, saved);
+              clientParticipants, incomingParticipant, genderCode, role, saved);
         }
-      } catch(Exception e){
+      } catch (Exception e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
       }
 
-      if(!saved) {
+      if (!saved) {
         clientParticipants.addParticipant(incomingParticipant);
       }
     } // next role
@@ -186,8 +185,7 @@ public class ParticipantService implements CrudsService {
 
   private boolean saveRegularReporter(ScreeningToReferral screeningToReferral, String referralId,
       MessageBuilder messageBuilder, Participant incomingParticipant, String role, boolean saved) {
-    if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
-        role)) {
+    if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant, role)) {
       saved = true;
     }
     return saved;
@@ -196,8 +194,8 @@ public class ParticipantService implements CrudsService {
   private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, String role, boolean saved) {
-    if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
-        clientParticipants, incomingParticipant, genderCode, role)) {
+    if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder, clientParticipants,
+        incomingParticipant, genderCode, role)) {
       saved = true;
     }
     return saved;
@@ -281,11 +279,13 @@ public class ParticipantService implements CrudsService {
       String clientId) {
     boolean dispositionCode =
         new R00824SetDispositionCode(screeningToReferral, incomingParticipant).isValid();
+    boolean staffPersonAddedIndicator =
+        new R00832SetStaffPersonAddedInd(screeningToReferral).isValid();
 
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
-            incomingParticipant.isClientStaffPersonAdded(), dispositionCode ? "A" : "", referralId,
-            clientId, LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
+            staffPersonAddedIndicator, dispositionCode ? "A" : "", referralId, clientId,
+            LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
             LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
@@ -349,20 +349,17 @@ public class ParticipantService implements CrudsService {
 
   private boolean okToUpdateClient(Participant incomingParticipant, Client foundClient,
       DateTimeComparatorInterface comparator) {
-    return comparator.compare(incomingParticipant.getLegacyDescriptor()
-          .getLastUpdated(),
-          foundClient.getLastUpdatedTime());
+    return comparator.compare(incomingParticipant.getLegacyDescriptor().getLastUpdated(),
+        foundClient.getLastUpdatedTime());
   }
 
   private void update(MessageBuilder messageBuilder, Participant incomingParticipant,
       Client foundClient, List<Short> otherRaceCodes) {
-    Client savedClient =
-        this.clientService.update(incomingParticipant.getLegacyId(), foundClient);
+    Client savedClient = this.clientService.update(incomingParticipant.getLegacyId(), foundClient);
     clientScpEthnicityService.createOtherEthnicity(foundClient.getExistingClientId(),
         otherRaceCodes);
     if (savedClient != null) {
-      incomingParticipant.getLegacyDescriptor()
-          .setLastUpdated(savedClient.getLastUpdatedTime());
+      incomingParticipant.getLegacyDescriptor().setLastUpdated(savedClient.getLastUpdatedTime());
     } else {
       String message = "Unable to save Client";
       messageBuilder.addMessageAndLog(message, LOGGER);
