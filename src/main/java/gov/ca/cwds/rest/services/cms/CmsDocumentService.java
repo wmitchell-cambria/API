@@ -151,6 +151,10 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
           stmt.executeUpdate(blobToInsert(blob));
         }
 
+        con.commit();
+      } catch (Exception e) {
+        con.rollback();
+        throw e;
       }
     } catch (Exception e) {
       throw new ServiceException("FAILED TO INSERT DOCUMENT SEGMENTS", e);
