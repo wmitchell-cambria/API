@@ -3,13 +3,13 @@ package gov.ca.cwds.fixture.investigation;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleAllegation;
 
 @SuppressWarnings("javadoc")
 public class ScreeningSummaryEntityBuilder {
-
 
   private String perpetratorId = "11";
   private Set<String> allegationTypes = validAllegationTypes();
@@ -26,25 +26,25 @@ public class ScreeningSummaryEntityBuilder {
   private Set<SimpleAllegation> allegations = validAllegationsSet();
 
   private Set<String> validSafetyAletrs() {
-    Set<String> safetyAlerts = new HashSet<>();
-    safetyAlerts.add("Dangerous Animal on Premises");
-    safetyAlerts.add("Firearms in Home");
-    safetyAlerts.add("Severe Mental Health Status");
-    return safetyAlerts;
+    final Set<String> ret = new HashSet<>();
+    ret.add("Dangerous Animal on Premises");
+    ret.add("Firearms in Home");
+    ret.add("Severe Mental Health Status");
+    return ret;
   }
 
   private Set<SimpleAllegation> validAllegationsSet() {
-    Set<SimpleAllegation> validAllegations = new HashSet<>();
+    final Set<SimpleAllegation> validAllegations = new HashSet<>();
     SimpleAllegation allegation = new SimpleAllegation(victimId, perpetratorId, allegationTypes);
     validAllegations.add(allegation);
     return validAllegations;
   }
 
   private Set<String> validAllegationTypes() {
-    Set<String> allegationTypes = new HashSet<>();
-    allegationTypes.add("General neglect");
-    allegationTypes.add("Physical abuse");
-    return allegationTypes;
+    final Set<String> ret = new HashSet<>();
+    ret.add("General neglect");
+    ret.add("Physical abuse");
+    return ret;
   }
 
   /**
@@ -54,7 +54,6 @@ public class ScreeningSummaryEntityBuilder {
   public ScreeningSummary build() {
     return new ScreeningSummary(id, name, decision, decisionDetail, safetyAlerts, safetyInformation,
         additionalInformation, startedAt, allegations);
-
   }
 
 }

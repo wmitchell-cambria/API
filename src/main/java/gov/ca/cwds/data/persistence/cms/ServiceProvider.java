@@ -7,9 +7,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,13 +21,11 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ServiceProvider.findAll",
-        query = "FROM ServiceProvider"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ServiceProvider.findAllUpdatedAfter",
-        query = "FROM ServiceProvider WHERE lastUpdatedTime > :after")})
-@NamedNativeQueries({@NamedNativeQuery(
-    name = "gov.ca.cwds.data.persistence.cms.ServiceProvider.findPartitionedBuckets",
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ServiceProvider.findAll",
+    query = "FROM ServiceProvider")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ServiceProvider.findAllUpdatedAfter",
+    query = "FROM ServiceProvider WHERE lastUpdatedTime > :after")
+@NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.ServiceProvider.findPartitionedBuckets",
     query = "select z.IDENTIFIER, z.AGENCY_NM, z.CITY_NM, z.FAX_NO, z.FIRST_NM, z.LAST_NM, "
         + "trim(z.NMPRFX_DSC) as NMPRFX_DSC, z.PHONE_NO, z.TEL_EXT_NO, "
         + "trim(z.PSTITL_DSC) as PSTITL_DSC, z.SVCPVDRC, z.STATE_C, "
@@ -40,16 +36,13 @@ import gov.ca.cwds.data.persistence.PersistentObject;
         + "from ( select c.* from {h-schema}SVC_PVRT c "
         + "WHERE c.IDENTIFIER >= :min_id and c.IDENTIFIER < :max_id "
         + ") x ) y ) z where z.bucket = :bucket_num for read only",
-    resultClass = ServiceProvider.class)})
+    resultClass = ServiceProvider.class)
 @Entity
 @Table(name = "SVC_PVRT")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceProvider extends BaseServiceProvider {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -203,11 +203,9 @@ public class Person extends NsPersistentObject {
   /**
    * @param personRace - The person race
    */
-  public void addPersonRace(PersonRace personRace) {
+  public final void addPersonRace(PersonRace personRace) {
     this.personRace.add(personRace);
   }
-
-
 
   /**
    * {@inheritDoc}
@@ -229,7 +227,6 @@ public class Person extends NsPersistentObject {
   /**
    * @return the firstName
    */
-  // @Override
   public String getFirstName() {
     return firstName;
   }
@@ -237,7 +234,6 @@ public class Person extends NsPersistentObject {
   /**
    * @return the middleName
    */
-  // @Override
   public String getMiddleName() {
     return middleName;
   }
@@ -245,7 +241,6 @@ public class Person extends NsPersistentObject {
   /**
    * @return the lastName
    */
-  // @Override
   public String getLastName() {
     return lastName;
   }
@@ -325,12 +320,5 @@ public class Person extends NsPersistentObject {
   public void setPersonEthnicity(Set<PersonEthnicity> personEthnicity) {
     this.personEthnicity = personEthnicity;
   }
-
-
-
-  // ================
-  // IPersonAware
-  // ================
-
 
 }

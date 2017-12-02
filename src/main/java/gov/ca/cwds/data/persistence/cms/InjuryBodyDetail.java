@@ -5,7 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -21,12 +22,12 @@ import gov.ca.cwds.data.SystemCodeSerializer;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({@NamedQuery(
+@NamedQuery(
     name = "gov.ca.cwds.data.dao.investigation.InjuryBodyDetail.findInjuryBodyDetailsByInjuryHarmDetailId",
-    query = "FROM InjuryBodyDetail WHERE secondaryInjuryHarmDetailId = :secondaryInjuryHarmDetailId"),
-    @NamedQuery(
-        name = "gov.ca.cwds.data.dao.investigation.InjuryBodyDetail.findInjuryBodyDetailsByAllegationId",
-        query = "FROM InjuryBodyDetail WHERE primaryInjuryHarmDetailId = :allegationId")})
+    query = "FROM InjuryBodyDetail WHERE secondaryInjuryHarmDetailId = :secondaryInjuryHarmDetailId")
+@NamedQuery(
+    name = "gov.ca.cwds.data.dao.investigation.InjuryBodyDetail.findInjuryBodyDetailsByAllegationId",
+    query = "FROM InjuryBodyDetail WHERE primaryInjuryHarmDetailId = :allegationId")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "IJBD_DET")
@@ -121,6 +122,16 @@ public class InjuryBodyDetail extends CmsPersistentObject {
    */
   public String getCountySpecificCode() {
     return countySpecificCode;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

@@ -9,6 +9,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -89,7 +91,7 @@ public class LawEnforcementEntity extends CmsPersistentObject {
    * Default constructor
    */
   public LawEnforcementEntity() {
-
+    // Default constructor
   }
 
   /**
@@ -264,6 +266,16 @@ public class LawEnforcementEntity extends CmsPersistentObject {
    */
   public Short getZipSuffixNumber() {
     return zipSuffixNumber;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }
