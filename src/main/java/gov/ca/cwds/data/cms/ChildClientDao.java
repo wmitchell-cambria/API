@@ -1,7 +1,8 @@
 package gov.ca.cwds.data.cms;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
@@ -27,17 +28,17 @@ public class ChildClientDao extends CrudsDaoImpl<ChildClient> {
   }
 
   /**
-   * Find the victim Child Clients associated with a referral
+   * Find the victim Child Clients associated with a referral.
    * 
    * @param referralId the referral identifier
    * @return the Child Clients
    */
   @SuppressWarnings("unchecked")
   public ChildClient[] findVictimClients(String referralId) {
-    Query query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.ChildClient.findVictimClients")
-        .setString("referralId", referralId);
-    return (ChildClient[]) query.list().toArray(new ChildClient[0]);
+    final NativeQuery<ChildClient> query = this.getSessionFactory().getCurrentSession()
+        .getNamedNativeQuery("gov.ca.cwds.data.persistence.cms.ChildClient.findVictimClients");
+    query.setParameter("referralId", referralId, StringType.INSTANCE);
+    return query.list().toArray(new ChildClient[0]);
   }
 
 }

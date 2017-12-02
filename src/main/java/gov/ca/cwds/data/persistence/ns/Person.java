@@ -196,7 +196,7 @@ public class Person extends NsPersistentObject {
    * 
    * @param personEthnicity - The person Ethnicity
    */
-  public void addPersonEthnicity(PersonEthnicity personEthnicity) {
+  public final void addPersonEthnicity(PersonEthnicity personEthnicity) {
     this.personEthnicity.add(personEthnicity);
   }
 

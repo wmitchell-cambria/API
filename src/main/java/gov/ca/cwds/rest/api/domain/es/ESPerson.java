@@ -37,11 +37,6 @@ public class ESPerson extends Person {
   // PRIVATE STATIC:
   // =========================
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
-
   private static final Logger LOGGER = LoggerFactory.getLogger(ESPerson.class);
 
   /**
@@ -65,6 +60,7 @@ public class ESPerson extends Person {
    * @author CWDS API Team
    */
   public enum ESColumn {
+
     /**
      * ElasticSearch identifier
      */
@@ -166,6 +162,117 @@ public class ESPerson extends Person {
     }
   }
 
+  // ================
+  // MEMBERS:
+  // ================
+
+  /**
+   * The identifier is String in legacy (CMS, mainframe DB2) but Long in new style (NS, PostGreSQL).
+   * Therefore, the generic id here is String to accommodate all possibilities without resorting to
+   * generics, untyped Object, or collections with heterogeneous types. For now,
+   * 
+   * <p>
+   * Java lacks a "union" construct (mutually exclusive child structures), and polymorphic return
+   * types (though, technically, the JVM could...), and typed templates (generics aren't the same).
+   * </p>
+   */
+  @JsonProperty("id")
+  private String id;
+
+  /**
+   * Original, fully-qualified, persistence-level source class, such
+   * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
+   */
+  @JsonProperty("type")
+  private String sourceType;
+
+  /**
+   * Raw, nested, child document (typically inherited from {@link Person} in JSON from object
+   * {@link #sourceType} and stored in ES document.
+   * 
+   * <p>
+   * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
+   * create a child Object and not the Object itself.
+   * </p>
+   */
+  @JsonProperty("source")
+  @JsonIgnore
+  private String sourceJson;
+
+  /**
+   * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
+   * Class type {@link #sourceType}.
+   */
+  @JsonProperty("source_object")
+  private transient Object sourceObj;
+
+  /**
+   * Overload constructor.
+   * 
+   * @param id unique identifier
+   * @param firstName The first name
+   * @param middleName The middle name
+   * @param lastName The last name
+   * @param nameSuffix name suffix
+   * @param gender The gender
+   * @param birthDate The date of birth
+   * @param ssn Social Security Number
+   * @param address The address, if any
+   * @param phoneNumber The phoneNumber, if any
+   * @param language The language, if any
+   * @param race The race, if any
+   * @param ethnicity The Ethnicity, if any
+   */
+  public ESPerson(String id, String firstName, String middleName, String lastName,
+      String nameSuffix, String gender, String birthDate, String ssn, Set<Address> address,
+      Set<PhoneNumber> phoneNumber, Set<Language> language, Set<Race> race,
+      Set<Ethnicity> ethnicity) {
+    super(trim(firstName), trim(middleName), trim(lastName), trim(nameSuffix), trim(gender),
+        trim(birthDate), trim(ssn), address, phoneNumber, language, race, ethnicity);
+    this.id = id;
+  }
+
+  /**
+   * Overload constructor, used to accommodate nested document members {@link #sourceType} and
+   * {@link #sourceJson}.
+   * 
+   * @param id identifier
+   * @param firstName first name
+   * @param middleName middle name
+   * @param lastName last name
+   * @param nameSuffix name suffix
+   * @param gender gender code
+   * @param birthDate birth date
+   * @param ssn SSN without dashes
+   * @param sourceType fully-qualified, persistence-level source class
+   * @param sourceJson raw, nested child document as JSON
+   * @param address address, if any
+   * @param phoneNumber PhoneNumber, if any
+   * @param language languages, if any
+   * @param race race, if any
+   * @param ethnicity ethnicity, if any
+   */
+  public ESPerson(String id, String firstName, String middleName, String lastName,
+      String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
+      String sourceJson, Set<Address> address, Set<PhoneNumber> phoneNumber, Set<Language> language,
+      Set<Race> race, Set<Ethnicity> ethnicity) {
+    super(trim(firstName), trim(middleName), trim(lastName), trim(nameSuffix), trim(gender),
+        trim(birthDate), trim(ssn), address, phoneNumber, language, race, ethnicity);
+    this.id = id;
+    this.sourceType = sourceType;
+    this.sourceJson = sourceJson;
+  }
+
+  /**
+   * Construct from a persistence-level, new style {@link gov.ca.cwds.data.persistence.ns.Person}.
+   * 
+   * @param person database NS person object
+   */
+  public ESPerson(gov.ca.cwds.data.persistence.ns.Person person) {
+    super(person);
+    this.id = person.getId().toString();
+  }
+
   /**
    * Produce an ESPerson domain from native ElasticSearch {@link SearchHit}. Parse JSON results and
    * populate associated fields.
@@ -263,118 +370,6 @@ public class ESPerson extends Person {
    */
   protected static String trim(String s) {
     return s != null ? s.trim() : null;
-  }
-
-  // ================
-  // MEMBERS:
-  // ================
-
-  /**
-   * The identifier is String in legacy (CMS, mainframe DB2) but Long in new style (NS, PostGreSQL).
-   * Therefore, the generic id here is String to accomodate all possibilities without resorting to
-   * generics, untyped Object, or collections with heterogenous types. For now,
-   * 
-   * <p>
-   * Java lacks a "union" construct (mutually exclusive child structures), and polymorphic return
-   * types (though, technically, the JVM could...), and typed templates (generics aren't the same).
-   * </p>
-   */
-  @JsonProperty("id")
-  private String id;
-
-  /**
-   * Original, fully-qualified, persistence-level source class, such
-   * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
-   */
-  @JsonProperty("type")
-  private String sourceType;
-
-  /**
-   * Raw, nested, child document (typically inherited from {@link Person} in JSON from object
-   * {@link #sourceType} and stored in ES document.
-   * 
-   * <p>
-   * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
-   * create a child Object and not the Object itself.
-   * </p>
-   */
-  @JsonProperty("source")
-  @JsonIgnore
-  private String sourceJson;
-
-  /**
-   * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
-   * Class type {@link #sourceType}.
-   */
-  @JsonProperty("source_object")
-  private transient Object sourceObj;
-
-
-  /**
-   * Overload constructor.
-   * 
-   * @param id unique identifier
-   * @param firstName The first name
-   * @param middleName The middle name
-   * @param lastName The last name
-   * @param nameSuffix name suffix
-   * @param gender The gender
-   * @param birthDate The date of birth
-   * @param ssn Social Security Number
-   * @param address The address, if any
-   * @param phoneNumber The phoneNumber, if any
-   * @param language The language, if any
-   * @param race The race, if any
-   * @param ethnicity The Ethnicity, if any
-   */
-  public ESPerson(String id, String firstName, String middleName, String lastName,
-      String nameSuffix, String gender, String birthDate, String ssn, Set<Address> address,
-      Set<PhoneNumber> phoneNumber, Set<Language> language, Set<Race> race,
-      Set<Ethnicity> ethnicity) {
-    super(trim(firstName), trim(middleName), trim(lastName), trim(nameSuffix), trim(gender),
-        trim(birthDate), trim(ssn), address, phoneNumber, language, race, ethnicity);
-    this.id = id;
-  }
-
-  /**
-   * Overload constructor, used to accommodate nested document members {@link #sourceType} and
-   * {@link #sourceJson}.
-   * 
-   * @param id identifier
-   * @param firstName first name
-   * @param middleName middle name
-   * @param lastName last name
-   * @param nameSuffix name suffix
-   * @param gender gender code
-   * @param birthDate birth date
-   * @param ssn SSN without dashes
-   * @param sourceType fully-qualified, persistence-level source class
-   * @param sourceJson raw, nested child document as JSON
-   * @param address address, if any
-   * @param phoneNumber PhoneNumber, if any
-   * @param language languages, if any
-   * @param race race, if any
-   * @param ethnicity ethnicity, if any
-   */
-  public ESPerson(String id, String firstName, String middleName, String lastName,
-      String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
-      String sourceJson, Set<Address> address, Set<PhoneNumber> phoneNumber, Set<Language> language,
-      Set<Race> race, Set<Ethnicity> ethnicity) {
-    super(trim(firstName), trim(middleName), trim(lastName), trim(nameSuffix), trim(gender),
-        trim(birthDate), trim(ssn), address, phoneNumber, language, race, ethnicity);
-    this.id = id;
-    this.sourceType = sourceType;
-    this.sourceJson = sourceJson;
-  }
-
-  /**
-   * Construct from a persistence-level, new style {@link gov.ca.cwds.data.persistence.ns.Person}.
-   * 
-   * @param person database NS person object
-   */
-  public ESPerson(gov.ca.cwds.data.persistence.ns.Person person) {
-    super(person);
-    this.id = person.getId().toString();
   }
 
   /**

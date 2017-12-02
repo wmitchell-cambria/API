@@ -266,8 +266,6 @@ public class Participant extends ReportingDomain implements Request, Response {
       this.gender = participant.getPerson().getGender();
       this.dateOfBirth = DomainChef.cookDate(participant.getPerson().getDateOfBirth());
       this.ssn = participant.getPerson().getSsn();
-      // this.primaryLanguage = participant;
-      // this.secondaryLanguage = secondaryLanguage;
       this.legacyDescriptor = new LegacyDescriptor();
     }
   }
@@ -277,7 +275,6 @@ public class Participant extends ReportingDomain implements Request, Response {
    * 
    * @param participant persistence level participant object
    * @param person domain person object
-   * 
    */
   public Participant(gov.ca.cwds.data.persistence.ns.Participant participant, Person person) {
     this.screeningId = participant.getHotlineContactId();

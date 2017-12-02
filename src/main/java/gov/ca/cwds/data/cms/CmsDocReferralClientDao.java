@@ -2,8 +2,9 @@ package gov.ca.cwds.data.cms;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
@@ -36,8 +37,9 @@ public class CmsDocReferralClientDao extends CrudsDaoImpl<CmsDocReferralClient> 
    */
   @SuppressWarnings("unchecked")
   public List<CmsDocReferralClient> listDocReferralClient(String docHandle) {
-    Query query = this.getSessionFactory().getCurrentSession().getNamedQuery("DocReferalClient")
-        .setString("docHandle", docHandle);
+    final NativeQuery<CmsDocReferralClient> query =
+        this.getSessionFactory().getCurrentSession().getNamedNativeQuery("DocReferalClient");
+    query.setParameter("docHandle", docHandle, StringType.INSTANCE);
     return query.list();
   }
 

@@ -15,10 +15,9 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonSnakeCase
 @JsonInclude(Include.ALWAYS)
 public class PostedScreening extends ScreeningResponse {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private long id;
 
@@ -28,76 +27,5 @@ public class PostedScreening extends ScreeningResponse {
   public PostedScreening() {
     super();
   }
-
-  /**
-   * Constructor
-   * 
-   * @param id The id
-   * @param reference The reference
-   * @param endedAt The ended at
-   * @param incidentCounty The incident county
-   * @param incidentDate The incident date
-   * @param locationType The location type
-   * @param communicationMethod The communication method
-   * @param name The name
-   * @param responseTime The response time
-   * @param screeningDecision The screening decision
-   * @param startedAt The started at
-   * @param narrative The narrative
-   * @param address The {@link Address}
-   * @param participants The {@link Set}
-   */
-  // public PostedScreening(long id, String reference, String endedAt, String incidentCounty,
-  // String incidentDate, String locationType, String communicationMethod, String name,
-  // String responseTime, String screeningDecision, String startedAt, String narrative,
-  // Address address, Set<Participant> participants) {
-  // super(reference, endedAt, incidentCounty, incidentDate, locationType, communicationMethod,
-  // name,
-  // responseTime, screeningDecision, startedAt, narrative, address, participants);
-  // this.id = id;
-  // }
-  //
-  // /**
-  // * Constructor
-  // *
-  // * @param id The id
-  // * @param reference The reference
-  // */
-  // public PostedScreening(long id, String reference) {
-  // super(reference);
-  // this.id = id;
-  // }
-  //
-  // /**
-  // * @return the id
-  // */
-  // public long getId() {
-  // return id;
-  // }
-  //
-  // @Override
-  // public int hashCode() {
-  // final int prime = 31;
-  // int result = super.hashCode();
-  // result = prime * result + (int) (id ^ (id >>> 32));
-  // return result;
-  // }
-  //
-  // @Override
-  // public boolean equals(Object obj) {
-  // if (this == obj)
-  // return true;
-  // if (!super.equals(obj))
-  // return false;
-  //
-  // if (!(obj instanceof PostedScreening)) {
-  // return false;
-  // }
-  //
-  // PostedScreening other = (PostedScreening) obj;
-  // if (id != other.id)
-  // return false;
-  // return true;
-  // }
 
 }

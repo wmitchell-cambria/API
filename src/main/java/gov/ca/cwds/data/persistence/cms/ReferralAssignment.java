@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * {@link CmsPersistentObject} representing a Referral Assignment.
@@ -67,6 +68,11 @@ public class ReferralAssignment extends BaseAssignment {
     super(countySpecificCode, endDate, endTime, FOLDED_KEY_CODE, referralId, fkCaseLoad,
         fkOutOfStateContactParty, responsibilityDescription, secondaryAssignmentRoleType, startDate,
         startTime, typeOfAssignmentCode, weightingNumber);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   @Override
