@@ -23,11 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 public class AllegationSubType extends ReportingDomain implements Response {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
-  private static final int PRIME = 31;
 
   @JsonProperty("injury_harm_type")
   @ApiModelProperty(required = true, readOnly = false, value = "Injury/Harm Type", example = "1372")
@@ -82,7 +78,6 @@ public class AllegationSubType extends ReportingDomain implements Response {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
-
   /**
    * {@inheritDoc}
    *
@@ -92,4 +87,5 @@ public class AllegationSubType extends ReportingDomain implements Response {
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 }
