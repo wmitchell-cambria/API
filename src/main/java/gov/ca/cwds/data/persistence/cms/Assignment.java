@@ -227,7 +227,7 @@ public class Assignment extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   @SuppressWarnings("javadoc")

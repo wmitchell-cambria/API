@@ -82,8 +82,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
       int result = 1;
       result = prime * result + ((submitlTimestamp == null) ? 0 : submitlTimestamp.hashCode());
       result = prime * result + ((logonUserId == null) ? 0 : logonUserId.hashCode());
-      result = prime * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
-      return result;
+      return prime * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
     }
 
     @Override

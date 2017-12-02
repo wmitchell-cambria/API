@@ -320,12 +320,12 @@ public abstract class BaseAssignment extends CmsPersistentObject {
   // ===================
 
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

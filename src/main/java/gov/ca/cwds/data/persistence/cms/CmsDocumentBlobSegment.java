@@ -101,8 +101,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
 
     // 1) NOT part of unique key, 2) potentially large waste of processing to compute.
     // 3) if you got this far, well ... ;)
-    result = prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
-    return result;
+    return prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
   }
 
   /**

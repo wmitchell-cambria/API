@@ -8,7 +8,6 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,11 +20,9 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Attorney.findAll",
-        query = "FROM Attorney"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Attorney.findAllUpdatedAfter",
-        query = "FROM Attorney WHERE lastUpdatedTime > :after")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Attorney.findAll", query = "FROM Attorney")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Attorney.findAllUpdatedAfter",
+    query = "FROM Attorney WHERE lastUpdatedTime > :after")
 @Entity
 @Table(name = "ATTRNY_T")
 @JsonPropertyOrder(alphabetic = true)

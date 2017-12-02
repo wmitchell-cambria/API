@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -110,10 +112,10 @@ public class CaseLoad extends CmsPersistentObject {
     this.countySpecificCode = countySpecificCode;
     this.caseLoadIndicatorVariable = caseLoadIndicatorVariable;
     this.fkAssignmentUnit = fkAssignmentUnit;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.onHoldIndicator = onHoldIndicator;
     this.identifierName = identifierName;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.ceilingNumber = ceilingNumber;
     this.assignmentDeskCaseLoadIndicator = assignmentDeskCaseLoadIndicator;
   }
@@ -129,7 +131,7 @@ public class CaseLoad extends CmsPersistentObject {
   }
 
   /**
-   * @return the identifer
+   * @return the identifier
    */
   public String getId() {
     return id;
@@ -167,7 +169,7 @@ public class CaseLoad extends CmsPersistentObject {
    * @return the startDate
    */
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   /**
@@ -188,7 +190,7 @@ public class CaseLoad extends CmsPersistentObject {
    * @return the endDate
    */
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   /**

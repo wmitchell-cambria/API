@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -113,8 +115,7 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
     this.referralId = domainGovernmentOrganizationCrossReport.getReferralId();
     this.governmentOrganizationId =
         StringUtils.isBlank(domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId())
-            ? null
-            : domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId();
+            ? null : domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId();
     this.organizationTypeInd = domainGovernmentOrganizationCrossReport.getOrganizationTypeInd();
   }
 
@@ -168,6 +169,16 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
    */
   public String getOrganizationTypeInd() {
     return organizationTypeInd;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

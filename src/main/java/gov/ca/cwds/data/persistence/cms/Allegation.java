@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -403,6 +405,16 @@ public class Allegation extends CmsPersistentObject {
         + placementFacilityType
         // + ", victimClients=" + victimClients + ", perpetratorClients=" + perpetratorClients
         + "]";
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }
