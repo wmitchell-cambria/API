@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joda.time.DateTime;
-
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
@@ -44,7 +42,6 @@ public class InvestigationEntityBuilder {
   private Boolean sealed = Boolean.FALSE;
   private BigDecimal phone = new BigDecimal("9164445555");
   private Integer phoneExtension = 1122;
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
   private Short phoneType = 1111;
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
@@ -72,7 +69,6 @@ public class InvestigationEntityBuilder {
 
   private Relationship relationship = new RelationshipEntityBuilder().build();
   private Set<Relationship> relationships = new HashSet<>();
-
 
   private SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
   private Set<String> crossReports = new HashSet<>();
@@ -391,4 +387,5 @@ public class InvestigationEntityBuilder {
   public SafetyAlerts getSafetyAlerts() {
     return safetyAlerts;
   }
+
 }

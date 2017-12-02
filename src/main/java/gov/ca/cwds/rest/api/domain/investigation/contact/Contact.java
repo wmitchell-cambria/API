@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain.investigation.contact;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -22,8 +24,8 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -45,9 +47,6 @@ import io.swagger.annotations.ApiModelProperty;
     "purpose", "communicationMethod", "status", "services", "location", "note", "people"})
 public class Contact extends ReportingDomain implements Request, Response {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   @NotNull
@@ -58,7 +57,6 @@ public class Contact extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false// )
       , value = "primary contact staff person legacy_descriptor")
   private LastUpdatedBy lastUpdatedBy;
-
 
   @NotEmpty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT,
@@ -148,8 +146,8 @@ public class Contact extends ReportingDomain implements Request, Response {
     super();
     this.legacyDescriptor = legacyDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
-    this.startedAt = startedAt;
-    this.endedAt = endedAt;
+    this.startedAt = freshDate(startedAt);
+    this.endedAt = freshDate(endedAt);
     this.purpose = purpose;
     this.communicationMethod = communicationMethod;
     this.status = status;
@@ -201,8 +199,6 @@ public class Contact extends ReportingDomain implements Request, Response {
     return legacyDescriptor;
   }
 
-
-
   /**
    * @return the lastUpdatedBy
    */
@@ -210,25 +206,19 @@ public class Contact extends ReportingDomain implements Request, Response {
     return lastUpdatedBy;
   }
 
-
-
   /**
    * @return the startedAt
    */
   public Date getStartedAt() {
-    return startedAt;
+    return freshDate(startedAt);
   }
-
-
 
   /**
    * @return the endedAt
    */
   public Date getEndedAt() {
-    return endedAt;
+    return freshDate(endedAt);
   }
-
-
 
   /**
    * @return the purpose
@@ -237,16 +227,12 @@ public class Contact extends ReportingDomain implements Request, Response {
     return purpose;
   }
 
-
-
   /**
    * @return the communicationMethod
    */
   public String getCommunicationMethod() {
     return communicationMethod;
   }
-
-
 
   /**
    * @return the status
@@ -255,16 +241,12 @@ public class Contact extends ReportingDomain implements Request, Response {
     return status;
   }
 
-
-
   /**
    * @return the services
    */
   public Set<Integer> getServices() {
     return services;
   }
-
-
 
   /**
    * @return the location
@@ -273,16 +255,12 @@ public class Contact extends ReportingDomain implements Request, Response {
     return location;
   }
 
-
-
   /**
    * @return the note
    */
   public String getNote() {
     return note;
   }
-
-
 
   /**
    * @return the people

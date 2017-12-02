@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -150,22 +152,18 @@ public class Screening implements PersistentObject {
       Set<Participant> participants) {
     super();
     this.reference = reference;
-    this.endedAt = endedAt;
+    this.endedAt = freshDate(endedAt);
     this.incidentCounty = incidentCounty;
     this.incidentDate = incidentDate;
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
     this.name = name;
-    // this.responseTime = responseTime;
     this.screeningDecision = screeningDecision;
-    this.startedAt = startedAt;
+    this.startedAt = freshDate(startedAt);
     this.narrative = narrative;
 
     this.safetyAlerts = new String[1];
-
   }
-
-
 
   /**
    * {@inheritDoc}
@@ -195,7 +193,7 @@ public class Screening implements PersistentObject {
    * @return the endedAt
    */
   public Date getEndedAt() {
-    return endedAt;
+    return freshDate(endedAt);
   }
 
   /**
@@ -209,7 +207,7 @@ public class Screening implements PersistentObject {
    * @return the incidentDate
    */
   public Date getIncidentDate() {
-    return incidentDate;
+    return freshDate(incidentDate);
   }
 
   /**
@@ -245,7 +243,7 @@ public class Screening implements PersistentObject {
    * @return the startedAt
    */
   public Date getStartedAt() {
-    return startedAt;
+    return freshDate(startedAt);
   }
 
   /**
@@ -329,7 +327,7 @@ public class Screening implements PersistentObject {
    * @return the restrictionsDate
    */
   public Date getRestrictionsDate() {
-    return restrictionsDate;
+    return freshDate(restrictionsDate);
   }
 
   /**
@@ -345,7 +343,5 @@ public class Screening implements PersistentObject {
   public Set<Allegation> getAllegations() {
     return allegations;
   }
-
-
 
 }

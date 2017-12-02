@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +21,6 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  */
 public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
@@ -72,19 +71,19 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
   }
 
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   public void setEndDate(Date endDate) {
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
   }
 
   public SystemCodeDescriptor getCounty() {

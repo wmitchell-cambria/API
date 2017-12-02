@@ -1,16 +1,21 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.ns.Screening;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
@@ -29,9 +34,6 @@ import io.swagger.annotations.ApiModelProperty;
     "safety_information", "additional_information", "started_at", "allegations"})
 public class ScreeningSummary extends ReportingDomain implements Response {
 
-  /**
-   * Default
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
@@ -111,7 +113,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     this.safetyAlerts = safetyAlerts;
     this.safetyInformation = safetyInformation;
     this.additionalInformation = additionalInformation;
-    this.startedAt = startedAt;
+    this.startedAt = freshDate(startedAt);
     this.allegations = allegations;
   }
 
@@ -134,14 +136,12 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     this.allegations = allegations;
   }
 
-
   /**
    * @return the id
    */
   public String getId() {
     return id;
   }
-
 
   /**
    * @return the name
@@ -150,14 +150,12 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     return name;
   }
 
-
   /**
    * @return the decision
    */
   public String getDecision() {
     return decision;
   }
-
 
   /**
    * @return the decisionDetail
@@ -166,14 +164,12 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     return decisionDetail;
   }
 
-
   /**
    * @return the safetyAlerts
    */
   public Set<String> getSafetyAlerts() {
     return safetyAlerts != null ? safetyAlerts : new HashSet<String>();
   }
-
 
   /**
    * @return the safetyInformation
@@ -182,7 +178,6 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     return safetyInformation;
   }
 
-
   /**
    * @return the additionalInformation
    */
@@ -190,20 +185,18 @@ public class ScreeningSummary extends ReportingDomain implements Response {
     return additionalInformation;
   }
 
-
   /**
    * @return the startedAt
    */
   public Date getStartedAt() {
-    return startedAt;
+    return freshDate(startedAt);
   }
-
 
   /**
    * @return the allegations
    */
   public Set<SimpleAllegation> getAllegations() {
-    return this.allegations != null ? this.allegations : new HashSet<SimpleAllegation>();
+    return this.allegations != null ? this.allegations : new HashSet<>();
   }
 
   /**
