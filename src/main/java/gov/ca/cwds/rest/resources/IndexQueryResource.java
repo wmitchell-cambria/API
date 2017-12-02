@@ -13,8 +13,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -44,12 +42,6 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class IndexQueryResource {
-
-  /**
-   * Logger for this class.
-   */
-  private static final Logger LOGGER = LoggerFactory.getLogger(IndexQueryResource.class);
-
 
   private SimpleResourceDelegate<String, IndexQueryRequest, IndexQueryResponse, IndexQueryService> resourceDelegate;
 
@@ -94,4 +86,5 @@ public class IndexQueryResource {
     }
     return ret;
   }
+
 }

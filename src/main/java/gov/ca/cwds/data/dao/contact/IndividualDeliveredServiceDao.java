@@ -1,13 +1,14 @@
 package gov.ca.cwds.data.dao.contact;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.StringType;
+
+import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.inject.CmsSessionFactory;
-
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-
-import com.google.inject.Inject;
 
 /**
  * DAO for {@link IndividualDeliveredServiceEntity}.
@@ -28,14 +29,11 @@ public class IndividualDeliveredServiceDao extends CrudsDaoImpl<IndividualDelive
 
   @SuppressWarnings("unchecked")
   public IndividualDeliveredServiceEntity[] findByDeliveredServiceId(String deliveredServiceId) {
-    Query query =
-        this.getSessionFactory()
-            .getCurrentSession()
-            .getNamedQuery(
-                "gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.findAllForDeliveredService")
-            .setString("deliveredServiceId", deliveredServiceId);
-    return (IndividualDeliveredServiceEntity[]) query.list().toArray(
-        new IndividualDeliveredServiceEntity[0]);
-
+    final NativeQuery<IndividualDeliveredServiceEntity> query =
+        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
+            "gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.findAllForDeliveredService");
+    query.setParameter("deliveredServiceId", deliveredServiceId, StringType.INSTANCE);
+    return query.list().toArray(new IndividualDeliveredServiceEntity[0]);
   }
+
 }

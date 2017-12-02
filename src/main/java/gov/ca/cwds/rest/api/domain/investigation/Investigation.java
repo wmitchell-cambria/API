@@ -40,7 +40,6 @@ import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
-
 /**
  * {@link DomainObject} representing a Investigation
  * 
@@ -54,6 +53,7 @@ import io.swagger.annotations.ApiModelProperty;
     "history_of_involvement", "allegations", "people", "relationships", "safety_alerts",
     "cross_reports", "contacts"})
 public class Investigation extends ReportingDomain implements Request, Response {
+
   private static final long serialVersionUID = 1L;
 
   @NotNull
@@ -272,9 +272,9 @@ public class Investigation extends ReportingDomain implements Request, Response 
     super();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
-    this.lastUpdatedAt = lastUpdatedAt;
+    this.lastUpdatedAt = freshDate(lastUpdatedAt);
     this.incidentCounty = incidentCounty;
-    this.incidentDate = incidentDate;
+    this.incidentDate = freshDate(incidentDate);
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
     this.name = name;

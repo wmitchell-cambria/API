@@ -3,9 +3,6 @@ package gov.ca.cwds.rest.business.rules;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.CountyOwnershipDao;
@@ -19,7 +16,6 @@ import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.ReferralClient.PrimaryKey;
 import gov.ca.cwds.data.rules.TriggerTableException;
-
 
 /**
  * Business layer object to work on Non LA Triggers
@@ -45,8 +41,6 @@ public class NonLACountyTriggers {
   private static final String SET_COUNTY = "setCounty";
   private static final String TYPE_OF_ASSIGNMENT_CODE = "P";
   private static final String REFERRAL_ESTABLISHED_CODE = "R";
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(NonLACountyTriggers.class);
 
   private CountyOwnershipDao countyOwnershipDao;
   private ReferralDao referralDao;
