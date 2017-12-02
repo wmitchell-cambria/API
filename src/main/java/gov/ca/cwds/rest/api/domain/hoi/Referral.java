@@ -26,9 +26,6 @@ import gov.ca.cwds.rest.util.FerbDateUtils;
  */
 public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
