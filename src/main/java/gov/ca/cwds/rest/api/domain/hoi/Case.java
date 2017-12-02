@@ -26,9 +26,6 @@ import gov.ca.cwds.rest.util.FerbDateUtils;
  */
 public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
@@ -165,7 +162,6 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
     accessLimitation.setLimitedAccessGovernmentEntity(govtEntity);
     kase.setAccessLimitation(accessLimitation);
 
-
     SocialWorker socialWorker = new SocialWorker();
     socialWorker.setFirstName("Worker First Name");
     socialWorker.setLastName("Worker Last Name");
@@ -193,7 +189,6 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
     kase.setFocusChild(victim);
 
     kase.setId("ccccccccc");
-
     kase.setLegacyDescriptor(new LegacyDescriptor("ccccccccc", "ccccccccc-hohj-jkj", new DateTime(),
         LegacyTable.CASE.getName(), LegacyTable.CASE.getDescription()));
 
@@ -234,5 +229,6 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
     String json = ObjectMapperUtils.createObjectMapper().writeValueAsString(kase);
     System.out.println(json);
   }
+
 }
 
