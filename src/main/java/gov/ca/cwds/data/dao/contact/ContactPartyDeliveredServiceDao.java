@@ -1,7 +1,8 @@
 package gov.ca.cwds.data.dao.contact;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
@@ -25,7 +26,6 @@ public class ContactPartyDeliveredServiceDao
   @Inject
   public ContactPartyDeliveredServiceDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
-
   }
 
   /**
@@ -36,10 +36,11 @@ public class ContactPartyDeliveredServiceDao
    */
   @SuppressWarnings("unchecked")
   public ContactPartyDeliveredServiceEntity findByDeliveredServiceId(String deliveredServiceId) {
-    Query query = this.getSessionFactory().getCurrentSession().getNamedQuery(
-        "gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.findByDeliveredServiceId")
-        .setString("deliveredServiceId", deliveredServiceId);
-    return (ContactPartyDeliveredServiceEntity) query.getSingleResult();
+    final NativeQuery<ContactPartyDeliveredServiceEntity> query =
+        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
+            "gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.findByDeliveredServiceId");
+    query.setParameter("deliveredServiceId", deliveredServiceId, StringType.INSTANCE);
+    return query.getSingleResult();
   }
 
 }
