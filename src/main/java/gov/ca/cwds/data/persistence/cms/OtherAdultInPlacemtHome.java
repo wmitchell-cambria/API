@@ -1,14 +1,15 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -20,21 +21,16 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.findAll",
-        query = "FROM OtherAdultInPlacemtHome"),
-    @NamedQuery(
-        name = "gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.findAllUpdatedAfter",
-        query = "FROM OtherAdultInPlacemtHome WHERE lastUpdatedTime > :after")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.findAll",
+    query = "FROM OtherAdultInPlacemtHome")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.findAllUpdatedAfter",
+    query = "FROM OtherAdultInPlacemtHome WHERE lastUpdatedTime > :after")
 @Entity
 @Table(name = "OTH_ADLT")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -65,18 +61,18 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
       String otherAdultCode, String passedBackgroundCheckCode, String residedOutOfStateIndicator,
       Date startDate) {
     super();
-    this.birthDate = birthDate;
+    this.birthDate = freshDate(birthDate);
     this.commentDescription = commentDescription;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.fkplcHmT = fkplcHmT;
     this.genderCode = genderCode;
     this.id = id;
-    this.identifiedDate = identifiedDate;
+    this.identifiedDate = freshDate(identifiedDate);
     this.name = name;
     this.otherAdultCode = otherAdultCode;
     this.passedBackgroundCheckCode = passedBackgroundCheckCode;
     this.residedOutOfStateIndicator = residedOutOfStateIndicator;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   /**

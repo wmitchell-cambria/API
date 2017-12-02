@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,9 +27,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CmsCase extends CmsPersistentObject {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -242,11 +241,11 @@ public class CmsCase extends CmsPersistentObject {
   }
 
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   public void setEndDate(Date endDate) {
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
   }
 
   public String getFkchldClt() {
@@ -306,11 +305,11 @@ public class CmsCase extends CmsPersistentObject {
   }
 
   public Date getLimitedAccessDate() {
-    return limitedAccessDate;
+    return freshDate(limitedAccessDate);
   }
 
   public void setLimitedAccessDate(Date limitedAccessDate) {
-    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDate = freshDate(limitedAccessDate);
   }
 
   public String getLimitedAccessDesc() {
@@ -338,19 +337,19 @@ public class CmsCase extends CmsPersistentObject {
   }
 
   public Date getNextTilpDueDate() {
-    return nextTilpDueDate;
+    return freshDate(nextTilpDueDate);
   }
 
   public void setNextTilpDueDate(Date nextTilpDueDate) {
-    this.nextTilpDueDate = nextTilpDueDate;
+    this.nextTilpDueDate = freshDate(nextTilpDueDate);
   }
 
   public Date getProjectedEndDate() {
-    return projectedEndDate;
+    return freshDate(projectedEndDate);
   }
 
   public void setProjectedEndDate(Date projectedEndDate) {
-    this.projectedEndDate = projectedEndDate;
+    this.projectedEndDate = freshDate(projectedEndDate);
   }
 
   public String getResponsibleAgencyCode() {
@@ -370,11 +369,11 @@ public class CmsCase extends CmsPersistentObject {
   }
 
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   public Short getStateCodeType() {
@@ -394,11 +393,11 @@ public class CmsCase extends CmsPersistentObject {
   }
 
   public Date getActiveSvcComponentStartDate() {
-    return activeSvcComponentStartDate;
+    return freshDate(activeSvcComponentStartDate);
   }
 
   public void setActiveSvcComponentStartDate(Date activeSvcComponentStartDate) {
-    this.activeSvcComponentStartDate = activeSvcComponentStartDate;
+    this.activeSvcComponentStartDate = freshDate(activeSvcComponentStartDate);
   }
 
   public String getTickleIndVar() {

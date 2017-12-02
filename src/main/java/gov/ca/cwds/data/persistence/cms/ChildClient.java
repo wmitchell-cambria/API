@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,9 +36,6 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChildClient extends CmsPersistentObject {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -167,7 +166,7 @@ public class ChildClient extends CmsPersistentObject {
   private String tribalCustomaryAdoptionIndicator;
 
   /**
-   * referential integrity check.
+   * Referential integrity check.
    * <p>
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
@@ -175,7 +174,6 @@ public class ChildClient extends CmsPersistentObject {
   @OneToOne(optional = false)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
-
 
   /**
    * Default constructor
@@ -227,7 +225,6 @@ public class ChildClient extends CmsPersistentObject {
    * @param tribalAncestryNotifctnIndicatorVar - tribalAncestryNotifctnIndicatorVar
    * @param tribalCustomaryAdoptionDate - tribalCustomaryAdoptionDate
    * @param tribalCustomaryAdoptionIndicator - tribalCustomaryAdoptionIndicator
-   * 
    */
   public ChildClient(String victimClientId, String adoptableCode, Short adoptedAge,
       String afdcFcEligibilityIndicatorVar, String allEducationInfoOnFileIndicator,
@@ -267,7 +264,7 @@ public class ChildClient extends CmsPersistentObject {
     this.drmsHealthEducPassportDoc = drmsHealthEducPassportDoc;
     this.drmsVoluntaryPlcmntAgrmntDoc = drmsVoluntaryPlcmntAgrmntDoc;
     this.fc2EligApplicationIndicatorVar = fc2EligApplicationIndicatorVar;
-    this.foodStampsApplicationDate = foodStampsApplicationDate;
+    this.foodStampsApplicationDate = freshDate(foodStampsApplicationDate);
     this.foodStampsApplicationIndicator = foodStampsApplicationIndicator;
     this.icwaEligibilityCode = icwaEligibilityCode;
     this.intercountryAdoptDisruptedIndicator = intercountryAdoptDisruptedIndicator;
@@ -282,8 +279,8 @@ public class ChildClient extends CmsPersistentObject {
     this.safelySurrendedBabiesIndicatorVar = safelySurrendedBabiesIndicatorVar;
     this.saw1EligApplicationIndicatorVar = saw1EligApplicationIndicatorVar;
     this.sawsCaseSerialNumber = sawsCaseSerialNumber;
-    this.sijsScheduledInterviewDate = sijsScheduledInterviewDate;
-    this.siiNextScreeningDueDate = siiNextScreeningDueDate;
+    this.sijsScheduledInterviewDate = freshDate(sijsScheduledInterviewDate);
+    this.siiNextScreeningDueDate = freshDate(siiNextScreeningDueDate);
     this.ssiSspApplicationIndicator = ssiSspApplicationIndicator;
     this.tribalAncestryNotifctnIndicatorVar = tribalAncestryNotifctnIndicatorVar;
     this.tribalCustomaryAdoptionDate = tribalCustomaryAdoptionDate;
@@ -368,9 +365,6 @@ public class ChildClient extends CmsPersistentObject {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   */
   @Override
   public String getPrimaryKey() {
     return getVictimClientId();
@@ -513,7 +507,7 @@ public class ChildClient extends CmsPersistentObject {
    * @return the foodStampsApplicationDate
    */
   public Date getFoodStampsApplicationDate() {
-    return foodStampsApplicationDate;
+    return freshDate(foodStampsApplicationDate);
   }
 
   /**
@@ -618,14 +612,14 @@ public class ChildClient extends CmsPersistentObject {
    * @return the sijsScheduledInterviewDate
    */
   public Date getSijsScheduledInterviewDate() {
-    return sijsScheduledInterviewDate;
+    return freshDate(sijsScheduledInterviewDate);
   }
 
   /**
    * @return the siiNextScreeningDueDate
    */
   public Date getSiiNextScreeningDueDate() {
-    return siiNextScreeningDueDate;
+    return freshDate(siiNextScreeningDueDate);
   }
 
   /**
@@ -646,7 +640,7 @@ public class ChildClient extends CmsPersistentObject {
    * @return the tribalCustomaryAdoptionDate
    */
   public Date getTribalCustomaryAdoptionDate() {
-    return tribalCustomaryAdoptionDate;
+    return freshDate(tribalCustomaryAdoptionDate);
   }
 
   /**

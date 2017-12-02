@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,9 +31,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @SuppressWarnings("javadoc")
 public class CountyOwnership implements PersistentObject, Serializable {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   protected static final int CMS_ID_LEN = CmsPersistentObject.CMS_ID_LEN;
@@ -380,7 +379,6 @@ public class CountyOwnership implements PersistentObject, Serializable {
    */
   public CountyOwnership() {
     super();
-
   }
 
   /**
@@ -538,7 +536,7 @@ public class CountyOwnership implements PersistentObject, Serializable {
     this.county61Flag = county61Flag;
     this.county62Flag = county62Flag;
     this.county63Flag = county63Flag;
-    this.deleteDate = deleteDate;
+    this.deleteDate = freshDate(deleteDate);
   }
 
   /**
@@ -1024,7 +1022,7 @@ public class CountyOwnership implements PersistentObject, Serializable {
    * @return the deleteDate
    */
   public Date getDeleteDate() {
-    return deleteDate;
+    return freshDate(deleteDate);
   }
 
   public void setEntityId(String entityId) {
@@ -1296,7 +1294,7 @@ public class CountyOwnership implements PersistentObject, Serializable {
   }
 
   public void setDeleteDate(Date deleteDate) {
-    this.deleteDate = deleteDate;
+    this.deleteDate = freshDate(deleteDate);
   }
 
 }

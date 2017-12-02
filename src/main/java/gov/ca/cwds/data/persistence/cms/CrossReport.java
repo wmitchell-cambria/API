@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -181,11 +183,11 @@ public class CrossReport extends CmsPersistentObject {
     this.crossReportMethodType = crossReportMethodType;
     this.filedOutOfStateIndicator = filedOutOfStateIndicator;
     this.governmentOrgCrossRptIndicatorVar = governmentOrgCrossRptIndicatorVar;
-    this.informTime = informTime;
+    this.informTime = freshDate(informTime);
     this.recipientBadgeNumber = recipientBadgeNumber;
     this.recipientPhoneExtensionNumber = recipientPhoneExtensionNumber;
     this.recipientPhoneNumber = recipientPhoneNumber;
-    this.informDate = informDate;
+    this.informDate = freshDate(informDate);
     this.recipientPositionTitleDesc = recipientPositionTitleDesc;
     this.referenceNumber = referenceNumber;
     this.lawEnforcementId = lawEnforcementId;
@@ -291,7 +293,7 @@ public class CrossReport extends CmsPersistentObject {
    * @return the informTime
    */
   public Date getInformTime() {
-    return informTime;
+    return freshDate(informTime);
   }
 
   /**
@@ -319,7 +321,7 @@ public class CrossReport extends CmsPersistentObject {
    * @return the informDate
    */
   public Date getInformDate() {
-    return informDate;
+    return freshDate(informDate);
   }
 
   /**

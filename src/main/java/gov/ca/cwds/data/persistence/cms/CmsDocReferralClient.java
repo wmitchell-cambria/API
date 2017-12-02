@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -151,7 +153,7 @@ public class CmsDocReferralClient extends CmsPersistentObject {
     this.commonFirstName = commonFirstName;
     this.commonMiddleName = commonMiddleName;
     this.commonLastName = commonLastName;
-    this.birthDate = birthDate;
+    this.birthDate = freshDate(birthDate);
     this.otherName = otherName;
     this.nameType = nameType;
     this.address = address;
@@ -165,7 +167,7 @@ public class CmsDocReferralClient extends CmsPersistentObject {
    */
   @Override
   public Serializable getPrimaryKey() {
-    // Use correct composite primary key, not other columns which do not comprise the key.
+    // Use correct composite primary key. Exclude columns which do not comprise the key.
     return new VarargPrimaryKey(getDocHandle(), getReferlId(), getClientId());
   }
 
@@ -236,14 +238,14 @@ public class CmsDocReferralClient extends CmsPersistentObject {
    * @return - document add date
    */
   public Date getDocAddedDate() {
-    return docAddedDate;
+    return freshDate(docAddedDate);
   }
 
   /**
    * @param docAddedDate - document add date
    */
   public void setDocAddedDate(Date docAddedDate) {
-    this.docAddedDate = docAddedDate;
+    this.docAddedDate = freshDate(docAddedDate);
   }
 
   /**
@@ -292,14 +294,14 @@ public class CmsDocReferralClient extends CmsPersistentObject {
    * @return - date of birth
    */
   public Date getBirthDate() {
-    return birthDate;
+    return freshDate(birthDate);
   }
 
   /**
    * @param birthDate - date of birth
    */
   public void setBirthDate(Date birthDate) {
-    this.birthDate = birthDate;
+    this.birthDate = freshDate(birthDate);
   }
 
   /**

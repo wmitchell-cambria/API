@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -62,7 +64,6 @@ public class CmsDocument extends CmsPersistentObject {
   private String compressionMethod;
 
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "docHandle")
-  // @OneToMany(fetch = FetchType.LAZY, mappedBy = "docHandle")
   @OrderBy("DOC_HANDLE, DOC_SEGSEQ")
   private Set<CmsDocumentBlobSegment> blobSegments = new LinkedHashSet<>();
 
@@ -96,9 +97,9 @@ public class CmsDocument extends CmsPersistentObject {
     this.docServ = docServ;
     this.docName = docName;
     this.segmentCount = segmentCount;
-    this.docDate = docDate;
+    this.docDate = freshDate(docDate);
+    this.docTime = freshDate(docTime);
     this.docLength = docLength;
-    this.docTime = docTime;
     this.compressionMethod = compressionMethod;
   }
 
@@ -114,9 +115,9 @@ public class CmsDocument extends CmsPersistentObject {
     this.docServ = copy.docServ;
     this.docName = copy.docName;
     this.segmentCount = copy.segmentCount;
-    this.docDate = copy.docDate;
+    this.docDate = freshDate(copy.docDate);
+    this.docTime = freshDate(copy.docTime);
     this.docLength = copy.docLength;
-    this.docTime = copy.docTime;
     this.compressionMethod = copy.compressionMethod;
     this.blobSegments = new LinkedHashSet<>(copy.blobSegments);
   }
@@ -221,28 +222,28 @@ public class CmsDocument extends CmsPersistentObject {
    * @return docDate document date
    */
   public Date getDocDate() {
-    return docDate;
+    return freshDate(docDate);
   }
 
   /**
    * @param docDate document date
    */
   public void setDocDate(Date docDate) {
-    this.docDate = docDate;
+    this.docDate = freshDate(docDate);
   }
 
   /**
    * @return docTime
    */
   public Date getDocTime() {
-    return docTime;
+    return freshDate(docTime);
   }
 
   /**
    * @param docTime time of document creation
    */
   public void setDocTime(Date docTime) {
-    this.docTime = docTime;
+    this.docTime = freshDate(docTime);
   }
 
   /**

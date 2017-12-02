@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,9 +30,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CountyTrigger implements PersistentObject, Serializable {
 
-  /**
-   * Serialization Version
-   */
   private static final long serialVersionUID = 1L;
 
   protected static final int CMS_ID_LEN = CmsPersistentObject.CMS_ID_LEN;
@@ -61,7 +60,7 @@ public class CountyTrigger implements PersistentObject, Serializable {
     super();
     this.countyTriggerEmbeddable =
         new CountyTriggerEmbeddable(logicId, countyOwnership0, countyOwnershipT, integratorEntity);
-    this.integratorTimeStamp = integratorTimeStamp;
+    this.integratorTimeStamp = freshDate(integratorTimeStamp);
   }
 
   /**
@@ -85,7 +84,7 @@ public class CountyTrigger implements PersistentObject, Serializable {
    * @return the integratorTimeStamp
    */
   public Date getIntegratorTimeStamp() {
-    return integratorTimeStamp;
+    return freshDate(integratorTimeStamp);
   }
 
   /**

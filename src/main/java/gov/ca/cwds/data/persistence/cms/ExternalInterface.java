@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,6 +34,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExternalInterface implements PersistentObject, Serializable {
+
   /**
    * Hibernate annotation {@link IdClass} requires that members match the id columns of the parent
    * class. From the Javadoc of said annotation,
@@ -43,6 +46,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
    * @see VarargPrimaryKey
    */
   public static final class PrimaryKey implements Serializable {
+
     private static final long serialVersionUID = 1L;
     private Date submitlTimestamp;
     private Integer sequenceNumber;
@@ -62,7 +66,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
      */
     public PrimaryKey(Date submitlTimestamp, Integer sequenceNumber, String logonUserId) {
       super();
-      this.submitlTimestamp = submitlTimestamp;
+      this.submitlTimestamp = freshDate(submitlTimestamp);
       this.sequenceNumber = sequenceNumber;
       this.logonUserId = logonUserId;
     }
@@ -74,11 +78,11 @@ public class ExternalInterface implements PersistentObject, Serializable {
      */
     @Override
     public int hashCode() {
-      final int PRIME = 31;
+      int prime = 31;
       int result = 1;
-      result = PRIME * result + ((submitlTimestamp == null) ? 0 : submitlTimestamp.hashCode());
-      result = PRIME * result + ((logonUserId == null) ? 0 : logonUserId.hashCode());
-      result = PRIME * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
+      result = prime * result + ((submitlTimestamp == null) ? 0 : submitlTimestamp.hashCode());
+      result = prime * result + ((logonUserId == null) ? 0 : logonUserId.hashCode());
+      result = prime * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
       return result;
     }
 
@@ -284,7 +288,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
     this.sequenceNumber = sequenceNumber;
     this.serialNumber = serialNumber;
     this.startDate = startDate;
-    this.submitlTimestamp = submitlTimestamp;
+    this.submitlTimestamp = freshDate(submitlTimestamp);
     this.tableName = tableName;
   }
 
@@ -628,7 +632,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
    * @return the submitlTimestamp
    */
   public Date getSubmitlTimestamp() {
-    return submitlTimestamp;
+    return freshDate(submitlTimestamp);
   }
 
   /**

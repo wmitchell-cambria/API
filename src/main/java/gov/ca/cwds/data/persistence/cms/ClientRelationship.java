@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -96,12 +98,12 @@ public class ClientRelationship extends CmsPersistentObject {
     super();
     this.absentParentCode = absentParentCode;
     this.clientRelationshipType = clientRelationshipType;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.secondaryClientId = secondaryClientId;
     this.primaryClientId = primaryClientId;
     this.id = id;
     this.sameHomeCode = sameHomeCode;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   /**
@@ -125,11 +127,6 @@ public class ClientRelationship extends CmsPersistentObject {
     this.startDate = DomainChef.uncookDateString(clientRelationship.getStartDate());
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
-   */
   @Override
   public String getPrimaryKey() {
     return getId();
@@ -153,7 +150,7 @@ public class ClientRelationship extends CmsPersistentObject {
    * @return the endDate
    */
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   /**
@@ -188,7 +185,7 @@ public class ClientRelationship extends CmsPersistentObject {
    * @return the startDate
    */
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   /**

@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -9,7 +11,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,20 +19,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * {@link PersistentObject} representing a CollateralIndividual
+ * {@link PersistentObject} representing a Collateral Individual.
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CollateralIndividual.findAll",
-        query = "FROM CollateralIndividual WHERE IDENTIFIER IN (SELECT collateralIndividualId from ClientCollateral "
-            + "WHERE activeIndicator = 'Y' AND clientId IN "
-            + "(SELECT id FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'))"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CollateralIndividual.findAllUpdatedAfter",
-        query = "FROM CollateralIndividual WHERE lastUpdatedTime > :after AND IDENTIFIER IN ("
-            + "SELECT collateralIndividualId from ClientCollateral "
-            + "WHERE activeIndicator = 'Y' AND clientId IN "
-            + "(SELECT id FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'))")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CollateralIndividual.findAll",
+    query = "FROM CollateralIndividual WHERE IDENTIFIER IN (SELECT collateralIndividualId from ClientCollateral "
+        + "WHERE activeIndicator = 'Y' AND clientId IN "
+        + "(SELECT id FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'))")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CollateralIndividual.findAllUpdatedAfter",
+    query = "FROM CollateralIndividual WHERE lastUpdatedTime > :after AND IDENTIFIER IN ("
+        + "SELECT collateralIndividualId from ClientCollateral "
+        + "WHERE activeIndicator = 'Y' AND clientId IN "
+        + "(SELECT id FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'))")
 @NamedNativeQueries({@NamedNativeQuery(
     name = "gov.ca.cwds.data.persistence.cms.CollateralIndividual.findPartitionedBuckets",
     query = "select z.IDENTIFIER, z.BADGE_NO, z.CITY_NM, z.EMPLYR_NM, z.FAX_NO, "
@@ -52,9 +52,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollateralIndividual extends BaseCollateralIndividual {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -105,7 +102,7 @@ public class CollateralIndividual extends BaseCollateralIndividual {
       Integer zipNumber, Short zipSuffixNumber) {
     super();
     this.badgeNumber = badgeNumber;
-    this.birthDate = birthDate;
+    this.birthDate = freshDate(birthDate);
     this.cityName = cityName;
     this.commentDescription = commentDescription;
     this.emailAddress = emailAddress;

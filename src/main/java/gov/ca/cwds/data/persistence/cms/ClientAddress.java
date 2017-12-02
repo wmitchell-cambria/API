@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
+
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -11,7 +14,6 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,22 +28,18 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientAddress.findAll",
-        query = "FROM ClientAddress"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientAddress.findAllUpdatedAfter",
-        query = "FROM ClientAddress WHERE lastUpdatedTime > :after"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientAddress.findByAddressAndClient",
-        query = "FROM ClientAddress WHERE fkAddress = :addressId and fkClient = :clientId")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientAddress.findAll",
+    query = "FROM ClientAddress")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientAddress.findAllUpdatedAfter",
+    query = "FROM ClientAddress WHERE lastUpdatedTime > :after")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ClientAddress.findByAddressAndClient",
+    query = "FROM ClientAddress WHERE fkAddress = :addressId and fkClient = :clientId")
 @Entity
 @Table(name = "CL_ADDRT")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientAddress extends BaseClientAddress {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @ManyToOne(cascade = CascadeType.ALL, optional = false)
@@ -98,8 +96,8 @@ public class ClientAddress extends BaseClientAddress {
     this.id = id;
     this.addressType = addressType;
     this.bkInmtId = bkInmtId;
-    this.effEndDt = effEndDt;
-    this.effStartDt = effStartDt;
+    this.effEndDt = freshDate(effEndDt);
+    this.effStartDt = freshDate(effStartDt);
     this.fkAddress = fkAddress;
     this.fkClient = fkClient;
     this.homelessInd = homelessInd;
@@ -108,7 +106,7 @@ public class ClientAddress extends BaseClientAddress {
   }
 
   /**
-   * A convience helper Constructor that includes lastUpdatedId
+   * A convenience helper Constructor that includes lastUpdatedId
    * 
    * @param id The identifier
    * @param addressType The addressType
@@ -129,8 +127,8 @@ public class ClientAddress extends BaseClientAddress {
     this.id = id;
     this.addressType = addressType;
     this.bkInmtId = bkInmtId;
-    this.effEndDt = effEndDt;
-    this.effStartDt = effStartDt;
+    this.effEndDt = freshDate(effEndDt);
+    this.effStartDt = freshDate(effStartDt);
     this.fkAddress = fkAddress;
     this.fkClient = fkClient;
     this.homelessInd = homelessInd;

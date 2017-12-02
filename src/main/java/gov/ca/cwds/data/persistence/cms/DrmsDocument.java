@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -65,7 +67,7 @@ public class DrmsDocument extends CmsPersistentObject {
       String fingerprintStaffPerson, String staffPersonId, String handleName) {
     super();
     this.id = id;
-    this.creationTimeStamp = creationTimeStamp;
+    this.creationTimeStamp = freshDate(creationTimeStamp);
     this.drmsDocumentTemplateId = drmsDocumentTemplateId;
     this.fingerprintStaffPerson = fingerprintStaffPerson;
     this.staffPersonId = staffPersonId;
@@ -112,7 +114,7 @@ public class DrmsDocument extends CmsPersistentObject {
    * @return the creationTimeStamp
    */
   public Date getCreationTimeStamp() {
-    return creationTimeStamp;
+    return freshDate(creationTimeStamp);
   }
 
   /**
