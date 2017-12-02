@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -321,15 +323,10 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.lastUpdatedAt = referral.getLastUpdatedTime();
     this.incidentCounty = referral.getCountySpecificCode();
 
-    // this.incidentDate = ;
-    // this.locationType = null;
-    // this.reference = null;
-
     this.communicationMethod = referral.getCommunicationMethodType();
     this.name = StringUtils.trim(referral.getReferralName());
     this.reportNarrative = longText != null ? StringUtils.trim(longText.getTextDescription()) : "";
     this.responseTime = referral.getReferralResponseType();
-
     this.startedAt = this.populateInvestigationStartAt(referral);
 
     this.additionalInformation =
@@ -384,12 +381,12 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return Date objects - concatenates date and time.
    */
   private Date populateInvestigationStartAt(Referral referral) {
-    Date startedAt = null;
+    Date itStartedAt = null;
     if (referral.getReceivedDate() != null) {
-      startedAt =
+      itStartedAt =
           DomainChef.concatenateDateAndTime(referral.getReceivedDate(), referral.getReceivedTime());
     }
-    return startedAt;
+    return itStartedAt;
   }
 
 
@@ -411,7 +408,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return - last updated date/time
    */
   public Date getLastUpdatedAt() {
-    return lastUpdatedAt;
+    return freshDate(lastUpdatedAt);
   }
 
   /**
@@ -425,7 +422,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return - date of incident
    */
   public Date getIncidentDate() {
-    return incidentDate;
+    return freshDate(incidentDate);
   }
 
   /**
@@ -474,7 +471,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return - started at
    */
   public Date getStartedAt() {
-    return startedAt;
+    return freshDate(startedAt);
   }
 
   /**
@@ -485,7 +482,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   }
 
   /**
-   * @return - addtional information
+   * @return - additional information
    */
   public String getAdditionalInformation() {
     return additionalInformation;
@@ -523,8 +520,6 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return - history of involvement
    */
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  // @JsonUnwrapped
-  // @JsonProperty("history_of_involvement")
   public HistoryOfInvolvement getHistoryOfInvolvement() {
     return historyOfInvolvement != null ? historyOfInvolvement : new HistoryOfInvolvement();
   }
@@ -599,7 +594,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   }
 
   /**
-   * @param historyOfInvolvement - the history of involement
+   * @param historyOfInvolvement - the history of involvement
    */
   public void setHistoryOfInvolvement(HistoryOfInvolvement historyOfInvolvement) {
     this.historyOfInvolvement = historyOfInvolvement;
