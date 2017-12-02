@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 
 /**
  * @author CWDS API Team
@@ -51,10 +49,10 @@ public class LanguageTest {
 
   }
 
-  @Test
-  public void equalsHashCodeWork() throws Exception {
-    EqualsVerifier.forClass(Language.class).suppress(Warning.NONFINAL_FIELDS).verify();
-  }
+  // @Test
+  // public void equalsHashCodeWork() throws Exception {
+  // EqualsVerifier.forClass(Language.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  // }
 
   @Test
   public void persistentObjectConstructorTest() throws Exception {
