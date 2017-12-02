@@ -8,13 +8,6 @@ package gov.ca.cwds.rest.core;
 public final class Api {
 
   /**
-   * Default private constructor
-   */
-  private Api() {
-    // Default private constructor
-  }
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_APPLICATION} API..
    */
   public static final String RESOURCE_APPLICATION = "application";
@@ -179,5 +172,12 @@ public final class Api {
    * A {@code String} constant representing {@value #RESOURCE_GOVERNMENT_ORG} API.
    */
   public static final String RESOURCE_GOVERNMENT_ORG = "cross_report_agency";
+
+  /**
+   * Default private constructor
+   */
+  private Api() {
+    // Default private constructor
+  }
 
 }

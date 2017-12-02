@@ -20,9 +20,6 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 public final class ESPersonSearchRequest extends DomainObject implements Request {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @ApiModelProperty(example = "bart")
@@ -133,12 +130,11 @@ public final class ESPersonSearchRequest extends DomainObject implements Request
 
   @Override
   public int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((birthDate == null) ? 0 : birthDate.hashCode());
-    result = PRIME * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result = PRIME * result + ((lastName == null) ? 0 : lastName.hashCode());
-    return result;
+    result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
+    result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+    return prime * result + ((lastName == null) ? 0 : lastName.hashCode());
   }
 
   @Override
