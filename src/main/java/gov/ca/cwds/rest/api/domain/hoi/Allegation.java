@@ -14,9 +14,6 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  */
 public class Allegation extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
