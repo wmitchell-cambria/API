@@ -11,13 +11,9 @@ import io.dropwizard.jackson.JsonSnakeCase;
  * 
  * @author CWDS API Team
  */
-
 @JsonSnakeCase
 public class ScreeningRequest implements Request {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("address")
@@ -68,10 +64,9 @@ public class ScreeningRequest implements Request {
    */
   @Override
   public final int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((address == null) ? 0 : address.hashCode());
-    return result;
+    return prime * result + ((address == null) ? 0 : address.hashCode());
   }
 
   /**
@@ -95,4 +90,5 @@ public class ScreeningRequest implements Request {
       return false;
     return true;
   }
+
 }

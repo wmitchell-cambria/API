@@ -65,8 +65,8 @@ public class Race extends NsPersistentObject {
   @SuppressWarnings("javadoc")
   public Race(gov.ca.cwds.rest.api.domain.Race domain, String lastUpdatedId, String createUserId) {
     super(lastUpdatedId, createUserId);
-    this.raceType = domain.getRace();
-    this.subRaceType = domain.getSubrace();
+    this.raceType = domain.getRaceType();
+    this.subRaceType = domain.getSubRaceType();
   }
 
   /**

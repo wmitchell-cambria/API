@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Set;
 
@@ -38,9 +39,6 @@ import io.swagger.annotations.ApiModelProperty;
     "address", "participants", "crossReports", "allegations"})
 public class ScreeningToReferral extends ReportingDomain implements Request {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
@@ -248,13 +246,13 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param currentLocationOfChildren - currentLocationOfChildren
    * @param name - screening name
    * @param reportNarrative - narrative
-   * @param reference - referrence
+   * @param reference - reference
    * @param responseTime - response time
    * @param startedAt - response started at time
    * @param assignee - staff person assigned
    * @param assigneeStaffId - assignee Id
    * @param additionalInformation - additional information
-   * @param screeningDecision - screening decesion
+   * @param screeningDecision - screening decision
    * @param screeningDecisionDetail - screening decision detail
    * @param approvalStatus - approvalStatus
    * @param familyAwareness - familyAwareness
@@ -265,9 +263,9 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param limitedAccessAgency - limitedAccessAgency
    * @param limitedAccessDate - limitedAccessDate
    * @param address - address associated with participants
-   * @param participants - participants associcated with this screening
-   * @param crossReports - Cross Reort
-   * @param allegations - Allegtions
+   * @param participants - participants associated with this screening
+   * @param crossReports - Cross Report
+   * @param allegations - Allegations
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
       @Date String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
@@ -306,7 +304,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.limitedAccessCode = limitedAccessCode;
     this.limitedAccessDescription = limitedAccessDescription;
     this.limitedAccessAgency = limitedAccessAgency;
-    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDate = freshDate(limitedAccessDate);
     this.address = address;
     this.participants = participants;
     this.crossReports = crossReports;
@@ -363,7 +361,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return communicaion method
+   * @return communication method
    */
   public Short getCommunicationMethod() {
     return communicationMethod;
@@ -391,7 +389,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return referrence
+   * @return reference
    */
   public String getReference() {
     return reference;
@@ -501,10 +499,10 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return limitedAccessDate limted Access Date
+   * @return limitedAccessDate limited Access Date
    */
   public java.util.Date getLimitedAccessDate() {
-    return limitedAccessDate;
+    return freshDate(limitedAccessDate);
   }
 
   @SuppressWarnings("javadoc")
@@ -540,7 +538,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -550,7 +548,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

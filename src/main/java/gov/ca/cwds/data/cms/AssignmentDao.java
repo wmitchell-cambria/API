@@ -33,13 +33,12 @@ public class AssignmentDao extends CrudsDaoImpl<Assignment> {
    * @return the caseLoad Id
    */
   public String findCaseId(String staffPersonId) {
-
     Query query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.cms.Assignment.findCaseId")
         .setParameter("fkStaffPerson", staffPersonId);
-    List<String> items = query.list();
+    final List<String> items = query.list();
     String caseLoadId;
-    if (items != null && items.size() > 0) {
+    if (items != null && !items.isEmpty()) {
       caseLoadId = items.get(0);
     } else {
       return null;

@@ -105,8 +105,8 @@ public class PersonTest {
 
     assertEquals(1, person.getPersonRace().size());
     for (PersonRace personRace : person.getPersonRace()) {
-      assertEquals(personRace.getRace().getRaceType(), race.getRace());
-      assertEquals(personRace.getRace().getSubRaceType(), race.getSubrace());
+      assertEquals(personRace.getRace().getRaceType(), race.getRaceType());
+      assertEquals(personRace.getRace().getSubRaceType(), race.getSubRaceType());
     }
   }
 

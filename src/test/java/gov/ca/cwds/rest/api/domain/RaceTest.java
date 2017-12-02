@@ -65,16 +65,16 @@ public class RaceTest {
         new gov.ca.cwds.data.persistence.ns.Race(domain, "12345", "12345");
 
     Race totest = new Race(persistent);
-    assertThat(totest.getRace(), is(equalTo(persistent.getRaceType())));
-    assertThat(totest.getSubrace(), is(equalTo(persistent.getSubRaceType())));
+    assertThat(totest.getRaceType(), is(equalTo(persistent.getRaceType())));
+    assertThat(totest.getSubRaceType(), is(equalTo(persistent.getSubRaceType())));
   }
 
   @Test
   public void testJSONConstructorTest() throws Exception {
     Race domain = new Race(race, subrace);
 
-    assertThat(domain.getRace(), is(equalTo(race)));
-    assertThat(domain.getSubrace(), is(equalTo(subrace)));
+    assertThat(domain.getRaceType(), is(equalTo(race)));
+    assertThat(domain.getSubRaceType(), is(equalTo(subrace)));
   }
 
   private Race validRace() {

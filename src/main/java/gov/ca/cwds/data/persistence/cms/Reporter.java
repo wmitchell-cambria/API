@@ -465,7 +465,7 @@ public class Reporter extends BaseReporter {
   @Transient
   public String getGender() {
     // Does not apply.
-    return null;
+    return super.getGender();
   }
 
   @JsonIgnore
@@ -473,7 +473,7 @@ public class Reporter extends BaseReporter {
   @Transient
   public Date getBirthDate() {
     // Does not apply.
-    return null;
+    return super.getBirthDate();
   }
 
   @JsonIgnore
@@ -481,7 +481,7 @@ public class Reporter extends BaseReporter {
   @Transient
   public String getSsn() {
     // Does not apply.
-    return null;
+    return super.getSsn();
   }
 
   @JsonIgnore

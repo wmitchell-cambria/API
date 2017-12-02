@@ -13,10 +13,9 @@ import io.dropwizard.jackson.JsonSnakeCase;
  */
 @JsonSnakeCase
 public class ScreeningReference extends ReportingDomain implements Request {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   private String reference;
 
   /**
@@ -37,26 +36,13 @@ public class ScreeningReference extends ReportingDomain implements Request {
     return reference;
   }
 
-
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
   @Override
   public final int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((reference == null) ? 0 : reference.hashCode());
-    return result;
+    return prime * result + ((reference == null) ? 0 : reference.hashCode());
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
   public final boolean equals(Object obj) {
     if (this == obj)
@@ -73,6 +59,5 @@ public class ScreeningReference extends ReportingDomain implements Request {
       return false;
     return true;
   }
-
 
 }

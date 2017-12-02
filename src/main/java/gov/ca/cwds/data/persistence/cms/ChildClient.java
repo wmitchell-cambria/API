@@ -12,6 +12,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -27,7 +29,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * @author CWDS API Team
  */
 @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ChildClient.findVictimClients",
-    query = "SELECT C" + " FROM ChildClient C, ReferralClient R, Allegation A"
+    query = "SELECT C FROM ChildClient C, ReferralClient R, Allegation A"
         + " WHERE C.victimClientId = R.clientId " + " AND A.victimClientId = R.clientId"
         + " AND R.referralId = :referralId")
 @Entity
@@ -648,6 +650,16 @@ public class ChildClient extends CmsPersistentObject {
    */
   public String getTribalCustomaryAdoptionIndicator() {
     return tribalCustomaryAdoptionIndicator;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

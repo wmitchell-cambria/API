@@ -71,11 +71,6 @@ public class ExternalInterface implements PersistentObject, Serializable {
       this.logonUserId = logonUserId;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
       int prime = 31;
@@ -633,7 +628,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
    * @param submitlTimestamp the submitlTimestamp to set
    */
   public void setSubmitlTimestamp(Date submitlTimestamp) {
-    this.submitlTimestamp = submitlTimestamp;
+    this.submitlTimestamp = freshDate(submitlTimestamp);
   }
 
   /**

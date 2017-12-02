@@ -38,10 +38,9 @@ import io.swagger.annotations.ApiModelProperty;
         ifValue = RaceAndEthnicity.UNABLE_TO_DETERMINE,
         message = "Hispanic unable to determine code must be set if hispanic codes include 6351")})
 public class RaceAndEthnicity extends ReportingDomain implements Request, Response {
+
   static final short UNABLE_TO_DETERMINE = 6351;
-  /**
-   * Serialization version.
-   */
+
   private static final long serialVersionUID = 1L;
 
   private static final String EXAMPLE_RACE_CODES = "['839', '840']";
@@ -160,7 +159,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -170,7 +169,7 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

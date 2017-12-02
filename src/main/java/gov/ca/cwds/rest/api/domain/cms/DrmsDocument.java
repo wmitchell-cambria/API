@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,9 +26,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class DrmsDocument extends ReportingDomain implements Request, Response, Serializable {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @NotNull
@@ -65,7 +64,7 @@ public class DrmsDocument extends ReportingDomain implements Request, Response, 
       @JsonProperty("staffPersonId") String staffPersonId,
       @JsonProperty("handleName") String handleName) {
     super();
-    this.creationTimeStamp = creationTimeStamp;
+    this.creationTimeStamp = freshDate(creationTimeStamp);
     this.drmsDocumentTemplateId = drmsDocumentTemplateId;
     this.fingerprintStaffPerson = fingerprintStaffPerson;
     this.staffPersonId = staffPersonId;
@@ -98,7 +97,7 @@ public class DrmsDocument extends ReportingDomain implements Request, Response, 
    * @return the creationTimeStamp
    */
   public Date getCreationTimeStamp() {
-    return creationTimeStamp;
+    return freshDate(creationTimeStamp);
   }
 
   /**
@@ -135,7 +134,7 @@ public class DrmsDocument extends ReportingDomain implements Request, Response, 
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -145,7 +144,7 @@ public class DrmsDocument extends ReportingDomain implements Request, Response, 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

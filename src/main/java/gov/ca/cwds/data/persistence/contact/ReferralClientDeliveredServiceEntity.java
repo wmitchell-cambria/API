@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.contact;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,10 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 
 /**
  * {@link CmsPersistentObject} Class representing an ReferralClientDeliveredService.
@@ -28,9 +30,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReferralClientDeliveredServiceEntity extends CmsPersistentObject {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -74,7 +73,6 @@ public class ReferralClientDeliveredServiceEntity extends CmsPersistentObject {
     return getReferralClientDeliveredServiceEmbeddable();
   }
 
-
   /**
    * @return the referralClientDeliveredServiceEmbeddable
    */
@@ -87,6 +85,16 @@ public class ReferralClientDeliveredServiceEntity extends CmsPersistentObject {
    */
   public String getCountySpecificCode() {
     return countySpecificCode;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

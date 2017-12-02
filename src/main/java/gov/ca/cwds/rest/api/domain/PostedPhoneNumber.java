@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.api.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Response;
@@ -12,10 +15,9 @@ import io.dropwizard.jackson.JsonSnakeCase;
  */
 @JsonSnakeCase
 public class PostedPhoneNumber extends PhoneNumber {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private long id;
 
@@ -48,4 +50,15 @@ public class PostedPhoneNumber extends PhoneNumber {
   public long getId() {
     return id;
   }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }

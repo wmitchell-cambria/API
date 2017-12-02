@@ -20,9 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 public class ValidatedAddress extends ReportingDomain implements Request, Response {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("zip")
@@ -39,7 +37,6 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
   @Size(max = 50)
   private String streetAddress;
 
-
   @JsonProperty("state")
   @ApiModelProperty(example = "CA")
   private String state;
@@ -55,7 +52,6 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
   @JsonProperty("deliverable")
   @ApiModelProperty(example = "true")
   private Boolean deliverable;
-
 
   /**
    * Constructor
@@ -90,14 +86,12 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
     return streetAddress;
   }
 
-
   /**
    * @return the city
    */
   public String getCity() {
     return city;
   }
-
 
   /**
    * @return the state
@@ -106,14 +100,12 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
     return state;
   }
 
-
   /**
    * @return the zip
    */
   public Integer getZip() {
     return zip;
   }
-
 
   /**
    * @return the longitude
@@ -122,14 +114,12 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
     return longitude;
   }
 
-
   /**
-   * @return the lattitude
+   * @return the latitude
    */
   public Double getLattitude() {
     return lattitude;
   }
-
 
   /**
    * @return the deliverable
@@ -144,7 +134,7 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -154,7 +144,7 @@ public class ValidatedAddress extends ReportingDomain implements Request, Respon
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

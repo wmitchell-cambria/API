@@ -40,13 +40,10 @@ import io.swagger.annotations.ApiModelProperty;
     "wraparoundServiceIndicator"})
 public class DeliveredServiceDomain extends ReportingDomain implements Request, Response {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
-  private static String DEFAULT_HARD_COPY_DOUMENT_ON_FILE_CODE = "N";
-  private static String DEFAULT_CONTACT_VISIT_CODE = "C";
+  private static final String DEFAULT_HARD_COPY_DOUMENT_ON_FILE_CODE = "N";
+  private static final String DEFAULT_CONTACT_VISIT_CODE = "C";
 
   @Size(max = CMS_ID_LEN)
   @NotNull
@@ -517,6 +514,5 @@ public class DeliveredServiceDomain extends ReportingDomain implements Request, 
         serviceContactType, startDate, startTime, statusCode, "",
         DomainChef.uncookBooleanString(deliveredServiceEntity.getWraparoundServiceIndicator()));
   }
-
 
 }
