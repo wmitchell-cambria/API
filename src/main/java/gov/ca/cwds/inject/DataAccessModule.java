@@ -3,6 +3,7 @@ package gov.ca.cwds.inject;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -13,10 +14,12 @@ import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -245,10 +248,6 @@ public class DataAccessModule extends AbstractModule {
    */
   @Override
   protected void configure() {
-    // Fails here. Call later.
-    // Method getSessionFactory() returns null at this point and fails in method toInstance().
-    // bind(SessionFactory.class).toInstance(cmsHibernateBundle.getSessionFactory());
-
     // CMS:
     // CmsReferral participants:
     bind(AllegationDao.class);

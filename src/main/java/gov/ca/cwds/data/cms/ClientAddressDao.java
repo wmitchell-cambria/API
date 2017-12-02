@@ -16,13 +16,14 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Hibernate DAO for DB2
+ * Hibernate DAO for DB2 client address table.
  * 
  * @author CWDS API Team
  * @see CmsSessionFactory
  * @see SessionFactory
  */
 public class ClientAddressDao extends CrudsDaoImpl<ClientAddress> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientAddressDao.class);
 
   /**
@@ -36,8 +37,8 @@ public class ClientAddressDao extends CrudsDaoImpl<ClientAddress> {
   }
 
   /**
-   * @param addressId - addressId
-   * @param clientId - clientid
+   * @param addressId - address id
+   * @param clientId - client id
    * @return the existing address and client
    */
   public List<ClientAddress> findByAddressAndClient(String addressId, String clientId) {
@@ -47,7 +48,6 @@ public class ClientAddressDao extends CrudsDaoImpl<ClientAddress> {
         Query query = this.getSessionFactory().getCurrentSession()
             .getNamedQuery("gov.ca.cwds.data.persistence.cms.ClientAddress.findByAddressAndClient")
             .setParameter("addressId", addressId).setParameter("clientId", clientId);
-        List<ClientAddress> items = query.list();
         clientAddresses.addAll(query.list());
       } catch (Exception e) {
         StringBuilder message = new StringBuilder();
@@ -61,4 +61,5 @@ public class ClientAddressDao extends CrudsDaoImpl<ClientAddress> {
     }
     return clientAddresses;
   }
+
 }

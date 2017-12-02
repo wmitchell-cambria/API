@@ -28,9 +28,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class Person extends ReportingDomain implements Request, Response {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("first_name")
@@ -145,36 +142,45 @@ public class Person extends ReportingDomain implements Request, Response {
     this.ethnicity = new HashSet<>();
 
     Set<PersonAddress> addresses = person.getPersonAddress();
-    if (addresses == null) { addresses = new HashSet(); };
+    if (addresses == null) {
+      addresses = new HashSet<>();
+    }
     for (PersonAddress personAddress : addresses) {
       this.address.add(new Address(personAddress.getAddress()));
     }
 
     Set<PersonPhone> phoneNumbers = person.getPersonPhone();
-    if (phoneNumbers == null) { phoneNumbers = new HashSet(); };
+    if (phoneNumbers == null) {
+      phoneNumbers = new HashSet<>();
+    }
     for (PersonPhone personPhone : phoneNumbers) {
       this.phoneNumber.add(new PhoneNumber(personPhone.getPhoneNumber()));
     }
 
     Set<PersonLanguage> languages = person.getPersonLanguage();
-    if (languages == null) { languages = new HashSet(); };
+    if (languages == null) {
+      languages = new HashSet<>();
+    }
     for (PersonLanguage personLanguage : languages) {
       this.language.add(new Language(personLanguage.getLanguage()));
     }
 
     Set<PersonRace> races = person.getPersonRace();
-    if (races == null) { races = new HashSet(); };
+    if (races == null) {
+      races = new HashSet<>();
+    }
     for (PersonRace personRace : races) {
       this.race.add(new Race(personRace.getRace()));
     }
 
     Set<PersonEthnicity> enthnicities = person.getPersonEthnicity();
-    if (enthnicities == null) { enthnicities = new HashSet(); };
-      for (PersonEthnicity personEthnicity : enthnicities) {
-        this.ethnicity.add(new Ethnicity(personEthnicity.getEthnicity()));
-      }
+    if (enthnicities == null) {
+      enthnicities = new HashSet<>();
+    }
+    for (PersonEthnicity personEthnicity : enthnicities) {
+      this.ethnicity.add(new Ethnicity(personEthnicity.getEthnicity()));
+    }
   }
-
 
 
   /**
