@@ -34,7 +34,7 @@ public class LanguageTest {
     gov.ca.cwds.rest.api.domain.Language domain =
         new gov.ca.cwds.rest.api.domain.Language(languageName);
     Language language = new Language(domain, userId, userId);
-    assertEquals(language.getLanguageCodeId(), domain.getLanguage());
+    assertEquals(language.getLanguageCodeId(), domain.getTheLanguage());
   }
 
 }

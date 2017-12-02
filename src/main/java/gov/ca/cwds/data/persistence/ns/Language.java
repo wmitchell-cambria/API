@@ -73,7 +73,7 @@ public class Language extends NsPersistentObject {
   public Language(gov.ca.cwds.rest.api.domain.Language language, String lastUpdatedId,
       String createUserId) {
     super(lastUpdatedId, createUserId);
-    this.languageCodeId = language.getLanguage();
+    this.languageCodeId = language.getTheLanguage();
   }
 
   /**

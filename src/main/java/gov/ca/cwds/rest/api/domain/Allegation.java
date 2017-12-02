@@ -27,9 +27,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("nsAllegation")
 public class Allegation extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("legacy_source_table")

@@ -20,15 +20,12 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 public class Language extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("language")
   @ApiModelProperty(example = "English")
   @Size(max = 50)
-  String language;
+  String theLanguage;
 
   /**
    * Construct from persistence class
@@ -36,7 +33,7 @@ public class Language extends ReportingDomain implements Request, Response {
    * @param language persistence level language object
    */
   public Language(gov.ca.cwds.data.persistence.ns.Language language) {
-    this.language = language.getLanguageCodeId();
+    this.theLanguage = language.getLanguageCodeId();
   }
 
   /**
@@ -44,14 +41,14 @@ public class Language extends ReportingDomain implements Request, Response {
    */
   public Language(@JsonProperty("language") String language) {
     super();
-    this.language = language;
+    this.theLanguage = language;
   }
 
   /**
    * @return the language
    */
-  public String getLanguage() {
-    return language;
+  public String getTheLanguage() {
+    return theLanguage;
   }
 
   /**
@@ -60,7 +57,7 @@ public class Language extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -70,7 +67,7 @@ public class Language extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

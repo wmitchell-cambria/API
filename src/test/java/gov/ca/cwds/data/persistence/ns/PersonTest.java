@@ -88,7 +88,7 @@ public class PersonTest {
     }
     assertEquals(1, person.getPersonLanguage().size());
     for (PersonLanguage personLanguage : person.getPersonLanguage()) {
-      assertEquals(personLanguage.getLanguage().getLanguageCodeId(), language.getLanguage());
+      assertEquals(personLanguage.getLanguage().getLanguageCodeId(), language.getTheLanguage());
     }
 
     assertEquals(1, person.getPersonPhone().size());

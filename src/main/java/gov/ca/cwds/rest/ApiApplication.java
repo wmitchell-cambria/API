@@ -1,12 +1,5 @@
 package gov.ca.cwds.rest;
 
-import gov.ca.cwds.health.AuthHealthCheck;
-import gov.ca.cwds.health.DB2HealthCheck;
-import gov.ca.cwds.health.SwaggerHealthCheck;
-import gov.ca.cwds.health.resource.AuthServer;
-import gov.ca.cwds.health.resource.DB2Database;
-import gov.ca.cwds.health.resource.SwaggerEndpoint;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -17,7 +10,14 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import gov.ca.cwds.health.AuthHealthCheck;
+import gov.ca.cwds.health.DB2HealthCheck;
+import gov.ca.cwds.health.SwaggerHealthCheck;
+import gov.ca.cwds.health.resource.AuthServer;
+import gov.ca.cwds.health.resource.DB2Database;
+import gov.ca.cwds.health.resource.SwaggerEndpoint;
 import gov.ca.cwds.inject.ApplicationModule;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContextFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import io.dropwizard.setup.Bootstrap;
@@ -76,16 +76,17 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
             injector.getInstance(RequestResponseLoggingFilter.class))
         .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
-    final DB2HealthCheck db2HealthCheck = new DB2HealthCheck(injector.getInstance(DB2Database
-        .class));
+    final DB2HealthCheck db2HealthCheck =
+        new DB2HealthCheck(injector.getInstance(DB2Database.class));
     environment.healthChecks().register("db2_status", db2HealthCheck);
 
-    final AuthHealthCheck authHealthCheck = new AuthHealthCheck( injector.getInstance( AuthServer.class));
+    final AuthHealthCheck authHealthCheck =
+        new AuthHealthCheck(injector.getInstance(AuthServer.class));
     environment.healthChecks().register("auth_status", authHealthCheck);
 
-    //TODO: Add ES search
-    final SwaggerHealthCheck swaggerHealthCheck = new SwaggerHealthCheck( injector
-        .getInstance( SwaggerEndpoint.class));
+    // TODO: Add ES search
+    final SwaggerHealthCheck swaggerHealthCheck =
+        new SwaggerHealthCheck(injector.getInstance(SwaggerEndpoint.class));
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);

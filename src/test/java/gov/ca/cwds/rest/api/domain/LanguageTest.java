@@ -65,14 +65,14 @@ public class LanguageTest {
 
     Language totest = new Language(persistent);
 
-    assertThat(totest.getLanguage(), is(equalTo(persistent.getLanguageCodeId())));
+    assertThat(totest.getTheLanguage(), is(equalTo(persistent.getLanguageCodeId())));
   }
 
   @Test
   public void testJSONConstructorTest() throws Exception {
     Language domain = new Language(language);
 
-    assertThat(domain.getLanguage(), is(equalTo(language)));
+    assertThat(domain.getTheLanguage(), is(equalTo(language)));
   }
 
   private Language validLanguage() {

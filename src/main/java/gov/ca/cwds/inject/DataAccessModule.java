@@ -419,23 +419,6 @@ public class DataAccessModule extends AbstractModule {
       for (Map.Entry<String, ElasticsearchConfiguration> esConfigKey : esConfigs.entrySet()) {
         ElasticsearchConfiguration config = esConfigs.get(esConfigKey.getKey());
 
-        /*
-         * NOTE: This will close the transportClient because of auto closable...
-         * 
-         * <blockquote> <pre>
-         * 
-         * try (TransportClient transportClient = new PreBuiltTransportClient(
-         * Settings.builder().put("cluster.name", config.getElasticsearchCluster()).build());) { ...
-         * ... }
-         * 
-         * </pre> </blockquote>
-         * 
-         * We want to keep the transportClient open. This is causing following error <br>
-         * java.lang.IllegalStateException: transport client is closed
-         * 
-         * <br> SonarQube however reports following as issue...
-         */
-
         try {
           TransportClient transportClient = makeESTransportClient(config);
           transportClient.addTransportAddress(

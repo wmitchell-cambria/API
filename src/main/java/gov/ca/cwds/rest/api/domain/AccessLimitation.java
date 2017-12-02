@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.api.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.std.ApiObjectIdentity;
@@ -76,5 +79,16 @@ public class AccessLimitation extends ApiObjectIdentity {
   public void setLimitedAccessGovernmentEntityName(String limitedAccessGovernmentEntityName) {
     this.limitedAccessGovernmentEntityName = limitedAccessGovernmentEntityName;
   }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }
 
