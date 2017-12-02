@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.ObjectMapperUtils;
@@ -34,9 +35,11 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
   private String id;
 
   @JsonProperty("start_date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private Date startDate;
 
   @JsonProperty("end_date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private Date endDate;
 
   @JsonProperty("county")
