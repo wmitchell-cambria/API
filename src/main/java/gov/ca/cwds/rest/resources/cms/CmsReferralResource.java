@@ -28,7 +28,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-
 /**
  * Implementation of {@link CmsReferralResource}.
  * 
@@ -86,7 +85,6 @@ public class CmsReferralResource {
       response = Object.class)
   public Response delete(@PathParam("id") @ApiParam(required = true,
       value = "id of CmsReferral to delete") String id) {
-    // return resourceDelegate.delete(id);
     return Response.status(HttpStatus.SC_NOT_IMPLEMENTED).build();
   }
 
@@ -135,7 +133,6 @@ public class CmsReferralResource {
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The id of the CmsReferral to update") String id,
       @Valid @ApiParam(hidden = false) CmsReferral cmsReferral) {
-    // return resourceDelegate.update(id, cmsReferral);
     return Response.status(HttpStatus.SC_NOT_IMPLEMENTED).build();
   }
 }
