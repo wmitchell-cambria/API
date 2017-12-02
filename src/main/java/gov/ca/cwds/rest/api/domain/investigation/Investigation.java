@@ -381,14 +381,13 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return Date objects - concatenates date and time.
    */
   private Date populateInvestigationStartAt(Referral referral) {
-    Date itStartedAt = null;
-    if (referral.getReceivedDate() != null) {
-      itStartedAt =
-          DomainChef.concatenateDateAndTime(referral.getReceivedDate(), referral.getReceivedTime());
+    Date ret = null;
+    final Date referralReceivedDate = referral.getReceivedDate();
+    if (referralReceivedDate != null) {
+      ret = DomainChef.concatenateDateAndTime(referralReceivedDate, referral.getReceivedTime());
     }
-    return itStartedAt;
+    return ret;
   }
-
 
   /**
    * @return - CMS record description
