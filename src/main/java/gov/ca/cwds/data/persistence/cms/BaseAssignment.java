@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -126,15 +128,15 @@ public abstract class BaseAssignment extends CmsPersistentObject {
     setEstablishedForId(establishedForId);
 
     this.countySpecificCode = countySpecificCode;
-    this.endDate = endDate;
-    this.endTime = endTime;
+    this.endDate = freshDate(endDate);
+    this.endTime = freshDate(endTime);
     this.establishedForCode = establishedForCode;
     this.fkCaseLoad = fkCaseLoad;
     this.fkOutOfStateContactParty = fkOutOfStateContactParty;
     this.responsibilityDescription = responsibilityDescription;
     this.secondaryAssignmentRoleType = secondaryAssignmentRoleType;
-    this.startDate = startDate;
-    this.startTime = startTime;
+    this.startDate = freshDate(startDate);
+    this.startTime = freshDate(startTime);
     this.typeOfAssignmentCode = typeOfAssignmentCode;
     this.weightingNumber = weightingNumber;
   }
@@ -176,12 +178,12 @@ public abstract class BaseAssignment extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   @SuppressWarnings("javadoc")
   public Date getEndTime() {
-    return endTime;
+    return freshDate(endTime);
   }
 
   @SuppressWarnings("javadoc")
@@ -216,12 +218,12 @@ public abstract class BaseAssignment extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   @SuppressWarnings("javadoc")
   public Date getStartTime() {
-    return startTime;
+    return freshDate(startTime);
   }
 
   @SuppressWarnings("javadoc")
@@ -249,19 +251,14 @@ public abstract class BaseAssignment extends CmsPersistentObject {
     return getId();
   }
 
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
   @SuppressWarnings("javadoc")
   public void setEndDate(Date endDate) {
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
   }
 
   @SuppressWarnings("javadoc")
   public void setEndTime(Date endTime) {
-    this.endTime = endTime;
+    this.endTime = freshDate(endTime);
   }
 
   @SuppressWarnings("javadoc")
@@ -286,12 +283,12 @@ public abstract class BaseAssignment extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   @SuppressWarnings("javadoc")
   public void setStartTime(Date startTime) {
-    this.startTime = startTime;
+    this.startTime = freshDate(startTime);
   }
 
   @SuppressWarnings("javadoc")
@@ -302,15 +299,6 @@ public abstract class BaseAssignment extends CmsPersistentObject {
   @SuppressWarnings("javadoc")
   public void setWeightingNumber(BigDecimal weightingNumber) {
     this.weightingNumber = weightingNumber;
-  }
-
-  // ===================
-  // IDENTITY:
-  // ===================
-
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
   @SuppressWarnings("javadoc")
@@ -325,6 +313,20 @@ public abstract class BaseAssignment extends CmsPersistentObject {
 
   protected void setEstablishedForCode(String establishedForCode) {
     this.establishedForCode = establishedForCode;
+  }
+
+  // ===================
+  // IDENTITY:
+  // ===================
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

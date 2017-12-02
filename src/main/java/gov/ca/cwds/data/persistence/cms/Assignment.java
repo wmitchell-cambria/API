@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -92,7 +94,7 @@ public class Assignment extends CmsPersistentObject {
   private BigDecimal weightingNumber;
 
   /**
-   * referential integrity check.
+   * Referential integrity check.
    * <p>
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
@@ -117,8 +119,8 @@ public class Assignment extends CmsPersistentObject {
    * @param endTime - end time of assignment
    * @param establishedForCode - referral or case
    * @param establishedForId - referral or case Id
-   * @param fkCaseLoad - foriegn key to the case load
-   * @param fkOutOfStateContactParty - foriegn ky to the out of state contact party
+   * @param fkCaseLoad - foreign key to the case load
+   * @param fkOutOfStateContactParty - foreign ky to the out of state contact party
    * @param responsibilityDescription - description
    * @param secondaryAssignmentRoleType - primary or secondary
    * @param startDate - start date of assignment
@@ -134,16 +136,16 @@ public class Assignment extends CmsPersistentObject {
     super();
     this.id = id;
     this.countySpecificCode = countySpecificCode;
-    this.endDate = endDate;
-    this.endTime = endTime;
+    this.endDate = freshDate(endDate);
+    this.endTime = freshDate(endTime);
     this.establishedForCode = establishedForCode;
     this.establishedForId = establishedForId;
     this.fkCaseLoad = fkCaseLoad;
     this.fkOutOfStateContactParty = fkOutOfStateContactParty;
     this.responsibilityDescription = responsibilityDescription;
     this.secondaryAssignmentRoleType = secondaryAssignmentRoleType;
-    this.startDate = startDate;
-    this.startTime = startTime;
+    this.startDate = freshDate(startDate);
+    this.startTime = freshDate(startTime);
     this.typeOfAssignmentCode = typeOfAssignmentCode;
     this.weightingNumber = weightingNumber;
   }
@@ -180,12 +182,12 @@ public class Assignment extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   @SuppressWarnings("javadoc")
   public Date getEndTime() {
-    return endTime;
+    return freshDate(endTime);
   }
 
   @SuppressWarnings("javadoc")
@@ -230,7 +232,7 @@ public class Assignment extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getStartTime() {
-    return startTime;
+    return freshDate(startTime);
   }
 
   @SuppressWarnings("javadoc")

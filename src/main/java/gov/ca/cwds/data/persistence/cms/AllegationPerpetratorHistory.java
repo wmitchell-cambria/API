@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -88,7 +90,7 @@ public class AllegationPerpetratorHistory extends CmsPersistentObject {
     this.countySpecificCode = countySpecificCode;
     this.perpetratorClientId = perpetratorClientId;
     this.allegationId = allegationId;
-    this.perpetratorUpdateDate = perpetratorUpdateDate;
+    this.perpetratorUpdateDate = freshDate(perpetratorUpdateDate);
   }
 
   /**
@@ -153,7 +155,7 @@ public class AllegationPerpetratorHistory extends CmsPersistentObject {
    * @return the prepetratorUpdateDate
    */
   public Date getPerpetratorUpdateDate() {
-    return perpetratorUpdateDate;
+    return freshDate(perpetratorUpdateDate);
   }
 
 }
