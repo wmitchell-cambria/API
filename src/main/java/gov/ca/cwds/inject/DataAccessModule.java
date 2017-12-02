@@ -3,6 +3,7 @@ package gov.ca.cwds.inject;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Client;
@@ -408,13 +409,10 @@ public class DataAccessModule extends AbstractModule {
     return esDaos.get("screeningsIndex");
   }
 
-  @Provides
-  public synchronized Map<String, Client> provideElasticsearchClients(
+  private synchronized Map<String, Client> makeElasticsearchClients(
       ApiConfiguration apiConfiguration) {
-
     if (clients == null) {
-      clients = new HashMap<>();
-
+      clients = new ConcurrentHashMap<>();
       Map<String, ElasticsearchConfiguration> esConfigs =
           apiConfiguration.getElasticsearchConfigurations();
 
@@ -454,8 +452,17 @@ public class DataAccessModule extends AbstractModule {
     return clients;
   }
 
+  @Provides
+  public Map<String, Client> provideElasticsearchClients(ApiConfiguration apiConfiguration) {
+    if (clients == null) {
+      makeElasticsearchClients(apiConfiguration);
+    }
+
+    return clients;
+  }
+
   private static TransportClient makeESTransportClient(final ElasticsearchConfiguration config) {
-    TransportClient esClient = null;
+    TransportClient esClient;
     String cluster = config.getElasticsearchCluster();
     String user = config.getUser();
     String password = config.getPassword();
