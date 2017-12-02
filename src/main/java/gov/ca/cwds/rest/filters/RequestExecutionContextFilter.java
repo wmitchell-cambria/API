@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.filters;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.filters.RequestExecutionContext.Parameter;
 import gov.ca.cwds.security.shiro.web.PerryAuthenticatingFilter;
 
@@ -52,8 +53,10 @@ public class RequestExecutionContextFilter implements Filter {
       final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
       RequestExecutionContextImpl.startRequest();
 
-      LOGGER.info("started request at {}", new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
-          .format(RequestExecutionContext.instance().get(Parameter.REQUEST_START_TIME)));
+      Date requestStartTime =
+          (Date) RequestExecutionContext.instance().get(Parameter.REQUEST_START_TIME);
+      String requestStartTimeStr = DomainChef.cookTimestamp(requestStartTime);
+      LOGGER.info("started request at {}", requestStartTimeStr);
 
       try {
         chain.doFilter(httpServletRequest, httpServletResponse);
