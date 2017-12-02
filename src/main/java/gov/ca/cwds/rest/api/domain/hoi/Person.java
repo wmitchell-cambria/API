@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 
 /**
  * Basic person.
@@ -28,12 +27,6 @@ public class Person extends ApiObjectIdentity implements ApiTypedIdentifier<Stri
 
   @JsonProperty("last_name")
   private String lastName;
-
-  /**
-   * Optional field
-   */
-  @JsonProperty("sensitivity_indicator")
-  private LimitedAccessType sensitivityIndicator;
 
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -71,14 +64,6 @@ public class Person extends ApiObjectIdentity implements ApiTypedIdentifier<Stri
 
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
-  }
-
-  public LimitedAccessType getSensitivityIndicator() {
-    return sensitivityIndicator;
-  }
-
-  public void setSensitivityIndicator(LimitedAccessType sensitivityIndicator) {
-    this.sensitivityIndicator = sensitivityIndicator;
   }
 }
 

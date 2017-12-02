@@ -28,14 +28,14 @@ public class Allegation extends ApiObjectIdentity implements ApiTypedIdentifier<
   @JsonProperty("disposition")
   private SystemCodeDescriptor disposition;
 
-  @JsonProperty("legacy_descriptor")
-  private LegacyDescriptor legacyDescriptor;
-
   @JsonProperty("victim")
-  private Person victim;
+  private Victim victim;
 
   @JsonProperty("perpetrator")
-  private Person perpetrator;
+  private Perpetrator perpetrator;
+
+  @JsonProperty("legacy_descriptor")
+  private LegacyDescriptor legacyDescriptor;
 
   /**
    * No-argument constructor
@@ -78,19 +78,19 @@ public class Allegation extends ApiObjectIdentity implements ApiTypedIdentifier<
     this.legacyDescriptor = legacyDescriptor;
   }
 
-  public Person getVictim() {
+  public Victim getVictim() {
     return victim;
   }
 
-  public void setVictim(Person victim) {
+  public void setVictim(Victim victim) {
     this.victim = victim;
   }
 
-  public Person getPerpetrator() {
+  public Perpetrator getPerpetrator() {
     return perpetrator;
   }
 
-  public void setPerpetrator(Person perpetrator) {
+  public void setPerpetrator(Perpetrator perpetrator) {
     this.perpetrator = perpetrator;
   }
 }
