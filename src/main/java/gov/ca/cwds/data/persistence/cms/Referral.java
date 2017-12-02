@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -367,7 +369,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     this.approvalNumber = approvalNumber;
     this.approvalStatusType = approvalStatusType;
     this.caretakersPerpetratorCode = caretakersPerpetratorCode;
-    this.closureDate = closureDate;
+    this.closureDate = freshDate(closureDate);
     this.communicationMethodType = communicationMethodType;
     this.currentLocationOfChildren = currentLocationOfChildren;
     this.drmsAllegationDescriptionDoc = drmsAllegationDescriptionDoc;
@@ -380,15 +382,15 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     this.legalDefinitionCode = legalDefinitionCode;
     this.legalRightsNoticeIndicator = legalRightsNoticeIndicator;
     this.limitedAccessCode = limitedAccessCode;
-    this.mandatedCrossReportReceivedDate = mandatedCrossReportReceivedDate;
+    this.mandatedCrossReportReceivedDate = freshDate(mandatedCrossReportReceivedDate);
     this.referralName = referralName;
     this.openAdequateCaseCode = openAdequateCaseCode;
-    this.receivedDate = receivedDate;
-    this.receivedTime = receivedTime;
+    this.receivedDate = freshDate(receivedDate);
+    this.receivedTime = freshDate(receivedTime);
     this.referralResponseType = referralResponseType;
     this.referredToResourceType = referredToResourceType;
-    this.responseDeterminationDate = responseDeterminationDate;
-    this.responseDeterminationTime = responseDeterminationTime;
+    this.responseDeterminationDate = freshDate(responseDeterminationDate);
+    this.responseDeterminationTime = freshDate(responseDeterminationTime);
     this.responseRationaleText = responseRationaleText;
     this.screenerNoteText = screenerNoteText;
     this.specificsIncludedCode = specificsIncludedCode;
@@ -403,10 +405,10 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     this.zippyCreatedIndicator = zippyCreatedIndicator;
     this.homelessIndicator = homelessIndicator;
     this.familyRefusedServicesIndicator = familyRefusedServicesIndicator;
-    this.firstEvaluatedOutApprovalDate = firstEvaluatedOutApprovalDate;
+    this.firstEvaluatedOutApprovalDate = freshDate(firstEvaluatedOutApprovalDate);
     this.responsibleAgencyCode = responsibleAgencyCode;
     this.limitedAccessGovtAgencyType = limitedAccessGovtAgencyType;
-    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDate = freshDate(limitedAccessDate);
     this.limitedAccessDesc = limitedAccessDesc;
     this.originalClosureDate = originalClosureDate;
     this.addresses = addresses;
@@ -585,7 +587,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the closureDate
    */
   public Date getClosureDate() {
-    return closureDate;
+    return freshDate(closureDate);
   }
 
   /**
@@ -670,7 +672,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the mandatedCrossReportReceivedDate
    */
   public Date getMandatedCrossReportReceivedDate() {
-    return mandatedCrossReportReceivedDate;
+    return freshDate(mandatedCrossReportReceivedDate);
   }
 
   /**
@@ -691,14 +693,14 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the receivedDate
    */
   public Date getReceivedDate() {
-    return receivedDate;
+    return freshDate(receivedDate);
   }
 
   /**
    * @return the receivedTime
    */
   public Date getReceivedTime() {
-    return receivedTime;
+    return freshDate(receivedTime);
   }
 
   /**
@@ -719,14 +721,14 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the responseDeterminationDate
    */
   public Date getResponseDeterminationDate() {
-    return responseDeterminationDate;
+    return freshDate(responseDeterminationDate);
   }
 
   /**
    * @return the responseDeterminationTime
    */
   public Date getResponseDeterminationTime() {
-    return responseDeterminationTime;
+    return freshDate(responseDeterminationTime);
   }
 
   /**
@@ -831,7 +833,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the firstEvaluatedOutApprovalDate
    */
   public Date getFirstEvaluatedOutApprovalDate() {
-    return firstEvaluatedOutApprovalDate;
+    return freshDate(firstEvaluatedOutApprovalDate);
   }
 
   /**
@@ -852,7 +854,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the limitedAccessDate
    */
   public Date getLimitedAccessDate() {
-    return limitedAccessDate;
+    return freshDate(limitedAccessDate);
   }
 
   /**
@@ -866,7 +868,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @return the originalClosureDate
    */
   public Date getOriginalClosureDate() {
-    return originalClosureDate;
+    return freshDate(originalClosureDate);
   }
 
   /**

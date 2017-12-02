@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -27,15 +28,12 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * @author CWDS API Team
  */
 @SuppressWarnings({"serial", "javadoc"})
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Person.findAll", query = "FROM Person"),
-    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Person.findAllUpdatedAfter",
-        query = "FROM Person WHERE lastUpdatedTime > :after")})
+@NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Person.findAll", query = "FROM Person")
+@NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Person.findAllUpdatedAfter",
+    query = "FROM Person WHERE lastUpdatedTime > :after")
 @Entity
 @Table(name = "person")
-public class Person extends NsPersistentObject
-// implements IPersonAware, IAddressAware
-{
+public class Person extends NsPersistentObject {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_person_id")
@@ -112,7 +110,7 @@ public class Person extends NsPersistentObject
     this.middleName = middleName;
     this.lastName = lastName;
     this.gender = gender;
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = freshDate(dateOfBirth);
     this.ssn = ssn;
     this.personAddress = personAddress;
     this.personPhone = personPhone;
@@ -138,7 +136,7 @@ public class Person extends NsPersistentObject
     this.dateOfBirth = DomainChef.uncookDateString(person.getBirthDate());
     this.ssn = person.getSsn();
     Set<gov.ca.cwds.rest.api.domain.Address> address = person.getAddress();
-    if (address != null ) {
+    if (address != null) {
       for (gov.ca.cwds.rest.api.domain.Address addresses : address) {
         this.addPersonAddress(
             new PersonAddress(this, new Address(addresses, lastUpdatedId, createUserId)));
@@ -152,7 +150,7 @@ public class Person extends NsPersistentObject
       }
     }
     Set<gov.ca.cwds.rest.api.domain.Language> language = person.getLanguage();
-    if (language != null ) {
+    if (language != null) {
       for (gov.ca.cwds.rest.api.domain.Language languages : language) {
         this.addPersonLanguage(
             new PersonLanguage(this, new Language(languages, lastUpdatedId, createUserId)));
@@ -255,7 +253,6 @@ public class Person extends NsPersistentObject
   /**
    * @return the gender
    */
-  // @Override
   public String getGender() {
     return gender;
   }
@@ -264,13 +261,12 @@ public class Person extends NsPersistentObject
    * @return the dateOfBirth
    */
   public Date getDateOfBirth() {
-    return dateOfBirth;
+    return freshDate(dateOfBirth);
   }
 
   /**
    * @return the ssn
    */
-  // @Override
   public String getSsn() {
     return ssn;
   }

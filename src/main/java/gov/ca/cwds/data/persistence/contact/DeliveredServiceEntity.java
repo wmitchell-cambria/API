@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.contact;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -162,15 +164,15 @@ public class DeliveredServiceEntity extends CmsPersistentObject {
     this.detailText = detailText;
     this.hardCopyDocumentOnFileCode = hardCopyDocumentOnFileCode;
     this.detailTextContinuation = detailTextContinuation;
-    this.endDate = endDate;
-    this.endTime = endTime;
+    this.endDate = freshDate(endDate);
+    this.endTime = freshDate(endTime);
     this.primaryDeliveredServiceId = primaryDeliveredServiceId;
     this.id = id;
     this.otherParticipantsDesc = otherParticipantsDesc;
     this.providedByCode = providedByCode;
     this.providedById = providedById;
-    this.startDate = startDate;
-    this.startTime = startTime;
+    this.startDate = freshDate(startDate);
+    this.startTime = freshDate(startTime);
     this.statusCode = statusCode;
     this.supervisionCode = supervisionCode;
     this.serviceContactType = serviceContactType;
@@ -300,14 +302,14 @@ public class DeliveredServiceEntity extends CmsPersistentObject {
    * @return the endDate
    */
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   /**
    * @return the endTime
    */
   public Date getEndTime() {
-    return endTime;
+    return freshDate(endTime);
   }
 
   /**
@@ -349,14 +351,14 @@ public class DeliveredServiceEntity extends CmsPersistentObject {
    * @return the startDate
    */
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   /**
    * @return the startTime
    */
   public Date getStartTime() {
-    return startTime;
+    return freshDate(startTime);
   }
 
   /**

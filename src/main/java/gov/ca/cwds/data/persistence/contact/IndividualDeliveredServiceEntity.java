@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.contact;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -29,9 +31,6 @@ import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IndividualDeliveredServiceEntity extends CmsPersistentObject {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -90,9 +89,9 @@ public class IndividualDeliveredServiceEntity extends CmsPersistentObject {
       Date lastUpdatedTime) {
     super(lastUpdatedId, lastUpdatedTime);
     this.countySpecificCode = countySpecificCode;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.serviceContactType = serviceContactType;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.deliveredServiceId = deliveredServiceId;
     this.deliveredToIndividualCode = deliveredToIndividualCode;
     this.deliveredToIndividualId = deliveredToIndividualId;
@@ -128,7 +127,7 @@ public class IndividualDeliveredServiceEntity extends CmsPersistentObject {
    * @return the endDate
    */
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   /**
@@ -142,7 +141,7 @@ public class IndividualDeliveredServiceEntity extends CmsPersistentObject {
    * @return the startDate
    */
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
 }

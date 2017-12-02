@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -27,9 +29,6 @@ public class Tickle extends CmsPersistentObject {
 
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -88,7 +87,7 @@ public class Tickle extends CmsPersistentObject {
     this.affectedByCode = affectedByCode;
     this.affectedByOtherId = affectedByOtherId;
     this.affectedByThirdId = affectedByThirdId;
-    this.dueDate = dueDate;
+    this.dueDate = freshDate(dueDate);
     this.noteText = noteText;
     this.tickleMessageType = tickleMessageType;
   }
@@ -163,7 +162,7 @@ public class Tickle extends CmsPersistentObject {
    * @return the dueDate
    */
   public Date getDueDate() {
-    return dueDate;
+    return freshDate(dueDate);
   }
 
   /**

@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -63,10 +65,10 @@ public class StaffPersonCaseLoad extends CmsPersistentObject {
       String fkStaffPerson, Date startDate, String thirdId) {
     super();
     this.countyCode = countyCode;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.fkCaseLoad = fkCaseLoad;
     this.fkStaffPerson = fkStaffPerson;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.thirdId = thirdId;
   }
 
@@ -106,7 +108,7 @@ public class StaffPersonCaseLoad extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   @SuppressWarnings("javadoc")
@@ -121,7 +123,7 @@ public class StaffPersonCaseLoad extends CmsPersistentObject {
 
   @SuppressWarnings("javadoc")
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   @SuppressWarnings("javadoc")

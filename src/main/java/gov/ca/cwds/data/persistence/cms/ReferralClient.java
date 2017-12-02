@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -94,10 +96,10 @@ public class ReferralClient extends CmsPersistentObject {
      */
     @Override
     public int hashCode() {
-      final int PRIME = 31;
+      int prime = 31;
       int result = 1;
-      result = PRIME * result + ((clientId == null) ? 0 : clientId.hashCode());
-      result = PRIME * result + ((referralId == null) ? 0 : referralId.hashCode());
+      result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+      result = prime * result + ((referralId == null) ? 0 : referralId.hashCode());
       return result;
     }
 
@@ -201,9 +203,6 @@ public class ReferralClient extends CmsPersistentObject {
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
 
-  // @OneToMany
-  // @JoinColumn(name = "APRVL_NO", nullable = true, updatable = false, insertable = false)
-  // private SupervisorApproval supervisorApproval;
   /**
    * Default constructor
    * 
@@ -244,7 +243,7 @@ public class ReferralClient extends CmsPersistentObject {
     this.approvalStatusType = approvalStatusType;
     this.dispositionClosureReasonType = dispositionClosureReasonType;
     this.dispositionCode = dispositionCode;
-    this.dispositionDate = dispositionDate;
+    this.dispositionDate = freshDate(dispositionDate);
     this.selfReportedIndicator = selfReportedIndicator;
     this.staffPersonAddedIndicator = staffPersonAddedIndicator;
     this.dispositionClosureDescription = dispositionClosureDescription;
@@ -349,7 +348,7 @@ public class ReferralClient extends CmsPersistentObject {
    * @return the dispositionDate
    */
   public Date getDispositionDate() {
-    return dispositionDate;
+    return freshDate(dispositionDate);
   }
 
   /**

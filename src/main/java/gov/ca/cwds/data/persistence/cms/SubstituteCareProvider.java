@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,9 +10,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,10 +23,9 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SubstituteCareProvider.findAll",
-    query = "FROM SubstituteCareProvider")})
-@NamedNativeQueries({@NamedNativeQuery(
-    name = "gov.ca.cwds.data.persistence.cms.SubstituteCareProvider.findAllByBucket",
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SubstituteCareProvider.findAll",
+    query = "FROM SubstituteCareProvider")
+@NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.SubstituteCareProvider.findAllByBucket",
     query = "select z.IDENTIFIER, z.ADD_TEL_NO, z.ADD_EXT_NO, z.YR_INC_AMT, "
         + "z.BIRTH_DT, z.CA_DLIC_NO, z.CITY_NM, z.EDUCATION, z.EMAIL_ADDR, "
         + "z.EMPLYR_NM, z.EMPL_STAT, z.ETH_UD_CD, z.FIRST_NM, z.FRG_ADRT_B, "
@@ -38,7 +37,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
         + "from ( select mod(y.rn, CAST(:total_buckets AS INTEGER)) + 1 as bucket, y.* "
         + "from ( select row_number() over (order by 1) as rn, x.* from {h-schema}SB_PVDRT x "
         + " ) y ) z where z.bucket = :bucket_num for read only",
-    resultClass = SubstituteCareProvider.class)})
+    resultClass = SubstituteCareProvider.class)
 @Entity
 @Table(name = "SB_PVDRT")
 @JsonPropertyOrder(alphabetic = true)
@@ -112,7 +111,7 @@ public class SubstituteCareProvider extends BaseSubstituteCareProvider {
     this.additionalPhoneNumber = additionalPhoneNumber;
     this.additionlPhoneExtensionNumber = additionlPhoneExtensionNumber;
     this.annualIncomeAmount = annualIncomeAmount;
-    this.birthDate = birthDate;
+    this.birthDate = freshDate(birthDate);
     this.caDriverLicenseNumber = caDriverLicenseNumber;
     this.cityName = cityName;
     this.educationType = educationType;

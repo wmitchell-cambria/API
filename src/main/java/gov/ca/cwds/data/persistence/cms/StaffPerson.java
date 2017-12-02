@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -19,7 +21,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * {@link CmsPersistentObject} representing a StaffPerson.
  * 
  * <p>
- * Note that a staff identifer is a base 62, char(3), not the usual char(10).
+ * Note that a staff identifier is a base 62, char(3), not the usual char(10).
  * </p>
  * 
  * @author CWDS API Team
@@ -134,7 +136,7 @@ public class StaffPerson extends CmsPersistentObject {
       String dutyWorkerIndicator, String cwsOfficeAddress, String emailAddress) {
     super();
     this.id = id;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.firstName = firstName;
     this.jobTitle = jobTitle;
     this.lastName = lastName;
@@ -142,7 +144,7 @@ public class StaffPerson extends CmsPersistentObject {
     this.namePrefix = namePrefix;
     this.phoneNumber = phoneNumber;
     this.phoneExt = phoneExt;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.nameSuffix = nameSuffix;
     this.telecommuterIndicator = telecommuterIndicator;
     this.cwsOffice = cwsOffice;
@@ -212,7 +214,7 @@ public class StaffPerson extends CmsPersistentObject {
    * @return the endDate
    */
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   /**
@@ -268,7 +270,7 @@ public class StaffPerson extends CmsPersistentObject {
    * @return the startDate
    */
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   /**

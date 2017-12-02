@@ -16,6 +16,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @Entity
 @Table(name = "allegations")
 public class Allegation implements PersistentObject {
+
   @Id
   @Column(name = "id")
   private String id;
@@ -35,11 +36,9 @@ public class Allegation implements PersistentObject {
   @Column(name = "updated_at")
   private String updatedAt;
 
-
   @Column(name = "allegation_types")
   @Type(type = "gov.ca.cwds.rest.util.StringArrayType")
   private String[] allegationTypes;
-
 
   @ManyToOne
   @JoinColumn(name = "screening_id", insertable = false, updatable = false)
@@ -116,7 +115,6 @@ public class Allegation implements PersistentObject {
   /**
    * @return the allegationTypes
    */
-
   public String[] getAllegationTypes() {
     return allegationTypes;
   }
@@ -128,15 +126,11 @@ public class Allegation implements PersistentObject {
     this.allegationTypes = allegationTypes;
   }
 
-
   /**
    * @return the screening
    */
-
   public Screening getScreening() {
     return screening;
   }
-
-
 
 }
