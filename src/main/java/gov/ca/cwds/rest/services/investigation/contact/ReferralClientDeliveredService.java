@@ -2,6 +2,8 @@ package gov.ca.cwds.rest.services.investigation.contact;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +48,6 @@ public class ReferralClientDeliveredService {
     this.childClientDao = childClientDao;
   }
 
-
   /**
    * Check if Contact Id is valid for the Referral Id
    * 
@@ -67,7 +68,6 @@ public class ReferralClientDeliveredService {
     }
     throw new ServiceException("ContactId is not Valid For the Given ReferralId");
   }
-
 
   private ReferralClientDeliveredServiceEntity[] findReferralClientDeliveredServiceEntities(
       String referralId) {
@@ -115,7 +115,6 @@ public class ReferralClientDeliveredService {
 
   }
 
-
   public ReferralClientDeliveredServiceEntity[] findByReferralId(String referralId) {
     return referralClientDeliveredServiceDao.findByReferralId(referralId);
   }
@@ -151,7 +150,6 @@ public class ReferralClientDeliveredService {
     }
   }
 
-
   private Boolean notExistsReferralClientDeliveredServiceEntity(
       ReferralClientDeliveredServiceEntity[] referralClientDeliveredServices,
       String childClientId) {
@@ -162,6 +160,16 @@ public class ReferralClientDeliveredService {
       }
     }
     return Boolean.TRUE;
-
   }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }

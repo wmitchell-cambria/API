@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import gov.ca.cwds.data.ns.NsPersistentObject;
 
 /**
- * {@link NsPersistentObject} representing a PersonEthnicity
+ * {@link NsPersistentObject} representing a Person Ethnicity record.
  * 
  * @author CWDS API Team
  */
@@ -91,10 +91,9 @@ public class PersonEthnicity extends NsPersistentObject implements Serializable 
 
   @Override
   public int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((personEthnicityId == null) ? 0 : personEthnicityId.hashCode());
-    return result;
+    return prime * result + ((personEthnicityId == null) ? 0 : personEthnicityId.hashCode());
   }
 
   @Override

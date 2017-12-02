@@ -9,7 +9,6 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
 
@@ -32,7 +31,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
         + "SELECT collateralIndividualId from ClientCollateral "
         + "WHERE activeIndicator = 'Y' AND clientId IN "
         + "(SELECT id FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'))")
-@NamedNativeQueries({@NamedNativeQuery(
+@NamedNativeQuery(
     name = "gov.ca.cwds.data.persistence.cms.CollateralIndividual.findPartitionedBuckets",
     query = "select z.IDENTIFIER, z.BADGE_NO, z.CITY_NM, z.EMPLYR_NM, z.FAX_NO, "
         + "z.FIRST_NM, z.FRG_ADRT_B, z.LAST_NM, z.MID_INI_NM, z.NMPRFX_DSC, "
@@ -45,7 +44,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
         + "from ( select c.* from {h-schema}COLTRL_T c "
         + "WHERE c.IDENTIFIER >= :min_id and c.IDENTIFIER < :max_id "
         + ") x ) y ) z where z.bucket = :bucket_num for read only",
-    resultClass = CollateralIndividual.class)})
+    resultClass = CollateralIndividual.class)
 @Entity
 @Table(name = "COLTRL_T")
 @JsonPropertyOrder(alphabetic = true)

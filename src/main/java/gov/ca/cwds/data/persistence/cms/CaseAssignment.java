@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * {@link CmsPersistentObject} representing a Case Assignment.
  * 
@@ -77,6 +80,16 @@ public class CaseAssignment extends BaseAssignment {
   public CaseAssignment(String id, gov.ca.cwds.rest.api.domain.cms.Assignment assignment,
       String lastUpdatedBy) {
     super(id, assignment, lastUpdatedBy);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

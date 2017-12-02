@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
 
@@ -546,7 +548,6 @@ public class Reporter extends BaseReporter {
     if (this.primaryPhoneNumber != null && primaryPhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
       String extension = this.primaryPhoneExtensionNumber != null
           ? this.primaryPhoneExtensionNumber.toString() : null;
-
       phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(), extension, null));
     }
 
@@ -559,6 +560,16 @@ public class Reporter extends BaseReporter {
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

@@ -198,11 +198,11 @@ public class InvestigationEntityBuilder {
   }
 
   public Date getStartedAt() {
-    return startedAt;
+    return freshDate(startedAt);
   }
 
   public InvestigationEntityBuilder setStartedAt(Date startedAt) {
-    this.startedAt = startedAt;
+    this.startedAt = freshDate(startedAt);
     return this;
   }
 

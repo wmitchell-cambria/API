@@ -7,7 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,9 +24,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Table(name = "GV_ORG_T")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.GovernmentOrganizationEntity.findAll",
-        query = "FROM GovernmentOrganizationEntity ORDER BY governmentOrganizationType")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.GovernmentOrganizationEntity.findAll",
+    query = "FROM GovernmentOrganizationEntity ORDER BY governmentOrganizationType")
 public class GovernmentOrganizationEntity extends CmsPersistentObject {
 
   @Id
@@ -271,6 +271,16 @@ public class GovernmentOrganizationEntity extends CmsPersistentObject {
    */
   public Short getZipSuffixNumber() {
     return zipSuffixNumber;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

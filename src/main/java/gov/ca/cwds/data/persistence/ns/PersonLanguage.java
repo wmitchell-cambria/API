@@ -14,8 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import gov.ca.cwds.data.ns.NsPersistentObject;
 
 /**
- * @author CWS-NS2
- *
+ * @author CWDS API Team
  */
 @SuppressWarnings("serial")
 @Entity
@@ -90,10 +89,9 @@ public class PersonLanguage extends NsPersistentObject implements Serializable {
 
   @Override
   public int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((personLanguageId == null) ? 0 : personLanguageId.hashCode());
-    return result;
+    return prime * result + ((personLanguageId == null) ? 0 : personLanguageId.hashCode());
   }
 
   @Override

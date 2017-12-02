@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.joda.time.DateTime;
-
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -38,7 +36,6 @@ public class PersonEntityBuilder {
   private RaceAndEthnicity raceAndEthnicity = new RaceAndEthnicityEntityBuilder().build();
   protected Boolean sensitive = Boolean.FALSE;
   protected Boolean sealed = Boolean.FALSE;
-  private DateTime now = new DateTime("2010-10-01T15:26:42.000-0700");
   protected Short phoneType = 1111;
 
   private BigDecimal phoneNumber = new BigDecimal(1233219876);

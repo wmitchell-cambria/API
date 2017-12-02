@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import gov.ca.cwds.data.ns.NsPersistentObject;
@@ -23,11 +22,10 @@ import gov.ca.cwds.data.ns.NsPersistentObject;
  *
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Ethnicity.findAll",
-        query = "FROM Ethnicity"),
-    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Ethnicity.findAllUpdatedAfter",
-        query = "FROM Ethnicity WHERE lastUpdatedTime > :after")})
+@NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Ethnicity.findAll",
+    query = "FROM Ethnicity")
+@NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Ethnicity.findAllUpdatedAfter",
+    query = "FROM Ethnicity WHERE lastUpdatedTime > :after")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "ethnicity")
@@ -57,8 +55,8 @@ public class Ethnicity extends NsPersistentObject {
    * Constructor
    * 
    * @param id - unique id
-   * @param ethnicityType - ethinicity
-   * @param subEthnicity - subethinicity
+   * @param ethnicityType - ethnicity
+   * @param subEthnicity - sub-ethnicity
    */
   public Ethnicity(Long id, String ethnicityType, String subEthnicity) {
     super();

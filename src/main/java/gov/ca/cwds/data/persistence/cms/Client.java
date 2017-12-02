@@ -14,6 +14,8 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -195,7 +197,7 @@ public class Client extends BaseClient {
     this.maritalCohabitatnHstryIndicatorVar = maritalCohabitatnHstryIndicatorVar;
     this.maritalStatusType = maritalStatusType;
     this.militaryStatusCode = militaryStatusCode;
-    this.motherParentalRightTermDate = motherParentalRightTermDate;
+    this.motherParentalRightTermDate = freshDate(motherParentalRightTermDate);
     this.namePrefixDescription = namePrefixDescription;
     this.nameType = nameType;
     this.outstandingWarrantIndicator = outstandingWarrantIndicator;
@@ -391,4 +393,15 @@ public class Client extends BaseClient {
   public void setClientAddress(Set<ClientAddress> clientAddress) {
     this.clientAddress = clientAddress;
   }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }

@@ -91,10 +91,9 @@ public class PersonPhone extends NsPersistentObject implements Serializable {
 
   @Override
   public int hashCode() {
-    final int PRIME = 31;
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((personPhoneId == null) ? 0 : personPhoneId.hashCode());
-    return result;
+    return prime * result + ((personPhoneId == null) ? 0 : personPhoneId.hashCode());
   }
 
   @Override
