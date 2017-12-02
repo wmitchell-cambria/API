@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -168,15 +170,15 @@ public class Allegation extends CmsPersistentObject {
     super();
 
     this.id = id;
-    this.abuseEndDate = abuseEndDate;
-    this.abuseStartDate = abuseStartDate;
+    this.abuseEndDate = freshDate(abuseEndDate);
+    this.abuseStartDate = freshDate(abuseStartDate);
     this.abuseFrequency = abuseFrequency;
     this.abuseFrequencyPeriodCode = abuseFrequencyPeriodCode;
     this.abuseLocationDescription = abuseLocationDescription;
     this.allegationDispositionType = allegationDispositionType;
     this.allegationType = allegationType;
     this.dispositionDescription = dispositionDescription;
-    this.dispositionDate = dispositionDate;
+    this.dispositionDate = freshDate(dispositionDate);
     this.injuryHarmDetailIndicator = injuryHarmDetailIndicator;
     this.nonProtectingParentCode = nonProtectingParentCode;
     this.staffPersonAddedIndicator = staffPersonAddedIndicator;
@@ -219,9 +221,8 @@ public class Allegation extends CmsPersistentObject {
     this.staffPersonAddedIndicator =
         DomainChef.cookBoolean(persistedAllegation.getStaffPersonAddedIndicator());
     this.victimClientId = persistedAllegation.getVictimClientId();
-    this.perpetratorClientId =
-        StringUtils.isBlank(persistedAllegation.getPerpetratorClientId()) ? null
-            : persistedAllegation.getPerpetratorClientId();
+    this.perpetratorClientId = StringUtils.isBlank(persistedAllegation.getPerpetratorClientId())
+        ? null : persistedAllegation.getPerpetratorClientId();
     this.referralId = persistedAllegation.getReferralId();
     this.countySpecificCode = persistedAllegation.getCountySpecificCode();
     this.zippyCreatedIndicator =
@@ -250,7 +251,7 @@ public class Allegation extends CmsPersistentObject {
    * @return the abuseEndDate
    */
   public Date getAbuseEndDate() {
-    return abuseEndDate;
+    return freshDate(abuseEndDate);
   }
 
   /**
@@ -278,7 +279,7 @@ public class Allegation extends CmsPersistentObject {
    * @return the abuseStartDate
    */
   public Date getAbuseStartDate() {
-    return abuseStartDate;
+    return freshDate(abuseStartDate);
   }
 
   /**
@@ -306,7 +307,7 @@ public class Allegation extends CmsPersistentObject {
    * @return the dispositionDate
    */
   public Date getDispositionDate() {
-    return dispositionDate;
+    return freshDate(dispositionDate);
   }
 
   /**

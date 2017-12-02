@@ -10,21 +10,24 @@ import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 
 /**
  * @author CWDS API Team
- *
  */
 public class CmsRecordUtils {
 
+  private CmsRecordUtils() {
+    // static methods only
+  }
+
   /**
-   * @param CmsId - CMS Id
+   * @param cmsId - CMS Id
    * @param cmsPhysicalTableName - CMS physical table name
    * @return - CmsRecordDescriptor
    */
-  public static CmsRecordDescriptor createLegacyDescriptor(String CmsId,
+  public static CmsRecordDescriptor createLegacyDescriptor(String cmsId,
       LegacyTable cmsPhysicalTableName) {
     final CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptor();
 
-    if (!StringUtils.isBlank(CmsId)) {
-      final String cmsUiId = CmsId.trim();
+    if (!StringUtils.isBlank(cmsId)) {
+      final String cmsUiId = cmsId.trim();
       cmsRecordDescriptor.setId(cmsUiId);
 
       if (cmsUiId.length() == CMS_ID_LEN) {
@@ -43,5 +46,3 @@ public class CmsRecordUtils {
   }
 
 }
-
-

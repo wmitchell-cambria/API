@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import gov.ca.cwds.data.ns.NsPersistentObject;
@@ -23,10 +22,9 @@ import gov.ca.cwds.data.ns.NsPersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Race.findAll", query = "FROM Race"),
-    @NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Race.findAllUpdatedAfter",
-        query = "FROM Race WHERE lastUpdatedTime > :after")})
+@NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Race.findAll", query = "FROM Race")
+@NamedQuery(name = "gov.ca.cwds.rest.api.persistence.ns.Race.findAllUpdatedAfter",
+    query = "FROM Race WHERE lastUpdatedTime > :after")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "race")
@@ -39,10 +37,10 @@ public class Race extends NsPersistentObject {
   private Long id;
 
   @Column(name = "race_type_id")
-  private String race;
+  private String raceType;
 
   @Column(name = "subrace_type_id")
-  private String subrace;
+  private String subRaceType;
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "personRaceId.race")
   private Set<PersonRace> personRace = new HashSet<>();
@@ -60,15 +58,15 @@ public class Race extends NsPersistentObject {
   public Race(Long id, String race, String subrace) {
     super();
     this.id = id;
-    this.race = race;
-    this.subrace = subrace;
+    this.raceType = race;
+    this.subRaceType = subrace;
   }
 
   @SuppressWarnings("javadoc")
   public Race(gov.ca.cwds.rest.api.domain.Race domain, String lastUpdatedId, String createUserId) {
     super(lastUpdatedId, createUserId);
-    this.race = domain.getRace();
-    this.subrace = domain.getSubrace();
+    this.raceType = domain.getRace();
+    this.subRaceType = domain.getSubrace();
   }
 
   /**
@@ -93,15 +91,13 @@ public class Race extends NsPersistentObject {
   /**
    * @return the race
    */
-  public String getRace() {
-    return race;
+  public String getRaceType() {
+    return raceType;
   }
 
-  /**
-   * @return the subrace
-   */
-  public String getSubrace() {
-    return subrace;
+  @SuppressWarnings("javadoc")
+  public String getSubRaceType() {
+    return subRaceType;
   }
 
   /**

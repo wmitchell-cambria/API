@@ -65,8 +65,8 @@ public class RaceTest {
         new gov.ca.cwds.data.persistence.ns.Race(domain, "12345", "12345");
 
     Race totest = new Race(persistent);
-    assertThat(totest.getRace(), is(equalTo(persistent.getRace())));
-    assertThat(totest.getSubrace(), is(equalTo(persistent.getSubrace())));
+    assertThat(totest.getRace(), is(equalTo(persistent.getRaceType())));
+    assertThat(totest.getSubrace(), is(equalTo(persistent.getSubRaceType())));
   }
 
   @Test

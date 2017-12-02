@@ -248,7 +248,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
 
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
-  private Referral referral;
+  private Referral riReferral;
 
   @ManyToOne(optional = true)
   @JoinColumn(name = "ALGDSC_DOC", nullable = true, updatable = false, insertable = false)
@@ -261,10 +261,6 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @ManyToOne(optional = true)
   @JoinColumn(name = "INVSTG_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument2;
-
-  // @ManyToOne(optional = true)
-  // @JoinColumn(name = "APRVL_NO", nullable = true, updatable = false, insertable = false)
-  // private SupervisorApproval supervisorApproval;
 
   @ManyToOne(optional = true)
   @JoinColumn(name = "CHILOC_TXT", nullable = true, updatable = false, insertable = false)
@@ -294,7 +290,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @param applicationForPetitionIndicator application for petition indicator
    * @param approvalNumber approval number
    * @param approvalStatusType approval status type
-   * @param caretakersPerpetratorCode caretakers perpetrator code
+   * @param caretakersPerpetratorCode care takers perpetrator code
    * @param closureDate closure date
    * @param communicationMethodType communication method type
    * @param currentLocationOfChildren current location of children
@@ -304,7 +300,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @param filedSuspectedChildAbuseReporttoLawEnforcementIndicator filed suspected child abuse
    *        report to law enforcement indicator
    * @param familyAwarenessIndicator family awareness indicator
-   * @param govtEntityType govt entity type
+   * @param govtEntityType government entity type
    * @param legalDefinitionCode legal definition code
    * @param legalRightsNoticeIndicator legal rights notice indicator
    * @param limitedAccessCode limited access code
@@ -465,9 +461,8 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
           DomainChef.cookBoolean(referral.getCaretakersPerpetratorCode());
       this.closureDate = DomainChef.uncookDateString(referral.getClosureDate());
       this.communicationMethodType = referral.getCommunicationMethodType();
-      this.currentLocationOfChildren =
-          StringUtils.isBlank(referral.getCurrentLocationOfChildren()) ? null
-              : referral.getCurrentLocationOfChildren();
+      this.currentLocationOfChildren = StringUtils.isBlank(referral.getCurrentLocationOfChildren())
+          ? null : referral.getCurrentLocationOfChildren();
       this.drmsAllegationDescriptionDoc = referral.getDrmsAllegationDescriptionDoc();
       this.drmsErReferralDoc = referral.getDrmsErReferralDoc();
       this.drmsInvestigationDoc = referral.getDrmsInvestigationDoc();
@@ -497,9 +492,8 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
       this.specificsIncludedCode = referral.getSpecificsIncludedCode();
       this.sufficientInformationCode = referral.getSufficientInformationCode();
       this.unfoundedSeriesCode = referral.getUnfoundedSeriesCode();
-      this.linkToPrimaryReferralId =
-          StringUtils.isBlank(referral.getLinkToPrimaryReferralId()) ? null
-              : referral.getLinkToPrimaryReferralId();
+      this.linkToPrimaryReferralId = StringUtils.isBlank(referral.getLinkToPrimaryReferralId())
+          ? null : referral.getLinkToPrimaryReferralId();
       this.allegesAbuseOccurredAtAddressId =
           StringUtils.isBlank(referral.getAllegesAbuseOccurredAtAddressId()) ? null
               : referral.getAllegesAbuseOccurredAtAddressId();
@@ -911,6 +905,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return referralClients;
   }
 
+  @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);
   }

@@ -105,8 +105,8 @@ public class PersonTest {
 
     assertEquals(1, person.getPersonRace().size());
     for (PersonRace personRace : person.getPersonRace()) {
-      assertEquals(personRace.getRace().getRace(), race.getRace());
-      assertEquals(personRace.getRace().getSubrace(), race.getSubrace());
+      assertEquals(personRace.getRace().getRaceType(), race.getRace());
+      assertEquals(personRace.getRace().getSubRaceType(), race.getSubrace());
     }
   }
 
@@ -234,8 +234,8 @@ public class PersonTest {
     person.setPersonRace(personRaces);
     assertEquals(1, person.getPersonRace().size());
     for (PersonRace newPersonRace : person.getPersonRace()) {
-      assertEquals(newPersonRace.getRace().getRace(), race.getRace());
-      assertEquals(newPersonRace.getRace().getSubrace(), race.getSubrace());
+      assertEquals(newPersonRace.getRace().getRaceType(), race.getRaceType());
+      assertEquals(newPersonRace.getRace().getSubRaceType(), race.getSubRaceType());
     }
   }
 }

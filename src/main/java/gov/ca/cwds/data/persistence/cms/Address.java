@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,25 +21,19 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Address.findAll", query = "FROM Address"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Address.findAllUpdatedAfter",
-        query = "FROM Address WHERE lastUpdatedTime > :after")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Address.findAll", query = "FROM Address")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Address.findAllUpdatedAfter",
+    query = "FROM Address WHERE lastUpdatedTime > :after")
 @Entity
 @Table(name = "ADDRS_T")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Address extends BaseAddress {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
-   * Default constructor
-   * 
-   * Required for Hibernate
+   * Default constructor.
    */
   public Address() {
     super();
@@ -140,26 +131,6 @@ public class Address extends BaseAddress {
     } catch (ApiException e) {
       throw new PersistenceException(e);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

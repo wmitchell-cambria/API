@@ -41,8 +41,8 @@ public class Race extends ReportingDomain implements Request, Response {
    * @param race persistence level race object
    */
   public Race(gov.ca.cwds.data.persistence.ns.Race race) {
-    this.race = race.getRace();
-    this.subrace = race.getSubrace();
+    this.race = race.getRaceType();
+    this.subrace = race.getSubRaceType();
   }
 
   /**

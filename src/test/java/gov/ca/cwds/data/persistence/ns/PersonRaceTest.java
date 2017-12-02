@@ -43,8 +43,8 @@ public class PersonRaceTest {
     PersonRace pRace = new PersonRace(person, race);
     pRace.setRace(newRace);
 
-    assertEquals(pRace.getRace().getRace(), race1);
-    assertEquals(pRace.getRace().getSubrace(), race2);
+    assertEquals(pRace.getRace().getRaceType(), race1);
+    assertEquals(pRace.getRace().getSubRaceType(), race2);
   }
 
   @Test
