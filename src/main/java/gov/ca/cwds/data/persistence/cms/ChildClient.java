@@ -283,7 +283,7 @@ public class ChildClient extends CmsPersistentObject {
     this.siiNextScreeningDueDate = freshDate(siiNextScreeningDueDate);
     this.ssiSspApplicationIndicator = ssiSspApplicationIndicator;
     this.tribalAncestryNotifctnIndicatorVar = tribalAncestryNotifctnIndicatorVar;
-    this.tribalCustomaryAdoptionDate = tribalCustomaryAdoptionDate;
+    this.tribalCustomaryAdoptionDate = freshDate(tribalCustomaryAdoptionDate);
     this.tribalCustomaryAdoptionIndicator = tribalCustomaryAdoptionIndicator;
   }
 

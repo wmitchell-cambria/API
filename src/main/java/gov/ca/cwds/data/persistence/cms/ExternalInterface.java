@@ -86,11 +86,6 @@ public class ExternalInterface implements PersistentObject, Serializable {
       return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
       if (this == obj) {
@@ -231,7 +226,7 @@ public class ExternalInterface implements PersistentObject, Serializable {
    * @param aidTypeCode the aid type code
    * @param assignmentUnitCode the assignment unit code
    * @param clearanceResponseType the clearance response type
-   * @param fbiIndicator the fbi indicator
+   * @param fbiIndicator the FBI indicator
    * @param governmentEntityCode the government entity code
    * @param logonUserId the logon user Id
    * @param licenseNumber the license number

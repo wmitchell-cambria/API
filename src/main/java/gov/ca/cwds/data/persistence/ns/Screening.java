@@ -154,7 +154,7 @@ public class Screening implements PersistentObject {
     this.reference = reference;
     this.endedAt = freshDate(endedAt);
     this.incidentCounty = incidentCounty;
-    this.incidentDate = incidentDate;
+    this.incidentDate = freshDate(incidentDate);
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
     this.name = name;

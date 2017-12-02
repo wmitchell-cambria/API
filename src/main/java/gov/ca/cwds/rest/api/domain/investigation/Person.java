@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.util.Date;
@@ -135,7 +136,7 @@ public class Person extends ReportingDomain implements Request, Response {
   private Set<InvestigationAddress> addresses;
 
   /**
-   * empty consutructor
+   * Default constructor
    */
   public Person() {
     // default
@@ -151,11 +152,11 @@ public class Person extends ReportingDomain implements Request, Response {
    * @param nameSuffix - name suffix
    * @param gender - gender
    * @param dateOfBirth - date of birth
-   * @param ssn - ssn
+   * @param ssn - SSN
    * @param languages - list of languages
    * @param raceAndEthnicity - race/ethnicity
    * @param sensitive - sensitive data
-   * @param sealed - sealted data
+   * @param sealed - sealed data
    * @param phone - phone information
    * @param roles - roles
    * @param addresses - address information
@@ -169,7 +170,7 @@ public class Person extends ReportingDomain implements Request, Response {
     super();
     this.cmsRecordDescriptor = cmsRecordDescriptor;
     this.lastUpdatedBy = lastUpdatedBy;
-    this.lastUpdatedAt = lastUpdatedAt;
+    this.lastUpdatedAt = freshDate(lastUpdatedAt);
     this.firstName = trim(firstName);
     this.middleName = trim(middleName);
     this.lastName = trim(lastName);
@@ -201,7 +202,6 @@ public class Person extends ReportingDomain implements Request, Response {
       Set<InvestigationAddress> addresses, Set<PhoneNumber> phoneNumbers, Set<String> roles,
       RaceAndEthnicity raceAndEthnicity) {
     this.lastUpdatedBy = client.getLastUpdatedId();
-
     this.lastUpdatedAt = client.getLastUpdatedTime() != null ? client.getLastUpdatedTime() : null;
 
     this.firstName = trim(client.getFirstName());
@@ -272,7 +272,7 @@ public class Person extends ReportingDomain implements Request, Response {
    * @return last updated date/time
    */
   public Date getLastUpdatedAt() {
-    return lastUpdatedAt;
+    return freshDate(lastUpdatedAt);
   }
 
   /**

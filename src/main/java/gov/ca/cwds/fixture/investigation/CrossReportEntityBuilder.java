@@ -1,5 +1,7 @@
 package gov.ca.cwds.fixture.investigation;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +42,7 @@ public class CrossReportEntityBuilder {
   }
 
   public CrossReportEntityBuilder setReportedOn(Date reportedOn) {
-    this.reportedOn = reportedOn;
+    this.reportedOn = freshDate(reportedOn);
     return this;
   }
 

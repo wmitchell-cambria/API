@@ -1,11 +1,15 @@
 package gov.ca.cwds.fixture.investigation;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 import org.joda.time.DateTime;
+
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
@@ -86,7 +90,7 @@ public class PersonEntityBuilder {
   }
 
   public PersonEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {
-    this.lastUpdatedAt = lastUpdatedAt;
+    this.lastUpdatedAt = freshDate(lastUpdatedAt);
     return this;
   }
 

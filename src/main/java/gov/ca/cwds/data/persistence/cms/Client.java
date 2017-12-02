@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,9 +36,6 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Client extends BaseClient {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   @OneToMany(cascade = CascadeType.DETACH)
@@ -156,7 +155,7 @@ public class Client extends BaseClient {
     this.alienRegistrationNumber = alienRegistrationNumber;
     this.birthCity = birthCity;
     this.birthCountryCodeType = birthCountryCodeType;
-    this.birthDate = birthDate;
+    this.birthDate = freshDate(birthDate);
     this.birthFacilityName = birthFacilityName;
     this.birthStateCodeType = birthStateCodeType;
     this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
@@ -166,13 +165,13 @@ public class Client extends BaseClient {
     this.commonFirstName = commonFirstName;
     this.commonMiddleName = StringUtils.isBlank(commonMiddleName) ? "" : commonMiddleName;
     this.commonLastName = commonLastName;
-    this.confidentialityActionDate = confidentialityActionDate;
+    this.confidentialityActionDate = freshDate(confidentialityActionDate);
     this.confidentialityInEffectIndicator = confidentialityInEffectIndicator;
-    this.creationDate = creationDate;
+    this.creationDate = freshDate(creationDate);
     this.currCaChildrenServIndicator = currCaChildrenServIndicator;
     this.currentlyOtherDescription = currentlyOtherDescription;
     this.currentlyRegionalCenterIndicator = currentlyRegionalCenterIndicator;
-    this.deathDate = deathDate;
+    this.deathDate = freshDate(deathDate);
     this.deathDateVerifiedIndicator = deathDateVerifiedIndicator;
     this.deathPlace = deathPlace;
     this.deathReasonText = deathReasonText;
@@ -181,7 +180,7 @@ public class Client extends BaseClient {
     this.emailAddress = emailAddress;
     this.estimatedDobCode = estimatedDobCode;
     this.ethUnableToDetReasonCode = ethUnableToDetReasonCode;
-    this.fatherParentalRightTermDate = fatherParentalRightTermDate;
+    this.fatherParentalRightTermDate = freshDate(fatherParentalRightTermDate);
     this.genderCode = genderCode;
     this.healthSummaryText = healthSummaryText;
     this.hispUnableToDetReasonCode = hispUnableToDetReasonCode;
@@ -325,7 +324,6 @@ public class Client extends BaseClient {
           DomainChef.cookBoolean(client.getTribalMembrshpVerifctnIndicatorVar());
       this.unemployedParentCode = client.getUnemployedParentCode();
       this.zippyCreatedIndicator = DomainChef.cookBoolean(client.getZippyCreatedIndicator());
-
     } catch (ApiException e) {
       throw new PersistenceException(e);
     }

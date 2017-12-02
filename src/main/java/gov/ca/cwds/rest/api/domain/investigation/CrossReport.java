@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -88,7 +90,7 @@ public class CrossReport extends ReportingDomain implements Response {
     super();
     this.legacyDescriptor = legacyDescriptor;
     this.readOnly = readOnly;
-    this.reportedOn = reportedOn;
+    this.reportedOn = freshDate(reportedOn);
     this.communicationMethod = communicationMethod;
     this.county = county;
     this.crossReportAgencies = crossReportAgencies;
@@ -112,7 +114,7 @@ public class CrossReport extends ReportingDomain implements Response {
    * @return - cross report date
    */
   public Date getReportedOn() {
-    return reportedOn;
+    return freshDate(reportedOn);
   }
 
   /**

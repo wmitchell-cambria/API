@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -9,14 +11,12 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
+import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,18 +32,16 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findAll",
-        query = "FROM Reporter WHERE confidentialWaiverIndicator = 'Y' AND referralId IN "
-            + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findAllUpdatedAfterOLD",
-        query = "FROM Reporter WHERE lastUpdatedTime > :after AND confidentialWaiverIndicator = 'Y' AND referralId IN "
-            + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')"),
-    @NamedQuery(
-        name = "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId",
-        query = "FROM Reporter WHERE confidentialWaiverIndicator = 'Y' AND referralId = :referralId")})
-@NamedNativeQueries({@NamedNativeQuery(
-    name = "gov.ca.cwds.data.persistence.cms.Reporter.findPartitionedBuckets",
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findAll",
+    query = "FROM Reporter WHERE confidentialWaiverIndicator = 'Y' AND referralId IN "
+        + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findAllUpdatedAfterOLD",
+    query = "FROM Reporter WHERE lastUpdatedTime > :after AND confidentialWaiverIndicator = 'Y' AND referralId IN "
+        + "(SELECT id FROM Referral WHERE limitedAccessCode = 'N')")
+@NamedQuery(
+    name = "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId",
+    query = "FROM Reporter WHERE confidentialWaiverIndicator = 'Y' AND referralId = :referralId")
+@NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findPartitionedBuckets",
     query = "select trim(z.RPTR_BDGNO) as RPTR_BDGNO, trim(z.RPTR_CTYNM) as RPTR_CTYNM, "
         + "z.COL_RELC, z.CMM_MTHC, z.CNFWVR_IND, z.FDBACK_DOC, z.RPTR_EMPNM, "
         + "z.FEEDBCK_DT, z.FB_RQR_IND, z.RPTR_FSTNM, trim(z.RPTR_LSTNM) as RPTR_LSTNM, "
@@ -57,7 +55,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
         + "from ( select c.* from {h-schema}REPTR_T c "
         + "WHERE c.FKREFERL_T >= :min_id and c.FKREFERL_T < :max_id "
         + ") x ) y ) z where z.bucket = :bucket_num for read only",
-    resultClass = Reporter.class)})
+    resultClass = Reporter.class)
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "REPTR_T")
@@ -154,7 +152,7 @@ public class Reporter extends BaseReporter {
     this.confidentialWaiverIndicator = confidentialWaiverIndicator;
     this.drmsMandatedRprtrFeedback = drmsMandatedRprtrFeedback;
     this.employerName = employerName;
-    this.feedbackDate = feedbackDate;
+    this.feedbackDate = freshDate(feedbackDate);
     this.feedbackRequiredIndicator = feedbackRequiredIndicator;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -192,9 +190,8 @@ public class Reporter extends BaseReporter {
     this.communicationMethodType = reporter.getCommunicationMethodType();
     this.confidentialWaiverIndicator =
         DomainChef.cookBoolean(reporter.getConfidentialWaiverIndicator());
-    this.drmsMandatedRprtrFeedback =
-        StringUtils.isBlank(reporter.getDrmsMandatedRprtrFeedback()) ? null
-            : reporter.getDrmsMandatedRprtrFeedback();
+    this.drmsMandatedRprtrFeedback = StringUtils.isBlank(reporter.getDrmsMandatedRprtrFeedback())
+        ? null : reporter.getDrmsMandatedRprtrFeedback();
     this.employerName = reporter.getEmployerName();
     this.feedbackDate = DomainChef.uncookDateString(reporter.getFeedbackDate());
     this.feedbackRequiredIndicator =
@@ -303,7 +300,7 @@ public class Reporter extends BaseReporter {
    */
   @Override
   public Date getFeedbackDate() {
-    return feedbackDate;
+    return freshDate(feedbackDate);
   }
 
   /**
@@ -547,16 +544,18 @@ public class Reporter extends BaseReporter {
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
     if (this.primaryPhoneNumber != null && primaryPhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
-      String extension = this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString() : null;
+      String extension = this.primaryPhoneExtensionNumber != null
+          ? this.primaryPhoneExtensionNumber.toString() : null;
 
-      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),extension, null));
+      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(), extension, null));
     }
 
     if (this.messagePhoneNumber != null && messagePhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
-      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
-          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
-              : null,
-          ApiPhoneAware.PhoneType.Cell));
+      phones
+          .add(new ReadablePhone(null,
+              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+                  ? this.messagePhoneExtensionNumber.toString() : null,
+              ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);

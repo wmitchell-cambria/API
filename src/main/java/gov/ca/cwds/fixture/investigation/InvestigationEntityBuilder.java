@@ -1,5 +1,7 @@
 package gov.ca.cwds.fixture.investigation;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -115,11 +117,11 @@ public class InvestigationEntityBuilder {
   }
 
   public Date getLastUpdatedAt() {
-    return lastUpdatedAt;
+    return freshDate(lastUpdatedAt);
   }
 
   public InvestigationEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {
-    this.lastUpdatedAt = lastUpdatedAt;
+    this.lastUpdatedAt = freshDate(lastUpdatedAt);
     return this;
   }
 
@@ -133,11 +135,11 @@ public class InvestigationEntityBuilder {
   }
 
   public Date getIncidentDate() {
-    return incidentDate;
+    return freshDate(incidentDate);
   }
 
   public InvestigationEntityBuilder setIncidentDate(Date incidentDate) {
-    this.incidentDate = incidentDate;
+    this.incidentDate = freshDate(incidentDate);
     return this;
   }
 
@@ -312,8 +314,6 @@ public class InvestigationEntityBuilder {
     this.address = address;
     return this;
   }
-
-
 
   public HistoryOfInvolvement getHistoryOfInvolvement() {
     return historyOfInvolvement;

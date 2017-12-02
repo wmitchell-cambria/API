@@ -86,7 +86,7 @@ public class DrmsDocument extends CmsPersistentObject {
       String lastUpdatedId, Date lastUpdatedTime) {
     super(lastUpdatedId, lastUpdatedTime);
     this.id = id;
-    this.creationTimeStamp = persisedDrmsDocument.getCreationTimeStamp();
+    this.creationTimeStamp = freshDate(persisedDrmsDocument.getCreationTimeStamp());
     this.drmsDocumentTemplateId = persisedDrmsDocument.getDrmsDocumentTemplateId();
     this.fingerprintStaffPerson = persisedDrmsDocument.getFingerprintStaffPerson();
     this.staffPersonId = persisedDrmsDocument.getStaffPersonId();
