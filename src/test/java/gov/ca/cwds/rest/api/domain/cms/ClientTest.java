@@ -54,7 +54,6 @@ import nl.jqno.equalsverifier.Warning;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 public class ClientTest implements DomainTestTemplate {
