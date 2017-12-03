@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
@@ -108,130 +110,6 @@ public class CmsDocReferralClient extends ReportingDomain
       this.nameType = nameType;
       this.address = address;
       this.addressType = addressType;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public final int hashCode() {
-      final int PRIME = 43;
-      int result = 1;
-      result = (PRIME * result) + ((address == null) ? PRIME : address.hashCode());
-      result = (PRIME * result) + ((addressType == null) ? PRIME : addressType.hashCode());
-      result = (PRIME * result) + ((birthDate == null) ? PRIME : birthDate.hashCode());
-      result = (PRIME * result) + ((clientId == null) ? PRIME : clientId.hashCode());
-      result = (PRIME * result) + ((commonFirstName == null) ? PRIME : commonFirstName.hashCode());
-      result = (PRIME * result) + ((commonLastName == null) ? PRIME : commonLastName.hashCode());
-      result =
-          (PRIME * result) + ((commonMiddleName == null) ? PRIME : commonMiddleName.hashCode());
-      result = (PRIME * result) + ((nameType == null) ? PRIME : nameType.hashCode());
-      result = (PRIME * result) + ((otherName == null) ? PRIME : otherName.hashCode());
-      result = (PRIME * result) + ((referlId == null) ? PRIME : referlId.hashCode());
-      return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public final boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null) {
-        return false;
-      }
-      if (!(obj instanceof CmsDocReferralClientDetail)) {
-        return false;
-      }
-      CmsDocReferralClientDetail other = (CmsDocReferralClientDetail) obj;
-
-      if (referlId == null) {
-        if (other.referlId != null) {
-          return false;
-        }
-      } else if (!referlId.equals(other.referlId)) {
-        return false;
-      }
-
-      if (clientId == null) {
-        if (other.clientId != null) {
-          return false;
-        }
-      } else if (!clientId.equals(other.clientId)) {
-        return false;
-      }
-
-      if (commonFirstName == null) {
-        if (other.commonFirstName != null) {
-          return false;
-        }
-      } else if (!commonFirstName.equals(other.commonFirstName)) {
-        return false;
-      }
-
-      if (commonLastName == null) {
-        if (other.commonLastName != null) {
-          return false;
-        }
-      } else if (!commonLastName.equals(other.commonLastName)) {
-        return false;
-      }
-
-      if (otherName == null) {
-        if (other.otherName != null) {
-          return false;
-        }
-      } else if (!otherName.equals(other.otherName)) {
-        return false;
-      }
-
-      if (birthDate == null) {
-        if (other.birthDate != null) {
-          return false;
-        }
-      } else if (!birthDate.equals(other.birthDate)) {
-        return false;
-      }
-
-      if (address == null) {
-        if (other.address != null) {
-          return false;
-        }
-      } else if (!address.equals(other.address)) {
-        return false;
-      }
-
-      if (addressType == null) {
-        if (other.addressType != null) {
-          return false;
-        }
-      } else if (!addressType.equals(other.addressType)) {
-        return false;
-      }
-
-      if (commonMiddleName == null) {
-        if (other.commonMiddleName != null) {
-          return false;
-        }
-      } else if (!commonMiddleName.equals(other.commonMiddleName)) {
-        return false;
-      }
-
-      if (nameType == null) {
-        if (other.nameType != null) {
-          return false;
-        }
-      } else if (!nameType.equals(other.nameType)) {
-        return false;
-      }
-
-      return true;
     }
 
     public String getReferlId() {
@@ -344,6 +222,17 @@ public class CmsDocReferralClient extends ReportingDomain
     public void setAddressType(String addressType) {
       this.addressType = addressType;
     }
+
+    @Override
+    public int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
 
   public static final class CmsDocReferralClientDocument implements Serializable {
@@ -524,84 +413,6 @@ public class CmsDocReferralClient extends ReportingDomain
   }
 
   /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    int prime = 43;
-    int result = 1;
-
-    result = (prime * result) + ((id == null) ? prime : id.hashCode());
-    result = (prime * result) + ((docName == null) ? prime : docName.hashCode());
-    result = (prime * result) + ((docAddedDate == null) ? prime : docAddedDate.hashCode());
-    result = (prime * result) + ((details == null) ? prime : details.hashCode());
-    return (prime * result) + ((cmsDocument == null) ? prime : cmsDocument.hashCode());
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof CmsDocReferralClient)) {
-      return false;
-    }
-    CmsDocReferralClient other = (CmsDocReferralClient) obj;
-
-    if (id == null) {
-      if (other.id != null) {
-        return false;
-      }
-    } else if (!id.equals(other.id)) {
-      return false;
-    }
-
-    if (docName == null) {
-      if (other.docName != null) {
-        return false;
-      }
-    } else if (!docName.equals(other.docName)) {
-      return false;
-    }
-
-    if (docAddedDate == null) {
-      if (other.docAddedDate != null) {
-        return false;
-      }
-    } else if (!docAddedDate.equals(other.docAddedDate)) {
-      return false;
-    }
-
-    if (details == null) {
-      if (other.details != null) {
-        return false;
-      }
-    } else if (!details.equals(other.details)) {
-      return false;
-    }
-
-    if (cmsDocument == null) {
-      if (other.cmsDocument != null) {
-        return false;
-      }
-    } else if (!cmsDocument.equals(other.cmsDocument)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * The 30 char document handle.
    * 
    * @return doc handle
@@ -679,6 +490,16 @@ public class CmsDocReferralClient extends ReportingDomain
    */
   public void setCmsDocument(CmsDocReferralClientDocument cmsDocument) {
     this.cmsDocument = cmsDocument;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

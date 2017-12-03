@@ -32,11 +32,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class Assignment extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
-
 
   @NotEmpty
   @Size(min = 1, max = 2)
@@ -199,19 +195,19 @@ public class Assignment extends ReportingDomain implements Request, Response {
   public Assignment createDefaultReferralAssignment(String countyCode, String referralId,
       String caseLoadId, String startDate, String startTime) {
 
-    final String END_DATE = "";
-    final String END_TIME = "";
-    final String ESTABLISHED_FOR_CODE = "R";
-    final String OUT_OF_STATE_CONTACT_ID = null;
-    final String RESPONSIBILITY_DESCRIPTION = "";
-    final Short SECONDARY_ASSIGNMENT_ROLE_TYPE = 0;
-    final String TYPE_OF_ASSIGNMENT_CODE = "P";
-    final BigDecimal WEIGHTING_NUMBER = new BigDecimal("0.0");
+    final String endDate = "";
+    final String endTime = "";
+    final String establishedForCode = "R";
+    final String outOfStateContactId = null;
+    final String responsibilityDescription = "";
+    final Short secondaryAssignmentRoleType = 0;
+    final String typeOfAssignmentCode = "P";
+    final BigDecimal weightingNumber = new BigDecimal("0.0");
 
-    return new Assignment(countyCode, END_DATE, END_TIME, ESTABLISHED_FOR_CODE, referralId,
-        caseLoadId, OUT_OF_STATE_CONTACT_ID, RESPONSIBILITY_DESCRIPTION,
-        SECONDARY_ASSIGNMENT_ROLE_TYPE, startDate, startTime, TYPE_OF_ASSIGNMENT_CODE,
-        WEIGHTING_NUMBER);
+    return new Assignment(countyCode, endDate, endTime, establishedForCode, referralId,
+        caseLoadId, outOfStateContactId, responsibilityDescription,
+        secondaryAssignmentRoleType, startDate, startTime, typeOfAssignmentCode,
+        weightingNumber);
   }
 
   /**
@@ -311,7 +307,7 @@ public class Assignment extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -321,9 +317,8 @@ public class Assignment extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }
-

@@ -3,6 +3,9 @@ package gov.ca.cwds.rest.api.domain.cms;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -59,52 +62,14 @@ public class CmsNSReferral extends ReportingDomain implements Request, Response 
     return person;
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
   @Override
   public int hashCode() {
-    int prime = 31;
-    int result = 1;
-    result = prime * result + ((referral == null) ? 0 : referral.hashCode());
-    return prime * result + ((person == null) ? 0 : person.hashCode());
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof CmsNSReferral)) {
-      return false;
-    }
-    CmsNSReferral other = (CmsNSReferral) obj;
-
-    if (referral == null) {
-      if (other.referral != null) {
-        return false;
-      }
-    } else if (!referral.equals(other.referral)) {
-      return false;
-    }
-    if (person == null) {
-      if (other.person != null) {
-        return false;
-      }
-    } else if (!person.equals(other.person)) {
-      return false;
-    }
-    return true;
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

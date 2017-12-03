@@ -49,7 +49,6 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Jones")
   private String lastName;
 
-
   @JsonProperty("name_suffix")
   @Size(max = 4)
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "SR.")
@@ -60,13 +59,11 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "MR.")
   private String prefixTitle;
 
-
   @NotEmpty
   @JsonProperty("relationship")
   @Size(min = 1, max = 10)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Reporter")
   private String relationship;
-
 
   /**
    * @param legacyDescriptor the CmsRecordDescriptor
@@ -93,12 +90,9 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
     this.relationship = relationship;
   }
 
-
   public IndividualDeliveredService() {
     // default
   }
-
-
 
   /**
    * @return the legacyDescriptor
@@ -107,16 +101,12 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
     return legacyDescriptor;
   }
 
-
-
   /**
    * @return the firstName
    */
   public String getFirstName() {
     return firstName;
   }
-
-
 
   /**
    * @return the lastName
@@ -125,16 +115,12 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
     return lastName;
   }
 
-
-
   /**
    * @return the relationship
    */
   public String getRelationship() {
     return relationship;
   }
-
-
 
   /**
    * @return the middleName
@@ -143,16 +129,12 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
     return middleName;
   }
 
-
-
   /**
    * @return the suffixTitle
    */
   public String getSuffixTitle() {
     return suffixTitle;
   }
-
-
 
   /**
    * @return the prefixTitle
@@ -161,15 +143,13 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
     return prefixTitle;
   }
 
-
-
   /**
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -179,7 +159,7 @@ public class IndividualDeliveredService extends ReportingDomain implements Reque
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
@@ -141,124 +143,6 @@ public class CmsDocument extends ReportingDomain implements Request, Response, S
   }
 
   /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    final int PRIME = 31;
-    int result = 1;
-
-    result = PRIME * result + ((id == null) ? 0 : id.hashCode());
-    result = PRIME * result + ((segmentCount == null) ? 0 : segmentCount.hashCode());
-    result = PRIME * result + ((docLength == null) ? 0 : docLength.hashCode());
-    result = PRIME * result + ((docAuth == null) ? 0 : docAuth.hashCode());
-    result = PRIME * result + ((docServ == null) ? 0 : docServ.hashCode());
-    result = PRIME * result + ((docDate == null) ? 0 : docDate.hashCode());
-    result = PRIME * result + ((docTime == null) ? 0 : docTime.hashCode());
-    result = PRIME * result + ((docName == null) ? 0 : docName.hashCode());
-    result = PRIME * result + ((compressionMethod == null) ? 0 : compressionMethod.hashCode());
-    result = PRIME * result + ((base64Blob == null) ? 0 : base64Blob.hashCode());
-
-    return result;
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof CmsDocument)) {
-      return false;
-    }
-    CmsDocument other = (CmsDocument) obj;
-
-    if (id == null) {
-      if (other.id != null) {
-        return false;
-      }
-    } else if (!id.equals(other.id)) {
-      return false;
-    }
-
-    if (segmentCount == null) {
-      if (other.segmentCount != null) {
-        return false;
-      }
-    } else if (!segmentCount.equals(other.segmentCount)) {
-      return false;
-    }
-    if (docLength == null) {
-      if (other.docLength != null) {
-        return false;
-      }
-    } else if (!docLength.equals(other.docLength)) {
-      return false;
-    }
-    if (docAuth == null) {
-      if (other.docAuth != null) {
-        return false;
-      }
-    } else if (!docAuth.equals(other.docAuth)) {
-      return false;
-    }
-    if (docServ == null) {
-      if (other.docServ != null) {
-        return false;
-      }
-    } else if (!docServ.equals(other.docServ)) {
-      return false;
-    }
-    if (docDate == null) {
-      if (other.docDate != null) {
-        return false;
-      }
-    } else if (!docDate.equals(other.docDate)) {
-      return false;
-    }
-    if (docTime == null) {
-      if (other.docTime != null) {
-        return false;
-      }
-    } else if (!docTime.equals(other.docTime)) {
-      return false;
-    }
-    if (docName == null) {
-      if (other.docName != null) {
-        return false;
-      }
-    } else if (!docName.equals(other.docName)) {
-      return false;
-    }
-    if (compressionMethod == null) {
-      if (other.compressionMethod != null) {
-        return false;
-      }
-    } else if (!compressionMethod.equals(other.compressionMethod)) {
-      return false;
-    }
-
-    if (base64Blob == null) {
-      if (other.base64Blob != null) {
-        return false;
-      }
-    } else if (!base64Blob.equals(other.base64Blob)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * @return docDate document date
    */
   public String getDocDate() {
@@ -391,5 +275,14 @@ public class CmsDocument extends ReportingDomain implements Request, Response, S
     this.base64Blob = base64Blob;
   }
 
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
 
 }

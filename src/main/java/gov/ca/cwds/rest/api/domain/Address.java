@@ -27,9 +27,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("nsAddress")
 public class Address extends ReportingDomain implements Request, Response {
 
-  /**
-   * Base serialization value. Increment by version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("legacy_source_table")
@@ -207,7 +204,7 @@ public class Address extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -217,7 +214,7 @@ public class Address extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

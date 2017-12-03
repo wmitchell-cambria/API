@@ -23,9 +23,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class CmsReferral extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @NotNull
@@ -82,7 +79,6 @@ public class CmsReferral extends ReportingDomain implements Request, Response {
     this.reporter = reporter;
   }
 
-
   /**
    * @return the referral
    */
@@ -104,7 +100,6 @@ public class CmsReferral extends ReportingDomain implements Request, Response {
     return allegation;
   }
 
-
   /**
    * @return the crossReport
    */
@@ -112,14 +107,12 @@ public class CmsReferral extends ReportingDomain implements Request, Response {
     return crossReport;
   }
 
-
   /**
    * @return the referralClient
    */
   public Set<ReferralClient> getReferralClient() {
     return referralClient;
   }
-
 
   /**
    * @return the reporter
@@ -134,7 +127,7 @@ public class CmsReferral extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -144,7 +137,7 @@ public class CmsReferral extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

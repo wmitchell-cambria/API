@@ -15,18 +15,15 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
  * @author CWDS API Team
  */
 public class PostedCmsReferral extends ReportingDomain {
-  /**
-   * Serialization version
-   */
 
   private static final long serialVersionUID = 1L;
+
   private Referral referral;
   private Set<Client> client;
   private Set<Allegation> allegation;
   private Set<CrossReport> crossReport;
   private Set<ReferralClient> referralClient;
   private Reporter reporter;
-
 
   /**
    * @param referral - PostedReferral
@@ -39,7 +36,6 @@ public class PostedCmsReferral extends ReportingDomain {
   public PostedCmsReferral(PostedReferral referral, Set<PostedClient> client,
       Set<PostedAllegation> allegation, Set<CrossReport> crossReport,
       Set<ReferralClient> referralClient, PostedReporter reporter) {
-
     super();
     this.referral = referral;
     this.client = new LinkedHashSet<>();
@@ -89,16 +85,12 @@ public class PostedCmsReferral extends ReportingDomain {
     return allegation;
   }
 
-
-
   /**
    * @return the crossReport
    */
   public Set<CrossReport> getCrossReport() {
     return crossReport;
   }
-
-
 
   /**
    * @return the referralClient
@@ -107,8 +99,6 @@ public class PostedCmsReferral extends ReportingDomain {
     return referralClient;
   }
 
-
-
   /**
    * @return the reporter
    */
@@ -116,14 +106,13 @@ public class PostedCmsReferral extends ReportingDomain {
     return reporter;
   }
 
-
   /**
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -133,7 +122,7 @@ public class PostedCmsReferral extends ReportingDomain {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

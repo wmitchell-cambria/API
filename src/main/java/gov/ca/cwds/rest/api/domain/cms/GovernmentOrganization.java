@@ -28,9 +28,6 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonPropertyOrder({"id", "name", "type", "county_id"})
 public class GovernmentOrganization extends ReportingDomain implements Request, Response {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @Valid
@@ -133,7 +130,7 @@ public class GovernmentOrganization extends ReportingDomain implements Request, 
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -143,7 +140,7 @@ public class GovernmentOrganization extends ReportingDomain implements Request, 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

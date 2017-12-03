@@ -28,9 +28,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class AllegationPerpetratorHistory extends ReportingDomain
     implements Request, Response, Serializable {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @Size(min = 2, max = 2)
@@ -110,7 +107,7 @@ public class AllegationPerpetratorHistory extends ReportingDomain
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -120,7 +117,7 @@ public class AllegationPerpetratorHistory extends ReportingDomain
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

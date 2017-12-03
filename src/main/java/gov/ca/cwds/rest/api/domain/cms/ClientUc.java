@@ -29,9 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class ClientUc extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @NotEmpty
@@ -64,8 +61,6 @@ public class ClientUc extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "HOWARD")
   private String commonMiddleName;
 
-
-
   /**
    * @param pktableId The primary key
    * @param sourceTableCode The source table code
@@ -88,7 +83,6 @@ public class ClientUc extends ReportingDomain implements Request, Response {
     this.commonMiddleName = commonMiddleName;
   }
 
-
   /**
    * @param persistedClientUc - persistedClientUc object
    * 
@@ -100,7 +94,6 @@ public class ClientUc extends ReportingDomain implements Request, Response {
     this.commonLastName = persistedClientUc.getCommonLastName();
     this.commonMiddleName = persistedClientUc.getCommonMiddleName();
   }
-
 
   /**
    * @return the pktableId
@@ -143,7 +136,7 @@ public class ClientUc extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -153,7 +146,7 @@ public class ClientUc extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
