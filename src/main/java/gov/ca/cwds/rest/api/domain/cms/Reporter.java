@@ -41,19 +41,14 @@ import io.swagger.annotations.ApiModelProperty;
 @IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
     @IfThen(ifProperty = "streetName", thenProperty = "cityName", required = false)})
 public class Reporter extends ReportingDomain implements Request, Response {
+
+  private static final long serialVersionUID = 1L;
+
   private static final short DEFAULT_CODE = 0;
   private static final BigDecimal DEFAULT_DECIMAL = new BigDecimal(0);
 
-
-  /**
-   * Serialization version.
-   */
-  private static final long serialVersionUID = 1L;
-
   @ApiModelProperty(required = false, readOnly = false, value = "Last Updated Time",
       example = "2004-03-31T09:45:58.000-0800")
-
-  // TODO:ADD TESTS
   private DateTime lastUpdatedTime;
 
   @NotEmpty

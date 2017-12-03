@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,6 +27,8 @@ import gov.ca.cwds.rest.util.FerbDateUtils;
  * @author CWDS API Team
  */
 public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Referral.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -235,6 +239,6 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
     referral.setStartDate(new Date());
 
     String json = ObjectMapperUtils.createObjectMapper().writeValueAsString(referral);
-    System.out.println(json);
+    LOGGER.info(json);
   }
 }
