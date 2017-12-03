@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * JUnit tests for PK compression.
  * 
@@ -27,13 +26,13 @@ public class PKCompressionTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PKCompressionTest.class);
 
-  private static final String TEST_BASE = "/jni/pk/";
-  private static final String ZIP_PK_1 = TEST_BASE + "first.pk";
-  private static final String ZIP_DOC_1 = TEST_BASE + "first.doc";
+  public static final String TEST_BASE = "/jni/pk/";
+  public static final String ZIP_PK_1 = TEST_BASE + "first.pk";
+  public static final String ZIP_DOC_1 = TEST_BASE + "first.doc";
 
-  private static final String ZIP_B64_3 = TEST_BASE + "third.b64";
-  private static final String ZIP_HEX_3 = TEST_BASE + "third.hex";
-  private static final String ZIP_DOC_3 = TEST_BASE + "third.doc";
+  public static final String ZIP_B64_3 = TEST_BASE + "third.b64";
+  public static final String ZIP_HEX_3 = TEST_BASE + "third.hex";
+  public static final String ZIP_DOC_3 = TEST_BASE + "third.doc";
 
   private CmsPKCompressor inst;
 

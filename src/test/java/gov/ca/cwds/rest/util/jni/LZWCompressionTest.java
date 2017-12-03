@@ -8,14 +8,13 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class LZWCompressionTest {
 
-  private static final String TEST_BASE = "/jni/lzw/";
-  private static final String GOOD_LZW = TEST_BASE + "good.lzw";
-  private static final String GOOD_DOC = TEST_BASE + "good.doc";
+  protected static final String TEST_BASE = "/jni/lzw/";
+  protected static final String GOOD_LZW = TEST_BASE + "good.lzw";
+  protected static final String GOOD_DOC = TEST_BASE + "good.doc";
 
-  private LZWEncoder inst;
+  protected LZWEncoder inst;
 
   @Before
   public void setUpBeforeTest() throws Exception {
