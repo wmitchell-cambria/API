@@ -195,19 +195,18 @@ public class Assignment extends ReportingDomain implements Request, Response {
   public Assignment createDefaultReferralAssignment(String countyCode, String referralId,
       String caseLoadId, String startDate, String startTime) {
 
-    final String endDate = "";
-    final String endTime = "";
-    final String establishedForCode = "R";
-    final String outOfStateContactId = null;
-    final String responsibilityDescription = "";
-    final Short secondaryAssignmentRoleType = 0;
-    final String typeOfAssignmentCode = "P";
-    final BigDecimal weightingNumber = new BigDecimal("0.0");
+    String endDate = "";
+    String endTime = "";
+    String establishedForCode = "R";
+    String outOfStateContactId = null;
+    String responsibilityDescription = "";
+    Short secondaryAssignmentRoleType = 0;
+    String typeOfAssignmentCode = "P";
+    BigDecimal weightingNumber = new BigDecimal("0.0");
 
-    return new Assignment(countyCode, endDate, endTime, establishedForCode, referralId,
-        caseLoadId, outOfStateContactId, responsibilityDescription,
-        secondaryAssignmentRoleType, startDate, startTime, typeOfAssignmentCode,
-        weightingNumber);
+    return new Assignment(countyCode, endDate, endTime, establishedForCode, referralId, caseLoadId,
+        outOfStateContactId, responsibilityDescription, secondaryAssignmentRoleType, startDate,
+        startTime, typeOfAssignmentCode, weightingNumber);
   }
 
   /**
