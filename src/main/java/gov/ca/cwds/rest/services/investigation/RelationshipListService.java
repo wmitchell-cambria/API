@@ -4,10 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.ClientDao;
@@ -22,7 +19,6 @@ import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 import gov.ca.cwds.rest.services.TypedCrudsService;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * Business layer object to work on Investigation
@@ -31,10 +27,6 @@ import io.dropwizard.jackson.Jackson;
  */
 public class RelationshipListService
     implements TypedCrudsService<String, RelationshipList, Response> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipListService.class);
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private RelationshipsDao relationshipsDao;
   private ClientDao clientDao;
@@ -81,23 +73,20 @@ public class RelationshipListService
    * @return list of relationship
    */
   public Set<Relationship> findRelationshipByReferralId(Referral referral) {
-    Set<Relationship> relationshipList = new HashSet<Relationship>();
-    Relationship relationship = null;
+    final Set<Relationship> setRels = new HashSet<>();
+    Relationship relationship;
     for (ReferralClient refClient : referral.getReferralClients()) {
-
       ClientRelationship[] persistedClientRelationships =
           this.relationshipsDao.findClientRelationshipByPrimaryClientId(refClient.getClientId());
-      // TODO - action on secondary client id value ???
+      // TODO - action on secondary client id value ??? Story ##??
       if (persistedClientRelationships.length > 0) {
         relationship =
             this.constructRelationshipData(persistedClientRelationships, refClient.getClientId());
-        relationshipList.add(relationship);
-
+        setRels.add(relationship);
       }
-
     }
-    return relationshipList;
 
+    return setRels;
   }
 
   /**
@@ -120,10 +109,6 @@ public class RelationshipListService
     }
     primaryClient = this.clientDao.find(primaryClientId);
     return new Relationship(primaryClient, relationShipToList);
-
-
-
   }
-
 
 }

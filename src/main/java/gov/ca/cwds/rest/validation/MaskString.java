@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 public class MaskString {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MaskString.class);
+
   private static final String SSN_WITH_HYPHEN = "^(?!000)[0-9]{3}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$";
   private static final String SSN_WITHOUT_HYPHEN =
       "^(?!000)[0-9]{3}(?!00)[0-9]{2}(?!0000)[0-9]{4}$";
@@ -28,15 +29,14 @@ public class MaskString {
   private static final Pattern patternNoHyphen = Pattern.compile(SSN_WITHOUT_HYPHEN);
 
   /**
-   * @param ssn incoming ssn
+   * @param ssn incoming SSN
    * @return return validation
    */
   public String maskSsn(String ssn) {
     String returnSsn;
 
     if (StringUtils.isBlank(ssn)) {
-      returnSsn = "";
-      return returnSsn;
+      return "";
     }
 
     final String actualString = ssn.trim();

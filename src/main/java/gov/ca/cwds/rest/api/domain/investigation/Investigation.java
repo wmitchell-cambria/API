@@ -281,7 +281,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     this.reportNarrative = reportNarrative;
     this.reference = reference;
     this.responseTime = responseTime;
-    this.startedAt = startedAt;
+    this.startedAt = freshDate(startedAt);
     this.assignee = assignee;
     this.additionalInformation = additionalInformation;
     this.sensitive = sensitive;
