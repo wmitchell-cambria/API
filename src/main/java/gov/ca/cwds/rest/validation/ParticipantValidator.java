@@ -16,7 +16,6 @@ import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * @author CWDS API Team
- *
  */
 public class ParticipantValidator {
 
@@ -28,12 +27,15 @@ public class ParticipantValidator {
    * CWS/CMS Referral must have on reporter
    */
   public static final int ALLOWED_NUMBER_OF_REPORTERS = 1;
+
   /**
    * CWS/CMS Referral must have at least one victim
    */
   public static final int MINIMUM_NUMBER_OF_VICTIMS = 1;
+
   @SuppressWarnings("javadoc")
   public static final Boolean INVALID_PARTICIPANTS = Boolean.FALSE;
+
   @SuppressWarnings("javadoc")
   public static final Boolean VALID_PARTICIPANTS = Boolean.TRUE;
 
@@ -42,7 +44,6 @@ public class ParticipantValidator {
    */
   private ParticipantValidator() {
     // Default, no-op.
-
   }
 
   /**
@@ -51,7 +52,6 @@ public class ParticipantValidator {
    * @throws ServiceException - throw and errors
    */
   public static Boolean hasValidParticipants(ScreeningToReferral scr) throws ServiceException {
-
     int reporterCount = 0;
     int victimCount = 0;
 
@@ -81,7 +81,6 @@ public class ParticipantValidator {
     return VALID_PARTICIPANTS;
   }
 
-
   /**
    * @param str - ScreeningToReferral object
    * @return Boolean - is an anonymous reporter
@@ -95,7 +94,6 @@ public class ParticipantValidator {
       for (Participant incomingParticipant : participants) {
         Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
         if (roles.contains(Role.ANONYMOUS_REPORTER_ROLE.getType())) {
-
           return Boolean.TRUE;
         }
       }
@@ -110,7 +108,6 @@ public class ParticipantValidator {
    * @throws ServiceException - throw all Exceptions
    */
   public static Boolean isReporterType(Participant participant) throws ServiceException {
-
     Set<String> roles = participant.getRoles();
     if (roles != null) {
       if (roles.contains(Role.ANONYMOUS_REPORTER_ROLE.getType())) {
@@ -152,12 +149,8 @@ public class ParticipantValidator {
    * @throws ServiceException - throw any exception
    */
   public static Boolean hasVictimRole(Participant participant) throws ServiceException {
-    Set<String> roles = participant.getRoles();
-    if (roles != null && roles.contains(Role.VICTIM_ROLE.getType())) {
-
-      return Boolean.TRUE;
-    }
-    return Boolean.FALSE;
+    final Set<String> roles = participant.getRoles();
+    return roles != null && roles.contains(Role.VICTIM_ROLE.getType());
   }
 
   /**
@@ -166,11 +159,8 @@ public class ParticipantValidator {
    * @throws ServiceException on arbitrary error
    */
   public static Boolean hasMandatedReporterRole(Participant participant) throws ServiceException {
-    Set<String> roles = participant.getRoles();
-    if (roles != null && roles.contains(Role.MANDATED_REPORTER_ROLE.getType())) {
-      return Boolean.TRUE;
-    }
-    return Boolean.FALSE;
+    final Set<String> roles = participant.getRoles();
+    return roles != null && roles.contains(Role.MANDATED_REPORTER_ROLE.getType());
   }
 
   /**
@@ -233,17 +223,18 @@ public class ParticipantValidator {
   }
 
   /**
+   * Check for incompatible roles for this participant.
+   * 
    * @param participant - Participant object
    * @return Boolean - has valid roles
    * @throws ServiceException - throw any exception
    */
-  // check for incompatiable roles for this participant
   public static Boolean hasValidRoles(Participant participant) throws ServiceException {
-
-    Set<String> roles = participant.getRoles();
+    final Set<String> roles = participant.getRoles();
     if (roles == null) {
       return Boolean.TRUE;
     }
+
     // R - 00831
     if (roles.contains(Role.ANONYMOUS_REPORTER_ROLE.getType())
         && roles.contains(Role.SELF_REPORTED_ROLE.getType())) {
@@ -297,12 +288,10 @@ public class ParticipantValidator {
    */
   public static Boolean isVictimParticipant(ScreeningToReferral str, long victimPersonId)
       throws ServiceException {
-
     if (str.getParticipants() != null) {
-      Set<Participant> participants = str.getParticipants();
+      final Set<Participant> participants = str.getParticipants();
       for (Participant participant : participants) {
         if (participant.getId() == victimPersonId && hasVictimRole(participant)) {
-
           return Boolean.TRUE;
         }
       }
@@ -318,14 +307,11 @@ public class ParticipantValidator {
    */
   public static Boolean isPerpetratorParticipant(ScreeningToReferral str,
       long perpetratorPersonId) {
-
     if (str.getParticipants() != null) {
       Set<Participant> participants = str.getParticipants();
       for (Participant participant : participants) {
         if (participant.getId() == perpetratorPersonId && (isPerpetrator(participant))) {
-
           return Boolean.TRUE;
-
         }
       }
     }
@@ -337,10 +323,7 @@ public class ParticipantValidator {
    * @return - Boolean true if perpetrator
    */
   public static Boolean roleIsPerpetrator(String role) {
-    if (role != null && role.equalsIgnoreCase(Role.PERPETRATOR_ROLE.getType())) {
-      return Boolean.TRUE;
-    }
-    return Boolean.FALSE;
+    return role != null && role.equalsIgnoreCase(Role.PERPETRATOR_ROLE.getType());
   }
 
   /**
@@ -348,10 +331,7 @@ public class ParticipantValidator {
    * @return - Boolean true if Victim
    */
   public static Boolean roleIsVictim(String role) {
-    if (role != null && role.equalsIgnoreCase(Role.VICTIM_ROLE.getType())) {
-      return Boolean.TRUE;
-    }
-    return Boolean.FALSE;
+    return role != null && role.equalsIgnoreCase(Role.VICTIM_ROLE.getType());
   }
 
   /**
@@ -361,10 +341,7 @@ public class ParticipantValidator {
    *         Returns true if role is any reporter role
    */
   public static Boolean roleIsAnyReporter(String role) {
-    if (roleIsReporterType(role) || roleIsAnonymousReporter(role) || roleIsSelfReporter(role)) {
-      return Boolean.TRUE;
-    }
-    return Boolean.FALSE;
+    return roleIsReporterType(role) || roleIsAnonymousReporter(role) || roleIsSelfReporter(role);
   }
 
   /**
@@ -374,13 +351,8 @@ public class ParticipantValidator {
    *         Do Not include Anonymous Reporter (special case of reporter)
    */
   public static Boolean roleIsReporterType(String role) {
-    if (role != null && (role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType())
-        || role.equalsIgnoreCase(Role.NON_MANDATED_REPORTER_ROLE.getType()))) {
-      return Boolean.TRUE;
-
-    }
-
-    return Boolean.FALSE;
+    return role != null && (role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType())
+        || role.equalsIgnoreCase(Role.NON_MANDATED_REPORTER_ROLE.getType()));
   }
 
   /**
@@ -388,12 +360,7 @@ public class ParticipantValidator {
    * @return - Boolean true if anonymous reporter
    */
   public static Boolean roleIsAnonymousReporter(String role) {
-    if (role != null && role.equalsIgnoreCase(Role.ANONYMOUS_REPORTER_ROLE.getType())) {
-
-      return Boolean.TRUE;
-
-    }
-    return Boolean.FALSE;
+    return role != null && role.equalsIgnoreCase(Role.ANONYMOUS_REPORTER_ROLE.getType());
   }
 
   /**
@@ -401,11 +368,7 @@ public class ParticipantValidator {
    * @return - Boolean true if Self Reporter reporter
    */
   public static Boolean roleIsSelfReporter(String role) {
-    if (role != null && role.equalsIgnoreCase(Role.SELF_REPORTED_ROLE.getType())) {
-      return Boolean.TRUE;
-
-    }
-    return Boolean.FALSE;
+    return role != null && role.equalsIgnoreCase(Role.SELF_REPORTED_ROLE.getType());
   }
 
   /**
@@ -413,9 +376,7 @@ public class ParticipantValidator {
    * @return - Boolean true if mandated reporter
    */
   public static Boolean roleIsMandatedReporter(String role) {
-    if (role != null && role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType())) {
-      return Boolean.TRUE;
-    }
-    return Boolean.FALSE;
+    return role != null && role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType());
   }
+
 }
