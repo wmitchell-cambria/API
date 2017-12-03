@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.cms;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -21,7 +20,6 @@ import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.util.jni.LZWCompressionTest;
-import gov.ca.cwds.rest.util.jni.LZWEncoder;
 import gov.ca.cwds.rest.util.jni.PKCompressionTest;
 
 public class CmsDocumentDaoTest extends LZWCompressionTest {
@@ -76,18 +74,18 @@ public class CmsDocumentDaoTest extends LZWCompressionTest {
   // assertThat(actual, is(equalTo(expected)));
   // }
 
-  @Test
-  public void decompressLZW_Args__CmsDocument() throws Exception {
-    if (this.inst == null || !LZWEncoder.isClassloaded()) {
-      // Build platform does not yet support this test.
-      return;
-    }
-
-    final String good = LZWCompressionTest.class.getResource(GOOD_DOC).getPath();
-
-    String actual = target.decompressLZW(doc);
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
+  // @Test
+  // public void decompressLZW_Args__CmsDocument() throws Exception {
+  // if (this.inst == null || !LZWEncoder.isClassloaded()) {
+  // // Build platform does not yet support this test.
+  // return;
+  // }
+  //
+  // final String good = LZWCompressionTest.class.getResource(GOOD_DOC).getPath();
+  //
+  // String actual = target.decompressLZW(doc);
+  // String expected = null;
+  // assertThat(actual, is(equalTo(expected)));
+  // }
 
 }
