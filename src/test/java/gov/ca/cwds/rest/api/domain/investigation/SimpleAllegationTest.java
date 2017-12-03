@@ -35,7 +35,6 @@ public class SimpleAllegationTest {
     screeningId = "3456789ABC";
     persistentAllegationTypes[0] = "General neglect";
     persistentAllegationTypes[1] = "Physical abuse";
-
   }
 
   @Test

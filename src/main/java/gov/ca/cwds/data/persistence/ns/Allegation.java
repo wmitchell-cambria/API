@@ -62,7 +62,8 @@ public class Allegation implements PersistentObject {
     this.victimId = victimId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.allegationTypes = Arrays.copyOf(allegationType, allegationType.length);
+    this.allegationTypes =
+        allegationType != null ? Arrays.copyOf(allegationType, allegationType.length) : null;
     this.screening = null;
   }
 
@@ -117,14 +118,15 @@ public class Allegation implements PersistentObject {
    * @return the allegationTypes
    */
   public String[] getAllegationTypes() {
-    return Arrays.copyOf(allegationTypes, allegationTypes.length);
+    return allegationTypes != null ? Arrays.copyOf(allegationTypes, allegationTypes.length) : null;
   }
 
   /**
    * @param allegationTypes the allegationTypes to set
    */
   public void setAllegationTypes(String[] allegationTypes) {
-    this.allegationTypes = Arrays.copyOf(allegationTypes, allegationTypes.length);
+    this.allegationTypes =
+        allegationTypes != null ? Arrays.copyOf(allegationTypes, allegationTypes.length) : null;
   }
 
   /**
