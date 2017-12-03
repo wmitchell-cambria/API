@@ -1,17 +1,16 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.Person;
-import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import io.swagger.annotations.ApiModelProperty;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.Person;
+import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Logical representation of a CmsNSReferral
@@ -20,16 +19,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class CmsNSReferral extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private Referral referral;
-
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
@@ -41,7 +36,6 @@ public class CmsNSReferral extends ReportingDomain implements Request, Response 
    * 
    * @param referral - Referral object
    * @param person - Person object
-   *
    */
   @JsonCreator
   public CmsNSReferral(@JsonProperty("referral") Referral referral,
@@ -51,15 +45,12 @@ public class CmsNSReferral extends ReportingDomain implements Request, Response 
     this.person = person;
   }
 
-
   /**
    * @return the referral
    */
   public Referral getReferral() {
     return referral;
   }
-
-
 
   /**
    * @return the person
@@ -68,21 +59,18 @@ public class CmsNSReferral extends ReportingDomain implements Request, Response 
     return person;
   }
 
-
   /**
    * {@inheritDoc}
    * 
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
-    final int PRIME = 31;
+  public int hashCode() {
+    int prime = 31;
     int result = 1;
-    result = PRIME * result + ((referral == null) ? 0 : referral.hashCode());
-    result = PRIME * result + ((person == null) ? 0 : person.hashCode());
-    return result;
+    result = prime * result + ((referral == null) ? 0 : referral.hashCode());
+    return prime * result + ((person == null) ? 0 : person.hashCode());
   }
-
 
   /**
    * {@inheritDoc}
@@ -90,7 +78,7 @@ public class CmsNSReferral extends ReportingDomain implements Request, Response 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     if (this == obj) {
       return true;
     }
@@ -118,6 +106,5 @@ public class CmsNSReferral extends ReportingDomain implements Request, Response 
     }
     return true;
   }
-
 
 }

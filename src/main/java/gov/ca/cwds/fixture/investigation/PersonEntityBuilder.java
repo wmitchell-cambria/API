@@ -83,7 +83,7 @@ public class PersonEntityBuilder {
   }
 
   public Date getLastUpdatedAt() {
-    return lastUpdatedAt;
+    return freshDate(lastUpdatedAt);
   }
 
   public PersonEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {

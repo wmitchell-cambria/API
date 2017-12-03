@@ -13,10 +13,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  */
 public class PostedAssignment extends Assignment {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private String id;
 
@@ -39,4 +38,5 @@ public class PostedAssignment extends Assignment {
   public String getId() {
     return id;
   }
+
 }

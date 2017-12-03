@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Reporter person.
  * 
@@ -7,9 +10,6 @@ package gov.ca.cwds.rest.api.domain.hoi;
  */
 public class Reporter extends Person {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   public enum Role {
@@ -49,5 +49,15 @@ public class Reporter extends Person {
   public void setRole(Role role) {
     this.role = role;
   }
-}
 
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+}

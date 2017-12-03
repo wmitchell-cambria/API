@@ -1,11 +1,5 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.ReportingDomain;
-import io.swagger.annotations.ApiModelProperty;
-
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -15,6 +9,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * {@link DomainObject} representing an LongText
  * 
@@ -22,9 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class LongText extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @NotEmpty
@@ -34,10 +31,7 @@ public class LongText extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 32700)
-  @ApiModelProperty(
-      required = true,
-      readOnly = false,
-      value = "Text Description",
+  @ApiModelProperty(required = true, readOnly = false, value = "Text Description",
       example = "Arrange for parents to have demonstrating home maker come to the home twice a week")
   private String textDescription;
 
@@ -64,7 +58,7 @@ public class LongText extends ReportingDomain implements Request, Response {
   }
 
   public LongText() {
-    // TODO Auto-generated constructor stub
+    // default ctor
   }
 
   /**
@@ -87,7 +81,7 @@ public class LongText extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -97,7 +91,7 @@ public class LongText extends ReportingDomain implements Request, Response {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

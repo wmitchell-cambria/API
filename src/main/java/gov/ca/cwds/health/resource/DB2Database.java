@@ -1,17 +1,22 @@
 package gov.ca.cwds.health.resource;
 
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.inject.CmsSessionFactory;
 
 /**
  * @author CWDS API Team
- *
  */
 public class DB2Database implements Pingable {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DB2Database.class);
+
   private SessionFactory sessionFactory;
   private String message;
 
@@ -27,11 +32,12 @@ public class DB2Database implements Pingable {
       Query query = session.createNativeQuery("values 1");
       if (query.list().get(0) == null) {
         connectionOK = false;
-        message = "Unable to retrieve test querry";
+        message = "Unable to retrieve test query";
       }
     } catch (Exception e) {
       connectionOK = false;
       message = "Exception occurred while connecting to DB: " + e.getMessage();
+      LOGGER.warn(message, e);
     }
     return connectionOK;
   }
@@ -40,4 +46,5 @@ public class DB2Database implements Pingable {
   public String getMessage() {
     return message;
   }
+
 }

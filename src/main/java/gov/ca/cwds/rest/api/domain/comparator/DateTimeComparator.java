@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
  * <p>
  * 
  * @author CWDS API Team
- *
- * 
  */
 public class DateTimeComparator implements DateTimeComparatorInterface {
 
