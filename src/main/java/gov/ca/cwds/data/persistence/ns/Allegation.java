@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,7 +62,7 @@ public class Allegation implements PersistentObject {
     this.victimId = victimId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.allegationTypes = allegationType;
+    this.allegationTypes = Arrays.copyOf(allegationType, allegationType.length);
     this.screening = null;
   }
 
@@ -116,14 +117,14 @@ public class Allegation implements PersistentObject {
    * @return the allegationTypes
    */
   public String[] getAllegationTypes() {
-    return allegationTypes;
+    return Arrays.copyOf(allegationTypes, allegationTypes.length);
   }
 
   /**
    * @param allegationTypes the allegationTypes to set
    */
   public void setAllegationTypes(String[] allegationTypes) {
-    this.allegationTypes = allegationTypes;
+    this.allegationTypes = Arrays.copyOf(allegationTypes, allegationTypes.length);
   }
 
   /**

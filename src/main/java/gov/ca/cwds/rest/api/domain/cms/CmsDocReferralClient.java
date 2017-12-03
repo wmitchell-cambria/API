@@ -530,16 +530,14 @@ public class CmsDocReferralClient extends ReportingDomain
    */
   @Override
   public final int hashCode() {
-    final int PRIME = 43;
+    int prime = 43;
     int result = 1;
 
-    result = (PRIME * result) + ((id == null) ? PRIME : id.hashCode());
-    result = (PRIME * result) + ((docName == null) ? PRIME : docName.hashCode());
-    result = (PRIME * result) + ((docAddedDate == null) ? PRIME : docAddedDate.hashCode());
-    result = (PRIME * result) + ((details == null) ? PRIME : details.hashCode());
-    result = (PRIME * result) + ((cmsDocument == null) ? PRIME : cmsDocument.hashCode());
-
-    return result;
+    result = (prime * result) + ((id == null) ? prime : id.hashCode());
+    result = (prime * result) + ((docName == null) ? prime : docName.hashCode());
+    result = (prime * result) + ((docAddedDate == null) ? prime : docAddedDate.hashCode());
+    result = (prime * result) + ((details == null) ? prime : details.hashCode());
+    return (prime * result) + ((cmsDocument == null) ? prime : cmsDocument.hashCode());
   }
 
   /**
