@@ -44,7 +44,7 @@ public class MessageBuilder {
   public void addError(String message, ErrorType type) {
     messages.add(new ErrorMessage(type, message, ""));
 
-    IssueDetails issue = new IssueDetails();
+    final IssueDetails issue = new IssueDetails();
     this.issues.add(issue);
     issue.setUserMessage(message);
 
@@ -68,9 +68,6 @@ public class MessageBuilder {
     if (!errors.isEmpty()) {
       errors.forEach(error -> {
         final String message = error.getPropertyPath() + " " + error.getMessage();
-        // " getRootBean: " + error.getRootBean() + " getLeafBean: "
-        // + error.getLeafBean() + " getConstraintDescriptor: " + error.getConstraintDescriptor()
-        // + " ERROR PROP PATH: " + error.getPropertyPath() + " " + error.getMessage();
         messages.add(new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, message, ""));
       });
 

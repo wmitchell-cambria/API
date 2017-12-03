@@ -228,7 +228,7 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(incomingParticipant, clientId, messageBuilder);
+        processChildClient(clientId, messageBuilder);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -386,8 +386,7 @@ public class ParticipantService implements CrudsService {
   }
 
   private Reporter saveReporter(Participant ip, String role, String referralId,
-      String countySpecificCode, MessageBuilder messageBuilder) throws ServiceException {
-
+      String countySpecificCode, MessageBuilder messageBuilder) {
     gov.ca.cwds.rest.api.domain.Address reporterAddress = null;
 
     if (ip.getAddresses() != null) {
@@ -402,7 +401,7 @@ public class ParticipantService implements CrudsService {
           continue;
         }
         reporterAddress = address;
-        Short zipSuffix = null;
+        Short zipSuffix = null; // BUG: assign this ... what?
         if (address.getZip().length() > 5) {
           zipSuffix = Short.valueOf(address.getZip().substring(5));
         }
@@ -422,9 +421,7 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(Participant id, String clientId,
-      MessageBuilder messageBuilder) throws ServiceException {
-
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -459,8 +456,13 @@ public class ParticipantService implements CrudsService {
     return null;
   }
 
+  /**
+   * First address in the list is primary.
+   * 
+   * @param allRaceCodes list of incoming races
+   * @return race code
+   */
   private Short getPrimaryRaceCode(List<Short> allRaceCodes) {
-    // first one in the list is primary;
     Short primaryRaceCode = 0;
     if (!allRaceCodes.isEmpty()) {
       primaryRaceCode = allRaceCodes.get(0);
@@ -475,7 +477,6 @@ public class ParticipantService implements CrudsService {
     }
     return otherRaceCodes;
   }
-
 
   private List<Short> getAllRaceCodes(RaceAndEthnicity raceAndEthnicity) {
     List<Short> allRaceCodes = new ArrayList<>();
@@ -493,6 +494,5 @@ public class ParticipantService implements CrudsService {
     }
     return allRaceCodes;
   }
-
 
 }
