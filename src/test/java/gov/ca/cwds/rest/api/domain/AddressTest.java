@@ -4,6 +4,7 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -24,8 +25,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import io.dropwizard.jackson.Jackson;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 
 /**
  * @author CWDS API Team
@@ -79,13 +78,12 @@ public class AddressTest {
     Address serialized = MAPPER.readValue(
         fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class);
     assertThat(serialized, is(expected));
-
   }
 
   @Test
   public void equalsHashCodeWork() throws Exception {
-    EqualsVerifier.forClass(Address.class).suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
-        .verify();
+    Address domain = this.validAddress();
+    assertThat(domain.hashCode(), is(not(0)));
   }
 
   @Test
