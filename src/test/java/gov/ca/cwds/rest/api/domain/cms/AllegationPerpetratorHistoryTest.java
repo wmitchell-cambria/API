@@ -8,8 +8,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -106,7 +106,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       System.out.println(message.getMessage());
     }
@@ -122,7 +122,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;
@@ -140,7 +140,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;
@@ -158,7 +158,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;
@@ -176,7 +176,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;
@@ -194,7 +194,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;
@@ -210,7 +210,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     assertTrue("No validation error detected", validationErrors.isEmpty());
   }
 
@@ -223,7 +223,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;
@@ -241,7 +241,7 @@ public class AllegationPerpetratorHistoryTest {
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toTest));
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals(errorMessage)) {
         containsError = true;

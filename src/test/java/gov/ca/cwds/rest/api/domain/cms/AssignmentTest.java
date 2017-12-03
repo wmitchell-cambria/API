@@ -10,8 +10,8 @@ import static org.junit.Assert.assertEquals;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -106,7 +106,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals("countySpecificCode size must be between 1 and 2")) {
         theErrorDetected = true;
@@ -125,7 +125,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       if (message.getMessage().equals("countySpecificCode may not be empty")) {
         theErrorDetected = true;
@@ -143,7 +143,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("countySpecificCode may not be empty")) {
@@ -189,7 +189,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("endDate must be in the format of yyyy-MM-dd")) {
@@ -239,7 +239,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       System.out.println(message.getMessage());
       if (message.getMessage().equals("endTime must be in the format of HH:mm:ss")) {
@@ -258,7 +258,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       System.out.println(message.getMessage());
       if (message.getMessage().equals("establishedForCode may not be empty")) {
@@ -277,7 +277,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("establishedForCode must be one of [R, C]")) {
@@ -296,7 +296,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("establishedForCode may not be empty")) {
@@ -315,7 +315,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("establishedForId may not be empty")) {
@@ -334,7 +334,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("establishedForId may not be empty")) {
@@ -354,7 +354,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("establishedForId size must be between 10 and 10")) {
@@ -394,7 +394,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("caseLoadId size must be between 0 and 10")) {
@@ -423,7 +423,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startDate may not be empty")) {
@@ -442,7 +442,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startDate may not be empty")) {
@@ -461,7 +461,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startDate may not be empty")) {
@@ -480,7 +480,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startDate must be in the format of yyyy-MM-dd")) {
@@ -499,7 +499,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startTime must be in the format of HH:mm:ss")) {
@@ -519,7 +519,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startTime must be in the format of HH:mm:ss")) {
@@ -538,7 +538,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startTime must be in the format of HH:mm:ss")) {
@@ -558,7 +558,7 @@ public class AssignmentTest {
     messageBuilder.addDomainValidationError(validator.validate(toCreate));
     Boolean theErrorDetected = false;
 
-    ArrayList<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       // System.out.println(message.getMessage());
       if (message.getMessage().equals("startTime must be in the format of HH:mm:ss")) {

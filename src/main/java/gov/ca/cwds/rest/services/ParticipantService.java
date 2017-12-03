@@ -48,10 +48,11 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  * @author CWDS API Team
  */
 public class ParticipantService implements CrudsService {
-  private static final String REPORTER_TABLE_NAME = "REPTR_T";
-  private static final String CLIENT_TABLE_NAME = "CLIENT_T";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
+
+  private static final String REPORTER_TABLE_NAME = "REPTR_T";
+  private static final String CLIENT_TABLE_NAME = "CLIENT_T";
 
   private Validator validator;
 
@@ -149,7 +150,7 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
-  // TODO:Techdebt simplify processing roles
+  // TODO: Techdebt simplify processing roles. Story #?
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, Set<String> roles) {
@@ -160,7 +161,6 @@ public class ParticipantService implements CrudsService {
       boolean saved = false;
 
       try {
-
         boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
             && (!ParticipantValidator.roleIsAnonymousReporter(role)
                 && !ParticipantValidator.selfReported(incomingParticipant));
@@ -325,14 +325,11 @@ public class ParticipantService implements CrudsService {
       List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
 
       String unableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-          ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode()
-          : "";
+          ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode() : "";
       String hispanicUnableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-          ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
-          : "";
+          ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode() : "";
       String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
-          ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode()
-          : "";
+          ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode() : "";
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
@@ -361,9 +358,7 @@ public class ParticipantService implements CrudsService {
     if (savedClient != null) {
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedClient.getLastUpdatedTime());
     } else {
-      String message = "Unable to save Client";
-      messageBuilder.addMessageAndLog(message, LOGGER);
-
+      messageBuilder.addMessageAndLog("Unable to save Client", LOGGER);
     }
   }
 

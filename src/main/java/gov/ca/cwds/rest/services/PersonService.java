@@ -33,7 +33,6 @@ import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.Ethnicity;
 import gov.ca.cwds.rest.api.domain.Language;
 import gov.ca.cwds.rest.api.domain.Person;
@@ -51,10 +50,8 @@ import io.dropwizard.hibernate.UnitOfWork;
 public class PersonService implements CrudsService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
-  private static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
-  // private static final String INDEX_PERSON = ElasticsearchDao.DEFAULT_PERSON_IDX_NM;
-  // private static final String DOCUMENT_TYPE_PERSON = ElasticsearchDao.DEFAULT_PERSON_DOC_TYPE;
+  private static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
   private PersonDao personDao;
   private ElasticsearchDao elasticsearchDao;
@@ -91,7 +88,6 @@ public class PersonService implements CrudsService {
    * @param personEthnicityDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.ns.PersonEthnicity}
    * @param ethnicityDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Ethnicity}
-   * 
    */
   @Inject
   public PersonService(PersonDao personDao,
@@ -145,19 +141,8 @@ public class PersonService implements CrudsService {
     managedPerson = personDao.find(managedPerson.getId());
     PostedPerson postedPerson = new PostedPerson(managedPerson);
     try {
-      final gov.ca.cwds.rest.api.domain.es.Person esPerson =
-          new gov.ca.cwds.rest.api.domain.es.Person(managedPerson.getId().toString(),
-              managedPerson.getFirstName(), managedPerson.getLastName(), managedPerson.getGender(),
-              DomainChef.cookDate(managedPerson.getDateOfBirth()), managedPerson.getSsn(),
-              managedPerson.getClass().getName(), MAPPER.writeValueAsString(managedPerson));
-      final String document = MAPPER.writeValueAsString(esPerson);
-
       // If the people index is missing, create it.
       elasticsearchDao.createIndexIfNeeded(elasticsearchDao.getDefaultAlias());
-
-      // The ES Dao manages its own connections. No need to manually start or stop.
-      // elasticsearchDao.index(elasticsearchDao.getDefaultAlias(),
-      // elasticsearchDao.getDefaultDocType(), document, esPerson.getId());
     } catch (Exception e) {
       LOGGER.error("Unable to Index Person in ElasticSearch", e);
       throw new ApiException("Unable to Index Person in ElasticSearch", e);
@@ -197,8 +182,7 @@ public class PersonService implements CrudsService {
     managedPerson = personDao.update(managedPerson);
     populatePersonDetails(person, managedPerson);
     managedPerson = personDao.find(managedPerson.getId());
-    PostedPerson postedPerson = new PostedPerson(managedPerson);
-    return postedPerson;
+    return new PostedPerson(managedPerson);
   }
 
   /**
@@ -208,19 +192,19 @@ public class PersonService implements CrudsService {
    */
   private void populatePersonDetails(Person person,
       gov.ca.cwds.data.persistence.ns.Person managedPerson) {
-    if (person.getAddress() != null ) {
+    if (person.getAddress() != null) {
       saveAddress(person, managedPerson);
     }
-    if (person.getPhoneNumber() != null ) {
+    if (person.getPhoneNumber() != null) {
       savePhoneNumber(person, managedPerson);
     }
-    if (person.getLanguage() != null ) {
+    if (person.getLanguage() != null) {
       saveLanguages(person, managedPerson);
     }
     if (person.getRace() != null) {
       saveRaces(person, managedPerson);
     }
-    if (person.getEthnicity() != null ) {
+    if (person.getEthnicity() != null) {
       saveEthnicity(person, managedPerson);
     }
   }

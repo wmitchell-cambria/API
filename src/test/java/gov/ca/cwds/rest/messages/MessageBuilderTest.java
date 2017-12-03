@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.messages;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -59,7 +59,7 @@ public class MessageBuilderTest {
     builder.addError("My 1st Message", ErrorType.VALIDATION);
     builder.addError("My 2nd Message", ErrorType.BUSINESS);
     builder.addError("My 3rd Message", ErrorType.DATA_ACCESS);
-    ArrayList<ErrorMessage> messages = builder.getMessages();
+    List<ErrorMessage> messages = builder.getMessages();
     assertEquals("Expected to find message type", "My 1st Message", messages.get(0).getMessage());
     assertEquals("Expected to find message type", "My 2nd Message", messages.get(1).getMessage());
     assertEquals("Expected to find message type", "My 3rd Message", messages.get(2).getMessage());

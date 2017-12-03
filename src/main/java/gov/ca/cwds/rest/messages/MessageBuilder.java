@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.messages;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -80,7 +81,7 @@ public class MessageBuilder {
   /**
    * @return the error message
    */
-  public ArrayList<ErrorMessage> getMessages() {
+  public List<ErrorMessage> getMessages() {
     return messages == null ? new ArrayList<>() : messages;
   }
 
