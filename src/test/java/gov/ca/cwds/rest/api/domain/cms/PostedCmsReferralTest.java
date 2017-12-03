@@ -21,6 +21,7 @@ import gov.ca.cwds.fixture.ReporterResourceBuilder;
 
 @SuppressWarnings("javadoc")
 public class PostedCmsReferralTest {
+
   private PostedReferral referral;
   private PostedClient client;
   private Set<PostedClient> clients = new HashSet<>();
@@ -67,7 +68,6 @@ public class PostedCmsReferralTest {
     persistentReporter =
         new gov.ca.cwds.data.persistence.cms.Reporter(domainReporter, lastUpdatedBy, lastUpdatedAt);
     reporter = new PostedReporter(persistentReporter);
-
   }
 
   @Test
@@ -84,7 +84,7 @@ public class PostedCmsReferralTest {
   @Test
   public void testPostedReferralConstructorWithMessages() throws Exception {
     PostedCmsReferral postedCmsReferral = new PostedCmsReferral(referral, clients, allegations,
-        crossReports, referralClients, reporter, null);
+        crossReports, referralClients, reporter);
     assertThat(postedCmsReferral, is(not(equalTo(null))));
   }
 
@@ -92,7 +92,7 @@ public class PostedCmsReferralTest {
   public void equalsHashCodeWork() {
     // EqualsVerifier.forClass(PostedCmsReferral.class).suppress(Warning.NONFINAL_FIELDS).verify();
     PostedCmsReferral postedCmsReferral = new PostedCmsReferral(referral, clients, allegations,
-        crossReports, referralClients, reporter, null);
+        crossReports, referralClients, reporter);
     assertThat(postedCmsReferral.hashCode(), is(not(0)));
   }
 

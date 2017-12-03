@@ -14,10 +14,8 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class PostedLongText extends LongText {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private String id;
 

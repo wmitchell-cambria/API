@@ -168,7 +168,7 @@ public class ScreeningSummary extends ReportingDomain implements Response {
    * @return the safetyAlerts
    */
   public Set<String> getSafetyAlerts() {
-    return safetyAlerts != null ? safetyAlerts : new HashSet<String>();
+    return safetyAlerts != null ? safetyAlerts : new HashSet<>();
   }
 
   /**

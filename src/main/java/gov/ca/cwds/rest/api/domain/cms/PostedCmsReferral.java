@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -47,21 +46,6 @@ public class PostedCmsReferral extends ReportingDomain {
     this.crossReport = crossReport;
     this.referralClient = referralClient;
     this.reporter = reporter;
-  }
-
-  /**
-   * @param referral - PostedReferral
-   * @param allegation = PostedAllegation
-   * @param crossReport - CrossReport
-   * @param referralClient - ReferralClient
-   * @param reporter - PostedReporter
-   * @param client - PostedClient
-   * @param errors - error messages
-   */
-  public PostedCmsReferral(PostedReferral referral, Set<PostedClient> client,
-      Set<PostedAllegation> allegation, Set<CrossReport> crossReport,
-      Set<ReferralClient> referralClient, PostedReporter reporter, Collection errors) {
-    this(referral, client, allegation, crossReport, referralClient, reporter);
   }
 
   /**
