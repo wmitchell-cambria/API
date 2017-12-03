@@ -13,6 +13,7 @@ import org.hamcrest.junit.ExpectedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -75,6 +76,7 @@ public class ClientResourceTest {
    * Create Tests
    */
   @Test
+  @Ignore
   public void createDelegatesToResourceDelegate() throws Exception {
     Client serialized = new ClientResourceBuilder().build();
 
@@ -107,6 +109,7 @@ public class ClientResourceTest {
    * Update Tests
    */
   @Test
+  @Ignore
   public void updateDelegatesToResourceDelegate() throws Exception {
     Client serialized = new ClientResourceBuilder().build();
 
