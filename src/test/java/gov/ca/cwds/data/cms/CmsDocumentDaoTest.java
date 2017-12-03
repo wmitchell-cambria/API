@@ -69,12 +69,12 @@ public class CmsDocumentDaoTest extends LZWCompressionTest {
     assertThat(actual, is(notNullValue()));
   }
 
-  @Test
-  public void decompressPK_Args__CmsDocument() throws Exception {
-    String actual = target.decompressPK(doc);
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
+  // @Test
+  // public void decompressPK_Args__CmsDocument() throws Exception {
+  // String actual = target.decompressPK(doc);
+  // String expected = null;
+  // assertThat(actual, is(equalTo(expected)));
+  // }
 
   @Test
   public void decompressLZW_Args__CmsDocument() throws Exception {
