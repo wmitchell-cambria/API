@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -601,7 +602,8 @@ public class ClientTest implements DomainTestTemplate {
   public void testEqualsHashCodeWorks() throws Exception {
     EqualsVerifier.forClass(Client.class).withIgnoredFields("messages")
         .suppress(Warning.NONFINAL_FIELDS).verify();
-
+    Client validClient = validDomainClient();
+    assertThat(validClient.hashCode(), is(not(0)));
   }
 
   @Override
