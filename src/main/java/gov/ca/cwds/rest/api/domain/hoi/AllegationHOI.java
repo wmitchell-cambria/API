@@ -12,7 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  * 
  * @author CWDS API Team
  */
-public class Allegation extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class AllegationHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class Allegation extends ApiObjectIdentity implements ApiTypedIdentifier<
   /**
    * No-argument constructor
    */
-  public Allegation() {
+  public AllegationHOI() {
     // No-argument constructor
   }
 

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * 
  * @author CWDS API Team
  */
-public class Reporter extends Person {
+public class ReporterHOI extends PersonHOI {
 
   private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class Reporter extends Person {
   /**
    * Default no-argument constructor
    */
-  public Reporter() {
+  public ReporterHOI() {
     super();
   }
 

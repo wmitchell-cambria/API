@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,6 +18,8 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @JsonSnakeCase
+@JsonPropertyOrder({"legacy_id", "legacy_ui_id", "legacy_last_updated", "legacy_table_name",
+    "legacy_table_description"})
 public class LegacyDescriptor implements Serializable {
 
   /**
@@ -34,11 +37,11 @@ public class LegacyDescriptor implements Serializable {
   @JsonProperty("legacy_ui_id")
   private String uiId;
 
-  @ApiModelProperty(required = false, readOnly = false, value = "CWS/CMS Last Updated Time",
-      example = "2010-10-01T15:26:42.000-0700")
   @JsonProperty("legacy_last_updated")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-  private DateTime lastUpdatedAt;
+  @ApiModelProperty(required = false, readOnly = false, value = "CWS/CMS Last Updated Time",
+      example = "2010-10-01T15:26:42.000-0700")
+  private DateTime lastUpdated;
 
   @JsonProperty("legacy_table_name")
   @ApiModelProperty(required = false, readOnly = false, value = "CWS/CMS Table Name",
@@ -68,7 +71,7 @@ public class LegacyDescriptor implements Serializable {
       String tableDescription) {
     this.id = id;
     this.uiId = uiId;
-    this.lastUpdatedAt = lastUpdated;
+    this.lastUpdated = lastUpdated;
     this.tableName = tableName;
     this.tableDescription = tableDescription;
   }
@@ -110,7 +113,7 @@ public class LegacyDescriptor implements Serializable {
    * @return return the last updated time as a string
    */
   public DateTime getLastUpdated() {
-    return lastUpdatedAt;
+    return lastUpdated;
   }
 
   /**
@@ -118,7 +121,7 @@ public class LegacyDescriptor implements Serializable {
    * @param lastUpdated set the last updated time as a string
    */
   public void setLastUpdated(DateTime lastUpdated) {
-    this.lastUpdatedAt = lastUpdated;
+    this.lastUpdated = lastUpdated;
   }
 
   /**

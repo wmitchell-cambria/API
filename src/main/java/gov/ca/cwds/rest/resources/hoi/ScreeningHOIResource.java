@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources.hoi;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
+import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,9 +12,10 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.ReferralHoiServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.hoi.ReferralHOI;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
+import gov.ca.cwds.inject.ScreeningHOIServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.hoi.CombinedHOI;
+// import gov.ca.cwds.rest.api.domain.hoi.HistoryOfInvolvement;
+import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,31 +23,31 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-/**
+/*
+ * 
  * @author CWDS API Team
- *
  */
-@Api(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
-@Path(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
+
+@Api(value = RESOURCE_SCREENINGS)
+@Path(value = RESOURCE_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ReferralHistoryOfInvolvementResource {
-
-  private ResourceDelegate resourceDelegate;
+public class ScreeningHOIResource {
+  private TypedResourceDelegate<String, CombinedHOI> typedResourceDelegate;
 
   /**
    * Constructor
    * 
-   * @param resourceDelegate - resourceDelegate
+   * @param typedResourceDelegate The resourceDelegate to delegate to.
    */
   @Inject
-  public ReferralHistoryOfInvolvementResource(
-      @ReferralHoiServiceBackedResource ResourceDelegate resourceDelegate) {
-    super();
-    this.resourceDelegate = resourceDelegate;
+  public ScreeningHOIResource(
+      @ScreeningHOIServiceBackedResource TypedResourceDelegate<String, CombinedHOI> typedResourceDelegate) {
+    this.typedResourceDelegate = typedResourceDelegate;
   }
 
   /**
+   * Finds history of involvement by screening id.
    * 
    * @param id the id
    * 
@@ -54,15 +55,15 @@ public class ReferralHistoryOfInvolvementResource {
    */
   @UnitOfWork(value = "cms")
   @GET
-  @Path("/{id}")
+  @Path("/{id}/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find referrals history of involvement by clientId",
-      response = ReferralHOI.class, code = 200)
+  @ApiOperation(value = "Find history of involvement by screening id",
+      response = gov.ca.cwds.rest.api.domain.hoi.CombinedHOI.class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the client to find") String id) {
-    return resourceDelegate.get(id);
+      value = "The id of the Screening") String id) {
+    return typedResourceDelegate.get(id);
   }
 
 }

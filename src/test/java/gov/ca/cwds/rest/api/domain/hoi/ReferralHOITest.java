@@ -17,18 +17,18 @@ import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 
-public class ReferralTest {
+public class ReferralHOITest {
 
-  Referral target;
+  ReferralHOI target;
 
   @Before
   public void setup() throws Exception {
-    target = new Referral();
+    target = new ReferralHOI();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(Referral.class, notNullValue());
+    assertThat(ReferralHOI.class, notNullValue());
   }
 
   @Test
@@ -103,14 +103,14 @@ public class ReferralTest {
 
   @Test
   public void getReporter_Args__() throws Exception {
-    Reporter actual = target.getReporter();
-    Reporter expected = null;
+    ReporterHOI actual = target.getReporter();
+    ReporterHOI expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setReporter_Args__Reporter() throws Exception {
-    Reporter reporter = mock(Reporter.class);
+    ReporterHOI reporter = mock(ReporterHOI.class);
     target.setReporter(reporter);
   }
 
@@ -129,14 +129,14 @@ public class ReferralTest {
 
   @Test
   public void getAllegations_Args__() throws Exception {
-    List<Allegation> actual = target.getAllegations();
-    List<Allegation> expected = new ArrayList<>();
+    List<AllegationHOI> actual = target.getAllegations();
+    List<AllegationHOI> expected = new ArrayList<>();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setAllegations_Args__List() throws Exception {
-    List<Allegation> allegations = new ArrayList<Allegation>();
+    List<AllegationHOI> allegations = new ArrayList<AllegationHOI>();
     target.setAllegations(allegations);
   }
 
@@ -169,7 +169,7 @@ public class ReferralTest {
   @Test
   public void main_Args__StringArray() throws Exception {
     String[] args = new String[] {};
-    Referral.main(args);
+    ReferralHOI.main(args);
   }
 
 }

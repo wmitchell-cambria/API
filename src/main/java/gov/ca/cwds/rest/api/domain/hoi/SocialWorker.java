@@ -5,7 +5,7 @@ package gov.ca.cwds.rest.api.domain.hoi;
  * 
  * @author CWDS API Team
  */
-public class SocialWorker extends Person {
+public class SocialWorker extends PersonHOI {
 
   /**
    * Default serialization version.

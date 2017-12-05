@@ -20,15 +20,16 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.util.FerbDateUtils;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Referral for HOI.
  * 
  * @author CWDS API Team
  */
-public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Referral.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReferralHOI.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -37,10 +38,12 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @JsonProperty("start_date")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "2017-08-22")
   private Date startDate;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @JsonProperty("end_date")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "2017-08-23")
   private Date endDate;
 
   @JsonProperty("county")
@@ -50,7 +53,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
   private SystemCodeDescriptor responseTime;
 
   @JsonProperty("reporter")
-  private Reporter reporter;
+  private ReporterHOI reporter;
 
   @JsonProperty("assigned_social_worker")
   private SocialWorker assignedSocialWorker;
@@ -59,7 +62,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
   private AccessLimitation accessLimitation;
 
   @JsonProperty("allegations")
-  private List<Allegation> allegations = new ArrayList<>();
+  private List<AllegationHOI> allegations = new ArrayList<>();
 
   @JsonProperty("legacy_descriptor")
   private LegacyDescriptor legacyDescriptor;
@@ -67,7 +70,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
   /**
    * No-argument constructor
    */
-  public Referral() {
+  public ReferralHOI() {
     // No-argument constructor
   }
 
@@ -113,11 +116,11 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
     this.responseTime = responseTime;
   }
 
-  public Reporter getReporter() {
+  public ReporterHOI getReporter() {
     return reporter;
   }
 
-  public void setReporter(Reporter reporter) {
+  public void setReporter(ReporterHOI reporter) {
     this.reporter = reporter;
   }
 
@@ -129,11 +132,11 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
     this.assignedSocialWorker = assignedSocialWorker;
   }
 
-  public List<Allegation> getAllegations() {
+  public List<AllegationHOI> getAllegations() {
     return allegations;
   }
 
-  public void setAllegations(List<Allegation> allegations) {
+  public void setAllegations(List<AllegationHOI> allegations) {
     this.allegations = allegations;
   }
 
@@ -154,7 +157,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
   }
 
   public static void main(String[] args) throws Exception {
-    Referral referral = new Referral();
+    ReferralHOI referral = new ReferralHOI();
 
     AccessLimitation accessLimitation = new AccessLimitation();
     accessLimitation.setLimitedAccessCode(LimitedAccessType.SEALED);
@@ -167,7 +170,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
     referral.setAccessLimitation(accessLimitation);
 
 
-    Allegation allegation = new Allegation();
+    AllegationHOI allegation = new AllegationHOI();
     allegation.setDescription("Allegation description");
 
     SystemCodeDescriptor aleggationDisposition = new SystemCodeDescriptor();
@@ -197,7 +200,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
     perpetrator.setLimitedAccessType(LimitedAccessType.NONE);
     allegation.setPerpetrator(perpetrator);
 
-    List<Allegation> allegations = new ArrayList<>();
+    List<AllegationHOI> allegations = new ArrayList<>();
     allegations.add(allegation);
     referral.setAllegations(allegations);
 
@@ -223,7 +226,7 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
         new DateTime(), LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription()));
 
 
-    Reporter reporter = new Reporter();
+    ReporterHOI reporter = new ReporterHOI();
     reporter.setFirstName("Reporter First Name");
     reporter.setLastName("Reporter Last Name");
     reporter.setId("jhgjhgjh");
@@ -241,4 +244,6 @@ public class Referral extends ApiObjectIdentity implements ApiTypedIdentifier<St
     String json = ObjectMapperUtils.createObjectMapper().writeValueAsString(referral);
     LOGGER.info(json);
   }
+
+
 }

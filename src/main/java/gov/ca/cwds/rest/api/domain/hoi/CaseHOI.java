@@ -18,13 +18,14 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.util.FerbDateUtils;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Case for HOI.
  * 
  * @author CWDS API Team
  */
-public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class CaseHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -37,6 +38,7 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
 
   @JsonProperty("end_date")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "2017-09-30")
   private Date endDate;
 
   @JsonProperty("county")
@@ -63,7 +65,7 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
   /**
    * No-argument constructor
    */
-  public Case() {
+  public CaseHOI() {
     // No-argument constructor
   }
 
@@ -150,7 +152,7 @@ public class Case extends ApiObjectIdentity implements ApiTypedIdentifier<String
   }
 
   public static void main(String[] args) throws Exception {
-    Case kase = new Case();
+    CaseHOI kase = new CaseHOI();
 
     AccessLimitation accessLimitation = new AccessLimitation();
     accessLimitation.setLimitedAccessCode(LimitedAccessType.SEALED);

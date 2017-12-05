@@ -71,6 +71,7 @@ import gov.ca.cwds.rest.resources.cms.ReferralResource;
 import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
+import gov.ca.cwds.rest.resources.hoi.ScreeningHOIResource;
 import gov.ca.cwds.rest.resources.investigation.ContactResource;
 import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
@@ -106,6 +107,7 @@ import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
+import gov.ca.cwds.rest.services.hoi.ScreeningHOIService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
@@ -172,6 +174,7 @@ public class ResourcesModule extends AbstractModule {
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
     bind(SafetyAlertsResource.class);
+    bind(ScreeningHOIResource.class);
   }
 
   @Provides
@@ -490,6 +493,14 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(gov.ca.cwds.rest.services.investigation.CrossReportListService.class));
+  }
+
+  @Provides
+  @ScreeningHOIServiceBackedResource
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.CombinedHOI> screeningHOIServiceBackedResource(
+      Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(ScreeningHOIService.class));
   }
 }
 

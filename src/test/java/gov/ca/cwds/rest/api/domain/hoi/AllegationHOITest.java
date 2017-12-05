@@ -12,18 +12,18 @@ import org.junit.Test;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 
-public class AllegationTest {
+public class AllegationHOITest {
 
-  Allegation target;
+  AllegationHOI target;
 
   @Before
   public void setup() throws Exception {
-    target = new Allegation();
+    target = new AllegationHOI();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(Allegation.class, notNullValue());
+    assertThat(AllegationHOI.class, notNullValue());
   }
 
   @Test

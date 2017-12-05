@@ -6,23 +6,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Basic person.
  * 
  * @author CWDS API Team
  */
-public class Person extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class PersonHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
+  @ApiModelProperty(example = "111111")
   private String id;
 
   @JsonProperty("first_name")
+  @ApiModelProperty(example = "joe")
   private String firstName;
 
   @JsonProperty("last_name")
+  @ApiModelProperty(example = "west")
   private String lastName;
 
   @JsonProperty("legacy_descriptor")
@@ -62,5 +66,6 @@ public class Person extends ApiObjectIdentity implements ApiTypedIdentifier<Stri
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
+
 }
 
