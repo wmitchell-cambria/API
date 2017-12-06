@@ -41,6 +41,25 @@ public class AllegationHOI extends ApiObjectIdentity implements ApiTypedIdentifi
     // No-argument constructor
   }
 
+  /**
+   * @param id - id
+   * @param description - description
+   * @param disposition - disposition
+   * @param victim - victim
+   * @param perpetrator - perpetrator
+   * @param legacyDescriptor - legacyDescriptor
+   */
+  public AllegationHOI(String id, String description, SystemCodeDescriptor disposition,
+      Victim victim, Perpetrator perpetrator, LegacyDescriptor legacyDescriptor) {
+    super();
+    this.id = id;
+    this.description = description;
+    this.disposition = disposition;
+    this.victim = victim;
+    this.perpetrator = perpetrator;
+    this.legacyDescriptor = legacyDescriptor;
+  }
+
   @Override
   public String getId() {
     return id;

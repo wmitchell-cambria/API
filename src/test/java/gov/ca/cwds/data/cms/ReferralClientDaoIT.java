@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.cms;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -114,6 +115,7 @@ public class ReferralClientDaoIT implements DaoTestTemplate {
   public void testDeleteEntityNotFoundException() throws Exception {
     ReferralClient delete = referralClientDao.delete(new PrimaryKey("ZZZZZZZ999", "XXXXXXX000"));
     assertThat(delete, is(nullValue()));
+
   }
 
   @Override
@@ -141,6 +143,30 @@ public class ReferralClientDaoIT implements DaoTestTemplate {
   @Override
   public void testFindAllReturnsCorrectList() throws Exception {
 
+  }
+
+  /**
+   * Test to find the referralClient by clientId
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindClientId() throws Exception {
+    ReferralClient[] referralClients = referralClientDao.findByClientId("AapJGAU04Z");
+    assertThat(referralClients, notNullValue());
+    assertThat(referralClients.length, greaterThanOrEqualTo(1));
+  }
+
+  /**
+   * Test to find the referralClient by referralId
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindReferralId() throws Exception {
+    ReferralClient[] referralClients = referralClientDao.findByReferralId("8ckQ38M04Z");
+    assertThat(referralClients, notNullValue());
+    assertThat(referralClients.length, greaterThanOrEqualTo(1));
   }
 
 }

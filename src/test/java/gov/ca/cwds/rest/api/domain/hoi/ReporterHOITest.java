@@ -3,7 +3,8 @@ package gov.ca.cwds.rest.api.domain.hoi;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
@@ -11,6 +12,11 @@ import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ReporterHOITest {
 
   ReporterHOI target;
@@ -89,5 +95,19 @@ public class ReporterHOITest {
     LegacyDescriptor legacyDescriptor = mock(LegacyDescriptor.class);
     target.setLegacyDescriptor(legacyDescriptor);
   }
+
+  @Test
+  public void testEmptyConstructor() throws Exception {
+    ReporterHOI empty = new ReporterHOI();
+    assertThat(empty.getClass(), is(ReporterHOI.class));
+  }
+
+
+  @Test
+  public void equalsHashCodeWork() {
+    ReporterHOI empty = new ReporterHOI();
+    assertThat(empty.hashCode(), is(not(0)));
+  }
+
 
 }
