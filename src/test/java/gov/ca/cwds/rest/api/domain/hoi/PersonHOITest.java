@@ -6,14 +6,22 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 
 public class PersonHOITest {
 
   PersonHOI target;
+  private String id = "jhdgfkhaj";
+  private String firstName = "Barney";
+  private String lastName = "Dino";
+  private LegacyDescriptor legacyDescriptor =
+      new LegacyDescriptor("jhdgfkhaj", "jhdgfkhaj-hohj-jkj", new DateTime(),
+          LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
 
   @Before
   public void setup() throws Exception {
@@ -88,6 +96,15 @@ public class PersonHOITest {
     PersonHOI target = new PersonHOI();
     LegacyDescriptor legacyDescriptor = mock(LegacyDescriptor.class);
     target.setLegacyDescriptor(legacyDescriptor);
+  }
+
+  @Test
+  public void constructorTest() throws Exception {
+    PersonHOI domain = new PersonHOI(id, firstName, lastName, legacyDescriptor);
+    assertThat(domain.getId(), is(equalTo(id)));
+    assertThat(domain.getFirstName(), is(equalTo(firstName)));
+    assertThat(domain.getLastName(), is(equalTo(lastName)));
+    assertThat(domain.getLegacyDescriptor(), is(equalTo(legacyDescriptor)));
   }
 
 }

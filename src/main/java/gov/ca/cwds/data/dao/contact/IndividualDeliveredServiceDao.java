@@ -1,7 +1,7 @@
 package gov.ca.cwds.data.dao.contact;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
@@ -29,8 +29,8 @@ public class IndividualDeliveredServiceDao extends CrudsDaoImpl<IndividualDelive
 
   @SuppressWarnings("unchecked")
   public IndividualDeliveredServiceEntity[] findByDeliveredServiceId(String deliveredServiceId) {
-    final NativeQuery<IndividualDeliveredServiceEntity> query =
-        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
+    final Query<IndividualDeliveredServiceEntity> query =
+        this.getSessionFactory().getCurrentSession().getNamedQuery(
             "gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.findAllForDeliveredService");
     query.setParameter("deliveredServiceId", deliveredServiceId, StringType.INSTANCE);
     return query.list().toArray(new IndividualDeliveredServiceEntity[0]);
