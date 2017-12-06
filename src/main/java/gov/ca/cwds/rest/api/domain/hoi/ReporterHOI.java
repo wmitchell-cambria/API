@@ -45,22 +45,27 @@ public class ReporterHOI extends PersonHOI {
   }
 
   /**
-   * @param description
-   * @param id
-   * @param firstName
-   * @param lastName
-   * @param legacyDescriptor
+   * @param id - id
+   * @param firstName - firstName
+   * @param lastName - lastName
+   * @param legacyDescriptor - legacyDescriptor
    */
-  public ReporterHOI(String description, String id, String firstName, String lastName,
+  public ReporterHOI(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
 
   }
 
+  /**
+   * @return the role
+   */
   public Role getRole() {
     return role;
   }
 
+  /**
+   * @param role - role
+   */
   public void setRole(Role role) {
     this.role = role;
   }
