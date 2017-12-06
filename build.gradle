@@ -208,7 +208,7 @@ tasks.withType(Test) {
 }
 
 test {
-    exclude '**/*IT*'
+    exclude '**/*DaoIT*'
 
     // These don't work. Docs mistaken?
     // jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
