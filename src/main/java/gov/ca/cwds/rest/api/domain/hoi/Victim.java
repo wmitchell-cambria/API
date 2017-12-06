@@ -34,9 +34,12 @@ public class Victim extends PersonHOI {
    * @param legacyDescriptor - legacyDescriptor
    */
   public Victim(String id, String firstName, String lastName, LegacyDescriptor legacyDescriptor) {
-    super();
+    super(id, firstName, lastName, legacyDescriptor);
   }
 
+  /**
+   * @return
+   */
   public LimitedAccessType getLimitedAccessType() {
     return limitedAccessType;
   }

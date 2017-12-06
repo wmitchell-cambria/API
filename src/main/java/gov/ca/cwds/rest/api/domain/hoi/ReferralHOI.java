@@ -114,7 +114,7 @@ public class ReferralHOI extends ApiObjectIdentity
         new SocialWorker(staffPerson.getId(), staffPerson.getFirstName(), staffPerson.getLastName(),
             new LegacyDescriptor(staffPerson.getId(), null,
                 new DateTime(staffPerson.getLastUpdatedTime()), LegacyTable.STAFF_PERSON.getName(),
-                null));
+                LegacyTable.STAFF_PERSON.getDescription()));
     this.accessLimitation = new AccessLimitation(LimitedAccessType.NONE,
         referral.getLimitedAccessDate(), referral.getLimitedAccessDesc(),
         new SystemCodeDescriptor(referral.getLimitedAccessGovtAgencyType(), SystemCodeCache.global()
@@ -125,8 +125,9 @@ public class ReferralHOI extends ApiObjectIdentity
         this.allegations.add(new AllegationHOI());
       }
     }
-    this.legacyDescriptor = new LegacyDescriptor(referral.getId(), null,
-        new DateTime(referral.getLastUpdatedTime()), LegacyTable.REFERRAL.getName(), null);
+    this.legacyDescriptor =
+        new LegacyDescriptor(referral.getId(), null, new DateTime(referral.getLastUpdatedTime()),
+            LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription());
   }
 
   @Override

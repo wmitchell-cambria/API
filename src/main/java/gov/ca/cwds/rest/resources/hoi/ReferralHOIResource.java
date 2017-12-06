@@ -67,7 +67,7 @@ public class ReferralHOIResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find referrals history of involvement by clientId",
-      response = ReferralHOI.class, code = 200)
+      response = ReferralHOI[].class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the client to find") String id) {
     return typedResourceDelegate.get(id);
