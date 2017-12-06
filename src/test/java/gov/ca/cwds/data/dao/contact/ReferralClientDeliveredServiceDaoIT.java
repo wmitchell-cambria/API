@@ -1,11 +1,11 @@
 package gov.ca.cwds.data.dao.contact;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEmbeddable;
-import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 
 import java.util.Date;
 
@@ -22,6 +22,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+
+import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEmbeddable;
+import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 
 /**
  * @author CWDS API Team
@@ -159,7 +162,19 @@ public class ReferralClientDeliveredServiceDaoIT {
             lastUpdatedId, lastUpdatedTime);
 
     referralClientDeliveredServiceDao.update(referralClientDeliveredService);
+  }
 
+  /**
+   * Test to find the deliveredService by referral id
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindDeliveredServiceId() throws Exception {
+    ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntity =
+        referralClientDeliveredServiceDao.findByReferralId(referralId);
+    assertThat(referralClientDeliveredServiceEntity, notNullValue());
+    assertThat(referralClientDeliveredServiceEntity.length, greaterThanOrEqualTo(1));
   }
 
 }

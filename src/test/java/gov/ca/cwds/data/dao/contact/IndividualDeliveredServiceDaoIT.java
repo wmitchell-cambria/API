@@ -1,11 +1,11 @@
 package gov.ca.cwds.data.dao.contact;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEmbeddable;
-import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 
 import java.util.Date;
 
@@ -22,6 +22,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+
+import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEmbeddable;
+import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 
 /**
  * @author CWDS API Team
@@ -160,7 +163,19 @@ public class IndividualDeliveredServiceDaoIT {
             "00", new Date(), (short) 420, new Date(), "", null);
 
     individualDeliveredServiceDao.update(individualDeliveredServiceEntity);
+  }
 
+  /**
+   * Test to find the deliveredService id
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindDeliveredServiceId() throws Exception {
+    IndividualDeliveredServiceEntity[] individualDeliveredServiceEntity =
+        individualDeliveredServiceDao.findByDeliveredServiceId(deliveredServiceId);
+    assertThat(individualDeliveredServiceEntity, notNullValue());
+    assertThat(individualDeliveredServiceEntity.length, greaterThanOrEqualTo(1));
   }
 
 }
