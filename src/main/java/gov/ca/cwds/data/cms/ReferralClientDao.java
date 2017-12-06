@@ -1,7 +1,7 @@
 package gov.ca.cwds.data.cms;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
@@ -27,17 +27,30 @@ public class ReferralClientDao extends CrudsDaoImpl<ReferralClient> {
     super(sessionFactory);
   }
 
+  /**
+   * Find by referral id
+   * 
+   * @param referralId - referralId
+   * @return the referralClient,
+   */
   @SuppressWarnings("unchecked")
   public ReferralClient[] findByReferralId(String referralId) {
-    final NativeQuery<ReferralClient> query = this.getSessionFactory().getCurrentSession()
-        .getNamedNativeQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByReferral");
+    final Query<ReferralClient> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByReferral");
     query.setParameter("referralId", referralId, StringType.INSTANCE);
     return query.list().toArray(new ReferralClient[0]);
   }
 
+  /**
+   * Find by client id
+   * 
+   * @param clientId - referralId
+   * @return the referalClient
+   */
+  @SuppressWarnings("unchecked")
   public ReferralClient[] findByClientId(String clientId) {
-    final NativeQuery<ReferralClient> query = this.getSessionFactory().getCurrentSession()
-        .getNamedNativeQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByClient");
+    final Query<ReferralClient> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByClient");
     query.setParameter("clientId", clientId, StringType.INSTANCE);
     return query.list().toArray(new ReferralClient[0]);
   }

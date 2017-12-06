@@ -44,6 +44,8 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 public class ReferralService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.Referral, gov.ca.cwds.rest.api.domain.cms.Referral> {
 
+  private static final short NOT_REFERRED = (short) 3225;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ReferralService.class);
 
   private ReferralDao referralDao;
@@ -278,7 +280,7 @@ public class ReferralService implements
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
         screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
         govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(), referredToResourceType ? (short) 3225 : 0,
+        screeningToReferral.getResponseTime(), referredToResourceType ? NOT_REFERRED : 0,
         allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
         screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
