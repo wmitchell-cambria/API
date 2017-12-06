@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -22,10 +23,11 @@ import io.dropwizard.jackson.JsonSnakeCase;
  * 
  * @author CWDS API Team
  */
-@JsonInclude(Include.ALWAYS)
+@JsonInclude(Include.NON_EMPTY)
 @JsonSnakeCase
 @JsonPropertyOrder({"cases", "referrals", "screenings"})
-public class CombinedHOI extends ApiObjectIdentity implements Request, Response {
+public class CombinedHOI extends ApiObjectIdentity
+    implements ApiTypedIdentifier<String>, Request, Response {
 
   private static final long serialVersionUID = 1L;
 
@@ -100,6 +102,18 @@ public class CombinedHOI extends ApiObjectIdentity implements Request, Response 
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  @Override
+  public String getId() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void setId(String id) {
+    // TODO Auto-generated method stub
+
   }
 
 }

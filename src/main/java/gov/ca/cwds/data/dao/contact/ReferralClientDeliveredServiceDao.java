@@ -1,7 +1,7 @@
 package gov.ca.cwds.data.dao.contact;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
@@ -30,8 +30,8 @@ public class ReferralClientDeliveredServiceDao
 
   @SuppressWarnings("unchecked")
   public ReferralClientDeliveredServiceEntity[] findByReferralId(String referralId) {
-    final NativeQuery<ReferralClientDeliveredServiceEntity> query =
-        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
+    final Query<ReferralClientDeliveredServiceEntity> query =
+        this.getSessionFactory().getCurrentSession().getNamedQuery(
             "gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.findAllForReferralId");
     query.setParameter("referralId", referralId, StringType.INSTANCE);
     return query.list().toArray(new ReferralClientDeliveredServiceEntity[0]);
