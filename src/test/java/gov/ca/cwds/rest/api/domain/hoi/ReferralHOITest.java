@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.api.domain.hoi;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
@@ -17,6 +17,11 @@ import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ReferralHOITest {
 
   ReferralHOI target;
@@ -170,6 +175,12 @@ public class ReferralHOITest {
   public void main_Args__StringArray() throws Exception {
     String[] args = new String[] {};
     ReferralHOI.main(args);
+  }
+
+  @Test
+  public void testEmptyConstructor() throws Exception {
+    ReferralHOI empty = new ReferralHOI();
+    assertThat(empty.getClass(), is(ReferralHOI.class));
   }
 
 }

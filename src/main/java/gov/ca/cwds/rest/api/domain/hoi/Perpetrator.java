@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.api.domain.hoi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 
 /**
@@ -23,6 +24,17 @@ public class Perpetrator extends PersonHOI {
    * No-argument constructor
    */
   public Perpetrator() {
+    super();
+  }
+
+  /**
+   * @param id - id
+   * @param firstName - firstName
+   * @param lastName - lastName
+   * @param legacyDescriptor - legacyDescriptor
+   */
+  public Perpetrator(String id, String firstName, String lastName,
+      LegacyDescriptor legacyDescriptor) {
     super();
   }
 

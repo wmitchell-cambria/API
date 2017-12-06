@@ -33,6 +33,26 @@ public class PersonHOI extends ApiObjectIdentity implements ApiTypedIdentifier<S
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
+  /**
+   * No-argument constructor
+   */
+  public PersonHOI() {}
+
+  /**
+   * @param id - id
+   * @param firstName - firstName
+   * @param lastName - lastName
+   * @param legacyDescriptor - legacyDescriptor
+   */
+  public PersonHOI(String id, String firstName, String lastName,
+      LegacyDescriptor legacyDescriptor) {
+    super();
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.legacyDescriptor = legacyDescriptor;
+  }
+
   @Override
   public String getId() {
     return id;

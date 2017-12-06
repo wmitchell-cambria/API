@@ -408,6 +408,20 @@ public class ReferralClient extends CmsPersistentObject {
   }
 
   /**
+   * @return the client
+   */
+  public Client getClient() {
+    return client;
+  }
+
+  /**
+   * @return the referral
+   */
+  public Referral getReferral() {
+    return referral;
+  }
+
+  /**
    * @return the drugIndicator
    */
   public String getDrugIndicator() {

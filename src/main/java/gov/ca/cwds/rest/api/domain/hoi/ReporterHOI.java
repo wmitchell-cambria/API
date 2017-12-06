@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.api.domain.hoi;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
+
 /**
  * Reporter person.
  * 
@@ -40,6 +42,19 @@ public class ReporterHOI extends PersonHOI {
    */
   public ReporterHOI() {
     super();
+  }
+
+  /**
+   * @param description
+   * @param id
+   * @param firstName
+   * @param lastName
+   * @param legacyDescriptor
+   */
+  public ReporterHOI(String description, String id, String firstName, String lastName,
+      LegacyDescriptor legacyDescriptor) {
+    super(id, firstName, lastName, legacyDescriptor);
+
   }
 
   public Role getRole() {

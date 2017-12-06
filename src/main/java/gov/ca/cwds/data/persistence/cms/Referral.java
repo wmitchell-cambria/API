@@ -465,8 +465,9 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
           DomainChef.cookBoolean(referral.getCaretakersPerpetratorCode());
       this.closureDate = DomainChef.uncookDateString(referral.getClosureDate());
       this.communicationMethodType = referral.getCommunicationMethodType();
-      this.currentLocationOfChildren = StringUtils.isBlank(referral.getCurrentLocationOfChildren())
-          ? null : referral.getCurrentLocationOfChildren();
+      this.currentLocationOfChildren =
+          StringUtils.isBlank(referral.getCurrentLocationOfChildren()) ? null
+              : referral.getCurrentLocationOfChildren();
       this.drmsAllegationDescriptionDoc = referral.getDrmsAllegationDescriptionDoc();
       this.drmsErReferralDoc = referral.getDrmsErReferralDoc();
       this.drmsInvestigationDoc = referral.getDrmsInvestigationDoc();
@@ -496,8 +497,9 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
       this.specificsIncludedCode = referral.getSpecificsIncludedCode();
       this.sufficientInformationCode = referral.getSufficientInformationCode();
       this.unfoundedSeriesCode = referral.getUnfoundedSeriesCode();
-      this.linkToPrimaryReferralId = StringUtils.isBlank(referral.getLinkToPrimaryReferralId())
-          ? null : referral.getLinkToPrimaryReferralId();
+      this.linkToPrimaryReferralId =
+          StringUtils.isBlank(referral.getLinkToPrimaryReferralId()) ? null
+              : referral.getLinkToPrimaryReferralId();
       this.allegesAbuseOccurredAtAddressId =
           StringUtils.isBlank(referral.getAllegesAbuseOccurredAtAddressId()) ? null
               : referral.getAllegesAbuseOccurredAtAddressId();
@@ -871,6 +873,13 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    */
   public Date getOriginalClosureDate() {
     return freshDate(originalClosureDate);
+  }
+
+  /**
+   * @return the staffPerson
+   */
+  public StaffPerson getStaffPerson() {
+    return staffPerson;
   }
 
   /**

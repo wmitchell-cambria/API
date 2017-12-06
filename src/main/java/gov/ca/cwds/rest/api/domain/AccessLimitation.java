@@ -38,6 +38,21 @@ public class AccessLimitation extends ApiObjectIdentity {
     // No-argument constructor
   }
 
+  /**
+   * @param limitedAccessCode - limitedAccessCode
+   * @param limitedAccessDate - limitedAccessDate
+   * @param limitedAccessDescription - limitedAccessDescription
+   * @param limitedAccessGovernmentEntity - limitedAccessGovernmentEntity
+   */
+  public AccessLimitation(LimitedAccessType limitedAccessCode, Date limitedAccessDate,
+      String limitedAccessDescription, SystemCodeDescriptor limitedAccessGovernmentEntity) {
+    super();
+    this.limitedAccessCode = limitedAccessCode;
+    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDescription = limitedAccessDescription;
+    this.limitedAccessGovernmentEntity = limitedAccessGovernmentEntity;
+  }
+
   public LimitedAccessType getLimitedAccessCode() {
     return limitedAccessCode;
   }
