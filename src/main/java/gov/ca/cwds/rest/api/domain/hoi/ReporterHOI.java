@@ -53,7 +53,6 @@ public class ReporterHOI extends PersonHOI {
   public ReporterHOI(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
-
   }
 
   /**
