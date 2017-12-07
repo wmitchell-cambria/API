@@ -6,7 +6,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
-import gov.ca.cwds.rest.api.domain.hoi.AllegationHOI;
+import gov.ca.cwds.rest.api.domain.hoi.HOIAllegation;
 import gov.ca.cwds.rest.api.domain.hoi.Perpetrator;
 import gov.ca.cwds.rest.api.domain.hoi.Victim;
 
@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.api.domain.hoi.Victim;
  * 
  * @author CWDS API Team
  */
-public class AllegationHOIResourceBuilder {
+public class HOIAllegationResourceBuilder {
 
   private String id = "jhdgfkhaj";
   private String description = "Allegation description";
@@ -24,35 +24,35 @@ public class AllegationHOIResourceBuilder {
   private SystemCodeDescriptor disposition;
 
 
-  public AllegationHOIResourceBuilder setId(String id) {
+  public HOIAllegationResourceBuilder setId(String id) {
     this.id = id;
     return this;
   }
 
 
-  public AllegationHOIResourceBuilder setDescription(String description) {
+  public HOIAllegationResourceBuilder setDescription(String description) {
     this.description = description;
     return this;
   }
 
 
-  public AllegationHOIResourceBuilder setVictim(Victim victim) {
+  public HOIAllegationResourceBuilder setVictim(Victim victim) {
     this.victim = victim;
     return this;
   }
 
-  public AllegationHOIResourceBuilder setPerpetrator(Perpetrator perpetrator) {
+  public HOIAllegationResourceBuilder setPerpetrator(Perpetrator perpetrator) {
     this.perpetrator = perpetrator;
     return this;
   }
 
-  public AllegationHOIResourceBuilder setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
+  public HOIAllegationResourceBuilder setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
     return this;
   }
 
 
-  public AllegationHOIResourceBuilder() {
+  public HOIAllegationResourceBuilder() {
     disposition = new SystemCodeDescriptor();
     disposition.setId((short) 45);
     disposition.setDescription("Substantiated");
@@ -80,7 +80,7 @@ public class AllegationHOIResourceBuilder {
   /**
    * @return the AllegationHOI
    */
-  public gov.ca.cwds.rest.api.domain.hoi.AllegationHOI createAllegationHOI() {
-    return new AllegationHOI(id, description, disposition, victim, perpetrator, legacyDescriptor);
+  public gov.ca.cwds.rest.api.domain.hoi.HOIAllegation createHOIAllegation() {
+    return new HOIAllegation(id, description, disposition, victim, perpetrator, legacyDescriptor);
   }
 }

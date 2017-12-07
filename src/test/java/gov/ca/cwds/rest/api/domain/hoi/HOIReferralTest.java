@@ -22,18 +22,18 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  *
  */
 @SuppressWarnings("javadoc")
-public class ReferralHOITest {
+public class HOIReferralTest {
 
-  ReferralHOI target;
+  HOIReferral target;
 
   @Before
   public void setup() throws Exception {
-    target = new ReferralHOI();
+    target = new HOIReferral();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(ReferralHOI.class, notNullValue());
+    assertThat(HOIReferral.class, notNullValue());
   }
 
   @Test
@@ -108,14 +108,14 @@ public class ReferralHOITest {
 
   @Test
   public void getReporter_Args__() throws Exception {
-    ReporterHOI actual = target.getReporter();
-    ReporterHOI expected = null;
+    HOIReporter actual = target.getReporter();
+    HOIReporter expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setReporter_Args__Reporter() throws Exception {
-    ReporterHOI reporter = mock(ReporterHOI.class);
+    HOIReporter reporter = mock(HOIReporter.class);
     target.setReporter(reporter);
   }
 
@@ -134,14 +134,14 @@ public class ReferralHOITest {
 
   @Test
   public void getAllegations_Args__() throws Exception {
-    List<AllegationHOI> actual = target.getAllegations();
-    List<AllegationHOI> expected = new ArrayList<>();
+    List<HOIAllegation> actual = target.getAllegations();
+    List<HOIAllegation> expected = new ArrayList<>();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setAllegations_Args__List() throws Exception {
-    List<AllegationHOI> allegations = new ArrayList<AllegationHOI>();
+    List<HOIAllegation> allegations = new ArrayList<HOIAllegation>();
     target.setAllegations(allegations);
   }
 
@@ -174,13 +174,13 @@ public class ReferralHOITest {
   @Test
   public void main_Args__StringArray() throws Exception {
     String[] args = new String[] {};
-    ReferralHOI.main(args);
+    HOIReferral.main(args);
   }
 
   @Test
   public void testEmptyConstructor() throws Exception {
-    ReferralHOI empty = new ReferralHOI();
-    assertThat(empty.getClass(), is(ReferralHOI.class));
+    HOIReferral empty = new HOIReferral();
+    assertThat(empty.getClass(), is(HOIReferral.class));
   }
 
 }

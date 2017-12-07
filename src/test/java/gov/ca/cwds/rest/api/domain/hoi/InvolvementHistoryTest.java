@@ -10,40 +10,40 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class CombinedHOITest {
+public class InvolvementHistoryTest {
 
   @Test
   public void type() throws Exception {
-    assertThat(CombinedHOI.class, notNullValue());
+    assertThat(InvolvementHistory.class, notNullValue());
   }
 
   @Test
   public void instantiation() throws Exception {
-    CombinedHOI target = new CombinedHOI();
+    InvolvementHistory target = new InvolvementHistory();
     assertThat(target, notNullValue());
   }
 
   @Test
   public void getCases_Args__() throws Exception {
-    CombinedHOI target = new CombinedHOI();
-    Set<CaseHOI> actual = target.getCases();
-    Set<CaseHOI> expected = Collections.emptySet();
+    InvolvementHistory target = new InvolvementHistory();
+    Set<HOICase> actual = target.getCases();
+    Set<HOICase> expected = Collections.emptySet();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void getReferrals_Args__() throws Exception {
-    CombinedHOI target = new CombinedHOI();
-    Set<ReferralHOI> actual = target.getReferrals();
-    Set<ReferralHOI> expected = Collections.emptySet();
+    InvolvementHistory target = new InvolvementHistory();
+    Set<HOIReferral> actual = target.getReferrals();
+    Set<HOIReferral> expected = Collections.emptySet();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void getScreenings_Args__() throws Exception {
-    CombinedHOI target = new CombinedHOI();
-    Set<ScreeningHOI> actual = target.getScreenings();
-    Set<ScreeningHOI> expected = Collections.emptySet();
+    InvolvementHistory target = new InvolvementHistory();
+    Set<HOIScreening> actual = target.getScreenings();
+    Set<HOIScreening> expected = Collections.emptySet();
     assertThat(actual, is(equalTo(expected)));
   }
 

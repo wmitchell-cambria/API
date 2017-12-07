@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
  * 
  * @author CWDS API Team
  */
-public class ReporterHOI extends PersonHOI {
+public class HOIReporter extends HOIPerson {
 
   private static final long serialVersionUID = 1L;
 
@@ -40,7 +40,7 @@ public class ReporterHOI extends PersonHOI {
   /**
    * Default no-argument constructor
    */
-  public ReporterHOI() {
+  public HOIReporter() {
     super();
   }
 
@@ -50,7 +50,7 @@ public class ReporterHOI extends PersonHOI {
    * @param lastName - lastName
    * @param legacyDescriptor - legacyDescriptor
    */
-  public ReporterHOI(String id, String firstName, String lastName,
+  public HOIReporter(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
   }

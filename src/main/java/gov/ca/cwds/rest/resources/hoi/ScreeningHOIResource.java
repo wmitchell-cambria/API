@@ -13,8 +13,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ScreeningHOIServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.hoi.CombinedHOI;
-// import gov.ca.cwds.rest.api.domain.hoi.HistoryOfInvolvement;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -33,7 +32,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ScreeningHOIResource {
-  private TypedResourceDelegate<String, CombinedHOI> typedResourceDelegate;
+  private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
 
   /**
    * Constructor
@@ -42,7 +41,7 @@ public class ScreeningHOIResource {
    */
   @Inject
   public ScreeningHOIResource(
-      @ScreeningHOIServiceBackedResource TypedResourceDelegate<String, CombinedHOI> typedResourceDelegate) {
+      @ScreeningHOIServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
@@ -60,7 +59,7 @@ public class ScreeningHOIResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find history of involvement by screening id",
-      response = gov.ca.cwds.rest.api.domain.hoi.CombinedHOI.class, code = 200)
+      response = gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory.class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the Screening") String id) {
     return typedResourceDelegate.get(id);

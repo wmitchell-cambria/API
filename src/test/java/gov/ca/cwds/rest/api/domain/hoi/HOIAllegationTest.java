@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  *
  */
 @SuppressWarnings("javadoc")
-public class AllegationHOITest {
+public class HOIAllegationTest {
 
   private String id = "ABC1234567";
   private String description = "descrption";
@@ -30,16 +30,16 @@ public class AllegationHOITest {
   private LegacyDescriptor legacyDescriptor =
       new LegacyDescriptor("Abc1209877", null, new DateTime(), null, null);
 
-  AllegationHOI target;
+  HOIAllegation target;
 
   @Before
   public void setup() throws Exception {
-    target = new AllegationHOI();
+    target = new HOIAllegation();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(AllegationHOI.class, notNullValue());
+    assertThat(HOIAllegation.class, notNullValue());
   }
 
   @Test
@@ -127,15 +127,15 @@ public class AllegationHOITest {
 
   @Test
   public void testEmptyConstructor() throws Exception {
-    AllegationHOI empty = new AllegationHOI();
-    assertThat(empty.getClass(), is(AllegationHOI.class));
+    HOIAllegation empty = new HOIAllegation();
+    assertThat(empty.getClass(), is(HOIAllegation.class));
   }
 
   @Test
   public void jsonCreatorConstructorTest() throws Exception {
 
-    AllegationHOI domain =
-        new AllegationHOI(id, description, disposition, victim, perpetrator, legacyDescriptor);
+    HOIAllegation domain =
+        new HOIAllegation(id, description, disposition, victim, perpetrator, legacyDescriptor);
 
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getDescription(), is(equalTo(description)));

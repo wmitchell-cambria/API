@@ -13,7 +13,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.hoi.CombinedHOI;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import io.dropwizard.jackson.Jackson;
 
@@ -41,8 +41,9 @@ public class ScreeningHOIServiceTest {
   @Test
   public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
 
-    CombinedHOI serialized = MAPPER.readValue(
-        fixture("gov/ca/cwds/rest/services/hoi/combinedhoi/valid/valid.json"), CombinedHOI.class);
+    InvolvementHistory serialized = MAPPER.readValue(
+        fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
+        InvolvementHistory.class);
     Response returned = screeningHOIService.find("999999");
     assertThat(returned, is(serialized));
   }

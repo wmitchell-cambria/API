@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  * 
  * @author CWDS API Team
  */
-public class RelatedPerson extends PersonHOI {
+public class RelatedPerson extends HOIPerson {
 
   /**
    * Default serialization version.

@@ -26,24 +26,24 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonInclude(Include.NON_EMPTY)
 @JsonSnakeCase
 @JsonPropertyOrder({"cases", "referrals", "screenings"})
-public class CombinedHOI extends ApiObjectIdentity
+public class InvolvementHistory extends ApiObjectIdentity
     implements ApiTypedIdentifier<String>, Request, Response {
 
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("cases")
-  private Set<CaseHOI> cases = new HashSet<>();
+  private Set<HOICase> cases = new HashSet<>();
 
   @JsonProperty("referrals")
-  private Set<ReferralHOI> referrals = new HashSet<>();
+  private Set<HOIReferral> referrals = new HashSet<>();
 
   @JsonProperty("screenings")
-  private Set<ScreeningHOI> screenings = new HashSet<>();
+  private Set<HOIScreening> screenings = new HashSet<>();
 
   /**
    * Constructor
    */
-  public CombinedHOI() {
+  public InvolvementHistory() {
     super();
   }
 
@@ -54,9 +54,9 @@ public class CombinedHOI extends ApiObjectIdentity
    * @param referrals the referrals
    * @param screenings the screenings
    */
-  public CombinedHOI(@JsonProperty("cases") Set<CaseHOI> cases,
-      @JsonProperty("referrals") Set<ReferralHOI> referrals,
-      @JsonProperty("screenings") Set<ScreeningHOI> screenings) {
+  public InvolvementHistory(@JsonProperty("cases") Set<HOICase> cases,
+      @JsonProperty("referrals") Set<HOIReferral> referrals,
+      @JsonProperty("screenings") Set<HOIScreening> screenings) {
     super();
     this.cases = cases;
     this.referrals = referrals;
@@ -66,21 +66,21 @@ public class CombinedHOI extends ApiObjectIdentity
   /**
    * @return the cases
    */
-  public Set<CaseHOI> getCases() {
+  public Set<HOICase> getCases() {
     return cases;
   }
 
   /**
    * @return the referrals
    */
-  public Set<ReferralHOI> getReferrals() {
+  public Set<HOIReferral> getReferrals() {
     return referrals;
   }
 
   /**
    * @return the screenings
    */
-  public Set<ScreeningHOI> getScreenings() {
+  public Set<HOIScreening> getScreenings() {
     return screenings;
   }
 

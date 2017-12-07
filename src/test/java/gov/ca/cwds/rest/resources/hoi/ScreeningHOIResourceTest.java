@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.rest.api.domain.hoi.CombinedHOI;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -47,7 +47,7 @@ public class ScreeningHOIResourceTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @SuppressWarnings("unchecked")
-  private final static TypedResourceDelegate<String, CombinedHOI> typedResourceDelegate =
+  private final static TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate =
       mock(TypedResourceDelegate.class);
 
   @ClassRule

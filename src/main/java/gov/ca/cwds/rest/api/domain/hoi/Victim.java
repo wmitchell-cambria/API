@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
  * 
  * @author CWDS API Team
  */
-public class Victim extends PersonHOI {
+public class Victim extends HOIPerson {
 
   /**
    * Default serialization version.
