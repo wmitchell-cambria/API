@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.jackson.Jackson;
@@ -21,7 +21,7 @@ import io.dropwizard.jackson.Jackson;
  * @author CWDS API Team
  */
 public class HistoryOfInvolvementService
-    implements TypedCrudsService<String, HistoryOfInvolvement, Response> {
+    implements TypedCrudsService<String, InvolvementHistory, Response> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoryOfInvolvementService.class);
 
@@ -42,8 +42,8 @@ public class HistoryOfInvolvementService
     // please do not change this code until we are ready to replace stubbed data with data from db2
     try {
       return MAPPER.readValue(
-          fixture("gov/ca/cwds/rest/services/investigation/historyOfInvolvement/valid/valid.json"),
-          HistoryOfInvolvement.class);
+          fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
+          InvolvementHistory.class);
     } catch (Exception e) {
       LOGGER.error("Exception in finding stubbed data for HistoryOfInvolvement {}", e.getMessage());
       throw new ServiceException("Exception In finding stubbed data for HistoryOfInvolvement", e);
@@ -51,7 +51,7 @@ public class HistoryOfInvolvementService
   }
 
   @Override
-  public Response create(HistoryOfInvolvement request) {
+  public Response create(InvolvementHistory request) {
     throw new NotImplementedException("create not implemented");
   }
 
@@ -62,7 +62,7 @@ public class HistoryOfInvolvementService
 
 
   @Override
-  public Response update(String primaryKey, HistoryOfInvolvement request) {
+  public Response update(String primaryKey, InvolvementHistory request) {
     throw new NotImplementedException("update not implemented");
   }
 

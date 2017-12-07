@@ -24,6 +24,14 @@ public class InvolvementHistoryTest {
   }
 
   @Test
+  public void getId_Args__() throws Exception {
+    InvolvementHistory target = new InvolvementHistory();
+    String actual = target.getId();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void getCases_Args__() throws Exception {
     InvolvementHistory target = new InvolvementHistory();
     Set<HOICase> actual = target.getCases();

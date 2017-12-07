@@ -15,6 +15,7 @@ import org.apache.http.HttpStatus;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.HistoryOfInvolvementServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -41,7 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HistoryOfInvolvementResource {
 
-  private TypedResourceDelegate<String, HistoryOfInvolvement> typedResourceDelegate;
+  private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
 
   /**
    * Constructor
@@ -50,7 +51,7 @@ public class HistoryOfInvolvementResource {
    */
   @Inject
   public HistoryOfInvolvementResource(
-      @HistoryOfInvolvementServiceBackedResource TypedResourceDelegate<String, HistoryOfInvolvement> typedResourceDelegate) {
+      @HistoryOfInvolvementServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
@@ -69,7 +70,7 @@ public class HistoryOfInvolvementResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 409, message = "Conflict - already exists")})
   @ApiOperation(value = "Find History Of Involvements by Referral/Case Id", code = HttpStatus.SC_OK,
-      response = HistoryOfInvolvement.class)
+      response = InvolvementHistory.class)
   public Response find(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the Referral ") String id) {
     return typedResourceDelegate.get(id);
