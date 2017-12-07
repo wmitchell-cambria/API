@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.api.domain.hoi;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 
 /**
@@ -10,6 +12,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
  * 
  * @author CWDS API Team
  */
+@JsonPropertyOrder({"id", "first_name", "last_name", "role", "legacy_descriptor"})
 public class HOIReporter extends HOIPerson {
 
   private static final long serialVersionUID = 1L;

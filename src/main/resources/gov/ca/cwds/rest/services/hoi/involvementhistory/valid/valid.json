@@ -109,6 +109,7 @@
         "id": "jhgjhgjh",
         "first_name": "Reporter First Name",
         "last_name": "Reporter Last Name",
+        "role": "MANDATED_REPORTER",
         "legacy_descriptor": {
           "legacy_id": "jhgjhgjh",
           "legacy_ui_id": "jhgjhgjh-hohj-jkj",
@@ -208,6 +209,7 @@
         "id": "jhgjhgjh",
         "first_name": "Reporter First Name",
         "last_name": "Reporter Last Name",
+        "role": "MANDATED_REPORTER",
         "legacy_descriptor": {
           "legacy_id": "jhgjhgjh",
           "legacy_ui_id": "jhgjhgjh-hohj-jkj",
