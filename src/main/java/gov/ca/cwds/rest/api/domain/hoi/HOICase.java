@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class CaseHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -65,7 +65,7 @@ public class CaseHOI extends ApiObjectIdentity implements ApiTypedIdentifier<Str
   /**
    * No-argument constructor
    */
-  public CaseHOI() {
+  public HOICase() {
     // No-argument constructor
   }
 
@@ -152,7 +152,7 @@ public class CaseHOI extends ApiObjectIdentity implements ApiTypedIdentifier<Str
   }
 
   public static void main(String[] args) throws Exception {
-    CaseHOI kase = new CaseHOI();
+    HOICase kase = new HOICase();
 
     AccessLimitation accessLimitation = new AccessLimitation();
     accessLimitation.setLimitedAccessCode(LimitedAccessType.SEALED);

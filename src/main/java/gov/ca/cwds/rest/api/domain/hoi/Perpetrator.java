@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
  * 
  * @author CWDS API Team
  */
-public class Perpetrator extends PersonHOI {
+public class Perpetrator extends HOIPerson {
 
   /**
    * Default serialization version.

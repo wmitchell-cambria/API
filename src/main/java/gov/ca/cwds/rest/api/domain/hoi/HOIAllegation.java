@@ -12,7 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  * 
  * @author CWDS API Team
  */
-public class AllegationHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class AllegationHOI extends ApiObjectIdentity implements ApiTypedIdentifi
   /**
    * No-argument constructor
    */
-  public AllegationHOI() {
+  public HOIAllegation() {
     // No-argument constructor
   }
 
@@ -49,7 +49,7 @@ public class AllegationHOI extends ApiObjectIdentity implements ApiTypedIdentifi
    * @param perpetrator - perpetrator
    * @param legacyDescriptor - legacyDescriptor
    */
-  public AllegationHOI(String id, String description, SystemCodeDescriptor disposition,
+  public HOIAllegation(String id, String description, SystemCodeDescriptor disposition,
       Victim victim, Perpetrator perpetrator, LegacyDescriptor legacyDescriptor) {
     super();
     this.id = id;

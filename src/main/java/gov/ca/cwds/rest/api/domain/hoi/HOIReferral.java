@@ -27,9 +27,9 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReferralHOI.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferral.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -53,7 +53,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
   private SystemCodeDescriptor responseTime;
 
   @JsonProperty("reporter")
-  private ReporterHOI reporter;
+  private HOIReporter reporter;
 
   @JsonProperty("assigned_social_worker")
   private SocialWorker assignedSocialWorker;
@@ -62,7 +62,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
   private AccessLimitation accessLimitation;
 
   @JsonProperty("allegations")
-  private List<AllegationHOI> allegations = new ArrayList<>();
+  private List<HOIAllegation> allegations = new ArrayList<>();
 
   @JsonProperty("legacy_descriptor")
   private LegacyDescriptor legacyDescriptor;
@@ -70,7 +70,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
   /**
    * No-argument constructor
    */
-  public ReferralHOI() {
+  public HOIReferral() {
     // No-argument constructor
   }
 
@@ -116,11 +116,11 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
     this.responseTime = responseTime;
   }
 
-  public ReporterHOI getReporter() {
+  public HOIReporter getReporter() {
     return reporter;
   }
 
-  public void setReporter(ReporterHOI reporter) {
+  public void setReporter(HOIReporter reporter) {
     this.reporter = reporter;
   }
 
@@ -132,11 +132,11 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
     this.assignedSocialWorker = assignedSocialWorker;
   }
 
-  public List<AllegationHOI> getAllegations() {
+  public List<HOIAllegation> getAllegations() {
     return allegations;
   }
 
-  public void setAllegations(List<AllegationHOI> allegations) {
+  public void setAllegations(List<HOIAllegation> allegations) {
     this.allegations = allegations;
   }
 
@@ -157,7 +157,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
   }
 
   public static void main(String[] args) throws Exception {
-    ReferralHOI referral = new ReferralHOI();
+    HOIReferral referral = new HOIReferral();
 
     AccessLimitation accessLimitation = new AccessLimitation();
     accessLimitation.setLimitedAccessCode(LimitedAccessType.SEALED);
@@ -170,7 +170,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
     referral.setAccessLimitation(accessLimitation);
 
 
-    AllegationHOI allegation = new AllegationHOI();
+    HOIAllegation allegation = new HOIAllegation();
     allegation.setDescription("Allegation description");
 
     SystemCodeDescriptor aleggationDisposition = new SystemCodeDescriptor();
@@ -200,7 +200,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
     perpetrator.setLimitedAccessType(LimitedAccessType.NONE);
     allegation.setPerpetrator(perpetrator);
 
-    List<AllegationHOI> allegations = new ArrayList<>();
+    List<HOIAllegation> allegations = new ArrayList<>();
     allegations.add(allegation);
     referral.setAllegations(allegations);
 
@@ -226,7 +226,7 @@ public class ReferralHOI extends ApiObjectIdentity implements ApiTypedIdentifier
         new DateTime(), LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription()));
 
 
-    ReporterHOI reporter = new ReporterHOI();
+    HOIReporter reporter = new HOIReporter();
     reporter.setFirstName("Reporter First Name");
     reporter.setLastName("Reporter Last Name");
     reporter.setId("jhgjhgjh");

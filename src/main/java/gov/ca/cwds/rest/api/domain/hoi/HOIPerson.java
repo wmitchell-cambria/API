@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class PersonHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOIPerson extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public class PersonHOI extends ApiObjectIdentity implements ApiTypedIdentifier<S
   /**
    * No-argument constructor
    */
-  public PersonHOI() {}
+  public HOIPerson() {}
 
   /**
    * @param id - id
@@ -44,7 +44,7 @@ public class PersonHOI extends ApiObjectIdentity implements ApiTypedIdentifier<S
    * @param lastName - lastName
    * @param legacyDescriptor - legacyDescriptor
    */
-  public PersonHOI(String id, String firstName, String lastName,
+  public HOIPerson(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super();
     this.id = id;

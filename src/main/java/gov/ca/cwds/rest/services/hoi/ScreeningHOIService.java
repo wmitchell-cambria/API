@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.hoi.CombinedHOI;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.jackson.Jackson;
@@ -20,7 +20,8 @@ import io.dropwizard.jackson.Jackson;
  * 
  * @author CWDS API Team
  */
-public class ScreeningHOIService implements TypedCrudsService<String, CombinedHOI, Response> {
+public class ScreeningHOIService
+    implements TypedCrudsService<String, InvolvementHistory, Response> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningHOIService.class);
 
@@ -39,8 +40,9 @@ public class ScreeningHOIService implements TypedCrudsService<String, CombinedHO
   @Override
   public Response find(String primaryKey) {
     try {
-      return MAPPER.readValue(fixture("gov/ca/cwds/rest/services/hoi/combinedhoi/valid/valid.json"),
-          CombinedHOI.class);
+      return MAPPER.readValue(
+          fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
+          InvolvementHistory.class);
     } catch (Exception e) {
       LOGGER.error("Exception in finding stubbed data for HistoryOfInvolvement {}", e.getMessage());
       throw new ServiceException("Exception In finding stubbed data for HistoryOfInvolvement", e);
@@ -48,7 +50,7 @@ public class ScreeningHOIService implements TypedCrudsService<String, CombinedHO
   }
 
   @Override
-  public Response create(CombinedHOI request) {
+  public Response create(InvolvementHistory request) {
     throw new NotImplementedException("create not implemented");
   }
 
@@ -58,7 +60,7 @@ public class ScreeningHOIService implements TypedCrudsService<String, CombinedHO
   }
 
   @Override
-  public Response update(String primaryKey, CombinedHOI request) {
+  public Response update(String primaryKey, InvolvementHistory request) {
     throw new NotImplementedException("update not implemented");
   }
 

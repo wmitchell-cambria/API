@@ -497,7 +497,7 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @ScreeningHOIServiceBackedResource
-  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.CombinedHOI> screeningHOIServiceBackedResource(
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> screeningHOIServiceBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(ScreeningHOIService.class));

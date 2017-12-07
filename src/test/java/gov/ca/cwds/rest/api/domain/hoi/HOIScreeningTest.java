@@ -13,18 +13,18 @@ import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 
-public class ScreeningHOITest {
+public class HOIScreeningTest {
 
-  ScreeningHOI target;
+  HOIScreening target;
 
   @Before
   public void setup() throws Exception {
-    target = new ScreeningHOI();
+    target = new HOIScreening();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(ScreeningHOI.class, notNullValue());
+    assertThat(HOIScreening.class, notNullValue());
   }
 
   @Test
@@ -86,14 +86,14 @@ public class ScreeningHOITest {
 
   @Test
   public void getReporter_Args__() throws Exception {
-    ReporterHOI actual = target.getReporter();
-    ReporterHOI expected = null;
+    HOIReporter actual = target.getReporter();
+    HOIReporter expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setReporter_Args__Reporter() throws Exception {
-    ReporterHOI reporter = mock(ReporterHOI.class);
+    HOIReporter reporter = mock(HOIReporter.class);
     target.setReporter(reporter);
   }
 
@@ -113,7 +113,7 @@ public class ScreeningHOITest {
   @Test
   public void main_Args__StringArray() throws Exception {
     String[] args = new String[] {};
-    ScreeningHOI.main(args);
+    HOIScreening.main(args);
   }
 
 }

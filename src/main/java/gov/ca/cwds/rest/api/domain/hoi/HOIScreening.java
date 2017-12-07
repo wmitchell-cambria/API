@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -56,18 +56,18 @@ public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifie
   private String decisionDetail;
 
   @JsonProperty("reporter")
-  private ReporterHOI reporter;
+  private HOIReporter reporter;
 
   @JsonProperty("assigned_social_worker")
   private SocialWorker assignedSocialWorker;
 
   @JsonProperty("all_people")
-  private List<PersonHOI> allPeople = new ArrayList<>();
+  private List<HOIPerson> allPeople = new ArrayList<>();
 
   /**
    * No-argument constructor
    */
-  public ScreeningHOI() {
+  public HOIScreening() {
     // No-argument constructor
   }
 
@@ -123,11 +123,11 @@ public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifie
     this.county = county;
   }
 
-  public ReporterHOI getReporter() {
+  public HOIReporter getReporter() {
     return reporter;
   }
 
-  public void setReporter(ReporterHOI reporter) {
+  public void setReporter(HOIReporter reporter) {
     this.reporter = reporter;
   }
 
@@ -148,16 +148,16 @@ public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifie
     this.decision = decision;
   }
 
-  public List<PersonHOI> getAllPeople() {
+  public List<HOIPerson> getAllPeople() {
     return allPeople;
   }
 
-  public void setAllPeople(List<PersonHOI> allPeople) {
+  public void setAllPeople(List<HOIPerson> allPeople) {
     this.allPeople = allPeople;
   }
 
   public static void main(String[] args) throws Exception {
-    ScreeningHOI screening = new ScreeningHOI();
+    HOIScreening screening = new HOIScreening();
 
     SocialWorker socialWorker = new SocialWorker();
     socialWorker.setFirstName("Worker First Name");
@@ -178,7 +178,7 @@ public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifie
     screening.setId("1234");
     screening.setName("ABC Screening");
 
-    ReporterHOI reporter = new ReporterHOI();
+    HOIReporter reporter = new HOIReporter();
     reporter.setFirstName("Reporter First Name");
     reporter.setLastName("Reporter Last Name");
     reporter.setId("jhgjhgjh");
@@ -191,7 +191,7 @@ public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifie
     screening.setDecision("promote to referral");
     screening.setDecisionDetail("drug counseling");
 
-    PersonHOI person1 = new PersonHOI();
+    HOIPerson person1 = new HOIPerson();
     person1.setFirstName("John");
     person1.setLastName("S");
     person1.setId("bbbbbbbbb");
@@ -199,14 +199,14 @@ public class ScreeningHOI extends ApiObjectIdentity implements ApiTypedIdentifie
         new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
 
 
-    PersonHOI person2 = new PersonHOI();
+    HOIPerson person2 = new HOIPerson();
     person2.setFirstName("Jane");
     person2.setLastName("S");
     person2.setId("aaaaaaa");
     person2.setLegacyDescriptor(new LegacyDescriptor("aaaaaaaaa", "aaaaaaaaa-hohj-jkj",
         new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
 
-    List<PersonHOI> people = new ArrayList<>();
+    List<HOIPerson> people = new ArrayList<>();
     people.add(person1);
     people.add(person2);
     screening.setAllPeople(people);

@@ -7,7 +7,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
  * 
  * @author CWDS API Team
  */
-public class SocialWorker extends PersonHOI {
+public class SocialWorker extends HOIPerson {
 
   /**
    * Default serialization version.
