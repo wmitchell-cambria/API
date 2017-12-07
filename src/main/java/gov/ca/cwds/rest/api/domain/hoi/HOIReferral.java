@@ -122,8 +122,10 @@ public class HOIReferral extends ApiObjectIdentity
 
     if (reporter != null) {
       this.reporter = new HOIReporter(role, reporter.getReferralId(), reporter.getFirstName(),
-          reporter.getLastName(), new LegacyDescriptor(reporter.getReferralId(), null,
-              new DateTime(reporter.getLastUpdatedTime()), null, null));
+          reporter.getLastName(),
+          new LegacyDescriptor(reporter.getReferralId(), null,
+              new DateTime(reporter.getLastUpdatedTime()), LegacyTable.REPORTER.getName(),
+              LegacyTable.REPORTER.getDescription()));
     } else {
       this.reporter = new HOIReporter(role, null, null, null, null);
     }
@@ -152,11 +154,13 @@ public class HOIReferral extends ApiObjectIdentity
                       LegacyTable.CLIENT.getDescription())));
         } else {
           hoiAllegation.setPerpetrator(new Perpetrator(eachclient.getId(),
-              eachclient.getFirstName(), eachclient.getLastName(), null));
+              eachclient.getFirstName(), eachclient.getLastName(),
+              new LegacyDescriptor(eachclient.getId(), null,
+                  new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+                  LegacyTable.CLIENT.getDescription())));
         }
       });
       this.allegations.add(hoiAllegation);
-
     }
 
     this.legacyDescriptor =

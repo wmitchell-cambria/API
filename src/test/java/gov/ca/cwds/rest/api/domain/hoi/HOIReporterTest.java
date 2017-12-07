@@ -22,6 +22,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 @SuppressWarnings("javadoc")
 public class HOIReporterTest {
 
+  private Role role = Role.MANDATED_REPORTER;
   HOIReporter target;
   private String id = "jhdgfkhaj";
   private String firstName = "Barney";
@@ -121,7 +122,7 @@ public class HOIReporterTest {
 
   @Test
   public void constructorTest() throws Exception {
-    HOIReporter domain = new HOIReporter(id, firstName, lastName, legacyDescriptor);
+    HOIReporter domain = new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getFirstName(), is(equalTo(firstName)));
     assertThat(domain.getLastName(), is(equalTo(lastName)));
@@ -130,35 +131,35 @@ public class HOIReporterTest {
 
   @Test
   public void testRoleMandatedReporter() throws Exception {
-    HOIReporter domain = new HOIReporter(id, firstName, lastName, legacyDescriptor);
+    HOIReporter domain = new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
     domain.setRole(Role.MANDATED_REPORTER);
     assertThat(domain.getRole(), is(Role.MANDATED_REPORTER));
   }
 
   @Test
   public void testRoleSelfReporter() throws Exception {
-    HOIReporter domain = new HOIReporter(id, firstName, lastName, legacyDescriptor);
+    HOIReporter domain = new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
     domain.setRole(Role.SELF_REPORTER);
     assertThat(domain.getRole(), is(Role.SELF_REPORTER));
   }
 
   @Test
   public void testRoleAnonymousReporter() throws Exception {
-    HOIReporter domain = new HOIReporter(id, firstName, lastName, legacyDescriptor);
+    HOIReporter domain = new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
     domain.setRole(Role.ANONYMOUS_REPORTER);
     assertThat(domain.getRole(), is(Role.ANONYMOUS_REPORTER));
   }
 
   @Test
   public void testRoleNonMandatedReporter() throws Exception {
-    HOIReporter domain = new HOIReporter(id, firstName, lastName, legacyDescriptor);
+    HOIReporter domain = new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
     domain.setRole(Role.NON_MANDATED_REPORTER);
     assertThat(domain.getRole(), is(Role.NON_MANDATED_REPORTER));
   }
 
   @Test
   public void testRoleDescription() throws Exception {
-    HOIReporter domain = new HOIReporter(id, firstName, lastName, legacyDescriptor);
+    HOIReporter domain = new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
     domain.setRole(Role.NON_MANDATED_REPORTER);
     assertThat(domain.getRole().getDescription(), is("Non-mandated Reporter"));
   }

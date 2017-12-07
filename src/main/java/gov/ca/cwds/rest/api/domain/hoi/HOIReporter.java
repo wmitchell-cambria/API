@@ -33,6 +33,9 @@ public class HOIReporter extends HOIPerson {
       this.description = description;
     }
 
+    /**
+     * @return the description
+     */
     public String getDescription() {
       return description;
     }
@@ -44,7 +47,6 @@ public class HOIReporter extends HOIPerson {
   }
 
   private Role role;
-  private String reporterRole;
 
   /**
    * Default no-argument constructor
@@ -54,6 +56,7 @@ public class HOIReporter extends HOIPerson {
   }
 
   /**
+   * @param role - role
    * @param id - id
    * @param firstName - firstName
    * @param lastName - lastName
@@ -62,7 +65,7 @@ public class HOIReporter extends HOIPerson {
   public HOIReporter(Role role, String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
-    this.reporterRole = role.getDescription();
+    this.role = role;
   }
 
   /**
@@ -77,15 +80,6 @@ public class HOIReporter extends HOIPerson {
    */
   public void setRole(Role role) {
     this.role = role;
-  }
-
-
-  public String getReporterRole() {
-    return reporterRole;
-  }
-
-  public void setReporterRole(String reporterRole) {
-    this.reporterRole = reporterRole;
   }
 
   @Override

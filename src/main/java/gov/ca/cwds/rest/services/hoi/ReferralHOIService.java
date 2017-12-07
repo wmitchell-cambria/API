@@ -55,16 +55,16 @@ public class ReferralHOIService implements TypedCrudsService<String, HOIReferral
     fetchReferralClient(primaryKey, referralSet);
 
     for (Map.Entry<Referral, ReferralClient> pair : referralSet.entrySet()) {
-      Role reporterRole = null;
+      Role role = null;
       Referral referral = pair.getKey();
       ReferralClient referralClient = pair.getValue();
       StaffPerson staffPerson = referral.getStaffPerson();
 
       Reporter reporter = referral.getReporters();
-      reporterRole = fetchForReporterRole(reporterRole, referral, referralClient, reporter);
+      role = fetchForReporterRole(role, referral, referralClient, reporter);
       Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
       referralHOIs.add(new HOIReferral(primaryKey, client, referral, staffPerson, reporter,
-          allegationMap, reporterRole));
+          allegationMap, role));
     }
 
     return referralHOIs.get(0);
@@ -78,22 +78,22 @@ public class ReferralHOIService implements TypedCrudsService<String, HOIReferral
     }
   }
 
-  private Role fetchForReporterRole(Role reporterRole, Referral referral,
-      ReferralClient referralClient, Reporter reporter) {
+  private Role fetchForReporterRole(Role role, Referral referral, ReferralClient referralClient,
+      Reporter reporter) {
     if (reporter == null) {
       if ("Y".equals(referral.getAnonymousReporterIndicator())) {
-        reporterRole = Role.ANONYMOUS_REPORTER;
+        role = Role.ANONYMOUS_REPORTER;
       } else if ("Y".equals(referralClient.getSelfReportedIndicator())) {
-        reporterRole = Role.SELF_REPORTER;
+        role = Role.SELF_REPORTER;
       }
     } else {
       if ("Y".equals(reporter.getMandatedReporterIndicator())) {
-        reporterRole = Role.MANDATED_REPORTER;
+        role = Role.MANDATED_REPORTER;
       } else {
-        reporterRole = Role.NON_MANDATED_REPORTER;
+        role = Role.NON_MANDATED_REPORTER;
       }
     }
-    return reporterRole;
+    return role;
   }
 
   private Map<Allegation, List<Client>> fetchForAllegation(Referral referral) {
