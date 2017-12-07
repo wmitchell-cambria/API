@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.api.domain.hoi;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 import gov.ca.cwds.rest.util.FerbDateUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,10 +45,10 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 @JsonPropertyOrder({"id", "startDate", "endDate", "county", "responseTime", "reporter",
     "assignedSocialWorker", "accessLimitation", "allegations", "legacyDescriptor"})
-public class ReferralHOI extends ApiObjectIdentity
+public class HOIReferral extends ApiObjectIdentity
     implements ApiTypedIdentifier<String>, Request, Response {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReferralHOI.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferral.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -71,7 +72,7 @@ public class ReferralHOI extends ApiObjectIdentity
   private SystemCodeDescriptor responseTime;
 
   @JsonProperty("reporter")
-  private ReporterHOI reporter;
+  private HOIReporter reporter;
 
   @JsonProperty("assigned_social_worker")
   private SocialWorker assignedSocialWorker;
@@ -80,7 +81,7 @@ public class ReferralHOI extends ApiObjectIdentity
   private AccessLimitation accessLimitation;
 
   @JsonProperty("allegations")
-  private List<AllegationHOI> allegations = new ArrayList<>();
+  private List<HOIAllegation> allegations = new ArrayList<>();
 
   @JsonProperty("legacy_descriptor")
   private LegacyDescriptor legacyDescriptor;
@@ -88,43 +89,76 @@ public class ReferralHOI extends ApiObjectIdentity
   /**
    * No-argument constructor
    */
-  public ReferralHOI() {
+  public HOIReferral() {
     // No-argument constructor
   }
 
   /**
-   * @param clientId
-   * @param client
-   * @param referral
-   * @param staffPerson
-   * @param reporter
-   * @param allegations
+   * @param clientId - clientId
+   * @param client - client
+   * @param referral - referral
+   * @param staffPerson - staffPerson
+   * @param reporter - reporter
+   * @param allegationMap - allegationMap
+   * @param role - role
    */
-  public ReferralHOI(String clientId, Client client, Referral referral, StaffPerson staffPerson,
-      Reporter reporter, Set<Allegation> allegations) {
+  public HOIReferral(String clientId, Client client, Referral referral, StaffPerson staffPerson,
+      Reporter reporter, Map<Allegation, List<Client>> allegationMap, Role role) {
 
     this.id = referral.getId();
     this.startDate = referral.getReceivedDate();
     this.endDate = referral.getClosureDate();
     this.county = new SystemCodeDescriptor(referral.getGovtEntityType(),
         SystemCodeCache.global().getSystemCodeShortDescription(referral.getGovtEntityType()));
+
     this.responseTime = new SystemCodeDescriptor(referral.getReferralResponseType(),
         SystemCodeCache.global().getSystemCodeShortDescription(referral.getReferralResponseType()));
+
     this.assignedSocialWorker =
         new SocialWorker(staffPerson.getId(), staffPerson.getFirstName(), staffPerson.getLastName(),
             new LegacyDescriptor(staffPerson.getId(), null,
                 new DateTime(staffPerson.getLastUpdatedTime()), LegacyTable.STAFF_PERSON.getName(),
                 LegacyTable.STAFF_PERSON.getDescription()));
+
+    if (reporter != null) {
+      this.reporter = new HOIReporter(role, reporter.getReferralId(), reporter.getFirstName(),
+          reporter.getLastName(), new LegacyDescriptor(reporter.getReferralId(), null,
+              new DateTime(reporter.getLastUpdatedTime()), null, null));
+    } else {
+      this.reporter = new HOIReporter(role, null, null, null, null);
+    }
+
     this.accessLimitation = new AccessLimitation(LimitedAccessType.NONE,
         referral.getLimitedAccessDate(), referral.getLimitedAccessDesc(),
         new SystemCodeDescriptor(referral.getLimitedAccessGovtAgencyType(), SystemCodeCache.global()
             .getSystemCodeShortDescription(referral.getLimitedAccessGovtAgencyType())));
-    for (Allegation allegation : allegations) {
-      if (clientId.equals(allegation.getVictimClientId())
-          || clientId.equals(allegation.getPerpetratorClientId())) {
-        this.allegations.add(new AllegationHOI());
-      }
+
+    for (Map.Entry<Allegation, List<Client>> allegation : allegationMap.entrySet()) {
+      HOIAllegation hoiAllegation = new HOIAllegation(allegation.getKey().getId(), null,
+          new SystemCodeDescriptor(allegation.getKey().getAllegationDispositionType(),
+              SystemCodeCache.global().getSystemCodeShortDescription(
+                  allegation.getKey().getAllegationDispositionType())),
+          null, null,
+          new LegacyDescriptor(allegation.getKey().getId(), null,
+              new DateTime(allegation.getKey().getLastUpdatedTime()),
+              LegacyTable.ALLEGATION.getName(), LegacyTable.ALLEGATION.getDescription()));
+      allegation.getValue().forEach(eachclient -> {
+
+        if (eachclient.getId().equals(allegation.getKey().getVictimClientId())) {
+          hoiAllegation.setVictim(
+              new Victim(eachclient.getId(), eachclient.getFirstName(), eachclient.getLastName(),
+                  new LegacyDescriptor(eachclient.getId(), null,
+                      new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+                      LegacyTable.CLIENT.getDescription())));
+        } else {
+          hoiAllegation.setPerpetrator(new Perpetrator(eachclient.getId(),
+              eachclient.getFirstName(), eachclient.getLastName(), null));
+        }
+      });
+      this.allegations.add(hoiAllegation);
+
     }
+
     this.legacyDescriptor =
         new LegacyDescriptor(referral.getId(), null, new DateTime(referral.getLastUpdatedTime()),
             LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription());
@@ -199,14 +233,14 @@ public class ReferralHOI extends ApiObjectIdentity
   /**
    * @return the reporter
    */
-  public ReporterHOI getReporter() {
+  public HOIReporter getReporter() {
     return reporter;
   }
 
   /**
    * @param reporter - reporter
    */
-  public void setReporter(ReporterHOI reporter) {
+  public void setReporter(HOIReporter reporter) {
     this.reporter = reporter;
   }
 
@@ -227,14 +261,14 @@ public class ReferralHOI extends ApiObjectIdentity
   /**
    * @return the allegations
    */
-  public List<AllegationHOI> getAllegations() {
+  public List<HOIAllegation> getAllegations() {
     return allegations;
   }
 
   /**
    * @param allegations - allegations
    */
-  public void setAllegations(List<AllegationHOI> allegations) {
+  public void setAllegations(List<HOIAllegation> allegations) {
     this.allegations = allegations;
   }
 
@@ -267,7 +301,7 @@ public class ReferralHOI extends ApiObjectIdentity
   }
 
   public static void main(String[] args) throws Exception {
-    ReferralHOI referral = new ReferralHOI();
+    HOIReferral referral = new HOIReferral();
 
     AccessLimitation accessLimitation = new AccessLimitation();
     accessLimitation.setLimitedAccessCode(LimitedAccessType.SEALED);
@@ -280,8 +314,10 @@ public class ReferralHOI extends ApiObjectIdentity
     referral.setAccessLimitation(accessLimitation);
 
 
-    AllegationHOI allegation = new AllegationHOI();
-    allegation.setDescription("Allegation description");
+    HOIAllegation allegation = new HOIAllegation();
+    SystemCodeDescriptor type = new SystemCodeDescriptor();
+    type.setId((short) 2179);
+    type.setDescription("Physical Abuse");
 
     SystemCodeDescriptor aleggationDisposition = new SystemCodeDescriptor();
     aleggationDisposition.setId((short) 45);
@@ -310,7 +346,7 @@ public class ReferralHOI extends ApiObjectIdentity
     perpetrator.setLimitedAccessType(LimitedAccessType.NONE);
     allegation.setPerpetrator(perpetrator);
 
-    List<AllegationHOI> allegations = new ArrayList<>();
+    List<HOIAllegation> allegations = new ArrayList<>();
     allegations.add(allegation);
     referral.setAllegations(allegations);
 
@@ -336,7 +372,7 @@ public class ReferralHOI extends ApiObjectIdentity
         new DateTime(), LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription()));
 
 
-    ReporterHOI reporter = new ReporterHOI();
+    HOIReporter reporter = new HOIReporter();
     reporter.setFirstName("Reporter First Name");
     reporter.setLastName("Reporter Last Name");
     reporter.setId("jhgjhgjh");

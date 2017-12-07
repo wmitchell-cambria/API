@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ReferralHoiServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.hoi.ReferralHOI;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -39,7 +39,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ReferralHOIResource {
 
-  private TypedResourceDelegate<String, ReferralHOI> typedResourceDelegate;
+  private TypedResourceDelegate<String, HOIReferral> typedResourceDelegate;
 
   /**
    * Constructor
@@ -48,7 +48,7 @@ public class ReferralHOIResource {
    */
   @Inject
   public ReferralHOIResource(
-      @ReferralHoiServiceBackedResource TypedResourceDelegate<String, ReferralHOI> typedResourceDelegate) {
+      @ReferralHoiServiceBackedResource TypedResourceDelegate<String, HOIReferral> typedResourceDelegate) {
     super();
     this.typedResourceDelegate = typedResourceDelegate;
   }
@@ -67,7 +67,7 @@ public class ReferralHOIResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find referrals history of involvement by clientId",
-      response = ReferralHOI[].class, code = 200)
+      response = HOIReferral[].class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the client to find") String id) {
     return typedResourceDelegate.get(id);

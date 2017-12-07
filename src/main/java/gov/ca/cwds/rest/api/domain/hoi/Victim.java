@@ -38,12 +38,15 @@ public class Victim extends HOIPerson {
   }
 
   /**
-   * @return
+   * @return the limitedAccessType
    */
   public LimitedAccessType getLimitedAccessType() {
     return limitedAccessType;
   }
 
+  /**
+   * @param limitedAccessType - limitedAccessType
+   */
   public void setLimitedAccessType(LimitedAccessType limitedAccessType) {
     this.limitedAccessType = limitedAccessType;
   }
