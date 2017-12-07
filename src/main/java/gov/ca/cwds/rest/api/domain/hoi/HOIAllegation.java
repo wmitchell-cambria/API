@@ -19,8 +19,8 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
   @JsonProperty("id")
   private String id;
 
-  @JsonProperty("description")
-  private String description;
+  @JsonProperty("type")
+  private SystemCodeDescriptor type;
 
   @JsonProperty("disposition")
   private SystemCodeDescriptor disposition;
@@ -43,17 +43,17 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
 
   /**
    * @param id - id
-   * @param description - description
+   * @param type - type
    * @param disposition - disposition
    * @param victim - victim
    * @param perpetrator - perpetrator
    * @param legacyDescriptor - legacyDescriptor
    */
-  public HOIAllegation(String id, String description, SystemCodeDescriptor disposition,
+  public HOIAllegation(String id, SystemCodeDescriptor type, SystemCodeDescriptor disposition,
       Victim victim, Perpetrator perpetrator, LegacyDescriptor legacyDescriptor) {
     super();
     this.id = id;
-    this.description = description;
+    this.type = type;
     this.disposition = disposition;
     this.victim = victim;
     this.perpetrator = perpetrator;
@@ -70,12 +70,12 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
     this.id = id;
   }
 
-  public String getDescription() {
-    return description;
+  public SystemCodeDescriptor getType() {
+    return type;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setType(SystemCodeDescriptor type) {
+    this.type = type;
   }
 
   public SystemCodeDescriptor getDisposition() {

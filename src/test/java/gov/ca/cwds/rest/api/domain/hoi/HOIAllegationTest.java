@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 public class HOIAllegationTest {
 
   private String id = "ABC1234567";
-  private String description = "descrption";
+  private SystemCodeDescriptor type = new SystemCodeDescriptor((short) 123, "descrption");
   private SystemCodeDescriptor disposition = new SystemCodeDescriptor((short) 123, "descrption");
   private Victim victim = new Victim(id, "Kak", "Man",
       new LegacyDescriptor("Abc1234589", null, new DateTime(), null, null));
@@ -62,15 +62,15 @@ public class HOIAllegationTest {
 
   @Test
   public void getDescription_Args__() throws Exception {
-    String actual = target.getDescription();
+    SystemCodeDescriptor actual = target.getType();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setDescription_Args__String() throws Exception {
-    String description = null;
-    target.setDescription(description);
+    SystemCodeDescriptor type = mock(SystemCodeDescriptor.class);
+    target.setType(type);
   }
 
   @Test
@@ -135,10 +135,10 @@ public class HOIAllegationTest {
   public void jsonCreatorConstructorTest() throws Exception {
 
     HOIAllegation domain =
-        new HOIAllegation(id, description, disposition, victim, perpetrator, legacyDescriptor);
+        new HOIAllegation(id, type, disposition, victim, perpetrator, legacyDescriptor);
 
     assertThat(domain.getId(), is(equalTo(id)));
-    assertThat(domain.getDescription(), is(equalTo(description)));
+    assertThat(domain.getType(), is(equalTo(type)));
     assertThat(domain.getDisposition(), is(equalTo(disposition)));
     assertThat(domain.getVictim(), is(equalTo(victim)));
     assertThat(domain.getPerpetrator(), is(equalTo(perpetrator)));

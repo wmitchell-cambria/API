@@ -171,7 +171,9 @@ public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier
 
 
     HOIAllegation allegation = new HOIAllegation();
-    allegation.setDescription("Allegation description");
+    SystemCodeDescriptor type = new SystemCodeDescriptor();
+    type.setId((short) 2179);
+    type.setDescription("Physical Abuse");
 
     SystemCodeDescriptor aleggationDisposition = new SystemCodeDescriptor();
     aleggationDisposition.setId((short) 45);
