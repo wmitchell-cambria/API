@@ -141,7 +141,10 @@
       "allegations": [
         {
           "id": "jhdgfkhaj",
-          "description": "Allegation description",
+          "type": {
+          "id": "2179",
+          "description": "Physical abuse"
+          },
           "disposition": {
             "id": "45",
             "description": "Substantiated"
