@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.api.domain.hoi.Victim;
 public class HOIAllegationResourceBuilder {
 
   private String id = "jhdgfkhaj";
-  private String description = "Allegation description";
+  private SystemCodeDescriptor type;
   private Victim victim;
   private Perpetrator perpetrator;
   private LegacyDescriptor legacyDescriptor;
@@ -30,8 +30,8 @@ public class HOIAllegationResourceBuilder {
   }
 
 
-  public HOIAllegationResourceBuilder setDescription(String description) {
-    this.description = description;
+  public HOIAllegationResourceBuilder setType(SystemCodeDescriptor type) {
+    this.type = type;
     return this;
   }
 
@@ -56,6 +56,9 @@ public class HOIAllegationResourceBuilder {
     disposition = new SystemCodeDescriptor();
     disposition.setId((short) 45);
     disposition.setDescription("Substantiated");
+    type = new SystemCodeDescriptor();
+    type.setId((short) 2179);
+    type.setDescription("physical abuse");
     victim = new Victim();
     victim.setFirstName("Victim First Name");
     victim.setLastName("Victim Last Name");
@@ -81,6 +84,6 @@ public class HOIAllegationResourceBuilder {
    * @return the AllegationHOI
    */
   public gov.ca.cwds.rest.api.domain.hoi.HOIAllegation createHOIAllegation() {
-    return new HOIAllegation(id, description, disposition, victim, perpetrator, legacyDescriptor);
+    return new HOIAllegation(id, type, disposition, victim, perpetrator, legacyDescriptor);
   }
 }
