@@ -12,9 +12,8 @@ import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import io.dropwizard.jackson.Jackson;
 
@@ -40,11 +39,11 @@ public class HistoryOfInvolvementServiceTest {
 
   // find test
   @Test
-  public void findReturnsExpectedContact() throws Exception {
-    HistoryOfInvolvement serialized = new HistoryOfInvolvementEntityBuilder().build();
-    serialized = MAPPER.readValue(
-        fixture("gov/ca/cwds/rest/services/investigation/historyOfInvolvement/valid/valid.json"),
-        HistoryOfInvolvement.class);
+  public void findReturnsExpectedInvolvementHistory() throws Exception {
+
+    InvolvementHistory serialized = MAPPER.readValue(
+        fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
+        InvolvementHistory.class);
     Response returned = historyOfInvolvementService.find("999999");
     assertThat(returned, is(serialized));
   }
@@ -60,7 +59,7 @@ public class HistoryOfInvolvementServiceTest {
   @Test
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    historyOfInvolvementService.delete("string");
+    historyOfInvolvementService.update("string", null);
   }
 
 
@@ -68,7 +67,7 @@ public class HistoryOfInvolvementServiceTest {
   @Test
   public void createThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    historyOfInvolvementService.delete("string");
+    historyOfInvolvementService.create(null);
   }
 
 

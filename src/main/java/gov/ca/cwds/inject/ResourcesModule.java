@@ -32,7 +32,7 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryRequest;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryResponse;
-import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.People;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
@@ -250,7 +250,7 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @HistoryOfInvolvementServiceBackedResource
-  public TypedResourceDelegate<String, HistoryOfInvolvement> historyOfInvolementResource(
+  public TypedResourceDelegate<String, InvolvementHistory> historyOfInvolementResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(HistoryOfInvolvementService.class));
