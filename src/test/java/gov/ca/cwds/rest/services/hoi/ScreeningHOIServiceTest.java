@@ -59,7 +59,7 @@ public class ScreeningHOIServiceTest {
   @Test
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    screeningHOIService.delete("string");
+    screeningHOIService.update("string", null);
   }
 
 
@@ -67,7 +67,7 @@ public class ScreeningHOIServiceTest {
   @Test
   public void createThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    screeningHOIService.delete("string");
+    screeningHOIService.create(null);
   }
 
 
