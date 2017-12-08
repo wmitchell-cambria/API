@@ -36,7 +36,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
  * @author CWDS API Team
  *
  */
-public class ReferralHOIServiceTest {
+public class HOIReferralServiceTest {
 
   private ClientDao clientdao;
   private ReferralClientDao referralClientDao;
@@ -69,7 +69,7 @@ public class ReferralHOIServiceTest {
   @Test
   public void testForHandleFind() throws Exception {
 
-    ReferralHOIService hoiService = new ReferralHOIService(clientdao, referralClientDao);
+    HOIReferralService hoiService = new HOIReferralService(clientdao, referralClientDao);
     Allegation allegation1 = new AllegationEntityBuilder().setReferralId("ABC1234567")
         .setVictimClientId("1234567ABC").build();
 

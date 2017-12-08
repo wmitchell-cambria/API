@@ -559,7 +559,7 @@ public class Referral extends ReportingDomain implements Request, Response {
       this.address.add(new Address(persistedReferral.getAddresses(), true));
     }
     this.reporter =
-        persistedReferral.getReporters() != null ? new Reporter(persistedReferral.getReporters())
+        persistedReferral.getReporter() != null ? new Reporter(persistedReferral.getReporter())
             : null;
     this.crossReport = new HashSet<>();
     Set<gov.ca.cwds.data.persistence.cms.CrossReport> savedCrossReports =

@@ -16,7 +16,7 @@ import gov.ca.cwds.inject.ReferralHoiServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
-import gov.ca.cwds.rest.services.hoi.ReferralHOIService;
+import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,9 +39,9 @@ import io.swagger.annotations.ApiResponses;
 @Path(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ReferralHOIResource {
+public class HOIReferralResource {
 
-  private SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate;
+  private SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate;
 
   /**
    * Constructor
@@ -49,8 +49,8 @@ public class ReferralHOIResource {
    * @param simpleResourceDelegate - typedResourceDelegate
    */
   @Inject
-  public ReferralHOIResource(
-      @ReferralHoiServiceBackedResource SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate) {
+  public HOIReferralResource(
+      @ReferralHoiServiceBackedResource SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate) {
     super();
     this.simpleResourceDelegate = simpleResourceDelegate;
   }
