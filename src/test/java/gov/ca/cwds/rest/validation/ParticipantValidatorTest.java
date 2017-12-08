@@ -4,14 +4,15 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
 
-import gov.ca.cwds.rest.api.domain.Role;
 import java.util.Arrays;
 import java.util.HashSet;
-
+import java.util.List;
 import java.util.Set;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -25,7 +26,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import io.dropwizard.jackson.Jackson;
 
@@ -40,6 +43,7 @@ public class ParticipantValidatorTest {
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
+    messageBuilder = new MessageBuilder();
 
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
   }
@@ -250,12 +254,64 @@ public class ParticipantValidatorTest {
   }
 
   @Test
-  public void roleIsSelfReporterShouldReportTrueWhenRoleIsSelfReporter(){
+  public void shouldReturnErrorMessageWhenStartDateBlank() throws Exception {
+    Participant participants = new ParticipantResourceBuilder()
+        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt("")
+        .createScreeningToReferral();
+    ParticipantValidator.extractStartDate(referral, messageBuilder);
+    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
+    assertThat(errorMessages.size(), is(equalTo(1)));
+
+  }
+
+  @Test
+  public void shouldReturnErrorMessageWhenStartDateNull() throws Exception {
+    Participant participants = new ParticipantResourceBuilder()
+        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt(null)
+        .createScreeningToReferral();
+    ParticipantValidator.extractStartDate(referral, messageBuilder);
+    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
+    assertThat(errorMessages.size(), is(equalTo(1)));
+
+  }
+
+  @Test
+  public void shouldReturnErrorMessageWhenStartTimeBlank() throws Exception {
+    Participant participants = new ParticipantResourceBuilder()
+        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt("")
+        .createScreeningToReferral();
+    ParticipantValidator.extractStartTime(referral, messageBuilder);
+    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
+    assertThat(errorMessages.size(), is(equalTo(1)));
+
+  }
+
+  @Test
+  public void shouldReturnErrorMessageWhenStartTimeNull() throws Exception {
+    Participant participants = new ParticipantResourceBuilder()
+        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt(null)
+        .createScreeningToReferral();
+    ParticipantValidator.extractStartTime(referral, messageBuilder);
+    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
+    assertThat(errorMessages.size(), is(equalTo(1)));
+
+  }
+
+  @Test
+  public void roleIsSelfReporterShouldReportTrueWhenRoleIsSelfReporter() {
     assertTrue(ParticipantValidator.roleIsAnyReporter(Role.SELF_REPORTED_ROLE.getType()));
   }
 
   @Test
-  public void roleIsSelfReporterShouldReportFalseWhenRoleIsNotSelfReporter(){
+  public void roleIsSelfReporterShouldReportFalseWhenRoleIsNotSelfReporter() {
     assertFalse(ParticipantValidator.roleIsAnyReporter("Not a self reporter"));
   }
 
@@ -271,39 +327,39 @@ public class ParticipantValidatorTest {
   }
 
   @Test
-  public void roleIsAnyReporterShouldReportTrueWhenRoleMandatedReporter(){
+  public void roleIsAnyReporterShouldReportTrueWhenRoleMandatedReporter() {
     assertTrue(ParticipantValidator.roleIsAnyReporter(Role.MANDATED_REPORTER_ROLE.getType()));
   }
 
   @Test
-  public void roleIsAnyReporterShouldReportTrueWhenRoleNonMandatedReporter(){
+  public void roleIsAnyReporterShouldReportTrueWhenRoleNonMandatedReporter() {
     assertTrue(ParticipantValidator.roleIsAnyReporter(Role.NON_MANDATED_REPORTER_ROLE.getType()));
   }
 
   @Test
-  public void roleIsAnyReporterShouldReportTrueWhenRoleAnonymousReporter(){
+  public void roleIsAnyReporterShouldReportTrueWhenRoleAnonymousReporter() {
     assertTrue(ParticipantValidator.roleIsAnyReporter(Role.ANONYMOUS_REPORTER_ROLE.getType()));
   }
 
   @Test
-  public void roleIsAnyReporterShouldReportTrueWhenRoleSelfReporter(){
+  public void roleIsAnyReporterShouldReportTrueWhenRoleSelfReporter() {
     assertTrue(ParticipantValidator.roleIsAnyReporter(Role.SELF_REPORTED_ROLE.getType()));
   }
 
   @Test
-  public void roleIsAnyReporterShouldReportFalseWhenRoleNotAValidReporter(){
+  public void roleIsAnyReporterShouldReportFalseWhenRoleNotAValidReporter() {
     assertFalse(ParticipantValidator.roleIsAnyReporter("Not A reporter"));
   }
 
   @Test
-  public void hasValidRolesShouldBeValidWhenRolesAreNull(){
+  public void hasValidRolesShouldBeValidWhenRolesAreNull() {
     Participant participant = new ParticipantResourceBuilder().setRoles(null).createParticipant();
 
     assertTrue(ParticipantValidator.hasValidRoles(participant));
   }
 
   @Test
-  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeAnonymousAndSelfReporter(){
+  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeAnonymousAndSelfReporter() {
     Set roles = new HashSet();
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
     roles.add(Role.SELF_REPORTED_ROLE.getType());
@@ -313,7 +369,7 @@ public class ParticipantValidatorTest {
   }
 
   @Test
-  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeAnonymousAndVictim(){
+  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeAnonymousAndVictim() {
     Set roles = new HashSet();
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
     roles.add(Role.VICTIM_ROLE.getType());
@@ -323,7 +379,7 @@ public class ParticipantValidatorTest {
   }
 
   @Test
-  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeAnonymousAndMandatedReporter(){
+  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeAnonymousAndMandatedReporter() {
     Set roles = new HashSet();
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
     roles.add(Role.MANDATED_REPORTER_ROLE.getType());
@@ -333,7 +389,7 @@ public class ParticipantValidatorTest {
   }
 
   @Test
-  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeVictimAndPerpetrator(){
+  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeVictimAndPerpetrator() {
     Set roles = new HashSet();
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.PERPETRATOR_ROLE.getType());
@@ -343,7 +399,7 @@ public class ParticipantValidatorTest {
   }
 
   @Test
-  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeMandatedAndNonMandatedRole(){
+  public void hasValidRolesShouldBeNotBeValidWhenRolesIncludeMandatedAndNonMandatedRole() {
     Set roles = new HashSet();
     roles.add(Role.MANDATED_REPORTER_ROLE.getType());
     roles.add(Role.NON_MANDATED_REPORTER_ROLE.getType());

@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
@@ -22,6 +25,7 @@ public class ParticipantValidator {
   private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
   private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
   private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantValidator.class);
 
   /**
    * CWS/CMS Referral must have on reporter
@@ -194,9 +198,10 @@ public class ParticipantValidator {
     try {
       Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
       timeStarted = timeFormat.format(dateTime);
-    } catch (ParseException e) {
+    } catch (ParseException | NullPointerException e) {
       String message = " parsing Start Date/Time ";
       builder.addError(message);
+      logError(message, e);
     }
     return timeStarted;
   }
@@ -215,9 +220,10 @@ public class ParticipantValidator {
     try {
       Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
       dateStarted = dateFormat.format(dateTime);
-    } catch (ParseException e) {
+    } catch (ParseException | NullPointerException e) {
       String message = " parsing Start Date/Time ";
       builder.addError(message);
+      logError(message, e);
     }
     return dateStarted;
   }
@@ -377,6 +383,10 @@ public class ParticipantValidator {
    */
   public static Boolean roleIsMandatedReporter(String role) {
     return role != null && role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType());
+  }
+
+  private static void logError(String message, Exception exception) {
+    LOGGER.error(message, exception.getMessage());
   }
 
 }
