@@ -65,7 +65,7 @@ public class ReferralResourceBuilder {
   String originalClosureDate = "";
   String uiIdentifier = "1706-0845-6765-4001284";
   Set<Address> address = new HashSet<>();
-  Set<Reporter> reporter = new HashSet<>();
+  Reporter reporter;
   Set<CrossReport> crossReport = new HashSet<>();
   Set<Allegation> allegation = new HashSet<>();
   Set<Client> victimClient = new HashSet<>();
@@ -523,11 +523,11 @@ public class ReferralResourceBuilder {
     return this;
   }
 
-  public Set<Reporter> getReporter() {
+  public Reporter getReporter() {
     return reporter;
   }
 
-  public ReferralResourceBuilder setReporter(Set<Reporter> reporter) {
+  public ReferralResourceBuilder setReporter(Reporter reporter) {
     this.reporter = reporter;
     return this;
   }

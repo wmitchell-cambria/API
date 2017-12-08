@@ -883,6 +883,11 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return staffPerson;
   }
 
+
+  public void setStaffPerson(StaffPerson staffPerson) {
+    this.staffPerson = staffPerson;
+  }
+
   /**
    * @return the address
    */

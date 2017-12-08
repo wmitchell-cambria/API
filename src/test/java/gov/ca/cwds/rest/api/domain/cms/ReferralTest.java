@@ -5,27 +5,32 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.fixture.ReferralEntityBuilder;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 import java.util.Set;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
+
 import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.core.Api;
@@ -236,14 +241,10 @@ public class ReferralTest {
   @Test
   public void shouldCreateReferralWithEmptySetsFromPersistedReferralWhenCollectionsAreEmpty() {
     gov.ca.cwds.data.persistence.cms.Referral savedReferral = new ReferralEntityBuilder()
-            .setAddresses(null)
-            .setReporters(null)
-            .setCrossReports(null)
-            .setAllegations(null)
-        .build();
+        .setAddresses(null).setReporter(null).setCrossReports(null).setAllegations(null).build();
     Referral referral = new Referral(savedReferral);
     assertTrue(referral.getAddress().isEmpty());
-    assertTrue(referral.getReporter().isEmpty());
+    assertThat(referral.getReporter(), is(nullValue()));
     assertTrue(referral.getCrossReport().isEmpty());
     assertTrue(referral.getAllegation().isEmpty());
   }

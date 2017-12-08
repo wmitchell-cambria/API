@@ -57,7 +57,7 @@ public class GovernmentOrganizationResponseTest {
    * @throws Exception - Exception
    */
   @Test
-  public void setLovEntries_Args__List() throws Exception {
+  public void setGoverOrganizations_Args__List() throws Exception {
     List<GovernmentOrganization> governmentOrganizations = new ArrayList<GovernmentOrganization>();
     GovernmentOrganizationResponse target =
         new GovernmentOrganizationResponse(governmentOrganizations);

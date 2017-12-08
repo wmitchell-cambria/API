@@ -14,7 +14,9 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ReferralHoiServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
-import gov.ca.cwds.rest.resources.TypedResourceDelegate;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
+import gov.ca.cwds.rest.services.hoi.ReferralHOIService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,8 +25,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link ReferralHOI}. It delegates functions to
- * {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
+ * A resource providing a RESTful interface for {@link HOIReferral}. It delegates functions to
+ * {@link SimpleResourceDelegate}. It decorates the {@link SimpleResourceDelegate} not in
  * functionality but with @see
  * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
  * Annotations</a> and
@@ -39,18 +41,18 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ReferralHOIResource {
 
-  private TypedResourceDelegate<String, HOIReferral> typedResourceDelegate;
+  private SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate;
 
   /**
    * Constructor
    * 
-   * @param typedResourceDelegate - typedResourceDelegate
+   * @param simpleResourceDelegate - typedResourceDelegate
    */
   @Inject
   public ReferralHOIResource(
-      @ReferralHoiServiceBackedResource TypedResourceDelegate<String, HOIReferral> typedResourceDelegate) {
+      @ReferralHoiServiceBackedResource SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate) {
     super();
-    this.typedResourceDelegate = typedResourceDelegate;
+    this.simpleResourceDelegate = simpleResourceDelegate;
   }
 
   /**
@@ -70,7 +72,7 @@ public class ReferralHOIResource {
       response = HOIReferral[].class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the client to find") String id) {
-    return typedResourceDelegate.get(id);
+    return simpleResourceDelegate.find(id);
   }
 
 }

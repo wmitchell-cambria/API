@@ -33,6 +33,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryRequest;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.People;
@@ -509,9 +510,9 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @ReferralHoiServiceBackedResource
-  public TypedResourceDelegate<String, HOIReferral> referralHoiServiceBackedResource(
+  public SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> referralHoiServiceBackedResource(
       Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(injector.getInstance(ReferralHOIService.class));
+    return new SimpleResourceDelegate<>(injector.getInstance(ReferralHOIService.class));
   }
 
 }
