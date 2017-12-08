@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
@@ -228,9 +229,9 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<CrossReport> crossReports = new HashSet<>();
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
-  private Set<Reporter> reporters = new HashSet<>();
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "IDENTIFIER")
+  private Reporter reporters;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
@@ -362,7 +363,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
       Date firstEvaluatedOutApprovalDate, String responsibleAgencyCode,
       Short limitedAccessGovtAgencyType, Date limitedAccessDate, String limitedAccessDesc,
       Date originalClosureDate, Address addresses, Set<Allegation> allegations,
-      Set<CrossReport> crossReports, Set<Reporter> reporters) {
+      Set<CrossReport> crossReports, Reporter reporters) {
     super();
     this.id = id;
     this.additionalInfoIncludedCode = additionalInfoIncludedCode;
@@ -882,6 +883,11 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return staffPerson;
   }
 
+
+  public void setStaffPerson(StaffPerson staffPerson) {
+    this.staffPerson = staffPerson;
+  }
+
   /**
    * @return the address
    */
@@ -906,7 +912,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   /**
    * @return the reporter
    */
-  public Set<Reporter> getReporters() {
+  public Reporter getReporters() {
     return reporters;
   }
 

@@ -1,17 +1,22 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -291,7 +296,7 @@ public class Referral extends ReportingDomain implements Request, Response {
   private Set<gov.ca.cwds.rest.api.domain.cms.Address> address;
 
   @JsonProperty("reporter")
-  private Set<Reporter> reporter;
+  private Reporter reporter;
 
   @JsonProperty("crossReports")
   private Set<CrossReport> crossReport;
@@ -411,7 +416,7 @@ public class Referral extends ReportingDomain implements Request, Response {
       @JsonProperty("originalClosureDate") String originalClosureDate,
       @JsonProperty("uiIdentifier") String uiIdentifier,
       @JsonProperty("addresses") Set<gov.ca.cwds.rest.api.domain.cms.Address> address,
-      @JsonProperty("reporter") Set<Reporter> reporter,
+      @JsonProperty("reporter") Reporter reporter,
       @JsonProperty("crossReports") Set<CrossReport> crossReport,
       @JsonProperty("allegation") Set<Allegation> allegation,
       @JsonProperty("victimClients") Set<Client> victimClient,
@@ -553,15 +558,9 @@ public class Referral extends ReportingDomain implements Request, Response {
     if (persistedReferral.getAddresses() != null) {
       this.address.add(new Address(persistedReferral.getAddresses(), true));
     }
-    this.reporter = new HashSet<>();
-    Set<gov.ca.cwds.data.persistence.cms.Reporter> savedReporters =
-        persistedReferral.getReporters();
-    if (savedReporters == null) {
-      savedReporters = new HashSet<>();
-    }
-    for (gov.ca.cwds.data.persistence.cms.Reporter persistedReporter : savedReporters) {
-      this.reporter.add(new Reporter(persistedReporter));
-    }
+    this.reporter =
+        persistedReferral.getReporters() != null ? new Reporter(persistedReferral.getReporters())
+            : null;
     this.crossReport = new HashSet<>();
     Set<gov.ca.cwds.data.persistence.cms.CrossReport> savedCrossReports =
         persistedReferral.getCrossReports();
@@ -999,7 +998,7 @@ public class Referral extends ReportingDomain implements Request, Response {
   /**
    * @return the reporter
    */
-  public Set<Reporter> getReporter() {
+  public Reporter getReporter() {
     return reporter;
   }
 

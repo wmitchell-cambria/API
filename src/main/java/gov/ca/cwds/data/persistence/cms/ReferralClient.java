@@ -421,6 +421,14 @@ public class ReferralClient extends CmsPersistentObject {
     return referral;
   }
 
+  public void setClient(Client client) {
+    this.client = client;
+  }
+
+  public void setReferral(Referral referral) {
+    this.referral = referral;
+  }
+
   /**
    * @return the drugIndicator
    */

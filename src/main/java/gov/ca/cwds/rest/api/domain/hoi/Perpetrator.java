@@ -35,7 +35,7 @@ public class Perpetrator extends HOIPerson {
    */
   public Perpetrator(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
-    super();
+    super(id, firstName, lastName, legacyDescriptor);
   }
 
   public LimitedAccessType getLimitedAccessType() {

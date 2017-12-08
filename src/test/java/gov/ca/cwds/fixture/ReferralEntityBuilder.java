@@ -66,7 +66,7 @@ public class ReferralEntityBuilder {
   private Address addresses = new AddressEntityBuilder().build();
   Set<Allegation> allegations;
   Set<CrossReport> crossReports;
-  Set<Reporter> reporters;
+  Reporter reporter;
 
   public Referral build() {
     return new Referral(id, additionalInfoIncludedCode, anonymousReporterIndicator,
@@ -84,7 +84,7 @@ public class ReferralEntityBuilder {
         zippyCreatedIndicator, homelessIndicator, familyRefusedServicesIndicator,
         firstEvaluatedOutApprovalDate, responsibleAgencyCode, limitedAccessGovtAgencyType,
         limitedAccessDate, limitedAccessDesc, originalClosureDate, addresses, allegations,
-        crossReports, reporters);
+        crossReports, reporter);
   }
 
   public ReferralEntityBuilder setId(String id) {
@@ -352,8 +352,8 @@ public class ReferralEntityBuilder {
     return this;
   }
 
-  public ReferralEntityBuilder setReporters(Set<Reporter> reporters) {
-    this.reporters = reporters;
+  public ReferralEntityBuilder setReporter(Reporter reporter) {
+    this.reporter = reporter;
     return this;
   }
 

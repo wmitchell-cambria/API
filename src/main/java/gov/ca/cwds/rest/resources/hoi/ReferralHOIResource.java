@@ -14,7 +14,9 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ReferralHoiServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
+import gov.ca.cwds.rest.services.hoi.ReferralHOIService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,30 +25,38 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
+ * A resource providing a RESTful interface for {@link HOIReferral}. It delegates functions to
+ * {@link SimpleResourceDelegate}. It decorates the {@link SimpleResourceDelegate} not in
+ * functionality but with @see
+ * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * Annotations</a> and
+ * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
+ * Annotations</a>
+ * 
  * @author CWDS API Team
- *
  */
 @Api(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
 @Path(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ReferralHistoryOfInvolvementResource {
+public class ReferralHOIResource {
 
-  private ResourceDelegate resourceDelegate;
+  private SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate;
 
   /**
    * Constructor
    * 
-   * @param resourceDelegate - resourceDelegate
+   * @param simpleResourceDelegate - typedResourceDelegate
    */
   @Inject
-  public ReferralHistoryOfInvolvementResource(
-      @ReferralHoiServiceBackedResource ResourceDelegate resourceDelegate) {
+  public ReferralHOIResource(
+      @ReferralHoiServiceBackedResource SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate) {
     super();
-    this.resourceDelegate = resourceDelegate;
+    this.simpleResourceDelegate = simpleResourceDelegate;
   }
 
   /**
+   * Finds an referrals HOI by client id.
    * 
    * @param id the id
    * 
@@ -59,10 +69,10 @@ public class ReferralHistoryOfInvolvementResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find referrals history of involvement by clientId",
-      response = HOIReferral.class, code = 200)
+      response = HOIReferral[].class, code = 200)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the client to find") String id) {
-    return resourceDelegate.get(id);
+    return simpleResourceDelegate.find(id);
   }
 
 }

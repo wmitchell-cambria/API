@@ -33,8 +33,16 @@ public class HOIReporter extends HOIPerson {
       this.description = description;
     }
 
+    /**
+     * @return the description
+     */
     public String getDescription() {
       return description;
+    }
+
+    @Override
+    public String toString() {
+      return this.getDescription();
     }
   }
 
@@ -48,15 +56,16 @@ public class HOIReporter extends HOIPerson {
   }
 
   /**
+   * @param role - role
    * @param id - id
    * @param firstName - firstName
    * @param lastName - lastName
    * @param legacyDescriptor - legacyDescriptor
    */
-  public HOIReporter(String id, String firstName, String lastName,
+  public HOIReporter(Role role, String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
-
+    this.role = role;
   }
 
   /**
