@@ -30,7 +30,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  * @author CWDS API Team
  *
  */
-public class ReferralHOIService
+public class HOIReferralService
     extends SimpleResourceService<String, HOIReferral, HOIReferralResponse> {
 
   /**
@@ -46,7 +46,7 @@ public class ReferralHOIService
    * @param referralClientDao - referralClientDao
    */
   @Inject
-  public ReferralHOIService(ClientDao clientDao, ReferralClientDao referralClientDao) {
+  public HOIReferralService(ClientDao clientDao, ReferralClientDao referralClientDao) {
     super();
     this.clientDao = clientDao;
     this.referralClientDao = referralClientDao;
@@ -75,7 +75,7 @@ public class ReferralHOIService
     Referral referral = referralClient.getReferral();
 
     StaffPerson staffPerson = referral.getStaffPerson();
-    Reporter reporter = referral.getReporters();
+    Reporter reporter = referral.getReporter();
     role = fetchForReporterRole(role, referral, referralClient, reporter);
 
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);

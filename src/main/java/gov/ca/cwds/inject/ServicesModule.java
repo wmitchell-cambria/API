@@ -50,7 +50,7 @@ import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
-import gov.ca.cwds.rest.services.hoi.ReferralHOIService;
+import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -144,7 +144,7 @@ public class ServicesModule extends AbstractModule {
     bind(StaffPersonIdRetriever.class);
     bind(StaffPersonService.class);
     bind(TickleService.class);
-    bind(ReferralHOIService.class);
+    bind(HOIReferralService.class);
 
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);

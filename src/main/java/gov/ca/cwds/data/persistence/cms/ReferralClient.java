@@ -421,10 +421,16 @@ public class ReferralClient extends CmsPersistentObject {
     return referral;
   }
 
+  /**
+   * @param client - client
+   */
   public void setClient(Client client) {
     this.client = client;
   }
 
+  /**
+   * @param referral - referral
+   */
   public void setReferral(Referral referral) {
     this.referral = referral;
   }

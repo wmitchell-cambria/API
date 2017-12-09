@@ -20,14 +20,14 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.services.hoi.ReferralHOIService;
+import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * @author CWDS API Team
  *
  */
-public class ReferralHOIResourceTest {
+public class HOIReferralResourceTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
 
@@ -45,12 +45,12 @@ public class ReferralHOIResourceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private static SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, ReferralHOIService> simpleResourceDelegate =
+  private static SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate =
       mock(SimpleResourceDelegate.class);
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new ReferralHOIResource(simpleResourceDelegate)).build();
+      .addResource(new HOIReferralResource(simpleResourceDelegate)).build();
 
   /**
    * @throws Exception - Exception
@@ -66,7 +66,7 @@ public class ReferralHOIResourceTest {
    */
   @Test
   public void type() throws Exception {
-    assertThat(ReferralHOIResource.class, notNullValue());
+    assertThat(HOIReferralResource.class, notNullValue());
   }
 
   /**
@@ -74,7 +74,7 @@ public class ReferralHOIResourceTest {
    */
   @Test
   public void instantiation() throws Exception {
-    ReferralHOIResource target = new ReferralHOIResource(simpleResourceDelegate);
+    HOIReferralResource target = new HOIReferralResource(simpleResourceDelegate);
     assertThat(target, notNullValue());
   }
 

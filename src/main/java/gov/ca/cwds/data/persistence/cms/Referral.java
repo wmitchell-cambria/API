@@ -231,7 +231,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "IDENTIFIER")
-  private Reporter reporters;
+  private Reporter reporter;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
@@ -341,7 +341,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @param addresses addresses
    * @param allegations allegations
    * @param crossReports crossReports
-   * @param reporters reporters
+   * @param reporter reporter
    */
   public Referral(String id, String additionalInfoIncludedCode, String anonymousReporterIndicator,
       String applicationForPetitionIndicator, String approvalNumber, Short approvalStatusType,
@@ -363,7 +363,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
       Date firstEvaluatedOutApprovalDate, String responsibleAgencyCode,
       Short limitedAccessGovtAgencyType, Date limitedAccessDate, String limitedAccessDesc,
       Date originalClosureDate, Address addresses, Set<Allegation> allegations,
-      Set<CrossReport> crossReports, Reporter reporters) {
+      Set<CrossReport> crossReports, Reporter reporter) {
     super();
     this.id = id;
     this.additionalInfoIncludedCode = additionalInfoIncludedCode;
@@ -417,7 +417,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     this.addresses = addresses;
     this.allegations = allegations;
     this.crossReports = crossReports;
-    this.reporters = reporters;
+    this.reporter = reporter;
   }
 
   /**
@@ -883,7 +883,9 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return staffPerson;
   }
 
-
+  /**
+   * @param staffPerson - staffPerson
+   */
   public void setStaffPerson(StaffPerson staffPerson) {
     this.staffPerson = staffPerson;
   }
@@ -912,8 +914,8 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   /**
    * @return the reporter
    */
-  public Reporter getReporters() {
-    return reporters;
+  public Reporter getReporter() {
+    return reporter;
   }
 
   /**
