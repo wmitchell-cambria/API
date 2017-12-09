@@ -94,32 +94,74 @@ public class HOIReferral extends ApiObjectIdentity
   }
 
   /**
-   * @param clientId - clientId
-   * @param client - client
    * @param referral - referral
    * @param staffPerson - staffPerson
    * @param reporter - reporter
    * @param allegationMap - allegationMap
    * @param role - role
    */
-  public HOIReferral(String clientId, Client client, Referral referral, StaffPerson staffPerson,
-      Reporter reporter, Map<Allegation, List<Client>> allegationMap, Role role) {
+  public HOIReferral(Referral referral, StaffPerson staffPerson, Reporter reporter,
+      Map<Allegation, List<Client>> allegationMap, Role role) {
+    createHOIReferral(referral, staffPerson, reporter, allegationMap, role);
+  }
 
+  private void createHOIReferral(Referral referral, StaffPerson staffPerson, Reporter reporter,
+      Map<Allegation, List<Client>> allegationMap, Role role) {
     this.id = referral.getId();
     this.startDate = referral.getReceivedDate();
     this.endDate = referral.getClosureDate();
     this.county = new SystemCodeDescriptor(referral.getGovtEntityType(),
         SystemCodeCache.global().getSystemCodeShortDescription(referral.getGovtEntityType()));
-
     this.responseTime = new SystemCodeDescriptor(referral.getReferralResponseType(),
         SystemCodeCache.global().getSystemCodeShortDescription(referral.getReferralResponseType()));
+    buildAssignedSocialWorkerDomain(staffPerson);
+    buildReporterDomain(reporter, role);
+    buildAccessLimitationDomain(referral);
+    for (Map.Entry<Allegation, List<Client>> allegation : allegationMap.entrySet()) {
+      HOIAllegation hoiAllegation = buildAllegationDomain(allegation);
+      this.allegations.add(hoiAllegation);
+    }
+    this.legacyDescriptor =
+        new LegacyDescriptor(referral.getId(), null, new DateTime(referral.getLastUpdatedTime()),
+            LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription());
+  }
 
-    this.assignedSocialWorker =
-        new SocialWorker(staffPerson.getId(), staffPerson.getFirstName(), staffPerson.getLastName(),
-            new LegacyDescriptor(staffPerson.getId(), null,
-                new DateTime(staffPerson.getLastUpdatedTime()), LegacyTable.STAFF_PERSON.getName(),
-                LegacyTable.STAFF_PERSON.getDescription()));
+  private void buildAccessLimitationDomain(Referral referral) {
+    this.accessLimitation = new AccessLimitation(LimitedAccessType.NONE,
+        referral.getLimitedAccessDate(), referral.getLimitedAccessDesc(),
+        new SystemCodeDescriptor(referral.getLimitedAccessGovtAgencyType(), SystemCodeCache.global()
+            .getSystemCodeShortDescription(referral.getLimitedAccessGovtAgencyType())));
+  }
 
+  private HOIAllegation buildAllegationDomain(Map.Entry<Allegation, List<Client>> allegation) {
+    HOIAllegation hoiAllegation = new HOIAllegation(allegation.getKey().getId(), null,
+        new SystemCodeDescriptor(allegation.getKey().getAllegationDispositionType(),
+            SystemCodeCache.global()
+                .getSystemCodeShortDescription(allegation.getKey().getAllegationDispositionType())),
+        null, null,
+        new LegacyDescriptor(allegation.getKey().getId(), null,
+            new DateTime(allegation.getKey().getLastUpdatedTime()),
+            LegacyTable.ALLEGATION.getName(), LegacyTable.ALLEGATION.getDescription()));
+    allegation.getValue().forEach(eachclient -> {
+
+      if (eachclient.getId().equals(allegation.getKey().getVictimClientId())) {
+        hoiAllegation.setVictim(
+            new Victim(eachclient.getId(), eachclient.getFirstName(), eachclient.getLastName(),
+                new LegacyDescriptor(eachclient.getId(), null,
+                    new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+                    LegacyTable.CLIENT.getDescription())));
+      } else {
+        hoiAllegation.setPerpetrator(
+            new Perpetrator(eachclient.getId(), eachclient.getFirstName(), eachclient.getLastName(),
+                new LegacyDescriptor(eachclient.getId(), null,
+                    new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+                    LegacyTable.CLIENT.getDescription())));
+      }
+    });
+    return hoiAllegation;
+  }
+
+  private void buildReporterDomain(Reporter reporter, Role role) {
     if (reporter != null) {
       this.reporter = new HOIReporter(role, reporter.getReferralId(), reporter.getFirstName(),
           reporter.getLastName(),
@@ -129,43 +171,14 @@ public class HOIReferral extends ApiObjectIdentity
     } else {
       this.reporter = new HOIReporter(role, null, null, null, null);
     }
+  }
 
-    this.accessLimitation = new AccessLimitation(LimitedAccessType.NONE,
-        referral.getLimitedAccessDate(), referral.getLimitedAccessDesc(),
-        new SystemCodeDescriptor(referral.getLimitedAccessGovtAgencyType(), SystemCodeCache.global()
-            .getSystemCodeShortDescription(referral.getLimitedAccessGovtAgencyType())));
-
-    for (Map.Entry<Allegation, List<Client>> allegation : allegationMap.entrySet()) {
-      HOIAllegation hoiAllegation = new HOIAllegation(allegation.getKey().getId(), null,
-          new SystemCodeDescriptor(allegation.getKey().getAllegationDispositionType(),
-              SystemCodeCache.global().getSystemCodeShortDescription(
-                  allegation.getKey().getAllegationDispositionType())),
-          null, null,
-          new LegacyDescriptor(allegation.getKey().getId(), null,
-              new DateTime(allegation.getKey().getLastUpdatedTime()),
-              LegacyTable.ALLEGATION.getName(), LegacyTable.ALLEGATION.getDescription()));
-      allegation.getValue().forEach(eachclient -> {
-
-        if (eachclient.getId().equals(allegation.getKey().getVictimClientId())) {
-          hoiAllegation.setVictim(
-              new Victim(eachclient.getId(), eachclient.getFirstName(), eachclient.getLastName(),
-                  new LegacyDescriptor(eachclient.getId(), null,
-                      new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
-                      LegacyTable.CLIENT.getDescription())));
-        } else {
-          hoiAllegation.setPerpetrator(new Perpetrator(eachclient.getId(),
-              eachclient.getFirstName(), eachclient.getLastName(),
-              new LegacyDescriptor(eachclient.getId(), null,
-                  new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
-                  LegacyTable.CLIENT.getDescription())));
-        }
-      });
-      this.allegations.add(hoiAllegation);
-    }
-
-    this.legacyDescriptor =
-        new LegacyDescriptor(referral.getId(), null, new DateTime(referral.getLastUpdatedTime()),
-            LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription());
+  private void buildAssignedSocialWorkerDomain(StaffPerson staffPerson) {
+    this.assignedSocialWorker =
+        new SocialWorker(staffPerson.getId(), staffPerson.getFirstName(), staffPerson.getLastName(),
+            new LegacyDescriptor(staffPerson.getId(), null,
+                new DateTime(staffPerson.getLastUpdatedTime()), LegacyTable.STAFF_PERSON.getName(),
+                LegacyTable.STAFF_PERSON.getDescription()));
   }
 
   @Override
