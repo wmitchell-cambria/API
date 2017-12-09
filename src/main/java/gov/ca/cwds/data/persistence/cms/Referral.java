@@ -341,7 +341,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @param addresses addresses
    * @param allegations allegations
    * @param crossReports crossReports
-   * @param reporters reporters
+   * @param reporter reporter
    */
   public Referral(String id, String additionalInfoIncludedCode, String anonymousReporterIndicator,
       String applicationForPetitionIndicator, String approvalNumber, Short approvalStatusType,
