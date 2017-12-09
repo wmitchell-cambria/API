@@ -61,7 +61,7 @@ public class HOIReferralService
       List<ReferralClient> referralClientList = fetchReferralClient(clientId);
 
       for (ReferralClient referralClient : referralClientList) {
-        fetchEachReferral(clientId, hoiReferralResponse, client, referralClient);
+        fetchEachReferral(hoiReferralResponse, referralClient);
       }
 
       return hoiReferralResponse;
@@ -69,8 +69,8 @@ public class HOIReferralService
     return null;
   }
 
-  private void fetchEachReferral(String clientId, HOIReferralResponse hoiReferralResponse,
-      Client client, ReferralClient referralClient) {
+  private void fetchEachReferral(HOIReferralResponse hoiReferralResponse,
+      ReferralClient referralClient) {
     Role role = null;
     Referral referral = referralClient.getReferral();
 
@@ -79,8 +79,8 @@ public class HOIReferralService
     role = fetchForReporterRole(role, referral, referralClient, reporter);
 
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
-    hoiReferralResponse.addHoiReferral(
-        new HOIReferral(clientId, client, referral, staffPerson, reporter, allegationMap, role));
+    hoiReferralResponse
+        .addHoiReferral(new HOIReferral(referral, staffPerson, reporter, allegationMap, role));
   }
 
   private List<ReferralClient> fetchReferralClient(String clientId) {
@@ -111,17 +111,19 @@ public class HOIReferralService
     Map<Allegation, List<Client>> allegationMap = new HashMap<>();
     for (Allegation allegation : allegations) {
       List<Client> clients = new ArrayList<>();
-      if (allegation.getVictimClientId() != null) {
-        clients.add(clientDao.find(allegation.getVictimClientId()));
-      }
-      if (allegation.getPerpetratorClientId() != null) {
-        clients.add(clientDao.find(allegation.getPerpetratorClientId()));
-      }
-
+      fetchForClients(allegation, clients);
       allegationMap.put(allegation, clients);
-
     }
     return allegationMap;
+  }
+
+  private void fetchForClients(Allegation allegation, List<Client> clients) {
+    if (allegation.getVictimClientId() != null) {
+      clients.add(clientDao.find(allegation.getVictimClientId()));
+    }
+    if (allegation.getPerpetratorClientId() != null) {
+      clients.add(clientDao.find(allegation.getPerpetratorClientId()));
+    }
   }
 
   @Override
