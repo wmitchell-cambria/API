@@ -31,7 +31,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
-public class ScreeningHOIResourceTest {
+public class HOIScreeningResourceTest {
 
   private static final String ROOT_RESOURCE = "/screenings/";
 
@@ -52,7 +52,7 @@ public class ScreeningHOIResourceTest {
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new ScreeningHOIResource(typedResourceDelegate)).build();
+      .addResource(new HOIScreeningResource(typedResourceDelegate)).build();
   /*
    * Load system code cache
    */

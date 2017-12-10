@@ -74,7 +74,7 @@ import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
 import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
-import gov.ca.cwds.rest.resources.hoi.ScreeningHOIResource;
+import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
 import gov.ca.cwds.rest.resources.investigation.ContactResource;
 import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
@@ -111,7 +111,7 @@ import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
-import gov.ca.cwds.rest.services.hoi.ScreeningHOIService;
+import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
@@ -178,7 +178,7 @@ public class ResourcesModule extends AbstractModule {
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
     bind(SafetyAlertsResource.class);
-    bind(ScreeningHOIResource.class);
+    bind(HOIScreeningResource.class);
     bind(HOIReferralResource.class);
   }
 
@@ -501,15 +501,15 @@ public class ResourcesModule extends AbstractModule {
   }
 
   @Provides
-  @ScreeningHOIServiceBackedResource
+  @HOIScreeningServiceBackedResource
   public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> screeningHOIServiceBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(ScreeningHOIService.class));
+        injector.getInstance(HOIScreeningService.class));
   }
 
   @Provides
-  @ReferralHoiServiceBackedResource
+  @HOIReferralServiceBackedResource
   public SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> referralHoiServiceBackedResource(
       Injector injector) {
     return new SimpleResourceDelegate<>(injector.getInstance(HOIReferralService.class));

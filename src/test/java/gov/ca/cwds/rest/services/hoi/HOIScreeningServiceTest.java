@@ -23,10 +23,10 @@ import io.dropwizard.jackson.Jackson;
  *
  */
 @SuppressWarnings("javadoc")
-public class ScreeningHOIServiceTest {
+public class HOIScreeningServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private ScreeningHOIService screeningHOIService;
+  private HOIScreeningService screeningHOIService;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -34,7 +34,7 @@ public class ScreeningHOIServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    screeningHOIService = new ScreeningHOIService();
+    screeningHOIService = new HOIScreeningService();
   }
 
   // find test

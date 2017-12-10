@@ -12,7 +12,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.ScreeningHOIServiceBackedResource;
+import gov.ca.cwds.inject.HOIScreeningServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -22,16 +23,22 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-/*
+/**
+ * A resource providing a RESTful interface for {@link HOIScreening}. It delegates functions to
+ * {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
+ * functionality but with @see
+ * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
+ * Annotations</a> and
+ * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
+ * Annotations</a>
  * 
  * @author CWDS API Team
  */
-
 @Api(value = RESOURCE_SCREENINGS)
 @Path(value = RESOURCE_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ScreeningHOIResource {
+public class HOIScreeningResource {
   private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
 
   /**
@@ -40,8 +47,8 @@ public class ScreeningHOIResource {
    * @param typedResourceDelegate The resourceDelegate to delegate to.
    */
   @Inject
-  public ScreeningHOIResource(
-      @ScreeningHOIServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
+  public HOIScreeningResource(
+      @HOIScreeningServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 

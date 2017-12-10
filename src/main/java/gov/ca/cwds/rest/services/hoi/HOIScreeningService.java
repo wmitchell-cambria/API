@@ -20,15 +20,15 @@ import io.dropwizard.jackson.Jackson;
  * 
  * @author CWDS API Team
  */
-public class ScreeningHOIService
+public class HOIScreeningService
     implements TypedCrudsService<String, InvolvementHistory, Response> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningHOIService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HOIScreeningService.class);
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @Inject
-  public ScreeningHOIService() {
+  public HOIScreeningService() {
     super();
   }
 

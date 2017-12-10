@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.ReferralHoiServiceBackedResource;
+import gov.ca.cwds.inject.HOIReferralServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
@@ -50,7 +50,7 @@ public class HOIReferralResource {
    */
   @Inject
   public HOIReferralResource(
-      @ReferralHoiServiceBackedResource SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate) {
+      @HOIReferralServiceBackedResource SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate) {
     super();
     this.simpleResourceDelegate = simpleResourceDelegate;
   }
