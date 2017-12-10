@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.ClientDao;
@@ -128,7 +130,7 @@ public class HOIReferralService
 
   @Override
   protected HOIReferralResponse handleRequest(HOIReferral req) {
-    return null;
+    throw new NotImplementedException("handle request not implemented");
   }
 
 }
