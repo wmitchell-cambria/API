@@ -4,11 +4,14 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.Validation;
@@ -54,6 +57,7 @@ import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
 import gov.ca.cwds.fixture.CmsReporterResourceBuilder;
 import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -67,6 +71,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
@@ -395,6 +400,22 @@ public class R00824SetDispositionCodeTest {
     clientParticipants.addParticipants(participants);
     screeningToReferralService.create(screeningToReferral);
     assertThat(referralClient.getDispositionCode(), is(equalTo("A")));
+  }
+
+  /**
+   * Test return false when participant date of birth is null
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFalseWhenParticipantDobNull() throws Exception {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null).createParticipant();
+    Set<Participant> participants = new HashSet<>(Arrays.asList(victim));
+    ScreeningToReferral validScreeningToreferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    R00824SetDispositionCode r00824SetDispositionCode =
+        new R00824SetDispositionCode(validScreeningToreferral, victim);
+    assertEquals(false, r00824SetDispositionCode.isValid());
   }
 
 }

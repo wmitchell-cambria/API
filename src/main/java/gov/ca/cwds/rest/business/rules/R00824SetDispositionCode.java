@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.business.rules;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
@@ -45,8 +46,11 @@ public class R00824SetDispositionCode implements RuleValidatator {
 
   @Override
   public boolean isValid() {
-    return clientAge() < ADULT && screeningToReferral.getResponseTime() == EVALUATE_OUT
-        && screeningToReferral.getApprovalStatus() == APPROVED;
+    if (StringUtils.isNotBlank(incomingParticipant.getDateOfBirth())) {
+      return clientAge() < ADULT && screeningToReferral.getResponseTime() == EVALUATE_OUT
+          && screeningToReferral.getApprovalStatus() == APPROVED;
+    }
+    return false;
   }
 
   private int clientAge() {

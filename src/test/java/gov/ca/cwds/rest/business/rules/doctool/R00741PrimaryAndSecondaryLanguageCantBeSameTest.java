@@ -52,7 +52,7 @@ public class R00741PrimaryAndSecondaryLanguageCantBeSameTest {
         .setSecondaryLanguage((short) 1253).createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
-    assertEquals("cant be same as primaryLanguage",
+    assertEquals("can not be same as primaryLanguage",
         constraintViolations.iterator().next().getMessage());
   }
 

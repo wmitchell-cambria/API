@@ -49,6 +49,8 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  */
 public class ParticipantService implements CrudsService {
 
+  private static final String ASSESMENT = "A";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
 
   private static final String REPORTER_TABLE_NAME = "REPTR_T";
@@ -284,7 +286,7 @@ public class ParticipantService implements CrudsService {
 
     ReferralClient referralClient =
         ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
-            staffPersonAddedIndicator, dispositionCode ? "A" : "", referralId, clientId,
+            staffPersonAddedIndicator, dispositionCode ? ASSESMENT : "", referralId, clientId,
             LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
             LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
