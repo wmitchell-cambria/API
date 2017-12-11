@@ -66,10 +66,12 @@ public class HOIReferralServiceFactory {
   }
 
   private void buildAccessLimitationDomain(Referral referral) {
-    hoiReferral.setAccessLimitation(new AccessLimitation(LimitedAccessType.NONE,
-        referral.getLimitedAccessDate(), referral.getLimitedAccessDesc(),
-        new SystemCodeDescriptor(referral.getLimitedAccessGovtAgencyType(), SystemCodeCache.global()
-            .getSystemCodeShortDescription(referral.getLimitedAccessGovtAgencyType()))));
+    hoiReferral.setAccessLimitation(
+        new AccessLimitation(LimitedAccessType.getByValue(referral.getLimitedAccessCode()),
+            referral.getLimitedAccessDate(), referral.getLimitedAccessDesc(),
+            new SystemCodeDescriptor(referral.getLimitedAccessGovtAgencyType(),
+                SystemCodeCache.global()
+                    .getSystemCodeShortDescription(referral.getLimitedAccessGovtAgencyType()))));
   }
 
   private HOIAllegation buildAllegationDomain(Map.Entry<Allegation, List<Client>> allegation) {
