@@ -284,11 +284,10 @@ public class ParticipantService implements CrudsService {
     boolean staffPersonAddedIndicator =
         new R00832SetStaffPersonAddedInd(screeningToReferral).isValid();
 
-    ReferralClient referralClient =
-        ReferralClient.createWithDefault(ParticipantValidator.selfReported(incomingParticipant),
-            staffPersonAddedIndicator, dispositionCode ? ASSESMENT : "", referralId, clientId,
-            LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
-            LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
+    ReferralClient referralClient = ReferralClient.createWithDefault(
+        ParticipantValidator.selfReported(incomingParticipant), staffPersonAddedIndicator,
+        dispositionCode ? ASSESMENT : "", referralId, clientId,
+        screeningToReferral.getIncidentCounty(), LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
 
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
@@ -327,11 +326,14 @@ public class ParticipantService implements CrudsService {
       List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
 
       String unableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-          ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode() : "";
+          ? incomingParticipant.getRaceAndEthnicity().getUnableToDetermineCode()
+          : "";
       String hispanicUnableToDetermineCode = incomingParticipant.getRaceAndEthnicity() != null
-          ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode() : "";
+          ? incomingParticipant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
+          : "";
       String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
-          ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode() : "";
+          ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode()
+          : "";
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
