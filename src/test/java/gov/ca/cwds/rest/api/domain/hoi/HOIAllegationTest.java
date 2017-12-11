@@ -23,9 +23,9 @@ public class HOIAllegationTest {
   private String id = "ABC1234567";
   private SystemCodeDescriptor type = new SystemCodeDescriptor((short) 123, "descrption");
   private SystemCodeDescriptor disposition = new SystemCodeDescriptor((short) 123, "descrption");
-  private Victim victim = new Victim(id, "Kak", "Man",
+  private HOIVictim victim = new HOIVictim(id, "Kak", "Man",
       new LegacyDescriptor("Abc1234589", null, new DateTime(), null, null));
-  private Perpetrator perpetrator = new Perpetrator("Abc1234580", "Kak1", "Man2",
+  private HOIPerpetrator perpetrator = new HOIPerpetrator("Abc1234580", "Kak1", "Man2",
       new LegacyDescriptor(id, null, new DateTime(), null, null));
   private LegacyDescriptor legacyDescriptor =
       new LegacyDescriptor("Abc1209877", null, new DateTime(), null, null);
@@ -101,27 +101,27 @@ public class HOIAllegationTest {
 
   @Test
   public void getVictim_Args__() throws Exception {
-    Victim actual = target.getVictim();
-    Victim expected = null;
+    HOIVictim actual = target.getVictim();
+    HOIVictim expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setVictim_Args__Victim() throws Exception {
-    Victim victim = mock(Victim.class);
+    HOIVictim victim = mock(HOIVictim.class);
     target.setVictim(victim);
   }
 
   @Test
   public void getPerpetrator_Args__() throws Exception {
-    Perpetrator actual = target.getPerpetrator();
-    Perpetrator expected = null;
+    HOIPerpetrator actual = target.getPerpetrator();
+    HOIPerpetrator expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setPerpetrator_Args__Perpetrator() throws Exception {
-    Perpetrator perpetrator = mock(Perpetrator.class);
+    HOIPerpetrator perpetrator = mock(HOIPerpetrator.class);
     target.setPerpetrator(perpetrator);
   }
 

@@ -7,7 +7,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
  * 
  * @author CWDS API Team
  */
-public class SocialWorker extends HOIPerson {
+public class HOISocialWorker extends HOIPerson {
 
   /**
    * Default serialization version.
@@ -17,7 +17,7 @@ public class SocialWorker extends HOIPerson {
   /**
    * Default constructor
    */
-  public SocialWorker() {
+  public HOISocialWorker() {
     super();
   }
 
@@ -28,7 +28,7 @@ public class SocialWorker extends HOIPerson {
    * @param lastName - lastName
    * @param legacyDescriptor - legacyDescriptor
    */
-  public SocialWorker(String id, String firstName, String lastName,
+  public HOISocialWorker(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
   }

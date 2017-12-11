@@ -26,10 +26,10 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
   private SystemCodeDescriptor disposition;
 
   @JsonProperty("victim")
-  private Victim victim;
+  private HOIVictim victim;
 
   @JsonProperty("perpetrator")
-  private Perpetrator perpetrator;
+  private HOIPerpetrator perpetrator;
 
   @JsonProperty("legacy_descriptor")
   private LegacyDescriptor legacyDescriptor;
@@ -50,7 +50,7 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
    * @param legacyDescriptor - legacyDescriptor
    */
   public HOIAllegation(String id, SystemCodeDescriptor type, SystemCodeDescriptor disposition,
-      Victim victim, Perpetrator perpetrator, LegacyDescriptor legacyDescriptor) {
+      HOIVictim victim, HOIPerpetrator perpetrator, LegacyDescriptor legacyDescriptor) {
     super();
     this.id = id;
     this.type = type;
@@ -94,19 +94,19 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
     this.legacyDescriptor = legacyDescriptor;
   }
 
-  public Victim getVictim() {
+  public HOIVictim getVictim() {
     return victim;
   }
 
-  public void setVictim(Victim victim) {
+  public void setVictim(HOIVictim victim) {
     this.victim = victim;
   }
 
-  public Perpetrator getPerpetrator() {
+  public HOIPerpetrator getPerpetrator() {
     return perpetrator;
   }
 
-  public void setPerpetrator(Perpetrator perpetrator) {
+  public void setPerpetrator(HOIPerpetrator perpetrator) {
     this.perpetrator = perpetrator;
   }
 }

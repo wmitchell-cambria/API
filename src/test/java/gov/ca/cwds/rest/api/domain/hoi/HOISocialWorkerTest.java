@@ -19,9 +19,9 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
  *
  */
 @SuppressWarnings("javadoc")
-public class SocialWorkerTest {
+public class HOISocialWorkerTest {
 
-  SocialWorker target;
+  HOISocialWorker target;
   private String id = "jhdgfkhaj";
   private String firstName = "Barney";
   private String lastName = "Dino";
@@ -31,23 +31,23 @@ public class SocialWorkerTest {
 
   @Before
   public void setup() throws Exception {
-    target = new SocialWorker();
+    target = new HOISocialWorker();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(SocialWorker.class, notNullValue());
+    assertThat(HOISocialWorker.class, notNullValue());
   }
 
   @Test
   public void instantiation() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     assertThat(target, notNullValue());
   }
 
   @Test
   public void getId_Args__() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     String actual = target.getId();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -55,14 +55,14 @@ public class SocialWorkerTest {
 
   @Test
   public void setId_Args__String() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     String id = null;
     target.setId(id);
   }
 
   @Test
   public void getFirstName_Args__() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     String actual = target.getFirstName();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -70,14 +70,14 @@ public class SocialWorkerTest {
 
   @Test
   public void setFirstName_Args__String() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     String firstName = null;
     target.setFirstName(firstName);
   }
 
   @Test
   public void getLastName_Args__() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     String actual = target.getLastName();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -85,41 +85,41 @@ public class SocialWorkerTest {
 
   @Test
   public void setLastName_Args__String() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     String lastName = null;
     target.setLastName(lastName);
   }
 
   @Test
   public void getLegacyDescriptor_Args__() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     LegacyDescriptor actual = target.getLegacyDescriptor();
     assertThat(actual, is(notNullValue()));
   }
 
   @Test
   public void setLegacyDescriptor_Args__LegacyDescriptor() throws Exception {
-    SocialWorker target = new SocialWorker();
+    HOISocialWorker target = new HOISocialWorker();
     LegacyDescriptor legacyDescriptor = mock(LegacyDescriptor.class);
     target.setLegacyDescriptor(legacyDescriptor);
   }
 
   @Test
   public void testEmptyConstructor() throws Exception {
-    SocialWorker empty = new SocialWorker();
-    assertThat(empty.getClass(), is(SocialWorker.class));
+    HOISocialWorker empty = new HOISocialWorker();
+    assertThat(empty.getClass(), is(HOISocialWorker.class));
   }
 
 
   @Test
   public void equalsHashCodeWork() {
-    SocialWorker empty = new SocialWorker();
+    HOISocialWorker empty = new HOISocialWorker();
     assertThat(empty.hashCode(), is(not(0)));
   }
 
   @Test
   public void constructorTest() throws Exception {
-    SocialWorker domain = new SocialWorker(id, firstName, lastName, legacyDescriptor);
+    HOISocialWorker domain = new HOISocialWorker(id, firstName, lastName, legacyDescriptor);
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getFirstName(), is(equalTo(firstName)));
     assertThat(domain.getLastName(), is(equalTo(lastName)));

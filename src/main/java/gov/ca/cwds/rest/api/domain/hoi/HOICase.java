@@ -48,16 +48,16 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
   private SystemCodeDescriptor serviceComponent;
 
   @JsonProperty("focus_child")
-  private Victim focusChild;
+  private HOIVictim focusChild;
 
   @JsonProperty("assigned_social_worker")
-  private SocialWorker assignedSocialWorker;
+  private HOISocialWorker assignedSocialWorker;
 
   @JsonProperty("access_limitation")
   private AccessLimitation accessLimitation;
 
   @JsonProperty("parents")
-  private List<RelatedPerson> parents = new ArrayList<>();
+  private List<HOIRelatedPerson> parents = new ArrayList<>();
 
   @JsonProperty("legacy_descriptor")
   private LegacyDescriptor legacyDescriptor;
@@ -111,27 +111,27 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     this.serviceComponent = serviceComponent;
   }
 
-  public Victim getFocusChild() {
+  public HOIVictim getFocusChild() {
     return focusChild;
   }
 
-  public void setFocusChild(Victim focusChild) {
+  public void setFocusChild(HOIVictim focusChild) {
     this.focusChild = focusChild;
   }
 
-  public SocialWorker getAssignedSocialWorker() {
+  public HOISocialWorker getAssignedSocialWorker() {
     return assignedSocialWorker;
   }
 
-  public void setAssignedSocialWorker(SocialWorker assignedSocialWorker) {
+  public void setAssignedSocialWorker(HOISocialWorker assignedSocialWorker) {
     this.assignedSocialWorker = assignedSocialWorker;
   }
 
-  public List<RelatedPerson> getParents() {
+  public List<HOIRelatedPerson> getParents() {
     return parents;
   }
 
-  public void setParents(List<RelatedPerson> parents) {
+  public void setParents(List<HOIRelatedPerson> parents) {
     this.parents = parents;
   }
 
@@ -164,7 +164,7 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     accessLimitation.setLimitedAccessGovernmentEntity(govtEntity);
     kase.setAccessLimitation(accessLimitation);
 
-    SocialWorker socialWorker = new SocialWorker();
+    HOISocialWorker socialWorker = new HOISocialWorker();
     socialWorker.setFirstName("Worker First Name");
     socialWorker.setLastName("Worker Last Name");
     socialWorker.setId("jhgguhgjh");
@@ -181,7 +181,7 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     kase.setEndDate(new Date());
     kase.setStartDate(new Date());
 
-    Victim victim = new Victim();
+    HOIVictim victim = new HOIVictim();
     victim.setFirstName("Victim First Name");
     victim.setLastName("Victim Last Name");
     victim.setId("iiiiiii");
@@ -199,7 +199,7 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     serviceComponent.setDescription("Permanent Placement");
     kase.setServiceComponent(serviceComponent);
 
-    RelatedPerson father = new RelatedPerson();
+    HOIRelatedPerson father = new HOIRelatedPerson();
     father.setFirstName("Father First Name");
     father.setLastName("Father Last Name");
     father.setId("fafafafafa");
@@ -211,7 +211,7 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     fatherRelationship.setDescription("Father/Son (Step)");
     father.setRelationship(fatherRelationship);
 
-    RelatedPerson mother = new RelatedPerson();
+    HOIRelatedPerson mother = new HOIRelatedPerson();
     mother.setFirstName("Mother First Name");
     mother.setLastName("Mother Last Name");
     mother.setId("mmmmmmmmmm");
@@ -223,7 +223,7 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     motherRelationship.setDescription("Mother/Son (Adoptive)");
     mother.setRelationship(motherRelationship);
 
-    List<RelatedPerson> parents = new ArrayList<>();
+    List<HOIRelatedPerson> parents = new ArrayList<>();
     parents.add(father);
     parents.add(mother);
     kase.setParents(parents);

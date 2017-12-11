@@ -10,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
  * 
  * @author CWDS API Team
  */
-public class Perpetrator extends HOIPerson {
+public class HOIPerpetrator extends HOIPerson {
 
   /**
    * Default serialization version.
@@ -23,7 +23,7 @@ public class Perpetrator extends HOIPerson {
   /**
    * No-argument constructor
    */
-  public Perpetrator() {
+  public HOIPerpetrator() {
     super();
   }
 
@@ -33,7 +33,7 @@ public class Perpetrator extends HOIPerson {
    * @param lastName - lastName
    * @param legacyDescriptor - legacyDescriptor
    */
-  public Perpetrator(String id, String firstName, String lastName,
+  public HOIPerpetrator(String id, String firstName, String lastName,
       LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, legacyDescriptor);
   }

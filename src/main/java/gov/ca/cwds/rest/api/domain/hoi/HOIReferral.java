@@ -67,7 +67,7 @@ public class HOIReferral extends ApiObjectIdentity
   private HOIReporter reporter;
 
   @JsonProperty("assigned_social_worker")
-  private SocialWorker assignedSocialWorker;
+  private HOISocialWorker assignedSocialWorker;
 
   @JsonProperty("access_limitation")
   private AccessLimitation accessLimitation;
@@ -168,14 +168,14 @@ public class HOIReferral extends ApiObjectIdentity
   /**
    * @return the assignedSocialWorker
    */
-  public SocialWorker getAssignedSocialWorker() {
+  public HOISocialWorker getAssignedSocialWorker() {
     return assignedSocialWorker;
   }
 
   /**
    * @param assignedSocialWorker - assignedSocialWorker
    */
-  public void setAssignedSocialWorker(SocialWorker assignedSocialWorker) {
+  public void setAssignedSocialWorker(HOISocialWorker assignedSocialWorker) {
     this.assignedSocialWorker = assignedSocialWorker;
   }
 
@@ -249,7 +249,7 @@ public class HOIReferral extends ApiObjectIdentity
     allegation.setLegacyDescriptor(new LegacyDescriptor("jhdgfkhaj", "jhdgfkhaj-hohj-jkj",
         new DateTime(), LegacyTable.ALLEGATION.getName(), LegacyTable.ALLEGATION.getDescription()));
 
-    Victim victim = new Victim();
+    HOIVictim victim = new HOIVictim();
     victim.setFirstName("Victim First Name");
     victim.setLastName("Victim Last Name");
     victim.setId("iiiiiii");
@@ -258,7 +258,7 @@ public class HOIReferral extends ApiObjectIdentity
     victim.setLimitedAccessType(LimitedAccessType.SEALED);
     allegation.setVictim(victim);
 
-    Perpetrator perpetrator = new Perpetrator();
+    HOIPerpetrator perpetrator = new HOIPerpetrator();
     perpetrator.setFirstName("Perpetrator First Name");
     perpetrator.setLastName("Perpetrator Last Name");
     perpetrator.setId("pppppppp");
@@ -271,7 +271,7 @@ public class HOIReferral extends ApiObjectIdentity
     allegations.add(allegation);
     referral.setAllegations(allegations);
 
-    SocialWorker socialWorker = new SocialWorker();
+    HOISocialWorker socialWorker = new HOISocialWorker();
     socialWorker.setFirstName("Worker First Name");
     socialWorker.setLastName("Worker Last Name");
     socialWorker.setId("jhgguhgjh");

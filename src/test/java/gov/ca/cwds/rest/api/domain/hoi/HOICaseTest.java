@@ -107,45 +107,45 @@ public class HOICaseTest {
   @Test
   public void getFocusChild_Args__() throws Exception {
     HOICase target = new HOICase();
-    Victim actual = target.getFocusChild();
-    Victim expected = null;
+    HOIVictim actual = target.getFocusChild();
+    HOIVictim expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setFocusChild_Args__Victim() throws Exception {
     HOICase target = new HOICase();
-    Victim focusChild = mock(Victim.class);
+    HOIVictim focusChild = mock(HOIVictim.class);
     target.setFocusChild(focusChild);
   }
 
   @Test
   public void getAssignedSocialWorker_Args__() throws Exception {
     HOICase target = new HOICase();
-    SocialWorker actual = target.getAssignedSocialWorker();
-    SocialWorker expected = null;
+    HOISocialWorker actual = target.getAssignedSocialWorker();
+    HOISocialWorker expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setAssignedSocialWorker_Args__SocialWorker() throws Exception {
     HOICase target = new HOICase();
-    SocialWorker assignedSocialWorker = mock(SocialWorker.class);
+    HOISocialWorker assignedSocialWorker = mock(HOISocialWorker.class);
     target.setAssignedSocialWorker(assignedSocialWorker);
   }
 
   @Test
   public void getParents_Args__() throws Exception {
     HOICase target = new HOICase();
-    List<RelatedPerson> actual = target.getParents();
-    List<RelatedPerson> expected = new ArrayList<>();
+    List<HOIRelatedPerson> actual = target.getParents();
+    List<HOIRelatedPerson> expected = new ArrayList<>();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setParents_Args__List() throws Exception {
     HOICase target = new HOICase();
-    List<RelatedPerson> parents = new ArrayList<RelatedPerson>();
+    List<HOIRelatedPerson> parents = new ArrayList<HOIRelatedPerson>();
     target.setParents(parents);
   }
 
