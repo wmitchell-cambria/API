@@ -7,8 +7,8 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.hoi.HOIAllegation;
-import gov.ca.cwds.rest.api.domain.hoi.Perpetrator;
-import gov.ca.cwds.rest.api.domain.hoi.Victim;
+import gov.ca.cwds.rest.api.domain.hoi.HOIPerpetrator;
+import gov.ca.cwds.rest.api.domain.hoi.HOIVictim;
 
 /**
  * 
@@ -18,8 +18,8 @@ public class HOIAllegationResourceBuilder {
 
   private String id = "jhdgfkhaj";
   private SystemCodeDescriptor type;
-  private Victim victim;
-  private Perpetrator perpetrator;
+  private HOIVictim victim;
+  private HOIPerpetrator perpetrator;
   private LegacyDescriptor legacyDescriptor;
   private SystemCodeDescriptor disposition;
 
@@ -36,12 +36,12 @@ public class HOIAllegationResourceBuilder {
   }
 
 
-  public HOIAllegationResourceBuilder setVictim(Victim victim) {
+  public HOIAllegationResourceBuilder setVictim(HOIVictim victim) {
     this.victim = victim;
     return this;
   }
 
-  public HOIAllegationResourceBuilder setPerpetrator(Perpetrator perpetrator) {
+  public HOIAllegationResourceBuilder setPerpetrator(HOIPerpetrator perpetrator) {
     this.perpetrator = perpetrator;
     return this;
   }
@@ -59,7 +59,7 @@ public class HOIAllegationResourceBuilder {
     type = new SystemCodeDescriptor();
     type.setId((short) 2179);
     type.setDescription("physical abuse");
-    victim = new Victim();
+    victim = new HOIVictim();
     victim.setFirstName("Victim First Name");
     victim.setLastName("Victim Last Name");
     victim.setId("iiiiiii");
@@ -67,7 +67,7 @@ public class HOIAllegationResourceBuilder {
         LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
     victim.setLimitedAccessType(LimitedAccessType.SEALED);
 
-    perpetrator = new Perpetrator();
+    perpetrator = new HOIPerpetrator();
     perpetrator.setFirstName("Perpetrator First Name");
     perpetrator.setLastName("Perpetrator Last Name");
     perpetrator.setId("pppppppp");
