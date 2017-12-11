@@ -29,7 +29,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIVictim;
  * @author CWDS API Team
  *
  */
-public class HOIReferralServiceFactory {
+public class HOIReferralFactory {
 
   /**
    * @param referral - referral
