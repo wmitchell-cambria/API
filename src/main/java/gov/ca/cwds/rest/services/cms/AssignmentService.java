@@ -3,10 +3,13 @@ package gov.ca.cwds.rest.services.cms;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
@@ -18,8 +21,10 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
+import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.R03731StartTimeSetting;
 import gov.ca.cwds.rest.business.rules.R04530AssignmentEndDateValidator;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
@@ -149,13 +154,14 @@ public class AssignmentService implements
   /**
    * @param screeningToReferral - screeningToReferral
    * @param referralId - referralId
+   * @param referral - referral
    * @param messageBuilder - messageBuilder
    */
   // create a default assignment
   // R - 02473 Default Referral Assignment
   // R - 02160 Assignment - Caseload Access
   public void createDefaultAssignmentForNewReferral(ScreeningToReferral screeningToReferral,
-      String referralId, MessageBuilder messageBuilder) {
+      String referralId, Referral referral, MessageBuilder messageBuilder) {
 
     String caseLoadId = "";
     String COUNTY_CODE = "00";
@@ -180,6 +186,13 @@ public class AssignmentService implements
     gov.ca.cwds.rest.api.domain.cms.Assignment da = createDefaultAssignmentToCaseLoad(COUNTY_CODE,
         referralId, screeningToReferral.getStartedAt(), caseLoadId);
     messageBuilder.addDomainValidationError(validator.validate(da));
+
+    if (!new R03731StartTimeSetting(referral, da).isValid()) {
+      String message =
+          "Referral Recieved Date/Time does not equal Assignment Start Date/Time (R - 03731)";
+      ServiceException se = new ServiceException(message);
+      messageBuilder.addMessageAndLog(message, se, LOGGER);
+    }
 
     if ("R".equals(da.getEstablishedForCode())
         && ("P".equals(da.getTypeOfAssignmentCode()) || ("S".equals(da.getTypeOfAssignmentCode())))
