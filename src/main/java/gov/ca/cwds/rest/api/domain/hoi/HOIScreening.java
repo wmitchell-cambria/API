@@ -59,7 +59,7 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
   private HOIReporter reporter;
 
   @JsonProperty("assigned_social_worker")
-  private SocialWorker assignedSocialWorker;
+  private HOISocialWorker assignedSocialWorker;
 
   @JsonProperty("all_people")
   private List<HOIPerson> allPeople = new ArrayList<>();
@@ -131,11 +131,11 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
     this.reporter = reporter;
   }
 
-  public SocialWorker getAssignedSocialWorker() {
+  public HOISocialWorker getAssignedSocialWorker() {
     return assignedSocialWorker;
   }
 
-  public void setAssignedSocialWorker(SocialWorker assignedSocialWorker) {
+  public void setAssignedSocialWorker(HOISocialWorker assignedSocialWorker) {
     this.assignedSocialWorker = assignedSocialWorker;
   }
 
@@ -159,7 +159,7 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
   public static void main(String[] args) throws Exception {
     HOIScreening screening = new HOIScreening();
 
-    SocialWorker socialWorker = new SocialWorker();
+    HOISocialWorker socialWorker = new HOISocialWorker();
     socialWorker.setFirstName("Worker First Name");
     socialWorker.setLastName("Worker Last Name");
     socialWorker.setId("jhgguhgjh");

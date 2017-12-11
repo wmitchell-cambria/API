@@ -81,8 +81,8 @@ public class HOIReferralService
     role = fetchForReporterRole(role, referral, referralClient, reporter);
 
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
-    hoiReferralResponse
-        .addHoiReferral(new HOIReferral(referral, staffPerson, reporter, allegationMap, role));
+    hoiReferralResponse.addHoiReferral(new HOIReferralFactory().createHOIReferral(referral,
+        staffPerson, reporter, allegationMap, role));
   }
 
   private List<ReferralClient> fetchReferralClient(String clientId) {

@@ -121,14 +121,14 @@ public class HOIReferralTest {
 
   @Test
   public void getAssignedSocialWorker_Args__() throws Exception {
-    SocialWorker actual = target.getAssignedSocialWorker();
-    SocialWorker expected = null;
+    HOISocialWorker actual = target.getAssignedSocialWorker();
+    HOISocialWorker expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void setAssignedSocialWorker_Args__SocialWorker() throws Exception {
-    SocialWorker assignedSocialWorker = mock(SocialWorker.class);
+    HOISocialWorker assignedSocialWorker = mock(HOISocialWorker.class);
     target.setAssignedSocialWorker(assignedSocialWorker);
   }
 
