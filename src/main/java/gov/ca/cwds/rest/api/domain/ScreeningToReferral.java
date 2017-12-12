@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.validation.AtRiskAllegation;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
 import gov.ca.cwds.rest.validation.ValidParticipantRoles;
@@ -227,6 +228,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false)
   @Valid
+  @AtRiskAllegation
   private Set<Allegation> allegations;
 
   @SuppressWarnings("javadoc")
