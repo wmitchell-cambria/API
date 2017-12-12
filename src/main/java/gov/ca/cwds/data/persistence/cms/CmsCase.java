@@ -5,13 +5,17 @@ import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * 
  * @author CWDS API Team
  */
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByClient",
+    query = "FROM CmsCase WHERE fkchldClt = :clientId")
 @SuppressWarnings("javadoc")
 @Entity
 @Table(name = "CASE_T")
@@ -141,6 +147,24 @@ public class CmsCase extends CmsPersistentObject {
 
   @Column(name = "TICKLE_T_B")
   private String tickleIndVar;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "FKCHLD_CLT", nullable = true, updatable = false, insertable = false)
+  private ChildClient childClient;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "FKSTFPERST", nullable = true, updatable = false, insertable = false)
+  private StaffPerson staffPerson;
+
+  /**
+   * referential integrity check.
+   * <p>
+   * Doesn't actually load the data. Just checks the existence of the parent client record.
+   * </p>
+   */
+  @ManyToOne(optional = true)
+  @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
+  private Referral riReferral;
 
   /**
    * Default constructor.
@@ -408,6 +432,23 @@ public class CmsCase extends CmsPersistentObject {
 
   public void setTickleIndVar(String tickleIndVar) {
     this.tickleIndVar = tickleIndVar;
+  }
+
+
+  public ChildClient getChildClient() {
+    return childClient;
+  }
+
+  public void setChildClient(ChildClient childClient) {
+    this.childClient = childClient;
+  }
+
+  public StaffPerson getStaffPerson() {
+    return staffPerson;
+  }
+
+  public void setStaffPerson(StaffPerson staffPerson) {
+    this.staffPerson = staffPerson;
   }
 
   @Override

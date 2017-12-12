@@ -32,6 +32,8 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryRequest;
 import gov.ca.cwds.rest.api.domain.es.IndexQueryResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOICase;
+import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
@@ -110,6 +112,7 @@ import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
+import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
@@ -513,6 +516,13 @@ public class ResourcesModule extends AbstractModule {
   public SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> referralHoiServiceBackedResource(
       Injector injector) {
     return new SimpleResourceDelegate<>(injector.getInstance(HOIReferralService.class));
+  }
+
+  @Provides
+  @HOICaseServiceBackedResource
+  public SimpleResourceDelegate<String, HOICase, HOICaseResponse, HOICaseService> caseHoiServiceBackedResource(
+      Injector injector) {
+    return new SimpleResourceDelegate<>(injector.getInstance(HOICaseService.class));
   }
 
 }

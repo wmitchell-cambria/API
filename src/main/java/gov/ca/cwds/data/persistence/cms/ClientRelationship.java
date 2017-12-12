@@ -32,6 +32,9 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @NamedQuery(
     name = "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipByPrimaryClientId",
     query = "FROM ClientRelationship WHERE primaryClientId = :primaryClientId")
+@NamedQuery(
+    name = "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipBySecondaryClientId",
+    query = "FROM ClientRelationship WHERE secondaryClientId = :secondaryClientId")
 @Entity
 @Table(name = "CLN_RELT")
 @JsonPropertyOrder(alphabetic = true)
