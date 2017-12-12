@@ -5,12 +5,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.validation.Validator;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
@@ -44,6 +48,7 @@ import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
+import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
@@ -150,9 +155,10 @@ public class ScreeningToReferralService implements CrudsService {
      * </blockquote>
      * </pre>
      */
-    String dateStarted = ParticipantValidator.extractStartDate(screeningToReferral, messageBuilder);
-    String timeStarted = ParticipantValidator.extractStartTime(screeningToReferral, messageBuilder);
-
+    String dateStarted =
+        StartDateTimeValidator.extractStartDate(screeningToReferral.getStartedAt(), messageBuilder);
+    String timeStarted =
+        StartDateTimeValidator.extractStartTime(screeningToReferral.getStartedAt(), messageBuilder);
 
     String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 

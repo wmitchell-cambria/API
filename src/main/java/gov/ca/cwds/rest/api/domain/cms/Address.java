@@ -39,8 +39,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </blockquote>
  * </pre>
  */
-@IfThen.List({@IfThen(ifProperty = "streetName", thenProperty = "streetNumber", required = false),
-    @IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
+@IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
     @IfThen(ifProperty = "streetName", thenProperty = "city", required = false)})
 public class Address extends ReportingDomain implements Request, Response {
   private static final BigDecimal DEFAULT_DECIMAL = new BigDecimal(0);

@@ -373,7 +373,8 @@ public class ParticipantService implements CrudsService {
     List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
     Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
     List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
-    boolean childClientIndicatorVar = new R02265ChildClientExists(incomingParticipant).isValid();
+    boolean childClientIndicatorVar =
+        new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
 
     Client client = Client.createWithDefaults(incomingParticipant, dateStarted, genderCode,
         primaryRaceCode, childClientIndicatorVar);

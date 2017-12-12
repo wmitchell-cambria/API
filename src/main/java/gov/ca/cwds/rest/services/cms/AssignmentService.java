@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
+import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 
 /**
  * Business layer object serves {@link Assignment}.
@@ -41,6 +42,9 @@ public class AssignmentService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.Assignment, gov.ca.cwds.rest.api.domain.cms.Assignment> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AssignmentService.class);
+  private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
+  private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
 
   private AssignmentDao assignmentDao;
   private NonLACountyTriggers nonLACountyTriggers;
@@ -184,7 +188,7 @@ public class AssignmentService implements
     }
 
     gov.ca.cwds.rest.api.domain.cms.Assignment da = createDefaultAssignmentToCaseLoad(COUNTY_CODE,
-        referralId, screeningToReferral.getStartedAt(), caseLoadId);
+        referralId, screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
     messageBuilder.addDomainValidationError(validator.validate(da));
 
     if (!new R03731StartTimeSetting(referral, da).isValid()) {
@@ -210,31 +214,28 @@ public class AssignmentService implements
 
   /**
    * @param countyCode - county code
-   * @param referral - referral
+   * @param referralId - referral Id
+   * @param startDateTime - start date of assignment
+   * @param caseLoadId - case load id of assignment
    * @return - default Assignment
    */
   private gov.ca.cwds.rest.api.domain.cms.Assignment createDefaultAssignmentToCaseLoad(
-      String countyCode, String referralId, String startDateTime, String caseLoadId) {
+      String countyCode, String referralId, String startDateTime, String caseLoadId,
+      MessageBuilder messageBuilder) {
     // #146713651 - BARNEY: Referrals require a default assignment
     // Default Assignment - referrals will be assigned to the '0X5' staff person ID.
     //
     // An assignment is the association between a Staff Person Case Load and the Referral
     //
-    String startDate = null;
-    String startTime = null;
-    if (startDateTime != null) {
-      String[] dateTime = startDateTime.split("T");
-      final int DATE = 0;
-      final int TIME = 1;
-      if (dateTime.length == 2) {
-        startDate = dateTime[DATE];
-        startTime = dateTime[TIME];
-      }
-    }
+
+    // extract and format the assignment start date/time from the passed start date/time
+    String dateStarted = StartDateTimeValidator.extractStartDate(startDateTime, messageBuilder);
+    String timeStarted = StartDateTimeValidator.extractStartTime(startDateTime, messageBuilder);
+
     gov.ca.cwds.rest.api.domain.cms.Assignment assignment =
         new gov.ca.cwds.rest.api.domain.cms.Assignment();
-    return assignment.createDefaultReferralAssignment(countyCode, referralId, caseLoadId, startDate,
-        startTime);
+    return assignment.createDefaultReferralAssignment(countyCode, referralId, caseLoadId,
+        dateStarted, timeStarted);
   }
 
   /**

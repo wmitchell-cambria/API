@@ -36,6 +36,20 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel
+/**
+ * <blockquote>
+ * 
+ * <pre>
+ * BUSINESS RULE: "R - 05360" - StreetName is set then City is required
+ * 
+ * IF  streetNumber is set
+ * THEN streetName is required
+ * 
+ * IF streetName is set
+ * THEN city is required
+ * </blockquote>
+ * </pre>
+ */
 @MutuallyExclusive(required = false, properties = {"employerName", "lawEnforcementId"})
 @OnlyIf(property = "badgeNumber", ifProperty = "lawEnforcementId")
 @IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),

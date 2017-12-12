@@ -289,7 +289,8 @@ public class AssignmentServiceTest {
    */
   @Test
   public void assignmentServiceCreateReturnsGeneratedId() throws Exception {
-    Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
+    Assignment domainAssignment = new AssignmentResourceBuilder().setStartDate("2017-01-01")
+        .setStartTime("16:01:01").buildAssignment();
 
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {

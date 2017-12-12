@@ -38,6 +38,7 @@ public class R03731StartTimeSetting implements RuleValidatator {
 
   @Override
   public boolean isValid() {
+
     return (referral.getReceivedDate().equals(assignment.getStartDate())
         && referral.getReceivedTime().equals(assignment.getStartTime()));
   }
