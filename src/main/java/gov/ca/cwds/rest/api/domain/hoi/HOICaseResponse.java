@@ -38,12 +38,13 @@ public class HOICaseResponse implements Response {
     // no -opt
   }
 
-
+  /**
+   * @param hoiCases - hoiCases
+   */
   public HOICaseResponse(List<HOICase> hoiCases) {
     super();
     this.hoiCases = hoiCases;
   }
-
 
   /**
    * 
