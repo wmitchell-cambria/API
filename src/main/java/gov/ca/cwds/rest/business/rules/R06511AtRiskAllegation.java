@@ -53,15 +53,19 @@ public class R06511AtRiskAllegation
     boolean valid = true;
     List<Short> allegationTypes = new ArrayList<>();
 
-    for (Allegation allegation : allegations) {
-      allegationTypes.add(allegation.getType());
-    }
+    if (allegations != null) {
+      for (Allegation allegation : allegations) {
+        allegationTypes.add(allegation.getType());
+      }
 
-    if (allegationTypes.contains(AT_RISK_TYPE)) {
-      valid = allegationTypes.contains(GENERAL_NEGLECT) || allegationTypes.contains(PHYSICAL_ABUSE)
-          || allegationTypes.contains(SEVERE_NEGLECT) || allegationTypes.contains(SEXUAL_ABUSE);
-    }
+      if (allegationTypes.contains(AT_RISK_TYPE)) {
+        valid = allegationTypes.contains(GENERAL_NEGLECT)
+            || allegationTypes.contains(PHYSICAL_ABUSE) || allegationTypes.contains(SEVERE_NEGLECT)
+            || allegationTypes.contains(SEXUAL_ABUSE);
+      }
 
+      return valid;
+    }
     return valid;
   }
 }
