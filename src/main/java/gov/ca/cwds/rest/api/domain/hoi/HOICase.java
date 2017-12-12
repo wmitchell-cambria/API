@@ -92,7 +92,8 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
     this.serviceComponent = serviceComponent;
     this.focusChild = focusChild;
     this.assignedSocialWorker = assignedSocialWorker;
-    this.accessLimitation = new AccessLimitation(LimitedAccessType.NONE,
+    this.accessLimitation = new AccessLimitation(
+        LimitedAccessType.getByValue(cmscase.getLimitedAccessCode()),
         cmscase.getLimitedAccessDate(), cmscase.getLimitedAccessDesc(),
         new SystemCodeDescriptor(cmscase.getLimitedAccessGovernmentEntityType(),
             SystemCodeCache.global()
