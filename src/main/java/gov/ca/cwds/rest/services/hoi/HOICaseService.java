@@ -40,7 +40,6 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  */
 public class HOICaseService extends SimpleResourceService<String, HOICase, HOICaseResponse> {
 
-
   /**
    * Serial Version UID
    */
@@ -96,8 +95,8 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
     HOISocialWorker assignedSocialWorker = getAssignedSocialWorker(cmscase);
     List<HOIRelatedPerson> parents = getParents(cmscase);
-    return new HOICase(cmscase, county, serviceComponent, focusChild, assignedSocialWorker,
-        parents);
+    return new HOICaseFactory().createHOICase(cmscase, county, serviceComponent, focusChild,
+        assignedSocialWorker, parents);
   }
 
   private List<String> findAllRelatedClientIds(String clientid) {
