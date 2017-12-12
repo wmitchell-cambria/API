@@ -29,9 +29,9 @@ import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.investigation.AllegationListEntityBuilder;
-import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.InvestigationEntityBuilder;
+import gov.ca.cwds.fixture.investigation.InvolvementHistoryResourceBuilder;
 import gov.ca.cwds.fixture.investigation.PeopleEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
@@ -39,6 +39,7 @@ import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -84,8 +85,7 @@ public class InvestigationTest {
 
   private ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
 
-  private HistoryOfInvolvement historyOfInvolvement =
-      new HistoryOfInvolvementEntityBuilder().build();
+  private InvolvementHistory historyOfInvolvement = new InvolvementHistoryResourceBuilder().build();
 
   private Allegation allegation = new AllegationEntityBuilder().build();
   private Set<Allegation> allegations = new HashSet<>();
@@ -151,8 +151,8 @@ public class InvestigationTest {
 
   @Test
   public void testDomainConstructorWithNullHoiSuccess() {
-    HistoryOfInvolvement nullHoi = null;
-    HistoryOfInvolvement hoi = new HistoryOfInvolvement();
+    InvolvementHistory nullHoi = null;
+    InvolvementHistory hoi = new InvolvementHistory();
 
     Investigation investigation = new Investigation(cmsRecordDescriptor, lastUpdatedBy,
         lastUpdatedAt, incidentCounty, incidentDate, locationType, communicationMethod, name,
