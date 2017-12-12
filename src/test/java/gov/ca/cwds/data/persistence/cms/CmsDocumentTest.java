@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import javax.xml.bind.DatatypeConverter;
+
 @SuppressWarnings("javadoc")
 public class CmsDocumentTest {
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -33,7 +35,7 @@ public class CmsDocumentTest {
   private CmsDocumentBlobSegment blobSegment;
   private String docHandle = "0131351421120020*JONESMF 00004";
   private String segmentSequence = "0001";
-  private String docBlob = "test document blob";
+  private byte[] docBlob = "test document blob".getBytes();
 
   private String newCompressionMethod = "CMSXXX";
   private String newDocAuth = "CWSD";

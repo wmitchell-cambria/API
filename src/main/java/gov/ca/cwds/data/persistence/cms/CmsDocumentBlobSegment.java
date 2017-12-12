@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 import javax.persistence.Column;
@@ -51,7 +52,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
   @Size(min = 1, max = 4000)
   // @ColumnTransformer(read = "blob(DOC_BLOB)", write = "x'?'")
   @ColumnTransformer(read = "blob(DOC_BLOB)")
-  private String docBlob;
+  private byte[] docBlob;
 
   /**
    * Default constructor
@@ -69,7 +70,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    * @param segmentSequence blob segment sequence
    * @param docBlob hexadecimal blob segment data
    */
-  public CmsDocumentBlobSegment(String docHandle, String segmentSequence, String docBlob) {
+  public CmsDocumentBlobSegment(String docHandle, String segmentSequence, byte[] docBlob) {
     super();
     this.docHandle = docHandle;
     this.segmentSequence = segmentSequence;
@@ -101,7 +102,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
 
     // 1) NOT part of unique key, 2) potentially large waste of processing to compute.
     // 3) if you got this far, well ... ;)
-    return prime * result + ((docBlob == null) ? 0 : docBlob.hashCode());
+    return prime * result + ((docBlob == null) ? 0 : Arrays.hashCode(docBlob));
   }
 
   /**
@@ -140,14 +141,9 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     // 1) NOT part of unique key, 2) potentially large and waste of processing to compute.
     // 3) if you got this far, well ... ;)
     if (docBlob == null) {
-      if (other.docBlob != null) {
-        return false;
-      }
-    } else if (!docBlob.equals(other.docBlob)) {
-      return false;
-    }
+      return other.docBlob == null;
+    } else return Arrays.equals(docBlob, other.docBlob);
 
-    return true;
   }
 
   // ==================
@@ -178,7 +174,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    * 
    * @return hex string of segment data
    */
-  public String getDocBlob() {
+  public byte[] getDocBlob() {
     return docBlob;
   }
 
@@ -187,7 +183,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    * 
    * @param docBlob hex of binary, compressed data for this segment
    */
-  public void setDocBlob(String docBlob) {
+  public void setDocBlob(byte[] docBlob) {
     this.docBlob = docBlob;
   }
 

@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -21,6 +21,9 @@ import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
+
+import javax.persistence.EntityExistsException;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Business layer object to work on {@link CmsDocument}.
@@ -73,6 +76,43 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   /**
+   * Create binary document.
+   *
+   * @param request domain document
+   */
+  @Override
+  public CmsDocument create(CmsDocument request) {
+    gov.ca.cwds.data.persistence.cms.CmsDocument managed = new  gov.ca.cwds.data.persistence.cms.CmsDocument(request);
+    CmsDocument retval = null;
+    String base64Doc;
+    if (StringUtils.isNotBlank(request.getDocAuth())) {
+      managed.setDocAuth(request.getDocAuth().trim());
+    }
+    if (StringUtils.isNotBlank(request.getDocName())) {
+      managed.setDocName(request.getDocName().trim());
+    }
+    if (StringUtils.isNotBlank(request.getDocServ())) {
+      managed.setDocServ(request.getDocServ().trim());
+    }
+
+    final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(managed, request.getBase64Blob().trim());
+    managed.setBlobSegments(new HashSet<>(blobs));
+    insertBlobs(managed, blobs);
+
+    try {
+      managed = dao.create(managed);
+      base64Doc = dao.decompressDoc(managed);
+      retval = new CmsDocument(managed);
+      retval.setBase64Blob(base64Doc);
+      return retval;
+
+    } catch (EntityExistsException e) {
+      LOGGER.info("CmsDocument already exists : {}", request);
+      throw new ServiceException("CmsDocument already exists : {}" + request, e);
+    }
+  }
+
+  /**
    * Update binary document.
    * 
    * @param primaryKey primary key
@@ -81,6 +121,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   @Override
   public CmsDocument update(String primaryKey, CmsDocument request) {
     LOGGER.debug("primaryKey={}", primaryKey);
+    CmsDocument retval = null;
 
     gov.ca.cwds.data.persistence.cms.CmsDocument doc = dao.find(primaryKey);
     if (doc != null) {
@@ -93,38 +134,47 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       if (StringUtils.isNotBlank(request.getDocServ())) {
         doc.setDocServ(request.getDocServ().trim());
       }
+      if (StringUtils.isNotBlank(request.getCompressionMethod())) {
+        doc.setCompressionMethod(request.getCompressionMethod().trim());
+      }
 
       final List<CmsDocumentBlobSegment> blobs =
-          dao.compressPK(doc, request.getBase64Blob().trim());
+          dao.compressDoc(doc, request.getBase64Blob().trim());
       doc.getBlobSegments().clear();
       insertBlobs(doc, blobs);
 
       gov.ca.cwds.data.persistence.cms.CmsDocument managed =
           new gov.ca.cwds.data.persistence.cms.CmsDocument(doc);
+      managed.setBlobSegments(new HashSet<>(blobs));
 
       try {
         dao.update(managed);
       } catch (Exception e) {
         LOGGER.error("FAILED TO SAVE DOCUMENT MAIN: {}", e.getMessage(), e);
+        throw new ServiceException("FAILED TO SAVE DOCUMENT MAIN: {" + request + "}", e);
       }
-
-      request.setCompressionMethod(managed.getCompressionMethod());
-      request.setDocAuth(managed.getDocAuth());
-      request.setDocName(managed.getDocName());
-      request.setDocLength(managed.getDocLength());
-      request.setSegmentCount(managed.getSegmentCount());
+      retval = new CmsDocument(managed);
+      String base64Doc = dao.decompressDoc(managed);
+      retval.setBase64Blob(base64Doc);
     } else {
       LOGGER.warn("EMPTY document! {}", primaryKey);
     }
 
-    return request;
+    return retval;
   }
 
   protected String blobToInsert(CmsDocumentBlobSegment blob) {
     return new StringBuilder().append("INSERT INTO ").append(getCurrentSchema())
         .append(".TSBLOBT(DOC_HANDLE, DOC_SEGSEQ, DOC_BLOB) VALUES").append("('")
-        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence()).append("',x'")
-        .append(blob.getDocBlob()).append("')").toString();
+        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence())
+        .append("',x'").append(DatatypeConverter.printHexBinary(blob.getDocBlob())).append("')")
+        .toString();
+  }
+
+  protected String blobsDelete() {
+    return new StringBuilder()
+        .append("DELETE FROM ").append(getCurrentSchema()).append(".TSBLOBT WHERE DOC_HANDLE = ?")
+        .toString();
   }
 
   protected String getCurrentSchema() {
@@ -132,12 +182,11 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
-  private void insertBlobsJdbc(final Connection con,
-      gov.ca.cwds.data.persistence.cms.CmsDocument doc, List<CmsDocumentBlobSegment> blobs)
-      throws SQLException {
+  private void insertBlobsJdbc(final Connection con, gov.ca.cwds.data.persistence.cms.CmsDocument doc,
+    List<CmsDocumentBlobSegment> blobs)
+    throws SQLException {
     try (
-        final PreparedStatement delStmt = con.prepareStatement(
-            "DELETE FROM " + getCurrentSchema() + ".TSBLOBT WHERE DOC_HANDLE = ?");
+        final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
         final Statement stmt = con.createStatement()) {
 
       delStmt.setString(1, doc.getId());
@@ -152,6 +201,30 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       con.rollback();
       throw e;
     }
+  }
+
+  private void deleteBlobsJdbc(final Connection con, gov.ca.cwds.data.persistence.cms.CmsDocument doc)
+      throws SQLException {
+    try (
+        final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
+
+      delStmt.setString(1, doc.getId());
+      delStmt.executeUpdate();
+
+      con.commit(); // WARNING: deadlock without this.
+    } catch (SQLException e) {
+      con.rollback();
+      throw e;
+    }
+  }
+
+  protected void deleteBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc){
+    try (final Connection con = getConnection()) {
+      deleteBlobsJdbc(con, doc);
+    } catch (SQLException e) {
+      throw new ServiceException("FAILED TO DELETE DOCUMENT SEGMENTS", e);
+    }
+
   }
 
   protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc,
@@ -181,20 +254,19 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument delete(String primaryKey) {
-    throw new NotImplementedException("DELETE NOT IMPLEMENTED!");
-  }
+    LOGGER.debug("primaryKey={}", primaryKey);
+    CmsDocument retval = null;
 
-  /**
-   * <p>
-   * <strong>NOT YET IMPLEMENTED!</strong>
-   * </p>
-   * {@inheritDoc}
-   * 
-   * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
-   */
-  @Override
-  public CmsDocument create(CmsDocument request) {
-    throw new NotImplementedException("CREATE NOT IMPLEMENTED!");
+    try {
+      gov.ca.cwds.data.persistence.cms.CmsDocument managed = dao.delete(primaryKey);
+      deleteBlobs(managed);
+      retval = new CmsDocument(managed);
+      String base64Doc = dao.decompressDoc(managed);
+      retval.setBase64Blob(base64Doc);
+    } catch (Exception e) {
+      LOGGER.error("FAILED TO DELETE DOCUMENT MAIN: {}", e.getMessage(), e);
+      throw new ServiceException("FAILED TO DELETE DOCUMENT MAIN: {" + primaryKey + "}", e);
+    }
+    return retval;
   }
-
 }
