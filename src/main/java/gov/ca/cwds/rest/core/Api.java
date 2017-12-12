@@ -176,7 +176,7 @@ public final class Api {
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
    */
-  public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "referrals_hoi";
+  public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..

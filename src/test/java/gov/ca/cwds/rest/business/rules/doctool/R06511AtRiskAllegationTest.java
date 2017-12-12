@@ -17,15 +17,15 @@ import org.junit.Test;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.AllegationResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.validation.AtRiskAllegation;
 
 /**
  * 
  * @author CWDS API Team
  * 
- * @see Address
+ * @see Allegation
  *
  */
 public class R06511AtRiskAllegationTest {
@@ -37,13 +37,14 @@ public class R06511AtRiskAllegationTest {
    */
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
+  /**
+   * 
+   */
   @Before
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
   }
-
-
 
   /**
    * Test when allegation type has 5001 and has one of types 2178, 2179, 2180 or 2181
@@ -78,7 +79,7 @@ public class R06511AtRiskAllegationTest {
    * @throws Exception - Exception
    */
   @Test
-  public void passWhenAllegationTypeValid() throws Exception {
+  public void testWhenAllegationType2179ReturnValid() throws Exception {
     gov.ca.cwds.rest.api.domain.Allegation allegation =
         new AllegationResourceBuilder().setInjuryHarmType((short) 5001).createAllegation();
     gov.ca.cwds.rest.api.domain.Allegation allegation2 =
@@ -90,6 +91,76 @@ public class R06511AtRiskAllegationTest {
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(validScreeningtoreferal);
     assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testWhenAllegationType2178ReturnValid() throws Exception {
+    gov.ca.cwds.rest.api.domain.Allegation allegation =
+        new AllegationResourceBuilder().setInjuryHarmType((short) 5001).createAllegation();
+    gov.ca.cwds.rest.api.domain.Allegation allegation2 =
+        new AllegationResourceBuilder().setInjuryHarmType((short) 2178).createAllegation();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
+        new HashSet<>(Arrays.asList(allegation, allegation2));
+    ScreeningToReferral validScreeningtoreferal = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegations).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(validScreeningtoreferal);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testWhenAllegationType2180ReturnValid() throws Exception {
+    gov.ca.cwds.rest.api.domain.Allegation allegation =
+        new AllegationResourceBuilder().setInjuryHarmType((short) 5001).createAllegation();
+    gov.ca.cwds.rest.api.domain.Allegation allegation2 =
+        new AllegationResourceBuilder().setInjuryHarmType((short) 2180).createAllegation();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
+        new HashSet<>(Arrays.asList(allegation, allegation2));
+    ScreeningToReferral validScreeningtoreferal = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegations).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(validScreeningtoreferal);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testWhenAllegationType2181ReturnValid() throws Exception {
+    gov.ca.cwds.rest.api.domain.Allegation allegation =
+        new AllegationResourceBuilder().setInjuryHarmType((short) 5001).createAllegation();
+    gov.ca.cwds.rest.api.domain.Allegation allegation2 =
+        new AllegationResourceBuilder().setInjuryHarmType((short) 2181).createAllegation();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
+        new HashSet<>(Arrays.asList(allegation, allegation2));
+    ScreeningToReferral validScreeningtoreferal = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegations).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(validScreeningtoreferal);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * Test fails when Allegation is empty or null.
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFailAllegationisEmpty() throws Exception {
+    ScreeningToReferral validScreeningtoreferal =
+        new ScreeningToReferralResourceBuilder().setAllegations(null).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(validScreeningtoreferal);
+    assertEquals(1, constraintViolations.size());
+    assertEquals("may not be empty", constraintViolations.iterator().next().getMessage());
   }
 
 }
