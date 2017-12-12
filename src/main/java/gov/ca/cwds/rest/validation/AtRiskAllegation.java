@@ -17,12 +17,11 @@ import javax.validation.Payload;
 import gov.ca.cwds.rest.business.rules.R06511AtRiskAllegation;
 
 /**
+ * 
  * Annotation indicating that a Set of allegations must contain one of following types if 'At risk,
- * Sibling abused' (5001) is present.
- * <li>2178 - General Neglect</li>
- * <li>2179 - Physical Abuse</li>
- * <li>2180 - Severe Neglect</li>
- * <li>2181 - Sexual Abuse</li>
+ * Sibling abused' (5001) is present. 2178 - General Neglect 2179 - Physical Abuse 2180 - Severe
+ * Neglect 2181 - Sexual Abuse
+ * 
  * 
  * @author CWDS API Team
  */
