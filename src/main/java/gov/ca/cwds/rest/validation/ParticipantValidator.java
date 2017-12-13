@@ -16,9 +16,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class ParticipantValidator {
 
-  private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
-  private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantValidator.class);
 
   /**
@@ -333,10 +330,6 @@ public class ParticipantValidator {
    */
   public static Boolean roleIsMandatedReporter(String role) {
     return role != null && role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType());
-  }
-
-  private static void logError(String message, Exception exception) {
-    LOGGER.error(message, exception.getMessage());
   }
 
 }

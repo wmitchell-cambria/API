@@ -42,9 +42,6 @@ public class AssignmentService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.Assignment, gov.ca.cwds.rest.api.domain.cms.Assignment> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AssignmentService.class);
-  private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
-  private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
 
   private AssignmentDao assignmentDao;
   private NonLACountyTriggers nonLACountyTriggers;

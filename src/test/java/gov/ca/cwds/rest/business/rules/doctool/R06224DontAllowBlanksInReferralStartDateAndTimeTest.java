@@ -54,31 +54,33 @@ public class R06224DontAllowBlanksInReferralStartDateAndTimeTest {
   @Test
   public void shouldNotAllowBlankReceivedDate() throws Exception {
     validator = Validation.buildDefaultValidatorFactory().getValidator();
-    Boolean theErrorDetected = false;
     Referral referral = new ReferralResourceBuilder().setReceivedDate("").build();
     messageBuilder.addDomainValidationError(validator.validate(referral));
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
-    for (ErrorMessage message : validationErrors) {
-      if (message.getMessage().equals("receivedDate must be in the format of yyyy-MM-dd")) {
-        theErrorDetected = true;
-      }
-    }
-    assertThat(theErrorDetected, is(Boolean.TRUE));
+    assertThat(
+        errorContainsMessage(validationErrors, "receivedDate must be in the format of yyyy-MM-dd"),
+        is(Boolean.TRUE));
   }
 
   @SuppressWarnings("javadoc")
   @Test
   public void shouldNotAllowBlankReceivedTime() throws Exception {
     validator = Validation.buildDefaultValidatorFactory().getValidator();
-    Boolean theErrorDetected = false;
     Referral referral = new ReferralResourceBuilder().setReceivedTime("").build();
     messageBuilder.addDomainValidationError(validator.validate(referral));
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
-    for (ErrorMessage message : validationErrors) {
-      if (message.getMessage().equals("receivedTime must be in the format of HH:mm:ss")) {
-        theErrorDetected = true;
+    assertThat(
+        errorContainsMessage(validationErrors, "receivedTime must be in the format of HH:mm:ss"),
+        is(Boolean.TRUE));
+  }
+
+  private Boolean errorContainsMessage(List<ErrorMessage> validationErrors, String message) {
+    Boolean containsMessage = Boolean.FALSE;
+    for (ErrorMessage errorMessage : validationErrors) {
+      if (errorMessage.getMessage().equals(message)) {
+        return Boolean.TRUE;
       }
     }
-    assertThat(theErrorDetected, is(Boolean.TRUE));
+    return containsMessage;
   }
 }

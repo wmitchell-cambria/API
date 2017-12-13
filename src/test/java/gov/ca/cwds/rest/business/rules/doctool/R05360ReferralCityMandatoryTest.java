@@ -86,16 +86,9 @@ public class R05360ReferralCityMandatoryTest {
         .setStreetName("test street name").setCity("").buildCmsAddress();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(address));
-    Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
-    for (ErrorMessage message : validationErrors) {
-      // System.out.println(message.getMessage());
-      if (message.getMessage().equals("city is required since streetName is set")) {
-        theErrorDetected = true;
-      }
-    }
-    assertThat(theErrorDetected, is(true));
-
+    assertThat(errorContainsMessage(validationErrors, "city is required since streetName is set"),
+        is(Boolean.TRUE));
   }
 
   @SuppressWarnings("javadoc")
@@ -105,15 +98,10 @@ public class R05360ReferralCityMandatoryTest {
         .setCity("city").buildCmsAddress();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(address));
-    Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
-    for (ErrorMessage message : validationErrors) {
-      // System.out.println(message.getMessage());
-      if (message.getMessage().equals("streetName is required since streetNumber is set")) {
-        theErrorDetected = true;
-      }
-    }
-    assertThat(theErrorDetected, is(true));
+    assertThat(
+        errorContainsMessage(validationErrors, "streetName is required since streetNumber is set"),
+        is(Boolean.TRUE));
 
   }
 
@@ -137,14 +125,9 @@ public class R05360ReferralCityMandatoryTest {
     messageBuilder.addDomainValidationError(validator.validate(reporter));
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
-    for (ErrorMessage message : validationErrors) {
-      // System.out.println(message.getMessage());
-      if (message.getMessage().equals("cityName is required since streetName is set")) {
-        theErrorDetected = true;
-      }
-    }
-    assertThat(theErrorDetected, is(true));
-
+    assertThat(
+        errorContainsMessage(validationErrors, "cityName is required since streetName is set"),
+        is(Boolean.TRUE));
   }
 
   @SuppressWarnings("javadoc")
@@ -154,16 +137,20 @@ public class R05360ReferralCityMandatoryTest {
         .setStreetNumber("1234").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(reporter));
-    Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
-    for (ErrorMessage message : validationErrors) {
-      // System.out.println(message.getMessage());
-      if (message.getMessage().equals("streetName is required since streetNumber is set")) {
-        theErrorDetected = true;
+    assertThat(
+        errorContainsMessage(validationErrors, "streetName is required since streetNumber is set"),
+        is(Boolean.TRUE));
+  }
+
+  private Boolean errorContainsMessage(List<ErrorMessage> validationErrors, String message) {
+    Boolean containsMessage = Boolean.FALSE;
+    for (ErrorMessage errorMessage : validationErrors) {
+      if (errorMessage.getMessage().equals(message)) {
+        return Boolean.TRUE;
       }
     }
-    assertThat(theErrorDetected, is(true));
-
+    return containsMessage;
   }
 
 }
