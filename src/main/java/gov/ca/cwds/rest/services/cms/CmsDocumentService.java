@@ -82,27 +82,26 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument create(CmsDocument request) {
-    gov.ca.cwds.data.persistence.cms.CmsDocument managed = new  gov.ca.cwds.data.persistence.cms.CmsDocument(request);
+    gov.ca.cwds.data.persistence.cms.CmsDocument doc = new  gov.ca.cwds.data.persistence.cms.CmsDocument(request);
     CmsDocument retval = null;
-    String base64Doc;
+    String base64Doc = request.getBase64Blob();
     if (StringUtils.isNotBlank(request.getDocAuth())) {
-      managed.setDocAuth(request.getDocAuth().trim());
+      doc.setDocAuth(request.getDocAuth().trim());
     }
     if (StringUtils.isNotBlank(request.getDocName())) {
-      managed.setDocName(request.getDocName().trim());
+      doc.setDocName(request.getDocName().trim());
     }
     if (StringUtils.isNotBlank(request.getDocServ())) {
-      managed.setDocServ(request.getDocServ().trim());
+      doc.setDocServ(request.getDocServ().trim());
     }
 
-    final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(managed, request.getBase64Blob().trim());
-    managed.setBlobSegments(new HashSet<>(blobs));
-    insertBlobs(managed, blobs);
+    final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(doc, request.getBase64Blob().trim());
+    doc.setBlobSegments(new HashSet<>(blobs));
+    insertBlobs(doc, blobs);
 
     try {
-      managed = dao.create(managed);
-      base64Doc = dao.decompressDoc(managed);
-      retval = new CmsDocument(managed);
+      doc = dao.create(doc);
+      retval = new CmsDocument(doc);
       retval.setBase64Blob(base64Doc);
       return retval;
 
@@ -203,12 +202,12 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
-  private void deleteBlobsJdbc(final Connection con, gov.ca.cwds.data.persistence.cms.CmsDocument doc)
+  private void deleteBlobsJdbc(final Connection con, String docId)
       throws SQLException {
     try (
         final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
 
-      delStmt.setString(1, doc.getId());
+      delStmt.setString(1, docId);
       delStmt.executeUpdate();
 
       con.commit(); // WARNING: deadlock without this.
@@ -218,9 +217,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
-  protected void deleteBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc){
+  protected void deleteBlobs(String docId){
     try (final Connection con = getConnection()) {
-      deleteBlobsJdbc(con, doc);
+      deleteBlobsJdbc(con, docId);
     } catch (SQLException e) {
       throw new ServiceException("FAILED TO DELETE DOCUMENT SEGMENTS", e);
     }
@@ -259,10 +258,12 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
 
     try {
       gov.ca.cwds.data.persistence.cms.CmsDocument managed = dao.delete(primaryKey);
-      deleteBlobs(managed);
-      retval = new CmsDocument(managed);
-      String base64Doc = dao.decompressDoc(managed);
-      retval.setBase64Blob(base64Doc);
+      deleteBlobs(primaryKey);
+      if (managed != null) {
+        retval = new CmsDocument(managed);
+        String base64Doc = dao.decompressDoc(managed);
+        retval.setBase64Blob(base64Doc);
+      }
     } catch (Exception e) {
       LOGGER.error("FAILED TO DELETE DOCUMENT MAIN: {}", e.getMessage(), e);
       throw new ServiceException("FAILED TO DELETE DOCUMENT MAIN: {" + primaryKey + "}", e);

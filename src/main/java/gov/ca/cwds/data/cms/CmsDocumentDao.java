@@ -30,7 +30,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
@@ -81,8 +80,10 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    */
   protected List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
+    byte[] bytes = DatatypeConverter.parseBase64Binary(base64);
+
     try {
-      final byte[] compressed = new CmsPKCompressor().compressBytes(DatatypeConverter.parseBase64Binary(base64));
+      final byte[] compressed = new CmsPKCompressor().compressBytes(bytes);
 
       int i = 0;
       int segmentStart = 0;
@@ -95,7 +96,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
-      doc.setDocLength((long) compressed.length);
+      doc.setDocLength((long) bytes.length);
       doc.setSegmentCount((short) i);
 
       final RequestExecutionContext ctx = RequestExecutionContext.instance();
@@ -376,7 +377,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyCompress(src.getAbsolutePath(), tgt.getAbsolutePath());
 
-      final String hex = DatatypeConverter.printHexBinary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
+      final byte[] compressed = Files.readAllBytes(Paths.get(tgt.getAbsolutePath()));
       final boolean srcDeletedSuccessfully = src.delete();
       if (!srcDeletedSuccessfully) {
         LOGGER.warn("Unable to delete compressed file {}", src.getAbsolutePath());
@@ -387,16 +388,18 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
         LOGGER.warn("Unable to delete doc file {}", tgt.getAbsolutePath());
       }
 
-      Splitter.fixedLength(BLOB_SEGMENT_LENGTH).split(hex).forEach(segments::add);
-
       int i = 0;
-      for (String docBlob : segments) {
+      int segmentStart = 0;
+      while (segmentStart < compressed.length) {
         final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence, DatatypeConverter.parseHexBinary(docBlob)));
+        final int segmentLenght = min(compressed.length - segmentStart, BLOB_SEGMENT_LENGTH);
+        blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence,
+                Arrays.copyOfRange(compressed,segmentStart, segmentStart + segmentLenght)));
+        segmentStart += segmentLenght;
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_LZW_FULL);
-      doc.setDocLength((long) hex.length()); // num chars multiplied by charset width?
+      doc.setDocLength((long) bytes.length);
       doc.setSegmentCount((short) i);
 
       final RequestExecutionContext ctx = RequestExecutionContext.instance();
