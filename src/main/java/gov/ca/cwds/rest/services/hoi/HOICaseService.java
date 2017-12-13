@@ -83,14 +83,14 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     for (String clientId : clientIds) {
       CmsCase[] cmscases = caseDao.findByClientId(clientId);
       for (CmsCase cmscase : cmscases) {
-        HOICase hoicase = createHOICase(cmscase);
+        HOICase hoicase = constructHOICase(cmscase);
         hoicases.add(hoicase);
       }
     }
     return hoicases;
   }
 
-  private HOICase createHOICase(CmsCase cmscase) {
+  private HOICase constructHOICase(CmsCase cmscase) {
     HOIVictim focusChild = getFocusChild(cmscase);
     SystemCodeDescriptor county = getCounty(cmscase);
     SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
@@ -103,15 +103,14 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
   private List<String> findAllRelatedClientIds(String clientid) {
     List<String> clientIds = new ArrayList<>();
     clientIds.add(clientid);
-    ClientRelationship[] clientRelationships =
+    ClientRelationship[] clientRelationshipsByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(clientid);
-
-    for (ClientRelationship relationship : clientRelationships) {
+    for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       clientIds.add(relationship.getSecondaryClientId());
     }
-    ClientRelationship[] clientRelationshipS =
+    ClientRelationship[] clientRelationshipBySecondaryClient =
         clientRelationshipDao.findBySecondaryClientId(clientid);
-    for (ClientRelationship relation : clientRelationshipS) {
+    for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
       clientIds.add(relation.getPrimaryClientId());
     }
     return clientIds;
@@ -121,29 +120,44 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     List<HOIRelatedPerson> parents = new ArrayList<>();
     ClientRelationship[] clientRelationshipByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(cmscase.getFkchldClt());
-    parents.addAll(findParentsByRelationship(clientRelationshipByPrimaryClient));
+    parents.addAll(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
     ClientRelationship[] clientRelationshipBySecondaryClient =
         clientRelationshipDao.findBySecondaryClientId(cmscase.getFkchldClt());
-    parents.addAll(findParentsByRelationship(clientRelationshipBySecondaryClient));
+    parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
     return parents;
   }
 
-  private List<HOIRelatedPerson> findParentsByRelationship(
+  private List<HOIRelatedPerson> findParentsByPrimaryRelationship(
       ClientRelationship[] clientRelationship) {
     List<HOIRelatedPerson> parents = new ArrayList<>();
     for (ClientRelationship relation : clientRelationship) {
       Short type = relation.getClientRelationshipType();
       if (isRelationTypeParent(type)) {
         String clientId = relation.getSecondaryClientId();
-        Client client = clientDao.find(clientId);
-        SystemCodeDescriptor relationship =
-            new SystemCodeDescriptor(relation.getClientRelationshipType(), SystemCodeCache.global()
-                .getSystemCodeShortDescription(relation.getClientRelationshipType()));
-        HOIRelatedPerson person = createHOIRelatedPerson(client, relationship);
-        parents.add(person);
+        parents.add(findPersonByClientId(clientId, type));
       }
     }
     return parents;
+  }
+
+  private List<HOIRelatedPerson> findParentsBySecondaryRelationship(
+      ClientRelationship[] clientRelationship) {
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    for (ClientRelationship relation : clientRelationship) {
+      Short type = relation.getClientRelationshipType();
+      if (isRelationTypeParent(type)) {
+        String clientId = relation.getPrimaryClientId();
+        parents.add(findPersonByClientId(clientId, type));
+      }
+    }
+    return parents;
+  }
+
+  private HOIRelatedPerson findPersonByClientId(String clientId, Short type) {
+    Client client = clientDao.find(clientId);
+    SystemCodeDescriptor relationship = new SystemCodeDescriptor(type,
+        SystemCodeCache.global().getSystemCodeShortDescription(type));
+    return createHOIRelatedPerson(client, relationship);
   }
 
   private HOIRelatedPerson createHOIRelatedPerson(Client client,
