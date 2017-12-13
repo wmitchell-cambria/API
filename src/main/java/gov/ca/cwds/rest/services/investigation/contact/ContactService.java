@@ -87,7 +87,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
       return findAllContactsForTheReferral(primaryKey);
     } else {
       String contactId = retrieveContactId(primaryKey);
-      return findSingleContact(contactId);
+      return contactId != null ? findSingleContact(contactId) : null;
     }
   }
 
@@ -135,8 +135,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     String[] identifiers = primaryKey.split(":");
     String referralId = identifiers[0].trim();
     String contactId = identifiers[1].trim();
-    validateContactId(referralId, contactId);
-    return contactId;
+    return isContactIdValid(referralId, contactId) ? contactId : null;
   }
 
   /**
@@ -145,20 +144,20 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * @param referralId the Referral Id
    * @param contactId the Contact Id
    */
-  private void validateContactId(String referralId, String contactId) {
+  private boolean isContactIdValid(String referralId, String contactId) {
 
     ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntities =
         referralClientDeliveredService.findByReferralId(referralId);
     if (referralClientDeliveredServiceEntities.length == 0) {
-      throw new ServiceException("There are no Contacts For the Given ReferralId");
+      return false;
     }
     for (ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity : referralClientDeliveredServiceEntities) {
       if (referralClientDeliveredServiceEntity.getReferralClientDeliveredServiceEmbeddable()
           .getDeliveredServiceId().equals(contactId)) {
-        return;
+        return true;
       }
     }
-    throw new ServiceException("ContactId Is Not Valid For the Given ReferralId");
+    return false;
   }
 
   /**
