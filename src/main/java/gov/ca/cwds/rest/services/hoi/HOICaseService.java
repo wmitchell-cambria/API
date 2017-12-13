@@ -40,7 +40,6 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  */
 public class HOICaseService extends SimpleResourceService<String, HOICase, HOICaseResponse> {
 
-
   /**
    * Serial Version UID
    */
@@ -73,6 +72,10 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     return new HOICaseResponse(cases);
   }
 
+  /**
+   * @param id - id
+   * @return the cases linked to single client
+   */
   public List<HOICase> findByClientId(String id) {
     List<String> clientIds = findAllRelatedClientIds(id);
     return findAllCasesForAllClients(clientIds);
@@ -83,57 +86,81 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     for (String clientId : clientIds) {
       CmsCase[] cmscases = caseDao.findByClientId(clientId);
       for (CmsCase cmscase : cmscases) {
-        HOICase hoicase = createHOICase(cmscase);
+        HOICase hoicase = constructHOICase(cmscase);
         hoicases.add(hoicase);
       }
     }
     return hoicases;
   }
 
-  private HOICase createHOICase(CmsCase cmscase) {
+  private HOICase constructHOICase(CmsCase cmscase) {
     HOIVictim focusChild = getFocusChild(cmscase);
     SystemCodeDescriptor county = getCounty(cmscase);
     SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
     HOISocialWorker assignedSocialWorker = getAssignedSocialWorker(cmscase);
     List<HOIRelatedPerson> parents = getParents(cmscase);
-    return new HOICase(cmscase, county, serviceComponent, focusChild, assignedSocialWorker,
-        parents);
+    return new HOICaseFactory().createHOICase(cmscase, county, serviceComponent, focusChild,
+        assignedSocialWorker, parents);
   }
 
   private List<String> findAllRelatedClientIds(String clientid) {
     List<String> clientIds = new ArrayList<>();
     clientIds.add(clientid);
-    ClientRelationship[] clientRelationships =
+    ClientRelationship[] clientRelationshipsByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(clientid);
-
-    for (ClientRelationship relationship : clientRelationships) {
+    for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       clientIds.add(relationship.getSecondaryClientId());
     }
-    ClientRelationship[] clientRelationshipS =
+    ClientRelationship[] clientRelationshipBySecondaryClient =
         clientRelationshipDao.findBySecondaryClientId(clientid);
-    for (ClientRelationship relation : clientRelationshipS) {
+    for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
       clientIds.add(relation.getPrimaryClientId());
     }
     return clientIds;
   }
 
   private List<HOIRelatedPerson> getParents(CmsCase cmscase) {
-    ClientRelationship[] clientRelationship =
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    ClientRelationship[] clientRelationshipByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(cmscase.getFkchldClt());
+    parents.addAll(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
+    ClientRelationship[] clientRelationshipBySecondaryClient =
+        clientRelationshipDao.findBySecondaryClientId(cmscase.getFkchldClt());
+    parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
+    return parents;
+  }
+
+  private List<HOIRelatedPerson> findParentsByPrimaryRelationship(
+      ClientRelationship[] clientRelationship) {
     List<HOIRelatedPerson> parents = new ArrayList<>();
     for (ClientRelationship relation : clientRelationship) {
       Short type = relation.getClientRelationshipType();
       if (isRelationTypeParent(type)) {
         String clientId = relation.getSecondaryClientId();
-        Client client = clientDao.find(clientId);
-        SystemCodeDescriptor relationship =
-            new SystemCodeDescriptor(relation.getClientRelationshipType(), SystemCodeCache.global()
-                .getSystemCodeShortDescription(relation.getClientRelationshipType()));
-        HOIRelatedPerson person = createHOIRelatedPerson(client, relationship);
-        parents.add(person);
+        parents.add(findPersonByClientId(clientId, type));
       }
     }
     return parents;
+  }
+
+  private List<HOIRelatedPerson> findParentsBySecondaryRelationship(
+      ClientRelationship[] clientRelationship) {
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    for (ClientRelationship relation : clientRelationship) {
+      Short type = relation.getClientRelationshipType();
+      if (isRelationTypeParent(type)) {
+        String clientId = relation.getPrimaryClientId();
+        parents.add(findPersonByClientId(clientId, type));
+      }
+    }
+    return parents;
+  }
+
+  private HOIRelatedPerson findPersonByClientId(String clientId, Short type) {
+    Client client = clientDao.find(clientId);
+    SystemCodeDescriptor relationship = new SystemCodeDescriptor(type,
+        SystemCodeCache.global().getSystemCodeShortDescription(type));
+    return createHOIRelatedPerson(client, relationship);
   }
 
   private HOIRelatedPerson createHOIRelatedPerson(Client client,
@@ -141,20 +168,23 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(client.getId(), null, new DateTime(client.getLastUpdatedTime()),
             LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
-    HOIRelatedPerson person = new HOIRelatedPerson();// client.getId(), client.getFirstName(),
+    HOIRelatedPerson person = new HOIRelatedPerson();
     person.setId(client.getId());
     person.setFirstName(client.getFirstName());
     person.setLastName(client.getLastName());
     person.setRelationship(relationship);
-    // person.setLimitedAccessType(LimitedAccessType.getByValue(client.getLimitedAccessCode()));
     person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
     person.setLegacyDescriptor(legacyDescriptor);
     return person;
   }
 
   private boolean isRelationTypeParent(Short type) {
-    return (type <= 214 && type >= 187) || (type <= 294 && type >= 282)
-        || (type == 214 || type == 273 || type == 5620 || type == 6360 || type == 6361);
+    boolean firstCondition = type <= 214 && type >= 187;
+    boolean secondCondition = type <= 254 && type >= 245;
+    boolean thirdCondition = type <= 294 && type >= 282;
+    boolean lastCondition =
+        type == 272 || type == 273 || type == 5620 || type == 6360 || type == 6361;
+    return firstCondition || secondCondition || thirdCondition || lastCondition;
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {

@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.investigation.contact;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -116,19 +117,20 @@ public class ContactServiceTest {
     assertThat(actual, nullValue());
   }
 
-  @Test(expected = ServiceException.class)
-  public void findSingleContactWhenEmptyReferralClientDeliveredService() throws Exception {
+  @Test
+  public void findSingleContactWhenEmptyReferralClientDeliveredService() {
     final String primaryKey = "ABC1234567:" + "ABC1234567";
     when(referralClientDeliveredService.findByReferralId(any()))
         .thenReturn(new ReferralClientDeliveredServiceEntity[0]);
-    target.find(primaryKey);
+    Response response = target.find(primaryKey);
+    assertNull(response);
   }
 
-  @Test(expected = ServiceException.class)
-  public void findSingleContactWhenNoCorrespondingReferralClientDeliveredService()
-      throws Exception {
+  @Test
+  public void findSingleContactWhenNoCorrespondingReferralClientDeliveredService() {
     final String primaryKey = "ABC1234567:" + "ABC1234999";
-    target.find(primaryKey);
+    Response response = target.find(primaryKey);
+    assertNull(response);
   }
 
   @Test(expected = ServiceException.class)

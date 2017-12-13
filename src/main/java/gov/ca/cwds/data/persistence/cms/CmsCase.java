@@ -173,6 +173,56 @@ public class CmsCase extends CmsPersistentObject {
     super();
   }
 
+  public CmsCase(String id, String alertText, String approvalNumber, Short approvalStatusType,
+      Short caseClosureReasonType, String caseplanChildrenDetailIndVar, String closureStatementText,
+      Short countryCodeType, String countySpecificCode, String drmsNotesDoc,
+      String emancipationDate, Date endDate, String fkchldClt, String fkreferlt, String fkstfperst,
+      Short governmentEntityType, String icpcOutgngPlcmtStatusIndVar,
+      String icpcOutgoingRequestIndVar, String limitedAccessCode, Date limitedAccessDate,
+      String limitedAccessDesc, Short limitedAccessGovernmentEntityType, String caseName,
+      Date nextTilpDueDate, Date projectedEndDate, String responsibleAgencyCode,
+      String specialProjectCaseIndVar, Date startDate, Short stateCodeType,
+      Short activeServiceComponentType, Date activeSvcComponentStartDate, String tickleIndVar,
+      ChildClient childClient, StaffPerson staffPerson, Referral riReferral) {
+    super();
+    this.id = id;
+    this.alertText = alertText;
+    this.approvalNumber = approvalNumber;
+    this.approvalStatusType = approvalStatusType;
+    this.caseClosureReasonType = caseClosureReasonType;
+    this.caseplanChildrenDetailIndVar = caseplanChildrenDetailIndVar;
+    this.closureStatementText = closureStatementText;
+    this.countryCodeType = countryCodeType;
+    this.countySpecificCode = countySpecificCode;
+    this.drmsNotesDoc = drmsNotesDoc;
+    this.emancipationDate = emancipationDate;
+    this.endDate = endDate;
+    this.fkchldClt = fkchldClt;
+    this.fkreferlt = fkreferlt;
+    this.fkstfperst = fkstfperst;
+    this.governmentEntityType = governmentEntityType;
+    this.icpcOutgngPlcmtStatusIndVar = icpcOutgngPlcmtStatusIndVar;
+    this.icpcOutgoingRequestIndVar = icpcOutgoingRequestIndVar;
+    this.limitedAccessCode = limitedAccessCode;
+    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDesc = limitedAccessDesc;
+    this.limitedAccessGovernmentEntityType = limitedAccessGovernmentEntityType;
+    this.caseName = caseName;
+    this.nextTilpDueDate = nextTilpDueDate;
+    this.projectedEndDate = projectedEndDate;
+    this.responsibleAgencyCode = responsibleAgencyCode;
+    this.specialProjectCaseIndVar = specialProjectCaseIndVar;
+    this.startDate = startDate;
+    this.stateCodeType = stateCodeType;
+    this.activeServiceComponentType = activeServiceComponentType;
+    this.activeSvcComponentStartDate = activeSvcComponentStartDate;
+    this.tickleIndVar = tickleIndVar;
+    this.childClient = childClient;
+    this.staffPerson = staffPerson;
+    this.riReferral = riReferral;
+  }
+
+
   @Override
   public Serializable getPrimaryKey() {
     return getId();
@@ -434,7 +484,6 @@ public class CmsCase extends CmsPersistentObject {
     this.tickleIndVar = tickleIndVar;
   }
 
-
   public ChildClient getChildClient() {
     return childClient;
   }
@@ -449,6 +498,14 @@ public class CmsCase extends CmsPersistentObject {
 
   public void setStaffPerson(StaffPerson staffPerson) {
     this.staffPerson = staffPerson;
+  }
+
+  public Referral getRiReferral() {
+    return riReferral;
+  }
+
+  public void setRiReferral(Referral riReferral) {
+    this.riReferral = riReferral;
   }
 
   @Override

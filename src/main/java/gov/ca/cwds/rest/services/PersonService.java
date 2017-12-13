@@ -6,11 +6,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AddressDao;
@@ -50,8 +48,6 @@ import io.dropwizard.hibernate.UnitOfWork;
 public class PersonService implements CrudsService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
-
-  private static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
   private PersonDao personDao;
   private ElasticsearchDao elasticsearchDao;

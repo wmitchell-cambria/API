@@ -98,7 +98,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    */
   @Override
   public Response find(String referralId) {
-    Investigation investigation;
+    Investigation investigation = null;
 
     if (referralId.equals(STUB_DATA_KEY)) {
       return returnInvestigationStub();
@@ -106,9 +106,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
 
     final Referral referral = investigationDao.find(referralId);
 
-    if (referral == null) {
-      throw new ServiceException("Referral/Investigation not found for provided id :" + referralId);
-    } else {
+    if (referral != null) {
       Address address = this.findIncidentAddress(referral.getAllegesAbuseOccurredAtAddressId());
       StaffPerson staffPerson = this.findStaffPersonById(referral.getPrimaryContactStaffPersonId());
       LongText rptNarrativeLongText =
