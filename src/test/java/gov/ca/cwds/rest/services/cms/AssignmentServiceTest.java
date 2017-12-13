@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -13,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -44,6 +46,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
@@ -286,7 +289,8 @@ public class AssignmentServiceTest {
    */
   @Test
   public void assignmentServiceCreateReturnsGeneratedId() throws Exception {
-    Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
+    Assignment domainAssignment = new AssignmentResourceBuilder().setStartDate("2017-01-01")
+        .setStartTime("16:01:01").buildAssignment();
 
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {
@@ -367,6 +371,8 @@ public class AssignmentServiceTest {
   @Test
   public void shouldSaveNewAssignment() throws Exception {
 
+    Referral referral = new ReferralResourceBuilder().build();
+
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
@@ -378,8 +384,41 @@ public class AssignmentServiceTest {
     when(caseLoadDao.find(any())).thenReturn(caseload);
 
     assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, "ABC1234567",
-        messageBuilder);
+        referral, messageBuilder);
     verify(assignmentDao, times(1)).create(any());
   }
 
+  @Test
+  public void shouldNotSaveWhenReferralReceivedDateNotEqualToAssignmentStartDate()
+      throws Exception {
+    MessageBuilder mb = new MessageBuilder();
+
+    Referral referral = new ReferralResourceBuilder().setReceivedDate("2016-12-08")
+        .setReceivedTime("16:01:01").build();
+
+    Assignment assignmentDomain = new AssignmentResourceBuilder().setStartDate("2017-12-08")
+        .setStartTime("15:01:01").buildAssignment();
+    gov.ca.cwds.data.persistence.cms.Assignment toCreate =
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
+            lastUpdatedTime);
+    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
+        .thenReturn(toCreate);
+
+    CaseLoad caseload = new CaseLoadEntityBuilder().build();
+    when(caseLoadDao.find(any())).thenReturn(caseload);
+
+    assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, "ABC1234567",
+        referral, mb);
+
+    Boolean messageFound = Boolean.FALSE;
+
+    List<ErrorMessage> messages = mb.getMessages();
+    for (ErrorMessage em : messages) {
+      if (em.getMessage().contains("03731")) {
+        messageFound = Boolean.TRUE;
+      }
+      // System.out.println(em.getMessage());
+    }
+    assertThat(messageFound, is(equalTo(Boolean.TRUE)));
+  }
 }

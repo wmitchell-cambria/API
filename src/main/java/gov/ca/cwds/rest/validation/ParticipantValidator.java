@@ -1,11 +1,6 @@
 package gov.ca.cwds.rest.validation;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -14,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -182,50 +176,6 @@ public class ParticipantValidator {
       }
     }
     return mandatedRepoter;
-  }
-
-  /**
-   * 
-   * @param screeningToReferral - screeningToReferral
-   * @param builder - logError messages
-   * @return - timeStarted
-   */
-  public static String extractStartTime(ScreeningToReferral screeningToReferral,
-      MessageBuilder builder) {
-    String timeStarted = null;
-    DateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.US);
-    DateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT_PATTERN);
-    try {
-      Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
-      timeStarted = timeFormat.format(dateTime);
-    } catch (ParseException | NullPointerException e) {
-      String message = " parsing Start Date/Time ";
-      builder.addError(message);
-      logError(message, e);
-    }
-    return timeStarted;
-  }
-
-  /**
-   * 
-   * @param screeningToReferral - screeningToReferral
-   * @param builder - logError messages
-   * @return dateStarted
-   */
-  public static String extractStartDate(ScreeningToReferral screeningToReferral,
-      MessageBuilder builder) {
-    DateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.US);
-    DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN);
-    String dateStarted = null;
-    try {
-      Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
-      dateStarted = dateFormat.format(dateTime);
-    } catch (ParseException | NullPointerException e) {
-      String message = " parsing Start Date/Time ";
-      builder.addError(message);
-      logError(message, e);
-    }
-    return dateStarted;
   }
 
   /**

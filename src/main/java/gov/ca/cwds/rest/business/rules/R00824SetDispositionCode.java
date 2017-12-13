@@ -34,6 +34,22 @@ public class R00824SetDispositionCode implements RuleValidatator {
   private Participant incomingParticipant;
 
   /**
+   * <blockquote>
+   *
+   * <pre>
+   * BUSINESS RULE: "R - 00824"
+   *
+   * IF    referralResponseTypeCode is set to Evaluate Out 
+   * THEN  referralClient - dispositionCode is set to the "A"
+   *
+   * </pre>
+   *
+   * </blockquote>
+   * 
+   * @throws Exception - Exception
+   */
+
+  /**
    * @param screeningToReferral - screeningToReferral
    * @param incomingParticipant - incomingParticipant
    */

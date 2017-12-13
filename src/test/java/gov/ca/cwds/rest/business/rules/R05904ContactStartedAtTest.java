@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
+@SuppressWarnings("javadoc")
 public class R05904ContactStartedAtTest {
 
   @Test
