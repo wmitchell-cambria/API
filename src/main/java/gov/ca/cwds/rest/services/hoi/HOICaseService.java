@@ -40,7 +40,6 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  */
 public class HOICaseService extends SimpleResourceService<String, HOICase, HOICaseResponse> {
 
-
   /**
    * Serial Version UID
    */
@@ -73,6 +72,10 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     return new HOICaseResponse(cases);
   }
 
+  /**
+   * @param id - id
+   * @return the cases linked to single client
+   */
   public List<HOICase> findByClientId(String id) {
     List<String> clientIds = findAllRelatedClientIds(id);
     return findAllCasesForAllClients(clientIds);
@@ -176,9 +179,12 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
   }
 
   private boolean isRelationTypeParent(Short type) {
-    return (type <= 214 && type >= 187) || (type <= 254 && type >= 245)
-        || (type <= 294 && type >= 282)
-        || (type == 272 || type == 273 || type == 5620 || type == 6360 || type == 6361);
+    boolean firstCondition = type <= 214 && type >= 187;
+    boolean secondCondition = type <= 254 && type >= 245;
+    boolean thirdCondition = type <= 294 && type >= 282;
+    boolean lastCondition =
+        type == 272 || type == 273 || type == 5620 || type == 6360 || type == 6361;
+    return firstCondition || secondCondition || thirdCondition || lastCondition;
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
