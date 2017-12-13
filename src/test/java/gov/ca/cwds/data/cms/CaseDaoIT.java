@@ -33,6 +33,8 @@ public class CaseDaoIT {
   private static CaseDao caseDao;
   private Session session;
 
+  public String clientId = "K9epuNg0BN";
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -66,7 +68,7 @@ public class CaseDaoIT {
 
   @Test
   public void testFind() throws Exception {
-    final String id = "AbxPBtY0Um";
+    final String id = "AadfKnG07n";
     CmsCase found = caseDao.find(id);
     assertThat(found.getId(), is(id));
   }
@@ -88,7 +90,7 @@ public class CaseDaoIT {
 
   @Test(expected = EntityExistsException.class)
   public void testCreateEntityExistsException() throws Exception {
-    CmsCase cmsCase = new CaseEntityBuilder().setId("AawSLHm057").build();
+    CmsCase cmsCase = new CaseEntityBuilder().setId("AadfKnG07n").build();
     caseDao.create(cmsCase);
   }
 
@@ -124,7 +126,7 @@ public class CaseDaoIT {
    */
   @Test
   public void testFindClientId() throws Exception {
-    CmsCase[] CmsCases = caseDao.findByClientId("K9epuNg0BN");
+    CmsCase[] CmsCases = caseDao.findByClientId(clientId);
     assertThat(CmsCases, notNullValue());
     assertThat(CmsCases.length, greaterThanOrEqualTo(1));
   }

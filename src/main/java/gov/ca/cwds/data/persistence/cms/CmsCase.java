@@ -484,7 +484,6 @@ public class CmsCase extends CmsPersistentObject {
     this.tickleIndVar = tickleIndVar;
   }
 
-
   public ChildClient getChildClient() {
     return childClient;
   }
@@ -499,6 +498,14 @@ public class CmsCase extends CmsPersistentObject {
 
   public void setStaffPerson(StaffPerson staffPerson) {
     this.staffPerson = staffPerson;
+  }
+
+  public Referral getRiReferral() {
+    return riReferral;
+  }
+
+  public void setRiReferral(Referral riReferral) {
+    this.riReferral = riReferral;
   }
 
   @Override
