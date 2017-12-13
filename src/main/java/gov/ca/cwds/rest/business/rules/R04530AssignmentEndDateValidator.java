@@ -39,16 +39,16 @@ public class R04530AssignmentEndDateValidator implements RuleValidatator {
 
 
     if (this.isAssignmentStartDateBeforeOrEqualsEndDate(assignemntStartDate, assignemntEndDate)
-        && (this.isCurrentDateBeforeOrEqualAssignmentEndDate(assignemntEndDate))) {
+        && (this.isAssignmentEndDateBeforeOrEqualCurrentDate(assignemntEndDate))) {
       validEndDate = true;
     }
     return validEndDate;
 
   }
 
-  private boolean isCurrentDateBeforeOrEqualAssignmentEndDate(Date assignemntEndDate) {
+  private boolean isAssignmentEndDateBeforeOrEqualCurrentDate(Date assignemntEndDate) {
     Date currentDate = new Date();
-    return (currentDate.compareTo(assignemntEndDate) <= 0);
+    return (assignemntEndDate.compareTo(currentDate) <= 0);
 
 
   }
