@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
  * @author CWDS API Team
  *
  */
+@SuppressWarnings("javadoc")
 public class HOICaseServiceTest {
 
   private CaseDao caseDao;

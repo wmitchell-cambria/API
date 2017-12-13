@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,6 +33,7 @@ import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 
 /**
@@ -42,6 +44,7 @@ public class HOIReferralServiceTest {
 
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
+  private HOIReferralService hoiService;
 
   /**
    * Initialize system code cache
@@ -61,6 +64,7 @@ public class HOIReferralServiceTest {
     SystemCodeCache.global().getAllSystemCodes();
     clientDao = mock(ClientDao.class);
     referralClientDao = mock(ReferralClientDao.class);
+    hoiService = new HOIReferralService(clientDao, referralClientDao);
   }
 
   /**
@@ -70,8 +74,6 @@ public class HOIReferralServiceTest {
    */
   @Test
   public void testForHandleFind() throws Exception {
-
-    HOIReferralService hoiService = new HOIReferralService(clientDao, referralClientDao);
     Allegation allegation1 = new AllegationEntityBuilder().setReferralId("ABC1234567")
         .setVictimClientId("1234567ABC").build();
 
@@ -120,8 +122,6 @@ public class HOIReferralServiceTest {
    */
   @Test
   public void testHandleFindWhenReporterMandated() throws Exception {
-
-    HOIReferralService hoiService = new HOIReferralService(clientDao, referralClientDao);
     Allegation allegation1 = new AllegationEntityBuilder().setReferralId("ABC1234567")
         .setVictimClientId("1234567ABC").build();
 
@@ -170,8 +170,6 @@ public class HOIReferralServiceTest {
    */
   @Test
   public void testHandleFindWhenAnonymousReporter() throws Exception {
-
-    HOIReferralService hoiService = new HOIReferralService(clientDao, referralClientDao);
     Allegation allegation1 = new AllegationEntityBuilder().setReferralId("ABC1234567")
         .setVictimClientId("1234567ABC").build();
 
@@ -217,8 +215,6 @@ public class HOIReferralServiceTest {
    */
   @Test
   public void testHandleFindWhenSelfReporter() throws Exception {
-
-    HOIReferralService hoiService = new HOIReferralService(clientDao, referralClientDao);
     Allegation allegation1 = new AllegationEntityBuilder().setReferralId("ABC1234567")
         .setVictimClientId("1234567ABC").build();
 
@@ -257,6 +253,62 @@ public class HOIReferralServiceTest {
 
     HOIReferralResponse response = hoiService.handleFind("123");
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testForHandleFindWhenPerpetratorAndVictimClientNull() throws Exception {
+    Allegation allegation1 = new AllegationEntityBuilder().setReferralId("ABC1234567")
+        .setVictimClientId("1234567ABC").setPerpetratorClientId(null).build();
+
+    Allegation allegation2 = new AllegationEntityBuilder().setReferralId("ABC1234568")
+        .setVictimClientId(null).setPerpetratorClientId(null).build();
+
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("0X5").build();
+    Reporter reporter = new CmsReporterResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.Reporter persistentReporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(reporter, "0X5", new Date());
+
+    Referral referral1 = new ReferralEntityBuilder().setId("ABC1234567")
+        .setAllegations(Arrays.asList(allegation1).stream().collect(Collectors.toSet()))
+        .setReporter(persistentReporter).build();
+    Referral referral2 = new ReferralEntityBuilder().setId("ABC1234568")
+        .setAllegations(Arrays.asList(allegation2).stream().collect(Collectors.toSet()))
+        .setFirstResponseDeterminedByStaffPersonId("0X5").build();
+
+    referral1.setStaffPerson(staffPerson);
+    referral2.setStaffPerson(staffPerson);
+
+    Client client = new ClientEntityBuilder().build();
+    ReferralClient referralCliemtDomain = new ReferralClientResourceBuilder().buildReferralClient();
+    gov.ca.cwds.data.persistence.cms.ReferralClient persistent1 =
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralCliemtDomain, "OXA",
+            new Date());
+    persistent1.setReferral(referral1);
+
+    ReferralClient referralCliemtDomain1 =
+        new ReferralClientResourceBuilder().setReferralId("ABC1234568").buildReferralClient();
+    gov.ca.cwds.data.persistence.cms.ReferralClient persistent2 =
+        new gov.ca.cwds.data.persistence.cms.ReferralClient(referralCliemtDomain1, "OXA",
+            new Date());
+    persistent2.setReferral(referral2);
+    gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {persistent1, persistent2};
+
+    when(clientDao.find(any(String.class))).thenReturn(client);
+    when(referralClientDao.findByClientId(any(String.class))).thenReturn(referralClients);
+
+    HOIReferralResponse response = hoiService.handleFind("123");
+    assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
+  }
+
+  /**
+   * @throws Exception - Exception
+   */
+  @Test(expected = NotImplementedException.class)
+  public void testHandleRequest() throws Exception {
+    hoiService.handleRequest(new HOIReferral());
   }
 
 }
