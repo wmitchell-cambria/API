@@ -69,5 +69,20 @@ public class ClientRelationshipEntityBuilder {
     return this;
   }
 
+  public ClientRelationshipEntityBuilder setClientRelationshipType(Short clientRelationshipType) {
+    this.clientRelationshipType = clientRelationshipType;
+    return this;
+  }
+
+  public ClientRelationshipEntityBuilder setAbsentParentCode(String absentParentCode) {
+    this.absentParentCode = absentParentCode;
+    return this;
+  }
+
+  public ClientRelationshipEntityBuilder setLastUpdatedId(String lastUpdatedId) {
+    this.lastUpdatedId = lastUpdatedId;
+    return this;
+  }
+
 }
 
