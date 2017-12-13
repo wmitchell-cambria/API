@@ -1,7 +1,6 @@
 package gov.ca.cwds.fixture;
 
 import java.math.BigDecimal;
-
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
 
 /**
@@ -11,7 +10,7 @@ import gov.ca.cwds.rest.api.domain.cms.Assignment;
 @SuppressWarnings("javadoc")
 public class AssignmentResourceBuilder {
   private String countySpecificCode = "20";
-  private String endDate = "2018-06-01";
+  private String endDate = "2017-12-01";
   private String endTime = "12:01:00-0800";
   private String establishedForCode = "R";
   private String establishedForId = "1234567ABC";
