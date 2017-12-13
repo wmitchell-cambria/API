@@ -40,6 +40,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  */
 public class HOICaseService extends SimpleResourceService<String, HOICase, HOICaseResponse> {
 
+
   /**
    * Serial Version UID
    */
@@ -117,8 +118,18 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
   }
 
   private List<HOIRelatedPerson> getParents(CmsCase cmscase) {
-    ClientRelationship[] clientRelationship =
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    ClientRelationship[] clientRelationshipByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(cmscase.getFkchldClt());
+    parents.addAll(findParentsByRelationship(clientRelationshipByPrimaryClient));
+    ClientRelationship[] clientRelationshipBySecondaryClient =
+        clientRelationshipDao.findBySecondaryClientId(cmscase.getFkchldClt());
+    parents.addAll(findParentsByRelationship(clientRelationshipBySecondaryClient));
+    return parents;
+  }
+
+  private List<HOIRelatedPerson> findParentsByRelationship(
+      ClientRelationship[] clientRelationship) {
     List<HOIRelatedPerson> parents = new ArrayList<>();
     for (ClientRelationship relation : clientRelationship) {
       Short type = relation.getClientRelationshipType();
@@ -140,20 +151,20 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
     LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(client.getId(), null, new DateTime(client.getLastUpdatedTime()),
             LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
-    HOIRelatedPerson person = new HOIRelatedPerson();// client.getId(), client.getFirstName(),
+    HOIRelatedPerson person = new HOIRelatedPerson();
     person.setId(client.getId());
     person.setFirstName(client.getFirstName());
     person.setLastName(client.getLastName());
     person.setRelationship(relationship);
-    // person.setLimitedAccessType(LimitedAccessType.getByValue(client.getLimitedAccessCode()));
     person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
     person.setLegacyDescriptor(legacyDescriptor);
     return person;
   }
 
   private boolean isRelationTypeParent(Short type) {
-    return (type <= 214 && type >= 187) || (type <= 294 && type >= 282)
-        || (type == 214 || type == 273 || type == 5620 || type == 6360 || type == 6361);
+    return (type <= 214 && type >= 187) || (type <= 254 && type >= 245)
+        || (type <= 294 && type >= 282)
+        || (type == 272 || type == 273 || type == 5620 || type == 6360 || type == 6361);
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
