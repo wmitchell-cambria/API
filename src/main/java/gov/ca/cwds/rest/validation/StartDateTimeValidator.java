@@ -18,7 +18,7 @@ public class StartDateTimeValidator {
   private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
   private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
   private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
-  private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantValidator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StartDateTimeValidator.class);
 
   /**
    * default constructor
