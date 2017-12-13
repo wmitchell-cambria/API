@@ -11,14 +11,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.ApiTypedIdentifier;
-import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.util.FerbDateUtils;
 import io.swagger.annotations.ApiModelProperty;
@@ -71,41 +69,6 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
   public HOICase() {
     // No-argument constructor
   }
-
-  /**
-   * 
-   * @param cmscase cmscase
-   * @param county county
-   * @param serviceComponent service component
-   * @param focusChild focus child
-   * @param assignedSocialWorker assigned social worker
-   * @param parents parents
-   */
-  public HOICase(CmsCase cmscase, SystemCodeDescriptor county,
-      SystemCodeDescriptor serviceComponent, HOIVictim focusChild,
-      HOISocialWorker assignedSocialWorker, List<HOIRelatedPerson> parents) {
-    super();
-    this.id = cmscase.getId();
-    this.startDate = cmscase.getStartDate();
-    this.endDate = cmscase.getEndDate();
-    this.county = county;
-    this.serviceComponent = serviceComponent;
-    this.focusChild = focusChild;
-    this.assignedSocialWorker = assignedSocialWorker;
-    this.accessLimitation = new AccessLimitation(
-        LimitedAccessType.getByValue(cmscase.getLimitedAccessCode()),
-        cmscase.getLimitedAccessDate(), cmscase.getLimitedAccessDesc(),
-        new SystemCodeDescriptor(cmscase.getLimitedAccessGovernmentEntityType(),
-            SystemCodeCache.global()
-                .getSystemCodeShortDescription(cmscase.getLimitedAccessGovernmentEntityType())));
-
-    this.parents = parents;
-    this.legacyDescriptor =
-        new LegacyDescriptor(cmscase.getId(), null, new DateTime(cmscase.getLastUpdatedTime()),
-            LegacyTable.CASE.getName(), LegacyTable.CASE.getDescription());
-
-  }
-
 
   @Override
   public String getId() {
