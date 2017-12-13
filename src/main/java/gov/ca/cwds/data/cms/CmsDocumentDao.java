@@ -302,8 +302,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       try (FileOutputStream fos = new FileOutputStream(src);){
         for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
           final byte[] bytes = seg.getDocBlob();
-          fos.write(bytes, 0, bytes.length);
+//          fos.write(bytes, 0, bytes.length);
+          fos.write(bytes);
         }
+        fos.flush();
+        fos.close();
       } catch (IOException e) {
         errorDecompressing(e);
       }
@@ -368,6 +371,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
       final byte[] bytes = DatatypeConverter.parseBase64Binary(base64.trim());
       fos.write(bytes, 0, bytes.length);
+      fos.flush();
       // COMPRESS!
       final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyCompress(src.getAbsolutePath(), tgt.getAbsolutePath());
