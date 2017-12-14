@@ -87,7 +87,7 @@ publishing {
 
 //Set artifactory variables in local gradle properties file. Example ~/.gradle/gradle.properties
 artifactory {
-    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    contextUrl = project.hasProperty('artifactory_contextUrl') ? "${artifactory_contextUrl}" : System.getenv('ARTIFACTORY_URL')
     publish {
         repository {
             repoKey = 'gradle-release-local'
