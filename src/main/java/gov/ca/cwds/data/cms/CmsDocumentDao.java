@@ -1,13 +1,5 @@
 package gov.ca.cwds.data.cms;
 
-import org.apache.poi.xwpf.usermodel.Borders;
-import org.apache.poi.xwpf.usermodel.BreakClear;
-import org.apache.poi.xwpf.usermodel.BreakType;
-import org.apache.poi.xwpf.usermodel.LineSpacingRule;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.TextAlignment;
-import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
-import org.apache.poi.xwpf.usermodel.VerticalAlign;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -78,7 +70,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param base64 base64 encoded bytes
    * @return new blobs in order
    */
-  protected List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
+  private List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
     byte[] bytes = DatatypeConverter.parseBase64Binary(base64);
 
@@ -117,7 +109,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param base64 base64 encoded bytes
    * @return new blobs in order
    */
-  protected List<CmsDocumentBlobSegment> compressPLAIN(final CmsDocument doc, String base64) {
+  private List<CmsDocumentBlobSegment> compressPLAIN(final CmsDocument doc, String base64) {
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
     try {
       final byte[] plain = DatatypeConverter.parseBase64Binary(base64);
@@ -216,7 +208,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc PK archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressPK(CmsDocument doc) {
+  private String decompressPK(CmsDocument doc) {
     String retval = "";
 
     try {
@@ -247,7 +239,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc PLAIN archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressPLAIN(CmsDocument doc) {
+  private String decompressPLAIN(CmsDocument doc) {
     String retval = "";
 
     try {
@@ -285,7 +277,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected String decompressLZW(CmsDocument doc) {
+  private String decompressLZW(CmsDocument doc) {
     String retval = "";
 
     File src = null;
@@ -350,7 +342,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
-  protected List<CmsDocumentBlobSegment> compressLZW(CmsDocument doc, String base64) {
+  private List<CmsDocumentBlobSegment> compressLZW(CmsDocument doc, String base64) {
 
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
 
@@ -426,23 +418,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     try (XWPFDocument doc = new XWPFDocument()) {
 
       XWPFParagraph paragraph = doc.createParagraph();
-//      paragraph.setAlignment(ParagraphAlignment.LEFT);
-//      paragraph.setBorderBottom(Borders.SINGLE);
-//      paragraph.setBorderTop(Borders.SINGLE);
-//
-//      paragraph.setBorderRight(Borders.DOUBLE);
-//      paragraph.setBorderLeft(Borders.DOUBLE);
-//      paragraph.setBorderBetween(Borders.SINGLE);
-//
-//      paragraph.setVerticalAlignment(TextAlignment.TOP);
-
       XWPFRun run = paragraph.createRun();
-//      run.setBold(false);
       run.setText(textBody);
-//      run.setBold(true);
       run.setFontFamily("Courier");
-//      run.setUnderline(UnderlinePatterns.DOT_DOT_DASH);
-//      run.setTextPosition(100);
 
       try (ByteArrayOutputStream out = new ByteArrayOutputStream(textBody.length())) {
         doc.write(out);
