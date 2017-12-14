@@ -12,6 +12,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.xml.bind.DatatypeConverter;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,9 +27,9 @@ public class CmsDocumentBlobSegmentTest {
 
   private String docHandle = "0131351421120020*JONESMF 00004";
   private String segmentSequence = "0001";
-  private String docBlob = "test document blob";
+  private byte[] docBlob = "test document blob".getBytes();
 
-  private String newDocBlob = "new test document blob";
+  private byte[] newDocBlob = "new test document blob".getBytes();
   private String newDocHandle = "0131351421120020*JONESMF 99999";
   private String newSegmentSequence = "0002";
 
@@ -140,7 +141,7 @@ public class CmsDocumentBlobSegmentTest {
 
   @Test
   public void testConstraintBlobMinSize() throws Exception {
-    CmsDocumentBlobSegment blob = new CmsDocumentBlobSegment(docHandle, segmentSequence, "");
+    CmsDocumentBlobSegment blob = new CmsDocumentBlobSegment(docHandle, segmentSequence, "".getBytes());
     Set<ConstraintViolation<CmsDocumentBlobSegment>> violations = validator.validate(blob);
 
     assertEquals(1, violations.size());
@@ -155,7 +156,7 @@ public class CmsDocumentBlobSegmentTest {
       buf.append(alphabet);
     }
 
-    final String theBlob = buf.toString();
+    final byte[] theBlob = buf.toString().getBytes();
     CmsDocumentBlobSegment blob = new CmsDocumentBlobSegment(docHandle, segmentSequence, theBlob);
     Set<ConstraintViolation<CmsDocumentBlobSegment>> violations = validator.validate(blob);
 

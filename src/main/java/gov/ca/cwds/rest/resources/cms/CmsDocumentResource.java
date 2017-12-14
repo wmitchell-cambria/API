@@ -88,14 +88,14 @@ public class CmsDocumentResource {
    * 
    * @return {@link Response}
    */
+  @UnitOfWork(value = "cms")
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
-  @ApiOperation(hidden = true, value = "Delete Document - not currently implemented",
-      code = HttpStatus.SC_OK, response = Object.class)
+  @ApiOperation(value = "Delete Document", code = HttpStatus.SC_OK, response = Object.class)
   public Response delete(
       @PathParam("id") @ApiParam(required = true, value = "id of Document to delete") String id) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+    return resourceDelegate.delete(id);
   }
 
   /**
@@ -117,7 +117,7 @@ public class CmsDocumentResource {
       response = CmsDocument.class)
   public Response create(@Valid @ApiParam(hidden = false,
       required = true) gov.ca.cwds.rest.api.domain.cms.CmsDocument doc) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+    return resourceDelegate.create(doc);
   }
 
   /**
