@@ -70,7 +70,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param base64 base64 encoded bytes
    * @return new blobs in order
    */
-  private List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
+  protected List<CmsDocumentBlobSegment> compressPK(final CmsDocument doc, String base64) {
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
     byte[] bytes = DatatypeConverter.parseBase64Binary(base64);
 
