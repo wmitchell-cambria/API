@@ -89,10 +89,10 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       int segmentStart = 0;
       while (segmentStart < compressed.length) {
         final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        final int segmentLenght = min(compressed.length - segmentStart, BLOB_SEGMENT_LENGTH);
+        final int segmentLength = min(compressed.length - segmentStart, BLOB_SEGMENT_LENGTH);
         blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence,
-            Arrays.copyOfRange(compressed,segmentStart, segmentStart + segmentLenght)));
-        segmentStart += segmentLenght;
+            Arrays.copyOfRange(compressed,segmentStart, segmentStart + segmentLength)));
+        segmentStart += segmentLength;
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_PK_FULL);
@@ -126,10 +126,10 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       int segmentStart = 0;
       while (segmentStart < plain.length) {
         final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        final int segmentLenght = min(plain.length - segmentStart, BLOB_SEGMENT_LENGTH);
+        final int segmentLength = min(plain.length - segmentStart, BLOB_SEGMENT_LENGTH);
         blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence,
-                Arrays.copyOfRange(plain,segmentStart, segmentStart + segmentLenght)));
-        segmentStart += segmentLenght;
+                Arrays.copyOfRange(plain,segmentStart, segmentStart + segmentLength)));
+        segmentStart += segmentLength;
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_PLAIN_FULL);
@@ -303,11 +303,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       try (FileOutputStream fos = new FileOutputStream(src);){
         for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
           final byte[] bytes = seg.getDocBlob();
-//          fos.write(bytes, 0, bytes.length);
           fos.write(bytes);
         }
         fos.flush();
-        fos.close();
       } catch (IOException e) {
         errorDecompressing(e);
       }
@@ -368,8 +366,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     }
 
     try (FileOutputStream fos = new FileOutputStream(src);) {
-      final List<String> segments = new ArrayList<>();
-
       final byte[] bytes = DatatypeConverter.parseBase64Binary(base64.trim());
       fos.write(bytes, 0, bytes.length);
       fos.flush();
@@ -392,10 +388,10 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       int segmentStart = 0;
       while (segmentStart < compressed.length) {
         final String sequence = StringUtils.leftPad(String.valueOf(++i), 4, '0');
-        final int segmentLenght = min(compressed.length - segmentStart, BLOB_SEGMENT_LENGTH);
+        final int segmentLength = min(compressed.length - segmentStart, BLOB_SEGMENT_LENGTH);
         blobs.add(new CmsDocumentBlobSegment(doc.getId(), sequence,
-                Arrays.copyOfRange(compressed,segmentStart, segmentStart + segmentLenght)));
-        segmentStart += segmentLenght;
+                Arrays.copyOfRange(compressed,segmentStart, segmentStart + segmentLength)));
+        segmentStart += segmentLength;
       }
 
       doc.setCompressionMethod(COMPRESSION_TYPE_LZW_FULL);
