@@ -76,7 +76,7 @@ import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
 import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
-import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
+import gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResource;
 import gov.ca.cwds.rest.resources.investigation.ContactResource;
 import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
@@ -114,7 +114,7 @@ import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
-import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
+import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
@@ -181,7 +181,7 @@ public class ResourcesModule extends AbstractModule {
     bind(PeopleResource.class);
     bind(GovernmentOrganizationResource.class);
     bind(SafetyAlertsResource.class);
-    bind(HOIScreeningResource.class);
+    bind(InvolvementHistoryResource.class);
     bind(HOIReferralResource.class);
   }
 
@@ -504,11 +504,11 @@ public class ResourcesModule extends AbstractModule {
   }
 
   @Provides
-  @HOIScreeningServiceBackedResource
+  @InvolvementHistoryServiceBackedResource
   public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> screeningHOIServiceBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(HOIScreeningService.class));
+        injector.getInstance(InvolvementHistoryService.class));
   }
 
   @Provides

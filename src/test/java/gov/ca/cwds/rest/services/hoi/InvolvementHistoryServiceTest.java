@@ -23,10 +23,10 @@ import io.dropwizard.jackson.Jackson;
  *
  */
 @SuppressWarnings("javadoc")
-public class HOIScreeningServiceTest {
+public class InvolvementHistoryServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private HOIScreeningService screeningHOIService;
+  private InvolvementHistoryService involvementHistoryService;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -34,7 +34,7 @@ public class HOIScreeningServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    screeningHOIService = new HOIScreeningService();
+    involvementHistoryService = new InvolvementHistoryService();
   }
 
   // find test
@@ -44,7 +44,7 @@ public class HOIScreeningServiceTest {
     InvolvementHistory serialized = MAPPER.readValue(
         fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
         InvolvementHistory.class);
-    Response returned = screeningHOIService.find("999999");
+    Response returned = involvementHistoryService.find("999999");
     assertThat(returned, is(serialized));
   }
 
@@ -52,14 +52,14 @@ public class HOIScreeningServiceTest {
   @Test
   public void deleteThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    screeningHOIService.delete("string");
+    involvementHistoryService.delete("string");
   }
 
   // update test
   @Test
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    screeningHOIService.update("string", null);
+    involvementHistoryService.update("string", null);
   }
 
 
@@ -67,7 +67,7 @@ public class HOIScreeningServiceTest {
   @Test
   public void createThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    screeningHOIService.create(null);
+    involvementHistoryService.create(null);
   }
 
 

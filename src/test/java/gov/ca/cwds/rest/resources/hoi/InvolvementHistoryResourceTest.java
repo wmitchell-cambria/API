@@ -31,7 +31,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
-public class HOIScreeningResourceTest {
+public class InvolvementHistoryResourceTest {
 
   private static final String ROOT_RESOURCE = "/screenings/";
 
@@ -52,7 +52,7 @@ public class HOIScreeningResourceTest {
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new HOIScreeningResource(typedResourceDelegate)).build();
+      .addResource(new InvolvementHistoryResource(typedResourceDelegate)).build();
   /*
    * Load system code cache
    */

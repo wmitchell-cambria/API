@@ -12,8 +12,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.HOIScreeningServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.inject.InvolvementHistoryServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -24,8 +23,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link HOIScreening}. It delegates functions to
- * {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
+ * A resource providing a RESTful interface for {@link InvolvementHistory}. It delegates functions
+ * to {@link TypedResourceDelegate}. It decorates the {@link TypedResourceDelegate} not in
  * functionality but with @see
  * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
  * Annotations</a> and
@@ -38,7 +37,7 @@ import io.swagger.annotations.ApiResponses;
 @Path(value = RESOURCE_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HOIScreeningResource {
+public class InvolvementHistoryResource {
   private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
 
   /**
@@ -47,8 +46,8 @@ public class HOIScreeningResource {
    * @param typedResourceDelegate The resourceDelegate to delegate to.
    */
   @Inject
-  public HOIScreeningResource(
-      @HOIScreeningServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
+  public InvolvementHistoryResource(
+      @InvolvementHistoryServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
