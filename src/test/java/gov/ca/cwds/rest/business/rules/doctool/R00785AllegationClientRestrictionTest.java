@@ -1,10 +1,17 @@
 package gov.ca.cwds.rest.business.rules.doctool;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import org.junit.Before;
 import org.junit.Test;
-import gov.ca.cwds.rest.business.rules.R00785AllegationClientRestriction;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.AllegationResourceBuilder;
+import gov.ca.cwds.rest.api.domain.Allegation;
+import gov.ca.cwds.rest.validation.NotEqual;
 
 /**
  * Test cases for R - 00785 Client Restriction.
@@ -14,34 +21,70 @@ import gov.ca.cwds.rest.business.rules.R00785AllegationClientRestriction;
  */
 public class R00785AllegationClientRestrictionTest {
 
-  @Test
-  public void testValidVictimAndPerpetratorClientId() {
-    String victimClientId = "8769";
-    String perpetratorClientId = "34567";
-    Boolean retValue =
-        new R00785AllegationClientRestriction(victimClientId, perpetratorClientId).isValid();
-    assertThat(retValue, is(equalTo(Boolean.TRUE)));
+  private Validator validator;
 
+  /*
+   * Load system code cache
+   */
+  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+
+
+  /**
+   * 
+   */
+  @Before
+  public void setup() {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
   }
 
+  /**
+   * Test to throw exception when victim and Perpetrator both are same
+   * 
+   * @see NotEqual
+   * 
+   * @throws Exception - Exception
+   */
   @Test
-  public void testValidVictimAndPerpetratorClientIdIsNull() {
-    String victimClientId = "8769";
-    String perpetratorClientId = null;
-    Boolean retValue =
-        new R00785AllegationClientRestriction(victimClientId, perpetratorClientId).isValid();
-    assertThat(retValue, is(equalTo(Boolean.TRUE)));
-
+  public void failsWhenVictimAndPerpetratorAreSame() throws Exception {
+    Allegation toValidate = new AllegationResourceBuilder().setVictimPersonId(1234567890)
+        .setPerpetratorPersonId(1234567890).createAllegation();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
+    assertEquals(1, constraintViolations.size());
+    assertEquals("can not be same as victimPersonId",
+        constraintViolations.iterator().next().getMessage());
   }
 
+  /**
+   * Test to throw exception when victim and Perpetrator both are NOT same
+   * 
+   * @see NotEqual
+   * 
+   * @throws Exception - Exception
+   */
   @Test
-  public void testInValidVictimAndPerpetratorValuesAreSame() {
-    String victimClientId = "8769";
-    String perpetratorClientId = "8769";
-    Boolean retValue =
-        new R00785AllegationClientRestriction(victimClientId, perpetratorClientId).isValid();
-    assertThat(retValue, is(equalTo(Boolean.FALSE)));
-
+  public void successWhenVictimAndPerpetratorAreNotSame() throws Exception {
+    Allegation toValidate = new AllegationResourceBuilder().setVictimPersonId(1234567890)
+        .setPerpetratorPersonId(1234567891).createAllegation();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
+    assertEquals(0, constraintViolations.size());
   }
+
+
+  /**
+   * Test to throw exception when victim and Perpetrator both are NOT same
+   * 
+   * @see NotEqual
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void successWhenPerpetratorIsNull() throws Exception {
+    Allegation toValidate = new AllegationResourceBuilder().setVictimPersonId(1234567890)
+        .setPerpetratorPersonId(0).createAllegation();
+    Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
+    assertEquals(0, constraintViolations.size());
+  }
+
 
 }

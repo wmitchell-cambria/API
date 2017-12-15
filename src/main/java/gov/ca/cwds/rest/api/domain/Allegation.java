@@ -1,17 +1,14 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.validation.NotEqual;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
@@ -25,6 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @ApiModel("nsAllegation")
+@NotEqual(ifProperty = "victimPersonId", thenProperty = "perpetratorPersonId")
 public class Allegation extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;

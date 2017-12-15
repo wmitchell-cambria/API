@@ -26,7 +26,6 @@ import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
-import gov.ca.cwds.rest.business.rules.R00785AllegationClientRestriction;
 import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -462,7 +461,7 @@ public class ScreeningToReferralService implements CrudsService {
       if (validateAllegationVictimExists(victimClientId)) {
         continue;
       }
-      this.validateR00785ClientRestrictionRule(victimClientId, perpatratorClientId);
+
       saveAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
           allegationDispositionType, allegation);
     }
@@ -564,19 +563,5 @@ public class ScreeningToReferralService implements CrudsService {
     this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
 
-  /**
-   * The alleged perpetrator and the alleged victim may not be the same person for a given
-   * allegation.
-   * 
-   * @param victimClientId - victim clientId
-   * @param perpetratorClientId - perpetrator ClientId
-   */
-  private void validateR00785ClientRestrictionRule(String victimClientId,
-      String perpetratorClientId) {
-    if (!new R00785AllegationClientRestriction(victimClientId, perpetratorClientId).isValid()) {
-      throw new ServiceException(
-          "R - 00785 Client Restriction : The alleged perpetrator and the alleged victim may not be the same person for a given allegation");
-    }
 
-  }
 }
