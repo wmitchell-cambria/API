@@ -368,10 +368,13 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
         new AssignmentEntityBuilder().build();
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
+    CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
+    CaseLoad[] caseLoadList = new CaseLoad[1];
+    caseLoadList[0] = caseLoad;
     StaffPerson staffPerson = mock(StaffPerson.class);
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("BTr");
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
     when(caseLoadDao.find(any())).thenReturn(caseload);
 

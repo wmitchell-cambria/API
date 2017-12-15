@@ -34,11 +34,11 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Assignment.findCaseId",
-    query = "SELECT C.id FROM StaffPersonCaseLoad S JOIN CaseLoad C ON S.fkCaseLoad = C.id AND C.endDate IS NULL "
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoadId",
+    query = "SELECT C FROM StaffPersonCaseLoad S JOIN CaseLoad C ON S.fkCaseLoad = C.id AND C.endDate IS NULL "
         + "AND S.fkStaffPerson = :fkStaffPerson AND S.endDate IS NULL "
         + "AND (C.archiveAssociationIndicator = 'N' OR C.archiveAssociationIndicator = 'Y') "
-        + "ORDER BY C.archiveAssociationIndicator DESC")
+        + "AND C.onHoldIndicator = 'N' " + "ORDER BY C.archiveAssociationIndicator DESC")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "ASGNM_T")

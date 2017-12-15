@@ -388,13 +388,16 @@ public class R07577CreateDummyDocsForReferralTest {
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
             new Date());
+    CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
+    CaseLoad[] caseLoadList = new CaseLoad[1];
+    caseLoadList[0] = caseLoad;
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     StaffPerson staffPerson = mock(StaffPerson.class);
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("0X5");
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
     when(caseLoadDao.find(any())).thenReturn(caseload);
 
@@ -531,13 +534,16 @@ public class R07577CreateDummyDocsForReferralTest {
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
             new Date());
+    CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
+    CaseLoad[] caseLoadList = new CaseLoad[1];
+    caseLoadList[0] = caseLoad;
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     StaffPerson staffPerson = mock(StaffPerson.class);
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("0X5");
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
     when(caseLoadDao.find(any())).thenReturn(caseload);
 
@@ -676,11 +682,14 @@ public class R07577CreateDummyDocsForReferralTest {
             new Date());
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(assignmentToCreate);
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
+    CaseLoad[] caseLoadList = new CaseLoad[1];
+    caseLoadList[0] = caseLoad;
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     StaffPerson staffPerson = mock(StaffPerson.class);
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("0X5");
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
     when(caseLoadDao.find(any())).thenReturn(caseload);
 

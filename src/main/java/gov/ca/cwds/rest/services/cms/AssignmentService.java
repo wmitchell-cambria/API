@@ -4,7 +4,6 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +14,6 @@ import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.Assignment;
-import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -24,14 +22,13 @@ import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
-import gov.ca.cwds.rest.business.rules.R03731StartTimeSetting;
+import gov.ca.cwds.rest.business.rules.R02473DefaultReferralAssignment;
 import gov.ca.cwds.rest.business.rules.R04530AssignmentEndDateValidator;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
-import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 
 /**
  * Business layer object serves {@link Assignment}.
@@ -158,81 +155,12 @@ public class AssignmentService implements
    * @param referral - referral
    * @param messageBuilder - messageBuilder
    */
-  // create a default assignment
-  // R - 02473 Default Referral Assignment
-  // R - 02160 Assignment - Caseload Access
   public void createDefaultAssignmentForNewReferral(ScreeningToReferral screeningToReferral,
       String referralId, Referral referral, MessageBuilder messageBuilder) {
-
-    String caseLoadId = "";
-    String COUNTY_CODE = "00";
-    if (staffpersonDao.find(screeningToReferral.getAssigneeStaffId()) == null) {
-      String message = "The given assigneeStaffId is not found";
-      ServiceException se = new ServiceException(message);
-      messageBuilder.addMessageAndLog(message, se, LOGGER);
-    } else {
-      caseLoadId = assignmentDao.findCaseId(screeningToReferral.getAssigneeStaffId());
-      if (caseLoadId == null) {
-        String message = "CaseLoad is not found for the staffperson";
-        ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
-      }
-    }
-
-    if (StringUtils.isNotBlank(caseLoadId)) {
-      final CaseLoad caseLoad = caseLoadDao.find(caseLoadId);
-      COUNTY_CODE = caseLoad.getCountySpecificCode();
-    }
-
-    gov.ca.cwds.rest.api.domain.cms.Assignment da = createDefaultAssignmentToCaseLoad(COUNTY_CODE,
-        referralId, screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
-    messageBuilder.addDomainValidationError(validator.validate(da));
-
-    if (!new R03731StartTimeSetting(referral, da).isValid()) {
-      String message =
-          "Referral Recieved Date/Time does not equal Assignment Start Date/Time (R - 03731)";
-      ServiceException se = new ServiceException(message);
-      messageBuilder.addMessageAndLog(message, se, LOGGER);
-    }
-
-    if ("R".equals(da.getEstablishedForCode())
-        && ("P".equals(da.getTypeOfAssignmentCode()) || ("S".equals(da.getTypeOfAssignmentCode())))
-        || (da.getSecondaryAssignmentRoleType() == 143)) {
-      externalInterfaceTables.createExternalInterfaceReferral(referralId, "C");
-    }
-
-    try {
-      this.create(da);
-    } catch (ServiceException e) {
-      String message = e.getMessage();
-      messageBuilder.addMessageAndLog(message, e, LOGGER);
-    }
-  }
-
-  /**
-   * @param countyCode - county code
-   * @param referralId - referral Id
-   * @param startDateTime - start date of assignment
-   * @param caseLoadId - case load id of assignment
-   * @return - default Assignment
-   */
-  private gov.ca.cwds.rest.api.domain.cms.Assignment createDefaultAssignmentToCaseLoad(
-      String countyCode, String referralId, String startDateTime, String caseLoadId,
-      MessageBuilder messageBuilder) {
-    // #146713651 - BARNEY: Referrals require a default assignment
-    // Default Assignment - referrals will be assigned to the '0X5' staff person ID.
-    //
-    // An assignment is the association between a Staff Person Case Load and the Referral
-    //
-
-    // extract and format the assignment start date/time from the passed start date/time
-    String dateStarted = StartDateTimeValidator.extractStartDate(startDateTime, messageBuilder);
-    String timeStarted = StartDateTimeValidator.extractStartTime(startDateTime, messageBuilder);
-
-    gov.ca.cwds.rest.api.domain.cms.Assignment assignment =
-        new gov.ca.cwds.rest.api.domain.cms.Assignment();
-    return assignment.createDefaultReferralAssignment(countyCode, referralId, caseLoadId,
-        dateStarted, timeStarted);
+    R02473DefaultReferralAssignment r02473DefaultReferralAssignment =
+        new R02473DefaultReferralAssignment(screeningToReferral, referralId, referral,
+            messageBuilder, assignmentDao, externalInterfaceTables, validator, this);
+    r02473DefaultReferralAssignment.execute();
   }
 
   /**

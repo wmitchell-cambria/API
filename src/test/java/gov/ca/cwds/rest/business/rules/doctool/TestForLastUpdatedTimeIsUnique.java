@@ -42,7 +42,9 @@ import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.CaseLoadEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
@@ -484,6 +486,9 @@ public class TestForLastUpdatedTimeIsUnique {
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
             new Date());
+    CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
+    CaseLoad[] caseLoadList = new CaseLoad[1];
+    caseLoadList[0] = caseLoad;
 
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {
@@ -496,7 +501,7 @@ public class TestForLastUpdatedTimeIsUnique {
             return assignmentToCreate;
           }
         });
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
     ScreeningToReferral screeningToReferral = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
 
