@@ -9,8 +9,8 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.fixture.AllegationResourceBuilder;
-import gov.ca.cwds.rest.api.domain.Allegation;
+import gov.ca.cwds.fixture.CmsAllegationResourceBuilder;
+import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.validation.NotEqual;
 
 /**
@@ -47,11 +47,11 @@ public class R00785AllegationClientRestrictionTest {
    */
   @Test
   public void failsWhenVictimAndPerpetratorAreSame() throws Exception {
-    Allegation toValidate = new AllegationResourceBuilder().setVictimPersonId(1234567890)
-        .setPerpetratorPersonId(1234567890).createAllegation();
+    Allegation toValidate = new CmsAllegationResourceBuilder().setVictimClientId("1234567890")
+        .setPerpetratorClientId("1234567890").buildCmsAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
-    assertEquals("can not be same as victimPersonId",
+    assertEquals("can not be same as victimClientId",
         constraintViolations.iterator().next().getMessage());
   }
 
@@ -64,8 +64,8 @@ public class R00785AllegationClientRestrictionTest {
    */
   @Test
   public void successWhenVictimAndPerpetratorAreNotSame() throws Exception {
-    Allegation toValidate = new AllegationResourceBuilder().setVictimPersonId(1234567890)
-        .setPerpetratorPersonId(1234567891).createAllegation();
+    Allegation toValidate = new CmsAllegationResourceBuilder().setVictimClientId("1234567890")
+        .setPerpetratorClientId("1234567891").buildCmsAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -80,8 +80,8 @@ public class R00785AllegationClientRestrictionTest {
    */
   @Test
   public void successWhenPerpetratorIsNull() throws Exception {
-    Allegation toValidate = new AllegationResourceBuilder().setVictimPersonId(1234567890)
-        .setPerpetratorPersonId(0).createAllegation();
+    Allegation toValidate = new CmsAllegationResourceBuilder().setVictimClientId("1234567890")
+        .setPerpetratorClientId(null).buildCmsAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
