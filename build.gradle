@@ -205,7 +205,7 @@ tasks.withType(Test) {
     // Set system properties for the test JVM(s).
     // Gradle passed the literal string '$rootProject.projectDir' ???
     // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
-    systemProperty 'java.library.path', '.:./lib:/var/lib/jenkins/workspace/API/lib:/usr/local/lib'
+    systemProperty 'java.library.path', '.:./lib:/opt/jenkins/workspace/taborda-API/lib:/usr/local/lib'
 }
 
 test {
