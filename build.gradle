@@ -50,7 +50,7 @@ mainClassName = mainclass
 repositories {
     mavenCentral()
     maven {
-        url "http://maven2.cwds.tabordasolutions.net"
+        url "http://sonar.dev.cwds.io:8081/artifactory/repo"
         // url "https://plugins.gradle.org/m2/"
     }
     maven {
