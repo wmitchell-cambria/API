@@ -56,7 +56,8 @@ node ('tpt4-slave'){
    }
    stage('Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
+       junit '**/build/test-results/*.xml'
+       jacoco()
    }
    stage('SonarQube analysis'){
 		withSonarQubeEnv('Core-SonarQube') {
@@ -86,6 +87,7 @@ node ('tpt4-slave'){
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
  }finally {
+       archiveArtifacts artifacts: '/var/lib/jenkins/workspace/API/build/docs/javadoc', onlyIfSuccessful: true
        cleanWs()
  }
 }
