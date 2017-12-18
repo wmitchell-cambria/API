@@ -5,7 +5,7 @@ package gov.ca.cwds.rest.business;
  *
  * Validators are responsible for checking if rule is implemented correctly.
  */
-public interface RuleValidatator {
+public interface RuleValidator {
 
   /**
    * @return the valid boolean

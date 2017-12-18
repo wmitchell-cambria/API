@@ -374,7 +374,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     StaffPerson staffPerson = mock(StaffPerson.class);
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("BTr");
-    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
+    when(assignmentDao.findCaseLoads(any(String.class))).thenReturn(caseLoadList);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();
     when(caseLoadDao.find(any())).thenReturn(caseload);
 

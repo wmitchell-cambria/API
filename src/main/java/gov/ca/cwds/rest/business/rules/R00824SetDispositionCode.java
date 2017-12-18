@@ -8,7 +8,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * 
@@ -24,7 +24,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  * @author CWDS API Team
  *
  */
-public class R00824SetDispositionCode implements RuleValidatator {
+public class R00824SetDispositionCode implements RuleValidator {
 
   private static final int APPROVED = 122;
   private static final int ADULT = 19;

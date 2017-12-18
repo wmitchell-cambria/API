@@ -29,12 +29,12 @@ public class AssignmentDao extends CrudsDaoImpl<Assignment> {
 
   /**
    * @param staffPersonId - staffPerson Id
-   * @return the caseLoad Id
+   * @return the caseLoads
    */
   @SuppressWarnings("unchecked")
-  public CaseLoad[] findCaseLoadId(String staffPersonId) {
+  public CaseLoad[] findCaseLoads(String staffPersonId) {
     Query<CaseLoad> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoadId")
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoads")
         .setParameter("fkStaffPerson", staffPersonId);
     return query.list().toArray(new CaseLoad[0]);
 

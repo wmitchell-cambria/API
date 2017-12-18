@@ -168,13 +168,13 @@ public class AssignmentDaoIT {
 
   @Test
   public void testWhenCaseLoadIdFound() throws Exception {
-    CaseLoad[] caseLoad = assignmentDao.findCaseLoadId("0Al");
+    CaseLoad[] caseLoad = assignmentDao.findCaseLoads("0Al");
     assertThat(caseLoad[0].getId(), is(equalTo("12z5Qos09B")));
   }
 
   @Test
   public void testWhenCaseLoadIdNotFound() throws Exception {
-    CaseLoad[] caseLoad = assignmentDao.findCaseLoadId("q1p");
+    CaseLoad[] caseLoad = assignmentDao.findCaseLoads("q1p");
     assertThat(caseLoad.length, is(0));
   }
 

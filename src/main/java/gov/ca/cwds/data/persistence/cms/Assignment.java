@@ -34,7 +34,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoadId",
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoads",
     query = "SELECT C FROM StaffPersonCaseLoad S JOIN CaseLoad C ON S.fkCaseLoad = C.id AND C.endDate IS NULL "
         + "AND S.fkStaffPerson = :fkStaffPerson AND S.endDate IS NULL "
         + "AND (C.archiveAssociationIndicator = 'N' OR C.archiveAssociationIndicator = 'Y') "

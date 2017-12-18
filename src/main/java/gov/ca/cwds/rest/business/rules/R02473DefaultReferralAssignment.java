@@ -75,7 +75,7 @@ public class R02473DefaultReferralAssignment implements RuleAction {
     CaseLoad[] caseLoads = null;
     String countyCode = "00";
 
-    caseLoads = assignmentDao.findCaseLoadId(screeningToReferral.getAssigneeStaffId());
+    caseLoads = assignmentDao.findCaseLoads(screeningToReferral.getAssigneeStaffId());
     if (caseLoads != null && caseLoads.length > 0) {
       caseLoad = caseLoads[0];
     }
@@ -88,14 +88,15 @@ public class R02473DefaultReferralAssignment implements RuleAction {
       countyCode = caseLoad.getCountySpecificCode();
     }
 
-    gov.ca.cwds.rest.api.domain.cms.Assignment da = createDefaultAssignmentToCaseLoad(countyCode,
-        referralId, screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
-    messageBuilder.addDomainValidationError(validator.validate(da));
+    gov.ca.cwds.rest.api.domain.cms.Assignment defaultAssignment =
+        createDefaultAssignmentToCaseLoad(countyCode, referralId,
+            screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
+    messageBuilder.addDomainValidationError(validator.validate(defaultAssignment));
 
-    setStartTime(da);
-    createExternalInterface(da);
+    setStartTime(defaultAssignment);
+    createExternalInterface(defaultAssignment);
     try {
-      this.assignmentService.create(da);
+      this.assignmentService.create(defaultAssignment);
     } catch (ServiceException e) {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);

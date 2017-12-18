@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.business.rules;
 
 import java.util.Date;
 
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * 
@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  * @author CWDS API Team
  */
 
-public class R05904ContactStartedAt implements RuleValidatator {
+public class R05904ContactStartedAt implements RuleValidator {
 
   private Date contactStartedAtDateTime;
   private Date referralReceivedDateTime;

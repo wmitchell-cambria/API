@@ -501,7 +501,7 @@ public class TestForLastUpdatedTimeIsUnique {
             return assignmentToCreate;
           }
         });
-    when(assignmentDao.findCaseLoadId(any(String.class))).thenReturn(caseLoadList);
+    when(assignmentDao.findCaseLoads(any(String.class))).thenReturn(caseLoadList);
     ScreeningToReferral screeningToReferral = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
 
