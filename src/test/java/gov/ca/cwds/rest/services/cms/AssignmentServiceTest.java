@@ -19,6 +19,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseDao;
+import gov.ca.cwds.data.cms.CaseLoadDao;
+import gov.ca.cwds.data.cms.CountyOwnershipDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,12 +36,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import gov.ca.cwds.data.cms.AssignmentDao;
-import gov.ca.cwds.data.cms.CaseLoadDao;
-import gov.ca.cwds.data.cms.CountyOwnershipDao;
-import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AssignmentResourceBuilder;
@@ -47,7 +50,6 @@ import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
 
 /**
  * @author CWDS API Team
@@ -66,11 +68,13 @@ public class AssignmentServiceTest {
   private CountyOwnershipDao countyOwnershipDao;
   private ReferralDao referralDao;
   private ReferralClientDao referralClientDao;
-  private RIAssignment riAssignment;
   private MessageBuilder messageBuilder;
   private ScreeningToReferral screeningToReferral;
   private CaseLoadDao caseLoadDao;
   private Date lastUpdatedTime = new Date();
+  private CaseDao caseDao;
+  private AssignmentUnitDao assignmentUnitDao;
+  private CwsOfficeDao cwsOfficeDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -87,14 +91,17 @@ public class AssignmentServiceTest {
     countyOwnershipDao = mock(CountyOwnershipDao.class);
     referralDao = mock(ReferralDao.class);
     referralClientDao = mock(ReferralClientDao.class);
-    riAssignment = mock(RIAssignment.class);
     messageBuilder = mock(MessageBuilder.class);
     screeningToReferral = mock(ScreeningToReferral.class);
     caseLoadDao = mock(CaseLoadDao.class);
+    caseDao = mock(CaseDao.class);
+    assignmentUnitDao = mock(AssignmentUnitDao.class);
+    cwsOfficeDao = mock(CwsOfficeDao.class);
     nonLACountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
   }
 

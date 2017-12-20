@@ -28,7 +28,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @SuppressWarnings("serial")
 public class ReferralAssignment extends BaseAssignment {
 
-  private static final String FOLDED_KEY_CODE = "R";
+  public static final String FOLDED_KEY_CODE = "R";
 
   /**
    * Declare foreign key from Assignment to Referral.

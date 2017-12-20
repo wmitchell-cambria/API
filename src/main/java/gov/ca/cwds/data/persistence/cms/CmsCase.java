@@ -292,6 +292,10 @@ public class CmsCase extends CmsPersistentObject {
     return governmentEntityType;
   }
 
+  public void setGovernmentEntityType(Short governmentEntityType) {
+    this.governmentEntityType = governmentEntityType;
+  }
+
   public String getIcpcOutgngPlcmtStatusIndVar() {
     return icpcOutgngPlcmtStatusIndVar;
   }

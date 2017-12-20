@@ -5,11 +5,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -110,7 +110,7 @@ public class HOIReporterTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     HOIReporter empty = new HOIReporter();
-    assertThat(empty.getClass(), is(HOIReporter.class));
+    assertNotNull(empty);
   }
 
 

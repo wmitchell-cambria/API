@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -174,7 +173,7 @@ public class HOIReferralTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     HOIReferral empty = new HOIReferral();
-    assertThat(empty.getClass(), is(HOIReferral.class));
+    Assert.assertNotNull(empty);
   }
 
 }
