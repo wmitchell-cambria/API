@@ -20,7 +20,15 @@ import gov.ca.cwds.rest.validation.VictimAgeRestriction;
 public class R00786VictimAgeRestriction
     implements ConstraintValidator<VictimAgeRestriction, ScreeningToReferral> {
 
-  public static final Short MAX_VICTIM_AGE_YEARS = 18;
+  /**
+   * Days in one year
+   */
+  public static final double ONE_YEAR_DAYS = 365.2425;
+
+  /**
+   * 18 years
+   */
+  public static final int MAX_VICTIM_AGE_DAYS = (int) (18 * ONE_YEAR_DAYS);
 
   /*
    * (non-Javadoc)
@@ -45,11 +53,11 @@ public class R00786VictimAgeRestriction
 
     if (!victims.isEmpty()) {
       String referralReceiveTimestampStr = screening.getStartedAt();
-      DateTime referralReceiveTimestamp =
+      DateTime referralReceiveDate =
           new DateTime(DomainChef.uncookDateString(referralReceiveTimestampStr));
 
-      // Subtract 18 years from referral receive time
-      DateTime victimOverAgeDate = referralReceiveTimestamp.minusYears(MAX_VICTIM_AGE_YEARS);
+      // Subtract MAX_VICTIM_AGE_DAYS from referral receive date
+      DateTime victimOverAgeDate = referralReceiveDate.minusDays(MAX_VICTIM_AGE_DAYS);
 
       for (Participant victim : victims) {
         boolean overage = isVictimOverAge(victim, victimOverAgeDate);
@@ -66,10 +74,12 @@ public class R00786VictimAgeRestriction
   private Collection<Participant> getVictims(Collection<Participant> participants) {
     List<Participant> victims = new ArrayList<>();
 
-    for (Participant participant : participants) {
-      Set<String> roles = participant.getRoles();
-      if (roles != null && roles.contains(Role.VICTIM_ROLE.getType())) {
-        victims.add(participant);
+    if (participants != null) {
+      for (Participant participant : participants) {
+        Set<String> roles = participant.getRoles();
+        if (roles != null && roles.contains(Role.VICTIM_ROLE.getType())) {
+          victims.add(participant);
+        }
       }
     }
     return victims;
