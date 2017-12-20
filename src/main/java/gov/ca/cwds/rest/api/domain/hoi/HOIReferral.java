@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,15 +13,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.LimitedAccessType;
-import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.util.FerbDateUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
@@ -220,97 +216,5 @@ public class HOIReferral extends ApiObjectIdentity
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
-
-  public static void main(String[] args) throws Exception {
-    HOIReferral referral = new HOIReferral();
-
-    AccessLimitation accessLimitation = new AccessLimitation();
-    accessLimitation.setLimitedAccessCode(LimitedAccessType.SEALED);
-    accessLimitation.setLimitedAccessDate(new Date());
-    accessLimitation.setLimitedAccessDescription("bla bla blah");
-    SystemCodeDescriptor govtEntity = new SystemCodeDescriptor();
-    govtEntity.setId((short) 1101);
-    govtEntity.setDescription("Sacramento");
-    accessLimitation.setLimitedAccessGovernmentEntity(govtEntity);
-    referral.setAccessLimitation(accessLimitation);
-
-
-    HOIAllegation allegation = new HOIAllegation();
-    SystemCodeDescriptor type = new SystemCodeDescriptor();
-    type.setId((short) 2179);
-    type.setDescription("Physical Abuse");
-
-    SystemCodeDescriptor aleggationDisposition = new SystemCodeDescriptor();
-    aleggationDisposition.setId((short) 45);
-    aleggationDisposition.setDescription("Substantiated");
-    allegation.setDisposition(aleggationDisposition);
-
-    allegation.setId("jhdgfkhaj");
-    allegation.setLegacyDescriptor(new LegacyDescriptor("jhdgfkhaj", "jhdgfkhaj-hohj-jkj",
-        new DateTime(), LegacyTable.ALLEGATION.getName(), LegacyTable.ALLEGATION.getDescription()));
-
-    HOIVictim victim = new HOIVictim();
-    victim.setFirstName("Victim First Name");
-    victim.setLastName("Victim Last Name");
-    victim.setId("iiiiiii");
-    victim.setLegacyDescriptor(new LegacyDescriptor("iiiiiii", "iiiiiii-hohj-jkj", new DateTime(),
-        LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
-    victim.setLimitedAccessType(LimitedAccessType.SEALED);
-    allegation.setVictim(victim);
-
-    HOIPerpetrator perpetrator = new HOIPerpetrator();
-    perpetrator.setFirstName("Perpetrator First Name");
-    perpetrator.setLastName("Perpetrator Last Name");
-    perpetrator.setId("pppppppp");
-    perpetrator.setLegacyDescriptor(new LegacyDescriptor("pppppppp", "pppppppp-hohj-jkj",
-        new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
-    perpetrator.setLimitedAccessType(LimitedAccessType.NONE);
-    allegation.setPerpetrator(perpetrator);
-
-    List<HOIAllegation> allegations = new ArrayList<>();
-    allegations.add(allegation);
-    referral.setAllegations(allegations);
-
-    HOISocialWorker socialWorker = new HOISocialWorker();
-    socialWorker.setFirstName("Worker First Name");
-    socialWorker.setLastName("Worker Last Name");
-    socialWorker.setId("jhgguhgjh");
-    socialWorker
-        .setLegacyDescriptor(new LegacyDescriptor("jhgguhgjh", "jhgguhgjh-hohj-jkj", new DateTime(),
-            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription()));
-    referral.setAssignedSocialWorker(socialWorker);
-
-
-    SystemCodeDescriptor county = new SystemCodeDescriptor();
-    county.setId((short) 1101);
-    county.setDescription("Sacramento");
-    referral.setCounty(county);
-
-    referral.setEndDate(new Date());
-    referral.setId("jhvuify0X5");
-
-    referral.setLegacyDescriptor(new LegacyDescriptor("jhvuify0X5", "jhgguhgjh-hohj-jkj",
-        new DateTime(), LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription()));
-
-
-    HOIReporter reporter = new HOIReporter();
-    reporter.setFirstName("Reporter First Name");
-    reporter.setLastName("Reporter Last Name");
-    reporter.setId("jhgjhgjh");
-    reporter.setLegacyDescriptor(new LegacyDescriptor("jhgjhgjh", "jhgjhgjh-hohj-jkj",
-        new DateTime(), LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription()));
-    referral.setReporter(reporter);
-
-    SystemCodeDescriptor responseTime = new SystemCodeDescriptor();
-    responseTime.setId((short) 1518);
-    responseTime.setDescription("5 Day");
-    referral.setResponseTime(responseTime);
-
-    referral.setStartDate(new Date());
-
-    String json = ObjectMapperUtils.createObjectMapper().writeValueAsString(referral);
-    LOGGER.info(json);
-  }
-
 
 }

@@ -172,12 +172,6 @@ public class HOIReferralTest {
   }
 
   @Test
-  public void main_Args__StringArray() throws Exception {
-    String[] args = new String[] {};
-    HOIReferral.main(args);
-  }
-
-  @Test
   public void testEmptyConstructor() throws Exception {
     HOIReferral empty = new HOIReferral();
     assertThat(empty.getClass(), is(HOIReferral.class));

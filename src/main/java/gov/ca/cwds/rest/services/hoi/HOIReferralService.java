@@ -68,7 +68,13 @@ public class HOIReferralService
 
       return hoiReferralResponse;
     }
-    return null;
+    return emptyHoiReferralResponse();
+  }
+
+  private HOIReferralResponse emptyHoiReferralResponse() {
+    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
+    hoiReferralResponse.setHoiReferrals(new ArrayList<>());
+    return hoiReferralResponse;
   }
 
   private void fetchEachReferral(HOIReferralResponse hoiReferralResponse,

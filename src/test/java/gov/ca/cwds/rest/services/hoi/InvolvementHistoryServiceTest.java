@@ -1,8 +1,10 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
@@ -15,6 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.resources.hoi.HOICaseResource;
+import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
 import io.dropwizard.jackson.Jackson;
 
 /***
@@ -26,6 +30,8 @@ import io.dropwizard.jackson.Jackson;
 public class InvolvementHistoryServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
+  private HOICaseResource hoicaseResource;
+  private HOIReferralResource hoireferralResource;
   private InvolvementHistoryService involvementHistoryService;
 
   @Rule
@@ -34,13 +40,14 @@ public class InvolvementHistoryServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    involvementHistoryService = new InvolvementHistoryService();
+    hoicaseResource = mock(HOICaseResource.class);
+    hoireferralResource = mock(HOIReferralResource.class);
+    involvementHistoryService = new InvolvementHistoryService(hoicaseResource, hoireferralResource);
   }
 
   // find test
   @Test
   public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
-
     InvolvementHistory serialized = MAPPER.readValue(
         fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
         InvolvementHistory.class);
@@ -70,5 +77,11 @@ public class InvolvementHistoryServiceTest {
     involvementHistoryService.create(null);
   }
 
+  @Test
+  public void instantiation() throws Exception {
+    InvolvementHistoryService target =
+        new InvolvementHistoryService(hoicaseResource, hoireferralResource);
+    assertThat(target, notNullValue());
+  }
 
 }
