@@ -18,14 +18,14 @@ import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * CWDS API Team
- *
+ * <p>
  * R - 01054 Prmary Assignment Adding
- *
- * Rule Text
+ * <p>
+ * Rule Text<br>
  * When adding a Primary Assignment (to a CASE or REFERRAL) set the CASE/REFERRAL.Government_Entity_Type to the CWS_Office.Government_Entity_Type of the Primary Assignment.
- *
- * Access Logic
- * Set CASE/REFERRAL.Government_Entity_Type = ASSIGNMENT (where .Type_Of_Assignment_Code = 'P')> CASELOAD> ASSIGNMENT_UNIT> CWS_OFFICE.Government_Entity_Type.
+ * <p>
+ * Access Logic<br>
+ * Set CASE/REFERRAL.Government_Entity_Type = ASSIGNMENT (where .Type_Of_Assignment_Code = 'P')&gt CASELOAD&gt ASSIGNMENT_UNIT&gt CWS_OFFICE.Government_Entity_Type.
  */
 public class R01054PrimaryAssignmentAdding implements RuleAction {
   private ReferralDao referralDao;
