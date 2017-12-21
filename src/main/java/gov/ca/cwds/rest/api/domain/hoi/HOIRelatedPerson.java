@@ -1,7 +1,9 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 
@@ -10,6 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  * 
  * @author CWDS API Team
  */
+@JsonPropertyOrder({"id", "first_name", "last_name", "legacy_descriptor", "relationship"})
 public class HOIRelatedPerson extends HOIPerson {
 
   /**
@@ -28,6 +31,23 @@ public class HOIRelatedPerson extends HOIPerson {
    */
   public HOIRelatedPerson() {
     super();
+  }
+
+  /**
+   * 
+   * @param id id
+   * @param firstName first name
+   * @param lastName last name
+   * @param legacyDescriptor legacy descriptor
+   * @param relationship relationship
+   * @param limitedAccessType limited access type
+   */
+  public HOIRelatedPerson(String id, String firstName, String lastName,
+      LegacyDescriptor legacyDescriptor, SystemCodeDescriptor relationship,
+      LimitedAccessType limitedAccessType) {
+    super(id, firstName, lastName, legacyDescriptor);
+    this.relationship = relationship;
+    this.limitedAccessType = limitedAccessType;
   }
 
   public LimitedAccessType getLimitedAccessType() {
