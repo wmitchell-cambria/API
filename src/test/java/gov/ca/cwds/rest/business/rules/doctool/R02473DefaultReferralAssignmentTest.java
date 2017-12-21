@@ -15,12 +15,20 @@ import java.util.List;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.data.cms.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseDao;
+import gov.ca.cwds.data.cms.CaseLoadDao;
+import gov.ca.cwds.data.cms.CountyOwnershipDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AssignmentResourceBuilder;
@@ -35,7 +43,6 @@ import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
 
 public class R02473DefaultReferralAssignmentTest {
 
@@ -78,11 +85,12 @@ public class R02473DefaultReferralAssignmentTest {
     caseDao = mock(CaseDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
+    when(screeningToReferral.getAssigneeStaffId()).thenReturn("0X5");
     nonLACountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
-        caseDao, assignmentUnitDao, cwsOfficeDao, messageBuilder);
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
   }
 
@@ -105,6 +113,27 @@ public class R02473DefaultReferralAssignmentTest {
     assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, "ABC1234567",
         referral, messageBuilder);
     verify(assignmentDao, times(1)).create(any());
+  }
+
+  @Test
+  public void shouldNotSaveWhenAssigneeIdIsDifferentFromCurrentUserId() throws Exception {
+
+    Referral referral = new ReferralResourceBuilder().build();
+
+    Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
+    gov.ca.cwds.data.persistence.cms.Assignment toCreate =
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
+            lastUpdatedTime);
+    when(screeningToReferral.getAssigneeStaffId()).thenReturn("con");
+    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
+        .thenReturn(toCreate);
+    CaseLoad caseload = new CaseLoadEntityBuilder().build();
+    when(caseLoadDao.find(any())).thenReturn(caseload);
+
+    assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, "ABC1234567",
+        referral, messageBuilder);
+
+    verify(assignmentDao, times(0)).create(any());
   }
 
   @Test

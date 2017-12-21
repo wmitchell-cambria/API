@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
@@ -33,8 +32,7 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 @JsonPropertyOrder({"id", "startDate", "endDate", "county", "responseTime", "reporter",
     "assignedSocialWorker", "accessLimitation", "allegations", "legacyDescriptor"})
-public class HOIReferral extends ApiObjectIdentity
-    implements ApiTypedIdentifier<String>, Request, Response {
+public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferral.class);
 

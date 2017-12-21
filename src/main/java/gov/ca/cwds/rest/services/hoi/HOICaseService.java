@@ -219,6 +219,7 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
 
   @Override
   protected HOICaseResponse handleRequest(HOICase req) {
+    LOGGER.info("HOICaseService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
 
