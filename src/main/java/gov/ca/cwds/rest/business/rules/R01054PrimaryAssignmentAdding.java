@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * When adding a Primary Assignment (to a CASE or REFERRAL) set the CASE/REFERRAL.Government_Entity_Type to the CWS_Office.Government_Entity_Type of the Primary Assignment.
  * <p>
  * Access Logic<br>
- * Set CASE/REFERRAL.Government_Entity_Type = ASSIGNMENT (where .Type_Of_Assignment_Code = 'P')&gt CASELOAD&gt ASSIGNMENT_UNIT&gt CWS_OFFICE.Government_Entity_Type.
+ * Set CASE/REFERRAL.Government_Entity_Type = ASSIGNMENT (where .Type_Of_Assignment_Code = 'P')&gt; CASELOAD&gt ASSIGNMENT_UNIT&gt; CWS_OFFICE.Government_Entity_Type.
  */
 public class R01054PrimaryAssignmentAdding implements RuleAction {
   private ReferralDao referralDao;
