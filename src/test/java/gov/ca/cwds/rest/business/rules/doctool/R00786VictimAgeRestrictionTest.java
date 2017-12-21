@@ -49,9 +49,11 @@ public class R00786VictimAgeRestrictionTest {
   @Test
   public void testVictimAgeNotOver() {
     // check with age = 10 years
-    int age = 10;
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
-    assertEquals(0, constraintViolations.size());
+    int ageYears = 10;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
   }
 
   /**
@@ -60,9 +62,11 @@ public class R00786VictimAgeRestrictionTest {
   @Test
   public void testVictimAgeMax() {
     // check with age = 18 years
-    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
-    assertEquals(0, constraintViolations.size());
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
   }
 
   /**
@@ -71,9 +75,11 @@ public class R00786VictimAgeRestrictionTest {
   @Test
   public void testVictimAgeBelowMax() {
     // check with age = 18 years - 1 year
-    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS - 1;
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
-    assertEquals(0, constraintViolations.size());
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS - 1;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
   }
 
   /**
@@ -82,18 +88,49 @@ public class R00786VictimAgeRestrictionTest {
   @Test
   public void testVictimAgeOver() {
     // check with age = 18 years + 1 year
-    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS + 1;
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
-    assertEquals(1, constraintViolations.size());
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS + 1;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 1;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age slightly over maximum allowed
+   */
+  @Test
+  public void testVictimAgeSlightlyOver() {
+    // check with age = 18 years + 1 day
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
+    int underAgeDays = 0;
+    int overAgeDays = 1;
+    int expectedViolations = 1;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age slightly under maximum allowed
+   */
+  @Test
+  public void testVictimAgeSlightlyUnder() {
+    // check with age = 18 years - 1 day
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
+    int underAgeDays = 1;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
   }
 
   /**
    * Create ScreeningToReferral for test and validate it for give victim age.
    * 
-   * @param victimAgeDays Victim age in days
-   * @return Validation result.
+   * @param victimAgeYears
+   * @param overAgeDays
+   * @param underAgeDays
+   * @param expectedViolations
    */
-  private Set<ConstraintViolation<ScreeningToReferral>> validate(int victimAgeYears) {
+  private void validateVictimAge(int victimAgeYears, int overAgeDays, int underAgeDays,
+      int expectedViolations) {
     String screeningStartedAt = "2017-01-01T00:00:00.000-08:00";
     DateTime screeningStartedAtDateTime =
         new DateTime(DomainChef.uncookDateString(screeningStartedAt));
@@ -101,8 +138,8 @@ public class R00786VictimAgeRestrictionTest {
     ScreeningToReferralResourceBuilder builder = new ScreeningToReferralResourceBuilder();
     builder.setStartedAt(screeningStartedAt);
 
-    String victimDob =
-        DomainChef.cookDate(screeningStartedAtDateTime.minusYears(victimAgeYears).toDate());
+    String victimDob = DomainChef.cookDate(screeningStartedAtDateTime.minusYears(victimAgeYears)
+        .minusDays(overAgeDays).plusDays(underAgeDays).toDate());
     Participant victim = new ParticipantResourceBuilder().setGender("M").setDateOfBirth(victimDob)
         .createVictimParticipant();
 
@@ -115,6 +152,9 @@ public class R00786VictimAgeRestrictionTest {
 
     ScreeningToReferral screeingToReferral = builder.createScreeningToReferral();
 
-    return validator.validate(screeingToReferral);
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeingToReferral);
+
+    assertEquals(expectedViolations, constraintViolations.size());
   }
 }
