@@ -4,14 +4,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
+import org.junit.Test;
 
 /**
  * @author CWDS API Team
@@ -128,7 +129,7 @@ public class HOIAllegationTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     HOIAllegation empty = new HOIAllegation();
-    assertThat(empty.getClass(), is(HOIAllegation.class));
+    assertNotNull(empty);
   }
 
   @Test

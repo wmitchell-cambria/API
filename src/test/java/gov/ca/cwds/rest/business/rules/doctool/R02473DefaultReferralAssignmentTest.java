@@ -15,17 +15,12 @@ import java.util.List;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.cms.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.cms.AssignmentDao;
-import gov.ca.cwds.data.cms.CaseLoadDao;
-import gov.ca.cwds.data.cms.CountyOwnershipDao;
-import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AssignmentResourceBuilder;
@@ -54,10 +49,12 @@ public class R02473DefaultReferralAssignmentTest {
   private CountyOwnershipDao countyOwnershipDao;
   private ReferralDao referralDao;
   private ReferralClientDao referralClientDao;
-  private RIAssignment riAssignment;
   private MessageBuilder messageBuilder;
   private ScreeningToReferral screeningToReferral;
   private CaseLoadDao caseLoadDao;
+  private CaseDao caseDao;
+  private AssignmentUnitDao assignmentUnitDao;
+  private CwsOfficeDao cwsOfficeDao;
   private Date lastUpdatedTime = new Date();
 
   @Rule
@@ -75,14 +72,17 @@ public class R02473DefaultReferralAssignmentTest {
     countyOwnershipDao = mock(CountyOwnershipDao.class);
     referralDao = mock(ReferralDao.class);
     referralClientDao = mock(ReferralClientDao.class);
-    riAssignment = mock(RIAssignment.class);
     messageBuilder = mock(MessageBuilder.class);
     screeningToReferral = mock(ScreeningToReferral.class);
     caseLoadDao = mock(CaseLoadDao.class);
+    caseDao = mock(CaseDao.class);
+    cwsOfficeDao = mock(CwsOfficeDao.class);
+    assignmentUnitDao = mock(AssignmentUnitDao.class);
     nonLACountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
+        caseDao, assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
   }
 

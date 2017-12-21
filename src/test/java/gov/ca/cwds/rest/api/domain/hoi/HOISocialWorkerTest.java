@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import org.joda.time.DateTime;
@@ -107,7 +108,7 @@ public class HOISocialWorkerTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     HOISocialWorker empty = new HOISocialWorker();
-    assertThat(empty.getClass(), is(HOISocialWorker.class));
+    assertNotNull(empty);
   }
 
 
