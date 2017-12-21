@@ -11,6 +11,7 @@ import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.business.RuleAction;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
@@ -70,36 +71,39 @@ public class R02473DefaultReferralAssignment implements RuleAction {
 
   @Override
   public void execute() {
-    CaseLoad caseLoad = null;
-    String caseLoadId = null;
-    CaseLoad[] caseLoads = null;
-    String countyCode = "00";
 
-    caseLoads = assignmentDao.findCaseLoads(screeningToReferral.getAssigneeStaffId());
-    if (caseLoads != null && caseLoads.length > 0) {
-      caseLoad = caseLoads[0];
-    }
-    if (caseLoad == null) {
-      String message = "Caseload is either inactive or on hold";
-      ServiceException se = new ServiceException(message);
-      messageBuilder.addMessageAndLog(message, se, LOGGER);
-    } else {
-      caseLoadId = caseLoad.getId();
-      countyCode = caseLoad.getCountySpecificCode();
-    }
+    if (isValidAssigneeStaffId(screeningToReferral)) {
+      CaseLoad caseLoad = null;
+      String caseLoadId = null;
+      CaseLoad[] caseLoads = null;
+      String countyCode = "00";
 
-    gov.ca.cwds.rest.api.domain.cms.Assignment defaultAssignment =
-        createDefaultAssignmentToCaseLoad(countyCode, referralId,
-            screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
-    messageBuilder.addDomainValidationError(validator.validate(defaultAssignment));
+      caseLoads = assignmentDao.findCaseLoads(screeningToReferral.getAssigneeStaffId());
+      if (caseLoads != null && caseLoads.length > 0) {
+        caseLoad = caseLoads[0];
+      }
+      if (caseLoad == null) {
+        String message = "Caseload is either inactive or on hold";
+        ServiceException se = new ServiceException(message);
+        messageBuilder.addMessageAndLog(message, se, LOGGER);
+      } else {
+        caseLoadId = caseLoad.getId();
+        countyCode = caseLoad.getCountySpecificCode();
+      }
 
-    setStartTime(defaultAssignment);
-    createExternalInterface(defaultAssignment);
-    try {
-      this.assignmentService.create(defaultAssignment);
-    } catch (ServiceException e) {
-      String message = e.getMessage();
-      messageBuilder.addMessageAndLog(message, e, LOGGER);
+      gov.ca.cwds.rest.api.domain.cms.Assignment defaultAssignment =
+          createDefaultAssignmentToCaseLoad(countyCode, referralId,
+              screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
+      messageBuilder.addDomainValidationError(validator.validate(defaultAssignment));
+
+      setStartTime(defaultAssignment);
+      createExternalInterface(defaultAssignment);
+      try {
+        this.assignmentService.create(defaultAssignment);
+      } catch (ServiceException e) {
+        String message = e.getMessage();
+        messageBuilder.addMessageAndLog(message, e, LOGGER);
+      }
     }
 
   }
@@ -139,6 +143,15 @@ public class R02473DefaultReferralAssignment implements RuleAction {
         new gov.ca.cwds.rest.api.domain.cms.Assignment();
     return assignment.createDefaultReferralAssignment(countyCode, referralId, caseLoadId,
         dateStarted, timeStarted);
+  }
+
+  private boolean isValidAssigneeStaffId(ScreeningToReferral screeningToReferral) {
+    if (!screeningToReferral.getAssigneeStaffId()
+        .equals(RequestExecutionContext.instance().getStaffId())) {
+      messageBuilder.addError("Assignee Staff Id is not the same as logged in User Staff Id");
+      return false;
+    }
+    return true;
   }
 
 }

@@ -5,13 +5,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.Set;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
@@ -35,16 +46,6 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressEntityBuilder;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
@@ -177,7 +178,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
    */
   @Before
   public void setup() throws Exception {
-    new TestingRequestExecutionContext("0X5");
+    new TestingRequestExecutionContext("02f");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     referralDao = mock(ReferralDao.class);

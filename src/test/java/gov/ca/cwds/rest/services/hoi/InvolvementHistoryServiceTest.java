@@ -43,8 +43,8 @@ public class InvolvementHistoryServiceTest {
 
   private HOICaseResource hoicaseResource;
   private HOIReferralResource hoireferralResource;
-  private javax.ws.rs.core.Response referralresponse;
-  javax.ws.rs.core.Response response;
+  private javax.ws.rs.core.Response referralResponse;
+  private javax.ws.rs.core.Response caseResponse;
   private InvolvementHistoryService involvementHistoryService;
 
   @Rule
@@ -55,25 +55,25 @@ public class InvolvementHistoryServiceTest {
     new TestingRequestExecutionContext("0X5");
     hoicaseResource = mock(HOICaseResource.class);
     hoireferralResource = mock(HOIReferralResource.class);
-    response = mock(javax.ws.rs.core.Response.class);
+    caseResponse = mock(javax.ws.rs.core.Response.class);
     HOICase hoicase = new HOICaseResourceBuilder().createHOICase();
     List<HOICase> hoicases = new ArrayList<>();
     hoicases.add(hoicase);
-    HOICaseResponse hoicaseresponse = new HOICaseResponse();
-    hoicaseresponse.setHoiCases(hoicases);
+    HOICaseResponse hoicaseResponse = new HOICaseResponse();
+    hoicaseResponse.setHoiCases(hoicases);
 
-    when(hoicaseResource.get(any(String.class))).thenReturn(response);
-    when(response.getEntity()).thenReturn(hoicaseresponse);
+    when(hoicaseResource.get(any(String.class))).thenReturn(caseResponse);
+    when(caseResponse.getEntity()).thenReturn(hoicaseResponse);
 
-    referralresponse = mock(javax.ws.rs.core.Response.class);
+    referralResponse = mock(javax.ws.rs.core.Response.class);
 
     HOIReferral hoireferral = new HOIReferralResourceBuilder().createHOIReferral();
     List<HOIReferral> hoireferrals = new ArrayList<>();
     hoireferrals.add(hoireferral);
-    HOIReferralResponse hoireferralresponse = new HOIReferralResponse();
-    hoireferralresponse.setHoiReferrals(hoireferrals);
-    when(hoireferralResource.get(any(String.class))).thenReturn(referralresponse);
-    when(referralresponse.getEntity()).thenReturn(hoireferralresponse);
+    HOIReferralResponse hoireferralResponse = new HOIReferralResponse();
+    hoireferralResponse.setHoiReferrals(hoireferrals);
+    when(hoireferralResource.get(any(String.class))).thenReturn(referralResponse);
+    when(referralResponse.getEntity()).thenReturn(hoireferralResponse);
 
     involvementHistoryService = new InvolvementHistoryService(hoicaseResource, hoireferralResource);
   }

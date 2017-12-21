@@ -60,7 +60,7 @@ public class InvolvementHistoryService
    */
   @Override
   public Response find(String primaryKey) {
-    if (!primaryKey.equals("999999")) {
+    if (!("999999").equals(primaryKey)) {
       return findInvolvementHistoryByScreeningId(primaryKey);
     }
     try {
