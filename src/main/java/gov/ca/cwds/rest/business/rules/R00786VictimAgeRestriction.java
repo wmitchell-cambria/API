@@ -21,14 +21,9 @@ public class R00786VictimAgeRestriction
     implements ConstraintValidator<VictimAgeRestriction, ScreeningToReferral> {
 
   /**
-   * Days in one year
-   */
-  public static final double ONE_YEAR_DAYS = 365.2425;
-
-  /**
    * 18 years
    */
-  public static final int MAX_VICTIM_AGE_DAYS = (int) (18 * ONE_YEAR_DAYS);
+  public static final int MAX_VICTIM_AGE_YEARS = 18;
 
   /*
    * (non-Javadoc)
@@ -52,16 +47,21 @@ public class R00786VictimAgeRestriction
     Collection<Participant> victims = getVictims(screening.getParticipants());
 
     if (!victims.isEmpty()) {
+      // Referral receive timestamp
       String referralReceiveTimestampStr = screening.getStartedAt();
-      DateTime referralReceiveDate =
+      DateTime referralReceiveTimestamp =
           new DateTime(DomainChef.uncookDateString(referralReceiveTimestampStr));
 
-      // Subtract MAX_VICTIM_AGE_DAYS from referral receive date
-      DateTime victimOverAgeDate = referralReceiveDate.minusDays(MAX_VICTIM_AGE_DAYS);
+      // Referral receive date - yyyy-mm-dd
+      String referralReceiveDateStr = DomainChef.cookDate(referralReceiveTimestamp.toDate());
+      DateTime referralReceiveDate =
+          new DateTime(DomainChef.uncookDateString(referralReceiveDateStr));
+
+      // Subtract MAX_VICTIM_AGE_YEARS from referral receive date
+      DateTime victimOverAgeDate = referralReceiveDate.minusYears(MAX_VICTIM_AGE_YEARS);
 
       for (Participant victim : victims) {
-        boolean overage = isVictimOverAge(victim, victimOverAgeDate);
-        if (overage) {
+        if (isVictimOverAge(victim, victimOverAgeDate)) {
           valid = false;
           break;
         }

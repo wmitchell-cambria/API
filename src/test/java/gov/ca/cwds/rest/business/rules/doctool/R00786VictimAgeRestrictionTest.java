@@ -49,40 +49,40 @@ public class R00786VictimAgeRestrictionTest {
   @Test
   public void testVictimAgeNotOver() {
     // check with age = 10 years
-    int age = (int) (R00786VictimAgeRestriction.ONE_YEAR_DAYS * 10);
+    int age = 10;
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
     assertEquals(0, constraintViolations.size());
   }
 
   /**
-   * Test that victim age is at maximum allowed
+   * Test with victim age at maximum allowed
    */
   @Test
-  public void testVictimAgeAtMax() {
+  public void testVictimAgeMax() {
     // check with age = 18 years
-    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_DAYS;
+    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
     assertEquals(0, constraintViolations.size());
   }
 
   /**
-   * Test that victim age is 1 day below maximum allowed
+   * Test with victim age below maximum allowed
    */
   @Test
-  public void testVictimAgeAtDayBelowMax() {
-    // check with age = 18 years - 1 day
-    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_DAYS - 1;
+  public void testVictimAgeBelowMax() {
+    // check with age = 18 years - 1 year
+    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS - 1;
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
     assertEquals(0, constraintViolations.size());
   }
 
   /**
-   * Test that victim age is 1 day over maximum allowed
+   * Test with victim age over maximum allowed
    */
   @Test
   public void testVictimAgeOver() {
-    // check with age = 18 years + 1 day
-    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_DAYS + 1;
+    // check with age = 18 years + 1 year
+    int age = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS + 1;
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations = validate(age);
     assertEquals(1, constraintViolations.size());
   }
@@ -93,7 +93,7 @@ public class R00786VictimAgeRestrictionTest {
    * @param victimAgeDays Victim age in days
    * @return Validation result.
    */
-  private Set<ConstraintViolation<ScreeningToReferral>> validate(int victimAgeDays) {
+  private Set<ConstraintViolation<ScreeningToReferral>> validate(int victimAgeYears) {
     String screeningStartedAt = "2017-01-01T00:00:00.000-08:00";
     DateTime screeningStartedAtDateTime =
         new DateTime(DomainChef.uncookDateString(screeningStartedAt));
@@ -102,7 +102,7 @@ public class R00786VictimAgeRestrictionTest {
     builder.setStartedAt(screeningStartedAt);
 
     String victimDob =
-        DomainChef.cookDate(screeningStartedAtDateTime.minusDays(victimAgeDays).toDate());
+        DomainChef.cookDate(screeningStartedAtDateTime.minusYears(victimAgeYears).toDate());
     Participant victim = new ParticipantResourceBuilder().setGender("M").setDateOfBirth(victimDob)
         .createVictimParticipant();
 
