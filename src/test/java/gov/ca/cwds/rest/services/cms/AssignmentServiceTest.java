@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -28,6 +28,8 @@ import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.fixture.*;
+import gov.ca.cwds.rest.business.rules.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,15 +40,11 @@ import org.mockito.stubbing.Answer;
 
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
-import gov.ca.cwds.fixture.AssignmentResourceBuilder;
-import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
-import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
-import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -370,5 +368,26 @@ public class AssignmentServiceTest {
     verify(countyOwnershipDao, times(0)).create(any());
   }
 
+  @Test
+  public void testR06560RuleValid() {
+    gov.ca.cwds.data.persistence.cms.Assignment assignment = new AssignmentEntityBuilder().
+        setEstablishedForCode("R").
+        setTypeOfAssignmentCode("P").
+        setFkCaseLoad("-1").build();
+    assignmentService.executeR06560Rule(assignment);
+  }
 
+  @Test
+  public void testR06560RuleInvalid() {
+    gov.ca.cwds.data.persistence.cms.Assignment assignment = new AssignmentEntityBuilder().
+        setEstablishedForCode("R").
+        setTypeOfAssignmentCode("P").
+        setFkCaseLoad(null).build();
+    try {
+      assignmentService.executeR06560Rule(assignment);
+      fail();
+    } catch (ServiceException e) {
+      assertEquals("R - 06560 Caseload Required For First Primary Asg is failed", e.getMessage());
+    }
+  }
 }
