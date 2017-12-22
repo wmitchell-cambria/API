@@ -87,12 +87,12 @@ publishing {
 
 //Set artifactory variables in local gradle properties file. Example ~/.gradle/gradle.properties
 artifactory {
-    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    contextUrl = project.hasProperty('artifactory_contextUrl') ? "${artifactory_contextUrl}" : System.getenv('ARTIFACTORY_URL')
     publish {
         repository {
             repoKey = 'gradle-release-local'
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            username = project.hasProperty('artifactory_user') ? "${artifactory_user}" : System.getenv('ARTIFACTORY_USER')
+            password = project.hasProperty('artifactory_password') ? "${artifactory_password}" : System.getenv('ARTIFACTORY_PASSWORD')
             maven = true
 
         }
@@ -100,8 +100,8 @@ artifactory {
     resolve {
         repository {
             repoKey = 'gradle-release-local'
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+              username = project.hasProperty('artifactory_user') ? "${artifactory_user}" : System.getenv('ARTIFACTORY_USER')
+              password = project.hasProperty('artifactory_password') ? "${artifactory_password}" : System.getenv('ARTIFACTORY_PASSWORD')
             maven = true
 
         }
@@ -139,7 +139,8 @@ dependencies {
 	compile group: "javax.el", name: "javax.el-api", version: "2.2.4"
 	compile group: "org.glassfish.web", name: "javax.el", version: "2.2.4"
 	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
-	
+	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+
     // ES 5.x:
     compile group: 'org.elasticsearch', name: 'elasticsearch', version: elasticsearchVersion
     compile group: 'org.elasticsearch.client', name: 'transport', version: elasticsearchVersion
@@ -147,7 +148,7 @@ dependencies {
 
 	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 	// Exclude transitive dependencies.
-	compile ('gov.ca.cwds.api:api-core:3.6.515') {
+	compile ('gov.ca.cwds.api:api-core:3.6.519') {
 	    exclude group: 'org.glassfish.jersey.core'
 	}
 

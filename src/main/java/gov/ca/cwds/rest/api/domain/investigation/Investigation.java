@@ -32,6 +32,7 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 import gov.ca.cwds.rest.util.SysIdShortToStringSerializer;
@@ -179,7 +180,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   @Valid
   // @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private HistoryOfInvolvement historyOfInvolvement;
+  private InvolvementHistory historyOfInvolvement;
 
   @JsonProperty("allegations")
   @ApiModelProperty(required = false, readOnly = false)
@@ -262,7 +263,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
       @JsonProperty("incident_phone_number") Set<PhoneNumber> phoneNumbers,
       @JsonProperty("incident_address") InvestigationAddress address,
       @JsonProperty("screening") ScreeningSummary screeningSummary,
-      @JsonProperty("history_of_involvement") HistoryOfInvolvement historyOfInvolvement,
+      @JsonProperty("history_of_involvement") InvolvementHistory historyOfInvolvement,
       @JsonProperty("allegations") Set<Allegation> allegations,
       @JsonProperty("people") Set<Person> people,
       @JsonProperty("relationships") Set<Relationship> relationships,
@@ -519,8 +520,8 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @return - history of involvement
    */
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  public HistoryOfInvolvement getHistoryOfInvolvement() {
-    return historyOfInvolvement != null ? historyOfInvolvement : new HistoryOfInvolvement();
+  public InvolvementHistory getHistoryOfInvolvement() {
+    return historyOfInvolvement != null ? historyOfInvolvement : new InvolvementHistory();
   }
 
   /**
@@ -595,7 +596,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
   /**
    * @param historyOfInvolvement - the history of involvement
    */
-  public void setHistoryOfInvolvement(HistoryOfInvolvement historyOfInvolvement) {
+  public void setHistoryOfInvolvement(InvolvementHistory historyOfInvolvement) {
     this.historyOfInvolvement = historyOfInvolvement;
   }
 

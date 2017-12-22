@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.cms.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -24,25 +25,10 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.cms.AddressDao;
-import gov.ca.cwds.data.cms.AllegationDao;
-import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
-import gov.ca.cwds.data.cms.AssignmentDao;
-import gov.ca.cwds.data.cms.CaseLoadDao;
-import gov.ca.cwds.data.cms.ChildClientDao;
-import gov.ca.cwds.data.cms.ClientAddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
-import gov.ca.cwds.data.cms.CrossReportDao;
-import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDao;
-import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
-import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.SsaName3Dao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
-import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.CaseLoadEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
@@ -118,7 +104,6 @@ public class TestForLastUpdatedTimeIsUnique {
   private ParticipantService participantService;
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
-  private RIAssignment riAssignment;
   private RIClientAddress riClientAddress;
   private RIAllegation riAllegation;
   private RICrossReport riCrossReport;
@@ -151,6 +136,10 @@ public class TestForLastUpdatedTimeIsUnique {
   private ExternalInterfaceTables externalInterfaceTables;
   private ClientScpEthnicityService clientScpEthnicityService;
   private CaseLoadDao caseLoadDao;
+  private CaseDao caseDao;
+  private AssignmentUnitDao assignmentUnitDao;
+  private CwsOfficeDao cwsOfficeDao;
+  private MessageBuilder messageBuilder;
 
   private Validator validator;
 
@@ -198,10 +187,14 @@ public class TestForLastUpdatedTimeIsUnique {
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
-    riAssignment = mock(RIAssignment.class);
     caseLoadDao = mock(CaseLoadDao.class);
+    caseDao = mock(CaseDao.class);
+    assignmentUnitDao = mock(AssignmentUnitDao.class);
+    cwsOfficeDao = mock(CwsOfficeDao.class);
+    messageBuilder = mock(MessageBuilder.class);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, riAssignment, caseLoadDao);
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
@@ -484,6 +477,9 @@ public class TestForLastUpdatedTimeIsUnique {
     gov.ca.cwds.data.persistence.cms.Assignment assignmentToCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("6789012ABC", assignment, "ABC",
             new Date());
+    CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
+    CaseLoad[] caseLoadList = new CaseLoad[1];
+    caseLoadList[0] = caseLoad;
 
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {
@@ -496,7 +492,7 @@ public class TestForLastUpdatedTimeIsUnique {
             return assignmentToCreate;
           }
         });
-    when(assignmentDao.findCaseId(any(String.class))).thenReturn("ABC1234567");
+    when(assignmentDao.findCaseLoads(any(String.class))).thenReturn(caseLoadList);
     ScreeningToReferral screeningToReferral = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
 

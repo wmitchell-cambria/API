@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services.investigation;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -134,10 +135,11 @@ public class InvestigationServiceTest {
 
   }
 
-  @Test(expected = ServiceException.class)
-  public void testFindThrowsExceptionWhenReferralIsNull() throws Exception {
+  @Test
+  public void testFindThrowsExceptionWhenReferralIsNull() {
     when(investigationDao.find(DEFAULT_KEY))
         .thenReturn(new ReferralEntityBuilder().setId(DEFAULT_KEY).build());
-    investigationService.find("1234567ABC");
+    Response response = investigationService.find("1234567ABC");
+    assertNull(response);
   }
 }

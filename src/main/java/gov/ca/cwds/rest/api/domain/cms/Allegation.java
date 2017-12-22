@@ -1,24 +1,21 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import gov.ca.cwds.rest.validation.NotEqual;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,6 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @ApiModel("cmsAllegation")
+@NotEqual(ifProperty = "victimClientId", thenProperty = "perpetratorClientId")
 public class Allegation extends ReportingDomain implements Request, Response {
   /**
    * Serialization version

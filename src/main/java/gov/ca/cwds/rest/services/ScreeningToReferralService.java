@@ -44,6 +44,7 @@ import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
+import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
@@ -150,9 +151,10 @@ public class ScreeningToReferralService implements CrudsService {
      * </blockquote>
      * </pre>
      */
-    String dateStarted = ParticipantValidator.extractStartDate(screeningToReferral, messageBuilder);
-    String timeStarted = ParticipantValidator.extractStartTime(screeningToReferral, messageBuilder);
-
+    String dateStarted =
+        StartDateTimeValidator.extractStartDate(screeningToReferral.getStartedAt(), messageBuilder);
+    String timeStarted =
+        StartDateTimeValidator.extractStartTime(screeningToReferral.getStartedAt(), messageBuilder);
 
     String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 
@@ -560,4 +562,6 @@ public class ScreeningToReferralService implements CrudsService {
 
     this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
+
+
 }

@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
-import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
 import gov.ca.cwds.rest.api.domain.investigation.LimitedAccess;
@@ -60,8 +60,8 @@ public class InvestigationEntityBuilder {
 
   private ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
 
-  private HistoryOfInvolvement historyOfInvolvement =
-      new HistoryOfInvolvementEntityBuilder().build();
+  InvolvementHistory historyOfInvolvement = new InvolvementHistoryResourceBuilder().build();
+
 
   private Allegation allegation = new AllegationEntityBuilder().build();
   private Set<Allegation> allegations = new HashSet<>();
@@ -315,12 +315,12 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public HistoryOfInvolvement getHistoryOfInvolvement() {
+  public InvolvementHistory getHistoryOfInvolvement() {
     return historyOfInvolvement;
   }
 
   public InvestigationEntityBuilder setHistoryOfInvolvement(
-      HistoryOfInvolvement historyOfInvolvement) {
+      InvolvementHistory historyOfInvolvement) {
     this.historyOfInvolvement = historyOfInvolvement;
     return this;
   }

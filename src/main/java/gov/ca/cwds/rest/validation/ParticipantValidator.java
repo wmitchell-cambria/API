@@ -1,11 +1,6 @@
 package gov.ca.cwds.rest.validation;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -14,16 +9,13 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * @author CWDS API Team
  */
 public class ParticipantValidator {
 
-  private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
-  private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantValidator.class);
 
   /**
@@ -52,8 +44,9 @@ public class ParticipantValidator {
   /**
    * @param scr - ScreeningToReferral object
    * @return Boolean - has valid participants
+   * @throws ServiceException - throw and errors
    */
-  public static Boolean hasValidParticipants(ScreeningToReferral scr) {
+  public static Boolean hasValidParticipants(ScreeningToReferral scr) throws ServiceException {
     int reporterCount = 0;
     int victimCount = 0;
 
@@ -86,9 +79,10 @@ public class ParticipantValidator {
   /**
    * @param str - ScreeningToReferral object
    * @return Boolean - is an anonymous reporter
+   * @throws ServiceException - throw any exception
    */
   // is there an anonymous reporter participant on this screening to referral?
-  public static Boolean anonymousReporter(ScreeningToReferral str) {
+  public static Boolean anonymousReporter(ScreeningToReferral str) throws ServiceException {
     Set<Participant> participants;
     participants = str.getParticipants();
     if (participants != null) {
@@ -106,8 +100,9 @@ public class ParticipantValidator {
   /**
    * @param participant - Participant
    * @return - Boolean true if Participant has reporter type role
+   * @throws ServiceException - throw all Exceptions
    */
-  public static Boolean isReporterType(Participant participant) {
+  public static Boolean isReporterType(Participant participant) throws ServiceException {
     Set<String> roles = participant.getRoles();
     if (roles != null) {
       if (roles.contains(Role.ANONYMOUS_REPORTER_ROLE.getType())) {
@@ -120,6 +115,10 @@ public class ParticipantValidator {
         return Boolean.TRUE;
       }
       if (roles.contains(Role.SELF_REPORTED_ROLE.getType())) {
+        return Boolean.TRUE;
+      }
+      if (roles.contains(Role.VICTIM_ROLE.getType())
+          && roles.contains(Role.NON_MANDATED_REPORTER_ROLE.getType())) {
         return Boolean.TRUE;
       }
     }
@@ -142,8 +141,9 @@ public class ParticipantValidator {
   /**
    * @param participant - Participant
    * @return Boolean - true if victim role found in participant
+   * @throws ServiceException - throw any exception
    */
-  public static Boolean hasVictimRole(Participant participant) {
+  public static Boolean hasVictimRole(Participant participant) throws ServiceException {
     final Set<String> roles = participant.getRoles();
     return roles != null && roles.contains(Role.VICTIM_ROLE.getType());
   }
@@ -151,8 +151,9 @@ public class ParticipantValidator {
   /**
    * @param participant - Participant
    * @return Boolean - true if mandated reporter role found in participant
+   * @throws ServiceException on arbitrary error
    */
-  public static Boolean hasMandatedReporterRole(Participant participant) {
+  public static Boolean hasMandatedReporterRole(Participant participant) throws ServiceException {
     final Set<String> roles = participant.getRoles();
     return roles != null && roles.contains(Role.MANDATED_REPORTER_ROLE.getType());
   }
@@ -160,8 +161,10 @@ public class ParticipantValidator {
   /**
    * @param participants - Participants
    * @return Boolean - true if mandated reporter role found in any of the participant
+   * @throws ServiceException on arbitrary error
    */
-  public static Boolean hasMandatedReporterRole(Set<Participant> participants) {
+  public static Boolean hasMandatedReporterRole(Set<Participant> participants)
+      throws ServiceException {
     boolean mandatedRepoter = false;
     for (Participant p : participants) {
       mandatedRepoter = hasMandatedReporterRole(p);
@@ -173,54 +176,13 @@ public class ParticipantValidator {
   }
 
   /**
-   * @param screeningToReferral - screeningToReferral
-   * @param builder - logError messages
-   * @return - timeStarted
-   */
-  public static String extractStartTime(ScreeningToReferral screeningToReferral,
-      MessageBuilder builder) {
-    String timeStarted = null;
-    DateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.US);
-    DateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT_PATTERN);
-    try {
-      Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
-      timeStarted = timeFormat.format(dateTime);
-    } catch (ParseException | NullPointerException e) {
-      String message = " parsing Start Date/Time ";
-      builder.addError(message);
-      logError(message, e);
-    }
-    return timeStarted;
-  }
-
-  /**
-   * @param screeningToReferral - screeningToReferral
-   * @param builder - logError messages
-   * @return dateStarted
-   */
-  public static String extractStartDate(ScreeningToReferral screeningToReferral,
-      MessageBuilder builder) {
-    DateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.US);
-    DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN);
-    String dateStarted = null;
-    try {
-      Date dateTime = dateTimeFormat.parse(screeningToReferral.getStartedAt());
-      dateStarted = dateFormat.format(dateTime);
-    } catch (ParseException | NullPointerException e) {
-      String message = " parsing Start Date/Time ";
-      builder.addError(message);
-      logError(message, e);
-    }
-    return dateStarted;
-  }
-
-  /**
    * Check for incompatible roles for this participant.
-   *
+   * 
    * @param participant - Participant object
    * @return Boolean - has valid roles
+   * @throws ServiceException - throw any exception
    */
-  public static Boolean hasValidRoles(Participant participant) {
+  public static Boolean hasValidRoles(Participant participant) throws ServiceException {
     final Set<String> roles = participant.getRoles();
     if (roles == null) {
       return Boolean.TRUE;
@@ -237,7 +199,7 @@ public class ParticipantValidator {
     }
     if (roles.contains(Role.ANONYMOUS_REPORTER_ROLE.getType())
         && (roles.contains(Role.MANDATED_REPORTER_ROLE.getType())
-        || roles.contains(Role.NON_MANDATED_REPORTER_ROLE.getType()))) {
+            || roles.contains(Role.NON_MANDATED_REPORTER_ROLE.getType()))) {
       return Boolean.FALSE;
     }
     if (roles.contains(Role.VICTIM_ROLE.getType())
@@ -252,12 +214,12 @@ public class ParticipantValidator {
   }
 
   // check for self-reported participant
-
   /**
    * @param participant - Participant object
    * @return Boolean - is a self reported participant
+   * @throws ServiceException - throw any exception
    */
-  public static Boolean selfReported(Participant participant) {
+  public static Boolean selfReported(Participant participant) throws ServiceException {
     Set<String> roles = participant.getRoles();
     if (roles != null) {
       if (roles.contains(Role.VICTIM_ROLE.getType())
@@ -275,8 +237,10 @@ public class ParticipantValidator {
    * @param str - ScreeningToReferral object
    * @param victimPersonId - Person Id of victim
    * @return - True if participant has a role of Victim
+   * @throws ServiceException - throw any exception
    */
-  public static Boolean isVictimParticipant(ScreeningToReferral str, long victimPersonId) {
+  public static Boolean isVictimParticipant(ScreeningToReferral str, long victimPersonId)
+      throws ServiceException {
     if (str.getParticipants() != null) {
       final Set<Participant> participants = str.getParticipants();
       for (Participant participant : participants) {
@@ -327,7 +291,7 @@ public class ParticipantValidator {
    * @param role - String role
    * @return - Boolean true if any reporter type
    *
-   * Returns true if role is any reporter role
+   *         Returns true if role is any reporter role
    */
   public static Boolean roleIsAnyReporter(String role) {
     return roleIsReporterType(role) || roleIsAnonymousReporter(role) || roleIsSelfReporter(role);
@@ -337,7 +301,7 @@ public class ParticipantValidator {
    * @param role - String role
    * @return - Boolean true if mandated or non mandated
    *
-   * Do Not include Anonymous Reporter (special case of reporter)
+   *         Do Not include Anonymous Reporter (special case of reporter)
    */
   public static Boolean roleIsReporterType(String role) {
     return role != null && (role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType())
@@ -366,10 +330,6 @@ public class ParticipantValidator {
    */
   public static Boolean roleIsMandatedReporter(String role) {
     return role != null && role.equalsIgnoreCase(Role.MANDATED_REPORTER_ROLE.getType());
-  }
-
-  private static void logError(String message, Exception exception) {
-    LOGGER.error(message, exception.getMessage());
   }
 
 }

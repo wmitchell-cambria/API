@@ -7,26 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
-import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
-
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
 import gov.ca.cwds.data.cms.AttorneyDao;
 import gov.ca.cwds.data.cms.CaseAssignmentDao;
 import gov.ca.cwds.data.cms.CaseDao;
@@ -42,6 +27,7 @@ import gov.ca.cwds.data.cms.CmsDocumentDao;
 import gov.ca.cwds.data.cms.CountyOwnershipDao;
 import gov.ca.cwds.data.cms.CountyTriggerDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.ExternalInterfaceDao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationCrossReportDao;
@@ -57,30 +43,12 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
-import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
-import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.EthnicityDao;
-import gov.ca.cwds.data.ns.IntakeLovDao;
-import gov.ca.cwds.data.ns.LanguageDao;
-import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.ns.PersonAddressDao;
-import gov.ca.cwds.data.ns.PersonDao;
-import gov.ca.cwds.data.ns.PersonEthnicityDao;
-import gov.ca.cwds.data.ns.PersonLanguageDao;
-import gov.ca.cwds.data.ns.PersonPhoneDao;
-import gov.ca.cwds.data.ns.PersonRaceDao;
-import gov.ca.cwds.data.ns.PhoneNumberDao;
-import gov.ca.cwds.data.ns.RaceDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.cms.AddressUc;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.Assignment;
+import gov.ca.cwds.data.persistence.cms.AssignmentUnit;
 import gov.ca.cwds.data.persistence.cms.BaseAssignment;
 import gov.ca.cwds.data.persistence.cms.CaseAssignment;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
@@ -99,6 +67,7 @@ import gov.ca.cwds.data.persistence.cms.CountyOwnership;
 import gov.ca.cwds.data.persistence.cms.CountyTrigger;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.CrossReport;
+import gov.ca.cwds.data.persistence.cms.CwsOffice;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 import gov.ca.cwds.data.persistence.cms.EducationProviderContact;
 import gov.ca.cwds.data.persistence.cms.ExternalInterface;
@@ -123,6 +92,41 @@ import gov.ca.cwds.data.persistence.cms.SystemCode;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.cms.SystemMeta;
 import gov.ca.cwds.data.persistence.cms.Tickle;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+
+import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
+import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
+import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
+import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
+import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.AddressDao;
+import gov.ca.cwds.data.ns.EthnicityDao;
+import gov.ca.cwds.data.ns.IntakeLovDao;
+import gov.ca.cwds.data.ns.LanguageDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.ns.PersonAddressDao;
+import gov.ca.cwds.data.ns.PersonDao;
+import gov.ca.cwds.data.ns.PersonEthnicityDao;
+import gov.ca.cwds.data.ns.PersonLanguageDao;
+import gov.ca.cwds.data.ns.PersonPhoneDao;
+import gov.ca.cwds.data.ns.PersonRaceDao;
+import gov.ca.cwds.data.ns.PhoneNumberDao;
+import gov.ca.cwds.data.ns.RaceDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
@@ -195,8 +199,8 @@ public class DataAccessModule extends AbstractModule {
           AllegationPerpetratorHistory.class, ClientUc.class, ChildClient.class,
           gov.ca.cwds.data.persistence.cms.Address.class, ClientAddress.class,
           CountyOwnership.class, CountyTrigger.class, CountyTriggerEmbeddable.class,
-          SystemCode.class, SystemMeta.class, DrmsDocument.class, Assignment.class,
-          BaseAssignment.class, ReferralAssignment.class, CaseAssignment.class, CmsCase.class,
+          SystemCode.class, SystemMeta.class, DrmsDocument.class, Assignment.class, AssignmentUnit.class,
+          CwsOffice.class, BaseAssignment.class, ReferralAssignment.class, CaseAssignment.class, CmsCase.class,
           Tickle.class, ClientRelationship.class, ClientCollateral.class, AddressUc.class,
           ExternalInterface.class, DeliveredServiceEntity.class,
           ContactPartyDeliveredServiceEntity.class, ReferralClientDeliveredServiceEntity.class,
@@ -280,6 +284,8 @@ public class DataAccessModule extends AbstractModule {
     bind(SystemMetaDao.class);
     bind(DrmsDocumentDao.class);
     bind(AssignmentDao.class);
+    bind(AssignmentUnitDao.class);
+    bind(CwsOfficeDao.class);
     bind(TickleDao.class);
     bind(AddressUcDao.class);
     bind(ExternalInterfaceDao.class);

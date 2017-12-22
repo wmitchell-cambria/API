@@ -48,7 +48,7 @@ public class HOIPersonResourceBuilder {
 
 
   /**
-   * @return the PersonHOI
+   * @return the HOIPerson
    */
   public gov.ca.cwds.rest.api.domain.hoi.HOIPerson createHOIPerson() {
     return new HOIPerson(id, firstName, lastName, legacyDescriptor);

@@ -4,9 +4,17 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
-public class R04530AssignmentEndDateValidator implements RuleValidatator {
+/**
+ * Implement R - 04530 The combination of Assignment End Date and End Time must be less than or
+ * equal to the current system date and time AND must be greater than or equal to Assignment Start
+ * Date and Start Time.
+ * 
+ * @author CWDS API Team
+ *
+ */
+public class R04530AssignmentEndDateValidator implements RuleValidator {
 
   Assignment assignment = null;
 
@@ -39,16 +47,16 @@ public class R04530AssignmentEndDateValidator implements RuleValidatator {
 
 
     if (this.isAssignmentStartDateBeforeOrEqualsEndDate(assignemntStartDate, assignemntEndDate)
-        && (this.isCurrentDateBeforeOrEqualAssignmentEndDate(assignemntEndDate))) {
+        && (this.isAssignmentEndDateBeforeOrEqualCurrentDate(assignemntEndDate))) {
       validEndDate = true;
     }
     return validEndDate;
 
   }
 
-  private boolean isCurrentDateBeforeOrEqualAssignmentEndDate(Date assignemntEndDate) {
+  private boolean isAssignmentEndDateBeforeOrEqualCurrentDate(Date assignemntEndDate) {
     Date currentDate = new Date();
-    return (currentDate.compareTo(assignemntEndDate) <= 0);
+    return (assignemntEndDate.compareTo(currentDate) <= 0);
 
 
   }

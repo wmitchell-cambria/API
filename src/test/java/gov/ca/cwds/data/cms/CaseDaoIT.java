@@ -1,8 +1,10 @@
 package gov.ca.cwds.data.cms;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -18,18 +20,20 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import gov.ca.cwds.data.junit.template.DaoTestTemplate;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import gov.ca.cwds.fixture.CaseEntityBuilder;
 
 /**
  * @author CWDS API Team
  */
-public class CaseDaoIT implements DaoTestTemplate {
+@SuppressWarnings("javadoc")
+public class CaseDaoIT {
 
   private static SessionFactory sessionFactory;
-  private static CaseDao dao;
+  private static CaseDao caseDao;
   private Session session;
+
+  public String clientId = "K9epuNg0BN";
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -40,7 +44,7 @@ public class CaseDaoIT implements DaoTestTemplate {
   @BeforeClass
   public static void beforeClass() {
     sessionFactory = new Configuration().configure().buildSessionFactory();
-    dao = new CaseDao(sessionFactory);
+    caseDao = new CaseDao(sessionFactory);
   }
 
   /**
@@ -51,93 +55,80 @@ public class CaseDaoIT implements DaoTestTemplate {
     sessionFactory.close();
   }
 
-  @Override
   @Before
   public void setup() {
     session = sessionFactory.getCurrentSession();
     session.beginTransaction();
   }
 
-  @Override
   @After
   public void teardown() {
     session.getTransaction().rollback();
   }
 
-  @Override
   @Test
   public void testFind() throws Exception {
-    final String id = "AbxPBtY0Um";
-    CmsCase found = dao.find(id);
+    final String id = "AadfKnG07n";
+    CmsCase found = caseDao.find(id);
     assertThat(found.getId(), is(id));
   }
 
-  @Override
   @Test
   public void testFindEntityNotFoundException() throws Exception {
     final String id = "ZZZZZZ999";
-    CmsCase found = dao.find(id);
+    CmsCase found = caseDao.find(id);
     assertThat(found, is(nullValue()));
   }
 
-  @Override
   @Test
   public void testCreate() throws Exception {
-    CmsCase bean = new CmsCase();
-    bean.setId(CmsKeyIdGenerator.generate("0x5"));
-    CmsCase created = dao.create(bean);
-    assertThat(created, is(bean));
+    CmsCase cmsCase = new CaseEntityBuilder().setId("AaOcpgX0kk").build();
+    CmsCase create = caseDao.create(cmsCase);
+    assertThat(cmsCase, is(create));
   }
 
-  @Override
-  // @Test
-  public void testCreateExistingEntityException() throws Exception {
-    thrown.expect(EntityExistsException.class);
-    CmsCase bean = new CmsCase();
-    dao.create(bean);
+
+  @Test(expected = EntityExistsException.class)
+  public void testCreateEntityExistsException() throws Exception {
+    CmsCase cmsCase = new CaseEntityBuilder().setId("AadfKnG07n").build();
+    caseDao.create(cmsCase);
   }
 
-  @Override
   @Test
   public void testDelete() throws Exception {
-    String id = "AbxPBtY0Um";
-    CmsCase deleted = dao.delete(id);
-    assertThat(deleted.getId(), is(id));
+    CmsCase deleted = caseDao.delete("AawSLHm057");
+    assertThat(deleted.getId(), is("AawSLHm057"));
   }
 
-  @Override
   @Test
   public void testDeleteEntityNotFoundException() throws Exception {
-    String id = "ZZZZZZZ999";
-    CmsCase deleted = dao.delete(id);
+    CmsCase deleted = caseDao.delete("9999999ZZZ");
     assertThat(deleted, is(nullValue()));
   }
 
-  @Override
   @Test
   public void testUpdate() throws Exception {
-    CmsCase bean = new CmsCase();
-    bean.setId("AbxPBtY0Um");
-    CmsCase updated = dao.update(bean);
-    assertThat(updated, is(bean));
+    CmsCase cmsCase = new CaseEntityBuilder().setAlertText("Alerts Text 1").build();
+    CmsCase updated = caseDao.update(cmsCase);
+    assertThat(updated, is(cmsCase));
   }
 
-  @Override
-  // @Test
+  @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
-    thrown.expect(EntityNotFoundException.class);
-    CmsCase bean = new CmsCase();
-    dao.update(bean);
+    CmsCase CmsCase = new CaseEntityBuilder().setId("AbNNjTK0P2").build();
+    caseDao.update(CmsCase);
   }
 
-  @Override
-  public void testFindAllNamedQueryExist() throws Exception {
-
-  }
-
-  @Override
-  public void testFindAllReturnsCorrectList() throws Exception {
-
+  /**
+   * Test to find the cases by clientId
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindClientId() throws Exception {
+    CmsCase[] CmsCases = caseDao.findByClientId(clientId);
+    assertThat(CmsCases, notNullValue());
+    assertThat(CmsCases.length, greaterThanOrEqualTo(1));
   }
 
 }

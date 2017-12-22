@@ -28,7 +28,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @SuppressWarnings("serial")
 public class CaseAssignment extends BaseAssignment {
 
-  private static final String FOLDED_KEY_CODE = "C";
+  public static final String FOLDED_KEY_CODE = "C";
 
   /**
    * Foreign key from Assignment to {@link CmsCase}. Reverse of {@link ReferralAssignment}? Why??

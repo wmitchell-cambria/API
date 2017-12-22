@@ -20,10 +20,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.validation.AtRiskAllegation;
 import gov.ca.cwds.rest.validation.Date;
 import gov.ca.cwds.rest.validation.ValidLogicalId;
 import gov.ca.cwds.rest.validation.ValidParticipantRoles;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
+import gov.ca.cwds.rest.validation.VictimAgeRestriction;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,6 +39,7 @@ import io.swagger.annotations.ApiModelProperty;
     "name", "reportNarrative", "reference", "responseTime", "startedAt", "assignee",
     "assigneeStaffId", "additionalInformation", "screeningDecision", "screeningDecisionDetail",
     "address", "participants", "crossReports", "allegations"})
+@VictimAgeRestriction
 public class ScreeningToReferral extends ReportingDomain implements Request {
 
   private static final long serialVersionUID = 1L;
@@ -227,6 +230,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false)
   @Valid
+  @AtRiskAllegation
   private Set<Allegation> allegations;
 
   @SuppressWarnings("javadoc")

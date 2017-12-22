@@ -91,7 +91,9 @@ public class TestSystemCodeCache implements SystemCodeCache {
     }
 
     if (SystemCodeCategoryId.INJURY_HARM_TYPE.equals(metaId)) {
-      if (2179 == systemCodeId.intValue()) {
+      if (2179 == systemCodeId.intValue() || 5001 == systemCodeId.intValue()
+          || 2177 == systemCodeId.intValue() || 2180 == systemCodeId.intValue()
+          || 2181 == systemCodeId.intValue()) {
         return true;
       }
       if (2178 == systemCodeId.intValue()) {

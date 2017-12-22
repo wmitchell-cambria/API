@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.cms;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -194,6 +196,32 @@ public class ClientRelationshipDaoIT {
 
 
     clientRelationshipDao.update(clientRelationship);
+  }
+
+  /**
+   * Test to find the client relationship by primary clientId[FKCLIENT_T]
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindPrimaryClientId() throws Exception {
+    ClientRelationship[] clientRelationship =
+        clientRelationshipDao.findByPrimaryClientId("0LIZAWH00h");
+    assertThat(clientRelationship, notNullValue());
+    assertThat(clientRelationship.length, greaterThanOrEqualTo(1));
+  }
+
+  /**
+   * Test to find the client relationship by secondary clientId[FKCLIENT_0]
+   * 
+   * @throws Exception - Exception
+   */
+  @Test
+  public void testFindSecondaryClientId() throws Exception {
+    ClientRelationship[] clientRelationship =
+        clientRelationshipDao.findBySecondaryClientId("GjRyRJh00h");
+    assertThat(clientRelationship, notNullValue());
+    assertThat(clientRelationship.length, greaterThanOrEqualTo(1));
   }
 
 }

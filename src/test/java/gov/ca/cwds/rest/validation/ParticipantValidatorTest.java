@@ -4,31 +4,22 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
-
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import io.dropwizard.jackson.Jackson;
 
@@ -118,9 +109,8 @@ public class ParticipantValidatorTest {
 
   @Test
   public void testAllegationPerpetratorPersonIdIsParticipantPerpetratorSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/ScreeningToReferral/valid/allegationPerpetratorIsParticipantPerpetrator.json"),
+    ScreeningToReferral toValidate = MAPPER.readValue(fixture(
+        "fixtures/domain/ScreeningToReferral/valid/allegationPerpetratorIsParticipantPerpetrator.json"),
         ScreeningToReferral.class);
     assertThat(ParticipantValidator.isPerpetratorParticipant(toValidate, 1234), equalTo(true));
   }
@@ -205,105 +195,6 @@ public class ParticipantValidatorTest {
     assertThat(ParticipantValidator.roleIsMandatedReporter(null), equalTo(false));
   }
 
-  @Test
-  public void testExtractStartTimeSuccess() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet(Arrays.asList(participants)))
-        .setStartedAt("2017-08-01T08:30:00.000Z").createScreeningToReferral();
-    assertThat(ParticipantValidator.extractStartTime(referral, messageBuilder),
-        equalTo("08:30:00"));
-
-  }
-
-  @Test
-  public void testExtractStartTimeFail() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet(Arrays.asList(participants)))
-        .setStartedAt("2017-08-01T14:20:00.000Z").createScreeningToReferral();
-    assertThat(ParticipantValidator.extractStartTime(referral, messageBuilder),
-        not(equalTo("14:10:00")));
-
-  }
-
-  @Test
-  public void testExtractStartDateSuccess() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet(Arrays.asList(participants)))
-        .setStartedAt("2017-08-01T08:30:00.000Z").createScreeningToReferral();
-    assertThat(ParticipantValidator.extractStartDate(referral, messageBuilder),
-        equalTo("2017-08-01"));
-
-  }
-
-  @Test
-  public void testExtractStartDateFail() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet(Arrays.asList(participants)))
-        .setStartedAt("2017-08-01T14:20:00.000Z").createScreeningToReferral();
-    assertThat(ParticipantValidator.extractStartTime(referral, messageBuilder),
-        not(equalTo("2017-08-02")));
-
-  }
-
-  @Test
-  public void shouldReturnErrorMessageWhenStartDateBlank() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt("")
-        .createScreeningToReferral();
-    ParticipantValidator.extractStartDate(referral, messageBuilder);
-    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
-    assertThat(errorMessages.size(), is(equalTo(1)));
-
-  }
-
-  @Test
-  public void shouldReturnErrorMessageWhenStartDateNull() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt(null)
-        .createScreeningToReferral();
-    ParticipantValidator.extractStartDate(referral, messageBuilder);
-    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
-    assertThat(errorMessages.size(), is(equalTo(1)));
-
-  }
-
-  @Test
-  public void shouldReturnErrorMessageWhenStartTimeBlank() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt("")
-        .createScreeningToReferral();
-    ParticipantValidator.extractStartTime(referral, messageBuilder);
-    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
-    assertThat(errorMessages.size(), is(equalTo(1)));
-
-  }
-
-  @Test
-  public void shouldReturnErrorMessageWhenStartTimeNull() throws Exception {
-    Participant participants = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<String>(Arrays.asList("Victim", null))).createParticipant();
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(new HashSet<Participant>(Arrays.asList(participants))).setStartedAt(null)
-        .createScreeningToReferral();
-    ParticipantValidator.extractStartTime(referral, messageBuilder);
-    List<ErrorMessage> errorMessages = messageBuilder.getMessages();
-    assertThat(errorMessages.size(), is(equalTo(1)));
-
-  }
 
   @Test
   public void roleIsSelfReporterShouldReportTrueWhenRoleIsSelfReporter() {
@@ -406,5 +297,35 @@ public class ParticipantValidatorTest {
     Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
 
     assertFalse(ParticipantValidator.hasValidRoles(participant));
+  }
+
+  @Test
+  public void hasMandatedReporterRoleValidScenario() {
+    Set<String> roles = new HashSet<String>();
+    roles.add(Role.MANDATED_REPORTER_ROLE.getType());
+    Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
+
+    assertTrue(ParticipantValidator.hasMandatedReporterRole(participant));
+  }
+
+  @Test
+  public void hasMandatedReporterRoleInValidScenario() {
+    Set<String> roles = new HashSet<String>();
+    roles.add(Role.VICTIM_ROLE.getType());
+    Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
+
+    assertFalse(ParticipantValidator.hasMandatedReporterRole(participant));
+  }
+
+
+  @Test
+  public void hasMandatedReporterRoleSet() {
+    Set<Participant> participants = new HashSet<Participant>();
+    Set<String> roles = new HashSet<String>();
+    roles.add(Role.MANDATED_REPORTER_ROLE.getType());
+    Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
+    participants.add(participant);
+
+    assertTrue(ParticipantValidator.hasMandatedReporterRole(participants));
   }
 }
