@@ -36,7 +36,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findHoiScreeningsByScreeningId",
     query = "SELECT s FROM ScreeningEntity s JOIN s.participants p "
         + "WHERE s.id <> :screeningId AND p.legacyId IN ("
-        + "SELECT legacyId FROM ParticipantEntity WHERE screening.id = :screeningId)")
+        + "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "screenings")
@@ -110,7 +110,7 @@ public class ScreeningEntity implements PersistentObject {
   private String restrictionsRationale;
 
   @Column(name = "user_county_code")
-  private String userCountyCode;
+  private Integer userCountyCode;
 
   @Column(name = "restrictions_date")
   private Date restrictionsDate;
@@ -118,10 +118,10 @@ public class ScreeningEntity implements PersistentObject {
   @Column(name = "indexable")
   private boolean indexable;
 
-  @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<Allegation> allegations = new HashSet<>();
 
-  @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<ParticipantEntity> participants = new HashSet<>();
 
   /**
@@ -333,7 +333,7 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * @return the userCountyCode
    */
-  public String getUserCountyCode() {
+  public Integer getUserCountyCode() {
     return userCountyCode;
   }
 

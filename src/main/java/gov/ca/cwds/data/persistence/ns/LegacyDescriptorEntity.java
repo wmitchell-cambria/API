@@ -21,7 +21,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Entity
 @Table(name = "legacy_descriptors")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findParticipantLegacyDescriptor",
-    query = "SELECT l FROM LegacyDescriptor l WHERE l.describableId = :participantId AND l.describableType = 'Participant'")
+    query = "SELECT l FROM LegacyDescriptorEntity l WHERE l.describableId = :participantId AND l.describableType = 'Participant'")
 public class LegacyDescriptorEntity implements PersistentObject {
 
   @Id

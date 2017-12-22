@@ -8,8 +8,6 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.NotImplementedException;
-import org.hibernate.Session;
-import org.hibernate.context.internal.ManagedSessionContext;
 
 import com.google.inject.Inject;
 
@@ -38,13 +36,9 @@ public class HOIScreeningService extends SimpleResourceService<String, HOIScreen
   @Override
   protected HOIScreeningResponse handleFind(String primaryKey) {
     Set<HOIScreening> screenings = new HashSet<>();
-    // SessionFactory from postgres DB and need to open session in order to execute.
-    try (Session session = screeningDao.getSessionFactory().openSession()) {
-      ManagedSessionContext.bind(session);
-      for (ScreeningEntity screeningEntity : screeningDao
-          .findHoiScreeningsByScreeningId(primaryKey)) {
-        screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
-      }
+    for (ScreeningEntity screeningEntity : screeningDao
+        .findHoiScreeningsByScreeningId(primaryKey)) {
+      screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
     }
     return new HOIScreeningResponse(screenings);
   }

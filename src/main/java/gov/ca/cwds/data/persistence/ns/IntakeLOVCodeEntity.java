@@ -17,8 +17,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @Entity
 @Table(name = "intake_lov_codes")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCode.findIntakeLOVCodeByIntakeCode",
-    query = "SELECT c FROM IntakeLOVCode c WHERE c.intakeCode = :intakeCode")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode",
+    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode = :intakeCode")
 public class IntakeLOVCodeEntity implements PersistentObject {
 
   @Id
