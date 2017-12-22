@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -22,14 +21,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @ApiModel
 @JsonSnakeCase
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class HOIScreeningList extends ReportingDomain implements Request, Response {
+public class HOIScreeningResponse extends ReportingDomain implements Response {
 
   private static final long serialVersionUID = 1L;
 
   @JsonUnwrapped
   private Set<HOIScreening> screenings;
 
-  public HOIScreeningList(Set<HOIScreening> screenings) {
+  public HOIScreeningResponse(Set<HOIScreening> screenings) {
     this.screenings = screenings;
   }
 

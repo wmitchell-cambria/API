@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
 import gov.ca.cwds.data.persistence.ns.Screening;
+import gov.ca.cwds.rest.api.Request;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -26,7 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  * @author CWDS API Team
  */
-public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
 
   private static final long serialVersionUID = 1L;
 

@@ -5,6 +5,10 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
+import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
@@ -17,10 +21,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
-import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
-import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
@@ -32,7 +33,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
-public class InvolvementHistoryResourceTest {
+public class HOIScreeningResourceTest {
 
   @After
   public void ensureServiceLocatorPopulated() {
@@ -46,16 +47,11 @@ public class InvolvementHistoryResourceTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @SuppressWarnings("unchecked")
-  private final static TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate =
-      mock(TypedResourceDelegate.class);
+  private final static SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate = mock(SimpleResourceDelegate.class);
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new InvolvementHistoryResource(typedResourceDelegate)).build();
-  /*
-   * Load system code cache
-   */
-  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+      .addResource(new HOIScreeningResource(simpleResourceDelegate)).build();
 
   @Before
   public void initMocks() {
@@ -66,7 +62,7 @@ public class InvolvementHistoryResourceTest {
   public void findDelegatesToResourceDelegate() {
     inMemoryResource.client().target("/" + RESOURCE_HOI_SCREENINGS + "/1").request()
         .accept(MediaType.APPLICATION_JSON).get().getStatus();
-    verify(typedResourceDelegate, atLeastOnce()).get("1");
+    verify(simpleResourceDelegate, atLeastOnce()).find("1");
   }
 
 }

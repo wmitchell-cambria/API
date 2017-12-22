@@ -2,6 +2,9 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
+import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,7 +17,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.HOIScreeningServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
-import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -40,17 +42,17 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HOIScreeningResource {
 
-  private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
+  private SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate;
 
   /**
    * Constructor
    *
-   * @param typedResourceDelegate The resourceDelegate to delegate to.
+   * @param simpleResourceDelegate The resourceDelegate to delegate to.
    */
   @Inject
   public HOIScreeningResource(
-      @HOIScreeningServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
-    this.typedResourceDelegate = typedResourceDelegate;
+      @HOIScreeningServiceBackedResource SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate) {
+    this.simpleResourceDelegate = simpleResourceDelegate;
   }
 
   /**
@@ -66,10 +68,10 @@ public class HOIScreeningResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find history of involvement by screening id",
-      response = gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory.class)
+      response = HOIScreeningResponse.class)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the Screening") String id) {
-    return typedResourceDelegate.get(id);
+    return simpleResourceDelegate.find(id);
   }
 
 }

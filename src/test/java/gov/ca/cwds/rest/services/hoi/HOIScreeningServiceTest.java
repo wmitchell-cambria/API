@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import io.dropwizard.jackson.Jackson;
 
@@ -67,27 +65,5 @@ public class HOIScreeningServiceTest {
     assertThat(returned, is(serialized));
   }
   */
-
-  // delete test
-  @Test
-  public void deleteThrowsNotImplementedException() throws Exception {
-    thrown.expect(NotImplementedException.class);
-    hoiScreeningService.delete("string");
-  }
-
-  // update test
-  @Test
-  public void updateThrowsNotImplementedException() throws Exception {
-    thrown.expect(NotImplementedException.class);
-    hoiScreeningService.update("string", null);
-  }
-
-
-  // create test
-  @Test
-  public void createThrowsNotImplementedException() throws Exception {
-    thrown.expect(NotImplementedException.class);
-    hoiScreeningService.create(null);
-  }
 
 }

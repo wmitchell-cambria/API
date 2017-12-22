@@ -2,7 +2,8 @@ package gov.ca.cwds.rest.services.hoi;
 
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningList;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceService;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.NotImplementedException;
@@ -11,17 +12,12 @@ import org.hibernate.context.internal.ManagedSessionContext;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
-import gov.ca.cwds.rest.services.TypedCrudsService;
-
 /**
  * Business layer object to work on Screening History Of Involvement
  *
  * @author CWDS API Team
  */
-public class HOIScreeningService
-    implements TypedCrudsService<String, InvolvementHistory, Response> {
+public class HOIScreeningService extends SimpleResourceService<String, HOIScreening, HOIScreeningResponse> {
 
   @Inject
   ScreeningDao screeningDao;
@@ -34,12 +30,12 @@ public class HOIScreeningService
   }
 
   /**
-   * {@inheritDoc}
    *
-   * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
+   * @param primaryKey - screening Id
+   * @return list of HOI Screenings
    */
   @Override
-  public Response find(String primaryKey) {
+  protected HOIScreeningResponse handleFind(String primaryKey) {
     Set<HOIScreening> screenings = new HashSet<>();
     // SessionFactory from postgres DB and need to open session in order to execute.
     try (Session session = screeningDao.getSessionFactory().openSession()) {
@@ -49,22 +45,13 @@ public class HOIScreeningService
         screenings.add(hoiScreeningFactory.buildHOIScreening(persistedScreening));
       }
     }
-    return new HOIScreeningList(screenings);
+    return new HOIScreeningResponse(screenings);
   }
 
   @Override
-  public Response create(InvolvementHistory request) {
-    throw new NotImplementedException("create not implemented");
-  }
-
-  @Override
-  public Response delete(String primaryKey) {
-    throw new NotImplementedException("delete not implemented");
-  }
-
-  @Override
-  public Response update(String primaryKey, InvolvementHistory request) {
-    throw new NotImplementedException("update not implemented");
+  protected HOIScreeningResponse handleRequest(HOIScreening hoiScreening) {
+    LOGGER.info("HOIScreeningService handle request not implemented");
+    throw new NotImplementedException("handle request not implemented");
   }
 
 }
