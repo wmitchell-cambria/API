@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,133 +11,189 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import gov.ca.cwds.data.ns.NsPersistentObject;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * {@link NsPersistentObject} representing an Address
- * 
+ * {@link PersistentObject} representing Participant.
+ *
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "hotline_contact_participant")
-public class Participant extends NsPersistentObject {
+@Table(name = "participants")
+public class Participant implements PersistentObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE,
-      generator = "seq_hotline_contact_participant_id")
-  @SequenceGenerator(name = "seq_hotline_contact_participant_id",
-      sequenceName = "seq_hotline_contact_participant_id", allocationSize = 50)
-  @Column(name = "hotline_contact_participant_id")
-  private Long hotlineContactParticipantId;
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_id")
+  @SequenceGenerator(name = "participant_id", sequenceName = "participants_id_seq")
+  private String id;
 
-  @Column(name = "hotline_contact_id")
-  private long screeningId;
+  @Column(name = "date_of_birth")
+  private Date dateOfBirth;
 
-  @Column(name = "person_id")
-  private long personId;
+  @Column(name = "first_name")
+  private String firstName;
 
-  @Column(name = "hotline_contact_participant_type")
-  private String hotelineContactParticipantType;
+  @Column(name = "gender")
+  private String gender;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "hotline_contact_id", nullable = false, insertable = false, updatable = false)
+  @Column(name = "last_name")
+  private String lastName;
+
+  @Column(name = "ssn")
+  private String ssn;
+
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "screening_id", nullable = false, insertable = false, updatable = false)
   private Screening screening;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "person_id", insertable = false, updatable = false)
-  private Person person;
+  @Column(name = "legacy_id")
+  private String legacyId;
 
+  @Column(name = "roles")
+  private String roles;
 
+  @Column(name = "languages")
+  private String languages;
 
-  /**
-   * @param person - personId
-   * @param screening - screeningId
-   */
-  public Participant(long person, long screening) {
-    this.personId = person;
-    this.screeningId = screening;
-  }
+  @Column(name = "middle_name")
+  private String middleName;
 
+  @Column(name = "name_suffix")
+  private String nameSuffix;
 
-  /**
-   * @param participant The domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
-   * @param createUserId the id of the person created the record
-   */
-  public Participant(gov.ca.cwds.rest.api.domain.Participant participant, String lastUpdatedId,
-      String createUserId) {
-    super(lastUpdatedId, createUserId);
-    // this.personId = participant.getPersonId();
-    this.screeningId = participant.getScreeningId();
-  }
+  @Column(name = "races")
+  private String races;
 
-  /**
-   * @param participant The domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
-   * @param createUserId the id of the person created the record
-   * @param person the Person that matches the personId
-   */
-  public Participant(gov.ca.cwds.rest.api.domain.Participant participant, String lastUpdatedId,
-      String createUserId, Person person) {
-    super(lastUpdatedId, createUserId);
-    // this.personId = participant.getPersonId();
-    this.screeningId = participant.getScreeningId();
-    this.person = person;
-  }
+  @Column(name = "ethnicity")
+  private String ethnicity;
+
+  @Column(name = "legacy_source_table")
+  private String legacySourceTable;
+
+  @Column(name = "sensitive")
+  private String sensitive;
+
+  @Column(name = "sealed")
+  private String sealed;
+
+  @Column(name = "approximate_age")
+  private String approximateAge;
+
+  @Column(name = "approximate_age_units")
+  private String approximateAgeUnits;
 
   /**
    * Default constructor
-   * 
+   *
    * Required for Hibernate
    */
   public Participant() {
     super();
   }
 
-
   @Override
-  public Long getPrimaryKey() {
-    return getId();
+  public String getPrimaryKey() {
+    return id;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public Date getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getGender() {
+    return gender;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String getSsn() {
+    return ssn;
+  }
+
+  public Screening getScreening() {
+    return screening;
+  }
+
+  public String getLegacyId() {
+    return legacyId;
+  }
+
+  public String getRoles() {
+    return roles;
+  }
+
+  public String getLanguages() {
+    return languages;
+  }
+
+  public String getMiddleName() {
+    return middleName;
+  }
+
+  public String getNameSuffix() {
+    return nameSuffix;
+  }
+
+  public String getRaces() {
+    return races;
+  }
+
+  public String getEthnicity() {
+    return ethnicity;
+  }
+
+  public String getLegacySourceTable() {
+    return legacySourceTable;
+  }
+
+  public String getSensitive() {
+    return sensitive;
+  }
+
+  public String getSealed() {
+    return sealed;
+  }
+
+  public String getApproximateAge() {
+    return approximateAge;
+  }
+
+  public String getApproximateAgeUnits() {
+    return approximateAgeUnits;
   }
 
   /**
-   * @return the id
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
    */
-  public Long getId() {
-    return hotlineContactParticipantId;
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   /**
-   * @return the personId
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
    */
-  public long getPersonId() {
-    return personId;
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
-
-  /**
-   * @return the screeningId
-   */
-  public long getHotlineContactId() {
-    return screeningId;
-  }
-
-  /**
-   * @return the hotelineContactParticipantType
-   */
-  public String getHotelineContactParticipantType() {
-    return hotelineContactParticipantType;
-  }
-
-  /**
-   * @return the person
-   */
-  public Person getPerson() {
-    return person;
-  }
-
 }

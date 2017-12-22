@@ -1,5 +1,7 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCode;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptor;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -171,7 +173,7 @@ import io.dropwizard.setup.Bootstrap;
 
 /**
  * DI (dependency injection) setup for data access objects (DAO).
- * 
+ *
  * @author CWDS API Team
  * @see ApiSessionFactoryFactory
  */
@@ -216,10 +218,11 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(Person.class, Address.class, Screening.class,
+          LegacyDescriptor.class,
           Participant.class, PersonAddressId.class, PersonAddress.class, PersonPhoneId.class,
           PhoneNumber.class, PersonPhone.class, PersonLanguageId.class, Language.class,
           PersonLanguage.class, PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class,
-          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class,
+          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class, IntakeLOVCode.class,
           gov.ca.cwds.data.persistence.ns.Allegation.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
@@ -234,7 +237,7 @@ public class DataAccessModule extends AbstractModule {
 
   /**
    * Constructor takes the API configuration.
-   * 
+   *
    * @param bootstrap the ApiConfiguration
    */
   public DataAccessModule(Bootstrap<ApiConfiguration> bootstrap) {
@@ -244,7 +247,7 @@ public class DataAccessModule extends AbstractModule {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see com.google.inject.AbstractModule#configure()
    */
   @Override

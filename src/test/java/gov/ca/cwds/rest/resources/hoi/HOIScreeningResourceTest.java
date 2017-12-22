@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -25,15 +26,13 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 /****
  * NOTE:The CWDS API Team has taken the pattern of delegating Resource functions to
- * 
+ *
  * {@link ServiceBackedResourceDelegate}. As such the tests in here reflect that assumption.
  *
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
 public class HOIScreeningResourceTest {
-
-  private static final String ROOT_RESOURCE = "/screenings/";
 
   @After
   public void ensureServiceLocatorPopulated() {
@@ -64,9 +63,8 @@ public class HOIScreeningResourceTest {
   }
 
   @Test
-  public void findDelegatesToResourceDelegate() throws Exception {
-
-    inMemoryResource.client().target(ROOT_RESOURCE + "1/history_of_involvements").request()
+  public void findDelegatesToResourceDelegate() {
+    inMemoryResource.client().target("/" + RESOURCE_HOI_SCREENINGS + "/1").request()
         .accept(MediaType.APPLICATION_JSON).get().getStatus();
     verify(typedResourceDelegate, atLeastOnce()).get("1");
   }

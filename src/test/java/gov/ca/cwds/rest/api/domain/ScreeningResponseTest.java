@@ -17,7 +17,6 @@ import io.dropwizard.jackson.Jackson;
 
 /**
  * @author CWDS API Team
- *
  */
 public class ScreeningResponseTest {
 
@@ -36,12 +35,12 @@ public class ScreeningResponseTest {
   final Long id = (long) 1234567;
   final String lastUpdateId = "234567";
   final String createId = "234567";
-  private Set<String> roles = new HashSet<String>();
-  private Set<Address> addresses = new HashSet<Address>();
+  private Set<String> roles = new HashSet<>();
+  private Set<Address> addresses = new HashSet<>();
 
   /*
    * constructor tests
-   * 
+   *
    */
   @SuppressWarnings("javadoc")
   @Test
@@ -49,32 +48,31 @@ public class ScreeningResponseTest {
 
     // ScreeningResponse vsr = validScreeningResponse();
 
-
   }
 
   @SuppressWarnings("javadoc")
   @Test
   public void testPesistentObjectConstructor() throws Exception {
-    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
-    Address addressDomain =
-        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
-    addresses.add(addressDomain);
-    roles.add("victim");
-
-    // ScreeningResponse vsr = validScreeningResponse();
-    Screening vs = validScreening();
-
-    gov.ca.cwds.data.persistence.ns.Address address = this.validAddress();
-
-    Participant dp = validParticipant();
-    gov.ca.cwds.data.persistence.ns.Participant participant =
-        new gov.ca.cwds.data.persistence.ns.Participant(dp, lastUpdateId, createId);
-
-    ImmutableSet.Builder<gov.ca.cwds.data.persistence.ns.Participant> participantSetBuilder =
-        ImmutableSet.builder();
-    participantSetBuilder.add(participant);
-    Set<gov.ca.cwds.data.persistence.ns.Participant> participants;
-    participants = participantSetBuilder.build();
+//    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
+//    Address addressDomain =
+//        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
+//    addresses.add(addressDomain);
+//    roles.add("victim");
+//
+//    // ScreeningResponse vsr = validScreeningResponse();
+//    Screening vs = validScreening();
+//
+//    gov.ca.cwds.data.persistence.ns.Address address = this.validAddress();
+//
+//    Participant dp = validParticipant();
+//    gov.ca.cwds.data.persistence.ns.Participant participant =
+//        new gov.ca.cwds.data.persistence.ns.Participant(dp, lastUpdateId, createId);
+//
+//    ImmutableSet.Builder<gov.ca.cwds.data.persistence.ns.Participant> participantSetBuilder =
+//        ImmutableSet.builder();
+//    participantSetBuilder.add(participant);
+//    Set<gov.ca.cwds.data.persistence.ns.Participant> participants;
+//    participants = participantSetBuilder.build();
 
     // gov.ca.cwds.data.persistence.ns.Screening persistent =
     // new gov.ca.cwds.data.persistence.ns.Screening(id, vs, address, participants, lastUpdateId,
@@ -103,7 +101,6 @@ public class ScreeningResponseTest {
 
   }
 
-
   // TODO : "equals" seems to work but the test is failing. Need to figure out the message.
   // TODO : verify 'STRICT_INHERITENCE' is appropriate here - reference pvitoltracker #136527227
   // @Test
@@ -111,7 +108,6 @@ public class ScreeningResponseTest {
   // EqualsVerifier.forClass(ScreeningResponse.class)
   // .suppress(Warning.NONFINAL_FIELDS, Warning.STRICT_INHERITANCE).suppress().verify();
   // }
-
 
   // Serialization and deserialization
 
@@ -212,9 +208,8 @@ public class ScreeningResponseTest {
   }
 
   /**
-   * 
    * persistence Address object
-   * 
+   *
    * @Address
    */
   private gov.ca.cwds.data.persistence.ns.Address validAddress() {

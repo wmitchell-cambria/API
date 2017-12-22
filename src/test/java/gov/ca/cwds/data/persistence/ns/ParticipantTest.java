@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -10,8 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
-
-import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 
 @SuppressWarnings("javadoc")
 public class ParticipantTest {
@@ -37,33 +34,5 @@ public class ParticipantTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     assertThat(Participant.class.newInstance(), is(notNullValue()));
-  }
-
-  @Test
-  public void testConstructor() {
-    Participant participant = new Participant(personId, screeningId);
-    assertEquals(participant.getPersonId(), personId);
-    assertEquals(participant.getHotlineContactId(), screeningId);
-  }
-
-  @Test
-  public void testConstructorUsingDomain() {
-    gov.ca.cwds.rest.api.domain.Participant domain =
-        new ParticipantResourceBuilder().createParticipant();
-    Participant participant = new Participant(domain, userId, userId);
-    assertEquals(participant.getPrimaryKey(), participant.getId());
-    assertEquals(participant.getHotlineContactId(), domain.getScreeningId());
-  }
-
-  @Test
-  public void testConstructorUsingDomainWithPerson() {
-    gov.ca.cwds.rest.api.domain.Participant domain =
-        new ParticipantResourceBuilder().createParticipant();
-    Person person = new Person(id, firstName, middleName, lastName, gender, birthDate, ssn,
-        personAddress, personPhone, personLanguage, personRace, personEthnicity);
-
-    Participant participant = new Participant(domain, userId, userId, person);
-    assertEquals(participant.getHotlineContactId(), domain.getScreeningId());
-    assertEquals(participant.getPerson(), person);
   }
 }

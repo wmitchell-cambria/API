@@ -33,6 +33,11 @@ public final class Api {
   public static final String RESOURCE_SCREENINGS = "screenings";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_HOI_SCREENINGS} API..
+   */
+  public static final String RESOURCE_HOI_SCREENINGS = "hoi_screenings";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_REFERRALS} API..
    */
   public static final String RESOURCE_REFERRALS = "referrals";
