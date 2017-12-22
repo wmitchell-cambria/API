@@ -36,6 +36,8 @@ import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.People;
@@ -114,6 +116,7 @@ import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.es.IndexQueryService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
+import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
@@ -505,7 +508,7 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @InvolvementHistoryServiceBackedResource
-  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> screeningHOIServiceBackedResource(
+  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> involvementHistoryServiceBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(InvolvementHistoryService.class));
@@ -525,5 +528,11 @@ public class ResourcesModule extends AbstractModule {
     return new SimpleResourceDelegate<>(injector.getInstance(HOICaseService.class));
   }
 
-}
+  @Provides
+  @HOIScreeningServiceBackedResource
+  public SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> screeningHOIServiceBackedResource(
+      Injector injector) {
+    return new SimpleResourceDelegate<>(injector.getInstance(HOIScreeningService.class));
+  }
 
+}

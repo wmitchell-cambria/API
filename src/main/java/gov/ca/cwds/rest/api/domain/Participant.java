@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * {@link DomainObject} representing a Participant.
- * 
+ *
  * @author CWDS API Team
  */
 @JsonSnakeCase
@@ -174,7 +174,7 @@ public class Participant extends ReportingDomain implements Request, Response {
 
   /**
    * Constructor
-   * 
+   *
    * @param id The id of the Participant
    * @param legacySourceTable - legacy source table name
    * @param clientId - the legacy clientId
@@ -248,44 +248,6 @@ public class Participant extends ReportingDomain implements Request, Response {
       perpetrator = ParticipantValidator.isPerpetrator(this);
     } catch (Exception e) {
       throw new ServiceException("An Error Occured while validating participant roles", e);
-    }
-  }
-
-  /**
-   * Construct from persistence class
-   * 
-   * @param participant persistence level participant object
-   */
-  public Participant(gov.ca.cwds.data.persistence.ns.Participant participant) {
-    this.screeningId = participant.getHotlineContactId();
-    if (participant.getPerson() != null) {
-      this.firstName = participant.getPerson().getFirstName();
-      this.middleName = participant.getPerson().getMiddleName();
-      this.lastName = participant.getPerson().getLastName();
-      this.nameSuffix = "";
-      this.gender = participant.getPerson().getGender();
-      this.dateOfBirth = DomainChef.cookDate(participant.getPerson().getDateOfBirth());
-      this.ssn = participant.getPerson().getSsn();
-      this.legacyDescriptor = new LegacyDescriptor();
-    }
-  }
-
-  /**
-   * Construct from persistence class and person
-   * 
-   * @param participant persistence level participant object
-   * @param person domain person object
-   */
-  public Participant(gov.ca.cwds.data.persistence.ns.Participant participant, Person person) {
-    this.screeningId = participant.getHotlineContactId();
-    if (person != null) {
-      this.firstName = person.getFirstName();
-      this.middleName = person.getMiddleName();
-      this.lastName = person.getLastName();
-      this.nameSuffix = person.getNameSuffix();
-      this.gender = person.getGender();
-      this.dateOfBirth = person.getBirthDate();
-      this.ssn = person.getSsn();
     }
   }
 
@@ -463,7 +425,7 @@ public class Participant extends ReportingDomain implements Request, Response {
 
   /**
    * adds a set of addresses to current addresses.
-   * 
+   *
    * @param addresses - domain addresses
    */
   public void addAddresses(Set<Address> addresses) {

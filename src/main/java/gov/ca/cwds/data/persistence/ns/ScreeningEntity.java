@@ -9,32 +9,43 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.data.ns.NsPersistentObject;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * {@link NsPersistentObject} representing a Person.
- * 
+ * {@link PersistentObject} representing Screening.
+ *
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.Screening.findScreeningsByReferralId",
-    query = "FROM Screening WHERE referralId = :referralId")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByReferralId",
+    query = "FROM ScreeningEntity WHERE referralId = :referralId")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findHoiScreeningsByScreeningId",
+    query = "SELECT s FROM ScreeningEntity s JOIN s.participants p "
+        + "WHERE s.id <> :screeningId AND p.legacyId IN ("
+        + "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "screenings")
-public class Screening implements PersistentObject {
+public class ScreeningEntity implements PersistentObject {
 
   @Id
   @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screening_id")
+  @SequenceGenerator(name = "screening_id", sequenceName = "screenings_id_seq")
   private String id;
 
   @Column(name = "reference")
@@ -86,7 +97,6 @@ public class Screening implements PersistentObject {
   @Type(type = "gov.ca.cwds.rest.util.StringArrayType")
   private String[] safetyAlerts;
 
-
   @Column(name = "referral_id")
   private String referralId;
 
@@ -100,7 +110,7 @@ public class Screening implements PersistentObject {
   private String restrictionsRationale;
 
   @Column(name = "user_county_code")
-  private String userCountyCode;
+  private Integer userCountyCode;
 
   @Column(name = "restrictions_date")
   private Date restrictionsDate;
@@ -108,30 +118,33 @@ public class Screening implements PersistentObject {
   @Column(name = "indexable")
   private boolean indexable;
 
-  @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL)
-  private Set<gov.ca.cwds.data.persistence.ns.Allegation> allegations = new HashSet<>();
+  @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
+  private Set<Allegation> allegations = new HashSet<>();
+
+  @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<ParticipantEntity> participants = new HashSet<>();
 
   /**
    * Default constructor
-   * 
+   *
    * Required for Hibernate
    */
-  public Screening() {
+  public ScreeningEntity() {
     super();
   }
 
   /**
    * Constructor
-   * 
+   *
    * @param reference The reference
    */
-  public Screening(String reference) {
+  public ScreeningEntity(String reference) {
     this.reference = reference;
   }
 
   /**
    * Constructor
-   * 
+   *
    * @param reference The reference
    * @param endedAt The endedAt date
    * @param incidentCounty The incident county
@@ -146,10 +159,10 @@ public class Screening implements PersistentObject {
    * @param contactAddress The contact address
    * @param participants The list of participants
    */
-  public Screening(String reference, Date endedAt, String incidentCounty, Date incidentDate,
+  public ScreeningEntity(String reference, Date endedAt, String incidentCounty, Date incidentDate,
       String locationType, String communicationMethod, String name, String responseTime,
       String screeningDecision, Date startedAt, String narrative, Address contactAddress,
-      Set<Participant> participants) {
+      Set<ParticipantEntity> participants) {
     super();
     this.reference = reference;
     this.endedAt = freshDate(endedAt);
@@ -163,11 +176,12 @@ public class Screening implements PersistentObject {
     this.narrative = narrative;
 
     this.safetyAlerts = new String[1];
+    this.participants = participants;
   }
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
@@ -319,7 +333,7 @@ public class Screening implements PersistentObject {
   /**
    * @return the userCountyCode
    */
-  public String getUserCountyCode() {
+  public Integer getUserCountyCode() {
     return userCountyCode;
   }
 
@@ -344,4 +358,27 @@ public class Screening implements PersistentObject {
     return allegations;
   }
 
+  public Set<ParticipantEntity> getParticipants() {
+    return participants;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
 }

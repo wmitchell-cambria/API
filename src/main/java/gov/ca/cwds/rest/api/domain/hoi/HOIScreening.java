@@ -1,9 +1,13 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
-import java.util.ArrayList;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.rest.api.Request;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 
+import java.util.Set;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,10 +24,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Screening for HOI.
- * 
+ *
  * @author CWDS API Team
  */
-public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifier<String> {
+public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
 
   private static final long serialVersionUID = 1L;
 
@@ -62,13 +66,27 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
   private HOISocialWorker assignedSocialWorker;
 
   @JsonProperty("all_people")
-  private List<HOIPerson> allPeople = new ArrayList<>();
+  private Set<HOIPerson> allPeople = new HashSet<>();
 
   /**
    * No-argument constructor
    */
   public HOIScreening() {
     // No-argument constructor
+  }
+
+  /**
+   * Construct from persistence class
+   *
+   * @param screeningEntity persistence level screening object
+   */
+  public HOIScreening(ScreeningEntity screeningEntity) {
+    this.id = screeningEntity.getId();
+    this.name = screeningEntity.getName();
+    this.decision = screeningEntity.getScreeningDecision();
+    this.decisionDetail = screeningEntity.getScreeningDecisionDetail();
+    this.startDate = screeningEntity.getStartedAt();
+    this.endDate = screeningEntity.getEndedAt();
   }
 
   @Override
@@ -96,8 +114,6 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
   public void setDecisionDetail(String decisionDetail) {
     this.decisionDetail = decisionDetail;
   }
-
-
 
   public Date getStartDate() {
     return FerbDateUtils.freshDate(startDate);
@@ -148,12 +164,32 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
     this.decision = decision;
   }
 
-  public List<HOIPerson> getAllPeople() {
+  public Set<HOIPerson> getAllPeople() {
     return allPeople;
   }
 
-  public void setAllPeople(List<HOIPerson> allPeople) {
+  public void setAllPeople(Set<HOIPerson> allPeople) {
     this.allPeople = allPeople;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
   public static void main(String[] args) throws Exception {
@@ -167,7 +203,6 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
         .setLegacyDescriptor(new LegacyDescriptor("jhgguhgjh", "jhgguhgjh-hohj-jkj", new DateTime(),
             LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription()));
     screening.setAssignedSocialWorker(socialWorker);
-
 
     SystemCodeDescriptor county = new SystemCodeDescriptor();
     county.setId((short) 1101);
@@ -198,7 +233,6 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
     person1.setLegacyDescriptor(new LegacyDescriptor("bbbbbbbbb", "bbbbbbbbb-hohj-jkj",
         new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
 
-
     HOIPerson person2 = new HOIPerson();
     person2.setFirstName("Jane");
     person2.setLastName("S");
@@ -206,7 +240,7 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
     person2.setLegacyDescriptor(new LegacyDescriptor("aaaaaaaaa", "aaaaaaaaa-hohj-jkj",
         new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
 
-    List<HOIPerson> people = new ArrayList<>();
+    Set<HOIPerson> people = new HashSet<>();
     people.add(person1);
     people.add(person2);
     screening.setAllPeople(people);
