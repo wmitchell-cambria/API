@@ -165,6 +165,7 @@ dependencies {
 
 	compile 'com.fasterxml.jackson.module:jackson-module-guice:2.8.2'
 	compile group: "com.smartystreets.api", name: "smartystreets-java-sdk", version: "1.0.7"
+	compile group: "com.smartystreets.api", name: "smartystreets-java-sdk", version: "1.0.7"
 	compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'
 
     compile fileTree(dir: 'lib', include: ['*.jar'])
