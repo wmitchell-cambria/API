@@ -43,11 +43,11 @@ public class Allegation implements PersistentObject {
 
   @ManyToOne
   @JoinColumn(name = "screening_id", insertable = false, updatable = false)
-  private gov.ca.cwds.data.persistence.ns.Screening screening;
+  private ScreeningEntity screeningEntity;
 
   /**
    * @param id - id
-   * @param screeningId - screening id
+   * @param screeningId - screeningEntity id
    * @param perpetratorId - perpetrator id
    * @param victimId - victim id
    * @param createdAt - date created
@@ -64,7 +64,7 @@ public class Allegation implements PersistentObject {
     this.updatedAt = updatedAt;
     this.allegationTypes =
         allegationType != null ? Arrays.copyOf(allegationType, allegationType.length) : null;
-    this.screening = null;
+    this.screeningEntity = null;
   }
 
   @Override
@@ -130,10 +130,10 @@ public class Allegation implements PersistentObject {
   }
 
   /**
-   * @return the screening
+   * @return the screeningEntity
    */
-  public Screening getScreening() {
-    return screening;
+  public ScreeningEntity getScreening() {
+    return screeningEntity;
   }
 
 }

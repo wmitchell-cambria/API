@@ -2,8 +2,9 @@ package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.ns.ScreeningDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCode;
-import gov.ca.cwds.data.persistence.ns.Screening;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
@@ -20,37 +21,37 @@ public final class HOIScreeningFactory {
   HOIPersonFactory hoiPersonFactory;
 
   /**
-   * @param persistedScreening ns Screening
+   * @param screeningEntity ns ScreeningEntity
    * @return HOIScreening
    */
-  public HOIScreening buildHOIScreening(Screening persistedScreening) {
-    HOIScreening result = new HOIScreening(persistedScreening);
+  public HOIScreening buildHOIScreening(ScreeningEntity screeningEntity) {
+    HOIScreening result = new HOIScreening(screeningEntity);
 
-    if (persistedScreening.getIncidentCounty() != null) {
-      IntakeLOVCode code = screeningDao
-          .findIntakeLOVCodeByIntakeCode(persistedScreening.getIncidentCounty());
+    if (screeningEntity.getIncidentCounty() != null) {
+      IntakeLOVCodeEntity code = screeningDao
+          .findIntakeLOVCodeByIntakeCode(screeningEntity.getIncidentCounty());
       if (code != null) {
         result.setCounty(
             new SystemCodeDescriptor(code.getLgSysId().shortValue(), code.getIntakeDisplay()));
       }
     }
 
-    if (persistedScreening.getParticipants() != null) {
-      for (gov.ca.cwds.data.persistence.ns.Participant persistedParticipant : persistedScreening
+    if (screeningEntity.getParticipants() != null) {
+      for (ParticipantEntity persistedParticipantEntity : screeningEntity
           .getParticipants()) {
-        HOIPerson participant = hoiPersonFactory.buildHOIPerson(persistedParticipant);
+        HOIPerson participant = hoiPersonFactory.buildHOIPerson(persistedParticipantEntity);
         result.getAllPeople().add(participant);
 
         if (result.getReporter() == null) {
           result.setReporter(hoiPersonFactory
-              .buidHOIReporter(persistedParticipant, participant.getLegacyDescriptor()));
+              .buidHOIReporter(persistedParticipantEntity, participant.getLegacyDescriptor()));
         }
       }
     }
 
-    if (persistedScreening.getAssigneeStaffId() != null) {
+    if (screeningEntity.getAssigneeStaffId() != null) {
       result.setAssignedSocialWorker(
-          hoiPersonFactory.buildHOISocialWorker(persistedScreening.getAssigneeStaffId()));
+          hoiPersonFactory.buildHOISocialWorker(screeningEntity.getAssigneeStaffId()));
     }
 
     return result;

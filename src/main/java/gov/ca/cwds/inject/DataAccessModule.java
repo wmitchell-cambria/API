@@ -1,7 +1,7 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCode;
-import gov.ca.cwds.data.persistence.ns.LegacyDescriptor;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -135,7 +135,7 @@ import gov.ca.cwds.data.persistence.ns.Address;
 import gov.ca.cwds.data.persistence.ns.Ethnicity;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.data.persistence.ns.Language;
-import gov.ca.cwds.data.persistence.ns.Participant;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.Person;
 import gov.ca.cwds.data.persistence.ns.PersonAddress;
 import gov.ca.cwds.data.persistence.ns.PersonAddressId;
@@ -149,7 +149,7 @@ import gov.ca.cwds.data.persistence.ns.PersonRace;
 import gov.ca.cwds.data.persistence.ns.PersonRaceId;
 import gov.ca.cwds.data.persistence.ns.PhoneNumber;
 import gov.ca.cwds.data.persistence.ns.Race;
-import gov.ca.cwds.data.persistence.ns.Screening;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.data.validation.SmartyStreetsDao;
 import gov.ca.cwds.rest.ApiConfiguration;
@@ -221,12 +221,12 @@ public class DataAccessModule extends AbstractModule {
       };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(Person.class, Address.class, Screening.class,
-          LegacyDescriptor.class,
-          Participant.class, PersonAddressId.class, PersonAddress.class, PersonPhoneId.class,
+      new HibernateBundle<ApiConfiguration>(Person.class, Address.class, ScreeningEntity.class,
+          LegacyDescriptorEntity.class, IntakeLOVCodeEntity.class,
+          ParticipantEntity.class, PersonAddressId.class, PersonAddress.class, PersonPhoneId.class,
           PhoneNumber.class, PersonPhone.class, PersonLanguageId.class, Language.class,
           PersonLanguage.class, PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class,
-          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class, IntakeLOVCode.class,
+          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class,
           gov.ca.cwds.data.persistence.ns.Allegation.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {

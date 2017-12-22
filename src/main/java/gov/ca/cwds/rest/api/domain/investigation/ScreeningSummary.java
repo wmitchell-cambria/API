@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import gov.ca.cwds.data.persistence.ns.Screening;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -120,19 +120,19 @@ public class ScreeningSummary extends ReportingDomain implements Response {
   /**
    * Constructor - assigning Screening summary values
    * 
-   * @param screening - Screening object
+   * @param screeningEntity - ScreeningEntity object
    * @param allegations - list of allegations
    */
-  public ScreeningSummary(Screening screening, Set<SimpleAllegation> allegations) {
+  public ScreeningSummary(ScreeningEntity screeningEntity, Set<SimpleAllegation> allegations) {
     safetyAlerts = new HashSet<>();
-    this.name = screening.getName();
-    Collections.addAll(this.safetyAlerts, screening.getSafetyAlerts());
-    this.decision = screening.getScreeningDecision();
-    this.additionalInformation = screening.getAdditionalInformation();
-    this.decisionDetail = screening.getScreeningDecisionDetail();
-    this.id = screening.getId();
-    this.safetyInformation = screening.getSafetyInformation();
-    this.startedAt = screening.getStartedAt();
+    this.name = screeningEntity.getName();
+    Collections.addAll(this.safetyAlerts, screeningEntity.getSafetyAlerts());
+    this.decision = screeningEntity.getScreeningDecision();
+    this.additionalInformation = screeningEntity.getAdditionalInformation();
+    this.decisionDetail = screeningEntity.getScreeningDecisionDetail();
+    this.id = screeningEntity.getId();
+    this.safetyInformation = screeningEntity.getSafetyInformation();
+    this.startedAt = screeningEntity.getStartedAt();
     this.allegations = allegations;
   }
 

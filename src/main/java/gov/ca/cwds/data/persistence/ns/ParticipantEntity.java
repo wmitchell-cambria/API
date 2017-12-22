@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "participants")
-public class Participant implements PersistentObject {
+public class ParticipantEntity implements PersistentObject {
 
   @Id
   @Column(name = "id")
@@ -49,7 +49,7 @@ public class Participant implements PersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "screening_id", nullable = false, insertable = false, updatable = false)
-  private Screening screening;
+  private ScreeningEntity screeningEntity;
 
   @Column(name = "legacy_id")
   private String legacyId;
@@ -92,7 +92,7 @@ public class Participant implements PersistentObject {
    *
    * Required for Hibernate
    */
-  public Participant() {
+  public ParticipantEntity() {
     super();
   }
 
@@ -125,8 +125,8 @@ public class Participant implements PersistentObject {
     return ssn;
   }
 
-  public Screening getScreening() {
-    return screening;
+  public ScreeningEntity getScreening() {
+    return screeningEntity;
   }
 
   public String getLegacyId() {

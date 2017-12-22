@@ -19,7 +19,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Table(name = "intake_lov_codes")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCode.findIntakeLOVCodeByIntakeCode",
     query = "SELECT c FROM IntakeLOVCode c WHERE c.intakeCode = :intakeCode")
-public class IntakeLOVCode implements PersistentObject {
+public class IntakeLOVCodeEntity implements PersistentObject {
 
   @Id
   @Column(name = "cat_id")
@@ -45,7 +45,7 @@ public class IntakeLOVCode implements PersistentObject {
    *
    * Required for Hibernate
    */
-  public IntakeLOVCode() {
+  public IntakeLOVCodeEntity() {
     super();
   }
 

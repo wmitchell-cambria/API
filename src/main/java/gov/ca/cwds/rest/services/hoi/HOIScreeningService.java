@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
@@ -40,9 +41,9 @@ public class HOIScreeningService extends SimpleResourceService<String, HOIScreen
     // SessionFactory from postgres DB and need to open session in order to execute.
     try (Session session = screeningDao.getSessionFactory().openSession()) {
       ManagedSessionContext.bind(session);
-      for (gov.ca.cwds.data.persistence.ns.Screening persistedScreening : screeningDao
+      for (ScreeningEntity screeningEntity : screeningDao
           .findHoiScreeningsByScreeningId(primaryKey)) {
-        screenings.add(hoiScreeningFactory.buildHOIScreening(persistedScreening));
+        screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
       }
     }
     return new HOIScreeningResponse(screenings);

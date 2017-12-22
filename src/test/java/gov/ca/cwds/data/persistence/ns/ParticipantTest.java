@@ -33,6 +33,6 @@ public class ParticipantTest {
 
   @Test
   public void testEmptyConstructor() throws Exception {
-    assertThat(Participant.class.newInstance(), is(notNullValue()));
+    assertThat(ParticipantEntity.class.newInstance(), is(notNullValue()));
   }
 }

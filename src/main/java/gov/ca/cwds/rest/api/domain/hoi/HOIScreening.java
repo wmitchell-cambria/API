@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
-import gov.ca.cwds.data.persistence.ns.Screening;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.Request;
 import java.util.Date;
 import java.util.HashSet;
@@ -78,15 +78,15 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
   /**
    * Construct from persistence class
    *
-   * @param persistedScreening persistence level screening object
+   * @param screeningEntity persistence level screening object
    */
-  public HOIScreening(Screening persistedScreening) {
-    this.id = persistedScreening.getId();
-    this.name = persistedScreening.getName();
-    this.decision = persistedScreening.getScreeningDecision();
-    this.decisionDetail = persistedScreening.getScreeningDecisionDetail();
-    this.startDate = persistedScreening.getStartedAt();
-    this.endDate = persistedScreening.getEndedAt();
+  public HOIScreening(ScreeningEntity screeningEntity) {
+    this.id = screeningEntity.getId();
+    this.name = screeningEntity.getName();
+    this.decision = screeningEntity.getScreeningDecision();
+    this.decisionDetail = screeningEntity.getScreeningDecisionDetail();
+    this.startDate = screeningEntity.getStartedAt();
+    this.endDate = screeningEntity.getEndedAt();
   }
 
   @Override

@@ -231,21 +231,21 @@ definitions:
 
   ScreeningRequest:
     allOf:
-      - $ref: '#/definitions/Screening'
+      - $ref: '#/definitions/ScreeningEntity'
     properties:
       address:
         $ref: '#/definitions/Address'
 
   ScreeningResponse:
     allOf:
-      - $ref: '#/definitions/Screening'
+      - $ref: '#/definitions/ScreeningEntity'
     properties:
       address:
         $ref: '#/definitions/Address'
       participants:
         type: array
         items:
-          $ref: '#/definitions/Participant'
+          $ref: '#/definitions/ParticipantEntity'
 
 paths:
   /people/{id}:
@@ -330,7 +330,7 @@ paths:
 
   /screenings/{id}:
     get:
-      description: Gets `Screening` object for the id.
+      description: Gets `ScreeningEntity` object for the id.
       tags:
         - screenings
         - screening
@@ -347,7 +347,7 @@ paths:
           schema:
             $ref: '#/definitions/ScreeningResponse'
     put:
-      description: Updates a `Screening` object
+      description: Updates a `ScreeningEntity` object
       tags:
         - screenings
         - screening
@@ -360,7 +360,7 @@ paths:
           format: int64
         - name: body
           in: body
-          description: Screening parameters
+          description: ScreeningEntity parameters
           required: true
           schema:
             $ref: '#/definitions/ScreeningRequest'
@@ -379,10 +379,10 @@ paths:
       parameters:
         - name: body
           in: body
-          description: Screening parameters
+          description: ScreeningEntity parameters
           required: true
           schema:
-            title: Screening Reference
+            title: ScreeningEntity Reference
             properties:
               reference:
                 type: string
@@ -390,7 +390,7 @@ paths:
         200:
           description: Successful creation
           schema:
-            title: Screening
+            title: ScreeningEntity
             allOf:
             - $ref: '#/definitions/ScreeningResponse'
             properties:
@@ -438,22 +438,22 @@ paths:
 
   /participants:
     post:
-      summary: Creates a `Participant` object.
+      summary: Creates a `ParticipantEntity` object.
       operationId: createParticipant
       parameters:
       - name: body
         in: body
-        description: Participant to create
+        description: ParticipantEntity to create
         required: true
         schema:
-          $ref: '#/definitions/Participant'
+          $ref: '#/definitions/ParticipantEntity'
       responses:
         201:
           description: Successful creation
           schema:
-            title: Participant
+            title: ParticipantEntity
             allOf:
-            - $ref: '#/definitions/Participant'
+            - $ref: '#/definitions/ParticipantEntity'
             properties:
               id:
                 type: integer

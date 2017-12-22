@@ -31,16 +31,16 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  *
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.Screening.findScreeningsByReferralId",
-    query = "FROM Screening WHERE referralId = :referralId")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.Screening.findHoiScreeningsByScreeningId",
-    query = "SELECT s FROM Screening s JOIN s.participants p "
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByReferralId",
+    query = "FROM ScreeningEntity WHERE referralId = :referralId")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findHoiScreeningsByScreeningId",
+    query = "SELECT s FROM ScreeningEntity s JOIN s.participants p "
         + "WHERE s.id <> :screeningId AND p.legacyId IN ("
-        + "SELECT legacyId FROM Participant WHERE screening.id = :screeningId)")
+        + "SELECT legacyId FROM ParticipantEntity WHERE screening.id = :screeningId)")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "screenings")
-public class Screening implements PersistentObject {
+public class ScreeningEntity implements PersistentObject {
 
   @Id
   @Column(name = "id")
@@ -122,14 +122,14 @@ public class Screening implements PersistentObject {
   private Set<Allegation> allegations = new HashSet<>();
 
   @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private Set<Participant> participants = new HashSet<>();
+  private Set<ParticipantEntity> participants = new HashSet<>();
 
   /**
    * Default constructor
    *
    * Required for Hibernate
    */
-  public Screening() {
+  public ScreeningEntity() {
     super();
   }
 
@@ -138,7 +138,7 @@ public class Screening implements PersistentObject {
    *
    * @param reference The reference
    */
-  public Screening(String reference) {
+  public ScreeningEntity(String reference) {
     this.reference = reference;
   }
 
@@ -159,10 +159,10 @@ public class Screening implements PersistentObject {
    * @param contactAddress The contact address
    * @param participants The list of participants
    */
-  public Screening(String reference, Date endedAt, String incidentCounty, Date incidentDate,
+  public ScreeningEntity(String reference, Date endedAt, String incidentCounty, Date incidentDate,
       String locationType, String communicationMethod, String name, String responseTime,
       String screeningDecision, Date startedAt, String narrative, Address contactAddress,
-      Set<Participant> participants) {
+      Set<ParticipantEntity> participants) {
     super();
     this.reference = reference;
     this.endedAt = freshDate(endedAt);
@@ -176,6 +176,7 @@ public class Screening implements PersistentObject {
     this.narrative = narrative;
 
     this.safetyAlerts = new String[1];
+    this.participants = participants;
   }
 
   /**
@@ -357,7 +358,7 @@ public class Screening implements PersistentObject {
     return allegations;
   }
 
-  public Set<Participant> getParticipants() {
+  public Set<ParticipantEntity> getParticipants() {
     return participants;
   }
 

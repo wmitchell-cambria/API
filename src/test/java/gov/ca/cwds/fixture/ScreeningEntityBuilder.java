@@ -1,11 +1,11 @@
 package gov.ca.cwds.fixture;
 
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.util.Date;
 import java.util.Set;
 
 import gov.ca.cwds.data.persistence.ns.Address;
-import gov.ca.cwds.data.persistence.ns.Participant;
-import gov.ca.cwds.data.persistence.ns.Screening;
 
 @SuppressWarnings("javadoc")
 public class ScreeningEntityBuilder {
@@ -22,10 +22,10 @@ public class ScreeningEntityBuilder {
   private Date startedAt;
   private String narrative = "screening narrative";
   private Address contactAddress;
-  private Set<Participant> participants;
+  private Set<ParticipantEntity> participants;
 
-  public Screening build() {
-    return new Screening(reference, endedAt, incidentCounty, incidentDate, locationType,
+  public ScreeningEntity build() {
+    return new ScreeningEntity(reference, endedAt, incidentCounty, incidentDate, locationType,
         communicationMethod, name, responseTime, screeningDecision, startedAt, narrative,
         contactAddress, participants);
   }

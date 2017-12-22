@@ -53,29 +53,29 @@ public class ScreeningResponseTest {
   @SuppressWarnings("javadoc")
   @Test
   public void testPesistentObjectConstructor() throws Exception {
-//    LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
+//    LegacyDescriptorEntity legacyDescriptor = new LegacyDescriptorEntity();
 //    Address addressDomain =
 //        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
 //    addresses.add(addressDomain);
 //    roles.add("victim");
 //
 //    // ScreeningResponse vsr = validScreeningResponse();
-//    Screening vs = validScreening();
+//    ScreeningEntity vs = validScreening();
 //
 //    gov.ca.cwds.data.persistence.ns.Address address = this.validAddress();
 //
-//    Participant dp = validParticipant();
-//    gov.ca.cwds.data.persistence.ns.Participant participant =
-//        new gov.ca.cwds.data.persistence.ns.Participant(dp, lastUpdateId, createId);
+//    ParticipantEntity dp = validParticipant();
+//    gov.ca.cwds.data.persistence.ns.ParticipantEntity participant =
+//        new gov.ca.cwds.data.persistence.ns.ParticipantEntity(dp, lastUpdateId, createId);
 //
-//    ImmutableSet.Builder<gov.ca.cwds.data.persistence.ns.Participant> participantSetBuilder =
+//    ImmutableSet.Builder<gov.ca.cwds.data.persistence.ns.ParticipantEntity> participantSetBuilder =
 //        ImmutableSet.builder();
 //    participantSetBuilder.add(participant);
-//    Set<gov.ca.cwds.data.persistence.ns.Participant> participants;
+//    Set<gov.ca.cwds.data.persistence.ns.ParticipantEntity> participants;
 //    participants = participantSetBuilder.build();
 
-    // gov.ca.cwds.data.persistence.ns.Screening persistent =
-    // new gov.ca.cwds.data.persistence.ns.Screening(id, vs, address, participants, lastUpdateId,
+    // gov.ca.cwds.data.persistence.ns.ScreeningEntity persistent =
+    // new gov.ca.cwds.data.persistence.ns.ScreeningEntity(id, vs, address, participants, lastUpdateId,
     // createId);
     //
     // ScreeningResponse domain = new ScreeningResponse(persistent, participants);
@@ -118,12 +118,12 @@ public class ScreeningResponseTest {
     // addresses.add(address);
     // roles.add("victim");
     //
-    // Participant participant =
-    // new Participant(participantId, "", "", new LegacyDescriptor(), firstName, middleName,
+    // ParticipantEntity participant =
+    // new ParticipantEntity(participantId, "", "", new LegacyDescriptorEntity(), firstName, middleName,
     // lastName, suffix, gender, ssn, dateOfBirth, personId, screeningId, roles, addresses);
-    // ImmutableSet.Builder<Participant> participantSetBuilder = ImmutableSet.builder();
+    // ImmutableSet.Builder<ParticipantEntity> participantSetBuilder = ImmutableSet.builder();
     // participantSetBuilder.add(participant);
-    // Set<Participant> participants;
+    // Set<ParticipantEntity> participants;
     // participants = participantSetBuilder.build();
     //
     // ScreeningResponse screeningResponse = new ScreeningResponse("screening reference",
@@ -144,12 +144,12 @@ public class ScreeningResponseTest {
     // addresses.add(address);
     // roles.add("victim");
     //
-    // Participant participant =
-    // new Participant(participantId, "", "", new LegacyDescriptor(), firstName, middleName,
+    // ParticipantEntity participant =
+    // new ParticipantEntity(participantId, "", "", new LegacyDescriptorEntity(), firstName, middleName,
     // lastName, suffix, gender, ssn, dateOfBirth, personId, screeningId, roles, addresses);
-    // ImmutableSet.Builder<Participant> participantSetBuilder = ImmutableSet.builder();
+    // ImmutableSet.Builder<ParticipantEntity> participantSetBuilder = ImmutableSet.builder();
     // participantSetBuilder.add(participant);
-    // Set<Participant> participants;
+    // Set<ParticipantEntity> participants;
     // participants = participantSetBuilder.build();
     //
     // ScreeningResponse expected = new ScreeningResponse("screening reference", "2016-10-31",

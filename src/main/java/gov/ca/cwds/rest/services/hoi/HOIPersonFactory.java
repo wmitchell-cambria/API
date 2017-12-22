@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.persistence.ns.Participant;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -29,31 +29,31 @@ public final class HOIPersonFactory {
   StaffPersonResource staffPersonResource;
 
   /**
-   * @param persistedParticipant ns Participant
+   * @param participantEntity ns ParticipantEntity
    * @return HOIPerson
    */
-  public HOIPerson buildHOIPerson(Participant persistedParticipant) {
-    HOIPerson result = new HOIPerson(persistedParticipant);
+  public HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
+    HOIPerson result = new HOIPerson(participantEntity);
     LegacyDescriptor legacyDescriptor = new LegacyDescriptor(
-        participantDao.findParticipantLegacyDescriptor(persistedParticipant.getId()));
+        participantDao.findParticipantLegacyDescriptor(participantEntity.getId()));
     result.setLegacyDescriptor(legacyDescriptor);
     return result;
   }
 
   /**
-   * @param persistedParticipant ns participant
+   * @param participantEntity ns participant
    * @param legacyDescriptor domain LegacyDescriptor
    * @return HOIReporter instance; can be null if the given participant has no reporter role
    */
-  public HOIReporter buidHOIReporter(Participant persistedParticipant,
+  public HOIReporter buidHOIReporter(ParticipantEntity participantEntity,
       LegacyDescriptor legacyDescriptor) {
-    Set<String> roles = parseRoles(persistedParticipant.getRoles());
+    Set<String> roles = parseRoles(participantEntity.getRoles());
     HOIReporter.Role reporterRole = findReporterRole(roles);
     if (reporterRole == null) {
       return null;
     }
-    return new HOIReporter(reporterRole, persistedParticipant.getId(),
-        persistedParticipant.getFirstName(), persistedParticipant.getLastName(),
+    return new HOIReporter(reporterRole, participantEntity.getId(),
+        participantEntity.getFirstName(), participantEntity.getLastName(),
         legacyDescriptor);
   }
 

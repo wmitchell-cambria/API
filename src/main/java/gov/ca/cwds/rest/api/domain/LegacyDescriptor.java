@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -80,18 +81,18 @@ public class LegacyDescriptor implements Serializable {
   /**
    * Construct from persistence class
    *
-   * @param persistedLegacyDescriptor persistence level LegacyDescriptor object
+   * @param legacyDescriptorEntity persistence level LegacyDescriptorEntity object
    */
   public LegacyDescriptor(
-      gov.ca.cwds.data.persistence.ns.LegacyDescriptor persistedLegacyDescriptor) {
-    this.id = persistedLegacyDescriptor.getLegacyId();
-    this.uiId = persistedLegacyDescriptor.getLegacyUiId();
-    if (persistedLegacyDescriptor.getLegacyLastUpdated() != null) {
+      LegacyDescriptorEntity legacyDescriptorEntity) {
+    this.id = legacyDescriptorEntity.getLegacyId();
+    this.uiId = legacyDescriptorEntity.getLegacyUiId();
+    if (legacyDescriptorEntity.getLegacyLastUpdated() != null) {
       DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-      this.lastUpdated = formatter.parseDateTime(persistedLegacyDescriptor.getLegacyLastUpdated());
+      this.lastUpdated = formatter.parseDateTime(legacyDescriptorEntity.getLegacyLastUpdated());
     }
-    this.tableName = persistedLegacyDescriptor.getLegacyTableName();
-    this.tableDescription = persistedLegacyDescriptor.getLegacyTableDescription();
+    this.tableName = legacyDescriptorEntity.getLegacyTableName();
+    this.tableDescription = legacyDescriptorEntity.getLegacyTableDescription();
   }
 
   /**

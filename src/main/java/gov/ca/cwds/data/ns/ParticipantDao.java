@@ -1,12 +1,12 @@
 package gov.ca.cwds.data.ns;
 
-import gov.ca.cwds.data.persistence.ns.LegacyDescriptor;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.Participant;
 import gov.ca.cwds.inject.NsSessionFactory;
 import org.hibernate.query.Query;
 
@@ -15,7 +15,7 @@ import org.hibernate.query.Query;
  *
  * @author CWDS API Team
  */
-public class ParticipantDao extends CrudsDaoImpl<Participant> {
+public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
 
   /**
    * Constructor
@@ -28,15 +28,15 @@ public class ParticipantDao extends CrudsDaoImpl<Participant> {
   }
 
   /**
-   * Find LegacyDescriptor by participantId
+   * Find LegacyDescriptorEntity by participantId
    *
    * @param participantId participantId
-   * @return LegacyDescriptor
+   * @return LegacyDescriptorEntity
    */
-  public LegacyDescriptor findParticipantLegacyDescriptor(String participantId) {
-    final Query<LegacyDescriptor> query = this.getSessionFactory().getCurrentSession()
+  public LegacyDescriptorEntity findParticipantLegacyDescriptor(String participantId) {
+    final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(
-            "gov.ca.cwds.data.persistence.ns.LegacyDescriptor.findParticipantLegacyDescriptor")
+            "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findParticipantLegacyDescriptor")
         .setParameter("participantId", Long.valueOf(participantId));
     return query.getSingleResult();
   }

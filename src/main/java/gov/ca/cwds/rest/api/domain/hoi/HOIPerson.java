@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
-import gov.ca.cwds.data.persistence.ns.Participant;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,12 +61,12 @@ public class HOIPerson extends ApiObjectIdentity implements ApiTypedIdentifier<S
   /**
    * Construct from persistence class
    *
-   * @param persistedParticipant persistence level participant object
+   * @param participantEntity persistence level participant object
    */
-  public HOIPerson(Participant persistedParticipant) {
-    this.id = persistedParticipant.getId();
-    this.firstName = persistedParticipant.getFirstName();
-    this.lastName = persistedParticipant.getLastName();
+  public HOIPerson(ParticipantEntity participantEntity) {
+    this.id = participantEntity.getId();
+    this.firstName = participantEntity.getFirstName();
+    this.lastName = participantEntity.getLastName();
   }
 
   @Override

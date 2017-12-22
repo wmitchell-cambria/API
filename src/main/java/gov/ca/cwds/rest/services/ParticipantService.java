@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -71,7 +72,7 @@ public class ParticipantService implements CrudsService {
   /**
    * Constructor
    *
-   * @param participantDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Participant}
+   * @param participantDao The {@link Dao} handling {@link ParticipantEntity}
    * @param clientService the clientService
    * @param referralClientService the referralClientService
    * @param reporterService the reporterService
@@ -102,7 +103,7 @@ public class ParticipantService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    /* todo ns Participant does not have personId, so this code is not relevant anymore
+    /* todo ns ParticipantEntity does not have personId, so this code is not relevant anymore
     assert request instanceof Participant;
     Participant participant = (Participant) request;
     gov.ca.cwds.data.persistence.ns.Participant managed =

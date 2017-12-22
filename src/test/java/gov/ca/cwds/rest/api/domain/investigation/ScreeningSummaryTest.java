@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,7 +19,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.ns.Address;
-import gov.ca.cwds.data.persistence.ns.Participant;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -99,25 +100,25 @@ public class ScreeningSummaryTest {
     Date startedAt = new Date();
     String narrative = "screening narrative";
     Address screeningAddress = new Address();
-    Set<Participant> participants = new HashSet<>();
-    Participant participant = new Participant();
-    participants.add(participant);
-    gov.ca.cwds.data.persistence.ns.Screening screening =
-        new gov.ca.cwds.data.persistence.ns.Screening(referrence, endedAt, incidentCounty,
+    Set<ParticipantEntity> participantEntities = new HashSet<>();
+    ParticipantEntity participantEntity = new ParticipantEntity();
+    participantEntities.add(participantEntity);
+    ScreeningEntity screeningEntity =
+        new ScreeningEntity(referrence, endedAt, incidentCounty,
             incidentDate, locationType, communicationMethod, name, responseTime, screeningDecision,
-            startedAt, narrative, screeningAddress, participants);
+            startedAt, narrative, screeningAddress, participantEntities);
 
-    ScreeningSummary screeningSummary = new ScreeningSummary(screening, simpleAllegations);
-    assertThat(screeningSummary.getName(), is(equalTo(screening.getName())));
-    assertThat(screeningSummary.getDecision(), is(equalTo(screening.getScreeningDecision())));
+    ScreeningSummary screeningSummary = new ScreeningSummary(screeningEntity, simpleAllegations);
+    assertThat(screeningSummary.getName(), is(equalTo(screeningEntity.getName())));
+    assertThat(screeningSummary.getDecision(), is(equalTo(screeningEntity.getScreeningDecision())));
     assertThat(screeningSummary.getAdditionalInformation(),
-        is(equalTo(screening.getAdditionalInformation())));
+        is(equalTo(screeningEntity.getAdditionalInformation())));
     assertThat(screeningSummary.getDecisionDetail(),
-        is(equalTo(screening.getScreeningDecisionDetail())));
-    assertThat(screeningSummary.getId(), is(equalTo(screening.getId())));
+        is(equalTo(screeningEntity.getScreeningDecisionDetail())));
+    assertThat(screeningSummary.getId(), is(equalTo(screeningEntity.getId())));
     assertThat(screeningSummary.getSafetyInformation(),
-        is(equalTo(screening.getSafetyInformation())));
-    assertThat(screeningSummary.getStartedAt(), is(equalTo(screening.getStartedAt())));
+        is(equalTo(screeningEntity.getSafetyInformation())));
+    assertThat(screeningSummary.getStartedAt(), is(equalTo(screeningEntity.getStartedAt())));
     assertThat(screeningSummary.getAllegations(), is(equalTo(simpleAllegations)));
   }
 
