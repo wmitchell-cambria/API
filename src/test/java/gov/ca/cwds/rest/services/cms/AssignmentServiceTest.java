@@ -30,6 +30,7 @@ import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.fixture.*;
 import gov.ca.cwds.rest.business.rules.*;
+import gov.ca.cwds.rest.exception.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -383,11 +384,15 @@ public class AssignmentServiceTest {
         setEstablishedForCode("R").
         setTypeOfAssignmentCode("P").
         setFkCaseLoad(null).build();
+    AssignmentService assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        assignmentUnitDao, cwsOfficeDao, new MessageBuilder());
     try {
       assignmentService.executeR06560Rule(assignment);
       fail();
-    } catch (ServiceException e) {
-      assertEquals("R - 06560 Caseload Required For First Primary Asg is failed", e.getMessage());
+    } catch (BusinessValidationException e) {
+      assertEquals("R - 06560 Caseload Required For First Primary Asg is failed",
+          e.getValidationDetailsList().iterator().next().getUserMessage());
     }
   }
 }
