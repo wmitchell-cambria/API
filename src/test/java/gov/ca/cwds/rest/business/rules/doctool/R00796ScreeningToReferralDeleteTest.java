@@ -6,6 +6,8 @@ import static org.mockito.Mockito.mock;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.rest.api.domain.cms.OtherCaseReferralDrmsDocument;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -81,6 +83,7 @@ public class R00796ScreeningToReferralDeleteTest {
   private ChildClientService childClientService;
   private LongTextService longTextService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
   private RIChildClient riChildClient;
@@ -133,7 +136,7 @@ public class R00796ScreeningToReferralDeleteTest {
     riReferral = mock(RIReferral.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);

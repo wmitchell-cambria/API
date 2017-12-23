@@ -95,6 +95,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       doc.setDocServ(request.getDocServ().trim());
     }
 
+    //Force PKWare compression for new documents
+    doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
+
     final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(doc, request.getBase64Blob().trim());
     doc.setBlobSegments(new HashSet<>(blobs));
     insertBlobs(doc, blobs);
@@ -136,6 +139,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       if (StringUtils.isNotBlank(request.getCompressionMethod())) {
         doc.setCompressionMethod(request.getCompressionMethod().trim());
       }
+
+      //Force PKWare compression for updated documents
+      doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
 
       final List<CmsDocumentBlobSegment> blobs =
           dao.compressDoc(doc, request.getBase64Blob().trim());

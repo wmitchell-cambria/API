@@ -1,11 +1,5 @@
 package gov.ca.cwds.data.cms;
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -410,29 +404,5 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     LOGGER.error("ERROR COMPRESSING LZW! {}", e.getMessage());
     throw new ServiceException("ERROR COMPRESSING LZW! " + e.getMessage(), e);
   }
-
-
-
-  public byte[] createWordBytes(String textBody) {
-
-    try (XWPFDocument doc = new XWPFDocument()) {
-
-      XWPFParagraph paragraph = doc.createParagraph();
-      XWPFRun run = paragraph.createRun();
-      run.setText(textBody);
-      run.setFontFamily("Courier");
-
-      try (ByteArrayOutputStream out = new ByteArrayOutputStream(textBody.length())) {
-        doc.write(out);
-        return out.toByteArray();
-      } catch (Exception e) {
-        throw new ServiceException("ERROR OUTPUTTING WORD DOCUMENT! " + e.getMessage(), e);
-      }
-    } catch (Exception e){
-      throw new ServiceException("ERROR CREATING WORD DOCUMENT! " + e.getMessage(), e);
-
-    }
-  }
-
 
 }

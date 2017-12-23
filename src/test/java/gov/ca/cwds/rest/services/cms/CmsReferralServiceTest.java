@@ -71,6 +71,7 @@ public class CmsReferralServiceTest {
   private ReporterService reporterService;
   private AssignmentService assignmentService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AddressService addressService;
   private LongTextService longTextService;
   private UpperCaseTables upperCaseTables;
@@ -115,7 +116,7 @@ public class CmsReferralServiceTest {
     riReferral = mock(RIReferral.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);

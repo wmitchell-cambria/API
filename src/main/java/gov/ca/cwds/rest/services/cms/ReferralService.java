@@ -57,6 +57,7 @@ public class ReferralService implements
   private Validator validator;
   private AssignmentService assignmentService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AddressService addressService;
   private LongTextService longTextService;
   private RIReferral riReferral;
@@ -77,6 +78,7 @@ public class ReferralService implements
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
    * @param drmsDocumentService the service for generating DRMS Documents
+   * @param otherCaseReferralDrmsDocumentService the service for generating Other Case/Referral DRMS Documents
    * @param addressService the service for creating addresses
    * @param longTextService the longText Service
    * @param riReferral the ri
@@ -85,7 +87,7 @@ public class ReferralService implements
   public ReferralService(final ReferralDao referralDao, NonLACountyTriggers nonLaTriggers,
       LACountyTrigger laCountyTrigger, TriggerTablesDao triggerTablesDao,
       StaffPersonDao staffpersonDao, AssignmentService assignmentService, Validator validator,
-      DrmsDocumentService drmsDocumentService, AddressService addressService,
+      DrmsDocumentService drmsDocumentService, OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService, AddressService addressService,
       LongTextService longTextService, RIReferral riReferral) {
     this.referralDao = referralDao;
     this.nonLaTriggers = nonLaTriggers;
@@ -95,6 +97,7 @@ public class ReferralService implements
     this.assignmentService = assignmentService;
     this.validator = validator;
     this.drmsDocumentService = drmsDocumentService;
+    this.otherCaseReferralDrmsDocumentService = otherCaseReferralDrmsDocumentService;
     this.addressService = addressService;
     this.longTextService = longTextService;
     this.riReferral = riReferral;
@@ -219,6 +222,9 @@ public class ReferralService implements
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, messageBuilder);
       // TODO: R - 01054 Prmary Assignment Adding
+
+      // when creating a referral - create Default Sreener Narrative
+      otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral, messageBuilder);
 
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now
