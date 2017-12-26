@@ -11,11 +11,14 @@ import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.R01054PrimaryAssignmentAdding;
 import gov.ca.cwds.rest.business.rules.R02473DefaultReferralAssignment;
 import gov.ca.cwds.rest.business.rules.R04530AssignmentEndDateValidator;
+import gov.ca.cwds.rest.business.rules.R06560CaseloadRequiredForFirstPrimaryAssignment;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,6 +147,7 @@ public class AssignmentService implements
       }
       createDownStreamEntity(managed);
       executeR01054Rule(managed);
+      executeR06560Rule(managed);
       return new PostedAssignment(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Assignment already exists : {}", request);
@@ -169,6 +173,16 @@ public class AssignmentService implements
     } catch (Exception e) {
       String message = "R01054 rule execution is failed for assignment: " + managed.getId();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
+    }
+  }
+
+  void executeR06560Rule(Assignment managed) {
+    R06560CaseloadRequiredForFirstPrimaryAssignment r06560Rule =
+        new R06560CaseloadRequiredForFirstPrimaryAssignment(managed);
+    if (!r06560Rule.isValid()) {
+      messageBuilder.addError("R - 06560 Caseload Required For First Primary Asg is failed",
+          ErrorMessage.ErrorType.BUSINESS);
+      throw new BusinessValidationException(messageBuilder.getIssues());
     }
   }
 
