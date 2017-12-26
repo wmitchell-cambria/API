@@ -20,6 +20,7 @@ import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.business.reminders.R03276MandatedReporterFollowUpReportReminder;
 import gov.ca.cwds.rest.business.reminders.R04464CrossReportLawEnforcementDue;
 import gov.ca.cwds.rest.business.reminders.R04631ReferralInvestigationContactDue;
 import gov.ca.cwds.rest.business.reminders.R05443StateIdMissing;
@@ -33,6 +34,7 @@ public class RemindersTest {
   private R05443StateIdMissing r05443StateIdMissing;
   private R04464CrossReportLawEnforcementDue r04464CrossReportLawEnforcementDue;
   private R04631ReferralInvestigationContactDue r04631ReferralInvestigationContactDue;
+  private R03276MandatedReporterFollowUpReportReminder r03276MandatedReporterFollowUpReportReminder;
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -46,6 +48,8 @@ public class RemindersTest {
     r05443StateIdMissing = mock(R05443StateIdMissing.class);
     r04464CrossReportLawEnforcementDue = mock(R04464CrossReportLawEnforcementDue.class);
     r04631ReferralInvestigationContactDue = mock(R04631ReferralInvestigationContactDue.class);
+    r03276MandatedReporterFollowUpReportReminder =
+        mock(R03276MandatedReporterFollowUpReportReminder.class);
   }
 
   /**
@@ -70,7 +74,7 @@ public class RemindersTest {
         .createWithDefaults("123ABC1234", referral, participants, crossReports, allegations);
 
     Reminders reminders = new Reminders(r05443StateIdMissing, r04464CrossReportLawEnforcementDue,
-        r04631ReferralInvestigationContactDue);
+        r04631ReferralInvestigationContactDue, r03276MandatedReporterFollowUpReportReminder);
     reminders.createTickle(postedScreeningToReferral);
   }
 
