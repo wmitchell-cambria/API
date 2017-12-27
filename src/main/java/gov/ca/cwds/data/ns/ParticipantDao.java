@@ -2,6 +2,8 @@ package gov.ca.cwds.data.ns;
 
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -39,5 +41,18 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
             "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findParticipantLegacyDescriptor")
         .setParameter("participantId", Long.valueOf(participantId));
     return query.getSingleResult();
+  }
+
+  /**
+   * Find Legacy Id-s by screeningId
+   *
+   * @param screeningId screeningId
+   * @return Set of Legacy Id-s
+   */
+  public Set<String> findLegacyIdListByScreeningId(String screeningId) {
+    final Query<String> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId")
+        .setParameter("screeningId", screeningId);
+    return new HashSet<>(query.list());
   }
 }

@@ -8,7 +8,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -33,18 +37,21 @@ import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
 import io.dropwizard.jackson.Jackson;
 
 /***
- * 
+ *
  * @author CWDS API Team
  *
  */
 @SuppressWarnings("javadoc")
 public class InvolvementHistoryServiceTest {
+
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private HOICaseResource hoicaseResource;
   private HOIReferralResource hoireferralResource;
+  private HOIScreeningResource hoiScreeningResource;
   private javax.ws.rs.core.Response referralResponse;
   private javax.ws.rs.core.Response caseResponse;
+  private javax.ws.rs.core.Response screeningResponse;
   private InvolvementHistoryService involvementHistoryService;
 
   @Rule
@@ -75,7 +82,18 @@ public class InvolvementHistoryServiceTest {
     when(hoireferralResource.get(any(String.class))).thenReturn(referralResponse);
     when(referralResponse.getEntity()).thenReturn(hoireferralResponse);
 
-    involvementHistoryService = new InvolvementHistoryService(hoicaseResource, hoireferralResource);
+    hoiScreeningResource = mock(HOIScreeningResource.class);
+    screeningResponse = mock(javax.ws.rs.core.Response.class);
+    HOIScreeningResponse hoiScreeningResponse = new HOIScreeningResponse(new HashSet<>());
+    when(screeningResponse.getEntity()).thenReturn(hoiScreeningResponse);
+    when(hoiScreeningResource.get(any(String.class))).thenReturn(screeningResponse);
+
+    involvementHistoryService = new InvolvementHistoryService(hoicaseResource, hoireferralResource,
+        hoiScreeningResource);
+
+    ParticipantDao participantDao = mock(ParticipantDao.class);
+    when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(new HashSet<>());
+    involvementHistoryService.participantDao = participantDao;
   }
 
   // find test
@@ -120,7 +138,7 @@ public class InvolvementHistoryServiceTest {
   @Test
   public void instantiation() throws Exception {
     InvolvementHistoryService target =
-        new InvolvementHistoryService(hoicaseResource, hoireferralResource);
+        new InvolvementHistoryService(hoicaseResource, hoireferralResource, hoiScreeningResource);
     assertThat(target, notNullValue());
   }
 
