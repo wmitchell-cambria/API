@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.services.hoi;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
 import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
 import io.dropwizard.hibernate.UnitOfWork;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,8 +21,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
-import gov.ca.cwds.rest.resources.hoi.HOICaseResource;
-import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.jackson.Jackson;
@@ -44,22 +40,17 @@ public class InvolvementHistoryService
   @Inject
   ParticipantDao participantDao;
 
-  private HOICaseResource hoiCaseResource;
-  private HOIReferralResource hoiReferralResource;
-  private HOIScreeningResource hoiScreeningResource;
-
-  /**
-   * @param hoiCaseResource the HOICaseResource
-   * @param hoiReferralResource the HOIReferralResource
-   * @param hoiScreeningResource the HOIScreeningResource
-   */
   @Inject
-  public InvolvementHistoryService(HOICaseResource hoiCaseResource,
-      HOIReferralResource hoiReferralResource, HOIScreeningResource hoiScreeningResource) {
+  HOICaseService hoiCaseService;
+
+  @Inject
+  HOIReferralService hoiReferralService;
+
+  @Inject
+  HOIScreeningService hoiScreeningService;
+
+  public InvolvementHistoryService() {
     super();
-    this.hoiCaseResource = hoiCaseResource;
-    this.hoiReferralResource = hoiReferralResource;
-    this.hoiScreeningResource = hoiScreeningResource;
   }
 
   /**
@@ -84,10 +75,10 @@ public class InvolvementHistoryService
 
   private Response findInvolvementHistoryByScreeningId(String screeningId) {
     Set<String> clientIds = findClientIdsByScreeningId(screeningId);
-    Set<HOICase> hoicases = findHOICasesByClientIds(clientIds);
-    Set<HOIReferral> hoireferrals = findHOIReferralsByClientIds(clientIds);
-    Set<HOIScreening> hoiscreenings = findHOIScreeningsByScreeningId(screeningId);
-    return new InvolvementHistory(screeningId, hoicases, hoireferrals, hoiscreenings);
+    Set<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
+    Set<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
+    Set<HOIScreening> hoiScreenings = findHOIScreeningsByScreeningId(screeningId);
+    return new InvolvementHistory(screeningId, hoiCases, hoiReferrals, hoiScreenings);
   }
 
   @UnitOfWork("ns")
@@ -95,26 +86,27 @@ public class InvolvementHistoryService
     return participantDao.findLegacyIdListByScreeningId(screeningId);
   }
 
-  private Set<HOIScreening> findHOIScreeningsByScreeningId(String screeningId) {
-    return ((HOIScreeningResponse) hoiScreeningResource.get(screeningId).getEntity())
-        .getScreenings();
+  @UnitOfWork("ns")
+  protected Set<HOIScreening> findHOIScreeningsByScreeningId(String screeningId) {
+    return hoiScreeningService.handleFind(screeningId).getScreenings();
   }
 
-  private Set<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
-    Set<HOIReferral> hoireferrals = new HashSet<>();
+  @UnitOfWork("cms")
+  protected Set<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
+    Set<HOIReferral> hoiReferrals = new HashSet<>();
     for (String clientId : clientIds) {
-      HOIReferralResponse referralResponse =
-          (HOIReferralResponse) hoiReferralResource.get(clientId).getEntity();
-      hoireferrals.addAll(referralResponse.getHoiReferrals());
+      HOIReferralResponse referralResponse = hoiReferralService.handleFind(clientId);
+      hoiReferrals.addAll(referralResponse.getHoiReferrals());
     }
-    return hoireferrals;
+    return hoiReferrals;
   }
 
-  private Set<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
+  @UnitOfWork("cms")
+  protected Set<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
     Set<HOICase> hoicases = new HashSet<>();
     for (String clientId : clientIds) {
-      HOICaseResponse cmscaseResponse = (HOICaseResponse) hoiCaseResource.get(clientId).getEntity();
-      hoicases.addAll(cmscaseResponse.getHoiCases());
+      HOICaseResponse hoiCaseResponse = hoiCaseService.find(clientId);
+      hoicases.addAll(hoiCaseResponse.getHoiCases());
     }
     return hoicases;
   }
