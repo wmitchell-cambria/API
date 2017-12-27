@@ -22,7 +22,7 @@ import gov.ca.cwds.rest.services.cms.TickleService;
  */
 public class R03276MandatedReporterFollowUpReportReminder {
 
-  private static final String AFFECTED_BY_CODE = "RL";
+  private static final String AFFECTED_BY_CODE = "RP";
   private static final short TICKLE_MESSAGE_TYPE = (short) 2052;
 
   @Inject
