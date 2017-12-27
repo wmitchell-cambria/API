@@ -15,7 +15,6 @@ import com.google.inject.Inject;
 import gov.ca.cwds.inject.InvolvementHistoryServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,7 +57,6 @@ public class InvolvementHistoryResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
   @GET
   @Path("/{id}/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

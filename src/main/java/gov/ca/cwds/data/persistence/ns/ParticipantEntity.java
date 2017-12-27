@@ -15,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedQuery;
 
 /**
  * {@link PersistentObject} representing Participant.
@@ -22,6 +23,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId",
+    query = "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
 @Entity
 @Table(name = "participants")
 public class ParticipantEntity implements PersistentObject {

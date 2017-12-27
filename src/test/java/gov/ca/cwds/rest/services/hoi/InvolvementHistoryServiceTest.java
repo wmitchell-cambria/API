@@ -8,7 +8,10 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -28,23 +31,21 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import gov.ca.cwds.rest.resources.hoi.HOICaseResource;
-import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
 import io.dropwizard.jackson.Jackson;
 
 /***
- * 
+ *
  * @author CWDS API Team
  *
  */
 @SuppressWarnings("javadoc")
 public class InvolvementHistoryServiceTest {
+
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private HOICaseResource hoicaseResource;
-  private HOIReferralResource hoireferralResource;
-  private javax.ws.rs.core.Response referralResponse;
-  private javax.ws.rs.core.Response caseResponse;
+  private HOICaseService hoiCaseService;
+  private HOIReferralService hoiReferralService;
+  private HOIScreeningService hoiScreeningService;
   private InvolvementHistoryService involvementHistoryService;
 
   @Rule
@@ -53,29 +54,35 @@ public class InvolvementHistoryServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    hoicaseResource = mock(HOICaseResource.class);
-    hoireferralResource = mock(HOIReferralResource.class);
-    caseResponse = mock(javax.ws.rs.core.Response.class);
+
+    hoiCaseService = mock(HOICaseService.class);
     HOICase hoicase = new HOICaseResourceBuilder().createHOICase();
     List<HOICase> hoicases = new ArrayList<>();
     hoicases.add(hoicase);
-    HOICaseResponse hoicaseResponse = new HOICaseResponse();
-    hoicaseResponse.setHoiCases(hoicases);
+    HOICaseResponse hoiCaseResponse = new HOICaseResponse();
+    hoiCaseResponse.setHoiCases(hoicases);
+    when(hoiCaseService.find(any(String.class))).thenReturn(hoiCaseResponse);
 
-    when(hoicaseResource.get(any(String.class))).thenReturn(caseResponse);
-    when(caseResponse.getEntity()).thenReturn(hoicaseResponse);
-
-    referralResponse = mock(javax.ws.rs.core.Response.class);
-
+    hoiReferralService = mock(HOIReferralService.class);
     HOIReferral hoireferral = new HOIReferralResourceBuilder().createHOIReferral();
     List<HOIReferral> hoireferrals = new ArrayList<>();
     hoireferrals.add(hoireferral);
-    HOIReferralResponse hoireferralResponse = new HOIReferralResponse();
-    hoireferralResponse.setHoiReferrals(hoireferrals);
-    when(hoireferralResource.get(any(String.class))).thenReturn(referralResponse);
-    when(referralResponse.getEntity()).thenReturn(hoireferralResponse);
+    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
+    hoiReferralResponse.setHoiReferrals(hoireferrals);
+    when(hoiReferralService.handleFind(any(String.class))).thenReturn(hoiReferralResponse);
 
-    involvementHistoryService = new InvolvementHistoryService(hoicaseResource, hoireferralResource);
+    hoiScreeningService = mock(HOIScreeningService.class);
+    HOIScreeningResponse hoiScreeningResponse = new HOIScreeningResponse(new HashSet<>());
+    when(hoiScreeningService.handleFind(any(String.class))).thenReturn(hoiScreeningResponse);
+
+    involvementHistoryService = new InvolvementHistoryService();
+    involvementHistoryService.hoiCaseService = hoiCaseService;
+    involvementHistoryService.hoiReferralService = hoiReferralService;
+    involvementHistoryService.hoiScreeningService = hoiScreeningService;
+
+    ParticipantDao participantDao = mock(ParticipantDao.class);
+    when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(new HashSet<>());
+    involvementHistoryService.participantDao = participantDao;
   }
 
   // find test
@@ -119,8 +126,7 @@ public class InvolvementHistoryServiceTest {
 
   @Test
   public void instantiation() throws Exception {
-    InvolvementHistoryService target =
-        new InvolvementHistoryService(hoicaseResource, hoireferralResource);
+    InvolvementHistoryService target = new InvolvementHistoryService();
     assertThat(target, notNullValue());
   }
 
