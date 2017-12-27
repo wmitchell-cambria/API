@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -25,17 +26,23 @@ public class R03276MandatedReporterFollowUpReportReminder {
   private static final String AFFECTED_BY_CODE = "RP";
   private static final short TICKLE_MESSAGE_TYPE = (short) 2052;
 
-  @Inject
   private ReferralDao referralDao;
-
-  @Inject
+  private ReporterDao reporterDao;
   private TickleService tickleService;
 
   /**
-   * Default no-argument constructor
+   * Construct with parameters.
+   * 
+   * @param referralDao Referral DAO
+   * @param reporterDao Reporter DAO
+   * @param tickleService Tickle Service
    */
-  public R03276MandatedReporterFollowUpReportReminder() {
-    // Default no-argument constructor
+  @Inject
+  public R03276MandatedReporterFollowUpReportReminder(ReferralDao referralDao,
+      ReporterDao reporterDao, TickleService tickleService) {
+    this.referralDao = referralDao;
+    this.reporterDao = reporterDao;
+    this.tickleService = tickleService;
   }
 
   /**
@@ -48,7 +55,7 @@ public class R03276MandatedReporterFollowUpReportReminder {
     String referralId = screeningToReferral.getReferralId();
 
     Referral referral = referralDao.find(referralId);
-    Reporter reporter = referral.getReporter();
+    Reporter reporter = reporterDao.find(referralId);
 
     if (reporter != null) {
       String reporterId = reporter.getPrimaryKey();
