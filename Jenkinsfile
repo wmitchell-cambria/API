@@ -41,7 +41,7 @@ node ('tpt4-slave'){
    def rtGradle = Artifactory.newGradleBuild()
    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
    parameters([
-      string(defaultValue: 'tpt4-dev-env', description: '', name: 'branch'),
+      string(defaultValue: 'master', description: '', name: 'branch'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC')
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
