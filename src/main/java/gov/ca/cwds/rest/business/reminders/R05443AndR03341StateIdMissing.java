@@ -42,12 +42,12 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  * and TICKLE.Affected_By_Code = 'CC' and TICKLE.Affected_By_Other_Id = CLIENT.Id.,<br>
  * set TICKLE.Due_Date = CLIENT.Creation Date + 30 days
  * <p>
- * else If the client is in a referral (or the referral in focus) and CHILD_CLIENT>REFERRAL.Closure_Date = null,<br>
- * set TICKLE.Affected_By_Case_Or_Referral_Id = CHILD_CLIENT>REFERRAL.Id and TICKLE.Affected_By_Code = 'RL'<br>
+ * else If the client is in a referral (or the referral in focus) and CHILD_CLIENT&gt;REFERRAL.Closure_Date = null,<br>
+ * set TICKLE.Affected_By_Case_Or_Referral_Id = CHILD_CLIENT&gt;REFERRAL.Id and TICKLE.Affected_By_Code = 'RL'<br>
  * and TICKLE.Affected_By_Other_Id = CLIENT.Id, set TICKLE.Due_Date = CLIENT.Creation Date + 30 days.}}
  * <p>
  * If (CHILD_CLIENT does not have a state_id row with End Date blank<br>
- * where .Government_Entity_Type = (CASE or REFERRAL > ASSIGNMENT<br>
+ * where .Government_Entity_Type = (CASE or REFERRAL &gt; ASSIGNMENT<br>
  * (where Type _Of_Assignment_Code = 'P' or (Type _Of_Assignment_Code = 'S'<br>
  * and Secondary_Assignment_role_type = 'ICPC Case Worker') and .End_Date = null<br>
  * or &gt; system date)) &gt; CASELOAD &gt; ASSIGNMENT UNIT &gt; CWS OFFICE.Government_Entity_Type, <br>
@@ -65,13 +65,10 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  * and TICKLE.Affected_By_Code = 'RL' and
  * </p>
  *
- * <lu>
- * <li>Do not implement part of DocTool rule that describes 'deleting' a reminder. That is out of the context for HotLine 1.0.</li>
+ * --- Do not implement part of DocTool rule that describes 'deleting' a reminder. That is out of the context for HotLine 1.0.
+ * --- Do not implement or consider any mention of Secondary Assignments. Secondary Assignments are not created by /referrals/POST for HotLine 1.0.
+ * --- Do not implement or consider any mention of Assignment Disposition. Assignments will not be dispositioned by /referrals/POST for HotLine 1.0.
  *
- * <li>Do not implement or consider any mention of Secondary Assignments. Secondary Assignments are not created by /referrals/POST for HotLine 1.0.</li>
- *
- * <li>Do not implement or consider any mention of Assignment Disposition. Assignments will not be dispositioned by /referrals/POST for HotLine 1.0</li>
- * </lu>
  * @author CWDS API Team
  */
 public class R05443AndR03341StateIdMissing {
