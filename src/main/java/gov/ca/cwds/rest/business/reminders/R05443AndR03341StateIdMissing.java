@@ -65,9 +65,9 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  * and TICKLE.Affected_By_Code = 'RL' and
  * </p>
  *
- * --- Do not implement part of DocTool rule that describes 'deleting' a reminder. That is out of the context for HotLine 1.0.
- * --- Do not implement or consider any mention of Secondary Assignments. Secondary Assignments are not created by /referrals/POST for HotLine 1.0.
- * --- Do not implement or consider any mention of Assignment Disposition. Assignments will not be dispositioned by /referrals/POST for HotLine 1.0.
+ * --- Do not implement part of DocTool rule that describes 'deleting' a reminder. That is out of the context for HotLine 1.0.<br>
+ * --- Do not implement or consider any mention of Secondary Assignments. Secondary Assignments are not created by /referrals/POST for HotLine 1.0.<br>
+ * --- Do not implement or consider any mention of Assignment Disposition. Assignments will not be dispositioned by /referrals/POST for HotLine 1.0.<br>
  *
  * @author CWDS API Team
  */
