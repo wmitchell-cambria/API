@@ -49,36 +49,37 @@ public class R01054PrimaryAssignmentAdding implements RuleAction {
   public void execute() {
     if ("P".equals(assignment.getTypeOfAssignmentCode())) {
       CaseLoad caseLoad = caseLoadDao.find(assignment.getFkCaseLoad());
-      if (caseLoad == null) {
-        throw new ServiceException("Cannot find caseLoad for assignment: " + assignment.getPrimaryKey());
-      }
+      validateOnNull(caseLoad, "Cannot find caseLoad for assignment: " + assignment.getPrimaryKey());
+
       AssignmentUnit assignmentUnit = assignmentUnitDao.find(caseLoad.getFkAssignmentUnit());
-      if (assignmentUnit == null) {
-        throw new ServiceException("Cannot find assignmentUnit for caseLoad: " + caseLoad.getPrimaryKey());
-      }
+      validateOnNull(assignmentUnit, "Cannot find assignmentUnit for caseLoad: " + caseLoad.getPrimaryKey());
+
       CwsOffice cwsOffice = cwsOfficeDao.find(assignmentUnit.getFkCwsOffice());
-      if (cwsOffice == null) {
-        throw new ServiceException("Cannot find cwsOffice for assignmentUnit: " + assignmentUnit.getPrimaryKey());
-      }
+      validateOnNull(cwsOffice, "Cannot find cwsOffice for assignmentUnit: " + assignmentUnit.getPrimaryKey());
+
       short governmentEntityType = cwsOffice.getGovernmentEntityType();
 
       String establishedForId = assignment.getEstablishedForId();
       String establishedForCode = assignment.getEstablishedForCode();
       if (ReferralAssignment.FOLDED_KEY_CODE.equals(establishedForCode)) {
         Referral referral = referralDao.find(establishedForId);
-        if (referral == null) {
-          throw new ServiceException("Cannot find referral for assignment: " + assignment.getPrimaryKey());
-        }
+        validateOnNull(referral, "Cannot find referral for assignment: " + assignment.getPrimaryKey());
+
         referral.setGovtEntityType(governmentEntityType);
         referralDao.update(referral);
       } else if (CaseAssignment.FOLDED_KEY_CODE.equals(establishedForCode)) {
         CmsCase cmsCase = caseDao.find(establishedForId);
-        if (cmsCase == null) {
-          throw new ServiceException("Cannot find case for assignment: " + assignment.getPrimaryKey());
-        }
+        validateOnNull(cmsCase, "Cannot find case for assignment: " + assignment.getPrimaryKey());
+
         cmsCase.setGovernmentEntityType(governmentEntityType);
         caseDao.update(cmsCase);
       }
+    }
+  }
+
+  private void validateOnNull(Object value, String message) {
+    if (value == null) {
+      throw new ServiceException(message);
     }
   }
 
