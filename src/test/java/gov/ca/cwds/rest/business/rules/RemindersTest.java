@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.business.reminders.R03276MandatedReporterFollowUpReportReminder;
 import gov.ca.cwds.rest.business.reminders.R04464CrossReportLawEnforcementDue;
 import gov.ca.cwds.rest.business.reminders.R04631ReferralInvestigationContactDue;
-import gov.ca.cwds.rest.business.reminders.R05443StateIdMissing;
+import gov.ca.cwds.rest.business.reminders.R05443AndR03341StateIdMissing;
 
 /**
  * @author CWDS API Team
@@ -31,7 +31,7 @@ import gov.ca.cwds.rest.business.reminders.R05443StateIdMissing;
  */
 public class RemindersTest {
 
-  private R05443StateIdMissing r05443StateIdMissing;
+  private R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing;
   private R04464CrossReportLawEnforcementDue r04464CrossReportLawEnforcementDue;
   private R04631ReferralInvestigationContactDue r04631ReferralInvestigationContactDue;
   private R03276MandatedReporterFollowUpReportReminder r03276MandatedReporterFollowUpReportReminder;
@@ -45,7 +45,7 @@ public class RemindersTest {
    */
   @Before
   public void setup() throws Exception {
-    r05443StateIdMissing = mock(R05443StateIdMissing.class);
+    r05443AndR03341StateIdMissing = mock(R05443AndR03341StateIdMissing.class);
     r04464CrossReportLawEnforcementDue = mock(R04464CrossReportLawEnforcementDue.class);
     r04631ReferralInvestigationContactDue = mock(R04631ReferralInvestigationContactDue.class);
     r03276MandatedReporterFollowUpReportReminder =
@@ -73,7 +73,7 @@ public class RemindersTest {
     PostedScreeningToReferral postedScreeningToReferral = PostedScreeningToReferral
         .createWithDefaults("123ABC1234", referral, participants, crossReports, allegations);
 
-    Reminders reminders = new Reminders(r05443StateIdMissing, r04464CrossReportLawEnforcementDue,
+    Reminders reminders = new Reminders(r05443AndR03341StateIdMissing, r04464CrossReportLawEnforcementDue,
         r04631ReferralInvestigationContactDue, r03276MandatedReporterFollowUpReportReminder);
     reminders.createTickle(postedScreeningToReferral);
   }

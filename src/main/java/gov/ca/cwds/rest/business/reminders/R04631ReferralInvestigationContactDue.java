@@ -69,8 +69,7 @@ public class R04631ReferralInvestigationContactDue {
    * @param postedScreeningToReferral - postedScreeningToReferral
    */
   public void referralInvestigationContactDue(PostedScreeningToReferral postedScreeningToReferral) {
-    ScreeningToReferral screeningToReferral = postedScreeningToReferral;
-    Set<Participant> participants = screeningToReferral.getParticipants();
+    Set<Participant> participants = postedScreeningToReferral.getParticipants();
     Referral referral = referralDao.find(postedScreeningToReferral.getReferralId());
     for (Participant participant : participants) {
       if ((ParticipantValidator.hasVictimRole(participant)
@@ -79,7 +78,7 @@ public class R04631ReferralInvestigationContactDue {
         Client client = clientDao.find(participant.getLegacyId());
         String dateOfBirth = participant.getDateOfBirth();
 
-        int years = ReminderHelper.checkForAgeDiffernce(dateOfBirth);
+        int years = ReminderHelper.checkForAgeDifference(dateOfBirth);
 
         if (years < 19
             && ReminderHelper.getMapTheDueDate().get(referral.getReferralResponseType()) != null) {
