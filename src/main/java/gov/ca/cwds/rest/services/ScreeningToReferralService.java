@@ -80,8 +80,6 @@ public class ScreeningToReferralService implements CrudsService {
 
   private ReferralDao referralDao;
 
-  LegacyCodes legacyCodes = new LegacyCodes();
-
   /**
    * Constructor
    * 

@@ -115,39 +115,58 @@ public class R05443AndR03341StateIdMissing {
     Set<Participant> participants = postedScreeningToReferral.getParticipants();
     Referral referral = referralDao.find(postedScreeningToReferral.getReferralId());
     for (Participant participant : participants) {
-      if ((ParticipantValidator.hasVictimRole(participant)
-          || ParticipantValidator.isPerpetrator(participant))) {
+      if (isClientAccepted(participant)) {
         Client client = clientDao.find(participant.getLegacyId());
 
         Integer estimatedAgeInYears = getEstimatedAgeInYears(referral, client);
+        Integer years = getYearsFromDob(participant);
 
-        Integer years = null;
-        String dateOfBirth = participant.getDateOfBirth();
-        if (dateOfBirth != null) {
-          years = ReminderHelper.checkForAgeDifference(dateOfBirth);
-        }
-
-        if (years != null && years < YEARS_LIMIT
-            || estimatedAgeInYears != null && estimatedAgeInYears < YEARS_LIMIT) {
-
-          boolean hasStateIdWithNoEndDate = false;
+        if (isLimitExceeded(years) || isLimitExceeded(estimatedAgeInYears)) {
           List<StateId> stateIds = stateIdDao.findAllByClientId(client.getId());
-          for (StateId stateId : stateIds) {
-            if (stateId.getEndDate() == null) {
-              hasStateIdWithNoEndDate = true;
-              break;
-            }
-          }
-          if (!hasStateIdWithNoEndDate && referral.getClosureDate() == null) {
-            Calendar tickleDate = Calendar.getInstance();
-            tickleDate.setTime(client.getCreationDate());
-            tickleDate.add(Calendar.DATE, TICKLE_DAYS_SHIFT);
+          boolean hasStateIdWithNoEndDate = isHasStateIdWithNoEndDate(stateIds);
 
-            createTickle(referral, client, tickleDate);
-          }
+          processTickle(referral, client, hasStateIdWithNoEndDate);
         }
       }
     }
+  }
+
+  private void processTickle(Referral referral, Client client, boolean hasStateIdWithNoEndDate) {
+    if (!hasStateIdWithNoEndDate && referral.getClosureDate() == null) {
+      Calendar tickleDate = Calendar.getInstance();
+      tickleDate.setTime(client.getCreationDate());
+      tickleDate.add(Calendar.DATE, TICKLE_DAYS_SHIFT);
+
+      createTickle(referral, client, tickleDate);
+    }
+  }
+
+  private boolean isHasStateIdWithNoEndDate(List<StateId> stateIds) {
+    boolean hasStateIdWithNoEndDate = false;
+    for (StateId stateId : stateIds) {
+      if (stateId.getEndDate() == null) {
+        hasStateIdWithNoEndDate = true;
+        break;
+      }
+    }
+    return hasStateIdWithNoEndDate;
+  }
+
+  private boolean isLimitExceeded(Integer years) {
+    return years != null && years < YEARS_LIMIT;
+  }
+
+  private Integer getYearsFromDob(Participant participant) {
+    Integer years = null;
+    String dateOfBirth = participant.getDateOfBirth();
+    if (dateOfBirth != null) {
+      years = ReminderHelper.checkForAgeDifference(dateOfBirth);
+    }
+    return years;
+  }
+
+  private boolean isClientAccepted(Participant participant) {
+    return ParticipantValidator.hasVictimRole(participant) || ParticipantValidator.isPerpetrator(participant);
   }
 
   private Integer getEstimatedAgeInYears(Referral referral, Client client) {
