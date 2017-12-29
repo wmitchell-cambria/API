@@ -43,6 +43,7 @@ public class R04631ReferralInvestigationContactDue {
 
   private static final String REFERRAL_REFERRALCLIENT = "RL";
   private static final short REFERRAL_INVESTIGATION_CONTACT_DUE = (short) 2058;
+  private static final int AGE_LIMIT = 19;
 
   private ClientDao clientDao;
   private ReferralDao referralDao;
@@ -80,7 +81,7 @@ public class R04631ReferralInvestigationContactDue {
 
         int years = ReminderHelper.checkForAgeDifference(dateOfBirth);
 
-        if (years < 19
+        if (years < AGE_LIMIT
             && ReminderHelper.getMapTheDueDate().get(referral.getReferralResponseType()) != null) {
           /*
            * duedate is updated based on the referralResponseType.

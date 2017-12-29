@@ -84,6 +84,7 @@ public class R05443AndR03341StateIdMissing {
   private static final String DEFAULT_TRUE_INDICATOR = "Y";
   private static final short STATE_ID_MISSING = (short) 2062;
   private static final int YEARS_LIMIT = 26;
+  private static final int TICKLE_DAYS_SHIFT = 30;
 
   private ClientDao clientDao;
   private ReferralDao referralDao;
@@ -143,7 +144,7 @@ public class R05443AndR03341StateIdMissing {
           if (!hasStateIdWithNoEndDate && referral.getClosureDate() == null) {
             Calendar tickleDate = Calendar.getInstance();
             tickleDate.setTime(client.getCreationDate());
-            tickleDate.add(Calendar.DATE, 30);
+            tickleDate.add(Calendar.DATE, TICKLE_DAYS_SHIFT);
 
             createTickle(referral, client, tickleDate);
           }
