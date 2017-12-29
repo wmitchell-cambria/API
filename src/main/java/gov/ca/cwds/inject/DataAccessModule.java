@@ -40,6 +40,7 @@ import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
@@ -86,6 +87,7 @@ import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.ServiceProvider;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.data.persistence.cms.StateId;
 import gov.ca.cwds.data.persistence.cms.StaffPersonCaseLoad;
 import gov.ca.cwds.data.persistence.cms.SubstituteCareProvider;
 import gov.ca.cwds.data.persistence.cms.SystemCode;
@@ -195,7 +197,7 @@ public class DataAccessModule extends AbstractModule {
           CollateralIndividual.class, CrossReport.class, EducationProviderContact.class,
           OtherAdultInPlacemtHome.class, OtherChildInPlacemtHome.class, OtherClientName.class,
           Referral.class, ReferralClient.class, Reporter.class, ServiceProvider.class,
-          StaffPerson.class, SubstituteCareProvider.class, LongText.class,
+          StaffPerson.class, StateId.class, SubstituteCareProvider.class, LongText.class,
           AllegationPerpetratorHistory.class, ClientUc.class, ChildClient.class,
           gov.ca.cwds.data.persistence.cms.Address.class, ClientAddress.class,
           CountyOwnership.class, CountyTrigger.class, CountyTriggerEmbeddable.class,
@@ -276,6 +278,7 @@ public class DataAccessModule extends AbstractModule {
     bind(CmsDocumentDao.class);
     bind(OtherClientNameDao.class);
     bind(StaffPersonDao.class);
+    bind(StateIdDao.class);
     bind(LongTextDao.class);
     bind(AllegationPerpetratorHistoryDao.class);
     bind(ClientUcDao.class);
@@ -295,7 +298,6 @@ public class DataAccessModule extends AbstractModule {
     bind(IndividualDeliveredServiceDao.class);
     bind(LawEnforcementDao.class);
     bind(CaseLoadDao.class);
-    bind(StaffPersonDao.class);
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
