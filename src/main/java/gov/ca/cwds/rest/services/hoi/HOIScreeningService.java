@@ -19,10 +19,10 @@ import com.google.inject.Inject;
 public class HOIScreeningService extends SimpleResourceService<String, HOIScreening, HOIScreeningResponse> {
 
   @Inject
-  ScreeningDao screeningDao;
+  transient ScreeningDao screeningDao;
 
   @Inject
-  HOIScreeningFactory hoiScreeningFactory;
+  transient HOIScreeningFactory hoiScreeningFactory;
 
   public HOIScreeningService() {
     super();

@@ -145,7 +145,9 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * Constructor
    *
+   * @param id the id
    * @param reference The reference
+   * @param startedAt The started at date
    * @param endedAt The endedAt date
    * @param incidentCounty The incident county
    * @param incidentDate The incident date
@@ -154,17 +156,19 @@ public class ScreeningEntity implements PersistentObject {
    * @param name The name of the screening
    * @param responseTime The response time
    * @param screeningDecision The screening decision
-   * @param startedAt The started at date
+   * @param screeningDecisionDetail The screening decision detail
    * @param narrative The narrative
    * @param contactAddress The contact address
    * @param participants The list of participants
    */
-  public ScreeningEntity(String reference, Date endedAt, String incidentCounty, Date incidentDate,
+  public ScreeningEntity(String id, String reference, Date startedAt, Date endedAt, String incidentCounty, Date incidentDate,
       String locationType, String communicationMethod, String name, String responseTime,
-      String screeningDecision, Date startedAt, String narrative, Address contactAddress,
+      String screeningDecision, String screeningDecisionDetail, String narrative, Address contactAddress,
       Set<ParticipantEntity> participants) {
     super();
+    this.id = id;
     this.reference = reference;
+    this.startedAt = freshDate(startedAt);
     this.endedAt = freshDate(endedAt);
     this.incidentCounty = incidentCounty;
     this.incidentDate = freshDate(incidentDate);
@@ -172,9 +176,8 @@ public class ScreeningEntity implements PersistentObject {
     this.communicationMethod = communicationMethod;
     this.name = name;
     this.screeningDecision = screeningDecision;
-    this.startedAt = freshDate(startedAt);
+    this.screeningDecisionDetail = screeningDecisionDetail;
     this.narrative = narrative;
-
     this.safetyAlerts = new String[1];
     this.participants = participants;
   }

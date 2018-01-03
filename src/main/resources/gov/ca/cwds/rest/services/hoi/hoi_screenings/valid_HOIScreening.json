@@ -1,0 +1,11 @@
+{
+  "id": "224",
+  "start_date": "2017-11-30 PST",
+  "end_date": "2017-12-10 PST",
+  "county": {
+    "id": "1101",
+    "description": "Sacramento"
+  },
+  "decision": "promote to referral",
+  "decision_detail": "drug counseling"
+}

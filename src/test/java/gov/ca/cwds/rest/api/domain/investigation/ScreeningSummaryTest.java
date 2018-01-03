@@ -16,7 +16,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.ns.Address;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -25,8 +24,6 @@ import nl.jqno.equalsverifier.Warning;
 
 @SuppressWarnings("javadoc")
 public class ScreeningSummaryTest {
-
-  private ObjectMapper MAPPER = new ObjectMapper();
 
   private String additionalInformation = "there was excessive evidence of abuse";
   private String decision = "promoteToReferral";
@@ -104,9 +101,9 @@ public class ScreeningSummaryTest {
     ParticipantEntity participantEntity = new ParticipantEntity();
     participantEntities.add(participantEntity);
     ScreeningEntity screeningEntity =
-        new ScreeningEntity(referrence, endedAt, incidentCounty,
+        new ScreeningEntity(null, referrence, startedAt, endedAt, incidentCounty,
             incidentDate, locationType, communicationMethod, name, responseTime, screeningDecision,
-            startedAt, narrative, screeningAddress, participantEntities);
+            null, narrative, screeningAddress, participantEntities);
 
     ScreeningSummary screeningSummary = new ScreeningSummary(screeningEntity, simpleAllegations);
     assertThat(screeningSummary.getName(), is(equalTo(screeningEntity.getName())));
@@ -139,15 +136,5 @@ public class ScreeningSummaryTest {
         safetyInformation, additionalInformation, startedAt, null);
     assertThat(domain.getAllegations(), is(equalTo(simpleAllegations)));
   }
-
-  // @Test
-  // @Ignore
-  // public void testSerializedOutput()
-  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-  // ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
-  // final String expected =
-  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(screeningSummary);
-  // System.out.println(expected);
-  // }
 
 }
