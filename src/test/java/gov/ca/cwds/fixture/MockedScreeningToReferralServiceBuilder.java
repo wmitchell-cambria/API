@@ -193,7 +193,6 @@ public class MockedScreeningToReferralServiceBuilder {
 
   private void buildDefaultMockForReporterService() {
     reporterService = mock(ReporterService.class);
-    Reporter reporter = mock(Reporter.class);
     PostedReporter postedReporter = mock(PostedReporter.class);
     when(postedReporter.getReferralId()).thenReturn("5674567845");
     when(reporterService.create(any(Reporter.class))).thenReturn(postedReporter);
@@ -447,10 +446,8 @@ public class MockedScreeningToReferralServiceBuilder {
    * @return the screeningToReferralService
    */
   public ScreeningToReferralService createScreeningToReferralService() {
-    return new ScreeningToReferralService(getReferralService(), getClientService(),
-        getAllegationService(), getCrossReportService(), getReferralClientService(),
-        getReporterService(), getAddressService(), getClientAddressService(),
-        getChildClientService(), getAssignmentService(), getParticipantService(),
+    return new ScreeningToReferralService(getReferralService(), getAllegationService(),
+        getCrossReportService(), getParticipantService(),
         Validation.buildDefaultValidatorFactory().getValidator(), getReferralDao(),
         getMessageBuilder(), getAllegationPerpetratorHistoryService(), getReminders(),
         getGovernmentOrganizationCrossReportService());
