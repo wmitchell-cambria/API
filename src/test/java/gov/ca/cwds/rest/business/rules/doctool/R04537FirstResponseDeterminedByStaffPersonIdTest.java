@@ -256,7 +256,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
     drmsDocumentTemplateDao = mock(DrmsDocumentTemplateDao.class);
-    drmsDocumentTemplateService = new DrmsDocumentTemplateService(drmsDocumentTemplateDao);
+    drmsDocumentTemplateService = new DrmsDocumentTemplateService(drmsDocumentTemplateDao, cmsDocumentService);
     otherCaseReferralDrmsDocumentDao = mock(OtherCaseReferralDrmsDocumentDao.class);
     otherCaseReferralDrmsDocumentService =
             new OtherCaseReferralDrmsDocumentService(otherCaseReferralDrmsDocumentDao, drmsDocumentService,

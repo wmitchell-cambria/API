@@ -117,7 +117,7 @@ public class ReferralServiceTest {
     cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
     drmsDocumentService = mock(DrmsDocumentService.class);
     drmsDocumentTemplateDao = mock(DrmsDocumentTemplateDao.class);
-    drmsDocumentTemplateService = new DrmsDocumentTemplateService(drmsDocumentTemplateDao);
+    drmsDocumentTemplateService = new DrmsDocumentTemplateService(drmsDocumentTemplateDao, cmsDocumentService);
     otherCaseReferralDrmsDocumentDao = mock(OtherCaseReferralDrmsDocumentDao.class);
     otherCaseReferralDrmsDocumentService =
             new OtherCaseReferralDrmsDocumentService(otherCaseReferralDrmsDocumentDao, drmsDocumentService,
