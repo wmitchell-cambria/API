@@ -69,7 +69,6 @@ public class ScreeningToReferralService implements CrudsService {
   private CrossReportService crossReportService;
   private ReferralClientService referralClientService;
   private ReporterService reporterService;
-  private Reporter savedReporter;
   private AddressService addressService;
   private ClientAddressService clientAddressService;
   private ChildClientService childClientService;

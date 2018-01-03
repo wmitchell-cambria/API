@@ -16,7 +16,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class ParticipantValidator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantValidator.class);
 
   /**
    * CWS/CMS Referral must have on reporter

@@ -19,8 +19,6 @@ public class ReminderHelper {
   private static final short REFERRAL_RESPONSE_TYPE_5_DAYS = (short) 1517;
   private static final short REFERRAL_RESPONSE_TYPE_IMMEDIATE = (short) 1520;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReminderHelper.class);
-
   /**
    * 
    */

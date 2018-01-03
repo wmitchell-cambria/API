@@ -18,8 +18,6 @@ import gov.ca.cwds.rest.api.domain.StaffPerson;
  */
 public class StaffPersonService implements TypedCrudsService<String, StaffPerson, StaffPerson> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(StaffPersonService.class);
-
   private StaffPersonDao staffPersonDao;
 
   /**
