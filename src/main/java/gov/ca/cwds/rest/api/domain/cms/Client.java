@@ -47,7 +47,8 @@ public class Client extends ReportingDomain implements Request, Response {
   public static final String DEFAULT_ADOPTION_STATUS_CODE = "N";
   public static final short DEFAULT_CODE = 0;
   public static final Boolean DEFAULT_CHILD_CLIENT_INDICATOR = Boolean.FALSE;
-  public static final String DEFAULT_ESTIMATED_DOB_CODE = "N";
+  public static final String ESTIMATED_DOB_CODE_ACTUALLY_ENTERED = "N";
+  public static final String ESTIMATED_DOB_CODE_NOT_PROVIDED = "U";
   public static final String DEFAULT_INCAPCITATED_PARENT_CODE = "U";
   public static final String DEFAULT_LITERATE_CODE = "U";
   public static final String DEFAULT_MILITARY_STATUS_CODE = "N";
@@ -753,7 +754,7 @@ public class Client extends ReportingDomain implements Request, Response {
         DEFAULT_CODE, Boolean.FALSE, childClientIndicatorVar, "", "", participant.getFirstName(),
         participant.getMiddleName(), participant.getLastName(), "", Boolean.FALSE, dateStarted,
         Boolean.FALSE, "", Boolean.FALSE, "", Boolean.FALSE, "", "", "", DEFAULT_CODE, "",
-        DEFAULT_ESTIMATED_DOB_CODE, unableToDetermineCode, "", genderCode, "",
+        ESTIMATED_DOB_CODE_ACTUALLY_ENTERED, unableToDetermineCode, "", genderCode, "",
         hispanicUnableToDetermineCode, hispanicOriginCode, DEFAULT_CODE, DEFAULT_CODE,
         DEFAULT_INCAPCITATED_PARENT_CODE, Boolean.FALSE, Boolean.FALSE, DEFAULT_LITERATE_CODE,
         Boolean.FALSE, DEFAULT_CODE, DEFAULT_MILITARY_STATUS_CODE, "", "", DEFAULT_NAME_TYPE,

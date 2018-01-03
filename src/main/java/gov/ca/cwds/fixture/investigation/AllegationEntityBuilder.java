@@ -11,15 +11,15 @@ import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 @SuppressWarnings("javadoc")
 public class AllegationEntityBuilder {
 
-  private Short injuryHarmType1 = 1372;
-  private Short injuryHarmType2 = 1372;
-  private Short injuryHarmSubType1 = 6;
-  private Short injuryHarmSubType2 = 7;
+  private static final Short INJURY_HARM_TYPE_1 = 1372;
+  private static final Short INJURY_HARM_TYPE_2 = 1372;
+  private static final Short INJURY_HARM_SUBTYPE_1 = 6;
+  private static final Short INJURY_HARM_SUBTYPE_2 = 7;
 
   private AllegationSubType allegationSubType1 =
-      new AllegationSubType(injuryHarmType1, injuryHarmSubType1);
+      new AllegationSubType(INJURY_HARM_TYPE_1, INJURY_HARM_SUBTYPE_1);
   private AllegationSubType allegationSubType2 =
-      new AllegationSubType(injuryHarmType2, injuryHarmSubType2);
+      new AllegationSubType(INJURY_HARM_TYPE_2, INJURY_HARM_SUBTYPE_2);
   private Set<AllegationSubType> allegationSubTypes = new HashSet<>();
 
   protected Short allegationType = 2179;
