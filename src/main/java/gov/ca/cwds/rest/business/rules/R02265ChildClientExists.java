@@ -6,7 +6,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import gov.ca.cwds.rest.api.domain.Participant;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * <p>
@@ -20,7 +20,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  * @author CWDS API Team
  *
  */
-public class R02265ChildClientExists implements RuleValidatator {
+public class R02265ChildClientExists implements RuleValidator {
 
   private Participant incomingParticipant;
   private String dateStarted;

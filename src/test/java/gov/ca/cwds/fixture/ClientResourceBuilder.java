@@ -40,7 +40,7 @@ public class ClientResourceBuilder {
   String driverLicenseNumber = "";
   Short driverLicenseStateCodeType = Client.DEFAULT_CODE;
   String emailAddress = "";
-  String estimatedDobCode = Client.DEFAULT_ESTIMATED_DOB_CODE;
+  String estimatedDobCode = Client.ESTIMATED_DOB_CODE_ACTUALLY_ENTERED;
   String ethUnableToDetReasonCode = "A";
   String fatherParentalRightTermDate = "";
   String genderCode = "M";

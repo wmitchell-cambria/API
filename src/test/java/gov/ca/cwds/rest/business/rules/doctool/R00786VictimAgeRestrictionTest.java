@@ -1,0 +1,160 @@
+package gov.ca.cwds.rest.business.rules.doctool;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
+
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
+import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.business.rules.R00786VictimAgeRestriction;
+
+/**
+ * Unit tests for R00786VictimAgeRestriction rule.
+ * 
+ * @author CWDS API Team
+ */
+public class R00786VictimAgeRestrictionTest {
+
+  /*
+   * Load system code cache
+   */
+  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+
+  private Validator validator;
+
+  @Before
+  public void setup() {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+  }
+
+  /**
+   * Test that victim age is under max allowed.
+   */
+  @Test
+  public void testVictimAgeNotOver() {
+    // check with age = 10 years
+    int ageYears = 10;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age at maximum allowed
+   */
+  @Test
+  public void testVictimAgeMax() {
+    // check with age = 18 years
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age below maximum allowed
+   */
+  @Test
+  public void testVictimAgeBelowMax() {
+    // check with age = 18 years - 1 year
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS - 1;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age over maximum allowed
+   */
+  @Test
+  public void testVictimAgeOver() {
+    // check with age = 18 years + 1 year
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS + 1;
+    int underAgeDays = 0;
+    int overAgeDays = 0;
+    int expectedViolations = 1;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age slightly over maximum allowed
+   */
+  @Test
+  public void testVictimAgeSlightlyOver() {
+    // check with age = 18 years + 1 day
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
+    int underAgeDays = 0;
+    int overAgeDays = 1;
+    int expectedViolations = 1;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Test with victim age slightly under maximum allowed
+   */
+  @Test
+  public void testVictimAgeSlightlyUnder() {
+    // check with age = 18 years - 1 day
+    int ageYears = R00786VictimAgeRestriction.MAX_VICTIM_AGE_YEARS;
+    int underAgeDays = 1;
+    int overAgeDays = 0;
+    int expectedViolations = 0;
+    validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * Create ScreeningToReferral for test and validate it for give victim age.
+   * 
+   * @param victimAgeYears
+   * @param overAgeDays
+   * @param underAgeDays
+   * @param expectedViolations
+   */
+  private void validateVictimAge(int victimAgeYears, int overAgeDays, int underAgeDays,
+      int expectedViolations) {
+    String screeningStartedAt = "2017-01-01T00:00:00.000-08:00";
+    DateTime screeningStartedAtDateTime =
+        new DateTime(DomainChef.uncookDateString(screeningStartedAt));
+
+    ScreeningToReferralResourceBuilder builder = new ScreeningToReferralResourceBuilder();
+    builder.setStartedAt(screeningStartedAt);
+
+    String victimDob = DomainChef.cookDate(screeningStartedAtDateTime.minusYears(victimAgeYears)
+        .minusDays(overAgeDays).plusDays(underAgeDays).toDate());
+    Participant victim = new ParticipantResourceBuilder().setGender("M").setDateOfBirth(victimDob)
+        .createVictimParticipant();
+
+    Participant perp = new ParticipantResourceBuilder().setGender("F").createPerpParticipant();
+    Participant reporter =
+        new ParticipantResourceBuilder().setGender("M").createReporterParticipant();
+
+    Set<Participant> participants = new HashSet<>(Arrays.asList(victim, perp, reporter));
+    builder.setParticipants(participants);
+
+    ScreeningToReferral screeingToReferral = builder.createScreeningToReferral();
+
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeingToReferral);
+
+    assertEquals(expectedViolations, constraintViolations.size());
+  }
+}

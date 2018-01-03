@@ -1,9 +1,8 @@
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
-        maven {
-      		url "https://plugins.gradle.org/m2/"      		
-    	    }
+        mavenCentral()
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
@@ -19,9 +18,6 @@ plugins {
     id 'com.github.jk1.dependency-license-report' version '0.3.14'
 }
 
-allprojects {
-    apply plugin: "com.jfrog.artifactory"
-}
 
 apply plugin: 'maven-publish'
 apply plugin: 'docker'
@@ -32,7 +28,7 @@ sourceCompatibility = 1.8
 applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/workspace/API/lib:/usr/local/lib"]
 
 project.ext {
-    apiVersion = 0.37
+    apiVersion = 0.39
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.1.0"
     dropwizardFlywayVersion = "1.0.0-1"
@@ -53,7 +49,7 @@ repositories {
         url "http://sonar.dev.cwds.io:8081/artifactory/repo"}
     mavenCentral()
     maven {
-        url "http://maven2.cwds.tabordasolutions.net"
+        url "http://sonar.dev.cwds.io:8081/artifactory/repo"
         // url "https://plugins.gradle.org/m2/"
     }
     maven {
@@ -73,7 +69,7 @@ shadowJar {
 
 publishing {
   publications {
-    library(MavenPublication) {
+      mavenJava(MavenPublication) {
       from components.java
       groupId 'gov.ca.cwds.api'
       artifactId 'api'
@@ -81,14 +77,14 @@ publishing {
     }
   }
   repositories {
-    maven {
-      // TODO: set to http url
-      url "file:///usr/share/nginx/html/maven2"
-    }
+      maven {
+          url "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
+      }
   }
 }
 
 //Set artifactory variables in local gradle properties file. Example ~/.gradle/gradle.properties
+/*
 artifactory {
     contextUrl = project.hasProperty('artifactory_contextUrl') ? "${artifactory_contextUrl}" : System.getenv('ARTIFACTORY_URL')
     publish {
@@ -110,6 +106,7 @@ artifactory {
         }
     }
 }
+*/
 
 dependencies {
     //third party libs
@@ -153,7 +150,7 @@ dependencies {
 
 	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 	// Exclude transitive dependencies.
-	compile ('gov.ca.cwds.api:api-core:3.6.515') {
+	compile ('gov.ca.cwds.api:api-core:3.6.519') {
 	    exclude group: 'org.glassfish.jersey.core'
 	}
 
@@ -210,7 +207,7 @@ tasks.withType(Test) {
     // Set system properties for the test JVM(s).
     // Gradle passed the literal string '$rootProject.projectDir' ???
     // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
-    systemProperty 'java.library.path', '.:./lib:/var/lib/jenkins/workspace/API/lib:/usr/local/lib'
+    systemProperty 'java.library.path', '.:./lib:/opt/jenkins/workspace/taborda-API/lib:/usr/local/lib'
 }
 
 test {

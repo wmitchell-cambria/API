@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,10 +13,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * @author CWDS API Team
- *
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"legacy_id", "legacy_ui_id", "legacy_last_updated", "legacy_table_name",
@@ -23,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class LegacyDescriptor implements Serializable {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -77,7 +79,23 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
+   * Construct from persistence class
    *
+   * @param legacyDescriptorEntity persistence level LegacyDescriptorEntity object
+   */
+  public LegacyDescriptor(
+      LegacyDescriptorEntity legacyDescriptorEntity) {
+    this.id = legacyDescriptorEntity.getLegacyId();
+    this.uiId = legacyDescriptorEntity.getLegacyUiId();
+    if (legacyDescriptorEntity.getLegacyLastUpdated() != null) {
+      DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+      this.lastUpdated = formatter.parseDateTime(legacyDescriptorEntity.getLegacyLastUpdated());
+    }
+    this.tableName = legacyDescriptorEntity.getLegacyTableName();
+    this.tableDescription = legacyDescriptorEntity.getLegacyTableDescription();
+  }
+
+  /**
    * @return the Legacy Id
    */
   public String getId() {
@@ -85,7 +103,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @param id Set the legacy Id
    */
   public void setId(String id) {
@@ -93,7 +110,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @return the Ui Id
    */
   public String getUiId() {
@@ -101,7 +117,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @param uiId set the uiId
    */
   public void setUiId(String uiId) {
@@ -109,7 +124,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @return return the last updated time as a string
    */
   public DateTime getLastUpdated() {
@@ -117,7 +131,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @param lastUpdated set the last updated time as a string
    */
   public void setLastUpdated(DateTime lastUpdated) {
@@ -125,7 +138,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @return get legacy table name
    */
   public String getTableName() {
@@ -133,7 +145,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @param tableName set legacy table name
    */
   public void setTableName(String tableName) {
@@ -141,7 +152,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @return get legacy table description
    */
   public String getTableDescription() {
@@ -149,7 +159,6 @@ public class LegacyDescriptor implements Serializable {
   }
 
   /**
-   *
    * @param tableDescription set the legacy table description
    */
   public void setTableDescription(String tableDescription) {

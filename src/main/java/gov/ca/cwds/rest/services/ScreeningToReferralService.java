@@ -5,16 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import javax.validation.Validator;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
@@ -83,8 +79,6 @@ public class ScreeningToReferralService implements CrudsService {
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private ReferralDao referralDao;
-
-  LegacyCodes legacyCodes = new LegacyCodes();
 
   /**
    * Constructor
@@ -566,4 +560,6 @@ public class ScreeningToReferralService implements CrudsService {
 
     this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
+
+
 }

@@ -232,120 +232,60 @@ public class CmsCase extends CmsPersistentObject {
     return this.id;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
   public String getAlertText() {
     return alertText;
-  }
-
-  public void setAlertText(String alertText) {
-    this.alertText = alertText;
   }
 
   public String getApprovalNumber() {
     return approvalNumber;
   }
 
-  public void setApprovalNumber(String approvalNumber) {
-    this.approvalNumber = approvalNumber;
-  }
-
   public Short getApprovalStatusType() {
     return approvalStatusType;
-  }
-
-  public void setApprovalStatusType(Short approvalStatusType) {
-    this.approvalStatusType = approvalStatusType;
   }
 
   public Short getCaseClosureReasonType() {
     return caseClosureReasonType;
   }
 
-  public void setCaseClosureReasonType(Short caseClosureReasonType) {
-    this.caseClosureReasonType = caseClosureReasonType;
-  }
-
   public String getCaseplanChildrenDetailIndVar() {
     return caseplanChildrenDetailIndVar;
-  }
-
-  public void setCaseplanChildrenDetailIndVar(String caseplanChildrenDetailIndVar) {
-    this.caseplanChildrenDetailIndVar = caseplanChildrenDetailIndVar;
   }
 
   public String getClosureStatementText() {
     return closureStatementText;
   }
 
-  public void setClosureStatementText(String closureStatementText) {
-    this.closureStatementText = closureStatementText;
-  }
-
   public Short getCountryCodeType() {
     return countryCodeType;
-  }
-
-  public void setCountryCodeType(Short countryCodeType) {
-    this.countryCodeType = countryCodeType;
   }
 
   public String getCountySpecificCode() {
     return countySpecificCode;
   }
 
-  public void setCountySpecificCode(String countySpecificCode) {
-    this.countySpecificCode = countySpecificCode;
-  }
-
   public String getDrmsNotesDoc() {
     return drmsNotesDoc;
-  }
-
-  public void setDrmsNotesDoc(String drmsNotesDoc) {
-    this.drmsNotesDoc = drmsNotesDoc;
   }
 
   public String getEmancipationDate() {
     return emancipationDate;
   }
 
-  public void setEmancipationDate(String emancipationDate) {
-    this.emancipationDate = emancipationDate;
-  }
-
   public Date getEndDate() {
     return freshDate(endDate);
-  }
-
-  public void setEndDate(Date endDate) {
-    this.endDate = freshDate(endDate);
   }
 
   public String getFkchldClt() {
     return fkchldClt;
   }
 
-  public void setFkchldClt(String fkchldClt) {
-    this.fkchldClt = fkchldClt;
-  }
-
   public String getFkreferlt() {
     return fkreferlt;
   }
 
-  public void setFkreferlt(String fkreferlt) {
-    this.fkreferlt = fkreferlt;
-  }
-
   public String getFkstfperst() {
     return fkstfperst;
-  }
-
-  public void setFkstfperst(String fkstfperst) {
-    this.fkstfperst = fkstfperst;
   }
 
   public Short getGovernmentEntityType() {
@@ -360,152 +300,76 @@ public class CmsCase extends CmsPersistentObject {
     return icpcOutgngPlcmtStatusIndVar;
   }
 
-  public void setIcpcOutgngPlcmtStatusIndVar(String icpcOutgngPlcmtStatusIndVar) {
-    this.icpcOutgngPlcmtStatusIndVar = icpcOutgngPlcmtStatusIndVar;
-  }
-
   public String getIcpcOutgoingRequestIndVar() {
     return icpcOutgoingRequestIndVar;
-  }
-
-  public void setIcpcOutgoingRequestIndVar(String icpcOutgoingRequestIndVar) {
-    this.icpcOutgoingRequestIndVar = icpcOutgoingRequestIndVar;
   }
 
   public String getLimitedAccessCode() {
     return limitedAccessCode;
   }
 
-  public void setLimitedAccessCode(String limitedAccessCode) {
-    this.limitedAccessCode = limitedAccessCode;
-  }
-
   public Date getLimitedAccessDate() {
     return freshDate(limitedAccessDate);
-  }
-
-  public void setLimitedAccessDate(Date limitedAccessDate) {
-    this.limitedAccessDate = freshDate(limitedAccessDate);
   }
 
   public String getLimitedAccessDesc() {
     return limitedAccessDesc;
   }
 
-  public void setLimitedAccessDesc(String limitedAccessDesc) {
-    this.limitedAccessDesc = limitedAccessDesc;
-  }
-
   public Short getLimitedAccessGovernmentEntityType() {
     return limitedAccessGovernmentEntityType;
-  }
-
-  public void setLimitedAccessGovernmentEntityType(Short limitedAccessGovernmentEntityType) {
-    this.limitedAccessGovernmentEntityType = limitedAccessGovernmentEntityType;
   }
 
   public String getCaseName() {
     return caseName;
   }
 
-  public void setCaseName(String caseName) {
-    this.caseName = caseName;
-  }
-
   public Date getNextTilpDueDate() {
     return freshDate(nextTilpDueDate);
-  }
-
-  public void setNextTilpDueDate(Date nextTilpDueDate) {
-    this.nextTilpDueDate = freshDate(nextTilpDueDate);
   }
 
   public Date getProjectedEndDate() {
     return freshDate(projectedEndDate);
   }
 
-  public void setProjectedEndDate(Date projectedEndDate) {
-    this.projectedEndDate = freshDate(projectedEndDate);
-  }
-
   public String getResponsibleAgencyCode() {
     return responsibleAgencyCode;
-  }
-
-  public void setResponsibleAgencyCode(String responsibleAgencyCode) {
-    this.responsibleAgencyCode = responsibleAgencyCode;
   }
 
   public String getSpecialProjectCaseIndVar() {
     return specialProjectCaseIndVar;
   }
 
-  public void setSpecialProjectCaseIndVar(String specialProjectCaseIndVar) {
-    this.specialProjectCaseIndVar = specialProjectCaseIndVar;
-  }
-
   public Date getStartDate() {
     return freshDate(startDate);
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = freshDate(startDate);
   }
 
   public Short getStateCodeType() {
     return stateCodeType;
   }
 
-  public void setStateCodeType(Short stateCodeType) {
-    this.stateCodeType = stateCodeType;
-  }
-
   public Short getActiveServiceComponentType() {
     return activeServiceComponentType;
-  }
-
-  public void setActiveServiceComponentType(Short activeServiceComponentType) {
-    this.activeServiceComponentType = activeServiceComponentType;
   }
 
   public Date getActiveSvcComponentStartDate() {
     return freshDate(activeSvcComponentStartDate);
   }
 
-  public void setActiveSvcComponentStartDate(Date activeSvcComponentStartDate) {
-    this.activeSvcComponentStartDate = freshDate(activeSvcComponentStartDate);
-  }
-
   public String getTickleIndVar() {
     return tickleIndVar;
-  }
-
-  public void setTickleIndVar(String tickleIndVar) {
-    this.tickleIndVar = tickleIndVar;
   }
 
   public ChildClient getChildClient() {
     return childClient;
   }
 
-  public void setChildClient(ChildClient childClient) {
-    this.childClient = childClient;
-  }
-
   public StaffPerson getStaffPerson() {
     return staffPerson;
   }
 
-  public void setStaffPerson(StaffPerson staffPerson) {
-    this.staffPerson = staffPerson;
-  }
-
   public Referral getRiReferral() {
     return riReferral;
-  }
-
-  public void setRiReferral(Referral riReferral) {
-    this.riReferral = riReferral;
   }
 
   @Override

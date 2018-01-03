@@ -6,6 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.StateIdDao;
+import java.time.DateTimeException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -47,6 +50,8 @@ public class R04631ReferralInvestigationContactDueTest {
   private TickleService tickleService;
   private ClientDao clientDao;
   private ReferralDao referralDao;
+  private ReferralClientDao referralClientDao;
+  private StateIdDao stateIdDao;
   private AllegationDao allegationDao;
   private ReporterDao reporterDao;
   private CrossReportDao crossReportDao;
@@ -68,6 +73,8 @@ public class R04631ReferralInvestigationContactDueTest {
     tickleService = mock(TickleService.class);
     clientDao = mock(ClientDao.class);
     referralDao = mock(ReferralDao.class);
+    referralClientDao = mock(ReferralClientDao.class);
+    stateIdDao = mock(StateIdDao.class);
     allegationDao = mock(AllegationDao.class);
     reporterDao = mock(ReporterDao.class);
     crossReportDao = mock(CrossReportDao.class);
@@ -137,12 +144,12 @@ public class R04631ReferralInvestigationContactDueTest {
     when(allegationDao.find(any(String.class))).thenReturn(savedAllegation);
     when(reporterDao.find(any(String.class))).thenReturn(savedReporter);
     when(crossReportDao.find(any(String.class))).thenReturn(savedCrossReport);
-    R05443StateIdMissing r05443StateIdMissing =
-        new R05443StateIdMissing(clientDao, referralDao, tickleService);
+    R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing =
+        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao, tickleService);
     R04631ReferralInvestigationContactDue r04631ReferralInvestigationContactDue =
         new R04631ReferralInvestigationContactDue(clientDao, referralDao, tickleService);
 
-    r05443StateIdMissing.stateIdMissing(postedScreeningToReferral);
+    r05443AndR03341StateIdMissing.stateIdMissing(postedScreeningToReferral);
     r04631ReferralInvestigationContactDue
         .referralInvestigationContactDue(postedScreeningToReferral);
     verify(tickleService, times(3)).create(any());
@@ -212,15 +219,15 @@ public class R04631ReferralInvestigationContactDueTest {
     when(allegationDao.find(any(String.class))).thenReturn(savedAllegation);
     when(reporterDao.find(any(String.class))).thenReturn(savedReporter);
     when(crossReportDao.find(any(String.class))).thenReturn(savedCrossReport);
-    R05443StateIdMissing r05443StateIdMissing =
-        new R05443StateIdMissing(clientDao, referralDao, tickleService);
+    R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing =
+        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao, tickleService);
     R04464CrossReportLawEnforcementDue r04464CrossReportLawEnforcementDue =
         new R04464CrossReportLawEnforcementDue(referralDao, allegationDao, reporterDao,
             crossReportDao, tickleService);
     R04631ReferralInvestigationContactDue r04631ReferralInvestigationContactDue =
         new R04631ReferralInvestigationContactDue(clientDao, referralDao, tickleService);
 
-    r05443StateIdMissing.stateIdMissing(postedScreeningToReferral);
+    r05443AndR03341StateIdMissing.stateIdMissing(postedScreeningToReferral);
     r04464CrossReportLawEnforcementDue.crossReportForLawEnforcmentDue(postedScreeningToReferral);
     r04631ReferralInvestigationContactDue
         .referralInvestigationContactDue(postedScreeningToReferral);
@@ -291,15 +298,15 @@ public class R04631ReferralInvestigationContactDueTest {
     when(allegationDao.find(any(String.class))).thenReturn(savedAllegation);
     when(reporterDao.find(any(String.class))).thenReturn(savedReporter);
     when(crossReportDao.find(any(String.class))).thenReturn(savedCrossReport);
-    R05443StateIdMissing r05443StateIdMissing =
-        new R05443StateIdMissing(clientDao, referralDao, tickleService);
+    R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing =
+        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao, tickleService);
     R04464CrossReportLawEnforcementDue r04464CrossReportLawEnforcementDue =
         new R04464CrossReportLawEnforcementDue(referralDao, allegationDao, reporterDao,
             crossReportDao, tickleService);
     R04631ReferralInvestigationContactDue r04631ReferralInvestigationContactDue =
         new R04631ReferralInvestigationContactDue(clientDao, referralDao, tickleService);
 
-    r05443StateIdMissing.stateIdMissing(postedScreeningToReferral);
+    r05443AndR03341StateIdMissing.stateIdMissing(postedScreeningToReferral);
     r04464CrossReportLawEnforcementDue.crossReportForLawEnforcmentDue(postedScreeningToReferral);
     r04631ReferralInvestigationContactDue
         .referralInvestigationContactDue(postedScreeningToReferral);
@@ -309,7 +316,7 @@ public class R04631ReferralInvestigationContactDueTest {
   /**
    * @throws Exception - ParseException
    */
-  @Test
+  @Test(expected = DateTimeException.class)
   public void testForReferralInvestigationDateOfBirthParseException() throws Exception {
     Participant victim =
         new ParticipantResourceBuilder().setDateOfBirth("1992-06-18").createVictimParticipant();
@@ -374,7 +381,6 @@ public class R04631ReferralInvestigationContactDueTest {
 
     r04631ReferralInvestigationContactDue
         .referralInvestigationContactDue(postedScreeningToReferral);
-    verify(tickleService, times(1)).create(any());
   }
 
 }

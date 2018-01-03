@@ -5,21 +5,16 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -114,9 +109,8 @@ public class ParticipantValidatorTest {
 
   @Test
   public void testAllegationPerpetratorPersonIdIsParticipantPerpetratorSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/ScreeningToReferral/valid/allegationPerpetratorIsParticipantPerpetrator.json"),
+    ScreeningToReferral toValidate = MAPPER.readValue(fixture(
+        "fixtures/domain/ScreeningToReferral/valid/allegationPerpetratorIsParticipantPerpetrator.json"),
         ScreeningToReferral.class);
     assertThat(ParticipantValidator.isPerpetratorParticipant(toValidate, 1234), equalTo(true));
   }
@@ -303,5 +297,35 @@ public class ParticipantValidatorTest {
     Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
 
     assertFalse(ParticipantValidator.hasValidRoles(participant));
+  }
+
+  @Test
+  public void hasMandatedReporterRoleValidScenario() {
+    Set<String> roles = new HashSet<String>();
+    roles.add(Role.MANDATED_REPORTER_ROLE.getType());
+    Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
+
+    assertTrue(ParticipantValidator.hasMandatedReporterRole(participant));
+  }
+
+  @Test
+  public void hasMandatedReporterRoleInValidScenario() {
+    Set<String> roles = new HashSet<String>();
+    roles.add(Role.VICTIM_ROLE.getType());
+    Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
+
+    assertFalse(ParticipantValidator.hasMandatedReporterRole(participant));
+  }
+
+
+  @Test
+  public void hasMandatedReporterRoleSet() {
+    Set<Participant> participants = new HashSet<Participant>();
+    Set<String> roles = new HashSet<String>();
+    roles.add(Role.MANDATED_REPORTER_ROLE.getType());
+    Participant participant = new ParticipantResourceBuilder().setRoles(roles).createParticipant();
+    participants.add(participant);
+
+    assertTrue(ParticipantValidator.hasMandatedReporterRole(participants));
   }
 }

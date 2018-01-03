@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.dao.investigation.PeopleDao;
@@ -164,14 +161,17 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     CmsRecordDescriptor cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referralId, LegacyTable.REPORTER);
     Reporter[] reporters = this.reporterDao.findInvestigationReportersByReferralId(referralId);
-    for (Reporter reporter : reporters) {
-      address.add(new InvestigationAddress(reporter, cmsRecordDescriptor));
-      phoneNunbers.add(new PhoneNumber(reporter, cmsRecordDescriptor));
-      role = StringUtils.equals(reporter.getMandatedReporterIndicator(), "Y")
-          ? Role.MANDATED_REPORTER_ROLE.getType() : Role.NON_MANDATED_REPORTER_ROLE.getType();
-      roles.add(role);
-      person = new Person(reporter, languages, cmsRecordDescriptor, address, phoneNunbers, roles);
-      persons.add(person);
+    if (reporters != null) {
+      for (Reporter reporter : reporters) {
+        address.add(new InvestigationAddress(reporter, cmsRecordDescriptor));
+        phoneNunbers.add(new PhoneNumber(reporter, cmsRecordDescriptor));
+        role = StringUtils.equals(reporter.getMandatedReporterIndicator(), "Y")
+            ? Role.MANDATED_REPORTER_ROLE.getType()
+            : Role.NON_MANDATED_REPORTER_ROLE.getType();
+        roles.add(role);
+        person = new Person(reporter, languages, cmsRecordDescriptor, address, phoneNunbers, roles);
+        persons.add(person);
+      }
     }
   }
 

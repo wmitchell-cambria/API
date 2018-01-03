@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.business.rules;
 
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * <p>
@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  * @author CWDS API Team
  *
  */
-public class R00832SetStaffPersonAddedInd implements RuleValidatator {
+public class R00832SetStaffPersonAddedInd implements RuleValidator {
 
   private ScreeningToReferral screeningToReferral;
 

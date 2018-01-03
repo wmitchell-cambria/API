@@ -1,7 +1,10 @@
 package gov.ca.cwds.rest.resources.hoi;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
+import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
+import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,7 +17,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.HOIScreeningServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
-import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -31,45 +33,45 @@ import io.swagger.annotations.ApiResponses;
  * Annotations</a> and
  * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
- * 
+ *
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_SCREENINGS)
-@Path(value = RESOURCE_SCREENINGS)
+@Api(value = RESOURCE_HOI_SCREENINGS)
+@Path(value = RESOURCE_HOI_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HOIScreeningResource {
-  private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
+
+  private SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate;
 
   /**
    * Constructor
-   * 
-   * @param typedResourceDelegate The resourceDelegate to delegate to.
+   *
+   * @param simpleResourceDelegate The resourceDelegate to delegate to.
    */
   @Inject
   public HOIScreeningResource(
-      @HOIScreeningServiceBackedResource TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate) {
-    this.typedResourceDelegate = typedResourceDelegate;
+      @HOIScreeningServiceBackedResource SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate) {
+    this.simpleResourceDelegate = simpleResourceDelegate;
   }
 
   /**
    * Finds history of involvement by screening id.
-   * 
+   *
    * @param id the id
-   * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "ns")
   @GET
-  @Path("/{id}/history_of_involvements")
+  @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find history of involvement by screening id",
-      response = gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory.class, code = 200)
+      response = HOIScreeningResponse.class)
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the Screening") String id) {
-    return typedResourceDelegate.get(id);
+    return simpleResourceDelegate.find(id);
   }
 
 }

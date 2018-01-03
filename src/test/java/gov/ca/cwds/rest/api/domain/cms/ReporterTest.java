@@ -331,7 +331,7 @@ public class ReporterTest {
     assertEquals("Expected feedbackDate field to have been initialized with value", "",
         reporter.getFeedbackDate());
     assertEquals("Expected feedbackRequiredIndicator field to have been initialized with value",
-        false, reporter.getFeedbackRequiredIndicator());
+        true, reporter.getFeedbackRequiredIndicator());
     assertEquals("Expected messagePhoneExtensionNumber field to have been initialized with value",
         new Integer("0"), reporter.getMessagePhoneExtensionNumber());
     assertEquals("Expected messagePhoneNumber field to have been initialized with value",

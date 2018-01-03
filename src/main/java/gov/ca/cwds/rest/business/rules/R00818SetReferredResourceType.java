@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.business.rules;
 
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * 
@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  * @author CWDS API Team
  *
  */
-public class R00818SetReferredResourceType implements RuleValidatator {
+public class R00818SetReferredResourceType implements RuleValidator {
 
   private static final short EVALUATE_OUT = 1519;
 

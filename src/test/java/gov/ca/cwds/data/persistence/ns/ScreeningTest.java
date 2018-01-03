@@ -9,22 +9,22 @@ public class ScreeningTest {
   @Test
   public void shouldAddParticipantWhenNotEmpty() {
     HashSet participants = new HashSet();
-    Participant participant = new Participant();
-    participants.add(participant);
+    ParticipantEntity participantEntity = new ParticipantEntity();
+    participants.add(participantEntity);
 
-    Screening screening =
-        new Screening("reference", new Date(), "Sonoma", new Date(), "Home", "Phone", "Fred",
+    ScreeningEntity screeningEntity =
+        new ScreeningEntity("reference", new Date(), "Sonoma", new Date(), "Home", "Phone", "Fred",
             "Immdiate", "Descicion", new Date(), "some Narative", new Address(), participants);
-    // assertEquals(screening.getParticipants(), participants);
+    // assertEquals(screeningEntity.getParticipants(), participants);
   }
 
   @Test
   public void shouldNotChangeParticipantsWhenAddingEmptyHashSet() {
     HashSet participants = new HashSet();
 
-    Screening screening =
-        new Screening("reference", new Date(), "Sonoma", new Date(), "Home", "Phone", "Fred",
+    ScreeningEntity screeningEntity =
+        new ScreeningEntity("reference", new Date(), "Sonoma", new Date(), "Home", "Phone", "Fred",
             "Immdiate", "Descicion", new Date(), "some Narative", new Address(), participants);
-    // assertEquals(0, screening.getParticipants().size());
+    // assertEquals(0, screeningEntity.getParticipants().size());
   }
 }

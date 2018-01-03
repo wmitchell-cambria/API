@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.Allegation;
-import gov.ca.cwds.data.persistence.ns.Screening;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
@@ -73,10 +73,10 @@ public class ScreeningSummaryService
     org.hibernate.Session session = sessionFactory.openSession();
     ManagedSessionContext.bind(session);
 
-    Screening[] screenings = screeningDao.findScreeningsByReferralId(referralId);
-    Screening screening = screenings.length > 0 ? screenings[0] : null;
-    screeningSummary = screening != null
-        ? new ScreeningSummary(screening, this.populateSimpleAllegations(screening))
+    ScreeningEntity[] screeningEntities = screeningDao.findScreeningsByReferralId(referralId);
+    ScreeningEntity screeningEntity = screeningEntities.length > 0 ? screeningEntities[0] : null;
+    screeningSummary = screeningEntity != null
+        ? new ScreeningSummary(screeningEntity, this.populateSimpleAllegations(screeningEntity))
         : new ScreeningSummary();
     session.close();
     return screeningSummary;
@@ -86,13 +86,13 @@ public class ScreeningSummaryService
   /**
    * populating list of Simple Allegation
    * 
-   * @param screening - Screening object
+   * @param screeningEntity - ScreeningEntity object
    * @return - list of simple allegations.
    */
-  private Set<SimpleAllegation> populateSimpleAllegations(Screening screening) {
+  private Set<SimpleAllegation> populateSimpleAllegations(ScreeningEntity screeningEntity) {
     Set<SimpleAllegation> allegations = new HashSet<>();
-    if (screening != null && screening.getAllegations() != null) {
-      for (Allegation allegation : screening.getAllegations()) {
+    if (screeningEntity != null && screeningEntity.getAllegations() != null) {
+      for (Allegation allegation : screeningEntity.getAllegations()) {
         allegations.add(new SimpleAllegation(allegation));
 
       }

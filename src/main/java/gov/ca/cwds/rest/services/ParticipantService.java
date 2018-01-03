@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 import javax.validation.Validator;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,6 @@ import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
-import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
@@ -44,7 +45,7 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
  * Business layer object to work on {@link Address}
- * 
+ *
  * @author CWDS API Team
  */
 public class ParticipantService implements CrudsService {
@@ -70,9 +71,8 @@ public class ParticipantService implements CrudsService {
 
   /**
    * Constructor
-   * 
-   * @param participantDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.Participant}
+   *
+   * @param participantDao The {@link Dao} handling {@link ParticipantEntity}
    * @param clientService the clientService
    * @param referralClientService the referralClientService
    * @param reporterService the reporterService
@@ -98,11 +98,12 @@ public class ParticipantService implements CrudsService {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Response create(Request request) {
+    /* todo ns ParticipantEntity does not have personId, so this code is not relevant anymore
     assert request instanceof Participant;
     Participant participant = (Participant) request;
     gov.ca.cwds.data.persistence.ns.Participant managed =
@@ -110,6 +111,8 @@ public class ParticipantService implements CrudsService {
     Person person = personService.find(managed.getPersonId());
     managed = participantDao.create(managed);
     return new Participant(managed, person);
+    */
+    throw new NotImplementedException("");
   }
 
   /**
@@ -117,7 +120,6 @@ public class ParticipantService implements CrudsService {
    * @param dateStarted - dateStarted
    * @param referralId - referralId
    * @param messageBuilder - messageBuilder
-   * 
    * @return the savedParticioants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
@@ -165,7 +167,7 @@ public class ParticipantService implements CrudsService {
       try {
         boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
             && (!ParticipantValidator.roleIsAnonymousReporter(role)
-                && !ParticipantValidator.selfReported(incomingParticipant));
+            && !ParticipantValidator.selfReported(incomingParticipant));
         if (isRegularReporter) {
           saved = saveRegularReporter(screeningToReferral, referralId, messageBuilder,
               incomingParticipant, role, saved);
@@ -463,7 +465,7 @@ public class ParticipantService implements CrudsService {
 
   /**
    * First address in the list is primary.
-   * 
+   *
    * @param allRaceCodes list of incoming races
    * @return race code
    */

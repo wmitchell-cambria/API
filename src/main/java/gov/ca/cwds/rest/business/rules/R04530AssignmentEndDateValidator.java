@@ -4,7 +4,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * Implement R - 04530 The combination of Assignment End Date and End Time must be less than or
@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  * @author CWDS API Team
  *
  */
-public class R04530AssignmentEndDateValidator implements RuleValidatator {
+public class R04530AssignmentEndDateValidator implements RuleValidator {
 
   Assignment assignment = null;
 

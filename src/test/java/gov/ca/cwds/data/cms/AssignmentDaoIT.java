@@ -20,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.cms.Assignment;
+import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.fixture.AssignmentResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
@@ -167,14 +168,14 @@ public class AssignmentDaoIT {
 
   @Test
   public void testWhenCaseLoadIdFound() throws Exception {
-    String caseLoadid = assignmentDao.findCaseId("0Al");
-    assertThat(caseLoadid, is(equalTo("12z5Qos09B")));
+    CaseLoad[] caseLoad = assignmentDao.findCaseLoads("0Al");
+    assertThat(caseLoad[0].getId(), is(equalTo("12z5Qos09B")));
   }
 
   @Test
   public void testWhenCaseLoadIdNotFound() throws Exception {
-    String caseLoadid = assignmentDao.findCaseId("q1p");
-    assertThat(caseLoadid, is(nullValue()));
+    CaseLoad[] caseLoad = assignmentDao.findCaseLoads("q1p");
+    assertThat(caseLoad.length, is(0));
   }
 
 }

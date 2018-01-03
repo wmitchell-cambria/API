@@ -179,10 +179,4 @@ public class HOICaseTest {
     target.setLegacyDescriptor(legacyDescriptor);
   }
 
-  @Test
-  public void main_Args__StringArray() throws Exception {
-    String[] args = new String[] {};
-    HOICase.main(args);
-  }
-
 }

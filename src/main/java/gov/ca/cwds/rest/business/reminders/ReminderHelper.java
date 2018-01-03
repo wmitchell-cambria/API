@@ -1,10 +1,7 @@
 package gov.ca.cwds.rest.business.reminders;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,30 +32,9 @@ public class ReminderHelper {
    * @param dateOfBirth - dateOfBirth
    * @return the ageDifference
    */
-  public static int checkForAgeDiffernce(String dateOfBirth) {
-    final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    int years = 0;
-    try {
-      /*
-       * check for the age difference by using the Java Calendar
-       */
-      Date dob = dateFormat.parse(dateOfBirth);
-      Calendar present = Calendar.getInstance();
-      Calendar past = Calendar.getInstance();
-      past.setTime(dob);
-
-      while (past.before(present)) {
-        past.add(Calendar.YEAR, 1);
-        if (past.before(present)) {
-          years++;
-        }
-      }
-
-    } catch (ParseException e) {
-      LOGGER.error("Error While parsing the dateOfBirth");
-    }
-    return years;
+  public static int checkForAgeDifference(String dateOfBirth) {
+    LocalDate dob = LocalDate.parse(dateOfBirth);
+    return (int) dob.until(LocalDate.now(), ChronoUnit.YEARS);
   }
 
   /**

@@ -651,6 +651,10 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return govtEntityType;
   }
 
+  public void setGovtEntityType(Short govtEntityType) {
+    this.govtEntityType = govtEntityType;
+  }
+
   /**
    * @return the legalDefinitionCode
    */

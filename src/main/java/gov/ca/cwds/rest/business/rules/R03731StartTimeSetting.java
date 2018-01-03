@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.business.rules;
 
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
-import gov.ca.cwds.rest.business.RuleValidatator;
+import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
  * 
@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.business.RuleValidatator;
  *
  */
 
-public class R03731StartTimeSetting implements RuleValidatator {
+public class R03731StartTimeSetting implements RuleValidator {
   private Referral referral;
   private Assignment assignment;
 

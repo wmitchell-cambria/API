@@ -379,9 +379,10 @@ public class Reporter extends ReportingDomain implements Request, Response {
       updated = participant.getLegacyDescriptor().getLastUpdated();
     }
 
+    Boolean feedbackRequiredInd = isMandatedReporter ? Boolean.TRUE:Boolean.FALSE;
     return new Reporter(updated, "", city, DEFAULT_CODE, DEFAULT_CODE,
         participant.isReporterConfidentialWaiver(), "", participant.getReporterEmployerName(), "",
-        Boolean.FALSE, participant.getFirstName(), participant.getLastName(), isMandatedReporter, 0,
+        feedbackRequiredInd, participant.getFirstName(), participant.getLastName(), isMandatedReporter, 0,
         DEFAULT_DECIMAL, participant.getMiddleName(), "", DEFAULT_DECIMAL, 0, stateCodeType,
         streetName, streetNumber, "", zipCodeString, referralId, "", DEFAULT_CODE, countyCode);
   }
