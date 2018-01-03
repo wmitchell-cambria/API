@@ -97,8 +97,7 @@ public class DrmsDocumentTemplateService implements TypedCrudsService<String, Dr
               LANGUAGE_ENGLISH,
               now,
               SCREENERNARRATIVE,
-              "N"
-      );
+              "N");
 
       template = drmsDocumentTemplateDao.create(template);
     }
