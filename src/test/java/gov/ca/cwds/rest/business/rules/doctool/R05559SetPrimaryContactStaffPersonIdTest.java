@@ -273,10 +273,8 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
         addressService, longTextService, riReferral);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
-        allegationService, crossReportService, referralClientService, reporterService,
-        addressService, clientAddressService, childClientService, assignmentService,
-        participantService, validator, referralDao, new MessageBuilder(),
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService, validator, referralDao, new MessageBuilder(),
         allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
   }
 

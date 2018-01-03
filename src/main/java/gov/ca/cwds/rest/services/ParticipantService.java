@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -59,9 +58,6 @@ public class ParticipantService implements CrudsService {
 
   private Validator validator;
 
-  private ParticipantDao participantDao;
-  @Inject
-  private PersonService personService;
   private ClientService clientService;
   private ReferralClientService referralClientService;
   private ReporterService reporterService;
@@ -82,11 +78,10 @@ public class ParticipantService implements CrudsService {
    * @param clientScpEthnicityService - clientScpEthnicityService
    */
   @Inject
-  public ParticipantService(ParticipantDao participantDao, ClientService clientService,
+  public ParticipantService(ClientService clientService,
       ReferralClientService referralClientService, ReporterService reporterService,
       ChildClientService childClientService, ClientAddressService clientAddressService,
       Validator validator, ClientScpEthnicityService clientScpEthnicityService) {
-    this.participantDao = participantDao;
     this.validator = validator;
     this.clientService = clientService;
     this.referralClientService = referralClientService;
@@ -103,15 +98,14 @@ public class ParticipantService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    /* todo ns ParticipantEntity does not have personId, so this code is not relevant anymore
-    assert request instanceof Participant;
-    Participant participant = (Participant) request;
-    gov.ca.cwds.data.persistence.ns.Participant managed =
-        new gov.ca.cwds.data.persistence.ns.Participant(participant, null, null);
-    Person person = personService.find(managed.getPersonId());
-    managed = participantDao.create(managed);
-    return new Participant(managed, person);
-    */
+    /*
+     * todo ns ParticipantEntity does not have personId, so this code is not relevant anymore assert
+     * request instanceof Participant; Participant participant = (Participant) request;
+     * gov.ca.cwds.data.persistence.ns.Participant managed = new
+     * gov.ca.cwds.data.persistence.ns.Participant(participant, null, null); Person person =
+     * personService.find(managed.getPersonId()); managed = participantDao.create(managed); return
+     * new Participant(managed, person);
+     */
     throw new NotImplementedException("");
   }
 
@@ -167,7 +161,7 @@ public class ParticipantService implements CrudsService {
       try {
         boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
             && (!ParticipantValidator.roleIsAnonymousReporter(role)
-            && !ParticipantValidator.selfReported(incomingParticipant));
+                && !ParticipantValidator.selfReported(incomingParticipant));
         if (isRegularReporter) {
           saved = saveRegularReporter(screeningToReferral, referralId, messageBuilder,
               incomingParticipant, role, saved);
@@ -320,9 +314,6 @@ public class ParticipantService implements CrudsService {
       Participant incomingParticipant, Client foundClient) {
     DateTimeComparatorInterface comparator = new DateTimeComparator();
     if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
-      foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
-      foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
-
       List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
       Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
       List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
@@ -380,8 +371,7 @@ public class ParticipantService implements CrudsService {
 
     Client client = Client.createWithDefaults(incomingParticipant, dateStarted, genderCode,
         primaryRaceCode, childClientIndicatorVar);
-    client.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
-    client.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
+
     messageBuilder.addDomainValidationError(validator.validate(client));
     PostedClient postedClient = this.clientService.create(client);
     clientId = postedClient.getId();
