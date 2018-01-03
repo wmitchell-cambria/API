@@ -224,7 +224,7 @@ public class ReferralService implements
       // TODO: R - 01054 Prmary Assignment Adding
 
       // when creating a referral - create Default Sreener Narrative
-      otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral, messageBuilder);
+      otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral);
 
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now

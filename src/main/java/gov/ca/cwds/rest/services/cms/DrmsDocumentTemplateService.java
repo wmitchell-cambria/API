@@ -43,7 +43,10 @@ public class DrmsDocumentTemplateService implements TypedCrudsService<String, Dr
       }
     }
 
-    if (template == null) return null;
+    if (template == null) {
+      LOGGER.warn("NO SCREENER NARRATIVE TEMPLATE FOUND.");
+      return null;
+    }
 
     return new DrmsDocumentTemplate(template);
   }

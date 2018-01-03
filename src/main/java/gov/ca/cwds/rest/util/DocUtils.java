@@ -4,6 +4,8 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Bookmark;
 import org.apache.poi.hwpf.usermodel.Bookmarks;
 import org.apache.poi.hwpf.usermodel.Range;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,6 +16,8 @@ import java.util.Map;
  * @author Intake Team 4
  */
 public class DocUtils {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocUtils.class);
 
   private DocUtils() {
     //static methods only
@@ -39,6 +43,7 @@ public class DocUtils {
       return out.toByteArray();
 
     } catch (Exception e){
+      LOGGER.warn("ERROR PROCESSING TEMPLATE: {}",e);
       return template;
     }
   }

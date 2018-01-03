@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.services.cms;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.CmsDocumentDao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.Allegation;
@@ -15,7 +14,6 @@ import gov.ca.cwds.rest.api.domain.cms.OtherCaseReferralDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
-import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.util.DocUtils;
@@ -30,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Business layer object to work on {@link OtherCaseReferralDrmsDocument}
@@ -103,8 +102,7 @@ public class OtherCaseReferralDrmsDocumentService
   public void createDefaultSreenerNarrativeForNewReferral(
       ScreeningToReferral screeningToReferral,
       String referralId,
-      Referral referral,
-      MessageBuilder messageBuilder) {
+      Referral referral) {
 
     DrmsDocumentTemplate drmsTemplate =
         drmsDocumentTemplateService.findScreenerNarrativeTemplate(referral.getGovtEntityType());
@@ -120,12 +118,13 @@ public class OtherCaseReferralDrmsDocumentService
       String docAuth = RequestExecutionContext.instance().getUserId();
       String docId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId(), now);
 
+      Random random = new Random();
       // TODO Generate handle the proper way. 0015441304100220*RAMESHA 00006
       String docHandle =
           CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","")
               .concat("*")
               .concat(StringUtils.rightPad(docAuth.substring(0, 7), 8))
-              .concat(StringUtils.leftPad(String.valueOf((int) (Math.random() * 99999)), 5, "0"));
+              .concat(StringUtils.leftPad(String.valueOf(random.nextInt(99999)), 5, "0"));
       Short segments = 1;
       Long docLength = 1L;
 
@@ -136,7 +135,7 @@ public class OtherCaseReferralDrmsDocumentService
       String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
 
       //TODO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
-      String nameNumber = StringUtils.leftPad(String.valueOf((int)(Math.random() * 999)), 3, "0");
+      String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
       String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0,5).concat(nameNumber).concat(".DOC");
 
 
@@ -167,7 +166,7 @@ public class OtherCaseReferralDrmsDocumentService
               drmsTemplate.getTitleName(),
               referralId,
               EXTENSION_TYPE_WORD_DOCX,
-              Math.round(cmsDocument.getDocLength() / 1024L));   //The size of the compressed document in kilobytes.
+              (int)(cmsDocument.getDocLength() / 1024L));   //The size of the compressed document in kilobytes.
 
       create(otherCaseReferralDrmsDocument);
 
