@@ -1,9 +1,9 @@
 package gov.ca.cwds.data.cms;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate;
 import gov.ca.cwds.inject.CmsSessionFactory;
-import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
@@ -12,9 +12,12 @@ import org.hibernate.query.Query;
  *
  * @author Intake Team 4
  */
-public class DrmsDocumentTemplateDao  extends AbstractDAO<DrmsDocumentTemplateDao> {
+public class DrmsDocumentTemplateDao  extends CrudsDaoImpl<DrmsDocumentTemplate> {
 
-  private SessionFactory sessionFactory;
+  public static final Short APPLICATION_CONTEXT_REFERRAL_DOCUMENTS = 82;
+  public static final Short GOVERMENT_ENTITY_SYSTEM = 0;
+  public static final Short LANGUAGE_ENGLISH = 1253;
+  public static final String SCREENERNARRATIVE = "Screener Narrative";
 
   /**
    * Constructor
@@ -24,11 +27,10 @@ public class DrmsDocumentTemplateDao  extends AbstractDAO<DrmsDocumentTemplateDa
   @Inject
   public DrmsDocumentTemplateDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
-    this.sessionFactory = sessionFactory;
   }
 
   /**
-   * finding reporters based on application contex id
+   * finding templates based on application contex id and goverment entity type
    *
    * @param applicationContextType - application context type id
    * @param govermentEntityType - govermant entity type id.
@@ -46,7 +48,4 @@ public class DrmsDocumentTemplateDao  extends AbstractDAO<DrmsDocumentTemplateDa
     return query.list().toArray(new DrmsDocumentTemplate[0]);
   }
 
-  public SessionFactory getSessionFactory() {
-    return sessionFactory;
-  }
 }

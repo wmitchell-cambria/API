@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gov.ca.cwds.data.CmsSystemCodeDeserializer;
 import gov.ca.cwds.data.SystemCodeSerializer;
-import gov.ca.cwds.data.persistence.TypedPersistentObject;
+import gov.ca.cwds.data.persistence.PersistentObject;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -18,7 +18,7 @@ import java.util.Date;
 import static gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY;
 
 /**
- * {@link TypedPersistentObject} Class representing an DrmsDocumentTemplate.
+ * {@link PersistentObject} Class representing an DrmsDocumentTemplate.
  *
  * @author Intake Team 4
  */
@@ -34,7 +34,7 @@ import static gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.NQ_TEMPLATES
 @Table(name = "DOCTMPLT")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DrmsDocumentTemplate implements TypedPersistentObject<String> {
+public class DrmsDocumentTemplate implements PersistentObject {
 
   private static final long serialVersionUID = 1L;
 

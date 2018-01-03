@@ -60,7 +60,6 @@ public class OtherCaseReferralDrmsDocumentService
       DrmsDocumentService drmsDocumentService,
       DrmsDocumentTemplateService drmsDocumentTemplateService,
       CmsDocumentService cmsDocumentService) {
-    super();
     this.otherCaseReferralDrmsDocumentDao = otherCaseReferralDrmsDocumentDao;
     this.drmsDocumentService = drmsDocumentService;
     this.drmsDocumentTemplateService = drmsDocumentTemplateService;
@@ -120,11 +119,7 @@ public class OtherCaseReferralDrmsDocumentService
 
       Random random = new Random();
       // TODO Generate handle the proper way. 0015441304100220*RAMESHA 00006
-      String docHandle =
-          CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","")
-              .concat("*")
-              .concat(StringUtils.rightPad(docAuth.substring(0, 7), 8))
-              .concat(StringUtils.leftPad(String.valueOf(random.nextInt(99999)), 5, "0"));
+      String docHandle = DocUtils.generateDocHandle(docId, docAuth);
       Short segments = 1;
       Long docLength = 1L;
 
@@ -165,7 +160,7 @@ public class OtherCaseReferralDrmsDocumentService
               referral.getCountySpecificCode(),
               drmsTemplate.getTitleName(),
               referralId,
-              EXTENSION_TYPE_WORD_DOCX,
+              EXTENSION_TYPE_WORD_DOC,
               (int)(cmsDocument.getDocLength() / 1024L));   //The size of the compressed document in kilobytes.
 
       create(otherCaseReferralDrmsDocument);

@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.util;
 
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Bookmark;
 import org.apache.poi.hwpf.usermodel.Bookmarks;
@@ -7,9 +10,11 @@ import org.apache.poi.hwpf.usermodel.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -18,6 +23,7 @@ import java.util.Map;
 public class DocUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocUtils.class);
+  private static final String TEMPLATE_LOCATION = "cms/drmstemplates";
 
   private DocUtils() {
     //static methods only
@@ -43,10 +49,28 @@ public class DocUtils {
       return out.toByteArray();
 
     } catch (Exception e){
-      LOGGER.warn("ERROR PROCESSING TEMPLATE: {}",e);
+      LOGGER.warn("ERROR PROCESSING TEMPLATE: {}", e);
       return template;
     }
   }
 
+  public static String generateDocHandle(String docId, String docAuth){
+    Random random = new Random();
+    return CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","")
+            .concat("*")
+            .concat(StringUtils.rightPad(docAuth.substring(0, 7), 8))
+            .concat(StringUtils.leftPad(String.valueOf(random.nextInt(99999)), 5, "0"));
+  }
+
+  public static String loadTemplateBase64(String docName){
+    try{
+      return DatatypeConverter.printBase64Binary(
+              IOUtils.toByteArray(
+                  DocUtils.class.getClassLoader().getResourceAsStream(TEMPLATE_LOCATION + "/" + docName)));
+    }catch (Exception e){
+      LOGGER.error("ERROR LOADING TEMPLATE {} FROM RESOURCES: {}", docName, e);
+      return "";
+    }
+  }
 
 }
