@@ -14,6 +14,13 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.cms.CmsDocumentDao;
+import gov.ca.cwds.data.cms.DrmsDocumentTemplateDao;
+import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
+import gov.ca.cwds.rest.api.domain.cms.OtherCaseReferralDrmsDocument;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import org.junit.Before;
 import org.junit.Rule;
@@ -151,7 +158,12 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
+  private CmsDocumentService cmsDocumentService;
+  private CmsDocumentDao cmsDocumentDao;
   private DrmsDocumentDao drmsDocumentDao;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
+  private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
+  private OtherCaseReferralDrmsDocumentDao otherCaseReferralDrmsDocumentDao;
   private SsaName3Dao ssaName3Dao;
   private Reminders reminders;
   private UpperCaseTables upperCaseTables;
@@ -236,8 +248,16 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     longTextDao = mock(LongTextDao.class);
     longTextService = new LongTextService(longTextDao);
 
+    cmsDocumentDao = mock(CmsDocumentDao.class);
+    cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
+    drmsDocumentTemplateDao = mock(DrmsDocumentTemplateDao.class);
+    drmsDocumentTemplateService = new DrmsDocumentTemplateService(drmsDocumentTemplateDao);
+    otherCaseReferralDrmsDocumentDao = mock(OtherCaseReferralDrmsDocumentDao.class);
+    otherCaseReferralDrmsDocumentService =
+            new OtherCaseReferralDrmsDocumentService(otherCaseReferralDrmsDocumentDao, drmsDocumentService,
+                    drmsDocumentTemplateService, cmsDocumentService);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
@@ -298,6 +318,25 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
             new Date());
     when(drmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.DrmsDocument.class)))
         .thenReturn(drmsDocumentToCreate);
+
+    DrmsDocumentTemplate drmsDocumentTemplateDomain = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/DrmsDocumentTemplate/valid/valid.json"), DrmsDocumentTemplate.class);
+    gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate drmsDocumentTemplateToCreate =
+            new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate(drmsDocumentTemplateDomain, new Date());
+    gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[] drmsDocumentTemplates = new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[1];
+    drmsDocumentTemplates[0] = drmsDocumentTemplateToCreate;
+    when(drmsDocumentTemplateDao.findByApplicationContextAndGovermentEntity(any(Short.class), any(Short.class)))
+            .thenReturn(drmsDocumentTemplates);
+
+
+    OtherCaseReferralDrmsDocument otherCaseReferralDrmsDocumentDomain = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/OtherCaseReferralDrmsDocument/valid/valid.json"),
+            OtherCaseReferralDrmsDocument.class);
+    gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument otherCaseReferralDrmsDocumentToCreate =
+            new gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument(otherCaseReferralDrmsDocumentDomain,
+                    "ABC", new Date());
+    when(otherCaseReferralDrmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument.class)))
+            .thenReturn(otherCaseReferralDrmsDocumentToCreate);
 
     gov.ca.cwds.data.persistence.cms.ChildClient childClientToCreate =
         new ChildClientEntityBuilder().build();

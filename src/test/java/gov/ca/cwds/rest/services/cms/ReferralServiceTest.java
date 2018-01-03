@@ -13,12 +13,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.cms.CmsDocumentDao;
+import gov.ca.cwds.data.cms.DrmsDocumentTemplateDao;
+import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
+import gov.ca.cwds.rest.api.domain.cms.OtherCaseReferralDrmsDocument;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -75,6 +81,11 @@ public class ReferralServiceTest {
   private StaffPersonDao staffpersonDao;
   private Validator validator;
   private RIReferral riReferral;
+  private CmsDocumentService cmsDocumentService;
+  private CmsDocumentDao cmsDocumentDao;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
+  private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
+  private OtherCaseReferralDrmsDocumentDao otherCaseReferralDrmsDocumentDao;
 
   private MessageBuilder mockMessageBuilder;
   private String dateStarted;
@@ -102,7 +113,15 @@ public class ReferralServiceTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     assignmentService = mock(AssignmentService.class);
+    cmsDocumentDao = mock(CmsDocumentDao.class);
+    cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
     drmsDocumentService = mock(DrmsDocumentService.class);
+    drmsDocumentTemplateDao = mock(DrmsDocumentTemplateDao.class);
+    drmsDocumentTemplateService = new DrmsDocumentTemplateService(drmsDocumentTemplateDao);
+    otherCaseReferralDrmsDocumentDao = mock(OtherCaseReferralDrmsDocumentDao.class);
+    otherCaseReferralDrmsDocumentService =
+            new OtherCaseReferralDrmsDocumentService(otherCaseReferralDrmsDocumentDao, drmsDocumentService,
+                    drmsDocumentTemplateService, cmsDocumentService);
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
 
@@ -489,6 +508,24 @@ public class ReferralServiceTest {
     DrmsDocumentService drmsDocumentService = mock(DrmsDocumentService.class);
     when(drmsDocumentService.create(any())).thenReturn(drmsDocument);
 
+    DrmsDocumentTemplate drmsDocumentTemplateDomain = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/DrmsDocumentTemplate/valid/valid.json"), DrmsDocumentTemplate.class);
+    gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate drmsDocumentTemplateToCreate =
+            new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate(drmsDocumentTemplateDomain, new Date());
+    gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[] drmsDocumentTemplates = new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[1];
+    drmsDocumentTemplates[0] = drmsDocumentTemplateToCreate;
+    when(drmsDocumentTemplateDao.findByApplicationContextAndGovermentEntity(any(Short.class), any(Short.class)))
+            .thenReturn(drmsDocumentTemplates);
+
+    OtherCaseReferralDrmsDocument otherCaseReferralDrmsDocumentDomain = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/OtherCaseReferralDrmsDocument/valid/valid.json"),
+            OtherCaseReferralDrmsDocument.class);
+    gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument otherCaseReferralDrmsDocumentToCreate =
+            new gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument(otherCaseReferralDrmsDocumentDomain,
+                    "ABC", new Date());
+    when(otherCaseReferralDrmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument.class)))
+            .thenReturn(otherCaseReferralDrmsDocumentToCreate);
+
     Address address = new AddressResourceBuilder().createAddress();
     addressService = mock(AddressService.class);
     when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
@@ -528,6 +565,25 @@ public class ReferralServiceTest {
     PostedDrmsDocument drmsDocument = mock(PostedDrmsDocument.class);
     DrmsDocumentService drmsDocumentService = mock(DrmsDocumentService.class);
     when(drmsDocumentService.create(any())).thenReturn(drmsDocument);
+
+    DrmsDocumentTemplate drmsDocumentTemplateDomain = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/DrmsDocumentTemplate/valid/valid.json"), DrmsDocumentTemplate.class);
+    gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate drmsDocumentTemplateToCreate =
+            new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate(drmsDocumentTemplateDomain, new Date());
+    gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[] drmsDocumentTemplates = new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[1];
+    drmsDocumentTemplates[0] = drmsDocumentTemplateToCreate;
+    when(drmsDocumentTemplateDao.findByApplicationContextAndGovermentEntity(any(Short.class), any(Short.class)))
+            .thenReturn(drmsDocumentTemplates);
+
+
+    OtherCaseReferralDrmsDocument otherCaseReferralDrmsDocumentDomain = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/OtherCaseReferralDrmsDocument/valid/valid.json"),
+            OtherCaseReferralDrmsDocument.class);
+    gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument otherCaseReferralDrmsDocumentToCreate =
+            new gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument(otherCaseReferralDrmsDocumentDomain,
+                    "ABC", new Date());
+    when(otherCaseReferralDrmsDocumentDao.create(any(gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument.class)))
+            .thenReturn(otherCaseReferralDrmsDocumentToCreate);
 
     addressService = mock(AddressService.class);
     when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.util.ByteArrayBuffer;
 import org.hibernate.SessionFactory;
@@ -271,6 +272,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
+  @SuppressFBWarnings("PATH_TRAVERSAL_IN") // There is no path traversal here
   private String decompressLZW(CmsDocument doc) {
     String retval = "";
 
@@ -286,20 +288,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     }
 
     try {
-      try (FileOutputStream fos = new FileOutputStream(src);){
-        for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
-          final byte[] bytes = seg.getDocBlob();
-          fos.write(bytes);
-        }
-        fos.flush();
-      } catch (IOException e) {
-        errorDecompressing(e);
-      }
+      blobSegmentsToFile(doc, src);
       // DECOMPRESS!
       final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
-      retval =
-          DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
+      retval = DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
 
       final boolean srcDeletedSuccessfully = src.delete();
       if (!srcDeletedSuccessfully) {
@@ -313,8 +306,19 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     } catch (Exception e) {
       errorDecompressing(e);
     }
-
     return retval;
+  }
+
+  private void blobSegmentsToFile(CmsDocument doc, File src) {
+    try (FileOutputStream fos = new FileOutputStream(src);){
+      for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
+        final byte[] bytes = seg.getDocBlob();
+        fos.write(bytes);
+      }
+      fos.flush();
+    } catch (IOException e) {
+      errorDecompressing(e);
+    }
   }
 
 
@@ -336,6 +340,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
+  @SuppressFBWarnings("PATH_TRAVERSAL_IN") // There is no path traversal here
   private List<CmsDocumentBlobSegment> compressLZW(CmsDocument doc, String base64) {
 
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
