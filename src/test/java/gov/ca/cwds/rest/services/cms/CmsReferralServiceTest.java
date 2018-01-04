@@ -114,6 +114,7 @@ public class CmsReferralServiceTest {
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
     riReferral = mock(RIReferral.class);
+    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
         otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
