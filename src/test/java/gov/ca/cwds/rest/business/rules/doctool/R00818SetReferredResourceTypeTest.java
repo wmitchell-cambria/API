@@ -86,11 +86,11 @@ public class R00818SetReferredResourceTypeTest {
     Boolean referredToResourceType =
         new R00818SetReferredResourceType(screeningToReferral).isValid();
     Referral referral = Referral.createWithDefaults(null, (short) 0, currentLocationOfChildren,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
-        familyAwarenessIndicator, govtEntityType, "name", "", "",
-        referredToResourceType ? NOT_REFERRED : 0, (short) 0, "",
-        firstResponseDeterminedByStaffPersonId, "", "", (short) 0, "", responseRationaleText,
-        responsibleAgencyCode, limitedAccessCode, "", null, (short) 0);
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, familyAwarenessIndicator,
+        govtEntityType, "name", "", "", referredToResourceType ? NOT_REFERRED : 0,
+        (short) 0, "", firstResponseDeterminedByStaffPersonId,
+        "", "", (short) 0, "", responseRationaleText, responsibleAgencyCode,
+        limitedAccessCode, "", null, (short) 0);
 
     assertThat(referral.getReferralResponseType(), is(equalTo(NOT_REFERRED)));
 
