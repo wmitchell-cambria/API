@@ -278,14 +278,14 @@ public class ReferralService implements
         ParticipantValidator.anonymousReporter(screeningToReferral),
         screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
-        govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(), referredToResourceType ? NOT_REFERRED : 0,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
-        screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
-        screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
-        screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
-        screeningToReferral.getLimitedAccessDescription(), limitedAccessDate, agencyCode);
+        screeningToReferral.isFamilyAwareness(), govEnt,
+        screeningToReferral.getName(), dateStarted, timeStarted, screeningToReferral.getResponseTime(),
+        referredToResourceType ? NOT_REFERRED : 0, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId(), longTextId, screeningToReferral.getIncidentCounty(),
+        (short) screeningToReferral.getApprovalStatus(), screeningToReferral.getAssigneeStaffId(),
+        responseRationalLongTextId, screeningToReferral.getResponsibleAgency(),
+        screeningToReferral.getLimitedAccessCode(), screeningToReferral.getLimitedAccessDescription(),
+        limitedAccessDate, agencyCode);
   }
 
   private Short convertLimitedAccessAgencyToNumericCode(ScreeningToReferral screeningToReferral) {
