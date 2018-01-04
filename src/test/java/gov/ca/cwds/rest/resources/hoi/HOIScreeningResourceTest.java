@@ -65,10 +65,10 @@ public class HOIScreeningResourceTest {
 
   @Test
   public void findDelegatesToResourceDelegate() {
-    Set<String> clientIdList = new HashSet<>();
-    clientIdList.add("1");
+    Set<String> clientIds = new HashSet<>();
+    clientIds.add("1");
     HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
-    hoiScreeningRequest.setClientIdList(clientIdList);
+    hoiScreeningRequest.setClientIds(clientIds);
     Entity requestEntity = Entity.entity(hoiScreeningRequest, MediaType.APPLICATION_JSON_TYPE);
 
     inMemoryResource.client().target("/" + RESOURCE_HOI_SCREENINGS).request()

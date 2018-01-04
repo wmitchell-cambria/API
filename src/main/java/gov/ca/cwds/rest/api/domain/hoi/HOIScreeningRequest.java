@@ -10,19 +10,19 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @JsonSnakeCase
 public class HOIScreeningRequest implements Request {
 
-  @JsonProperty("client_id_list")
-  private Set<String> clientIdList;
+  @JsonProperty("client_ids")
+  private Set<String> clientIds;
 
   public HOIScreeningRequest() {
     // default
   }
 
-  public Set<String> getClientIdList() {
-    return clientIdList;
+  public Set<String> getClientIds() {
+    return clientIds;
   }
 
-  public void setClientIdList(Set<String> clientIdList) {
-    this.clientIdList = clientIdList;
+  public void setClientIds(Set<String> clientIds) {
+    this.clientIds = clientIds;
   }
 
   /**
