@@ -45,14 +45,15 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
   /**
    * Find HOI ScreeningEntity objects by screening id.
    *
-   * @param screeningId - screening Id
+   * @param clientIdList - list of Client Id-s
    * @return list of ScreeningEntity objects
    */
   @SuppressWarnings("unchecked")
-  public Set<ScreeningEntity> findHoiScreeningsByScreeningId(String screeningId) {
+  public Set<ScreeningEntity> findScreeningsByScreeningId(Set<String> clientIdList) {
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findHoiScreeningsByScreeningId")
-        .setParameter("screeningId", screeningId);
+        .getNamedQuery(
+            "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIdList")
+        .setParameter("clientIdList", clientIdList);
     return new HashSet(query.list());
   }
 
