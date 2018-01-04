@@ -25,8 +25,8 @@ public class ScreeningEntityBuilder {
   private Set<ParticipantEntity> participants;
 
   public ScreeningEntity build() {
-    return new ScreeningEntity(reference, endedAt, incidentCounty, incidentDate, locationType,
-        communicationMethod, name, responseTime, screeningDecision, startedAt, narrative,
+    return new ScreeningEntity(null, reference, startedAt, endedAt, incidentCounty, incidentDate, locationType,
+        communicationMethod, name, responseTime, screeningDecision, null, narrative,
         contactAddress, participants);
   }
 
