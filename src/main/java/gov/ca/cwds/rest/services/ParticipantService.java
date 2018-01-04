@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -67,15 +65,14 @@ public class ParticipantService implements CrudsService {
 
   /**
    * Constructor
-   *
-   * @param participantDao The {@link Dao} handling {@link ParticipantEntity}
-   * @param clientService the clientService
-   * @param referralClientService the referralClientService
-   * @param reporterService the reporterService
-   * @param childClientService the childClientService
-   * @param clientAddressService the clientAddressService
-   * @param validator - the validator
-   * @param clientScpEthnicityService - clientScpEthnicityService
+   * 
+   * @param clientService clientService
+   * @param referralClientService referralClientService
+   * @param reporterService reporterService
+   * @param childClientService childClientService
+   * @param clientAddressService clientAddressService
+   * @param validator validator
+   * @param clientScpEthnicityService clientScpEthnicityService
    */
   @Inject
   public ParticipantService(ClientService clientService,
