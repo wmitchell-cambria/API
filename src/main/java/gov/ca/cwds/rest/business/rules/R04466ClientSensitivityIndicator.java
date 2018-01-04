@@ -6,6 +6,6 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
 
   @Override
   public void execute() {
-
+    // pending implementation
   }
 }
