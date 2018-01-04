@@ -3,10 +3,12 @@ package gov.ca.cwds.rest.services.hoi;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
 import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
 import io.dropwizard.hibernate.UnitOfWork;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,21 +79,26 @@ public class InvolvementHistoryService
     Set<String> clientIds = findClientIdsByScreeningId(screeningId);
     Set<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
     Set<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
-    Set<HOIScreening> hoiScreenings = findHOIScreeningsByScreeningId(screeningId);
+    Set<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
     return new InvolvementHistory(screeningId, hoiCases, hoiReferrals, hoiScreenings);
   }
 
-  @UnitOfWork("ns")
+  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   protected Set<String> findClientIdsByScreeningId(String screeningId) {
     return participantDao.findLegacyIdListByScreeningId(screeningId);
   }
 
-  @UnitOfWork("ns")
-  protected Set<HOIScreening> findHOIScreeningsByScreeningId(String screeningId) {
-    return hoiScreeningService.handleFind(screeningId).getScreenings();
+  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  protected Set<HOIScreening> findHOIScreeningsByClientIds(Set<String> clientIds,
+      String exceptScreeningId) {
+    HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
+    hoiScreeningRequest.setClientIdList(clientIds);
+    return hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings()
+        .stream().filter(hoiScreening -> !hoiScreening.getId().equals(exceptScreeningId))
+        .collect(Collectors.toSet());
   }
 
-  @UnitOfWork("cms")
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   protected Set<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
     Set<HOIReferral> hoiReferrals = new HashSet<>();
     for (String clientId : clientIds) {
@@ -101,7 +108,7 @@ public class InvolvementHistoryService
     return hoiReferrals;
   }
 
-  @UnitOfWork("cms")
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   protected Set<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
     Set<HOICase> hoicases = new HashSet<>();
     for (String clientId : clientIds) {
