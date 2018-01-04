@@ -68,7 +68,7 @@ public class HOIScreeningResource {
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find history of involvement by screening id",
       response = HOIScreeningResponse.class)
-  public Response post(@ApiParam(required = true, name = "clientIdList",
+  public Response post(@ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") HOIScreeningRequest hoiScreeningRequest) {
     return simpleResourceDelegate.find(hoiScreeningRequest);
   }

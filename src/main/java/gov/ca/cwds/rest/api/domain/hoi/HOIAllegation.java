@@ -6,6 +6,8 @@ import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Screening allegation.
@@ -108,5 +110,25 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
 
   public void setPerpetrator(HOIPerpetrator perpetrator) {
     this.perpetrator = perpetrator;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }

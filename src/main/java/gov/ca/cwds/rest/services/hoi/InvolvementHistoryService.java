@@ -92,7 +92,7 @@ public class InvolvementHistoryService
   protected Set<HOIScreening> findHOIScreeningsByClientIds(Set<String> clientIds,
       String exceptScreeningId) {
     HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
-    hoiScreeningRequest.setClientIdList(clientIds);
+    hoiScreeningRequest.setClientIds(clientIds);
     return hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings()
         .stream().filter(hoiScreening -> !hoiScreening.getId().equals(exceptScreeningId))
         .collect(Collectors.toSet());
