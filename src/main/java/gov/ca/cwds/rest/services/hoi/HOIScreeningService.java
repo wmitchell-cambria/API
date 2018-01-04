@@ -38,7 +38,7 @@ public class HOIScreeningService extends
   protected HOIScreeningResponse handleFind(HOIScreeningRequest hoiScreeningRequest) {
     Set<HOIScreening> screenings = new HashSet<>();
     for (ScreeningEntity screeningEntity : screeningDao
-        .findScreeningsByScreeningId(hoiScreeningRequest.getClientIdList())) {
+        .findScreeningsByClientIdList(hoiScreeningRequest.getClientIdList())) {
       screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
     }
     return new HOIScreeningResponse(screenings);
