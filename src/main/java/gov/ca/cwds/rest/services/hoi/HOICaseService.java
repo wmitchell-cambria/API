@@ -47,9 +47,9 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HOICaseService.class);
 
-  private transient CaseDao caseDao;
-  private transient ClientDao clientDao;
-  private transient ClientRelationshipDao clientRelationshipDao;
+  private CaseDao caseDao;
+  private ClientDao clientDao;
+  private ClientRelationshipDao clientRelationshipDao;
 
   /**
    * @param caseDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.CmsCase} objects
