@@ -32,7 +32,9 @@ import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.api.domain.cms.Client;
@@ -94,6 +96,7 @@ public class CmsReferralServiceTest {
   private RIReporter riReporter;
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
+  StaffPerson staffPerson;
 
 
   @Rule
@@ -113,6 +116,10 @@ public class CmsReferralServiceTest {
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
     riReferral = mock(RIReferral.class);
+    staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51").build();
+    when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("21");
+
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
         addressService, longTextService, riReferral);
