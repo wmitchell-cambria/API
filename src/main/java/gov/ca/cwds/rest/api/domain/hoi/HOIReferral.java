@@ -34,8 +34,6 @@ import io.swagger.annotations.ApiModelProperty;
     "assignedSocialWorker", "accessLimitation", "allegations", "legacyDescriptor"})
 public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferral.class);
-
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")

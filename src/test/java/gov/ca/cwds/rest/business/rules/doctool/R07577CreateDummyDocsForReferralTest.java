@@ -14,8 +14,6 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
-import gov.ca.cwds.data.cms.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,6 +24,26 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.data.cms.AddressDao;
+import gov.ca.cwds.data.cms.AllegationDao;
+import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
+import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseDao;
+import gov.ca.cwds.data.cms.CaseLoadDao;
+import gov.ca.cwds.data.cms.ChildClientDao;
+import gov.ca.cwds.data.cms.ClientAddressDao;
+import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.CrossReportDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
+import gov.ca.cwds.data.cms.DrmsDocumentDao;
+import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.ReporterDao;
+import gov.ca.cwds.data.cms.SsaName3Dao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -67,6 +85,7 @@ import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -244,12 +263,10 @@ public class R07577CreateDummyDocsForReferralTest {
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
         otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
-        allegationService, crossReportService, referralClientService, reporterService,
-        addressService, clientAddressService, childClientService, assignmentService,
-        participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-        governmentOrganizationCrossReportService);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
   }
 
   /**

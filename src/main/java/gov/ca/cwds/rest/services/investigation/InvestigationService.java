@@ -52,7 +52,6 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private ScreeningSummaryService screeningSummaryService;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
-  private HistoryOfInvolvement stubHoi;
 
   /**
    * 

@@ -5,13 +5,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.validation.Validator;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
-import gov.ca.cwds.data.Dao;
+
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -24,25 +27,17 @@ import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
-import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
-import gov.ca.cwds.rest.services.cms.AssignmentService;
-import gov.ca.cwds.rest.services.cms.ChildClientService;
-import gov.ca.cwds.rest.services.cms.ClientAddressService;
-import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
-import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
-import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -63,17 +58,9 @@ public class ScreeningToReferralService implements CrudsService {
   private MessageBuilder messageBuilder;
 
   private ReferralService referralService;
-  private ClientService clientService;
   private AllegationService allegationService;
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private CrossReportService crossReportService;
-  private ReferralClientService referralClientService;
-  private ReporterService reporterService;
-  private Reporter savedReporter;
-  private AddressService addressService;
-  private ClientAddressService clientAddressService;
-  private ChildClientService childClientService;
-  private AssignmentService assignmentService;
   private ParticipantService participantService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
@@ -83,31 +70,20 @@ public class ScreeningToReferralService implements CrudsService {
   /**
    * Constructor
    * 
-   * @param referralService the referralService
-   * @param clientService the clientService
-   * @param allegationService the allegationService
-   * @param crossReportService the crossReportService
-   * @param referralClientService the referralClientService
-   * @param reporterService the reporterService
-   * @param addressService - cms address service
-   * @param clientAddressService - cms ClientAddress service
-   * @param childClientService - cms ChildClient service
-   * @param assignmentService CMS assignment service
-   * @param participantService CMS participantService service
-   * @param validator - the validator
-   * @param referralDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
-   *        objects.
-   * @param messageBuilder log message
-   * @param allegationPerpetratorHistoryService the allegationPerpetratorHistoryService
-   * @param reminders - reminders
-   * @param governmentOrganizationCrossReportService - governmentOrganizationCrossReportService
+   * @param referralService referralService
+   * @param allegationService allegationService
+   * @param crossReportService crossReportService
+   * @param participantService participantService
+   * @param validator validator
+   * @param referralDao referralDao
+   * @param messageBuilder messageBuilder
+   * @param allegationPerpetratorHistoryService allegationPerpetratorHistoryService
+   * @param reminders reminders
+   * @param governmentOrganizationCrossReportService governmentOrganizationCrossReportService
    */
   @Inject
-  public ScreeningToReferralService(ReferralService referralService, ClientService clientService,
+  public ScreeningToReferralService(ReferralService referralService,
       AllegationService allegationService, CrossReportService crossReportService,
-      ReferralClientService referralClientService, ReporterService reporterService,
-      AddressService addressService, ClientAddressService clientAddressService,
-      ChildClientService childClientService, AssignmentService assignmentService,
       ParticipantService participantService, Validator validator, ReferralDao referralDao,
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
@@ -115,15 +91,8 @@ public class ScreeningToReferralService implements CrudsService {
 
     super();
     this.referralService = referralService;
-    this.clientService = clientService;
     this.allegationService = allegationService;
     this.crossReportService = crossReportService;
-    this.referralClientService = referralClientService;
-    this.reporterService = reporterService;
-    this.addressService = addressService;
-    this.clientAddressService = clientAddressService;
-    this.childClientService = childClientService;
-    this.assignmentService = assignmentService;
     this.participantService = participantService;
     this.validator = validator;
     this.referralDao = referralDao;
