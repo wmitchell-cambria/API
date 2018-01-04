@@ -79,14 +79,8 @@ public class HOIScreeningServiceTest {
   }
 
   private HOIScreeningResponse createExpectedResponse() {
-    HOIScreeningBuilder hoiScreeningBuilder = new HOIScreeningBuilder();
-    hoiScreeningBuilder.setId("224");
-    hoiScreeningBuilder.setStartDate("2017-11-30").setEndDate("2017-12-10");
-    hoiScreeningBuilder.setCountyId(1101).setCountyDescription("Sacramento");
-    hoiScreeningBuilder.setDecision("promote to referral").setDecisionDetail("drug counseling");
-
     Set<HOIScreening> screenings = new HashSet<>();
-    screenings.add(hoiScreeningBuilder.createHOIScreening());
+    screenings.add(new HOIScreeningBuilder().createHOIScreening());
     return new HOIScreeningResponse(screenings);
   }
 

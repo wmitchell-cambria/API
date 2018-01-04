@@ -9,13 +9,13 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
  */
 public class HOIScreeningBuilder {
 
-  private String id;
-  private String startDate;
-  private String endDate;
-  private String decision;
-  private String decisionDetail;
-  private Integer countyId;
-  private String countyDescription;
+  private String id = "224";
+  private String startDate = "2017-11-30";
+  private String endDate = "2017-12-10";
+  private String decision = "promote to referral";
+  private String decisionDetail = "drug counseling";
+  private Integer countyId = 1101;
+  private String countyDescription = "Sacramento";
 
   public HOIScreeningBuilder setId(String id) {
     this.id = id;
