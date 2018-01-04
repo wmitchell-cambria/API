@@ -49,7 +49,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    * @return list of ScreeningEntity objects
    */
   @SuppressWarnings("unchecked")
-  public Set<ScreeningEntity> findScreeningsByScreeningId(Set<String> clientIdList) {
+  public Set<ScreeningEntity> findScreeningsByClientIdList(Set<String> clientIdList) {
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIdList")
