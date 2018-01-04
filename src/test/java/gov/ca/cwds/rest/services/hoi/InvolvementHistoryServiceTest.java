@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,7 +74,8 @@ public class InvolvementHistoryServiceTest {
 
     hoiScreeningService = mock(HOIScreeningService.class);
     HOIScreeningResponse hoiScreeningResponse = new HOIScreeningResponse(new HashSet<>());
-    when(hoiScreeningService.handleFind(any(String.class))).thenReturn(hoiScreeningResponse);
+    when(hoiScreeningService.handleFind(any(HOIScreeningRequest.class)))
+        .thenReturn(hoiScreeningResponse);
 
     involvementHistoryService = new InvolvementHistoryService();
     involvementHistoryService.hoiCaseService = hoiCaseService;
@@ -81,7 +83,8 @@ public class InvolvementHistoryServiceTest {
     involvementHistoryService.hoiScreeningService = hoiScreeningService;
 
     ParticipantDao participantDao = mock(ParticipantDao.class);
-    when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(new HashSet<>());
+    when(participantDao.findLegacyIdListByScreeningId(any(String.class)))
+        .thenReturn(new HashSet<>());
     involvementHistoryService.participantDao = participantDao;
   }
 

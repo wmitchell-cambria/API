@@ -515,7 +515,7 @@ public class Referral extends ReportingDomain implements Request, Response {
     this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
     this.receivedDate = DomainChef.cookDate(persistedReferral.getReceivedDate());
     this.receivedTime = DomainChef.cookTime(persistedReferral.getReceivedTime());
-    this.referralResponseType = persistedReferral.getReferralResponseType() == null ? 0
+    this.referralResponseType = persistedReferral.getReferralResponseType() == null ? Short.valueOf((short)0)
         : persistedReferral.getReferralResponseType();
     this.referredToResourceType = persistedReferral.getReferredToResourceType();
     this.responseDeterminationDate =

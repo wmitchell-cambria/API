@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
+import gov.ca.cwds.rest.business.rules.R04880EstimatedDOBCodeSetting;
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -37,7 +38,6 @@ public class ClientService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
   private ClientDao clientDao;
-  private ClientAddressDao clientAddressDao;
   private StaffPersonDao staffpersonDao;
   private TriggerTablesDao triggerTablesDao;
   private NonLACountyTriggers nonLaCountyTriggers;
@@ -134,6 +134,9 @@ public class ClientService implements
               client, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
 
+      R04880EstimatedDOBCodeSetting r04880Rule = new R04880EstimatedDOBCodeSetting(managed);
+      r04880Rule.execute();
+
       managed = clientDao.create(managed);
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
@@ -174,6 +177,9 @@ public class ClientService implements
       Client managed =
           new Client(primaryKey, client, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
+
+      R04880EstimatedDOBCodeSetting r04880Rule = new R04880EstimatedDOBCodeSetting(managed);
+      r04880Rule.execute();
 
       managed.setClientAddress(existingClient.getClientAddress());
       managed = clientDao.update(managed);
