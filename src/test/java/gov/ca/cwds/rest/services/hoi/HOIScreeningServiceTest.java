@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
@@ -11,24 +10,19 @@ import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.fixture.hoi.HOIScreeningBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import io.dropwizard.jackson.Jackson;
 
 /***
  *
@@ -38,8 +32,6 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("javadoc")
 public class HOIScreeningServiceTest {
 
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
   private HOIScreeningService hoiScreeningService;
 
   @Rule
@@ -47,9 +39,6 @@ public class HOIScreeningServiceTest {
 
   @Before
   public void setUp() {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd z");
-    MAPPER.getSerializationConfig().with(dateFormat).with(TimeZone.getTimeZone("PST"));
-
     new TestingRequestExecutionContext("0X5");
 
     ParticipantDao participantDao = mock(ParticipantDao.class);
@@ -57,7 +46,9 @@ public class HOIScreeningServiceTest {
     hoiPersonFactory.participantDao = participantDao;
 
     ScreeningDao screeningDao = mock(ScreeningDao.class);
-    when(screeningDao.findScreeningsByClientIds(any(Set.class)))
+    Set<String> clientIds = new HashSet<>();
+    clientIds.add("1");
+    when(screeningDao.findScreeningsByClientIds(clientIds))
         .thenReturn(mockScreeningEntityList());
     IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
     mockIntakeLOVCodeEntity.setLgSysId(1101L);
@@ -75,26 +66,34 @@ public class HOIScreeningServiceTest {
   }
 
   @Test
-  public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
+  public void findReturnsExpectedHistoryOfInvolvement() {
+    HOIScreeningResponse expectedResponse = createExpectedResponse();
+
     Set<String> clientIds = new HashSet<>();
     clientIds.add("1");
     HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
     hoiScreeningRequest.setClientIds(clientIds);
-
-    HOIScreening expectedScreening = MAPPER
-        .readValue(fixture("gov/ca/cwds/rest/services/hoi/hoi_screenings/valid_HOIScreening.json"),
-            HOIScreening.class);
-    Set<HOIScreening> screenings = new HashSet<>();
-    screenings.add(expectedScreening);
-    HOIScreeningResponse expectedResponse = new HOIScreeningResponse(screenings);
     HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
+    
     assertThat(actualResponse, is(expectedResponse));
+  }
+
+  private HOIScreeningResponse createExpectedResponse() {
+    HOIScreeningBuilder hoiScreeningBuilder = new HOIScreeningBuilder();
+    hoiScreeningBuilder.setId("224");
+    hoiScreeningBuilder.setStartDate("2017-11-30").setEndDate("2017-12-10");
+    hoiScreeningBuilder.setCountyId(1101).setCountyDescription("Sacramento");
+    hoiScreeningBuilder.setDecision("promote to referral").setDecisionDetail("drug counseling");
+
+    Set<HOIScreening> screenings = new HashSet<>();
+    screenings.add(hoiScreeningBuilder.createHOIScreening());
+    return new HOIScreeningResponse(screenings);
   }
 
   private Set<ScreeningEntity> mockScreeningEntityList() {
     ScreeningEntity entity = new ScreeningEntity("224", null,
-        DomainChef.uncookStrictTimestampString("2017-11-29T16:00:00.000-0800"),
-        DomainChef.uncookStrictTimestampString("2017-12-09T16:00:00.000-0800"), "sacramento", null,
+        DomainChef.uncookDateString("2017-11-30"),
+        DomainChef.uncookDateString("2017-12-10"), "sacramento", null,
         null, null, null, null, "promote to referral",
         "drug counseling", null, null, null);
 
