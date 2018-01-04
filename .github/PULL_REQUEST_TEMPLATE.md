@@ -25,4 +25,5 @@
 <!--- If you're unsure about any of these, don't hesitate to ask. -->
 - [ ] My code follows the google code style of this project.
 - [ ] I have ran all tests for the project.
+- [ ] My code is in a stable state ready to be deployable, but not necessarily complete.
 - [ ] I promise on my honor as a CWDS developer to ensure I don't break the build, to check SonarQube after the build completes, use best practices, to leave the code in better shape than I found it, and to have a good day.
