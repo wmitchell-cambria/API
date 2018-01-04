@@ -183,14 +183,16 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   private void insertBlobsJdbc(final Connection con,
       gov.ca.cwds.data.persistence.cms.CmsDocument doc, List<CmsDocumentBlobSegment> blobs)
       throws SQLException {
-    try (final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
+    String deleteSql = blobsDelete();
+    try (final PreparedStatement delStmt = con.prepareStatement(deleteSql);
         final Statement stmt = con.createStatement()) {
 
       delStmt.setString(1, doc.getId());
       delStmt.executeUpdate();
 
       for (CmsDocumentBlobSegment blob : blobs) {
-        stmt.executeUpdate(blobToInsert(blob));
+        String insertSql = blobToInsert(blob);
+        stmt.executeUpdate(insertSql);
       }
 
       con.commit(); // WARNING: deadlock without this.
@@ -201,7 +203,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   private void deleteBlobsJdbc(final Connection con, String docId) throws SQLException {
-    try (final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
+    String deleteSql = blobsDelete();
+    try (final PreparedStatement delStmt = con.prepareStatement(deleteSql)) {
 
       delStmt.setString(1, docId);
       delStmt.executeUpdate();
