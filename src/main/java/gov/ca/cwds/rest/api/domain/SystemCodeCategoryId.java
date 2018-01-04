@@ -62,7 +62,7 @@ public final class SystemCodeCategoryId {
   /**
    * County Code e.g) Sonoma, Sacramento, Marin
    */
-  public static final String COUNTY_CODE = "GVR_ENTC";
+  public static final String COUNTY_CODE = GOVERNMENT_ENTITY;
 
   /**
    * Client collateral relationship, e.g) Attorney, Clergy, Friend
@@ -93,11 +93,6 @@ public final class SystemCodeCategoryId {
    * Ethnicity
    */
   public static final String ETHNICITY = "ETHNCTYC";
-
-  /**
-   * Allegation type
-   */
-  public static final String ALLEGATION_TYPE = "INJR_HMC";
 
   /**
    * Injury to body part type

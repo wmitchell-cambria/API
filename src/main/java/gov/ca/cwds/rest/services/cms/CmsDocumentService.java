@@ -7,7 +7,11 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+import javax.xml.bind.DatatypeConverter;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -22,9 +26,6 @@ import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
-
-import javax.persistence.EntityExistsException;
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * Business layer object to work on {@link CmsDocument}.
@@ -84,7 +85,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument create(CmsDocument request) {
-    gov.ca.cwds.data.persistence.cms.CmsDocument doc = new  gov.ca.cwds.data.persistence.cms.CmsDocument(request);
+    gov.ca.cwds.data.persistence.cms.CmsDocument doc =
+        new gov.ca.cwds.data.persistence.cms.CmsDocument(request);
     CmsDocument retval = null;
     String base64Doc = request.getBase64Blob();
     if (StringUtils.isNotBlank(request.getDocAuth())) {
@@ -227,7 +229,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
-  protected void deleteBlobs(String docId){
+  protected void deleteBlobs(String docId) {
     try (final Connection con = getConnection()) {
       deleteBlobsJdbc(con, docId);
     } catch (SQLException e) {
