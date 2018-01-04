@@ -13,6 +13,7 @@ import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,7 +57,7 @@ public class HOIScreeningServiceTest {
     hoiPersonFactory.participantDao = participantDao;
 
     ScreeningDao screeningDao = mock(ScreeningDao.class);
-    when(screeningDao.findHoiScreeningsByScreeningId(any(String.class)))
+    when(screeningDao.findScreeningsByClientIds(any(Set.class)))
         .thenReturn(mockScreeningEntityList());
     IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
     mockIntakeLOVCodeEntity.setLgSysId(1101L);
@@ -75,13 +76,18 @@ public class HOIScreeningServiceTest {
 
   @Test
   public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
+    Set<String> clientIds = new HashSet<>();
+    clientIds.add("1");
+    HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
+    hoiScreeningRequest.setClientIds(clientIds);
+
     HOIScreening expectedScreening = MAPPER
         .readValue(fixture("gov/ca/cwds/rest/services/hoi/hoi_screenings/valid_HOIScreening.json"),
             HOIScreening.class);
     Set<HOIScreening> screenings = new HashSet<>();
     screenings.add(expectedScreening);
     HOIScreeningResponse expectedResponse = new HOIScreeningResponse(screenings);
-    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind("1");
+    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
     assertThat(actualResponse, is(expectedResponse));
   }
 
