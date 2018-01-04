@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+import javax.xml.bind.DatatypeConverter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -21,9 +24,6 @@ import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
-
-import javax.persistence.EntityExistsException;
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * Business layer object to work on {@link CmsDocument}.
@@ -82,7 +82,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument create(CmsDocument request) {
-    gov.ca.cwds.data.persistence.cms.CmsDocument doc = new  gov.ca.cwds.data.persistence.cms.CmsDocument(request);
+    gov.ca.cwds.data.persistence.cms.CmsDocument doc =
+        new gov.ca.cwds.data.persistence.cms.CmsDocument(request);
     CmsDocument retval = null;
     String base64Doc = request.getBase64Blob();
     if (StringUtils.isNotBlank(request.getDocAuth())) {
@@ -162,18 +163,16 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     return retval;
   }
 
-  protected String blobToInsert(CmsDocumentBlobSegment blob) {
+  private String blobToInsert(CmsDocumentBlobSegment blob) {
     return new StringBuilder().append("INSERT INTO ").append(getCurrentSchema())
         .append(".TSBLOBT(DOC_HANDLE, DOC_SEGSEQ, DOC_BLOB) VALUES").append("('")
-        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence())
-        .append("',x'").append(DatatypeConverter.printHexBinary(blob.getDocBlob())).append("')")
-        .toString();
+        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence()).append("',x'")
+        .append(DatatypeConverter.printHexBinary(blob.getDocBlob())).append("')").toString();
   }
 
-  protected String blobsDelete() {
-    return new StringBuilder()
-        .append("DELETE FROM ").append(getCurrentSchema()).append(".TSBLOBT WHERE DOC_HANDLE = ?")
-        .toString();
+  private String blobsDelete() {
+    return new StringBuilder().append("DELETE FROM ").append(getCurrentSchema())
+        .append(".TSBLOBT WHERE DOC_HANDLE = ?").toString();
   }
 
   protected String getCurrentSchema() {
@@ -181,18 +180,19 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
-  private void insertBlobsJdbc(final Connection con, gov.ca.cwds.data.persistence.cms.CmsDocument doc,
-    List<CmsDocumentBlobSegment> blobs)
-    throws SQLException {
-    try (
-        final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
+  private void insertBlobsJdbc(final Connection con,
+      gov.ca.cwds.data.persistence.cms.CmsDocument doc, List<CmsDocumentBlobSegment> blobs)
+      throws SQLException {
+    String deleteSql = blobsDelete();
+    try (final PreparedStatement delStmt = con.prepareStatement(deleteSql);
         final Statement stmt = con.createStatement()) {
 
       delStmt.setString(1, doc.getId());
       delStmt.executeUpdate();
 
       for (CmsDocumentBlobSegment blob : blobs) {
-        stmt.executeUpdate(blobToInsert(blob));
+        String insertSql = blobToInsert(blob);
+        stmt.executeUpdate(insertSql);
       }
 
       con.commit(); // WARNING: deadlock without this.
@@ -202,10 +202,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
-  private void deleteBlobsJdbc(final Connection con, String docId)
-      throws SQLException {
-    try (
-        final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
+  private void deleteBlobsJdbc(final Connection con, String docId) throws SQLException {
+    String deleteSql = blobsDelete();
+    try (final PreparedStatement delStmt = con.prepareStatement(deleteSql)) {
 
       delStmt.setString(1, docId);
       delStmt.executeUpdate();
@@ -217,7 +216,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
-  protected void deleteBlobs(String docId){
+  protected void deleteBlobs(String docId) {
     try (final Connection con = getConnection()) {
       deleteBlobsJdbc(con, docId);
     } catch (SQLException e) {
