@@ -40,8 +40,8 @@ public class HOIReferralService
    */
   private static final long serialVersionUID = 1L;
 
-  private transient ClientDao clientDao;
-  private transient ReferralClientDao referralClientDao;
+  private ClientDao clientDao;
+  private ReferralClientDao referralClientDao;
 
   /**
    * @param clientDao - clientDao

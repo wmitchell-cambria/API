@@ -3,9 +3,6 @@ package gov.ca.cwds.rest.validation;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;

@@ -111,24 +111,4 @@ public class HOIAllegation extends ApiObjectIdentity implements ApiTypedIdentifi
   public void setPerpetrator(HOIPerpetrator perpetrator) {
     this.perpetrator = perpetrator;
   }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
 }

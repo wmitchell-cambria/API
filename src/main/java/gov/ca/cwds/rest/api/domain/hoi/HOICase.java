@@ -202,24 +202,4 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
 }

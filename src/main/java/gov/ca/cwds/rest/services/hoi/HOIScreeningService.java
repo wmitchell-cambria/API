@@ -21,10 +21,10 @@ public class HOIScreeningService extends
     SimpleResourceService<HOIScreeningRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
-  transient ScreeningDao screeningDao;
+  ScreeningDao screeningDao;
 
   @Inject
-  transient HOIScreeningFactory hoiScreeningFactory;
+  HOIScreeningFactory hoiScreeningFactory;
 
   public HOIScreeningService() {
     super();
