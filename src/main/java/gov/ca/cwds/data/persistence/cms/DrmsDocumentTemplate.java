@@ -115,7 +115,7 @@ public class DrmsDocumentTemplate implements PersistentObject {
     this.cmsDocumentId = cmsDocumentId;
     this.inactive = inactive;
     this.languageType = languageType;
-    this.lastUpdatedTime = lastUpdatedTime;
+    this.lastUpdatedTime = new Date(lastUpdatedTime.getTime());
     this.titleName = titleName;
     this.transactionType = transactionType;
   }
@@ -137,7 +137,7 @@ public class DrmsDocumentTemplate implements PersistentObject {
     this.languageType = drmsDocumentTemplate.getLanguageType();
     this.titleName = drmsDocumentTemplate.getTitleName();
     this.transactionType = drmsDocumentTemplate.getTransactionType();
-    this.lastUpdatedTime = lastUpdatedTime;
+    this.lastUpdatedTime = new Date(lastUpdatedTime.getTime());
   }
 
 
@@ -206,7 +206,7 @@ public class DrmsDocumentTemplate implements PersistentObject {
    * @return the lastUpdatedTime
    */
   public Date getLastUpdatedTime() {
-    return lastUpdatedTime;
+    return new Date(lastUpdatedTime.getTime());
   }
 
   /**
