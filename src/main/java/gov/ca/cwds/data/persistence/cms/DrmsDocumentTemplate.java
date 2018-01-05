@@ -63,13 +63,13 @@ public class DrmsDocumentTemplate implements PersistentObject {
   private String cmsDocumentId;
 
   @Column(name = "INACT_IND", length = 1)
-  private String inactive;
+  private String inactive = "N";
 
   @SystemCodeSerializer(logical = true, description = true)
   @JsonDeserialize(using = CmsSystemCodeDeserializer.class)
   @Type(type = "short")
   @Column(name = "LANG_TPC")
-  private Short languageType;
+  private Short languageType = 1253;
 
   @Type(type = "timestamp")
   @Column(name = "LST_UPD_TS")
