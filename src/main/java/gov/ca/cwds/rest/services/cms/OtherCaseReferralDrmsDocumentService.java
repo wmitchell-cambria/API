@@ -174,8 +174,6 @@ public class OtherCaseReferralDrmsDocumentService
     Map<String, String> keyValuePairs = new HashMap<>();
     // Get child name from allegations
     String childName = "Dummy Name";
-    for(Allegation allegation: screeningToReferral.getAllegations()){
-    }
 
     keyValuePairs.put("ChildName",childName);
     keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(screeningToReferral.getReferralId()));
