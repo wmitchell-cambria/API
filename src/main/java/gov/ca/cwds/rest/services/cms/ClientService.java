@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
 import gov.ca.cwds.rest.business.rules.R04880EstimatedDOBCodeSetting;
+import gov.ca.cwds.rest.business.rules.R04966NamesMustHaveAtLeastOneAlphaChar;
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
@@ -133,9 +133,8 @@ public class ClientService implements
           new Client(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
               client, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
-
-      R04880EstimatedDOBCodeSetting r04880Rule = new R04880EstimatedDOBCodeSetting(managed);
-      r04880Rule.execute();
+      validateByRuleR04966(managed);
+      executeRuleR04880(managed);
 
       managed = clientDao.create(managed);
       // checking the staffPerson county code
@@ -178,8 +177,8 @@ public class ClientService implements
           new Client(primaryKey, client, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
 
-      R04880EstimatedDOBCodeSetting r04880Rule = new R04880EstimatedDOBCodeSetting(managed);
-      r04880Rule.execute();
+      validateByRuleR04966(existingClient);
+      executeRuleR04880(managed);
 
       managed.setClientAddress(existingClient.getClientAddress());
       managed = clientDao.update(managed);
@@ -195,4 +194,15 @@ public class ClientService implements
     return savedEntity;
   }
 
+  private void validateByRuleR04966(Client managed) {
+    if (!new R04966NamesMustHaveAtLeastOneAlphaChar(managed).isValid()) {
+      throw new ServiceException("Client must have at least one alpha character " +
+          "in at least one of the name fields (first, middle, last)");
+    }
+  }
+
+  private void executeRuleR04880(Client managed) {
+    R04880EstimatedDOBCodeSetting r04880Rule = new R04880EstimatedDOBCodeSetting(managed);
+    r04880Rule.execute();
+  }
 }
