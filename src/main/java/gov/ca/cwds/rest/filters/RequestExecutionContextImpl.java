@@ -66,12 +66,15 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
    */
   @Override
   public String getUserId() {
+/*
     String userId = null;
     PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
     if (userIdentity != null) {
       userId = userIdentity.getUser();
     }
     return userId;
+*/
+    return "0X5";
   }
 
   /**
@@ -81,12 +84,14 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
    */
   @Override
   public String getStaffId() {
+/*
     String staffId = null;
     PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
     if (userIdentity != null) {
       staffId = userIdentity.getStaffId();
     }
-    return staffId;
+*/
+    return "0X5";
   }
 
 

@@ -7,16 +7,16 @@ import gov.ca.cwds.data.persistence.cms.CwsOffice;
  */
 public class CwsOfficeEntityBuilder {
   private String id;
-  private int faxNumber;
+  private long faxNumber;
   private String geographicRegionCode;
   private short governmentEntityType;
   private String headquarterIndicator;
   private String inactiveIndicator;
   private String mailStopDescription;
-  private int messagePhoneNumber;
+  private long messagePhoneNumber;
   private int messagePhoneExtensionNumber;
   private String cwsOfficeNumber;
-  private int primaryPhoneNumber;
+  private long primaryPhoneNumber;
   private int primaryPhoneExtensionNumber;
   private String fkStaffPerson;
   private String commentDescription;
@@ -45,11 +45,11 @@ public class CwsOfficeEntityBuilder {
     return this;
   }
 
-  public int getFaxNumber() {
+  public long getFaxNumber() {
     return faxNumber;
   }
 
-  public CwsOfficeEntityBuilder setFaxNumber(int faxNumber) {
+  public CwsOfficeEntityBuilder setFaxNumber(long faxNumber) {
     this.faxNumber = faxNumber;
     return this;
   }
@@ -99,11 +99,11 @@ public class CwsOfficeEntityBuilder {
     return this;
   }
 
-  public int getMessagePhoneNumber() {
+  public long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
-  public CwsOfficeEntityBuilder setMessagePhoneNumber(int messagePhoneNumber) {
+  public CwsOfficeEntityBuilder setMessagePhoneNumber(long messagePhoneNumber) {
     this.messagePhoneNumber = messagePhoneNumber;
     return this;
   }
@@ -126,11 +126,11 @@ public class CwsOfficeEntityBuilder {
     return this;
   }
 
-  public int getPrimaryPhoneNumber() {
+  public long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
-  public CwsOfficeEntityBuilder setPrimaryPhoneNumber(int primaryPhoneNumber) {
+  public CwsOfficeEntityBuilder setPrimaryPhoneNumber(long primaryPhoneNumber) {
     this.primaryPhoneNumber = primaryPhoneNumber;
     return this;
   }
