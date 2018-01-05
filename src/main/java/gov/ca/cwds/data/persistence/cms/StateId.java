@@ -102,19 +102,19 @@ public class StateId extends CmsPersistentObject {
   }
 
   public Date getStartDate() {
-    return startDate;
+    return new Date(startDate.getTime());
   }
 
   public void setStartDate(Date startDt) {
-    this.startDate = startDt;
+    this.startDate = new Date(startDt.getTime());
   }
 
   public Date getEndDate() {
-    return endDate;
+    return new Date(endDate.getTime());
   }
 
   public void setEndDate(Date endDt) {
-    this.endDate = endDt;
+    this.endDate = new Date(endDt.getTime());
   }
 
   public String getStateIdCaseFirstName() {
