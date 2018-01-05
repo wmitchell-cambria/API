@@ -73,6 +73,7 @@ public class CmsReferralServiceTest {
   private ReporterService reporterService;
   private AssignmentService assignmentService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AddressService addressService;
   private LongTextService longTextService;
   private UpperCaseTables upperCaseTables;
@@ -116,13 +117,14 @@ public class CmsReferralServiceTest {
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
     riReferral = mock(RIReferral.class);
+    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
     staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51").build();
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("21");
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);

@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -123,6 +124,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   private ChildClientService childClientService;
   private LongTextService longTextService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
   private RIChildClient riChildClient;
@@ -242,7 +244,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
-
+    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
     childClientService = new ChildClientService(childClientDao, riChildClient);
@@ -272,7 +274,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService, validator, referralDao, new MessageBuilder(),

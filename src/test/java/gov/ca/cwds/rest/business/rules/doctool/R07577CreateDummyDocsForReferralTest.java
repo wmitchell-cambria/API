@@ -86,6 +86,7 @@ import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -149,6 +150,7 @@ public class R07577CreateDummyDocsForReferralTest {
   private TriggerTablesDao triggerTablesDao;
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentDao drmsDocumentDao;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private SsaName3Dao ssaName3Dao;
   private Reminders reminders;
   private UpperCaseTables upperCaseTables;
@@ -235,6 +237,7 @@ public class R07577CreateDummyDocsForReferralTest {
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
+    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
@@ -263,7 +266,7 @@ public class R07577CreateDummyDocsForReferralTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,

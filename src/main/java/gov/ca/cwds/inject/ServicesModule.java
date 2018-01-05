@@ -5,6 +5,8 @@ import java.util.Properties;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,6 +136,8 @@ public class ServicesModule extends AbstractModule {
     bind(DeliveredService.class);
     bind(DeliveredToIndividualService.class);
     bind(DrmsDocumentService.class);
+    bind(DrmsDocumentTemplateService.class);
+    bind(OtherCaseReferralDrmsDocumentService.class);
     bind(GovernmentOrganizationCrossReportService.class);
     bind(IndexQueryService.class);
     bind(LegacyKeyService.class);

@@ -64,6 +64,7 @@ import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -126,6 +127,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private DrmsDocumentDao drmsDocumentDao;
   private SsaName3Dao ssaName3Dao;
   private Reminders reminders;
@@ -166,7 +168,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);

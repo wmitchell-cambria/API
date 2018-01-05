@@ -86,6 +86,7 @@ import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
@@ -118,6 +119,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private ChildClientService childClientService;
   private LongTextService longTextService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
   private RIChildClient riChildClient;
@@ -234,6 +236,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
+    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
@@ -265,7 +268,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService, validator, referralDao, new MessageBuilder(),
