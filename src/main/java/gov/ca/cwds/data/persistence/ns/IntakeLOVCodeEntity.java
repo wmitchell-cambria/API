@@ -57,12 +57,20 @@ public class IntakeLOVCodeEntity implements PersistentObject {
     return lgSysId;
   }
 
+  public void setLgSysId(Long lgSysId) {
+    this.lgSysId = lgSysId;
+  }
+
   public String getIntakeCode() {
     return intakeCode;
   }
 
   public String getIntakeDisplay() {
     return intakeDisplay;
+  }
+
+  public void setIntakeDisplay(String intakeDisplay) {
+    this.intakeDisplay = intakeDisplay;
   }
 
   public String getOmitInd() {

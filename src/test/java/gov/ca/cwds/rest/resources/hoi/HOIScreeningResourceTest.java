@@ -6,9 +6,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
+import java.util.HashSet;
+import java.util.Set;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
@@ -47,7 +51,8 @@ public class HOIScreeningResourceTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @SuppressWarnings("unchecked")
-  private final static SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate = mock(SimpleResourceDelegate.class);
+  private final static SimpleResourceDelegate<HOIScreeningRequest, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate = mock(
+      SimpleResourceDelegate.class);
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
@@ -60,9 +65,15 @@ public class HOIScreeningResourceTest {
 
   @Test
   public void findDelegatesToResourceDelegate() {
-    inMemoryResource.client().target("/" + RESOURCE_HOI_SCREENINGS + "/1").request()
-        .accept(MediaType.APPLICATION_JSON).get().getStatus();
-    verify(simpleResourceDelegate, atLeastOnce()).find("1");
+    Set<String> clientIds = new HashSet<>();
+    clientIds.add("1");
+    HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
+    hoiScreeningRequest.setClientIds(clientIds);
+    Entity requestEntity = Entity.entity(hoiScreeningRequest, MediaType.APPLICATION_JSON_TYPE);
+
+    inMemoryResource.client().target("/" + RESOURCE_HOI_SCREENINGS).request()
+        .accept(MediaType.APPLICATION_JSON).post(requestEntity).getStatus();
+    verify(simpleResourceDelegate, atLeastOnce()).find(hoiScreeningRequest);
   }
 
 }

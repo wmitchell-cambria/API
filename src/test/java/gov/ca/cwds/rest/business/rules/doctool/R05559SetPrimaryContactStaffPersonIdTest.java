@@ -59,6 +59,7 @@ import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
 import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.helper.CmsIdGenerator;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
@@ -380,7 +381,8 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     CaseLoad caseLoad = new CaseLoadEntityBuilder().setId("ABC1234567").build();
     CaseLoad[] caseLoadList = new CaseLoad[1];
     caseLoadList[0] = caseLoad;
-    StaffPerson staffPerson = mock(StaffPerson.class);
+    StaffPerson staffPerson =
+        new StaffPersonEntityBuilder().setId("0X5").setCountyCode("34").build();
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("BTr");
     when(assignmentDao.findCaseLoads(any(String.class))).thenReturn(caseLoadList);

@@ -200,5 +200,4 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
-
 }

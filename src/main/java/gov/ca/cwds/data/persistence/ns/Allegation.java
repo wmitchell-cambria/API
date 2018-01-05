@@ -46,6 +46,15 @@ public class Allegation implements PersistentObject {
   private ScreeningEntity screeningEntity;
 
   /**
+   * Default constructor
+   *
+   * Required for Hibernate
+   */
+  public Allegation() {
+    // default
+  }
+
+  /**
    * @param id - id
    * @param screeningId - screeningEntity id
    * @param perpetratorId - perpetrator id

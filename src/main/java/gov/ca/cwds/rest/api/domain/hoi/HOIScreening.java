@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 
 import java.util.Set;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -170,26 +168,6 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
 
   public void setAllPeople(Set<HOIPerson> allPeople) {
     this.allPeople = allPeople;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
   public static void main(String[] args) throws Exception {
