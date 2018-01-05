@@ -26,6 +26,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.business.rules.CountyOfAssignedStaffWorker;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.R00818SetReferredResourceType;
@@ -141,6 +142,7 @@ public class ReferralService implements
     try {
       StaffPerson staffperson =
           staffPersonValidate(RequestExecutionContext.instance().getStaffId());
+      validateCountyOfAssignedStaffWorker(referral);
       Referral managed =
           new Referral(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
               referral, RequestExecutionContext.instance().getStaffId(),
@@ -156,6 +158,15 @@ public class ReferralService implements
     } catch (EntityExistsException e) {
       LOGGER.info("Referral already exists : {}", referral);
       throw new ServiceException(e);
+    }
+  }
+
+  private void validateCountyOfAssignedStaffWorker(
+      gov.ca.cwds.rest.api.domain.cms.Referral referral) {
+    if (!new CountyOfAssignedStaffWorker(referral, staffpersonDao).isValid()) {
+      LOGGER.error("Assigned Staff Person County must be the same as the Incident County");
+      throw new ServiceException(
+          "Assigned Staff Person County must be the same as the Incident County");
     }
   }
 
