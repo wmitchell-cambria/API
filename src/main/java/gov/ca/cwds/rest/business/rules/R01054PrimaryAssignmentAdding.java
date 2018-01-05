@@ -1,15 +1,12 @@
 package gov.ca.cwds.rest.business.rules;
 
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.persistence.cms.Assignment;
 import gov.ca.cwds.data.persistence.cms.AssignmentUnit;
-import gov.ca.cwds.data.persistence.cms.CaseAssignment;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
-import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.CwsOffice;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralAssignment;
@@ -29,17 +26,15 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class R01054PrimaryAssignmentAdding implements RuleAction {
   private ReferralDao referralDao;
-  private CaseDao caseDao;
   private CaseLoadDao caseLoadDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private Assignment assignment;
 
-  public R01054PrimaryAssignmentAdding(Assignment assignment, ReferralDao referralDao, CaseDao caseDao,
+  public R01054PrimaryAssignmentAdding(Assignment assignment, ReferralDao referralDao,
        CaseLoadDao caseLoadDao, AssignmentUnitDao assignmentUnitDao, CwsOfficeDao cwsOfficeDao) {
     this.assignment = assignment;
     this.referralDao = referralDao;
-    this.caseDao = caseDao;
     this.caseLoadDao = caseLoadDao;
     this.assignmentUnitDao = assignmentUnitDao;
     this.cwsOfficeDao = cwsOfficeDao;
@@ -66,13 +61,7 @@ public class R01054PrimaryAssignmentAdding implements RuleAction {
         validateOnNull(referral, "Cannot find referral for assignment: " + assignment.getPrimaryKey());
 
         referral.setGovtEntityType(governmentEntityType);
-        referralDao.update(referral);
-      } else if (CaseAssignment.FOLDED_KEY_CODE.equals(establishedForCode)) {
-        CmsCase cmsCase = caseDao.find(establishedForId);
-        validateOnNull(cmsCase, "Cannot find case for assignment: " + assignment.getPrimaryKey());
-
-        cmsCase.setGovernmentEntityType(governmentEntityType);
-        caseDao.update(cmsCase);
+        referralDao.getSessionFactory().getCurrentSession().merge(referral);
       }
     }
   }
