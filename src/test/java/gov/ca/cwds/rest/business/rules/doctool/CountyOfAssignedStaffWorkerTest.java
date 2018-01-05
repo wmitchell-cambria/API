@@ -28,7 +28,7 @@ public class CountyOfAssignedStaffWorkerTest {
   }
 
   @Test
-  public void falseWhenCountyOfAssignedSocialWorkerIsDifferentFromIncidentCounty()
+  public void failsValidationWhenCountyOfAssignedSocialWorkerIsDifferentFromIncidentCounty()
       throws Exception {
     Referral referral = new ReferralResourceBuilder().setPrimaryContactStaffPersonId("q1p")
         .setCountySpecificCode("45").build();
@@ -37,7 +37,7 @@ public class CountyOfAssignedStaffWorkerTest {
   }
 
   @Test
-  public void trueWhenCountyOfAssignedSocialWorkerIsSameIncidentCounty() throws Exception {
+  public void successWhenCountyOfAssignedSocialWorkerIsSameAsIncidentCounty() throws Exception {
     Referral referral = new ReferralResourceBuilder().setPrimaryContactStaffPersonId("q1p")
         .setCountySpecificCode("99").build();
     Boolean expected = new CountyOfAssignedStaffWorker(referral, staffPersonDao).isValid();
