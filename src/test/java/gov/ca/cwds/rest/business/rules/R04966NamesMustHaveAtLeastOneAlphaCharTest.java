@@ -31,4 +31,13 @@ public class R04966NamesMustHaveAtLeastOneAlphaCharTest {
     assertFalse(new R04966NamesMustHaveAtLeastOneAlphaChar(client).isValid());
   }
 
+  @Test
+  public void testNulls() {
+    Client client = new ClientEntityBuilder().
+        setCommonFirstName(null).
+        setCommonLastName(null).
+        setCommonMiddleName(null).
+        build();
+    assertFalse(new R04966NamesMustHaveAtLeastOneAlphaChar(client).isValid());
+  }
 }
