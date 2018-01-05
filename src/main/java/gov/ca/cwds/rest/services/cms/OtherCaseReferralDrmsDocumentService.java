@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
 import com.google.inject.Inject;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
@@ -98,6 +99,7 @@ public class OtherCaseReferralDrmsDocumentService
     throw new NotImplementedException("update not implement");
   }
 
+  @SuppressFBWarnings("PREDICTABLE_RANDOM") // Random is a temp implementation till we know how
   public void createDefaultSreenerNarrativeForNewReferral(
       ScreeningToReferral screeningToReferral,
       String referralId,

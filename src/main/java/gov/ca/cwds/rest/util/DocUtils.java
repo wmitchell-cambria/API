@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +55,7 @@ public class DocUtils {
     }
   }
 
+  @SuppressFBWarnings("PREDICTABLE_RANDOM") // Random is a temp implementation till we know how
   public static String generateDocHandle(String docId, String docAuth){
     Random random = new Random();
     return CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","")
