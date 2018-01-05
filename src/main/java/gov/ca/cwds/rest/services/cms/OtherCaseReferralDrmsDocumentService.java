@@ -112,7 +112,7 @@ public class OtherCaseReferralDrmsDocumentService
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
 
       //Make Word doc from Template with new DOC_HANDLE etc.
-      //TODO
+      //TO1DO
 
 
       Date now = new Date();
@@ -120,18 +120,18 @@ public class OtherCaseReferralDrmsDocumentService
       String docId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId(), now);
 
       Random random = new Random();
-      // TODO Generate handle the proper way. 0015441304100220*RAMESHA 00006
+      // TO1DO Generate handle the proper way. 0015441304100220*RAMESHA 00006
       String docHandle = DocUtils.generateDocHandle(docId, docAuth);
       Short segments = 1;
       Long docLength = 1L;
 
-      // TODO ???  The server name through which the document was added.
+      // TO1DO ???  The server name through which the document was added.
       String docServ = "AUTOCRTD";
 
       String docDate = new SimpleDateFormat(DomainObject.DATE_FORMAT).format(now);
       String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
 
-      //TODO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
+      //TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
       String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
       String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0,5).concat(nameNumber).concat(".DOC");
 
