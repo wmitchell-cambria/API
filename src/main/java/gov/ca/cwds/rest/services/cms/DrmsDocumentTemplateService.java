@@ -32,7 +32,7 @@ import static gov.ca.cwds.data.cms.DrmsDocumentTemplateDao.SCREENERNARRATIVE;
  */
 public class DrmsDocumentTemplateService implements TypedCrudsService<String, DrmsDocumentTemplate, DrmsDocumentTemplate> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DrmsDocumentTemplate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DrmsDocumentTemplateService.class);
 
   private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
   private CmsDocumentService cmsDocumentService;
