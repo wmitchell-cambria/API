@@ -168,7 +168,7 @@ public class AssignmentService implements
 
   private void executeR01054Rule(Assignment managed) {
     R01054PrimaryAssignmentAdding r01054Rule = new R01054PrimaryAssignmentAdding(managed,
-        referralDao, caseDao, caseLoadDao, assignmentUnitDao, cwsOfficeDao);
+        referralDao, caseLoadDao, assignmentUnitDao, cwsOfficeDao);
     try {
       r01054Rule.execute();
     } catch (Exception e) {
