@@ -58,9 +58,9 @@ public class DocUtils {
   @SuppressFBWarnings("PREDICTABLE_RANDOM") // Random is a temp implementation till we know how
   public static String generateDocHandle(String docId, String docAuth){
     Random random = new Random();
-    return CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","")
+    return CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","").substring(0,16)
             .concat("*")
-            .concat(StringUtils.rightPad(docAuth.substring(0, 7), 8))
+            .concat(StringUtils.rightPad(docAuth.concat("       ").substring(0, 7), 8))
             .concat(StringUtils.leftPad(String.valueOf(random.nextInt(99999)), 5, "0"));
   }
 
