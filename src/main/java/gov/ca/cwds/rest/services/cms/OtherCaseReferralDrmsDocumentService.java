@@ -6,7 +6,9 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
@@ -138,6 +140,8 @@ public class OtherCaseReferralDrmsDocumentService
       String base64Blob = DatatypeConverter.printBase64Binary(
               screenerNarrativeFromTemplate(
                       screeningToReferral,
+                      referralId,
+                      referral,
                       DatatypeConverter.parseBase64Binary(cmsTemplate.getBase64Blob())));
 
       CmsDocument cmsDocument = new CmsDocument(docHandle, segments, docLength,
@@ -169,13 +173,25 @@ public class OtherCaseReferralDrmsDocumentService
     }
   }
 
-  private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral, byte[] template){
+  private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral,
+                                               String referralId,
+                                               Referral referral,
+                                               byte[] template){
     Map<String, String> keyValuePairs = new HashMap<>();
     // Get child name from allegations
-    String childName = "Dummy Name";
 
-    keyValuePairs.put("ChildName",childName);
-    keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(screeningToReferral.getReferralId()));
+    String childName = "";
+    String childNumber = ",Dummy Child Number";
+    for(Client victim : referral.getVictimClient()){
+        childName.concat(", ").concat(victim.getCommonFirstName()).concat(" ").concat(victim.getCommonLastName());
+//        childNumber.concat(", ").concat(CmsKeyIdGenerator.getUIIdentifierFromKey(victim.get.getLegacyId()));
+    }
+    keyValuePairs.put("ChildName",childName.substring(1));
+    keyValuePairs.put("ChildNumber",childNumber.substring(1));
+
+    keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
+    keyValuePairs.put("ReferralDate",referral.getReceivedDate());
+
     keyValuePairs.put("bkBody",screeningToReferral.getReportNarrative());
 
     return DocUtils.createFromTemplateUseBookmarks(template, keyValuePairs);

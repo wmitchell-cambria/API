@@ -50,7 +50,7 @@ public class DrmsDocumentTemplateService implements TypedCrudsService<String, Dr
             drmsDocumentTemplateDao.findByApplicationContextAndGovermentEntity(APPLICATION_CONTEXT_REFERRAL_DOCUMENTS, govermentEntity);
     for (gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate doc : templates) {
       //TO1DO For now can't use DOT files as templates with POI. So only _NS files are considered, which will be a DOC files
-      if (SCREENERNARRATIVE.equals(doc.getTitleName()) && doc.getDocumentDOSFilePrefixName().toUpperCase().endsWith("_NS")) {
+      if (SCREENERNARRATIVE.equals(doc.getTitleName().trim()) && doc.getDocumentDOSFilePrefixName().toUpperCase().endsWith("_NS")) {
         template = doc;
         if ((GOVERMENT_ENTITY_SYSTEM.equals(govermentEntity)
                 && GOVERMENT_ENTITY_SYSTEM.equals(doc.getGovermentEntityType()))
