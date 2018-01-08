@@ -2,13 +2,10 @@ package gov.ca.cwds.rest.services.hoi;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
-import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
-import io.dropwizard.hibernate.UnitOfWork;
 import java.util.HashSet;
 import java.util.Set;
-
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +13,18 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jackson.Jackson;
 
 /**
@@ -77,10 +77,14 @@ public class InvolvementHistoryService
 
   private Response findInvolvementHistoryByScreeningId(String screeningId) {
     Set<String> clientIds = findClientIdsByScreeningId(screeningId);
-    Set<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
-    Set<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
-    Set<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
-    return new InvolvementHistory(screeningId, hoiCases, hoiReferrals, hoiScreenings);
+    if (!clientIds.isEmpty()) {
+      Set<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
+      Set<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
+      Set<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
+      return new InvolvementHistory(screeningId, hoiCases, hoiReferrals, hoiScreenings);
+    }
+    return new InvolvementHistory(screeningId, new HashSet<HOICase>(), new HashSet<HOIReferral>(),
+        new HashSet<HOIScreening>());
   }
 
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
@@ -91,30 +95,31 @@ public class InvolvementHistoryService
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   protected Set<HOIScreening> findHOIScreeningsByClientIds(Set<String> clientIds,
       String exceptScreeningId) {
-    HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
+    HOIRequest hoiScreeningRequest = new HOIRequest();
     hoiScreeningRequest.setClientIds(clientIds);
-    return hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings()
-        .stream().filter(hoiScreening -> !hoiScreening.getId().equals(exceptScreeningId))
+    return hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings().stream()
+        .filter(hoiScreening -> !hoiScreening.getId().equals(exceptScreeningId))
         .collect(Collectors.toSet());
   }
 
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   protected Set<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
+    HOIRequest hoiRequest = new HOIRequest();
+    hoiRequest.setClientIds(clientIds);
     Set<HOIReferral> hoiReferrals = new HashSet<>();
-    for (String clientId : clientIds) {
-      HOIReferralResponse referralResponse = hoiReferralService.handleFind(clientId);
-      hoiReferrals.addAll(referralResponse.getHoiReferrals());
-    }
+    HOIReferralResponse referralResponse = hoiReferralService.handleFind(hoiRequest);
+    hoiReferrals.addAll(referralResponse.getHoiReferrals());
     return hoiReferrals;
   }
 
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   protected Set<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
     Set<HOICase> hoicases = new HashSet<>();
-    for (String clientId : clientIds) {
-      HOICaseResponse hoiCaseResponse = hoiCaseService.find(clientId);
-      hoicases.addAll(hoiCaseResponse.getHoiCases());
-    }
+    HOIRequest hoiRequest = new HOIRequest();
+    hoiRequest.setClientIds(clientIds);
+    HOICaseResponse hoiCaseResponse = hoiCaseService.handleFind(hoiRequest);
+    hoicases.addAll(hoiCaseResponse.getHoiCases());
+
     return hoicases;
   }
 

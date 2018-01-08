@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.util.Arrays;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -126,7 +128,7 @@ public class CaseDaoIT {
    */
   @Test
   public void testFindClientId() throws Exception {
-    CmsCase[] CmsCases = caseDao.findByClientId(clientId);
+    CmsCase[] CmsCases = caseDao.findByVictimClientIds(Arrays.asList(clientId));
     assertThat(CmsCases, notNullValue());
     assertThat(CmsCases.length, greaterThanOrEqualTo(1));
   }

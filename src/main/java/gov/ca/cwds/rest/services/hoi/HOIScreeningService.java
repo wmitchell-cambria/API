@@ -1,24 +1,26 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.data.ns.ScreeningDao;
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import gov.ca.cwds.rest.resources.SimpleResourceService;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
+
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceService;
 
 /**
  * Business layer object to work on Screening History Of Involvement
  *
  * @author CWDS API Team
  */
-public class HOIScreeningService extends
-    SimpleResourceService<HOIScreeningRequest, HOIScreening, HOIScreeningResponse> {
+public class HOIScreeningService
+    extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
   ScreeningDao screeningDao;
@@ -35,7 +37,7 @@ public class HOIScreeningService extends
    * @return list of HOI Screenings
    */
   @Override
-  protected HOIScreeningResponse handleFind(HOIScreeningRequest hoiScreeningRequest) {
+  protected HOIScreeningResponse handleFind(HOIRequest hoiScreeningRequest) {
     Set<HOIScreening> screenings = new HashSet<>();
     for (ScreeningEntity screeningEntity : screeningDao
         .findScreeningsByClientIds(hoiScreeningRequest.getClientIds())) {

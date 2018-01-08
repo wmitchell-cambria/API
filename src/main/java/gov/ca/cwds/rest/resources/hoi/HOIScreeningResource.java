@@ -2,10 +2,6 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
-import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,8 +12,12 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.HOIScreeningServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
+import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HOIScreeningResource {
 
-  private SimpleResourceDelegate<HOIScreeningRequest, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate;
+  private SimpleResourceDelegate<HOIRequest, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate;
 
   /**
    * Constructor
@@ -51,7 +51,7 @@ public class HOIScreeningResource {
    */
   @Inject
   public HOIScreeningResource(
-      @HOIScreeningServiceBackedResource SimpleResourceDelegate<HOIScreeningRequest, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate) {
+      @HOIScreeningServiceBackedResource SimpleResourceDelegate<HOIRequest, HOIScreening, HOIScreeningResponse, HOIScreeningService> simpleResourceDelegate) {
     this.simpleResourceDelegate = simpleResourceDelegate;
   }
 
@@ -69,7 +69,7 @@ public class HOIScreeningResource {
   @ApiOperation(value = "Find history of involvement by screening id",
       response = HOIScreeningResponse.class)
   public Response post(@ApiParam(required = true, name = "clientIds",
-      value = "List of Client Id-s") HOIScreeningRequest hoiScreeningRequest) {
+      value = "List of Client Id-s") HOIRequest hoiScreeningRequest) {
     return simpleResourceDelegate.find(hoiScreeningRequest);
   }
 

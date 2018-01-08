@@ -22,6 +22,7 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 
 /**
@@ -33,7 +34,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  *
  */
 public class HOIReferralService
-    extends SimpleResourceService<String, HOIReferral, HOIReferralResponse> {
+    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
 
   /**
    * 
@@ -55,20 +56,16 @@ public class HOIReferralService
   }
 
   @Override
-  public HOIReferralResponse handleFind(String clientId) {
+  protected HOIReferralResponse handleFind(HOIRequest hoiRequest) {
     HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-
-    Client client = clientDao.find(clientId);
-    if (client != null) {
-      List<ReferralClient> referralClientList = fetchReferralClient(clientId);
-
-      for (ReferralClient referralClient : referralClientList) {
-        fetchEachReferral(hoiReferralResponse, referralClient);
-      }
-
-      return hoiReferralResponse;
+    List<ReferralClient> referralClientList = fetchReferralClient(hoiRequest.getClientIds());
+    if (referralClientList.isEmpty()) {
+      return emptyHoiReferralResponse();
     }
-    return emptyHoiReferralResponse();
+    for (ReferralClient referralClient : referralClientList) {
+      fetchEachReferral(hoiReferralResponse, referralClient);
+    }
+    return hoiReferralResponse;
   }
 
   private HOIReferralResponse emptyHoiReferralResponse() {
@@ -91,8 +88,8 @@ public class HOIReferralService
         staffPerson, reporter, allegationMap, role));
   }
 
-  private List<ReferralClient> fetchReferralClient(String clientId) {
-    ReferralClient[] referralClients = referralClientDao.findByClientId(clientId);
+  private List<ReferralClient> fetchReferralClient(Set<String> clientIds) {
+    ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
     return Arrays.asList(referralClients);
   }
 
