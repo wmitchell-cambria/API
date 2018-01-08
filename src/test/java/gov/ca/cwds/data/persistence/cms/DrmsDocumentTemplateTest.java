@@ -39,7 +39,7 @@ public class DrmsDocumentTemplateTest implements PersistentTestTemplate {
   @Test
   public void testPersistentConstructor() throws Exception {
 
-    DrmsDocumentTemplate vp = validDrmsDocument();
+    DrmsDocumentTemplate vp = validDrmsDocumentTemplate();
 
     DrmsDocumentTemplate persistent =
         new DrmsDocumentTemplate(id, vp.getApplicationContextType(), vp.getDocumentDOSFilePrefixName(),
@@ -77,7 +77,7 @@ public class DrmsDocumentTemplateTest implements PersistentTestTemplate {
     assertThat(persistent.getTransactionType(), is(equalTo(domain.getTransactionType())));
   }
 
-  private DrmsDocumentTemplate validDrmsDocument()
+  private DrmsDocumentTemplate validDrmsDocumentTemplate()
       throws JsonParseException, JsonMappingException, IOException {
 
     DrmsDocumentTemplate validDrmsDocumentTemplate = MAPPER.readValue(
