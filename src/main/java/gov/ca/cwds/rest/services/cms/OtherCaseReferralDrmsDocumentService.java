@@ -6,8 +6,8 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
@@ -179,13 +179,20 @@ public class OtherCaseReferralDrmsDocumentService
                                                Referral referral,
                                                byte[] template){
     Map<String, String> keyValuePairs = new HashMap<>();
-    // Get child name from allegations
+    // Get child name from ...victims, allegations, participants???
 
-    String childName = ",Dummy Child Name";
-    String childNumber = ",Dummy Child Number";
+    String childName = "";
+    String childNumber = "";
 
-    keyValuePairs.put("ChildName",childName.substring(min(childName.length(),1)));
-    keyValuePairs.put("ChildNumber",childNumber.substring(1));
+    if (screeningToReferral.getParticipants() != null) {
+        for (Participant participant : screeningToReferral.getParticipants()) {
+          if(participant.getRoles().contains("Victim")) {
+            childName = childName.concat(", ").concat(participant.getFirstName()).concat(" ").concat(participant.getLastName());
+          }
+        }
+    }
+    keyValuePairs.put("ChildName",childName.substring(min(childName.length(), 1)).trim());
+    keyValuePairs.put("ChildNumber",childNumber.substring(min(childNumber.length(), 1)).trim());
 
     keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
     keyValuePairs.put("ReferralDate",referral.getReceivedDate());
