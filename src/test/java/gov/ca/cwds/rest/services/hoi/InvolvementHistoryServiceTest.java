@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,6 +51,7 @@ public class InvolvementHistoryServiceTest {
   private HOIScreeningService hoiScreeningService;
   private InvolvementHistoryService involvementHistoryService;
   private HOIRequest hoiRequest;
+  private ParticipantDao participantDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -65,6 +67,7 @@ public class InvolvementHistoryServiceTest {
     hoicases.add(hoicase);
     HOICaseResponse hoiCaseResponse = new HOICaseResponse();
     hoiCaseResponse.setHoiCases(hoicases);
+    when(hoiCaseService.handleFind(any(HOIRequest.class))).thenReturn(hoiCaseResponse);
     when(hoiCaseService.find(any(HOIRequest.class))).thenReturn(hoiCaseResponse);
 
     hoiReferralService = mock(HOIReferralService.class);
@@ -84,13 +87,13 @@ public class InvolvementHistoryServiceTest {
     involvementHistoryService.hoiReferralService = hoiReferralService;
     involvementHistoryService.hoiScreeningService = hoiScreeningService;
 
-    ParticipantDao participantDao = mock(ParticipantDao.class);
+    participantDao = mock(ParticipantDao.class);
     when(participantDao.findLegacyIdListByScreeningId(any(String.class)))
         .thenReturn(new HashSet<>());
     involvementHistoryService.participantDao = participantDao;
   }
 
-  // find test
+  // find tests
   @Test
   public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
     InvolvementHistory serialized = MAPPER.readValue(
@@ -100,9 +103,16 @@ public class InvolvementHistoryServiceTest {
     assertThat(returned, is(serialized));
   }
 
-  // find test
   @Test
-  public void findReturnsExpectedHistoryOfInvolvementNonStub() throws Exception {
+  public void findReturnsHistoryOfInvolvementWhenScreeningHasNoLegacyClientId() throws Exception {
+    Response returned = involvementHistoryService.find("1");
+    assertThat(returned, is(notNullValue()));
+  }
+
+  @Test
+  public void findReturnsHistoryOfInvolvementWhenScreeningHasALegacyClientId() throws Exception {
+    Set<String> clientIds = Stream.of("123").collect(Collectors.toSet());
+    when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(clientIds);
     Response returned = involvementHistoryService.find("1");
     assertThat(returned, is(notNullValue()));
   }

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,7 +20,6 @@ import org.junit.rules.ExpectedException;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
@@ -44,11 +44,6 @@ public class HOICaseServiceTest {
   private ClientRelationshipDao clientRelationshipDao;
   private HOICaseService target;
   private HOIRequest request;
-
-  /**
-   * Initialize system code cache
-   */
-  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -83,6 +78,14 @@ public class HOICaseServiceTest {
     when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
     when(clientDao.find(any(String.class))).thenReturn(client);
     HOICaseResponse response = target.handleFind(request);
+    assertThat(response, notNullValue());
+  }
+
+  @Test
+  public void testHandleFindWhenNoClientIdsProvided() throws Exception {
+    HOIRequest emptyRequest = new HOIRequest();
+    emptyRequest.setClientIds(new HashSet<String>());
+    HOICaseResponse response = target.handleFind(emptyRequest);
     assertThat(response, notNullValue());
   }
 
