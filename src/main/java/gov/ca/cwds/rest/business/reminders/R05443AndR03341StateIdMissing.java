@@ -136,6 +136,10 @@ public class R05443AndR03341StateIdMissing {
       if (isClientAccepted(participant)) {
         Client client = clientDao.find(participant.getLegacyId());
 
+        if (client == null) {
+          return;
+        }
+
         Integer estimatedAgeInYears = getEstimatedAgeInYears(referral, client);
         Integer years = getYearsFromDob(participant);
 
@@ -189,7 +193,7 @@ public class R05443AndR03341StateIdMissing {
   }
 
   private Integer getEstimatedAgeInYears(Referral referral, Client client) {
-    if (DEFAULT_TRUE_INDICATOR.equals(client.getEstimatedDobCode())) {
+    if (client != null && DEFAULT_TRUE_INDICATOR.equals(client.getEstimatedDobCode())) {
       ReferralClient.PrimaryKey primaryKey =
           new ReferralClient.PrimaryKey(referral.getPrimaryKey(), client.getPrimaryKey());
       ReferralClient referralClient = referralClientDao.find(primaryKey);
