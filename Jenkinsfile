@@ -79,6 +79,10 @@ node ('tpt4-slave'){
 	stage('Clean Workspace') {
 		cleanWs()
 	}
+	stage('Initiate Application Deployment Job') {
+		build job: 'tpt4-api-deploy-app', parameters: [string(name: 'version', value: 'latest'), string(name: 'inventory', value: 'inventories/development/hosts.yml')], propagate: false
+	}
+	
  } catch (Exception e)    {
  	   errorcode = e
   	   currentBuild.result = "FAIL"
