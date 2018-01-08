@@ -6,7 +6,6 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
@@ -186,7 +185,6 @@ public class OtherCaseReferralDrmsDocumentService
     String childNumber = ",Dummy Child Number";
     for(Client victim : referral.getVictimClient()){
         childName = childName.concat(", ").concat(victim.getCommonFirstName()).concat(" ").concat(victim.getCommonLastName());
-//        childNumber.concat(", ").concat(CmsKeyIdGenerator.getUIIdentifierFromKey(victim.get.getLegacyId()));
     }
     keyValuePairs.put("ChildName",childName.substring(min(childName.length(),1)));
     keyValuePairs.put("ChildNumber",childNumber.substring(1));
