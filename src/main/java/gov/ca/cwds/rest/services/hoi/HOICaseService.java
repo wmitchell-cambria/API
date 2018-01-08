@@ -99,8 +99,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       allClientIds.addAll(findAllRelatedClientIds(clientId));
     }
     allClientIds.addAll(clientIds);
-    List<HOICase> hoicases = new ArrayList<>();
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
+    List<HOICase> hoicases = new ArrayList<>(cmscases.length);
     for (CmsCase cmscase : cmscases) {
       HOICase hoicase = constructHOICase(cmscase);
       hoicases.add(hoicase);
