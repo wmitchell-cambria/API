@@ -36,8 +36,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  */
 @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ReferralClient.findByReferral",
     query = "FROM ReferralClient WHERE referralId = :referralId")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ReferralClient.findByClient",
-    query = "FROM ReferralClient WHERE clientId = :clientId")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ReferralClient.findByClientIds",
+    query = "FROM ReferralClient WHERE clientId in :clientIds")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "REFR_CLT")

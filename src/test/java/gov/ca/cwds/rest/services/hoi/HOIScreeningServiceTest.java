@@ -6,22 +6,25 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.fixture.hoi.HOIScreeningBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import java.util.HashSet;
-import java.util.Set;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 /***
@@ -29,7 +32,6 @@ import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
  * @author CWDS API Team
  *
  */
-@SuppressWarnings("javadoc")
 public class HOIScreeningServiceTest {
 
   private HOIScreeningService hoiScreeningService;
@@ -48,8 +50,7 @@ public class HOIScreeningServiceTest {
     ScreeningDao screeningDao = mock(ScreeningDao.class);
     Set<String> clientIds = new HashSet<>();
     clientIds.add("1");
-    when(screeningDao.findScreeningsByClientIds(clientIds))
-        .thenReturn(mockScreeningEntityList());
+    when(screeningDao.findScreeningsByClientIds(clientIds)).thenReturn(mockScreeningEntityList());
     IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
     mockIntakeLOVCodeEntity.setLgSysId(1101L);
     mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
@@ -69,12 +70,9 @@ public class HOIScreeningServiceTest {
   public void findReturnsExpectedHistoryOfInvolvement() {
     HOIScreeningResponse expectedResponse = createExpectedResponse();
 
-    Set<String> clientIds = new HashSet<>();
-    clientIds.add("1");
-    HOIScreeningRequest hoiScreeningRequest = new HOIScreeningRequest();
-    hoiScreeningRequest.setClientIds(clientIds);
+    HOIRequest hoiScreeningRequest = new HOIRequest();
+    hoiScreeningRequest.setClientIds(Stream.of("1").collect(Collectors.toSet()));
     HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
-    
     assertThat(actualResponse, is(expectedResponse));
   }
 
@@ -85,11 +83,10 @@ public class HOIScreeningServiceTest {
   }
 
   private Set<ScreeningEntity> mockScreeningEntityList() {
-    ScreeningEntity entity = new ScreeningEntity("224", null,
-        DomainChef.uncookDateString("2017-11-30"),
-        DomainChef.uncookDateString("2017-12-10"), "sacramento", null,
-        null, null, null, null, "promote to referral",
-        "drug counseling", null, null, null);
+    ScreeningEntity entity =
+        new ScreeningEntity("224", null, DomainChef.uncookDateString("2017-11-30"),
+            DomainChef.uncookDateString("2017-12-10"), "sacramento", null, null, null, null, null,
+            "promote to referral", "drug counseling", null, null, null);
 
     Set<ScreeningEntity> result = new HashSet<>();
     result.add(entity);
