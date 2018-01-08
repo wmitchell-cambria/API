@@ -32,6 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static java.lang.Math.min;
+
 /**
  * Business layer object to work on {@link OtherCaseReferralDrmsDocument}
  *
@@ -183,10 +185,10 @@ public class OtherCaseReferralDrmsDocumentService
     String childName = "";
     String childNumber = ",Dummy Child Number";
     for(Client victim : referral.getVictimClient()){
-        childName.concat(", ").concat(victim.getCommonFirstName()).concat(" ").concat(victim.getCommonLastName());
+        childName = childName.concat(", ").concat(victim.getCommonFirstName()).concat(" ").concat(victim.getCommonLastName());
 //        childNumber.concat(", ").concat(CmsKeyIdGenerator.getUIIdentifierFromKey(victim.get.getLegacyId()));
     }
-    keyValuePairs.put("ChildName",childName.substring(1));
+    keyValuePairs.put("ChildName",childName.substring(min(childName.length(),1)));
     keyValuePairs.put("ChildNumber",childNumber.substring(1));
 
     keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
