@@ -181,11 +181,9 @@ public class OtherCaseReferralDrmsDocumentService
     Map<String, String> keyValuePairs = new HashMap<>();
     // Get child name from allegations
 
-    String childName = "";
+    String childName = ",Dummy Child Name";
     String childNumber = ",Dummy Child Number";
-    for(Client victim : referral.getVictimClient()){
-        childName = childName.concat(", ").concat(victim.getCommonFirstName()).concat(" ").concat(victim.getCommonLastName());
-    }
+
     keyValuePairs.put("ChildName",childName.substring(min(childName.length(),1)));
     keyValuePairs.put("ChildNumber",childNumber.substring(1));
 
