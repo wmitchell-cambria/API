@@ -134,7 +134,11 @@ public class R05443AndR03341StateIdMissing {
     Referral referral = referralDao.find(postedScreeningToReferral.getReferralId());
     for (Participant participant : participants) {
       if (isClientAccepted(participant)) {
-        Client client = clientDao.find(participant.getLegacyId());
+        String legacyId = participant.getLegacyId();
+        if (legacyId == null) {
+          return;
+        }
+        Client client = clientDao.find(legacyId);
 
         if (client == null) {
           return;
