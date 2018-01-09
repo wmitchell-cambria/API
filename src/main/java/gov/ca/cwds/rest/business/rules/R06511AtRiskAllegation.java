@@ -33,11 +33,12 @@ public class R06511AtRiskAllegation
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.validation.ConstraintValidator#initialize(java.lang.annotation.Annotation)
    */
   @Override
   public void initialize(AtRiskAllegation constraintAnnotation) {
+    //No Initialization currently needed apparently
   }
 
   /*
