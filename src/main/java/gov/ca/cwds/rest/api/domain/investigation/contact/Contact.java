@@ -179,11 +179,11 @@ public class Contact extends ReportingDomain implements Request, Response {
       this.endedAt =
           DomainChef.concatenateDateAndTime(endDate, persistedDeliverdService.getEndTime());
     }
-    this.purpose = persistedDeliverdService.getServiceContactType().toString();
-    this.communicationMethod = persistedDeliverdService.getCommunicationMethodType().toString();
+    this.purpose = String.valueOf(persistedDeliverdService.getServiceContactType());
+    this.communicationMethod = String.valueOf(persistedDeliverdService.getCommunicationMethodType());
     this.status = persistedDeliverdService.getStatusCode();
     this.services = null;
-    this.location = persistedDeliverdService.getContactLocationType().toString();
+    this.location = String.valueOf(persistedDeliverdService.getContactLocationType());
     this.note = note;
     this.people = people;
   }

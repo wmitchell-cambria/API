@@ -120,7 +120,7 @@ public class Address extends BaseAddress {
       this.state = address.getState();
       this.streetName = address.getStreetName();
       this.streetNumber = address.getStreetNumber();
-      this.zip = address.getZip().toString();
+      this.zip = String.valueOf(address.getZip());
       this.zip4 = address.getZip4();
       this.addressDescription = address.getAddressDescription();
       this.postDirCd = address.getPostDirCd();
