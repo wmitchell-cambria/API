@@ -84,7 +84,6 @@ public class PKCompressionTest {
   }
 
   @Test
-  @Ignore
   public void testDecompressBase64Encoded3() {
     try {
       final String src = PKCompressionTest.class.getResource(ZIP_B64_3).getPath();
