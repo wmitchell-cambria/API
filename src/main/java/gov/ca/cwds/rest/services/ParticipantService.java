@@ -429,7 +429,7 @@ public class ParticipantService implements CrudsService {
    * CMS Address - create ADDRESS and CLIENT_ADDRESS for each address of the participant
    */
   private Participant processClientAddress(Participant clientParticipant, String referralId,
-      String clientId, MessageBuilder messageBuilder) throws ServiceException {
+      String clientId, MessageBuilder messageBuilder) {
 
     return clientAddressService.saveClientAddress(clientParticipant, referralId, clientId,
         messageBuilder);

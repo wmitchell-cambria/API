@@ -616,16 +616,8 @@ public class ClientTest implements DomainTestTemplate {
   }
 
   @Override
-  @Test
-  @Ignore
+  //TODO: Needs tests
   public void testDeserializesFromJSON() throws Exception {
-    lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-        .parseDateTime("2004-03-31T09:45:58.000-0800");
-    Client validClient = validDomainClient();
-    Client clientFromSnippet =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Client/valid/valid.json"), Client.class);
-
-    assertTrue(clientFromSnippet.equals(validClient));
   }
 
   @Override

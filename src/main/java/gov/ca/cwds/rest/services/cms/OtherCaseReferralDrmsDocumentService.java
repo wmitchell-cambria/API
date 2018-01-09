@@ -8,7 +8,6 @@ import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
@@ -31,6 +30,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static java.lang.Math.min;
 
 /**
  * Business layer object to work on {@link OtherCaseReferralDrmsDocument}
@@ -178,16 +179,20 @@ public class OtherCaseReferralDrmsDocumentService
                                                Referral referral,
                                                byte[] template){
     Map<String, String> keyValuePairs = new HashMap<>();
-    // Get child name from allegations
+    // Get child name from ...victims, allegations, participants???
 
     String childName = "";
-    String childNumber = ",Dummy Child Number";
-    for(Client victim : referral.getVictimClient()){
-        childName.concat(", ").concat(victim.getCommonFirstName()).concat(" ").concat(victim.getCommonLastName());
-//        childNumber.concat(", ").concat(CmsKeyIdGenerator.getUIIdentifierFromKey(victim.get.getLegacyId()));
+    String childNumber = "";
+
+    if (screeningToReferral.getParticipants() != null) {
+        for (Participant participant : screeningToReferral.getParticipants()) {
+          if(participant.getRoles().contains("Victim")) {
+            childName = childName.concat(", ").concat(participant.getFirstName()).concat(" ").concat(participant.getLastName());
+          }
+        }
     }
-    keyValuePairs.put("ChildName",childName.substring(1));
-    keyValuePairs.put("ChildNumber",childNumber.substring(1));
+    keyValuePairs.put("ChildName",childName.substring(min(childName.length(), 1)).trim());
+    keyValuePairs.put("ChildNumber",childNumber.substring(min(childNumber.length(), 1)).trim());
 
     keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
     keyValuePairs.put("ReferralDate",referral.getReceivedDate());

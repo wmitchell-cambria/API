@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
@@ -34,9 +35,10 @@ public final class HOIPersonFactory {
    */
   public HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
     HOIPerson result = new HOIPerson(participantEntity);
-    LegacyDescriptor legacyDescriptor = new LegacyDescriptor(
-        participantDao.findParticipantLegacyDescriptor(participantEntity.getId()));
-    result.setLegacyDescriptor(legacyDescriptor);
+    LegacyDescriptorEntity legacyDescriptorEntity = participantDao.findParticipantLegacyDescriptor(participantEntity.getId());
+    if (legacyDescriptorEntity != null) {
+      result.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
+    }
     return result;
   }
 

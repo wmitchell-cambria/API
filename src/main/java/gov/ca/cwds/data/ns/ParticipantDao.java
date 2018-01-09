@@ -3,6 +3,7 @@ package gov.ca.cwds.data.ns;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.hibernate.SessionFactory;
 
@@ -40,7 +41,8 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findParticipantLegacyDescriptor")
         .setParameter("participantId", Long.valueOf(participantId));
-    return query.getSingleResult();
+    List<LegacyDescriptorEntity> entityList = query.getResultList();
+    return entityList.isEmpty() ? null : entityList.get(0);
   }
 
   /**

@@ -1,7 +1,9 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
@@ -26,6 +28,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRelatedPerson;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.hoi.HOIVictim;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
@@ -38,7 +41,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  * @author CWDS API Team
  *
  */
-public class HOICaseService extends SimpleResourceService<String, HOICase, HOICaseResponse> {
+public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, HOICaseResponse> {
 
   /**
    * Serial Version UID
@@ -67,28 +70,40 @@ public class HOICaseService extends SimpleResourceService<String, HOICase, HOICa
   }
 
   @Override
-  protected HOICaseResponse handleFind(String id) {
-    List<HOICase> cases = findByClientId(id);
-    return new HOICaseResponse(cases);
+  protected HOICaseResponse handleFind(HOIRequest hoiRequest) {
+    if (!hoiRequest.getClientIds().isEmpty()) {
+      List<HOICase> cases = findByClientId(hoiRequest);
+      return new HOICaseResponse(cases);
+    }
+    return emptyHoiCaseResponse();
   }
 
   /**
-   * @param id - id
-   * @return the cases linked to single client
+   * @param hoiRequest - hoiCaseRequest
+   * @return the cases linked to multiple client
    */
-  public List<HOICase> findByClientId(String id) {
-    List<String> clientIds = findAllRelatedClientIds(id);
+  public List<HOICase> findByClientId(HOIRequest hoiRequest) {
+    Set<String> clientIds = hoiRequest.getClientIds();
     return findAllCasesForAllClients(clientIds);
   }
 
-  private List<HOICase> findAllCasesForAllClients(List<String> clientIds) {
-    List<HOICase> hoicases = new ArrayList<>();
+  private HOICaseResponse emptyHoiCaseResponse() {
+    HOICaseResponse hoiCaseResponse = new HOICaseResponse();
+    hoiCaseResponse.setHoiCases(new ArrayList<>());
+    return hoiCaseResponse;
+  }
+
+  private List<HOICase> findAllCasesForAllClients(Set<String> clientIds) {
+    Set<String> allClientIds = new HashSet<>();
     for (String clientId : clientIds) {
-      CmsCase[] cmscases = caseDao.findByClientId(clientId);
-      for (CmsCase cmscase : cmscases) {
-        HOICase hoicase = constructHOICase(cmscase);
-        hoicases.add(hoicase);
-      }
+      allClientIds.addAll(findAllRelatedClientIds(clientId));
+    }
+    allClientIds.addAll(clientIds);
+    CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
+    List<HOICase> hoicases = new ArrayList<>(cmscases.length);
+    for (CmsCase cmscase : cmscases) {
+      HOICase hoicase = constructHOICase(cmscase);
+      hoicases.add(hoicase);
     }
     return hoicases;
   }

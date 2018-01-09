@@ -17,6 +17,7 @@ import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
@@ -42,7 +43,7 @@ public class HOICaseResourceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private static SimpleResourceDelegate<String, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate =
+  private static SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate =
       mock(SimpleResourceDelegate.class);
 
   @ClassRule

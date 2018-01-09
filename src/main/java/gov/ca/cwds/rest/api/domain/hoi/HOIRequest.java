@@ -1,19 +1,27 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import gov.ca.cwds.rest.api.Request;
-import io.dropwizard.jackson.JsonSnakeCase;
 import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import gov.ca.cwds.rest.api.Request;
+import io.dropwizard.jackson.JsonSnakeCase;
+
 @JsonSnakeCase
-public class HOIScreeningRequest implements Request {
+public class HOIRequest implements Request {
+
+  /**
+   * default
+   */
+  private static final long serialVersionUID = 1L;
 
   @JsonProperty("client_ids")
   private Set<String> clientIds;
 
-  public HOIScreeningRequest() {
+  public HOIRequest() {
     // default
   }
 

@@ -17,6 +17,7 @@ import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -45,7 +46,7 @@ public class HOIReferralResourceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private static SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate =
+  private static SimpleResourceDelegate<HOIRequest, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate =
       mock(SimpleResourceDelegate.class);
 
   @ClassRule
