@@ -95,14 +95,6 @@ public class ParticipantService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    /*
-     * todo ns ParticipantEntity does not have personId, so this code is not relevant anymore assert
-     * request instanceof Participant; Participant participant = (Participant) request;
-     * gov.ca.cwds.data.persistence.ns.Participant managed = new
-     * gov.ca.cwds.data.persistence.ns.Participant(participant, null, null); Person person =
-     * personService.find(managed.getPersonId()); managed = participantDao.create(managed); return
-     * new Participant(managed, person);
-     */
     throw new NotImplementedException("");
   }
 

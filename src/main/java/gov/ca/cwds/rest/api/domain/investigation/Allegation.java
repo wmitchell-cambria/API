@@ -122,11 +122,6 @@ public class Allegation extends ReportingDomain implements Response {
     }
 
     // TODO: must determine whether allegation was created during Screening or Investigation
-    // createdByScreener - was allegation created during Screening (true) or during Investigation
-    // (false)
-    // this.createdByScreener =
-    // StringUtils.equals("Y", persistedAllocation.getStaffPersonAddedIndicator()) ? Boolean.TRUE
-    // : Boolean.FALSE;
     this.createdByScreener = Boolean.FALSE;
 
     this.allegationSubType = allegationSubType;

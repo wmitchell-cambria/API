@@ -115,9 +115,6 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<Person> peoples = this.peopleService.getInvestigationPeople(referral);
       Set<Relationship> relationshipList = new HashSet<>();
 
-      // TODO - uncomment below when its needed
-      // this.relationshipListService.findRelationshipByReferralId(referral);
-
       SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
       Set<String> crossReports = new HashSet<>();
       Set<Contact> contacts = this.findContactsByReferralId(referralId);
