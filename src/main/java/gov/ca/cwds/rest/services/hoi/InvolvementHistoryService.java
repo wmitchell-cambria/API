@@ -5,10 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.ParticipantDao;
@@ -22,7 +19,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * Business layer object to work on Screening History Of Involvement
@@ -31,10 +27,6 @@ import io.dropwizard.jackson.Jackson;
  */
 public class InvolvementHistoryService
     implements TypedCrudsService<String, InvolvementHistory, Response> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(InvolvementHistoryService.class);
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @Inject
   ParticipantDao participantDao;
