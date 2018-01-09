@@ -30,7 +30,7 @@ def notifyBuild(String buildStatus, Exception e) {
       body: details,
       attachLog: true,
       recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-      to: "maksym.ivanov@osi.ca.gov"
+      to: "tom.parker@osi.ca.gov"
     )
 }
 
@@ -79,7 +79,7 @@ node ('tpt4-slave'){
 	stage('Clean Workspace') {
 		cleanWs()
 	}
-	stage('Initiate Application Deployment Job') {
+	stage('Deploy Application') {
 		build job: 'tpt4-api-deploy-app', parameters: [string(name: 'version', value: 'latest'), string(name: 'inventory', value: 'inventories/development/hosts.yml')], propagate: false
 	}
 	
