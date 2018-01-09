@@ -98,16 +98,16 @@ public class RelationshipListService
   private Relationship constructRelationshipData(ClientRelationship[] persistedClientRelationships,
       String primaryClientId) {
     String secondaryClientId;
-    Set<RelationshipTo> relationShipToList = new HashSet<>();
+    Set<RelationshipTo> relationShips = new HashSet<>();
     Client secondaryClient;
     Client primaryClient;
     for (ClientRelationship clientRelationship : persistedClientRelationships) {
       secondaryClientId = clientRelationship.getSecondaryClientId();
       secondaryClient = this.clientDao.find(secondaryClientId);
-      relationShipToList.add(new RelationshipTo(clientRelationship, secondaryClient));
+      relationShips.add(new RelationshipTo(clientRelationship, secondaryClient));
     }
     primaryClient = this.clientDao.find(primaryClientId);
-    return new Relationship(primaryClient, relationShipToList);
+    return new Relationship(primaryClient, relationShips);
   }
 
 }
