@@ -21,6 +21,7 @@ import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -48,6 +49,11 @@ public class HOIReferralServiceTest {
   private ReferralClientDao referralClientDao;
   private HOIReferralService hoiService;
   private HOIRequest request;
+
+  /**
+   * Initialize system code cache
+   */
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
