@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +20,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
-import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jackson.Jackson;
@@ -62,17 +59,7 @@ public class InvolvementHistoryService
    */
   @Override
   public Response find(String screeningId) {
-    if (!("999999").equals(screeningId)) {
-      return findInvolvementHistoryByScreeningId(screeningId);
-    }
-    try {
-      return MAPPER.readValue(
-          fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
-          InvolvementHistory.class);
-    } catch (Exception e) {
-      LOGGER.error("Exception in finding stubbed data for HistoryOfInvolvement {}", e.getMessage());
-      throw new ServiceException("Exception In finding stubbed data for HistoryOfInvolvement", e);
-    }
+    return findInvolvementHistoryByScreeningId(screeningId);
   }
 
   private Response findInvolvementHistoryByScreeningId(String screeningId) {

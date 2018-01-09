@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -33,7 +32,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import io.dropwizard.jackson.Jackson;
 
@@ -94,15 +92,6 @@ public class InvolvementHistoryServiceTest {
   }
 
   // find tests
-  @Test
-  public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
-    InvolvementHistory serialized = MAPPER.readValue(
-        fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
-        InvolvementHistory.class);
-    Response returned = involvementHistoryService.find("999999");
-    assertThat(returned, is(serialized));
-  }
-
   @Test
   public void findReturnsHistoryOfInvolvementWhenScreeningHasNoLegacyClientId() throws Exception {
     Response returned = involvementHistoryService.find("1");
