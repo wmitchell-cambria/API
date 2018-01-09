@@ -22,7 +22,6 @@ import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.CountyOwnershipDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
@@ -59,7 +58,6 @@ public class R02473DefaultReferralAssignmentTest {
   private MessageBuilder messageBuilder;
   private ScreeningToReferral screeningToReferral;
   private CaseLoadDao caseLoadDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private Date lastUpdatedTime = new Date();
@@ -82,21 +80,20 @@ public class R02473DefaultReferralAssignmentTest {
     messageBuilder = mock(MessageBuilder.class);
     screeningToReferral = mock(ScreeningToReferral.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    caseDao = mock(CaseDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     when(screeningToReferral.getAssigneeStaffId()).thenReturn("0X5");
     nonLACountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
   }
 
 
   @Test
-  public void shouldSaveNewAssignment() throws Exception {
+  public void shouldSaveNewAssignment() {
 
     Referral referral = new ReferralResourceBuilder().build();
 
@@ -116,7 +113,7 @@ public class R02473DefaultReferralAssignmentTest {
   }
 
   @Test
-  public void shouldNotSaveWhenAssigneeIdIsDifferentFromCurrentUserId() throws Exception {
+  public void shouldNotSaveWhenAssigneeIdIsDifferentFromCurrentUserId() {
 
     Referral referral = new ReferralResourceBuilder().build();
 
@@ -137,8 +134,7 @@ public class R02473DefaultReferralAssignmentTest {
   }
 
   @Test
-  public void shouldNotSaveWhenReferralReceivedDateNotEqualToAssignmentStartDate()
-      throws Exception {
+  public void shouldNotSaveWhenReferralReceivedDateNotEqualToAssignmentStartDate() {
     MessageBuilder mb = new MessageBuilder();
 
     Referral referral = new ReferralResourceBuilder().setReceivedDate("2016-12-08")
