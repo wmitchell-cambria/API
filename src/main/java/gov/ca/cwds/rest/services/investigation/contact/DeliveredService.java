@@ -143,8 +143,7 @@ public class DeliveredService {
   /**
    * Construct the DeliveredService object for create
    *
-   * @param contactId the Delivered Service Identifier
-   * @param contactRequest the request
+   * @param request the request
    * @param countySpecificCode
    * @return the DeliveredServiceDomain
    */

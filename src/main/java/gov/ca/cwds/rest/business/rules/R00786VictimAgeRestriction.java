@@ -32,7 +32,6 @@ public class R00786VictimAgeRestriction
    */
   @Override
   public void initialize(VictimAgeRestriction constraintAnnotation) {
-    // TODO Auto-generated method stub
   }
 
   /*

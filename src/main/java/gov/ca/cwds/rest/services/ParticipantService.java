@@ -103,7 +103,7 @@ public class ParticipantService implements CrudsService {
    * @param dateStarted - dateStarted
    * @param referralId - referralId
    * @param messageBuilder - messageBuilder
-   * @return the savedParticioants
+   * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
       String dateStarted, String referralId, MessageBuilder messageBuilder) {
@@ -137,7 +137,6 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
-  // TODO: Techdebt simplify processing roles. Story #?
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, Set<String> roles) {
@@ -380,8 +379,6 @@ public class ParticipantService implements CrudsService {
 
       // use the first address node only
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-        // TODO: #141511573 address parsing - Smarty Streets Free Form display requires
-        // standardizing parsing to fields in CMS
         if (address == null) {
           // next address
           continue;

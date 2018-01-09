@@ -121,7 +121,6 @@ public class Allegation extends ReportingDomain implements Response {
       this.perpetrator = new AllegationPerson(persistedAllocation.getPerpetratorClients());
     }
 
-    // TODO: must determine whether allegation was created during Screening or Investigation
     this.createdByScreener = Boolean.FALSE;
 
     this.allegationSubType = allegationSubType;

@@ -162,7 +162,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   /**
    * Find the Staff Person who last updated the deliveredServiceEntity persistence object
    * 
-   * @param deliveredServiceEntity The persistence object
+   * @param staffPersonId The persistence object
    * @return The Staff Person who last updated the persistence object
    */
   private StaffPerson findStaffPersonById(String staffPersonId) {

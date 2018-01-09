@@ -38,8 +38,6 @@ public class R06511AtRiskAllegation
    */
   @Override
   public void initialize(AtRiskAllegation constraintAnnotation) {
-    // TODO Auto-generated method stub
-
   }
 
   /*

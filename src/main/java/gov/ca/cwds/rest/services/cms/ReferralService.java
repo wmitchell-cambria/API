@@ -232,9 +232,6 @@ public class ReferralService implements
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, messageBuilder);
-      // TODO: R - 01054 Prmary Assignment Adding
-
-      // when creating a referral - create Default Sreener Narrative
       otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral);
 
     } else {

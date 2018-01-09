@@ -78,7 +78,6 @@ public class RelationshipListService
     for (ReferralClient refClient : referral.getReferralClients()) {
       ClientRelationship[] persistedClientRelationships =
           this.relationshipsDao.findClientRelationshipByPrimaryClientId(refClient.getClientId());
-      // TODO - action on secondary client id value ??? Story ##??
       if (persistedClientRelationships.length > 0) {
         relationship =
             this.constructRelationshipData(persistedClientRelationships, refClient.getClientId());
