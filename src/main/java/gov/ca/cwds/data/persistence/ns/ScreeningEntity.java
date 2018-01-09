@@ -114,7 +114,7 @@ public class ScreeningEntity implements PersistentObject {
   private Date restrictionsDate;
 
   @Column(name = "indexable")
-  private boolean indexable;
+  private Boolean indexable;
 
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<Allegation> allegations = new HashSet<>();
@@ -348,7 +348,7 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * @return the indexable
    */
-  public boolean isIndexable() {
+  public Boolean isIndexable() {
     return indexable;
   }
 
