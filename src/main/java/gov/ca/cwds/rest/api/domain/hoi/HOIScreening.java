@@ -1,21 +1,16 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
-import gov.ca.cwds.rest.api.Request;
 import java.util.Date;
 import java.util.HashSet;
-
 import java.util.Set;
-import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.ApiTypedIdentifier;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
-import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.util.FerbDateUtils;
 import io.swagger.annotations.ApiModelProperty;
@@ -170,59 +165,4 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
     this.allPeople = allPeople;
   }
 
-  public static void main(String[] args) throws Exception {
-    HOIScreening screening = new HOIScreening();
-
-    HOISocialWorker socialWorker = new HOISocialWorker();
-    socialWorker.setFirstName("Worker First Name");
-    socialWorker.setLastName("Worker Last Name");
-    socialWorker.setId("jhgguhgjh");
-    socialWorker
-        .setLegacyDescriptor(new LegacyDescriptor("jhgguhgjh", "jhgguhgjh-hohj-jkj", new DateTime(),
-            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription()));
-    screening.setAssignedSocialWorker(socialWorker);
-
-    SystemCodeDescriptor county = new SystemCodeDescriptor();
-    county.setId((short) 1101);
-    county.setDescription("Sacramento");
-    screening.setCounty(county);
-
-    screening.setEndDate(new Date());
-    screening.setId("1234");
-    screening.setName("ABC Screening");
-
-    HOIReporter reporter = new HOIReporter();
-    reporter.setFirstName("Reporter First Name");
-    reporter.setLastName("Reporter Last Name");
-    reporter.setId("jhgjhgjh");
-    reporter.setLegacyDescriptor(new LegacyDescriptor("jhgjhgjh", "jhgjhgjh-hohj-jkj",
-        new DateTime(), LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription()));
-    screening.setReporter(reporter);
-
-    screening.setStartDate(new Date());
-
-    screening.setDecision("promote to referral");
-    screening.setDecisionDetail("drug counseling");
-
-    HOIPerson person1 = new HOIPerson();
-    person1.setFirstName("John");
-    person1.setLastName("S");
-    person1.setId("bbbbbbbbb");
-    person1.setLegacyDescriptor(new LegacyDescriptor("bbbbbbbbb", "bbbbbbbbb-hohj-jkj",
-        new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
-
-    HOIPerson person2 = new HOIPerson();
-    person2.setFirstName("Jane");
-    person2.setLastName("S");
-    person2.setId("aaaaaaa");
-    person2.setLegacyDescriptor(new LegacyDescriptor("aaaaaaaaa", "aaaaaaaaa-hohj-jkj",
-        new DateTime(), LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription()));
-
-    Set<HOIPerson> people = new HashSet<>();
-    people.add(person1);
-    people.add(person2);
-    screening.setAllPeople(people);
-    String json = ObjectMapperUtils.createObjectMapper().writeValueAsString(screening);
-    System.out.println(json);
-  }
 }

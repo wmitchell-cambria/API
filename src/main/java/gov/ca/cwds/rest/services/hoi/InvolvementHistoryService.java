@@ -1,16 +1,11 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.ParticipantDao;
@@ -22,10 +17,8 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
-import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * Business layer object to work on Screening History Of Involvement
@@ -34,10 +27,6 @@ import io.dropwizard.jackson.Jackson;
  */
 public class InvolvementHistoryService
     implements TypedCrudsService<String, InvolvementHistory, Response> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(InvolvementHistoryService.class);
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @Inject
   ParticipantDao participantDao;
@@ -62,17 +51,7 @@ public class InvolvementHistoryService
    */
   @Override
   public Response find(String screeningId) {
-    if (!("999999").equals(screeningId)) {
-      return findInvolvementHistoryByScreeningId(screeningId);
-    }
-    try {
-      return MAPPER.readValue(
-          fixture("gov/ca/cwds/rest/services/hoi/involvementhistory/valid/valid.json"),
-          InvolvementHistory.class);
-    } catch (Exception e) {
-      LOGGER.error("Exception in finding stubbed data for HistoryOfInvolvement {}", e.getMessage());
-      throw new ServiceException("Exception In finding stubbed data for HistoryOfInvolvement", e);
-    }
+    return findInvolvementHistoryByScreeningId(screeningId);
   }
 
   private Response findInvolvementHistoryByScreeningId(String screeningId) {

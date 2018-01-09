@@ -19,6 +19,7 @@ import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
@@ -180,11 +181,13 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
   private HOIRelatedPerson createHOIRelatedPerson(Client client,
       SystemCodeDescriptor relationship) {
+    String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(client.getId(), null, new DateTime(client.getLastUpdatedTime()),
-            LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
+        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+            LegacyTable.CLIENT.getDescription());
     HOIRelatedPerson person = new HOIRelatedPerson();
-    person.setId(client.getId());
+    person.setId(clientId);
     person.setFirstName(client.getFirstName());
     person.setLastName(client.getLastName());
     person.setRelationship(relationship);
@@ -204,12 +207,13 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
     StaffPerson staffPerson = cmscase.getStaffPerson();
-    LegacyDescriptor legacyDescriptor = new LegacyDescriptor(staffPerson.getId(), null,
-        new DateTime(staffPerson.getLastUpdatedTime()), LegacyTable.STAFF_PERSON.getName(),
-        LegacyTable.STAFF_PERSON.getDescription());
+    String staffId = staffPerson.getId();
+    LegacyDescriptor legacyDescriptor =
+        new LegacyDescriptor(staffId, staffId, new DateTime(staffPerson.getLastUpdatedTime()),
+            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription());
 
-    return new HOISocialWorker(staffPerson.getId(), staffPerson.getFirstName(),
-        staffPerson.getLastName(), legacyDescriptor);
+    return new HOISocialWorker(staffId, staffPerson.getFirstName(), staffPerson.getLastName(),
+        legacyDescriptor);
   }
 
   private SystemCodeDescriptor getServiceComponent(CmsCase cmscase) {
@@ -225,9 +229,11 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   private HOIVictim getFocusChild(CmsCase cmscase) {
     String focusChildId = cmscase.getFkchldClt();
     Client client = clientDao.find(focusChildId);
+    String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(client.getId(), null, new DateTime(client.getLastUpdatedTime()),
-            LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
+        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+            LegacyTable.CLIENT.getDescription());
     return new HOIVictim(client.getId(), client.getCommonFirstName(), client.getCommonLastName(),
         legacyDescriptor);
   }
