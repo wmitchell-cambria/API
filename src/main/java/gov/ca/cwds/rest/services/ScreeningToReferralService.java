@@ -379,8 +379,7 @@ public class ScreeningToReferralService implements CrudsService {
    * CMS Allegation - one for each allegation
    */
   private Set<Allegation> processAllegations(ScreeningToReferral scr, String referralId,
-      HashMap<Long, String> perpatratorClient, HashMap<Long, String> victimClient)
-      throws ServiceException {
+      HashMap<Long, String> perpatratorClient, HashMap<Long, String> victimClient) {
 
     Set<Allegation> processedAllegations = new HashSet<>();
     Set<Allegation> allegations;

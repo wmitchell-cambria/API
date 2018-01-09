@@ -260,7 +260,7 @@ public class ReferralService implements
    */
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
     String longTextId = generateReportNarrative(screeningToReferral, messageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, messageBuilder);
@@ -409,7 +409,7 @@ public class ReferralService implements
   }
 
   private String createLongText(String countySpecificCode, String textDescription,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
 
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);
