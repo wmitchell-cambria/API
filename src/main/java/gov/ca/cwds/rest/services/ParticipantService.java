@@ -95,14 +95,6 @@ public class ParticipantService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    /*
-     * todo ns ParticipantEntity does not have personId, so this code is not relevant anymore assert
-     * request instanceof Participant; Participant participant = (Participant) request;
-     * gov.ca.cwds.data.persistence.ns.Participant managed = new
-     * gov.ca.cwds.data.persistence.ns.Participant(participant, null, null); Person person =
-     * personService.find(managed.getPersonId()); managed = participantDao.create(managed); return
-     * new Participant(managed, person);
-     */
     throw new NotImplementedException("");
   }
 
@@ -111,7 +103,7 @@ public class ParticipantService implements CrudsService {
    * @param dateStarted - dateStarted
    * @param referralId - referralId
    * @param messageBuilder - messageBuilder
-   * @return the savedParticioants
+   * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
       String dateStarted, String referralId, MessageBuilder messageBuilder) {
@@ -145,7 +137,6 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
-  // TODO: Techdebt simplify processing roles. Story #?
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, Set<String> roles) {
@@ -388,8 +379,6 @@ public class ParticipantService implements CrudsService {
 
       // use the first address node only
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-        // TODO: #141511573 address parsing - Smarty Streets Free Form display requires
-        // standardizing parsing to fields in CMS
         if (address == null) {
           // next address
           continue;

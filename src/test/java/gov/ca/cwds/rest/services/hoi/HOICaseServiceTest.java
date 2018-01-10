@@ -20,6 +20,7 @@ import org.junit.rules.ExpectedException;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
@@ -31,6 +32,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 /**
  * @author CWDS API Team
@@ -45,6 +47,11 @@ public class HOICaseServiceTest {
   private HOICaseService target;
   private HOIRequest request;
 
+  /**
+   * Initialize system code cache
+   */
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -55,6 +62,7 @@ public class HOICaseServiceTest {
    */
   @Before
   public void setup() throws Exception {
+    new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
     caseDao = mock(CaseDao.class);
     clientDao = mock(ClientDao.class);
@@ -66,7 +74,7 @@ public class HOICaseServiceTest {
 
   @Test
   public void testHandleFind() throws Exception {
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("1234")
+    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
         .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
     CmsCase[] cases = {cmscase};
     ClientRelationship relationship = new ClientRelationshipEntityBuilder().build();
@@ -91,7 +99,7 @@ public class HOICaseServiceTest {
 
   @Test
   public void testFindParentsByPrimaryRelationship() throws Exception {
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("1234")
+    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
         .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
     CmsCase[] cases = {cmscase};
     ClientRelationship relationship =

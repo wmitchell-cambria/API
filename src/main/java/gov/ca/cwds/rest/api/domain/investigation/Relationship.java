@@ -131,9 +131,9 @@ public final class Relationship extends ReportingDomain implements Request, Resp
    * Constructing relationship object
    * 
    * @param client - client object
-   * @param relationshipToList - list of relationship
+   * @param relationships - set of relationship
    */
-  public Relationship(Client client, Set<RelationshipTo> relationshipToList) {
+  public Relationship(Client client, Set<RelationshipTo> relationships) {
     this.id = client.getId();
     this.dateOfBirth =
         client.getBirthDate() != null ? DomainChef.cookDate(client.getBirthDate()) : null;
@@ -147,7 +147,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
         ? Boolean.TRUE : Boolean.FALSE;
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
-    this.relatedTo = relationshipToList;
+    this.relatedTo = relationships;
 
   }
 

@@ -308,7 +308,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    * @param addInfoLongText - Additional information long text instance
    * @param allegations - list of allegations
    * @param peoples - list of peoples
-   * @param relationshipList - list of relationship
+   * @param relationships - list of relationship
    * @param safetyAlerts - safety alerts
    * @param crossReports - crossReports
    * @param contacts - contacts
@@ -316,7 +316,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
    */
   public Investigation(Referral referral, Address address, StaffPerson staffPerson,
       LongText longText, LongText addInfoLongText, Set<Allegation> allegations, Set<Person> peoples,
-      Set<Relationship> relationshipList, SafetyAlerts safetyAlerts, Set<String> crossReports,
+      Set<Relationship> relationships, SafetyAlerts safetyAlerts, Set<String> crossReports,
       Set<Contact> contacts, ScreeningSummary screeningSummary) {
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(referral.getId(), LegacyTable.REFERRAL);
@@ -351,7 +351,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
 
     this.allegations = allegations;
     this.people = peoples;
-    this.relationships = relationshipList;
+    this.relationships = relationships;
     this.safetyAlerts = safetyAlerts;
     this.crossReports = crossReports;
     this.contacts = contacts;

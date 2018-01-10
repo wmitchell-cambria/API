@@ -5,6 +5,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.persistence.cms.CmsCase;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.AccessLimitation;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
@@ -35,8 +36,8 @@ public class HOICaseFactory {
       SystemCodeDescriptor serviceComponent, HOIVictim focusChild,
       HOISocialWorker assignedSocialWorker, List<HOIRelatedPerson> parents) {
     HOICase hoiCase = new HOICase();
-
-    hoiCase.setId(cmscase.getId());
+    String cmscaseId = cmscase.getId();
+    hoiCase.setId(cmscaseId);
     hoiCase.setStartDate(cmscase.getStartDate());
     hoiCase.setEndDate(cmscase.getEndDate());
     hoiCase.setCounty(county);
@@ -52,8 +53,9 @@ public class HOICaseFactory {
 
     hoiCase.setParents(parents);
     hoiCase.setLegacyDescriptor(
-        new LegacyDescriptor(cmscase.getId(), null, new DateTime(cmscase.getLastUpdatedTime()),
-            LegacyTable.CASE.getName(), LegacyTable.CASE.getDescription()));
+        new LegacyDescriptor(cmscaseId, CmsKeyIdGenerator.getUIIdentifierFromKey(cmscaseId),
+            new DateTime(cmscase.getLastUpdatedTime()), LegacyTable.CASE.getName(),
+            LegacyTable.CASE.getDescription()));
     return hoiCase;
   }
 

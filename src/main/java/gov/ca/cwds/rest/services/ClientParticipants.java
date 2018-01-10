@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -13,8 +14,8 @@ import gov.ca.cwds.rest.api.domain.Participant;
 @SuppressWarnings("javadoc")
 public class ClientParticipants {
   Set<Participant> participants;
-  HashMap<Long, String> victimIds;
-  HashMap<Long, String> perpetratorIds;
+  Map<Long, String> victimIds;
+  Map<Long, String> perpetratorIds;
 
   /**
    * 
@@ -30,8 +31,8 @@ public class ClientParticipants {
    * @param victimIds - victimIds
    * @param perpetratorIds - perpetratorIds
    */
-  public ClientParticipants(Set<Participant> participants, HashMap<Long, String> victimIds,
-      HashMap<Long, String> perpetratorIds) {
+  public ClientParticipants(Set<Participant> participants, Map<Long, String> victimIds,
+      Map<Long, String> perpetratorIds) {
     this.participants = participants;
     this.victimIds = victimIds;
     this.perpetratorIds = perpetratorIds;
@@ -53,7 +54,7 @@ public class ClientParticipants {
     this.participants.add(participant);
   }
 
-  public HashMap<Long, String> getVictimIds() {
+  public Map<Long, String> getVictimIds() {
     return victimIds;
   }
 
@@ -68,7 +69,7 @@ public class ClientParticipants {
     this.victimIds.put(id, legacyId);
   }
 
-  public HashMap<Long, String> getPerpetratorIds() {
+  public Map<Long, String> getPerpetratorIds() {
     return perpetratorIds;
   }
 

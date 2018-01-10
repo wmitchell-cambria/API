@@ -340,8 +340,6 @@ public class Reporter extends ReportingDomain implements Request, Response {
    */
   public static Reporter createWithDefaults(String referralId, boolean isMandatedReporter,
       gov.ca.cwds.rest.api.domain.Address address, Participant participant, String countyCode) {
-    // TODO: #141511573 address parsing - Smarty Streets Free Form display requires
-    // parsing to fields in CMS
     String zipCodeString = "";
     String streetNumber = "";
     String streetName = "";

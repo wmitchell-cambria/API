@@ -156,8 +156,8 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private Set<Allegation> createAllegations(ScreeningToReferral screeningToReferral,
-      String referralId, HashMap<Long, String> victimClient,
-      HashMap<Long, String> perpatratorClient) {
+      String referralId, Map<Long, String> victimClient,
+      Map<Long, String> perpatratorClient) {
     Set<Allegation> resultAllegations = null;
     try {
       resultAllegations =
@@ -379,7 +379,7 @@ public class ScreeningToReferralService implements CrudsService {
    * CMS Allegation - one for each allegation
    */
   private Set<Allegation> processAllegations(ScreeningToReferral scr, String referralId,
-      HashMap<Long, String> perpatratorClient, HashMap<Long, String> victimClient) {
+      Map<Long, String> perpatratorClient, Map<Long, String> victimClient) {
 
     Set<Allegation> processedAllegations = new HashSet<>();
     Set<Allegation> allegations;
@@ -474,7 +474,7 @@ public class ScreeningToReferralService implements CrudsService {
     }
   }
 
-  private String getClientLegacyId(HashMap<Long, String> client, String clientId, long personId) {
+  private String getClientLegacyId(Map<Long, String> client, String clientId, long personId) {
     if (client.containsKey(personId)) {
       clientId = client.get(personId);
     }

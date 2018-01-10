@@ -29,7 +29,7 @@ public class AllegationService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(AllegationService.class);
 
   private AllegationDao allegationDao;
-  //TODO: Make RI check explicit. Used to implicitly check for referential Integrity.
+  //Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIAllegation riAllegation;
 
   /**

@@ -103,7 +103,6 @@ public class AllegationService implements TypedCrudsService<String, Allegation, 
           .findInjuryBodyDetailsByInjuryHarmDetailId(harmDetail.getThirdId());
 
       for (InjuryBodyDetail injuryBodyDetail : injuryBodyDetails) {
-        // TODO change it to list of values??
         injuryHarmSubType = injuryBodyDetail.getPhysicalAbuseBodyPartType();
       }
 
