@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,20 +63,16 @@ public class HOIReferralService
     if (referralClientList.isEmpty()) {
       return emptyHoiReferralResponse();
     }
+    List<HOIReferral> hoiReferrals = new ArrayList<HOIReferral>();
     for (ReferralClient referralClient : referralClientList) {
-      fetchEachReferral(hoiReferralResponse, referralClient);
+      hoiReferrals.add(createHOIReferral(referralClient));
     }
+    Collections.sort(hoiReferrals);
+    hoiReferralResponse.setHoiReferrals(hoiReferrals);
     return hoiReferralResponse;
   }
 
-  private HOIReferralResponse emptyHoiReferralResponse() {
-    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-    hoiReferralResponse.setHoiReferrals(new ArrayList<>());
-    return hoiReferralResponse;
-  }
-
-  private void fetchEachReferral(HOIReferralResponse hoiReferralResponse,
-      ReferralClient referralClient) {
+  private HOIReferral createHOIReferral(ReferralClient referralClient) {
     Role role = null;
     Referral referral = referralClient.getReferral();
 
@@ -84,8 +81,14 @@ public class HOIReferralService
     role = fetchForReporterRole(role, referral, referralClient, reporter);
 
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
-    hoiReferralResponse.addHoiReferral(new HOIReferralFactory().createHOIReferral(referral,
-        staffPerson, reporter, allegationMap, role));
+    return new HOIReferralFactory().createHOIReferral(referral, staffPerson, reporter,
+        allegationMap, role);
+  }
+
+  private HOIReferralResponse emptyHoiReferralResponse() {
+    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
+    hoiReferralResponse.setHoiReferrals(new ArrayList<>());
+    return hoiReferralResponse;
   }
 
   private List<ReferralClient> fetchReferralClient(Set<String> clientIds) {
