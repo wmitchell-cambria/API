@@ -111,17 +111,9 @@ public class ParticipantService implements CrudsService {
 
     Set<Participant> participants = screeningToReferral.getParticipants();
     for (Participant incomingParticipant : participants) {
-
-      try {
-        if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
-          String message = " Participant contains incompatiable roles ";
-          messageBuilder.addMessageAndLog(message, LOGGER);
-          // next participant
-          continue;
-        }
-      } catch (Exception e1) {
-        String message = e1.getMessage();
-        messageBuilder.addMessageAndLog(message, e1, LOGGER);
+      if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
+        String message = " Participant contains incompatible roles ";
+        messageBuilder.addMessageAndLog(message, LOGGER);
         // next participant
         continue;
       }
@@ -144,50 +136,27 @@ public class ParticipantService implements CrudsService {
      * process the roles of this participant
      */
     for (String role : roles) {
-      boolean saved = false;
+      boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
+          && (!ParticipantValidator.roleIsAnonymousReporter(role)
+              && !ParticipantValidator.selfReported(incomingParticipant));
+      if (isRegularReporter) {
+        saveRegularReporter(screeningToReferral, referralId, messageBuilder,
+            incomingParticipant, role);
 
-      try {
-        boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
-            && (!ParticipantValidator.roleIsAnonymousReporter(role)
-                && !ParticipantValidator.selfReported(incomingParticipant));
-        if (isRegularReporter) {
-          saved = saveRegularReporter(screeningToReferral, referralId, messageBuilder,
-              incomingParticipant, role, saved);
-
-        } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
-          saved = saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
-              clientParticipants, incomingParticipant, genderCode, role, saved);
-        }
-      } catch (Exception e) {
-        String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+      } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
+        saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
+            clientParticipants, incomingParticipant, genderCode, role);
       }
-
-      if (!saved) {
-        clientParticipants.addParticipant(incomingParticipant);
-      }
+      clientParticipants.addParticipant(incomingParticipant);
     } // next role
   }
 
-  private boolean saveRegularReporter(ScreeningToReferral screeningToReferral, String referralId,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String role, boolean saved) {
-    if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant, role)) {
-      saved = true;
-    }
-    return saved;
+  private void saveRegularReporter(ScreeningToReferral screeningToReferral, String referralId,
+      MessageBuilder messageBuilder, Participant incomingParticipant, String role) {
+    saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant, role);
   }
 
-  private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
-      Participant incomingParticipant, String genderCode, String role, boolean saved) {
-    if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder, clientParticipants,
-        incomingParticipant, genderCode, role)) {
-      saved = true;
-    }
-    return saved;
-  }
-
-  private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
+  private void saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, String role) {
     String clientId;
@@ -199,9 +168,7 @@ public class ParticipantService implements CrudsService {
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      if (updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId)) {
-        return true;
-      }
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
@@ -219,7 +186,6 @@ public class ParticipantService implements CrudsService {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
         // next role
-        return true;
       }
     }
 
@@ -234,9 +200,7 @@ public class ParticipantService implements CrudsService {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
       // next role
-      return true;
     }
-    return false;
   }
 
   private boolean saveReporter(ScreeningToReferral screeningToReferral, String referralId,
