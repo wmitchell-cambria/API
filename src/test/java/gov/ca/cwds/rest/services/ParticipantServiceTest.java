@@ -173,7 +173,7 @@ public class ParticipantServiceTest {
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
-    String expectedErrorMessage = "Participant contains incompatiable roles";
+    String expectedErrorMessage = "Participant contains incompatible roles";
     assertEquals("Expected Incompatible participant Role message to have been recorded",
         expectedErrorMessage, message);
   }
@@ -197,7 +197,7 @@ public class ParticipantServiceTest {
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
-    String expectedErrorMessage = "Participant contains incompatiable roles";
+    String expectedErrorMessage = "Participant contains incompatible roles";
     assertEquals("Expected Incompatible participant Role message to have been recorded",
         expectedErrorMessage, message);
   }
@@ -249,7 +249,7 @@ public class ParticipantServiceTest {
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
-    String expectedErrorMessage = "Participant contains incompatiable roles";
+    String expectedErrorMessage = "Participant contains incompatible roles";
     assertEquals("Expected Incompatible participant Role message to have been recorded",
         expectedErrorMessage, message);
   }
@@ -307,7 +307,7 @@ public class ParticipantServiceTest {
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
-    String expectedErrorMessage = "Participant contains incompatiable roles";
+    String expectedErrorMessage = "Participant contains incompatible roles";
     assertEquals("Expected Incompatible participant Role message to have been recorded",
         expectedErrorMessage, message);
   }
@@ -329,7 +329,7 @@ public class ParticipantServiceTest {
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
-    String expectedErrorMessage = "Participant contains incompatiable roles";
+    String expectedErrorMessage = "Participant contains incompatible roles";
     assertEquals("Expected Incompatible participant Role message to have been recorded",
         expectedErrorMessage, message);
   }
@@ -421,7 +421,7 @@ public class ParticipantServiceTest {
     assertEquals("Expected to have one error message", messageBuilder.getMessages().size(), 1);
     assertEquals("Expected to have in compatible role error",
         messageBuilder.getMessages().get(0).getMessage().trim(),
-        "Participant contains incompatiable roles");
+        "Participant contains incompatible roles");
 
   }
 
