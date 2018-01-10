@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
+import java.util.Set;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
@@ -230,6 +231,28 @@ public class AssignmentService implements
           "Rule : R - 04530 - Assignment End Date and Time must be less than or equal to the current system date and time AND must be greater than or equal to Assignment Start Date and Time");
     }
 
+  }
+
+  public Assignment findReferralFirstAssignment(String referralId) {
+    Assignment firstAssignment = null;
+    Set<Assignment> assignmentSet = assignmentDao.findAssignmentsByReferralId(referralId);
+    for (Assignment assignment : assignmentSet) {
+      if (firstAssignment == null || isAssignmentStartedEarlier(assignment, firstAssignment)) {
+        firstAssignment = assignment;
+      }
+    }
+    return firstAssignment;
+  }
+
+  private boolean isAssignmentStartedEarlier(Assignment assignment1, Assignment assignment2) {
+    if (assignment1.getStartDate().before(assignment2.getStartDate())) {
+      return true;
+    }
+    if (assignment1.getStartDate().equals(assignment2.getStartDate()) && assignment1.getStartTime()
+        .before(assignment2.getStartTime())) {
+      return true;
+    }
+    return false;
   }
 
 }

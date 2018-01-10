@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
+import static gov.ca.cwds.fixture.ReferralResourceBuilder.DEFAULT_REFERRAL_RECEIVED_DATE;
+import static gov.ca.cwds.fixture.ReferralResourceBuilder.DEFAULT_REFERRAL_RECEIVED_TIME;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -12,6 +14,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.persistence.cms.Assignment;
+import gov.ca.cwds.fixture.AssignmentEntityBuilder;
 import java.math.BigDecimal;
 
 import javax.persistence.EntityExistsException;
@@ -25,14 +29,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
-import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.LongText;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -86,11 +87,6 @@ public class ReferralServiceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  /**
-   * Initialize system code cache
-   */
-  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
-
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
@@ -115,6 +111,12 @@ public class ReferralServiceTest {
     timeStarted = "07:00:00";
   }
 
+  private Assignment buildMockAssignment(String startDate, String startTime, String endDate,
+      String endTime) {
+    return new AssignmentEntityBuilder().setStartDate(startDate).setStartTime(startTime)
+        .setEndDate(endDate).setEndTime(endTime).build();
+  }
+
   // find test
   @Test
   public void testFindReturnsCorrectEntity() throws Exception {
@@ -133,7 +135,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testFindReturnsNullWhenNotFound() throws Exception {
+  public void testFindReturnsNullWhenNotFound() {
     Response found = referralService.find("ABC1234567");
     assertThat(found, is(nullValue()));
   }
@@ -147,14 +149,14 @@ public class ReferralServiceTest {
 
 
   @Test
-  public void testDeleteReturnsNullWhenNotFound() throws Exception {
+  public void testDeleteReturnsNullWhenNotFound() {
     Response found = referralService.delete("ABC1234567");
     assertThat(found, is(nullValue()));
   }
 
 
   @Test
-  public void testDeleteReturnsClass() throws Exception {
+  public void testDeleteReturnsClass() {
     // delete success
     Referral referralDomain = new ReferralResourceBuilder().build();
 
@@ -166,12 +168,11 @@ public class ReferralServiceTest {
     Referral returned = referralService.delete("ABC1234567");
 
     assertThat(returned.getClass(), is(Referral.class));
-
   }
 
   // update test
   @Test
-  public void testUpdateReturnsDomain() throws Exception {
+  public void testUpdateReturnsDomain() {
     Referral expected = new ReferralResourceBuilder().build();
 
     gov.ca.cwds.data.persistence.cms.Referral referral =
@@ -180,30 +181,32 @@ public class ReferralServiceTest {
     when(referralDao.update(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
         .thenReturn(referral);
 
+    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
+        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
+
     Object retval = referralService.update("1234567ABC", expected);
     assertThat(retval.getClass(), is(Referral.class));
+
+    // R04611 - first assignment start date/time is updated with referral received date/time
+    verify(assignmentService, times(1)).update(any(String.class),
+        any(gov.ca.cwds.rest.api.domain.cms.Assignment.class));
   }
 
-  @Test
-  public void testUpdateThrowsServiceException() throws Exception {
+  @Test(expected = ServiceException.class)
+  public void testUpdateThrowsServiceException() {
+    Referral referralRequest = new ReferralResourceBuilder().build();
 
-    try {
-      Referral referralRequest = new ReferralResourceBuilder().build();
+    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
+        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
 
-      when(referralDao.update(any())).thenThrow(EntityNotFoundException.class);
+    when(referralDao.update(any())).thenThrow(EntityNotFoundException.class);
 
-      referralService.update("ZZZZZZZ0X5", referralRequest);
-
-      Assert.fail("Expected EntityNotFoundException was not thrown");
-
-    } catch (Exception ex) {
-      assertEquals(ex.getClass(), ServiceException.class);
-    }
+    referralService.update("ZZZZZZZ0X5", referralRequest);
   }
 
   // create test
   @Test
-  public void referralServiceCreateThrowsEntityExistsException() throws Exception {
+  public void referralServiceCreateThrowsEntityExistsException() {
     try {
       Referral referralRequest = new ReferralResourceBuilder().build();
 
@@ -232,7 +235,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testCreateReturnsCorrectEntity() throws Exception {
+  public void testCreateReturnsCorrectEntity() {
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
@@ -247,7 +250,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testCreateEmptyIDError() throws Exception {
+  public void testCreateEmptyIDError() {
     try {
       Referral referralDomain = new ReferralResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.Referral toCreate =
@@ -266,7 +269,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testCreateNullIDError() throws Exception {
+  public void testCreateNullIDError() {
     try {
       Referral referralDomain = new ReferralResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.Referral toCreate =
@@ -284,7 +287,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testCreateBlankIDError() throws Exception {
+  public void testCreateBlankIDError() {
     try {
       Referral referralDomain = new ReferralResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.Referral toCreate =
@@ -302,7 +305,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testCreateReturnsCorrectReferralId() throws Exception {
+  public void testCreateReturnsCorrectReferralId() {
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
@@ -321,28 +324,19 @@ public class ReferralServiceTest {
    * Test for checking the new Referral Id generated and lenght is 10
    */
   @Test
-  public void createReturnsGeneratedId() throws Exception {
+  public void createReturnsGeneratedId() {
     Referral referralDomain = new ReferralResourceBuilder().build();
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
-        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Referral>() {
-
-          @Override
-          public gov.ca.cwds.data.persistence.cms.Referral answer(InvocationOnMock invocation)
-              throws Throwable {
-            gov.ca.cwds.data.persistence.cms.Referral report =
-                (gov.ca.cwds.data.persistence.cms.Referral) invocation.getArguments()[0];
-            return report;
-          }
-        });
+        .thenAnswer(invocation -> invocation.getArguments()[0]);
 
     PostedReferral returned = referralService.create(referralDomain);
-    assertEquals(returned.getId().length(), 10);
+    assertEquals(10, returned.getId().length());
     PostedReferral newReturned = referralService.create(referralDomain);
     Assert.assertNotEquals(returned.getId(), newReturned.getId());
   }
 
   @Test
-  public void testCreateLACountyTriggerForReferralCreate() throws Exception {
+  public void testCreateLACountyTriggerForReferralCreate() {
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "BTr");
@@ -360,14 +354,9 @@ public class ReferralServiceTest {
         .thenReturn(toCreate);
 
     when(laCountyTrigger.createCountyTrigger(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
-        .thenAnswer(new Answer<Boolean>() {
-
-
-          @Override
-          public Boolean answer(InvocationOnMock invocation) throws Throwable {
-            isLaCountyTrigger = true;
-            return true;
-          }
+        .thenAnswer(invocation -> {
+          isLaCountyTrigger = true;
+          return true;
         });
 
     referralService.create(request);
@@ -376,7 +365,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void testCreateLACountyTriggerForReferralUpdate() throws Exception {
+  public void testCreateLACountyTriggerForReferralUpdate() {
     Referral referralDomain = new ReferralResourceBuilder().build();
 
     gov.ca.cwds.data.persistence.cms.Referral toUpdate =
@@ -395,23 +384,24 @@ public class ReferralServiceTest {
         .thenReturn(toUpdate);
 
     when(laCountyTrigger.createCountyTrigger(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
-        .thenAnswer(new Answer<Boolean>() {
-
-
-          @Override
-          public Boolean answer(InvocationOnMock invocation) throws Throwable {
-            isLaCountyTrigger = true;
-            return true;
-          }
+        .thenAnswer(invocation -> {
+          isLaCountyTrigger = true;
+          return true;
         });
+
+    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
+        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
 
     referralService.update("1234567ABC", request);
     assertThat(isLaCountyTrigger, is(true));
 
+    // R04611 - first assignment start date/time is updated with referral received date/time
+    verify(assignmentService, times(1)).update(any(String.class),
+        any(gov.ca.cwds.rest.api.domain.cms.Assignment.class));
   }
 
   @Test
-  public void shouldSetApprovalCodeToNotSubmittedDefaultValue() throws Exception {
+  public void shouldSetApprovalCodeToNotSubmittedDefaultValue() {
     Address address = new AddressResourceBuilder().createAddress();
     ScreeningToReferral screeningToReferral =
         new ScreeningToReferralResourceBuilder().setAddress(address).createScreeningToReferral();
@@ -462,7 +452,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void shouldFailWhenSpecifyingALegacyReferralIdThatDoesNotExist() throws Exception {
+  public void shouldFailWhenSpecifyingALegacyReferralIdThatDoesNotExist() {
     String nonExistingReferralId = "9999999999";
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setReferralId(nonExistingReferralId).createScreeningToReferral();
@@ -471,7 +461,6 @@ public class ReferralServiceTest {
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
         addressService, longTextService, riReferral);
 
-    MessageBuilder messageBuilder = mock(MessageBuilder.class);
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
         mockMessageBuilder);
 
@@ -480,7 +469,7 @@ public class ReferralServiceTest {
   }
 
   @Test
-  public void shouldFailSavingWhenReferralHasInvalidDateTimeFormat() throws Exception {
+  public void shouldFailSavingWhenReferralHasInvalidDateTimeFormat() {
     ScreeningToReferral screeningToReferral =
         new ScreeningToReferralResourceBuilder().createScreeningToReferral();
 
@@ -514,11 +503,10 @@ public class ReferralServiceTest {
     assertEquals("Expected a single error message", 1, messageBuilder.getMessages().size());
     assertEquals("ExpectedDate Error message", "receivedDate must be in the format of yyyy-MM-dd",
         messageBuilder.getMessages().get(0).getMessage());
-
   }
 
   @Test
-  public void testAllegesAbuseOccurredAtAddressId() throws Exception {
+  public void testAllegesAbuseOccurredAtAddressId() {
     String legacyId = "1234567890";
     Address address = new AddressResourceBuilder().setLegacyId(legacyId).createAddress();
     ScreeningToReferral screeningToReferral =
@@ -558,7 +546,7 @@ public class ReferralServiceTest {
 
 
   @Test(expected = ServiceException.class)
-  public void shouldThrowErrorIfStaffPersonIdIsNotFound() throws Exception {
+  public void shouldThrowErrorIfStaffPersonIdIsNotFound() {
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
@@ -570,7 +558,7 @@ public class ReferralServiceTest {
   }
 
   @Test(expected = ServiceException.class)
-  public void shouldThrowErrorIfReferralIsNotSavedSuccessfully() throws Exception {
+  public void shouldThrowErrorIfReferralIsNotSavedSuccessfully() {
     when(referralDao.create(any())).thenReturn(null);
     Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
@@ -579,60 +567,48 @@ public class ReferralServiceTest {
     Referral request = new Referral(toCreate);
 
     referralService.create(request);
-
   }
-  // @Test
-  // public void shouldCreateCmsReferralFromScreening(){
-  // Date timestamp = new Date();
-  // Address address = new AddressResourceBuilder().createAddress();
-  // ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
-  // .setAddress(address).createScreeningToReferral();
-  // MessageBuilder messageBuilder = mock(MessageBuilder.class);
-  // when(addressService.createAddressFromScreening(screeningToReferral, timestamp,
-  // messageBuilder)).thenReturn(address);
-  // gov.ca.cwds.data.persistence.cms.LongText longText = new
-  // gov.ca.cwds.data.persistence.cms.LongText("123abc2345", "65", "A long text ");
-  // PostedLongText postedLongText = new PostedLongText(longText);
-  //// when(drmsDocumentService.generateDrmsDocumentId(messageBuilder)).thenThrow(new
-  // ServiceException());
-  // when(longTextService.create(any(LongText.class))).thenReturn(postedLongText);
-  // Referral savedReferral= mock(Referral.class);
-  // when(referralDao.create(any())).thenReturn((savedReferral));
-  //// staffPersonIdRetriever
-  // ReferralService referralService = new ReferralService( referralDao, nonLACountyTriggers,
-  // laCountyTrigger,
-  // triggerTablesDao,staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-  // drmsDocumentService,
-  // addressService, longTextService);
-  //// LongTextService longTextService = mock(LongTextService.class);
-  // String dateStarted = "2013-01-30";
-  // String timeStarted = "14:22:58";
-  // referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
-  // timestamp, messageBuilder);
-  //
-  //// verify(messageBuilder).addMessageAndLog("", any(ServiceException.class),any(Logger.class));
-  //
-  // }
 
-  // @Test
-  // public void
-  // shouldLogAndBuildMessageWhenServiceExceptionIsThrownWhileCreatingCmsReferralFromScreening(){
-  // MessageBuilder messageBuilder = mock(MessageBuilder.class);
-  // when(drmsDocumentService.generateDrmsDocumentId(messageBuilder)).thenThrow(new
-  // ServiceException());
-  //// longTextService
-  //// staffPersonIdRetriever
-  // ReferralService referralService = new ReferralService( referralDao, nonLACountyTriggers,
-  // laCountyTrigger,
-  // triggerTablesDao,staffpersonDao, staffPersonIdRetriever, assignmentService, validator,
-  // drmsDocumentService,
-  // addressService, longTextService);
-  //// LongTextService longTextService = mock(LongTextService.class);
-  // ScreeningToReferral screeningToReferral = new
-  // ScreeningToReferralResourceBuilder().createScreeningToReferral();
-  // referralService.createCmsReferralFromScreening(screeningToReferral, "dateStarted",
-  // "timeStarted", new Date(), messageBuilder);
-  //
-  // verify(messageBuilder).addMessageAndLog("", any(ServiceException.class),any(Logger.class));
-  // }
+  @Test(expected = ServiceException.class)
+  public void testR04611shouldThrowErrorIfReferralStartDateTimeNotValid() {
+    Referral domainReferral = new ReferralResourceBuilder().build();
+
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", domainReferral, "ABC");
+
+    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
+        buildMockAssignment("1999-01-10", "15:11:00", "1999-01-15", "16:10:00"));
+
+    when(referralDao.update(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
+        .thenReturn(referral);
+
+    referralService.update("1234567ABC", domainReferral);
+  }
+
+  // R04611 - the Referral Start date/time can not exceed the End Date and can not equal or exceed
+  // End Time of the first assignment
+  @Test
+  public void testR04611ReferralValidation () {
+    Referral domainReferral = new ReferralResourceBuilder().build();
+
+    // Referral earlier date
+    Assignment firstAssignment = buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00");
+    boolean isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
+    assertThat(isValid, is(true));
+
+    // Referral same date, earlier time
+    firstAssignment = buildMockAssignment(DEFAULT_REFERRAL_RECEIVED_DATE, "17:15:45", "2017-01-04", "16:00:00");
+    isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
+    assertThat(isValid, is(true));
+
+    // Referral same date, same time
+    firstAssignment = buildMockAssignment(DEFAULT_REFERRAL_RECEIVED_DATE, "00:00:00", DEFAULT_REFERRAL_RECEIVED_DATE, DEFAULT_REFERRAL_RECEIVED_TIME);
+    isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
+    assertThat(isValid, is(false));
+
+    // Referral later date
+    firstAssignment = buildMockAssignment("1999-01-10", "15:11:45", "1999-01-15", "16:00:00");
+    isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
+    assertThat(isValid, is(false));
+  }
 }
