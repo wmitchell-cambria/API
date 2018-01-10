@@ -700,11 +700,13 @@ public class Client extends ReportingDomain implements Request, Response {
     this.prevRegionalCenterIndicator =
         DomainChef.uncookBooleanString(persistedClient.getPrevRegionalCenterIndicator());
     this.primaryEthnicityType = persistedClient.getPrimaryEthnicityType();
-    this.primaryLanguage = persistedClient.getPrimaryLanguageType() != null
-        ? persistedClient.getPrimaryLanguageType() : 0;
+    this.primaryLanguage =
+        persistedClient.getPrimaryLanguageType() != null ? persistedClient.getPrimaryLanguageType()
+            : 0;
     this.religionType = persistedClient.getReligionType();
     this.secondaryLanguage = persistedClient.getSecondaryLanguageType() != null
-        ? persistedClient.getSecondaryLanguageType() : 0;
+        ? persistedClient.getSecondaryLanguageType()
+        : 0;
     this.sensitiveHlthInfoOnFileIndicator =
         DomainChef.uncookBooleanString(persistedClient.getSensitiveHlthInfoOnFileIndicator());
     this.sensitivityIndicator = persistedClient.getSensitivityIndicator();
@@ -743,11 +745,14 @@ public class Client extends ReportingDomain implements Request, Response {
       String genderCode, Short raceCode, Boolean childClientIndicatorVar) {
 
     String unableToDetermineCode = participant.getRaceAndEthnicity() != null
-        ? participant.getRaceAndEthnicity().getUnableToDetermineCode() : "";
+        ? participant.getRaceAndEthnicity().getUnableToDetermineCode()
+        : "";
     String hispanicUnableToDetermineCode = participant.getRaceAndEthnicity() != null
-        ? participant.getRaceAndEthnicity().getHispanicUnableToDetermineCode() : "";
+        ? participant.getRaceAndEthnicity().getHispanicUnableToDetermineCode()
+        : "";
     String hispanicOriginCode = participant.getRaceAndEthnicity() != null
-        ? participant.getRaceAndEthnicity().getHispanicOriginCode() : "";
+        ? participant.getRaceAndEthnicity().getHispanicOriginCode()
+        : "";
 
     return new Client("", participant.getLegacyDescriptor().getLastUpdated(), Boolean.FALSE,
         DEFAULT_ADOPTION_STATUS_CODE, "", "", DEFAULT_CODE, participant.getDateOfBirth(), "",
@@ -1255,7 +1260,6 @@ public class Client extends ReportingDomain implements Request, Response {
   private void makeSensitive() {
     if (!isSealed()) {
       this.sensitivityIndicator = LimitedAccessType.SENSITIVE.getValue();
-
     }
   }
 

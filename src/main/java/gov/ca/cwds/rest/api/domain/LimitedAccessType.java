@@ -70,16 +70,6 @@ public enum LimitedAccessType {
   }
 
   /**
-   * Determine if given limitedAccessType is higher level than this one.
-   * 
-   * @param limitedAccessType The limited access code
-   * @return true if given limitedAccessType is higher level than this one
-   */
-  public boolean isHigherPriority(LimitedAccessType limitedAccessType) {
-    return limitedAccessType.getPriority() > this.getPriority();
-  }
-
-  /**
    * Determine if given limited access code is the highest priority one.
    * 
    * @param limitedAccessType Limited access type
