@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 /**
@@ -61,7 +64,31 @@ public class StateId extends CmsPersistentObject {
   @Column(name = "FKCLIENT_T", nullable = false, length = 10)
   private String fkClientId;
 
-  public String getId() {
+  /**
+   * Default constructor
+   */
+  public StateId () {
+	    // Default constructor	  
+  }
+
+  public StateId(String id, String assistanceUnitCode, short governmentEntityType, String personNumber,
+		String serialNumber, Date startDate, Date endDate, String stateIdCaseFirstName, String stateIdCaseLastName,
+		String stateIdCaseMiddleName, String fkClientId) {
+	super();
+	this.id = id;
+	this.assistanceUnitCode = assistanceUnitCode;
+	this.governmentEntityType = governmentEntityType;
+	this.personNumber = personNumber;
+	this.serialNumber = serialNumber;
+	this.startDate = startDate;
+	this.endDate = endDate;
+	this.stateIdCaseFirstName = stateIdCaseFirstName;
+	this.stateIdCaseLastName = stateIdCaseLastName;
+	this.stateIdCaseMiddleName = stateIdCaseMiddleName;
+	this.fkClientId = fkClientId;
+}
+
+public String getId() {
     return id;
   }
 
@@ -153,4 +180,15 @@ public class StateId extends CmsPersistentObject {
   public Serializable getPrimaryKey() {
     return getId();
   }
+  
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }
