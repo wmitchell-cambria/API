@@ -27,7 +27,6 @@ public class LawEnforcementTest {
     assertThat(LawEnforcementEntity.class.newInstance(), is(notNullValue()));
   }
 
-
   /**
    * persistent Constructor test
    * 

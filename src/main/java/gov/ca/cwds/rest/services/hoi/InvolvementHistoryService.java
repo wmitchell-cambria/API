@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,13 +59,13 @@ public class InvolvementHistoryService
   private Response findInvolvementHistoryByScreeningId(String screeningId) {
     Set<String> clientIds = findClientIdsByScreeningId(screeningId);
     if (!clientIds.isEmpty()) {
-      Set<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
-      Set<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
-      Set<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
+      List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
+      List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
+      List<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
       return new InvolvementHistory(screeningId, hoiCases, hoiReferrals, hoiScreenings);
     }
-    return new InvolvementHistory(screeningId, new HashSet<HOICase>(), new HashSet<HOIReferral>(),
-        new HashSet<HOIScreening>());
+    return new InvolvementHistory(screeningId, new ArrayList<HOICase>(),
+        new ArrayList<HOIReferral>(), new ArrayList<HOIScreening>());
   }
 
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
@@ -72,33 +74,32 @@ public class InvolvementHistoryService
   }
 
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
-  protected Set<HOIScreening> findHOIScreeningsByClientIds(Set<String> clientIds,
+  protected List<HOIScreening> findHOIScreeningsByClientIds(Set<String> clientIds,
       String exceptScreeningId) {
     HOIRequest hoiScreeningRequest = new HOIRequest();
     hoiScreeningRequest.setClientIds(clientIds);
     return hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings().stream()
         .filter(hoiScreening -> !hoiScreening.getId().equals(exceptScreeningId))
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
   }
 
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
-  protected Set<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
+  protected List<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
     HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(clientIds);
-    Set<HOIReferral> hoiReferrals = new HashSet<>();
     HOIReferralResponse referralResponse = hoiReferralService.handleFind(hoiRequest);
-    hoiReferrals.addAll(referralResponse.getHoiReferrals());
+    List<HOIReferral> hoiReferrals = referralResponse.getHoiReferrals();
+    Collections.sort(hoiReferrals);
     return hoiReferrals;
   }
 
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
-  protected Set<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
-    Set<HOICase> hoicases = new HashSet<>();
+  protected List<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
     HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(clientIds);
     HOICaseResponse hoiCaseResponse = hoiCaseService.handleFind(hoiRequest);
-    hoicases.addAll(hoiCaseResponse.getHoiCases());
-
+    List<HOICase> hoicases = hoiCaseResponse.getHoiCases();
+    Collections.sort(hoicases);
     return hoicases;
   }
 
