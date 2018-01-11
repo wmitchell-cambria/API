@@ -81,7 +81,6 @@ public class ReferralServiceTest {
   private MessageBuilder mockMessageBuilder;
   private String dateStarted;
   private String timeStarted;
-  private StaffPerson staffPerson;
   private Referral referralDomain;
 
   private static Boolean isLaCountyTrigger = false;
@@ -105,7 +104,8 @@ public class ReferralServiceTest {
     otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
-    staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51").build();
+    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51")
+        .build();
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("21");
 
