@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,9 +75,11 @@ public class HOICaseServiceTest {
 
   @Test
   public void testHandleFind() throws Exception {
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
+    CmsCase cmscase1 = new CmsCaseEntityBuilder().setId("TAZGOO205C").setStartDate(new Date())
         .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
-    CmsCase[] cases = {cmscase};
+    CmsCase cmscase2 = new CmsCaseEntityBuilder().setId("RAZGOO205C").setStartDate(new Date())
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
+    CmsCase[] cases = {cmscase1, cmscase2};
     ClientRelationship relationship = new ClientRelationshipEntityBuilder().build();
     ClientRelationship[] relationships = {relationship};
     when(clientRelationshipDao.findByPrimaryClientId(any(String.class))).thenReturn(relationships);

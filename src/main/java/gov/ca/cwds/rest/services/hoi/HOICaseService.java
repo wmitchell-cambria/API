@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,6 +75,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   protected HOICaseResponse handleFind(HOIRequest hoiRequest) {
     if (!hoiRequest.getClientIds().isEmpty()) {
       List<HOICase> cases = findByClientId(hoiRequest);
+      Collections.sort(cases);
       return new HOICaseResponse(cases);
     }
     return emptyHoiCaseResponse();
@@ -222,8 +224,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private SystemCodeDescriptor getCounty(CmsCase cmscase) {
-    return new SystemCodeDescriptor(cmscase.getCountryCodeType(),
-        SystemCodeCache.global().getSystemCodeShortDescription(cmscase.getCountryCodeType()));
+    return new SystemCodeDescriptor(cmscase.getGovernmentEntityType(),
+        SystemCodeCache.global().getSystemCodeShortDescription(cmscase.getGovernmentEntityType()));
   }
 
   private HOIVictim getFocusChild(CmsCase cmscase) {
