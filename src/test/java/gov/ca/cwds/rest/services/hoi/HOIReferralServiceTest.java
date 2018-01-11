@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -307,6 +309,15 @@ public class HOIReferralServiceTest {
 
     HOIReferralResponse response = hoiService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
+  }
+
+
+  @Test
+  public void testHandleFindWhenNoClientIdsProvided() throws Exception {
+    HOIRequest emptyRequest = new HOIRequest();
+    emptyRequest.setClientIds(new HashSet<String>());
+    HOIReferralResponse response = hoiService.handleFind(emptyRequest);
+    assertThat(response, notNullValue());
   }
 
   /**

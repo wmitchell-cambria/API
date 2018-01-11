@@ -96,7 +96,7 @@ public class DrmsDocumentTemplate implements PersistentObject {
    * @param thirdId template identifier
    * @param applicationContextType applicationContextType
    * @param documentDOSFilePrefixName  documentDOSFilePrefixName
-   * @param govermentEntityType  govermentEntityType
+   * @param governmentEntityType  govermentEntityType
    * @param cmsDocumentId  cmsDocumentId
    * @param inactive  inactive
    * @param languageType  languageType
@@ -106,12 +106,12 @@ public class DrmsDocumentTemplate implements PersistentObject {
    *
    */
   public DrmsDocumentTemplate(String thirdId, Short applicationContextType, String documentDOSFilePrefixName,
-                              Short govermentEntityType, String cmsDocumentId, String inactive, Short languageType,
+                              Short governmentEntityType, String cmsDocumentId, String inactive, Short languageType,
                               Date lastUpdatedTime, String titleName, String transactionType) {
     this.thirdId = thirdId;
     this.applicationContextType = applicationContextType;
     this.documentDOSFilePrefixName = documentDOSFilePrefixName;
-    this.govermentEntityType = govermentEntityType;
+    this.govermentEntityType = governmentEntityType;
     this.cmsDocumentId = cmsDocumentId;
     this.inactive = inactive;
     this.languageType = languageType;

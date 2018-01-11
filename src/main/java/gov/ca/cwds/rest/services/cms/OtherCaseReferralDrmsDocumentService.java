@@ -56,6 +56,9 @@ public class OtherCaseReferralDrmsDocumentService
   /**
    * @param otherCaseReferralDrmsDocumentDao {@link Dao} handling {@link
    *     gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument} objects
+   * @param drmsDocumentService - DRMS document service
+   * @param drmsDocumentTemplateService - DRMS template service
+   * @param cmsDocumentService - CMS document service
    */
   @Inject
   public OtherCaseReferralDrmsDocumentService(
