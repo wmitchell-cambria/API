@@ -29,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.business.rules.CountyOfAssignedStaffWorker;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.R00818SetReferredResourceType;
@@ -60,6 +61,7 @@ public class ReferralService implements
   private Validator validator;
   private AssignmentService assignmentService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AddressService addressService;
   private LongTextService longTextService;
   private RIReferral riReferral;
@@ -80,6 +82,7 @@ public class ReferralService implements
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
    * @param drmsDocumentService the service for generating DRMS Documents
+   * @param otherCaseReferralDrmsDocumentService the service for generating Other Case/Referral DRMS Documents
    * @param addressService the service for creating addresses
    * @param longTextService the longText Service
    * @param riReferral the ri
@@ -88,7 +91,7 @@ public class ReferralService implements
   public ReferralService(final ReferralDao referralDao, NonLACountyTriggers nonLaTriggers,
       LACountyTrigger laCountyTrigger, TriggerTablesDao triggerTablesDao,
       StaffPersonDao staffpersonDao, AssignmentService assignmentService, Validator validator,
-      DrmsDocumentService drmsDocumentService, AddressService addressService,
+      DrmsDocumentService drmsDocumentService, OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService, AddressService addressService,
       LongTextService longTextService, RIReferral riReferral) {
     this.referralDao = referralDao;
     this.nonLaTriggers = nonLaTriggers;
@@ -98,6 +101,7 @@ public class ReferralService implements
     this.assignmentService = assignmentService;
     this.validator = validator;
     this.drmsDocumentService = drmsDocumentService;
+    this.otherCaseReferralDrmsDocumentService = otherCaseReferralDrmsDocumentService;
     this.addressService = addressService;
     this.longTextService = longTextService;
     this.riReferral = riReferral;
@@ -144,6 +148,7 @@ public class ReferralService implements
     try {
       StaffPerson staffperson =
           staffPersonValidate(RequestExecutionContext.instance().getStaffId());
+      validateCountyOfAssignedStaffWorker(referral);
       Referral managed =
           new Referral(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
               referral, RequestExecutionContext.instance().getStaffId(),
@@ -159,6 +164,15 @@ public class ReferralService implements
     } catch (EntityExistsException e) {
       LOGGER.info("Referral already exists : {}", referral);
       throw new ServiceException(e);
+    }
+  }
+
+  private void validateCountyOfAssignedStaffWorker(
+      gov.ca.cwds.rest.api.domain.cms.Referral referral) {
+    if (!new CountyOfAssignedStaffWorker(referral, staffpersonDao).isValid()) {
+      LOGGER.error("Assigned Staff Person County must be the same as the Incident County");
+      throw new ServiceException(
+          "Assigned Staff Person County must be the same as the Incident County");
     }
   }
 
@@ -221,7 +235,7 @@ public class ReferralService implements
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, messageBuilder);
-      // TODO: R - 01054 Prmary Assignment Adding
+      otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral);
 
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now
@@ -246,7 +260,7 @@ public class ReferralService implements
    */
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
     String longTextId = generateReportNarrative(screeningToReferral, messageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, messageBuilder);
@@ -281,14 +295,14 @@ public class ReferralService implements
         ParticipantValidator.anonymousReporter(screeningToReferral),
         screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
-        govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(), referredToResourceType ? NOT_REFERRED : 0,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
-        screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
-        screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
-        screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
-        screeningToReferral.getLimitedAccessDescription(), limitedAccessDate, agencyCode);
+        screeningToReferral.isFamilyAwareness(), govEnt,
+        screeningToReferral.getName(), dateStarted, timeStarted, screeningToReferral.getResponseTime(),
+        referredToResourceType ? NOT_REFERRED : 0, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId(), longTextId, screeningToReferral.getIncidentCounty(),
+        (short) screeningToReferral.getApprovalStatus(), screeningToReferral.getAssigneeStaffId(),
+        responseRationalLongTextId, screeningToReferral.getResponsibleAgency(),
+        screeningToReferral.getLimitedAccessCode(), screeningToReferral.getLimitedAccessDescription(),
+        limitedAccessDate, agencyCode);
   }
 
   private Short convertLimitedAccessAgencyToNumericCode(ScreeningToReferral screeningToReferral) {
@@ -394,7 +408,7 @@ public class ReferralService implements
   }
 
   private String createLongText(String countySpecificCode, String textDescription,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
 
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);

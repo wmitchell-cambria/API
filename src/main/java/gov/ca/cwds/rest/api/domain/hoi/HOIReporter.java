@@ -18,9 +18,6 @@ public class HOIReporter extends HOIPerson {
 
   private static final long serialVersionUID = 1L;
 
-  /* todo avoid duplication of the Role enum, use gov.ca.cwds.rest.api.domain.Role,
-  that's fine because of the checkRole method below
-  */
   public enum Role {
 
     MANDATED_REPORTER("Mandated Reporter"),

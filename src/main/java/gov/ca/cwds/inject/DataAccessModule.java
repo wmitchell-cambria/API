@@ -29,11 +29,13 @@ import gov.ca.cwds.data.cms.CountyTriggerDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
+import gov.ca.cwds.data.cms.DrmsDocumentTemplateDao;
 import gov.ca.cwds.data.cms.ExternalInterfaceDao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationCrossReportDao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.cms.OtherClientNameDao;
 import gov.ca.cwds.data.cms.ReferralAssignmentDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
@@ -70,6 +72,7 @@ import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.CrossReport;
 import gov.ca.cwds.data.persistence.cms.CwsOffice;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
+import gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate;
 import gov.ca.cwds.data.persistence.cms.EducationProviderContact;
 import gov.ca.cwds.data.persistence.cms.ExternalInterface;
 import gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport;
@@ -79,6 +82,7 @@ import gov.ca.cwds.data.persistence.cms.InjuryHarmDetail;
 import gov.ca.cwds.data.persistence.cms.LawEnforcementEntity;
 import gov.ca.cwds.data.persistence.cms.LongText;
 import gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome;
+import gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument;
 import gov.ca.cwds.data.persistence.cms.OtherChildInPlacemtHome;
 import gov.ca.cwds.data.persistence.cms.OtherClientName;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -208,6 +212,7 @@ public class DataAccessModule extends AbstractModule {
           ContactPartyDeliveredServiceEntity.class, ReferralClientDeliveredServiceEntity.class,
           IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class, CaseLoad.class,
           StaffPersonCaseLoad.class, ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
+          DrmsDocumentTemplate.class, OtherCaseReferralDrmsDocument.class,
           GovernmentOrganizationCrossReport.class, InjuryHarmDetail.class, InjuryBodyDetail.class),
           new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
 
@@ -286,6 +291,8 @@ public class DataAccessModule extends AbstractModule {
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
     bind(DrmsDocumentDao.class);
+    bind(DrmsDocumentTemplateDao.class);
+    bind(OtherCaseReferralDrmsDocumentDao.class);
     bind(AssignmentDao.class);
     bind(AssignmentUnitDao.class);
     bind(CwsOfficeDao.class);

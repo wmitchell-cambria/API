@@ -35,7 +35,7 @@ public class AddressValidationService implements CrudsService {
    * @return array of {@link ValidatedAddress}
    * @throws ServiceException due to SmartyStreets error, I/O error, etc.
    */
-  public ValidatedAddress[] fetchValidatedAddresses(Address address) throws ServiceException {
+  public ValidatedAddress[] fetchValidatedAddresses(Address address) {
     ValidatedAddress[] addresses = null;
     try {
       SmartyStreet smartyStreet = new SmartyStreet(smartyStreetsDao);

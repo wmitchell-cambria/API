@@ -23,7 +23,6 @@ import javax.validation.Validator;
 
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.CountyOwnershipDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
@@ -66,7 +65,6 @@ public class AssignmentServiceTest {
   private ReferralDao referralDao;
   private CaseLoadDao caseLoadDao;
   private Date lastUpdatedTime = new Date();
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
 
@@ -87,13 +85,12 @@ public class AssignmentServiceTest {
     ReferralClientDao referralClientDao = mock(ReferralClientDao.class);
     MessageBuilder messageBuilder = mock(MessageBuilder.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    caseDao = mock(CaseDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     nonLACountyTriggers =
         new NonLACountyTriggers(countyOwnershipDao, referralDao, referralClientDao);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
   }
 
@@ -368,9 +365,8 @@ public class AssignmentServiceTest {
         setEstablishedForCode("R").
         setTypeOfAssignmentCode("P").
         setFkCaseLoad(null).build();
-    AssignmentService assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers,
-        staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+    AssignmentService assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, new MessageBuilder());
     try {
       assignmentService.executeR06560Rule(assignment);

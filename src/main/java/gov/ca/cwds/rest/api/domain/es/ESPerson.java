@@ -272,7 +272,7 @@ public class ESPerson extends Person {
    */
   public ESPerson(gov.ca.cwds.data.persistence.ns.Person person) {
     super(person);
-    this.id = person.getId().toString();
+    this.id = String.valueOf(person.getId());
   }
 
   /**

@@ -26,8 +26,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByClient",
-    query = "FROM CmsCase WHERE fkchldClt = :clientId")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByVictimClientIds",
+    query = "FROM CmsCase WHERE fkchldClt in :clientIds")
 @SuppressWarnings("javadoc")
 @Entity
 @Table(name = "CASE_T")

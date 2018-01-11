@@ -110,6 +110,16 @@ public class Referral extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "ABC1234567")
   private String drmsInvestigationDoc;
 
+  /**
+   * R - 02535 - Do not report to In-State Law
+   * 
+   * Do not cross report to Law Enforcement on referrals reported by Law Enforcement. 
+   * If Referral mandated reporter is Law Enforcement, do not enable.
+   * 
+   * API referrals/POST does not allow for a Law Enforcement agency to be specified
+   * for a Reporter.  
+   * 
+   */
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   private Boolean filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
@@ -515,7 +525,7 @@ public class Referral extends ReportingDomain implements Request, Response {
     this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
     this.receivedDate = DomainChef.cookDate(persistedReferral.getReceivedDate());
     this.receivedTime = DomainChef.cookTime(persistedReferral.getReceivedTime());
-    this.referralResponseType = persistedReferral.getReferralResponseType() == null ? new Short((short)0)
+    this.referralResponseType = persistedReferral.getReferralResponseType() == null ? Short.valueOf((short)0)
         : persistedReferral.getReferralResponseType();
     this.referredToResourceType = persistedReferral.getReferredToResourceType();
     this.responseDeterminationDate =
@@ -565,7 +575,7 @@ public class Referral extends ReportingDomain implements Request, Response {
     Set<gov.ca.cwds.data.persistence.cms.CrossReport> savedCrossReports =
         persistedReferral.getCrossReports();
     if (savedCrossReports == null) {
-      savedCrossReports = new HashSet();
+      savedCrossReports = new HashSet<>();
     }
     for (gov.ca.cwds.data.persistence.cms.CrossReport persistedCrossReport : savedCrossReports) {
       this.crossReport.add(new CrossReport(persistedCrossReport));
@@ -577,7 +587,7 @@ public class Referral extends ReportingDomain implements Request, Response {
     Set<gov.ca.cwds.data.persistence.cms.Allegation> savedAllegations =
         persistedReferral.getAllegations();
     if (savedAllegations == null) {
-      savedAllegations = new HashSet();
+      savedAllegations = new HashSet<>();
     }
     for (gov.ca.cwds.data.persistence.cms.Allegation persistedAllegation : savedAllegations) {
       this.allegation.add(new Allegation(persistedAllegation));
@@ -599,7 +609,6 @@ public class Referral extends ReportingDomain implements Request, Response {
    * @param drmsAllegationDescriptionDoc - drmsAllegationDescriptionDoc
    * @param drmsErReferralDoc - drmsErReferralDoc
    * @param drmsInvestigationDoc - drmsInvestigationDoc
-   * @param filedCrossReport - filedCrossReport
    * @param familyAwareness - familyAwareness
    * @param governmentEntity - governmentEntity
    * @param referalName - referalName
@@ -624,17 +633,17 @@ public class Referral extends ReportingDomain implements Request, Response {
   public static Referral createWithDefaults(Boolean anonymousReporter,
       short communicationsMethodCode, String currentLocationOfChildren,
       String drmsAllegationDescriptionDoc, String drmsErReferralDoc, String drmsInvestigationDoc,
-      boolean filedCrossReport, boolean familyAwareness, int governmentEntity, String referalName,
-      String dateStarted, String timeStarted, short referralResponseTypeCode,
-      short referredToResourceType, String allegesAbuseOccurredAtAddressId,
-      String firstResponseDeterminedByStaffPersonId, String screenerNoteLongTextId,
-      String countyCode, short approvalCode, String staffId, String responseRationalLongTextId,
-      String responsibleAgencyCode, String limitedAccessCode, String limitedAccessDesc,
-      String limitedAccessDate, Short limitedAccessGovtAgencyType) {
+      boolean familyAwareness, int governmentEntity, String referalName, String dateStarted,
+      String timeStarted, short referralResponseTypeCode, short referredToResourceType,
+      String allegesAbuseOccurredAtAddressId, String firstResponseDeterminedByStaffPersonId,
+      String screenerNoteLongTextId, String countyCode,
+      short approvalCode, String staffId, String responseRationalLongTextId, String responsibleAgencyCode,
+      String limitedAccessCode, String limitedAccessDesc, String limitedAccessDate,
+      Short limitedAccessGovtAgencyType) {
 
     return new Referral(Boolean.FALSE, anonymousReporter, Boolean.FALSE, "", approvalCode,
         Boolean.FALSE, "", communicationsMethodCode, currentLocationOfChildren,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, Boolean.FALSE,
         familyAwareness, (short) governmentEntity, DEFAULT_NO, Boolean.FALSE, limitedAccessCode, "",
         referalName, "", dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
         "", "", responseRationalLongTextId, screenerNoteLongTextId, DEFAULT_NO, DEFAULT_NO,

@@ -8,8 +8,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
@@ -35,6 +37,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 
 /**
  * @author CWDS API Team
@@ -45,6 +48,7 @@ public class HOIReferralServiceTest {
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
   private HOIReferralService hoiService;
+  private HOIRequest request;
 
   /**
    * Initialize system code cache
@@ -65,6 +69,8 @@ public class HOIReferralServiceTest {
     clientDao = mock(ClientDao.class);
     referralClientDao = mock(ReferralClientDao.class);
     hoiService = new HOIReferralService(clientDao, referralClientDao);
+    request = new HOIRequest();
+    request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
   }
 
   /**
@@ -111,9 +117,9 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {persistent1, persistent2};
 
     when(clientDao.find(any(String.class))).thenReturn(client);
-    when(referralClientDao.findByClientId(any(String.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
-    HOIReferralResponse response = hoiService.handleFind("123");
+    HOIReferralResponse response = hoiService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
   }
 
@@ -159,9 +165,9 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {persistent1, persistent2};
 
     when(clientDao.find(any(String.class))).thenReturn(client);
-    when(referralClientDao.findByClientId(any(String.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
-    HOIReferralResponse response = hoiService.handleFind("123");
+    HOIReferralResponse response = hoiService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
   }
 
@@ -204,9 +210,9 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {persistent1, persistent2};
 
     when(clientDao.find(any(String.class))).thenReturn(client);
-    when(referralClientDao.findByClientId(any(String.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
-    HOIReferralResponse response = hoiService.handleFind("123");
+    HOIReferralResponse response = hoiService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
   }
 
@@ -249,9 +255,9 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {persistent1, persistent2};
 
     when(clientDao.find(any(String.class))).thenReturn(client);
-    when(referralClientDao.findByClientId(any(String.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
-    HOIReferralResponse response = hoiService.handleFind("123");
+    HOIReferralResponse response = hoiService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
   }
 
@@ -297,9 +303,9 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {persistent1, persistent2};
 
     when(clientDao.find(any(String.class))).thenReturn(client);
-    when(referralClientDao.findByClientId(any(String.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
-    HOIReferralResponse response = hoiService.handleFind("123");
+    HOIReferralResponse response = hoiService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
   }
 

@@ -42,6 +42,7 @@ import gov.ca.cwds.fixture.LongTextEntityBuilder;
 import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
@@ -65,6 +66,7 @@ public class ReferralServiceTest {
 
   private AssignmentService assignmentService;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private AddressService addressService;
   private LongTextService longTextService;
   private ReferralService referralService;
@@ -79,6 +81,8 @@ public class ReferralServiceTest {
   private MessageBuilder mockMessageBuilder;
   private String dateStarted;
   private String timeStarted;
+  private StaffPerson staffPerson;
+  private Referral referralDomain;
 
   private static Boolean isLaCountyTrigger = false;
 
@@ -98,13 +102,20 @@ public class ReferralServiceTest {
     staffpersonDao = mock(StaffPersonDao.class);
     assignmentService = mock(AssignmentService.class);
     drmsDocumentService = mock(DrmsDocumentService.class);
+    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
+    staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51").build();
+    when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("21");
 
     riReferral = mock(RIReferral.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
+
+    referralDomain = new ReferralResourceBuilder().setPrimaryContactStaffPersonId("q1p")
+        .setCountySpecificCode("51").build();
 
     mockMessageBuilder = mock(MessageBuilder.class);
     dateStarted = "2009-12-20";
@@ -236,7 +247,6 @@ public class ReferralServiceTest {
 
   @Test
   public void testCreateReturnsCorrectEntity() {
-    Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
 
@@ -252,7 +262,6 @@ public class ReferralServiceTest {
   @Test
   public void testCreateEmptyIDError() {
     try {
-      Referral referralDomain = new ReferralResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.Referral toCreate =
           new gov.ca.cwds.data.persistence.cms.Referral("", referralDomain, "0XA");
 
@@ -306,7 +315,6 @@ public class ReferralServiceTest {
 
   @Test
   public void testCreateReturnsCorrectReferralId() {
-    Referral referralDomain = new ReferralResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
 
@@ -325,7 +333,6 @@ public class ReferralServiceTest {
    */
   @Test
   public void createReturnsGeneratedId() {
-    Referral referralDomain = new ReferralResourceBuilder().build();
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
         .thenAnswer(invocation -> invocation.getArguments()[0]);
 
@@ -337,7 +344,8 @@ public class ReferralServiceTest {
 
   @Test
   public void testCreateLACountyTriggerForReferralCreate() {
-    Referral referralDomain = new ReferralResourceBuilder().build();
+    Referral referralDomain = new ReferralResourceBuilder().setPrimaryContactStaffPersonId("BTr")
+        .setCountySpecificCode("19").build();
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "BTr");
 
@@ -421,7 +429,7 @@ public class ReferralServiceTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     Referral referralCreated = referralService.createReferralWithDefaults(screeningToReferral,
         dateStarted, timeStarted, mockMessageBuilder);
@@ -440,7 +448,7 @@ public class ReferralServiceTest {
     when(referralDao.find(referralId)).thenReturn(savedReferral);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     MessageBuilder messageBuilder = new MessageBuilder();
     String response = referralService.createCmsReferralFromScreening(screeningToReferral,
@@ -459,7 +467,7 @@ public class ReferralServiceTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
         mockMessageBuilder);
@@ -470,8 +478,8 @@ public class ReferralServiceTest {
 
   @Test
   public void shouldFailSavingWhenReferralHasInvalidDateTimeFormat() {
-    ScreeningToReferral screeningToReferral =
-        new ScreeningToReferralResourceBuilder().createScreeningToReferral();
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setassigneeStaffId("q1p").setIncidentCounty("51").createScreeningToReferral();
 
     PostedDrmsDocument drmsDocument = mock(PostedDrmsDocument.class);
     DrmsDocumentService drmsDocumentService = mock(DrmsDocumentService.class);
@@ -489,10 +497,11 @@ public class ReferralServiceTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral =
-        new ReferralEntityBuilder().setId("1234567890").build();
+        new ReferralEntityBuilder().setId("1234567890").setPrimaryContactStaffPersonId("q1p")
+            .setCountySpecificCode("51").build();
     when(referralDao.create(any())).thenReturn(savedReferral);
 
     MessageBuilder messageBuilder = new MessageBuilder();
@@ -510,7 +519,8 @@ public class ReferralServiceTest {
     String legacyId = "1234567890";
     Address address = new AddressResourceBuilder().setLegacyId(legacyId).createAddress();
     ScreeningToReferral screeningToReferral =
-        new ScreeningToReferralResourceBuilder().setAddress(address).createScreeningToReferral();
+        new ScreeningToReferralResourceBuilder().setassigneeStaffId("q1p").setIncidentCounty("51")
+            .setAddress(address).createScreeningToReferral();
 
     PostedDrmsDocument drmsDocument = mock(PostedDrmsDocument.class);
     DrmsDocumentService drmsDocumentService = mock(DrmsDocumentService.class);
@@ -527,10 +537,11 @@ public class ReferralServiceTest {
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral =
-        new ReferralEntityBuilder().setId("1234567890").build();
+        new ReferralEntityBuilder().setId("1234567890").setPrimaryContactStaffPersonId("q1p")
+            .setCountySpecificCode("51").build();
     when(referralDao.create(any())).thenReturn(savedReferral);
 
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,

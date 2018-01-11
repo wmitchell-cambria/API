@@ -42,7 +42,6 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    */
   private static final long serialVersionUID = 1L;
 
-  // TODO: remove the unique key from the domain class
   @NotNull
   @Size(max = CMS_ID_LEN)
   @ApiModelProperty(required = true, readOnly = true, value = "", example = "1234ABC123")

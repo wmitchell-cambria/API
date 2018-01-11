@@ -67,7 +67,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    * 
    * @param docHandle document identifier
    * @param segmentSequence blob segment sequence
-   * @param docBlob hexadecimal blob segment data
+   * @param docBlob binary blob segment data
    */
   public CmsDocumentBlobSegment(String docHandle, String segmentSequence, byte[] docBlob) {
     super();
