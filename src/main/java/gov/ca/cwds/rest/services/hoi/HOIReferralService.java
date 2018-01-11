@@ -59,11 +59,14 @@ public class HOIReferralService
   @Override
   protected HOIReferralResponse handleFind(HOIRequest hoiRequest) {
     HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-    List<ReferralClient> referralClientList = fetchReferralClient(hoiRequest.getClientIds());
+    List<ReferralClient> referralClientList = new ArrayList<>();
+    if (!hoiRequest.getClientIds().isEmpty()) {
+      referralClientList = fetchReferralClient(hoiRequest.getClientIds());
+    }
     if (referralClientList.isEmpty()) {
       return emptyHoiReferralResponse();
     }
-    List<HOIReferral> hoiReferrals = new ArrayList<HOIReferral>();
+    List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientList.size());
     for (ReferralClient referralClient : referralClientList) {
       hoiReferrals.add(createHOIReferral(referralClient));
     }
