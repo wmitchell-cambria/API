@@ -11,6 +11,7 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 /**
  * CWDS API Team
@@ -80,8 +81,8 @@ public class StateId extends CmsPersistentObject {
 	this.governmentEntityType = governmentEntityType;
 	this.personNumber = personNumber;
 	this.serialNumber = serialNumber;
-	this.startDate = startDate;
-	this.endDate = endDate;
+	this.startDate = freshDate(startDate);
+	this.endDate = freshDate(endDate);
 	this.stateIdCaseFirstName = stateIdCaseFirstName;
 	this.stateIdCaseLastName = stateIdCaseLastName;
 	this.stateIdCaseMiddleName = stateIdCaseMiddleName;
