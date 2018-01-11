@@ -227,9 +227,9 @@ public class AssignmentService implements
       throw new ServiceException(
           "Rule : R - 04530 - Assignment End Date and Time must be less than or equal to the current system date and time AND must be greater than or equal to Assignment Start Date and Time");
     }
-
   }
 
+  // used by DocTool Rule R04611 - R04611ReferralStartDateTimeValidator
   public Assignment findReferralFirstAssignment(String referralId) {
     Assignment firstAssignment = null;
     Set<Assignment> assignmentSet = assignmentDao.findAssignmentsByReferralId(referralId);

@@ -430,6 +430,10 @@ public class ReferralService implements
     gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
 
     try {
+      /*
+       * Reuse the validation of DocTool Rule 04611
+       * in the gov.ca.cwds.rest.services.ScreeningToReferralService
+       */
       validateMaxReferralStartDateTime(primaryKey, request);
 
       Referral managed =
