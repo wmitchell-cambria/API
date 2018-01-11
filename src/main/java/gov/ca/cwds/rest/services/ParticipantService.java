@@ -140,12 +140,12 @@ public class ParticipantService implements CrudsService {
           && (!ParticipantValidator.roleIsAnonymousReporter(role)
               && !ParticipantValidator.selfReported(incomingParticipant));
       if (isRegularReporter) {
-        saveRegularReporter(screeningToReferral, referralId, messageBuilder,
-            incomingParticipant, role);
+        saveRegularReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
+            role);
 
       } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
-        saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
-            clientParticipants, incomingParticipant, genderCode, role);
+        saveClient(screeningToReferral, dateStarted, referralId, messageBuilder, clientParticipants,
+            incomingParticipant, genderCode, role);
       }
       clientParticipants.addParticipant(incomingParticipant);
     } // next role
@@ -324,6 +324,11 @@ public class ParticipantService implements CrudsService {
     Client client = Client.createWithDefaults(incomingParticipant, dateStarted, genderCode,
         primaryRaceCode, childClientIndicatorVar);
 
+    /*
+     * IMPORTANT: A referral client record must be added after a
+     */
+    executeR04466ClientSensitivityIndicator(client, screeningToReferral);
+
     messageBuilder.addDomainValidationError(validator.validate(client));
     PostedClient postedClient = this.clientService.create(client);
     clientId = postedClient.getId();
@@ -442,4 +447,12 @@ public class ParticipantService implements CrudsService {
     return allRaceCodes;
   }
 
+  private void executeR04466ClientSensitivityIndicator(Client client,
+      ScreeningToReferral screeningToReferral) {
+    // R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
+    // new R04466ClientSensitivityIndicator(client,
+    // LimitedAccessType.getByValue(screeningToReferral.getLimitedAccessCode()), caseDao,
+    // clientRelationshipDao, referralClientDao);
+    // r04466ClientSensitivityIndicator.execute();
+  }
 }
