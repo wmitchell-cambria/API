@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Test;
@@ -22,8 +21,8 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class PhoneNumberTest {
 
-  private BigDecimal phone = new BigDecimal(4345677);
-  private BigDecimal phone1 = new BigDecimal(3345789);
+  private Long phone = 4345677L;
+  private Long phone1 = 3345789L;
   private Integer phoneExtension = 1123;
   private Short phoneType = 1111;
   private CmsRecordDescriptor cmsRecordDescriptor =

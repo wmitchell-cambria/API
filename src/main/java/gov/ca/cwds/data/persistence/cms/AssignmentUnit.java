@@ -27,7 +27,7 @@ public class AssignmentUnit extends CmsPersistentObject {
 
   @Basic
   @Column(name = "PHONE_NO", nullable = false, precision = 0)
-  private int phoneNumber;
+  private Long phoneNumber;
 
   @Basic
   @Column(name = "TEL_EXT_NO", nullable = false)
@@ -52,7 +52,7 @@ public class AssignmentUnit extends CmsPersistentObject {
   public AssignmentUnit() {
   }
 
-  public AssignmentUnit(String id, String assignmentDeskUnitIndicator, Date endDate, int phoneNumber,
+  public AssignmentUnit(String id, String assignmentDeskUnitIndicator, Date endDate, Long phoneNumber,
                         int phoneExtensionNumber, Date startDate, String fkCwsOffice,
                         String assignmentUnitName, String countySpecificCode) {
     this.id = id;
@@ -90,11 +90,11 @@ public class AssignmentUnit extends CmsPersistentObject {
     this.endDate = endDate;
   }
 
-  public int getPhoneNumber() {
+  public Long getPhoneNumber() {
     return phoneNumber;
   }
 
-  public void setPhoneNumber(int phoneNumber) {
+  public void setPhoneNumber(Long phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 

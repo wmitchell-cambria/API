@@ -150,9 +150,9 @@ dependencies {
 
 	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 	// Exclude transitive dependencies.
-	compile ('gov.ca.cwds.api:api-core:3.6.520') {
-	    exclude group: 'org.glassfish.jersey.core'
-	}
+	compile ('gov.ca.cwds.api:api-core:3.6.521') {
+        exclude group: 'org.glassfish.jersey.core'
+    }
 
 	// LOGGING:	
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion

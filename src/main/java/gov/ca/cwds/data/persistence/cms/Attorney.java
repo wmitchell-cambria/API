@@ -2,7 +2,6 @@ package gov.ca.cwds.data.persistence.cms;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -70,11 +69,11 @@ public class Attorney extends BaseAttorney {
    * @param zipSuffixNumber The zipSuffixNumber
    */
   public Attorney(String archiveAssociationIndicator, String businessName, String cityName,
-      String cwsAttorneyIndicator, String emailAddress, Date endDate, BigDecimal faxNumber,
+      String cwsAttorneyIndicator, String emailAddress, Date endDate, Long faxNumber,
       String firstName, Short governmentEntityType, String id, Short languageType, String lastName,
-      Integer messagePhoneExtensionNumber, BigDecimal messagePhoneNumber, String middleInitialName,
+      Integer messagePhoneExtensionNumber, Long messagePhoneNumber, String middleInitialName,
       String namePrefixDescription, String positionTitleDescription,
-      Integer primaryPhoneExtensionNumber, BigDecimal primaryPhoneNumber, Short stateCodeType,
+      Integer primaryPhoneExtensionNumber, Long primaryPhoneNumber, Short stateCodeType,
       String streetName, String streetNumber, String suffixTitleDescription, Integer zipNumber,
       Short zipSuffixNumber) {
     super();

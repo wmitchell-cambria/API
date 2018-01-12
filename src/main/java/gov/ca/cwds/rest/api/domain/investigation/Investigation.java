@@ -369,7 +369,7 @@ public class Investigation extends ReportingDomain implements Request, Response 
     phoneNumbers.add(new PhoneNumber(address.getPrimaryNumber(), address.getPrimaryExtension(),
         null, addressRecDescriptor));
 
-    if (address.getEmergencyNumber() != null && address.getEmergencyNumber().longValueExact() > 0) {
+    if (address.getEmergencyNumber() != null && address.getEmergencyNumber() > 0) {
       phoneNumbers.add(new PhoneNumber(address.getEmergencyNumber(),
           address.getEmergencyExtension(), null, addressRecDescriptor));
     }

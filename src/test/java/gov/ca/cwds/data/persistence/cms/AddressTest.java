@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Test;
@@ -26,16 +25,16 @@ public class AddressTest implements PersistentTestTemplate {
   private String cityName = "Sacramento";
   private String description = "test CWS address";
   private int emergencyPhoneExtension = 0;
-  private BigDecimal emergencyPhoneNumber = new BigDecimal(0);
+  private Long emergencyPhoneNumber = 0L;
   private String foreignAddressIndicator = "N";
   private Short governmentEntityType = 0;
   private int messagePhoneExtension = 0;
-  private BigDecimal messagePhoneNumber = new BigDecimal(0);
+  private Long messagePhoneNumber = 0L;
   private String otherHeaderAddress = "";
   private String postDirectionTextCode = "";
   private String preDirectionTextCode = "";
   private int primaryPhoneNumberExtension = 0;
-  private BigDecimal primaryPhoneNumber = new BigDecimal(0);
+  private Long primaryPhoneNumber = 0L;
   private Short stateCodeType = 1828;
   private String streetName = "First Street";
   private String streetNumber = "1";
