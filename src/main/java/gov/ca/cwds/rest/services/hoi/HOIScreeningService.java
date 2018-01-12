@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import java.util.HashSet;
 import java.util.Set;
 
+import java.util.TreeSet;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -38,7 +38,9 @@ public class HOIScreeningService
    */
   @Override
   protected HOIScreeningResponse handleFind(HOIRequest hoiScreeningRequest) {
-    Set<HOIScreening> screenings = new HashSet<>();
+    Set<HOIScreening> screenings = new TreeSet<>(
+        (s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
+
     for (ScreeningEntity screeningEntity : screeningDao
         .findScreeningsByClientIds(hoiScreeningRequest.getClientIds())) {
       screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
