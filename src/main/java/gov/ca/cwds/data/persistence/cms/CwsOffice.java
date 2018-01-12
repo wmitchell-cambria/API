@@ -18,7 +18,7 @@ public class CwsOffice extends CmsPersistentObject {
 
   @Basic
   @Column(name = "FAX_NO", nullable = false, precision = 0)
-  private long faxNumber;
+  private Long faxNumber;
 
   @Basic
   @Column(name = "GEO_RGNTCD", nullable = false, length = 2)
@@ -42,7 +42,7 @@ public class CwsOffice extends CmsPersistentObject {
 
   @Basic
   @Column(name = "MSG_TEL_NO", nullable = false, precision = 0)
-  private long messagePhoneNumber;
+  private Long messagePhoneNumber;
 
   @Basic
   @Column(name = "MSG_EXT_NO", nullable = false)
@@ -54,7 +54,7 @@ public class CwsOffice extends CmsPersistentObject {
 
   @Basic
   @Column(name = "PRM_TEL_NO", nullable = false, precision = 0)
-  private long primaryPhoneNumber;
+  private Long primaryPhoneNumber;
 
   @Basic
   @Column(name = "PRM_EXT_NO", nullable = false)
@@ -99,10 +99,10 @@ public class CwsOffice extends CmsPersistentObject {
   public CwsOffice() {
   }
 
-  public CwsOffice(String id, long faxNumber, String geographicRegionCode, short governmentEntityType,
+  public CwsOffice(String id, Long faxNumber, String geographicRegionCode, short governmentEntityType,
        String headquarterIndicator, String inactiveIndicator, String mailStopDescription,
-       long messagePhoneNumber, int messagePhoneExtensionNumber, String cwsOfficeNumber,
-       long primaryPhoneNumber, int primaryPhoneExtensionNumber, String fkStaffPerson,
+       Long messagePhoneNumber, int messagePhoneExtensionNumber, String cwsOfficeNumber,
+       Long primaryPhoneNumber, int primaryPhoneExtensionNumber, String fkStaffPerson,
        String commentDescription, String agencyName, String departmentDivisionName, String cwsOfficeName,
        String countySpecificCode, short agencyCodeNumber, short locationCountyType, String directorsNameTitle) {
     this.id = id;
@@ -136,11 +136,11 @@ public class CwsOffice extends CmsPersistentObject {
     this.id = identifier;
   }
 
-  public long getFaxNumber() {
+  public Long getFaxNumber() {
     return faxNumber;
   }
 
-  public void setFaxNumber(long faxNo) {
+  public void setFaxNumber(Long faxNo) {
     this.faxNumber = faxNo;
   }
 
@@ -184,11 +184,11 @@ public class CwsOffice extends CmsPersistentObject {
     this.mailStopDescription = mailstDsc;
   }
 
-  public long getMessagePhoneNumber() {
+  public Long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
-  public void setMessagePhoneNumber(long msgTelNo) {
+  public void setMessagePhoneNumber(Long msgTelNo) {
     this.messagePhoneNumber = msgTelNo;
   }
 
@@ -208,11 +208,11 @@ public class CwsOffice extends CmsPersistentObject {
     this.cwsOfficeNumber = cwsOffNo;
   }
 
-  public long getPrimaryPhoneNumber() {
+  public Long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
-  public void setPrimaryPhoneNumber(long prmTelNo) {
+  public void setPrimaryPhoneNumber(Long prmTelNo) {
     this.primaryPhoneNumber = prmTelNo;
   }
 

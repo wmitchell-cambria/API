@@ -133,7 +133,7 @@ public class EducationProviderContactDaoIT implements DaoTestTemplate {
         epc.getdepartmentOfEducationIndicator(), epc.getEmailAddress(), epc.getFaxNumber(),
         epc.getFirstName(), epc.getfKeyEducationProvider(), epc.getId(), epc.getLastName(),
         epc.getMiddleName(), epc.getNamePrefixDescription(), epc.getPhoneExtensionNumber(),
-        epc.getPhoneNumberAsDecimal(), epc.getPrimaryContactIndicator(),
+        Long.valueOf(epc.getPhoneNumber()), epc.getPrimaryContactIndicator(),
         epc.getSuffixTitleDescription(), epc.getTitleDescription());
 
     EducationProviderContact created = educationProviderContactDao.create(educationProviderContact);
@@ -149,7 +149,7 @@ public class EducationProviderContactDaoIT implements DaoTestTemplate {
         epc.getdepartmentOfEducationIndicator(), epc.getEmailAddress(), epc.getFaxNumber(),
         epc.getFirstName(), epc.getfKeyEducationProvider(), epc.getId(), epc.getLastName(),
         epc.getMiddleName(), epc.getNamePrefixDescription(), epc.getPhoneExtensionNumber(),
-        epc.getPhoneNumberAsDecimal(), epc.getPrimaryContactIndicator(),
+        Long.valueOf(epc.getPhoneNumber()), epc.getPrimaryContactIndicator(),
         epc.getSuffixTitleDescription(), epc.getTitleDescription());
 
     educationProviderContactDao.create(educationProviderContact);
@@ -180,7 +180,7 @@ public class EducationProviderContactDaoIT implements DaoTestTemplate {
         epc.getdepartmentOfEducationIndicator(), epc.getEmailAddress(), epc.getFaxNumber(),
         epc.getFirstName(), epc.getfKeyEducationProvider(), epc.getId(), epc.getLastName(),
         epc.getMiddleName(), epc.getNamePrefixDescription(), epc.getPhoneExtensionNumber(),
-        epc.getPhoneNumberAsDecimal(), epc.getPrimaryContactIndicator(),
+        Long.valueOf(epc.getPhoneNumber()), epc.getPrimaryContactIndicator(),
         epc.getSuffixTitleDescription(), epc.getTitleDescription());
 
     EducationProviderContact updated = educationProviderContactDao.update(educationProviderContact);
@@ -196,7 +196,7 @@ public class EducationProviderContactDaoIT implements DaoTestTemplate {
         epc.getdepartmentOfEducationIndicator(), epc.getEmailAddress(), epc.getFaxNumber(),
         epc.getFirstName(), epc.getfKeyEducationProvider(), epc.getId(), epc.getLastName(),
         epc.getMiddleName(), epc.getNamePrefixDescription(), epc.getPhoneExtensionNumber(),
-        epc.getPhoneNumberAsDecimal(), epc.getPrimaryContactIndicator(),
+        Long.valueOf(epc.getPhoneNumber()), epc.getPrimaryContactIndicator(),
         epc.getSuffixTitleDescription(), epc.getTitleDescription());
 
     educationProviderContactDao.update(educationProviderContact);

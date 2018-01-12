@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -119,7 +118,7 @@ public class ServiceProviderDaoIT implements DaoTestTemplate {
   @Test
   public void testCreate() throws Exception {
     ServiceProvider serviceProvider = new ServiceProvider("Test Agency", "N", " ", null,
-        BigDecimal.ZERO, "Horacio", "Ao9dm8T0Kj", "G.", "Dr.", 0, BigDecimal.ZERO, "Kiddie Care",
+        0L, "Horacio", "Ao9dm8T0Kj", "G.", "Dr.", 0, 0L, "Kiddie Care",
         (short) 0, (short) 0, " ", " ", " ", 0, (short) 0);
     ServiceProvider created = serviceProviderDao.create(serviceProvider);
     assertThat(created, is(serviceProvider));
@@ -129,7 +128,7 @@ public class ServiceProviderDaoIT implements DaoTestTemplate {
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
     ServiceProvider serviceProvider = new ServiceProvider("Test Agency", "N", " ", null,
-        BigDecimal.ZERO, "Horacio", "Ao9dm8T0Ki", "G.", "Dr.", 0, BigDecimal.ZERO, "Kiddie Care",
+        0L, "Horacio", "Ao9dm8T0Ki", "G.", "Dr.", 0, 0L, "Kiddie Care",
         (short) 0, (short) 0, " ", " ", " ", 0, (short) 0);
     serviceProviderDao.create(serviceProvider);
   }
@@ -156,7 +155,7 @@ public class ServiceProviderDaoIT implements DaoTestTemplate {
   public void testUpdate() throws Exception {
 
     ServiceProvider serviceProvider = new ServiceProvider("Test Agency", "N", " ", null,
-        BigDecimal.ZERO, "Horacio", "Ao9dm8T0Ki", "Guest", "Dr.", 0, BigDecimal.ZERO, "Kiddie Care",
+        0L, "Horacio", "Ao9dm8T0Ki", "Guest", "Dr.", 0, 0L, "Kiddie Care",
         (short) 0, (short) 0, " ", " ", " ", 0, (short) 0);
     ServiceProvider updated = serviceProviderDao.update(serviceProvider);
     assertThat(updated, is(serviceProvider));
@@ -167,7 +166,7 @@ public class ServiceProviderDaoIT implements DaoTestTemplate {
   public void testUpdateEntityNotFoundException() throws Exception {
 
     ServiceProvider serviceProvider = new ServiceProvider("Test Agency", "N", " ", null,
-        BigDecimal.ZERO, "Horacio", "Ao9dm8T0Kk", "G.", "Dr.", 0, BigDecimal.ZERO, "Kiddie Care",
+        0L, "Horacio", "Ao9dm8T0Kk", "G.", "Dr.", 0, 0L, "Kiddie Care",
         (short) 0, (short) 0, " ", " ", " ", 0, (short) 0);
     serviceProviderDao.update(serviceProvider);
   }
