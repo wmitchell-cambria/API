@@ -63,6 +63,7 @@ repositories {
 shadowJar {
   classifier = 'dist'
   baseName = 'api'
+  zip64 = true
   mergeServiceFiles()	
   manifest {
     attributes 'Main-Class': mainclass
