@@ -2,8 +2,6 @@ package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -59,7 +57,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
   private static final long serialVersionUID = 1L;
 
   private static final short DEFAULT_CODE = 0;
-  private static final BigDecimal DEFAULT_DECIMAL = new BigDecimal(0);
+  private static final Long DEFAULT_LONG = 0L;
 
   @ApiModelProperty(required = false, readOnly = false, value = "Last Updated Time",
       example = "2004-03-31T09:45:58.000-0800")
@@ -136,7 +134,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, example = "1234678")
-  private BigDecimal messagePhoneNumber;
+  private Long messagePhoneNumber;
 
   @Size(min = 0, max = 1)
   @ApiModelProperty(required = false, readOnly = false, value = "Middle name", example = "A")
@@ -149,7 +147,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, example = "1234567")
-  private BigDecimal primaryPhoneNumber;
+  private Long primaryPhoneNumber;
 
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, example = "123")
@@ -249,10 +247,10 @@ public class Reporter extends ReportingDomain implements Request, Response {
       @JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName,
       @JsonProperty("mandatedReporterIndicator") Boolean mandatedReporterIndicator,
       @JsonProperty("messagePhoneExtensionNumber") Integer messagePhoneExtensionNumber,
-      @JsonProperty("messagePhoneNumber") BigDecimal messagePhoneNumber,
+      @JsonProperty("messagePhoneNumber") Long messagePhoneNumber,
       @JsonProperty("middleInitialName") String middleInitialName,
       @JsonProperty("namePrefixDescription") String namePrefixDescription,
-      @JsonProperty("primaryPhoneNumber") BigDecimal primaryPhoneNumber,
+      @JsonProperty("primaryPhoneNumber") Long primaryPhoneNumber,
       @JsonProperty("primaryPhoneExtensionNumber") Integer primaryPhoneExtensionNumber,
       @JsonProperty("stateCodeType") Short stateCodeType,
       @JsonProperty("streetName") String streetName,
@@ -340,8 +338,6 @@ public class Reporter extends ReportingDomain implements Request, Response {
    */
   public static Reporter createWithDefaults(String referralId, boolean isMandatedReporter,
       gov.ca.cwds.rest.api.domain.Address address, Participant participant, String countyCode) {
-    // TODO: #141511573 address parsing - Smarty Streets Free Form display requires
-    // parsing to fields in CMS
     String zipCodeString = "";
     String streetNumber = "";
     String streetName = "";
@@ -383,7 +379,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
     return new Reporter(updated, "", city, DEFAULT_CODE, DEFAULT_CODE,
         participant.isReporterConfidentialWaiver(), "", participant.getReporterEmployerName(), "",
         feedbackRequiredInd, participant.getFirstName(), participant.getLastName(), isMandatedReporter, 0,
-        DEFAULT_DECIMAL, participant.getMiddleName(), "", DEFAULT_DECIMAL, 0, stateCodeType,
+        DEFAULT_LONG, participant.getMiddleName(), "", DEFAULT_LONG, 0, stateCodeType,
         streetName, streetNumber, "", zipCodeString, referralId, "", DEFAULT_CODE, countyCode);
   }
 
@@ -481,7 +477,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
   /**
    * @return the messagePhoneNumber
    */
-  public BigDecimal getMessagePhoneNumber() {
+  public Long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
@@ -502,7 +498,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
   /**
    * @return the primaryPhoneNumber
    */
-  public BigDecimal getPrimaryPhoneNumber() {
+  public Long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 

@@ -95,7 +95,7 @@ public class SubstituteCareProvider extends BaseSubstituteCareProvider {
    * @param zipNumber The zipNumber
    * @param zipSuffixNumber The zipSuffixNumber
    */
-  public SubstituteCareProvider(String id, BigDecimal additionalPhoneNumber,
+  public SubstituteCareProvider(String id, Long additionalPhoneNumber,
       Integer additionlPhoneExtensionNumber, BigDecimal annualIncomeAmount, Date birthDate,
       String caDriverLicenseNumber, String cityName, Short educationType, String emailAddress,
       String employerName, Short employmentStatusType, String ethUnableToDetReasonCode,

@@ -6,27 +6,27 @@ import gov.ca.cwds.data.persistence.cms.CwsOffice;
  * CWDS API Team
  */
 public class CwsOfficeEntityBuilder {
-  private String id;
-  private int faxNumber;
-  private String geographicRegionCode;
-  private short governmentEntityType;
-  private String headquarterIndicator;
-  private String inactiveIndicator;
-  private String mailStopDescription;
-  private int messagePhoneNumber;
-  private int messagePhoneExtensionNumber;
-  private String cwsOfficeNumber;
-  private int primaryPhoneNumber;
-  private int primaryPhoneExtensionNumber;
-  private String fkStaffPerson;
-  private String commentDescription;
-  private String agencyName;
-  private String departmentDivisionName;
-  private String cwsOfficeName;
-  private String countySpecificCode;
-  private short agencyCodeNumber;
-  private short locationCountyType;
-  private String directorsNameTitle;
+  private String id = "1234567ABC";
+  private long faxNumber = 1234567;
+  private String geographicRegionCode = "111";
+  private short governmentEntityType = 1034;
+  private String headquarterIndicator = "Y";
+  private String inactiveIndicator = "Y";
+  private String mailStopDescription = "office mail stop";
+  private long messagePhoneNumber = 2345678;
+  private int messagePhoneExtensionNumber = 123;
+  private String cwsOfficeNumber = "office number";
+  private long primaryPhoneNumber = 3456789;
+  private int primaryPhoneExtensionNumber = 234;
+  private String fkStaffPerson = "0X5";
+  private String commentDescription = "description of comment";
+  private String agencyName = "county child welfare";
+  private String departmentDivisionName = "county department";
+  private String cwsOfficeName = "county office";
+  private String countySpecificCode = "34";
+  private short agencyCodeNumber = 1122;
+  private short locationCountyType = 2233;
+  private String directorsNameTitle = "director title";
 
   public CwsOffice build() {
     return new CwsOffice(id, faxNumber, geographicRegionCode, governmentEntityType, headquarterIndicator,
@@ -45,11 +45,11 @@ public class CwsOfficeEntityBuilder {
     return this;
   }
 
-  public int getFaxNumber() {
+  public long getFaxNumber() {
     return faxNumber;
   }
 
-  public CwsOfficeEntityBuilder setFaxNumber(int faxNumber) {
+  public CwsOfficeEntityBuilder setFaxNumber(long faxNumber) {
     this.faxNumber = faxNumber;
     return this;
   }
@@ -99,11 +99,11 @@ public class CwsOfficeEntityBuilder {
     return this;
   }
 
-  public int getMessagePhoneNumber() {
+  public long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
-  public CwsOfficeEntityBuilder setMessagePhoneNumber(int messagePhoneNumber) {
+  public CwsOfficeEntityBuilder setMessagePhoneNumber(long messagePhoneNumber) {
     this.messagePhoneNumber = messagePhoneNumber;
     return this;
   }
@@ -126,11 +126,11 @@ public class CwsOfficeEntityBuilder {
     return this;
   }
 
-  public int getPrimaryPhoneNumber() {
+  public long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
-  public CwsOfficeEntityBuilder setPrimaryPhoneNumber(int primaryPhoneNumber) {
+  public CwsOfficeEntityBuilder setPrimaryPhoneNumber(long primaryPhoneNumber) {
     this.primaryPhoneNumber = primaryPhoneNumber;
     return this;
   }

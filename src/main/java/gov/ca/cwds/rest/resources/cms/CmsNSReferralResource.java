@@ -85,7 +85,6 @@ public class CmsNSReferralResource {
       response = Object.class)
   public Response delete(@PathParam("id") @ApiParam(required = true,
       value = "id of CmsNSReferral to delete") String id) {
-    // return resourceDelegate.delete(id);
     return Response.status(HttpStatus.SC_NOT_IMPLEMENTED).build();
   }
 
@@ -133,7 +132,6 @@ public class CmsNSReferralResource {
   public Response update(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the CmsReferral to update") String id,
       @Valid @ApiParam(hidden = false) CmsNSReferral cmsNsReferral) {
-    // return resourceDelegate.update(id, cmsNsReferral);
     return Response.status(HttpStatus.SC_NOT_IMPLEMENTED).build();
   }
 }

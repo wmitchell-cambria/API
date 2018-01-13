@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -76,8 +74,8 @@ public class ServiceProvider extends BaseServiceProvider {
    * @param zipSuffixNumber The zipSuffixNumber
    */
   public ServiceProvider(String agencyName, String archiveAssociationIndicator, String cityName,
-      String emailAddress, BigDecimal faxNumber, String firstName, String id, String lastName,
-      String namePrefixDescription, Integer phoneExtensionNumber, BigDecimal phoneNumber,
+      String emailAddress, Long faxNumber, String firstName, String id, String lastName,
+      String namePrefixDescription, Integer phoneExtensionNumber, Long phoneNumber,
       String positionTitleDescription, Short serviceProviderType, Short stateCodeType,
       String streetName, String streetNumber, String suffixTitleDescription, Integer zipNumber,
       Short zipSuffixNumber) {

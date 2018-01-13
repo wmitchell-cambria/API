@@ -1,8 +1,6 @@
 package gov.ca.cwds.rest.services;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -17,8 +15,6 @@ import gov.ca.cwds.rest.api.domain.StaffPerson;
  * @author CWDS API Team
  */
 public class StaffPersonService implements TypedCrudsService<String, StaffPerson, StaffPerson> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(StaffPersonService.class);
 
   private StaffPersonDao staffPersonDao;
 

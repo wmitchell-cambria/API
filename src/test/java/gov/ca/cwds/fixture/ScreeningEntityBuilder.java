@@ -2,6 +2,7 @@ package gov.ca.cwds.fixture;
 
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.util.Date;
 import java.util.Set;
 
@@ -10,8 +11,8 @@ import gov.ca.cwds.data.persistence.ns.Address;
 @SuppressWarnings("javadoc")
 public class ScreeningEntityBuilder {
 
+  private String id = null;
   private String reference = "screening reference";
-  private Date endedAt;
   private String incidentCounty = "020";
   private Date incidentDate;
   private String locationType = "1111";
@@ -19,15 +20,22 @@ public class ScreeningEntityBuilder {
   private String name = "screening name";
   private String responseTime = "2 day";
   private String screeningDecision = "screening decision";
+  private String screeningDecisionDetail = null;
   private Date startedAt;
+  private Date endedAt;
   private String narrative = "screening narrative";
   private Address contactAddress;
   private Set<ParticipantEntity> participants;
 
   public ScreeningEntity build() {
-    return new ScreeningEntity(reference, endedAt, incidentCounty, incidentDate, locationType,
-        communicationMethod, name, responseTime, screeningDecision, startedAt, narrative,
-        contactAddress, participants);
+    return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
+        locationType, communicationMethod, name, responseTime, screeningDecision, screeningDecisionDetail,
+        narrative, contactAddress, participants);
+  }
+
+  public ScreeningEntityBuilder setId(String id) {
+    this.id = id;
+    return this;
   }
 
   public ScreeningEntityBuilder setReference(String reference) {
@@ -37,6 +45,11 @@ public class ScreeningEntityBuilder {
 
   public ScreeningEntityBuilder setEndedAt(Date endedAt) {
     this.endedAt = endedAt;
+    return this;
+  }
+
+  public ScreeningEntityBuilder setEndedAt(String endedAt) {
+    this.endedAt = DomainChef.uncookDateString(endedAt);
     return this;
   }
 
@@ -66,8 +79,18 @@ public class ScreeningEntityBuilder {
     return this;
   }
 
+  public ScreeningEntityBuilder setScreeningDecisionDetail(String screeningDecisionDetail) {
+    this.screeningDecisionDetail = screeningDecisionDetail;
+    return this;
+  }
+
   public ScreeningEntityBuilder setStartedAt(Date startedAt) {
     this.startedAt = startedAt;
+    return this;
+  }
+
+  public ScreeningEntityBuilder setStartedAt(String startedAt) {
+    this.startedAt = DomainChef.uncookDateString(startedAt);
     return this;
   }
 

@@ -15,7 +15,6 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.data.cms.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -25,7 +24,25 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.cms.AddressDao;
+import gov.ca.cwds.data.cms.AllegationDao;
+import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
+import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseLoadDao;
+import gov.ca.cwds.data.cms.ChildClientDao;
+import gov.ca.cwds.data.cms.ClientAddressDao;
+import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.CrossReportDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
+import gov.ca.cwds.data.cms.DrmsDocumentDao;
+import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.ReporterDao;
+import gov.ca.cwds.data.cms.SsaName3Dao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.CaseLoadEntityBuilder;
@@ -66,12 +83,12 @@ import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
@@ -128,6 +145,7 @@ public class TestForLastUpdatedTimeIsUnique {
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private DrmsDocumentService drmsDocumentService;
+  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private DrmsDocumentDao drmsDocumentDao;
   private AssignmentDao assignmentDao;
   private SsaName3Dao ssaName3Dao;
@@ -136,7 +154,6 @@ public class TestForLastUpdatedTimeIsUnique {
   private ExternalInterfaceTables externalInterfaceTables;
   private ClientScpEthnicityService clientScpEthnicityService;
   private CaseLoadDao caseLoadDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
@@ -188,12 +205,11 @@ public class TestForLastUpdatedTimeIsUnique {
     triggerTablesDao = mock(TriggerTablesDao.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    caseDao = mock(CaseDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     messageBuilder = mock(MessageBuilder.class);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
     clientDao = mock(ClientDao.class);
@@ -252,21 +268,18 @@ public class TestForLastUpdatedTimeIsUnique {
     riReferral = mock(RIReferral.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
-    ParticipantDao participantDao = mock(ParticipantDao.class);
-    participantService = new ParticipantService(participantDao, clientService,
-        referralClientService, reporterService, childClientService, clientAddressService, validator,
-        clientScpEthnicityService);
+    participantService =
+        new ParticipantService(clientService, referralClientService, reporterService,
+            childClientService, clientAddressService, validator, clientScpEthnicityService);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
-        allegationService, crossReportService, referralClientService, reporterService,
-        addressService, clientAddressService, childClientService, assignmentService,
-        participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-        governmentOrganizationCrossReportService);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
   }
 
   /**
@@ -485,8 +498,7 @@ public class TestForLastUpdatedTimeIsUnique {
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {
 
           @Override
-          public gov.ca.cwds.data.persistence.cms.Assignment answer(InvocationOnMock invocation)
-              throws Throwable {
+          public gov.ca.cwds.data.persistence.cms.Assignment answer(InvocationOnMock invocation) {
             createdAssignment =
                 (gov.ca.cwds.data.persistence.cms.Assignment) invocation.getArguments()[0];
             return assignmentToCreate;

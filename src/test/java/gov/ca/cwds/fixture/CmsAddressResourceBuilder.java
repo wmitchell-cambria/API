@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import java.math.BigDecimal;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -16,14 +14,14 @@ public class CmsAddressResourceBuilder {
   DateTime lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
       .parseDateTime("2004-03-31T09:45:58.000-0800");
   String city = "Sacramento";
-  BigDecimal emergencyNumber = new BigDecimal("123456789");
+  Long emergencyNumber = 123456789L;
   Integer emergencyExtension = 1234;
   Boolean frgAdrtB = false;
   Short governmentEntityCd = (short) 99;
-  BigDecimal messageNumber = new BigDecimal("0987654321");
+  Long messageNumber = 987654321L;
   Integer messageExtension = 6789;
   String headerAddress = "Senior Residence";
-  BigDecimal primaryNumber = new BigDecimal("0897453127");
+  Long primaryNumber = 897453127L;
   Integer primaryExtension = 21;
   Short state = (short) 99;
   String streetName = "2870";
@@ -90,11 +88,11 @@ public class CmsAddressResourceBuilder {
     return this;
   }
 
-  public BigDecimal getEmergencyNumber() {
+  public Long getEmergencyNumber() {
     return emergencyNumber;
   }
 
-  public CmsAddressResourceBuilder setEmergencyNumber(BigDecimal emergencyNumber) {
+  public CmsAddressResourceBuilder setEmergencyNumber(Long emergencyNumber) {
     this.emergencyNumber = emergencyNumber;
     return this;
   }
@@ -117,11 +115,11 @@ public class CmsAddressResourceBuilder {
     return this;
   }
 
-  public BigDecimal getMessageNumber() {
+  public Long getMessageNumber() {
     return messageNumber;
   }
 
-  public CmsAddressResourceBuilder setMessageNumber(BigDecimal messageNumber) {
+  public CmsAddressResourceBuilder setMessageNumber(Long messageNumber) {
     this.messageNumber = messageNumber;
     return this;
   }
@@ -144,11 +142,11 @@ public class CmsAddressResourceBuilder {
     return this;
   }
 
-  public BigDecimal getPrimaryNumber() {
+  public Long getPrimaryNumber() {
     return primaryNumber;
   }
 
-  public CmsAddressResourceBuilder setPrimaryNumber(BigDecimal primaryNumber) {
+  public CmsAddressResourceBuilder setPrimaryNumber(Long primaryNumber) {
     this.primaryNumber = primaryNumber;
     return this;
   }

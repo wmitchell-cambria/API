@@ -1,6 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -22,7 +21,7 @@ public class CollateralIndividualEntityBuilder {
   String emailAddress = "abc@123.com";
   String employerName = "EmployerName";
   String establishedForCode = "564";
-  BigDecimal faxNumber = BigDecimal.ONE;
+  Long faxNumber = 1L;
   String firstName = "firstName";
   String foreignAddressIndicatorVariable = "variableName";
   String genderCode = "M";
@@ -31,7 +30,7 @@ public class CollateralIndividualEntityBuilder {
   String middleInitialName = "middleName";
   String namePrefixDescription = "PrefixDescription";
   Integer primaryExtensionNumber = 123;
-  BigInteger primaryPhoneNo = BigInteger.ONE;
+  Long primaryPhoneNo = 1L;
   String residedOutOfStateIndicator = "Y";
   Short stateCode = (short) 890;
   String streetName = "West River";
@@ -88,7 +87,7 @@ public class CollateralIndividualEntityBuilder {
     return this;
   }
 
-  public CollateralIndividualEntityBuilder setFaxNumber(BigDecimal faxNumber) {
+  public CollateralIndividualEntityBuilder setFaxNumber(Long faxNumber) {
     this.faxNumber = faxNumber;
     return this;
   }
@@ -135,7 +134,7 @@ public class CollateralIndividualEntityBuilder {
     return this;
   }
 
-  public CollateralIndividualEntityBuilder setPrimaryPhoneNo(BigInteger primaryPhoneNo) {
+  public CollateralIndividualEntityBuilder setPrimaryPhoneNo(Long primaryPhoneNo) {
     this.primaryPhoneNo = primaryPhoneNo;
     return this;
   }

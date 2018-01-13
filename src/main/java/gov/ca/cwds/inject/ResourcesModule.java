@@ -36,6 +36,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
@@ -516,21 +517,21 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @HOIReferralServiceBackedResource
-  public SimpleResourceDelegate<String, HOIReferral, HOIReferralResponse, HOIReferralService> referralHoiServiceBackedResource(
+  public SimpleResourceDelegate<HOIRequest, HOIReferral, HOIReferralResponse, HOIReferralService> referralHoiServiceBackedResource(
       Injector injector) {
     return new SimpleResourceDelegate<>(injector.getInstance(HOIReferralService.class));
   }
 
   @Provides
   @HOICaseServiceBackedResource
-  public SimpleResourceDelegate<String, HOICase, HOICaseResponse, HOICaseService> caseHoiServiceBackedResource(
+  public SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> caseHoiServiceBackedResource(
       Injector injector) {
     return new SimpleResourceDelegate<>(injector.getInstance(HOICaseService.class));
   }
 
   @Provides
   @HOIScreeningServiceBackedResource
-  public SimpleResourceDelegate<String, HOIScreening, HOIScreeningResponse, HOIScreeningService> screeningHOIServiceBackedResource(
+  public SimpleResourceDelegate<HOIRequest, HOIScreening, HOIScreeningResponse, HOIScreeningService> screeningHOIServiceBackedResource(
       Injector injector) {
     return new SimpleResourceDelegate<>(injector.getInstance(HOIScreeningService.class));
   }

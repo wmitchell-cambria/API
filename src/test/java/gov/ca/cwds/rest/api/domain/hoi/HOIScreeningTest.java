@@ -110,10 +110,4 @@ public class HOIScreeningTest {
     target.setAssignedSocialWorker(assignedSocialWorker);
   }
 
-  @Test
-  public void main_Args__StringArray() throws Exception {
-    String[] args = new String[] {};
-    HOIScreening.main(args);
-  }
-
 }

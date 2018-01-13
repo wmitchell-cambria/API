@@ -84,7 +84,6 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
         new AuthHealthCheck(injector.getInstance(AuthServer.class));
     environment.healthChecks().register("auth_status", authHealthCheck);
 
-    // TODO: Add ES search
     final SwaggerHealthCheck swaggerHealthCheck =
         new SwaggerHealthCheck(injector.getInstance(SwaggerEndpoint.class));
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);

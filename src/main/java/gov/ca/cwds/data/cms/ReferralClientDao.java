@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.cms;
 
+import java.util.Collection;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
@@ -42,16 +44,16 @@ public class ReferralClientDao extends CrudsDaoImpl<ReferralClient> {
   }
 
   /**
-   * Find by client id
+   * Find by client ids
    * 
-   * @param clientId - referralId
-   * @return the referalClient
+   * @param clientIds - clientlIds
+   * @return the referalClients
    */
   @SuppressWarnings("unchecked")
-  public ReferralClient[] findByClientId(String clientId) {
+  public ReferralClient[] findByClientIds(Collection<String> clientIds) {
     final Query<ReferralClient> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByClient");
-    query.setParameter("clientId", clientId, StringType.INSTANCE);
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByClientIds");
+    query.setParameterList("clientIds", clientIds, StringType.INSTANCE);
     return query.list().toArray(new ReferralClient[0]);
   }
 

@@ -49,7 +49,7 @@ public class CmsDocumentDaoTest {
   // DECOMPRESS LZW:
   // ===================
 
-  // TODO: Test runs great in Eclipse (OS X and Windows) and even as the Jenkins user on Linux.
+  // Test runs great in Eclipse (OS X and Windows) and even as the Jenkins user on Linux.
   // However, the Jenkins service isn't loading Linux environment variables as expected.
   @Test
   public void testDecompressLZW() {

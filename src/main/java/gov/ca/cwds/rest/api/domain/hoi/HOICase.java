@@ -1,8 +1,12 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,7 +25,9 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
+public class HOICase extends ApiObjectIdentity
+    implements ApiTypedIdentifier<String>, Request, Comparable<HOICase>, Comparator<HOICase> {
+
 
   private static final long serialVersionUID = 1L;
 
@@ -199,6 +205,26 @@ public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<Str
    */
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
+  }
+
+  @Override
+  public int compare(HOICase o1, HOICase o2) {
+    return o2.getStartDate().compareTo(o1.getStartDate());
+  }
+
+  @Override
+  public int compareTo(HOICase o) {
+    return compare(this, o);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

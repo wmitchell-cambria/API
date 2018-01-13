@@ -67,13 +67,9 @@ public class CmsDocReferralClientTest {
         .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
   }
 
-  @Test
-  @Ignore
+
+  //TODO: Needs tests
   public void serializesToJSON() throws Exception {
-    final String expected = MAPPER.writeValueAsString(
-        MAPPER.readValue(fixture("fixtures/domain/cms/CmsDocReferralClient/valid/valid.json"),
-            CmsDocReferralClient.class));
-    assertThat(MAPPER.writeValueAsString(validCmsDocReferralClient()), is(equalTo(expected)));
   }
 
   @Test

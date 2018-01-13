@@ -1,9 +1,7 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -39,13 +37,13 @@ public class InvolvementHistory extends ApiObjectIdentity
   private String id;
 
   @JsonProperty("cases")
-  private Set<HOICase> cases = new HashSet<>();
+  private List<HOICase> cases = new ArrayList<>();
 
   @JsonProperty("referrals")
-  private Set<HOIReferral> referrals = new HashSet<>();
+  private List<HOIReferral> referrals = new ArrayList<>();
 
   @JsonProperty("screenings")
-  private Set<HOIScreening> screenings = new HashSet<>();
+  private List<HOIScreening> screenings = new ArrayList<>();
 
   @JsonIgnore
   private ArrayList<ErrorMessage> messages = new ArrayList<>();
@@ -66,9 +64,9 @@ public class InvolvementHistory extends ApiObjectIdentity
    * @param screenings the screenings
    */
   public InvolvementHistory(@JsonProperty("id") String id,
-      @JsonProperty("cases") Set<HOICase> cases,
-      @JsonProperty("referrals") Set<HOIReferral> referrals,
-      @JsonProperty("screenings") Set<HOIScreening> screenings) {
+      @JsonProperty("cases") List<HOICase> cases,
+      @JsonProperty("referrals") List<HOIReferral> referrals,
+      @JsonProperty("screenings") List<HOIScreening> screenings) {
     super();
     this.id = id;
     this.cases = cases;
@@ -79,21 +77,21 @@ public class InvolvementHistory extends ApiObjectIdentity
   /**
    * @return the cases
    */
-  public Set<HOICase> getCases() {
+  public List<HOICase> getCases() {
     return cases;
   }
 
   /**
    * @return the referrals
    */
-  public Set<HOIReferral> getReferrals() {
+  public List<HOIReferral> getReferrals() {
     return referrals;
   }
 
   /**
    * @return the screenings
    */
-  public Set<HOIScreening> getScreenings() {
+  public List<HOIScreening> getScreenings() {
     return screenings;
   }
 

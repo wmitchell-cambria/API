@@ -23,7 +23,7 @@ public class RelationshipList implements Request, Response {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("relationships")
-  private Set<Relationship> relationshipList;
+  private Set<Relationship> relationships;
 
   /**
    * empty constructor
@@ -33,10 +33,10 @@ public class RelationshipList implements Request, Response {
   }
 
   /**
-   * @param relationshipList - list of relationships of people for investigation
+   * @param relationships - set of relationships of people for investigation
    */
-  public RelationshipList(Set<Relationship> relationshipList) {
-    this.relationshipList = relationshipList;
+  public RelationshipList(Set<Relationship> relationships) {
+    this.relationships = relationships;
   }
 
   /**
@@ -44,7 +44,7 @@ public class RelationshipList implements Request, Response {
    */
   @JsonValue
   public Set<Relationship> getRelationship() {
-    return relationshipList;
+    return relationships;
   }
 
   @Override

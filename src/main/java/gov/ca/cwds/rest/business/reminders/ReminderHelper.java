@@ -5,9 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author CWS-NS2
  *
@@ -18,8 +15,6 @@ public class ReminderHelper {
   private static final short REFERRAL_RESPONSE_TYPE_3_DAYS = (short) 1516;
   private static final short REFERRAL_RESPONSE_TYPE_5_DAYS = (short) 1517;
   private static final short REFERRAL_RESPONSE_TYPE_IMMEDIATE = (short) 1520;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReminderHelper.class);
 
   /**
    * 

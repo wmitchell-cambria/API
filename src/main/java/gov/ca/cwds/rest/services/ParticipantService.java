@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,8 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -59,9 +56,6 @@ public class ParticipantService implements CrudsService {
 
   private Validator validator;
 
-  private ParticipantDao participantDao;
-  @Inject
-  private PersonService personService;
   private ClientService clientService;
   private ReferralClientService referralClientService;
   private ReporterService reporterService;
@@ -71,22 +65,20 @@ public class ParticipantService implements CrudsService {
 
   /**
    * Constructor
-   *
-   * @param participantDao The {@link Dao} handling {@link ParticipantEntity}
-   * @param clientService the clientService
-   * @param referralClientService the referralClientService
-   * @param reporterService the reporterService
-   * @param childClientService the childClientService
-   * @param clientAddressService the clientAddressService
-   * @param validator - the validator
-   * @param clientScpEthnicityService - clientScpEthnicityService
+   * 
+   * @param clientService clientService
+   * @param referralClientService referralClientService
+   * @param reporterService reporterService
+   * @param childClientService childClientService
+   * @param clientAddressService clientAddressService
+   * @param validator validator
+   * @param clientScpEthnicityService clientScpEthnicityService
    */
   @Inject
-  public ParticipantService(ParticipantDao participantDao, ClientService clientService,
+  public ParticipantService(ClientService clientService,
       ReferralClientService referralClientService, ReporterService reporterService,
       ChildClientService childClientService, ClientAddressService clientAddressService,
       Validator validator, ClientScpEthnicityService clientScpEthnicityService) {
-    this.participantDao = participantDao;
     this.validator = validator;
     this.clientService = clientService;
     this.referralClientService = referralClientService;
@@ -103,15 +95,6 @@ public class ParticipantService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    /* todo ns ParticipantEntity does not have personId, so this code is not relevant anymore
-    assert request instanceof Participant;
-    Participant participant = (Participant) request;
-    gov.ca.cwds.data.persistence.ns.Participant managed =
-        new gov.ca.cwds.data.persistence.ns.Participant(participant, null, null);
-    Person person = personService.find(managed.getPersonId());
-    managed = participantDao.create(managed);
-    return new Participant(managed, person);
-    */
     throw new NotImplementedException("");
   }
 
@@ -120,7 +103,7 @@ public class ParticipantService implements CrudsService {
    * @param dateStarted - dateStarted
    * @param referralId - referralId
    * @param messageBuilder - messageBuilder
-   * @return the savedParticioants
+   * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
       String dateStarted, String referralId, MessageBuilder messageBuilder) {
@@ -128,17 +111,9 @@ public class ParticipantService implements CrudsService {
 
     Set<Participant> participants = screeningToReferral.getParticipants();
     for (Participant incomingParticipant : participants) {
-
-      try {
-        if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
-          String message = " Participant contains incompatiable roles ";
-          messageBuilder.addMessageAndLog(message, LOGGER);
-          // next participant
-          continue;
-        }
-      } catch (Exception e1) {
-        String message = e1.getMessage();
-        messageBuilder.addMessageAndLog(message, e1, LOGGER);
+      if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
+        String message = " Participant contains incompatible roles ";
+        messageBuilder.addMessageAndLog(message, LOGGER);
         // next participant
         continue;
       }
@@ -154,7 +129,6 @@ public class ParticipantService implements CrudsService {
     return clientParticipants;
   }
 
-  // TODO: Techdebt simplify processing roles. Story #?
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, Set<String> roles) {
@@ -162,50 +136,27 @@ public class ParticipantService implements CrudsService {
      * process the roles of this participant
      */
     for (String role : roles) {
-      boolean saved = false;
+      boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
+          && (!ParticipantValidator.roleIsAnonymousReporter(role)
+              && !ParticipantValidator.selfReported(incomingParticipant));
+      if (isRegularReporter) {
+        saveRegularReporter(screeningToReferral, referralId, messageBuilder,
+            incomingParticipant, role);
 
-      try {
-        boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
-            && (!ParticipantValidator.roleIsAnonymousReporter(role)
-            && !ParticipantValidator.selfReported(incomingParticipant));
-        if (isRegularReporter) {
-          saved = saveRegularReporter(screeningToReferral, referralId, messageBuilder,
-              incomingParticipant, role, saved);
-
-        } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
-          saved = saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
-              clientParticipants, incomingParticipant, genderCode, role, saved);
-        }
-      } catch (Exception e) {
-        String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+      } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
+        saveClient(screeningToReferral, dateStarted, referralId, messageBuilder,
+            clientParticipants, incomingParticipant, genderCode, role);
       }
-
-      if (!saved) {
-        clientParticipants.addParticipant(incomingParticipant);
-      }
+      clientParticipants.addParticipant(incomingParticipant);
     } // next role
   }
 
-  private boolean saveRegularReporter(ScreeningToReferral screeningToReferral, String referralId,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String role, boolean saved) {
-    if (saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant, role)) {
-      saved = true;
-    }
-    return saved;
+  private void saveRegularReporter(ScreeningToReferral screeningToReferral, String referralId,
+      MessageBuilder messageBuilder, Participant incomingParticipant, String role) {
+    saveReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant, role);
   }
 
-  private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
-      Participant incomingParticipant, String genderCode, String role, boolean saved) {
-    if (saveClient(screeningToReferral, dateStarted, referralId, messageBuilder, clientParticipants,
-        incomingParticipant, genderCode, role)) {
-      saved = true;
-    }
-    return saved;
-  }
-
-  private boolean saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
+  private void saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
       Participant incomingParticipant, String genderCode, String role) {
     String clientId;
@@ -217,9 +168,7 @@ public class ParticipantService implements CrudsService {
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      if (updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId)) {
-        return true;
-      }
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
@@ -237,7 +186,6 @@ public class ParticipantService implements CrudsService {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
         // next role
-        return true;
       }
     }
 
@@ -252,9 +200,7 @@ public class ParticipantService implements CrudsService {
       String message = e.getMessage();
       messageBuilder.addMessageAndLog(message, e, LOGGER);
       // next role
-      return true;
     }
-    return false;
   }
 
   private boolean saveReporter(ScreeningToReferral screeningToReferral, String referralId,
@@ -320,9 +266,6 @@ public class ParticipantService implements CrudsService {
       Participant incomingParticipant, Client foundClient) {
     DateTimeComparatorInterface comparator = new DateTimeComparator();
     if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
-      foundClient.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
-      foundClient.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
-
       List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
       Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
       List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
@@ -380,8 +323,7 @@ public class ParticipantService implements CrudsService {
 
     Client client = Client.createWithDefaults(incomingParticipant, dateStarted, genderCode,
         primaryRaceCode, childClientIndicatorVar);
-    client.applySensitivityIndicator(screeningToReferral.getLimitedAccessCode());
-    client.applySensitivityIndicator(incomingParticipant.getSensitivityIndicator());
+
     messageBuilder.addDomainValidationError(validator.validate(client));
     PostedClient postedClient = this.clientService.create(client);
     clientId = postedClient.getId();
@@ -401,8 +343,6 @@ public class ParticipantService implements CrudsService {
 
       // use the first address node only
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-        // TODO: #141511573 address parsing - Smarty Streets Free Form display requires
-        // standardizing parsing to fields in CMS
         if (address == null) {
           // next address
           continue;
@@ -442,7 +382,7 @@ public class ParticipantService implements CrudsService {
    * CMS Address - create ADDRESS and CLIENT_ADDRESS for each address of the participant
    */
   private Participant processClientAddress(Participant clientParticipant, String referralId,
-      String clientId, MessageBuilder messageBuilder) throws ServiceException {
+      String clientId, MessageBuilder messageBuilder) {
 
     return clientAddressService.saveClientAddress(clientParticipant, referralId, clientId,
         messageBuilder);

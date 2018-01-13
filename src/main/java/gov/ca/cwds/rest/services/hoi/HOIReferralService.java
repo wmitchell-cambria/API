@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 
 /**
@@ -33,15 +35,15 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  *
  */
 public class HOIReferralService
-    extends SimpleResourceService<String, HOIReferral, HOIReferralResponse> {
+    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
 
   /**
    * 
    */
   private static final long serialVersionUID = 1L;
 
-  private transient ClientDao clientDao;
-  private transient ReferralClientDao referralClientDao;
+  private ClientDao clientDao;
+  private ReferralClientDao referralClientDao;
 
   /**
    * @param clientDao - clientDao
@@ -55,30 +57,25 @@ public class HOIReferralService
   }
 
   @Override
-  public HOIReferralResponse handleFind(String clientId) {
+  protected HOIReferralResponse handleFind(HOIRequest hoiRequest) {
     HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-
-    Client client = clientDao.find(clientId);
-    if (client != null) {
-      List<ReferralClient> referralClientList = fetchReferralClient(clientId);
-
-      for (ReferralClient referralClient : referralClientList) {
-        fetchEachReferral(hoiReferralResponse, referralClient);
-      }
-
-      return hoiReferralResponse;
+    List<ReferralClient> referralClientList = new ArrayList<>();
+    if (!hoiRequest.getClientIds().isEmpty()) {
+      referralClientList = fetchReferralClient(hoiRequest.getClientIds());
     }
-    return emptyHoiReferralResponse();
-  }
-
-  private HOIReferralResponse emptyHoiReferralResponse() {
-    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-    hoiReferralResponse.setHoiReferrals(new ArrayList<>());
+    if (referralClientList.isEmpty()) {
+      return emptyHoiReferralResponse();
+    }
+    List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientList.size());
+    for (ReferralClient referralClient : referralClientList) {
+      hoiReferrals.add(createHOIReferral(referralClient));
+    }
+    Collections.sort(hoiReferrals);
+    hoiReferralResponse.setHoiReferrals(hoiReferrals);
     return hoiReferralResponse;
   }
 
-  private void fetchEachReferral(HOIReferralResponse hoiReferralResponse,
-      ReferralClient referralClient) {
+  private HOIReferral createHOIReferral(ReferralClient referralClient) {
     Role role = null;
     Referral referral = referralClient.getReferral();
 
@@ -87,12 +84,18 @@ public class HOIReferralService
     role = fetchForReporterRole(role, referral, referralClient, reporter);
 
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
-    hoiReferralResponse.addHoiReferral(new HOIReferralFactory().createHOIReferral(referral,
-        staffPerson, reporter, allegationMap, role));
+    return new HOIReferralFactory().createHOIReferral(referral, staffPerson, reporter,
+        allegationMap, role);
   }
 
-  private List<ReferralClient> fetchReferralClient(String clientId) {
-    ReferralClient[] referralClients = referralClientDao.findByClientId(clientId);
+  private HOIReferralResponse emptyHoiReferralResponse() {
+    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
+    hoiReferralResponse.setHoiReferrals(new ArrayList<>());
+    return hoiReferralResponse;
+  }
+
+  private List<ReferralClient> fetchReferralClient(Set<String> clientIds) {
+    ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
     return Arrays.asList(referralClients);
   }
 

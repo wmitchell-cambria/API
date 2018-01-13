@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import java.math.BigDecimal;
-
 import gov.ca.cwds.data.persistence.cms.Address;
 
 /**
@@ -12,14 +10,14 @@ import gov.ca.cwds.data.persistence.cms.Address;
 public class AddressEntityBuilder {
   String id = "ABc1r90Pg6";
   String city = "Sacramento";
-  java.math.BigDecimal emergencyNumber = BigDecimal.ZERO;
+  Long emergencyNumber = 0L;
   Integer emergencyExtension = 0;
   String frgAdrtB = "N";
   Short governmentEntityCd = 0;
-  BigDecimal messageNumber = new BigDecimal(0);
+  Long messageNumber = 0L;
   Integer messageExtension = 0;
   String headerAddress = "";
-  BigDecimal primaryNumber = new BigDecimal(0);
+  Long primaryNumber = 0L;
   Integer primaryExtension = 0;
   Short state = 1828;
   String streetName = "First Street";
@@ -58,11 +56,11 @@ public class AddressEntityBuilder {
     return this;
   }
 
-  public BigDecimal getEmergencyNumber() {
+  public Long getEmergencyNumber() {
     return emergencyNumber;
   }
 
-  public AddressEntityBuilder setEmergencyNumber(BigDecimal emergencyNumber) {
+  public AddressEntityBuilder setEmergencyNumber(Long emergencyNumber) {
     this.emergencyNumber = emergencyNumber;
     return this;
   }
@@ -94,11 +92,11 @@ public class AddressEntityBuilder {
     return this;
   }
 
-  public BigDecimal getMessageNumber() {
+  public Long getMessageNumber() {
     return messageNumber;
   }
 
-  public AddressEntityBuilder setMessageNumber(BigDecimal messageNumber) {
+  public AddressEntityBuilder setMessageNumber(Long messageNumber) {
     this.messageNumber = messageNumber;
     return this;
   }
@@ -121,11 +119,11 @@ public class AddressEntityBuilder {
     return this;
   }
 
-  public BigDecimal getPrimaryNumber() {
+  public Long getPrimaryNumber() {
     return primaryNumber;
   }
 
-  public AddressEntityBuilder setPrimaryNumber(BigDecimal primaryNumber) {
+  public AddressEntityBuilder setPrimaryNumber(Long primaryNumber) {
     this.primaryNumber = primaryNumber;
     return this;
   }
