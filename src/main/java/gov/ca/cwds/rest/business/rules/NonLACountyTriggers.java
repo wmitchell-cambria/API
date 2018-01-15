@@ -135,7 +135,7 @@ public class NonLACountyTriggers {
       Boolean countyExists) {
     Method method = null;
     try {
-      if (!methodName.equals(SET_COUNTY + COUNTY_SPECIFIC_CODE_DEFAULT_CODE + FLAG)) {
+    	  if (!(SET_COUNTY + COUNTY_SPECIFIC_CODE_DEFAULT_CODE + FLAG).equals(methodName)) {
         method = countyOwnership.getClass().getMethod(methodName, String.class);
         method.invoke(countyOwnership, SET_FLAG);
       }

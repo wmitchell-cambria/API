@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
-
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 /**
  * CWDS API Team
  */
@@ -57,10 +57,10 @@ public class AssignmentUnit extends CmsPersistentObject {
                         String assignmentUnitName, String countySpecificCode) {
     this.id = id;
     this.assignmentDeskUnitIndicator = assignmentDeskUnitIndicator;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.phoneNumber = phoneNumber;
     this.phoneExtensionNumber = phoneExtensionNumber;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.fkCwsOffice = fkCwsOffice;
     this.assignmentUnitName = assignmentUnitName;
     this.countySpecificCode = countySpecificCode;
