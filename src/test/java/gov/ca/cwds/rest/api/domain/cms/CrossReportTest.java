@@ -656,37 +656,6 @@ public class CrossReportTest {
   }
 
   /*
-   * recipientPhoneNumber Tests
-   */
-  @Test
-  @Ignore
-  public void failsWhenRecipientPhoneNumberMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientPhoneNumberMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientPhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  @Ignore
-  public void failsWhenRecipientPhoneNumberNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientPhoneNumberNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientPhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /*
    * informDate Tests
    */
   @Test
