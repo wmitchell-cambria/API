@@ -66,7 +66,7 @@ public class SimpleAllegation extends ReportingDomain implements Response {
     this.victimId = allegation.getVictimId();
     this.perpetratorId = allegation.getPerpetratorId();
     String [] theseAllegationTypes = allegation.getAllegationTypes();
-    if (allegationTypes != null) {
+    if (theseAllegationTypes != null) {
       Collections.addAll(this.allegationTypes, theseAllegationTypes);
     }
 
