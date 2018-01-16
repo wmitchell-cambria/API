@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest.services.cms;
 
+import gov.ca.cwds.data.persistence.cms.Assignment;
+import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeAction;
+import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeValidator;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
@@ -39,7 +42,7 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
  * Business layer object to work on {@link Referral}
- * 
+ *
  * @author CWDS API Team
  */
 public class ReferralService implements
@@ -65,7 +68,7 @@ public class ReferralService implements
 
   /**
    * Constructor
-   * 
+   *
    * @param referralDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
    *        objects.
    * @param nonLaTriggers The {@link Dao} handling
@@ -106,7 +109,7 @@ public class ReferralService implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
@@ -121,7 +124,7 @@ public class ReferralService implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
@@ -135,7 +138,7 @@ public class ReferralService implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
@@ -348,7 +351,6 @@ public class ReferralService implements
    */
   private static String firstResponseDeterminedByStaffPersonId() {
     return RequestExecutionContext.instance().getStaffId();
-
   }
 
   private String generateReportNarrative(ScreeningToReferral screeningToReferral,
@@ -414,12 +416,11 @@ public class ReferralService implements
     messageBuilder.addDomainValidationError(validator.validate(longText));
 
     return postedLongText.getId();
-
   }
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)
    */
@@ -429,6 +430,12 @@ public class ReferralService implements
     gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
 
     try {
+      /*
+       * Reuse the validation of DocTool Rule 04611
+       * in the gov.ca.cwds.rest.services.ScreeningToReferralService
+       */
+      validateMaxReferralStartDateTime(primaryKey, request);
+
       Referral managed =
           new Referral(primaryKey, referral, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
@@ -444,4 +451,19 @@ public class ReferralService implements
     }
   }
 
+  private void validateMaxReferralStartDateTime(String referralId,
+      gov.ca.cwds.rest.api.domain.cms.Referral request) {
+    Assignment firstAssignment = assignmentService.findReferralFirstAssignment(referralId);
+    if (isReferralStartDateTimeValid(request, firstAssignment)) {
+      new R04611ReferralStartDateTimeAction(assignmentService, request, firstAssignment).execute();
+    } else {
+      throw new ServiceException(
+          "Rule : R - 04611 - Referral Start Date & Time can not exceed the End Date AND can not equal or exceed End Time of the first assignment.");
+    }
+  }
+
+  boolean isReferralStartDateTimeValid(gov.ca.cwds.rest.api.domain.cms.Referral request,
+      Assignment firstAssignment) {
+    return new R04611ReferralStartDateTimeValidator(request, firstAssignment).isValid();
+  }
 }

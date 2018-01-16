@@ -14,6 +14,8 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validation;
@@ -35,13 +37,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
@@ -51,7 +50,6 @@ import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 public class AssignmentServiceTest {
@@ -65,9 +63,6 @@ public class AssignmentServiceTest {
   private ExternalInterfaceTables externalInterfaceTables;
   private CountyOwnershipDao countyOwnershipDao;
   private ReferralDao referralDao;
-  private ReferralClientDao referralClientDao;
-  private MessageBuilder messageBuilder;
-  private ScreeningToReferral screeningToReferral;
   private CaseLoadDao caseLoadDao;
   private Date lastUpdatedTime = new Date();
   private AssignmentUnitDao assignmentUnitDao;
@@ -87,9 +82,8 @@ public class AssignmentServiceTest {
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
     countyOwnershipDao = mock(CountyOwnershipDao.class);
     referralDao = mock(ReferralDao.class);
-    referralClientDao = mock(ReferralClientDao.class);
-    messageBuilder = mock(MessageBuilder.class);
-    screeningToReferral = mock(ScreeningToReferral.class);
+    ReferralClientDao referralClientDao = mock(ReferralClientDao.class);
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
     caseLoadDao = mock(CaseLoadDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
@@ -98,12 +92,11 @@ public class AssignmentServiceTest {
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
         triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
-
   }
 
   // find test
   @Test
-  public void assignmentServiceFindReturnsCorrectEntity() throws Exception {
+  public void assignmentServiceFindReturnsCorrectEntity() {
     String id = "SlCAr46088";
     Assignment expected = new AssignmentResourceBuilder().buildAssignment();
 
@@ -117,7 +110,7 @@ public class AssignmentServiceTest {
 
 
   @Test
-  public void assignmentServiceFindReturnsNullWhenNotFound() throws Exception {
+  public void assignmentServiceFindReturnsNullWhenNotFound() {
     Response found = assignmentService.find("ABC1234567");
     assertThat(found, is(nullValue()));
   }
@@ -130,13 +123,13 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceDeleteReturnsNullWhenNotFound() throws Exception {
+  public void assignmentServiceDeleteReturnsNullWhenNotFound() {
     Response found = assignmentService.delete("ABC1234567");
     assertThat(found, is(nullValue()));
   }
 
   @Test
-  public void assignmentServiceDeleteReturnsNotNull() throws Exception {
+  public void assignmentServiceDeleteReturnsNotNull() {
     String id = "AabekZX00F";
     Assignment expected = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment assignment =
@@ -149,7 +142,7 @@ public class AssignmentServiceTest {
 
   // update test
   @Test
-  public void assignmentServiceUpdateReturnsCorrectEntity() throws Exception {
+  public void assignmentServiceUpdateReturnsCorrectEntity() {
     String id = "SlCAr46088";
     Assignment expected =
         new AssignmentResourceBuilder().setCountySpecificCode("45").buildAssignment();
@@ -165,7 +158,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceUpdateThrowsExceptionWhenNotFound() throws Exception {
+  public void assignmentServiceUpdateThrowsExceptionWhenNotFound() {
     try {
       Assignment assignmentRequest =
           new AssignmentResourceBuilder().setCountySpecificCode("45").buildAssignment();
@@ -180,7 +173,7 @@ public class AssignmentServiceTest {
 
   // create test
   @Test
-  public void assignmentServiceCreateReturnsPostedClass() throws Exception {
+  public void assignmentServiceCreateReturnsPostedClass() {
     String id = "5rVkB8c088";
     Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
@@ -197,7 +190,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceCreateReturnsNonNull() throws Exception {
+  public void assignmentServiceCreateReturnsNonNull() {
     String id = "5rVkB8c088";
     Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
@@ -214,7 +207,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceCreateReturnsCorrectEntity() throws Exception {
+  public void assignmentServiceCreateReturnsCorrectEntity() {
     String id = "5rVkB8c088";
     Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
@@ -232,7 +225,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceCreateThrowsEntityExistsException() throws Exception {
+  public void assignmentServiceCreateThrowsEntityExistsException() {
     try {
       Assignment assignmentRequest = new AssignmentResourceBuilder().buildAssignment();
 
@@ -245,7 +238,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceCreateNullIDError() throws Exception {
+  public void assignmentServiceCreateNullIDError() {
     try {
       Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
 
@@ -256,7 +249,7 @@ public class AssignmentServiceTest {
       when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
           .thenReturn(toCreate);
 
-      PostedAssignment expected = new PostedAssignment(toCreate);
+      new PostedAssignment(toCreate);
     } catch (ServiceException e) {
       assertEquals("Assignment ID cannot be blank", e.getMessage());
     }
@@ -264,7 +257,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void assignmentServiceCreateBlankIDError() throws Exception {
+  public void assignmentServiceCreateBlankIDError() {
     try {
       Assignment domainAssignment = new AssignmentResourceBuilder().buildAssignment();
       gov.ca.cwds.data.persistence.cms.Assignment toCreate =
@@ -274,7 +267,7 @@ public class AssignmentServiceTest {
       when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
           .thenReturn(toCreate);
 
-      PostedAssignment expected = new PostedAssignment(toCreate);
+      new PostedAssignment(toCreate);
     } catch (ServiceException e) {
       assertEquals("Assignment ID cannot be blank", e.getMessage());
     }
@@ -282,25 +275,16 @@ public class AssignmentServiceTest {
 
   /**
    * Test for checking the new Assignment Id generated and length is 10
-   * 
+   *
    * @throws Exception - exception
    */
   @Test
-  public void assignmentServiceCreateReturnsGeneratedId() throws Exception {
+  public void assignmentServiceCreateReturnsGeneratedId() {
     Assignment domainAssignment = new AssignmentResourceBuilder().setStartDate("2017-01-01")
         .setStartTime("16:01:01").buildAssignment();
 
-    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
-        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {
-
-          @Override
-          public gov.ca.cwds.data.persistence.cms.Assignment answer(InvocationOnMock invocation)
-              throws Throwable {
-            gov.ca.cwds.data.persistence.cms.Assignment report =
-                (gov.ca.cwds.data.persistence.cms.Assignment) invocation.getArguments()[0];
-            return report;
-          }
-        });
+    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class))).thenAnswer(
+        invocation -> invocation.getArguments()[0]);
 
     PostedAssignment returned = assignmentService.create(domainAssignment);
     assertEquals(returned.getId().length(), 10);
@@ -309,7 +293,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void testCreateNonLACountyTriggerForAssignment() throws Exception {
+  public void testCreateNonLACountyTriggerForAssignment() {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
@@ -338,7 +322,7 @@ public class AssignmentServiceTest {
   }
 
   @Test
-  public void testNotCreateNonLACountyTriggerForAssignment() throws Exception {
+  public void testNotCreateNonLACountyTriggerForAssignment() {
     Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
     gov.ca.cwds.data.persistence.cms.Assignment toCreate =
         new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "BTr",
@@ -391,5 +375,37 @@ public class AssignmentServiceTest {
       assertEquals("R - 06560 Caseload Required For First Primary Asg is failed",
           e.getValidationDetailsList().iterator().next().getUserMessage());
     }
+  }
+
+  @Test
+  public void testFirstAssignmentWithEarlierStartDate() {
+    Set<gov.ca.cwds.data.persistence.cms.Assignment> assignmentSet = new HashSet<>();
+    assignmentSet.add(new AssignmentEntityBuilder().setId("1").setStartDate("2017-01-11")
+        .setStartTime("10:11:02").setEndDate("2017-01-12").setEndTime("14:00:00").build());
+    assignmentSet.add(new AssignmentEntityBuilder().setId("2").setStartDate("2015-06-10")
+        .setStartTime("10:11:02").setEndDate("2015-06-11").setEndTime("14:00:00").build());
+    assignmentSet.add(new AssignmentEntityBuilder().setId("3").setStartDate("2015-04-11")
+        .setStartTime("10:11:02").setEndDate("2015-04-12").setEndTime("14:00:00").build());
+    when(assignmentDao.findAssignmentsByReferralId(any(String.class))).thenReturn(assignmentSet);
+
+    gov.ca.cwds.data.persistence.cms.Assignment firstAssignment = assignmentService
+        .findReferralFirstAssignment("111");
+    assertNotNull(firstAssignment);
+    assertEquals("3", firstAssignment.getId());
+  }
+
+  @Test
+  public void testFirstAssignmentWithSameStartDateEarlierStartTime() {
+    Set<gov.ca.cwds.data.persistence.cms.Assignment> assignmentSet = new HashSet<>();
+    assignmentSet.add(new AssignmentEntityBuilder().setId("1").setStartDate("2017-01-11")
+        .setStartTime("10:11:02").setEndDate("2017-01-12").setEndTime("14:00:00").build());
+    assignmentSet.add(new AssignmentEntityBuilder().setId("2").setStartDate("2017-01-11")
+        .setStartTime("09:56:02").setEndDate("2017-01-12").setEndTime("15:00:00").build());
+    when(assignmentDao.findAssignmentsByReferralId(any(String.class))).thenReturn(assignmentSet);
+
+    gov.ca.cwds.data.persistence.cms.Assignment firstAssignment = assignmentService
+        .findReferralFirstAssignment("111");
+    assertNotNull(firstAssignment);
+    assertEquals("2", firstAssignment.getId());
   }
 }

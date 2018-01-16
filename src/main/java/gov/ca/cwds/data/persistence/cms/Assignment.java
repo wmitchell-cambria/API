@@ -39,6 +39,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
         + "AND S.fkStaffPerson = :fkStaffPerson AND S.endDate IS NULL "
         + "AND (C.archiveAssociationIndicator = 'N' OR C.archiveAssociationIndicator = 'Y') "
         + "AND C.onHoldIndicator = 'N' " + "ORDER BY C.archiveAssociationIndicator DESC")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Assignment.findAssignmentsByReferralId",
+    query = "FROM Assignment WHERE referral.id = :referralId")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "ASGNM_T")
@@ -232,9 +234,17 @@ public class Assignment extends CmsPersistentObject {
     return freshDate(startDate);
   }
 
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+
   @SuppressWarnings("javadoc")
   public Date getStartTime() {
     return freshDate(startTime);
+  }
+
+  public void setStartTime(Date startTime) {
+    this.startTime = startTime;
   }
 
   @SuppressWarnings("javadoc")
