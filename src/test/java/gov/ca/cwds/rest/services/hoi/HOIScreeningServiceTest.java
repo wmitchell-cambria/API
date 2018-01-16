@@ -6,8 +6,10 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.fixture.ScreeningEntityBuilder;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +23,6 @@ import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.fixture.hoi.HOIScreeningBuilder;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
@@ -67,7 +68,7 @@ public class HOIScreeningServiceTest {
   }
 
   @Test
-  public void findReturnsExpectedHistoryOfInvolvement() {
+  public void findReturnsExpectedAndSortedHOIScreenings() {
     HOIScreeningResponse expectedResponse = createExpectedResponse();
 
     HOIRequest hoiScreeningRequest = new HOIRequest();
@@ -77,19 +78,28 @@ public class HOIScreeningServiceTest {
   }
 
   private HOIScreeningResponse createExpectedResponse() {
-    Set<HOIScreening> screenings = new HashSet<>();
+    Set<HOIScreening> screenings = new TreeSet<>(
+        (s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
     screenings.add(new HOIScreeningBuilder().createHOIScreening());
+    screenings.add(new HOIScreeningBuilder().setId("223").setStartDate("2017-09-25")
+        .setEndDate("2017-10-01").createHOIScreening());
     return new HOIScreeningResponse(screenings);
   }
 
   private Set<ScreeningEntity> mockScreeningEntityList() {
-    ScreeningEntity entity =
-        new ScreeningEntity("224", null, DomainChef.uncookDateString("2017-11-30"),
-            DomainChef.uncookDateString("2017-12-10"), "sacramento", null, null, null, null, null,
-            "promote to referral", "drug counseling", null, null, null);
+    ScreeningEntity entity1 = new ScreeningEntityBuilder().setId("223").setStartedAt("2017-09-25")
+        .setEndedAt("2017-10-01").setIncidentCounty("sacramento").setName(null)
+        .setScreeningDecision("promote to referral").setScreeningDecisionDetail("drug counseling")
+        .build();
+
+    ScreeningEntity entity2 = new ScreeningEntityBuilder().setId("224").setStartedAt("2017-11-30")
+        .setEndedAt("2017-12-10").setIncidentCounty("sacramento").setName(null)
+        .setScreeningDecision("promote to referral").setScreeningDecisionDetail("drug counseling")
+        .build();
 
     Set<ScreeningEntity> result = new HashSet<>();
-    result.add(entity);
+    result.add(entity1);
+    result.add(entity2);
     return result;
   }
 

@@ -7,11 +7,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -219,7 +216,7 @@ public class ReporterTest implements PersistentTestTemplate {
 
   @Test
   public void shouldNotContainPhoneNumbersWhenBlank(){
-    BigDecimal phoneNumber = new BigDecimal("0");
+    Long phoneNumber = 0L;
     Integer extension = new Integer(0);
     gov.ca.cwds.rest.api.domain.cms.Reporter domain =
         new ReporterResourceBuilder()
@@ -235,8 +232,8 @@ public class ReporterTest implements PersistentTestTemplate {
 
   @Test
   public void shouldContainBothPhoneNumbersWhenNotBlank(){
-    BigDecimal primaryPhoneNumber = new BigDecimal("123");
-    BigDecimal messagePhoneNumber = new BigDecimal("987");
+    Long primaryPhoneNumber = 123L;
+    Long messagePhoneNumber = 987L;
     Integer primaryExtension = new Integer(0);
     Integer messageExtension = new Integer(0);
     gov.ca.cwds.rest.api.domain.cms.Reporter domain =

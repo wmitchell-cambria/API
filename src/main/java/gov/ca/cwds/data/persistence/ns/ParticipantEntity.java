@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 /**
  * {@link PersistentObject} representing Participant.
@@ -109,7 +110,7 @@ public class ParticipantEntity implements PersistentObject {
   }
 
   public Date getDateOfBirth() {
-    return dateOfBirth;
+    return freshDate(dateOfBirth);
   }
 
   public String getFirstName() {

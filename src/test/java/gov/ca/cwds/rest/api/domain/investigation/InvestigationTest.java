@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,7 +67,7 @@ public class InvestigationTest {
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
-  private BigDecimal phone = new BigDecimal(4445555);
+  private Long phone = 4445555L;
   private Integer phoneExtension = 1122;
   private Short phoneType = 1111;
 
@@ -486,7 +485,7 @@ public class InvestigationTest {
   @Test
   public void testReferralAddressPhoneMatchesInvestigationSuccess() {
 
-    BigDecimal primaryPhone = new BigDecimal(1234567);
+    Long primaryPhone = 1234567L;
 
     Referral referral = new ReferralEntityBuilder().build();
     Address address = new AddressEntityBuilder().setPrimaryNumber(primaryPhone).build();
@@ -508,8 +507,8 @@ public class InvestigationTest {
     Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
     phoneNumbers = investigation.getPhoneNumbers();
 
-    BigDecimal addressPhoneNumber = address.getPrimaryNumber();
-    BigDecimal investigationPhoneNumber = new BigDecimal(0);
+    Long addressPhoneNumber = address.getPrimaryNumber();
+    Long investigationPhoneNumber = 0L;
 
     for (PhoneNumber phone : phoneNumbers) {
       investigationPhoneNumber = phone.getNumber();

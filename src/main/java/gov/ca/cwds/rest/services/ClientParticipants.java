@@ -48,7 +48,7 @@ public class ClientParticipants {
 
   public void addParticipant(Participant participant) {
     if (participants == null) {
-      participants = new HashSet<Participant>();
+      participants = new HashSet<>();
     }
     addToClientIds(participant);
     this.participants.add(participant);
@@ -58,13 +58,13 @@ public class ClientParticipants {
     return victimIds;
   }
 
-  public void setVictimIds(HashMap<Long, String> victimIds) {
+  public void setVictimIds(Map<Long, String> victimIds) {
     this.victimIds = victimIds;
   }
 
   public void addVictimIds(Long id, String legacyId) {
     if (victimIds == null) {
-      victimIds = new HashMap<Long, String>();
+      victimIds = new HashMap<>();
     }
     this.victimIds.put(id, legacyId);
   }
@@ -73,13 +73,13 @@ public class ClientParticipants {
     return perpetratorIds;
   }
 
-  public void setPerpetratorIds(HashMap<Long, String> perpetratorIds) {
+  public void setPerpetratorIds(Map<Long, String> perpetratorIds) {
     this.perpetratorIds = perpetratorIds;
   }
 
   public void addPerpetratorIds(Long id, String legacyId) {
     if (perpetratorIds == null) {
-      perpetratorIds = new HashMap<Long, String>();
+      perpetratorIds = new HashMap<>();
     }
     this.perpetratorIds.put(id, legacyId);
   }

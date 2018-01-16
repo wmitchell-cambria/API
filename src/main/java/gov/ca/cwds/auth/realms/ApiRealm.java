@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.ObjectMapperUtils;
-import gov.ca.cwds.security.shiro.realms.JwtRealm;
+import gov.ca.cwds.security.realm.JwtRealm;
 
 
 /**

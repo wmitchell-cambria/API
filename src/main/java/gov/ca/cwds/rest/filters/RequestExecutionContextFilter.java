@@ -21,7 +21,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.filters.RequestExecutionContext.Parameter;
-import gov.ca.cwds.security.shiro.web.PerryAuthenticatingFilter;
+import gov.ca.cwds.security.web.PerryAuthenticatingFilter;
 
 /**
  * Store common info when an HTTP request begins. Can be merged with
