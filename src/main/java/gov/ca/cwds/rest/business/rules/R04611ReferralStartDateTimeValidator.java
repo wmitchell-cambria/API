@@ -40,10 +40,8 @@ public class R04611ReferralStartDateTimeValidator implements RuleValidator {
     if (domainReferral.getReceivedDate().compareTo(firstAssignmentEndDate) < 0) {
       return true;
     }
-    if (domainReferral.getReceivedDate().equals(firstAssignmentEndDate)
-        && domainReferral.getReceivedTime().compareTo(firstAssignmentEndTime) < 0) {
-      return true;
-    }
-    return false;
+    
+    return domainReferral.getReceivedDate().equals(firstAssignmentEndDate)
+        && domainReferral.getReceivedTime().compareTo(firstAssignmentEndTime) < 0;
   }
 }

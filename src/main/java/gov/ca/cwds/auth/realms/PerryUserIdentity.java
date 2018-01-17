@@ -14,11 +14,12 @@ public class PerryUserIdentity extends PerryAccount {
   @JsonProperty
   private String staffId;
 
-
+  @Override
   public String getStaffId() {
     return staffId;
   }
 
+  @Override
   public void setStaffId(String staffId) {
     this.staffId = staffId;
   }

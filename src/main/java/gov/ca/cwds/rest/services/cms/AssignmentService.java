@@ -245,11 +245,9 @@ public class AssignmentService implements
     if (assignment1.getStartDate().before(assignment2.getStartDate())) {
       return true;
     }
-    if (assignment1.getStartDate().equals(assignment2.getStartDate()) && assignment1.getStartTime()
-        .before(assignment2.getStartTime())) {
-      return true;
-    }
-    return false;
+    return assignment1.getStartDate().equals(assignment2.getStartDate()) && assignment1
+        .getStartTime()
+        .before(assignment2.getStartTime());
   }
 
 }
