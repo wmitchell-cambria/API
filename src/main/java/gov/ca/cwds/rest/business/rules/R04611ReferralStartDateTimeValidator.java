@@ -7,10 +7,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * R - 04611 - Maximum Referral Start Date/Time: A change to the Referral Start Date and Time will
- * automatically reset the Start Date & Time of the first Assignment, and the Referral Start Date and
- * Time can not exceed the End Date and can not equal or exceed End Time of the first assignment if
- * it exists.
+ * R - 04611 - Maximum Referral Start Date/Time A change to the Referral Start Date and Time will
+ * automatically reset the Start Date and Time of the first Assignment and the Referral Start Date
+ * and Time can not exceed the End Date and can not equal or exceed End Time of the first assignment
+ * if it exists.
  *
  * @author CWDS API Team
  */
