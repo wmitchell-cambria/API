@@ -59,8 +59,7 @@ public class PostedCmsNSReferral extends DomainObject implements Response {
     final int PRIME = 31;
     int result = 1;
     result = PRIME * result + ((referral == null) ? 0 : referral.hashCode());
-    result = PRIME * result + ((person == null) ? 0 : person.hashCode());
-    return result;
+    return PRIME * result + ((person == null) ? 0 : person.hashCode());
   }
 
 
