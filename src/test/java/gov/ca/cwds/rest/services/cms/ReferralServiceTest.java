@@ -23,7 +23,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;

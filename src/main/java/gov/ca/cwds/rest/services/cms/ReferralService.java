@@ -171,7 +171,7 @@ public class ReferralService implements
 
       //work around to be able to pass externally generated ID
       String referralId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId());
-      if (!StringUtils.isBlank(referral.getUiIdentifier())){
+      if (!StringUtils.isBlank(referral.getUiIdentifier()) && referral.getUiIdentifier().length() == 10){
         referralId = referral.getUiIdentifier();
         referral.setUiIdentifier(null);
       }
@@ -242,7 +242,10 @@ public class ReferralService implements
       try {
         referral = createReferralWithDefaults(screeningToReferral, dateStarted, timeStarted,
             messageBuilder);
-      } catch (ServiceException|NullPointerException e) {
+      } catch (ServiceException e) {
+        String message = e.getMessage();
+        messageBuilder.addMessageAndLog(message, e, LOGGER);
+      } catch (NullPointerException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
       } catch (Exception e) {
@@ -251,12 +254,12 @@ public class ReferralService implements
         throw e;
       }
 
-      messageBuilder.addDomainValidationError(validator.validate(referral));
-
       if (referral == null){
-        messageBuilder.addMessageAndLog("Referral was not created. (null)", LOGGER);
+//        messageBuilder.addMessageAndLog("Referral was not created. (null)", LOGGER);
         return null;
       }
+
+      messageBuilder.addDomainValidationError(validator.validate(referral));
 
       /*
        * Attach default screener narrative created from template
