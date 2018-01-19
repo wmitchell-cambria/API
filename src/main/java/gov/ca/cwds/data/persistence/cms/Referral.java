@@ -617,13 +617,6 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   }
 
   /**
-   * @param drmsAllegationDescriptionDoc - Screener Narrative DRMS Document Id
-   */
-  public void setDrmsAllegationDescriptionDoc(String drmsAllegationDescriptionDoc) {
-    this.drmsAllegationDescriptionDoc = drmsAllegationDescriptionDoc;
-  }
-
-  /**
    * @return the drmsErReferralDoc
    */
   public String getDrmsErReferralDoc() {
