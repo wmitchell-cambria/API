@@ -1,5 +1,6 @@
 package gov.ca.cwds.fixture;
 
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -22,8 +23,8 @@ public class AssignmentEntityBuilder {
   private String fkOutOfStateContactParty = null;
   private String responsibilityDescription = "some kind of descrption";
   private Short secondaryAssignmentRoleType = (short) 0;
-  private Date startDate = new Date();
-  private Date startTime = new Date();
+  private Date startDate = DomainChef.uncookDateString("2008-01-15");
+  private Date startTime = DomainChef.uncookTimeString("15:11:45");
   private String typeOfAssignmentCode = "P";
   private BigDecimal weightingNumber = new BigDecimal(0.00);
 
@@ -60,12 +61,22 @@ public class AssignmentEntityBuilder {
     return this;
   }
 
+  public AssignmentEntityBuilder setEndDate(String endDate) {
+    this.endDate = DomainChef.uncookDateString(endDate);
+    return this;
+  }
+
   public Date getEndTime() {
     return endTime;
   }
 
   public AssignmentEntityBuilder setEndTime(Date endTime) {
     this.endTime = endTime;
+    return this;
+  }
+
+  public AssignmentEntityBuilder setEndTime(String endTime) {
+    this.endTime = DomainChef.uncookTimeString(endTime);
     return this;
   }
 
@@ -87,17 +98,9 @@ public class AssignmentEntityBuilder {
     return this;
   }
 
-  public String getFkCaseLoad() {
-    return fkCaseLoad;
-  }
-
   public AssignmentEntityBuilder setFkCaseLoad(String fkCaseLoad) {
     this.fkCaseLoad = fkCaseLoad;
     return this;
-  }
-
-  public String getFkOutOfStateContactParty() {
-    return fkOutOfStateContactParty;
   }
 
   public AssignmentEntityBuilder setFkOutOfStateContactParty(String fkOutOfStateContactParty) {
@@ -132,12 +135,22 @@ public class AssignmentEntityBuilder {
     return this;
   }
 
+  public AssignmentEntityBuilder setStartDate(String startDate) {
+    this.startDate = DomainChef.uncookDateString(startDate);
+    return this;
+  }
+
   public Date getStartTime() {
     return startTime;
   }
 
   public AssignmentEntityBuilder setStartTime(Date startTime) {
     this.startTime = startTime;
+    return this;
+  }
+
+  public AssignmentEntityBuilder setStartTime(String startTime) {
+    this.startTime = DomainChef.uncookTimeString(startTime);
     return this;
   }
 

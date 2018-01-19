@@ -4,6 +4,10 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
+import com.codahale.metrics.servlets.AdminServlet;
+import com.codahale.metrics.servlets.HealthCheckServlet;
+import com.codahale.metrics.servlets.MetricsServlet;
+import io.dropwizard.jetty.NonblockingServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +69,16 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
   @Override
   public void runInternal(final ApiConfiguration configuration, final Environment environment) {
     Injector injector = guiceBundle.getInjector();
+
+    environment.getApplicationContext().setAttribute(
+            MetricsServlet.METRICS_REGISTRY,
+            environment.metrics());
+    environment.getApplicationContext().setAttribute(
+            HealthCheckServlet.HEALTH_CHECK_REGISTRY,
+            environment.healthChecks());
+    environment.getApplicationContext().addServlet(
+            new NonblockingServletHolder(new AdminServlet()), "/admin/*");
+
 
     environment.servlets()
         .addFilter("RequestExecutionContextManagingFilter",

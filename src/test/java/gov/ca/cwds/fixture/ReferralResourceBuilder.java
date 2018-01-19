@@ -16,6 +16,9 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
  */
 @SuppressWarnings("javadoc")
 public class ReferralResourceBuilder {
+  public static final String DEFAULT_REFERRAL_RECEIVED_DATE = "2017-01-01";
+  public static final String DEFAULT_REFERRAL_RECEIVED_TIME = "16:41:49";
+
   Boolean additionalInfoIncludedCode = false;
   Boolean anonymousReporterIndicator = false;
   Boolean applicationForPetitionIndicator = false;
@@ -37,8 +40,8 @@ public class ReferralResourceBuilder {
   String mandatedCrossReportReceivedDate = "";
   String referralName = "";
   String openAdequateCaseCode = "";
-  String receivedDate = "2017-01-01";
-  String receivedTime = "16:41:49";
+  String receivedDate = DEFAULT_REFERRAL_RECEIVED_DATE;
+  String receivedTime = DEFAULT_REFERRAL_RECEIVED_TIME;
   Short referralResponseType = 1520;
   Short referredToResourceType = 0;
   String responseDeterminationDate = "";
