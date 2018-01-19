@@ -169,7 +169,7 @@ public class ReferralService implements
           staffPersonValidate(RequestExecutionContext.instance().getStaffId());
       validateCountyOfAssignedStaffWorker(referral);
 
-      //worarond to be able to pass externally generated ID
+      //work around to be able to pass externally generated ID
       String referralId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId());
       if (!StringUtils.isBlank(referral.getUiIdentifier())){
         referralId = referral.getUiIdentifier();
@@ -517,14 +517,11 @@ public class ReferralService implements
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
 
       //Make Word doc from Template with new DOC_HANDLE etc.
-      //TO1DO
-
 
       Date now = new Date();
       String docAuth = RequestExecutionContext.instance().getUserId();
 
       SecureRandom random = new SecureRandom();
-      // TO1DO Generate handle the proper way. 0015441304100220*RAMESHA 00006
       String docHandle = DocUtils.generateDocHandle(now, docAuth);
       Short segments = 1;
       Long docLength = 1L;
@@ -574,11 +571,11 @@ public class ReferralService implements
                                                gov.ca.cwds.rest.api.domain.cms.Referral referral,
                                                byte[] template){
     Map<String, String> keyValuePairs = new HashMap<>();
-    // Get child name from ...victims, allegations, participants???
 
     String childName = "";
     String childNumber = "";
 
+    // Get child name from ...victims, allegations, participants???
     if (screeningToReferral.getParticipants() != null) {
       for (Participant participant : screeningToReferral.getParticipants()) {
         if(participant.getRoles().contains("Victim")) {
