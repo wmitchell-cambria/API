@@ -242,10 +242,7 @@ public class ReferralService implements
       try {
         referral = createReferralWithDefaults(screeningToReferral, dateStarted, timeStarted,
             messageBuilder);
-      } catch (ServiceException e) {
-        String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
-      } catch (NullPointerException e) {
+      } catch (ServiceException|NullPointerException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
       } catch (Exception e) {
@@ -255,7 +252,6 @@ public class ReferralService implements
       }
 
       if (referral == null){
-//        messageBuilder.addMessageAndLog("Referral was not created. (null)", LOGGER);
         return null;
       }
 
