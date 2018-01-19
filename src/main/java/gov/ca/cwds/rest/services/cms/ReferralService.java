@@ -1,11 +1,24 @@
 package gov.ca.cwds.rest.services.cms;
 
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
+import javax.xml.bind.DatatypeConverter;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
+import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
+import gov.ca.cwds.rest.util.DocUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +50,8 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
+import static java.lang.Math.min;
+
 /**
  * Business layer object to work on {@link Referral}
  * 
@@ -57,15 +72,16 @@ public class ReferralService implements
 
   private Validator validator;
   private AssignmentService assignmentService;
+  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
-  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AddressService addressService;
   private LongTextService longTextService;
   private RIReferral riReferral;
 
   /**
    * Constructor
-   * 
+   *
    * @param referralDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
    *        objects.
    * @param nonLaTriggers The {@link Dao} handling
@@ -78,8 +94,9 @@ public class ReferralService implements
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
+   * @param cmsDocumentService the service for storing Cms Documents
    * @param drmsDocumentService the service for generating DRMS Documents
-   * @param otherCaseReferralDrmsDocumentService the service for generating Other Case/Referral DRMS Documents
+   * @param drmsDocumentTemplateService the service for DRMS Document Templates
    * @param addressService the service for creating addresses
    * @param longTextService the longText Service
    * @param riReferral the ri
@@ -88,7 +105,8 @@ public class ReferralService implements
   public ReferralService(final ReferralDao referralDao, NonLACountyTriggers nonLaTriggers,
       LACountyTrigger laCountyTrigger, TriggerTablesDao triggerTablesDao,
       StaffPersonDao staffpersonDao, AssignmentService assignmentService, Validator validator,
-      DrmsDocumentService drmsDocumentService, OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService, AddressService addressService,
+      CmsDocumentService cmsDocumentService, DrmsDocumentService drmsDocumentService,
+      DrmsDocumentTemplateService drmsDocumentTemplateService, AddressService addressService,
       LongTextService longTextService, RIReferral riReferral) {
     this.referralDao = referralDao;
     this.nonLaTriggers = nonLaTriggers;
@@ -97,8 +115,9 @@ public class ReferralService implements
     this.staffpersonDao = staffpersonDao;
     this.assignmentService = assignmentService;
     this.validator = validator;
+    this.cmsDocumentService = cmsDocumentService;
     this.drmsDocumentService = drmsDocumentService;
-    this.otherCaseReferralDrmsDocumentService = otherCaseReferralDrmsDocumentService;
+    this.drmsDocumentTemplateService = drmsDocumentTemplateService;
     this.addressService = addressService;
     this.longTextService = longTextService;
     this.riReferral = riReferral;
@@ -157,6 +176,20 @@ public class ReferralService implements
         throw new ServiceException("Referral Not successfully saved");
       }
       createLACountyTrigger(staffperson, managed);
+
+      /*
+       * Attach default screener narrative created from template
+       */
+      String screenerNarrativeId = createDefaultSreenerNarrativeForNewReferral(referral, managed.getId());
+      if (!StringUtils.isBlank(screenerNarrativeId)){
+        managed.setDrmsAllegationDescriptionDoc(screenerNarrativeId);
+        managed = referralDao.update(managed);
+        if (managed == null || managed.getId() == null) {
+          LOGGER.warn("Unable to save referral: {}", referral);
+          throw new ServiceException("Referral Not successfully saved");
+        }
+      }
+
       return new PostedReferral(managed);
     } catch (EntityExistsException e) {
       LOGGER.info("Referral already exists : {}", referral);
@@ -212,10 +245,7 @@ public class ReferralService implements
       try {
         referral = createReferralWithDefaults(screeningToReferral, dateStarted, timeStarted,
             messageBuilder);
-      } catch (ServiceException e) {
-        String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
-      } catch (NullPointerException e) {
+      } catch (ServiceException|NullPointerException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
       } catch (Exception e) {
@@ -232,7 +262,7 @@ public class ReferralService implements
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, messageBuilder);
-      otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral);
+      // TODO: R - 01054 Prmary Assignment Adding
 
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now
@@ -443,5 +473,97 @@ public class ReferralService implements
       throw new ServiceException(msg, e);
     }
   }
+
+  public String createDefaultSreenerNarrativeForNewReferral(
+          gov.ca.cwds.rest.api.domain.cms.Referral referral,
+          String referralId) {
+    String screenerNarrativeId = null;
+    DrmsDocumentTemplate drmsTemplate =
+            drmsDocumentTemplateService.findScreenerNarrativeTemplate(referral.getGovtEntityType());
+
+    if (drmsTemplate != null) {
+      CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
+
+      //Make Word doc from Template with new DOC_HANDLE etc.
+      //TO1DO
+
+
+      Date now = new Date();
+      String docAuth = RequestExecutionContext.instance().getUserId();
+
+      SecureRandom random = new SecureRandom();
+      // TO1DO Generate handle the proper way. 0015441304100220*RAMESHA 00006
+      String docHandle = DocUtils.generateDocHandle(now, docAuth);
+      Short segments = 1;
+      Long docLength = 1L;
+
+      // TO1DO ???  The server name through which the document was added.
+      String docServ = "AUTOCRTD";
+
+      String docDate = new SimpleDateFormat(DomainObject.DATE_FORMAT).format(now);
+      String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
+
+      //TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
+      String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
+      String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0,5).concat(nameNumber).concat(".DOC");
+
+
+      String base64Blob = DatatypeConverter.printBase64Binary(
+              screenerNarrativeFromTemplate(
+                      referralId,
+                      referral,
+                      DatatypeConverter.parseBase64Binary(cmsTemplate.getBase64Blob())));
+
+      CmsDocument cmsDocument = new CmsDocument(docHandle, segments, docLength,
+              docAuth,
+              docServ,
+              docDate, docTime, docName,
+              cmsTemplate.getCompressionMethod(),
+              base64Blob );
+      cmsDocument = cmsDocumentService.create(cmsDocument);
+
+      DrmsDocument document = new DrmsDocument(
+              new Date(),
+              drmsTemplate.getThirdId(),
+              null,
+              RequestExecutionContext.instance().getStaffId(),
+              cmsDocument.getId());
+
+      PostedDrmsDocument posted = drmsDocumentService.create(document);
+      screenerNarrativeId = posted.getId();
+
+    }
+    return screenerNarrativeId;
+  }
+
+  private byte[] screenerNarrativeFromTemplate(String referralId,
+                                               gov.ca.cwds.rest.api.domain.cms.Referral referral,
+                                               byte[] template){
+    Map<String, String> keyValuePairs = new HashMap<>();
+    // Get child name from ...victims, allegations, participants???
+
+    String childName = "";
+    String childNumber = "";
+
+//    if (screeningToReferral.getParticipants() != null) {
+//      for (Participant participant : screeningToReferral.getParticipants()) {
+//        if(participant.getRoles().contains("Victim")) {
+//          childName = childName.concat(", ").concat(participant.getFirstName()).concat(" ").concat(participant.getLastName());
+//        }
+//      }
+//    }
+
+    keyValuePairs.put("ChildName",childName.substring(min(childName.length(), 1)).trim());
+    keyValuePairs.put("ChildNumber",childNumber.substring(min(childNumber.length(), 1)).trim());
+
+    keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
+    keyValuePairs.put("ReferralDate",referral.getReceivedDate());
+
+//    keyValuePairs.put("bkBody",screeningToReferral.getReportNarrative());
+    keyValuePairs.put("bkBody",referral.getScreenerNoteText());
+
+    return DocUtils.createFromTemplateUseBookmarks(template, keyValuePairs);
+  }
+
 
 }

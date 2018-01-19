@@ -13,6 +13,8 @@ import java.util.Date;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -125,8 +127,9 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
+  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
-  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private DrmsDocumentDao drmsDocumentDao;
   private SsaName3Dao ssaName3Dao;
   private Reminders reminders;
@@ -157,6 +160,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
 
+    cmsDocumentService = mock(CmsDocumentService.class);
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
@@ -165,8 +169,8 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     riReferral = mock(RIReferral.class);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+        drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);

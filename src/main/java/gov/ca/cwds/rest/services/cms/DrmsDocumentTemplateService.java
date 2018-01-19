@@ -65,7 +65,7 @@ public class DrmsDocumentTemplateService implements TypedCrudsService<String, Dr
     if (template == null) {
       LOGGER.warn("NO (_NS) SCREENER NARRATIVE TEMPLATE FOUND. CREATING ONE.");
       final String base64blob = DocUtils.loadTemplateBase64(TEMPLATE_DOC_NAME_SCREENER_NARRATIVE);
-      if (base64blob.isEmpty()){
+      if (base64blob.isEmpty()) {
         LOGGER.warn("CAN'T LOAD (_NS) SCREENER NARRATIVE TEMPLATE.");
         return null;
       }
@@ -77,17 +77,22 @@ public class DrmsDocumentTemplateService implements TypedCrudsService<String, Dr
       final Short segments = 1;
       final Long docLength = 1L;
 
-
-      CmsDocument cmsDocument = new CmsDocument(
-              DocUtils.generateDocHandle(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId(), now), docAuth),
-              segments, docLength,
-              docAuth, docServ,
-              docDate, docTime, TEMPLATE_DOC_NAME_SCREENER_NARRATIVE,
+      CmsDocument cmsDocument =
+          new CmsDocument(
+              DocUtils.generateDocHandle(now, docAuth),
+              segments,
+              docLength,
+              docAuth,
+              docServ,
+              docDate,
+              docTime,
+              TEMPLATE_DOC_NAME_SCREENER_NARRATIVE,
               COMPRESSION_TYPE_PK_FULL,
               base64blob);
       cmsDocument = cmsDocumentService.create(cmsDocument);
 
-      template = new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate(
+      template =
+          new gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate(
               CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId(), now),
               APPLICATION_CONTEXT_REFERRAL_DOCUMENTS,
               FilenameUtils.getBaseName(TEMPLATE_DOC_NAME_SCREENER_NARRATIVE),
