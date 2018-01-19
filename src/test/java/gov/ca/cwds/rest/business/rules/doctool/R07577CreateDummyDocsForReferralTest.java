@@ -14,6 +14,9 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -147,9 +150,10 @@ public class R07577CreateDummyDocsForReferralTest {
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
+  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private DrmsDocumentDao drmsDocumentDao;
-  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
   private SsaName3Dao ssaName3Dao;
   private Reminders reminders;
   private UpperCaseTables upperCaseTables;
@@ -234,8 +238,9 @@ public class R07577CreateDummyDocsForReferralTest {
     longTextService = new LongTextService(longTextDao);
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
+    cmsDocumentService = mock(CmsDocumentService.class);
+    drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
-    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
 
     childClientDao = mock(ChildClientDao.class);
     riChildClient = mock(RIChildClient.class);
@@ -262,8 +267,8 @@ public class R07577CreateDummyDocsForReferralTest {
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+        drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,

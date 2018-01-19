@@ -72,8 +72,9 @@ public class CmsReferralServiceTest {
   private CrossReportService crossReportService;
   private ReporterService reporterService;
   private AssignmentService assignmentService;
+  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
-  private OtherCaseReferralDrmsDocumentService otherCaseReferralDrmsDocumentService;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AddressService addressService;
   private LongTextService longTextService;
   private UpperCaseTables upperCaseTables;
@@ -113,18 +114,19 @@ public class CmsReferralServiceTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     assignmentService = mock(AssignmentService.class);
+    cmsDocumentService = mock(CmsDocumentService.class);
     drmsDocumentService = mock(DrmsDocumentService.class);
+    drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
     riReferral = mock(RIReferral.class);
-    otherCaseReferralDrmsDocumentService = mock(OtherCaseReferralDrmsDocumentService.class);
     staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51").build();
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("21");
 
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        otherCaseReferralDrmsDocumentService, addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+        drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
