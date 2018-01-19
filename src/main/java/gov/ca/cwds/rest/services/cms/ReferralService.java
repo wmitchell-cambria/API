@@ -253,6 +253,11 @@ public class ReferralService implements
 
       messageBuilder.addDomainValidationError(validator.validate(referral));
 
+      if (referral == null){
+        messageBuilder.addMessageAndLog("Referral was not created. (null)", LOGGER);
+        return null;
+      }
+
       /*
        * Attach default screener narrative created from template
        */
@@ -506,7 +511,7 @@ public class ReferralService implements
           String referralId) {
     String screenerNarrativeId = null;
     DrmsDocumentTemplate drmsTemplate =
-            drmsDocumentTemplateService.findScreenerNarrativeTemplate(referral.getGovtEntityType());
+            drmsDocumentTemplateService.findScreenerNarrativeTemplateNs(referral.getGovtEntityType());
 
     if (drmsTemplate != null) {
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
