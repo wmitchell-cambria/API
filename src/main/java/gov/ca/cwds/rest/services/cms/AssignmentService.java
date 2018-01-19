@@ -11,7 +11,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.ReferralDao;
@@ -53,7 +52,6 @@ public class AssignmentService implements
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
   private ReferralDao referralDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
@@ -71,7 +69,6 @@ public class AssignmentService implements
    * @param externalInterfaceTables externalInterfaceTables
    * @param caseLoadDao caseLoadDao
    * @param referralDao referralDao
-   * @param caseDao caseDao
    * @param assignmentUnitDao assignmentUnitDao
    * @param cwsOfficeDao cwsOfficeDao
    * @param messageBuilder messageBuilder
@@ -80,7 +77,7 @@ public class AssignmentService implements
   public AssignmentService(AssignmentDao assignmentDao, NonLACountyTriggers nonLACountyTriggers,
       StaffPersonDao staffpersonDao, TriggerTablesDao triggerTablesDao, Validator validator,
       ExternalInterfaceTables externalInterfaceTables, CaseLoadDao caseLoadDao,
-      ReferralDao referralDao, CaseDao caseDao, AssignmentUnitDao assignmentUnitDao,
+      ReferralDao referralDao, AssignmentUnitDao assignmentUnitDao,
       CwsOfficeDao cwsOfficeDao, MessageBuilder messageBuilder) {
     this.assignmentDao = assignmentDao;
     this.nonLACountyTriggers = nonLACountyTriggers;
@@ -90,7 +87,6 @@ public class AssignmentService implements
     this.externalInterfaceTables = externalInterfaceTables;
     this.caseLoadDao = caseLoadDao;
     this.referralDao = referralDao;
-    this.caseDao = caseDao;
     this.assignmentUnitDao = assignmentUnitDao;
     this.cwsOfficeDao = cwsOfficeDao;
     this.messageBuilder = messageBuilder;
@@ -168,7 +164,7 @@ public class AssignmentService implements
 
   private void executeR01054Rule(Assignment managed) {
     R01054PrimaryAssignmentAdding r01054Rule = new R01054PrimaryAssignmentAdding(managed,
-        referralDao, caseDao, caseLoadDao, assignmentUnitDao, cwsOfficeDao);
+        referralDao, caseLoadDao, assignmentUnitDao, cwsOfficeDao);
     try {
       r01054Rule.execute();
     } catch (Exception e) {

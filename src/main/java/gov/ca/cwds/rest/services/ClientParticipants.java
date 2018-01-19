@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -13,8 +14,8 @@ import gov.ca.cwds.rest.api.domain.Participant;
 @SuppressWarnings("javadoc")
 public class ClientParticipants {
   Set<Participant> participants;
-  HashMap<Long, String> victimIds;
-  HashMap<Long, String> perpetratorIds;
+  Map<Long, String> victimIds;
+  Map<Long, String> perpetratorIds;
 
   /**
    * 
@@ -30,8 +31,8 @@ public class ClientParticipants {
    * @param victimIds - victimIds
    * @param perpetratorIds - perpetratorIds
    */
-  public ClientParticipants(Set<Participant> participants, HashMap<Long, String> victimIds,
-      HashMap<Long, String> perpetratorIds) {
+  public ClientParticipants(Set<Participant> participants, Map<Long, String> victimIds,
+      Map<Long, String> perpetratorIds) {
     this.participants = participants;
     this.victimIds = victimIds;
     this.perpetratorIds = perpetratorIds;
@@ -47,38 +48,38 @@ public class ClientParticipants {
 
   public void addParticipant(Participant participant) {
     if (participants == null) {
-      participants = new HashSet<Participant>();
+      participants = new HashSet<>();
     }
     addToClientIds(participant);
     this.participants.add(participant);
   }
 
-  public HashMap<Long, String> getVictimIds() {
+  public Map<Long, String> getVictimIds() {
     return victimIds;
   }
 
-  public void setVictimIds(HashMap<Long, String> victimIds) {
+  public void setVictimIds(Map<Long, String> victimIds) {
     this.victimIds = victimIds;
   }
 
   public void addVictimIds(Long id, String legacyId) {
     if (victimIds == null) {
-      victimIds = new HashMap<Long, String>();
+      victimIds = new HashMap<>();
     }
     this.victimIds.put(id, legacyId);
   }
 
-  public HashMap<Long, String> getPerpetratorIds() {
+  public Map<Long, String> getPerpetratorIds() {
     return perpetratorIds;
   }
 
-  public void setPerpetratorIds(HashMap<Long, String> perpetratorIds) {
+  public void setPerpetratorIds(Map<Long, String> perpetratorIds) {
     this.perpetratorIds = perpetratorIds;
   }
 
   public void addPerpetratorIds(Long id, String legacyId) {
     if (perpetratorIds == null) {
-      perpetratorIds = new HashMap<Long, String>();
+      perpetratorIds = new HashMap<>();
     }
     this.perpetratorIds.put(id, legacyId);
   }

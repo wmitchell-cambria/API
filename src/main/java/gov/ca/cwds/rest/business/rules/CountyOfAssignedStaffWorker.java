@@ -36,12 +36,10 @@ public class CountyOfAssignedStaffWorker implements RuleValidator {
   }
 
   private StaffPerson validatedStaffPerson(String staffPersonId) {
-    StaffPerson staffperson;
     if (staffPersonId == null) {
       throw new ServiceException("Assigned Staff Person Id is mandatory");
     } else {
-      staffperson = staffPersonDao.find(staffPersonId);
+      return staffPersonDao.find(staffPersonId);
     }
-    return staffperson;
   }
 }

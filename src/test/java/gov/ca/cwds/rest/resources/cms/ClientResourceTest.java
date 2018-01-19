@@ -2,7 +2,8 @@ package gov.ca.cwds.rest.resources.cms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.eq;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -76,13 +77,12 @@ public class ClientResourceTest {
    * Create Tests
    */
   @Test
-  @Ignore
   public void createDelegatesToResourceDelegate() throws Exception {
     Client serialized = new ClientResourceBuilder().build();
 
     inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .post(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    verify(typedResourceDelegate).create(eq(serialized));
+    verify(typedResourceDelegate).create(any(Client.class));
   }
 
   @Test
@@ -109,13 +109,12 @@ public class ClientResourceTest {
    * Update Tests
    */
   @Test
-  @Ignore
   public void updateDelegatesToResourceDelegate() throws Exception {
     Client serialized = new ClientResourceBuilder().build();
 
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .put(Entity.entity(serialized, MediaType.APPLICATION_JSON));
-    verify(typedResourceDelegate).update(eq("AaiU7IW0Rt"), eq(serialized));
+    verify(typedResourceDelegate).update(eq("AaiU7IW0Rt"), any(Client.class));
   }
 
   @Test

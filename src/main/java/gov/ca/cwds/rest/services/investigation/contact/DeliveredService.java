@@ -112,8 +112,6 @@ public class DeliveredService {
 
     List<DeliveredServiceDomain> deliveredServiceDomains =
         constructDeliveredServiceDomainForCreate(request, countySpecificCode);
-    // TODO use below list to store contact id's into Postgres.
-    // Set<String> deliveredServiceEntityIds = new HashSet<>();
     String primaryDeliveredServiceId = null;
 
     try {
@@ -129,7 +127,6 @@ public class DeliveredService {
           primaryDeliveredServiceId = persistedDeliveredService.getId();
 
         }
-        // deliveredServiceEntityIds.add(persistedDeliveredService.getId());
       }
     } catch (EntityExistsException e) {
       LOGGER.info("Internal Error : deliveredServiceEntity couldn't create it for Referral id : {}",
@@ -146,8 +143,7 @@ public class DeliveredService {
   /**
    * Construct the DeliveredService object for create
    *
-   * @param contactId the Delivered Service Identifier
-   * @param contactRequest the request
+   * @param request the request
    * @param countySpecificCode
    * @return the DeliveredServiceDomain
    */

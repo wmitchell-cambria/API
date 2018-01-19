@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -59,9 +60,11 @@ public class HOIReferralFactory {
       hoiAllegatons.add(buildAllegationDomain(allegation));
     }
     hoiReferral.setAllegations(hoiAllegatons);
+    String referralId = referral.getId();
     hoiReferral.setLegacyDescriptor(
-        new LegacyDescriptor(referral.getId(), null, new DateTime(referral.getLastUpdatedTime()),
-            LegacyTable.REFERRAL.getName(), LegacyTable.REFERRAL.getDescription()));
+        new LegacyDescriptor(referralId, CmsKeyIdGenerator.getUIIdentifierFromKey(referralId),
+            new DateTime(referral.getLastUpdatedTime()), LegacyTable.REFERRAL.getName(),
+            LegacyTable.REFERRAL.getDescription()));
     return hoiReferral;
   }
 
@@ -73,7 +76,8 @@ public class HOIReferralFactory {
   }
 
   private HOIAllegation buildAllegationDomain(Map.Entry<Allegation, List<Client>> allegation) {
-    HOIAllegation hoiAllegation = new HOIAllegation(allegation.getKey().getId(),
+    String allegationId = allegation.getKey().getId();
+    HOIAllegation hoiAllegation = new HOIAllegation(allegationId,
         new SystemCodeDescriptor(allegation.getKey().getAllegationType(),
             SystemCodeCache.global()
                 .getSystemCodeShortDescription(allegation.getKey().getAllegationType())),
@@ -81,7 +85,8 @@ public class HOIReferralFactory {
             SystemCodeCache.global()
                 .getSystemCodeShortDescription(allegation.getKey().getAllegationDispositionType())),
         null, null,
-        new LegacyDescriptor(allegation.getKey().getId(), null,
+
+        new LegacyDescriptor(allegationId, CmsKeyIdGenerator.getUIIdentifierFromKey(allegationId),
             new DateTime(allegation.getKey().getLastUpdatedTime()),
             LegacyTable.ALLEGATION.getName(), LegacyTable.ALLEGATION.getDescription()));
     allegation.getValue()
@@ -91,28 +96,30 @@ public class HOIReferralFactory {
 
   private void buildClientsDomain(Map.Entry<Allegation, List<Client>> allegation,
       HOIAllegation hoiAllegation, Client eachclient) {
-
+    String clientId = eachclient.getId();
     if (eachclient.getId().equals(allegation.getKey().getVictimClientId())) {
-      hoiAllegation.setVictim(
-          new HOIVictim(eachclient.getId(), eachclient.getFirstName(), eachclient.getLastName(),
-              new LegacyDescriptor(eachclient.getId(), null,
+
+      hoiAllegation
+          .setVictim(new HOIVictim(clientId, eachclient.getFirstName(), eachclient.getLastName(),
+              new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
                   new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
                   LegacyTable.CLIENT.getDescription())));
     } else {
-      hoiAllegation.setPerpetrator(new HOIPerpetrator(eachclient.getId(), eachclient.getFirstName(),
-          eachclient.getLastName(),
-          new LegacyDescriptor(eachclient.getId(), null,
-              new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
-              LegacyTable.CLIENT.getDescription())));
+      hoiAllegation.setPerpetrator(
+          new HOIPerpetrator(clientId, eachclient.getFirstName(), eachclient.getLastName(),
+              new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+                  new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+                  LegacyTable.CLIENT.getDescription())));
     }
   }
 
   private HOIReporter buildReporterDomain(Reporter reporter, Role role) {
     HOIReporter hoiReporter = null;
     if (reporter != null) {
+      String reporterId = reporter.getReferralId();
       hoiReporter = new HOIReporter(role, reporter.getReferralId(), reporter.getFirstName(),
           reporter.getLastName(),
-          new LegacyDescriptor(reporter.getReferralId(), null,
+          new LegacyDescriptor(reporterId, CmsKeyIdGenerator.getUIIdentifierFromKey(reporterId),
               new DateTime(reporter.getLastUpdatedTime()), LegacyTable.REPORTER.getName(),
               LegacyTable.REPORTER.getDescription()));
     } else {
@@ -122,11 +129,11 @@ public class HOIReferralFactory {
   }
 
   private HOISocialWorker buildAssignedSocialWorkerDomain(StaffPerson staffPerson) {
+    String staffId = staffPerson.getId();
     return new HOISocialWorker(staffPerson.getId(), staffPerson.getFirstName(),
         staffPerson.getLastName(),
-        new LegacyDescriptor(staffPerson.getId(), null,
-            new DateTime(staffPerson.getLastUpdatedTime()), LegacyTable.STAFF_PERSON.getName(),
-            LegacyTable.STAFF_PERSON.getDescription()));
+        new LegacyDescriptor(staffId, staffId, new DateTime(staffPerson.getLastUpdatedTime()),
+            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription()));
   }
 
 }

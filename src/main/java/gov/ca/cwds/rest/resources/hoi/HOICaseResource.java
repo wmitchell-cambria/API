@@ -3,9 +3,8 @@ package gov.ca.cwds.rest.resources.hoi;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CASE_HISTORY_OF_INVOLVEMENT;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -15,6 +14,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.inject.HOICaseServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -41,7 +41,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HOICaseResource {
 
-  private SimpleResourceDelegate<String, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate;
+  private SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate;
 
   /**
    * Constructor
@@ -50,29 +50,27 @@ public class HOICaseResource {
    */
   @Inject
   public HOICaseResource(
-      @HOICaseServiceBackedResource SimpleResourceDelegate<String, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate) {
+      @HOICaseServiceBackedResource SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate) {
     super();
     this.simpleResourceDelegate = simpleResourceDelegate;
   }
 
   /**
-   * Finds a cases HOI by client id.
+   * Finds a cases HOI by client ids.
    * 
-   * @param id the id
-   * 
+   * @param hoiCaseRequest HOI Case Request containing a list of Client Id-s
    * @return the response
    */
   @UnitOfWork(value = "cms")
-  @GET
-  @Path("/{id}")
+  @POST
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find cases history of involvement by clientId", response = HOICase[].class,
       code = 200)
-  public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the client") String id) {
-    return simpleResourceDelegate.find(id);
+  public Response post(@ApiParam(required = true, name = "clientIds",
+      value = "List of Client Id-s") HOIRequest hoiCaseRequest) {
+    return simpleResourceDelegate.find(hoiCaseRequest);
   }
 
 }

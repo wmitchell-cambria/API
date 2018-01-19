@@ -113,10 +113,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       Set<gov.ca.cwds.rest.api.domain.investigation.Allegation> allegations =
           this.allegationService.populateAllegations(referral.getAllegations());
       Set<Person> peoples = this.peopleService.getInvestigationPeople(referral);
-      Set<Relationship> relationshipList = new HashSet<>();
-
-      // TODO - uncomment below when its needed
-      // this.relationshipListService.findRelationshipByReferralId(referral);
+      Set<Relationship> relationships = new HashSet<>();
 
       SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
       Set<String> crossReports = new HashSet<>();
@@ -124,7 +121,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
       ScreeningSummary screeningSummary = this.findScreeningSummaryServiceByReferralId(referralId);
 
       investigation = new Investigation(referral, address, staffPerson, rptNarrativeLongText,
-          addInfoLongText, allegations, peoples, relationshipList, safetyAlerts, crossReports,
+          addInfoLongText, allegations, peoples, relationships, safetyAlerts, crossReports,
           contacts, screeningSummary);
     }
 
@@ -165,7 +162,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   /**
    * Find the Staff Person who last updated the deliveredServiceEntity persistence object
    * 
-   * @param deliveredServiceEntity The persistence object
+   * @param staffPersonId The persistence object
    * @return The Staff Person who last updated the persistence object
    */
   private StaffPerson findStaffPersonById(String staffPersonId) {

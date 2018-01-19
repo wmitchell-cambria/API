@@ -1,8 +1,12 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,7 +33,8 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 @JsonPropertyOrder({"id", "startDate", "endDate", "county", "responseTime", "reporter",
     "assignedSocialWorker", "accessLimitation", "allegations", "legacyDescriptor"})
-public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
+public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request,
+    Comparable<HOIReferral>, Comparator<HOIReferral> {
 
   private static final long serialVersionUID = 1L;
 
@@ -209,5 +214,26 @@ public class HOIReferral extends ApiObjectIdentity implements ApiTypedIdentifier
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
+
+  @Override
+  public int compare(HOIReferral o1, HOIReferral o2) {
+    return o2.getStartDate().compareTo(o1.getStartDate());
+  }
+
+  @Override
+  public int compareTo(HOIReferral o) {
+    return compare(this, o);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 
 }

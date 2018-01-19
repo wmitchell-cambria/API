@@ -1,11 +1,12 @@
 package gov.ca.cwds.rest.services.cms;
 
 import com.google.inject.Inject;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static java.lang.Math.min;
+
 /**
  * Business layer object to work on {@link OtherCaseReferralDrmsDocument}
  *
@@ -53,6 +56,9 @@ public class OtherCaseReferralDrmsDocumentService
   /**
    * @param otherCaseReferralDrmsDocumentDao {@link Dao} handling {@link
    *     gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument} objects
+   * @param drmsDocumentService - DRMS document service
+   * @param drmsDocumentTemplateService - DRMS template service
+   * @param cmsDocumentService - CMS document service
    */
   @Inject
   public OtherCaseReferralDrmsDocumentService(
@@ -98,6 +104,7 @@ public class OtherCaseReferralDrmsDocumentService
     throw new NotImplementedException("update not implement");
   }
 
+  @SuppressFBWarnings("PREDICTABLE_RANDOM") // Random is a temp implementation till we know how
   public void createDefaultSreenerNarrativeForNewReferral(
       ScreeningToReferral screeningToReferral,
       String referralId,
@@ -110,7 +117,7 @@ public class OtherCaseReferralDrmsDocumentService
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
 
       //Make Word doc from Template with new DOC_HANDLE etc.
-      //TODO
+      //TO1DO
 
 
       Date now = new Date();
@@ -118,18 +125,18 @@ public class OtherCaseReferralDrmsDocumentService
       String docId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId(), now);
 
       Random random = new Random();
-      // TODO Generate handle the proper way. 0015441304100220*RAMESHA 00006
+      // TO1DO Generate handle the proper way. 0015441304100220*RAMESHA 00006
       String docHandle = DocUtils.generateDocHandle(docId, docAuth);
       Short segments = 1;
       Long docLength = 1L;
 
-      // TODO ???  The server name through which the document was added.
+      // TO1DO ???  The server name through which the document was added.
       String docServ = "AUTOCRTD";
 
       String docDate = new SimpleDateFormat(DomainObject.DATE_FORMAT).format(now);
       String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
 
-      //TODO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
+      //TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
       String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
       String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0,5).concat(nameNumber).concat(".DOC");
 
@@ -137,6 +144,8 @@ public class OtherCaseReferralDrmsDocumentService
       String base64Blob = DatatypeConverter.printBase64Binary(
               screenerNarrativeFromTemplate(
                       screeningToReferral,
+                      referralId,
+                      referral,
                       DatatypeConverter.parseBase64Binary(cmsTemplate.getBase64Blob())));
 
       CmsDocument cmsDocument = new CmsDocument(docHandle, segments, docLength,
@@ -168,15 +177,29 @@ public class OtherCaseReferralDrmsDocumentService
     }
   }
 
-  private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral, byte[] template){
+  private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral,
+                                               String referralId,
+                                               Referral referral,
+                                               byte[] template){
     Map<String, String> keyValuePairs = new HashMap<>();
-    // Get child name from allegations
-    String childName = "Dummy Name";
-    for(Allegation allegation: screeningToReferral.getAllegations()){
-    }
+    // Get child name from ...victims, allegations, participants???
 
-    keyValuePairs.put("ChildName",childName);
-    keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(screeningToReferral.getReferralId()));
+    String childName = "";
+    String childNumber = "";
+
+    if (screeningToReferral.getParticipants() != null) {
+        for (Participant participant : screeningToReferral.getParticipants()) {
+          if(participant.getRoles().contains("Victim")) {
+            childName = childName.concat(", ").concat(participant.getFirstName()).concat(" ").concat(participant.getLastName());
+          }
+        }
+    }
+    keyValuePairs.put("ChildName",childName.substring(min(childName.length(), 1)).trim());
+    keyValuePairs.put("ChildNumber",childNumber.substring(min(childNumber.length(), 1)).trim());
+
+    keyValuePairs.put("ReferralNumber",CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
+    keyValuePairs.put("ReferralDate",referral.getReceivedDate());
+
     keyValuePairs.put("bkBody",screeningToReferral.getReportNarrative());
 
     return DocUtils.createFromTemplateUseBookmarks(template, keyValuePairs);

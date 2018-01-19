@@ -29,7 +29,6 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
@@ -155,7 +154,6 @@ public class TestForLastUpdatedTimeIsUnique {
   private ExternalInterfaceTables externalInterfaceTables;
   private ClientScpEthnicityService clientScpEthnicityService;
   private CaseLoadDao caseLoadDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
@@ -207,12 +205,11 @@ public class TestForLastUpdatedTimeIsUnique {
     triggerTablesDao = mock(TriggerTablesDao.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    caseDao = mock(CaseDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     messageBuilder = mock(MessageBuilder.class);
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
     clientDao = mock(ClientDao.class);
@@ -501,8 +498,7 @@ public class TestForLastUpdatedTimeIsUnique {
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Assignment>() {
 
           @Override
-          public gov.ca.cwds.data.persistence.cms.Assignment answer(InvocationOnMock invocation)
-              throws Throwable {
+          public gov.ca.cwds.data.persistence.cms.Assignment answer(InvocationOnMock invocation) {
             createdAssignment =
                 (gov.ca.cwds.data.persistence.cms.Assignment) invocation.getArguments()[0];
             return assignmentToCreate;

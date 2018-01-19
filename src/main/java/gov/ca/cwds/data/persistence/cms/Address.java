@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -63,9 +62,9 @@ public class Address extends BaseAddress {
    * @param unitDesignationCd The unitDesignationCd
    * @param unitNumber The unitNumber
    */
-  public Address(String id, String city, BigDecimal emergencyNumber, Integer emergencyExtension,
-      String frgAdrtB, Short governmentEntityCd, BigDecimal messageNumber, Integer messageExtension,
-      String headerAddress, BigDecimal primaryNumber, Integer primaryExtension, Short state,
+  public Address(String id, String city, Long emergencyNumber, Integer emergencyExtension,
+      String frgAdrtB, Short governmentEntityCd, Long messageNumber, Integer messageExtension,
+      String headerAddress, Long primaryNumber, Integer primaryExtension, Short state,
       String streetName, String streetNumber, String zip, String addressDescription, Short zip4,
       String postDirCd, String preDirCd, Short streetSuffixCd, Short unitDesignationCd,
       String unitNumber) {
@@ -120,7 +119,7 @@ public class Address extends BaseAddress {
       this.state = address.getState();
       this.streetName = address.getStreetName();
       this.streetNumber = address.getStreetNumber();
-      this.zip = address.getZip().toString();
+      this.zip = String.valueOf(address.getZip());
       this.zip4 = address.getZip4();
       this.addressDescription = address.getAddressDescription();
       this.postDirCd = address.getPostDirCd();

@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import java.math.BigDecimal;
-
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 
 /**
@@ -17,7 +15,7 @@ public class CmsCrossReportResourceBuilder {
   String informTime = "";
   String recipientBadgeNumber = "";
   Integer recipientPhoneExtensionNumber = 0;
-  BigDecimal recipientPhoneNumber = new BigDecimal(0);
+  Long recipientPhoneNumber = 0L;
   String informDate = "";
   String recipientPositionTitleDesc = "";
   String referenceNumber = "";
@@ -70,7 +68,7 @@ public class CmsCrossReportResourceBuilder {
     return this;
   }
 
-  public CmsCrossReportResourceBuilder setRecipientPhoneNumber(BigDecimal recipientPhoneNumber) {
+  public CmsCrossReportResourceBuilder setRecipientPhoneNumber(Long recipientPhoneNumber) {
     this.recipientPhoneNumber = recipientPhoneNumber;
     return this;
   }

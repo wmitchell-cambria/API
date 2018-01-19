@@ -3,7 +3,6 @@ package gov.ca.cwds.data.persistence.cms;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.beans.Transient;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -141,8 +140,8 @@ public class Reporter extends BaseReporter {
       String confidentialWaiverIndicator, String drmsMandatedRprtrFeedback, String employerName,
       Date feedbackDate, String feedbackRequiredIndicator, String firstName, String lastName,
       String mandatedReporterIndicator, Integer messagePhoneExtensionNumber,
-      BigDecimal messagePhoneNumber, String middleInitialName, String namePrefixDescription,
-      BigDecimal primaryPhoneNumber, Integer primaryPhoneExtensionNumber, Short stateCodeType,
+      Long messagePhoneNumber, String middleInitialName, String namePrefixDescription,
+      Long primaryPhoneNumber, Integer primaryPhoneExtensionNumber, Short stateCodeType,
       String streetName, String streetNumber, String suffixTitleDescription, Integer zipNumber,
       String lawEnforcementId, Short zipSuffixNumber, String countySpecificCode) {
     super();
@@ -349,7 +348,7 @@ public class Reporter extends BaseReporter {
    * @return the messagePhoneNumber
    */
   @Override
-  public BigDecimal getMessagePhoneNumber() {
+  public Long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
@@ -373,7 +372,7 @@ public class Reporter extends BaseReporter {
    * @return the primaryPhoneNumber
    */
   @Override
-  public BigDecimal getPrimaryPhoneNumber() {
+  public Long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
@@ -545,16 +544,16 @@ public class Reporter extends BaseReporter {
   @Override
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null && primaryPhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
+    if (this.primaryPhoneNumber != null && primaryPhoneNumber != 0) {
       String extension = this.primaryPhoneExtensionNumber != null
           ? this.primaryPhoneExtensionNumber.toString() : null;
-      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(), extension, null));
+      phones.add(new ReadablePhone(null, String.valueOf(this.primaryPhoneNumber), extension, null));
     }
 
-    if (this.messagePhoneNumber != null && messagePhoneNumber.compareTo(BigDecimal.ZERO) != 0) {
+    if (this.messagePhoneNumber != null && messagePhoneNumber != 0) {
       phones
           .add(new ReadablePhone(null,
-              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+              String.valueOf(this.messagePhoneNumber), this.messagePhoneExtensionNumber != null
                   ? this.messagePhoneExtensionNumber.toString() : null,
               ApiPhoneAware.PhoneType.Cell));
     }

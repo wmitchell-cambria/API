@@ -70,7 +70,7 @@ public class CrossReport extends CmsPersistentObject {
   private Integer recipientPhoneExtensionNumber;
 
   @Column(name = "RCPT_TELNO")
-  private BigDecimal recipientPhoneNumber;
+  private Long recipientPhoneNumber;
 
   @Type(type = "date")
   @Column(name = "INFORM_DT")
@@ -174,7 +174,7 @@ public class CrossReport extends CmsPersistentObject {
   public CrossReport(String referralId, String thirdId, Short crossReportMethodType,
       String filedOutOfStateIndicator, String governmentOrgCrossRptIndicatorVar, Date informTime,
       String recipientBadgeNumber, Integer recipientPhoneExtensionNumber,
-      BigDecimal recipientPhoneNumber, Date informDate, String recipientPositionTitleDesc,
+      Long recipientPhoneNumber, Date informDate, String recipientPositionTitleDesc,
       String referenceNumber, String lawEnforcementId, String staffPersonId, String description,
       String recipientName, String outStateLawEnforcementAddr, String countySpecificCode,
       String lawEnforcementIndicator, String outStateLawEnforcementIndicator,
@@ -315,7 +315,7 @@ public class CrossReport extends CmsPersistentObject {
   /**
    * @return the recipientPhoneNumber
    */
-  public BigDecimal getRecipientPhoneNumber() {
+  public Long getRecipientPhoneNumber() {
     return recipientPhoneNumber;
   }
 

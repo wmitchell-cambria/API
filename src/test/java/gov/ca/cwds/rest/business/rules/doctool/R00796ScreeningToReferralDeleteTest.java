@@ -17,7 +17,6 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
@@ -119,7 +118,6 @@ public class R00796ScreeningToReferralDeleteTest {
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
@@ -205,13 +203,12 @@ public class R00796ScreeningToReferralDeleteTest {
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    caseDao = mock(CaseDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     messageBuilder = mock(MessageBuilder.class);
 
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
     participantService = mock(ParticipantService.class);
@@ -242,20 +239,15 @@ public class R00796ScreeningToReferralDeleteTest {
    * Implemented Exception.
    * </blockquote>
    * </pre>
-   * 
-   * @throws Exception general error
    */
   @Test
-  public void deleteThrowsNotImplementedException() throws Exception {
+  public void deleteThrowsNotImplementedException() {
     thrown.expect(NotImplementedException.class);
     screeningToReferralService.delete("string");
   }
 
-  /**
-   * @throws Exception on general error
-   */
   @Test
-  public void deleteThrowsAssertionError() throws Exception {
+  public void deleteThrowsAssertionError() {
     thrown.expect(AssertionError.class);
     try {
       screeningToReferralService.delete(1L);

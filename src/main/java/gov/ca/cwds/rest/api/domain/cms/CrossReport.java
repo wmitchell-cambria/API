@@ -2,8 +2,6 @@ package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -35,14 +33,13 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("CmsCrossReport")
 public class CrossReport extends ReportingDomain implements Request, Response {
   private static final int DEFAULT_INT = 0;
-  private static final BigDecimal DEFAULT_DECIMAL = new BigDecimal(0);
+  private static final Long DEFAULT_LONG = 0L;
 
   /**
    * Serialization version
    */
   private static final long serialVersionUID = 1L;
 
-  // TODO: remove the unique key from the domain class
   @NotNull
   @Size(max = CMS_ID_LEN)
   @ApiModelProperty(required = true, readOnly = true, value = "", example = "1234ABC123")
@@ -82,7 +79,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
 
   @NotNull
   @ApiModelProperty(required = false, readOnly = false, example = "1234567")
-  private BigDecimal recipientPhoneNumber;
+  private Long recipientPhoneNumber;
 
   @NotNull
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -185,7 +182,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
       @JsonProperty("informTime") String informTime,
       @JsonProperty("recipientBadgeNumber") String recipientBadgeNumber,
       @JsonProperty("recipientPhoneExtensionNumber") Integer recipientPhoneExtensionNumber,
-      @JsonProperty("recipientPhoneNumber") BigDecimal recipientPhoneNumber,
+      @JsonProperty("recipientPhoneNumber") Long recipientPhoneNumber,
       @JsonProperty("informDate") String informDate,
       @JsonProperty("recipientPositionTitleDesc") String recipientPositionTitleDesc,
       @JsonProperty("referenceNumber") String referenceNumber,
@@ -275,7 +272,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
       Boolean outStateLawEnforcementIndicator, Boolean governmentOrgCrossRptIndicatorVar) {
     return new CrossReport(id, crossReport.getMethod().shortValue(),
         crossReport.isFiledOutOfState(), governmentOrgCrossRptIndicatorVar, "", "", DEFAULT_INT,
-        DEFAULT_DECIMAL, crossReport.getInformDate(), "", "", referralId, lawEnforcementId, staffId,
+        DEFAULT_LONG, crossReport.getInformDate(), "", "", referralId, lawEnforcementId, staffId,
         "", "", outStateLawEnforcementAddr, countyId,
         StringUtils.isBlank(lawEnforcementId) ? Boolean.FALSE : Boolean.TRUE,
         outStateLawEnforcementIndicator, Boolean.FALSE);
@@ -333,7 +330,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   /**
    * @return the recipientPhoneNumber
    */
-  public BigDecimal getRecipientPhoneNumber() {
+  public Long getRecipientPhoneNumber() {
     return recipientPhoneNumber;
   }
 

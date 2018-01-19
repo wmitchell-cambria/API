@@ -232,9 +232,6 @@ public class ReferralService implements
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, messageBuilder);
-      // TODO: R - 01054 Prmary Assignment Adding
-
-      // when creating a referral - create Default Sreener Narrative
       otherCaseReferralDrmsDocumentService.createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referralId, referral);
 
     } else {
@@ -260,7 +257,7 @@ public class ReferralService implements
    */
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
     String longTextId = generateReportNarrative(screeningToReferral, messageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, messageBuilder);
@@ -295,14 +292,14 @@ public class ReferralService implements
         ParticipantValidator.anonymousReporter(screeningToReferral),
         screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
-        govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(), referredToResourceType ? NOT_REFERRED : 0,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
-        screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
-        screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
-        screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
-        screeningToReferral.getLimitedAccessDescription(), limitedAccessDate, agencyCode);
+        screeningToReferral.isFamilyAwareness(), govEnt,
+        screeningToReferral.getName(), dateStarted, timeStarted, screeningToReferral.getResponseTime(),
+        referredToResourceType ? NOT_REFERRED : 0, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId(), longTextId, screeningToReferral.getIncidentCounty(),
+        (short) screeningToReferral.getApprovalStatus(), screeningToReferral.getAssigneeStaffId(),
+        responseRationalLongTextId, screeningToReferral.getResponsibleAgency(),
+        screeningToReferral.getLimitedAccessCode(), screeningToReferral.getLimitedAccessDescription(),
+        limitedAccessDate, agencyCode);
   }
 
   private Short convertLimitedAccessAgencyToNumericCode(ScreeningToReferral screeningToReferral) {
@@ -409,7 +406,7 @@ public class ReferralService implements
   }
 
   private String createLongText(String countySpecificCode, String textDescription,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
 
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);

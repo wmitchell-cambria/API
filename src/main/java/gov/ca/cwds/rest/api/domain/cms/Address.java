@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -42,7 +40,7 @@ import io.swagger.annotations.ApiModelProperty;
 @IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
     @IfThen(ifProperty = "streetName", thenProperty = "city", required = false)})
 public class Address extends ReportingDomain implements Request, Response {
-  private static final BigDecimal DEFAULT_DECIMAL = new BigDecimal(0);
+  private static final Long DEFAULT_LONG = 0L;
   private static final int DEFAULT_INT = 0;
   private static final short DEFAULT_CODE = 0;
 
@@ -66,7 +64,7 @@ public class Address extends ReportingDomain implements Request, Response {
 
   @NotNull
   @ApiModelProperty(required = false, readOnly = false, example = "1112223333")
-  private BigDecimal emergencyNumber;
+  private Long emergencyNumber;
 
   @NotNull
   @ApiModelProperty(example = "1112")
@@ -80,7 +78,7 @@ public class Address extends ReportingDomain implements Request, Response {
   private Short governmentEntityCd;
 
   @ApiModelProperty(example = "1112223333")
-  private BigDecimal messageNumber;
+  private Long messageNumber;
 
   @ApiModelProperty(example = "1112")
   private Integer messageExtension;
@@ -90,7 +88,7 @@ public class Address extends ReportingDomain implements Request, Response {
   private String headerAddress;
 
   @ApiModelProperty(example = "1112223333")
-  private BigDecimal primaryNumber;
+  private Long primaryNumber;
 
   @ApiModelProperty(example = "1112")
   private Integer primaryExtension;
@@ -167,9 +165,9 @@ public class Address extends ReportingDomain implements Request, Response {
    * @param unitNumber city unitNumber
    */
   public Address(String existingAddressId, DateTime lastUpdatedTime, String city,
-      BigDecimal emergencyNumber, Integer emergencyExtension, Boolean frgAdrtB,
-      Short governmentEntityCd, BigDecimal messageNumber, Integer messageExtension,
-      String headerAddress, BigDecimal primaryNumber, Integer primaryExtension, Short state,
+      Long emergencyNumber, Integer emergencyExtension, Boolean frgAdrtB,
+      Short governmentEntityCd, Long messageNumber, Integer messageExtension,
+      String headerAddress, Long primaryNumber, Integer primaryExtension, Short state,
       String streetName, String streetNumber, Integer zip, String addressDescription, Short zip4,
       String postDirCd, String preDirCd, Short streetSuffixCd, Short unitDesignationCd,
       String unitNumber) {
@@ -242,8 +240,6 @@ public class Address extends ReportingDomain implements Request, Response {
    * @return - postedAddress
    */
   public static Address createWithDefaults(gov.ca.cwds.rest.api.domain.Address address) {
-    // TODO: 41511573 address parsing - Smarty Streets Free Form display requires standardizing
-    // parsing to fields in CMS
     int zipCode = Integer.parseInt(address.getZip());
     short zipSuffix = 0;
     if (address.getZip().length() > 5) {
@@ -276,8 +272,8 @@ public class Address extends ReportingDomain implements Request, Response {
     }
 
     return new Address(" ", address.getLegacyDescriptor().getLastUpdated(), address.getCity(),
-        DEFAULT_DECIMAL, DEFAULT_INT, false, DEFAULT_CODE, DEFAULT_DECIMAL, DEFAULT_INT, " ",
-        DEFAULT_DECIMAL, DEFAULT_INT, address.getState().shortValue(), streetName, streetNumber,
+        DEFAULT_LONG, DEFAULT_INT, false, DEFAULT_CODE, DEFAULT_LONG, DEFAULT_INT, " ",
+        DEFAULT_LONG, DEFAULT_INT, address.getState().shortValue(), streetName, streetNumber,
         zipCode, " ", zipSuffix, " ", " ", DEFAULT_CODE, DEFAULT_CODE, " ");
   }
 
@@ -305,7 +301,7 @@ public class Address extends ReportingDomain implements Request, Response {
   /**
    * @return the emergencyNumber
    */
-  public BigDecimal getEmergencyNumber() {
+  public Long getEmergencyNumber() {
     return emergencyNumber;
   }
 
@@ -333,7 +329,7 @@ public class Address extends ReportingDomain implements Request, Response {
   /**
    * @return the messageNumber
    */
-  public BigDecimal getMessageNumber() {
+  public Long getMessageNumber() {
     return messageNumber;
   }
 
@@ -354,7 +350,7 @@ public class Address extends ReportingDomain implements Request, Response {
   /**
    * @return the primaryNumber
    */
-  public BigDecimal getPrimaryNumber() {
+  public Long getPrimaryNumber() {
     return primaryNumber;
   }
 

@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,10 +86,10 @@ public class ReporterTest {
   private String lastName = "Smith";
   private Boolean mandatedReporterIndicator = Boolean.FALSE;
   private int messagePhoneExtensionNumber = 123;
-  private BigDecimal messagePhoneNumber = new BigDecimal(1234567);
+  private Long messagePhoneNumber = 1234567L;
   private String middleInitialName = "A";
   private String namePrefixDescription = "ABC123";
-  private BigDecimal primaryPhoneNumber = new BigDecimal(1234567);;
+  private Long primaryPhoneNumber = 1234567L;
   private int primaryPhoneExtensionNumber = 123;
   private Short stateCodeType = 1234;
   private String streetName = "ABC STREET";
@@ -335,11 +334,11 @@ public class ReporterTest {
     assertEquals("Expected messagePhoneExtensionNumber field to have been initialized with value",
         new Integer("0"), reporter.getMessagePhoneExtensionNumber());
     assertEquals("Expected messagePhoneNumber field to have been initialized with value",
-        new BigDecimal(0), reporter.getMessagePhoneNumber());
+        new Long(0), reporter.getMessagePhoneNumber());
     assertEquals("Expected namePrefixDescription field to have been initialized with value", "",
         reporter.getNamePrefixDescription());
     assertEquals("Expected primaryPhoneNumber field to have been initialized with value",
-        new BigDecimal(0), reporter.getPrimaryPhoneNumber());
+        new Long(0), reporter.getPrimaryPhoneNumber());
     assertEquals("Expected primaryPhoneExtensionNumber field to have been initialized with value",
         new Integer("0"), reporter.getPrimaryPhoneExtensionNumber());
     assertEquals("Expected lawEnforcementId field to have been initialized with value", "",

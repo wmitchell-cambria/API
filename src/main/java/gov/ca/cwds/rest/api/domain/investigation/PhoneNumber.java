@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
-import java.math.BigDecimal;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -30,7 +28,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   @JsonProperty("number")
   @ApiModelProperty(required = true, readOnly = false, value = "phone number",
       example = "9164569939")
-  private BigDecimal number;
+  private Long number;
 
   @JsonProperty("extension")
   @ApiModelProperty(required = true, readOnly = false, value = "extension", example = "2334")
@@ -58,7 +56,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneType -type
    * @param cmsRecordDescriptor - CMS record description
    */
-  public PhoneNumber(@JsonProperty("number") BigDecimal phoneNumber,
+  public PhoneNumber(@JsonProperty("number") Long phoneNumber,
       @JsonProperty("extension") Integer phoneExtension, @JsonProperty("type") Short phoneType,
       @JsonProperty("legacy_descriptor") CmsRecordDescriptor cmsRecordDescriptor) {
     super();
@@ -98,7 +96,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   /**
    * @return - phone number
    */
-  public BigDecimal getNumber() {
+  public Long getNumber() {
     return number;
   }
 

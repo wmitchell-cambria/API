@@ -9,7 +9,7 @@
 ## Tests
 - [ ] I have included unit tests 
 - [ ] I have included functional tests 
-- [ ] I have included oter tests 
+- [ ] I have included other tests 
 - [ ] I have NOT included tests 
 <!--- Please indicate why tests were not added. -->
 

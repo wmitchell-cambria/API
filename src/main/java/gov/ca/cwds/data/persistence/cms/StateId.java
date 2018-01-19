@@ -7,7 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 /**
  * CWDS API Team
@@ -61,7 +65,31 @@ public class StateId extends CmsPersistentObject {
   @Column(name = "FKCLIENT_T", nullable = false, length = 10)
   private String fkClientId;
 
-  public String getId() {
+  /**
+   * Default constructor
+   */
+  public StateId () {
+	    // Default constructor	  
+  }
+
+  public StateId(String id, String assistanceUnitCode, short governmentEntityType, String personNumber,
+		String serialNumber, Date startDate, Date endDate, String stateIdCaseFirstName, String stateIdCaseLastName,
+		String stateIdCaseMiddleName, String fkClientId) {
+	super();
+	this.id = id;
+	this.assistanceUnitCode = assistanceUnitCode;
+	this.governmentEntityType = governmentEntityType;
+	this.personNumber = personNumber;
+	this.serialNumber = serialNumber;
+	this.startDate = freshDate(startDate);
+	this.endDate = freshDate(endDate);
+	this.stateIdCaseFirstName = stateIdCaseFirstName;
+	this.stateIdCaseLastName = stateIdCaseLastName;
+	this.stateIdCaseMiddleName = stateIdCaseMiddleName;
+	this.fkClientId = fkClientId;
+}
+
+public String getId() {
     return id;
   }
 
@@ -102,19 +130,19 @@ public class StateId extends CmsPersistentObject {
   }
 
   public Date getStartDate() {
-    return startDate;
+    return startDate == null ? null : new Date(startDate.getTime());
   }
 
   public void setStartDate(Date startDt) {
-    this.startDate = startDt;
+    this.startDate = new Date(startDt.getTime());
   }
 
   public Date getEndDate() {
-    return endDate;
+    return endDate== null ? null : new Date(endDate.getTime());
   }
 
   public void setEndDate(Date endDt) {
-    this.endDate = endDt;
+    this.endDate = new Date(endDt.getTime());
   }
 
   public String getStateIdCaseFirstName() {
@@ -153,4 +181,15 @@ public class StateId extends CmsPersistentObject {
   public Serializable getPrimaryKey() {
     return getId();
   }
+  
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }

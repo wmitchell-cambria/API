@@ -32,7 +32,7 @@ import static gov.ca.cwds.data.cms.DrmsDocumentTemplateDao.SCREENERNARRATIVE;
  */
 public class DrmsDocumentTemplateService implements TypedCrudsService<String, DrmsDocumentTemplate, DrmsDocumentTemplate> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DrmsDocumentTemplate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DrmsDocumentTemplateService.class);
 
   private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
   private CmsDocumentService cmsDocumentService;
@@ -49,8 +49,8 @@ public class DrmsDocumentTemplateService implements TypedCrudsService<String, Dr
     gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[] templates =
             drmsDocumentTemplateDao.findByApplicationContextAndGovermentEntity(APPLICATION_CONTEXT_REFERRAL_DOCUMENTS, govermentEntity);
     for (gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate doc : templates) {
-      //TODO For now can't use DOT files as templates with POI. So only _NS files are considered, which will be a DOC files
-      if (SCREENERNARRATIVE.equals(doc.getTitleName()) && doc.getDocumentDOSFilePrefixName().toUpperCase().endsWith("_NS")) {
+      //TO1DO For now can't use DOT files as templates with POI. So only _NS files are considered, which will be a DOC files
+      if (SCREENERNARRATIVE.equals(doc.getTitleName().trim()) && doc.getDocumentDOSFilePrefixName().toUpperCase().endsWith("_NS")) {
         template = doc;
         if ((GOVERMENT_ENTITY_SYSTEM.equals(govermentEntity)
                 && GOVERMENT_ENTITY_SYSTEM.equals(doc.getGovermentEntityType()))

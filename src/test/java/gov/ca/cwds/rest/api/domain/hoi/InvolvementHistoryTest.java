@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -34,24 +34,24 @@ public class InvolvementHistoryTest {
   @Test
   public void getCases_Args__() throws Exception {
     InvolvementHistory target = new InvolvementHistory();
-    Set<HOICase> actual = target.getCases();
-    Set<HOICase> expected = Collections.emptySet();
+    List<HOICase> actual = target.getCases();
+    List<HOICase> expected = Collections.emptyList();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void getReferrals_Args__() throws Exception {
     InvolvementHistory target = new InvolvementHistory();
-    Set<HOIReferral> actual = target.getReferrals();
-    Set<HOIReferral> expected = Collections.emptySet();
+    List<HOIReferral> actual = target.getReferrals();
+    List<HOIReferral> expected = Collections.emptyList();
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void getScreenings_Args__() throws Exception {
     InvolvementHistory target = new InvolvementHistory();
-    Set<HOIScreening> actual = target.getScreenings();
-    Set<HOIScreening> expected = Collections.emptySet();
+    List<HOIScreening> actual = target.getScreenings();
+    List<HOIScreening> expected = Collections.emptyList();
     assertThat(actual, is(equalTo(expected)));
   }
 
