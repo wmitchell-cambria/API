@@ -45,4 +45,11 @@ The test does NOT creates a Referral successfully via the API New System to the 
 
 The test checks that per the Rule R - 06560 an appropriate error message is generated that informs the end user of the Rule - 06560.
 
+### R00785AllegationClientRestrictionSameVictimPerpetrator.jmx
 
+This test logs in with a user id that is associated with a test staff person who has a Caseload and hence is able to create a Referral.
+
+The test is attempting to create a Referral where victim and perpetrator are the same person.
+
+The test checks that per the Rule R - 00785 an appropriate error message is generated that informs the end user that perpetratorClientId can not be same as victimClientId.
+ 
