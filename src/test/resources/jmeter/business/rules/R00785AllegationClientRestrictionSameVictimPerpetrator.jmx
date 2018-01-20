@@ -768,13 +768,13 @@
     {&#xd;
       &quot;id&quot;:&quot;6&quot;,&#xd;
       &quot;legacy_descriptor&quot;:{&#xd;
-        &quot;legacy_id&quot;:null,&#xd;
+        &quot;legacy_id&quot;:&quot;AbYzA8r0If&quot;,&#xd;
         &quot;legacy_ui_id&quot;:null,&#xd;
         &quot;legacy_last_updated&quot;:&quot;2017-08-04T21:02:38.598+0000&quot;,&#xd;
         &quot;legacy_table_name&quot;:null,&#xd;
         &quot;legacy_table_description&quot;:null&#xd;
       },&#xd;
-      &quot;legacy_id&quot;:&quot;&quot;,&#xd;
+      &quot;legacy_id&quot;:&quot;AbYzA8r0If&quot;,&#xd;
       &quot;legacy_source_table&quot;:null,&#xd;
       &quot;gender&quot;:&quot;U&quot;,&#xd;
       &quot;first_name&quot;:&quot;See&quot;,&#xd;
@@ -805,13 +805,13 @@
     {&#xd;
       &quot;id&quot;:&quot;6&quot;,&#xd;
       &quot;legacy_descriptor&quot;:{&#xd;
-        &quot;legacy_id&quot;:null,&#xd;
+        &quot;legacy_id&quot;:&quot;AbYzA8r0If&quot;,&#xd;
         &quot;legacy_ui_id&quot;:null,&#xd;
         &quot;legacy_last_updated&quot;:&quot;2017-08-04T21:02:38.598+0000&quot;,&#xd;
         &quot;legacy_table_name&quot;:null,&#xd;
         &quot;legacy_table_description&quot;:null&#xd;
       },&#xd;
-      &quot;legacy_id&quot;:&quot;&quot;,&#xd;
+      &quot;legacy_id&quot;:&quot;AbYzA8r0If&quot;,&#xd;
       &quot;legacy_source_table&quot;:null,&#xd;
       &quot;gender&quot;:&quot;U&quot;,&#xd;
       &quot;first_name&quot;:&quot;See&quot;,&#xd;
@@ -860,6 +860,15 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+              <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+              <stringProp name="RegexExtractor.refname">validationResult</stringProp>
+              <stringProp name="RegexExtractor.regex">(can not be same as victimClientId)</stringProp>
+              <stringProp name="RegexExtractor.template">$1$</stringProp>
+              <stringProp name="RegexExtractor.default"></stringProp>
+              <stringProp name="RegexExtractor.match_number"></stringProp>
+            </RegexExtractor>
+            <hashTree/>
             <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
               <boolProp name="ResultCollector.error_logging">false</boolProp>
               <objProp>
@@ -905,30 +914,24 @@
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="828660804">R - 00785 Client Restriction</stringProp>
+                <stringProp name="-1681875326">can not be same as victimClientId</stringProp>
                 <stringProp name="0"></stringProp>
               </collectionProp>
-              <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data_as_document</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">2</intProp>
+              <stringProp name="Assertion.scope">variable</stringProp>
+              <stringProp name="Scope.variable">validationResult</stringProp>
             </ResponseAssertion>
-            <hashTree/>
-            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
-              <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-              <stringProp name="RegexExtractor.refname">test</stringProp>
-              <stringProp name="RegexExtractor.regex">(can not be same as victimClientId)</stringProp>
-              <stringProp name="RegexExtractor.template">$1$</stringProp>
-              <stringProp name="RegexExtractor.default"></stringProp>
-              <stringProp name="RegexExtractor.match_number"></stringProp>
-            </RegexExtractor>
             <hashTree/>
             <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters"></stringProp>
               <boolProp name="resetInterpreter">false</boolProp>
-              <stringProp name="script">log.info(&quot;test &quot;+&quot;${test}&quot;);
+              <stringProp name="script">log.info(&quot;validationResult: &quot;+&quot;${validationResult}&quot;);
 
-if (&quot;${test}&quot;.contains(&quot;can not be same as victimClientId&quot;)){
+if (&quot;${validationResult}&quot;.contains(&quot;can not be same as victimClientId&quot;)){
+	prev.setSuccessful(true);
 	log.info(&quot;The test was successful. Referral has not been created for its Victim and Perpetrator are the same person.&quot;);
 } else {	
 	prev.setSuccessful(false);
@@ -936,7 +939,6 @@ if (&quot;${test}&quot;.contains(&quot;can not be same as victimClientId&quot;))
      prev.setResponseMessage(errormsg);
      log.error(errormsg);
      prev.setStopTestNow(true);	
-
 }
 </stringProp>
             </BeanShellPostProcessor>
