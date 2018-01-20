@@ -15,9 +15,11 @@ import org.hibernate.query.Query;
 public class DrmsDocumentTemplateDao  extends CrudsDaoImpl<DrmsDocumentTemplate> {
 
   public static final Short APPLICATION_CONTEXT_REFERRAL_DOCUMENTS = 82;
+  public static final Short APPLICATION_CONTEXT_OTHER = 3075;
   public static final Short GOVERMENT_ENTITY_SYSTEM = 0;
   public static final Short LANGUAGE_ENGLISH = 1253;
   public static final String SCREENERNARRATIVE = "Screener Narrative";
+  public static final String SCREENERNARRATIVE_NS = "Screener Narrative (NS)";
 
   /**
    * Constructor
