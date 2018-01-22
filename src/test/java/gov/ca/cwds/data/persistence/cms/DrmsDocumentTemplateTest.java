@@ -5,7 +5,6 @@ import gov.ca.cwds.data.persistence.junit.template.PersistentTestTemplate;
 import gov.ca.cwds.fixture.DrmsDocumentTemplateEntityBuilder;
 import gov.ca.cwds.fixture.DrmsDocumentTemplateResourceBuilder;
 import org.junit.Test;
-import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;

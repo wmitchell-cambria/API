@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import gov.ca.cwds.fixture.LawEnforcementEntityBuilder;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 /**
  * @author CWDS API Team
  *
@@ -16,6 +20,8 @@ import gov.ca.cwds.fixture.LawEnforcementEntityBuilder;
 public class LawEnforcementTest {
 
   private String id = "1234567ABC";
+  private Validator validator;
+  private final static String STATE_OF_CALIFORNIA_COUNTY_ID = "1126";
 
   /**
    * Constructor test
@@ -25,6 +31,21 @@ public class LawEnforcementTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     assertThat(LawEnforcementEntity.class.newInstance(), is(notNullValue()));
+  }
+
+  /**
+   *  R - 02366 County drop douwns
+   */
+  @Test
+  public void testCmsCaseCounty(){
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    LawEnforcementEntity validLawEnforcemrnt = new LawEnforcementEntityBuilder().build();
+    assertThat(validator.validate(validLawEnforcemrnt).isEmpty(), is(true));
+    validLawEnforcemrnt = new LawEnforcementEntityBuilder()
+            .setGovernmentEntityType(new Short(STATE_OF_CALIFORNIA_COUNTY_ID))
+            .build();
+    assertThat(validator.validate(validLawEnforcemrnt).isEmpty(), is(false));
   }
 
   /**
@@ -46,7 +67,7 @@ public class LawEnforcementTest {
         validLawEnforcemrnt.getLawEnforcementName(), validLawEnforcemrnt.getReferenceNumber(),
         validLawEnforcemrnt.getStationName(), validLawEnforcemrnt.getStreetName(),
         validLawEnforcemrnt.getStreetNumber(), validLawEnforcemrnt.getZipNumber(),
-        validLawEnforcemrnt.getZipSuffixNumber());
+        validLawEnforcemrnt.getZipSuffixNumber(), validLawEnforcemrnt.getLastUpdatedId());
 
     assertThat(persistent.getId(), is(equalTo(id)));
     assertThat(persistent.getArchiveAssociationInd(),

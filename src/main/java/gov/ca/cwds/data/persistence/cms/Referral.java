@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
+import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -102,6 +103,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JsonDeserialize(using = CmsSystemCodeDeserializer.class)
   @Type(type = "short")
   @Column(name = "GVR_ENTC")
+  @ValidCounty
   private Short govtEntityType;
 
   @Column(name = "LGL_DEF_CD")

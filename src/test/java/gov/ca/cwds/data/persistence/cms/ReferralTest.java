@@ -22,6 +22,10 @@ import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 /**
  * @author CWDS API Team
  *
@@ -36,6 +40,9 @@ public class ReferralTest implements PersistentTestTemplate {
   private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ss");
   private String id = "1234567ABC";
   private String lastUpdatedId = "0X5";
+  private Validator validator;
+  private final static String STATE_OF_CALIFORNIA_COUNTY_ID = "1126";
+
 
   /*
    * Constructor test
@@ -44,6 +51,21 @@ public class ReferralTest implements PersistentTestTemplate {
   @Test
   public void testEmptyConstructor() throws Exception {
     assertThat(Referral.class.newInstance(), is(notNullValue()));
+  }
+
+  /**
+   *  R - 02366 County drop douwns
+   */
+  @Test
+  public void testCmsCaseCounty(){
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    gov.ca.cwds.rest.api.domain.cms.Referral domainReferral = new ReferralResourceBuilder().build();
+    Referral persistent = new Referral(id, domainReferral, "0X5");
+    persistent.setLastUpdatedId("10");
+    assertThat(validator.validate(persistent).isEmpty(), is(true));
+    persistent.setGovtEntityType(new Short(STATE_OF_CALIFORNIA_COUNTY_ID));
+    assertThat(validator.validate(persistent).isEmpty(), is(false));
   }
 
   @Override

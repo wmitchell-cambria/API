@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
@@ -90,6 +91,7 @@ public class CmsCase extends CmsPersistentObject {
 
   @Type(type = "short")
   @Column(name = "GVR_ENTC")
+  @ValidCounty
   private Short governmentEntityType;
 
   @Column(name = "ICPCSTAT_B")
