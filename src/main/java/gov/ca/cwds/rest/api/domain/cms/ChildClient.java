@@ -428,7 +428,7 @@ public class ChildClient extends ReportingDomain implements Request, Response {
 
     return new ChildClient(clientId, "NA", DEFAULT_CODE, Boolean.FALSE, Boolean.FALSE,
         Boolean.FALSE, "", "", "", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", DEFAULT_CODE,
-        "D", "U", "", "", Boolean.FALSE, "", Boolean.FALSE, "U", Boolean.FALSE, Boolean.FALSE,
+        "D", "", "", "", Boolean.FALSE, "", Boolean.FALSE, "U", Boolean.FALSE, Boolean.FALSE,
         Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
         "X", Boolean.FALSE, Boolean.FALSE, DEFAULT_INT, "", "", Boolean.FALSE, Boolean.FALSE, "",
         Boolean.FALSE);
