@@ -52,4 +52,11 @@ This test logs in with a user id that is associated with a test staff person who
 The test is attempting to create a Referral where victim and perpetrator are the same person.
 
 The test checks that per the Rule R - 00785 an appropriate error message is generated that informs the end user that perpetratorClientId can not be same as victimClientId.
- 
+
+### R02473AssigneeStaffIdIsDifferentFromCurrentUserStaffId.jmx 
+
+This test logs in with a user id that is associated with a test staff person who has a Caseload and hence is able to create a Referral.
+
+The test is attempting to create a Referral where Assignee Staff Id is not the same as logged in User Staff Id.
+
+The test checks that per the Rule R - 02473 an appropriate error message is generated that informs the end user that Assignee Staff Id is not the same as logged in User Staff Id.
