@@ -138,7 +138,7 @@ public class ParticipantService implements CrudsService {
     for (String role : roles) {
       boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
           && (!ParticipantValidator.roleIsAnonymousReporter(role)
-          && !ParticipantValidator.selfReported(incomingParticipant));
+              && !ParticipantValidator.selfReported(incomingParticipant));
       if (isRegularReporter) {
         saveRegularReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
             role);
@@ -326,7 +326,7 @@ public class ParticipantService implements CrudsService {
     /*
      * IMPORTANT: A referral client record must be added after a
      */
-    executeR04466ClientSensitivityIndicator(client, screeningToReferral);
+    // executeR04466ClientSensitivityIndicator(client, screeningToReferral);
 
     messageBuilder.addDomainValidationError(validator.validate(client));
     PostedClient postedClient = this.clientService.create(client);

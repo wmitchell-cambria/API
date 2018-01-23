@@ -16,6 +16,12 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.business.RuleAction;
 
+/**
+ * Apply Doctool rule R - 04466: Set client sensitivity indicator
+ * 
+ * @author CWDS API Team
+ *
+ */
 public class R04466ClientSensitivityIndicator implements RuleAction {
 
   private CaseDao caseDao;
