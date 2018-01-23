@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.util;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hwpf.HWPFDocument;
@@ -14,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
-import java.util.Random;
 
 
 /**
@@ -25,6 +25,8 @@ public class DocUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocUtils.class);
   private static final String TEMPLATE_LOCATION = "cms/drmstemplates";
+  private static final String DATE_FORMAT = "yyyyMMddHHmmssSSS";
+  private static final String SPACE8 = "        ";
 
   private DocUtils() {
     //static methods only
@@ -40,7 +42,7 @@ public class DocUtils {
         String value = keyValuePairs.get(bookmark.getName());
         if( value != null){
           Range range = new Range(bookmark.getStart(), bookmark.getEnd(), document);
-          //Bookmar text should contain bookmark name in squere brackets . Problems replacing text in empty bookmarks
+          //Bookmark text should contain bookmark name in squere brackets . Problems replacing text in empty bookmarks
           range.replaceText("["+bookmark.getName()+"]", value);
         }
       }
@@ -55,24 +57,32 @@ public class DocUtils {
     }
   }
 
-  @SuppressFBWarnings("PREDICTABLE_RANDOM") // Random is a temp implementation till we know how
-  public static String generateDocHandle(String docId, String docAuth){
-    Random random = new Random();
-    return CmsKeyIdGenerator.getUIIdentifierFromKey(docId).replace("-","").substring(0,16)
-            .concat("*")
-            .concat(StringUtils.rightPad(docAuth.concat("       ").substring(0, 7), 8))
-            .concat(StringUtils.leftPad(String.valueOf(random.nextInt(99999)), 5, "0"));
+  public static String generateDocHandle(Date date, String docAuth) {
+    SecureRandom random = new SecureRandom();
+    String ds = (new SimpleDateFormat(DATE_FORMAT)).format(date);
+    return ds.substring(14, 16) // hundreds of seconds
+        .concat(ds.substring(12, 14)) // seconds
+        .concat(ds.substring(10, 12)) // minutes
+        .concat(ds.substring(8, 10)) // hour (24 hr format)
+        .concat(ds.substring(6, 8)) // Day
+        .concat(ds.substring(4, 6)) // Month
+        .concat(ds.substring(2, 4)) // Year year
+        .concat(ds.substring(0, 2)) // Year century
+        .concat("*")
+        .concat(docAuth.concat(SPACE8).substring(0, 8)) // User Id (8 characters)
+        .concat(StringUtils.leftPad(String.valueOf(random.nextInt(99999)), 5, "0"));
   }
 
-  public static String loadTemplateBase64(String docName){
-    try{
+  public static String loadTemplateBase64(String docName) {
+    try {
       return DatatypeConverter.printBase64Binary(
-              IOUtils.toByteArray(
-                  DocUtils.class.getClassLoader().getResourceAsStream(TEMPLATE_LOCATION + "/" + docName)));
-    }catch (Exception e){
+          IOUtils.toByteArray(
+              DocUtils.class
+                  .getClassLoader()
+                  .getResourceAsStream(TEMPLATE_LOCATION + "/" + docName)));
+    } catch (Exception e) {
       LOGGER.error("ERROR LOADING TEMPLATE {} FROM RESOURCES: {}", docName, e);
       return "";
     }
   }
-
 }

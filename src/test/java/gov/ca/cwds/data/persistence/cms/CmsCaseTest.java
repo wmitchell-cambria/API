@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import gov.ca.cwds.fixture.CaseEntityBuilder;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 /**
  * @author CWDS API Team
  *
@@ -16,6 +20,8 @@ import gov.ca.cwds.fixture.CaseEntityBuilder;
 public class CmsCaseTest {
 
   private String id = "1234567ABC";
+  private Validator validator;
+  private final static String STATE_OF_CALIFORNIA_COUNTY_ID = "1126";
 
   /**
    * Constructor test
@@ -25,6 +31,20 @@ public class CmsCaseTest {
   @Test
   public void testEmptyConstructor() throws Exception {
     assertThat(CmsCase.class.newInstance(), is(notNullValue()));
+  }
+
+  /**
+   *  R - 02366 County drop douwns
+   */
+  @Test
+  public void testCmsCaseCounty(){
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    CmsCase validCmsCase = new CaseEntityBuilder().build();
+    validCmsCase.setLastUpdatedId("10");
+    assertThat(validator.validate(validCmsCase).isEmpty(), is(true));
+    validCmsCase.setGovernmentEntityType(new Short(STATE_OF_CALIFORNIA_COUNTY_ID));
+    assertThat(validator.validate(validCmsCase).isEmpty(), is(false));
   }
 
   /**

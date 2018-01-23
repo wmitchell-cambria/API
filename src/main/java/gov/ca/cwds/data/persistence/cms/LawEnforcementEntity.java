@@ -9,6 +9,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
@@ -57,6 +58,7 @@ public class LawEnforcementEntity extends CmsPersistentObject {
 
   @Type(type = "short")
   @Column(name = "GVR_ENTC")
+  @ValidCounty
   private Short governmentEntityType;
 
   @Id
@@ -112,13 +114,14 @@ public class LawEnforcementEntity extends CmsPersistentObject {
    * @param streetNumber the street Number
    * @param zipNumber the zip Number
    * @param zipSuffixNumber the zip Suffix Number
+   * @param lastUpdatedId the last update id
    */
   public LawEnforcementEntity(String archiveAssociationInd, String cityName,
       Integer contactPhoneExtensionNumber, String contactPersonName, BigDecimal contactPhoneNumber,
       String contactPositionTitleDescription, String emailAddress, BigDecimal faxNumber,
       Short governmentEntityType, String id, String lawEnforcementName, Short referenceNumber,
       String stationName, String streetName, String streetNumber, Integer zipNumber,
-      Short zipSuffixNumber) {
+      Short zipSuffixNumber, String lastUpdatedId) {
     super();
     this.archiveAssociationInd = archiveAssociationInd;
     this.cityName = cityName;
@@ -137,6 +140,7 @@ public class LawEnforcementEntity extends CmsPersistentObject {
     this.streetNumber = streetNumber;
     this.zipNumber = zipNumber;
     this.zipSuffixNumber = zipSuffixNumber;
+    this.setLastUpdatedId(lastUpdatedId);
   }
 
   /**

@@ -35,7 +35,9 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 public class ChildClientServiceTest {
   private ChildClientService childClientService;
   private ChildClientDao childClientDao;
-  private RIChildClient ri;
+  private RIChildClient ri;    
+  String invalidPrimaryKey = "9999999ZZZ";
+  String staffId = "0X5";
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -44,10 +46,11 @@ public class ChildClientServiceTest {
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
-    new TestingRequestExecutionContext("0X5");
+    new TestingRequestExecutionContext(staffId);
     childClientDao = mock(ChildClientDao.class);
     ri = mock(RIChildClient.class);
     childClientService = new ChildClientService(childClientDao, ri);
+
   }
 
 
@@ -59,16 +62,16 @@ public class ChildClientServiceTest {
 
     gov.ca.cwds.data.persistence.cms.ChildClient childCleint =
         new gov.ca.cwds.data.persistence.cms.ChildClient(expected.getVictimClientId(), expected,
-            "0X5");
+        		staffId);
     when(childClientDao.find(eq(expected.getVictimClientId()))).thenReturn(childCleint);
-    ChildClient found = childClientService.find("ABC1234567");
+    ChildClient found = childClientService.find(expected.getVictimClientId());
     assertThat(found, is(expected));
   }
 
   @SuppressWarnings("javadoc")
   @Test
   public void findReturnsNullWhenNotFound() throws Exception {
-    Response found = childClientService.find("0X51234567");
+    Response found = childClientService.find(invalidPrimaryKey);
     assertThat(found, is(nullValue()));
   }
 
@@ -82,18 +85,18 @@ public class ChildClientServiceTest {
 
   @SuppressWarnings("javadoc")
   @Test
-  public void deleteReturnsNullWhenNotFount() throws Exception {
-    Response found = childClientService.delete("ABC1234567");
+  public void deleteReturnsNullWhenNotFound() throws Exception {
+    Response found = childClientService.delete(invalidPrimaryKey);
     assertThat(found, is(nullValue()));
   }
 
   @SuppressWarnings("javadoc")
   @Test
   public void childClientServiceDeleteReturnsNotNull() throws Exception {
-    String id = "ABC1234567";
     ChildClient expected = new ChildClientResourceBuilder().buildChildClient();
+    String id = expected.getVictimClientId();
     gov.ca.cwds.data.persistence.cms.ChildClient childClient =
-        new gov.ca.cwds.data.persistence.cms.ChildClient(id, expected, "0XA");
+        new gov.ca.cwds.data.persistence.cms.ChildClient(id, expected, staffId);
 
     when(childClientDao.delete(id)).thenReturn(childClient);
     ChildClient found = childClientService.delete(id);
@@ -108,11 +111,11 @@ public class ChildClientServiceTest {
 
     gov.ca.cwds.data.persistence.cms.ChildClient childClient =
         new gov.ca.cwds.data.persistence.cms.ChildClient(expected.getVictimClientId(), expected,
-            "ABC");
+        		staffId);
 
-    when(childClientDao.find("ABC1234567")).thenReturn(childClient);
+    when(childClientDao.find(expected.getVictimClientId())).thenReturn(childClient);
     when(childClientDao.update(any())).thenReturn(childClient);
-    Object retval = childClientService.update("ABC1234567", expected);
+    Object retval = childClientService.update(expected.getVictimClientId(), expected);
     assertThat(retval.getClass(), is(ChildClient.class));
   }
 
@@ -123,13 +126,13 @@ public class ChildClientServiceTest {
 
     gov.ca.cwds.data.persistence.cms.ChildClient childClient =
         new gov.ca.cwds.data.persistence.cms.ChildClient(childClientRequest.getVictimClientId(),
-            childClientRequest, "ABC");
+            childClientRequest, staffId);
 
-    when(childClientDao.find("ABC1234567")).thenReturn(childClient);
+    when(childClientDao.find(childClientRequest.getVictimClientId())).thenReturn(childClient);
     when(childClientDao.update(any())).thenReturn(childClient);
 
     ChildClient expected = new ChildClient(childClient);
-    ChildClient updated = childClientService.update("ABC1234567", expected);
+    ChildClient updated = childClientService.update(childClientRequest.getVictimClientId(), expected);
     assertThat(updated, is(expected));
   }
 
@@ -142,7 +145,7 @@ public class ChildClientServiceTest {
 
       when(childClientDao.update(any())).thenThrow(EntityNotFoundException.class);
 
-      childClientService.update("ZZZ1234567", childClientRequest);
+      childClientService.update(invalidPrimaryKey, childClientRequest);
     } catch (Exception e) {
       assertEquals(e.getClass(), ServiceException.class);
     }
@@ -156,7 +159,7 @@ public class ChildClientServiceTest {
 
     gov.ca.cwds.data.persistence.cms.ChildClient toCreate =
         new gov.ca.cwds.data.persistence.cms.ChildClient(childClientDomain.getVictimClientId(),
-            childClientDomain, "ABC");
+            childClientDomain, staffId);
 
     ChildClient request = new ChildClient(toCreate);
     when(childClientDao.create(any(gov.ca.cwds.data.persistence.cms.ChildClient.class)))
@@ -196,7 +199,7 @@ public class ChildClientServiceTest {
 
     gov.ca.cwds.data.persistence.cms.ChildClient toCreate =
         new gov.ca.cwds.data.persistence.cms.ChildClient(childClientDomain.getVictimClientId(),
-            childClientDomain, "ABC");
+            childClientDomain, staffId);
 
     ChildClient request = new ChildClient(toCreate);
     when(childClientDao.create(any(gov.ca.cwds.data.persistence.cms.ChildClient.class)))
@@ -213,7 +216,7 @@ public class ChildClientServiceTest {
 
     gov.ca.cwds.data.persistence.cms.ChildClient toCreate =
         new gov.ca.cwds.data.persistence.cms.ChildClient(childClientDomain.getVictimClientId(),
-            childClientDomain, "ABC");
+            childClientDomain, staffId);
 
     ChildClient request = new ChildClient(toCreate);
 

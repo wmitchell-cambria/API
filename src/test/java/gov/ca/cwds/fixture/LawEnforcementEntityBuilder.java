@@ -28,12 +28,13 @@ public class LawEnforcementEntityBuilder {
   String streetNumber = "914";
   Integer zipNumber = 95833;
   Short zipSuffixNumber = 0;
+  String lastUpdatedId = "123";
 
   public LawEnforcementEntity build() {
     return new LawEnforcementEntity(archiveAssociationInd, cityName, contactPhoneExtensionNumber,
         contactPersonName, contactPhoneNumber, contactPositionTitleDescription, emailAddress,
         faxNumber, governmentEntityType, id, lawEnforcementName, referenceNumber, stationName,
-        streetName, streetNumber, zipNumber, zipSuffixNumber);
+        streetName, streetNumber, zipNumber, zipSuffixNumber, lastUpdatedId);
   }
 
   public String getArchiveAssociationInd() {
@@ -191,4 +192,7 @@ public class LawEnforcementEntityBuilder {
     return this;
   }
 
+  public String getLastUpdatedId() {
+    return lastUpdatedId;
+  }
 }

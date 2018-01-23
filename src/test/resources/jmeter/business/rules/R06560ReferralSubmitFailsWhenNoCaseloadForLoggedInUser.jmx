@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.9" jmeter="3.0 r1743807">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="R06560ReferralSubmitFailsWhenNoCaseloadForLoggedInUser" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Perry Login" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <longProp name="ThreadGroup.start_time">1510262347000</longProp>
+        <longProp name="ThreadGroup.end_time">1510262347000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Perry Parameters" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="CLIENT-ID" elementType="Argument">
+              <stringProp name="Argument.name">CLIENT-ID</stringProp>
+              <stringProp name="Argument.value">${__P(saf.client.id)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="IDP-PROTOCOL" elementType="Argument">
+              <stringProp name="Argument.name">IDP-PROTOCOL</stringProp>
+              <stringProp name="Argument.value">https</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="IDP-HOST" elementType="Argument">
+              <stringProp name="Argument.name">IDP-HOST</stringProp>
+              <stringProp name="Argument.value">${__P(saf.idp.host)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="IDP-PORT" elementType="Argument">
+              <stringProp name="Argument.name">IDP-PORT</stringProp>
+              <stringProp name="Argument.value">${__P(saf.idp.port)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="IDP-CONTEXT-ROOT" elementType="Argument">
+              <stringProp name="Argument.name">IDP-CONTEXT-ROOT</stringProp>
+              <stringProp name="Argument.value">${__P(saf.idp.context.root)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="PERRY-HOST" elementType="Argument">
+              <stringProp name="Argument.name">PERRY-HOST</stringProp>
+              <stringProp name="Argument.value">${__P(perry.host)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="PERRY-PORT" elementType="Argument">
+              <stringProp name="Argument.name">PERRY-PORT</stringProp>
+              <stringProp name="Argument.value">${__P(perry.port)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="PERRY-CONTEXT-ROOT" elementType="Argument">
+              <stringProp name="Argument.name">PERRY-CONTEXT-ROOT</stringProp>
+              <stringProp name="Argument.value">${__P(perry.context.root)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="PERRY-PROTOCOL" elementType="Argument">
+              <stringProp name="Argument.name">PERRY-PROTOCOL</stringProp>
+              <stringProp name="Argument.value">https</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+          <stringProp name="delimiter">,</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="filename">${__P(saf.users.nocaseload.path)}</stringProp>
+          <boolProp name="ignoreFirstLine">false</boolProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="variableNames">username,password</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
+          <collectionProp name="CookieManager.cookies"/>
+          <boolProp name="CookieManager.clearEachIteration">false</boolProp>
+        </CookieManager>
+        <hashTree/>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${IDP-HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${IDP-PORT}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol">${IDP-PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get SAF Login Page" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port">${IDP-PORT}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/${IDP-CONTEXT-ROOT}/client/${CLIENT-ID}</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Request Verification Token" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">requestVerificationToken</stringProp>
+            <stringProp name="RegexExtractor.regex">input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;(.*)&quot;</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login to SAF" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="Username" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${username}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">Username</stringProp>
+              </elementProp>
+              <elementProp name="Password" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${password}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">Password</stringProp>
+              </elementProp>
+              <elementProp name="View" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">None</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">View</stringProp>
+              </elementProp>
+              <elementProp name="__RequestVerificationToken" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${requestVerificationToken}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">__RequestVerificationToken</stringProp>
+              </elementProp>
+              <elementProp name="submit.Signin.RACF" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">RACF</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">submit.Signin.RACF</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/${IDP-CONTEXT-ROOT}/client/${CLIENT-ID}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert response 200 Ok" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get SAF Access Code Page" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${IDP-CONTEXT-ROOT}/client/${CLIENT-ID}/Account/SendAccessCode</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Request Verification Token" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">requestVerificationToken</stringProp>
+            <stringProp name="RegexExtractor.regex">input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;(.*)&quot; </stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Email Contact" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">emailContact</stringProp>
+            <stringProp name="RegexExtractor.regex">input id=&quot;emailContact&quot; name=&quot;emailContact&quot; type=&quot;hidden&quot; value=&quot;(.*)&quot; </stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Request SAF Access Code" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="__RequestVerificationToken" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${requestVerificationToken}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">__RequestVerificationToken</stringProp>
+              </elementProp>
+              <elementProp name="submit.SendAccessCode" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">submit.SendAccessCode</stringProp>
+              </elementProp>
+              <elementProp name="emailContact" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${__unescapeHtml(${emailContact})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">emailContact</stringProp>
+              </elementProp>
+              <elementProp name="accessCode" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${__unescapeHtml(${emailContact})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">accessCode</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${IDP-CONTEXT-ROOT}/client/${CLIENT-ID}/Account/SendAccessCode</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Request Verification Token" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">requestVerificationToken</stringProp>
+            <stringProp name="RegexExtractor.regex">input name=&quot;__RequestVerificationToken&quot; type=&quot;hidden&quot; value=&quot;(.*)&quot; </stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Device Log Id" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">deviceLogID</stringProp>
+            <stringProp name="RegexExtractor.regex">name=&quot;deviceLogID&quot; type=&quot;hidden&quot; value=&quot;(.*)&quot;</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Send Access Code" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="accessCode" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">123</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">accessCode</stringProp>
+              </elementProp>
+              <elementProp name="__RequestVerificationToken" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${requestVerificationToken}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">__RequestVerificationToken</stringProp>
+              </elementProp>
+              <elementProp name="selectedContact" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${__unescapeHtml(${emailContact})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">selectedContact</stringProp>
+              </elementProp>
+              <elementProp name="submit.Validate" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">submit.Validate</stringProp>
+              </elementProp>
+              <elementProp name="deviceLogID" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${deviceLogID}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">deviceLogID</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${IDP-CONTEXT-ROOT}/client/${CLIENT-ID}/Account/AccessCode</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Perry Demo Page" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${PERRY-HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${PERRY-PORT}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol">${PERRY-PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${PERRY-CONTEXT-ROOT}/demo-sp.html</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract redirect uri" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">URL</stringProp>
+            <stringProp name="RegexExtractor.refname">redirect_uri</stringProp>
+            <stringProp name="RegexExtractor.regex">redirect_uri=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract client id" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">URL</stringProp>
+            <stringProp name="RegexExtractor.refname">client_id</stringProp>
+            <stringProp name="RegexExtractor.regex">client_id=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract response type" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">URL</stringProp>
+            <stringProp name="RegexExtractor.refname">response_type</stringProp>
+            <stringProp name="RegexExtractor.regex">response_type=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract scope" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">URL</stringProp>
+            <stringProp name="RegexExtractor.refname">scope</stringProp>
+            <stringProp name="RegexExtractor.regex">scope=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract state" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">URL</stringProp>
+            <stringProp name="RegexExtractor.refname">state</stringProp>
+            <stringProp name="RegexExtractor.regex">state=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SAF Authorize Client" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="client_id" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">AA0415D3-779F-4BE4-AC3E-43FB1A596D76</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">client_id</stringProp>
+              </elementProp>
+              <elementProp name="submit.Continue" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">Continue+to+CWDS+-+Integration</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">submit.Continue</stringProp>
+              </elementProp>
+              <elementProp name="redirect_uri" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">https://web.integration.cwds.io/perry/login</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">redirect_uri</stringProp>
+              </elementProp>
+              <elementProp name="response_type" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">code</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">response_type</stringProp>
+              </elementProp>
+              <elementProp name="scope" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">basicprofile racfid</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">scope</stringProp>
+              </elementProp>
+              <elementProp name="state" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${state}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">state</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/${IDP-CONTEXT-ROOT}/oauth2/authorize?client_id=${CLIENT-ID}&amp;redirect_uri=https://web.integration.cwds.io/perry/login&amp;scope=basicprofile racfid&amp;response_type=code</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login to Perry version 1" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${PERRY-HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${PERRY-PORT}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol">${PERRY-PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/${PERRY-CONTEXT-ROOT}/authn/login?callback=/perry/demo-sp.html</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract token from response" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">URL</stringProp>
+            <stringProp name="RegexExtractor.refname">token</stringProp>
+            <stringProp name="RegexExtractor.regex">token=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
+          <stringProp name="BeanShellAssertion.query">${__setProperty(token, ${token})};
+
+</stringProp>
+          <stringProp name="BeanShellAssertion.filename"></stringProp>
+          <stringProp name="BeanShellAssertion.parameters"></stringProp>
+          <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+        </BeanShellAssertion>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Referral Creation Test" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1482864233000</longProp>
+        <longProp name="ThreadGroup.end_time">1482864233000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Ferb Parameters" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="FERB-URL" elementType="Argument">
+              <stringProp name="Argument.name">FERB-URL</stringProp>
+              <stringProp name="Argument.value">${__P(ferb.url)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="FERB-PROTOCOL" elementType="Argument">
+              <stringProp name="Argument.name">FERB-PROTOCOL</stringProp>
+              <stringProp name="Argument.value">https</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Ferb Controller" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Accept</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Referral Via Ferb" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+   &quot;approval_status&quot;:118,&#xd;
+   &quot;family_awareness&quot;:true,&#xd;
+   &quot;filed_with_law_enforcement&quot;:false,&#xd;
+   &quot;additional_information&quot;:null,&#xd;
+   &quot;allegations&quot;:[&#xd;
+      {&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;victim_person_id&quot;:&quot;6&quot;,&#xd;
+         &quot;perpetrator_person_id&quot;:&quot;7&quot;,&#xd;
+         &quot;type&quot;:2177,&#xd;
+         &quot;county&quot;:&quot;57&quot;,&#xd;
+         &quot;non_protecting_parent&quot;:&quot;U&quot;&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;victim_person_id&quot;:&quot;6&quot;,&#xd;
+         &quot;perpetrator_person_id&quot;:&quot;7&quot;,&#xd;
+         &quot;type&quot;:2178,&#xd;
+         &quot;county&quot;:&quot;57&quot;,&#xd;
+         &quot;non_protecting_parent&quot;:&quot;U&quot;&#xd;
+      }&#xd;
+   ],&#xd;
+   &quot;assignee&quot;:&quot;Jim Bob&quot;,&#xd;
+   &quot;communication_method&quot;:5375,&#xd;
+   &quot;cross_reports&quot;:[&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;20&quot;,&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;inform_date&quot;:&quot;2016-08-17&quot;,&#xd;
+         &quot;method&quot;:2096,&#xd;
+         &quot;filed_out_of_state&quot;:true,&#xd;
+         &quot;county_id&quot;:&quot;1126&quot;,&#xd;
+          &quot;agencies&quot;:[]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;21&quot;,&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;inform_date&quot;:&quot;2016-08-17&quot;,&#xd;
+         &quot;method&quot;:2096,&#xd;
+         &quot;filed_out_of_state&quot;:true,&#xd;
+         &quot;county_id&quot;:&quot;1126&quot;,&#xd;
+          &quot;agencies&quot;:[]&#xd;
+      }&#xd;
+   ],&#xd;
+   &quot;ended_at&quot;:null,&#xd;
+   &quot;id&quot;:&quot;9&quot;,&#xd;
+   &quot;incident_county&quot;:&quot;${__P(saf.users.nocaseload.county)}&quot;,&#xd;
+   &quot;incident_date&quot;:&quot;1996-08-23&quot;,&#xd;
+   &quot;location_type&quot;:&quot;Child&apos;s Home&quot;,&#xd;
+   &quot;name&quot;:&quot;Languages test&quot;,&#xd;
+   &quot;reference&quot;:&quot;XLT60X&quot;,&#xd;
+   &quot;report_narrative&quot;:&quot;Distinctio ad aliquid ut doloremque nobis. &quot;,&#xd;
+   &quot;screening_decision&quot;:&quot;promote_to_referral&quot;,&#xd;
+   &quot;screening_decision_detail&quot;:&quot;3_days&quot;,&#xd;
+   &quot;started_at&quot;:&quot;2017-08-02T18:55:00.000Z&quot;,&#xd;
+   &quot;assignee_staff_id&quot;:&quot;${__P(saf.users.nocaseload.staff.id)}&quot;,&#xd;
+   &quot;legacy_id&quot;:null,&#xd;
+   &quot;legacy_source_table&quot;:null,&#xd;
+   &quot;response_time&quot;:1516,&#xd;
+   &quot;responsible_agency&quot;:&quot;C&quot;,&#xd;
+   &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+   &quot;limited_access_description&quot;: &quot;&quot;,&#xd;
+   &quot;limited_access_agency&quot;:&quot;&quot;,&#xd;
+   &quot;limited_access_date&quot;:&quot;&quot;,&#xd;
+   &quot;address&quot;:{&#xd;
+      &quot;legacy_id&quot;:null,&#xd;
+      &quot;legacy_source_table&quot;:null,&#xd;
+      &quot;city&quot;:&quot;Wilheminachester&quot;,&#xd;
+      &quot;state&quot;:1838,&#xd;
+      &quot;street_address&quot;:&quot;005 Lorenzo Hills&quot;,&#xd;
+      &quot;zip&quot;:&quot;55926&quot;,&#xd;
+      &quot;type&quot;:6272&#xd;
+   },&#xd;
+   &quot;participants&quot;:[&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;8&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:null,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;m&quot;,&#xd;
+         &quot;first_name&quot;:&quot;Lavette&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Konopelski&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;N&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Mandated Reporter&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;1980-03-28&quot;,&#xd;
+         &quot;ssn&quot;:&quot;373201577&quot;,&#xd;
+         &quot;primary_language&quot;:1249,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[&#xd;
+            {&#xd;
+               &quot;legacy_id&quot;:null,&#xd;
+               &quot;legacy_source_table&quot;:null,&#xd;
+               &quot;city&quot;:&quot;Quintinberg&quot;,&#xd;
+               &quot;state&quot;:1844,&#xd;
+               &quot;street_address&quot;:&quot;8211 Stephen Bridge&quot;,&#xd;
+               &quot;zip&quot;:&quot;71146&quot;,&#xd;
+               &quot;type&quot;:6273&#xd;
+            }&#xd;
+         ]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;7&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:null,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;M&quot;,&#xd;
+         &quot;first_name&quot;:&quot;Abdul&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Ziemessasdfsadf&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;R&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Perpetrator&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;1995-10-23&quot;,&#xd;
+         &quot;ssn&quot;:&quot;442743442&quot;,&#xd;
+         &quot;primary_language&quot;:null,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;6&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:&quot;2017-08-04T21:02:38.598+0000&quot;,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:&quot;&quot;,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;U&quot;,&#xd;
+         &quot;first_name&quot;:&quot;See&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Abbott&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;K&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Victim&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;2005-08-14&quot;,&#xd;
+         &quot;ssn&quot;:&quot;546486409&quot;,&#xd;
+         &quot;primary_language&quot;:null,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[]&#xd;
+      }&#xd;
+   ]&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${FERB-URL}</stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            <stringProp name="HTTPSampler.protocol">${FERB-PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/referrals?token=${__property(token)}</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.monitor">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+              <boolProp name="ResultCollector.error_logging">false</boolProp>
+              <objProp>
+                <name>saveConfig</name>
+                <value class="SampleSaveConfiguration">
+                  <time>true</time>
+                  <latency>true</latency>
+                  <timestamp>true</timestamp>
+                  <success>true</success>
+                  <label>true</label>
+                  <code>true</code>
+                  <message>true</message>
+                  <threadName>true</threadName>
+                  <dataType>true</dataType>
+                  <encoding>false</encoding>
+                  <assertions>true</assertions>
+                  <subresults>true</subresults>
+                  <responseData>false</responseData>
+                  <samplerData>false</samplerData>
+                  <xml>false</xml>
+                  <fieldNames>true</fieldNames>
+                  <responseHeaders>false</responseHeaders>
+                  <requestHeaders>false</requestHeaders>
+                  <responseDataOnError>false</responseDataOnError>
+                  <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                  <assertionsResultsToSave>0</assertionsResultsToSave>
+                  <bytes>true</bytes>
+                  <threadCounts>true</threadCounts>
+                  <idleTime>true</idleTime>
+                </value>
+              </objProp>
+              <stringProp name="filename"></stringProp>
+            </ResultCollector>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="51572">422</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">true</boolProp>
+              <intProp name="Assertion.test_type">8</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1975058580">R - 06560 Caseload Required For First Primary</stringProp>
+                <stringProp name="0"></stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data_as_document</stringProp>
+              <boolProp name="Assertion.assume_success">true</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+              <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+              <stringProp name="RegexExtractor.refname">test</stringProp>
+              <stringProp name="RegexExtractor.regex">(R - 06560 Caseload Required For First Primary)</stringProp>
+              <stringProp name="RegexExtractor.template">$1$</stringProp>
+              <stringProp name="RegexExtractor.default"></stringProp>
+              <stringProp name="RegexExtractor.match_number"></stringProp>
+            </RegexExtractor>
+            <hashTree/>
+            <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">log.info(&quot;test &quot;+&quot;${test}&quot;);
+
+if (!&quot;${test}&quot;.contains(&quot;R - 06560 Caseload Required For First Primary&quot;)){
+	prev.setSuccessful(false);
+     String errormsg = &quot;The test failed. Appropriate error was NOT generated for R - 06560 Caseload Required For First Primary Assignment. This test assumes that the logged in User does not have a Caseload. Please check if the logged in User has a Caseload&quot;;
+     prev.setResponseMessage(errormsg);
+     log.error(errormsg);
+     prev.setStopTestNow(true);	
+} else {
+	log.info(&quot;The test was successful. Appropriate error was generated for R - 06560 Caseload Required For First Primary Assignment when Caseload was not found for the logged in User&quot;);
+}
+</stringProp>
+            </BeanShellPostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
