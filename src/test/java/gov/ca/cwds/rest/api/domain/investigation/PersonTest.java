@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -62,7 +61,7 @@ public class PersonTest {
   private Boolean sealed = false;
   private Short phoneType = 1111;
 
-  private BigDecimal phoneNumber = new BigDecimal(3219876);
+  private Long phoneNumber = 3219876L;
   private CmsRecordDescriptor phoneCmsRecordDescriptor =
       new CmsRecordDescriptor("1234567ABC", "001-2000-3399-415790", "CLIENT_T", "Client");
 

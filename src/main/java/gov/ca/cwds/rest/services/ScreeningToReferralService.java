@@ -256,6 +256,12 @@ public class ScreeningToReferralService implements CrudsService {
 
   @Override
   public Response update(Serializable primaryKey, Request request) {
+    /*
+     * Reuse part of functionality from legacy gov.ca.cwds.rest.services.cms.ReferralService:
+     * the ReferralService.update method executes validation according to DocTool Rule R04611.
+     * The R04611ReferralStartDateTimeValidator and R04611ReferralStartDateTimeAction shell be used
+     * here similarly.
+     */
     assert primaryKey instanceof String;
     throw new NotImplementedException("Update is not implemented");
   }

@@ -48,13 +48,13 @@ public class AllowableEnumValues implements AllowableValues {
       addSysCodeItems(allowableValues, items, isSysCodeId);
     } else {
       LOGGER.info(allowableValues);
-      AddNonSysCodeItems(allowableValues, items);
+      addNonSysCodeItems(allowableValues, items);
     }
 
     return items.isEmpty() ? null : new AllowableEnumValues(items);
   }
 
-  private static void AddNonSysCodeItems(String allowableValues, List<String> items) {
+  private static void addNonSysCodeItems(String allowableValues, List<String> items) {
     for (String value : allowableValues.split(",")) {
       final String trimmed = value.trim();
       if (!"".equals(trimmed)) {
@@ -71,7 +71,7 @@ public class AllowableEnumValues implements AllowableValues {
 
       if (sysCodes != null && !sysCodes.isEmpty()) {
         items.addAll(sysCodes.stream().map(c -> isSysCodeId ? c.getSystemId() : c.getLogicalId())
-            .sorted().map(s -> s.toString()).collect(Collectors.toList()));
+            .sorted().map(Object::toString).collect(Collectors.toList()));
       } else {
         LOGGER.warn("NO SYSTEM CODES FOR CATEGORY {}", category);
       }

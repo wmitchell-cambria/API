@@ -2,7 +2,6 @@ package gov.ca.cwds.fixture.investigation;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +41,7 @@ public class InvestigationEntityBuilder {
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
-  private BigDecimal phone = new BigDecimal("9164445555");
+  private Long phone = 9164445555L;
   private Integer phoneExtension = 1122;
   private Short phoneType = 1111;
   private CmsRecordDescriptor cmsRecordDescriptor =
@@ -233,11 +232,11 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public BigDecimal getPhone() {
+  public Long getPhone() {
     return phone;
   }
 
-  public InvestigationEntityBuilder setPhone(BigDecimal phone) {
+  public InvestigationEntityBuilder setPhone(Long phone) {
     this.phone = phone;
     return this;
   }

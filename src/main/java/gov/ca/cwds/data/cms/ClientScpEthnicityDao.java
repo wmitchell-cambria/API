@@ -2,7 +2,7 @@ package gov.ca.cwds.data.cms;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;

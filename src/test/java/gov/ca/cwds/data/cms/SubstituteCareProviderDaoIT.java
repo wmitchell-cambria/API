@@ -129,7 +129,7 @@ public class SubstituteCareProviderDaoIT implements DaoTestTemplate {
   public void testCreate() throws Exception {
     Date birthDate = df.parse(birthDateString);
     SubstituteCareProvider substituteCareProvider =
-        new SubstituteCareProvider("AnPcSg504F", BigDecimal.ZERO, 0, BigDecimal.ZERO, birthDate,
+        new SubstituteCareProvider("AnPcSg504F", 0L, 0, BigDecimal.ZERO, birthDate,
             "C0000005", "Chico", (short) 3149, "dora@email.com", "Employer", (short) 0,
             "ReasonCode", "catherine", "N", "F", "HisReasonCode", "OrganicCode", (short) 0, "Tuna",
             "N", "PersonId", (short) 1308, "Mr", "Erik", "Passed", (short) 0, "N", (short) 0,
@@ -144,7 +144,7 @@ public class SubstituteCareProviderDaoIT implements DaoTestTemplate {
     thrown.expect(EntityExistsException.class);
     Date birthDate = df.parse(birthDateString);
     SubstituteCareProvider substituteCareProvider =
-        new SubstituteCareProvider("aQqUhBQF11", BigDecimal.ZERO, 0, BigDecimal.ZERO, birthDate,
+        new SubstituteCareProvider("aQqUhBQF11", 0L, 0, BigDecimal.ZERO, birthDate,
             "C0000005", "Chico", (short) 3149, "dora@email.com", "Employer", (short) 0,
             "ReasonCode", "catherine", "N", "F", "HisReasonCode", "OrganicCode", (short) 0, "Tuna",
             "N", "PersonId", (short) 1308, "Mr", "Erik", "Passed", (short) 0, "N", (short) 0,
@@ -173,7 +173,7 @@ public class SubstituteCareProviderDaoIT implements DaoTestTemplate {
   public void testUpdate() throws Exception {
     Date birthDate = df.parse(birthDateString);
     SubstituteCareProvider substituteCareProvider =
-        new SubstituteCareProvider("aQqUhBQF12", BigDecimal.ZERO, 0, BigDecimal.ZERO, birthDate,
+        new SubstituteCareProvider("aQqUhBQF12", 0L, 0, BigDecimal.ZERO, birthDate,
             "C0000005", "Chico", (short) 3149, "epic@email.com", "Employer", (short) 0,
             "ReasonCode", "Alex", "N", "F", "HisReasonCode", "OrganicCode", (short) 0, "Tuna", "N",
             "PersonId", (short) 1308, "Mr", "Erik", "Passed", (short) 0, "N", (short) 0,
@@ -188,7 +188,7 @@ public class SubstituteCareProviderDaoIT implements DaoTestTemplate {
     thrown.expect(EntityNotFoundException.class);
     Date birthDate = df.parse(birthDateString);
     SubstituteCareProvider substituteCareProvider =
-        new SubstituteCareProvider("aQqUhBQF13", BigDecimal.ZERO, 0, BigDecimal.ZERO, birthDate,
+        new SubstituteCareProvider("aQqUhBQF13", 0L, 0, BigDecimal.ZERO, birthDate,
             "C0000005", "Chico", (short) 3149, "epic@email.com", "Employer", (short) 0,
             "ReasonCode", "Alex", "N", "F", "HisReasonCode", "OrganicCode", (short) 0, "Tuna", "N",
             "PersonId", (short) 1308, "Mr", "Erik", "Passed", (short) 0, "N", (short) 0,

@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import java.math.BigDecimal;
-
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import org.joda.time.DateTime;
 
@@ -26,10 +24,10 @@ public class CmsReporterResourceBuilder {
   String lastName = "Reporter";
   Boolean mandatedReporterIndicator = false;
   Integer messagePhoneExtensionNumber = 0;
-  BigDecimal messagePhoneNumber = new BigDecimal(0);
+  Long messagePhoneNumber = 0L;
   String middleInitialName = " ";
   String namePrefixDescription = " ";
-  BigDecimal primaryPhoneNumber = new BigDecimal(0);
+  Long primaryPhoneNumber = 0L;
   Integer primaryPhoneExtensionNumber = 0;
   Short stateCodeType = 1828;
   String streetName = "Street";
@@ -208,12 +206,12 @@ public class CmsReporterResourceBuilder {
   }
 
 
-  public BigDecimal getMessagePhoneNumber() {
+  public Long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
 
-  public CmsReporterResourceBuilder setMessagePhoneNumber(BigDecimal messagePhoneNumber) {
+  public CmsReporterResourceBuilder setMessagePhoneNumber(Long messagePhoneNumber) {
     this.messagePhoneNumber = messagePhoneNumber;
     return this;
   }
@@ -241,12 +239,12 @@ public class CmsReporterResourceBuilder {
   }
 
 
-  public BigDecimal getPrimaryPhoneNumber() {
+  public Long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
 
-  public CmsReporterResourceBuilder setPrimaryPhoneNumber(BigDecimal primaryPhoneNumber) {
+  public CmsReporterResourceBuilder setPrimaryPhoneNumber(Long primaryPhoneNumber) {
     this.primaryPhoneNumber = primaryPhoneNumber;
     return this;
   }

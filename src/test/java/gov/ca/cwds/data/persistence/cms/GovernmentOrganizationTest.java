@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import gov.ca.cwds.fixture.GovernmentOrganizationEntityBuilder;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 /**
  * @author CWDS API Team
  *
@@ -16,6 +20,25 @@ import gov.ca.cwds.fixture.GovernmentOrganizationEntityBuilder;
 public class GovernmentOrganizationTest {
 
   private String id = "1234567ABC";
+  private Validator validator;
+  private final static String STATE_OF_CALIFORNIA_COUNTY_ID = "1126";
+
+  /**
+   *  R - 02366 County drop douwns
+   */
+  @Test
+  public void testCmsCaseCounty(){
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+    GovernmentOrganizationEntity validGovernmentOrganization =
+            new GovernmentOrganizationEntityBuilder().build();
+    validGovernmentOrganization.setLastUpdatedId("10");
+    assertThat(validator.validate(validGovernmentOrganization).isEmpty(), is(true));
+    validGovernmentOrganization = new GovernmentOrganizationEntityBuilder()
+            .setGovernmentEntityType(new Short(STATE_OF_CALIFORNIA_COUNTY_ID))
+            .build();
+    assertThat(validator.validate(validGovernmentOrganization).isEmpty(), is(false));
+  }
 
   /**
    * Constructor test

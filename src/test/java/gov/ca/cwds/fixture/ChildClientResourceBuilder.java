@@ -9,9 +9,9 @@ import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 @SuppressWarnings("javadoc")
 public class ChildClientResourceBuilder {
 
-  String victimClientId = "ABC1234567";
+  String victimClientId = "1234567ABC";
   String adoptableCode = "N";
-  Short adoptedAge = (short) 1234;
+  Short adoptedAge = (short) 12;
   Boolean afdcFcEligibilityIndicatorVar = false;
   Boolean allEducationInfoOnFileIndicator = false;
   Boolean allHealthInfoOnFileIndicator = false;
@@ -22,13 +22,13 @@ public class ChildClientResourceBuilder {
   Boolean childIndianAncestryIndicator = false;
   Boolean collegeIndicator = false;
   String currentCaseId = "ABC1234567";
-  Short deathCircumstancesType = (short) 1234;
+  Short deathCircumstancesType = (short) 0;
   String disabilityDiagnosedCode = "N";
-  String drmsHePassportDocOld = "Old";
-  String drmsHealthEducPassportDoc = "Document";
-  String drmsVoluntaryPlcmntAgrmntDoc = "Agreement";
+  String drmsHePassportDocOld = "";
+  String drmsHealthEducPassportDoc = "";
+  String drmsVoluntaryPlcmntAgrmntDoc = "";
   Boolean fc2EligApplicationIndicatorVar = false;
-  String foodStampsApplicationDate = "2000-01-01";
+  String foodStampsApplicationDate = "2011-01-01";
   Boolean foodStampsApplicationIndicator = false;
   String icwaEligibilityCode = "N";
   Boolean intercountryAdoptDisruptedIndicator = false;
@@ -43,11 +43,11 @@ public class ChildClientResourceBuilder {
   Boolean safelySurrendedBabiesIndicatorVar = false;
   Boolean saw1EligApplicationIndicatorVar = false;
   Integer sawsCaseSerialNumber = 0;
-  String sijsScheduledInterviewDate = "2000-01-01";
-  String siiNextScreeningDueDate = "2000-01-01";
+  String sijsScheduledInterviewDate = "2010-01-01";
+  String siiNextScreeningDueDate = "2010-01-01";
   Boolean ssiSspApplicationIndicator = false;
   Boolean tribalAncestryNotifctnIndicatorVar = false;
-  String tribalCustomaryAdoptionDate = "2000-01-01";
+  String tribalCustomaryAdoptionDate = "2010-01-01";
   Boolean tribalCustomaryAdoptionIndicator = false;
 
   public ChildClient buildChildClient() {

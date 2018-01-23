@@ -5,8 +5,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -86,7 +84,7 @@ public class CrossReportDaoIT implements DaoTestTemplate {
   @Test
   public void testCreate() throws Exception {
     CrossReport crossreport = new CrossReport("925q4As0AC", "7wviAIk0AC", (short) 2094, "N", "N",
-        null, "  ", 0, BigDecimal.ZERO, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
+        null, "  ", 0, 0L, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
         "N", "N", "N");
     CrossReport created = crossreportDao.create(crossreport);
     assertThat(created, is(crossreport));
@@ -97,7 +95,7 @@ public class CrossReportDaoIT implements DaoTestTemplate {
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
     CrossReport crossreport = new CrossReport("Aj20cK10WS", "CVDUfmj0WS", (short) 2094, "N", "N",
-        null, "  ", 0, BigDecimal.ZERO, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
+        null, "  ", 0, 0L, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
         "N", "N", "N");
     crossreportDao.create(crossreport);
   }
@@ -122,7 +120,7 @@ public class CrossReportDaoIT implements DaoTestTemplate {
   @Test
   public void testUpdate() throws Exception {
     CrossReport crossreport = new CrossReport("Aj20cK10WS", "CVDUfmj0WS", (short) 2094, "N", "N",
-        null, "  ", 0, BigDecimal.ZERO, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
+        null, "  ", 0, 0L, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
         "N", "N", "N");
     CrossReport updated = crossreportDao.update(crossreport);
     assertThat(updated, is(crossreport));
@@ -132,7 +130,7 @@ public class CrossReportDaoIT implements DaoTestTemplate {
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
     CrossReport crossreport = new CrossReport("ZZ20cK10WS", "ZZDUfmj0WS", (short) 2094, "N", "N",
-        null, "  ", 0, BigDecimal.ZERO, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
+        null, "  ", 0, 0L, null, " ", " ", "925q4As0AC", "0AC", " ", " ", " ", "34",
         "N", "N", "N");
     crossreportDao.update(crossreport);
   }

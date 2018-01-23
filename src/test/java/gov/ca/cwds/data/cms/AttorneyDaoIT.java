@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,9 +134,9 @@ public class AttorneyDaoIT implements DaoTestTemplate {
   @Override
   @Test
   public void testCreate() throws Exception {
-    Attorney attorney = new Attorney("N", " ", " ", " ", null, null, BigDecimal.ZERO, "Lance",
-        (short) 0, "A6IeoSu0Um", (short) 1274, "Johnson", 0, BigDecimal.ZERO, " ", " ", "Attorney",
-        0, BigDecimal.ZERO, (short) 0, " ", " ", " ", 0, (short) 0);
+    Attorney attorney = new Attorney("N", " ", " ", " ", null, null, 0L, "Lance",
+        (short) 0, "A6IeoSu0Um", (short) 1274, "Johnson", 0, 0L, " ", " ", "Attorney",
+        0, 0L, (short) 0, " ", " ", " ", 0, (short) 0);
     Attorney created = attorneyDao.create(attorney);
     assertThat(created, is(attorney));
   }
@@ -145,9 +144,9 @@ public class AttorneyDaoIT implements DaoTestTemplate {
   @Override
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
-    Attorney attorney = new Attorney("N", " ", " ", " ", null, null, BigDecimal.ZERO, "Lance",
-        (short) 0, "AcjOOPa0BU", (short) 1274, "Johnson", 0, BigDecimal.ZERO, " ", " ", "Attorney",
-        0, BigDecimal.ZERO, (short) 0, " ", " ", " ", 0, (short) 0);
+    Attorney attorney = new Attorney("N", " ", " ", " ", null, null, 0L, "Lance",
+        (short) 0, "AcjOOPa0BU", (short) 1274, "Johnson", 0, 0L, " ", " ", "Attorney",
+        0, 0L, (short) 0, " ", " ", " ", 0, (short) 0);
     attorneyDao.create(attorney);
   }
 
@@ -179,9 +178,9 @@ public class AttorneyDaoIT implements DaoTestTemplate {
   @Test
   public void testUpdate() throws Exception {
     Date endDate = df.parse(endDateString);
-    Attorney attorney = new Attorney("N", " ", " ", " ", null, endDate, BigDecimal.ZERO, "Lance",
-        (short) 0, "AcjOOPa0BU", (short) 1274, "Johnson", 0, BigDecimal.ZERO, " ", " ", "Attorney",
-        0, BigDecimal.ZERO, (short) 0, " ", " ", " ", 0, (short) 0);
+    Attorney attorney = new Attorney("N", " ", " ", " ", null, endDate, 0L, "Lance",
+        (short) 0, "AcjOOPa0BU", (short) 1274, "Johnson", 0, 0L, " ", " ", "Attorney",
+        0, 0L, (short) 0, " ", " ", " ", 0, (short) 0);
     Attorney updated = attorneyDao.update(attorney);
     assertThat(updated, is(attorney));
   }
@@ -190,9 +189,9 @@ public class AttorneyDaoIT implements DaoTestTemplate {
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
     Date endDate = df.parse(endDateString);
-    Attorney attorney = new Attorney("N", " ", " ", " ", null, endDate, BigDecimal.ZERO, "Lance",
-        (short) 0, "AcjOOPa0By", (short) 1274, "Johnson", 0, BigDecimal.ZERO, " ", " ", "Attorney",
-        0, BigDecimal.ZERO, (short) 0, " ", " ", " ", 0, (short) 0);
+    Attorney attorney = new Attorney("N", " ", " ", " ", null, endDate, 0L, "Lance",
+        (short) 0, "AcjOOPa0By", (short) 1274, "Johnson", 0, 0L, " ", " ", "Attorney",
+        0, 0L, (short) 0, " ", " ", " ", 0, (short) 0);
     attorneyDao.update(attorney);
   }
 

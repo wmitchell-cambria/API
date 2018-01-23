@@ -82,6 +82,9 @@ node ('tpt4-slave'){
 	stage('Deploy Application') {
 		build job: 'tpt4-api-deploy-app', parameters: [string(name: 'version', value: 'latest'), string(name: 'inventory', value: 'inventories/development/hosts.yml')], propagate: false
 	}
+	stage('JMeter Tests') {
+		build 'tpt4-api-jmeter-tests'
+	}
 	
  } catch (Exception e)    {
  	   errorcode = e

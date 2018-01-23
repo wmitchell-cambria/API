@@ -65,7 +65,7 @@ public class ParticipantService implements CrudsService {
 
   /**
    * Constructor
-   * 
+   *
    * @param clientService clientService
    * @param referralClientService referralClientService
    * @param reporterService reporterService
@@ -138,7 +138,7 @@ public class ParticipantService implements CrudsService {
     for (String role : roles) {
       boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
           && (!ParticipantValidator.roleIsAnonymousReporter(role)
-              && !ParticipantValidator.selfReported(incomingParticipant));
+          && !ParticipantValidator.selfReported(incomingParticipant));
       if (isRegularReporter) {
         saveRegularReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
             role);
@@ -163,12 +163,11 @@ public class ParticipantService implements CrudsService {
 
     boolean newClient = StringUtils.isBlank(incomingParticipant.getLegacyId());
     if (newClient) {
-      clientId = createNewClient(screeningToReferral, dateStarted, messageBuilder,
-          incomingParticipant, genderCode);
+      clientId = createNewClient(dateStarted, messageBuilder, incomingParticipant, genderCode);
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
+      updateClient(messageBuilder, incomingParticipant, clientId);
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
@@ -247,11 +246,11 @@ public class ParticipantService implements CrudsService {
     return referralClient;
   }
 
-  private boolean updateClient(ScreeningToReferral screeningToReferral,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
+  private boolean updateClient(MessageBuilder messageBuilder, Participant incomingParticipant,
+      String clientId) {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
-      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient);
+      updateClient(messageBuilder, incomingParticipant, foundClient);
     } else {
       String message =
           " Legacy Id of Participant does not correspond to an existing CWS/CMS Client ";
@@ -262,8 +261,8 @@ public class ParticipantService implements CrudsService {
     return false;
   }
 
-  private void updateClient(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder,
-      Participant incomingParticipant, Client foundClient) {
+  private void updateClient(MessageBuilder messageBuilder, Participant incomingParticipant,
+      Client foundClient) {
     DateTimeComparatorInterface comparator = new DateTimeComparator();
     if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
       List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -311,8 +310,8 @@ public class ParticipantService implements CrudsService {
     }
   }
 
-  private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String genderCode) {
+  private String createNewClient(String dateStarted, MessageBuilder messageBuilder,
+      Participant incomingParticipant, String genderCode) {
     String clientId;
 
     List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());

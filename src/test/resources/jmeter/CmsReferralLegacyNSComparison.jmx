@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2 r1790748">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3 r1808647">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -26,6 +26,10 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
+        <IncludeController guiclass="IncludeControllerGui" testclass="IncludeController" testname="Include Controller" enabled="true">
+          <stringProp name="IncludeController.includepath">/Users/tparker/projects/API/src/test/resources/jmeter/login.jmx</stringProp>
+        </IncludeController>
+        <hashTree/>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Create Controller" enabled="true"/>
         <hashTree>
           <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -57,7 +61,7 @@
  &quot;caretakersPerpetratorCode&quot; : false,&#xd;
  &quot;closureDate&quot; : null,&#xd;
  &quot;communicationMethodType&quot; : 409,&#xd;
- &quot;countySpecificCode&quot; : &quot;20&quot;,&#xd;
+ &quot;countySpecificCode&quot; : &quot;36&quot;,&#xd;
  &quot;currentLocationOfChildren&quot; : &quot;7h6hSuC0X5&quot;,&#xd;
  &quot;drmsAllegationDescriptionDoc&quot; : &quot;AajeIli0Dv&quot;,&#xd;
  &quot;drmsErReferralDoc&quot; : &quot;Aaxp90g0Mc&quot;,&#xd;
@@ -114,7 +118,7 @@
  &quot;victimClientId&quot; : &quot;Ov6RE3Q0X5&quot;,&#xd;
  &quot;perpetratorClientId&quot; : null,&#xd;
  &quot;referralId&quot; : &quot;5Y3vKVs0X5&quot;,&#xd;
- &quot;countySpecificCode&quot; : &quot;20&quot;,&#xd;
+ &quot;countySpecificCode&quot; : &quot;36&quot;,&#xd;
  &quot;zippyCreatedIndicator&quot; : false,&#xd;
  &quot;placementFacilityType&quot; : 1417&#xd;
 }&#xd;
@@ -138,7 +142,7 @@
  &quot;description&quot; : &quot;                                                                                                                        &quot;,&#xd;
  &quot;recipientName&quot; : &quot;longarm law                             &quot;,&#xd;
  &quot;outStateLawEnforcementAddr&quot; : &quot;                                                                                                                                                                                                                                                              &quot;,&#xd;
- &quot;countySpecificCode&quot; : &quot;20&quot;,&#xd;
+ &quot;countySpecificCode&quot; : &quot;36&quot;,&#xd;
  &quot;lawEnforcementIndicator&quot; : false,&#xd;
  &quot;outStateLawEnforcementIndicator&quot; : false,&#xd;
  &quot;satisfyCrossReportIndicator&quot; : false&#xd;
@@ -158,7 +162,7 @@
  &quot;dispositionClosureDescription&quot; : &quot;                                                                                                                                                                                                                            &quot;,&#xd;
  &quot;ageNumber&quot; : 39,&#xd;
  &quot;agePeriodCode&quot; : &quot;Y&quot;,&#xd;
- &quot;countySpecificCode&quot; : &quot;20&quot;,&#xd;
+ &quot;countySpecificCode&quot; : &quot;36&quot;,&#xd;
  &quot;mentalHealthIssuesIndicator&quot; : null,&#xd;
  &quot;alcoholIndicator&quot; : null,&#xd;
  &quot;drugIndicator&quot; : null&#xd;
@@ -191,7 +195,7 @@
  &quot;zipcode&quot; : &quot;99887&quot;,&#xd;
  &quot;lawEnforcementId&quot; : &quot;Ad4ATcY00E&quot;,&#xd;
  &quot;zipSuffixNumber&quot; : 0,&#xd;
- &quot;countySpecificCode&quot; : &quot;99&quot;&#xd;
+ &quot;countySpecificCode&quot; : &quot;36&quot;&#xd;
 },&#xd;
   &quot;client&quot;: [&#xd;
     {&#xd;
@@ -255,7 +259,7 @@
   &quot;soc158PlacementCode&quot;: &quot;N&quot;,&#xd;
   &quot;soc158SealedClientIndicator&quot;: false,&#xd;
   &quot;socialSecurityNumChangedCode&quot;: &quot;N&quot;,&#xd;
-  &quot;socialSecurityNumber&quot;: &quot;         &quot;,&#xd;
+  &quot;socialSecurityNumber&quot;: &quot;&quot;,&#xd;
   &quot;suffixTitleDescription&quot;: &quot; &quot;,&#xd;
   &quot;tribalAncestryClientIndicatorVar&quot;: false,&#xd;
   &quot;tribalMembrshpVerifctnIndicatorVar&quot;: false,&#xd;
@@ -269,10 +273,10 @@
               </collectionProp>
             </elementProp>
             <stringProp name="HTTPSampler.domain">${__P(api.host)}</stringProp>
-            <stringProp name="HTTPSampler.port">${__P(api.port)}</stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">${__P(api.protocol)}</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/_cmsreferrals</stringProp>
+            <stringProp name="HTTPSampler.path">/_cmsreferrals?token=${__property(token)}</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
@@ -1113,6 +1117,42 @@ if(success){
             <hashTree/>
           </hashTree>
         </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
       </hashTree>
     </hashTree>
     <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">

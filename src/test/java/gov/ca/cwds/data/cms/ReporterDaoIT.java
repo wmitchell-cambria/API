@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -94,7 +93,7 @@ public class ReporterDaoIT implements DaoTestTemplate {
   public void testCreate() throws Exception {
     Reporter reporter =
         new Reporter("AbiQCgu0AA", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
-            "Fred", "Reporter", "N", 0, BigDecimal.valueOf(0), " ", " ", BigDecimal.valueOf(0L), 0,
+            "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0,
             (short) 1828, "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
     Reporter created = reporterDao.create(reporter);
     assertThat(created, is(reporter));
@@ -105,7 +104,7 @@ public class ReporterDaoIT implements DaoTestTemplate {
   public void testCreateExistingEntityException() throws Exception {
     Reporter reporter =
         new Reporter("AbiQCgu0Hj", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
-            "Fred", "Reporter", "N", 0, BigDecimal.valueOf(0), " ", " ", BigDecimal.valueOf(0L), 0,
+            "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0,
             (short) 1828, "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
     reporterDao.create(reporter);
   }
@@ -130,8 +129,8 @@ public class ReporterDaoIT implements DaoTestTemplate {
   // @Test
   public void testUpdate() throws Exception {
     Reporter reporter = new Reporter("AbiQCgu0Hj", "  ", "City", (short) 591, (short) 0, "N", null,
-        " ", null, "N", "Fred", "Reporter", "N", 0, BigDecimal.valueOf(0), " ", " ",
-        BigDecimal.valueOf(0L), 0, (short) 1828, "Street", "12345", " ", new Integer(95845),
+        " ", null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ",
+        0L, 0, (short) 1828, "Street", "12345", " ", 95845,
         "AbiQCgu0Hk", (short) 0, "51");
     Reporter updated = reporterDao.update(reporter);
     assertThat(reporter, is(updated));
@@ -141,8 +140,8 @@ public class ReporterDaoIT implements DaoTestTemplate {
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
     Reporter reporter = new Reporter("ZZZZZZ", "  ", "City", (short) 591, (short) 0, "N", null, " ",
-        null, "N", "Fred", "Reporter", "N", 0, BigDecimal.valueOf(0), " ", " ",
-        BigDecimal.valueOf(0L), 0, (short) 1828, "Street", "12345", " ", new Integer(95845),
+        null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ",
+        0L, 0, (short) 1828, "Street", "12345", " ", 95845,
         "AbiQCgu0Hk", (short) 0, "51");
     reporterDao.update(reporter);
   }
