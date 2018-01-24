@@ -41,6 +41,7 @@ public class R04466ClientSensitivityIndicatorTest {
             referralClientDao);
     r04466ClientSensitivityIndicator.execute();
 
+    // assert.asser
   }
 
 }
