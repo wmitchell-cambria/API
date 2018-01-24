@@ -36,6 +36,7 @@ import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
@@ -161,6 +162,7 @@ public class TestForLastUpdatedTimeIsUnique {
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
+  private ClientRelationshipDao clientRelationshipDao;
 
   private Validator validator;
 
@@ -268,7 +270,7 @@ public class TestForLastUpdatedTimeIsUnique {
     childClientService = new ChildClientService(childClientDao, riChildClient);
 
     reminders = mock(Reminders.class);
-
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
     addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     riReferral = mock(RIReferral.class);
@@ -285,7 +287,7 @@ public class TestForLastUpdatedTimeIsUnique {
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,
         Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**

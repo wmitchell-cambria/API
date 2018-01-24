@@ -35,6 +35,7 @@ import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
@@ -133,6 +134,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+  private ClientRelationshipDao clientRelationshipDao;
 
 
   private ReferralDao referralDao;
@@ -219,6 +221,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
 
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
     addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
@@ -273,7 +276,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService, validator, referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**

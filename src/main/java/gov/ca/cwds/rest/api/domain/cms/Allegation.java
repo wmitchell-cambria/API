@@ -348,6 +348,15 @@ public class Allegation extends ReportingDomain implements Request, Response {
   }
 
   /**
+   * Allows limited fields to be updated after creation
+   *
+   * @param nonProtectingParentCode non protecting parent code
+   */
+  public void update(String nonProtectingParentCode){
+    this.nonProtectingParentCode = nonProtectingParentCode;
+  }
+
+  /**
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()
