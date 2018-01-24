@@ -1,10 +1,11 @@
 package gov.ca.cwds.rest.business.rules;
 
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.business.RuleAction;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 /*
  * BUSINESS RULE: R - 08740
@@ -32,6 +33,28 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class R08740SetNonProtectingParentCode implements RuleAction {
 
+  private static final int CHILD_RESIDENTIAL_FACILITY_STAFF_REL_CODE = 5993;
+  private static final int RESIDENTIAL_FACILITY_STAFF_REL_CODE_CHILD = 5994;
+  private static final int MOTHER_DOUGHTER_PRESUMED = 5620;
+  private static final int SON_MOTHER_PRESUMED_REL_CODE = 6360;
+  private static final int MOTHER_SON_PRESUMED_REL_CODE = 6361;
+  private static final int NON_CUSTODIAL_PARENT_DAUGHTER_REL_CODE = 272;
+  private static final int NON_CUSTODIAL_PARENT_SON_REL_CODE = 273;
+
+  private static final int DAUGHTER_PARENT_REL_CODE_START_INDEX = 187;
+  private static final int DAUGHTER_PARENT_REL_CODE_END_INDEX = 200;
+  private static final int SON_PARENT_REL_CODE_START_INDEX = 282;
+  private static final int SON_PARENT_REL_CODE_END_INDEX = 294;
+  private static final int FATHER_CHILD_REL_CODE_START_INDEX = 201;
+  private static final int FATHER_CHILD_REL_CODE_END_INDEX = 214;
+  private static final int MOTHER_CHILD_REL_CODE_START_INDEX = 245;
+  private static final int MOTHER_CHILD_REL_CODE_END_INDEX = 254;
+
+  private static final String UNIDENTIFIED_PERPETRATOR = "U";
+  private static final String PERPETRATIR_IS_A_PARENT = "Y";
+  private static final String PERPETRATOR_IS_NOT_A_PARENT = "N";
+  private static final String RESIDENTIAL_FACILITY_STAFF_PERPETRATOR = "P";
+
   private ClientRelationshipDao clientRelationshipDao;
   private String victimClientId;
   private String perpatratorClientId;
@@ -52,7 +75,7 @@ public class R08740SetNonProtectingParentCode implements RuleAction {
   public void execute() {
     String nonProtectingParentCode;
     if (StringUtils.isEmpty(perpatratorClientId)) {
-      nonProtectingParentCode = "U";
+      nonProtectingParentCode = UNIDENTIFIED_PERPETRATOR;
     } else {
       nonProtectingParentCode = determineNonProtectingParentCode();
     }
@@ -61,65 +84,77 @@ public class R08740SetNonProtectingParentCode implements RuleAction {
 
   private String determineNonProtectingParentCode() {
     if (isResFacilityStaff()) {
-      return  "P";
+      return RESIDENTIAL_FACILITY_STAFF_PERPETRATOR;
     } else {
-      return isParent() ? "Y" : "N";
+      return isParent() ? PERPETRATIR_IS_A_PARENT : PERPETRATOR_IS_NOT_A_PARENT;
     }
   }
 
   private boolean isResFacilityStaff() {
-    ClientRelationship[] clientRelationships =
-        clientRelationshipDao.findByPrimaryClientId(victimClientId);
-    for (ClientRelationship relationship : clientRelationships) {
-      Short type = relationship.getClientRelationshipType();
-      if (relationship.getSecondaryClientId().equals(perpatratorClientId) && type == 5993) {
-        return true;
-      }
-    }
-    clientRelationships =
-            clientRelationshipDao.findBySecondaryClientId(victimClientId);
-    for (ClientRelationship relationship : clientRelationships) {
-      Short type = relationship.getClientRelationshipType();
-      if (relationship.getPrimaryClientId().equals(perpatratorClientId) && type == 5994) {
-        return true;
-      }
-    }
-    return false;
+    return isResFacilityStaffByPrimaryClientId() || isResFacilityStaffBySecondaryClientId();
+  }
+
+  private boolean isResFacilityStaffByPrimaryClientId() {
+    return Arrays.stream(clientRelationshipDao.findByPrimaryClientId(victimClientId))
+        .anyMatch(
+            relationship ->
+                relationship.getSecondaryClientId().equals(perpatratorClientId)
+                    && relationship.getClientRelationshipType()
+                        == CHILD_RESIDENTIAL_FACILITY_STAFF_REL_CODE);
+  }
+
+  private boolean isResFacilityStaffBySecondaryClientId() {
+    return Arrays.stream(clientRelationshipDao.findBySecondaryClientId(victimClientId))
+        .anyMatch(
+            relationship ->
+                relationship.getPrimaryClientId().equals(perpatratorClientId)
+                    && relationship.getClientRelationshipType()
+                        == RESIDENTIAL_FACILITY_STAFF_REL_CODE_CHILD);
   }
 
   private boolean isParent() {
-    ClientRelationship[] clientRelationships =
-        clientRelationshipDao.findByPrimaryClientId(victimClientId);
-    for (ClientRelationship relationship : clientRelationships) {
-      Short type = relationship.getClientRelationshipType();
-      if (relationship.getSecondaryClientId().equals(perpatratorClientId)
-          && isRelationTypeParentByPrimaryId(type)) {
-        return true;
-      }
-    }
-    clientRelationships =
-            clientRelationshipDao.findBySecondaryClientId(victimClientId);
-    for (ClientRelationship relationship : clientRelationships) {
-      Short type = relationship.getClientRelationshipType();
-      if (relationship.getPrimaryClientId().equals(perpatratorClientId)
-              && isRelationTypeParentBySecondaryId(type)) {
-        return true;
-      }
-    }
-    return false;
+    return isParentByPrimaryClientId() || isParentBySecondaryClientId();
   }
 
-  private boolean isRelationTypeParentByPrimaryId(Short type) {
-    boolean firstCondition = type <= 200 && type >= 187;
-    boolean secondCondition = type <= 294 && type >= 282;
-    boolean lastCondition = type == 6360;
+  private boolean isParentByPrimaryClientId() {
+    return Arrays.stream(clientRelationshipDao.findByPrimaryClientId(victimClientId))
+        .anyMatch(
+            relationship -> {
+              Short type = relationship.getClientRelationshipType();
+              return relationship.getSecondaryClientId().equals(perpatratorClientId)
+                  && checkParentRelationshipByPrimaryId(type);
+            });
+  }
+
+  private boolean isParentBySecondaryClientId() {
+    return Arrays.stream(clientRelationshipDao.findBySecondaryClientId(victimClientId))
+        .anyMatch(
+            relationship -> {
+              Short type = relationship.getClientRelationshipType();
+              return relationship.getPrimaryClientId().equals(perpatratorClientId)
+                  && checkParentRelationBySecondaryId(type);
+            });
+  }
+
+  private boolean checkParentRelationshipByPrimaryId(Short type) {
+    boolean firstCondition =
+        type <= DAUGHTER_PARENT_REL_CODE_END_INDEX && type >= DAUGHTER_PARENT_REL_CODE_START_INDEX;
+    boolean secondCondition =
+        type <= SON_PARENT_REL_CODE_END_INDEX && type >= SON_PARENT_REL_CODE_START_INDEX;
+    boolean lastCondition = type == SON_MOTHER_PRESUMED_REL_CODE;
     return firstCondition || secondCondition || lastCondition;
   }
 
-  private boolean isRelationTypeParentBySecondaryId(Short type) {
-    boolean firstCondition = type <= 214 && type >= 201;
-    boolean secondCondition = type <= 254 && type >= 245;
-    boolean lastCondition = type == 272 || type == 273 || type == 5620 || type == 6361;
+  private boolean checkParentRelationBySecondaryId(Short type) {
+    boolean firstCondition =
+        type <= FATHER_CHILD_REL_CODE_END_INDEX && type >= FATHER_CHILD_REL_CODE_START_INDEX;
+    boolean secondCondition =
+        type <= MOTHER_CHILD_REL_CODE_END_INDEX && type >= MOTHER_CHILD_REL_CODE_START_INDEX;
+    boolean lastCondition =
+        type == NON_CUSTODIAL_PARENT_DAUGHTER_REL_CODE
+            || type == NON_CUSTODIAL_PARENT_SON_REL_CODE
+            || type == MOTHER_DOUGHTER_PRESUMED
+            || type == MOTHER_SON_PRESUMED_REL_CODE;
     return firstCondition || secondCondition || lastCondition;
   }
 }
