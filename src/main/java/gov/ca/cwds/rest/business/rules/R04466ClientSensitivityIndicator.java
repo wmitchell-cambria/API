@@ -30,6 +30,16 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
   private Client client;
   private LimitedAccessType screeningToReferralLimmitedAccessCode;
 
+  /**
+   * Constructor
+   * 
+   * @param client The client that must be updated
+   * @param screeningToReferralLimmitedAccessCode The current limited access code requested with
+   *        referral
+   * @param caseDao Case DAO
+   * @param clientRelationshipDao Client relationship DAO
+   * @param referralClientDao Referral client DAO
+   */
   public R04466ClientSensitivityIndicator(Client client,
       LimitedAccessType screeningToReferralLimmitedAccessCode, CaseDao caseDao,
       ClientRelationshipDao clientRelationshipDao, ReferralClientDao referralClientDao) {
