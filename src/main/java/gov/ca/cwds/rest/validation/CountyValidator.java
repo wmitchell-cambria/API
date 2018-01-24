@@ -15,11 +15,11 @@ public class CountyValidator
 
   /**
    *
-   * R - 02366 County drop douwns
+   * R - 02366 County drop downs
    *
    * @param value Government Entity Type id
    * @param context ConstraintValidatorContext
-   * @return valudation result
+   * @return validation result
    */
   @Override
   public boolean isValid(Short value, ConstraintValidatorContext context) {
