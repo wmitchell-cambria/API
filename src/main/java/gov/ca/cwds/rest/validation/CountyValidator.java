@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidatorContext;
 public class CountyValidator
         implements ConstraintValidator<ValidCounty, Short> {
 
-  private static final Short STATE_OF_CALIFORNIA_SYSTEM_CODE = new Short("1126");
+  private static final Short STATE_OF_CALIFORNIA_SYSTEM_CODE = Short.valueOf("1126");
 
   @Override
   public void initialize(ValidCounty constraintAnnotation) {
