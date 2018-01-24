@@ -4,7 +4,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -94,6 +98,16 @@ public class HOICaseServiceTest {
     when(clientDao.find(any(String.class))).thenReturn(client);
     HOICaseResponse response = target.handleFind(request);
     assertThat(response, notNullValue());
+  }
+
+  @Test
+  public void testNotPermittedHandleFind() throws Exception {
+    HOICaseService spy = spy(target);
+    doThrow(new AuthorizationException()).when(spy).authorizeClient(anyString());
+    when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(new CmsCase[] {});
+
+    HOICaseResponse response = spy.handleFind(request);
+    assertEquals(response.getHoiCases().size(), 0);
   }
 
   @Test

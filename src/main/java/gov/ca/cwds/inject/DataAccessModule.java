@@ -246,6 +246,19 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
+  private final HibernateBundle<ApiConfiguration> rsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(ImmutableList.of(), new ApiSessionFactoryFactory()) {
+    @Override
+    public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+      return configuration.getRsDataSourceFactory();
+    }
+
+    @Override
+    public String name() {
+      return "rs";
+    }
+  };
+
   /**
    * Constructor takes the API configuration.
    *
@@ -254,6 +267,7 @@ public class DataAccessModule extends AbstractModule {
   public DataAccessModule(Bootstrap<ApiConfiguration> bootstrap) {
     bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
+    bootstrap.addBundle(rsHibernateBundle);
   }
 
   /**
@@ -369,6 +383,12 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
+  @CwsRsSessionFactory
+  SessionFactory rsSessionFactory() {
+    return rsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
   @CmsHibernateBundle
   HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
     return cmsHibernateBundle;
@@ -378,6 +398,12 @@ public class DataAccessModule extends AbstractModule {
   @NsHibernateBundle
   HibernateBundle<ApiConfiguration> nsHibernateBundle() {
     return nsHibernateBundle;
+  }
+
+  @Provides
+  @CwsRsHibernateBundle
+  HibernateBundle<ApiConfiguration> rsHibernateBundle() {
+    return rsHibernateBundle;
   }
 
   @Provides
