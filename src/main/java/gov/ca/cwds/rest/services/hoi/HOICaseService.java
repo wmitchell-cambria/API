@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.security.annotations.Authorize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,11 +99,15 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private List<HOICase> findAllCasesForAllClients(Set<String> clientIds) {
-    Set<String> allClientIds = new HashSet<>();
+    Set<String> allClientIds = new HashSet<>(clientIds);
     for (String clientId : clientIds) {
-      allClientIds.addAll(findAllRelatedClientIds(clientId));
+      try {
+        clientId = authorizeClient(clientId);
+        allClientIds.addAll(findAllRelatedClientIds(clientId));
+      } catch (AuthorizationException e) {
+        LOGGER.debug("Client ID doesn't pass authorization: " + clientId);
+      }
     }
-    allClientIds.addAll(clientIds);
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
     List<HOICase> hoicases = new ArrayList<>(cmscases.length);
     for (CmsCase cmscase : cmscases) {
@@ -121,18 +127,30 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         assignedSocialWorker, parents);
   }
 
-  private List<String> findAllRelatedClientIds(String clientid) {
+  private List<String> findAllRelatedClientIds(String clientId) {
     List<String> clientIds = new ArrayList<>();
-    clientIds.add(clientid);
+    clientIds.add(clientId);
     ClientRelationship[] clientRelationshipsByPrimaryClient =
-        clientRelationshipDao.findByPrimaryClientId(clientid);
+        clientRelationshipDao.findByPrimaryClientId(clientId);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
-      clientIds.add(relationship.getSecondaryClientId());
+      String secondaryClientId = relationship.getSecondaryClientId();
+      try {
+        authorizeClient(secondaryClientId);
+        clientIds.add(secondaryClientId);
+      } catch (AuthorizationException e) {
+        LOGGER.debug("Secondary client ID doesn't pass authorization: " + secondaryClientId);
+      }
     }
     ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(clientid);
+        clientRelationshipDao.findBySecondaryClientId(clientId);
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-      clientIds.add(relation.getPrimaryClientId());
+      String secondaryClientRelatedId = relation.getPrimaryClientId();
+      try {
+        authorizeClient(secondaryClientRelatedId);
+      } catch (AuthorizationException e) {
+        LOGGER.debug("Secondary client related ID doesn't pass authorization: " + secondaryClientRelatedId);
+      }
+      clientIds.add(secondaryClientRelatedId);
     }
     return clientIds;
   }
@@ -155,7 +173,12 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       Short type = relation.getClientRelationshipType();
       if (isRelationTypeParent(type)) {
         String clientId = relation.getSecondaryClientId();
-        parents.add(findPersonByClientId(clientId, type));
+        try {
+          authorizeClient(clientId);
+          parents.add(findPersonByClientId(clientId, type));
+        } catch (AuthorizationException e) {
+          LOGGER.debug("Secondary client parent ID doesn't pass authorization: " + clientId);
+        }
       }
     }
     return parents;
@@ -168,7 +191,12 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       Short type = relation.getClientRelationshipType();
       if (isRelationTypeParent(type)) {
         String clientId = relation.getPrimaryClientId();
-        parents.add(findPersonByClientId(clientId, type));
+        try {
+          authorizeClient(clientId);
+          parents.add(findPersonByClientId(clientId, type));
+        } catch (AuthorizationException e) {
+          LOGGER.debug("Primary client parent ID doesn't pass authorization: " + clientId);
+        }
       }
     }
     return parents;
@@ -244,6 +272,10 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   protected HOICaseResponse handleRequest(HOICase req) {
     LOGGER.info("HOICaseService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
+  }
+
+  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+    return clientId;
   }
 
 }
