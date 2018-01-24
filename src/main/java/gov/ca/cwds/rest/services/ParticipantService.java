@@ -15,8 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.cms.CaseDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
@@ -31,6 +35,7 @@ import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
+import gov.ca.cwds.rest.business.rules.R04466ClientSensitivityIndicator;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -62,10 +67,13 @@ public class ParticipantService implements CrudsService {
   private ChildClientService childClientService;
   private ClientAddressService clientAddressService;
   private ClientScpEthnicityService clientScpEthnicityService;
+  private CaseDao caseDao;
+  private ClientRelationshipDao clientRelationshipDao;
+  private ReferralClientDao referralClientDao;
 
   /**
    * Constructor
-   *
+   * 
    * @param clientService clientService
    * @param referralClientService referralClientService
    * @param reporterService reporterService
@@ -73,12 +81,16 @@ public class ParticipantService implements CrudsService {
    * @param clientAddressService clientAddressService
    * @param validator validator
    * @param clientScpEthnicityService clientScpEthnicityService
+   * @param caseDao caseDao
+   * @param clientRelationshipDao clientRelationshipDao
+   * @param referralClientDao referralClientDao
    */
   @Inject
   public ParticipantService(ClientService clientService,
       ReferralClientService referralClientService, ReporterService reporterService,
       ChildClientService childClientService, ClientAddressService clientAddressService,
-      Validator validator, ClientScpEthnicityService clientScpEthnicityService) {
+      Validator validator, ClientScpEthnicityService clientScpEthnicityService, CaseDao caseDao,
+      ClientRelationshipDao clientRelationshipDao, ReferralClientDao referralClientDao) {
     this.validator = validator;
     this.clientService = clientService;
     this.referralClientService = referralClientService;
@@ -86,6 +98,9 @@ public class ParticipantService implements CrudsService {
     this.childClientService = childClientService;
     this.clientAddressService = clientAddressService;
     this.clientScpEthnicityService = clientScpEthnicityService;
+    this.caseDao = caseDao;
+    this.clientRelationshipDao = clientRelationshipDao;
+    this.referralClientDao = referralClientDao;
   }
 
   /**
@@ -163,11 +178,12 @@ public class ParticipantService implements CrudsService {
 
     boolean newClient = StringUtils.isBlank(incomingParticipant.getLegacyId());
     if (newClient) {
-      clientId = createNewClient(dateStarted, messageBuilder, incomingParticipant, genderCode);
+      clientId = createNewClient(screeningToReferral, dateStarted, messageBuilder,
+          incomingParticipant, genderCode);
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      updateClient(messageBuilder, incomingParticipant, clientId);
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
@@ -246,11 +262,11 @@ public class ParticipantService implements CrudsService {
     return referralClient;
   }
 
-  private boolean updateClient(MessageBuilder messageBuilder, Participant incomingParticipant,
-      String clientId) {
+  private boolean updateClient(ScreeningToReferral screeningToReferral,
+      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
-      updateClient(messageBuilder, incomingParticipant, foundClient);
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient);
     } else {
       String message =
           " Legacy Id of Participant does not correspond to an existing CWS/CMS Client ";
@@ -261,8 +277,8 @@ public class ParticipantService implements CrudsService {
     return false;
   }
 
-  private void updateClient(MessageBuilder messageBuilder, Participant incomingParticipant,
-      Client foundClient) {
+  private void updateClient(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder,
+      Participant incomingParticipant, Client foundClient) {
     DateTimeComparatorInterface comparator = new DateTimeComparator();
     if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
       List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -278,6 +294,12 @@ public class ParticipantService implements CrudsService {
       String hispanicOriginCode = incomingParticipant.getRaceAndEthnicity() != null
           ? incomingParticipant.getRaceAndEthnicity().getHispanicOriginCode()
           : "";
+
+      /*
+       * IMPORTANT: A referral client record must be added after updating client sensitivity
+       * indicator
+       */
+      executeR04466ClientSensitivityIndicator(foundClient, screeningToReferral);
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
@@ -310,8 +332,8 @@ public class ParticipantService implements CrudsService {
     }
   }
 
-  private String createNewClient(String dateStarted, MessageBuilder messageBuilder,
-      Participant incomingParticipant, String genderCode) {
+  private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,
+      MessageBuilder messageBuilder, Participant incomingParticipant, String genderCode) {
     String clientId;
 
     List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -324,9 +346,9 @@ public class ParticipantService implements CrudsService {
         primaryRaceCode, childClientIndicatorVar);
 
     /*
-     * IMPORTANT: A referral client record must be added after a
+     * IMPORTANT: A referral client record must be added after updating client sensitivity indicator
      */
-    // executeR04466ClientSensitivityIndicator(client, screeningToReferral);
+    executeR04466ClientSensitivityIndicator(client, screeningToReferral);
 
     messageBuilder.addDomainValidationError(validator.validate(client));
     PostedClient postedClient = this.clientService.create(client);
@@ -448,10 +470,10 @@ public class ParticipantService implements CrudsService {
 
   private void executeR04466ClientSensitivityIndicator(Client client,
       ScreeningToReferral screeningToReferral) {
-    // R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
-    // new R04466ClientSensitivityIndicator(client,
-    // LimitedAccessType.getByValue(screeningToReferral.getLimitedAccessCode()), caseDao,
-    // clientRelationshipDao, referralClientDao);
-    // r04466ClientSensitivityIndicator.execute();
+    R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
+        new R04466ClientSensitivityIndicator(client,
+            LimitedAccessType.getByValue(screeningToReferral.getLimitedAccessCode()), caseDao,
+            clientRelationshipDao, referralClientDao);
+    r04466ClientSensitivityIndicator.execute();
   }
 }

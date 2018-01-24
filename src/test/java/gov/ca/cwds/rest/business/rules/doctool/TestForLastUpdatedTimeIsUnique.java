@@ -15,9 +15,6 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate;
-import gov.ca.cwds.rest.services.cms.CmsDocumentService;
-import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -32,10 +29,12 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
@@ -82,11 +81,12 @@ import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -161,6 +161,8 @@ public class TestForLastUpdatedTimeIsUnique {
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
+  private CaseDao caseDao;
+  private ClientRelationshipDao clientRelationshipDao;
 
   private Validator validator;
 
@@ -228,6 +230,8 @@ public class TestForLastUpdatedTimeIsUnique {
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
 
     referralClientDao = mock(ReferralClientDao.class);
+    caseDao = mock(CaseDao.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
@@ -274,13 +278,14 @@ public class TestForLastUpdatedTimeIsUnique {
     riReferral = mock(RIReferral.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
-    participantService =
-        new ParticipantService(clientService, referralClientService, reporterService,
-            childClientService, clientAddressService, validator, clientScpEthnicityService);
+    participantService = new ParticipantService(clientService, referralClientService,
+        reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService, caseDao, clientRelationshipDao, referralClientDao);
 
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,
