@@ -272,7 +272,7 @@ public class TestForLastUpdatedTimeIsUnique {
     childClientService = new ChildClientService(childClientDao, riChildClient);
 
     reminders = mock(Reminders.class);
-
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
     addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     riReferral = mock(RIReferral.class);
@@ -287,10 +287,11 @@ public class TestForLastUpdatedTimeIsUnique {
             staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService,
-        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**
