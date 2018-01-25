@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,7 +203,13 @@ public class R05443AndR03341StateIdMissing {
           new ReferralClient.PrimaryKey(referral.getPrimaryKey(), client.getPrimaryKey());
       ReferralClient referralClient = referralClientDao.find(primaryKey);
       if (referralClient != null) {
-        AgeUnit from = AgeUnit.valueOf(referralClient.getAgePeriodCode());
+        String agePeriodCode = referralClient.getAgePeriodCode();
+        AgeUnit from = null;
+
+        if (StringUtils.isNotBlank(agePeriodCode)) {
+          from = AgeUnit.valueOf(referralClient.getAgePeriodCode());
+        }
+
         if (from != null) {
           return AgeUnit.convertTo(referralClient.getAgeNumber(), from, AgeUnit.Y);
         }
