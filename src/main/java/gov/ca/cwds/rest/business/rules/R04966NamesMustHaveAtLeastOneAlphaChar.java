@@ -17,16 +17,6 @@ import java.util.regex.Pattern;
  * If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and <br>
  * (txtLastName does not have an alpha character)), <br>
  * then return the cursor to the txtFirstName control and trigger Error 1201. <br>
- * For the following pages in the Search notebook: <br>
- * - Search/fraClientSearch, <br>
- * - Search/fraClientSubstituteCareProviderSearch,<br>
- * - fraSubstituteCareProvider, <br>
- * - fraHomeSearch(Rel/FFH/SFH/Grdn),<br>
- * - fraHomeSearch(FFACH/FFH),<br>
- * - fraHomeSearch(GH/FFA), <br>
- * - and fraHomeSearch(GH/FFACH) <br>
- *   if you are using First Name, Middle Name, Last Name as part of your search criteria and <br>
- *   the rule check fails then disable the OK button.<br>
  */
 public class R04966NamesMustHaveAtLeastOneAlphaChar implements RuleValidator {
 
