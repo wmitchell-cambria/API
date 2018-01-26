@@ -68,10 +68,19 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
       return;
     }
 
-    String clientId = client.getExistingClientId();
     LimitedAccessType currentHighestLimitedAccessCode =
         screeningToReferralLimmitedAccessCode == null ? LimitedAccessType.NONE
             : screeningToReferralLimmitedAccessCode;
+
+    /*
+     * If given referral limited access code is highest then apply it
+     */
+    if (LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
+      client.applySensitivityIndicator(currentHighestLimitedAccessCode.getValue());
+      return;
+    }
+
+    String clientId = client.getExistingClientId();
 
     /*
      * Is it a new client (does not exist in db)
