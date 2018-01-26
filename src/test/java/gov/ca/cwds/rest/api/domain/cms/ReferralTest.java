@@ -1135,6 +1135,18 @@ public class ReferralTest {
         is(greaterThanOrEqualTo(0)));
   }
 
+  @Test
+  public void failsWhenGovtEntityTypeIsStateOfCalifornia() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/Referral/invalid/govEntityTypeStateOfCalifornia.json"), Referral.class);
+    Response response =
+            resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+                    .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("govtEntityType County is not valid"),
+            is(greaterThanOrEqualTo(0)));
+  }
+
   /*
    * legalDefinitionCode Tests
    */

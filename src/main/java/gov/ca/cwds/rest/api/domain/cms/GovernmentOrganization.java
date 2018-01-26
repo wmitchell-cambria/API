@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.api.domain.cms;
 
 import javax.validation.Valid;
 
+import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -49,6 +50,7 @@ public class GovernmentOrganization extends ReportingDomain implements Request, 
   @Valid
   @JsonProperty("county_id")
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "1094")
+  @ValidCounty
   private Short countyId;
 
   /**
