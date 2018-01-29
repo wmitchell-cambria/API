@@ -23,6 +23,7 @@ import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.LongTextDao;
@@ -124,6 +125,7 @@ public class R00796ScreeningToReferralDeleteTest {
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
+  private ClientRelationshipDao clientRelationshipDao;
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -140,6 +142,7 @@ public class R00796ScreeningToReferralDeleteTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     riReferral = mock(RIReferral.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffpersonDao, assignmentService, validator,cmsDocumentService, drmsDocumentService,
         drmsDocumentTemplateService, addressService, longTextService, riReferral);
@@ -221,7 +224,7 @@ public class R00796ScreeningToReferralDeleteTest {
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,
         Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**

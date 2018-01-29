@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import javax.validation.Validation;
 
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
@@ -61,7 +62,7 @@ public class MockedScreeningToReferralServiceBuilder {
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
-
+  private ClientRelationshipDao clientRelationshipDao;
   private ReferralDao referralDao;
   private MessageBuilder messageBuilder;
 
@@ -307,6 +308,16 @@ public class MockedScreeningToReferralServiceBuilder {
   }
 
   /**
+   * @return the clientRelationshipDao
+   */
+  public ClientRelationshipDao getClientRelationshipDao() {
+    if (clientRelationshipDao == null) {
+      clientRelationshipDao = mock(ClientRelationshipDao.class);
+    }
+    return clientRelationshipDao;
+  }
+
+  /**
    * @return the messageBuilder
    */
   public MessageBuilder getMessageBuilder() {
@@ -450,6 +461,6 @@ public class MockedScreeningToReferralServiceBuilder {
         getCrossReportService(), getParticipantService(),
         Validation.buildDefaultValidatorFactory().getValidator(), getReferralDao(),
         getMessageBuilder(), getAllegationPerpetratorHistoryService(), getReminders(),
-        getGovernmentOrganizationCrossReportService());
+        getGovernmentOrganizationCrossReportService(), getClientRelationshipDao());
   }
 }

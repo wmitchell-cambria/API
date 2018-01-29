@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.api.domain.cms;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
@@ -75,6 +76,7 @@ public class Address extends ReportingDomain implements Request, Response {
   private Boolean frgAdrtB;
 
   @ApiModelProperty(example = "1104")
+  @ValidCounty
   private Short governmentEntityCd;
 
   @ApiModelProperty(example = "1112223333")

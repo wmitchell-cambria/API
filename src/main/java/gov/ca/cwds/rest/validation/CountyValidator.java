@@ -23,6 +23,6 @@ public class CountyValidator
    */
   @Override
   public boolean isValid(Short value, ConstraintValidatorContext context) {
-    return !value.equals(STATE_OF_CALIFORNIA_SYSTEM_CODE);
+    return !STATE_OF_CALIFORNIA_SYSTEM_CODE.equals(value);
   }
 }

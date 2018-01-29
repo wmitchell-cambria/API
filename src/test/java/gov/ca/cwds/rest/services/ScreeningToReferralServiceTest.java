@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -23,6 +24,7 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -42,6 +44,7 @@ import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.LongTextDao;
@@ -57,6 +60,7 @@ import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
 import gov.ca.cwds.fixture.AllegationResourceBuilder;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.ClientRelationshipEntityBuilder;
 import gov.ca.cwds.fixture.CmsCrossReportResourceBuilder;
 import gov.ca.cwds.fixture.CrossReportResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
@@ -169,6 +173,7 @@ public class ScreeningToReferralServiceTest {
   private DrmsDocumentService drmsDocumentService;
   private AssignmentDao assignmentDao;
   private SsaName3Dao ssaName3Dao;
+  private ClientRelationshipDao clientRelationshipDao;
   private Reminders reminders;
   private UpperCaseTables upperCaseTables;
   private Validator validator;
@@ -210,6 +215,8 @@ public class ScreeningToReferralServiceTest {
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     reminders = mock(Reminders.class);
+
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
 
     lastUpdateDate = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         .parseDateTime("2010-03-14T13:33:12.456-0700");
@@ -292,7 +299,7 @@ public class ScreeningToReferralServiceTest {
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,
         Validation.buildDefaultValidatorFactory().getValidator(), referralDao, messageBuilder,
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
 
   }
 
@@ -930,6 +937,10 @@ public class ScreeningToReferralServiceTest {
     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
         ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
 
+    ClientRelationship clientRelationship = new ClientRelationshipEntityBuilder().build();
+    ClientRelationship[] relationships = {clientRelationship};
+    when(clientRelationshipDao.findByPrimaryClientId(anyString())).thenReturn(relationships);
+    when(clientRelationshipDao.findBySecondaryClientId(anyString())).thenReturn(relationships);
     Response response = screeningToReferralService.create(screeningToReferral);
 
     verify(allegationPerpetratorHistoryService).create(perpHistory.capture());
@@ -966,6 +977,10 @@ public class ScreeningToReferralServiceTest {
     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
         ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
 
+    ClientRelationship clientRelationship = new ClientRelationshipEntityBuilder().build();
+    ClientRelationship[] relationships = {clientRelationship};
+    when(clientRelationshipDao.findByPrimaryClientId(anyString())).thenReturn(relationships);
+    when(clientRelationshipDao.findBySecondaryClientId(anyString())).thenReturn(relationships);
     Response response = screeningToReferralService.create(screeningToReferral);
 
     verify(allegationPerpetratorHistoryService).create(perpHistory.capture());
@@ -1122,7 +1137,7 @@ public class ScreeningToReferralServiceTest {
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,
         Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService);
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
 
     mockParticipantService(screeningToReferral);
 
