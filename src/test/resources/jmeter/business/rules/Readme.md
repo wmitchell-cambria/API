@@ -59,7 +59,7 @@ This test creates a Referral that includes Cross Report to a Government Organiza
 
 The test checks that per the rule R - 05928 If the check box is marked, the corresponding Government Organization must be selected. ie- If the Department of Justice check box is marked, a Department of Justice entry must be selected.   For each GOVERNMENT_ORG_CROSS_REPORT created, the Fkgv_Org_T must <> nulls.
 
-###R05928SetGovernmentOrganizationCrossReportAgency
+###R01166SetGovernmentOrganizationCrossReportIndicator 
 
 This test creates a Referral that includes Cross Report to a Government Organization
 
