@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3 r1808647">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="R02473AssigneeStaffIdIsDifferentFromCurrentUserStaffId" enabled="true">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="R02473DefaultReferralAssignmentNoCaseLoad" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
@@ -81,7 +81,7 @@
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Creation of Referral with incorrect Assignee Staff Id" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Creation of Referral when Staff Person has no Case Load" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -110,7 +110,7 @@
             </elementProp>
             <elementProp name="EXPECTED-VALIDATION-MESSAGE" elementType="Argument">
               <stringProp name="Argument.name">EXPECTED-VALIDATION-MESSAGE</stringProp>
-              <stringProp name="Argument.value">Assignee Staff Id is not the same as logged in User Staff Id</stringProp>
+              <stringProp name="Argument.value">Caseload is either inactive or on hold</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
