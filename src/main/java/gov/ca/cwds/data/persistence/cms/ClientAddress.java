@@ -42,7 +42,7 @@ public class ClientAddress extends BaseClientAddress {
 
   private static final long serialVersionUID = 1L;
 
-  @ManyToOne(cascade = CascadeType.ALL, optional = false)
+  @ManyToOne(cascade = CascadeType.DETACH, optional = false)
   @JoinColumn(name = "FKADDRS_T", nullable = false, insertable = false, updatable = false)
   private Address addresses;
 

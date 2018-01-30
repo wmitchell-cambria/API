@@ -145,7 +145,7 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
     for (ReferralClient referralClient : referralClients) {
       Referral referral = referralClient.getReferral();
       LimitedAccessType referralLimitedAccessCode =
-          LimitedAccessType.valueOf(referral.getLimitedAccessCode());
+          LimitedAccessType.getByValue(referral.getLimitedAccessCode());
       if (referralLimitedAccessCode == null) {
         referralLimitedAccessCode = LimitedAccessType.NONE;
       }
