@@ -53,3 +53,16 @@ The test is attempting to create a Referral where victim and perpetrator are the
 
 The test checks that per the Rule R - 00785 an appropriate error message is generated that informs the end user that perpetratorClientId can not be same as victimClientId.
  
+###R05928SetGovernmentOrganizationCrossReportAgency
+
+This test creates a Referral that includes Cross Report to a Government Organization
+
+The test checks that per the rule R - 05928 If the check box is marked, the corresponding Government Organization must be selected. ie- If the Department of Justice check box is marked, a Department of Justice entry must be selected.   For each GOVERNMENT_ORG_CROSS_REPORT created, the Fkgv_Org_T must <> nulls.
+
+###R01166SetGovernmentOrganizationCrossReportIndicator 
+
+This test creates a Referral that includes Cross Report to a Government Organization
+
+The test checks that per the rule R - 01166 Set GOVERNMENT_ORG_CROSS_RPT_IND_VAR indicator variable to Y when sending Cross Report to any of the identified Government Agencies.    Select CROSS_REPORT> GOVERNMENT_ORG_CROSS_REPORT Set CROSS_REPORT.GOVERNMENT_ORG_CROSS_RPT_IND_VAR= Y Update CROSS_REPORT
+
+ 
