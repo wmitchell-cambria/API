@@ -1247,32 +1247,8 @@ public class Client extends ReportingDomain implements Request, Response {
     return zippyCreatedIndicator;
   }
 
-  public void applySensitivityIndicator(String sensitivityIndicator) {
-    if (LimitedAccessType.SEALED.getValue().equals(sensitivityIndicator)) {
-      makeSealed();
-    } else if (LimitedAccessType.SENSITIVE.getValue().equals(sensitivityIndicator)) {
-      makeSensitive();
-    } else if (this.sensitivityIndicator == null) {
-      removeSealedSensitive();
-    }
-  }
-
-  private void makeSensitive() {
-    if (!isSealed()) {
-      this.sensitivityIndicator = LimitedAccessType.SENSITIVE.getValue();
-    }
-  }
-
-  private void makeSealed() {
-    this.sensitivityIndicator = LimitedAccessType.SEALED.getValue();
-  }
-
-  private void removeSealedSensitive() {
-    this.sensitivityIndicator = LimitedAccessType.NONE.getValue();
-  }
-
-  private boolean isSealed() {
-    return LimitedAccessType.SEALED.getValue().equals(sensitivityIndicator);
+  public void applySensitivityIndicator(LimitedAccessType limitedAccessType) {
+    this.sensitivityIndicator = limitedAccessType.getValue();
   }
 
   /**

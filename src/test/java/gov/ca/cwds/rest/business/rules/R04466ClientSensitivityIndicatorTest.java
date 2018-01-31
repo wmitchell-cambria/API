@@ -65,14 +65,34 @@ public class R04466ClientSensitivityIndicatorTest {
   public void testClientAlreadyAtHighestLevel() {
     ClientResourceBuilder clientResourceBuilder = new ClientResourceBuilder();
     clientResourceBuilder.setSoc158SealedClientIndicator(false);
-    clientResourceBuilder.setSensitivityIndicator("R");
+    clientResourceBuilder.setSensitivityIndicator(LimitedAccessType.SEALED.getValue());
     Client client = clientResourceBuilder.build();
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
-        new R04466ClientSensitivityIndicator(client, LimitedAccessType.SEALED, caseDao,
+        new R04466ClientSensitivityIndicator(client, LimitedAccessType.SENSITIVE, caseDao,
             clientRelationshipDao, referralClientDao);
     r04466ClientSensitivityIndicator.execute();
 
-    Assert.assertEquals("R", client.getSensitivityIndicator());
+    Assert.assertEquals(LimitedAccessType.SENSITIVE.getValue(), client.getSensitivityIndicator());
   }
+
+  // @Test
+  // public void testHighestCaseLinitedAccessCode() {
+  // ClientResourceBuilder clientResourceBuilder = new ClientResourceBuilder();
+  // clientResourceBuilder.setSoc158SealedClientIndicator(false);
+  // clientResourceBuilder.setSensitivityIndicator("N");
+  // Client client = clientResourceBuilder.build();
+  //
+  // ClientRelationshipResourceBuilder
+  //
+  // when(clientRelationshipDao.findByPrimaryClientId(any(String.class))).thenReturn(value, values);
+  //
+  //
+  // R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
+  // new R04466ClientSensitivityIndicator(client, LimitedAccessType.SEALED, caseDao,
+  // clientRelationshipDao, referralClientDao);
+  // r04466ClientSensitivityIndicator.execute();
+  //
+  // Assert.assertEquals("R", client.getSensitivityIndicator());
+  // }
 }

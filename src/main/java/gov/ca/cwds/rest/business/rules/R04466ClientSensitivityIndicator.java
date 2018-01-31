@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
@@ -60,25 +59,14 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
       return;
     }
 
-    /*
-     * If client's sensitivity is already at highest level then don't change it.
-     */
-    String clientSensitivityIndicator = client.getSensitivityIndicator();
-    if (LimitedAccessType.HIGHEST_PRIORITY.getValue().equals(clientSensitivityIndicator)) {
-      return;
-    }
-
     LimitedAccessType currentHighestLimitedAccessCode =
         screeningToReferralLimmitedAccessCode == null ? LimitedAccessType.NONE
             : screeningToReferralLimmitedAccessCode;
 
     /*
-     * If given referral limited access code is highest then apply it
+     * Apply current highest limited access code
      */
-    if (LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
-      client.applySensitivityIndicator(currentHighestLimitedAccessCode.getValue());
-      return;
-    }
+    client.applySensitivityIndicator(currentHighestLimitedAccessCode);
 
     String clientId = client.getExistingClientId();
 
@@ -86,7 +74,7 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
      * Is it a new client (does not exist in db)
      */
     if (StringUtils.isBlank(clientId)) {
-      client.applySensitivityIndicator(currentHighestLimitedAccessCode.getValue());
+      client.applySensitivityIndicator(currentHighestLimitedAccessCode);
       return;
     }
 
@@ -108,14 +96,14 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
     /*
      * Found highest limited access code, apply it to client
      */
-    client.applySensitivityIndicator(currentHighestLimitedAccessCode.getValue());
+    client.applySensitivityIndicator(currentHighestLimitedAccessCode);
   }
 
   private LimitedAccessType findHighestCaseLimitedAccessCode(String clientId) {
     LimitedAccessType currentHighestLimitedAccessCode = LimitedAccessType.NONE;
-    List<String> clientIds = findAllRelatedClientIds(clientId);
+    // List<String> clientIds = findAllRelatedClientIds(clientId);
 
-    CmsCase[] cmsCases = caseDao.findByVictimClientIds(clientIds);
+    CmsCase[] cmsCases = caseDao.findAllRelatedByVictimClientId(clientId);
     for (CmsCase cmsCase : cmsCases) {
       String limitedAccessCodeValue = cmsCase.getLimitedAccessCode();
       LimitedAccessType caseLimitedAccessCode =
@@ -162,21 +150,21 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
     return currentHighestLimitedAccessCode;
   }
 
-  private List<String> findAllRelatedClientIds(String clientId) {
-    List<String> clientIds = new ArrayList<>();
-    clientIds.add(clientId);
-
-    ClientRelationship[] clientRelationshipsByPrimaryClient =
-        clientRelationshipDao.findByPrimaryClientId(clientId);
-    for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
-      clientIds.add(relationship.getSecondaryClientId());
-    }
-
-    ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(clientId);
-    for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-      clientIds.add(relation.getPrimaryClientId());
-    }
-    return clientIds;
-  }
+  // private List<String> findAllRelatedClientIds(String clientId) {
+  // List<String> clientIds = new ArrayList<>();
+  // clientIds.add(clientId);
+  //
+  // ClientRelationship[] clientRelationshipsByPrimaryClient =
+  // clientRelationshipDao.findByPrimaryClientId(clientId);
+  // for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
+  // clientIds.add(relationship.getSecondaryClientId());
+  // }
+  //
+  // ClientRelationship[] clientRelationshipBySecondaryClient =
+  // clientRelationshipDao.findBySecondaryClientId(clientId);
+  // for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
+  // clientIds.add(relation.getPrimaryClientId());
+  // }
+  // return clientIds;
+  // }
 }
