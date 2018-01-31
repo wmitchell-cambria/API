@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3 r1808647">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="R05928 Set Government Organization Cross Report Agency" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="R05928 Set Government Organization Cross Report Agency Test" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1482864233000</longProp>
+        <longProp name="ThreadGroup.end_time">1482864233000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <IncludeController guiclass="IncludeControllerGui" testclass="IncludeController" testname="Include Controller" enabled="true">
+          <stringProp name="IncludeController.includepath">../../login.jmx</stringProp>
+        </IncludeController>
+        <hashTree/>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Ferb Parameters" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="FERB-URL" elementType="Argument">
+              <stringProp name="Argument.name">FERB-URL</stringProp>
+              <stringProp name="Argument.value">${__P(ferb.url)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="FERB-PROTOCOL" elementType="Argument">
+              <stringProp name="Argument.name">FERB-PROTOCOL</stringProp>
+              <stringProp name="Argument.value">https</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="USER-COUNTY" elementType="Argument">
+              <stringProp name="Argument.name">USER-COUNTY</stringProp>
+              <stringProp name="Argument.value">${__P(saf.users.county)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="USER-STAFF-ID" elementType="Argument">
+              <stringProp name="Argument.name">USER-STAFF-ID</stringProp>
+              <stringProp name="Argument.value">${__P(saf.users.staff.id)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Ferb Controller" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Accept</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Referral With Cross Report Via Ferb" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+   &quot;approval_status&quot;:118,&#xd;
+   &quot;family_awareness&quot;:true,&#xd;
+   &quot;filed_with_law_enforcement&quot;:false,&#xd;
+   &quot;additional_information&quot;:null,&#xd;
+   &quot;allegations&quot;:[&#xd;
+      {&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;victim_person_id&quot;:&quot;6&quot;,&#xd;
+         &quot;perpetrator_person_id&quot;:&quot;7&quot;,&#xd;
+         &quot;type&quot;:2177,&#xd;
+         &quot;county&quot;:&quot;57&quot;,&#xd;
+         &quot;non_protecting_parent&quot;:&quot;U&quot;&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;victim_person_id&quot;:&quot;6&quot;,&#xd;
+         &quot;perpetrator_person_id&quot;:&quot;7&quot;,&#xd;
+         &quot;type&quot;:2178,&#xd;
+         &quot;county&quot;:&quot;57&quot;,&#xd;
+         &quot;non_protecting_parent&quot;:&quot;U&quot;&#xd;
+      }&#xd;
+   ],&#xd;
+   &quot;assignee&quot;:&quot;Jim Bob&quot;,&#xd;
+   &quot;communication_method&quot;:5375,&#xd;
+      &quot;cross_reports&quot;:[&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;20&quot;,&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;inform_date&quot;:&quot;2016-08-17&quot;,&#xd;
+         &quot;method&quot;:2095,&#xd;
+         &quot;filed_out_of_state&quot;:true,&#xd;
+         &quot;county_id&quot;:&quot;1101&quot;,&#xd;
+          &quot;agencies&quot;: [&#xd;
+            {&#xd;
+            &quot;id&quot;: &quot;Ad4ATcY00E&quot;,&#xd;
+            &quot;type&quot;: &quot;LAW_ENFORCEMENT&quot;&#xd;
+            },&#xd;
+            {&#xd;
+            &quot;id&quot;: &quot;12vhdlh00i&quot;,&#xd;
+            &quot;type&quot;: &quot;DEPARTMENT_OF_JUSTICE&quot;&#xd;
+            }&#xd;
+            ]&#xd;
+      }&#xd;
+   ],&#xd;
+   &quot;ended_at&quot;:null,&#xd;
+   &quot;id&quot;:&quot;9&quot;,&#xd;
+   &quot;incident_county&quot;:&quot;${USER-COUNTY}&quot;,&#xd;
+   &quot;incident_date&quot;:&quot;1996-08-23&quot;,&#xd;
+   &quot;location_type&quot;:&quot;Child&apos;s Home&quot;,&#xd;
+   &quot;name&quot;:&quot;Languages test&quot;,&#xd;
+   &quot;reference&quot;:&quot;XLT60X&quot;,&#xd;
+   &quot;report_narrative&quot;:&quot;Distinctio ad aliquid ut doloremque nobis. &quot;,&#xd;
+   &quot;screening_decision&quot;:&quot;promote_to_referral&quot;,&#xd;
+   &quot;screening_decision_detail&quot;:&quot;3_days&quot;,&#xd;
+   &quot;started_at&quot;:&quot;2017-08-02T18:55:00.000Z&quot;,&#xd;
+   &quot;assignee_staff_id&quot;:&quot;${USER-STAFF-ID}&quot;,&#xd;
+   &quot;legacy_id&quot;:null,&#xd;
+   &quot;legacy_source_table&quot;:null,&#xd;
+   &quot;response_time&quot;:1516,&#xd;
+   &quot;responsible_agency&quot;:&quot;C&quot;,&#xd;
+   &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+   &quot;limited_access_description&quot;: &quot;&quot;,&#xd;
+   &quot;limited_access_agency&quot;:&quot;&quot;,&#xd;
+   &quot;limited_access_date&quot;:&quot;&quot;,&#xd;
+   &quot;address&quot;:{&#xd;
+      &quot;legacy_id&quot;:null,&#xd;
+      &quot;legacy_source_table&quot;:null,&#xd;
+      &quot;city&quot;:&quot;Wilheminachester&quot;,&#xd;
+      &quot;state&quot;:1838,&#xd;
+      &quot;street_address&quot;:&quot;005 Lorenzo Hills&quot;,&#xd;
+      &quot;zip&quot;:&quot;55926&quot;,&#xd;
+      &quot;type&quot;:6272&#xd;
+   },&#xd;
+   &quot;participants&quot;:[&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;8&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:null,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;m&quot;,&#xd;
+         &quot;first_name&quot;:&quot;Lavette&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Konopelski&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;N&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Mandated Reporter&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;1980-03-28&quot;,&#xd;
+         &quot;ssn&quot;:&quot;373201577&quot;,&#xd;
+         &quot;primary_language&quot;:1249,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[&#xd;
+            {&#xd;
+               &quot;legacy_id&quot;:null,&#xd;
+               &quot;legacy_source_table&quot;:null,&#xd;
+               &quot;city&quot;:&quot;Quintinberg&quot;,&#xd;
+               &quot;state&quot;:1844,&#xd;
+               &quot;street_address&quot;:&quot;8211 Stephen Bridge&quot;,&#xd;
+               &quot;zip&quot;:&quot;71146&quot;,&#xd;
+               &quot;type&quot;:6273&#xd;
+            }&#xd;
+         ]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;7&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:null,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;M&quot;,&#xd;
+         &quot;first_name&quot;:&quot;Abdul&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Ziemessasdfsadf&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;R&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Perpetrator&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;1995-10-23&quot;,&#xd;
+         &quot;ssn&quot;:&quot;442743442&quot;,&#xd;
+         &quot;primary_language&quot;:null,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;6&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:&quot;2017-08-04T21:02:38.598+0000&quot;,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:&quot;&quot;,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;U&quot;,&#xd;
+         &quot;first_name&quot;:&quot;See&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Abbott&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;K&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Victim&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;2005-08-14&quot;,&#xd;
+         &quot;ssn&quot;:&quot;546486409&quot;,&#xd;
+         &quot;primary_language&quot;:null,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[]&#xd;
+      }&#xd;
+   ]&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${FERB-URL}</stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">${FERB-PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/referrals?token=${token}</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49587">201</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">8</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Path PostProcessor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">crossReport</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.cross_reports[0].legacy_id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">log.info(&quot;id of Posted Cross Report &quot; +&quot;${crossReport}&quot;);
+</stringProp>
+            </BeanShellPostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="JDBC Controller" enabled="true"/>
+        <hashTree>
+          <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Configuration" enabled="true">
+            <stringProp name="dataSource">docker</stringProp>
+            <stringProp name="poolMax">10</stringProp>
+            <stringProp name="timeout">10000</stringProp>
+            <stringProp name="trimInterval">60000</stringProp>
+            <boolProp name="autocommit">true</boolProp>
+            <stringProp name="transactionIsolation">DEFAULT</stringProp>
+            <boolProp name="keepAlive">true</boolProp>
+            <stringProp name="connectionAge">5000</stringProp>
+            <stringProp name="checkQuery">values 1</stringProp>
+            <stringProp name="dbUrl">${__P(legacy.db2.url)}</stringProp>
+            <stringProp name="driver">com.ibm.db2.jcc.DB2Driver</stringProp>
+            <stringProp name="username">${__P(legacy.db2.username)}</stringProp>
+            <stringProp name="password">${__P(ns.db2.password)}</stringProp>
+          </JDBCDataSource>
+          <hashTree/>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="Government Organization Cross Report JDBC Request" enabled="true">
+            <stringProp name="dataSource">docker</stringProp>
+            <stringProp name="queryType">Select Statement</stringProp>
+            <stringProp name="query">SELECT
+	*
+FROM
+	CWSINT.GV_XRPT
+where 
+	FKCRSS_RP0 =&apos;${crossReport}&apos;
+AND
+	FKGV_ORG_T is NOT NULL</stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="variableNames">IDENTIFIER</stringProp>
+            <stringProp name="resultVariable">govtOrg</stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+          </JDBCSampler>
+          <hashTree>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
+              <stringProp name="BeanShellAssertion.query">if(vars.getObject(&quot;govtOrg&quot;).size()==0){
+		Failure = true;
+	FailureMessage = &quot;The corresponding Government Organization Cross Report for the Referral was not created successfully&quot;;
+}
+</stringProp>
+              <stringProp name="BeanShellAssertion.filename"></stringProp>
+              <stringProp name="BeanShellAssertion.parameters"></stringProp>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

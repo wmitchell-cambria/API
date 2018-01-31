@@ -523,6 +523,7 @@ public class ScreeningToReferralService implements CrudsService {
     PostedAllegation postedAllegation = this.allegationService.create(cmsAllegation);
     allegation.setLegacyId(postedAllegation.getId());
     allegation.setLegacySourceTable(ALLEGATION_TABLE_NAME);
+    allegation.setNonProtectingParent(postedAllegation.getNonProtectingParentCode());
     processedAllegations.add(allegation);
 
     // create the Allegation Perpetrator History
