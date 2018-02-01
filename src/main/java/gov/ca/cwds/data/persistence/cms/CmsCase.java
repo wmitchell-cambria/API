@@ -333,6 +333,10 @@ public class CmsCase extends CmsPersistentObject {
     return limitedAccessCode;
   }
 
+  public void setLimitedAccessCode(String limitedAccessCode) {
+    this.limitedAccessCode = limitedAccessCode;
+  }
+
   public Date getLimitedAccessDate() {
     return freshDate(limitedAccessDate);
   }
