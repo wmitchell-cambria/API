@@ -24,7 +24,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -89,6 +92,9 @@ public class ParticipantServiceTest {
   private TriggerTablesDao triggerTablesDao;
   private StaffPersonDao staffpersonDao;
   private RIClientAddress riClientAddress;
+  private CaseDao caseDao;
+  private ClientRelationshipDao clientRelationshipDao;
+  private ReferralClientDao referralClientDao;
 
   private Validator validator;
 
@@ -136,6 +142,9 @@ public class ParticipantServiceTest {
 
     clientAddressService = mock(ClientAddressService.class);
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
+    caseDao = mock(CaseDao.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
+    referralClientDao = mock(ReferralClientDao.class);
 
     messageBuilder = new MessageBuilder();
 
@@ -149,9 +158,9 @@ public class ParticipantServiceTest {
     referralId = "1234567890";
     timestamp = new Date();
 
-    participantService =
-        new ParticipantService(clientService, referralClientService, reporterService,
-            childClientService, clientAddressService, validator, clientScpEthnicityService);
+    participantService = new ParticipantService(clientService, referralClientService,
+        reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService, caseDao, referralClientDao);
   }
 
   @SuppressWarnings("javadoc")
@@ -286,7 +295,7 @@ public class ParticipantServiceTest {
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
     String expectedErrorMessage =
-        "Unable to Update John Smith Client. Client was previously modified";
+        "Unable to update client John Smith. Client was previously modified.";
     assertEquals("Expected client previously modified message to have been recorded",
         expectedErrorMessage, message);
   }
