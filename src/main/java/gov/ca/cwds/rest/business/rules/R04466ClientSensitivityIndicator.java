@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.ca.cwds.data.cms.CaseDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -24,7 +23,6 @@ import gov.ca.cwds.rest.business.RuleAction;
 public class R04466ClientSensitivityIndicator implements RuleAction {
 
   private CaseDao caseDao;
-  private ClientRelationshipDao clientRelationshipDao;
   private ReferralClientDao referralClientDao;
   private Client client;
   private LimitedAccessType screeningToReferralLimmitedAccessCode;
@@ -36,16 +34,14 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
    * @param screeningToReferralLimmitedAccessCode The current limited access code requested with
    *        referral
    * @param caseDao Case DAO
-   * @param clientRelationshipDao Client relationship DAO
    * @param referralClientDao Referral client DAO
    */
   public R04466ClientSensitivityIndicator(Client client,
       LimitedAccessType screeningToReferralLimmitedAccessCode, CaseDao caseDao,
-      ClientRelationshipDao clientRelationshipDao, ReferralClientDao referralClientDao) {
+      ReferralClientDao referralClientDao) {
     this.client = client;
     this.screeningToReferralLimmitedAccessCode = screeningToReferralLimmitedAccessCode;
     this.caseDao = caseDao;
-    this.clientRelationshipDao = clientRelationshipDao;
     this.referralClientDao = referralClientDao;
   }
 
@@ -64,32 +60,32 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
             : screeningToReferralLimmitedAccessCode;
 
     /*
-     * Apply current highest limited access code
-     */
-    client.applySensitivityIndicator(currentHighestLimitedAccessCode);
-
-    String clientId = client.getExistingClientId();
-
-    /*
-     * Is it a new client (does not exist in db)
-     */
-    if (StringUtils.isBlank(clientId)) {
-      client.applySensitivityIndicator(currentHighestLimitedAccessCode);
-      return;
-    }
-
-    /*
-     * Find highest limited access code from cases
-     */
-    currentHighestLimitedAccessCode = findHighestCaseLimitedAccessCode(clientId);
-
-    /*
-     * If limited access code determined from cases is not the highest then traverse referrals
+     * If we already have highest limited access code then use it otherwise check cases and
+     * referrals
      */
     if (!LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
-      LimitedAccessType referralLimitedAccessCode = findHighestReferralLimitedAccessCode(clientId);
-      if (referralLimitedAccessCode.getPriority() > currentHighestLimitedAccessCode.getPriority()) {
-        currentHighestLimitedAccessCode = referralLimitedAccessCode;
+      String clientId = client.getExistingClientId();
+
+      /*
+       * Is it an existing?
+       */
+      if (StringUtils.isNotBlank(clientId)) {
+        /*
+         * Find highest limited access code from cases
+         */
+        currentHighestLimitedAccessCode = findHighestCaseLimitedAccessCode(clientId);
+
+        /*
+         * If limited access code determined from cases is not the highest then traverse referrals
+         */
+        if (!LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
+          LimitedAccessType referralLimitedAccessCode =
+              findHighestReferralLimitedAccessCode(clientId);
+          if (referralLimitedAccessCode.getPriority() > currentHighestLimitedAccessCode
+              .getPriority()) {
+            currentHighestLimitedAccessCode = referralLimitedAccessCode;
+          }
+        }
       }
     }
 
@@ -101,14 +97,13 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
 
   private LimitedAccessType findHighestCaseLimitedAccessCode(String clientId) {
     LimitedAccessType currentHighestLimitedAccessCode = LimitedAccessType.NONE;
-    // List<String> clientIds = findAllRelatedClientIds(clientId);
 
     CmsCase[] cmsCases = caseDao.findAllRelatedByVictimClientId(clientId);
     for (CmsCase cmsCase : cmsCases) {
       String limitedAccessCodeValue = cmsCase.getLimitedAccessCode();
       LimitedAccessType caseLimitedAccessCode =
           LimitedAccessType.getByValue(limitedAccessCodeValue);
-      if (caseLimitedAccessCode != null) {
+      if (caseLimitedAccessCode == null) {
         caseLimitedAccessCode = LimitedAccessType.NONE;
       }
 
@@ -149,22 +144,4 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
 
     return currentHighestLimitedAccessCode;
   }
-
-  // private List<String> findAllRelatedClientIds(String clientId) {
-  // List<String> clientIds = new ArrayList<>();
-  // clientIds.add(clientId);
-  //
-  // ClientRelationship[] clientRelationshipsByPrimaryClient =
-  // clientRelationshipDao.findByPrimaryClientId(clientId);
-  // for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
-  // clientIds.add(relationship.getSecondaryClientId());
-  // }
-  //
-  // ClientRelationship[] clientRelationshipBySecondaryClient =
-  // clientRelationshipDao.findBySecondaryClientId(clientId);
-  // for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-  // clientIds.add(relation.getPrimaryClientId());
-  // }
-  // return clientIds;
-  // }
 }

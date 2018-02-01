@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.CaseDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -68,7 +67,6 @@ public class ParticipantService implements CrudsService {
   private ClientAddressService clientAddressService;
   private ClientScpEthnicityService clientScpEthnicityService;
   private CaseDao caseDao;
-  private ClientRelationshipDao clientRelationshipDao;
   private ReferralClientDao referralClientDao;
 
   /**
@@ -82,7 +80,6 @@ public class ParticipantService implements CrudsService {
    * @param validator validator
    * @param clientScpEthnicityService clientScpEthnicityService
    * @param caseDao caseDao
-   * @param clientRelationshipDao clientRelationshipDao
    * @param referralClientDao referralClientDao
    */
   @Inject
@@ -90,7 +87,7 @@ public class ParticipantService implements CrudsService {
       ReferralClientService referralClientService, ReporterService reporterService,
       ChildClientService childClientService, ClientAddressService clientAddressService,
       Validator validator, ClientScpEthnicityService clientScpEthnicityService, CaseDao caseDao,
-      ClientRelationshipDao clientRelationshipDao, ReferralClientDao referralClientDao) {
+      ReferralClientDao referralClientDao) {
     this.validator = validator;
     this.clientService = clientService;
     this.referralClientService = referralClientService;
@@ -99,7 +96,6 @@ public class ParticipantService implements CrudsService {
     this.clientAddressService = clientAddressService;
     this.clientScpEthnicityService = clientScpEthnicityService;
     this.caseDao = caseDao;
-    this.clientRelationshipDao = clientRelationshipDao;
     this.referralClientDao = referralClientDao;
   }
 
@@ -308,7 +304,7 @@ public class ParticipantService implements CrudsService {
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
       String message =
-          String.format("Unable to Update %s %s Client. Client was previously modified",
+          String.format("Unable to update client %s %s. Client was previously modified.",
               incomingParticipant.getFirstName(), incomingParticipant.getLastName());
       messageBuilder.addMessageAndLog(message, LOGGER);
     }
@@ -473,7 +469,7 @@ public class ParticipantService implements CrudsService {
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client,
             LimitedAccessType.getByValue(screeningToReferral.getLimitedAccessCode()), caseDao,
-            clientRelationshipDao, referralClientDao);
+            referralClientDao);
     r04466ClientSensitivityIndicator.execute();
   }
 }

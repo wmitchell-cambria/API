@@ -280,7 +280,7 @@ public class TestForLastUpdatedTimeIsUnique {
 
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
-        clientScpEthnicityService, caseDao, clientRelationshipDao, referralClientDao);
+        clientScpEthnicityService, caseDao, referralClientDao);
 
     referralService =
         new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,

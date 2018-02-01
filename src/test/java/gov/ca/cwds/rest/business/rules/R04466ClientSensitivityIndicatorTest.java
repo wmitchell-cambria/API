@@ -40,7 +40,7 @@ public class R04466ClientSensitivityIndicatorTest {
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SEALED, caseDao,
-            clientRelationshipDao, referralClientDao);
+            referralClientDao);
     r04466ClientSensitivityIndicator.execute();
 
     Assert.assertEquals("S", client.getSensitivityIndicator());
@@ -55,7 +55,7 @@ public class R04466ClientSensitivityIndicatorTest {
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SEALED, caseDao,
-            clientRelationshipDao, referralClientDao);
+            referralClientDao);
     r04466ClientSensitivityIndicator.execute();
 
     Assert.assertEquals("R", client.getSensitivityIndicator());
@@ -70,7 +70,7 @@ public class R04466ClientSensitivityIndicatorTest {
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SENSITIVE, caseDao,
-            clientRelationshipDao, referralClientDao);
+            referralClientDao);
     r04466ClientSensitivityIndicator.execute();
 
     Assert.assertEquals(LimitedAccessType.SENSITIVE.getValue(), client.getSensitivityIndicator());

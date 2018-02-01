@@ -160,7 +160,7 @@ public class ParticipantServiceTest {
 
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
-        clientScpEthnicityService, caseDao, clientRelationshipDao, referralClientDao);
+        clientScpEthnicityService, caseDao, referralClientDao);
   }
 
   @SuppressWarnings("javadoc")
@@ -295,7 +295,7 @@ public class ParticipantServiceTest {
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
     String expectedErrorMessage =
-        "Unable to Update John Smith Client. Client was previously modified";
+        "Unable to update client John Smith. Client was previously modified.";
     assertEquals("Expected client previously modified message to have been recorded",
         expectedErrorMessage, message);
   }
