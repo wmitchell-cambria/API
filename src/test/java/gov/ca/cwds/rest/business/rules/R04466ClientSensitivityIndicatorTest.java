@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gov.ca.cwds.data.cms.CaseDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -28,13 +27,11 @@ import gov.ca.cwds.rest.api.domain.cms.Client;
 public class R04466ClientSensitivityIndicatorTest {
 
   private CaseDao caseDao;
-  private ClientRelationshipDao clientRelationshipDao;
   private ReferralClientDao referralClientDao;
 
   @Before
   public void setup() throws Exception {
     caseDao = mock(CaseDao.class);
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
     referralClientDao = mock(ReferralClientDao.class);
   }
 
@@ -103,17 +100,11 @@ public class R04466ClientSensitivityIndicatorTest {
     clientResourceBuilder.setExistingClientId("1111111111");
     Client client = clientResourceBuilder.build();
 
-    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
-    cmsCases[0].setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    cmsCases[1].setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    when(caseDao.findAllRelatedByVictimClientId(any(String.class))).thenReturn(cmsCases);
+    when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
+        .thenReturn(createCases(LimitedAccessType.NONE, LimitedAccessType.NONE));
 
-    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
-    referralClients[0].setReferral(new Referral());
-    referralClients[0].getReferral().setLimitedAccessCode(LimitedAccessType.SENSITIVE.getValue());
-    referralClients[1].setReferral(new Referral());
-    referralClients[1].getReferral().setLimitedAccessCode(LimitedAccessType.SEALED.getValue());
-    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class)))
+        .thenReturn(createReferralClients(LimitedAccessType.SENSITIVE, LimitedAccessType.SEALED));
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SENSITIVE, caseDao,
@@ -130,17 +121,11 @@ public class R04466ClientSensitivityIndicatorTest {
     clientResourceBuilder.setExistingClientId("1111111111");
     Client client = clientResourceBuilder.build();
 
-    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
-    cmsCases[0].setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    cmsCases[1].setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    when(caseDao.findAllRelatedByVictimClientId(any(String.class))).thenReturn(cmsCases);
+    when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
+        .thenReturn(createCases(LimitedAccessType.NONE, LimitedAccessType.NONE));
 
-    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
-    referralClients[0].setReferral(new Referral());
-    referralClients[0].getReferral().setLimitedAccessCode(LimitedAccessType.SENSITIVE.getValue());
-    referralClients[1].setReferral(new Referral());
-    referralClients[1].getReferral().setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class)))
+        .thenReturn(createReferralClients(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SENSITIVE, caseDao,
@@ -157,17 +142,11 @@ public class R04466ClientSensitivityIndicatorTest {
     clientResourceBuilder.setExistingClientId("1111111111");
     Client client = clientResourceBuilder.build();
 
-    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
-    cmsCases[0].setLimitedAccessCode(LimitedAccessType.SENSITIVE.getValue());
-    cmsCases[1].setLimitedAccessCode(LimitedAccessType.SEALED.getValue());
-    when(caseDao.findAllRelatedByVictimClientId(any(String.class))).thenReturn(cmsCases);
+    when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
+        .thenReturn(createCases(LimitedAccessType.SENSITIVE, LimitedAccessType.SEALED));
 
-    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
-    referralClients[0].setReferral(new Referral());
-    referralClients[0].getReferral().setLimitedAccessCode(LimitedAccessType.SENSITIVE.getValue());
-    referralClients[1].setReferral(new Referral());
-    referralClients[1].getReferral().setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class)))
+        .thenReturn(createReferralClients(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SENSITIVE, caseDao,
@@ -184,17 +163,11 @@ public class R04466ClientSensitivityIndicatorTest {
     clientResourceBuilder.setExistingClientId("1111111111");
     Client client = clientResourceBuilder.build();
 
-    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
-    cmsCases[0].setLimitedAccessCode(LimitedAccessType.SENSITIVE.getValue());
-    cmsCases[1].setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    when(caseDao.findAllRelatedByVictimClientId(any(String.class))).thenReturn(cmsCases);
+    when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
+        .thenReturn(createCases(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
 
-    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
-    referralClients[0].setReferral(new Referral());
-    referralClients[0].getReferral().setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    referralClients[1].setReferral(new Referral());
-    referralClients[1].getReferral().setLimitedAccessCode(LimitedAccessType.NONE.getValue());
-    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    when(referralClientDao.findByClientIds(any(Collection.class)))
+        .thenReturn(createReferralClients(LimitedAccessType.NONE, LimitedAccessType.NONE));
 
     R04466ClientSensitivityIndicator r04466ClientSensitivityIndicator =
         new R04466ClientSensitivityIndicator(client, LimitedAccessType.SENSITIVE, caseDao,
@@ -205,4 +178,23 @@ public class R04466ClientSensitivityIndicatorTest {
   }
 
 
+  private CmsCase[] createCases(LimitedAccessType firstCaseLimitedAccessCode,
+      LimitedAccessType secondCaseLimitedAccessCode) {
+    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
+    cmsCases[0].setLimitedAccessCode(firstCaseLimitedAccessCode.getValue());
+    cmsCases[1].setLimitedAccessCode(secondCaseLimitedAccessCode.getValue());
+    return cmsCases;
+  }
+
+  private ReferralClient[] createReferralClients(LimitedAccessType firstReferralLimitedAccessCode,
+      LimitedAccessType secondReferralLimitedAccessCode) {
+    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
+    referralClients[0].setReferral(new Referral());
+    referralClients[0].getReferral()
+        .setLimitedAccessCode(firstReferralLimitedAccessCode.getValue());
+    referralClients[1].setReferral(new Referral());
+    referralClients[1].getReferral()
+        .setLimitedAccessCode(secondReferralLimitedAccessCode.getValue());
+    return referralClients;
+  }
 }
