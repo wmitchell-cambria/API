@@ -1,0 +1,214 @@
+Test Scenario 2: Screening to referral with limited access code 'R'.
+	Victim - new
+	Perpetrator - new
+	
+	Expected result:
+	Victim - SENSTV_IND = 'R'
+	Perpetrator - SENSTV_IND = 'R'
+
+Payload:
+
+	
+{
+   "approval_status":118,
+   "family_awareness":true,
+   "filed_with_law_enforcement":false,
+   "additional_information":null,
+   "allegations":[
+      {
+         "legacy_id":null,
+         "legacy_source_table":null,
+         "victim_person_id":"6",
+         "perpetrator_person_id":"7",
+         "type":2177,
+         "county":"57",
+         "non_protecting_parent":"U"
+      },
+      {
+         "legacy_id":null,
+         "legacy_source_table":null,
+         "victim_person_id":"6",
+         "perpetrator_person_id":"7",
+         "type":2178,
+         "county":"57",
+         "non_protecting_parent":"U"
+      }
+   ],
+   "assignee":"Jim Bob",
+   "communication_method":5375,
+   "cross_reports":[
+      {
+         "id":"20",
+         "legacy_id":null,
+         "legacy_source_table":null,
+         "inform_date":"2016-08-17",
+         "method":2096,
+         "filed_out_of_state":true,
+         "county_id":"1126",
+          "agencies":[]
+      },
+      {
+         "id":"21",
+         "legacy_id":null,
+         "legacy_source_table":null,
+         "inform_date":"2016-08-17",
+         "method":2096,
+         "filed_out_of_state":true,
+         "county_id":"1126",
+          "agencies":[]
+      }
+   ],
+   "ended_at":null,
+   "id":"9",
+   "incident_county":"34",
+   "incident_date":"1996-08-23",
+   "location_type":"Child's Home",
+   "name":"Languages test",
+   "reference":"XLT60X",
+   "report_narrative":"Distinctio ad aliquid ut doloremque nobis. ",
+   "screening_decision":"promote_to_referral",
+   "screening_decision_detail":"3_days",
+   "started_at":"2017-08-02T18:55:00.000Z",
+   "assignee_staff_id":"0X5",
+   "legacy_id":null,
+   "legacy_source_table":null,
+   "response_time":1516,
+   "responsible_agency":"C",
+   "limited_access_code": "R",
+   "limited_access_description": "Restricted for Testing",
+   "limited_access_agency":"34",
+   "limited_access_date":"2018-01-30",
+   "address":{
+      "legacy_id":null,
+      "legacy_source_table":null,
+      "city":"Wilheminachester",
+      "state":1838,
+      "street_address":"005 Lorenzo Hills",
+      "zip":"55926",
+      "type":6272
+   },
+   "participants":[
+      {
+         "id":"8",
+         "legacy_descriptor":{
+            "legacy_id":null,
+            "legacy_ui_id":null,
+            "legacy_last_updated":null,
+            "legacy_table_name":null,
+            "legacy_table_description":null
+         },
+         "legacy_id":null,
+         "legacy_source_table":null,
+         "gender":"m",
+         "first_name":"Lavette",
+         "last_name":"Konopelski",
+         "middle_name":"N",
+         "name_suffix":null,
+         "roles":[
+            "Mandated Reporter"
+         ],
+         "screening_id":"9",
+         "date_of_birth":"1980-03-28",
+         "ssn":"373201577",
+         "primary_language":1249,
+         "secondary_language":null,
+         "client_staff_person_added":false,
+         "reporter_confidential_waiver":true,
+         "reporter_employer_name":"",
+         "limited_access_code": "N",
+         "race_ethnicity":{  
+           "race_codes":[],
+           "unable_to_determine_code":"A",
+           "hispanic_codes":[],
+           "hispanic_orgin_code":"X",
+           "hispanic_unable_to_determine_code":"A"
+         },
+         "addresses":[
+            {
+               "legacy_id":null,
+               "legacy_source_table":null,
+               "city":"Quintinberg",
+               "state":1844,
+               "street_address":"8211 Stephen Bridge",
+               "zip":"71146",
+               "type":6273
+            }
+         ]
+      },
+      {
+         "id":"7",
+         "legacy_descriptor":{
+            "legacy_id":null,
+            "legacy_ui_id":null,
+            "legacy_last_updated":null,
+            "legacy_table_name":null,
+            "legacy_table_description":null
+         },
+         "legacy_id":null,
+         "legacy_source_table":null,
+         "gender":"M",
+         "first_name":"Abdul",
+         "last_name":"Ziemessasdfsadf",
+         "middle_name":"R",
+         "name_suffix":null,
+         "roles":[
+            "Perpetrator"
+         ],
+         "screening_id":"9",
+         "date_of_birth":"1995-10-23",
+         "ssn":"442743442",
+         "primary_language":null,
+         "secondary_language":null,
+         "client_staff_person_added":false,
+         "reporter_confidential_waiver":true,
+         "reporter_employer_name":"",
+         "limited_access_code": "N",
+         "race_ethnicity":{  
+           "race_codes":[],
+           "unable_to_determine_code":"A",
+           "hispanic_codes":[],
+           "hispanic_orgin_code":"X",
+           "hispanic_unable_to_determine_code":"A"
+         },
+         "addresses":[]
+      },
+      {
+         "id":"6",
+         "legacy_descriptor":{
+            "legacy_id":null,
+            "legacy_ui_id":null,
+            "legacy_last_updated":"2017-08-04T21:02:38.598+0000",
+            "legacy_table_name":null,
+            "legacy_table_description":null
+         },
+         "legacy_id":"",
+         "legacy_source_table":null,
+         "gender":"U",
+         "first_name":"See",
+         "last_name":"Abbott",
+         "middle_name":"K",
+         "name_suffix":null,
+         "roles":[
+            "Victim"
+         ],
+         "screening_id":"9",
+         "date_of_birth":"2005-08-14",
+         "ssn":"546486409",
+         "primary_language":null,
+         "secondary_language":null,
+         "client_staff_person_added":false,
+         "reporter_confidential_waiver":true,
+         "reporter_employer_name":"",
+         "limited_access_code": "N",
+         "race_ethnicity":{  
+           "race_codes":[],
+           "unable_to_determine_code":"A",
+           "hispanic_codes":[],
+           "hispanic_orgin_code":"X",
+           "hispanic_unable_to_determine_code":"A"
+         },
+         "addresses":[]
+      }
+   ]
+}	
+	
