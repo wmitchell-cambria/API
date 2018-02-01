@@ -11,8 +11,9 @@ import static org.junit.Assert.*;
  * CWDS API Team
  */
 public class R04966NamesMustHaveAtLeastOneAlphaCharTest {
+	
   @Test
-  public void testValid() {
+  public void validWithMiddleNameOnly() {
     Client client = new ClientEntityBuilder().
         setCommonFirstName(null).
         setCommonLastName(null).
@@ -22,7 +23,29 @@ public class R04966NamesMustHaveAtLeastOneAlphaCharTest {
   }
 
   @Test
-  public void testInvalid() {
+  public void validWithFirstNameOnly() {
+	Client client = new ClientEntityBuilder().
+      setCommonFirstName("J").
+      setCommonLastName(null).
+      setCommonMiddleName(null).
+      build();
+  assertTrue(new R04966NamesMustHaveAtLeastOneAlphaChar(client).isValid());
+	  
+  }
+  
+  @Test
+  public void  validWithLastNameOnly() {
+		Client client = new ClientEntityBuilder().
+			      setCommonFirstName(null).
+			      setCommonLastName("L").
+			      setCommonMiddleName(null).
+			      build();
+			  assertTrue(new R04966NamesMustHaveAtLeastOneAlphaChar(client).isValid());
+	  
+  }
+  
+  @Test
+  public void invalidWithAllNumerics() {
     Client client = new ClientEntityBuilder().
         setCommonFirstName("1").
         setCommonLastName("22").
@@ -32,7 +55,17 @@ public class R04966NamesMustHaveAtLeastOneAlphaCharTest {
   }
 
   @Test
-  public void testNulls() {
+  public void invalidWithAllSpaces() {
+    Client client = new ClientEntityBuilder().
+        setCommonFirstName("1").
+        setCommonLastName("22").
+        setCommonMiddleName("333").
+        build();
+    assertFalse(new R04966NamesMustHaveAtLeastOneAlphaChar(client).isValid());
+  }
+
+  @Test
+  public void invalidWithAllNulls() {
     Client client = new ClientEntityBuilder().
         setCommonFirstName(null).
         setCommonLastName(null).
@@ -40,4 +73,6 @@ public class R04966NamesMustHaveAtLeastOneAlphaCharTest {
         build();
     assertFalse(new R04966NamesMustHaveAtLeastOneAlphaChar(client).isValid());
   }
+  
+  
 }

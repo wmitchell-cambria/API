@@ -45,7 +45,7 @@ public class AssignmentDao extends CrudsDaoImpl<Assignment> {
   /**
    *
    * @param referralId referral ID
-   * @return
+   * @return the assignments
    */
   public Set<Assignment> findAssignmentsByReferralId(String referralId) {
     Query<Assignment> query = this.getSessionFactory().getCurrentSession()

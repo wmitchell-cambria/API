@@ -77,4 +77,13 @@ public class R02265ChildClientExistsTest {
     assertThat(client.getChildClientIndicatorVar(), is(equalTo(Boolean.FALSE)));
   }
 
+  @Test
+  public void shouldDetermineThatClientIsNotChildWhenDOBNull() throws Exception {
+	    Participant participant =
+	            new ParticipantResourceBuilder().setDateOfBirth(null).createParticipant();
+	        String dateStarted = "2017-01-01";
+	        R02265ChildClientExists r02265ChildClientExists =
+	            new R02265ChildClientExists(participant, dateStarted);
+	        assertThat(r02265ChildClientExists.isValid(), is(equalTo(Boolean.FALSE)));
+  }
 }
