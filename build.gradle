@@ -294,7 +294,7 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
 }
 
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
-  commandLine 'docker',  'build',  '-t',  'cwds/api', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api', '-f', 'Dockerfile', '.'
   commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
 }
 
