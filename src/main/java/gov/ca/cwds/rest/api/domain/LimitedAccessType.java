@@ -76,6 +76,6 @@ public enum LimitedAccessType {
    * @return true if given limited access code is the highest priority one.
    */
   public static boolean isHighestPriority(LimitedAccessType limitedAccessType) {
-    return LimitedAccessType.HIGHEST_PRIORITY.equals(limitedAccessType);
+    return LimitedAccessType.HIGHEST_PRIORITY == limitedAccessType;
   }
 }
