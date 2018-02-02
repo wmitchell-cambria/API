@@ -2,7 +2,6 @@ package gov.ca.cwds.data.persistence.cms;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -173,12 +172,11 @@ public class CrossReport extends CmsPersistentObject {
    */
   public CrossReport(String referralId, String thirdId, Short crossReportMethodType,
       String filedOutOfStateIndicator, String governmentOrgCrossRptIndicatorVar, Date informTime,
-      String recipientBadgeNumber, Integer recipientPhoneExtensionNumber,
-      Long recipientPhoneNumber, Date informDate, String recipientPositionTitleDesc,
-      String referenceNumber, String lawEnforcementId, String staffPersonId, String description,
-      String recipientName, String outStateLawEnforcementAddr, String countySpecificCode,
-      String lawEnforcementIndicator, String outStateLawEnforcementIndicator,
-      String satisfyCrossReportIndicator) {
+      String recipientBadgeNumber, Integer recipientPhoneExtensionNumber, Long recipientPhoneNumber,
+      Date informDate, String recipientPositionTitleDesc, String referenceNumber,
+      String lawEnforcementId, String staffPersonId, String description, String recipientName,
+      String outStateLawEnforcementAddr, String countySpecificCode, String lawEnforcementIndicator,
+      String outStateLawEnforcementIndicator, String satisfyCrossReportIndicator) {
     super();
     this.referralId = referralId;
     this.thirdId = thirdId;
@@ -401,6 +399,18 @@ public class CrossReport extends CmsPersistentObject {
    */
   public String getSatisfyCrossReportIndicator() {
     return satisfyCrossReportIndicator;
+  }
+
+  public Referral getReferral() {
+    return referral;
+  }
+
+  public LawEnforcementEntity getLawEnforcement() {
+    return lawEnforcement;
+  }
+
+  public StaffPerson getStaffPerson() {
+    return staffPerson;
   }
 
   @Override

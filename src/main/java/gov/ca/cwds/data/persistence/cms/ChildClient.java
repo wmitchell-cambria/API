@@ -652,6 +652,10 @@ public class ChildClient extends CmsPersistentObject {
     return tribalCustomaryAdoptionIndicator;
   }
 
+  public Client getClient() {
+    return client;
+  }
+
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);

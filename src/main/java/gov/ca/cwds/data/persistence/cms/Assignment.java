@@ -244,7 +244,7 @@ public class Assignment extends CmsPersistentObject {
   }
 
   public void setStartTime(Date startTime) {
-    this.startTime = startTime;
+    this.startTime = freshDate(startTime);
   }
 
   @SuppressWarnings("javadoc")
@@ -255,6 +255,10 @@ public class Assignment extends CmsPersistentObject {
   @SuppressWarnings("javadoc")
   public BigDecimal getWeightingNumber() {
     return weightingNumber;
+  }
+
+  public Referral getReferral() {
+    return referral;
   }
 
   @Override

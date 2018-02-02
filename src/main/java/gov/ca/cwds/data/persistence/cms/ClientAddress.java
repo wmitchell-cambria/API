@@ -167,6 +167,14 @@ public class ClientAddress extends BaseClientAddress {
     return addresses;
   }
 
+  public Client getClient() {
+    return client;
+  }
+
+  public Referral getReferral() {
+    return referral;
+  }
+
   /**
    * {@inheritDoc}
    * 

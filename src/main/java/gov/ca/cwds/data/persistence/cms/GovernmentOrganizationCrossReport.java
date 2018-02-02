@@ -115,7 +115,8 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
     this.referralId = domainGovernmentOrganizationCrossReport.getReferralId();
     this.governmentOrganizationId =
         StringUtils.isBlank(domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId())
-            ? null : domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId();
+            ? null
+            : domainGovernmentOrganizationCrossReport.getGovernmentOrganizationId();
     this.organizationTypeInd = domainGovernmentOrganizationCrossReport.getOrganizationTypeInd();
   }
 
@@ -169,6 +170,18 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
    */
   public String getOrganizationTypeInd() {
     return organizationTypeInd;
+  }
+
+  public CrossReport getCrossReport() {
+    return crossReport;
+  }
+
+  public Referral getReferral() {
+    return referral;
+  }
+
+  public GovernmentOrganizationEntity getGovernmentOrganization() {
+    return governmentOrganization;
   }
 
   @Override
