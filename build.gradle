@@ -295,18 +295,22 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
 
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
   commandLine 'docker',  'build',  '-t',  'cwds/api', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
 }
 
 task tagDockerImage(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'tag',  'cwds/api',  "cwds/api:$dockerTag"
+  commandLine 'docker',  'tag',  'cwds/api-integration-test',  "cwds/api-integration-test:$dockerTag"
 }
 
 task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'push',  'cwds/api:latest'
+  commandLine 'docker',  'push',  'cwds/api-integration-test:latest'
 }
 
 task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
   commandLine 'docker',  'push',  "cwds/api:$dockerTag"
+  commandLine 'docker',  'push',  "cwds/api-integration-test:$dockerTag"
 }
 
 task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
@@ -314,6 +318,7 @@ task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
 	 println 'Published'
    }
 }
+
 //==================================================================================================
 // Custom Groovy classes for Licence Reports.
 // Move to own classes outside of build.
@@ -433,6 +438,7 @@ This report was generated at ${new Date()}.
                 "\n\n================================================================================\n\n"
     }
 }
+
 
 import com.github.jk1.license.LicenseReportPlugin.LicenseReportExtension
 class CWDSHtmlReportRenderer implements ReportRenderer {
