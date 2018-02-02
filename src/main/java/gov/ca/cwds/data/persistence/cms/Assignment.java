@@ -235,7 +235,7 @@ public class Assignment extends CmsPersistentObject {
   }
 
   public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   @SuppressWarnings("javadoc")

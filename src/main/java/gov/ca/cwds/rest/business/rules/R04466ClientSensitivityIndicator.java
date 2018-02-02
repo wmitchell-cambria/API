@@ -76,16 +76,11 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
         currentHighestLimitedAccessCode = findHighestCaseLimitedAccessCode(clientId);
 
         /*
-         * If limited access code determined from cases is not the highest then traverse referrals
+         * Find highest referral limited access code taking into account current highest limited
+         * access code
          */
-        if (!LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
-          LimitedAccessType referralLimitedAccessCode =
-              findHighestReferralLimitedAccessCode(clientId);
-          if (referralLimitedAccessCode.getPriority() > currentHighestLimitedAccessCode
-              .getPriority()) {
-            currentHighestLimitedAccessCode = referralLimitedAccessCode;
-          }
-        }
+        currentHighestLimitedAccessCode =
+            findHighestReferralLimitedAccessCode(clientId, currentHighestLimitedAccessCode);
       }
     }
 
@@ -119,26 +114,35 @@ public class R04466ClientSensitivityIndicator implements RuleAction {
     return currentHighestLimitedAccessCode;
   }
 
-  private LimitedAccessType findHighestReferralLimitedAccessCode(String clientId) {
-    LimitedAccessType currentHighestLimitedAccessCode = LimitedAccessType.NONE;
-    List<String> clientIds = new ArrayList<>();
-    clientIds.add(clientId);
-    ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
+  private LimitedAccessType findHighestReferralLimitedAccessCode(String clientId,
+      LimitedAccessType highestLimitedAccessCode) {
+    LimitedAccessType currentHighestLimitedAccessCode = highestLimitedAccessCode;
 
-    for (ReferralClient referralClient : referralClients) {
-      Referral referral = referralClient.getReferral();
-      LimitedAccessType referralLimitedAccessCode =
-          LimitedAccessType.getByValue(referral.getLimitedAccessCode());
-      if (referralLimitedAccessCode == null) {
-        referralLimitedAccessCode = LimitedAccessType.NONE;
-      }
+    /*
+     * If current highest limited access code is the highest then return it otherwise check
+     * referrals
+     */
+    if (!LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
+      List<String> clientIds = new ArrayList<>();
+      clientIds.add(clientId);
+      ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
 
-      if (referralLimitedAccessCode.getPriority() > currentHighestLimitedAccessCode.getPriority()) {
-        currentHighestLimitedAccessCode = referralLimitedAccessCode;
-      }
+      for (ReferralClient referralClient : referralClients) {
+        Referral referral = referralClient.getReferral();
+        LimitedAccessType referralLimitedAccessCode =
+            LimitedAccessType.getByValue(referral.getLimitedAccessCode());
+        if (referralLimitedAccessCode == null) {
+          referralLimitedAccessCode = LimitedAccessType.NONE;
+        }
 
-      if (LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
-        break;
+        if (referralLimitedAccessCode.getPriority() > currentHighestLimitedAccessCode
+            .getPriority()) {
+          currentHighestLimitedAccessCode = referralLimitedAccessCode;
+        }
+
+        if (LimitedAccessType.isHighestPriority(currentHighestLimitedAccessCode)) {
+          break;
+        }
       }
     }
 
