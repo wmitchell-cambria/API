@@ -317,7 +317,7 @@ task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'push',  'cwds/api:latest'
 }
 
-task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
+task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagIntegrationTestDockerImage) {
     commandLine 'docker',  'push',  "cwds/api-integration-test:$dockerTag"
 }
 
