@@ -229,7 +229,7 @@
             &quot;legacy_table_name&quot;:null,&#xd;
             &quot;legacy_table_description&quot;:null&#xd;
          },&#xd;
-         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_id&quot;:&quot;1234567890&quot;,&#xd;
          &quot;legacy_source_table&quot;:null,&#xd;
          &quot;gender&quot;:&quot;m&quot;,&#xd;
          &quot;first_name&quot;:&quot;Lavette&quot;,&#xd;
