@@ -27,7 +27,12 @@ public class MessageBuilder {
    * messageBuilder - messageBuilder
    */
   public MessageBuilder() {
-    messages = new ArrayList<>();
+    // default constructor
+  }
+
+  public void merge(MessageBuilder messageBuilder) {
+    this.messages.addAll(messageBuilder.messages);
+    this.issues.addAll(messageBuilder.issues);
   }
 
   /**

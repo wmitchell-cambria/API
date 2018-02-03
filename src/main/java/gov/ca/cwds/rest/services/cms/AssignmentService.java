@@ -188,13 +188,13 @@ public class AssignmentService implements
    * @param screeningToReferral - screeningToReferral
    * @param referralId - referralId
    * @param referral - referral
-   * @param messageBuilder - messageBuilder
+   * @param strsMessageBuilder - ScreeningToReferralService messageBuilder
    */
   public void createDefaultAssignmentForNewReferral(ScreeningToReferral screeningToReferral,
-      String referralId, Referral referral, MessageBuilder messageBuilder) {
+      String referralId, Referral referral, MessageBuilder strsMessageBuilder) {
     R02473DefaultReferralAssignment r02473DefaultReferralAssignment =
         new R02473DefaultReferralAssignment(screeningToReferral, referralId, referral,
-            messageBuilder, assignmentDao, externalInterfaceTables, validator, this);
+            strsMessageBuilder, assignmentDao, externalInterfaceTables, validator, this);
     r02473DefaultReferralAssignment.execute();
   }
 
@@ -250,4 +250,7 @@ public class AssignmentService implements
         .before(assignment2.getStartTime());
   }
 
+  public MessageBuilder getMessageBuilder() {
+    return messageBuilder;
+  }
 }

@@ -161,7 +161,6 @@ public class R02473DefaultReferralAssignmentTest {
       if (em.getMessage().contains("03731")) {
         messageFound = Boolean.TRUE;
       }
-      // System.out.println(em.getMessage());
     }
     assertThat(messageFound, is(equalTo(Boolean.TRUE)));
   }
