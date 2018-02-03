@@ -23,7 +23,6 @@ import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
@@ -116,95 +115,28 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     SystemCodeDescriptor county = getCounty(cmscase);
     SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
     HOISocialWorker assignedSocialWorker = getAssignedSocialWorker(cmscase);
-    List<HOIRelatedPerson> parents = getParents(cmscase);
+    List<HOIRelatedPerson> parents =
+        new HOIParentService(clientDao, clientRelationshipDao).getParents(cmscase.getFkchldClt());
     return new HOICaseFactory().createHOICase(cmscase, county, serviceComponent, focusChild,
         assignedSocialWorker, parents);
   }
 
   private List<String> findAllRelatedClientIds(String clientid) {
-    List<String> clientIds = new ArrayList<>();
-    clientIds.add(clientid);
+
     ClientRelationship[] clientRelationshipsByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(clientid);
+    ClientRelationship[] clientRelationshipBySecondaryClient =
+        clientRelationshipDao.findBySecondaryClientId(clientid);
+    List<String> clientIds = new ArrayList<>(
+        clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
+    clientIds.add(clientid);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       clientIds.add(relationship.getSecondaryClientId());
     }
-    ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(clientid);
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
       clientIds.add(relation.getPrimaryClientId());
     }
     return clientIds;
-  }
-
-  private List<HOIRelatedPerson> getParents(CmsCase cmscase) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
-    ClientRelationship[] clientRelationshipByPrimaryClient =
-        clientRelationshipDao.findByPrimaryClientId(cmscase.getFkchldClt());
-    parents.addAll(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
-    ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(cmscase.getFkchldClt());
-    parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
-    return parents;
-  }
-
-  private List<HOIRelatedPerson> findParentsByPrimaryRelationship(
-      ClientRelationship[] clientRelationship) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
-    for (ClientRelationship relation : clientRelationship) {
-      Short type = relation.getClientRelationshipType();
-      if (isRelationTypeParent(type)) {
-        String clientId = relation.getSecondaryClientId();
-        parents.add(findPersonByClientId(clientId, type));
-      }
-    }
-    return parents;
-  }
-
-  private List<HOIRelatedPerson> findParentsBySecondaryRelationship(
-      ClientRelationship[] clientRelationship) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
-    for (ClientRelationship relation : clientRelationship) {
-      Short type = relation.getClientRelationshipType();
-      if (isRelationTypeParent(type)) {
-        String clientId = relation.getPrimaryClientId();
-        parents.add(findPersonByClientId(clientId, type));
-      }
-    }
-    return parents;
-  }
-
-  private HOIRelatedPerson findPersonByClientId(String clientId, Short type) {
-    Client client = clientDao.find(clientId);
-    SystemCodeDescriptor relationship = new SystemCodeDescriptor(type,
-        SystemCodeCache.global().getSystemCodeShortDescription(type));
-    return createHOIRelatedPerson(client, relationship);
-  }
-
-  private HOIRelatedPerson createHOIRelatedPerson(Client client,
-      SystemCodeDescriptor relationship) {
-    String clientId = client.getId();
-    LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
-            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
-            LegacyTable.CLIENT.getDescription());
-    HOIRelatedPerson person = new HOIRelatedPerson();
-    person.setId(clientId);
-    person.setFirstName(client.getFirstName());
-    person.setLastName(client.getLastName());
-    person.setRelationship(relationship);
-    person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
-    person.setLegacyDescriptor(legacyDescriptor);
-    return person;
-  }
-
-  private boolean isRelationTypeParent(Short type) {
-    boolean firstCondition = type <= 214 && type >= 187;
-    boolean secondCondition = type <= 254 && type >= 245;
-    boolean thirdCondition = type <= 294 && type >= 282;
-    boolean lastCondition =
-        type == 272 || type == 273 || type == 5620 || type == 6360 || type == 6361;
-    return firstCondition || secondCondition || thirdCondition || lastCondition;
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
