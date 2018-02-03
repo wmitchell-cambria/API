@@ -20,7 +20,7 @@ function runTests(){
       executeTest
       reportErrors
     fi
-  done < src/test/resources/jmeter/functionalTests
+  done < ${TEST_PATH}/functionalTests
 }
 function validation(){
   if [ -z $JMETER ]
