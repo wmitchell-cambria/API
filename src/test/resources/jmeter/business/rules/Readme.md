@@ -28,7 +28,6 @@ Similarly saf.users.nocaseload.path will  contains test user id that is associat
 
 These files need to be added to the environment in which the test is to be executed.
 
-
 ### R06560CaseloadRequiredForFirstPrimaryAssignment.jmx
 
 This test logs in with a user id that is associated with a test staff person who has a Caseload and hence is able to create a Referral. 
@@ -53,7 +52,7 @@ The test is attempting to create a Referral where victim and perpetrator are the
 
 The test checks that per the Rule R - 00785 an appropriate error message is generated that informs the end user that perpetratorClientId can not be same as victimClientId.
  
-###R05928SetGovernmentOrganizationCrossReportAgency
+### R05928SetGovernmentOrganizationCrossReportAgency.jmx
 
 This test creates a Referral that includes Cross Report to a Government Organization
 
@@ -67,7 +66,9 @@ The test checks that per the rule R - 01166 Set GOVERNMENT_ORG_CROSS_RPT_IND_VAR
 
 ### R02473AssigneeStaffIdIsDifferentFromCurrentUserStaffId.jmx 
 
-This test logs in with a user id that is associated with a test staff person who has a Caseload and hence is able to create a Referral.
+This test will require the property 'saf.passwd.path' instead of 'saf.users.path'. It will also require 'saf.users.nocaseload.county' and 'saf.users.nocaseload.staff.id'.
+
+This test logs in with a user id that is associated with a test staff person who has an active Caseload and hence is able to create a Referral.
 
 The test is attempting to create a Referral where Assignee Staff Id is not the same as logged in User Staff Id.
 
@@ -75,5 +76,8 @@ The test checks that per the Rule R - 02473 an appropriate error message is gene
 
 ### R02473DefaultReferralAssignmentNoCaseLoad.jmx
 
-This test logs in with a user id that is associated with a test staff person who has no Caseload and hence is not able to create a Referral.
- 
+This test will require the property 'saf.passwd.path' instead of 'saf.users.path'. It will also require 'saf.users.county' and 'saf.users.staff.id'.
+
+This test logs in with a user id that is associated with a test staff person who has no active Caseload and hence is not able to create a Referral.
+
+The test is attempting to create a Referral and checks that per the Rule R - 02473 an appropriate error message is generated that informs the end user that Caseload is either inactive or on hold.
