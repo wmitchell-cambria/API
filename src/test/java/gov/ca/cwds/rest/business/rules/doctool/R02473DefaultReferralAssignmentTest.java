@@ -165,4 +165,31 @@ public class R02473DefaultReferralAssignmentTest {
     assertThat(messageFound, is(equalTo(Boolean.TRUE)));
   }
 
+  @Test
+  public void shouldNotSaveWhenCaseloadIsInactiveOrOnHold() {
+    MessageBuilder mb = new MessageBuilder();
+    Referral referral = new ReferralResourceBuilder().build();
+
+    Assignment assignmentDomain = new AssignmentResourceBuilder().buildAssignment();
+    gov.ca.cwds.data.persistence.cms.Assignment toCreate =
+        new gov.ca.cwds.data.persistence.cms.Assignment("ABC1234567", assignmentDomain, "q1p",
+            lastUpdatedTime);
+
+    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
+        .thenReturn(toCreate);
+    when(assignmentDao.findCaseLoads(any())).thenReturn(new CaseLoad[]{});
+
+    assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, "ABC1234567",
+        referral, mb);
+
+    Boolean messageFound = Boolean.FALSE;
+    List<ErrorMessage> messages = mb.getMessages();
+    for (ErrorMessage em : messages) {
+      if (em.getMessage().equals("R - 02473 Caseload is either inactive or on hold")) {
+        messageFound = Boolean.TRUE;
+      }
+    }
+    assertThat(messageFound, is(equalTo(Boolean.TRUE)));
+  }
+
 }
