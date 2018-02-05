@@ -39,10 +39,6 @@ public class CaseLoadEntityBuilder {
     return this;
   }
 
-  public String getArchiveAssociationIndicator() {
-    return archiveAssociationIndicator;
-  }
-
   public CaseLoadEntityBuilder setArchiveAssociationIndicator(String archiveAssociationIndicator) {
     this.archiveAssociationIndicator = archiveAssociationIndicator;
     return this;
@@ -57,17 +53,9 @@ public class CaseLoadEntityBuilder {
     return this;
   }
 
-  public String getCaseLoadIndicatorVariable() {
-    return caseLoadIndicatorVariable;
-  }
-
   public CaseLoadEntityBuilder setCaseLoadIndicatorVariable(String caseLoadIndicatorVariable) {
     this.caseLoadIndicatorVariable = caseLoadIndicatorVariable;
     return this;
-  }
-
-  public String getFkAssignmentUnit() {
-    return fkAssignmentUnit;
   }
 
   public CaseLoadEntityBuilder setFkAssignmentUnit(String fkAssignmentUnit) {
@@ -84,17 +72,9 @@ public class CaseLoadEntityBuilder {
     return this;
   }
 
-  public String getOnHoldIndicator() {
-    return onHoldIndicator;
-  }
-
   public CaseLoadEntityBuilder setOnHoldIndicator(String onHoldIndicator) {
     this.onHoldIndicator = onHoldIndicator;
     return this;
-  }
-
-  public String getIdentifierName() {
-    return identifierName;
   }
 
   public CaseLoadEntityBuilder setIdentifierName(String identifierName) {
@@ -111,17 +91,9 @@ public class CaseLoadEntityBuilder {
     return this;
   }
 
-  public BigDecimal getCeilingNumber() {
-    return ceilingNumber;
-  }
-
   public CaseLoadEntityBuilder setCeilingNumber(BigDecimal ceilingNumber) {
     this.ceilingNumber = ceilingNumber;
     return this;
-  }
-
-  public String getAssignmentDeskCaseLoadIndicator() {
-    return assignmentDeskCaseLoadIndicator;
   }
 
   public CaseLoadEntityBuilder setAssignmentDeskCaseLoadIndicator(
