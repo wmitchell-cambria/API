@@ -223,8 +223,9 @@ public class Allegation extends CmsPersistentObject {
     this.staffPersonAddedIndicator =
         DomainChef.cookBoolean(persistedAllegation.getStaffPersonAddedIndicator());
     this.victimClientId = persistedAllegation.getVictimClientId();
-    this.perpetratorClientId = StringUtils.isBlank(persistedAllegation.getPerpetratorClientId())
-        ? null : persistedAllegation.getPerpetratorClientId();
+    this.perpetratorClientId =
+        StringUtils.isBlank(persistedAllegation.getPerpetratorClientId()) ? null
+            : persistedAllegation.getPerpetratorClientId();
     this.referralId = persistedAllegation.getReferralId();
     this.countySpecificCode = persistedAllegation.getCountySpecificCode();
     this.zippyCreatedIndicator =
@@ -387,6 +388,10 @@ public class Allegation extends CmsPersistentObject {
    */
   public Client getPerpetratorClients() {
     return perpetratorClients;
+  }
+
+  public Referral getReferral() {
+    return this.referral;
   }
 
   @Override

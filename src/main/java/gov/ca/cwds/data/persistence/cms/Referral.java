@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
-import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -33,6 +32,7 @@ import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.data.persistence.AccessLimitationAware;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.validation.ValidCounty;
 
 /**
  * {@link CmsPersistentObject} representing a Referral.
@@ -677,6 +677,10 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @Override
   public String getLimitedAccessCode() {
     return limitedAccessCode;
+  }
+
+  public void setLimitedAccessCode(String limitedAccessCode) {
+    this.limitedAccessCode = limitedAccessCode;
   }
 
   /**

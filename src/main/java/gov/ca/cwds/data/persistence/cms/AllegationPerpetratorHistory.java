@@ -160,6 +160,14 @@ public class AllegationPerpetratorHistory extends CmsPersistentObject {
     return freshDate(perpetratorUpdateDate);
   }
 
+  public Client getClient() {
+    return client;
+  }
+
+  public Allegation getAllegation() {
+    return allegation;
+  }
+
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);

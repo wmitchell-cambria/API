@@ -70,6 +70,10 @@ public class ReferralAssignment extends BaseAssignment {
         startTime, typeOfAssignmentCode, weightingNumber);
   }
 
+  public Referral getReferral() {
+    return referral;
+  }
+
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);

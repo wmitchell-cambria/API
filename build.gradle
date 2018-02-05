@@ -293,27 +293,44 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
     tagVersion = version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
 }
 
+task createIntegrationTestDockerImage (type:Exec, dependsOn: shadowJar) {
+    commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
+}
+
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
-  commandLine 'docker',  'build',  '-t',  'cwds/api', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api', '-f', 'Dockerfile', '.'
+}
+
+task tagIntegrationTestDockerImage(type:Exec, dependsOn: createIntegrationTestDockerImage) {
+    commandLine 'docker',  'tag',  'cwds/api-integration-test',  "cwds/api-integration-test:$dockerTag"
 }
 
 task tagDockerImage(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'tag',  'cwds/api',  "cwds/api:$dockerTag"
 }
 
+task pushIntegrationTestDockerLatest(type:Exec, dependsOn: createIntegrationTestDockerImage) {
+    commandLine 'docker',  'push',  'cwds/api-integration-test:latest'
+}
+
 task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'push',  'cwds/api:latest'
+}
+
+task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagIntegrationTestDockerImage) {
+    commandLine 'docker',  'push',  "cwds/api-integration-test:$dockerTag"
 }
 
 task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
   commandLine 'docker',  'push',  "cwds/api:$dockerTag"
 }
 
-task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
+task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest, pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest]) {
    doLast { 
 	 println 'Published'
    }
 }
+
 //==================================================================================================
 // Custom Groovy classes for Licence Reports.
 // Move to own classes outside of build.
@@ -433,6 +450,7 @@ This report was generated at ${new Date()}.
                 "\n\n================================================================================\n\n"
     }
 }
+
 
 import com.github.jk1.license.LicenseReportPlugin.LicenseReportExtension
 class CWDSHtmlReportRenderer implements ReportRenderer {

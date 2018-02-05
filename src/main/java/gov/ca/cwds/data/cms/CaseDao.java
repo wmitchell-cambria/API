@@ -43,4 +43,18 @@ public class CaseDao extends CrudsDaoImpl<CmsCase> {
     return query.list().toArray(new CmsCase[0]);
   }
 
+  /**
+   * Find all related cases by Victim Client Id
+   * 
+   * @param clientId - the victim client Id
+   * @return all cases for all related client including given client id
+   */
+  @SuppressWarnings("unchecked")
+  public CmsCase[] findAllRelatedByVictimClientId(String clientId) {
+    final Query<CmsCase> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId");
+    query.setParameter("clientId", clientId, StringType.INSTANCE);
+    return query.list().toArray(new CmsCase[0]);
+  }
+
 }

@@ -162,6 +162,14 @@ public class ClientCollateral extends CmsPersistentObject {
     return thirdId;
   }
 
+  public Client getClient() {
+    return client;
+  }
+
+  public CollateralIndividual getCollateralIndividual() {
+    return collateralIndividual;
+  }
+
   /**
    * {@inheritDoc}
    */
