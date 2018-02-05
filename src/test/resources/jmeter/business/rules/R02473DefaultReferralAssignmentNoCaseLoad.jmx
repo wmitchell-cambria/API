@@ -110,7 +110,7 @@
             </elementProp>
             <elementProp name="EXPECTED-VALIDATION-MESSAGE" elementType="Argument">
               <stringProp name="Argument.name">EXPECTED-VALIDATION-MESSAGE</stringProp>
-              <stringProp name="Argument.value">Caseload is either inactive or on hold</stringProp>
+              <stringProp name="Argument.value">R - 02473 Caseload is either inactive or on hold</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
