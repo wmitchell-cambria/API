@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JMETER_LOG=jmeter.log
+JMETER_LOG=jmeter.jtl
 
 function runTests(){
   validation
@@ -50,8 +50,8 @@ function validation(){
 
 
 function executeTest(){
-  printf "${JMETER} --propfile ${PROPS} -n -t ${TEST_PATH}/${file} -j ${LOG_DIR}/${JMETER_LOG} -l ${LOG_DIR}/${JMETER_LOG} -Jlogs.assertion.file=${ASSERTION_FILE} \n -Jincludecontroller.prefix=${TEST_PATH}/\n"
-  ${JMETER} --propfile ${PROPS} -n -t ${TEST_PATH}/${file} -j ${LOG_DIR}/${JMETER_LOG} -l ${LOG_DIR}/${JMETER_LOG} -Jlogs.assertion.file=${ASSERTION_FILE}
+  printf "${JMETER} --propfile ${PROPS} -n -t ${TEST_PATH}/${file} -j ${LOG_DIR}/${JMETER_LOG} -l ${REPORT_DIR}/${JMETER_LOG} -e -o ${REPORT_DIR} -Jlogs.assertion.file=${ASSERTION_FILE}\n"
+  ${JMETER} --propfile ${PROPS} -n -t ${TEST_PATH}/${file} -j ${LOG_DIR}/${JMETER_LOG} -l ${REPORT_DIR}/${JMETER_LOG} -e -o ${REPORT_DIR} -Jlogs.assertion.file=${ASSERTION_FILE}
 
 }
 
