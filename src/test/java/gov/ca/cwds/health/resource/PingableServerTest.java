@@ -42,6 +42,13 @@ public class PingableServerTest {
   }
 
   @Test
+  public void shouldReturnTrueWhenA302StatusIsReceived(){
+    when(wsResponse.getStatus()).thenReturn(302);
+    assertTrue("Expected a valid ping", pingable.ping());
+  }
+
+
+    @Test
   public void shouldReturnfalseWhenA500StatusIsReceived(){
     when(wsResponse.getStatus()).thenReturn(500);
     PingableServer pingable = new PingableServer(wsClient, url, mediaType);

@@ -38,7 +38,7 @@ public class PingableServer implements Pingable {
     Response response = invocationBuilder.get();
 
     boolean ok = false;
-    if (response.getStatus() == 200) {
+    if (acceptableResponse(response)) {
       ok = true;
       message = "Status is OK";
     } else {
@@ -49,6 +49,10 @@ public class PingableServer implements Pingable {
       message = "Status:" + status;
     }
     return ok;
+  }
+
+  private boolean acceptableResponse(Response response){
+    return response.getStatus() == 200 || response.getStatus() == 302;
   }
 
   @Override
