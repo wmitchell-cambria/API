@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3 r1808647">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="R02473AssigneeStaffIdIsDifferentFromCurrentUserStaffId" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Creation of Referral with incorrect Assignee Staff Id" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1482864233000</longProp>
+        <longProp name="ThreadGroup.end_time">1482864233000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Test Properties" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="FERB-URL" elementType="Argument">
+              <stringProp name="Argument.name">FERB-URL</stringProp>
+              <stringProp name="Argument.value">${__P(ferb.url)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="FERB-PROTOCOL" elementType="Argument">
+              <stringProp name="Argument.name">FERB-PROTOCOL</stringProp>
+              <stringProp name="Argument.value">https</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="EXPECTED-VALIDATION-MESSAGE" elementType="Argument">
+              <stringProp name="Argument.name">EXPECTED-VALIDATION-MESSAGE</stringProp>
+              <stringProp name="Argument.value">Assignee Staff Id is not the same as logged in User Staff Id</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <IncludeController guiclass="IncludeControllerGui" testclass="IncludeController" testname="Include Login Controller" enabled="true">
+          <stringProp name="IncludeController.includepath">../../login.jmx</stringProp>
+        </IncludeController>
+        <hashTree/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Ferb Controller" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Accept</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Referral to Ferb" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+   &quot;approval_status&quot;:118,&#xd;
+   &quot;family_awareness&quot;:true,&#xd;
+   &quot;filed_with_law_enforcement&quot;:false,&#xd;
+   &quot;additional_information&quot;:null,&#xd;
+   &quot;allegations&quot;:[&#xd;
+      {&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;victim_person_id&quot;:&quot;6&quot;,&#xd;
+         &quot;perpetrator_person_id&quot;:&quot;7&quot;,&#xd;
+         &quot;type&quot;:2177,&#xd;
+         &quot;county&quot;:&quot;57&quot;,&#xd;
+         &quot;non_protecting_parent&quot;:&quot;U&quot;&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;victim_person_id&quot;:&quot;6&quot;,&#xd;
+         &quot;perpetrator_person_id&quot;:&quot;7&quot;,&#xd;
+         &quot;type&quot;:2178,&#xd;
+         &quot;county&quot;:&quot;57&quot;,&#xd;
+         &quot;non_protecting_parent&quot;:&quot;U&quot;&#xd;
+      }&#xd;
+   ],&#xd;
+   &quot;assignee&quot;:&quot;Jim Bob&quot;,&#xd;
+   &quot;communication_method&quot;:5375,&#xd;
+   &quot;cross_reports&quot;:[&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;20&quot;,&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;inform_date&quot;:&quot;2016-08-17&quot;,&#xd;
+         &quot;method&quot;:2096,&#xd;
+         &quot;filed_out_of_state&quot;:true,&#xd;
+         &quot;county_id&quot;:&quot;1126&quot;,&#xd;
+          &quot;agencies&quot;:[]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;21&quot;,&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;inform_date&quot;:&quot;2016-08-17&quot;,&#xd;
+         &quot;method&quot;:2096,&#xd;
+         &quot;filed_out_of_state&quot;:true,&#xd;
+         &quot;county_id&quot;:&quot;1126&quot;,&#xd;
+          &quot;agencies&quot;:[]&#xd;
+      }&#xd;
+   ],&#xd;
+   &quot;ended_at&quot;:null,&#xd;
+   &quot;id&quot;:&quot;9&quot;,&#xd;
+   &quot;incident_county&quot;:&quot;${__P(saf.users.county)}&quot;,&#xd;
+   &quot;incident_date&quot;:&quot;1996-08-23&quot;,&#xd;
+   &quot;location_type&quot;:&quot;Child&apos;s Home&quot;,&#xd;
+   &quot;name&quot;:&quot;Languages test&quot;,&#xd;
+   &quot;reference&quot;:&quot;XLT60X&quot;,&#xd;
+   &quot;report_narrative&quot;:&quot;Distinctio ad aliquid ut doloremque nobis. &quot;,&#xd;
+   &quot;screening_decision&quot;:&quot;promote_to_referral&quot;,&#xd;
+   &quot;screening_decision_detail&quot;:&quot;3_days&quot;,&#xd;
+   &quot;started_at&quot;:&quot;2017-08-02T18:55:00.000Z&quot;,&#xd;
+   &quot;assignee_staff_id&quot;:&quot;${__P(saf.users.staff.id)}&quot;,&#xd;
+   &quot;legacy_id&quot;:null,&#xd;
+   &quot;legacy_source_table&quot;:null,&#xd;
+   &quot;response_time&quot;:1516,&#xd;
+   &quot;responsible_agency&quot;:&quot;C&quot;,&#xd;
+   &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+   &quot;limited_access_description&quot;: &quot;&quot;,&#xd;
+   &quot;limited_access_agency&quot;:&quot;&quot;,&#xd;
+   &quot;limited_access_date&quot;:&quot;&quot;,&#xd;
+   &quot;address&quot;:{&#xd;
+      &quot;legacy_id&quot;:null,&#xd;
+      &quot;legacy_source_table&quot;:null,&#xd;
+      &quot;city&quot;:&quot;Wilheminachester&quot;,&#xd;
+      &quot;state&quot;:1838,&#xd;
+      &quot;street_address&quot;:&quot;005 Lorenzo Hills&quot;,&#xd;
+      &quot;zip&quot;:&quot;55926&quot;,&#xd;
+      &quot;type&quot;:6272&#xd;
+   },&#xd;
+   &quot;participants&quot;:[&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;8&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:null,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;m&quot;,&#xd;
+         &quot;first_name&quot;:&quot;Lavette&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Konopelski&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;N&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Mandated Reporter&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;1980-03-28&quot;,&#xd;
+         &quot;ssn&quot;:&quot;373201577&quot;,&#xd;
+         &quot;primary_language&quot;:1249,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[&#xd;
+            {&#xd;
+               &quot;legacy_id&quot;:null,&#xd;
+               &quot;legacy_source_table&quot;:null,&#xd;
+               &quot;city&quot;:&quot;Quintinberg&quot;,&#xd;
+               &quot;state&quot;:1844,&#xd;
+               &quot;street_address&quot;:&quot;8211 Stephen Bridge&quot;,&#xd;
+               &quot;zip&quot;:&quot;71146&quot;,&#xd;
+               &quot;type&quot;:6273&#xd;
+            }&#xd;
+         ]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;7&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:null,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:null,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;M&quot;,&#xd;
+         &quot;first_name&quot;:&quot;Abdul&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Ziemessasdfsadf&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;R&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Perpetrator&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;1995-10-23&quot;,&#xd;
+         &quot;ssn&quot;:&quot;442743442&quot;,&#xd;
+         &quot;primary_language&quot;:null,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[]&#xd;
+      },&#xd;
+      {&#xd;
+         &quot;id&quot;:&quot;6&quot;,&#xd;
+         &quot;legacy_descriptor&quot;:{&#xd;
+            &quot;legacy_id&quot;:null,&#xd;
+            &quot;legacy_ui_id&quot;:null,&#xd;
+            &quot;legacy_last_updated&quot;:&quot;2017-08-04T21:02:38.598+0000&quot;,&#xd;
+            &quot;legacy_table_name&quot;:null,&#xd;
+            &quot;legacy_table_description&quot;:null&#xd;
+         },&#xd;
+         &quot;legacy_id&quot;:&quot;&quot;,&#xd;
+         &quot;legacy_source_table&quot;:null,&#xd;
+         &quot;gender&quot;:&quot;U&quot;,&#xd;
+         &quot;first_name&quot;:&quot;See&quot;,&#xd;
+         &quot;last_name&quot;:&quot;Abbott&quot;,&#xd;
+         &quot;middle_name&quot;:&quot;K&quot;,&#xd;
+         &quot;name_suffix&quot;:null,&#xd;
+         &quot;roles&quot;:[&#xd;
+            &quot;Victim&quot;&#xd;
+         ],&#xd;
+         &quot;screening_id&quot;:&quot;9&quot;,&#xd;
+         &quot;date_of_birth&quot;:&quot;2005-08-14&quot;,&#xd;
+         &quot;ssn&quot;:&quot;546486409&quot;,&#xd;
+         &quot;primary_language&quot;:null,&#xd;
+         &quot;secondary_language&quot;:null,&#xd;
+         &quot;client_staff_person_added&quot;:false,&#xd;
+         &quot;reporter_confidential_waiver&quot;:true,&#xd;
+         &quot;reporter_employer_name&quot;:&quot;&quot;,&#xd;
+         &quot;limited_access_code&quot;: &quot;N&quot;,&#xd;
+         &quot;race_ethnicity&quot;:{  &#xd;
+           &quot;race_codes&quot;:[],&#xd;
+           &quot;unable_to_determine_code&quot;:&quot;A&quot;,&#xd;
+           &quot;hispanic_codes&quot;:[],&#xd;
+           &quot;hispanic_orgin_code&quot;:&quot;X&quot;,&#xd;
+           &quot;hispanic_unable_to_determine_code&quot;:&quot;A&quot;&#xd;
+         },&#xd;
+         &quot;addresses&quot;:[]&#xd;
+      }&#xd;
+   ]&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${FERB-URL}</stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">${FERB-PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/referrals?token=${__property(token)}</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+              <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+              <stringProp name="RegexExtractor.refname">validationResult</stringProp>
+              <stringProp name="RegexExtractor.regex">(${EXPECTED-VALIDATION-MESSAGE})</stringProp>
+              <stringProp name="RegexExtractor.template">$1$</stringProp>
+              <stringProp name="RegexExtractor.default"></stringProp>
+              <stringProp name="RegexExtractor.match_number"></stringProp>
+            </RegexExtractor>
+            <hashTree/>
+            <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+              <boolProp name="ResultCollector.error_logging">false</boolProp>
+              <objProp>
+                <name>saveConfig</name>
+                <value class="SampleSaveConfiguration">
+                  <time>true</time>
+                  <latency>true</latency>
+                  <timestamp>true</timestamp>
+                  <success>true</success>
+                  <label>true</label>
+                  <code>true</code>
+                  <message>true</message>
+                  <threadName>true</threadName>
+                  <dataType>true</dataType>
+                  <encoding>false</encoding>
+                  <assertions>true</assertions>
+                  <subresults>true</subresults>
+                  <responseData>false</responseData>
+                  <samplerData>false</samplerData>
+                  <xml>false</xml>
+                  <fieldNames>true</fieldNames>
+                  <responseHeaders>false</responseHeaders>
+                  <requestHeaders>false</requestHeaders>
+                  <responseDataOnError>false</responseDataOnError>
+                  <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                  <assertionsResultsToSave>0</assertionsResultsToSave>
+                  <bytes>true</bytes>
+                  <threadCounts>true</threadCounts>
+                  <idleTime>true</idleTime>
+                </value>
+              </objProp>
+              <stringProp name="filename"></stringProp>
+            </ResultCollector>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="51572">422</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">8</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-683770356">${EXPECTED-VALIDATION-MESSAGE}</stringProp>
+                <stringProp name="0"></stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data_as_document</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+              <stringProp name="Assertion.scope">variable</stringProp>
+              <stringProp name="Scope.variable">validationResult</stringProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">log.info(&quot;validationResult: &quot;+&quot;${validationResult}&quot;);
+
+if (&quot;${validationResult}&quot;.contains(&quot;${EXPECTED-VALIDATION-MESSAGE}&quot;)){
+	prev.setSuccessful(true);
+	log.info(&quot;The test was successful. Referral has not been created because ${EXPECTED-VALIDATION-MESSAGE}.&quot;);
+} else {	
+	prev.setSuccessful(false);
+     String errormsg = &quot;The test failed. Appropriate error was NOT generated for Referral where ${EXPECTED-VALIDATION-MESSAGE}.&quot;;
+     prev.setResponseMessage(errormsg);
+     log.error(errormsg);
+     prev.setStopTestNow(true);	
+}
+</stringProp>
+            </BeanShellPostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
