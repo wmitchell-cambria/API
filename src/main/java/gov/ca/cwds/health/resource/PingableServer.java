@@ -52,7 +52,7 @@ public class PingableServer implements Pingable {
   }
 
   private boolean acceptableResponse(Response response){
-    return response.getStatus() == 200 || response.getStatus() == 302;
+    return response.getStatus() >= 200 && response.getStatus() < 500;
   }
 
   @Override
