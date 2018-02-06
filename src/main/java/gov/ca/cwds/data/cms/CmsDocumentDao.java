@@ -393,7 +393,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       errorCompressing(e);
     }
 
@@ -405,7 +405,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     throw new ServiceException("ERROR DECOMPRESSING LZW! " + e.getMessage(), e);
   }
 
-  private void errorCompressing(Exception e) {
+  private void errorCompressing(Exception e)  {
     LOGGER.error("ERROR COMPRESSING LZW! {}", e.getMessage());
     throw new ServiceException("ERROR COMPRESSING LZW! " + e.getMessage(), e);
   }
