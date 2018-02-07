@@ -216,10 +216,8 @@ public class ReferralService implements
     if (staffPersonId == null) {
       LOGGER.error("Staff Person Id was not found");
       throw new ServiceException("Staff Person Id was not found.");
-    } else {
-      staffperson = staffpersonDao.find(staffPersonId);
     }
-    return staffperson;
+    return staffpersonDao.find(staffPersonId);
   }
 
   /**

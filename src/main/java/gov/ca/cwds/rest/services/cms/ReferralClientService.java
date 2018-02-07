@@ -150,7 +150,7 @@ public class ReferralClientService implements
       return new gov.ca.cwds.rest.api.domain.cms.ReferralClient(managed);
     } catch (EntityNotFoundException e) {
       LOGGER.info("Referral not found : {}", referralClient);
-      LOGGER.error(e.getMessage(), e);
+      LOGGER.error("Unable to find referral in Database", e);
       throw new ServiceException(e);
     }
   }

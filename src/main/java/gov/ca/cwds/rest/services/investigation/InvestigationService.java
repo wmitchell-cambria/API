@@ -97,7 +97,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   public Response find(String referralId) {
     Investigation investigation = null;
 
-    if (referralId.equals(STUB_DATA_KEY)) {
+    if (STUB_DATA_KEY.equals(referralId)) {
       return returnInvestigationStub();
     }
 

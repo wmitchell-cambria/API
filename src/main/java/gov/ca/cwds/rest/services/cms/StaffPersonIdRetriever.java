@@ -52,7 +52,6 @@ public class StaffPersonIdRetriever {
 
     Subject currentUser = SecurityUtils.getSubject();
     PrincipalCollection principalCollection = currentUser.getPrincipals();
-    boolean perryStaffIdAvailable = false;
 
     if (principalCollection != null) {
       @SuppressWarnings("rawtypes")
