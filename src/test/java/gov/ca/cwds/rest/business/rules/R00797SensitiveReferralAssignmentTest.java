@@ -189,9 +189,6 @@ public class R00797SensitiveReferralAssignmentTest {
     staffpersonDao = mock(StaffPersonDao.class);
 
     clientDao = mock(ClientDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
     ssaName3Dao = mock(SsaName3Dao.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
@@ -199,10 +196,6 @@ public class R00797SensitiveReferralAssignmentTest {
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
     referralClientDao = mock(ReferralClientDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
     riReferralClient = mock(RIReferralClient.class);
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
         laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
@@ -228,10 +221,6 @@ public class R00797SensitiveReferralAssignmentTest {
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     clientAddressDao = mock(ClientAddressDao.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
     riClientAddress = mock(RIClientAddress.class);
     clientAddressService =
         new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
@@ -249,9 +238,6 @@ public class R00797SensitiveReferralAssignmentTest {
     childClientService = new ChildClientService(childClientDao, riChildClient);
 
     assignmentDao = mock(AssignmentDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
     caseLoadDao = mock(CaseLoadDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
