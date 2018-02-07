@@ -1,16 +1,28 @@
 package gov.ca.cwds.rest.services.cms;
 
+import java.util.Set;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.persistence.cms.Assignment;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
+import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
@@ -19,19 +31,6 @@ import gov.ca.cwds.rest.business.rules.R02473DefaultReferralAssignment;
 import gov.ca.cwds.rest.business.rules.R04530AssignmentEndDateValidator;
 import gov.ca.cwds.rest.business.rules.R06560CaseloadRequiredForFirstPrimaryAssignment;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.inject.Inject;
-
-import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.persistence.cms.Assignment;
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.data.rules.TriggerTablesDao;
-import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
-import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -54,7 +53,6 @@ public class AssignmentService implements
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
   private ReferralDao referralDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
@@ -64,22 +62,23 @@ public class AssignmentService implements
   /**
    * Constructor
    * 
-   * @param assignmentDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.cms.Assignment} objects.
-   * @param nonLACountyTriggers The {@link Dao} handling
-   *        {@link gov.ca.cwds.rest.business.rules.NonLACountyTriggers} objects
-   * @param staffpersonDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
-   * @param triggerTablesDao - triggerTablesDao
-   * @param validator the validator to use to validate validatable objects
-   * @param externalInterfaceTables external interface table
-   * @param caseLoadDao - caseLoadDao
+   * @param assignmentDao assignmentDao
+   * @param nonLACountyTriggers nonLACountyTriggers
+   * @param staffpersonDao staffpersonDao
+   * @param triggerTablesDao triggerTablesDao
+   * @param validator validator
+   * @param externalInterfaceTables externalInterfaceTables
+   * @param caseLoadDao caseLoadDao
+   * @param referralDao referralDao
+   * @param assignmentUnitDao assignmentUnitDao
+   * @param cwsOfficeDao cwsOfficeDao
+   * @param messageBuilder messageBuilder
    */
   @Inject
   public AssignmentService(AssignmentDao assignmentDao, NonLACountyTriggers nonLACountyTriggers,
       StaffPersonDao staffpersonDao, TriggerTablesDao triggerTablesDao, Validator validator,
-      ExternalInterfaceTables externalInterfaceTables, CaseLoadDao caseLoadDao, ReferralDao referralDao,
-      CaseDao caseDao, AssignmentUnitDao assignmentUnitDao,
+      ExternalInterfaceTables externalInterfaceTables, CaseLoadDao caseLoadDao,
+      ReferralDao referralDao, AssignmentUnitDao assignmentUnitDao,
       CwsOfficeDao cwsOfficeDao, MessageBuilder messageBuilder) {
     this.assignmentDao = assignmentDao;
     this.nonLACountyTriggers = nonLACountyTriggers;
@@ -89,7 +88,6 @@ public class AssignmentService implements
     this.externalInterfaceTables = externalInterfaceTables;
     this.caseLoadDao = caseLoadDao;
     this.referralDao = referralDao;
-    this.caseDao = caseDao;
     this.assignmentUnitDao = assignmentUnitDao;
     this.cwsOfficeDao = cwsOfficeDao;
     this.messageBuilder = messageBuilder;
@@ -166,8 +164,8 @@ public class AssignmentService implements
   }
 
   private void executeR01054Rule(Assignment managed) {
-    R01054PrimaryAssignmentAdding r01054Rule = new R01054PrimaryAssignmentAdding(managed, referralDao, caseDao,
-        caseLoadDao, assignmentUnitDao, cwsOfficeDao);
+    R01054PrimaryAssignmentAdding r01054Rule = new R01054PrimaryAssignmentAdding(managed,
+        referralDao, caseLoadDao, assignmentUnitDao, cwsOfficeDao);
     try {
       r01054Rule.execute();
     } catch (Exception e) {
@@ -190,13 +188,13 @@ public class AssignmentService implements
    * @param screeningToReferral - screeningToReferral
    * @param referralId - referralId
    * @param referral - referral
-   * @param messageBuilder - messageBuilder
+   * @param strsMessageBuilder - ScreeningToReferralService messageBuilder
    */
   public void createDefaultAssignmentForNewReferral(ScreeningToReferral screeningToReferral,
-      String referralId, Referral referral, MessageBuilder messageBuilder) {
+      String referralId, Referral referral, MessageBuilder strsMessageBuilder) {
     R02473DefaultReferralAssignment r02473DefaultReferralAssignment =
         new R02473DefaultReferralAssignment(screeningToReferral, referralId, referral,
-            messageBuilder, assignmentDao, externalInterfaceTables, validator, this);
+            strsMessageBuilder, assignmentDao, externalInterfaceTables, validator, this);
     r02473DefaultReferralAssignment.execute();
   }
 
@@ -229,7 +227,30 @@ public class AssignmentService implements
       throw new ServiceException(
           "Rule : R - 04530 - Assignment End Date and Time must be less than or equal to the current system date and time AND must be greater than or equal to Assignment Start Date and Time");
     }
-
   }
 
+  // used by DocTool Rule R04611 - R04611ReferralStartDateTimeValidator
+  public Assignment findReferralFirstAssignment(String referralId) {
+    Assignment firstAssignment = null;
+    Set<Assignment> assignmentSet = assignmentDao.findAssignmentsByReferralId(referralId);
+    for (Assignment assignment : assignmentSet) {
+      if (firstAssignment == null || isAssignmentStartedEarlier(assignment, firstAssignment)) {
+        firstAssignment = assignment;
+      }
+    }
+    return firstAssignment;
+  }
+
+  private boolean isAssignmentStartedEarlier(Assignment assignment1, Assignment assignment2) {
+    if (assignment1.getStartDate().before(assignment2.getStartDate())) {
+      return true;
+    }
+    return assignment1.getStartDate().equals(assignment2.getStartDate()) && assignment1
+        .getStartTime()
+        .before(assignment2.getStartTime());
+  }
+
+  public MessageBuilder getMessageBuilder() {
+    return messageBuilder;
+  }
 }

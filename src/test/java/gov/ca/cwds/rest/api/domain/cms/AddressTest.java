@@ -65,16 +65,16 @@ public class AddressTest {
   private String cityName = "Sacramento";
   private String description = "test CWS address";
   private int emergencyPhoneExtension = 1234;
-  private BigDecimal emergencyPhoneNumber = new BigDecimal(9876543);
+  private Long emergencyPhoneNumber = 9876543L;
   private Boolean foreignAddressIndicator = false;
   private Short governmentEntityType = 99;
   private int messagePhoneExtension = 1234;
-  private BigDecimal messagePhoneNumber = new BigDecimal(9876543);
+  private Long messagePhoneNumber = 9876543L;
   private String otherHeaderAddress = "";
   private String postDirectionTextCode = "";
   private String preDirectionTextCode = "";
   private int primaryPhoneNumberExtension = 4321;
-  private BigDecimal primaryPhoneNumber = new BigDecimal(8765432);
+  private Long primaryPhoneNumber = 8765432L;
   private Short stateCodeType = 99;
   private String streetName = "First Street";
   private String streetNumber = "1234";
@@ -220,7 +220,7 @@ public class AddressTest {
     assertEquals("Expected existingAddressId field to be initialized with default values", " ",
         cmsAddr.getExistingAddressId());
     assertEquals("Expected emergencyNumber field to be initialized with default values",
-        new BigDecimal(0), cmsAddr.getEmergencyNumber());
+        new Long(0), cmsAddr.getEmergencyNumber());
     assertEquals("Expected emergencyExtension field to be initialized with default values",
         new Integer(0), cmsAddr.getEmergencyExtension());
     assertEquals("Expected frgAdrtB field to be initialized with default values", false,
@@ -228,13 +228,13 @@ public class AddressTest {
     assertEquals("Expected governmentEntityCd field to be initialized with default values",
         new Short("0"), cmsAddr.getGovernmentEntityCd());
     assertEquals("Expected messageNumber field to be initialized with default values",
-        new BigDecimal(0), cmsAddr.getMessageNumber());
+        new Long(0), cmsAddr.getMessageNumber());
     assertEquals("Expected messageExtension field to be initialized with default values",
         new Integer(0), cmsAddr.getMessageExtension());
     assertEquals("Expected headerAddress field to be initialized with default values", " ",
         cmsAddr.getHeaderAddress());
     assertEquals("Expected primaryNumber field to be initialized with default values",
-        new BigDecimal(0), cmsAddr.getPrimaryNumber());
+        new Long(0), cmsAddr.getPrimaryNumber());
     assertEquals("Expected primaryExtension field to be initialized with default values",
         new Integer(0), cmsAddr.getPrimaryExtension());
     assertEquals("Expected postDirCd field to be initialized with default values", " ",

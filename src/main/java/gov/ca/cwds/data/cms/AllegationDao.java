@@ -4,7 +4,7 @@ import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -31,7 +31,7 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
     Query query =
         this.getSessionFactory().getCurrentSession()
             .getNamedQuery("gov.ca.cwds.data.persistence.cms.Allegation.findByReferral")
-            .setString("referralId", referralId);
+            .setParameter("referralId", referralId);
     return (Allegation[]) query.list().toArray(new Allegation[0]);
 
   }

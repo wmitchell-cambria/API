@@ -38,7 +38,7 @@ public class R02473DefaultReferralAssignment implements RuleAction {
   private ScreeningToReferral screeningToReferral;
   private String referralId;
   private Referral referral;
-  private MessageBuilder messageBuilder;
+  private MessageBuilder strsMessageBuilder;
   private AssignmentDao assignmentDao;
   private ExternalInterfaceTables externalInterfaceTables;
   private Validator validator;
@@ -48,21 +48,21 @@ public class R02473DefaultReferralAssignment implements RuleAction {
    * @param screeningToReferral - screeningToReferral
    * @param referralId - referralId
    * @param referral - referral
-   * @param messageBuilder - messageBuilder
+   * @param strsMessageBuilder - ScreeningToReferralService messageBuilder
    * @param assignmentDao - assignmentDao
    * @param externalInterfaceTables - externalInterfaceTables
    * @param validator - validator
    * @param assignmentService - assignmentService
    */
   public R02473DefaultReferralAssignment(ScreeningToReferral screeningToReferral, String referralId,
-      Referral referral, MessageBuilder messageBuilder, AssignmentDao assignmentDao,
+      Referral referral, MessageBuilder strsMessageBuilder, AssignmentDao assignmentDao,
       ExternalInterfaceTables externalInterfaceTables, Validator validator,
       AssignmentService assignmentService) {
     super();
     this.screeningToReferral = screeningToReferral;
     this.referralId = referralId;
     this.referral = referral;
-    this.messageBuilder = messageBuilder;
+    this.strsMessageBuilder = strsMessageBuilder;
     this.assignmentDao = assignmentDao;
     this.externalInterfaceTables = externalInterfaceTables;
     this.validator = validator;
@@ -83,9 +83,9 @@ public class R02473DefaultReferralAssignment implements RuleAction {
         caseLoad = caseLoads[0];
       }
       if (caseLoad == null) {
-        String message = "Caseload is either inactive or on hold";
+        String message = "R - 02473 Caseload is either inactive or on hold";
         ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
+        strsMessageBuilder.addMessageAndLog(message, se, LOGGER);
       } else {
         caseLoadId = caseLoad.getId();
         countyCode = caseLoad.getCountySpecificCode();
@@ -93,16 +93,17 @@ public class R02473DefaultReferralAssignment implements RuleAction {
 
       gov.ca.cwds.rest.api.domain.cms.Assignment defaultAssignment =
           createDefaultAssignmentToCaseLoad(countyCode, referralId,
-              screeningToReferral.getStartedAt(), caseLoadId, messageBuilder);
-      messageBuilder.addDomainValidationError(validator.validate(defaultAssignment));
+              screeningToReferral.getStartedAt(), caseLoadId, strsMessageBuilder);
+      strsMessageBuilder.addDomainValidationError(validator.validate(defaultAssignment));
 
       setStartTime(defaultAssignment);
       createExternalInterface(defaultAssignment);
       try {
-        this.assignmentService.create(defaultAssignment);
+        assignmentService.getMessageBuilder().merge(strsMessageBuilder);
+        assignmentService.create(defaultAssignment);
       } catch (ServiceException e) {
         String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+        strsMessageBuilder.addMessageAndLog(message, e, LOGGER);
       }
     }
 
@@ -113,7 +114,7 @@ public class R02473DefaultReferralAssignment implements RuleAction {
       String message =
           "Referral Recieved Date/Time does not equal Assignment Start Date/Time (R - 03731)";
       ServiceException se = new ServiceException(message);
-      messageBuilder.addMessageAndLog(message, se, LOGGER);
+      strsMessageBuilder.addMessageAndLog(message, se, LOGGER);
     }
   }
 
@@ -148,7 +149,7 @@ public class R02473DefaultReferralAssignment implements RuleAction {
   private boolean isValidAssigneeStaffId(ScreeningToReferral screeningToReferral) {
     if (!screeningToReferral.getAssigneeStaffId()
         .equals(RequestExecutionContext.instance().getStaffId())) {
-      messageBuilder.addError("Assignee Staff Id is not the same as logged in User Staff Id");
+      strsMessageBuilder.addError("Assignee Staff Id is not the same as logged in User Staff Id");
       return false;
     }
     return true;

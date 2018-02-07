@@ -1,11 +1,27 @@
 package gov.ca.cwds.rest.services.cms;
 
+import gov.ca.cwds.data.persistence.cms.Assignment;
+import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeAction;
+import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeValidator;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
+import javax.xml.bind.DatatypeConverter;
 
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
+import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
+import gov.ca.cwds.rest.util.DocUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +42,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.business.rules.CountyOfAssignedStaffWorker;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.R00818SetReferredResourceType;
@@ -36,9 +53,11 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
+import static java.lang.Math.min;
+
 /**
  * Business layer object to work on {@link Referral}
- * 
+ *
  * @author CWDS API Team
  */
 public class ReferralService implements
@@ -56,14 +75,16 @@ public class ReferralService implements
 
   private Validator validator;
   private AssignmentService assignmentService;
+  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AddressService addressService;
   private LongTextService longTextService;
   private RIReferral riReferral;
 
   /**
    * Constructor
-   * 
+   *
    * @param referralDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
    *        objects.
    * @param nonLaTriggers The {@link Dao} handling
@@ -76,7 +97,9 @@ public class ReferralService implements
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
+   * @param cmsDocumentService the service for storing Cms Documents
    * @param drmsDocumentService the service for generating DRMS Documents
+   * @param drmsDocumentTemplateService the service for DRMS Document Templates
    * @param addressService the service for creating addresses
    * @param longTextService the longText Service
    * @param riReferral the ri
@@ -85,7 +108,8 @@ public class ReferralService implements
   public ReferralService(final ReferralDao referralDao, NonLACountyTriggers nonLaTriggers,
       LACountyTrigger laCountyTrigger, TriggerTablesDao triggerTablesDao,
       StaffPersonDao staffpersonDao, AssignmentService assignmentService, Validator validator,
-      DrmsDocumentService drmsDocumentService, AddressService addressService,
+      CmsDocumentService cmsDocumentService, DrmsDocumentService drmsDocumentService,
+      DrmsDocumentTemplateService drmsDocumentTemplateService, AddressService addressService,
       LongTextService longTextService, RIReferral riReferral) {
     this.referralDao = referralDao;
     this.nonLaTriggers = nonLaTriggers;
@@ -94,7 +118,9 @@ public class ReferralService implements
     this.staffpersonDao = staffpersonDao;
     this.assignmentService = assignmentService;
     this.validator = validator;
+    this.cmsDocumentService = cmsDocumentService;
     this.drmsDocumentService = drmsDocumentService;
+    this.drmsDocumentTemplateService = drmsDocumentTemplateService;
     this.addressService = addressService;
     this.longTextService = longTextService;
     this.riReferral = riReferral;
@@ -102,7 +128,7 @@ public class ReferralService implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
@@ -117,7 +143,7 @@ public class ReferralService implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
@@ -131,31 +157,49 @@ public class ReferralService implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
   public PostedReferral create(gov.ca.cwds.rest.api.domain.cms.Referral request) {
-
-    gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
     try {
       StaffPerson staffperson =
           staffPersonValidate(RequestExecutionContext.instance().getStaffId());
+      validateCountyOfAssignedStaffWorker(request);
+
+      //work around to be able to pass externally generated ID
+      String referralId = CmsKeyIdGenerator
+          .generate(RequestExecutionContext.instance().getStaffId());
+      if (!StringUtils.isBlank(request.getUiIdentifier())
+          && request.getUiIdentifier().length() == 10) {
+        referralId = request.getUiIdentifier();
+        request.setUiIdentifier(null);
+      }
+
       Referral managed =
-          new Referral(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-              referral, RequestExecutionContext.instance().getStaffId(),
+          new Referral(referralId,
+              request, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
 
       managed = referralDao.create(managed);
       if (managed == null || managed.getId() == null) {
-        LOGGER.warn("Unable to save referral: {}", referral);
+        LOGGER.warn("Unable to save referral: {}", request);
         throw new ServiceException("Referral Not successfully saved");
       }
       createLACountyTrigger(staffperson, managed);
       return new PostedReferral(managed);
     } catch (EntityExistsException e) {
-      LOGGER.info("Referral already exists : {}", referral);
+      LOGGER.info("Referral already exists : {}", request);
       throw new ServiceException(e);
+    }
+  }
+
+  private void validateCountyOfAssignedStaffWorker(
+      gov.ca.cwds.rest.api.domain.cms.Referral referral) {
+    if (!new CountyOfAssignedStaffWorker(referral, staffpersonDao).isValid()) {
+      LOGGER.error("Assigned Staff Person County must be the same as the Incident County");
+      throw new ServiceException(
+          "Assigned Staff Person County must be the same as the Incident County");
     }
   }
 
@@ -182,13 +226,13 @@ public class ReferralService implements
    * @param screeningToReferral - screeningToReferral
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
-   * @param messageBuilder - messageBuilder
+   * @param strsMessageBuilder - ScreeningToReferralService messageBuilder
    * @return the cmsReferral
    */
   public String createCmsReferralFromScreening(ScreeningToReferral screeningToReferral,
-      String dateStarted, String timeStarted, MessageBuilder messageBuilder) {
+      String dateStarted, String timeStarted, MessageBuilder strsMessageBuilder) {
 
-    String referralId = null;
+    String referralId;
 
     if (screeningToReferral.getReferralId() == null
         || screeningToReferral.getReferralId().isEmpty()) {
@@ -197,28 +241,39 @@ public class ReferralService implements
       gov.ca.cwds.rest.api.domain.cms.Referral referral = null;
       try {
         referral = createReferralWithDefaults(screeningToReferral, dateStarted, timeStarted,
-            messageBuilder);
-      } catch (ServiceException e) {
+            strsMessageBuilder);
+      } catch (ServiceException | NullPointerException e) {
         String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
-      } catch (NullPointerException e) {
-        String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+        strsMessageBuilder.addMessageAndLog(message, e, LOGGER);
       } catch (Exception e) {
         String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+        strsMessageBuilder.addMessageAndLog(message, e, LOGGER);
         throw e;
       }
 
-      messageBuilder.addDomainValidationError(validator.validate(referral));
+      if (referral == null) {
+        return null;
+      }
 
+      strsMessageBuilder.addDomainValidationError(validator.validate(referral));
+
+      /*
+       * Attach default screener narrative created from template
+       */
+      referralId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId());
+      String screenerNarrativeId = createDefaultSreenerNarrativeForNewReferral(screeningToReferral,
+          referral, referralId);
+      if (!StringUtils.isBlank(screenerNarrativeId)) {
+        //Pass the referral Id
+        referral.setUiIdentifier(referralId);
+        referral.setDrmsAllegationDescriptionDoc(screenerNarrativeId);
+      }
       PostedReferral postedReferral = this.create(referral);
       referralId = postedReferral.getId();
 
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
-          referral, messageBuilder);
-      // TODO: R - 01054 Prmary Assignment Adding
+          referral, strsMessageBuilder);
 
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now
@@ -227,7 +282,7 @@ public class ReferralService implements
       if (foundReferral == null) {
         String message = "Legacy Id does not correspond to an existing CMS/CWS Referral";
         ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
+        strsMessageBuilder.addMessageAndLog(message, se, LOGGER);
       }
     }
     return referralId;
@@ -237,32 +292,33 @@ public class ReferralService implements
    * @param screeningToReferral - screeningToReferral
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
-   * @param messageBuilder - the messageBuilder object responsible for handling errors
+   * @param strsMessageBuilder - the ScreeningToReferralService messageBuilder object responsible
+   * for handling errors
    * @return the referral
    * @throws ServiceException - ServiceException
    */
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
-      MessageBuilder messageBuilder) throws ServiceException {
-    String longTextId = generateReportNarrative(screeningToReferral, messageBuilder);
+      MessageBuilder strsMessageBuilder) {
+    String longTextId = generateReportNarrative(screeningToReferral, strsMessageBuilder);
     String responseRationalLongTextId =
-        generateResponseRationalText(screeningToReferral, messageBuilder);
+        generateResponseRationalText(screeningToReferral, strsMessageBuilder);
     String currentLocationOfChildrenLongTextId =
-        generateCurrentLocationOfChildren(screeningToReferral, messageBuilder);
+        generateCurrentLocationOfChildren(screeningToReferral, strsMessageBuilder);
 
     /*
      * create a three dummy records using generateDrmsDocumentId method
      */
     String drmsAllegationDescriptionDoc =
-        drmsDocumentService.generateDrmsDocumentId(messageBuilder);
-    String drmsErReferralDoc = drmsDocumentService.generateDrmsDocumentId(messageBuilder);
-    String drmsInvestigationDoc = drmsDocumentService.generateDrmsDocumentId(messageBuilder);
+        drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
+    String drmsErReferralDoc = drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
+    String drmsInvestigationDoc = drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
 
     /*
      * create the referralAddress and assign the value to the
      * allegesAbuseOccurredAtAddressId(FKADDRS_T)
      */
-    createReferralAddress(screeningToReferral, messageBuilder);
+    createReferralAddress(screeningToReferral, strsMessageBuilder);
     String allegesAbuseOccurredAtAddressId = screeningToReferral.getAddress().getLegacyId();
 
     String limitedAccessDate = DomainChef.cookDate(screeningToReferral.getLimitedAccessDate());
@@ -278,14 +334,17 @@ public class ReferralService implements
         ParticipantValidator.anonymousReporter(screeningToReferral),
         screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        screeningToReferral.isFiledWithLawEnforcement(), screeningToReferral.isFamilyAwareness(),
-        govEnt, screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(), referredToResourceType ? NOT_REFERRED : 0,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId(), longTextId,
-        screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
-        screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
-        screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
-        screeningToReferral.getLimitedAccessDescription(), limitedAccessDate, agencyCode);
+        screeningToReferral.isFamilyAwareness(), govEnt,
+        screeningToReferral.getName(), dateStarted, timeStarted,
+        screeningToReferral.getResponseTime(),
+        referredToResourceType ? NOT_REFERRED : 0, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId(), longTextId,
+        screeningToReferral.getIncidentCounty(),
+        (short) screeningToReferral.getApprovalStatus(), screeningToReferral.getAssigneeStaffId(),
+        responseRationalLongTextId, screeningToReferral.getResponsibleAgency(),
+        screeningToReferral.getLimitedAccessCode(),
+        screeningToReferral.getLimitedAccessDescription(),
+        limitedAccessDate, agencyCode);
   }
 
   private Short convertLimitedAccessAgencyToNumericCode(ScreeningToReferral screeningToReferral) {
@@ -334,16 +393,13 @@ public class ReferralService implements
    */
   private static String firstResponseDeterminedByStaffPersonId() {
     return RequestExecutionContext.instance().getStaffId();
-
   }
 
   private String generateReportNarrative(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     String longTextId = null;
-    if (screeningToReferral.getReportNarrative() == null
-        || screeningToReferral.getReportNarrative().isEmpty()) {
-      longTextId = null;
-    } else {
+    if (screeningToReferral.getReportNarrative() != null
+        && !screeningToReferral.getReportNarrative().isEmpty()) {
       try {
         longTextId = createLongText(screeningToReferral.getIncidentCounty(),
             screeningToReferral.getReportNarrative(), messageBuilder);
@@ -358,10 +414,8 @@ public class ReferralService implements
   private String generateResponseRationalText(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     String longTextId = null;
-    if (screeningToReferral.getAdditionalInformation() == null
-        || screeningToReferral.getAdditionalInformation().isEmpty()) {
-      longTextId = null;
-    } else {
+    if (screeningToReferral.getAdditionalInformation() != null
+        && !screeningToReferral.getAdditionalInformation().isEmpty()) {
       try {
         longTextId = createLongText(screeningToReferral.getIncidentCounty(),
             screeningToReferral.getAdditionalInformation(), messageBuilder);
@@ -376,10 +430,8 @@ public class ReferralService implements
   private String generateCurrentLocationOfChildren(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     String currentLocationOfChildren = null;
-    if (screeningToReferral.getCurrentLocationOfChildren() == null
-        || screeningToReferral.getCurrentLocationOfChildren().isEmpty()) {
-      currentLocationOfChildren = null;
-    } else {
+    if (screeningToReferral.getCurrentLocationOfChildren() != null
+        && !screeningToReferral.getCurrentLocationOfChildren().isEmpty()) {
       try {
         currentLocationOfChildren = createLongText(screeningToReferral.getIncidentCounty(),
             screeningToReferral.getCurrentLocationOfChildren(), messageBuilder);
@@ -392,7 +444,7 @@ public class ReferralService implements
   }
 
   private String createLongText(String countySpecificCode, String textDescription,
-      MessageBuilder messageBuilder) throws ServiceException {
+      MessageBuilder messageBuilder) {
 
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);
@@ -400,23 +452,26 @@ public class ReferralService implements
     messageBuilder.addDomainValidationError(validator.validate(longText));
 
     return postedLongText.getId();
-
   }
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Referral update(String primaryKey,
       gov.ca.cwds.rest.api.domain.cms.Referral request) {
-    gov.ca.cwds.rest.api.domain.cms.Referral referral = request;
-
     try {
+      /*
+       * Reuse the validation of DocTool Rule 04611
+       * in the gov.ca.cwds.rest.services.ScreeningToReferralService
+       */
+      validateMaxReferralStartDateTime(primaryKey, request);
+
       Referral managed =
-          new Referral(primaryKey, referral, RequestExecutionContext.instance().getStaffId(),
+          new Referral(primaryKey, request, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = referralDao.update(managed);
       // checking the staffPerson county code
@@ -424,10 +479,117 @@ public class ReferralService implements
       createLACountyTrigger(staffperson, managed);
       return new gov.ca.cwds.rest.api.domain.cms.Referral(managed);
     } catch (EntityNotFoundException e) {
-      final String msg = "Referral not found : " + referral;
-      LOGGER.error("Referral not found : {}", referral);
+      final String msg = "Referral not found : " + request;
+      LOGGER.error("Referral not found : {}", request);
       throw new ServiceException(msg, e);
     }
+  }
+
+  private void validateMaxReferralStartDateTime(String referralId,
+      gov.ca.cwds.rest.api.domain.cms.Referral request) {
+    Assignment firstAssignment = assignmentService.findReferralFirstAssignment(referralId);
+    if (isReferralStartDateTimeValid(request, firstAssignment)) {
+      new R04611ReferralStartDateTimeAction(assignmentService, request, firstAssignment).execute();
+    } else {
+      throw new ServiceException(
+          "Rule : R - 04611 - Referral Start Date & Time can not exceed the End Date AND can not equal or exceed End Time of the first assignment.");
+    }
+  }
+
+  boolean isReferralStartDateTimeValid(gov.ca.cwds.rest.api.domain.cms.Referral request,
+      Assignment firstAssignment) {
+    return new R04611ReferralStartDateTimeValidator(request, firstAssignment).isValid();
+  }
+
+  private String createDefaultSreenerNarrativeForNewReferral(
+      ScreeningToReferral screeningToReferral,
+      gov.ca.cwds.rest.api.domain.cms.Referral referral,
+      String referralId) {
+    String screenerNarrativeId = null;
+    DrmsDocumentTemplate drmsTemplate =
+        drmsDocumentTemplateService.findScreenerNarrativeTemplateNs(referral.getGovtEntityType());
+
+    if (drmsTemplate != null) {
+      CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
+
+      //Make Word doc from Template with new DOC_HANDLE etc.
+
+      Date now = new Date();
+      String docAuth = RequestExecutionContext.instance().getUserId();
+
+      SecureRandom random = new SecureRandom();
+      String docHandle = DocUtils.generateDocHandle(now, docAuth);
+      Short segments = 1;
+      Long docLength = 1L;
+
+      // TO1DO ???  The server name through which the document was added.
+      String docServ = "AUTOCRTD";
+
+      String docDate = new SimpleDateFormat(DomainObject.DATE_FORMAT).format(now);
+      String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
+
+      //TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
+      String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
+      String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0, 5)
+          .concat(nameNumber).concat(".DOC");
+
+      String base64Blob = DatatypeConverter.printBase64Binary(
+          screenerNarrativeFromTemplate(
+              screeningToReferral,
+              referralId,
+              referral,
+              DatatypeConverter.parseBase64Binary(cmsTemplate.getBase64Blob())));
+
+      CmsDocument cmsDocument = new CmsDocument(docHandle, segments, docLength,
+          docAuth,
+          docServ,
+          docDate, docTime, docName,
+          cmsTemplate.getCompressionMethod(),
+          base64Blob);
+      cmsDocument = cmsDocumentService.create(cmsDocument);
+
+      DrmsDocument document = new DrmsDocument(
+          new Date(),
+          drmsTemplate.getThirdId(),
+          null,
+          RequestExecutionContext.instance().getStaffId(),
+          cmsDocument.getId());
+
+      PostedDrmsDocument posted = drmsDocumentService.create(document);
+      screenerNarrativeId = posted.getId();
+
+    }
+    return screenerNarrativeId;
+  }
+
+  private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral,
+      String referralId,
+      gov.ca.cwds.rest.api.domain.cms.Referral referral,
+      byte[] template) {
+    Map<String, String> keyValuePairs = new HashMap<>();
+
+    String childName = "";
+    String childNumber = "";
+
+    // Get child name from ...victims, allegations, participants???
+    if (screeningToReferral.getParticipants() != null) {
+      for (Participant participant : screeningToReferral.getParticipants()) {
+        if (participant.getRoles().contains("Victim")) {
+          childName = childName.concat(", ").concat(participant.getFirstName()).concat(" ")
+              .concat(participant.getLastName());
+        }
+      }
+    }
+
+    keyValuePairs.put("ChildName", childName.substring(min(childName.length(), 1)).trim());
+    keyValuePairs.put("ChildNumber", childNumber.substring(min(childNumber.length(), 1)).trim());
+
+    keyValuePairs.put("ReferralNumber", CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
+    keyValuePairs.put("ReferralDate", referral.getReceivedDate());
+
+    keyValuePairs.put("bkBody", screeningToReferral.getReportNarrative());
+
+    return DocUtils.createFromTemplateUseBookmarks(template, keyValuePairs);
   }
 
 }

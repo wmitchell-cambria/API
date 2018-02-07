@@ -1,5 +1,18 @@
 package gov.ca.cwds.rest.business.reminders;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
@@ -11,18 +24,6 @@ import gov.ca.cwds.data.persistence.cms.StateId;
 import gov.ca.cwds.rest.api.domain.AgeUnit;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.inject.Inject;
-
-import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
@@ -33,41 +34,55 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  * <p>
  * Access Logic
  * <p>
- * CHILD_CLIENT (where system date - CLIENT.Birth_Date &lt; 26 years <br> or where CLIENT.Estimated_DOB_Code = Y and Age and Age Unit &lt; 26 years)<br>
+ * CHILD_CLIENT (where system date - CLIENT.Birth_Date &lt; 26 years <br>
+ * or where CLIENT.Estimated_DOB_Code = Y and Age and Age Unit &lt; 26 years)<br>
  * does not have a state_id row with End Date blank and CHILD_CLIENT&gt;CASE.End_Date = null,<br>
  * then <br>
- * {Create TICKLE, set Tickle_Message_Type = 'State ID Missing',<p>
+ * {Create TICKLE, set Tickle_Message_Type = 'State ID Missing',
+ * <p>
  * {if the client is the focus child in a case (or the case in focus), <br>
  * set TICKLE.Affected_By_Case_Or_Referral_Id = CHILD_CLIENT&gt;CASE.Id of that case <br>
  * and TICKLE.Affected_By_Code = 'CC' and TICKLE.Affected_By_Other_Id = CLIENT.Id.,<br>
  * set TICKLE.Due_Date = CLIENT.Creation Date + 30 days
  * <p>
- * else If the client is in a referral (or the referral in focus) and CHILD_CLIENT&gt;REFERRAL.Closure_Date = null,<br>
- * set TICKLE.Affected_By_Case_Or_Referral_Id = CHILD_CLIENT&gt;REFERRAL.Id and TICKLE.Affected_By_Code = 'RL'<br>
- * and TICKLE.Affected_By_Other_Id = CLIENT.Id, set TICKLE.Due_Date = CLIENT.Creation Date + 30 days.}}
+ * else If the client is in a referral (or the referral in focus) and
+ * CHILD_CLIENT&gt;REFERRAL.Closure_Date = null,<br>
+ * set TICKLE.Affected_By_Case_Or_Referral_Id = CHILD_CLIENT&gt;REFERRAL.Id and
+ * TICKLE.Affected_By_Code = 'RL'<br>
+ * and TICKLE.Affected_By_Other_Id = CLIENT.Id, set TICKLE.Due_Date = CLIENT.Creation Date + 30
+ * days.}}
  * <p>
  * If (CHILD_CLIENT does not have a state_id row with End Date blank<br>
  * where .Government_Entity_Type = (CASE or REFERRAL &gt; ASSIGNMENT<br>
  * (where Type _Of_Assignment_Code = 'P' or (Type _Of_Assignment_Code = 'S'<br>
  * and Secondary_Assignment_role_type = 'ICPC Case Worker') and .End_Date = null<br>
- * or &gt; system date)) &gt; CASELOAD &gt; ASSIGNMENT UNIT &gt; CWS OFFICE.Government_Entity_Type, <br>
+ * or &gt; system date)) &gt; CASELOAD &gt; ASSIGNMENT UNIT &gt; CWS OFFICE.Government_Entity_Type,
+ * <br>
  * then {Create TICKLE, set Tickle_Message_Type = 'State ID Missing',
  * <p>
- * {if the client is the focus child in a case (or the case in focus) and CHILD_CLIENT&gt;CASE.End_Date = null,<br>
- * set TICKLE.Affected_By_Case_Or_Referral_Id = STATE_ID_NUMBER&gt;CLIENT&gt;CHILD_CLIENT&gt;CASE.Id of that case<br>
- * and TICKLE.Affected_By_Code = 'CC' and TICKLE.Affected_By_Other_Id = STATE_ID_NUMBER&gt;CLIENT.Id.,<br>
+ * {if the client is the focus child in a case (or the case in focus) and
+ * CHILD_CLIENT&gt;CASE.End_Date = null,<br>
+ * set TICKLE.Affected_By_Case_Or_Referral_Id = STATE_ID_NUMBER&gt;CLIENT&gt;CHILD_CLIENT&gt;CASE.Id
+ * of that case<br>
+ * and TICKLE.Affected_By_Code = 'CC' and TICKLE.Affected_By_Other_Id =
+ * STATE_ID_NUMBER&gt;CLIENT.Id.,<br>
  * set TICKLE.Due_Date = CASE &gt; ASSIGNMENT (where Type _Of_Assignment_Code = 'P' or<br>
  * (Type _Of_Assignment_Code = 'S' and Secondary_Assignment_role_type = 'ICPC Case Worker')<br>
  * county change date +30 days.
  * <p>
- * Else If the client is in a referral (or the referral in focus) and REFERRAL.Closure_Date = null,<br>
- * set TICKLE.Affected_By_Case_Or_Referral_Id = STATE_ID_NUMBER&gt;CLIENT&gt;CHILD_CLIENT&gt;REFERRAL.Id<br>
+ * Else If the client is in a referral (or the referral in focus) and REFERRAL.Closure_Date =
+ * null,<br>
+ * set TICKLE.Affected_By_Case_Or_Referral_Id =
+ * STATE_ID_NUMBER&gt;CLIENT&gt;CHILD_CLIENT&gt;REFERRAL.Id<br>
  * and TICKLE.Affected_By_Code = 'RL' and
  * </p>
  *
- * --- Do not implement part of DocTool rule that describes 'deleting' a reminder. That is out of the context for HotLine 1.0.<br>
- * --- Do not implement or consider any mention of Secondary Assignments. Secondary Assignments are not created by /referrals/POST for HotLine 1.0.<br>
- * --- Do not implement or consider any mention of Assignment Disposition. Assignments will not be dispositioned by /referrals/POST for HotLine 1.0.<br>
+ * --- Do not implement part of DocTool rule that describes 'deleting' a reminder. That is out of
+ * the context for HotLine 1.0.<br>
+ * --- Do not implement or consider any mention of Secondary Assignments. Secondary Assignments are
+ * not created by /referrals/POST for HotLine 1.0.<br>
+ * --- Do not implement or consider any mention of Assignment Disposition. Assignments will not be
+ * dispositioned by /referrals/POST for HotLine 1.0.<br>
  *
  * @author CWDS API Team
  */
@@ -91,11 +106,15 @@ public class R05443AndR03341StateIdMissing {
 
 
   /**
-   * @param clientDao     - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Client}
-   *                      objects
-   * @param referralDao   - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
-   *                      objects
-   * @param tickleService - tickleService
+   * @param clientDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Client}
+   *        objects
+   * @param referralDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
+   *        objects
+   * @param referralClientDao - The {@link Dao} handling
+   *        {@link gov.ca.cwds.data.persistence.cms.ReferralClient} objects
+   * @param stateIdDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.StateId}
+   *        objects
+   * @param tickleService tickleService
    */
   @Inject
   public R05443AndR03341StateIdMissing(ClientDao clientDao, ReferralDao referralDao,
@@ -116,7 +135,15 @@ public class R05443AndR03341StateIdMissing {
     Referral referral = referralDao.find(postedScreeningToReferral.getReferralId());
     for (Participant participant : participants) {
       if (isClientAccepted(participant)) {
-        Client client = clientDao.find(participant.getLegacyId());
+        String legacyId = participant.getLegacyId();
+        if (legacyId == null) {
+          return;
+        }
+        Client client = clientDao.find(legacyId);
+
+        if (client == null) {
+          return;
+        }
 
         Integer estimatedAgeInYears = getEstimatedAgeInYears(referral, client);
         Integer years = getYearsFromDob(participant);
@@ -166,16 +193,23 @@ public class R05443AndR03341StateIdMissing {
   }
 
   private boolean isClientAccepted(Participant participant) {
-    return ParticipantValidator.hasVictimRole(participant) || ParticipantValidator.isPerpetrator(participant);
+    return ParticipantValidator.hasVictimRole(participant)
+        || ParticipantValidator.isPerpetrator(participant);
   }
 
   private Integer getEstimatedAgeInYears(Referral referral, Client client) {
-    if (DEFAULT_TRUE_INDICATOR.equals(client.getEstimatedDobCode())) {
+    if (client != null && DEFAULT_TRUE_INDICATOR.equals(client.getEstimatedDobCode())) {
       ReferralClient.PrimaryKey primaryKey =
           new ReferralClient.PrimaryKey(referral.getPrimaryKey(), client.getPrimaryKey());
       ReferralClient referralClient = referralClientDao.find(primaryKey);
       if (referralClient != null) {
-        AgeUnit from = AgeUnit.valueOf(referralClient.getAgePeriodCode());
+        String agePeriodCode = referralClient.getAgePeriodCode();
+        AgeUnit from = null;
+
+        if (StringUtils.isNotBlank(agePeriodCode)) {
+          from = AgeUnit.valueOf(referralClient.getAgePeriodCode());
+        }
+
         if (from != null) {
           return AgeUnit.convertTo(referralClient.getAgeNumber(), from, AgeUnit.Y);
         }

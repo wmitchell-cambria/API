@@ -22,7 +22,7 @@ public class IntakeLovService
    */
   private static final long serialVersionUID = 1L;
 
-  private transient IntakeLovDao dao;
+  private IntakeLovDao dao;
 
   /**
    * Constructor

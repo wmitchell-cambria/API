@@ -10,11 +10,12 @@ swagger:
   resourcePackage: gov.ca.cwds.rest.resources
   title: CWDS API
   description: RESTful API definitions for the CWS New System.
-  logo: images/CWDS-API-Logo-Horizontal.png
-  loginUrl: ${LOGIN_URL:-http://localhost:8090/authn/login}
+  logo: images/CWDS-API-Logo-Horizontal.png  
   showSwagger: ${SHOW_SWAGGER:-false}
   jsonUrl: ${SWAGGER_JSON_URL:-http://localhost:8080/swagger.json}
+  loginUrl: ${LOGIN_URL:-http://localhost:8090/authn/login}
   callbackUrl: ${SWAGGER_CALLBACK_URL:-http://localhost:8080/swagger}
+  tokenUrl: ${SWAGGER_TOKEN_URL:-http://localhost:8080/perry/authn/token}
 
 nsDataSourceFactory:
   driverClass: org.postgresql.Driver
@@ -76,8 +77,8 @@ elasticsearch:
     elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS:-}
     
 smartystreets:
-  clientId: ${SS_ID:-8721f357-6381-1001-4633-5157e84b68cb}
-  token: ${SS_TOKEN:-Q62NxpgzuBEUq3IalqVx}
+  clientId: ${SS_ID:-193cc984-be1d-4b18-90c2-2399ebcf67bb}                  
+  token: ${SS_TOKEN:-f15BXf61uOidswnnFZAc}                     
   maxCandidates: ${SS_MAX:-10}
   
 triggertables:

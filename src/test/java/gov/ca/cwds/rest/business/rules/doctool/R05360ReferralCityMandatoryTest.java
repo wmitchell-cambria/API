@@ -37,6 +37,7 @@ public class R05360ReferralCityMandatoryTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private MessageBuilder messageBuilder;
   private Validator validator;
+  public static final Short STATE_OF_CALIFORNIA_COUNTY_CODE = Short.valueOf("1126");
 
 
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
@@ -77,6 +78,15 @@ public class R05360ReferralCityMandatoryTest {
     messageBuilder.addDomainValidationError(validator.validate(address));
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     assertThat(validationErrors.size(), is(equalTo(0)));
+  }
+
+  @Test
+  public void shouldOneErrorMessageInvalidCounty() {
+    Address address = new CmsAddressResourceBuilder().setGovernmentEntityCd(STATE_OF_CALIFORNIA_COUNTY_CODE).buildCmsAddress();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(address));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    assertThat(validationErrors.size(), is(equalTo(1)));
   }
 
   @SuppressWarnings("javadoc")

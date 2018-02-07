@@ -15,19 +15,43 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import gov.ca.cwds.rest.validation.ValidCounty;
+
 /**
  * {@link CmsPersistentObject} Class representing a Case.
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByClient",
-    query = "FROM CmsCase WHERE fkchldClt = :clientId")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByVictimClientIds",
+    query = "FROM CmsCase WHERE fkchldClt in :clientIds")
+
+@NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId",
+    query = " SELECT C.*                            \n"
+        + "     FROM {h-schema}CASE_T C             \n"
+        + "     WHERE C.FKCHLD_CLT = :clientId      \n"
+        + "   UNION                                 \n"
+        + "     SELECT DISTINCT X.*                 \n"
+        + "     FROM {h-schema}CLN_RELT T,          \n"
+        + "     {h-schema}CASE_T X                  \n"
+        + "     WHERE T.FKCLIENT_T = :clientId      \n"
+        + "     AND T.FKCLIENT_0 <> :clientId       \n"
+        + "     AND T.FKCLIENT_0 = X.FKCHLD_CLT     \n"
+        + "   UNION                                 \n"
+        + "     SELECT DISTINCT Y.*                 \n"
+        + "     FROM {h-schema}CLN_RELT Z,          \n"
+        + "     {h-schema}CASE_T Y                  \n"
+        + "     WHERE Z.FKCLIENT_0  = :clientId     \n"
+        + "     AND Z.FKCLIENT_T <> :clientId       \n"
+        + "     AND Z.FKCLIENT_T = Y.FKCHLD_CLT     ",
+    resultClass = CmsCase.class, readOnly = true)
+
 @SuppressWarnings("javadoc")
 @Entity
 @Table(name = "CASE_T")
@@ -90,6 +114,7 @@ public class CmsCase extends CmsPersistentObject {
 
   @Type(type = "short")
   @Column(name = "GVR_ENTC")
+  @ValidCounty
   private Short governmentEntityType;
 
   @Column(name = "ICPCSTAT_B")
@@ -306,6 +331,10 @@ public class CmsCase extends CmsPersistentObject {
 
   public String getLimitedAccessCode() {
     return limitedAccessCode;
+  }
+
+  public void setLimitedAccessCode(String limitedAccessCode) {
+    this.limitedAccessCode = limitedAccessCode;
   }
 
   public Date getLimitedAccessDate() {

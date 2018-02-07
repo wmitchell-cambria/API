@@ -32,6 +32,7 @@ import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.data.persistence.AccessLimitationAware;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.validation.ValidCounty;
 
 /**
  * {@link CmsPersistentObject} representing a Referral.
@@ -102,6 +103,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JsonDeserialize(using = CmsSystemCodeDeserializer.class)
   @Type(type = "short")
   @Column(name = "GVR_ENTC")
+  @ValidCounty
   private Short govtEntityType;
 
   @Column(name = "LGL_DEF_CD")
@@ -675,6 +677,10 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @Override
   public String getLimitedAccessCode() {
     return limitedAccessCode;
+  }
+
+  public void setLimitedAccessCode(String limitedAccessCode) {
+    this.limitedAccessCode = limitedAccessCode;
   }
 
   /**

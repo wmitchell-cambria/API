@@ -1,43 +1,39 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
-import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
-import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import gov.ca.cwds.fixture.ScreeningEntityBuilder;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TimeZone;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.fixture.hoi.HOIScreeningBuilder;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import io.dropwizard.jackson.Jackson;
 
 /***
  *
  * @author CWDS API Team
  *
  */
-@SuppressWarnings("javadoc")
 public class HOIScreeningServiceTest {
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private HOIScreeningService hoiScreeningService;
 
@@ -46,9 +42,6 @@ public class HOIScreeningServiceTest {
 
   @Before
   public void setUp() {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd z");
-    MAPPER.getSerializationConfig().with(dateFormat).with(TimeZone.getTimeZone("PST"));
-
     new TestingRequestExecutionContext("0X5");
 
     ParticipantDao participantDao = mock(ParticipantDao.class);
@@ -56,8 +49,9 @@ public class HOIScreeningServiceTest {
     hoiPersonFactory.participantDao = participantDao;
 
     ScreeningDao screeningDao = mock(ScreeningDao.class);
-    when(screeningDao.findHoiScreeningsByScreeningId(any(String.class)))
-        .thenReturn(mockScreeningEntityList());
+    Set<String> clientIds = new HashSet<>();
+    clientIds.add("1");
+    when(screeningDao.findScreeningsByClientIds(clientIds)).thenReturn(mockScreeningEntityList());
     IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
     mockIntakeLOVCodeEntity.setLgSysId(1101L);
     mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
@@ -74,26 +68,38 @@ public class HOIScreeningServiceTest {
   }
 
   @Test
-  public void findReturnsExpectedHistoryOfInvolvement() throws Exception {
-    HOIScreening expectedScreening = MAPPER
-        .readValue(fixture("gov/ca/cwds/rest/services/hoi/hoi_screenings/valid_HOIScreening.json"),
-            HOIScreening.class);
-    Set<HOIScreening> screenings = new HashSet<>();
-    screenings.add(expectedScreening);
-    HOIScreeningResponse expectedResponse = new HOIScreeningResponse(screenings);
-    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind("1");
+  public void findReturnsExpectedAndSortedHOIScreenings() {
+    HOIScreeningResponse expectedResponse = createExpectedResponse();
+
+    HOIRequest hoiScreeningRequest = new HOIRequest();
+    hoiScreeningRequest.setClientIds(Stream.of("1").collect(Collectors.toSet()));
+    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
     assertThat(actualResponse, is(expectedResponse));
   }
 
+  private HOIScreeningResponse createExpectedResponse() {
+    Set<HOIScreening> screenings = new TreeSet<>(
+        (s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
+    screenings.add(new HOIScreeningBuilder().createHOIScreening());
+    screenings.add(new HOIScreeningBuilder().setId("223").setStartDate("2017-09-25")
+        .setEndDate("2017-10-01").createHOIScreening());
+    return new HOIScreeningResponse(screenings);
+  }
+
   private Set<ScreeningEntity> mockScreeningEntityList() {
-    ScreeningEntity entity = new ScreeningEntity("224", null,
-        DomainChef.uncookStrictTimestampString("2017-11-29T16:00:00.000-0800"),
-        DomainChef.uncookStrictTimestampString("2017-12-09T16:00:00.000-0800"), "sacramento", null,
-        null, null, null, null, "promote to referral",
-        "drug counseling", null, null, null);
+    ScreeningEntity entity1 = new ScreeningEntityBuilder().setId("223").setStartedAt("2017-09-25")
+        .setEndedAt("2017-10-01").setIncidentCounty("sacramento").setName(null)
+        .setScreeningDecision("promote to referral").setScreeningDecisionDetail("drug counseling")
+        .build();
+
+    ScreeningEntity entity2 = new ScreeningEntityBuilder().setId("224").setStartedAt("2017-11-30")
+        .setEndedAt("2017-12-10").setIncidentCounty("sacramento").setName(null)
+        .setScreeningDecision("promote to referral").setScreeningDecisionDetail("drug counseling")
+        .build();
 
     Set<ScreeningEntity> result = new HashSet<>();
-    result.add(entity);
+    result.add(entity1);
+    result.add(entity2);
     return result;
   }
 

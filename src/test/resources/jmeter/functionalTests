@@ -1,0 +1,20 @@
+#This file lists the tests to run as part of the automated functional tests suite.
+#Explicitly listing tests prevents unwanted load & Performance or other test files from being ran.
+#
+#Comments are '#'. Place test name in this file on it's own line to have a test execute.
+#
+## Place holders for existing tests. Uncomment to start running
+#_allegations.jmx
+#_staffpersons.jmx
+#_clients.jmx
+#_referralClients.jmx
+#_referrals.jmx
+#_reporters.jmx
+#_cmsreferrals.jmx
+#CmsReferralLegacyNSComparison.jmx
+#referrals.jmx
+#contacts.jmx
+#addresses.jmx
+#
+#Tests to run:
+address_validation.jmx

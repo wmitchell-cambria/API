@@ -5,13 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.validation.Validator;
+
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.rest.business.rules.R08740SetNonProtectingParentCode;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
-import gov.ca.cwds.data.Dao;
+
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -24,25 +29,17 @@ import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.AgencyType;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
-import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
-import gov.ca.cwds.rest.services.cms.AssignmentService;
-import gov.ca.cwds.rest.services.cms.ChildClientService;
-import gov.ca.cwds.rest.services.cms.ClientAddressService;
-import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
-import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
-import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -63,67 +60,45 @@ public class ScreeningToReferralService implements CrudsService {
   private MessageBuilder messageBuilder;
 
   private ReferralService referralService;
-  private ClientService clientService;
   private AllegationService allegationService;
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private CrossReportService crossReportService;
-  private ReferralClientService referralClientService;
-  private ReporterService reporterService;
-  private Reporter savedReporter;
-  private AddressService addressService;
-  private ClientAddressService clientAddressService;
-  private ChildClientService childClientService;
-  private AssignmentService assignmentService;
   private ParticipantService participantService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private ReferralDao referralDao;
+  private ClientRelationshipDao clientRelationshipDao;
 
   /**
    * Constructor
    * 
-   * @param referralService the referralService
-   * @param clientService the clientService
-   * @param allegationService the allegationService
-   * @param crossReportService the crossReportService
-   * @param referralClientService the referralClientService
-   * @param reporterService the reporterService
-   * @param addressService - cms address service
-   * @param clientAddressService - cms ClientAddress service
-   * @param childClientService - cms ChildClient service
-   * @param assignmentService CMS assignment service
-   * @param participantService CMS participantService service
-   * @param validator - the validator
-   * @param referralDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Referral}
-   *        objects.
-   * @param messageBuilder log message
-   * @param allegationPerpetratorHistoryService the allegationPerpetratorHistoryService
-   * @param reminders - reminders
-   * @param governmentOrganizationCrossReportService - governmentOrganizationCrossReportService
+   * @param referralService referralService
+   * @param allegationService allegationService
+   * @param crossReportService crossReportService
+   * @param participantService participantService
+   * @param validator validator
+   * @param referralDao referralDao
+   * @param messageBuilder messageBuilder
+   * @param allegationPerpetratorHistoryService allegationPerpetratorHistoryService
+   * @param reminders reminders
+   * @param governmentOrganizationCrossReportService governmentOrganizationCrossReportService
+   * @param clientRelationshipDao clientRelationshipDao
    */
   @Inject
-  public ScreeningToReferralService(ReferralService referralService, ClientService clientService,
+  public ScreeningToReferralService(ReferralService referralService,
       AllegationService allegationService, CrossReportService crossReportService,
-      ReferralClientService referralClientService, ReporterService reporterService,
-      AddressService addressService, ClientAddressService clientAddressService,
-      ChildClientService childClientService, AssignmentService assignmentService,
       ParticipantService participantService, Validator validator, ReferralDao referralDao,
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
-      GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService) {
+      GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService,
+      ClientRelationshipDao clientRelationshipDao) {
 
     super();
+    this.clientRelationshipDao = clientRelationshipDao;
     this.referralService = referralService;
-    this.clientService = clientService;
     this.allegationService = allegationService;
     this.crossReportService = crossReportService;
-    this.referralClientService = referralClientService;
-    this.reporterService = reporterService;
-    this.addressService = addressService;
-    this.clientAddressService = clientAddressService;
-    this.childClientService = childClientService;
-    this.assignmentService = assignmentService;
     this.participantService = participantService;
     this.validator = validator;
     this.referralDao = referralDao;
@@ -187,8 +162,8 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private Set<Allegation> createAllegations(ScreeningToReferral screeningToReferral,
-      String referralId, HashMap<Long, String> victimClient,
-      HashMap<Long, String> perpatratorClient) {
+      String referralId, Map<Long, String> victimClient,
+      Map<Long, String> perpatratorClient) {
     Set<Allegation> resultAllegations = null;
     try {
       resultAllegations =
@@ -287,6 +262,12 @@ public class ScreeningToReferralService implements CrudsService {
 
   @Override
   public Response update(Serializable primaryKey, Request request) {
+    /*
+     * Reuse part of functionality from legacy gov.ca.cwds.rest.services.cms.ReferralService:
+     * the ReferralService.update method executes validation according to DocTool Rule R04611.
+     * The R04611ReferralStartDateTimeValidator and R04611ReferralStartDateTimeAction shell be used
+     * here similarly.
+     */
     assert primaryKey instanceof String;
     throw new NotImplementedException("Update is not implemented");
   }
@@ -410,8 +391,7 @@ public class ScreeningToReferralService implements CrudsService {
    * CMS Allegation - one for each allegation
    */
   private Set<Allegation> processAllegations(ScreeningToReferral scr, String referralId,
-      HashMap<Long, String> perpatratorClient, HashMap<Long, String> victimClient)
-      throws ServiceException {
+      Map<Long, String> perpatratorClient, Map<Long, String> victimClient) {
 
     Set<Allegation> processedAllegations = new HashSet<>();
     Set<Allegation> allegations;
@@ -506,7 +486,7 @@ public class ScreeningToReferralService implements CrudsService {
     }
   }
 
-  private String getClientLegacyId(HashMap<Long, String> client, String clientId, long personId) {
+  private String getClientLegacyId(Map<Long, String> client, String clientId, long personId) {
     if (client.containsKey(personId)) {
       clientId = client.get(personId);
     }
@@ -534,19 +514,30 @@ public class ScreeningToReferralService implements CrudsService {
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
             scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
-            Boolean.FALSE, ("").equals(perpatratorClientId) ? "U" : "N", Boolean.FALSE,
+            Boolean.FALSE, LegacyDefaultValues.DEFAULT_NON_PROTECTING_PARENT_CODE, Boolean.FALSE,
             victimClientId, perpatratorClientId, referralId, scr.getIncidentCounty(),
             R06998ZippyIndicator.YES.getCode(), LegacyDefaultValues.DEFAULT_CODE);
-
+    executeR08740(cmsAllegation, victimClientId, perpatratorClientId);
     messageBuilder.addDomainValidationError(validator.validate(cmsAllegation));
 
     PostedAllegation postedAllegation = this.allegationService.create(cmsAllegation);
     allegation.setLegacyId(postedAllegation.getId());
     allegation.setLegacySourceTable(ALLEGATION_TABLE_NAME);
+    allegation.setNonProtectingParent(postedAllegation.getNonProtectingParentCode());
     processedAllegations.add(allegation);
 
     // create the Allegation Perpetrator History
     processAllegationPerpetratorHistory(scr, postedAllegation);
+  }
+
+  private void executeR08740(
+      gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation,
+      String victimClientId,
+      String perpetratorClientId) {
+    R08740SetNonProtectingParentCode r08740 =
+        new R08740SetNonProtectingParentCode(
+            cmsAllegation, clientRelationshipDao, victimClientId, perpetratorClientId);
+    r08740.execute();
   }
 
   private void processAllegationPerpetratorHistory(ScreeningToReferral scr,

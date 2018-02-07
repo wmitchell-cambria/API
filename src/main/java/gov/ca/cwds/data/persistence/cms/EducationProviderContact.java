@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -65,9 +63,9 @@ public class EducationProviderContact extends BaseEducationProviderContact {
    * @param titleDescription The title description
    */
   public EducationProviderContact(String departmentOfEducationIndicator, String emailAddress,
-      BigDecimal faxNumber, String firstName, String fKeyEducationProvider, String id,
+      Long faxNumber, String firstName, String fKeyEducationProvider, String id,
       String lastName, String middleName, String namePrefixDescription, Integer phoneExtension,
-      BigDecimal phoneNumber, String primaryContactIndicator, String suffixTitleDescription,
+      Long phoneNumber, String primaryContactIndicator, String suffixTitleDescription,
       String titleDescription) {
 
     this.departmentOfEducationIndicator = departmentOfEducationIndicator;

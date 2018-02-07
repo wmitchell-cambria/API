@@ -17,7 +17,6 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
@@ -77,6 +76,9 @@ public class R04631ReferralInvestigationContactDue {
           || ParticipantValidator.isPerpetrator(participant))
           && participant.getDateOfBirth() != null) {
         Client client = clientDao.find(participant.getLegacyId());
+        if (client == null) {
+          return;
+        }
         String dateOfBirth = participant.getDateOfBirth();
 
         int years = ReminderHelper.checkForAgeDifference(dateOfBirth);

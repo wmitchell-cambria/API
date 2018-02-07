@@ -276,11 +276,11 @@ public class ReferralTest {
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
         currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
-        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
-        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
-        countyCode, approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode,
-        limitedAccessDesc, limitedAccessDate, limitedAccessGovtAgencyType);
+        drmsInvestigationDoc, familyAwarenessIndicator, govtEntityType, referalName,
+        dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId, longTextId, countyCode,
+        approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode, limitedAccessDesc,
+        limitedAccessDate, limitedAccessGovtAgencyType);
     assertEquals("Expected anonReporter field to have presetValues", anonReporter,
         referral.getAnonymousReporterIndicator());
     assertEquals("Expected communicationsMethodCode field to have presetValues",
@@ -306,9 +306,6 @@ public class ReferralTest {
     assertEquals("Expected firstResponseDeterminedByStaffPersonId field to have presetValues",
         firstResponseDeterminedByStaffPersonId,
         referral.getFirstResponseDeterminedByStaffPersonId());
-    assertEquals(
-        "Expected filedSuspectedChildAbuseReporttoLawEnforcementIndicator field to have presetValues",
-        filedCrossReport, referral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
     assertEquals("Expected longTextId field to have presetValues", longTextId,
         referral.getScreenerNoteText());
     assertEquals("Expected longTextId field to have presetValues", longTextId,
@@ -383,11 +380,11 @@ public class ReferralTest {
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
         currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
-        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
-        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
-        countyCode, approvalCode, staffId, responseRationaleText, responsibleAgencyCode, "N", "",
-        null, (short) 0);
+        drmsInvestigationDoc, familyAwarenessIndicator, govtEntityType, referalName,
+        dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId, longTextId, countyCode,
+        approvalCode, staffId, responseRationaleText, responsibleAgencyCode, "N", "", null,
+        (short) 0);
     assertEquals("Expected additionalInfoIncludedCode field to have presetValues",
         additionalInfoIncludedCode, referral.getAdditionalInfoIncludedCode());
     assertEquals("Expected applicationForPetitionIndicator field to have presetValues",
@@ -470,10 +467,10 @@ public class ReferralTest {
     String limitedAccessCode = null;
 
     Referral referral = Referral.createWithDefaults(null, (short) 0, currentLocationOfChildren,
-        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, filedCrossReport,
-        familyAwarenessIndicator, govtEntityType, "name", "", "", (short) 0, (short) 0, "",
-        firstResponseDeterminedByStaffPersonId, "", "", (short) 0, "", responseRationaleText,
-        responsibleAgencyCode, limitedAccessCode, "", null, (short) 0);
+        drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc, familyAwarenessIndicator,
+        govtEntityType, "name", "", "", (short) 0, (short) 0, "", firstResponseDeterminedByStaffPersonId,
+        "", "", (short) 0, "", responseRationaleText, responsibleAgencyCode,
+        limitedAccessCode, "", null, (short) 0);
 
     assertThat(referral.getLimitedAccessCode(), is(equalTo("N")));
   }
@@ -1136,6 +1133,18 @@ public class ReferralTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(response.readEntity(String.class).indexOf("govtEntityType may not be null"),
         is(greaterThanOrEqualTo(0)));
+  }
+
+  @Test
+  public void failsWhenGovtEntityTypeIsStateOfCalifornia() throws Exception {
+    Referral toCreate = MAPPER.readValue(
+            fixture("fixtures/domain/legacy/Referral/invalid/govEntityTypeStateOfCalifornia.json"), Referral.class);
+    Response response =
+            resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+                    .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("govtEntityType County is not valid"),
+            is(greaterThanOrEqualTo(0)));
   }
 
   /*
@@ -2752,20 +2761,57 @@ public class ReferralTest {
     Short limitedAccessGovtAgencyType = 123;
     String limitedAccessDate = "2019-10-20";
     String limitedAccessDesc = "Some description";
-    boolean filedCrossReport = true;
 
 
     Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
         currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
-        drmsInvestigationDoc, filedCrossReport, familyAwarenessIndicator, govtEntityType,
-        referalName, dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType,
-        allegesAbuseOccurredAtAddressId, firstResponseDeterminedByStaffPersonId, longTextId,
-        countyCode, approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode,
-        limitedAccessDesc, limitedAccessDate, limitedAccessGovtAgencyType);
+        drmsInvestigationDoc, familyAwarenessIndicator, govtEntityType, referalName,
+        dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
+        firstResponseDeterminedByStaffPersonId, longTextId, countyCode,
+        approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode, limitedAccessDesc,
+        limitedAccessDate, limitedAccessGovtAgencyType);
     assertEquals("Expected zippyCreatedIndicator field to be initialized as  True", Boolean.TRUE,
         referral.getZippyCreatedIndicator());
   }
 
+  /**
+   * DocTool rule R - 02535
+   */
+  @Test
+  public void testFiledCrossReportWithLawEnforcementIndicatorIsFalse() {
+	   boolean anonReporter = true;
+	    Short communicationsMethodCode = 44;
+	    String currentLocationOfChildren = "currentLocationOfChildren";
+	    String drmsAllegationDescriptionDoc = "ABC1234569";
+	    String drmsErReferralDoc = "1234567ABC";
+	    String drmsInvestigationDoc = "ABD1234567";
+	    String referalName = "zippy referral";
+	    String dateStarted = "may 22";
+	    String timeStarted = "6 o'clock";
+	    Short referralResponseTypeCode = 4;
+	    String allegesAbuseOccurredAtAddressId = "ABC1234567";
+	    String firstResponseDeterminedByStaffPersonId = "0X5";
+	    String longTextId = "LongText";
+	    String countyCode = "sacramento";
+	    Short approvalCode = 4;
+	    String staffId = "098";
+	    String limitedAccessCode = "N";
+	    Short limitedAccessGovtAgencyType = 123;
+	    String limitedAccessDate = "2019-10-20";
+	    String limitedAccessDesc = "Some description";
+
+
+	    Referral referral = Referral.createWithDefaults(anonReporter, communicationsMethodCode,
+	        currentLocationOfChildren, drmsAllegationDescriptionDoc, drmsErReferralDoc,
+	        drmsInvestigationDoc, familyAwarenessIndicator, govtEntityType, referalName,
+	        dateStarted, timeStarted, referralResponseTypeCode, referredToResourceType, allegesAbuseOccurredAtAddressId,
+	        firstResponseDeterminedByStaffPersonId, longTextId, countyCode,
+	        approvalCode, staffId, longTextId, responsibleAgencyCode, limitedAccessCode, limitedAccessDesc,
+	        limitedAccessDate, limitedAccessGovtAgencyType);
+	    assertEquals("Expected filedCrossReportWithLawEnforcementIndicator field to be initialized as False", Boolean.FALSE,
+	            referral.getFiledSuspectedChildAbuseReporttoLawEnforcementIndicator());
+  }
+  
   /*
    * Utils
    */

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import javax.validation.Validation;
 
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
@@ -61,7 +62,7 @@ public class MockedScreeningToReferralServiceBuilder {
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
-
+  private ClientRelationshipDao clientRelationshipDao;
   private ReferralDao referralDao;
   private MessageBuilder messageBuilder;
 
@@ -193,7 +194,6 @@ public class MockedScreeningToReferralServiceBuilder {
 
   private void buildDefaultMockForReporterService() {
     reporterService = mock(ReporterService.class);
-    Reporter reporter = mock(Reporter.class);
     PostedReporter postedReporter = mock(PostedReporter.class);
     when(postedReporter.getReferralId()).thenReturn("5674567845");
     when(reporterService.create(any(Reporter.class))).thenReturn(postedReporter);
@@ -305,6 +305,16 @@ public class MockedScreeningToReferralServiceBuilder {
       referralDao = mock(ReferralDao.class);
     }
     return referralDao;
+  }
+
+  /**
+   * @return the clientRelationshipDao
+   */
+  public ClientRelationshipDao getClientRelationshipDao() {
+    if (clientRelationshipDao == null) {
+      clientRelationshipDao = mock(ClientRelationshipDao.class);
+    }
+    return clientRelationshipDao;
   }
 
   /**
@@ -447,12 +457,10 @@ public class MockedScreeningToReferralServiceBuilder {
    * @return the screeningToReferralService
    */
   public ScreeningToReferralService createScreeningToReferralService() {
-    return new ScreeningToReferralService(getReferralService(), getClientService(),
-        getAllegationService(), getCrossReportService(), getReferralClientService(),
-        getReporterService(), getAddressService(), getClientAddressService(),
-        getChildClientService(), getAssignmentService(), getParticipantService(),
+    return new ScreeningToReferralService(getReferralService(), getAllegationService(),
+        getCrossReportService(), getParticipantService(),
         Validation.buildDefaultValidatorFactory().getValidator(), getReferralDao(),
         getMessageBuilder(), getAllegationPerpetratorHistoryService(), getReminders(),
-        getGovernmentOrganizationCrossReportService());
+        getGovernmentOrganizationCrossReportService(), getClientRelationshipDao());
   }
 }

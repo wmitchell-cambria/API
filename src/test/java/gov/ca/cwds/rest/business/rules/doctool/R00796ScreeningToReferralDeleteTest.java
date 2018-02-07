@@ -6,16 +6,24 @@ import static org.mockito.Mockito.mock;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
+import org.apache.commons.lang3.NotImplementedException;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
-import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.LongTextDao;
@@ -24,12 +32,6 @@ import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
-import org.apache.commons.lang3.NotImplementedException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
@@ -51,6 +53,7 @@ import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -82,7 +85,9 @@ public class R00796ScreeningToReferralDeleteTest {
   private ClientAddressService clientAddressService;
   private ChildClientService childClientService;
   private LongTextService longTextService;
+  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
+  private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
   private RIChildClient riChildClient;
@@ -117,10 +122,10 @@ public class R00796ScreeningToReferralDeleteTest {
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
-  private CaseDao caseDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
+  private ClientRelationshipDao clientRelationshipDao;
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -137,9 +142,10 @@ public class R00796ScreeningToReferralDeleteTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
     riReferral = mock(RIReferral.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
     referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, drmsDocumentService,
-        addressService, longTextService, riReferral);
+        triggerTablesDao, staffpersonDao, assignmentService, validator,cmsDocumentService, drmsDocumentService,
+        drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
@@ -203,25 +209,22 @@ public class R00796ScreeningToReferralDeleteTest {
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     caseLoadDao = mock(CaseLoadDao.class);
-    caseDao = mock(CaseDao.class);
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     messageBuilder = mock(MessageBuilder.class);
 
     assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao, caseDao,
-        assignmentUnitDao,cwsOfficeDao, messageBuilder);
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
+        assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
     participantService = mock(ParticipantService.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
     reminders = mock(Reminders.class);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
-        allegationService, crossReportService, referralClientService, reporterService,
-        addressService, clientAddressService, childClientService, assignmentService,
-        participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-        governmentOrganizationCrossReportService);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**
@@ -242,20 +245,15 @@ public class R00796ScreeningToReferralDeleteTest {
    * Implemented Exception.
    * </blockquote>
    * </pre>
-   * 
-   * @throws Exception general error
    */
   @Test
-  public void deleteThrowsNotImplementedException() throws Exception {
+  public void deleteThrowsNotImplementedException() {
     thrown.expect(NotImplementedException.class);
     screeningToReferralService.delete("string");
   }
 
-  /**
-   * @throws Exception on general error
-   */
   @Test
-  public void deleteThrowsAssertionError() throws Exception {
+  public void deleteThrowsAssertionError() {
     thrown.expect(AssertionError.class);
     try {
       screeningToReferralService.delete(1L);

@@ -19,7 +19,6 @@ import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.LegacyDefaultValues;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
@@ -37,8 +36,6 @@ public class AddressService implements
   private UpperCaseTables upperCaseTables;
 
   private Validator validator;
-
-  LegacyDefaultValues legacyDefaultValues = new LegacyDefaultValues();
 
   /**
    * 
@@ -58,12 +55,10 @@ public class AddressService implements
 
   @Override
   public PostedAddress create(gov.ca.cwds.rest.api.domain.cms.Address request) {
-    gov.ca.cwds.rest.api.domain.cms.Address address = request;
-
     try {
       Address managed =
           new Address(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-              address, RequestExecutionContext.instance().getStaffId(),
+              request, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
 
       managed = addressDao.create(managed);
@@ -74,7 +69,7 @@ public class AddressService implements
       upperCaseTables.createAddressUc(managed);
       return new PostedAddress(managed, true);
     } catch (EntityExistsException e) {
-      LOGGER.info("Address already exists : {}", address);
+      LOGGER.info("Address already exists : {}", request);
       throw new ServiceException(e);
     }
   }
@@ -136,18 +131,17 @@ public class AddressService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Address update(String primaryKey,
       gov.ca.cwds.rest.api.domain.cms.Address request) {
-    gov.ca.cwds.rest.api.domain.cms.Address address = request;
 
     try {
       Address managed =
-          new Address(primaryKey, address, RequestExecutionContext.instance().getStaffId(),
+          new Address(primaryKey, request, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = addressDao.update(managed);
       ssaname3Dao.addressSsaname3("U", managed);
       upperCaseTables.updateAddressUc(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Address(managed, true);
     } catch (EntityNotFoundException e) {
-      LOGGER.info("Address not found : {}", address);
+      LOGGER.info("Address not found : {}", request);
       throw new ServiceException(e);
     }
   }

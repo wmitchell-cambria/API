@@ -82,6 +82,10 @@ public class CaseAssignment extends BaseAssignment {
     super(id, assignment, lastUpdatedBy);
   }
 
+  public CmsCase getCase() {
+    return cmsCase;
+  }
+
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);

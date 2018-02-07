@@ -41,7 +41,7 @@ public class EducationProviderContactTest implements PersistentTestTemplate {
         epc.getdepartmentOfEducationIndicator(), epc.getEmailAddress(), epc.getFaxNumber(),
         epc.getFirstName(), epc.getfKeyEducationProvider(), epc.getId(), epc.getLastName(),
         epc.getMiddleName(), epc.getNamePrefixDescription(), epc.getPhoneExtensionNumber(),
-        epc.getPhoneNumberAsDecimal(), epc.getPrimaryContactIndicator(),
+        Long.valueOf(epc.getPhoneNumber()), epc.getPrimaryContactIndicator(),
         epc.getSuffixTitleDescription(), epc.getTitleDescription());
 
     assertThat(pre.getdepartmentOfEducationIndicator(),
@@ -55,7 +55,7 @@ public class EducationProviderContactTest implements PersistentTestTemplate {
     assertThat(pre.getMiddleName(), is(equalTo(epc.getMiddleName())));
     assertThat(pre.getNamePrefixDescription(), is(equalTo(epc.getNamePrefixDescription())));
     assertThat(pre.getPhoneExtensionNumber(), is(equalTo(epc.getPhoneExtensionNumber())));
-    assertThat(pre.getPhoneNumberAsDecimal(), is(equalTo(epc.getPhoneNumberAsDecimal())));
+    assertThat(pre.getPhoneNumber(), is(equalTo(epc.getPhoneNumber())));
     assertThat(pre.getPrimaryContactIndicator(), is(equalTo(epc.getPrimaryContactIndicator())));
     assertThat(pre.getSuffixTitleDescription(), is(equalTo(epc.getSuffixTitleDescription())));
     assertThat(pre.getTitleDescription(), is(equalTo(epc.getTitleDescription())));

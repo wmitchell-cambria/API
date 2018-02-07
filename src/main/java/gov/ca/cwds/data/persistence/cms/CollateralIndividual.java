@@ -2,8 +2,6 @@ package gov.ca.cwds.data.persistence.cms;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -93,10 +91,10 @@ public class CollateralIndividual extends BaseCollateralIndividual {
    */
   public CollateralIndividual(String badgeNumber, Date birthDate, String cityName,
       String commentDescription, String emailAddress, String employerName,
-      String establishedForCode, BigDecimal faxNumber, String firstName,
+      String establishedForCode, Long faxNumber, String firstName,
       String foreignAddressIndicatorVariable, String genderCode, String id, String lastName,
       Short maritalStatus, String middleInitialName, String namePrefixDescription,
-      Integer primaryExtensionNumber, BigInteger primaryPhoneNo, String residedOutOfStateIndicator,
+      Integer primaryExtensionNumber, Long primaryPhoneNo, String residedOutOfStateIndicator,
       Short stateCode, String streetName, String streetNumber, String suffixTitleDescription,
       Integer zipNumber, Short zipSuffixNumber) {
     super();

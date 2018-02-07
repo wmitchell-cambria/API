@@ -1,11 +1,14 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 /**
  * CWDS API Team
@@ -13,6 +16,9 @@ import java.util.Date;
 @Entity
 @Table(name = "ASG_UNIT")
 public class AssignmentUnit extends CmsPersistentObject {
+
+  private static final long serialVersionUID = 1L;
+
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   private String id;
@@ -27,7 +33,7 @@ public class AssignmentUnit extends CmsPersistentObject {
 
   @Basic
   @Column(name = "PHONE_NO", nullable = false, precision = 0)
-  private int phoneNumber;
+  private Long phoneNumber;
 
   @Basic
   @Column(name = "TEL_EXT_NO", nullable = false)
@@ -49,18 +55,17 @@ public class AssignmentUnit extends CmsPersistentObject {
   @Column(name = "CNTY_SPFCD", nullable = false, length = 2)
   private String countySpecificCode;
 
-  public AssignmentUnit() {
-  }
+  public AssignmentUnit() {}
 
-  public AssignmentUnit(String id, String assignmentDeskUnitIndicator, Date endDate, int phoneNumber,
-                        int phoneExtensionNumber, Date startDate, String fkCwsOffice,
-                        String assignmentUnitName, String countySpecificCode) {
+  public AssignmentUnit(String id, String assignmentDeskUnitIndicator, Date endDate,
+      Long phoneNumber, int phoneExtensionNumber, Date startDate, String fkCwsOffice,
+      String assignmentUnitName, String countySpecificCode) {
     this.id = id;
     this.assignmentDeskUnitIndicator = assignmentDeskUnitIndicator;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.phoneNumber = phoneNumber;
     this.phoneExtensionNumber = phoneExtensionNumber;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.fkCwsOffice = fkCwsOffice;
     this.assignmentUnitName = assignmentUnitName;
     this.countySpecificCode = countySpecificCode;
@@ -83,18 +88,18 @@ public class AssignmentUnit extends CmsPersistentObject {
   }
 
   public Date getEndDate() {
-    return endDate;
+    return freshDate(endDate);
   }
 
   public void setEndDate(Date endDate) {
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
   }
 
-  public int getPhoneNumber() {
+  public Long getPhoneNumber() {
     return phoneNumber;
   }
 
-  public void setPhoneNumber(int phoneNumber) {
+  public void setPhoneNumber(Long phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
@@ -107,11 +112,11 @@ public class AssignmentUnit extends CmsPersistentObject {
   }
 
   public Date getStartDate() {
-    return startDate;
+    return freshDate(startDate);
   }
 
   public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
 
   public String getFkCwsOffice() {

@@ -96,7 +96,7 @@ public final class RelationshipTo implements Serializable {
   public RelationshipTo(ClientRelationship clientRelationship, Client client) {
     this.relatedFirstName = client.getFirstName();
     this.relatedLastName = client.getLastName();
-    this.relationshipToPerson = clientRelationship.getClientRelationshipType().toString();
+    this.relationshipToPerson = String.valueOf(clientRelationship.getClientRelationshipType());
     relationshipContext = " ";
     relatedPersonRelationship = " ";
     this.cmsRecordDescriptor = CmsRecordUtils.createLegacyDescriptor(clientRelationship.getId(),

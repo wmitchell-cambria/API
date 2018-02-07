@@ -11,7 +11,7 @@ public class AssignmentUnitEntityBuilder {
   private String id = "assignmentUnitId";
   private String assignmentDeskUnitIndicator = "assignmentDeskUnitIndicator";
   private Date endDate = new Date();
-  private int phoneNumber = 1234567890;
+  private Long phoneNumber = 1234567890L;
   private int phoneExtensionNumber = 1234;
   private Date startDate = new Date();
   private String fkCwsOffice = "fkCwsOffice";
@@ -50,11 +50,11 @@ public class AssignmentUnitEntityBuilder {
     return this;
   }
 
-  public int getPhoneNumber() {
+  public Long getPhoneNumber() {
     return phoneNumber;
   }
 
-  public AssignmentUnitEntityBuilder setPhoneNumber(int phoneNumber) {
+  public AssignmentUnitEntityBuilder setPhoneNumber(Long phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }

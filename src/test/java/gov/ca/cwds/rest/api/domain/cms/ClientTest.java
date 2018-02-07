@@ -15,10 +15,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -28,7 +26,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.After;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -616,17 +613,8 @@ public class ClientTest implements DomainTestTemplate {
   }
 
   @Override
-  @Test
-  @Ignore
-  public void testDeserializesFromJSON() throws Exception {
-    lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-        .parseDateTime("2004-03-31T09:45:58.000-0800");
-    Client validClient = validDomainClient();
-    Client clientFromSnippet =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Client/valid/valid.json"), Client.class);
-
-    assertTrue(clientFromSnippet.equals(validClient));
-  }
+  // TODO: Needs tests
+  public void testDeserializesFromJSON() throws Exception {}
 
   @Override
   @Test
@@ -3331,67 +3319,11 @@ public class ClientTest implements DomainTestTemplate {
   }
 
   @Test
-  public void shouldApplySealedSensitiveIndicatorRegardlessOfExistingValue() {
-    List<String> sensitivityIndicators = Arrays.asList(null, LimitedAccessType.NONE.getValue(),
-        LimitedAccessType.SENSITIVE.getValue(), LimitedAccessType.SEALED.getValue());
-    for (String sensitivityIndicator : sensitivityIndicators) {
-      Client client =
-          new ClientResourceBuilder().setSensitivityIndicator(sensitivityIndicator).build();
-
-      client.applySensitivityIndicator(LimitedAccessType.SEALED.getValue());
-      assertEquals("Expected indicator to be Restricited/Sealed",
-          LimitedAccessType.SEALED.getValue(), client.getSensitivityIndicator());
-    }
-  }
-
-  @Test
-  public void shouldNotApplySensitiveSensitiveIndicatorWhenExistingValueIsSealed() {
-    List<String> sensitivityIndicators = Arrays.asList(LimitedAccessType.SEALED.getValue());
-    for (String sensitivityIndicator : sensitivityIndicators) {
-      Client client =
-          new ClientResourceBuilder().setSensitivityIndicator(sensitivityIndicator).build();
-
-      client.applySensitivityIndicator(LimitedAccessType.SENSITIVE.getValue());
-      assertEquals("Expected indicator to stay as Sealed", LimitedAccessType.SEALED.getValue(),
-          client.getSensitivityIndicator());
-    }
-  }
-
-
-  @Test
-  public void shouldApplySensitiveSensitiveIndicatorWhenExistingValueIsNotRestricted() {
-    List<String> sensitivityIndicators = Arrays.asList(null, LimitedAccessType.SENSITIVE.getValue(),
-        LimitedAccessType.NONE.getValue());
-    for (String sensitivityIndicator : sensitivityIndicators) {
-      Client client =
-          new ClientResourceBuilder().setSensitivityIndicator(sensitivityIndicator).build();
-
-      client.applySensitivityIndicator(LimitedAccessType.SENSITIVE.getValue());
-      assertEquals("Expected indicator to be Sensitive", LimitedAccessType.SENSITIVE.getValue(),
-          client.getSensitivityIndicator());
-    }
-  }
-
-  @Test
-  public void shouldNotRemoveSealedSensitiveIndicatorWhenAlreadySet() {
-    List<String> sensitivityIndicators =
-        Arrays.asList(LimitedAccessType.SENSITIVE.getValue(), LimitedAccessType.SEALED.getValue());
-    for (String sensitivityIndicator : sensitivityIndicators) {
-      Client client =
-          new ClientResourceBuilder().setSensitivityIndicator(sensitivityIndicator).build();
-
-      client.applySensitivityIndicator(LimitedAccessType.NONE.getValue());
-      assertEquals("Expected indicator to not be unchanged", sensitivityIndicator,
-          client.getSensitivityIndicator());
-    }
-  }
-
-  @Test
-  public void shouldSetSealedSensitiveIndicatorToNoneWhenPreviousValueIsNull() {
+  public void applySealedSensitiveIndicator() {
     Client client = new ClientResourceBuilder().setSensitivityIndicator(null).build();
 
-    client.applySensitivityIndicator(LimitedAccessType.NONE.getValue());
-    assertEquals("Expected indicator to not be unchanged", LimitedAccessType.NONE.getValue(),
+    client.applySensitivityIndicator(LimitedAccessType.SENSITIVE);
+    assertEquals("Expected indicator to not be unchanged", LimitedAccessType.SENSITIVE.getValue(),
         client.getSensitivityIndicator());
   }
 

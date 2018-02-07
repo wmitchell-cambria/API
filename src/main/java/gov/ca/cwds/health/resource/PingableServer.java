@@ -38,16 +38,21 @@ public class PingableServer implements Pingable {
     Response response = invocationBuilder.get();
 
     boolean ok = false;
-    if (response.getStatus() == 200) {
+    if (acceptableResponse(response)) {
       ok = true;
       message = "Status is OK";
     } else {
 
+      int status = response.getStatus();
       LOGGER.warn("Unable to ping resource: url: {}", url);
-      LOGGER.warn("Received status of: {}", response.getStatus());
-      message = "Status:" + response.getStatus();
+      LOGGER.warn("Received status of: {}", status);
+      message = "Status:" + status;
     }
     return ok;
+  }
+
+  private boolean acceptableResponse(Response response){
+    return response.getStatus() >= 200 && response.getStatus() < 500;
   }
 
   @Override

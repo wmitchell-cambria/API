@@ -7,6 +7,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.util.Arrays;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -152,7 +154,8 @@ public class ReferralClientDaoIT implements DaoTestTemplate {
    */
   @Test
   public void testFindClientId() throws Exception {
-    ReferralClient[] referralClients = referralClientDao.findByClientId("AapJGAU04Z");
+    ReferralClient[] referralClients =
+        referralClientDao.findByClientIds(Arrays.asList("AapJGAU04Z"));
     assertThat(referralClients, notNullValue());
     assertThat(referralClients.length, greaterThanOrEqualTo(1));
   }

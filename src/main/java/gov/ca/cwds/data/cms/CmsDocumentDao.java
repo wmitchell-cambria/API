@@ -1,11 +1,5 @@
 package gov.ca.cwds.data.cms;
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.util.ByteArrayBuffer;
 import org.hibernate.SessionFactory;
@@ -277,6 +272,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
+  @SuppressFBWarnings("PATH_TRAVERSAL_IN") // There is no path traversal here
   private String decompressLZW(CmsDocument doc) {
     String retval = "";
 
@@ -292,20 +288,11 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     }
 
     try {
-      try (FileOutputStream fos = new FileOutputStream(src);){
-        for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
-          final byte[] bytes = seg.getDocBlob();
-          fos.write(bytes);
-        }
-        fos.flush();
-      } catch (IOException e) {
-        errorDecompressing(e);
-      }
+      blobSegmentsToFile(doc, src);
       // DECOMPRESS!
       final LZWEncoder lzw = new LZWEncoder();
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
-      retval =
-          DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
+      retval = DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
 
       final boolean srcDeletedSuccessfully = src.delete();
       if (!srcDeletedSuccessfully) {
@@ -319,8 +306,19 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     } catch (Exception e) {
       errorDecompressing(e);
     }
-
     return retval;
+  }
+
+  private void blobSegmentsToFile(CmsDocument doc, File src) {
+    try (FileOutputStream fos = new FileOutputStream(src);){
+      for (CmsDocumentBlobSegment seg : doc.getBlobSegments()) {
+        final byte[] bytes = seg.getDocBlob();
+        fos.write(bytes);
+      }
+      fos.flush();
+    } catch (IOException e) {
+      errorDecompressing(e);
+    }
   }
 
 
@@ -342,6 +340,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
    * @param doc LZW archive to decompress
    * @return base64-encoded String of decompressed document
    */
+  @SuppressFBWarnings("PATH_TRAVERSAL_IN") // There is no path traversal here
   private List<CmsDocumentBlobSegment> compressLZW(CmsDocument doc, String base64) {
 
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
@@ -394,7 +393,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       errorCompressing(e);
     }
 
@@ -406,33 +405,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     throw new ServiceException("ERROR DECOMPRESSING LZW! " + e.getMessage(), e);
   }
 
-  private void errorCompressing(Exception e) {
+  private void errorCompressing(Exception e)  {
     LOGGER.error("ERROR COMPRESSING LZW! {}", e.getMessage());
     throw new ServiceException("ERROR COMPRESSING LZW! " + e.getMessage(), e);
   }
-
-
-
-  public byte[] createWordBytes(String textBody) {
-
-    try (XWPFDocument doc = new XWPFDocument()) {
-
-      XWPFParagraph paragraph = doc.createParagraph();
-      XWPFRun run = paragraph.createRun();
-      run.setText(textBody);
-      run.setFontFamily("Courier");
-
-      try (ByteArrayOutputStream out = new ByteArrayOutputStream(textBody.length())) {
-        doc.write(out);
-        return out.toByteArray();
-      } catch (Exception e) {
-        throw new ServiceException("ERROR OUTPUTTING WORD DOCUMENT! " + e.getMessage(), e);
-      }
-    } catch (Exception e){
-      throw new ServiceException("ERROR CREATING WORD DOCUMENT! " + e.getMessage(), e);
-
-    }
-  }
-
 
 }

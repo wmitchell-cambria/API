@@ -65,7 +65,6 @@ public class ChildClientTest implements DomainTestTemplate {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private String lastUpdatedId = "0X5";
-  private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   private String victimClientId = "ABC1234567";
   private String adoptableCode = "N";
@@ -357,7 +356,7 @@ public class ChildClientTest implements DomainTestTemplate {
         "Expected disabilityDiagnosedCode field to have been initialized with default value", "D",
         client.getDisabilityDiagnosedCode());
     assertEquals("Expected drmsHePassportDocOld field to have been initialized with default value",
-        "U", client.getDrmsHePassportDocOld());
+        "", client.getDrmsHePassportDocOld());
     assertEquals(
         "Expected drmsHealthEducPassportDoc field to have been initialized with default value", "",
         client.getDrmsHealthEducPassportDoc());

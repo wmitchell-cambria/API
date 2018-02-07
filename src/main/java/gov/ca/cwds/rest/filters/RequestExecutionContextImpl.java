@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.filters;
 
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;

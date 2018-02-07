@@ -29,7 +29,7 @@ public class ClientCollateralService
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientCollateralService.class);
 
   private ClientCollateralDao clientCollateralDao;
-  //TODO: Make RI check explicit. Used to implicitly check for referential Integrity.
+  //Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIClientCollateral ri;
 
   /**

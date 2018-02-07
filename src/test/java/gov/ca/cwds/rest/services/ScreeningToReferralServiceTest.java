@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -23,6 +24,7 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -42,6 +44,7 @@ import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.LongTextDao;
@@ -57,6 +60,7 @@ import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
 import gov.ca.cwds.fixture.AllegationResourceBuilder;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.ClientRelationshipEntityBuilder;
 import gov.ca.cwds.fixture.CmsCrossReportResourceBuilder;
 import gov.ca.cwds.fixture.CrossReportResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
@@ -169,6 +173,7 @@ public class ScreeningToReferralServiceTest {
   private DrmsDocumentService drmsDocumentService;
   private AssignmentDao assignmentDao;
   private SsaName3Dao ssaName3Dao;
+  private ClientRelationshipDao clientRelationshipDao;
   private Reminders reminders;
   private UpperCaseTables upperCaseTables;
   private Validator validator;
@@ -210,6 +215,8 @@ public class ScreeningToReferralServiceTest {
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     reminders = mock(Reminders.class);
+
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
 
     lastUpdateDate = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         .parseDateTime("2010-03-14T13:33:12.456-0700");
@@ -289,12 +296,10 @@ public class ScreeningToReferralServiceTest {
     messageBuilder = new MessageBuilder();
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-    screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
-        allegationService, crossReportService, referralClientService, reporterService,
-        addressService, clientAddressService, childClientService, assignmentService,
-        participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        messageBuilder, allegationPerpetratorHistoryService, reminders,
-        governmentOrganizationCrossReportService);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, messageBuilder,
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
 
   }
 
@@ -382,8 +387,7 @@ public class ScreeningToReferralServiceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void testScreeningToReferralMultipleCrossReportsSuccess() throws Exception {
-    Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports =
-        new HashSet<gov.ca.cwds.rest.api.domain.CrossReport>();
+    Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports = new HashSet<>();
     gov.ca.cwds.rest.api.domain.CrossReport sheriffCrossReport = new CrossReportResourceBuilder()
         .setCountyId("1101").setInformDate("2017-03-15").createCrossReport();
     gov.ca.cwds.rest.api.domain.CrossReport daCrossReport = new CrossReportResourceBuilder()
@@ -746,8 +750,7 @@ public class ScreeningToReferralServiceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveSuccessfullyWhenReferraHasMultipleAllegations() throws Exception {
-    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
-        new HashSet<gov.ca.cwds.rest.api.domain.Allegation>();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations = new HashSet<>();
     gov.ca.cwds.rest.api.domain.Allegation allegation1 =
         new AllegationResourceBuilder().createAllegation();
     gov.ca.cwds.rest.api.domain.Allegation allegation2 =
@@ -776,8 +779,7 @@ public class ScreeningToReferralServiceTest {
   public void shouldFailSavingWhenAllegationDoesNotHaveMatchingVictim() throws Exception {
     int nonExistentVictimId = -999999999;
 
-    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
-        new HashSet<gov.ca.cwds.rest.api.domain.Allegation>();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations = new HashSet<>();
     gov.ca.cwds.rest.api.domain.Allegation allegation =
         new AllegationResourceBuilder().setVictimPersonId(nonExistentVictimId).createAllegation();
     allegations.addAll(Arrays.asList(allegation));
@@ -811,8 +813,7 @@ public class ScreeningToReferralServiceTest {
       throws Exception {
     long nonExistentPerpId = -9999999;
 
-    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
-        new HashSet<gov.ca.cwds.rest.api.domain.Allegation>();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations = new HashSet<>();
     gov.ca.cwds.rest.api.domain.Allegation allegation = new AllegationResourceBuilder()
         .setPerpetratorPersonId(nonExistentPerpId).createAllegation();
     allegations.addAll(Arrays.asList(allegation));
@@ -936,6 +937,10 @@ public class ScreeningToReferralServiceTest {
     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
         ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
 
+    ClientRelationship clientRelationship = new ClientRelationshipEntityBuilder().build();
+    ClientRelationship[] relationships = {clientRelationship};
+    when(clientRelationshipDao.findByPrimaryClientId(anyString())).thenReturn(relationships);
+    when(clientRelationshipDao.findBySecondaryClientId(anyString())).thenReturn(relationships);
     Response response = screeningToReferralService.create(screeningToReferral);
 
     verify(allegationPerpetratorHistoryService).create(perpHistory.capture());
@@ -972,6 +977,10 @@ public class ScreeningToReferralServiceTest {
     ArgumentCaptor<AllegationPerpetratorHistory> perpHistory =
         ArgumentCaptor.forClass(AllegationPerpetratorHistory.class);
 
+    ClientRelationship clientRelationship = new ClientRelationshipEntityBuilder().build();
+    ClientRelationship[] relationships = {clientRelationship};
+    when(clientRelationshipDao.findByPrimaryClientId(anyString())).thenReturn(relationships);
+    when(clientRelationshipDao.findBySecondaryClientId(anyString())).thenReturn(relationships);
     Response response = screeningToReferralService.create(screeningToReferral);
 
     verify(allegationPerpetratorHistoryService).create(perpHistory.capture());
@@ -988,8 +997,7 @@ public class ScreeningToReferralServiceTest {
     gov.ca.cwds.rest.api.domain.Allegation allegation =
         new AllegationResourceBuilder().setLegacyId("1234567ABC").setVictimPersonId(1234)
             .setPerpetratorPersonId(0).createAllegation();
-    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
-        new HashSet<gov.ca.cwds.rest.api.domain.Allegation>();
+    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations = new HashSet<>();
     allegations.addAll(Arrays.asList(allegation));
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setAllegations(allegations).setParticipants(participants).createScreeningToReferral();
@@ -1095,7 +1103,7 @@ public class ScreeningToReferralServiceTest {
 
     gov.ca.cwds.rest.api.domain.Address perpAddress =
         new AddressResourceBuilder().setLegacyId(nonExistantPerpAddressId).createAddress();
-    Set perpAddresses = new HashSet<Object>();
+    Set perpAddresses = new HashSet<>();
     perpAddresses.add(perpAddress);
     Participant perp =
         new ParticipantResourceBuilder().setAddresses(perpAddresses).createPerpParticipant();
@@ -1114,10 +1122,10 @@ public class ScreeningToReferralServiceTest {
         any())).thenReturn(validReferralId);
 
     Address victimLegacyAddress = new Address().createWithDefaults(victimAddress);
-    Set victimLegacyAddresses = new HashSet<Object>();
+    Set victimLegacyAddresses = new HashSet<>();
     victimAddresses.add(victimLegacyAddress);
     Address perpLegacyAddress = new Address().createWithDefaults(perpAddress);
-    Set perpLegacyAddresses = new HashSet<Object>();
+    Set perpLegacyAddresses = new HashSet<>();
     perpAddresses.add(perpLegacyAddress);
     addressService = mock(AddressService.class);
     when(addressService.find(nonExistentVictimAddressId)).thenReturn(victimLegacyAddress);
@@ -1126,12 +1134,10 @@ public class ScreeningToReferralServiceTest {
     when(clientAddressService.findByAddressAndClient(eq(victimAddress), any())).thenReturn(null);
     when(clientAddressService.findByAddressAndClient(eq(perpAddress), any())).thenReturn(null);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, clientService,
-        allegationService, crossReportService, referralClientService, reporterService,
-        addressService, clientAddressService, childClientService, assignmentService,
-        participantService, Validation.buildDefaultValidatorFactory().getValidator(), referralDao,
-        new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-        governmentOrganizationCrossReportService);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
 
     mockParticipantService(screeningToReferral);
 
@@ -1172,7 +1178,7 @@ public class ScreeningToReferralServiceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveReferralWhenReporterIsANonReporter() throws Exception {
-    Set<String> roles = new HashSet<String>();
+    Set<String> roles = new HashSet<>();
     roles.add("Anonymous Reporter");
     Participant reporter =
         new ParticipantResourceBuilder().setRoles(roles).createReporterParticipant();

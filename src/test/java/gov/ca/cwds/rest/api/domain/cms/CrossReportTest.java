@@ -10,7 +10,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +27,7 @@ import org.assertj.core.util.Sets;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +78,7 @@ public class CrossReportTest {
   private String informTime = "16:41:49";
   private String recipientBadgeNumber = "d";
   private Integer recipientPhoneExtensionNumber = 2;
-  private BigDecimal recipientPhoneNumber = new BigDecimal(3);
+  private Long recipientPhoneNumber = 3L;
   private String informDate = "1973-11-22";
   private String recipientPositionTitleDesc = "e";
   private String referenceNumber = "f";
@@ -258,7 +258,7 @@ public class CrossReportTest {
         cmsCrossReport.getRecipientBadgeNumber());
     assertEquals("Expected  field to be initialized with default values", new Integer(0),
         cmsCrossReport.getRecipientPhoneExtensionNumber());
-    assertEquals("Expected  field to be initialized with default values", new BigDecimal(0),
+    assertEquals("Expected  field to be initialized with default values", new Long(0),
         cmsCrossReport.getRecipientPhoneNumber());
     assertEquals("Expected  field to be initialized with default values", "",
         cmsCrossReport.getRecipientPositionTitleDesc());
@@ -652,35 +652,6 @@ public class CrossReportTest {
     assertThat(response.getStatus(), is(equalTo(422)));
     assertThat(
         response.readEntity(String.class).indexOf("recipientPhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /*
-   * recipientPhoneNumber Tests
-   */
-  @Test
-  public void failsWhenRecipientPhoneNumberMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientPhoneNumberMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientPhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenRecipientPhoneNumberNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientPhoneNumberNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientPhoneNumber may not be null"),
         is(greaterThanOrEqualTo(0)));
   }
 
@@ -1401,7 +1372,7 @@ public class CrossReportTest {
     Short validCrossReportMethod = 2095;
     gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport =
         new gov.ca.cwds.rest.api.domain.cms.CrossReport("thirdId", validCrossReportMethod,
-            Boolean.FALSE, Boolean.FALSE, "16:41:49", "ABC123", 123, new BigDecimal(1234567),
+            Boolean.FALSE, Boolean.FALSE, "16:41:49", "ABC123", 123, 1234567L,
             "2000-01-01", "recipientPositionTitleDesc", "ABC123", "ABC1234567", "ABC1234567", "ABC",
             "description", "recipientName", "outStateLawEnforcementAddr", "AA", Boolean.FALSE,
             Boolean.FALSE, Boolean.FALSE);
@@ -1419,7 +1390,7 @@ public class CrossReportTest {
     Short invalidCrossReportMethod = 9999;
     gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport =
         new gov.ca.cwds.rest.api.domain.cms.CrossReport("thirdId", invalidCrossReportMethod,
-            Boolean.FALSE, Boolean.FALSE, "16:41:49", "ABC123", 123, new BigDecimal(1234567),
+            Boolean.FALSE, Boolean.FALSE, "16:41:49", "ABC123", 123, 1234567L,
             "2000-01-01", "recipientPositionTitleDesc", "ABC123", "ABC1234567", "ABC1234567", "ABC",
             "description", "recipientName", "outStateLawEnforcementAddr", "AA", Boolean.FALSE,
             Boolean.FALSE, Boolean.FALSE);

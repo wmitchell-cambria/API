@@ -26,7 +26,7 @@ public class StateIdDao extends CrudsDaoImpl<StateId> {
   @SuppressWarnings("unchecked")
   public List<StateId> findAllByClientId(String clientId) {
     Query query = namedQuery(getEntityClass().getName() + ".findByClientId");
-    query.setParameter(clientId, clientId);
+    query.setParameter("clientId", clientId);
     return list(query);
   }
 

@@ -23,7 +23,7 @@ public class DB2DatabaseTest {
 
   @Before
   public void setup() {
-    String sql = "values 1";
+    String sql = "select 1 from sysibm.sysdummy1";
     List results = new ArrayList();
     results.add("a result");
 

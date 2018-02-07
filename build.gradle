@@ -44,10 +44,16 @@ version = apiVersion
 mainClassName = mainclass
 
 repositories {
+    mavenLocal()
+    maven {
+        url "http://sonar.dev.cwds.io:8081/artifactory/repo"}
     mavenCentral()
     maven {
         url "http://sonar.dev.cwds.io:8081/artifactory/repo"
         // url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        url "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
     }
     maven {
         url "https://artifacts.elastic.co/maven"
@@ -57,6 +63,7 @@ repositories {
 shadowJar {
   classifier = 'dist'
   baseName = 'api'
+  zip64 = true
   mergeServiceFiles()	
   manifest {
     attributes 'Main-Class': mainclass
@@ -137,6 +144,8 @@ dependencies {
 	compile group: "org.glassfish.web", name: "javax.el", version: "2.2.4"
 	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
 	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+	compile group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.17'
+	compile group: 'org.apache.poi', name: 'poi', version: '3.17'
 
     // ES 5.x:
     compile group: 'org.elasticsearch', name: 'elasticsearch', version: elasticsearchVersion
@@ -145,7 +154,7 @@ dependencies {
 
 	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 	// Exclude transitive dependencies.
-	compile ('gov.ca.cwds.api:api-core:3.6.519') {
+    compile ('gov.ca.cwds.api:api-core:0.5.4_208-RC') {
 	    exclude group: 'org.glassfish.jersey.core'
 	}
 
@@ -284,27 +293,44 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
     tagVersion = version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
 }
 
+task createIntegrationTestDockerImage (type:Exec, dependsOn: shadowJar) {
+    commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
+}
+
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
-  commandLine 'docker',  'build',  '-t',  'cwds/api', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api', '-f', 'Dockerfile', '.'
+}
+
+task tagIntegrationTestDockerImage(type:Exec, dependsOn: createIntegrationTestDockerImage) {
+    commandLine 'docker',  'tag',  'cwds/api-integration-test',  "cwds/api-integration-test:$dockerTag"
 }
 
 task tagDockerImage(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'tag',  'cwds/api',  "cwds/api:$dockerTag"
 }
 
+task pushIntegrationTestDockerLatest(type:Exec, dependsOn: createIntegrationTestDockerImage) {
+    commandLine 'docker',  'push',  'cwds/api-integration-test:latest'
+}
+
 task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'push',  'cwds/api:latest'
+}
+
+task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagIntegrationTestDockerImage) {
+    commandLine 'docker',  'push',  "cwds/api-integration-test:$dockerTag"
 }
 
 task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
   commandLine 'docker',  'push',  "cwds/api:$dockerTag"
 }
 
-task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
+task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest, pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest]) {
    doLast { 
 	 println 'Published'
    }
 }
+
 //==================================================================================================
 // Custom Groovy classes for Licence Reports.
 // Move to own classes outside of build.
@@ -424,6 +450,7 @@ This report was generated at ${new Date()}.
                 "\n\n================================================================================\n\n"
     }
 }
+
 
 import com.github.jk1.license.LicenseReportPlugin.LicenseReportExtension
 class CWDSHtmlReportRenderer implements ReportRenderer {

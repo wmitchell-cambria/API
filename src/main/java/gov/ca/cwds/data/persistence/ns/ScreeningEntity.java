@@ -33,10 +33,8 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  */
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByReferralId",
     query = "FROM ScreeningEntity WHERE referralId = :referralId")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findHoiScreeningsByScreeningId",
-    query = "SELECT s FROM ScreeningEntity s JOIN s.participants p "
-        + "WHERE s.id <> :screeningId AND p.legacyId IN ("
-        + "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds",
+    query = "SELECT s FROM ScreeningEntity s JOIN s.participants p WHERE p.legacyId IN (:clientIds)")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "screenings")
@@ -116,7 +114,7 @@ public class ScreeningEntity implements PersistentObject {
   private Date restrictionsDate;
 
   @Column(name = "indexable")
-  private boolean indexable;
+  private Boolean indexable;
 
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<Allegation> allegations = new HashSet<>();
@@ -350,7 +348,7 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * @return the indexable
    */
-  public boolean isIndexable() {
+  public Boolean isIndexable() {
     return indexable;
   }
 

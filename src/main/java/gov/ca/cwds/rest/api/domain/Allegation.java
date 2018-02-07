@@ -82,6 +82,10 @@ public class Allegation extends ReportingDomain implements Request, Response {
     this.county = county;
   }
 
+  public void setNonProtectingParent(String nonProtectingParent) {
+    this.nonProtectingParent = nonProtectingParent;
+  }
+
   /**
    * @return legacy source table
    */

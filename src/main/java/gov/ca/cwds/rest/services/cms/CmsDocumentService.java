@@ -7,6 +7,11 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+import javax.xml.bind.DatatypeConverter;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -22,9 +27,6 @@ import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
-import javax.persistence.EntityExistsException;
-import javax.xml.bind.DatatypeConverter;
-
 /**
  * Business layer object to work on {@link CmsDocument}.
  * 
@@ -33,6 +35,7 @@ import javax.xml.bind.DatatypeConverter;
 public class CmsDocumentService implements TypedCrudsService<String, CmsDocument, CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentService.class);
+  private static final String PRIMARY_KEY = "primaryKey={}";
 
   private CmsDocumentDao dao;
 
@@ -53,7 +56,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument find(String primaryKey) {
-    LOGGER.debug("primaryKey={}", primaryKey);
+    LOGGER.debug(PRIMARY_KEY, primaryKey);
     CmsDocument retval = null;
     String base64Doc;
 
@@ -82,7 +85,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument create(CmsDocument request) {
-    gov.ca.cwds.data.persistence.cms.CmsDocument doc = new  gov.ca.cwds.data.persistence.cms.CmsDocument(request);
+    gov.ca.cwds.data.persistence.cms.CmsDocument doc =
+        new gov.ca.cwds.data.persistence.cms.CmsDocument(request);
     CmsDocument retval = null;
     String base64Doc = request.getBase64Blob();
     if (StringUtils.isNotBlank(request.getDocAuth())) {
@@ -94,6 +98,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     if (StringUtils.isNotBlank(request.getDocServ())) {
       doc.setDocServ(request.getDocServ().trim());
     }
+
+    //Force PKWare compression for new documents
+    doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
 
     final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(doc, request.getBase64Blob().trim());
     doc.setBlobSegments(new HashSet<>(blobs));
@@ -119,7 +126,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument update(String primaryKey, CmsDocument request) {
-    LOGGER.debug("primaryKey={}", primaryKey);
+    LOGGER.debug(PRIMARY_KEY, primaryKey);
     CmsDocument retval = null;
 
     gov.ca.cwds.data.persistence.cms.CmsDocument doc = dao.find(primaryKey);
@@ -136,6 +143,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       if (StringUtils.isNotBlank(request.getCompressionMethod())) {
         doc.setCompressionMethod(request.getCompressionMethod().trim());
       }
+
+      //Force PKWare compression for updated documents
+      doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
 
       final List<CmsDocumentBlobSegment> blobs =
           dao.compressDoc(doc, request.getBase64Blob().trim());
@@ -181,18 +191,19 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
+  @SuppressFBWarnings("SQL_INJECTION_JDBC") // There is no sql injection here
   private void insertBlobsJdbc(final Connection con, gov.ca.cwds.data.persistence.cms.CmsDocument doc,
     List<CmsDocumentBlobSegment> blobs)
     throws SQLException {
     try (
         final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
-        final Statement stmt = con.createStatement()) {
+        final Statement insStmt = con.createStatement()) {
 
       delStmt.setString(1, doc.getId());
       delStmt.executeUpdate();
 
       for (CmsDocumentBlobSegment blob : blobs) {
-        stmt.executeUpdate(blobToInsert(blob));
+        insStmt.executeUpdate(blobToInsert(blob));
       }
 
       con.commit(); // WARNING: deadlock without this.
@@ -202,6 +213,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
+  @SuppressFBWarnings("SQL_INJECTION_JDBC") // There is no sql injection here
   private void deleteBlobsJdbc(final Connection con, String docId)
       throws SQLException {
     try (
@@ -217,7 +229,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
   }
 
-  protected void deleteBlobs(String docId){
+  protected void deleteBlobs(String docId) {
     try (final Connection con = getConnection()) {
       deleteBlobsJdbc(con, docId);
     } catch (SQLException e) {
@@ -253,7 +265,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
    */
   @Override
   public CmsDocument delete(String primaryKey) {
-    LOGGER.debug("primaryKey={}", primaryKey);
+    LOGGER.debug(PRIMARY_KEY, primaryKey);
     CmsDocument retval = null;
 
     try {
