@@ -1,0 +1,157 @@
+applicationName: CWDS API
+version: ${APP_VERSION:-local}
+
+shiro:
+ iniConfigs: ["classpath:api-core-test-support-shiro.ini"]
+
+swagger:
+  templateName: swagger.mustache
+  assetsPath: /static
+  resourcePackage: gov.ca.cwds.rest.resources
+  title: CWDS API
+  description: RESTful API definitions for the CWS New System.
+  logo: images/CWDS-API-Logo-Horizontal.png
+  showSwagger: ${SHOW_SWAGGER:-true}
+  jsonUrl: ${SWAGGER_JSON_URL:-http://localhost:8080/swagger.json}
+  loginUrl: ${LOGIN_URL:-http://localhost:8090/perry/authn/login}
+  callbackUrl: ${SWAGGER_CALLBACK_URL:-http://localhost:8080/swagger}
+  tokenUrl: ${SWAGGER_TOKEN_URL:-http://localhost:8080/perry/authn/token}
+
+nsDataSourceFactory:
+  driverClass: org.h2.Driver
+  user: sa
+  password:
+  url: jdbc:h2:mem:intakens;INIT=create schema if not exists intakens\;set schema intakens
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  logValidationErrors: true
+  initialSize: ${DB_NS_CP_INITIAL_SIZE:-2}
+  minSize: ${DB_NS_CP_MIN_SIZE:-2}
+  maxSize: ${DB_NS_CP_MAX_SIZE:-8}
+  minIdleTime: 1 minute
+  properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.jdbc.time_zone: America/Los_Angeles
+      hibernate.id.new_generator_mappings: false
+      hibernate.format_sql: true
+      hibernate.default_schema: intakens
+      hibernate.use_sql_comments: false
+
+cmsDataSourceFactory:
+  autoCommitByDefault: false
+  driverClass: org.h2.Driver
+  user: sa
+  password:
+  url: jdbc:h2:mem:cwsint;INIT=create schema if not exists cwsint\;set schema cwsint
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  logValidationErrors: true
+  initialSize: ${DB_CMS_CP_INITIAL_SIZE:-2}
+  minSize: ${DB_CMS_CP_MIN_SIZE:-2}
+  maxSize: ${DB_CMS_CP_MAX_SIZE:-8}
+  minIdleTime: 1 minute
+  properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.jdbc.time_zone: America/Los_Angeles
+      hibernate.format_sql: true
+      hibernate.use_sql_comments: false
+      hibernate.default_schema: cwsint
+      hibernate.connection.autocommit: false
+
+rsDataSourceFactory:
+  autoCommitByDefault: false
+  driverClass: org.h2.Driver
+  user: sa
+  password:
+  url: jdbc:h2:mem:cwsrs1;INIT=create schema if not exists cwsrs1\;set schema cwsrs1
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  logValidationErrors: true
+  initialSize: ${DB_CWSRS_CP_INITIAL_SIZE:-2}
+  minSize: ${DB_CWSRS_CP_MIN_SIZE:-2}
+  maxSize: ${DB_CWSRS_CP_MAX_SIZE:-8}
+  minIdleTime: 1 minute
+  properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.jdbc.time_zone: America/Los_Angeles
+      hibernate.format_sql: true
+      hibernate.use_sql_comments: false
+      hibernate.default_schema: cwsrs1
+      hibernate.connection.autocommit: false
+
+elasticsearch:
+  # People index
+  peopleIndex:
+    elasticsearch.host: ${ES_HOST_PEOPLE:-127.0.0.1}
+    elasticsearch.port: ${ES_PORT_PEOPLE:-9200}
+    elasticsearch.cluster: ${ES_CLUSTER_PEOPLE:-taborda-dev-es}
+    elasticsearch.alias: ${ES_ALIAS_PEOPLE:-people}
+    elasticsearch.doctype: ${ES_DOCTYPE_PEOPLE:-person}
+    elasticsearch.xpack.user: ${XPACK_USER_PEOPLE:-}
+    elasticsearch.xpack.password: ${XPACK_PASSWORD_PEOPLE:-}
+
+  # Screenings index
+  screeningsIndex:
+    elasticsearch.host: ${ES_HOST_SCREENINGS:-127.0.0.1}
+    elasticsearch.port: ${ES_PORT_SCREENINGS:-9200}
+    elasticsearch.cluster: ${ES_CLUSTER_SCREENINGS:-taborda-dev-es}
+    elasticsearch.alias: ${ES_ALIAS_SCREENINGS:-screenings}
+    elasticsearch.doctype: ${ES_DOCTYPE:-screening}
+    elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-}
+    elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS:-}
+
+smartystreets:
+  clientId: ${SS_ID:-8721f357-6381-1001-4633-5157e84b68cb}
+  token: ${SS_TOKEN:-Q62NxpgzuBEUq3IalqVx}
+  maxCandidates: ${SS_MAX:-10}
+
+triggertables:
+  laCountySpecificCode: 19
+
+webSecurity:
+  httpResponseSecurityHeaders:
+    # Prevent MIMI sniffing
+    X-Content-Type-Options: nosniff
+
+    # Prevent click-jacking
+    X-Frame-Options: deny
+
+    # Prevent cross site scripting
+    X-XSS-Protection: 1; mode=block
+
+    # Prevent everything other than same origin
+    Content-Security-Policy: default-src 'self' 'unsafe-inline';
+
+server:
+  applicationConnectors:
+  - type: http
+    port: ${APP_STD_PORT:-8080}
+  adminConnectors:
+  - type: http
+    port: ${APP_ADMIN_PORT:-8081}
+
+  requestLog:
+    appenders:
+      - type: console
+
+logging:
+  level: ${LOGLEVEL:-WARN}
+  loggers:
+    "org.hibernate.SQL":
+      # Use DEBUG to see SQL logged
+      level: DEBUG
+    "org.hibernate.type.descriptor.sql":
+      # Use TRACE to see SQL parameters logged
+      level: INFO
+    "gov.ca.cwds.data.ApiHibernateInterceptor":
+      # Use DEBUG or TRACE to see entities logged
+      level: INFO
+    "io.dropwizard.server":
+      level: INFO
+    "io.dropwizard.jersey.DropwizardResourceConfig":
+      level: INFO
+    "AUDIT":
+      level: WARN
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+      logFormat: '[%X{REMOTE_ADDRESS}] [%date{ISO8601}] [%level] [%thread] [%X{UNIQUE_ID}] [%logger] [%X{USER_ID}] [%X{REQUEST_START_TIME}]: [%message]%n'

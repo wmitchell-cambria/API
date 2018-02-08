@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.security.annotations.Authorize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -274,7 +273,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     throw new NotImplementedException("handle request not implemented");
   }
 
-  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+//  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+  public String authorizeClient(String clientId) {
     return clientId;
   }
 
