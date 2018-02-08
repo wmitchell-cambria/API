@@ -363,9 +363,12 @@ public class ParticipantService implements CrudsService {
     if (ip.getAddresses() != null) {
       Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>(ip.getAddresses());
 
-      // use the first address node only
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-        reporterAddress = address;
+        if (address != null){
+          reporterAddress = address;
+          // use the first address node only
+          break;
+        }
       }
     }
 

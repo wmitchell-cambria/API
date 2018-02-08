@@ -212,7 +212,6 @@ public class ReferralService implements
   }
 
   private StaffPerson staffPersonValidate(String staffPersonId) {
-    StaffPerson staffperson;
     if (staffPersonId == null) {
       LOGGER.error("Staff Person Id was not found");
       throw new ServiceException("Staff Person Id was not found.");
