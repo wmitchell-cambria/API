@@ -84,18 +84,14 @@ public class CmsPKCompressor {
       throw new IOException("REQUIRED: file names cannot be null");
     }
 
-    final FileInputStream fis = new FileInputStream(createFile(inputFileName));
-    final InputStream iis = new InflateInputStream(fis, true);
-    final FileOutputStream fos = new FileOutputStream(createFile(outputFileName));
-
-    try {
+    try (
+      final FileInputStream fis = new FileInputStream(createFile(inputFileName));
+      final InputStream iis = new InflateInputStream(fis, true);
+      final FileOutputStream fos = new FileOutputStream(createFile(outputFileName));
+    ){
       IOUtils.copy(iis, fos);
     } catch (Exception e){
       throw new RuntimeException("Error copying file", e);
-    }
-    finally {
-      fis.close();
-      fos.close();
     }
   }
 
@@ -194,17 +190,14 @@ public class CmsPKCompressor {
       throw new IOException("REQUIRED: file names cannot be null");
     }
 
-    final FileInputStream fis = new FileInputStream(createFile(inputFileName));
-    final OutputStream fos = new DeflateOutputStream(
-        new FileOutputStream(createFile(outputFileName)), DEFAULT_COMPRESSION_LEVEL, true);
-
-    try{
+    try(
+       final FileInputStream fis = new FileInputStream(createFile(inputFileName));
+       final OutputStream fos = new DeflateOutputStream(
+         new FileOutputStream(createFile(outputFileName)), DEFAULT_COMPRESSION_LEVEL, true);
+       ){
       IOUtils.copy(fis, fos);
     }catch(RuntimeException e){
       throw new RuntimeException("Unable to copy file", e);
-    }finally{
-      fis.close();
-      fos.close();
     }
   }
 
