@@ -83,7 +83,7 @@ public class StaffPersonIdRetriever {
 
   private static PerryUserIdentity getCurrentPrincipal(Object currentPrincipal) {
     PerryUserIdentity perryUserIdentity = null;
-    if ( currentPrincipal.getClass().isAssignableFrom(PerryAccount.class)) {
+    if ( currentPrincipal != null && PerryAccount.class.isAssignableFrom(currentPrincipal.getClass())) {
       try {
         ObjectMapper objectMapper = ObjectMapperUtils.createObjectMapper();
         String valueAsString = objectMapper.writeValueAsString(currentPrincipal);
