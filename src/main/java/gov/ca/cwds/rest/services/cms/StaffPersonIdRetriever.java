@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
+import gov.ca.cwds.security.realm.PerryAccount;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +61,7 @@ public class StaffPersonIdRetriever {
       int principalCount = principals.size();
       Object currentPrincipal = principalCount > 1 ? principals.get(1) : null;
 
-      perryUserIdentity = getCurrentprincipal(perryUserIdentity, currentPrincipal);
+      perryUserIdentity = getCurrentPrincipal(currentPrincipal);
     } else {
       LOGGER.info("======= current user has no principals for {}", currentUser);
 
@@ -79,22 +81,27 @@ public class StaffPersonIdRetriever {
     return perryUserIdentity;
   }
 
-  private static PerryUserIdentity getCurrentprincipal(PerryUserIdentity perryUserIdentity,
-      Object currentPrincipal) {
-    if ( currentPrincipal instanceof PerryUserIdentity) {
-      PerryUserIdentity currentUserInfo = (PerryUserIdentity) currentPrincipal;
-      String staffPersonId = currentUserInfo.getStaffId();
+  private static PerryUserIdentity getCurrentPrincipal(Object currentPrincipal) {
+    PerryUserIdentity perryUserIdentity = null;
+    if ( currentPrincipal.getClass().isAssignableFrom(PerryAccount.class)) {
+      try {
+        ObjectMapper objectMapper = ObjectMapperUtils.createObjectMapper();
+        String valueAsString = objectMapper.writeValueAsString(currentPrincipal);
+        PerryUserIdentity currentUserInfo = objectMapper.readValue(valueAsString, PerryUserIdentity.class);
+        String staffPersonId = currentUserInfo.getStaffId();
 
-      if (StringUtils.isBlank(staffPersonId)) {
-        handleMissingStaffId(currentUserInfo);
-      } else {
-        perryUserIdentity = currentUserInfo;
-        LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
+        if (StringUtils.isBlank(staffPersonId)) {
+          handleMissingStaffId(currentUserInfo);
+        } else {
+          perryUserIdentity = currentUserInfo;
+          LOGGER.info("======= Perry Staff ID = {}", staffPersonId);
+        }
+      } catch (IOException e) {
+        LOGGER.error("======= Cannot convert principal to PerryUserIdentity", e);
       }
     } else {
       LOGGER.info("======= currentPrinciple is null or not a PerryUserIdentity object{}",
           currentPrincipal);
-
     }
     return perryUserIdentity;
   }
