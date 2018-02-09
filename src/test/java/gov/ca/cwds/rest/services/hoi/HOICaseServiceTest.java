@@ -1,17 +1,10 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CASE_HISTORY_OF_INVOLVEMENT;
-import static org.junit.Assert.assertEquals;
 
 
 import gov.ca.cwds.IntakeBaseTest;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,7 +38,8 @@ public class HOICaseServiceTest extends IntakeBaseTest {
     Response response = invocation.post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
 
     String value = IOUtils.toString((InputStream) response.getEntity(), "UTF-8");
-    assertEquals("[ ]", value);
+
+    assertEqualJsonArrays("[ ]", value);
   }
 
   /**
