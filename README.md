@@ -34,6 +34,18 @@ In order for the CWDS API successfully connect to the above databases the follow
 - DB_CMS_PASSWORD -- the CWDS CMS database password
 - DB_CMS_JDBC_URL -- the CWDS CMS database URL in Java Database Connectivity format
 - DB_CMS_SCHEMA -- the CWDS CMS database schema the tables belong to.
+- DB_CMS_CP_INITIAL_SIZE -- the CWDS CMS database connection pool initial size
+- DB_CMS_CP_MIN_SIZE -- the CWDS CMS database connection pool minimum size
+- DB_CMS_CP_MAX_SIZE -- the CWDS CMS database connection pool maximum size
+
+
+- DB_CWSRS_USER -- the CWDS RS database username
+- DB_CWSRS_PASSWORD -- the CWDS RS database password
+- DB_CWSRS_JDBC_URL -- the CWDS RS database URL in Java Database Connectivity format
+- DB_CWSRS_SCHEMA -- the CWDS RS database schema the tables belong to.
+- DB_CWSRS_CP_INITIAL_SIZE -- the CWDS RS database connection pool initial size
+- DB_CWSRS_CP_MIN_SIZE -- the CWDS RS database connection pool minimum size
+- DB_CWSRS_CP_MAX_SIZE -- the CWDS RS database connection pool maximum size
 
 The Docker env-file option provides a convenient method to supply these variables. These instructions assume an env file called .env located in the current directory. The repository contains a sample env file called env.sample.
 
