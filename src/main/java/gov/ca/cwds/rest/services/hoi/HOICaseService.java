@@ -104,7 +104,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientId = authorizeClient(clientId);
         allClientIds.addAll(findAllRelatedClientIds(clientId));
       } catch (AuthorizationException e) {
-        LOGGER.debug("Client ID doesn't pass authorization: " + clientId);
+        LOGGER.debug("Client ID doesn't pass authorization: {}", clientId);
       }
     }
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
@@ -126,6 +126,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         assignedSocialWorker, parents);
   }
 
+  @SuppressWarnings("fb-contrib:PSC_PRESIZE_COLLECTIONS")
   private List<String> findAllRelatedClientIds(String clientId) {
     List<String> clientIds = new ArrayList<>();
     clientIds.add(clientId);
@@ -137,7 +138,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         authorizeClient(secondaryClientId);
         clientIds.add(secondaryClientId);
       } catch (AuthorizationException e) {
-        LOGGER.debug("Secondary client ID doesn't pass authorization: " + secondaryClientId);
+        LOGGER.debug("Secondary client ID doesn't pass authorization: {}", secondaryClientId);
       }
     }
     ClientRelationship[] clientRelationshipBySecondaryClient =
@@ -147,7 +148,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       try {
         authorizeClient(secondaryClientRelatedId);
       } catch (AuthorizationException e) {
-        LOGGER.debug("Secondary client related ID doesn't pass authorization: " + secondaryClientRelatedId);
+        LOGGER.debug("Secondary client related ID doesn't pass authorization: {}", secondaryClientRelatedId);
       }
       clientIds.add(secondaryClientRelatedId);
     }
@@ -176,7 +177,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
           authorizeClient(clientId);
           parents.add(findPersonByClientId(clientId, type));
         } catch (AuthorizationException e) {
-          LOGGER.debug("Secondary client parent ID doesn't pass authorization: " + clientId);
+          LOGGER.debug("Secondary client parent ID doesn't pass authorization: {}", clientId);
         }
       }
     }
@@ -194,7 +195,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
           authorizeClient(clientId);
           parents.add(findPersonByClientId(clientId, type));
         } catch (AuthorizationException e) {
-          LOGGER.debug("Primary client parent ID doesn't pass authorization: " + clientId);
+          LOGGER.debug("Primary client parent ID doesn't pass authorization: ", clientId);
         }
       }
     }
