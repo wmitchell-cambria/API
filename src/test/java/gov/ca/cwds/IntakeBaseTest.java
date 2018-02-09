@@ -1,20 +1,15 @@
 package gov.ca.cwds;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.ApiApplication;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.test.support.BaseApiTest;
 import gov.ca.cwds.test.support.BaseDropwizardApplication;
 import gov.ca.cwds.test.support.DatabaseHelper;
-import io.dropwizard.jackson.Jackson;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * CWDS API Team
  */
 public class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
-  private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
   @ClassRule
   public static final BaseDropwizardApplication<ApiConfiguration> application =
@@ -55,18 +49,14 @@ public class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
   }
 
   public void assertEqualJsonArrays(String expectedJson, String actualJson) throws IOException {
-    LOGGER.warn("expectedJson=%s", expectedJson);
-    LOGGER.warn("actualJson=%s", actualJson);
-    ObjectMapper objectMapper = Jackson.newObjectMapper();
-    List expectedList = objectMapper.readValue(expectedJson, List.class);
-    List actualList = objectMapper.readValue(actualJson, List.class);
+    List expectedList = clientTestRule.getMapper().readValue(expectedJson, List.class);
+    List actualList = clientTestRule.getMapper().readValue(actualJson, List.class);
     assertThat(expectedList).isEqualTo(actualList);
   }
 
   public void assertEqualJson(String expectedJson, String actualJson) throws IOException {
-    ObjectMapper objectMapper = Jackson.newObjectMapper();
-    Map expectedMap = objectMapper.readValue(expectedJson, Map.class);
-    Map actualMap = objectMapper.readValue(actualJson, Map.class);
+    Map expectedMap = clientTestRule.getMapper().readValue(expectedJson, Map.class);
+    Map actualMap = clientTestRule.getMapper().readValue(actualJson, Map.class);
     assertThat(actualMap).isEqualTo(expectedMap);
   }
 }

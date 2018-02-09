@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
@@ -24,6 +25,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
  *
  */
 @SuppressWarnings("javadoc")
+@Ignore
 public class HOICaseServiceTest extends IntakeBaseTest {
 
   @Test
