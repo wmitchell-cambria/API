@@ -195,7 +195,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
           authorizeClient(clientId);
           parents.add(findPersonByClientId(clientId, type));
         } catch (AuthorizationException e) {
-          LOGGER.debug("Primary client parent ID doesn't pass authorization: ", clientId);
+          LOGGER.debug("Primary client parent ID doesn't pass authorization: {}", clientId);
         }
       }
     }
