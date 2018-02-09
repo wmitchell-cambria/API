@@ -1,10 +1,12 @@
 package gov.ca.cwds;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.ApiApplication;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.test.support.BaseApiTest;
 import gov.ca.cwds.test.support.BaseDropwizardApplication;
 import gov.ca.cwds.test.support.DatabaseHelper;
+import io.dropwizard.jackson.Jackson;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -50,14 +52,16 @@ public class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
   }
 
   public void assertEqualJsonArrays(String expectedJson, String actualJson) throws IOException {
-    List expectedList = clientTestRule.getMapper().readValue(expectedJson, List.class);
-    List actualList = clientTestRule.getMapper().readValue(actualJson, List.class);
+    ObjectMapper objectMapper = Jackson.newObjectMapper();
+    List expectedList = objectMapper.readValue(expectedJson, List.class);
+    List actualList = objectMapper.readValue(actualJson, List.class);
     assertThat(expectedList).isEqualTo(actualList);
   }
 
   public void assertEqualJson(String expectedJson, String actualJson) throws IOException {
-    Map expectedMap = clientTestRule.getMapper().readValue(expectedJson, Map.class);
-    Map actualMap = clientTestRule.getMapper().readValue(actualJson, Map.class);
+    ObjectMapper objectMapper = Jackson.newObjectMapper();
+    Map expectedMap = objectMapper.readValue(expectedJson, Map.class);
+    Map actualMap = objectMapper.readValue(actualJson, Map.class);
     assertThat(actualMap).isEqualTo(expectedMap);
   }
 }
