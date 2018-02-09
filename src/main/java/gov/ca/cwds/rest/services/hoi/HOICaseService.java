@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
