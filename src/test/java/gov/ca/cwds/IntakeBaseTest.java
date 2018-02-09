@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * CWDS API Team
  */
 public class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
+  private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
   @ClassRule
   public static final BaseDropwizardApplication<ApiConfiguration> application =
@@ -52,6 +55,8 @@ public class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
   }
 
   public void assertEqualJsonArrays(String expectedJson, String actualJson) throws IOException {
+    LOGGER.warn("expectedJson=%s", expectedJson);
+    LOGGER.warn("actualJson=%s", actualJson);
     ObjectMapper objectMapper = Jackson.newObjectMapper();
     List expectedList = objectMapper.readValue(expectedJson, List.class);
     List actualList = objectMapper.readValue(actualJson, List.class);
