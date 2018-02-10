@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * CWDS API Team
  */
-public class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
+public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
 
   @ClassRule
   public static final BaseDropwizardApplication<ApiConfiguration> application =
