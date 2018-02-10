@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
+import static gov.ca.cwds.fixture.ParticipantEntityBuilder.DEFAULT_PERSON_ID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -16,11 +17,11 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 public class HOIPersonTest {
 
   HOIPerson target;
-  private String id = "jhdgfkhaj";
+  private String id = DEFAULT_PERSON_ID;
   private String firstName = "Barney";
   private String lastName = "Dino";
   private LegacyDescriptor legacyDescriptor =
-      new LegacyDescriptor("jhdgfkhaj", "jhdgfkhaj-hohj-jkj", new DateTime(),
+      new LegacyDescriptor(id, "jhdgfkhaj-hohj-jkj", new DateTime(),
           LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
 
   @Before

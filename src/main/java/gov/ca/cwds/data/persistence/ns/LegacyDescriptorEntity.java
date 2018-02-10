@@ -60,6 +60,15 @@ public class LegacyDescriptorEntity implements PersistentObject {
     super();
   }
 
+  public LegacyDescriptorEntity(String legacyId, String legacyUiId, String legacyTableName,
+      String legacyTableDescription, String legacyLastUpdated) {
+    this.legacyId = legacyId;
+    this.legacyUiId = legacyUiId;
+    this.legacyTableName = legacyTableName;
+    this.legacyTableDescription = legacyTableDescription;
+    this.legacyLastUpdated = legacyLastUpdated;
+  }
+
   public Long getId() {
     return id;
   }
