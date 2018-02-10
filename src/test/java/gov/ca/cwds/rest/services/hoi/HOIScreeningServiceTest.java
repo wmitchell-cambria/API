@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.hoi;
 
 import static gov.ca.cwds.fixture.ParticipantEntityBuilder.DEFAULT_PERSON_ID;
 import static gov.ca.cwds.fixture.ParticipantEntityBuilder.DEFAULT_REPORTER_ID;
+import static gov.ca.cwds.fixture.ScreeningEntityBuilder.DEFAULT_ASSIGNEE_STAFF_ID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
@@ -12,12 +13,19 @@ import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.fixture.ParticipantEntityBuilder;
 import gov.ca.cwds.fixture.ScreeningEntityBuilder;
+import gov.ca.cwds.fixture.StaffPersonResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIPersonResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIReporterResourceBuilder;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
+import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
+import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
+import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
+import gov.ca.cwds.rest.resources.StaffPersonResource;
+import gov.ca.cwds.rest.util.CmsRecordUtils;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -25,6 +33,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,9 +50,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 /**
- *
  * @author CWDS API Team
- *
  */
 public class HOIScreeningServiceTest {
 
@@ -54,15 +61,20 @@ public class HOIScreeningServiceTest {
 
   @Before
   public void setUp() {
-    new TestingRequestExecutionContext("0X5");
+    new TestingRequestExecutionContext(DEFAULT_ASSIGNEE_STAFF_ID);
 
     ParticipantDao participantDao = mock(ParticipantDao.class);
     when(participantDao.findParticipantLegacyDescriptor(DEFAULT_PERSON_ID))
         .thenReturn(mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
     when(participantDao.findParticipantLegacyDescriptor(DEFAULT_REPORTER_ID))
         .thenReturn(mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
+    StaffPersonResource staffPersonResource = mock(StaffPersonResource.class);
+    StaffPerson mockStaffPerson = new StaffPersonResourceBuilder().build();
+    when(staffPersonResource.get(DEFAULT_ASSIGNEE_STAFF_ID))
+        .thenReturn(Response.ok(mockStaffPerson).build());
     HOIPersonFactory hoiPersonFactory = new HOIPersonFactory();
     hoiPersonFactory.participantDao = participantDao;
+    hoiPersonFactory.staffPersonResource = staffPersonResource;
 
     ScreeningDao screeningDao = mock(ScreeningDao.class);
     Set<String> clientIds = new HashSet<>();
@@ -99,6 +111,8 @@ public class HOIScreeningServiceTest {
       HOIScreening expectedScreening = expectedScreenings.next();
       assertThat(actualScreening.getAllPeople(), is(expectedScreening.getAllPeople()));
       assertThat(actualScreening.getReporter(), is(expectedScreening.getReporter()));
+      assertThat(actualScreening.getAssignedSocialWorker(),
+          is(expectedScreening.getAssignedSocialWorker()));
     }
   }
 
@@ -114,12 +128,17 @@ public class HOIScreeningServiceTest {
         .setFirstName("Alec").setLastName("Nite")
         .setLegacyDescriptor(reporter.getLegacyDescriptor()).createHOIPerson();
 
+    HOISocialWorker socialWorker = new HOISocialWorker(DEFAULT_ASSIGNEE_STAFF_ID, "b", "d",
+        expectedSocialWorkerLegacyDescriptor(DEFAULT_ASSIGNEE_STAFF_ID));
+
     Set<HOIScreening> screenings = new TreeSet<>(
         (s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
     screenings.add(new HOIScreeningBuilder().addHOIPerson(personReporter).setReporter(reporter)
-        .createHOIScreening());
+        .setSocialWorker(socialWorker).createHOIScreening());
     screenings.add(new HOIScreeningBuilder().setId("223").setStartDate("2017-09-25")
-        .setEndDate("2017-10-01").addHOIPerson(person1).createHOIScreening());
+        .setEndDate("2017-10-01").addHOIPerson(person1).setSocialWorker(socialWorker)
+        .createHOIScreening());
+
     return new HOIScreeningResponse(screenings);
   }
 
@@ -164,5 +183,14 @@ public class HOIScreeningServiceTest {
       default:
         return null;
     }
+  }
+
+  private LegacyDescriptor expectedSocialWorkerLegacyDescriptor(String staffId) {
+    CmsRecordDescriptor cmsRecordDescriptor = CmsRecordUtils
+        .createLegacyDescriptor(staffId, LegacyTable.STAFF_PERSON);
+
+    return new LegacyDescriptor(cmsRecordDescriptor.getId(),
+        cmsRecordDescriptor.getUiId(), null, cmsRecordDescriptor.getTableName(),
+        cmsRecordDescriptor.getTableDescription());
   }
 }
