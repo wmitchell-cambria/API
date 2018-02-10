@@ -43,6 +43,7 @@ project.ext {
     apiSecurityTestSupportVersion = '0.5.4_333-RC'
 
     h2Version = '1.4.194'
+    jsonassertVersion = '1.5.0'
 }
 
 def dockerTag = apiVersion + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
@@ -194,7 +195,8 @@ dependencies {
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-rs1-data-model', version: cwdsModelVersion
 
     testCompile 'org.mockito:mockito-core:2.0.54-beta'
- 	testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+    testCompile group: 'org.skyscreamer', name: 'jsonassert', version: jsonassertVersion
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
 	testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {
 		exclude group: 'javax.servlet', module: 'javax.servlet-api'
 		exclude group: 'junit', module: 'junit'
