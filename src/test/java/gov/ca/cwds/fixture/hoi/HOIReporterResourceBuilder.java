@@ -1,5 +1,7 @@
 package gov.ca.cwds.fixture.hoi;
 
+import static gov.ca.cwds.fixture.ParticipantEntityBuilder.DEFAULT_REPORTER_ID;
+
 import org.joda.time.DateTime;
 
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -8,12 +10,11 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 
 /**
- * 
  * @author CWDS API Team
  */
 public class HOIReporterResourceBuilder {
 
-  private String id = "reporterabc";
+  private String id = DEFAULT_REPORTER_ID;
   private String firstName = "Reporter1";
   private String lastName = "Dino";
   private LegacyDescriptor legacyDescriptor;
@@ -24,12 +25,10 @@ public class HOIReporterResourceBuilder {
     return this;
   }
 
-
   public HOIReporterResourceBuilder setFirstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
-
 
   public HOIReporterResourceBuilder setLastName(String lastName) {
     this.lastName = lastName;
@@ -46,14 +45,16 @@ public class HOIReporterResourceBuilder {
     return this;
   }
 
-
-  public HOIReporterResourceBuilder() {
-
-    legacyDescriptor = new LegacyDescriptor("reporterabc", "reporterabc-hohj-jkj", new DateTime(),
-        LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription());
-    role = Role.ANONYMOUS_REPORTER;
+  HOIReporterResourceBuilder() {
+    this(new DateTime());
   }
 
+  public HOIReporterResourceBuilder(DateTime legacyDescriptorlastUpdated) {
+    legacyDescriptor = new LegacyDescriptor(id, "reporterabc-hohj-jkj",
+        legacyDescriptorlastUpdated, LegacyTable.REPORTER.getName(),
+        LegacyTable.REPORTER.getDescription());
+    role = Role.ANONYMOUS_REPORTER;
+  }
 
   /**
    * @return the HOIReporter

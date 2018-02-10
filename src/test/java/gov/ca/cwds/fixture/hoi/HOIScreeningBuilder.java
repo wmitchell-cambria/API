@@ -2,7 +2,11 @@ package gov.ca.cwds.fixture.hoi;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
+import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
+import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author CWDS API Team
@@ -16,6 +20,8 @@ public class HOIScreeningBuilder {
   private String decisionDetail = "drug counseling";
   private Integer countyId = 1101;
   private String countyDescription = "Sacramento";
+  private Set<HOIPerson> allPeople = new HashSet<>();
+  private HOIReporter reporter;
 
   public HOIScreeningBuilder setId(String id) {
     this.id = id;
@@ -52,6 +58,16 @@ public class HOIScreeningBuilder {
     return this;
   }
 
+  public HOIScreeningBuilder addHOIPerson(HOIPerson person) {
+    this.allPeople.add(person);
+    return this;
+  }
+
+  public HOIScreeningBuilder setReporter(HOIReporter reporter) {
+    this.reporter = reporter;
+    return this;
+  }
+
   public HOIScreening createHOIScreening() {
     HOIScreening screening = new HOIScreening();
     screening.setId(id);
@@ -60,6 +76,8 @@ public class HOIScreeningBuilder {
     screening.setCounty(new SystemCodeDescriptor(countyId.shortValue(), countyDescription));
     screening.setDecision(decision);
     screening.setDecisionDetail(decisionDetail);
+    screening.setAllPeople(allPeople);
+    screening.setReporter(reporter);
     return screening;
   }
 }
