@@ -37,14 +37,13 @@ public final class HOIScreeningFactory {
     }
 
     if (screeningEntity.getParticipants() != null) {
-      for (ParticipantEntity persistedParticipantEntity : screeningEntity
-          .getParticipants()) {
-        HOIPerson participant = hoiPersonFactory.buildHOIPerson(persistedParticipantEntity);
+      for (ParticipantEntity participantEntity : screeningEntity.getParticipants()) {
+        HOIPerson participant = hoiPersonFactory.buildHOIPerson(participantEntity);
         result.getAllPeople().add(participant);
 
         if (result.getReporter() == null) {
           result.setReporter(hoiPersonFactory
-              .buidHOIReporter(persistedParticipantEntity, participant.getLegacyDescriptor()));
+              .buidHOIReporter(participantEntity, participant.getLegacyDescriptor()));
         }
       }
     }

@@ -4,6 +4,7 @@ import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import gov.ca.cwds.data.persistence.ns.Address;
@@ -25,7 +26,7 @@ public class ScreeningEntityBuilder {
   private Date endedAt;
   private String narrative = "screening narrative";
   private Address contactAddress;
-  private Set<ParticipantEntity> participants;
+  private Set<ParticipantEntity> participants = new HashSet<>();
 
   public ScreeningEntity build() {
     return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
@@ -99,4 +100,8 @@ public class ScreeningEntityBuilder {
     return this;
   }
 
+  public ScreeningEntityBuilder addParticipant(ParticipantEntity participant) {
+    this.participants.add(participant);
+    return this;
+  }
 }
