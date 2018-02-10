@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import com.ibm.db2.jcc.DB2Connection;
 
+@SuppressWarnings("squid:S2187")
 public class DB2PassUserTest {
 
   @SuppressWarnings("deprecation")

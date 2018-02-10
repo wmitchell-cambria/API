@@ -24,12 +24,7 @@ public class R06560CaseloadRequiredForFirstPrimaryAssignment implements RuleVali
 
   @Override
   public boolean isValid() {
-    if (ReferralAssignment.FOLDED_KEY_CODE.equals(assignment.getEstablishedForCode())
-        && "P".equals(assignment.getTypeOfAssignmentCode())) {
-      if (assignment.getFkCaseLoad() == null) {
-        return false;
-      }
-    }
-    return true;
+    return !(ReferralAssignment.FOLDED_KEY_CODE.equals(assignment.getEstablishedForCode()) && "P"
+        .equals(assignment.getTypeOfAssignmentCode()) && assignment.getFkCaseLoad() == null);
   }
 }

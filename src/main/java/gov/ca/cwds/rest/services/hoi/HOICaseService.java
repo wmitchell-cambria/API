@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.rest.api.domain.LimitedAccessType;
+import static gov.ca.cwds.rest.services.hoi.HOIParentService.createHOIRelatedPerson;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -211,29 +212,13 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     return createHOIRelatedPerson(client, relationship);
   }
 
-  private HOIRelatedPerson createHOIRelatedPerson(Client client,
-      SystemCodeDescriptor relationship) {
-    String clientId = client.getId();
-    LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
-            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
-            LegacyTable.CLIENT.getDescription());
-    HOIRelatedPerson person = new HOIRelatedPerson();
-    person.setId(clientId);
-    person.setFirstName(client.getFirstName());
-    person.setLastName(client.getLastName());
-    person.setRelationship(relationship);
-    person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
-    person.setLegacyDescriptor(legacyDescriptor);
-    return person;
-  }
-
   private boolean isRelationTypeParent(Short type) {
     boolean firstCondition = type <= 214 && type >= 187;
     boolean secondCondition = type <= 254 && type >= 245;
     boolean thirdCondition = type <= 294 && type >= 282;
-    boolean lastCondition = Stream.of(272, 273, 5620, 6360, 6361).anyMatch(i -> i == type.intValue());
-    return firstCondition || secondCondition || thirdCondition || lastCondition;
+    boolean rangesCondition = firstCondition || secondCondition || thirdCondition;
+    return Stream.of(272, 273, 5620, 6360, 6361).anyMatch(i -> i == type.intValue())
+        || rangesCondition;
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
@@ -275,7 +260,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     throw new NotImplementedException("handle request not implemented");
   }
 
-//  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
   public String authorizeClient(String clientId) {
     return clientId;
   }

@@ -45,10 +45,10 @@ public class HOIParentService {
   }
 
   protected List<HOIRelatedPerson> getParents(String victimClientId) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
     ClientRelationship[] clientRelationshipByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(victimClientId);
-    parents.addAll(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
+    List<HOIRelatedPerson> parents = new ArrayList<>(
+        findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
     ClientRelationship[] clientRelationshipBySecondaryClient =
         clientRelationshipDao.findBySecondaryClientId(victimClientId);
     parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
@@ -88,7 +88,7 @@ public class HOIParentService {
     return createHOIRelatedPerson(client, relationship);
   }
 
-  private HOIRelatedPerson createHOIRelatedPerson(Client client,
+  static HOIRelatedPerson createHOIRelatedPerson(Client client,
       SystemCodeDescriptor relationship) {
     String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =

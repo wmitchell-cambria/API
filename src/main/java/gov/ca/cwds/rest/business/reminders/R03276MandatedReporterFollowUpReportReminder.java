@@ -67,8 +67,9 @@ public class R03276MandatedReporterFollowUpReportReminder {
       Date referralReceiveDate = referral.getReceivedDate();
       Date referralClosureDate = referral.getClosureDate();
 
-      if (mandatedReporterIndicator && feedbackRequiredIndicator && feedbackDate == null
-          && referralReceiveDate != null && referralClosureDate == null) {
+      boolean datesCondition = feedbackDate == null && referralReceiveDate != null
+          && referralClosureDate == null;
+      if (mandatedReporterIndicator && feedbackRequiredIndicator && datesCondition) {
         DateTime reportDueDate = new DateTime(referralReceiveDate).plusDays(30);
         createTickle(referralId, reporterId, reportDueDate, referral.getScreenerNoteText());
       }
