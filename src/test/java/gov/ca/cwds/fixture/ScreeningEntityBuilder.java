@@ -11,6 +11,7 @@ import gov.ca.cwds.data.persistence.ns.Address;
 
 @SuppressWarnings("javadoc")
 public class ScreeningEntityBuilder {
+  public static String DEFAULT_ASSIGNEE_STAFF_ID = "0X5";
 
   private String id = null;
   private String reference = "screening reference";
@@ -26,12 +27,13 @@ public class ScreeningEntityBuilder {
   private Date endedAt;
   private String narrative = "screening narrative";
   private Address contactAddress;
+  private String assigneeStaffId = DEFAULT_ASSIGNEE_STAFF_ID;
   private Set<ParticipantEntity> participants = new HashSet<>();
 
   public ScreeningEntity build() {
     return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
         locationType, communicationMethod, name, responseTime, screeningDecision, screeningDecisionDetail,
-        narrative, contactAddress, participants);
+        narrative, contactAddress, assigneeStaffId, participants);
   }
 
   public ScreeningEntityBuilder setId(String id) {

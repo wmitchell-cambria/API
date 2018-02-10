@@ -158,11 +158,12 @@ public class ScreeningEntity implements PersistentObject {
    * @param narrative The narrative
    * @param contactAddress The contact address
    * @param participants The list of participants
+   * @param assigneeStaffId The staffId of assignee
    */
   public ScreeningEntity(String id, String reference, Date startedAt, Date endedAt, String incidentCounty, Date incidentDate,
       String locationType, String communicationMethod, String name, String responseTime,
       String screeningDecision, String screeningDecisionDetail, String narrative, Address contactAddress,
-      Set<ParticipantEntity> participants) {
+      String assigneeStaffId, Set<ParticipantEntity> participants) {
     super();
     this.id = id;
     this.reference = reference;
@@ -177,6 +178,7 @@ public class ScreeningEntity implements PersistentObject {
     this.screeningDecisionDetail = screeningDecisionDetail;
     this.narrative = narrative;
     this.safetyAlerts = new String[1];
+    this.assigneeStaffId = assigneeStaffId;
     this.participants = participants;
   }
 

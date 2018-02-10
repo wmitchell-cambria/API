@@ -5,6 +5,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public class HOIScreeningBuilder {
   private String countyDescription = "Sacramento";
   private Set<HOIPerson> allPeople = new HashSet<>();
   private HOIReporter reporter;
+  private HOISocialWorker socialWorker;
 
   public HOIScreeningBuilder setId(String id) {
     this.id = id;
@@ -68,6 +70,11 @@ public class HOIScreeningBuilder {
     return this;
   }
 
+  public HOIScreeningBuilder setSocialWorker(HOISocialWorker socialWorker) {
+    this.socialWorker = socialWorker;
+    return this;
+  }
+
   public HOIScreening createHOIScreening() {
     HOIScreening screening = new HOIScreening();
     screening.setId(id);
@@ -78,6 +85,7 @@ public class HOIScreeningBuilder {
     screening.setDecisionDetail(decisionDetail);
     screening.setAllPeople(allPeople);
     screening.setReporter(reporter);
+    screening.setAssignedSocialWorker(socialWorker);
     return screening;
   }
 }
