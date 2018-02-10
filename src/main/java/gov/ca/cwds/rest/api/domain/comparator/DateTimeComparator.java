@@ -50,20 +50,22 @@ public class DateTimeComparator implements DateTimeComparatorInterface {
    * @param savedDate - savedDate
    */
   public void logDateNotEqual(DateTime incomingDate, DateTime savedDate) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("Date comparison failed. incomingDate: ");
-    builder.append(incomingDate);
-    builder.append(' ');
-    builder.append(incomingDate.getZone());
-    builder.append(' ');
-    builder.append(incomingDate.getMillis());
-    builder.append(" savedDate: ");
-    builder.append(savedDate);
-    builder.append(' ');
-    builder.append(savedDate.getZone());
-    builder.append(' ');
-    builder.append(savedDate.getMillis());
-    LOGGER.warn(builder.toString());
+    if(LOGGER.isWarnEnabled()){
+      StringBuilder builder = new StringBuilder();
+      builder.append("Date comparison failed. incomingDate: ");
+      builder.append(incomingDate);
+      builder.append(' ');
+      builder.append(incomingDate.getZone());
+      builder.append(' ');
+      builder.append(incomingDate.getMillis());
+      builder.append(" savedDate: ");
+      builder.append(savedDate);
+      builder.append(' ');
+      builder.append(savedDate.getZone());
+      builder.append(' ');
+      builder.append(savedDate.getMillis());
+      LOGGER.warn(builder.toString());
+    }
   }
 
 }

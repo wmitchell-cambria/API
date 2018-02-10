@@ -70,17 +70,17 @@ public class DeliveredService
   }
 
   @Override
-  public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain delete(String arg0) {
+  public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain delete(String id) {
     throw new NotImplementedException("delete not implement");
   }
 
   @Override
-  public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain find(String arg0) {
+  public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain find(String id) {
     throw new NotImplementedException("find not implement");
   }
 
   @Override
-  public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain update(String arg0,
+  public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain update(String id,
       gov.ca.cwds.rest.api.contact.DeliveredServiceDomain arg1) {
     throw new NotImplementedException("update not implement");
   }

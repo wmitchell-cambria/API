@@ -195,6 +195,26 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
+          //legacy-data-access
+          gov.ca.cwds.data.legacy.cms.entity.Client.class,
+          gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
+          gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
+          gov.ca.cwds.data.legacy.cms.entity.LicensingVisit.class,
+          gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome.class,
+          gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome.class,
+          gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship.class,
+          gov.ca.cwds.data.legacy.cms.entity.OutOfHomePlacement.class,
+          gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementHome.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementHomeNotes.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile.class,
+          gov.ca.cwds.data.legacy.cms.entity.StaffPerson.class,
+          gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.County.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType.class,
+
           gov.ca.cwds.data.persistence.cms.Address.class, Allegation.class, ClientAddress.class,
           ClientCollateral.class, gov.ca.cwds.data.persistence.cms.Client.class,
           CmsDocReferralClient.class, CmsDocument.class, CmsDocumentBlobSegment.class,
@@ -246,6 +266,19 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
+  private final HibernateBundle<ApiConfiguration> rsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(ImmutableList.of(), new ApiSessionFactoryFactory()) {
+    @Override
+    public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+      return configuration.getRsDataSourceFactory();
+    }
+
+    @Override
+    public String name() {
+      return "rs";
+    }
+  };
+
   /**
    * Constructor takes the API configuration.
    *
@@ -254,6 +287,7 @@ public class DataAccessModule extends AbstractModule {
   public DataAccessModule(Bootstrap<ApiConfiguration> bootstrap) {
     bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
+    bootstrap.addBundle(rsHibernateBundle);
   }
 
   /**
@@ -369,6 +403,12 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
+  @CwsRsSessionFactory
+  SessionFactory rsSessionFactory() {
+    return rsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
   @CmsHibernateBundle
   HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
     return cmsHibernateBundle;
@@ -378,6 +418,12 @@ public class DataAccessModule extends AbstractModule {
   @NsHibernateBundle
   HibernateBundle<ApiConfiguration> nsHibernateBundle() {
     return nsHibernateBundle;
+  }
+
+  @Provides
+  @CwsRsHibernateBundle
+  HibernateBundle<ApiConfiguration> rsHibernateBundle() {
+    return rsHibernateBundle;
   }
 
   @Provides

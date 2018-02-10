@@ -2,8 +2,11 @@ package gov.ca.cwds.inject;
 
 import com.google.inject.AbstractModule;
 
+import gov.ca.cwds.authorizer.ClientAbstractReadAuthorizer;
 import gov.ca.cwds.rest.ApiApplication;
 import gov.ca.cwds.rest.ApiConfiguration;
+import gov.ca.cwds.rest.BaseApiApplication;
+import gov.ca.cwds.security.module.SecurityModule;
 import io.dropwizard.setup.Bootstrap;
 
 /**
@@ -35,11 +38,15 @@ public class ApplicationModule extends AbstractModule {
   @Override
   protected void configure() {
     install(new DataAccessModule(bootstrap));
+    install(new DataAccessServicesModule());
     install(new ServicesModule());
     install(new ResourcesModule());
     install(new FiltersModule());
     install(new AuditingModule());
     install(new HealthCheckModule());
+    install(new SecurityModule(BaseApiApplication::getInjector)
+        .addAuthorizer("client:read", ClientAbstractReadAuthorizer.class)
+    );
   }
 
 }

@@ -370,6 +370,23 @@ public class ParticipantServiceTest {
 
   @SuppressWarnings("javadoc")
   @Test
+  public void shouldSaveReporterIfAddressIsNull() throws Exception {
+
+    Participant reporter = new ParticipantResourceBuilder().createReporterParticipant();
+    reporter.setAddresses(null);
+    Set<Participant> participants =
+            new HashSet<>(Arrays.asList(reporter, defaultVictim));
+
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+            .setParticipants(participants).createScreeningToReferral();
+
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
+
+    assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
+  }
+
+  @SuppressWarnings("javadoc")
+  @Test
   public void testMultipleVictimSuccess() throws Exception {
     Participant victim1 =
         new ParticipantResourceBuilder().setFirstName("Sally").createVictimParticipant();

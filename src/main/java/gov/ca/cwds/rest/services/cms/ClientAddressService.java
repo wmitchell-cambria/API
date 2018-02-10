@@ -210,36 +210,42 @@ public class ClientAddressService implements
         addressId = updateExistingAddress(messageBuilder, addressId, address, domainAddress);
       }
 
-      /*
-       * CMS Client Address
-       */
-      if (addressId.isEmpty()) {
-        String message = " ADDRESS/IDENTIFIER is required for CLIENT_ADDRESS table ";
-        ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
-        continue;
-      }
-      if (clientId.isEmpty()) {
-        String message = " CLIENT/IDENTIFIER is required for CLIENT_ADDRESS ";
-        ServiceException se = new ServiceException(message);
-        messageBuilder.addMessageAndLog(message, se, LOGGER);
-        continue;
-      }
+      if (hasAddress(messageBuilder, addressId) && hasClient(clientId, messageBuilder) ){
+        Short addressType = address.getType() != null ? address.getType().shortValue()
+            : LegacyDefaultValues.DEFAULT_ADDRESS_TYPE;
+        gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress =
+            new gov.ca.cwds.rest.api.domain.cms.ClientAddress(addressType, "", "", "", addressId,
+                clientId, "", referralId);
 
-      Short addressType = address.getType() != null ? address.getType().shortValue()
-          : LegacyDefaultValues.DEFAULT_ADDRESS_TYPE;
-      gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress =
-          new gov.ca.cwds.rest.api.domain.cms.ClientAddress(addressType, "", "", "", addressId,
-              clientId, "", referralId);
-
-      messageBuilder.addDomainValidationError(validator.validate(clientAddress));
-      create(clientAddress);
-      messageBuilder.addDomainValidationError(validator.validate(clientAddress));
-      address.setLegacySourceTable(CLIENT_ADDRESS_TABLE_NAME);
-      address.setLegacyId(addressId);
+        messageBuilder.addDomainValidationError(validator.validate(clientAddress));
+        create(clientAddress);
+        messageBuilder.addDomainValidationError(validator.validate(clientAddress));
+        address.setLegacySourceTable(CLIENT_ADDRESS_TABLE_NAME);
+        address.setLegacyId(addressId);
+      }
     }
 
     return clientParticipant;
+  }
+
+  private boolean hasClient(String clientId, MessageBuilder messageBuilder) {
+    if (clientId.isEmpty()) {
+      String message = " CLIENT/IDENTIFIER is required for CLIENT_ADDRESS ";
+      ServiceException se = new ServiceException(message);
+      messageBuilder.addMessageAndLog(message, se, LOGGER);
+      return false;
+    }
+    return true;
+  }
+
+  private boolean hasAddress(MessageBuilder messageBuilder, String addressId) {
+    if (addressId.isEmpty()) {
+      String message = " ADDRESS/IDENTIFIER is required for CLIENT_ADDRESS table ";
+      ServiceException se = new ServiceException(message);
+      messageBuilder.addMessageAndLog(message, se, LOGGER);
+      return false;
+    }
+    return true;
   }
 
   private String updateExistingAddress(MessageBuilder messageBuilder, String addressId,

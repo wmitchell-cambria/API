@@ -187,7 +187,6 @@ public class ClientService implements
       upperCaseTables.updateClientUc(managed);
       externalInterfaceTables.createExtInterClient(managed, "C");
     } catch (EntityNotFoundException e) {
-      savedEntity = null;
       LOGGER.info("client not found : {}", client);
       throw new ServiceException(e);
     }

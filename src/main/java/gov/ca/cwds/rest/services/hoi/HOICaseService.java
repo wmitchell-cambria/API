@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,11 +98,15 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private List<HOICase> findAllCasesForAllClients(Set<String> clientIds) {
-    Set<String> allClientIds = new HashSet<>();
+    Set<String> allClientIds = new HashSet<>(clientIds);
     for (String clientId : clientIds) {
-      allClientIds.addAll(findAllRelatedClientIds(clientId));
+      try {
+        clientId = authorizeClient(clientId);
+        allClientIds.addAll(findAllRelatedClientIds(clientId));
+      } catch (AuthorizationException e) {
+        LOGGER.debug("Client ID doesn't pass authorization: {}", clientId);
+      }
     }
-    allClientIds.addAll(clientIds);
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
     List<HOICase> hoicases = new ArrayList<>(cmscases.length);
     for (CmsCase cmscase : cmscases) {
@@ -115,28 +121,118 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     SystemCodeDescriptor county = getCounty(cmscase);
     SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
     HOISocialWorker assignedSocialWorker = getAssignedSocialWorker(cmscase);
-    List<HOIRelatedPerson> parents =
-        new HOIParentService(clientDao, clientRelationshipDao).getParents(cmscase.getFkchldClt());
+    List<HOIRelatedPerson> parents = getParents(cmscase);
     return new HOICaseFactory().createHOICase(cmscase, county, serviceComponent, focusChild,
         assignedSocialWorker, parents);
   }
 
-  private List<String> findAllRelatedClientIds(String clientid) {
-
+  @SuppressWarnings("fb-contrib:PSC_PRESIZE_COLLECTIONS")
+  private List<String> findAllRelatedClientIds(String clientId) {
+    List<String> clientIds = new ArrayList<>();
+    clientIds.add(clientId);
     ClientRelationship[] clientRelationshipsByPrimaryClient =
-        clientRelationshipDao.findByPrimaryClientId(clientid);
-    ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(clientid);
-    List<String> clientIds = new ArrayList<>(
-        clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
-    clientIds.add(clientid);
+        clientRelationshipDao.findByPrimaryClientId(clientId);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
-      clientIds.add(relationship.getSecondaryClientId());
+      String secondaryClientId = relationship.getSecondaryClientId();
+      try {
+        authorizeClient(secondaryClientId);
+        clientIds.add(secondaryClientId);
+      } catch (AuthorizationException e) {
+        LOGGER.debug("Secondary client ID doesn't pass authorization: {}", secondaryClientId);
+      }
     }
+    ClientRelationship[] clientRelationshipBySecondaryClient =
+        clientRelationshipDao.findBySecondaryClientId(clientId);
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-      clientIds.add(relation.getPrimaryClientId());
+      String secondaryClientRelatedId = relation.getPrimaryClientId();
+      try {
+        authorizeClient(secondaryClientRelatedId);
+      } catch (AuthorizationException e) {
+        LOGGER.debug("Secondary client related ID doesn't pass authorization: {}", secondaryClientRelatedId);
+      }
+      clientIds.add(secondaryClientRelatedId);
     }
     return clientIds;
+  }
+
+  private List<HOIRelatedPerson> getParents(CmsCase cmscase) {
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    ClientRelationship[] clientRelationshipByPrimaryClient =
+        clientRelationshipDao.findByPrimaryClientId(cmscase.getFkchldClt());
+    parents.addAll(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
+    ClientRelationship[] clientRelationshipBySecondaryClient =
+        clientRelationshipDao.findBySecondaryClientId(cmscase.getFkchldClt());
+    parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
+    return parents;
+  }
+
+  private List<HOIRelatedPerson> findParentsByPrimaryRelationship(
+      ClientRelationship[] clientRelationship) {
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    for (ClientRelationship relation : clientRelationship) {
+      Short type = relation.getClientRelationshipType();
+      if (isRelationTypeParent(type)) {
+        String clientId = relation.getSecondaryClientId();
+        try {
+          authorizeClient(clientId);
+          parents.add(findPersonByClientId(clientId, type));
+        } catch (AuthorizationException e) {
+          LOGGER.debug("Secondary client parent ID doesn't pass authorization: {}", clientId);
+        }
+      }
+    }
+    return parents;
+  }
+
+  private List<HOIRelatedPerson> findParentsBySecondaryRelationship(
+      ClientRelationship[] clientRelationship) {
+    List<HOIRelatedPerson> parents = new ArrayList<>();
+    for (ClientRelationship relation : clientRelationship) {
+      Short type = relation.getClientRelationshipType();
+      if (isRelationTypeParent(type)) {
+        String clientId = relation.getPrimaryClientId();
+        try {
+          authorizeClient(clientId);
+          parents.add(findPersonByClientId(clientId, type));
+        } catch (AuthorizationException e) {
+          LOGGER.debug("Primary client parent ID doesn't pass authorization: {}", clientId);
+        }
+      }
+    }
+    return parents;
+  }
+
+  private HOIRelatedPerson findPersonByClientId(String clientId, Short type) {
+    Client client = clientDao.find(clientId);
+    SystemCodeDescriptor relationship = new SystemCodeDescriptor(type,
+        SystemCodeCache.global().getSystemCodeShortDescription(type));
+    return createHOIRelatedPerson(client, relationship);
+  }
+
+  private HOIRelatedPerson createHOIRelatedPerson(Client client,
+      SystemCodeDescriptor relationship) {
+    String clientId = client.getId();
+    LegacyDescriptor legacyDescriptor =
+        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+            LegacyTable.CLIENT.getDescription());
+    HOIRelatedPerson person = new HOIRelatedPerson();
+    person.setId(clientId);
+    person.setFirstName(client.getFirstName());
+    person.setLastName(client.getLastName());
+    person.setRelationship(relationship);
+    person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
+    person.setLegacyDescriptor(legacyDescriptor);
+    return person;
+  }
+
+  private boolean isRelationTypeParent(Short type) {
+    boolean firstCondition = type <= 214 && type >= 187;
+    boolean secondCondition = type <= 254 && type >= 245;
+    boolean thirdCondition = type <= 294 && type >= 282;
+    boolean lastCondition =
+        type == 272 || type == 273 || type == 5620 || type == 6360 || type == 6361;
+    return firstCondition || secondCondition || thirdCondition || lastCondition;
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
@@ -176,6 +272,11 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   protected HOICaseResponse handleRequest(HOICase req) {
     LOGGER.info("HOICaseService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
+  }
+
+//  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+  public String authorizeClient(String clientId) {
+    return clientId;
   }
 
 }

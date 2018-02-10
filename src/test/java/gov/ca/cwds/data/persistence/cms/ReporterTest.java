@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -250,6 +251,43 @@ public class ReporterTest implements PersistentTestTemplate {
     assertEquals(reporterEntity.getPhones()[1].getPhoneNumber(), "987");
   }
 
+  @Test
+  public void shouldEqualAReporterWithSameValues(){
+    gov.ca.cwds.rest.api.domain.cms.Reporter fred = new ReporterResourceBuilder().setEmployerName("Fred").build();
+    Reporter fred1Entity = new Reporter(fred, lastUpdatedId, lastUpdatedTime);
+    gov.ca.cwds.rest.api.domain.cms.Reporter bill = new ReporterResourceBuilder().setEmployerName("Fred").build();
+    Reporter fred2Entity = new Reporter(bill, lastUpdatedId, lastUpdatedTime);
+    assertEquals("Expecting reporters to be equal", fred1Entity, fred2Entity);
+
+  }
+  @Test
+  public void shouldNotEqualAReporterWithDifferentValues(){
+    gov.ca.cwds.rest.api.domain.cms.Reporter fred = new ReporterResourceBuilder().setEmployerName("Fred").build();
+    Reporter fredEntity = new Reporter(fred, lastUpdatedId, lastUpdatedTime);
+    gov.ca.cwds.rest.api.domain.cms.Reporter bill = new ReporterResourceBuilder().setEmployerName("Bill").build();
+    Reporter billEntity = new Reporter(bill, lastUpdatedId, lastUpdatedTime);
+    assertNotEquals("Expecting reporters to not be equal", fredEntity, billEntity);
+
+  }
+
+  @Test
+  public void shouldHaveSameHashCodesForReportersWithSameValues(){
+    gov.ca.cwds.rest.api.domain.cms.Reporter fred = new ReporterResourceBuilder().setEmployerName("Fred").build();
+    Reporter fred1Entity = new Reporter(fred, lastUpdatedId, lastUpdatedTime);
+    gov.ca.cwds.rest.api.domain.cms.Reporter bill = new ReporterResourceBuilder().setEmployerName("Fred").build();
+    Reporter fred2Entity = new Reporter(bill, lastUpdatedId, lastUpdatedTime);
+    assertEquals("Expecting reporters to have same hash code", fred1Entity.hashCode(), fred2Entity.hashCode());
+
+  }
+  @Test
+  public void shouldNotHaveSameHashCodesForReportersWithDifferentSameValues(){
+    gov.ca.cwds.rest.api.domain.cms.Reporter fred = new ReporterResourceBuilder().setEmployerName("Fred").build();
+    Reporter fredEntity = new Reporter(fred, lastUpdatedId, lastUpdatedTime);
+    gov.ca.cwds.rest.api.domain.cms.Reporter bill = new ReporterResourceBuilder().setEmployerName("Bill").build();
+    Reporter billEntity = new Reporter(bill, lastUpdatedId, lastUpdatedTime);
+    assertNotEquals("Expecting reporters to have different hash code", fredEntity.hashCode(), billEntity.hashCode());
+
+  }
   private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {
     Reporter validReporter =
         MAPPER.readValue(fixture("fixtures/persistent/Reporter/valid/valid.json"), Reporter.class);

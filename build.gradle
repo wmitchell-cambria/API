@@ -28,15 +28,22 @@ sourceCompatibility = 1.8
 applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/workspace/API/lib:/usr/local/lib"]
 
 project.ext {
-    apiVersion = 0.39
-    configPath = "$rootProject.projectDir/config/"
-    dropwizardVersion = "1.1.0"
-    dropwizardFlywayVersion = "1.0.0-1"
-    metricsVersion = "3.1.0"
-    dropwizardSwaggerVersion = "1.0.0-1"
-    mainclass = "gov.ca.cwds.rest.ApiApplication" 
-    elasticsearchVersion = "5.5.0"
-    log4jVersion = "2.8.2"
+    apiVersion = '0.39'
+    coreApiVersion = '0.5.6_303-RC'
+    cwdsModelVersion = '0.5.6_447-RC'
+    configPath = '$rootProject.projectDir/config/'
+    dropwizardVersion = '1.1.0'
+    dropwizardFlywayVersion = '1.0.0-1'
+    metricsVersion = '3.1.0'
+    dropwizardSwaggerVersion = '1.0.0-1'
+    mainclass = 'gov.ca.cwds.rest.ApiApplication'
+    elasticsearchVersion = '5.5.0'
+    log4jVersion = '2.8.2'
+
+    apiSecurityTestSupportVersion = '0.5.4_333-RC'
+
+    h2Version = '1.4.194'
+    jsonassertVersion = '1.5.0'
 }
 
 def dockerTag = apiVersion + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
@@ -154,7 +161,7 @@ dependencies {
 
 	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 	// Exclude transitive dependencies.
-    compile ('gov.ca.cwds.api:api-core:0.5.4_208-RC') {
+    compile (group: 'gov.ca.cwds.api', name: 'api-core', version: coreApiVersion) {
 	    exclude group: 'org.glassfish.jersey.core'
 	}
 
@@ -181,8 +188,15 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20090211'
 
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
+    testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
+
+    testCompile group: 'gov.ca.cwds.cals', name: 'intake-ns-data-model', version: cwdsModelVersion
+    testCompile group: 'gov.ca.cwds.cals', name: 'intake-cws-data-model', version: cwdsModelVersion
+    testCompile group: 'gov.ca.cwds.cals', name: 'cws-rs1-data-model', version: cwdsModelVersion
+
     testCompile 'org.mockito:mockito-core:2.0.54-beta'
- 	testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+    testCompile group: 'org.skyscreamer', name: 'jsonassert', version: jsonassertVersion
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
 	testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {
 		exclude group: 'javax.servlet', module: 'javax.servlet-api'
 		exclude group: 'junit', module: 'junit'
@@ -202,7 +216,7 @@ task printProps << {
 
 tasks.withType(Test) {
     enableAssertions = true
-    systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER"])
+    systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER", "DB_CWSRS_JDBC_URL", "DB_CWSRS_PASSWORD", "DB_CWSRS_SCHEMA", "DB_CWSRS_USER"])
 
     // These don't work. Docs mistaken?
     // jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
@@ -230,7 +244,7 @@ test {
 task integrationTest(type: Test, dependsOn: testClasses) {
     include '**/*IT*'
     exclude '**/*Test*'
-    // systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER"])
+    // systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER", DB_CWSRS_JDBC_URL", "DB_CWSRS_PASSWORD", "DB_CWSRS_SCHEMA", "DB_CWSRS_USER"])
 }
 
 run {

@@ -535,10 +535,21 @@ public class ScreeningToReferralServiceTest {
       Set<IssueDetails> issues = e.getValidationDetailsList();
       assertThat(issues.size(), is(equalTo(3)));
       IssueDetails issue = issues.iterator().next();
+      assertTrue("Expected to contain missing victim error message",exceptionContainsErrorMessage(e, "Allegation/Victim Person Id does not contain a Participant with a role of Victim"));
       assertThat(IssueType.CONSTRAINT_VALIDATION, is(equalTo(issue.getType())));
       // assertThat("Incompatiable participants included in request",
       // is(equalTo(issue.getUserMessage())));
     }
+  }
+
+  private boolean exceptionContainsErrorMessage(BusinessValidationException e, String errorMessage) {
+    boolean containsMessage = false;
+    for (IssueDetails detail : e.getValidationDetailsList()){
+      if (detail.getUserMessage().contains(errorMessage)){
+        containsMessage = true;
+      }
+    }
+    return containsMessage;
   }
 
   @SuppressWarnings("javadoc")

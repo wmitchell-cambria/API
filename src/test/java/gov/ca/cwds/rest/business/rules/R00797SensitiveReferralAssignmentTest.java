@@ -1,9 +1,10 @@
-package gov.ca.cwds.rest.business.rules.doctool;
+package gov.ca.cwds.rest.business.rules;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -68,11 +69,6 @@ import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
-import gov.ca.cwds.rest.business.rules.LACountyTrigger;
-import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
-import gov.ca.cwds.rest.business.rules.Reminders;
-import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ClientParticipants;
@@ -108,7 +104,7 @@ import io.dropwizard.jackson.Jackson;
  * 
  * @author CWDS API Team
  */
-public class R05559SetPrimaryContactStaffPersonIdTest {
+public class R00797SensitiveReferralAssignmentTest {
 
   private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -272,18 +268,23 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   }
 
   /**
-   * <blockquote>
-   *
-   * <pre>
-   * BUSINESS RULE: "R - 05559"
-   * </pre>
-   *
-   * </blockquote>
+   * <p>
+   * BUSINESS RULE: "R - 00797" Sensitive Referral Assignment
+   * 
+   * A Sealed or Sensitive CASE or REFERRAL may be assigned to any Staff Person, whether they have
+   * sealed or sensitive authority or not.
+   * 
+   * We are currently not checking for sealed or sensitive authority of a Staff Person when
+   * assigning a CASE or REFERRAL If we start checking for sealed or sensitive authority of a Staff
+   * Person, this test should fail. The test should then be redesigned to make sure that the
+   * Business Rule R - 00797 is being applied to Referral Creation.
+   * 
+   * <p>
    * 
    * @throws Exception - Exception
    */
   @Test
-  public void testToSetPrimaryContactStaffPersonId() throws Exception {
+  public void testForSensitiveReferralAssignment() throws Exception {
 
     gov.ca.cwds.data.persistence.cms.Referral referralToCreate =
         new ReferralEntityBuilder().build();
@@ -372,7 +373,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     CaseLoad[] caseLoadList = new CaseLoad[1];
     caseLoadList[0] = caseLoad;
     StaffPerson staffPerson =
-        new StaffPersonEntityBuilder().setId("0X5").setCountyCode("34").build();
+        new StaffPersonEntityBuilder().setId("02f").setCountyCode("34").build();
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("BTr");
     when(assignmentDao.findCaseLoads(any(String.class))).thenReturn(caseLoadList);
@@ -404,7 +405,13 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
         .thenReturn(clientParticipants);
 
     screeningToReferralService.create(screeningToReferral);
-    assertThat(referral.getPrimaryContactStaffPersonId(), is(equalTo("02f")));
+    assertThat(referral.getLastUpdatedId(), is(equalTo("02f")));
+  }
+
+  @Test
+  public void R00797SensitiveReferralAssignmentDefaultsToTrue() throws Exception {
+    assertEquals(Boolean.TRUE, new R00797SensitiveReferralAssignment().isValid());
+
   }
 
 }

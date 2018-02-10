@@ -145,13 +145,10 @@ public class ScreeningToReferralService implements CrudsService {
 
     reminders.createTickle(pstr);
 
-    StringBuilder errorMessage = new StringBuilder();
     boolean foundError = false;
     for (ErrorMessage message : messageBuilder.getMessages()) {
       if (StringUtils.isNotBlank(message.getMessage())) {
         foundError = true;
-        errorMessage.append(message.getMessage());
-        errorMessage.append("&&");
       }
     }
     if (foundError) {
@@ -423,25 +420,22 @@ public class ScreeningToReferralService implements CrudsService {
 
     for (Allegation allegation : allegations) {
 
-      if (validateAllegationHasVictim(scr, allegation)) {
-        continue;
+      if (! validateAllegationHasVictim(scr, allegation)) {
+        victimClientId =
+            getClientLegacyId(victimClient, victimClientId, allegation.getVictimPersonId());
+
+        boolean allegationHasPerpPersonId = allegation.getPerpetratorPersonId() != 0;
+        boolean isNotPerpetrator =
+            !ParticipantValidator.isPerpetratorParticipant(scr, allegation.getPerpetratorPersonId());
+        validateAllegationHasPerpetrator(allegationHasPerpPersonId, isNotPerpetrator);
+
+        perpatratorClientId = getClientLegacyId(perpatratorClient, perpatratorClientId,
+            allegation.getPerpetratorPersonId());
+        if (! validateAllegationVictimExists(victimClientId)) {
+          saveAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
+              allegationDispositionType, allegation);
+        }
       }
-      victimClientId =
-          getClientLegacyId(victimClient, victimClientId, allegation.getVictimPersonId());
-
-      boolean allegationHasPerpPersonId = allegation.getPerpetratorPersonId() != 0;
-      boolean isNotPerpetrator =
-          !ParticipantValidator.isPerpetratorParticipant(scr, allegation.getPerpetratorPersonId());
-      validateAllegationHasPerpetrator(allegationHasPerpPersonId, isNotPerpetrator);
-
-      perpatratorClientId = getClientLegacyId(perpatratorClient, perpatratorClientId,
-          allegation.getPerpetratorPersonId());
-      if (validateAllegationVictimExists(victimClientId)) {
-        continue;
-      }
-
-      saveAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
-          allegationDispositionType, allegation);
     }
     return processedAllegations;
   }
