@@ -123,102 +123,40 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     SystemCodeDescriptor county = getCounty(cmscase);
     SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
     HOISocialWorker assignedSocialWorker = getAssignedSocialWorker(cmscase);
-    List<HOIRelatedPerson> parents = getParents(cmscase);
+    List<HOIRelatedPerson> parents =
+        new HOIParentService(clientDao, clientRelationshipDao).getParents(cmscase.getFkchldClt());
     return new HOICaseFactory().createHOICase(cmscase, county, serviceComponent, focusChild,
         assignedSocialWorker, parents);
   }
 
   @SuppressWarnings("fb-contrib:PSC_PRESIZE_COLLECTIONS")
   private List<String> findAllRelatedClientIds(String clientId) {
-    List<String> clientIds = new ArrayList<>();
-    clientIds.add(clientId);
     ClientRelationship[] clientRelationshipsByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(clientId);
+    ClientRelationship[] clientRelationshipBySecondaryClient =
+        clientRelationshipDao.findBySecondaryClientId(clientId);
+    List<String> clientIds = new ArrayList<>(
+        clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
+    clientIds.add(clientId);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       String secondaryClientId = relationship.getSecondaryClientId();
       try {
         authorizeClient(secondaryClientId);
         clientIds.add(secondaryClientId);
       } catch (AuthorizationException e) {
-        LOGGER.debug("Secondary client ID doesn't pass authorization: " + secondaryClientId, e);
+        LOGGER.debug("Secondary client ID doesn't pass authorization: {}", secondaryClientId);
       }
     }
-    ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(clientId);
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-      String secondaryClientRelatedId = relation.getPrimaryClientId();
+      String primaryClientId = relation.getPrimaryClientId();
       try {
-        authorizeClient(secondaryClientRelatedId);
+        authorizeClient(primaryClientId);
+        clientIds.add(primaryClientId);
       } catch (AuthorizationException e) {
-        LOGGER.debug("Secondary client related ID doesn't pass authorization: "
-            + secondaryClientRelatedId, e);
+        LOGGER.debug("Primary client ID doesn't pass authorization: {}", primaryClientId);
       }
-      clientIds.add(secondaryClientRelatedId);
     }
     return clientIds;
-  }
-
-  private List<HOIRelatedPerson> getParents(CmsCase cmscase) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
-    ClientRelationship[] clientRelationshipByPrimaryClient =
-        clientRelationshipDao.findByPrimaryClientId(cmscase.getFkchldClt());
-    parents.addAll(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
-    ClientRelationship[] clientRelationshipBySecondaryClient =
-        clientRelationshipDao.findBySecondaryClientId(cmscase.getFkchldClt());
-    parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
-    return parents;
-  }
-
-  private List<HOIRelatedPerson> findParentsByPrimaryRelationship(
-      ClientRelationship[] clientRelationship) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
-    for (ClientRelationship relation : clientRelationship) {
-      Short type = relation.getClientRelationshipType();
-      if (isRelationTypeParent(type)) {
-        String clientId = relation.getSecondaryClientId();
-        try {
-          authorizeClient(clientId);
-          parents.add(findPersonByClientId(clientId, type));
-        } catch (AuthorizationException e) {
-          LOGGER.debug("Secondary client parent ID doesn't pass authorization: " + clientId, e);
-        }
-      }
-    }
-    return parents;
-  }
-
-  private List<HOIRelatedPerson> findParentsBySecondaryRelationship(
-      ClientRelationship[] clientRelationship) {
-    List<HOIRelatedPerson> parents = new ArrayList<>();
-    for (ClientRelationship relation : clientRelationship) {
-      Short type = relation.getClientRelationshipType();
-      if (isRelationTypeParent(type)) {
-        String clientId = relation.getPrimaryClientId();
-        try {
-          authorizeClient(clientId);
-          parents.add(findPersonByClientId(clientId, type));
-        } catch (AuthorizationException e) {
-          LOGGER.debug("Primary client parent ID doesn't pass authorization: " + clientId, e);
-        }
-      }
-    }
-    return parents;
-  }
-
-  private HOIRelatedPerson findPersonByClientId(String clientId, Short type) {
-    Client client = clientDao.find(clientId);
-    SystemCodeDescriptor relationship = new SystemCodeDescriptor(type,
-        SystemCodeCache.global().getSystemCodeShortDescription(type));
-    return createHOIRelatedPerson(client, relationship);
-  }
-
-  private boolean isRelationTypeParent(Short type) {
-    boolean firstCondition = type <= 214 && type >= 187;
-    boolean secondCondition = type <= 254 && type >= 245;
-    boolean thirdCondition = type <= 294 && type >= 282;
-    boolean rangesCondition = firstCondition || secondCondition || thirdCondition;
-    return Stream.of(272, 273, 5620, 6360, 6361).anyMatch(i -> i == type.intValue())
-        || rangesCondition;
   }
 
   private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
@@ -260,6 +198,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     throw new NotImplementedException("handle request not implemented");
   }
 
+//  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
   public String authorizeClient(String clientId) {
     return clientId;
   }
