@@ -1,14 +1,11 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import static gov.ca.cwds.rest.services.hoi.HOIParentService.createHOIRelatedPerson;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import java.util.stream.Stream;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.joda.time.DateTime;
@@ -106,7 +103,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientId = authorizeClient(clientId);
         allClientIds.addAll(findAllRelatedClientIds(clientId));
       } catch (AuthorizationException e) {
-        LOGGER.debug("Client ID doesn't pass authorization: " + clientId, e);
+        LOGGER.debug("Client ID doesn't pass authorization: {}", clientId);
+        LOGGER.debug("AuthorizationException: ", e);
       }
     }
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
@@ -145,6 +143,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientIds.add(secondaryClientId);
       } catch (AuthorizationException e) {
         LOGGER.debug("Secondary client ID doesn't pass authorization: {}", secondaryClientId);
+        LOGGER.debug("AuthorizationException: ", e);
       }
     }
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
@@ -154,6 +153,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientIds.add(primaryClientId);
       } catch (AuthorizationException e) {
         LOGGER.debug("Primary client ID doesn't pass authorization: {}", primaryClientId);
+        LOGGER.debug("AuthorizationException: ", e);
       }
     }
     return clientIds;
