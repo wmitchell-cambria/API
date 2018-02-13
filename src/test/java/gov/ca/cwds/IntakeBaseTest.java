@@ -42,6 +42,23 @@ public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
         configuration.getCmsDataSourceFactory().getUser(),
         configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/intake-cwsint-database-master.xml");
 
+/*
+    new DatabaseHelper(
+        configuration.getCmsDataSourceFactory().getUrl(),
+        configuration.getCmsDataSourceFactory().getUser(),
+        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/case-data.xml");
+
+    new DatabaseHelper(
+        configuration.getCmsDataSourceFactory().getUrl(),
+        configuration.getCmsDataSourceFactory().getUser(),
+        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/client-data.xml");
+
+    new DatabaseHelper(
+        configuration.getCmsDataSourceFactory().getUrl(),
+        configuration.getCmsDataSourceFactory().getUser(),
+        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/client_relationship-data.xml");
+*/
+
     new DatabaseHelper(
         configuration.getRsDataSourceFactory().getUrl(),
         configuration.getRsDataSourceFactory().getUser(),
