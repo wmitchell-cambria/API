@@ -19,7 +19,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
  * @author CWDS API Team
  *
  */
-@Ignore
+//@Ignore
 public class HOICaseResourceTest extends IntakeBaseTest {
 
   @Test

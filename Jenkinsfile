@@ -54,6 +54,10 @@ node ('tpt4-slave'){
    stage('Build'){
 		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
    }
+   stage('First line Tests') {
+       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test --tests "gov.ca.cwds.rest.resources.hoi.HOICaseResourceTest.testHandleFindNonExistingClientId"', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/first-line-tests', reportFiles: 'index.html', reportName: 'First line tests Report', reportTitles: 'First line tests Summary'])
+   }
    stage('Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
@@ -94,6 +98,7 @@ node ('tpt4-slave'){
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
  }finally {
+       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/first-line-tests', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'First line tests Summary'])
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
        cleanWs()
  }
