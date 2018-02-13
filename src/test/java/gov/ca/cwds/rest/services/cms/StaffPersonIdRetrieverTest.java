@@ -99,17 +99,4 @@ public class StaffPersonIdRetrieverTest extends AbstractShiroTest {
     assertEquals(actual, expected);
   }
 
-  @SuppressWarnings({"javadoc", "rawtypes", "unchecked"})
-  @Test
-  public void getStaffPersonIdReturnsStaffIdValueNull() throws Exception {
-    Subject mockSubject = mock(Subject.class);
-    PrincipalCollection pc = mock(PrincipalCollection.class);
-    List list = new ArrayList();
-    when(pc.asList()).thenReturn(list);
-    when(mockSubject.getPrincipals()).thenReturn(pc);
-    setSubject(mockSubject);
-    String actual = new StaffPersonIdRetriever().getStaffPersonId();
-    String expected = "q1p";
-    assertEquals(actual, null);
-  }
 }
