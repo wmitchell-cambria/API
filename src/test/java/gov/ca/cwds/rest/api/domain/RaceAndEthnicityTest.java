@@ -463,5 +463,19 @@ public class RaceAndEthnicityTest {
     assertThat(domain.getHispanicUnableToDetermineCode(),
         is(equalTo(hispanicUnableToDetermineCode)));
   }
+  
+  @Test
+  public void testEntityBuilderGetters() throws Exception {
+	  // required for test coverage while RaceAndEthnicityEntityBuilder class is under src/main/java
+	  RaceAndEthnicityEntityBuilder builder = new RaceAndEthnicityEntityBuilder();
+	  
+	  RaceAndEthnicity toValidate =
+	            new RaceAndEthnicityEntityBuilder().build();
+	    assertThat(toValidate.getRaceCode(), is(equalTo(builder.getRaceCode())));
+	    assertThat(toValidate.getHispanicCode(), is(equalTo(builder.getHispanicCode())));
+	    assertThat(toValidate.getHispanicOriginCode(), is(equalTo(builder.getHispanicOriginCode())));
+	    assertThat(toValidate.getHispanicUnableToDetermineCode(), is(equalTo(builder.getHispanicUnableToDetermineCode())));
+	  
+  }
 
 }

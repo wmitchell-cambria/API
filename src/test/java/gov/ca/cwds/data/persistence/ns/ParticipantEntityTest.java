@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -54,6 +55,7 @@ public class ParticipantEntityTest {
 			   approximateAgeUnits);
 	  
 			  assertThat(pe.getId(), is(equalTo(id)));
+			  assertThat(pe.getPrimaryKey(), is(equalTo(id)));
 			  assertThat(pe.getDateOfBirth(), is(equalTo(birthDate)));
 			  assertThat(pe.getFirstName(), is(equalTo(firstName)));
 			  assertThat(pe.getGender(), is(equalTo(gender)));
@@ -73,4 +75,11 @@ public class ParticipantEntityTest {
 			  assertThat(pe.getApproximateAge(), is(equalTo(approximateAge)));
 			  assertThat(pe.getApproximateAgeUnits(), is(equalTo(approximateAgeUnits)));
   }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	ParticipantEntity pe = new ParticipantEntity();	  
+    assertTrue(pe.equals(pe));
+  }
+
 }
