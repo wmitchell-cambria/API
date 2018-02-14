@@ -70,7 +70,16 @@ public class CmsDocumentTest {
   private String docName = "1234";
   private String compressionMethod = "CWSCMP01";
   private String base64Blob = "string";
-
+  private String newDocDate = "2018-02-13";
+  private Long newDocLength = (long) 1500;
+  private Short newSegmentCount = 1299;
+  private String newDocAuth = "NEWDOCA";
+  private String newDocServ = "E7706001";
+  private String newCompressionMethod = "CMSNEW01";
+  private String newDocName = "2345";
+  private String newDocTime = "01:02:03";
+  private String newId = "2345678ABC";
+  private String newBase64Blob = "newblob";
 
   public CmsDocumentTest() throws ParseException {}
 
@@ -143,6 +152,33 @@ public class CmsDocumentTest {
     assertThat(domain.getDocDate(), is(equalTo(docDate)));
     assertThat(domain.getDocTime(), is(equalTo(docTime)));
     assertThat(domain.getDocName(), is(equalTo(docName)));
+  }
+  
+  @Test
+  public void shouldModifyValuesUsingSetters() throws Exception {
+    CmsDocument domain = new CmsDocument(id, segmentCount, docLength, docAuth, docServ, docDate,
+        docTime, docName, compressionMethod, base64Blob);
+    domain.setDocDate(newDocDate);
+    assertThat(domain.getDocDate(), is(equalTo(newDocDate)));
+    domain.setDocLength(newDocLength);
+    assertThat(domain.getDocLength(), is(equalTo(newDocLength)));
+    domain.setSegmentCount(newSegmentCount);
+    assertThat(domain.getSegmentCount(), is(equalTo(newSegmentCount)));
+    domain.setDocAuth(newDocAuth);
+    assertThat(domain.getDocAuth(), is(equalTo(newDocAuth)));
+    domain.setDocServ(newDocServ);
+    assertThat(domain.getDocServ(), is(equalTo(newDocServ)));
+    domain.setCompressionMethod(newCompressionMethod);
+    assertThat(domain.getCompressionMethod(), is(equalTo(newCompressionMethod)));
+    domain.setDocName(newDocName);
+    assertThat(domain.getDocName(), is(equalTo(newDocName)));
+    domain.setDocTime(newDocTime);
+    assertThat(domain.getDocTime(), is(equalTo(newDocTime)));
+    domain.setBase64Blob(newBase64Blob);
+    assertThat(domain.getBase64Blob(), is(equalTo(newBase64Blob)));
+    domain.setId(newId);
+    assertThat(domain.getId(), is(equalTo(newId)));
+	
   }
 
   /*

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.LegacyDescriptorEntityBuilder;
 import io.dropwizard.jackson.Jackson;
 
 /**
@@ -188,6 +189,14 @@ public class AddressTest {
         constraintViolations.iterator().next().getMessage());
   }
 
+  @Test
+  public void testLegacyDescriptorSetter() throws Exception {
+    Address domain = new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
+    LegacyDescriptor newLegacyDescriptor = new LegacyDescriptorEntityBuilder().build();
+    domain.setLegacyDescriptor(newLegacyDescriptor);
+    assertThat(domain.getLegacyDescriptor(), is(equalTo(newLegacyDescriptor)));	
+  }
+  
   private Address validAddress() {
 
     try {

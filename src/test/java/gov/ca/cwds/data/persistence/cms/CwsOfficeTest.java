@@ -31,6 +31,28 @@ public class CwsOfficeTest {
   private short agencyCodeNumber = 1122;
   private short locationCountyType = 2233;
   private String directorsNameTitle = "director title";
+  
+  private String newId = "234567ABC";
+  private long newFaxNumber = 234567;
+  private String newGeographicRegionCode = "112";
+  private short newGovernmentEntityType = 1036;
+  private String newHeadquarterIndicator = "N";
+  private String newInactiveIndicator = "N";
+  private String newMailStopDescription = "new office mail stop";
+  private long newMessagePhoneNumber = 9345678;
+  private int newMessagePhoneExtensionNumber = 234;
+  private String newCwsOfficeNumber = "new office number";
+  private long newPrimaryPhoneNumber = 3456777;
+  private int newPrimaryPhoneExtensionNumber = 222;
+  private String newFkStaffPerson = "aab";
+  private String newCommentDescription = "new description of comment";
+  private String newAgencyName = "new county child welfare";
+  private String newDepartmentDivisionName = "new county department";
+  private String newCwsOfficeName = "new county office";
+  private String newCountySpecificCode = "31";
+  private short newAgencyCodeNumber = 1133;
+  private short newLocationCountyType = 2244;
+  private String newDirectorsNameTitle = "new director title";
 	  
   /**
   * Constructor test
@@ -69,5 +91,54 @@ public class CwsOfficeTest {
 	  
 	  assertThat(pco.getPrimaryKey(), is(equalTo(id)));
 	  
+  }
+  
+  @Test
+  public void shouldModifyValuesUsingSetters() throws Exception {
+	CwsOffice co = new CwsOfficeEntityBuilder().build();
+	co.setId(newId);
+	assertThat(co.getId(), is(equalTo(newId)));
+	co.setFaxNumber(newFaxNumber);
+	assertThat(co.getFaxNumber(), is(equalTo(newFaxNumber)));
+	co.setGeographicRegionCode(newGeographicRegionCode);
+	assertThat(co.getGeographicRegionCode(), is(equalTo(newGeographicRegionCode)));
+	co.setGovernmentEntityType(newGovernmentEntityType);
+	assertThat(co.getGovernmentEntityType(), is(equalTo(newGovernmentEntityType)));
+	co.setHeadquarterIndicator(newHeadquarterIndicator);
+	assertThat(co.getHeadquarterIndicator(), is(equalTo(newHeadquarterIndicator)));
+	co.setInactiveIndicator(newInactiveIndicator);
+	assertThat(co.getInactiveIndicator(), is(equalTo(newInactiveIndicator)));
+	co.setMailStopDescription(newMailStopDescription);
+	assertThat(co.getMailStopDescription(), is(equalTo(newMailStopDescription)));
+	co.setMessagePhoneExtensionNumber(newMessagePhoneExtensionNumber);
+	assertThat(co.getMessagePhoneExtensionNumber(), is(equalTo(newMessagePhoneExtensionNumber)));
+	co.setMessagePhoneNumber(newMessagePhoneNumber);
+	assertThat(co.getMessagePhoneNumber(), is(equalTo(newMessagePhoneNumber)));
+	co.setCwsOfficeNumber(newCwsOfficeNumber);
+	assertThat(co.getCwsOfficeNumber(), is(equalTo(newCwsOfficeNumber)));
+	co.setCwsOfficeName(newCwsOfficeName);
+	assertThat(co.getCwsOfficeName(), is(equalTo(newCwsOfficeName)));
+	co.setPrimaryPhoneNumber(newPrimaryPhoneNumber);
+	assertThat(co.getPrimaryPhoneNumber(), is(equalTo(newPrimaryPhoneNumber)));
+	co.setPrimaryPhoneExtensionNumber(newPrimaryPhoneExtensionNumber);
+	assertThat(co.getPrimaryPhoneExtensionNumber(), is(equalTo(newPrimaryPhoneExtensionNumber)));
+	co.setFkStaffPerson(newFkStaffPerson);
+	assertThat(co.getFkStaffPerson(), is(equalTo(newFkStaffPerson)));
+	co.setCommentDescription(newCommentDescription);
+	assertThat(co.getCommentDescription(), is(equalTo(newCommentDescription)));
+	co.setAgencyName(newAgencyName);
+	assertThat(co.getAgencyName(), is(equalTo(newAgencyName)));
+	co.setDepartmentDivisionName(newDepartmentDivisionName);
+	assertThat(co.getDepartmentDivisionName(), is(equalTo(newDepartmentDivisionName)));
+	co.setCwsOfficeName(newCwsOfficeName);
+	assertThat(co.getCwsOfficeName(), is(equalTo(newCwsOfficeName)));
+	co.setLocationCountyType(newLocationCountyType);
+	assertThat(co.getLocationCountyType(), is(equalTo(newLocationCountyType)));
+	co.setCountySpecificCode(newCountySpecificCode);
+	assertThat(co.getCountySpecificCode(), is(equalTo(newCountySpecificCode)));
+	co.setAgencyCodeNumber(newAgencyCodeNumber);
+	assertThat(co.getAgencyCodeNumber(), is(equalTo(newAgencyCodeNumber)));
+	co.setDirectorsNameTitle(newDirectorsNameTitle);
+	assertThat(co.getDirectorsNameTitle(), is(equalTo(newDirectorsNameTitle)));	
   }
 }

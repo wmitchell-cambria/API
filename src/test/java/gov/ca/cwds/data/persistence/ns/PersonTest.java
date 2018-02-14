@@ -191,6 +191,26 @@ public class PersonTest {
       assertEquals(newPersonPhone.getPhoneNumber().getType(), phone.getType());
     }
   }
+  
+  @Test
+  public void shouldSetPersonLanguage() {
+	Long languageId = 1111L;	
+	String languageCodeId = "5555";
+	Person person = new Person(domainPerson, lastUpdatedId, userId);
+	gov.ca.cwds.data.persistence.ns.Language language = new gov.ca.cwds.data.persistence.ns.Language(languageId,
+		languageCodeId);
+	PersonLanguage personLanguage = new PersonLanguage(person, language);
+	Set<PersonLanguage> personLanguages = new HashSet<>();
+	personLanguages.add(personLanguage);
+	
+	person.setPersonLanguage(personLanguages);
+	
+	assertEquals(1, person.getPersonLanguage().size());
+	for (PersonLanguage newPersonLanguage : person.getPersonLanguage()) {
+	  assertEquals(newPersonLanguage.getLanguage().getLanguageCodeId(), language.getLanguageCodeId());
+	  assertEquals(newPersonLanguage.getLanguage().getLanguageId(), language.getLanguageId());
+	}
+  }
 
   @Test
   public void shouldSetPersonEthnicity() {

@@ -6,6 +6,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
+
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -160,6 +162,12 @@ public class CrossReportTest implements PersistentTestTemplate {
     CrossReport vcp = MAPPER.readValue(fixture("fixtures/persistent/CrossReport/valid/valid.json"),
         CrossReport.class);
     return vcp;
+  }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+      CrossReport cr = new CrossReport();
+      assertTrue(cr.equals(cr));
   }
 
 }

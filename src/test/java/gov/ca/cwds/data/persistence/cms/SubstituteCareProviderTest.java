@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.junit.template.PersistentTestTemplate;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 
 /**
  * @author CWDS API Team
@@ -147,4 +149,10 @@ public class SubstituteCareProviderTest implements PersistentTestTemplate {
     return validSubstituteCareProvider;
   }
 
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	SubstituteCareProvider scp = new SubstituteCareProvider();	  
+    assertTrue(scp.equals(scp));
+  }
+  
 }
