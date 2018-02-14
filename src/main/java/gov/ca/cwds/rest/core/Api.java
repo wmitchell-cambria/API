@@ -8,44 +8,20 @@ package gov.ca.cwds.rest.core;
 public final class Api {
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_APPLICATION} API..
-   */
-  public static final String RESOURCE_APPLICATION = "application";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_ADDRESSES} API..
    */
   public static final String RESOURCE_ADDRESSES = "addresses";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_PEOPLE} API..
+   * A {@code String} constant representing {@value #RESOURCE_ADDRESS_VALIDATION} API.
    */
-  public static final String RESOURCE_PEOPLE = "people";
+  public static final String RESOURCE_ADDRESS_VALIDATION = "address_validation";
+
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS} API..
+   * A {@code String} constant representing {@value #RESOURCE_APPLICATION} API..
    */
-  public static final String RESOURCE_PARTICIPANTS = "participants";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_SCREENINGS} API..
-   */
-  public static final String RESOURCE_SCREENINGS = "screenings";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_HOI_SCREENINGS} API..
-   */
-  public static final String RESOURCE_HOI_SCREENINGS = "hoi_screenings";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRALS} API..
-   */
-  public static final String RESOURCE_REFERRALS = "referrals";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSONS} API.
-   */
-  public static final String RESOURCE_STAFF_PERSONS = "staffpersons";
+  public static final String RESOURCE_APPLICATION = "application";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} API..
@@ -56,7 +32,7 @@ public final class Api {
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
    */
   public static final String RESOURCE_ALLEGATION_PERPETRATOR_HISTORY =
-      "_allegationPerpetratorHistory";
+          "_allegationPerpetratorHistory";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_ASSIGNMENT} API..
@@ -64,34 +40,24 @@ public final class Api {
   public static final String RESOURCE_ASSIGNMENT = "_assignments";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
+   */
+  public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_CHILDCLIENT} API..
+   */
+  public static final String RESOURCE_CHILDCLIENT = "_childClients";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} API..
    */
   public static final String RESOURCE_CLIENT = "_clients";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} API.
+   * A {@code String} constant representing {@value #RESOURCE_CLIENT_COLLATERALS} API..
    */
-  public static final String RESOURCE_CROSS_REPORT = "_crossReports";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRAL} API.
-   */
-  public static final String RESOURCE_REFERRAL = "_referrals";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} API.
-   */
-  public static final String RESOURCE_STAFF_PERSON = "_staffpersons";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_REPORTER} API.
-   */
-  public static final String RESOURCE_REPORTER = "_reporters";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} API.
-   */
-  public static final String RESOURCE_REFERRAL_CLIENT = "_referralClients";
+  public static final String RESOURCE_CLIENT_COLLATERALS = "client_collaterals";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CMS_DOCUMENT} API.
@@ -114,19 +80,19 @@ public final class Api {
   public static final String RESOURCE_CMSNSREFERRAL = "cms_ns_referrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ADDRESS_VALIDATION} API.
+   * A {@code String} constant representing {@value #RESOURCE_CMS_UI_IDENTIFIER} API..
    */
-  public static final String RESOURCE_ADDRESS_VALIDATION = "address_validation";
+  public static final String RESOURCE_CMS_UI_IDENTIFIER = "cms_ui_id";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_LONG_TEXT} API
+   * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} API.
    */
-  public static final String RESOURCE_LONG_TEXT = "_longText";
+  public static final String RESOURCE_CROSS_REPORT = "_crossReports";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ELASTICSEARCH_INDEX_QUERY} API.
+   * A {@code String} constant representing {@value #RESOURCE_DELIVERY_SERVICE} API.
    */
-  public static final String RESOURCE_ELASTICSEARCH_INDEX_QUERY = "dora";
+  public static final String RESOURCE_DELIVERY_SERVICE = "contacts";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_DRMS_DOCUMENT} API.
@@ -134,34 +100,19 @@ public final class Api {
   public static final String RESOURCE_DRMS_DOCUMENT = "_drmsDocument";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_CHILDCLIENT} API..
+   * A {@code String} constant representing {@value #RESOURCE_ELASTICSEARCH_INDEX_QUERY} API.
    */
-  public static final String RESOURCE_CHILDCLIENT = "_childClients";
+  public static final String RESOURCE_ELASTICSEARCH_INDEX_QUERY = "dora";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_LOV} API..
+   * A {@code String} constant representing {@value #RESOURCE_GOVERNMENT_ORG} API.
    */
-  public static final String RESOURCE_LOV = "__oldlov";
+  public static final String RESOURCE_GOVERNMENT_ORG = "cross_report_agency";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_CMS_UI_IDENTIFIER} API..
+   * A {@code String} constant representing {@value #RESOURCE_HOI_SCREENINGS} API..
    */
-  public static final String RESOURCE_CMS_UI_IDENTIFIER = "cms_ui_id";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_RELATIONSHIPS} API..
-   */
-  public static final String RESOURCE_RELATIONSHIPS = "relationships";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_CLIENT_COLLATERALS} API..
-   */
-  public static final String RESOURCE_CLIENT_COLLATERALS = "client_collaterals";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_DELIVERY_SERVICE} API.
-   */
-  public static final String RESOURCE_DELIVERY_SERVICE = "contacts";
+  public static final String RESOURCE_HOI_SCREENINGS = "hoi_screenings";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_INVESTIGATIONS} API.
@@ -174,9 +125,39 @@ public final class Api {
   public static final String RESOURCE_INTAKE_LOV = "lov";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_GOVERNMENT_ORG} API.
+   * A {@code String} constant representing {@value #RESOURCE_LONG_TEXT} API
    */
-  public static final String RESOURCE_GOVERNMENT_ORG = "cross_report_agency";
+  public static final String RESOURCE_LONG_TEXT = "_longText";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_LOV} API..
+   */
+  public static final String RESOURCE_LOV = "__oldlov";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS} API..
+   */
+  public static final String RESOURCE_PARTICIPANTS = "participants";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_PEOPLE} API..
+   */
+  public static final String RESOURCE_PEOPLE = "people";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_REFERRAL} API.
+   */
+  public static final String RESOURCE_REFERRAL = "_referrals";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_REFERRALS} API..
+   */
+  public static final String RESOURCE_REFERRALS = "referrals";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} API.
+   */
+  public static final String RESOURCE_REFERRAL_CLIENT = "_referralClients";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
@@ -184,9 +165,29 @@ public final class Api {
   public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
+   * A {@code String} constant representing {@value #RESOURCE_RELATIONSHIPS} API..
    */
-  public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
+  public static final String RESOURCE_RELATIONSHIPS = "relationships";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_REPORTER} API.
+   */
+  public static final String RESOURCE_REPORTER = "_reporters";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_SCREENINGS} API..
+   */
+  public static final String RESOURCE_SCREENINGS = "screenings";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} API.
+   */
+  public static final String RESOURCE_STAFF_PERSON = "_staffpersons";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSONS} API.
+   */
+  public static final String RESOURCE_STAFF_PERSONS = "staffpersons";
 
   /**
    * Default private constructor

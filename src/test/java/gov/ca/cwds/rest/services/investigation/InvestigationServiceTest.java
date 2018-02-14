@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.HashSet;
 import java.util.Set;
 
+import gov.ca.cwds.rest.services.RelationshipService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,7 +30,6 @@ import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 
@@ -41,7 +41,7 @@ public class InvestigationServiceTest {
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
-  private RelationshipListService relationshipListService;
+  private RelationshipService relationshipListService;
   private ContactService contactService;
   private HistoryOfInvolvementService hoiService;
   private ScreeningSummaryService screeningSummaryService;
@@ -68,7 +68,7 @@ public class InvestigationServiceTest {
     this.longTextService = mock(LongTextService.class);
     this.peopleService = mock(PeopleService.class);
     this.allegationService = mock(AllegationService.class);
-    this.relationshipListService = mock(RelationshipListService.class);
+    this.relationshipListService = mock(RelationshipService.class);
     this.contactService = mock(ContactService.class);
     this.hoiService = mock(HistoryOfInvolvementService.class);
     this.screeningSummaryService = mock(ScreeningSummaryService.class);
