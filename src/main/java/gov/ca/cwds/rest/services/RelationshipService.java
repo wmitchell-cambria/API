@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.services.investigation;
+package gov.ca.cwds.rest.services;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * 
  * @author CWDS API Team
  */
-public class RelationshipListService
+public class RelationshipService
     implements TypedCrudsService<String, RelationshipList, Response> {
 
   private RelationshipsDao relationshipsDao;
@@ -40,7 +40,7 @@ public class RelationshipListService
    * @param clientDao - clientDao instance
    */
   @Inject
-  public RelationshipListService(RelationshipsDao relationshipsDao, ClientDao clientDao) {
+  public RelationshipService(RelationshipsDao relationshipsDao, ClientDao clientDao) {
     super();
     this.relationshipsDao = relationshipsDao;
     this.clientDao = clientDao;

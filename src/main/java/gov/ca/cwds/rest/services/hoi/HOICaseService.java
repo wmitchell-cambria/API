@@ -49,7 +49,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
    * Serial Version UID
    */
   private static final long serialVersionUID = 1L;
-
+  private static final String AUTHORIZE_EXCEPTION_MESSAGE = "AuthorizationException: ";
   private static final Logger LOGGER = LoggerFactory.getLogger(HOICaseService.class);
 
   private CaseDao caseDao;
@@ -104,7 +104,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         allClientIds.addAll(findAllRelatedClientIds(clientId));
       } catch (AuthorizationException e) {
         LOGGER.debug("Client ID doesn't pass authorization: {}", clientId);
-        LOGGER.debug("AuthorizationException: ", e);
+        LOGGER.debug(AUTHORIZE_EXCEPTION_MESSAGE, e);
       }
     }
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
@@ -143,7 +143,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientIds.add(secondaryClientId);
       } catch (AuthorizationException e) {
         LOGGER.debug("Secondary client ID doesn't pass authorization: {}", secondaryClientId);
-        LOGGER.debug("AuthorizationException: ", e);
+        LOGGER.debug(AUTHORIZE_EXCEPTION_MESSAGE, e);
       }
     }
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
@@ -153,7 +153,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientIds.add(primaryClientId);
       } catch (AuthorizationException e) {
         LOGGER.debug("Primary client ID doesn't pass authorization: {}", primaryClientId);
-        LOGGER.debug("AuthorizationException: ", e);
+        LOGGER.debug(AUTHORIZE_EXCEPTION_MESSAGE, e);
       }
     }
     return clientIds;
@@ -198,7 +198,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     throw new NotImplementedException("handle request not implemented");
   }
 
-//  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
   public String authorizeClient(String clientId) {
     return clientId;
   }

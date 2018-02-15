@@ -51,13 +51,17 @@ public class GovernmentOrganizationCrossReportTest {
             validGovernmentOrganizationCrossReport.getOrganizationTypeInd());
 
     assertThat(persistent.getThirdId(), is(equalTo(thirdId)));
-    assertThat(persistent.getCountySpecificCode(), is(equalTo(persistent.getCountySpecificCode())));
-    assertThat(persistent.getCrossReportThirdId(), is(equalTo(persistent.getCrossReportThirdId())));
-    assertThat(persistent.getReferralId(), is(equalTo(persistent.getReferralId())));
+    assertThat(persistent.getPrimaryKey(), is(equalTo(thirdId)));
+    assertThat(persistent.getCountySpecificCode(), is(equalTo(validGovernmentOrganizationCrossReport.getCountySpecificCode())));
+    assertThat(persistent.getCrossReportThirdId(), is(equalTo(validGovernmentOrganizationCrossReport.getCrossReportThirdId())));
+    assertThat(persistent.getReferralId(), is(equalTo(validGovernmentOrganizationCrossReport.getReferralId())));
     assertThat(persistent.getGovernmentOrganizationId(),
-        is(equalTo(persistent.getGovernmentOrganizationId())));
+        is(equalTo(validGovernmentOrganizationCrossReport.getGovernmentOrganizationId())));
     assertThat(persistent.getOrganizationTypeInd(),
-        is(equalTo(persistent.getOrganizationTypeInd())));
+        is(equalTo(validGovernmentOrganizationCrossReport.getOrganizationTypeInd())));
+    assertThat(persistent.getReferral(), is(equalTo(null)));
+    assertThat(persistent.getCrossReport(), is(equalTo(null)));
+    assertThat(persistent.getGovernmentOrganization(), is(equalTo(null)));
   }
 
   /**

@@ -34,6 +34,7 @@ nsDataSourceFactory:
       hibernate.id.new_generator_mappings: false
       hibernate.format_sql: true
       hibernate.use_sql_comments: false
+      hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}
 
 cmsDataSourceFactory:
   autoCommitByDefault: false
@@ -63,9 +64,9 @@ rsDataSourceFactory:
   url: ${DB_CWSRS_JDBC_URL}
   validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only"
   logValidationErrors: true
-  initialSize: ${DB_CWSRS_CP_INITIAL_SIZE}
-  minSize: ${DB_CWSRS_CP_MIN_SIZE}
-  maxSize: ${DB_CWSRS_CP_MAX_SIZE}
+  initialSize: ${DB_CWSRS_CP_INITIAL_SIZE:-2}
+  minSize: ${DB_CWSRS_CP_MIN_SIZE:-2}
+  maxSize: ${DB_CWSRS_CP_MAX_SIZE:-8}
   minIdleTime: 1 minute
   properties:
       hibernate.dialect: org.hibernate.dialect.DB2Dialect

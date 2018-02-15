@@ -1,10 +1,11 @@
-package gov.ca.cwds.rest.services.investigation;
+package gov.ca.cwds.rest.services;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import gov.ca.cwds.rest.services.RelationshipService;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,10 +20,10 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 @SuppressWarnings("javadoc")
-public class RelationshipListServiceTest {
+public class RelationshipServiceTest {
   private static final String DEFAULT_KEY = "1234567ABC";
   private RelationshipList relationshipListStub;
-  private RelationshipListService relationshipListService;
+  private RelationshipService relationshipService;
   private RelationshipsDao relationshipDao;
   private ClientDao clientDao;
 
@@ -35,13 +36,13 @@ public class RelationshipListServiceTest {
 
     this.relationshipDao = mock(RelationshipsDao.class);
     this.clientDao = mock(ClientDao.class);
-    relationshipListService = new RelationshipListService(relationshipDao, clientDao);
+    relationshipService = new RelationshipService(relationshipDao, clientDao);
     relationshipListStub = new RelationshipListEntityBuilder().build();
   }
 
   @Test
   public void testFindReturnsRelationshipListStub() {
-    Response response = relationshipListService.find(DEFAULT_KEY);
+    Response response = relationshipService.find(DEFAULT_KEY);
     assertThat(response, is(equalTo(relationshipListStub)));
 
   }
@@ -49,19 +50,19 @@ public class RelationshipListServiceTest {
   @Test
   public void createThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    relationshipListService.create(relationshipListStub);
+    relationshipService.create(relationshipListStub);
   }
 
   @Test
   public void deleteThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    relationshipListService.delete(DEFAULT_KEY);
+    relationshipService.delete(DEFAULT_KEY);
   }
 
   @Test
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
-    relationshipListService.update(DEFAULT_KEY, relationshipListStub);
+    relationshipService.update(DEFAULT_KEY, relationshipListStub);
   }
 
 }

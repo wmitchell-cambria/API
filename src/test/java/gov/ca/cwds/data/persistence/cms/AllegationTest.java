@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Date;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.junit.template.PersistentTestTemplate;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.CmsAllegationResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -280,6 +282,12 @@ public class AllegationTest implements PersistentTestTemplate {
     Allegation persistent = new Allegation(id, domainAllegation, lastUpdatedId, lastUpdatedTime);
     assertThat(persistent.toString(), is(not(equalTo(""))));
 
+  }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	Allegation pe = new Allegation();	  
+    assertTrue(pe.equals(pe));
   }
 
   private Allegation validAllegation()

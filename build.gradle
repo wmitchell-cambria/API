@@ -263,8 +263,6 @@ sonarqube {
   properties {
       property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec"
       property "sonar.jacoco.itReportPaths", "${buildDir}/jacoco/integrationTest.exec"
-     // property "sonar.host.url", "http://sonarqube.cwds.tabordasolutions
-     //        .net/dashboard?id=cwds%3Aapi"
   }
 }
 

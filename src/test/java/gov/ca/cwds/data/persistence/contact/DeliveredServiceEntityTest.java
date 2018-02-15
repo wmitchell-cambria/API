@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
 import org.junit.Test;
 
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceResourceBuilder;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -148,6 +150,12 @@ public class DeliveredServiceEntityTest {
         equalTo(DomainChef.cookBoolean(deliveredServiceDomain.getWraparoundServiceIndicator()))));
     assertThat(deliveredServiceEntity.getPrimaryKey(), is(equalTo(id)));
 
+  }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	DeliveredServiceEntity ds = new DeliveredServiceEntity();	  
+    assertTrue(ds.equals(ds));
   }
 
 }

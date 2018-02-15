@@ -1,9 +1,14 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.*;
 
 import java.util.Date;
 import org.junit.Test;
+
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 
 public class ClientAddressTest {
   @Test
@@ -31,6 +36,8 @@ public class ClientAddressTest {
     assertEquals("Expected homelessInd to have been set in constructor", homelessInd, address.getHomelessInd());
     assertEquals("Expected fkReferral to have been set in constructor", fkReferral, address.getFkReferral());
     assertEquals("Expected addresses to have been set in constructor", addresses, address.getAddresses());
+    assertEquals("Expected Client to be null", null, address.getClient());
+    assertEquals("Expected Referral to be null", null, address.getReferral());
   }
 
   @Test
@@ -61,6 +68,17 @@ public class ClientAddressTest {
     assertEquals("Expected addresses to have been set in constructor", addresses, address.getAddresses());
     assertEquals("Expected lastUpdateId to have been set in constructor", lastUpdateId, address.getLastUpdatedId());
 
+    
   }
 
+  @Test
+  public void testEmptyConstructor() throws Exception {
+    assertThat(ClientAddress.class.newInstance(), is(notNullValue()));
+  }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	ClientAddress ca = new ClientAddress();	  
+    assertTrue(ca.equals(ca));
+  }
 }
