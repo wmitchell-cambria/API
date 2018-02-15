@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
+import static gov.ca.cwds.rest.core.Api.RESOURCE_LEGACY_RELATIONSHIPS;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -29,7 +30,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 @SuppressWarnings("javadoc")
 public class ClientRelationshipResourceTest {
 
-  private static final String ROOT_RESOURCE = "/relationships/";
+  private static final String ROOT_RESOURCE = "/_relationships/";
 
   @After
   public void ensureServiceLocatorPopulated() {
