@@ -55,7 +55,7 @@ node ('tpt4-slave'){
 		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
    }
    stage('First line Tests') {
-       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test --tests "gov.ca.cwds.rest.resources.hoi.HOICaseResourceTest.testHandleFindNonExistingClientId"', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'firstLineTest jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/first-line-tests', reportFiles: 'index.html', reportName: 'First line tests Report', reportTitles: 'First line tests Summary'])
    }
    stage('Tests') {

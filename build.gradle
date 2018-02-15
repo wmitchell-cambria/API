@@ -236,7 +236,13 @@ tasks.withType(Test) {
     systemProperty 'java.library.path', '.:./lib:/opt/jenkins/workspace/taborda-API/lib:/usr/local/lib'
 }
 
+task firstLineTest(type: Test, dependsOn: testClasses) {
+    include '**/*FLT*'
+    exclude '**/*Test*'
+}
+
 test {
+    exclude '**/*FLT*'
     exclude '**/*DaoIT*'
 
     // These don't work. Docs mistaken?
