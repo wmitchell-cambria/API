@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import gov.ca.cwds.fixture.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
@@ -229,24 +230,6 @@ public class InvestigationEntityBuilder {
 
   public InvestigationEntityBuilder setSealed(Boolean sealed) {
     this.sealed = sealed;
-    return this;
-  }
-
-  public Long getPhone() {
-    return phone;
-  }
-
-  public InvestigationEntityBuilder setPhone(Long phone) {
-    this.phone = phone;
-    return this;
-  }
-
-  public Integer getPhoneExtension() {
-    return phoneExtension;
-  }
-
-  public InvestigationEntityBuilder setPhoneExtension(Integer phoneExtension) {
-    this.phoneExtension = phoneExtension;
     return this;
   }
 

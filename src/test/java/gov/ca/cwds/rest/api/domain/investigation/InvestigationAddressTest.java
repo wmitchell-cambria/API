@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
+import gov.ca.cwds.fixture.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
-import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;

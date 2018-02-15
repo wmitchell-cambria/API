@@ -27,8 +27,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
-import gov.ca.cwds.fixture.investigation.InvestigationAddressEntityBuilder;
 import gov.ca.cwds.fixture.investigation.PersonEntityBuilder;
 import gov.ca.cwds.fixture.investigation.RaceAndEthnicityEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;

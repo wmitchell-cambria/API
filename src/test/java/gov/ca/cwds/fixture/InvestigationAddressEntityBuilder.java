@@ -1,4 +1,4 @@
-package gov.ca.cwds.fixture.investigation;
+package gov.ca.cwds.fixture;
 
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;

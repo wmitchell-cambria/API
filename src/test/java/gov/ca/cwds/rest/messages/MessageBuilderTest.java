@@ -59,6 +59,8 @@ public class MessageBuilderTest {
     builder.addError("My 1st Message", ErrorType.VALIDATION);
     builder.addError("My 2nd Message", ErrorType.BUSINESS);
     builder.addError("My 3rd Message", ErrorType.DATA_ACCESS);
+    builder.addError("cover the CLIENT_CONTRACT error type", ErrorType.CLIENT_CONTRACT);
+    
     List<ErrorMessage> messages = builder.getMessages();
     assertEquals("Expected to find message type", "My 1st Message", messages.get(0).getMessage());
     assertEquals("Expected to find message type", "My 2nd Message", messages.get(1).getMessage());
@@ -80,5 +82,19 @@ public class MessageBuilderTest {
         "city size must be between 0 and 20", message.getMessage());
     assertEquals("Expected Error to have default validation type ", ErrorType.VALIDATION,
         message.getType());
+  }
+  
+  @Test
+  public void shouldMergeMessages() {
+	MessageBuilder anotherMessageBuilder = new MessageBuilder();
+	anotherMessageBuilder.addError("1st message to merge", ErrorType.VALIDATION);
+	
+	builder.addError("My 1st Message", ErrorType.VALIDATION);	
+	builder.merge(anotherMessageBuilder);
+	
+	List<ErrorMessage> messages = builder.getMessages();
+    assertEquals("Expected to find message type", "My 1st Message", messages.get(0).getMessage());
+    assertEquals("Expected to find message type", "1st message to merge", messages.get(1).getMessage());
+	
   }
 }

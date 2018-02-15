@@ -12,7 +12,6 @@ import org.apache.commons.io.IOUtils;
 // import org.apache.commons.compress.utils.IOUtils;
 import org.flywaydb.core.internal.util.FileCopyUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
