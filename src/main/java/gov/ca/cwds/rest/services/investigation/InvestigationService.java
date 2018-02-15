@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.services.investigation;
 import java.util.HashSet;
 import java.util.Set;
 
-import gov.ca.cwds.rest.services.RelationshipService;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.inject.Inject;
@@ -45,7 +44,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
-  private RelationshipService relationshipListService;
+  private ClientsRelationshipsService relationshipListService;
   private ContactService contactService;
   private HistoryOfInvolvementService hoiSvc;
   private ScreeningSummaryService screeningSummaryService;
@@ -68,7 +67,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
       AddressDao addressDao, LongTextService longTextService, PeopleService peopleService,
-      AllegationService allegationService, RelationshipService relationshipListService,
+      AllegationService allegationService, ClientsRelationshipsService relationshipListService,
       ContactService contactService, HistoryOfInvolvementService hoiSvc,
       ScreeningSummaryService screeningSummaryService) {
     super();

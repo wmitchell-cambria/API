@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 import java.util.HashSet;
 import java.util.Set;
 
-import gov.ca.cwds.rest.services.RelationshipService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,7 +40,7 @@ public class InvestigationServiceTest {
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
-  private RelationshipService relationshipListService;
+  private ClientsRelationshipsService relationshipListService;
   private ContactService contactService;
   private HistoryOfInvolvementService hoiService;
   private ScreeningSummaryService screeningSummaryService;
@@ -68,7 +67,7 @@ public class InvestigationServiceTest {
     this.longTextService = mock(LongTextService.class);
     this.peopleService = mock(PeopleService.class);
     this.allegationService = mock(AllegationService.class);
-    this.relationshipListService = mock(RelationshipService.class);
+    this.relationshipListService = mock(ClientsRelationshipsService.class);
     this.contactService = mock(ContactService.class);
     this.hoiService = mock(HistoryOfInvolvementService.class);
     this.screeningSummaryService = mock(ScreeningSummaryService.class);

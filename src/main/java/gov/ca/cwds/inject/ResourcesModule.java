@@ -124,7 +124,7 @@ import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
-import gov.ca.cwds.rest.services.RelationshipService;
+import gov.ca.cwds.rest.services.investigation.ClientsRelationshipsService;
 import gov.ca.cwds.rest.services.investigation.SafetyAlertsService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 
@@ -461,7 +461,7 @@ public class ResourcesModule extends AbstractModule {
   public TypedResourceDelegate<String, RelationshipList> relationshipListBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(RelationshipService.class));
+        injector.getInstance(ClientsRelationshipsService.class));
   }
 
   @Provides

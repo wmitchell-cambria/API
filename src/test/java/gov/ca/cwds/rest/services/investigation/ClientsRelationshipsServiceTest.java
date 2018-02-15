@@ -1,11 +1,11 @@
-package gov.ca.cwds.rest.services;
+package gov.ca.cwds.rest.services.investigation;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
-import gov.ca.cwds.rest.services.RelationshipService;
+import gov.ca.cwds.rest.services.investigation.ClientsRelationshipsService;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,10 +20,10 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 @SuppressWarnings("javadoc")
-public class RelationshipServiceTest {
+public class ClientsRelationshipsServiceTest {
   private static final String DEFAULT_KEY = "1234567ABC";
   private RelationshipList relationshipListStub;
-  private RelationshipService relationshipService;
+  private ClientsRelationshipsService relationshipService;
   private RelationshipsDao relationshipDao;
   private ClientDao clientDao;
 
@@ -36,7 +36,7 @@ public class RelationshipServiceTest {
 
     this.relationshipDao = mock(RelationshipsDao.class);
     this.clientDao = mock(ClientDao.class);
-    relationshipService = new RelationshipService(relationshipDao, clientDao);
+    relationshipService = new ClientsRelationshipsService(relationshipDao, clientDao);
     relationshipListStub = new RelationshipListEntityBuilder().build();
   }
 
