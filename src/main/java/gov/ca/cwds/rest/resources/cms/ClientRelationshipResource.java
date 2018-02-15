@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
-import static gov.ca.cwds.rest.core.Api.RESOURCE_RELATIONSHIPS;
+import static gov.ca.cwds.rest.core.Api.RESOURCE_LEGACY_RELATIONSHIPS;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -38,8 +38,8 @@ import io.swagger.annotations.ApiResponses;
  * 
  * @author CWDS API Team
  */
-@Api(value = RESOURCE_RELATIONSHIPS)
-@Path(value = RESOURCE_RELATIONSHIPS)
+@Api(value = RESOURCE_LEGACY_RELATIONSHIPS)
+@Path(value = RESOURCE_LEGACY_RELATIONSHIPS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientRelationshipResource {

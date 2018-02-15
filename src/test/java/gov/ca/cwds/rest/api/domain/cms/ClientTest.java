@@ -54,7 +54,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 @SuppressWarnings("javadoc")
 public class ClientTest implements DomainTestTemplate {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CLIENT + "/";;
+  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LEGACY_CLIENT + "/";;
 
   private static final ClientResource mockedClientResource = mock(ClientResource.class);
 
