@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiResponses;
  * Annotations</a> and
  * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
- * 
+ *
  * @author CWDS API Team
  */
 @Api(value = RESOURCE_CASE_HISTORY_OF_INVOLVEMENT)
@@ -41,13 +41,23 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HOICaseResource {
 
-  @Inject
-  @HOICaseServiceBackedResource
   private SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate;
 
   /**
+   * Constructor
+   *
+   * @param simpleResourceDelegate - typedResourceDelegate
+   */
+  @Inject
+  public HOICaseResource(
+      @HOICaseServiceBackedResource SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate) {
+    super();
+    this.simpleResourceDelegate = simpleResourceDelegate;
+  }
+
+  /**
    * Finds a cases HOI by client ids.
-   * 
+   *
    * @param hoiCaseRequest HOI Case Request containing a list of Client Id-s
    * @return the response
    */
