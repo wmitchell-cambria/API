@@ -13,7 +13,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RelationshipsServiceTest {
-
     RelationshipsService service;
     ClientRelationshipDao relationshipDao;
     Genealogist genealogist;

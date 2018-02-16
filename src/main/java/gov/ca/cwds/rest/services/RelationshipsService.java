@@ -7,8 +7,6 @@ import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.Response;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.Set;
-
 public class RelationshipsService  implements TypedCrudsService<String, Relationship, Response> {
     ClientRelationshipDao relationshipDao;
     Genealogist genealogist;
