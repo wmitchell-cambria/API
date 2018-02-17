@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.resources;
 import com.google.inject.Inject;
 import gov.ca.cwds.inject.RelationshipServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
-import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 

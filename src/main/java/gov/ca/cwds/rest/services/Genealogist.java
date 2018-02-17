@@ -6,8 +6,6 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import java.util.HashSet;
 import java.util.Set;
