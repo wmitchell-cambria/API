@@ -5,7 +5,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -326,6 +329,15 @@ public class HOIReferralServiceTest {
   @Test(expected = NotImplementedException.class)
   public void testHandleRequest() throws Exception {
     hoiService.handleRequest(new HOIReferral());
+  }
+
+  @Test(expected = AuthorizationException.class)
+  public void testUnAuthorizedSecondaryRelationClient() {
+    HOIReferralService spyTarget = spy(hoiService);
+    request = new HOIRequest();
+    request.setClientIds(Stream.of("unauthorizedId").collect(Collectors.toSet()));
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
+    spyTarget.handleFind(request);
   }
 
 }
