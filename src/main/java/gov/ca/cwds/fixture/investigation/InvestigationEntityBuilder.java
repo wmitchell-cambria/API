@@ -41,17 +41,12 @@ public class InvestigationEntityBuilder {
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
-  private Long phone = new Long("9164445555");
-  private Integer phoneExtension = new Integer(1122);
-  private Short phoneType = new Short("1111");
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
 
   private Assignee assignee = new Assignee("CWS Staff", incidentCounty, "Madera CWS", "0X5");
 
   private Set<PhoneNumber> phoneNumbers = new HashSet<>();
-  private PhoneNumber phoneNumber =
-      new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
 
   private LimitedAccess limitedAccess = new LimitedAccess("N", "20");
 
@@ -76,6 +71,11 @@ public class InvestigationEntityBuilder {
   private Set<Contact> contacts = new HashSet<>();
 
   public Investigation build() {
+	final Long phone = Long.valueOf("9164445555");
+	final Integer phoneExtension = Integer.valueOf("2222");
+	final Short phoneType = Short.valueOf("1111");
+	final  PhoneNumber phoneNumber =
+	      new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
     people.add(person);
     phoneNumbers.add(phoneNumber);
     relationships.add(relationship);
@@ -232,15 +232,6 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Short getPhoneType() {
-    return phoneType;
-  }
-
-  public InvestigationEntityBuilder setPhoneType(Short phoneType) {
-    this.phoneType = phoneType;
-    return this;
-  }
-
   public CmsRecordDescriptor getCmsRecordDescriptor() {
     return cmsRecordDescriptor;
   }
@@ -266,15 +257,6 @@ public class InvestigationEntityBuilder {
 
   public InvestigationEntityBuilder setPhoneNumbers(Set<PhoneNumber> phoneNumbers) {
     this.phoneNumbers = phoneNumbers;
-    return this;
-  }
-
-  public PhoneNumber getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public InvestigationEntityBuilder setPhoneNumber(PhoneNumber phoneNumber) {
-    this.phoneNumber = phoneNumber;
     return this;
   }
 
