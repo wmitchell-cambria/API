@@ -32,18 +32,18 @@ public class InvestigationEntityBuilder {
   private String incidentCounty = "20";
   private Date incidentDate = DomainChef.uncookDateString("2017-08-20");
   private String locationType = "Home";
-  private Short communicationMethod = 408;
+  private Short communicationMethod = new Short("408");
   private String name = "The test investigation";
   private String reportNarrative = "Summary of an investigation would appear here.";
   private String reference = "REF-TEST";
-  private Short responseTime = 1518;
+  private Short responseTime = new Short("1518");
   private Date startedAt = DomainChef.uncookStrictTimestampString("2017-08-03T01:00:00.000-0000");
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
-  private Long phone = 9164445555L;
-  private Integer phoneExtension = 1122;
-  private Short phoneType = 1111;
+  private Long phone = new Long("9164445555");
+  private Integer phoneExtension = new Integer(1122);
+  private Short phoneType = new Short("1111");
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
 

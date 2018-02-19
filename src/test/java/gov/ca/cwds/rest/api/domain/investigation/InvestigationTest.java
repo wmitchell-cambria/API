@@ -496,7 +496,6 @@ public class InvestigationTest {
 	// InvestigationEntityBuilder is used to create data for the 'stubbed' investigations end point
 	final Short newCommunicationMethod = 401;
 	final Short newResponseTime = 1517;
-	final Long newPhone = 9165555555L;
 	final Date newLastUpdatedAt = DomainChef.uncookStrictTimestampString("2017-01-03T01:00:00.000-0700");
 	final Date newIncidentDate = DomainChef.uncookDateString("2018-02-15");
 	final Date newStartedAt = DomainChef.uncookStrictTimestampString("2018-02-15T01:00:00.000-0000");
