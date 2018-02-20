@@ -4,11 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
 import org.junit.Test;
+
+import gov.ca.cwds.fixture.AssignmentUnitEntityBuilder;
 
 public class AssignmentUnitTest {
 
@@ -85,6 +88,12 @@ public class AssignmentUnitTest {
 		AssignmentUnit assignmentUnit = new AssignmentUnit();	  
 	    assertTrue(assignmentUnit.equals(assignmentUnit));
 	  }
-
+	  @Test
+	  public void shouldHaveSameHashCodesForAssignmentUnitWithSameValues() {
+		AssignmentUnit assignmentUnit1 = new AssignmentUnitEntityBuilder().build();
+		AssignmentUnit assignmentUnit2 = new AssignmentUnitEntityBuilder().setEndDate(assignmentUnit1.getEndDate())
+			.setStartDate(assignmentUnit1.getStartDate()).build();
+		assertEquals("Expecting AssignmentUnits to have same hash code", assignmentUnit1.hashCode(), assignmentUnit2.hashCode());
+	  }
 	
 }

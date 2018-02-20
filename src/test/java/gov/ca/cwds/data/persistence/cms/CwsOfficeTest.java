@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -147,5 +148,12 @@ public class CwsOfficeTest {
   public void equalsShouldBeTrueWhenSameObject() throws Exception {
 	CwsOffice cwsOffice = new CwsOffice();	  
     assertTrue(cwsOffice.equals(cwsOffice));
+  }
+
+  @Test
+  public void shouldHaveSameHashCodesForCwsOfficeWithSameValues() {
+	CwsOffice cwsOffice = new CwsOfficeEntityBuilder().build();
+	CwsOffice cwsOffice1 = new CwsOfficeEntityBuilder().build();
+	assertEquals("Expecting CwsOffice object to have same hash code", cwsOffice.hashCode(), cwsOffice1.hashCode());
   }
 }

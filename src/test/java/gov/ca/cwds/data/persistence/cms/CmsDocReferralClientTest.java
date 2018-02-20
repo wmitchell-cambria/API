@@ -3,12 +3,14 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
 import org.junit.Test;
 
+import gov.ca.cwds.fixture.CmsDocReferralClientEntityBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
 @SuppressWarnings("javadoc")
@@ -113,4 +115,10 @@ public class CmsDocReferralClientTest {
     assertTrue(cmsDocReferralClient.equals(cmsDocReferralClient));
   }
   
+  @Test
+  public void shouldHaveSameHashCodesForCmsDocReferralClientWithSameValues() {
+	CmsDocReferralClient cmsDocReferralClient = new CmsDocReferralClientEntityBuilder().build();
+	CmsDocReferralClient cmsDocReferralClient1 = new CmsDocReferralClientEntityBuilder().build();
+	assertEquals("Expecting CmsDocReferralClient objects to have same hash code", cmsDocReferralClient.hashCode(), cmsDocReferralClient1.hashCode());
+  }
 }

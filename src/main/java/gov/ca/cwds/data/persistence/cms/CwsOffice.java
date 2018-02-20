@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * CWDS API Team
@@ -307,4 +308,10 @@ public class CwsOffice extends CmsPersistentObject {
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+  
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
 }
