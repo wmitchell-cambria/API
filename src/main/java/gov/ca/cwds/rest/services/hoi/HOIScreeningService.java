@@ -49,7 +49,7 @@ public class HOIScreeningService
     authorizeClients(clientIds);
 
     for (ScreeningEntity screeningEntity : screeningDao.findScreeningsByClientIds(clientIds)) {
-      authorizeScreeningClients(screeningEntity);
+      authorizeScreening(screeningEntity);
       screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
     }
 
@@ -62,9 +62,16 @@ public class HOIScreeningService
     throw new NotImplementedException("handle request not implemented");
   }
 
-  private void authorizeScreeningClients(ScreeningEntity screeningEntity) {
-    Set<ParticipantEntity> participants = screeningEntity.getParticipants();
+  private void authorizeScreening(
+      @Authorize("screening:read:screeningEntity") ScreeningEntity screeningEntity) {
+    // Check screening access restriction
+    String accessRestriction = screeningEntity.getAccessRestrictions();
+    if (StringUtils.isNoneBlank(accessRestriction)) {
 
+    }
+
+    // Check participants
+    Set<ParticipantEntity> participants = screeningEntity.getParticipants();
     if (participants != null) {
       for (ParticipantEntity participant : participants) {
         String participantId = participant.getLegacyId();
