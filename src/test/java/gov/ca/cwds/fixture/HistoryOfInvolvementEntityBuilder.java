@@ -1,8 +1,11 @@
-package gov.ca.cwds.fixture.investigation;
+package gov.ca.cwds.fixture;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import gov.ca.cwds.fixture.investigation.CaseEntityBuilder;
+import gov.ca.cwds.fixture.investigation.SimpleReferralEntityBuilder;
+import gov.ca.cwds.fixture.investigation.SimpleScreeningEntityBuilder;
 import gov.ca.cwds.rest.api.domain.investigation.Case;
 import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
 import gov.ca.cwds.rest.api.domain.investigation.SimpleReferral;

@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.security.annotations.Authorize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -7,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
    * Serial Version UID
    */
   private static final long serialVersionUID = 1L;
-  private static final String AUTHORIZE_EXCEPTION_MESSAGE = "AuthorizationException: ";
   private static final Logger LOGGER = LoggerFactory.getLogger(HOICaseService.class);
 
   private CaseDao caseDao;
@@ -99,13 +98,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   private List<HOICase> findAllCasesForAllClients(Set<String> clientIds) {
     Set<String> allClientIds = new HashSet<>(clientIds);
     for (String clientId : clientIds) {
-      try {
-        clientId = authorizeClient(clientId);
-        allClientIds.addAll(findAllRelatedClientIds(clientId));
-      } catch (AuthorizationException e) {
-        LOGGER.debug("Client ID doesn't pass authorization: {}", clientId);
-        LOGGER.debug(AUTHORIZE_EXCEPTION_MESSAGE, e);
-      }
+      clientId = authorizeClient(clientId);
+      allClientIds.addAll(findAllRelatedClientIds(clientId));
     }
     CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
     List<HOICase> hoicases = new ArrayList<>(cmscases.length);
@@ -127,7 +121,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         assignedSocialWorker, parents);
   }
 
-  @SuppressWarnings("fb-contrib:PSC_PRESIZE_COLLECTIONS")
   private List<String> findAllRelatedClientIds(String clientId) {
     ClientRelationship[] clientRelationshipsByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(clientId);
@@ -135,26 +128,15 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientRelationshipDao.findBySecondaryClientId(clientId);
     List<String> clientIds = new ArrayList<>(
         clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
-    clientIds.add(clientId);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       String secondaryClientId = relationship.getSecondaryClientId();
-      try {
-        authorizeClient(secondaryClientId);
-        clientIds.add(secondaryClientId);
-      } catch (AuthorizationException e) {
-        LOGGER.debug("Secondary client ID doesn't pass authorization: {}", secondaryClientId);
-        LOGGER.debug(AUTHORIZE_EXCEPTION_MESSAGE, e);
-      }
+      authorizeClient(secondaryClientId);
+      clientIds.add(secondaryClientId);
     }
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
       String primaryClientId = relation.getPrimaryClientId();
-      try {
-        authorizeClient(primaryClientId);
-        clientIds.add(primaryClientId);
-      } catch (AuthorizationException e) {
-        LOGGER.debug("Primary client ID doesn't pass authorization: {}", primaryClientId);
-        LOGGER.debug(AUTHORIZE_EXCEPTION_MESSAGE, e);
-      }
+      authorizeClient(primaryClientId);
+      clientIds.add(primaryClientId);
     }
     return clientIds;
   }
@@ -182,6 +164,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
   private HOIVictim getFocusChild(CmsCase cmscase) {
     String focusChildId = cmscase.getFkchldClt();
+    authorizeClient(focusChildId);
     Client client = clientDao.find(focusChildId);
     String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =
@@ -198,7 +181,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     throw new NotImplementedException("handle request not implemented");
   }
 
-  public String authorizeClient(String clientId) {
+  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
     return clientId;
   }
 

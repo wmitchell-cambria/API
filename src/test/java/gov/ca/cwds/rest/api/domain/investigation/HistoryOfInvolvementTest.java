@@ -15,10 +15,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.fixture.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.fixture.investigation.CaseEntityBuilder;
-import gov.ca.cwds.fixture.investigation.HistoryOfInvolvementEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimpleReferralEntityBuilder;
 import gov.ca.cwds.fixture.investigation.SimpleScreeningEntityBuilder;
+import gov.ca.cwds.rest.api.domain.investigation.Case;
+import gov.ca.cwds.rest.api.domain.investigation.HistoryOfInvolvement;
+import gov.ca.cwds.rest.api.domain.investigation.SimpleReferral;
+import gov.ca.cwds.rest.api.domain.investigation.SimpleScreening;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 

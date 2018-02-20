@@ -17,8 +17,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -46,7 +44,6 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class InvestigationTest {
 
-  private ObjectMapper MAPPER = new ObjectMapper();
   private final static DateFormat tf = new SimpleDateFormat("HH:mm:ss");
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -224,30 +221,6 @@ public class InvestigationTest {
     assertThat(investigation.getContacts(), is(equalTo(contacts)));
 
   }
-
-  // @Test
-  // public void testWithNullEmergencyNumber() {
-  // Referral referral = new ReferralEntityBuilder().build();
-  // Address address = new AddressEntityBuilder().setEmergencyNumber(null).build();
-  // StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
-  // LongText longText = new LongTextResourceBuilder().build();
-  // AllegationList allegations = new AllegationListEntityBuilder().build();
-  // Set<Allegation> allgationSet = allegations.getAllegations();
-  // People people = new PeopleEntityBuilder().build();
-  // Set<Person> personSet = people.getPersons();
-  // // TODO
-  // Set<Relationship> relationshipList = new HashSet<>();
-  // SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
-  // Set<String> crossReports = new HashSet<String>();
-  // Set<Contact> contacts = new HashSet<Contact>();
-  // ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
-  // Investigation investigation =
-  // new Investigation(referral, address, staffPerson, longText, longText, allgationSet,
-  // personSet, relationshipList, safetyAlerts, crossReports, contacts, screeningSummary);
-  // Set<PhoneNumber> ip = investigation.getPhoneNumbers();
-  //
-  // assertThat(investigation.getPhoneNumbers())
-  // }
 
   @Test
   public void testWithNullReferralReceivedDateHasNullStartedAt() {
@@ -519,6 +492,63 @@ public class InvestigationTest {
   }
 
   @Test
+  public void testInvestigationEntityBuilder() {
+	// InvestigationEntityBuilder is used to create data for the 'stubbed' investigations end point
+	final Short newCommunicationMethod = 401;
+	final Short newResponseTime = 1517;
+	final Date newLastUpdatedAt = DomainChef.uncookStrictTimestampString("2017-01-03T01:00:00.000-0700");
+	final Date newIncidentDate = DomainChef.uncookDateString("2018-02-15");
+	final Date newStartedAt = DomainChef.uncookStrictTimestampString("2018-02-15T01:00:00.000-0000");
+	final Boolean newSensitive = Boolean.TRUE;
+	final Boolean newSealed = Boolean.TRUE;
+	final String newTableName = "CLIENT_T";
+	final String newId = "2345678ABC";
+	final String newLastUpdatedBy = "aab";
+	final String newIncidentCounty = "34";
+	final String newName = "new test investigation";
+	final String newLocationType = "Residence";
+	final String newReportNarrative = "new report narrative";
+	final String newReference = "NEW-REF";
+	final String newAdditionalInformation = "new additional information";
+	final CmsRecordDescriptor newCmsRecordDescriptor = new CmsRecordDescriptor(newId, "222-333-444-5555", newTableName, "Client");
+	
+	Investigation investigation = new InvestigationEntityBuilder()
+		.setId(newId)
+		.setTableName(newTableName)
+		.setLastUpdatedBy(newLastUpdatedBy)
+		.setLastUpdatedAt(newLastUpdatedAt)
+		.setIncidentCounty(newIncidentCounty)
+		.setIncidentDate(newIncidentDate)
+		.setLocationType(newLocationType)
+		.setCommunicationMethod(newCommunicationMethod)
+		.setName(newName)
+		.setReportNarrative(newReportNarrative)
+		.setReference(newReference)
+		.setResponseTime(newResponseTime)
+		.setStartedAt(newStartedAt)
+		.setAdditionalInformation(newAdditionalInformation)
+		.setSensitive(newSensitive)
+		.setSealed(newSealed)
+		.setCmsRecordDescriptor(newCmsRecordDescriptor)
+		.build();
+		
+	assertThat(investigation.getLastUpdatedBy(), is(equalTo(newLastUpdatedBy)));
+	assertThat(investigation.getLastUpdatedAt(), is(equalTo(newLastUpdatedAt)));
+	assertThat(investigation.getIncidentCounty(), is(equalTo(newIncidentCounty)));
+	assertThat(investigation.getIncidentDate(), is(equalTo(newIncidentDate)));
+	assertThat(investigation.getLocationType(), is(equalTo(newLocationType)));
+	assertThat(investigation.getCommunicationMethod(), is(equalTo(newCommunicationMethod)));
+	assertThat(investigation.getName(), is(equalTo(newName)));
+	assertThat(investigation.getReportNarrative(), is(equalTo(newReportNarrative)));
+	assertThat(investigation.getReference(), is(equalTo(newReference)));
+	assertThat(investigation.getResponseTime(), is(equalTo(newResponseTime)));
+	assertThat(investigation.getStartedAt(), is(equalTo(newStartedAt)));
+	assertThat(investigation.getAdditionalInformation(), is(equalTo(newAdditionalInformation)));
+	assertThat(investigation.getSensitive(), is(equalTo(newSensitive)));
+	assertThat(investigation.getSealed(), is(equalTo(newSealed)));
+  }
+  
+  @Test
   public void shouldCompareEqualsToObjectWithSameValues() {
     Investigation investigation = new InvestigationEntityBuilder().build();
     Investigation otherInvestigation = new InvestigationEntityBuilder().build();
@@ -532,18 +562,6 @@ public class InvestigationTest {
         .setIncidentDate(DomainChef.uncookDateString("2017-01-01")).build();
     assertThat(investigation, is(not(equals(otherInvestigation))));
   }
-
-  // @Test
-  // @Ignore
-  // public void testSerializedInvestigation()
-  // throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-  // SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
-  // Investigation investigation =
-  // new InvestigationEntityBuilder().setSafetyAlerts(safetyAlerts).build();
-  // final String expected =
-  // MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
-  // System.out.println(expected);
-  // }
 
   @Test
   public void equalsHashCodeWork() {

@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.persistence.junit.template.PersistentTestTemplate;
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.CmsAllegationResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;

@@ -31,7 +31,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 public class ClientRelationshipTest {
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_RELATIONSHIPS + "/";
+  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LEGACY_RELATIONSHIPS + "/";
 
   private static final ClientRelationshipResource mockedResource =
       mock(ClientRelationshipResource.class);

@@ -40,10 +40,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
-import gov.ca.cwds.rest.api.domain.investigation.Investigation;
-import gov.ca.cwds.rest.api.domain.investigation.People;
-import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
-import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
+import gov.ca.cwds.rest.api.domain.investigation.*;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.AddressValidationResource;
@@ -86,13 +83,7 @@ import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
 import gov.ca.cwds.rest.resources.investigation.RelationshipListResource;
 import gov.ca.cwds.rest.resources.investigation.SafetyAlertsResource;
-import gov.ca.cwds.rest.services.AddressService;
-import gov.ca.cwds.rest.services.AddressValidationService;
-import gov.ca.cwds.rest.services.IntakeLovService;
-import gov.ca.cwds.rest.services.ParticipantService;
-import gov.ca.cwds.rest.services.PersonService;
-import gov.ca.cwds.rest.services.ScreeningService;
-import gov.ca.cwds.rest.services.ScreeningToReferralService;
+import gov.ca.cwds.rest.services.*;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
@@ -124,7 +115,7 @@ import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.HistoryOfInvolvementService;
 import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
-import gov.ca.cwds.rest.services.RelationshipService;
+import gov.ca.cwds.rest.services.investigation.ClientsRelationshipsService;
 import gov.ca.cwds.rest.services.investigation.SafetyAlertsService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 
@@ -461,7 +452,15 @@ public class ResourcesModule extends AbstractModule {
   public TypedResourceDelegate<String, RelationshipList> relationshipListBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(RelationshipService.class));
+        injector.getInstance(ClientsRelationshipsService.class));
+  }
+
+  @Provides
+  @RelationshipServiceBackedResource
+  public TypedResourceDelegate<String, Relationship> relationshipBackedResource(
+          Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+            injector.getInstance(RelationshipsService.class));
   }
 
   @Provides

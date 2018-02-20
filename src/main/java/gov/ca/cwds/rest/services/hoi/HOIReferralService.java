@@ -25,6 +25,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
+import gov.ca.cwds.security.annotations.Authorize;
 
 /**
  * <p>
@@ -95,8 +96,15 @@ public class HOIReferralService
   }
 
   private List<ReferralClient> fetchReferralClient(Set<String> clientIds) {
+    authorizeClients(clientIds);
     ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
     return Arrays.asList(referralClients);
+  }
+
+  private void authorizeClients(Set<String> clientIds) {
+    for (String clientId : clientIds) {
+      authorizeClient(clientId);
+    }
   }
 
   private Role fetchForReporterRole(Role role, Referral referral, ReferralClient referralClient,
@@ -130,16 +138,20 @@ public class HOIReferralService
 
   private void fetchForClients(Allegation allegation, List<Client> clients) {
     if (allegation.getVictimClientId() != null) {
-      clients.add(clientDao.find(allegation.getVictimClientId()));
+      clients.add(clientDao.find(authorizeClient(allegation.getVictimClientId())));
     }
     if (allegation.getPerpetratorClientId() != null) {
-      clients.add(clientDao.find(allegation.getPerpetratorClientId()));
+      clients.add(clientDao.find(authorizeClient(allegation.getPerpetratorClientId())));
     }
   }
 
   @Override
   protected HOIReferralResponse handleRequest(HOIReferral req) {
     throw new NotImplementedException("handle request not implemented");
+  }
+
+  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+    return clientId;
   }
 
 }

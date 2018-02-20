@@ -50,9 +50,15 @@ public final class Api {
   public static final String RESOURCE_CHILDCLIENT = "_childClients";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_LEGACY_CLIENT} API..
+   */
+  public static final String RESOURCE_LEGACY_CLIENT = "_clients";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} API..
    */
-  public static final String RESOURCE_CLIENT = "_clients";
+  public static final String RESOURCE_CLIENT = "clients";
+
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT_COLLATERALS} API..
@@ -165,9 +171,9 @@ public final class Api {
   public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_RELATIONSHIPS} API..
+   * A {@code String} constant representing {@value #RESOURCE_LEGACY_RELATIONSHIPS} API..
    */
-  public static final String RESOURCE_RELATIONSHIPS = "relationships";
+  public static final String RESOURCE_LEGACY_RELATIONSHIPS = "_relationships";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_REPORTER} API.

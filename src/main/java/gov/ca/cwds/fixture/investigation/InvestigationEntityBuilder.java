@@ -32,26 +32,21 @@ public class InvestigationEntityBuilder {
   private String incidentCounty = "20";
   private Date incidentDate = DomainChef.uncookDateString("2017-08-20");
   private String locationType = "Home";
-  private Short communicationMethod = 408;
+  private Short communicationMethod = Short.valueOf("408");
   private String name = "The test investigation";
   private String reportNarrative = "Summary of an investigation would appear here.";
   private String reference = "REF-TEST";
-  private Short responseTime = 1518;
+  private Short responseTime = Short.valueOf("1518");
   private Date startedAt = DomainChef.uncookStrictTimestampString("2017-08-03T01:00:00.000-0000");
   private String additionalInformation = "Additional information about the investigation.";
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
-  private Long phone = 9164445555L;
-  private Integer phoneExtension = 1122;
-  private Short phoneType = 1111;
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
 
   private Assignee assignee = new Assignee("CWS Staff", incidentCounty, "Madera CWS", "0X5");
 
   private Set<PhoneNumber> phoneNumbers = new HashSet<>();
-  private PhoneNumber phoneNumber =
-      new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
 
   private LimitedAccess limitedAccess = new LimitedAccess("N", "20");
 
@@ -76,6 +71,11 @@ public class InvestigationEntityBuilder {
   private Set<Contact> contacts = new HashSet<>();
 
   public Investigation build() {
+	final Long phone = Long.valueOf("9164445555");
+	final Integer phoneExtension = Integer.valueOf("2222");
+	final Short phoneType = Short.valueOf("1111");
+	final  PhoneNumber phoneNumber =
+	      new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
     people.add(person);
     phoneNumbers.add(phoneNumber);
     relationships.add(relationship);
@@ -232,33 +232,6 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Long getPhone() {
-    return phone;
-  }
-
-  public InvestigationEntityBuilder setPhone(Long phone) {
-    this.phone = phone;
-    return this;
-  }
-
-  public Integer getPhoneExtension() {
-    return phoneExtension;
-  }
-
-  public InvestigationEntityBuilder setPhoneExtension(Integer phoneExtension) {
-    this.phoneExtension = phoneExtension;
-    return this;
-  }
-
-  public Short getPhoneType() {
-    return phoneType;
-  }
-
-  public InvestigationEntityBuilder setPhoneType(Short phoneType) {
-    this.phoneType = phoneType;
-    return this;
-  }
-
   public CmsRecordDescriptor getCmsRecordDescriptor() {
     return cmsRecordDescriptor;
   }
@@ -284,15 +257,6 @@ public class InvestigationEntityBuilder {
 
   public InvestigationEntityBuilder setPhoneNumbers(Set<PhoneNumber> phoneNumbers) {
     this.phoneNumbers = phoneNumbers;
-    return this;
-  }
-
-  public PhoneNumber getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public InvestigationEntityBuilder setPhoneNumber(PhoneNumber phoneNumber) {
-    this.phoneNumber = phoneNumber;
     return this;
   }
 

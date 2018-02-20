@@ -30,4 +30,12 @@ public class R00832SetStaffPersonAddedIndTest {
     assertEquals(true, r00832SetStaffPersonAddedInd.isValid());
   }
 
+  @Test
+  public void shouldNotPassIfIsValidReturnFalse() throws Exception {
+    ScreeningToReferral validScreeningToreferral = new ScreeningToReferralResourceBuilder()
+        .setResponseTime(null).createScreeningToReferral();
+    R00832SetStaffPersonAddedInd r00832SetStaffPersonAddedInd =
+        new R00832SetStaffPersonAddedInd(validScreeningToreferral);
+    assertEquals(false, r00832SetStaffPersonAddedInd.isValid());
+  }
 }
