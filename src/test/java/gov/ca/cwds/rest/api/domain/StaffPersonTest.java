@@ -4,9 +4,6 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 
@@ -17,33 +14,19 @@ import java.text.SimpleDateFormat;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 @SuppressWarnings("javadoc")
 public class StaffPersonTest {
-
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_STAFF_PERSONS + "/";
-
-  private static final StaffPersonResource mockedStaffPersonResource =
-      mock(StaffPersonResource.class);
-
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-  private StaffPerson validStaffPerson = validStaffPerson();
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private String id = "a";

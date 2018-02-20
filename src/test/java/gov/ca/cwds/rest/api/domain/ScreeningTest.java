@@ -1,23 +1,15 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
-import java.util.Set;
-
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableSet;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -35,11 +27,6 @@ public class ScreeningTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private static final ScreeningResource mockedScreeningResource = mock(ScreeningResource.class);
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

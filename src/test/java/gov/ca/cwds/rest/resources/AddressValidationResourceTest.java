@@ -7,14 +7,11 @@ import static org.mockito.Mockito.mock;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -30,11 +27,6 @@ public class AddressValidationResourceTest {
 
   private static final String ROOT_RESOURCE = "/address_validation/";
   private static final String FOUND_RESOURCE = "/address_validation/1";
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

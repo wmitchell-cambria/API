@@ -16,14 +16,11 @@ import java.util.List;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -35,14 +32,8 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("javadoc")
 public class AssignmentTest {
 
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private final static DateFormat timeOnlyFormat = new SimpleDateFormat("HH:mm:ssZ");

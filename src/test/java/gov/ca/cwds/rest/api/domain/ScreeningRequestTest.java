@@ -5,14 +5,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
@@ -30,11 +27,6 @@ public class ScreeningRequestTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private static final ScreeningResource resource = mock(ScreeningResource.class);
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

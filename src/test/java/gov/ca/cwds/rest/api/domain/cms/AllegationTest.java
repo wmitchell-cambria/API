@@ -19,14 +19,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.fixture.CmsAllegationResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.core.Api;
@@ -43,19 +40,9 @@ public class AllegationTest {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_ALLEGATION + "/";
   private static final AllegationResource mockedResource = mock(AllegationResource.class);
 
-  @SuppressWarnings("javadoc")
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
-
-  @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  /**
-   * 
-   */
   @ClassRule
   public static final ResourceTestRule resources =
       ResourceTestRule.builder().addResource(mockedResource).build();

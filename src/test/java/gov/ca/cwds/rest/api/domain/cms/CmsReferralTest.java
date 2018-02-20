@@ -17,7 +17,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -26,7 +25,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
@@ -48,11 +46,6 @@ public class CmsReferralTest {
 
   private static final CmsReferralResource mockedCmsReferralResource =
       mock(CmsReferralResource.class);
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

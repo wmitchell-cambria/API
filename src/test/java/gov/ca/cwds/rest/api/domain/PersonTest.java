@@ -15,7 +15,6 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -23,8 +22,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.fixture.PersonEntityBuilder;
 import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -61,11 +58,6 @@ public class PersonTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private static final PersonResource mockedPersonResource = mock(PersonResource.class);
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
