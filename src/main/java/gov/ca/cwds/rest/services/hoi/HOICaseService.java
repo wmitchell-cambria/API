@@ -49,7 +49,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
    * Serial Version UID
    */
   private static final long serialVersionUID = 1L;
-  private static final String AUTHORIZE_EXCEPTION_MESSAGE = "AuthorizationException: ";
   private static final Logger LOGGER = LoggerFactory.getLogger(HOICaseService.class);
 
   private CaseDao caseDao;
