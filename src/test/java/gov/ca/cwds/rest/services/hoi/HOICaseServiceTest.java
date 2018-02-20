@@ -4,7 +4,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -13,10 +15,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -246,4 +250,45 @@ public class HOICaseServiceTest {
     return response;
   }
 
+  @Test(expected = AuthorizationException.class)
+  public void testUnAuthorizedClient() {
+    HOICaseService spyTarget = spy(target);
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("123");
+    spyTarget.handleFind(request);
+  }
+
+  @Test(expected = AuthorizationException.class)
+  public void testUnAuthorizedPrimaryRelationClient() {
+    HOICaseService spyTarget = spy(target);
+    ClientRelationship clientRelationshipsByPrimaryClient =
+        new ClientRelationshipEntityBuilder().setSecondaryClientId("unauthorizedId").build();
+    when(clientRelationshipDao.findByPrimaryClientId("123")).thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
+    when(clientRelationshipDao.findBySecondaryClientId("123")).thenReturn(new ClientRelationship[] {});
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
+    spyTarget.handleFind(request);
+  }
+
+  @Test(expected = AuthorizationException.class)
+  public void testUnAuthorizedSecondaryRelationClient() {
+    HOICaseService spyTarget = spy(target);
+    ClientRelationship clientRelationshipsByPrimaryClient =
+        new ClientRelationshipEntityBuilder().setSecondaryClientId("secondaryId").build();
+    when(clientRelationshipDao.findByPrimaryClientId("123")).thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
+    ClientRelationship clientRelationshipsBySecondaryClient =
+        new ClientRelationshipEntityBuilder().setPrimaryClientId("unauthorizedId").build();
+    when(clientRelationshipDao.findBySecondaryClientId("123")).thenReturn(new ClientRelationship[] {clientRelationshipsBySecondaryClient});
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
+    spyTarget.handleFind(request);
+  }
+
+  @Test(expected = AuthorizationException.class)
+  public void testUnAuthorizedFocusChildClient() {
+    HOICaseService spyTarget = spy(target);
+    when(clientRelationshipDao.findByPrimaryClientId("123")).thenReturn(new ClientRelationship[] {});
+    when(clientRelationshipDao.findBySecondaryClientId("123")).thenReturn(new ClientRelationship[] {});
+    CmsCase cmsCase = new CmsCaseEntityBuilder().setFkchldClt("unauthorizedId").build();
+    when(caseDao.findByVictimClientIds(any(Set.class))).thenReturn(new CmsCase[] {cmsCase});
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
+    spyTarget.handleFind(request);
+  }
 }
