@@ -224,4 +224,13 @@ public class ClientRelationshipDaoIT {
     assertThat(clientRelationship.length, greaterThanOrEqualTo(1));
   }
 
+  @Test
+  public void shouldFindBothPrimaryAndSecondaryClients() {
+    ClientRelationship[] clientRelationship =
+            clientRelationshipDao.findByPrimaryClientId("0LIZAWH00h");
+    assertThat(clientRelationship, notNullValue());
+    assertThat(clientRelationship.length, greaterThanOrEqualTo(1));
+
+  }
+
 }

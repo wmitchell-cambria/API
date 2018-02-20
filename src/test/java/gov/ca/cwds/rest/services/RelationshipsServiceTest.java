@@ -13,36 +13,45 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RelationshipsServiceTest {
-    RelationshipsService service;
-    ClientRelationshipDao relationshipDao;
-    Genealogist genealogist;
+    private RelationshipsService service;
+    private ClientRelationshipDao relationshipDao;
+    private Genealogist genealogist;
+    private ClientRelationship[] primaryRelationships;
+    private ClientRelationship[] secondaryRelationships;
+    private String clientId;
 
     @Before
     public void setup(){
+        clientId = "1XVZ43D";
+        primaryRelationships = new ClientRelationship[2];
+        secondaryRelationships = new ClientRelationship[2];
+
+
         relationshipDao = mock(ClientRelationshipDao.class);
+        when(relationshipDao.findByPrimaryClientId(clientId)).thenReturn(primaryRelationships);
+        when(relationshipDao.findBySecondaryClientId(clientId)).thenReturn(secondaryRelationships);
+
         genealogist = mock(Genealogist.class);
         service = new RelationshipsService(relationshipDao, genealogist);
     }
 
     @Test
-    public void shouldFindRelationShips(){
-        String clientId = "1XVZ43D";
-        ClientRelationship[] relationships = new ClientRelationship[2];
-        when(relationshipDao.findByPrimaryClientId(clientId)).thenReturn(relationships);
-
+    public void shouldSearchForClientsRelatedToClient(){
         service.find(clientId);
         verify(relationshipDao).findByPrimaryClientId(clientId);
-        verify(genealogist).buildRelationForClient(clientId, relationships);
+        verify(relationshipDao).findBySecondaryClientId(clientId);
     }
 
     @Test
-    public void findShouldReturnTheFoundRelations(){
-        Relationship relationship = new Relationship();
+    public void shouldBuildRelationshipForClient(){
+        service.find(clientId);
+        verify(genealogist).buildRelationForClient(clientId, primaryRelationships, secondaryRelationships);
+    }
 
-        String clientId = "1XVZ43D";
-        ClientRelationship[] relationships = new ClientRelationship[2];
-        when(relationshipDao.findByPrimaryClientId(clientId)).thenReturn(relationships);
-        when(genealogist.buildRelationForClient(clientId, relationships)).thenReturn(relationship);
+    @Test
+    public void findShouldReturnTheClientAndHisRelations(){
+        Relationship relationship = new Relationship();
+        when(genealogist.buildRelationForClient(clientId, primaryRelationships, secondaryRelationships)).thenReturn(relationship);
 
         Relationship foundRelationship = (Relationship)service.find(clientId);
         assertSame(relationship, foundRelationship);

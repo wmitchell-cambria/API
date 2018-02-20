@@ -24,8 +24,9 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
     }
 
     public Response find(String id) {
-        ClientRelationship[] relations = relationshipDao.findByPrimaryClientId(id);
-        return genealogist.buildRelationForClient(id, relations);
+        ClientRelationship[] primaryRelations = relationshipDao.findByPrimaryClientId(id);
+        ClientRelationship[] secondaryRelations = relationshipDao.findBySecondaryClientId(id);
+        return genealogist.buildRelationForClient(id, primaryRelations, secondaryRelations);
     }
 
     @Override

@@ -23,25 +23,47 @@ public class Genealogist {
         this.clientDao = clientDao;
     }
 
-    public Relationship buildRelationForClient(String clientId, ClientRelationship[] relatedClients) {
+    public Relationship buildRelationForClient(String clientId, ClientRelationship[] primaryRelatedClients, ClientRelationship[] secondaryRelatedClients) {
         Set<RelationshipTo> relations = new HashSet<>();
         Client primaryClient;
-        for (ClientRelationship clientRelationship : relatedClients) {
-            RelationshipTo relationship = buildRelationship(clientRelationship);
-            relations.add(relationship);
-        }
+        relations.addAll(addRelatedToClients(primaryRelatedClients, clientId));
+        relations.addAll(AddRelatedFromClients(secondaryRelatedClients, clientId));
         primaryClient = findClient(clientId);
         return new Relationship(primaryClient, relations);
     }
 
-    private RelationshipTo buildRelationship(ClientRelationship clientRelationship ){
+    private Set<RelationshipTo>  addRelatedToClients(ClientRelationship[] relatedClients, String clientId) {
+        Set<RelationshipTo> relations = new HashSet<>();
+        for (ClientRelationship clientRelationship : relatedClients) {
+            if( clientId.equals(clientRelationship.getPrimaryClientId())){
+                RelationshipTo relationship = buildRelatedToClient(clientRelationship);
+                relations.add(relationship);
+            }
+        }
+        return relations;
+    }
+
+    private RelationshipTo buildRelatedToClient(ClientRelationship clientRelationship ){
         String secondaryClientId = clientRelationship.getSecondaryClientId();
-        Client secondaryClient = findClientRelation(secondaryClientId);
+        Client secondaryClient = findClient(secondaryClientId);
         return new RelationshipTo(clientRelationship, secondaryClient);
     }
 
-    private Client findClientRelation(String id){
-        return this.clientDao.find(id);
+    private Set<RelationshipTo>  AddRelatedFromClients(ClientRelationship[] relatedClients, String clientId) {
+        Set<RelationshipTo> relations = new HashSet<>();
+        for (ClientRelationship clientRelationship : relatedClients) {
+            if( clientId.equals(clientRelationship.getSecondaryClientId())){
+                RelationshipTo relationship = buildRelatedFromClient(clientRelationship);
+                relations.add(relationship);
+            }
+        }
+        return relations;
+    }
+
+    private RelationshipTo buildRelatedFromClient(ClientRelationship clientRelationship ){
+        String primaryClientId = clientRelationship.getPrimaryClientId();
+        Client primaryClient = findClient(primaryClientId);
+        return new RelationshipTo(clientRelationship, primaryClient);
     }
 
     private Client findClient(String id){

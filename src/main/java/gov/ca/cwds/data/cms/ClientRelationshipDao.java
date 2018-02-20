@@ -11,6 +11,9 @@ import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
+import java.util.ArrayList;
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * DAO for {@link ClientRelationship}.
  * 
@@ -55,4 +58,13 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     query.setParameter("secondaryClientId", secondaryClientId, StringType.INSTANCE);
     return query.list().toArray(new ClientRelationship[0]);
   }
+
+  @SuppressWarnings("unchecked")
+  public ClientRelationship[] findAllRelatedClientsByClientId(String clientId) {
+    ClientRelationship[] primaryClients = findByPrimaryClientId(clientId);
+    ClientRelationship[] secondaryClients = findBySecondaryClientId(clientId);
+
+    return ArrayUtils.addAll(primaryClients, secondaryClients);
+  }
+
 }
