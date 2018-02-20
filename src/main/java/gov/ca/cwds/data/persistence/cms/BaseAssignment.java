@@ -13,6 +13,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.DiscriminatorOptions;
 import org.hibernate.annotations.Type;
@@ -312,6 +313,11 @@ public abstract class BaseAssignment extends CmsPersistentObject {
   @SuppressWarnings("javadoc")
   protected void setEstablishedForCode(String establishedForCode) {
     this.establishedForCode = establishedForCode;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

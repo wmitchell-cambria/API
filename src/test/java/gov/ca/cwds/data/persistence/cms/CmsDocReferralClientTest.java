@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -105,4 +106,11 @@ public class CmsDocReferralClientTest {
     document.setAddressType(newAddressType);
     assertThat(document.getAddressType(), is(equalTo(newAddressType)));
   }
+
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	CmsDocReferralClient cmsDocReferralClient = new CmsDocReferralClient();	  
+    assertTrue(cmsDocReferralClient.equals(cmsDocReferralClient));
+  }
+  
 }

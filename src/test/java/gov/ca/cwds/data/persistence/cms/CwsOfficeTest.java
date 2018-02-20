@@ -1,9 +1,10 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -140,5 +141,11 @@ public class CwsOfficeTest {
 	assertThat(co.getAgencyCodeNumber(), is(equalTo(newAgencyCodeNumber)));
 	co.setDirectorsNameTitle(newDirectorsNameTitle);
 	assertThat(co.getDirectorsNameTitle(), is(equalTo(newDirectorsNameTitle)));	
+  }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	CwsOffice cwsOffice = new CwsOffice();	  
+    assertTrue(cwsOffice.equals(cwsOffice));
   }
 }

@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -79,6 +80,11 @@ public class AssignmentUnitTest {
 		assertThat(assignmentUnit.getAssignmentUnitName(), is(equalTo(newAssignmentUnitName)));
 	  
 	}
+	  @Test
+	  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+		AssignmentUnit assignmentUnit = new AssignmentUnit();	  
+	    assertTrue(assignmentUnit.equals(assignmentUnit));
+	  }
 
 	
 }

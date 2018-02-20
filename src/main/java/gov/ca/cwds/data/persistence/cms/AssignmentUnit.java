@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 /**
  * CWDS API Team
  */
@@ -146,5 +148,10 @@ public class AssignmentUnit extends CmsPersistentObject {
   @Override
   public String getPrimaryKey() {
     return getId();
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }
