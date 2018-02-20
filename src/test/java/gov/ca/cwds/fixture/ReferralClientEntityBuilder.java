@@ -1,7 +1,9 @@
 package gov.ca.cwds.fixture;
 
-import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import java.util.Date;
+
+import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.data.persistence.cms.ReferralClient;
 
 /**
  * CWDS API Team
@@ -17,18 +19,22 @@ public class ReferralClientEntityBuilder {
   private String selfReportedIndicator;
   private String staffPersonAddedIndicator;
   private String dispositionClosureDescription;
-  private Short ageNumber = (short)3;
+  private Short ageNumber = (short) 3;
   private String agePeriodCode = "D";
   private String countySpecificCode;
   private String mentalHealthIssuesIndicator;
   private String alcoholIndicator;
   private String drugIndicator;
+  private Referral referral = new ReferralEntityBuilder().build();
 
-  public ReferralClient build(){
-    return new ReferralClient(referralId, clientId, approvalNumber, approvalStatusType, dispositionClosureReasonType,
-        dispositionCode, dispositionDate, selfReportedIndicator, staffPersonAddedIndicator,
-        dispositionClosureDescription, ageNumber, agePeriodCode, countySpecificCode, mentalHealthIssuesIndicator,
-        alcoholIndicator, drugIndicator);
+  public ReferralClient build() {
+    ReferralClient referralClient =
+        new ReferralClient(referralId, clientId, approvalNumber, approvalStatusType,
+            dispositionClosureReasonType, dispositionCode, dispositionDate, selfReportedIndicator,
+            staffPersonAddedIndicator, dispositionClosureDescription, ageNumber, agePeriodCode,
+            countySpecificCode, mentalHealthIssuesIndicator, alcoholIndicator, drugIndicator);
+    referralClient.setReferral(referral);
+    return referralClient;
   }
 
   public String getApprovalNumber() {
@@ -53,7 +59,8 @@ public class ReferralClientEntityBuilder {
     return dispositionClosureReasonType;
   }
 
-  public ReferralClientEntityBuilder setDispositionClosureReasonType(Short dispositionClosureReasonType) {
+  public ReferralClientEntityBuilder setDispositionClosureReasonType(
+      Short dispositionClosureReasonType) {
     this.dispositionClosureReasonType = dispositionClosureReasonType;
     return this;
   }
@@ -89,7 +96,8 @@ public class ReferralClientEntityBuilder {
     return staffPersonAddedIndicator;
   }
 
-  public ReferralClientEntityBuilder setStaffPersonAddedIndicator(String staffPersonAddedIndicator) {
+  public ReferralClientEntityBuilder setStaffPersonAddedIndicator(
+      String staffPersonAddedIndicator) {
     this.staffPersonAddedIndicator = staffPersonAddedIndicator;
     return this;
   }
@@ -100,6 +108,11 @@ public class ReferralClientEntityBuilder {
 
   public ReferralClientEntityBuilder setReferralId(String referralId) {
     this.referralId = referralId;
+    return this;
+  }
+
+  public ReferralClientEntityBuilder setReferral(Referral referral) {
+    this.referral = referral;
     return this;
   }
 
@@ -116,7 +129,8 @@ public class ReferralClientEntityBuilder {
     return dispositionClosureDescription;
   }
 
-  public ReferralClientEntityBuilder setDispositionClosureDescription(String dispositionClosureDescription) {
+  public ReferralClientEntityBuilder setDispositionClosureDescription(
+      String dispositionClosureDescription) {
     this.dispositionClosureDescription = dispositionClosureDescription;
     return this;
   }
@@ -152,7 +166,8 @@ public class ReferralClientEntityBuilder {
     return mentalHealthIssuesIndicator;
   }
 
-  public ReferralClientEntityBuilder setMentalHealthIssuesIndicator(String mentalHealthIssuesIndicator) {
+  public ReferralClientEntityBuilder setMentalHealthIssuesIndicator(
+      String mentalHealthIssuesIndicator) {
     this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
     return this;
   }
