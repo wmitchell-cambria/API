@@ -27,7 +27,7 @@ public class Genealogist {
         Set<RelationshipTo> relations = new HashSet<>();
         Client primaryClient;
         relations.addAll(addRelatedToClients(primaryRelatedClients, clientId));
-        relations.addAll(AddRelatedFromClients(secondaryRelatedClients, clientId));
+        relations.addAll(addRelatedFromClients(secondaryRelatedClients, clientId));
         primaryClient = findClient(clientId);
         return new Relationship(primaryClient, relations);
     }
@@ -49,7 +49,7 @@ public class Genealogist {
         return new RelationshipTo(clientRelationship, secondaryClient);
     }
 
-    private Set<RelationshipTo>  AddRelatedFromClients(ClientRelationship[] relatedClients, String clientId) {
+    private Set<RelationshipTo>  addRelatedFromClients(ClientRelationship[] relatedClients, String clientId) {
         Set<RelationshipTo> relations = new HashSet<>();
         for (ClientRelationship clientRelationship : relatedClients) {
             if( clientId.equals(clientRelationship.getSecondaryClientId())){
