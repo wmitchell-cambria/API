@@ -1,13 +1,14 @@
 package gov.ca.cwds.fixture.hoi;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author CWDS API Team
@@ -15,6 +16,7 @@ import java.util.Set;
 public class HOIScreeningBuilder {
 
   private String id = "224";
+  private String screeningName = "screening name";
   private String startDate = "2017-11-30";
   private String endDate = "2017-12-10";
   private String decision = "promote to referral";
@@ -30,6 +32,11 @@ public class HOIScreeningBuilder {
     return this;
   }
 
+  public HOIScreeningBuilder setName(String name) {
+	this.screeningName = name;
+	return this;
+  }
+  
   public HOIScreeningBuilder setStartDate(String startDate) {
     this.startDate = startDate;
     return this;
@@ -78,6 +85,7 @@ public class HOIScreeningBuilder {
   public HOIScreening createHOIScreening() {
     HOIScreening screening = new HOIScreening();
     screening.setId(id);
+    screening.setName(screeningName);
     screening.setStartDate(DomainChef.uncookDateString(startDate));
     screening.setEndDate(DomainChef.uncookDateString(endDate));
     screening.setCounty(new SystemCodeDescriptor(countyId.shortValue(), countyDescription));

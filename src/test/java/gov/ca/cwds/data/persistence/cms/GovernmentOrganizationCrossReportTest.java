@@ -4,11 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
 import org.junit.Test;
 
+import gov.ca.cwds.fixture.GovernmentOrganizationCrossReportEntityBuilder;
 import gov.ca.cwds.fixture.GovernmentOrganizationCrossReportResourceBuilder;
 
 /**
@@ -89,6 +92,20 @@ public class GovernmentOrganizationCrossReportTest {
     assertThat(persistent.getOrganizationTypeInd(),
         is(equalTo(domainGovernmentOrganizationCrossReport.getOrganizationTypeInd())));
     assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
+  }
+  
+  @Test
+  public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	GovernmentOrganizationCrossReport gocr = new GovernmentOrganizationCrossReportEntityBuilder().build();
+	assertTrue(gocr.equals(gocr));
+  }
+  
+  @Test
+  public void shouldHaveSameHashCodesForObjectsWithSameValues() {
+	GovernmentOrganizationCrossReport gocr = new GovernmentOrganizationCrossReportEntityBuilder().build();
+	GovernmentOrganizationCrossReport gocr1 = new GovernmentOrganizationCrossReportEntityBuilder().build();
+	assertEquals("Expecting GovernmentOrganizationCrossReport to have same hash code", gocr, gocr1);
+
   }
 
 }

@@ -13,7 +13,6 @@ import gov.ca.cwds.rest.api.domain.investigation.Assignee;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
-import gov.ca.cwds.rest.api.domain.investigation.LimitedAccess;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
@@ -48,13 +47,11 @@ public class InvestigationEntityBuilder {
 
   private Set<PhoneNumber> phoneNumbers = new HashSet<>();
 
-  private LimitedAccess limitedAccess = new LimitedAccess("N", "20");
-
   private InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
 
   private ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
 
-  InvolvementHistory historyOfInvolvement = new InvolvementHistoryResourceBuilder().build();
+  private InvolvementHistory historyOfInvolvement = new InvolvementHistoryResourceBuilder().build();
 
 
   private Allegation allegation = new AllegationEntityBuilder().build();
@@ -88,17 +85,9 @@ public class InvestigationEntityBuilder {
         safetyAlerts, crossReports, contacts);
   }
 
-  public String getTableName() {
-    return tableName;
-  }
-
   public InvestigationEntityBuilder setTableName(String tableName) {
     this.tableName = tableName;
     return this;
-  }
-
-  public String getId() {
-    return id;
   }
 
   public InvestigationEntityBuilder setId(String id) {
@@ -106,44 +95,28 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public String getLastUpdatedBy() {
-    return lastUpdatedBy;
-  }
 
   public InvestigationEntityBuilder setLastUpdatedBy(String lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
     return this;
   }
 
-  public Date getLastUpdatedAt() {
-    return freshDate(lastUpdatedAt);
-  }
 
   public InvestigationEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {
     this.lastUpdatedAt = freshDate(lastUpdatedAt);
     return this;
   }
 
-  public String getIncidentCounty() {
-    return incidentCounty;
-  }
 
   public InvestigationEntityBuilder setIncidentCounty(String incidentCounty) {
     this.incidentCounty = incidentCounty;
     return this;
   }
 
-  public Date getIncidentDate() {
-    return freshDate(incidentDate);
-  }
 
   public InvestigationEntityBuilder setIncidentDate(Date incidentDate) {
     this.incidentDate = freshDate(incidentDate);
     return this;
-  }
-
-  public String getLocationType() {
-    return locationType;
   }
 
   public InvestigationEntityBuilder setLocationType(String locationType) {
@@ -151,17 +124,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Short getCommunicationMethod() {
-    return communicationMethod;
-  }
-
   public InvestigationEntityBuilder setCommunicationMethod(Short communicationMethod) {
     this.communicationMethod = communicationMethod;
     return this;
-  }
-
-  public String getName() {
-    return name;
   }
 
   public InvestigationEntityBuilder setName(String name) {
@@ -169,17 +134,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public String getReportNarrative() {
-    return reportNarrative;
-  }
-
   public InvestigationEntityBuilder setReportNarrative(String reportNarrative) {
     this.reportNarrative = reportNarrative;
     return this;
-  }
-
-  public String getReference() {
-    return reference;
   }
 
   public InvestigationEntityBuilder setReference(String reference) {
@@ -187,17 +144,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Short getResponseTime() {
-    return responseTime;
-  }
-
   public InvestigationEntityBuilder setResponseTime(Short responseTime) {
     this.responseTime = responseTime;
     return this;
-  }
-
-  public Date getStartedAt() {
-    return freshDate(startedAt);
   }
 
   public InvestigationEntityBuilder setStartedAt(Date startedAt) {
@@ -205,17 +154,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public String getAdditionalInformation() {
-    return additionalInformation;
-  }
-
   public InvestigationEntityBuilder setAdditionalInformation(String additionalInformation) {
     this.additionalInformation = additionalInformation;
     return this;
-  }
-
-  public Boolean getSensitive() {
-    return sensitive;
   }
 
   public InvestigationEntityBuilder setSensitive(Boolean sensitive) {
@@ -223,17 +164,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Boolean getSealed() {
-    return sealed;
-  }
-
   public InvestigationEntityBuilder setSealed(Boolean sealed) {
     this.sealed = sealed;
     return this;
-  }
-
-  public CmsRecordDescriptor getCmsRecordDescriptor() {
-    return cmsRecordDescriptor;
   }
 
   public InvestigationEntityBuilder setCmsRecordDescriptor(
@@ -242,17 +175,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Assignee getAssignee() {
-    return assignee;
-  }
-
   public InvestigationEntityBuilder setAssignee(Assignee assignee) {
     this.assignee = assignee;
     return this;
-  }
-
-  public Set<PhoneNumber> getPhoneNumbers() {
-    return phoneNumbers;
   }
 
   public InvestigationEntityBuilder setPhoneNumbers(Set<PhoneNumber> phoneNumbers) {
@@ -260,26 +185,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public LimitedAccess getLimitedAccess() {
-    return limitedAccess;
-  }
-
-  public InvestigationEntityBuilder setLimitedAccess(LimitedAccess limitedAccess) {
-    this.limitedAccess = limitedAccess;
-    return this;
-  }
-
-  public InvestigationAddress getAddress() {
-    return address;
-  }
-
   public InvestigationEntityBuilder setAddress(InvestigationAddress address) {
     this.address = address;
     return this;
-  }
-
-  public InvolvementHistory getHistoryOfInvolvement() {
-    return historyOfInvolvement;
   }
 
   public InvestigationEntityBuilder setHistoryOfInvolvement(
@@ -288,17 +196,9 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Set<Allegation> getAllegations() {
-    return allegations;
-  }
-
   public InvestigationEntityBuilder setAllegations(Set<Allegation> allegations) {
     this.allegations = allegations;
     return this;
-  }
-
-  public Person getPerson() {
-    return person;
   }
 
   public InvestigationEntityBuilder setPerson(Person person) {
@@ -306,26 +206,14 @@ public class InvestigationEntityBuilder {
     return this;
   }
 
-  public Set<Person> getPeople() {
-    return people;
-  }
-
   public InvestigationEntityBuilder setPeople(Set<Person> people) {
     this.people = people;
     return this;
   }
 
-  public Relationship getRelationship() {
-    return relationship;
-  }
-
   public InvestigationEntityBuilder setRelationship(Relationship relationship) {
     this.relationship = relationship;
     return this;
-  }
-
-  public Set<Relationship> getRelationships() {
-    return relationships;
   }
 
   public InvestigationEntityBuilder setRelationships(Set<Relationship> relationships) {
@@ -346,9 +234,15 @@ public class InvestigationEntityBuilder {
     this.safetyAlerts = safetyAlerts;
     return this;
   }
-
-  public SafetyAlerts getSafetyAlerts() {
-    return safetyAlerts;
+  
+  public InvestigationEntityBuilder setCrossReports(Set<String> crossReports) {
+	this.crossReports = crossReports;
+	return this;
+  }
+  
+  public InvestigationEntityBuilder setContacts(Set<Contact> contacts) {
+	this.contacts = contacts;
+	return this;
   }
 
 }

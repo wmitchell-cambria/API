@@ -1,12 +1,13 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -87,6 +88,38 @@ public class ExternalInterfaceTest {
     ExternalInterface validExternalInterface = MAPPER.readValue(
         fixture("fixtures/persistent/ExternalInterface/valid/valid.json"), ExternalInterface.class);
     return validExternalInterface;
+  }
+  
+  @Test
+  public void testPrimaryKeyDefaultConstructor() {
+	ExternalInterface.PrimaryKey primaryKey = new ExternalInterface.PrimaryKey();
+	assertThat(primaryKey, is(notNullValue()));
+  }
+  
+  public void testPrimaryKeyConstructor() throws Exception {
+	final Date timeStamp = new Date();
+	final Integer sequence = 123;
+	final String userId = "USERID";
+
+    ExternalInterface exin = validExternalInterface();
+
+    gov.ca.cwds.data.persistence.cms.ExternalInterface persistent =
+        new gov.ca.cwds.data.persistence.cms.ExternalInterface(exin.getAidTypeCode(),
+            exin.getAssignmentUnitCode(), exin.getClearanceResponseType(), exin.getFbiIndicator(),
+            exin.getGovernmentEntityCode(), exin.getLogonUserId(), exin.getLicenseNumber(),
+            exin.getOperationType(), exin.getOtherData(), exin.getPersonNumber(),
+            exin.getPrimaryKey1(), exin.getPrimaryKey2(), exin.getPrimaryKey3(),
+            exin.getPrimaryKey4(), exin.getPrimaryKey5(), exin.getPrimaryKey6(),
+            exin.getPrimaryKey7(), exin.getPrimaryKey8(), exin.getRapIdentifier(),
+            exin.getResponseReceivedDate(), exin.getClearanceResponseDate(),
+            exin.getSequenceNumber(), exin.getSerialNumber(), exin.getStartDate(),
+            exin.getSubmitlTimestamp(), exin.getTableName());
+
+	ExternalInterface.PrimaryKey primaryKey = new ExternalInterface.PrimaryKey(timeStamp, sequence, userId);
+	assertThat(persistent.getSubmitlTimestamp(), is(equalTo(timeStamp)));
+	assertThat(persistent.getSequenceNumber(), is(equalTo(sequence)));
+	assertThat(persistent.getLogonUserId(), is(equalTo(userId)));
+	
   }
 
 }

@@ -54,7 +54,7 @@ public enum AgencyType {
 
   public static AgencyType getById(Short id) {
     for (AgencyType agencyType : values()) {
-      if (agencyType.getId().equals(id)) {
+      if (agencyType.getId() != null && agencyType.getId().equals(id)) {
         return agencyType;
       }
     }

@@ -30,11 +30,13 @@ public class AddressTest {
   public void testConstructor() throws Exception {
     Address address = new Address(id, streetAddress, city, state, zip, type);
     assertThat(address.getId(), is(equalTo(id)));
+    assertThat(address.getPrimaryKey(), is(equalTo(id)));
     assertThat(address.getStreetAddress(), is(equalTo(streetAddress)));
     assertThat(address.getCity(), is(equalTo(city)));
     assertThat(address.getState(), is(equalTo(state)));
     assertThat(address.getZip(), is(equalTo(zip)));
     assertThat(address.getType(), is(equalTo(type)));
+    assertThat(address.getPersonAddress().isEmpty(), is(Boolean.TRUE));
   }
 
   @Test

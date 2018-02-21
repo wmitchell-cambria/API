@@ -5,13 +5,13 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.junit.Test;
-
-import gov.ca.cwds.fixture.CaseEntityBuilder;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+
+import org.junit.Test;
+
+import gov.ca.cwds.fixture.CaseEntityBuilder;
 
 /**
  * @author CWDS API Team
@@ -76,6 +76,7 @@ public class CmsCaseTest {
         validCmsCase.getStaffPerson(), null);
 
     assertThat(persistent.getId(), is(equalTo(id)));
+    assertThat(persistent.getPrimaryKey(), is(equalTo(id)));
     assertThat(persistent.getAlertText(), is(equalTo(validCmsCase.getAlertText())));
     assertThat(persistent.getApprovalNumber(), is(equalTo(validCmsCase.getApprovalNumber())));
     assertThat(persistent.getApprovalStatusType(),

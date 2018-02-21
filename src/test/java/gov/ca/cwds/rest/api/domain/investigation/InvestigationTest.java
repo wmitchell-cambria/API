@@ -77,7 +77,7 @@ public class InvestigationTest {
   private PhoneNumber phoneNumber =
       new PhoneNumber(phone, phoneExtension, phoneType, cmsRecordDescriptor);
 
-  private InvestigationAddress address = new InvestigationAddressEntityBuilder().build();
+  private InvestigationAddress address = new InvestigationAddressEntityBuilder().setStreetAddress("111 first st").build();
 
   private ScreeningSummary screeningSummary = new ScreeningSummaryEntityBuilder().build();
 
@@ -511,6 +511,26 @@ public class InvestigationTest {
 	final String newReference = "NEW-REF";
 	final String newAdditionalInformation = "new additional information";
 	final CmsRecordDescriptor newCmsRecordDescriptor = new CmsRecordDescriptor(newId, "222-333-444-5555", newTableName, "Client");
+	final Assignee newAssignee = new Assignee("CWS Staff", incidentCounty, "Madera CWS", "aab");
+	final  Set<PhoneNumber> newPhoneNumbers = new HashSet<>();
+	final Long newPhone = Long.valueOf("9165556666");
+	final Integer newPhoneExtension = Integer.valueOf("3333");
+	final Short newPhoneType = Short.valueOf("2222");
+	final  PhoneNumber newPhoneNumber =
+	      new PhoneNumber(newPhone, newPhoneExtension, newPhoneType, cmsRecordDescriptor);
+
+	final Allegation newAllegation = new AllegationEntityBuilder().setLegacyDescriptor(newCmsRecordDescriptor).build();
+	final Set<Allegation> newAllegations = new HashSet<>();
+	final Person newPerson = new PersonEntityBuilder().setLastName("last name").build();
+	final Set<Person> newPeople = new HashSet<>();
+	final Relationship newRelationship = new RelationshipEntityBuilder().setFirstName("first name").build();
+	final Set<Relationship> newRelationships = new HashSet<>();
+	final SafetyAlerts newSafetyAlerts = new SafetyAlertsEntityBuilder().setAlertInformation("new alert information").build();
+
+	newAllegations.add(newAllegation);
+	newPhoneNumbers.add(newPhoneNumber);
+	newPeople.add(newPerson);
+	newRelationships.add(newRelationship);
 	
 	Investigation investigation = new InvestigationEntityBuilder()
 		.setId(newId)
@@ -530,6 +550,16 @@ public class InvestigationTest {
 		.setSensitive(newSensitive)
 		.setSealed(newSealed)
 		.setCmsRecordDescriptor(newCmsRecordDescriptor)
+		.setAssignee(newAssignee)
+		.setPhoneNumbers(newPhoneNumbers)
+		.setAddress(address)
+		.setHistoryOfInvolvement(historyOfInvolvement)
+		.setAllegations(newAllegations)
+		.setPeople(newPeople)
+		.setRelationships(newRelationships)
+		.setSafetyAlerts(newSafetyAlerts)
+		.setCrossReports(crossReports)
+		.setContacts(contacts)
 		.build();
 		
 	assertThat(investigation.getLastUpdatedBy(), is(equalTo(newLastUpdatedBy)));
@@ -546,6 +576,15 @@ public class InvestigationTest {
 	assertThat(investigation.getAdditionalInformation(), is(equalTo(newAdditionalInformation)));
 	assertThat(investigation.getSensitive(), is(equalTo(newSensitive)));
 	assertThat(investigation.getSealed(), is(equalTo(newSealed)));
+	assertThat(investigation.getAssignee(), is(equalTo(newAssignee)));
+	assertThat(investigation.getPhoneNumbers(), is(equalTo(newPhoneNumbers)));
+	assertThat(investigation.getAddress(), is(equalTo(address)));
+	assertThat(investigation.getHistoryOfInvolvement(), is(equalTo(historyOfInvolvement)));
+	assertThat(investigation.getAllegations(), is(equalTo(newAllegations)));
+	assertThat(investigation.getPeople(), is(equalTo(newPeople)));
+	assertThat(investigation.getRelationships(), is(equalTo(newRelationships)));
+	assertThat(investigation.getSafetyAlerts(), is(equalTo(newSafetyAlerts)));
+
   }
   
   @Test

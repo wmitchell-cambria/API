@@ -4,7 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class LegacyDescriptorEntityTest {
@@ -15,8 +17,6 @@ public class LegacyDescriptorEntityTest {
 	private String legacyTableName = "CLIENT_T";
 	private String legacyTableDescription = "Client";
 	private String legacyLastUpdated = "";
-	private String describableType = "";
-	private String descriabledId = "";
 	
 	@Test
 	public void testEmptyConstructor() throws Exception {
@@ -38,9 +38,18 @@ public class LegacyDescriptorEntityTest {
 	  assertThat(descriptor.getDescribableType(), is(equalTo(null)));
 	}
 	
-	  @Test
-	  public void equalsShouldBeTrueWhenSameObject() throws Exception {
-		LegacyDescriptorEntity descriptor = new LegacyDescriptorEntity();	  
-	    assertTrue(descriptor.equals(descriptor));
-	  }
+	@Test
+	public void equalsShouldBeTrueWhenSameObject() throws Exception {
+	  LegacyDescriptorEntity descriptor = new LegacyDescriptorEntity();	  
+	  assertTrue(descriptor.equals(descriptor));
+	}
+	  
+	@Test
+	public void shouldHaveEqualsHashcode() throws Exception {
+	  LegacyDescriptorEntity descriptor = new LegacyDescriptorEntity(legacyId, legacyUiId,
+		  legacyTableName, legacyTableDescription, legacyLastUpdated);
+	  LegacyDescriptorEntity descriptor1 = new LegacyDescriptorEntity(legacyId, legacyUiId,
+		  legacyTableName, legacyTableDescription, legacyLastUpdated);
+	  assertEquals("Expecting legacy descriptor to have same hash code", descriptor.hashCode(), descriptor1.hashCode());
+	}
 }
