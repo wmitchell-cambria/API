@@ -24,15 +24,12 @@ import javax.ws.rs.core.Response;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
@@ -57,11 +54,6 @@ public class ClientTest implements DomainTestTemplate {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LEGACY_CLIENT + "/";;
 
   private static final ClientResource mockedClientResource = mock(ClientResource.class);
-
-  @After
-  public void ensureSerivceLocatorPopulate() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

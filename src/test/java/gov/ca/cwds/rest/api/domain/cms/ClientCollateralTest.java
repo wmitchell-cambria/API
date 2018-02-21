@@ -14,12 +14,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.ClientCollateralResource;
@@ -33,13 +30,6 @@ public class ClientCollateralTest {
 
   private static final ClientCollateralResource mockedResource =
       mock(ClientCollateralResource.class);
-
-
-  @SuppressWarnings("javadoc")
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @SuppressWarnings("javadoc")
   @ClassRule

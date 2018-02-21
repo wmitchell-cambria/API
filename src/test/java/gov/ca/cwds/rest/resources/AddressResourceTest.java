@@ -11,14 +11,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -37,12 +34,6 @@ public class AddressResourceTest {
   private static final String FOUND_RESOURCE = "/addresses/1";
   private static final String NOT_FOUND_RESOURCE = "/addresses/X";
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
-
-  @SuppressWarnings("javadoc")
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @SuppressWarnings("javadoc")
   @ClassRule
