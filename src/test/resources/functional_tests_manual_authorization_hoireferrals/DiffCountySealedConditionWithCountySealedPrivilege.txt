@@ -1,4 +1,4 @@
-Test Scenario with different county sealed condition with county sensitive privilege:
+Test Scenario with different county sealed condition with county sealed privilege:
 Test the hoi_referrals returns 403 (Forbidden)
 
      URL:https://ferbapi.preint.cwds.io/swagger
