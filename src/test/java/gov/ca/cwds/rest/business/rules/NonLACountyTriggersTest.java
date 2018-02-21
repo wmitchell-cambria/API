@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -24,6 +24,7 @@ import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.CountyOwnership;
+import gov.ca.cwds.data.persistence.cms.ReferralClient.PrimaryKey;
 import gov.ca.cwds.data.rules.TriggerTableException;
 import gov.ca.cwds.fixture.AssignmentResourceBuilder;
 import gov.ca.cwds.fixture.ClientAddressResourceBuilder;
@@ -202,7 +203,7 @@ public class NonLACountyTriggersTest {
         new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
             new Date());
 
-    when(referralClientDao.find(any(String.class))).thenReturn(referralClient);
+    when(referralClientDao.find(any(PrimaryKey.class))).thenReturn(referralClient);
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
         .thenAnswer(new Answer<CountyOwnership>() {
 
@@ -241,7 +242,7 @@ public class NonLACountyTriggersTest {
         new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
             new Date());
 
-    when(referralClientDao.find(any(String.class))).thenReturn(referralClient);
+    when(referralClientDao.find(any(PrimaryKey.class))).thenReturn(referralClient);
     when(countyOwnershipDao.create(any(CountyOwnership.class)))
         .thenAnswer(new Answer<CountyOwnership>() {
 
@@ -275,7 +276,7 @@ public class NonLACountyTriggersTest {
         new gov.ca.cwds.data.persistence.cms.ReferralClient(referralClientDomain, "ABC",
             new Date());
 
-    when(referralClientDao.find(any(String.class))).thenReturn(referralClient);
+    when(referralClientDao.find(any(PrimaryKey.class))).thenReturn(referralClient);
 
     when(countyOwnershipDao.find(any(String.class))).thenReturn(new CountyOwnership());
     when(countyOwnershipDao.update(any(CountyOwnership.class)))
