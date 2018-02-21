@@ -13,14 +13,11 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 /****
  * NOTE:The CWDS API Team has taken the pattern of delegating Resource functions to
@@ -34,11 +31,6 @@ public class ScreeningSummaryResourceTest {
 
 
   private static final String ROOT_RESOURCE = "/investigations/";
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

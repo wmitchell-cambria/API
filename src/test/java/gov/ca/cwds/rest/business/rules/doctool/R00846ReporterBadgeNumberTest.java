@@ -22,7 +22,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -43,11 +42,6 @@ public class R00846ReporterBadgeNumberTest {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REPORTER + "/";
 
   private static final ReporterResource mockedReporterResource = mock(ReporterResource.class);
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

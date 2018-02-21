@@ -7,13 +7,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.api.domain.junit.template.DomainTestTemplate;
 import gov.ca.cwds.rest.resources.AddressValidationResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -31,11 +28,6 @@ public class ValidatedAddressTest implements DomainTestTemplate {
 
   private static final AddressValidationResource mockedAddressValidationResource =
       mock(AddressValidationResource.class);
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

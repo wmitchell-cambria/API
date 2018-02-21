@@ -6,13 +6,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 
@@ -23,18 +20,9 @@ import io.dropwizard.jackson.Jackson;
 public class ClientUcTest {
 
   @SuppressWarnings("javadoc")
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
-
-  @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  /**
-   * 
-   */
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private ClientUc validClientUc = validClientUc();
 

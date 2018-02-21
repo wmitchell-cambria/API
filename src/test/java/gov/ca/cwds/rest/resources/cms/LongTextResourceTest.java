@@ -11,7 +11,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -19,8 +18,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
@@ -40,11 +37,6 @@ public class LongTextResourceTest {
   private static final String FOUND_RESOURCE = "/_longText/abc";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

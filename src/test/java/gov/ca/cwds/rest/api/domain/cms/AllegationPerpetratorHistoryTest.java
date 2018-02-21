@@ -14,14 +14,11 @@ import java.util.List;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
@@ -34,9 +31,6 @@ public class AllegationPerpetratorHistoryTest {
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  // @ClassRule
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private String id = "1234567ABC";
@@ -52,11 +46,6 @@ public class AllegationPerpetratorHistoryTest {
   public void setup() {
     perpetratorUpdateDate = new Date();
     messageBuilder = new MessageBuilder();
-  }
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
   }
 
   @Test

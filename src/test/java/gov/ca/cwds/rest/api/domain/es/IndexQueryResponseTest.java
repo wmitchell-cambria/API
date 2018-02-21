@@ -10,14 +10,12 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 /**
  * Test domain request class, {@link IndexQueryResponse}.
@@ -37,11 +35,6 @@ public class IndexQueryResponseTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

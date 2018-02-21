@@ -7,11 +7,8 @@ import static org.hamcrest.Matchers.not;
 
 import java.util.Date;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.fixture.GovernmentOrganizationCrossReportResourceBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -21,12 +18,6 @@ import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
  *
  */
 public class GovernmentOrganizationCrossReportTest {
-
-  @SuppressWarnings("javadoc")
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @SuppressWarnings("javadoc")
   @ClassRule

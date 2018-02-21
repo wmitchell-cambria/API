@@ -32,10 +32,4 @@ public class JerseyGuiceRule extends ExternalResource {
       }
     });
   }
-
-  @Override
-  protected void after() {
-    JerseyGuiceUtils.reset();
-  }
-
 }

@@ -24,14 +24,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.assertj.core.util.Sets;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -51,11 +49,6 @@ import nl.jqno.equalsverifier.Warning;
 public class CrossReportTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CROSS_REPORT + "/";
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

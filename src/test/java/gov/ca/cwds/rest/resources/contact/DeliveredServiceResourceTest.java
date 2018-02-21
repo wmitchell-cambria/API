@@ -10,14 +10,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.contacts.DeliveredServiceResourceBuilder;
@@ -38,11 +35,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 public class DeliveredServiceResourceTest {
 
   private static final String ROOT_RESOURCE = "/contacts/";
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

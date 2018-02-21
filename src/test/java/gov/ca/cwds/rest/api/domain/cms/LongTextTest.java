@@ -14,14 +14,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import gov.ca.cwds.rest.resources.cms.LongTextResource;
@@ -36,12 +33,6 @@ public class LongTextTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LONG_TEXT + "/";
   private static final LongTextResource mockedLongTextResource = mock(LongTextResource.class);
-
-  @SuppressWarnings("javadoc")
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @SuppressWarnings("javadoc")
   @ClassRule

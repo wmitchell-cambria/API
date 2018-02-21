@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.resources.cms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -11,15 +10,12 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.fixture.ClientResourceBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Client;
@@ -38,11 +34,6 @@ public class ClientResourceTest {
 
   private static final String ROOT_RESOURCE = "/_clients/";
   private static final String FOUND_RESOURCE = "/_clients/AaiU7IW0Rt";
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
