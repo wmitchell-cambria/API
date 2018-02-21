@@ -10,7 +10,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import org.junit.Ignore;
 import org.junit.Test;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -19,7 +18,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
  * @author CWDS API Team
  *
  */
-@Ignore
 public class HOICaseResourceApplicationTest extends IntakeBaseTest {
 
   @Test

@@ -19,8 +19,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
@@ -40,11 +38,6 @@ public class ChildClientResourceTest {
   private static final String FOUND_RESOURCE = "/_childClients/victimId=AbiOD9Y0Hj";
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

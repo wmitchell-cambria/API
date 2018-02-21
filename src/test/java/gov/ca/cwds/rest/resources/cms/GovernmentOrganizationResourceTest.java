@@ -5,15 +5,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.api.domain.cms.GovernmentOrganization;
 import gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationResponse;
@@ -29,14 +26,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 public class GovernmentOrganizationResourceTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_GOVERNMENT_ORG;
-
-  /**
-   * 
-   */
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();

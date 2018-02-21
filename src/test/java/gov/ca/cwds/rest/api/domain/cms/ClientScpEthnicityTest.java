@@ -7,11 +7,8 @@ import static org.hamcrest.Matchers.not;
 
 import java.util.Date;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 
@@ -21,11 +18,6 @@ import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
  */
 @SuppressWarnings("javadoc")
 public class ClientScpEthnicityTest {
-
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
@@ -70,8 +62,6 @@ public class ClientScpEthnicityTest {
 
   @Test
   public void equalsHashCodeWork() {
-    // EqualsVerifier.forClass(ClientScpEthnicity.class).suppress(Warning.NONFINAL_FIELDS).verify();
-
     ClientScpEthnicity domain =
         new ClientScpEthnicity(id, establishedForCode, establishedId, ethnicity);
     assertThat(domain.hashCode(), is(not(0)));

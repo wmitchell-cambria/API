@@ -4,11 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -23,17 +20,6 @@ public class GovernmentAgencyTest {
   private String id = "12vhdlh00i";
   private String type = "DEPARTMENT_OF_JUSTICE";
 
-  /**
-   * 
-   */
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
-
-  /**
-   * 
-   */
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
@@ -48,9 +34,6 @@ public class GovernmentAgencyTest {
     assertThat(domain.getType(), is(equalTo(type)));
   }
 
-  /**
-   * 
-   */
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(GovernmentAgency.class).suppress(Warning.NONFINAL_FIELDS).verify();

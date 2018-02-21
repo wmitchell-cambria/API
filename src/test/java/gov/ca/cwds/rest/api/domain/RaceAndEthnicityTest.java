@@ -16,15 +16,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.investigation.RaceAndEthnicityEntityBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -41,14 +38,6 @@ public class RaceAndEthnicityTest {
   private Validator validator;
 
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
-
-  /**
-   * 
-   */
-  @After
-  public void ensureServiceLocatorPopulated() {
-    JerseyGuiceUtils.reset();
-  }
 
   @Before
   public void setup() {
