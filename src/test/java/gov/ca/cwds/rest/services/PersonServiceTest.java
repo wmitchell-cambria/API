@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -104,15 +104,15 @@ public class PersonServiceTest {
     Language language = new Language("English");
     Race race = new Race("White", "European");
     Ethnicity ethnicity = new Ethnicity("Unknown", "South American");
-    Set<Address> addresses = new HashSet<Address>();
+    Set<Address> addresses = new HashSet<>();
     addresses.add(address);
-    Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
+    Set<PhoneNumber> phoneNumbers = new HashSet<>();
     phoneNumbers.add(phoneNumber);
-    Set<Language> languages = new HashSet<Language>();
+    Set<Language> languages = new HashSet<>();
     languages.add(language);
-    Set<Race> races = new HashSet<Race>();
+    Set<Race> races = new HashSet<>();
     races.add(race);
-    Set<Ethnicity> ethnicities = new HashSet<Ethnicity>();
+    Set<Ethnicity> ethnicities = new HashSet<>();
     ethnicities.add(ethnicity);
     Person expected = new Person("Bart", "S", "Simpson", "", "M", "2016-10-31", "1234556789",
         addresses, phoneNumbers, languages, races, ethnicities);
@@ -161,7 +161,7 @@ public class PersonServiceTest {
 
     Person request = new Person(toCreate);
     when(personDao.create(any(gov.ca.cwds.data.persistence.ns.Person.class))).thenReturn(toCreate);
-    when(personDao.find(any(gov.ca.cwds.data.persistence.ns.Person.class))).thenReturn(toCreate);
+    when(personDao.find(any(Long.class))).thenReturn(toCreate);
     Response response = personService.create(request);
     assertThat(response.getClass(), is(PostedPerson.class));
   }
@@ -181,7 +181,7 @@ public class PersonServiceTest {
         personAddresses, null, null, null, null);
     Person request = new Person(toCreate);
     when(personDao.create(any(gov.ca.cwds.data.persistence.ns.Person.class))).thenReturn(toCreate);
-    when(personDao.find(any(gov.ca.cwds.data.persistence.ns.Person.class))).thenReturn(toCreate);
+    when(personDao.find(any(Long.class))).thenReturn(toCreate);
 
     PostedPerson postedPerson = personService.create(request);
     assertThat(postedPerson, is(notNullValue()));

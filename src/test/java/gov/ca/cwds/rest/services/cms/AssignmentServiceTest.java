@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -13,13 +15,19 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validation;
 import javax.validation.Validator;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
@@ -29,21 +37,18 @@ import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
-import gov.ca.cwds.fixture.*;
-import gov.ca.cwds.rest.business.rules.*;
-import gov.ca.cwds.rest.exception.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.AssignmentEntityBuilder;
+import gov.ca.cwds.fixture.AssignmentResourceBuilder;
+import gov.ca.cwds.fixture.ReferralResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
+import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
+import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -283,8 +288,8 @@ public class AssignmentServiceTest {
     Assignment domainAssignment = new AssignmentResourceBuilder().setStartDate("2017-01-01")
         .setStartTime("16:01:01").buildAssignment();
 
-    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class))).thenAnswer(
-        invocation -> invocation.getArguments()[0]);
+    when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
+        .thenAnswer(invocation -> invocation.getArguments()[0]);
 
     PostedAssignment returned = assignmentService.create(domainAssignment);
     assertEquals(returned.getId().length(), 10);
@@ -312,8 +317,7 @@ public class AssignmentServiceTest {
         "N", "MIZN02k00E", "  ", "    ", "19", "N", "3XPCP92q38", null);
 
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
-    when(referralDao.find(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
-        .thenReturn(referral);
+    when(referralDao.find(any(String.class))).thenReturn(referral);
     when(assignmentDao.create(any(gov.ca.cwds.data.persistence.cms.Assignment.class)))
         .thenReturn(toCreate);
     assignmentService.create(request);
@@ -352,22 +356,18 @@ public class AssignmentServiceTest {
 
   @Test
   public void testR06560RuleValid() {
-    gov.ca.cwds.data.persistence.cms.Assignment assignment = new AssignmentEntityBuilder().
-        setEstablishedForCode("R").
-        setTypeOfAssignmentCode("P").
-        setFkCaseLoad("-1").build();
+    gov.ca.cwds.data.persistence.cms.Assignment assignment = new AssignmentEntityBuilder()
+        .setEstablishedForCode("R").setTypeOfAssignmentCode("P").setFkCaseLoad("-1").build();
     assignmentService.executeR06560Rule(assignment);
   }
 
   @Test
   public void testR06560RuleInvalid() {
-    gov.ca.cwds.data.persistence.cms.Assignment assignment = new AssignmentEntityBuilder().
-        setEstablishedForCode("R").
-        setTypeOfAssignmentCode("P").
-        setFkCaseLoad(null).build();
-    AssignmentService assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
-        assignmentUnitDao, cwsOfficeDao, new MessageBuilder());
+    gov.ca.cwds.data.persistence.cms.Assignment assignment = new AssignmentEntityBuilder()
+        .setEstablishedForCode("R").setTypeOfAssignmentCode("P").setFkCaseLoad(null).build();
+    AssignmentService assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers,
+        staffpersonDao, triggerTablesDao, validator, externalInterfaceTables, caseLoadDao,
+        referralDao, assignmentUnitDao, cwsOfficeDao, new MessageBuilder());
     try {
       assignmentService.executeR06560Rule(assignment);
       fail();
@@ -388,8 +388,8 @@ public class AssignmentServiceTest {
         .setStartTime("10:11:02").setEndDate("2015-04-12").setEndTime("14:00:00").build());
     when(assignmentDao.findAssignmentsByReferralId(any(String.class))).thenReturn(assignmentSet);
 
-    gov.ca.cwds.data.persistence.cms.Assignment firstAssignment = assignmentService
-        .findReferralFirstAssignment("111");
+    gov.ca.cwds.data.persistence.cms.Assignment firstAssignment =
+        assignmentService.findReferralFirstAssignment("111");
     assertNotNull(firstAssignment);
     assertEquals("3", firstAssignment.getId());
   }
@@ -403,8 +403,8 @@ public class AssignmentServiceTest {
         .setStartTime("09:56:02").setEndDate("2017-01-12").setEndTime("15:00:00").build());
     when(assignmentDao.findAssignmentsByReferralId(any(String.class))).thenReturn(assignmentSet);
 
-    gov.ca.cwds.data.persistence.cms.Assignment firstAssignment = assignmentService
-        .findReferralFirstAssignment("111");
+    gov.ca.cwds.data.persistence.cms.Assignment firstAssignment =
+        assignmentService.findReferralFirstAssignment("111");
     assertNotNull(firstAssignment);
     assertEquals("2", firstAssignment.getId());
   }

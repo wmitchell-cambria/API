@@ -2,6 +2,7 @@ package gov.ca.cwds.inject;
 
 import com.google.inject.AbstractModule;
 
+import gov.ca.cwds.auth.ScreeningAuthorizer;
 import gov.ca.cwds.authorizer.ClientAbstractReadAuthorizer;
 import gov.ca.cwds.rest.ApiApplication;
 import gov.ca.cwds.rest.ApiConfiguration;
@@ -46,7 +47,7 @@ public class ApplicationModule extends AbstractModule {
     install(new HealthCheckModule());
     install(new SecurityModule(BaseApiApplication::getInjector)
         .addAuthorizer("client:read", ClientAbstractReadAuthorizer.class)
-    );
+        .addAuthorizer("screening.read", ScreeningAuthorizer.class));
   }
 
 }

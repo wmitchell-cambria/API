@@ -160,10 +160,11 @@ public class ScreeningEntity implements PersistentObject {
    * @param participants The list of participants
    * @param assigneeStaffId The staffId of assignee
    */
-  public ScreeningEntity(String id, String reference, Date startedAt, Date endedAt, String incidentCounty, Date incidentDate,
-      String locationType, String communicationMethod, String name, String responseTime,
-      String screeningDecision, String screeningDecisionDetail, String narrative, Address contactAddress,
-      String assigneeStaffId, Set<ParticipantEntity> participants) {
+  public ScreeningEntity(String id, String reference, Date startedAt, Date endedAt,
+      String incidentCounty, Date incidentDate, String locationType, String communicationMethod,
+      String name, String responseTime, String screeningDecision, String screeningDecisionDetail,
+      String narrative, Address contactAddress, String assigneeStaffId,
+      Set<ParticipantEntity> participants) {
     super();
     this.id = id;
     this.reference = reference;
@@ -324,6 +325,15 @@ public class ScreeningEntity implements PersistentObject {
    */
   public String getAccessRestrictions() {
     return accessRestrictions;
+  }
+
+  /**
+   * Sets access restriction
+   * 
+   * @param accessRestrictions The access restriction
+   */
+  public void setAccessRestrictions(String accessRestrictions) {
+    this.accessRestrictions = accessRestrictions;
   }
 
   /**

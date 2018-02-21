@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.services.hoi;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -84,9 +84,9 @@ public class HOICaseServiceTest {
   @Test
   public void testHandleFind() throws Exception {
     CmsCase cmscase1 = new CmsCaseEntityBuilder().setId("TAZGOO205C").setStartDate(new Date())
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHOLD").build();
     CmsCase cmscase2 = new CmsCaseEntityBuilder().setId("RAZGOO205C").setStartDate(new Date())
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FC2").build();
     CmsCase[] cases = {cmscase1, cmscase2};
     ClientRelationship relationship = new ClientRelationshipEntityBuilder().build();
     ClientRelationship[] relationships = {relationship};
@@ -172,7 +172,7 @@ public class HOICaseServiceTest {
   @Test
   public void testFindParentsWhereChildIsSecondaryClientInTheRelationshipForAllValidTypesSuccess()
       throws Exception {
-    List<Integer> parentToChildTypes = new ArrayList<Integer>();
+    List<Integer> parentToChildTypes = new ArrayList<>();
     parentToChildTypes.addAll(Arrays.asList(272, 273, 5620, 6361));
     for (Integer i = 201; i <= 214; i++) {
       parentToChildTypes.add(i);
@@ -190,7 +190,7 @@ public class HOICaseServiceTest {
   @Test
   public void testFindParentsWhereChildIsPrimaryClientInTheRelationshipForAllValidTypesSuccess()
       throws Exception {
-    List<Integer> childToParentTypes = new ArrayList<Integer>();
+    List<Integer> childToParentTypes = new ArrayList<>();
     childToParentTypes.addAll(Arrays.asList(6360));
     for (Integer i = 187; i <= 200; i++) {
       childToParentTypes.add(i);
@@ -214,7 +214,7 @@ public class HOICaseServiceTest {
   public HOICaseResponse getCaseResponseWhereChildIsPrimaryClientInTheRelationship(short type)
       throws Exception {
     CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD").build();
     CmsCase[] cases = {cmscase};
     ClientRelationship relationship =
         new ClientRelationshipEntityBuilder().setClientRelationshipType(type).build();
@@ -233,7 +233,7 @@ public class HOICaseServiceTest {
   public HOICaseResponse getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(short type)
       throws Exception {
     CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("CHILDCLIENT").build();
     CmsCase[] cases = {cmscase};
     ClientRelationship relationship =
         new ClientRelationshipEntityBuilder().setClientRelationshipType(type).build();
@@ -262,8 +262,10 @@ public class HOICaseServiceTest {
     HOICaseService spyTarget = spy(target);
     ClientRelationship clientRelationshipsByPrimaryClient =
         new ClientRelationshipEntityBuilder().setSecondaryClientId("unauthorizedId").build();
-    when(clientRelationshipDao.findByPrimaryClientId("123")).thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
-    when(clientRelationshipDao.findBySecondaryClientId("123")).thenReturn(new ClientRelationship[] {});
+    when(clientRelationshipDao.findByPrimaryClientId("123"))
+        .thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
+    when(clientRelationshipDao.findBySecondaryClientId("123"))
+        .thenReturn(new ClientRelationship[] {});
     doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
     spyTarget.handleFind(request);
   }
@@ -273,10 +275,12 @@ public class HOICaseServiceTest {
     HOICaseService spyTarget = spy(target);
     ClientRelationship clientRelationshipsByPrimaryClient =
         new ClientRelationshipEntityBuilder().setSecondaryClientId("secondaryId").build();
-    when(clientRelationshipDao.findByPrimaryClientId("123")).thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
+    when(clientRelationshipDao.findByPrimaryClientId("123"))
+        .thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
     ClientRelationship clientRelationshipsBySecondaryClient =
         new ClientRelationshipEntityBuilder().setPrimaryClientId("unauthorizedId").build();
-    when(clientRelationshipDao.findBySecondaryClientId("123")).thenReturn(new ClientRelationship[] {clientRelationshipsBySecondaryClient});
+    when(clientRelationshipDao.findBySecondaryClientId("123"))
+        .thenReturn(new ClientRelationship[] {clientRelationshipsBySecondaryClient});
     doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
     spyTarget.handleFind(request);
   }
@@ -284,8 +288,10 @@ public class HOICaseServiceTest {
   @Test(expected = AuthorizationException.class)
   public void testUnAuthorizedFocusChildClient() {
     HOICaseService spyTarget = spy(target);
-    when(clientRelationshipDao.findByPrimaryClientId("123")).thenReturn(new ClientRelationship[] {});
-    when(clientRelationshipDao.findBySecondaryClientId("123")).thenReturn(new ClientRelationship[] {});
+    when(clientRelationshipDao.findByPrimaryClientId("123"))
+        .thenReturn(new ClientRelationship[] {});
+    when(clientRelationshipDao.findBySecondaryClientId("123"))
+        .thenReturn(new ClientRelationship[] {});
     CmsCase cmsCase = new CmsCaseEntityBuilder().setFkchldClt("unauthorizedId").build();
     when(caseDao.findByVictimClientIds(any(Set.class))).thenReturn(new CmsCase[] {cmsCase});
     doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
