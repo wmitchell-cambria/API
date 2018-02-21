@@ -41,19 +41,9 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HOICaseResource {
 
-  private SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate;
-
-  /**
-   * Constructor
-   *
-   * @param simpleResourceDelegate - typedResourceDelegate
-   */
   @Inject
-  public HOICaseResource(
-      @HOICaseServiceBackedResource SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate) {
-    super();
-    this.simpleResourceDelegate = simpleResourceDelegate;
-  }
+  @HOICaseServiceBackedResource
+  private SimpleResourceDelegate<HOIRequest, HOICase, HOICaseResponse, HOICaseService> simpleResourceDelegate;
 
   /**
    * Finds a cases HOI by client ids.
@@ -72,5 +62,4 @@ public class HOICaseResource {
       value = "List of Client Id-s") HOIRequest hoiCaseRequest) {
     return simpleResourceDelegate.find(hoiCaseRequest);
   }
-
 }
