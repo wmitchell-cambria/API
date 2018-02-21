@@ -5,8 +5,6 @@ import java.util.Properties;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
-import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +27,7 @@ import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.AddressValidationService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
+import gov.ca.cwds.rest.services.auth.AuthorizationCheckingService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.CachingSystemCodeService;
@@ -40,9 +39,11 @@ import gov.ca.cwds.rest.services.cms.CmsNSReferralService;
 import gov.ca.cwds.rest.services.cms.CmsReferralService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationService;
 import gov.ca.cwds.rest.services.cms.LegacyKeyService;
+import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -153,6 +154,7 @@ public class ServicesModule extends AbstractModule {
     bind(HOIReferralService.class);
     bind(InvolvementHistoryService.class);
     bind(HOICaseService.class);
+    bind(AuthorizationCheckingService.class);
 
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);

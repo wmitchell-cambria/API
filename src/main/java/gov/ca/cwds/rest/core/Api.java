@@ -32,7 +32,7 @@ public final class Api {
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
    */
   public static final String RESOURCE_ALLEGATION_PERPETRATOR_HISTORY =
-          "_allegationPerpetratorHistory";
+      "_allegationPerpetratorHistory";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_ASSIGNMENT} API..
@@ -58,6 +58,11 @@ public final class Api {
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} API..
    */
   public static final String RESOURCE_CLIENT = "clients";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_AUTHORIZE} API..
+   */
+  public static final String RESOURCE_AUTHORIZE = "authorize";
 
 
   /**
