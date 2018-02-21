@@ -62,5 +62,4 @@ public class HOICaseResource {
       value = "List of Client Id-s") HOIRequest hoiCaseRequest) {
     return simpleResourceDelegate.find(hoiCaseRequest);
   }
-
 }
