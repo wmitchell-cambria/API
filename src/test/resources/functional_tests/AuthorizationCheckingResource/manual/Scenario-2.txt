@@ -1,13 +1,12 @@
-Test Scenario 1: 
-Test that /authorize end point returns code 200 (OK)
+Test Scenario 2:
+Test that /authorize end point returns code 403 (Forbidden)
 
 	URL:https://ferbapi.preint.cwds.io/swagger
 	LOGIN JSON:
-	   { "user": "RACFID", "staffId": "0X5", "roles": [ "Supervisor" ], "county_code": "56", "county_name": "Ventura", "privileges": [ "Countywide Read", "Sensitive Persons" ] } 	
+	   { "user": "RACFID", "staffId": "aaw", "roles": [ "Supervisor" ], "county_code": "56", "county_name": "Ventura", "privileges": [ "Countywide Read", "Sensitive Persons" ] } 	
 
-    Staff Person: 0X5
+    Staff Person: aaw
     End Point: /authorize/client/{id}    
 	Cleint ID: Aybe9HF00h
 	
-	Expected Result: 200
-	
+	Expected Result: 403
