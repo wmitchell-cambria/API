@@ -7,6 +7,6 @@ Test that /authorize end point returns code 403 (Forbidden)
 
     Staff Person: aaw
     End Point: /authorize/client/{id}    
-	Cleint ID: Aybe9HF00h
+	Client ID: Aybe9HF00h
 	
 	Expected Result: 403

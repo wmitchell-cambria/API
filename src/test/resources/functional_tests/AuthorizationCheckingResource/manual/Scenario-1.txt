@@ -7,7 +7,7 @@ Test that /authorize end point returns code 200 (OK)
 
     Staff Person: 0X5
     End Point: /authorize/client/{id}    
-	Cleint ID: Aybe9HF00h
+	Client ID: Aybe9HF00h
 		
 	Expected Result: 200
 	

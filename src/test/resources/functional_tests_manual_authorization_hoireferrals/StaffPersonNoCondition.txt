@@ -1,0 +1,159 @@
+Test Scenario with no conditions:
+Test the hoi_referrals returns 200 (Ok)
+
+     URL:https://ferbapi.preint.cwds.io/swagger
+     Login JSON: 
+           { "user": "RACFID", "staffId": "aaw", "roles": [ "Supervisor" ], "county_code": "56", "county_name": "Ventura", "privileges": [ "Countywide Read", "Sensitive Persons" ] } 
+
+	
+	Staff Person: aaw
+    End Point: hoi_referrals 
+	Client ID: GNCmGiP00d
+	
+Request: 
+
+{
+  "client_ids": [
+    "GNCmGiP00d"
+  ]
+}
+
+Expected Response: 200
+
+[
+  {
+    "id": "Bd0gLMf00d",
+    "start_date": "1989-07-01",
+    "end_date": null,
+    "county": {
+      "id": "1084",
+      "description": "Lake"
+    },
+    "response_time": {
+      "id": "0",
+      "description": ""
+    },
+    "reporter": {
+      "id": "Bd0gLMf00d",
+      "first_name": "Bill",
+      "last_name": "Houser",
+      "role": "MANDATED_REPORTER",
+      "legacy_descriptor": {
+        "legacy_id": "Bd0gLMf00d",
+        "legacy_ui_id": "0660-5418-6377-7000039",
+        "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+        "legacy_table_name": "REPTR_T",
+        "legacy_table_description": "Reporter"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "00d",
+      "first_name": "Geroge",
+      "last_name": "Washington",
+      "legacy_descriptor": {
+        "legacy_id": "00d",
+        "legacy_ui_id": "00d",
+        "legacy_last_updated": "2000-08-29T13:51:39.247-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "NONE",
+      "limited_access_government_entity": {}
+    },
+    "allegations": [
+      {
+        "id": "MbiCFiz00d",
+        "type": {
+          "id": "2179",
+          "description": "Physical Abuse"
+        },
+        "disposition": {
+          "id": "0",
+          "description": ""
+        },
+        "victim": {
+          "id": "SMHmoJl00d",
+          "first_name": "Willam",
+          "last_name": "Tipple",
+          "legacy_descriptor": {
+            "legacy_id": "SMHmoJl00d",
+            "legacy_ui_id": "1610-8243-4953-7000039",
+            "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        "perpetrator": {
+          "id": "GNCmGiP00d",
+          "first_name": "Dora",
+          "last_name": "Piris",
+          "legacy_descriptor": {
+            "legacy_id": "GNCmGiP00d",
+            "legacy_ui_id": "0930-0636-4451-3000039",
+            "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        "legacy_descriptor": {
+          "legacy_id": "MbiCFiz00d",
+          "legacy_ui_id": "1284-1551-7680-1000039",
+          "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+          "legacy_table_name": "ALLGTN_T",
+          "legacy_table_description": "Allegation"
+        }
+      },
+      {
+        "id": "M64URn700d",
+        "type": {
+          "id": "2177",
+          "description": "Exploitation"
+        },
+        "disposition": {
+          "id": "0",
+          "description": ""
+        },
+        "victim": {
+          "id": "SMHmoJl00d",
+          "first_name": "Willam",
+          "last_name": "Tipple",
+          "legacy_descriptor": {
+            "legacy_id": "SMHmoJl00d",
+            "legacy_ui_id": "1610-8243-4953-7000039",
+            "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        "perpetrator": {
+          "id": "GNCmGiP00d",
+          "first_name": "Dora",
+          "last_name": "Piris",
+          "legacy_descriptor": {
+            "legacy_id": "GNCmGiP00d",
+            "legacy_ui_id": "0930-0636-4451-3000039",
+            "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        "legacy_descriptor": {
+          "legacy_id": "M64URn700d",
+          "legacy_ui_id": "1255-1683-4185-7000039",
+          "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+          "legacy_table_name": "ALLGTN_T",
+          "legacy_table_description": "Allegation"
+        }
+      }
+    ],
+    "legacy_descriptor": {
+      "legacy_id": "Bd0gLMf00d",
+      "legacy_ui_id": "0660-5418-6377-7000039",
+      "legacy_last_updated": "1997-08-15T14:59:44.983-0700",
+      "legacy_table_name": "REFERL_T",
+      "legacy_table_description": "Referral"
+    }
+  }
+]
