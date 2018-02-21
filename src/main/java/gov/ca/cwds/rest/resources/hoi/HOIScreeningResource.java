@@ -18,7 +18,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -61,7 +60,7 @@ public class HOIScreeningResource {
    * @param hoiScreeningRequest HOI Screening Request containing a list of Client Id-s
    * @return the response
    */
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  // @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
