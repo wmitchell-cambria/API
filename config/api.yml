@@ -98,9 +98,9 @@ elasticsearch:
     elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS:-}
     
 smartystreets:
-  clientId: ${SS_ID:-193cc984-be1d-4b18-90c2-2399ebcf67bb}                  
-  token: ${SS_TOKEN:-f15BXf61uOidswnnFZAc}                     
-  maxCandidates: ${SS_MAX:-10}
+  clientId: ${FERB_SS_ID:-193cc984-be1d-4b18-90c2-2399ebcf67bb}           
+  token: ${FERB_SS_TOKEN:-f15BXf61uOidswnnFZAc}     
+  maxCandidates: ${FERB_SS_MAX:-10}
   
 triggertables:
   laCountySpecificCode: 19
