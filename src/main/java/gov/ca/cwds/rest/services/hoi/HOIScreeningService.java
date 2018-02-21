@@ -62,7 +62,7 @@ public class HOIScreeningService
     throw new NotImplementedException("handle request not implemented");
   }
 
-  private void authorizeScreening(
+  public void authorizeScreening(
       @Authorize("screening:read:screeningEntity") ScreeningEntity screeningEntity) {
     // Check screening access restriction
     String accessRestriction = screeningEntity.getAccessRestrictions();
@@ -88,7 +88,7 @@ public class HOIScreeningService
     }
   }
 
-  private String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
     return clientId;
   }
 }

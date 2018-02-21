@@ -6,7 +6,9 @@ import static gov.ca.cwds.fixture.ScreeningEntityBuilder.DEFAULT_ASSIGNEE_STAFF_
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -18,6 +20,7 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -122,20 +125,31 @@ public class HOIScreeningServiceTest {
     }
   }
 
-  @Test
-  public void testWithScreeingAccessRestriction() {
-    ScreeningEntity screening = new ScreeningEntity();
-    screening.setAccessRestrictions(null);
+  @Test(expected = AuthorizationException.class)
+  public void testUnauthorizedClient() {
+    HOIScreeningService spyTarget = spy(hoiScreeningService);
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("123");
+
+    HOIRequest request = new HOIRequest();
+    request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
+    spyTarget.handleFind(request);
+  }
+
+  @Test(expected = AuthorizationException.class)
+  public void testUnauthorizedScreening() {
+    HOIScreeningService spyTarget = spy(hoiScreeningService);
 
     Set<String> clientIds = new HashSet<>();
-    clientIds.add("1");
+    clientIds.add("123");
     when(screeningDao.findScreeningsByClientIds(clientIds))
-        .thenReturn(mockScreeningEntityList("seald"));
+        .thenReturn(mockScreeningEntityList("sealed"));
 
-    HOIRequest hoiScreeningRequest = new HOIRequest();
-    hoiScreeningRequest.setClientIds(Stream.of("1").collect(Collectors.toSet()));
-    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
+    doThrow(AuthorizationException.class).when(spyTarget)
+        .authorizeScreening(any(ScreeningEntity.class));
 
+    HOIRequest request = new HOIRequest();
+    request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
+    spyTarget.handleFind(request);
   }
 
   private HOIScreeningResponse createExpectedResponse() {
