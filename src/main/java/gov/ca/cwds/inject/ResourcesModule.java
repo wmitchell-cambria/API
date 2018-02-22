@@ -413,16 +413,10 @@ public class ResourcesModule extends AbstractModule {
   }
 
   @Provides
-  // @Singleton
   @GovernmentOrganizationServiceBackedResource
   public SimpleResourceDelegate<String, GovernmentOrganization, GovernmentOrganizationResponse, GovernmentOrganizationService> governmentOrganizationResource(
       Injector injector) {
-    return new SimpleResourceDelegate<>(injector.getInstance(GovernmentOrganizationService.class)
-    // injector.getInstance(Key.<GovernmentOrganizationService>get(
-    // GovernmentOrganizationService.class, Names.named("govt_org_svc")))
-    // injector.getInstance(
-    // Key.<GovernmentOrganizationService>get(GovernmentOrganizationService.class))
-    );
+    return new SimpleResourceDelegate<>(injector.getInstance(GovernmentOrganizationService.class));
   }
 
   @Provides
@@ -469,13 +463,6 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(ClientsRelationshipsService.class));
-  }
-
-  @Provides
-  @RelationshipServiceBackedResource
-  public TypedResourceDelegate<String, Relationship> relationshipBackedResource(Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(RelationshipsService.class));
   }
 
   @Provides
