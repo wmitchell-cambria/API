@@ -66,9 +66,6 @@ public class HOIScreeningService
       @Authorize("screening:read:screeningEntity") ScreeningEntity screeningEntity) {
     // Check screening access restriction
     String accessRestriction = screeningEntity.getAccessRestrictions();
-    if (StringUtils.isNoneBlank(accessRestriction)) {
-
-    }
 
     // Check participants
     Set<ParticipantEntity> participants = screeningEntity.getParticipants();
