@@ -1,0 +1,20 @@
+Test Scenario with different county sealed condition with county sensitive privilege:
+Test the hoi_referrals returns 403 (Forbidden)
+
+     URL:https://ferbapi.preint.cwds.io/swagger
+     Login JSON: 
+           { "user": "RACFID", "staffId": "aax", "roles": [ "Supervisor" ], "county_code": "56", "county_name": "Ventura", "privileges": [ "Countywide Read", "Sensitive Persons" ] } 
+
+	Staff Person: aax
+    End Point: hoi_referrals 
+	Client ID: A02Pt2Haaf
+	
+Request: 
+
+{
+  "client_ids": [
+    "A02Pt2Haaf"
+  ]
+}
+
+Expected Response: 403

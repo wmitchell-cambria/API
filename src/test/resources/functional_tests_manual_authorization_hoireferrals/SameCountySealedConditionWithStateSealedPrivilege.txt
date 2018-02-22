@@ -1,0 +1,22 @@
+Test Scenario with same county sealed condition with state sealed privilege:
+Test the hoi_referrals returns 200 (OK)
+
+     URL:https://ferbapi.preint.cwds.io/swagger
+     Login JSON: 
+           { "user": "RACFID", "staffId": "0RG", "roles": [ "Supervisor" ], "county_code": "56", "county_name": "Ventura", "privileges": [ "Countywide Read", "Sensitive Persons" ] } 
+	
+	Staff Person: 0RG
+    End Point: hoi_referrals 
+	Client ID: Aj6VfEH00m
+	
+Request: 
+
+{
+  "client_ids": [
+    "Aj6VfEH00m"
+  ]
+}
+
+Expected Response: 200 
+
+Returned Empty Response
