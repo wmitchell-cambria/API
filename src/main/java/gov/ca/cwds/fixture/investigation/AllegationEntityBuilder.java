@@ -24,7 +24,6 @@ public class AllegationEntityBuilder {
 
   protected Short allegationType = 2179;
   protected Boolean createdByScreener = Boolean.FALSE;
-  protected AllegationSubType allegationSubType;
   protected Short dispositionType = 46;
   protected String rational = "disposition reason explained";
 
