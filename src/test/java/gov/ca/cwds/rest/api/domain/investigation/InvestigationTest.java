@@ -533,8 +533,6 @@ public class InvestigationTest {
 	newRelationships.add(newRelationship);
 	
 	Investigation investigation = new InvestigationEntityBuilder()
-		.setId(newId)
-		.setTableName(newTableName)
 		.setLastUpdatedBy(newLastUpdatedBy)
 		.setLastUpdatedAt(newLastUpdatedAt)
 		.setIncidentCounty(newIncidentCounty)

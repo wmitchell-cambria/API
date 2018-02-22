@@ -23,8 +23,6 @@ import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 @SuppressWarnings("javadoc")
 public class InvestigationEntityBuilder {
 
-  private String tableName = "REFERL_T";
-  private String id = "1234567ABC";
   private String lastUpdatedBy = "0X5";
   private Date lastUpdatedAt =
       DomainChef.uncookStrictTimestampString("2016-08-03T01:00:00.000-0700");
@@ -41,7 +39,7 @@ public class InvestigationEntityBuilder {
   private Boolean sensitive = Boolean.FALSE;
   private Boolean sealed = Boolean.FALSE;
   private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Referral");
+      new CmsRecordDescriptor("1234567ABC", "111-222-333-4444", "REFERL_T", "Referral");
 
   private Assignee assignee = new Assignee("CWS Staff", incidentCounty, "Madera CWS", "0X5");
 
@@ -85,34 +83,20 @@ public class InvestigationEntityBuilder {
         safetyAlerts, crossReports, contacts);
   }
 
-  public InvestigationEntityBuilder setTableName(String tableName) {
-    this.tableName = tableName;
-    return this;
-  }
-
-  public InvestigationEntityBuilder setId(String id) {
-    this.id = id;
-    return this;
-  }
-
-
   public InvestigationEntityBuilder setLastUpdatedBy(String lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
     return this;
   }
-
 
   public InvestigationEntityBuilder setLastUpdatedAt(Date lastUpdatedAt) {
     this.lastUpdatedAt = freshDate(lastUpdatedAt);
     return this;
   }
 
-
   public InvestigationEntityBuilder setIncidentCounty(String incidentCounty) {
     this.incidentCounty = incidentCounty;
     return this;
   }
-
 
   public InvestigationEntityBuilder setIncidentDate(Date incidentDate) {
     this.incidentDate = freshDate(incidentDate);
