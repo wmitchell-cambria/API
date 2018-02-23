@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
-import gov.ca.cwds.security.annotations.Authorize;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
@@ -45,16 +45,20 @@ public class HOIReferralService
 
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
+  private AuthorizationService authorizationService;
 
   /**
    * @param clientDao - clientDao
    * @param referralClientDao - referralClientDao
+   * @param authorizationService - authorizationService
    */
   @Inject
-  public HOIReferralService(ClientDao clientDao, ReferralClientDao referralClientDao) {
+  public HOIReferralService(ClientDao clientDao, ReferralClientDao referralClientDao,
+      AuthorizationService authorizationService) {
     super();
     this.clientDao = clientDao;
     this.referralClientDao = referralClientDao;
+    this.authorizationService = authorizationService;
   }
 
   @Override
@@ -150,7 +154,8 @@ public class HOIReferralService
     throw new NotImplementedException("handle request not implemented");
   }
 
-  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+  String authorizeClient(String clientId) {
+    authorizationService.ensureClientAccessAuthorized(clientId);
     return clientId;
   }
 

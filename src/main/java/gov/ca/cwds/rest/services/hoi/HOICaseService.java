@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.security.annotations.Authorize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,6 +33,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.hoi.HOIVictim;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
@@ -54,20 +54,23 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   private CaseDao caseDao;
   private ClientDao clientDao;
   private ClientRelationshipDao clientRelationshipDao;
+  private AuthorizationService authorizationService;
 
   /**
    * @param caseDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.CmsCase} objects
    * @param clientDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Client} objects
    * @param clientRelationshipDao {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.ClientRelationship} objects
+   * @param authorizationService - authorizationService
    */
   @Inject
   public HOICaseService(CaseDao caseDao, ClientDao clientDao,
-      ClientRelationshipDao clientRelationshipDao) {
+      ClientRelationshipDao clientRelationshipDao, AuthorizationService authorizationService) {
     super();
     this.caseDao = caseDao;
     this.clientDao = clientDao;
     this.clientRelationshipDao = clientRelationshipDao;
+    this.authorizationService = authorizationService;
   }
 
   @Override
@@ -181,7 +184,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     throw new NotImplementedException("handle request not implemented");
   }
 
-  public String authorizeClient(@Authorize("client:read:clientId") String clientId) {
+  String authorizeClient(String clientId) {
+    authorizationService.ensureClientAccessAuthorized(clientId);
     return clientId;
   }
 

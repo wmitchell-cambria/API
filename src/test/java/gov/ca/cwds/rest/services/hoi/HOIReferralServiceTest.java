@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -45,6 +45,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * @author CWDS API Team
@@ -54,6 +55,7 @@ public class HOIReferralServiceTest {
 
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
+  private AuthorizationService authorizationService;
   private HOIReferralService hoiService;
   private HOIRequest request;
 
@@ -75,7 +77,8 @@ public class HOIReferralServiceTest {
     SystemCodeCache.global().getAllSystemCodes();
     clientDao = mock(ClientDao.class);
     referralClientDao = mock(ReferralClientDao.class);
-    hoiService = new HOIReferralService(clientDao, referralClientDao);
+    authorizationService = new AuthorizationService();
+    hoiService = new HOIReferralService(clientDao, referralClientDao, authorizationService);
     request = new HOIRequest();
     request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
   }
