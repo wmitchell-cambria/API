@@ -49,10 +49,28 @@ public class HOIScreeningService
         new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
 
     Set<String> clientIds = hoiScreeningRequest.getClientIds();
-    // authorizationService.ensureClientAccessAuthorized(clientIds);
+    /**
+     * NOTE: When we want to enable authorizations for screening history, we can add following line
+     * of code back at this spot.
+     * 
+     * <pre>
+     * 
+     * authorizationService.ensureClientAccessAuthorized(clientIds);
+     * 
+     * </pre>
+     */
 
     for (ScreeningEntity screeningEntity : screeningDao.findScreeningsByClientIds(clientIds)) {
-      // authorizationService.ensureScreeningAccessAuthorized(screeningEntity);
+      /**
+       * NOTE: When we want to enable authorizations for screening history, we can add following
+       * line of code back at this spot.
+       * 
+       * <pre>
+       * 
+       * authorizationService.ensureScreeningAccessAuthorized(screeningEntity);
+       * 
+       * </pre>
+       */
       screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
     }
 
