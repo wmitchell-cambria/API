@@ -1,0 +1,12 @@
+{
+  "user": "TESTIE",
+  "staffId": "0RG",
+  "roles": [
+    "Supervisor"
+  ],
+  "county_code": "99",
+  "county_name": "State of California",
+  "privileges": [
+    "Sensitive Persons"
+  ]
+}
