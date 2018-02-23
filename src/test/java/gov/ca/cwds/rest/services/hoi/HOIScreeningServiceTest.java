@@ -6,9 +6,7 @@ import static gov.ca.cwds.fixture.ScreeningEntityBuilder.DEFAULT_ASSIGNEE_STAFF_
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -20,7 +18,6 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,6 +48,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.resources.StaffPersonResource;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 
 /**
@@ -94,9 +92,12 @@ public class HOIScreeningServiceTest {
     hoiScreeningFactory.screeningDao = screeningDao;
     hoiScreeningFactory.hoiPersonFactory = hoiPersonFactory;
 
+    AuthorizationService authorizationService = mock(AuthorizationService.class);
+
     hoiScreeningService = new HOIScreeningService();
     hoiScreeningService.screeningDao = screeningDao;
     hoiScreeningService.hoiScreeningFactory = hoiScreeningFactory;
+    hoiScreeningService.authorizationService = authorizationService;
   }
 
   @Test
@@ -123,33 +124,6 @@ public class HOIScreeningServiceTest {
       assertThat(actualScreening.getAssignedSocialWorker(),
           is(expectedScreening.getAssignedSocialWorker()));
     }
-  }
-
-  @Test(expected = AuthorizationException.class)
-  public void testUnauthorizedClient() {
-    HOIScreeningService spyTarget = spy(hoiScreeningService);
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("123");
-
-    HOIRequest request = new HOIRequest();
-    request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
-    spyTarget.handleFind(request);
-  }
-
-  @Test(expected = AuthorizationException.class)
-  public void testUnauthorizedScreening() {
-    HOIScreeningService spyTarget = spy(hoiScreeningService);
-
-    Set<String> clientIds = new HashSet<>();
-    clientIds.add("123");
-    when(screeningDao.findScreeningsByClientIds(clientIds))
-        .thenReturn(mockScreeningEntityList("sealed"));
-
-    doThrow(AuthorizationException.class).when(spyTarget)
-        .authorizeScreening(any(ScreeningEntity.class));
-
-    HOIRequest request = new HOIRequest();
-    request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
-    spyTarget.handleFind(request);
   }
 
   private HOIScreeningResponse createExpectedResponse() {

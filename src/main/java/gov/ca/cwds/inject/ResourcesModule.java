@@ -11,8 +11,8 @@ import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.IntakeLovEntry;
 import gov.ca.cwds.rest.api.domain.IntakeLovResponse;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import gov.ca.cwds.rest.api.domain.auth.AuthorizationCheckingRequest;
-import gov.ca.cwds.rest.api.domain.auth.AuthorizationCheckingResponse;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.rest.api.domain.cms.Assignment;
@@ -61,7 +61,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedServiceBackedResourceDelegate;
-import gov.ca.cwds.rest.resources.auth.AuthorizationCheckingResource;
+import gov.ca.cwds.rest.resources.auth.AuthorizationResource;
 import gov.ca.cwds.rest.resources.cms.AllegationPerpetratorHistoryResource;
 import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import gov.ca.cwds.rest.resources.cms.AssignmentResource;
@@ -98,7 +98,7 @@ import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.RelationshipsService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
-import gov.ca.cwds.rest.services.auth.AuthorizationCheckingService;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
@@ -195,7 +195,7 @@ public class ResourcesModule extends AbstractModule {
     bind(InvolvementHistoryResource.class);
     bind(HOIReferralResource.class);
     bind(HOICaseResource.class);
-    bind(AuthorizationCheckingResource.class);
+    bind(AuthorizationResource.class);
   }
 
   @Provides
@@ -553,9 +553,9 @@ public class ResourcesModule extends AbstractModule {
   }
 
   @Provides
-  @AuthorizationCheckingServiceBackedResource
-  public SimpleResourceDelegate<String, AuthorizationCheckingRequest, AuthorizationCheckingResponse, AuthorizationCheckingService> authorizationCheckingServiceBackedResource(
+  @AuthorizationServiceBackedResource
+  public SimpleResourceDelegate<String, AuthorizationRequest, AuthorizationResponse, AuthorizationService> authorizationServiceBackedResource(
       Injector injector) {
-    return new SimpleResourceDelegate<>(injector.getInstance(AuthorizationCheckingService.class));
+    return new SimpleResourceDelegate<>(injector.getInstance(AuthorizationService.class));
   }
 }

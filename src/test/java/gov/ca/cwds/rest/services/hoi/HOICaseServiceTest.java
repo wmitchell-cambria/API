@@ -42,6 +42,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * @author CWDS API Team
@@ -53,6 +54,7 @@ public class HOICaseServiceTest {
   private CaseDao caseDao;
   private ClientDao clientDao;
   private ClientRelationshipDao clientRelationshipDao;
+  private AuthorizationService authorizationService;
   private HOICaseService target;
   private HOIRequest request;
 
@@ -76,7 +78,8 @@ public class HOICaseServiceTest {
     caseDao = mock(CaseDao.class);
     clientDao = mock(ClientDao.class);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
-    target = new HOICaseService(caseDao, clientDao, clientRelationshipDao);
+    authorizationService = new AuthorizationService();
+    target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, authorizationService);
     request = new HOIRequest();
     request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
   }

@@ -27,7 +27,7 @@ import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.AddressValidationService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
-import gov.ca.cwds.rest.services.auth.AuthorizationCheckingService;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.CachingSystemCodeService;
@@ -154,7 +154,7 @@ public class ServicesModule extends AbstractModule {
     bind(HOIReferralService.class);
     bind(InvolvementHistoryService.class);
     bind(HOICaseService.class);
-    bind(AuthorizationCheckingService.class);
+    bind(AuthorizationService.class);
 
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);

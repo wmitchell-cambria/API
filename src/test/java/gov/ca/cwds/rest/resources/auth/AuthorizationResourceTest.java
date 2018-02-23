@@ -13,12 +13,12 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import gov.ca.cwds.rest.api.domain.auth.AuthorizationCheckingRequest;
-import gov.ca.cwds.rest.api.domain.auth.AuthorizationCheckingResponse;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.services.auth.AuthorizationCheckingService;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
@@ -27,7 +27,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  *
  */
-public class AuthorizationCheckingResourceTest {
+public class AuthorizationResourceTest {
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
@@ -35,12 +35,12 @@ public class AuthorizationCheckingResourceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private static SimpleResourceDelegate<String, AuthorizationCheckingRequest, AuthorizationCheckingResponse, AuthorizationCheckingService> simpleResourceDelegate =
+  private static SimpleResourceDelegate<String, AuthorizationRequest, AuthorizationResponse, AuthorizationService> simpleResourceDelegate =
       mock(SimpleResourceDelegate.class);
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new AuthorizationCheckingResource(simpleResourceDelegate)).build();
+      .addResource(new AuthorizationResource(simpleResourceDelegate)).build();
 
   /**
    * @throws Exception - Exception
@@ -56,7 +56,7 @@ public class AuthorizationCheckingResourceTest {
    */
   @Test
   public void type() throws Exception {
-    assertThat(AuthorizationCheckingResource.class, notNullValue());
+    assertThat(AuthorizationResource.class, notNullValue());
   }
 
   /**
@@ -64,8 +64,8 @@ public class AuthorizationCheckingResourceTest {
    */
   @Test
   public void instantiation() throws Exception {
-    AuthorizationCheckingResource target =
-        new AuthorizationCheckingResource(simpleResourceDelegate);
+    AuthorizationResource target =
+        new AuthorizationResource(simpleResourceDelegate);
     assertThat(target, notNullValue());
   }
 
