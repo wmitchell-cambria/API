@@ -19,12 +19,11 @@ import org.skyscreamer.jsonassert.JSONAssert;
  * @author CWDS API Team
  *
  */
-@Ignore
 public class HOICaseResourceTest extends IntakeBaseTest {
 
   @Test
   public void testHandleFindNonExistingClientId() throws Exception {
-    WebTarget target = clientTestRule.withSecurityToken("security/social-worker-only-principal.json")
+    WebTarget target = clientTestRule.withSecurityToken("fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json")
         .target(RESOURCE_CASE_HISTORY_OF_INVOLVEMENT);
 
     HOIRequest request = new HOIRequest();
@@ -36,4 +35,22 @@ public class HOICaseResourceTest extends IntakeBaseTest {
 
     JSONAssert.assertEquals("[]", actualJson, true);
   }
+
+
+  @Ignore
+  @Test
+  public void testHandleFind() throws Exception {
+    WebTarget target = clientTestRule.withSecurityToken("fixtures/gov/ca/cwds/rest/resources/hoi/user-county-sensitive.json")
+        .target(RESOURCE_CASE_HISTORY_OF_INVOLVEMENT);
+
+    HOIRequest request = new HOIRequest();
+    request.setClientIds(Stream.of("AhGPhcm0T1").collect(Collectors.toSet()));
+
+    Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON_TYPE);
+    HOICase[] response = invocation.post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), HOICase[].class);
+    String actualJson = clientTestRule.getMapper().writeValueAsString(response);
+
+    JSONAssert.assertEquals("[]", actualJson, true);
+  }
+
 }

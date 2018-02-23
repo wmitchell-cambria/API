@@ -1,0 +1,27 @@
+1. login with
+{
+    "user": "BRADYG",
+    "staffId": "aaw",
+    "roles": [
+        "SocialWorker"
+    ],
+    "county_code": "17",
+    "county_name": "Lake",
+    "privileges": [
+        "County License Case Management",
+        "Adoptions",
+        "Statewide Read",
+        "System Administration",
+        "Create Service Provider",
+        "CWS Case Management System"
+    ]
+}
+
+2. Clients
+No Conditions:              AhGPhcm0T1
+Same County Sensitive:      1S3k0iv00T unauthorized
+Same County Sealed:         4kgIiDy00T unauthorized
+Different County Sensitive: 8ROySNV00T unauthorized
+Different County Sealed:    4jCKVgx0GE unauthorized
+No County Sensitive:        F187hFj00E unauthorized
+No County Sealed:           SIfUah90GD unauthorized
