@@ -1,0 +1,99 @@
+package gov.ca.cwds.rest.services.auth;
+
+import java.util.Collection;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.AuthorizationException;
+
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
+import gov.ca.cwds.rest.resources.SimpleResourceService;
+import gov.ca.cwds.security.annotations.Authorize;
+
+/**
+ * Service to check that logged in staff person is authorized to access entities
+ * 
+ * @author CWDS API Team
+ */
+public class AuthorizationService
+    extends SimpleResourceService<String, AuthorizationRequest, AuthorizationResponse> {
+
+  /**
+   * Constructor
+   */
+  public AuthorizationService() {
+    // No-op
+  }
+
+  /**
+   * Check if logged in user is authorized to access requested entity
+   */
+  @Override
+  protected AuthorizationResponse handleRequest(AuthorizationRequest request) {
+    if (request != null && StringUtils.isNotBlank(request.getId())) {
+      ensureClientAccessAuthorized(request.getId());
+    }
+    return new AuthorizationResponse();
+  }
+
+  /**
+   * Check if logged in user is authorized to access client identified by given clientId, throws
+   * AuthorizationException if it is not.
+   * 
+   * @param clientId The client id
+   * @throws AuthorizationException
+   */
+  public void ensureClientAccessAuthorized(@Authorize("client:read:clientId") String clientId) {
+    // Authorizer annotation does the work
+  }
+
+  /**
+   * Check if logged in user is authorized to access clients identified by given clientIds, throws
+   * AuthorizationException if any client is not authorized for staff person.
+   * 
+   * @param clientId The client id
+   * @throws AuthorizationException
+   */
+  public void ensureClientAccessAuthorized(Collection<String> clientIds) {
+    for (String clientId : clientIds) {
+      ensureClientAccessAuthorized(clientId);
+    }
+  }
+
+  /**
+   * Check if logged in user is authorized to access given screening and all participants, throws
+   * AuthorizationException if not authorized.
+   * 
+   * @param screeningEntity
+   * @throws AuthorizationException
+   */
+  public void ensureScreeningAccessAuthorized(
+      @Authorize("screening:read:screeningEntity") ScreeningEntity screeningEntity) {
+
+    if (screeningEntity == null) {
+      return;
+    }
+
+    // Check participants
+    Set<ParticipantEntity> participants = screeningEntity.getParticipants();
+    if (participants != null) {
+      for (ParticipantEntity participant : participants) {
+        String participantId = participant.getLegacyId();
+        if (StringUtils.isNotBlank(participantId)) {
+          ensureClientAccessAuthorized(participantId);
+        }
+      }
+    }
+  }
+
+  /**
+   * This method in not implemented
+   */
+  @Override
+  protected AuthorizationResponse handleFind(String arg0) {
+    throw new UnsupportedOperationException();
+  }
+}

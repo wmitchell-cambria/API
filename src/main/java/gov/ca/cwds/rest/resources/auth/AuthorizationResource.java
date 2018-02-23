@@ -9,12 +9,11 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.AuthorizationCheckingServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.auth.AuthorizationCheckingRequest;
-import gov.ca.cwds.rest.api.domain.auth.AuthorizationCheckingResponse;
+import gov.ca.cwds.inject.AuthorizationServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
+import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
-import gov.ca.cwds.rest.services.auth.AuthorizationCheckingService;
-import io.dropwizard.hibernate.UnitOfWork;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,16 +27,16 @@ import io.swagger.annotations.ApiResponses;
  */
 @Api(value = RESOURCE_AUTHORIZE, tags = {RESOURCE_AUTHORIZE})
 @Path(value = RESOURCE_AUTHORIZE)
-public class AuthorizationCheckingResource {
+public class AuthorizationResource {
 
-  private SimpleResourceDelegate<String, AuthorizationCheckingRequest, AuthorizationCheckingResponse, AuthorizationCheckingService> simpleResourceDelegate;
+  private SimpleResourceDelegate<String, AuthorizationRequest, AuthorizationResponse, AuthorizationService> simpleResourceDelegate;
 
   /**
    * Constructor
    */
   @Inject
-  public AuthorizationCheckingResource(
-      @AuthorizationCheckingServiceBackedResource SimpleResourceDelegate<String, AuthorizationCheckingRequest, AuthorizationCheckingResponse, AuthorizationCheckingService> simpleResourceDelegate) {
+  public AuthorizationResource(
+      @AuthorizationServiceBackedResource SimpleResourceDelegate<String, AuthorizationRequest, AuthorizationResponse, AuthorizationService> simpleResourceDelegate) {
     super();
     this.simpleResourceDelegate = simpleResourceDelegate;
   }
@@ -48,7 +47,6 @@ public class AuthorizationCheckingResource {
    * @param id the id
    * @return the response
    */
-  @UnitOfWork(value = "cms")
   @GET
   @Path("/client/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -57,7 +55,7 @@ public class AuthorizationCheckingResource {
   @ApiOperation(value = "Determine if client is authorized", response = Response.class, code = 200)
   public Response authorizeClientAccess(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "ID of the client to authorize") String id) {
-    simpleResourceDelegate.handle(new AuthorizationCheckingRequest(id));
+    simpleResourceDelegate.handle(new AuthorizationRequest(id));
     return Response.status(Response.Status.OK).build();
   }
 }
