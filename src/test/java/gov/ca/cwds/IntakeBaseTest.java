@@ -40,47 +40,17 @@ public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
     new DatabaseHelper(
         configuration.getCmsDataSourceFactory().getUrl(),
         configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/ddl/system_code_table.xml");
+        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/intake-cwsint-ddl-master.xml");
 
     new DatabaseHelper(
         configuration.getCmsDataSourceFactory().getUrl(),
         configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/system_code_table-data.xml");
-
-    new DatabaseHelper(
-        configuration.getCmsDataSourceFactory().getUrl(),
-        configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/intake-cwsint-database-master.xml");
-
-    new DatabaseHelper(
-        configuration.getCmsDataSourceFactory().getUrl(),
-        configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/case-data.xml");
-
-    new DatabaseHelper(
-        configuration.getCmsDataSourceFactory().getUrl(),
-        configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/client-data.xml");
-
-    new DatabaseHelper(
-        configuration.getCmsDataSourceFactory().getUrl(),
-        configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/client_relationship-data.xml");
-
-    new DatabaseHelper(
-        configuration.getCmsDataSourceFactory().getUrl(),
-        configuration.getCmsDataSourceFactory().getUser(),
-        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/dml/child_client-data.xml");
+        configuration.getCmsDataSourceFactory().getPassword()).runScript("liquibase/functional-tests-data.xml");
 
     new DatabaseHelper(
         configuration.getRsDataSourceFactory().getUrl(),
         configuration.getRsDataSourceFactory().getUser(),
         configuration.getRsDataSourceFactory().getPassword()).runScript("liquibase/cwsrs1-database-master.xml");
-
-    new DatabaseHelper(
-        configuration.getRsDataSourceFactory().getUrl(),
-        configuration.getRsDataSourceFactory().getUser(),
-        configuration.getRsDataSourceFactory().getPassword()).runScript("liquibase/dml/client_county-data.xml");
   }
 
   public void assertEqualJsonArrays(String expectedJson, String actualJson) throws IOException {
