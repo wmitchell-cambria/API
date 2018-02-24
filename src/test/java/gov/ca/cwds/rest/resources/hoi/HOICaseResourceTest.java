@@ -37,7 +37,6 @@ public class HOICaseResourceTest extends IntakeBaseTest {
   }
 
 
-  @Ignore
   @Test
   public void testHandleFind() throws Exception {
     WebTarget target = clientTestRule.withSecurityToken("fixtures/gov/ca/cwds/rest/resources/hoi/user-county-sensitive.json")
