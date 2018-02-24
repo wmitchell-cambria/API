@@ -1,19 +1,15 @@
 package gov.ca.cwds.rest.resources;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.inject.RelationshipServiceBackedResource;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.RelationshipsService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CLIENT;
