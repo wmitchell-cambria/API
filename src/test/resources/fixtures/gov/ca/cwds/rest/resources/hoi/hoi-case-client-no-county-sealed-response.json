@@ -1,0 +1,48 @@
+[
+  {
+    "id": "ToQnUaR0GD",
+    "start_date": "1999-08-26",
+    "county": {
+      "id": "0"
+    },
+    "service_component": {
+      "id": "1692"
+    },
+    "focus_child": {
+      "id": "SIfUah90GD",
+      "first_name": "asdf",
+      "last_name": "Orgill",
+      "legacy_descriptor": {
+        "legacy_id": "SIfUah90GD",
+        "legacy_ui_id": "1607-5101-0800-3001005",
+        "legacy_last_updated": "1999-08-26T08:35:41.995-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "0GD",
+      "first_name": "y",
+      "last_name": "ygu",
+      "legacy_descriptor": {
+        "legacy_id": "0GD",
+        "legacy_ui_id": "0GD",
+        "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "SEALED",
+      "limited_access_government_entity": {}
+    },
+    "parents": [],
+    "legacy_descriptor": {
+      "legacy_id": "ToQnUaR0GD",
+      "legacy_ui_id": "1693-4094-5392-3001005",
+      "legacy_last_updated": "1999-09-28T11:20:11.522-0700",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]

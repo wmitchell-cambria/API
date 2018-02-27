@@ -308,7 +308,6 @@ public class DataAccessModule extends AbstractModule {
     bind(CaseDao.class);
     bind(ReferralAssignmentDao.class);
     bind(CaseAssignmentDao.class);
-    bind(CaseDao.class);
     bind(ClientRelationshipDao.class);
     bind(ClientCollateralDao.class);
 

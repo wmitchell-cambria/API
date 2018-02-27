@@ -1,0 +1,81 @@
+[
+  {
+    "id": "B014gP20T1",
+    "start_date": "2004-03-31",
+    "county": {
+      "id": "1068"
+    },
+    "service_component": {
+      "id": "1692"
+    },
+    "focus_child": {
+      "id": "AhGPhcm0T1",
+      "first_name": "Peter",
+      "last_name": "Gasticke",
+      "legacy_descriptor": {
+        "legacy_id": "AhGPhcm0T1",
+        "legacy_ui_id": "0607-6386-1488-8001799",
+        "legacy_last_updated": "2004-04-23T10:49:47.381-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "0Hw",
+      "first_name": "William",
+      "last_name": "Ne",
+      "legacy_descriptor": {
+        "legacy_id": "0Hw",
+        "legacy_ui_id": "0Hw",
+        "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "NONE",
+      "limited_access_government_entity": {}
+    },
+    "parents": [
+      {
+        "id": "4VP2prc0T1",
+        "first_name": "Lisa",
+        "last_name": "Kopelman",
+        "legacy_descriptor": {
+          "legacy_id": "4VP2prc0T1",
+          "legacy_ui_id": "0255-9711-4455-2001799",
+          "legacy_last_updated": "2004-04-27T08:44:24.025-0700",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        },
+        "relationship": {
+          "id": "291"
+        },
+        "limited_access_code": "NONE"
+      },
+      {
+        "id": "6tftuP20T1",
+        "first_name": "Donald",
+        "last_name": "Desorts",
+        "legacy_descriptor": {
+          "legacy_id": "6tftuP20T1",
+          "legacy_ui_id": "0391-8078-7389-6001799",
+          "legacy_last_updated": "2004-04-27T08:44:24.025-0700",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        },
+        "relationship": {
+          "id": "285"
+        },
+        "limited_access_code": "NONE"
+      }
+    ],
+    "legacy_descriptor": {
+      "legacy_id": "B014gP20T1",
+      "legacy_ui_id": "0624-8184-8407-2001799",
+      "legacy_last_updated": "2004-04-23T11:02:45.857-0700",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]

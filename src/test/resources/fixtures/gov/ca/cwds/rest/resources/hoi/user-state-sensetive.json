@@ -5,6 +5,7 @@
     "Supervisor"
   ],
   "county_code": "99",
+  "county_cws_code": "1126",
   "county_name": "State of California",
   "privileges": [
     "Sensitive Persons"

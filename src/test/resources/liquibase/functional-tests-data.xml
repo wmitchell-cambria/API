@@ -8,5 +8,7 @@
     <include file="liquibase/dml/case-data.xml"/>
     <include file="liquibase/dml/client_relationship-data.xml"/>
     <include file="liquibase/dml/child_client-data.xml"/>
+    <include file="liquibase/dml/staff_person-data.xml"/>
+    <include file="liquibase/dml/referral-data.xml"/>
 
 </databaseChangeLog>
