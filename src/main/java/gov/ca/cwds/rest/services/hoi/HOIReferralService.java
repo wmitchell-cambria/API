@@ -2,8 +2,8 @@ package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,11 +71,17 @@ public class HOIReferralService
     if (referralClientList.isEmpty()) {
       return emptyHoiReferralResponse();
     }
-    List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientList.size());
-    for (ReferralClient referralClient : referralClientList) {
+    // eliminate duplicate ReferralClient records
+    ArrayList<ReferralClient> referralClientArrayList = new ArrayList<ReferralClient>(referralClientList);
+    Set<ReferralClient> referralClientSet = new LinkedHashSet<ReferralClient>(referralClientList);
+    referralClientArrayList.clear();
+    referralClientArrayList.addAll(referralClientSet);
+    
+    List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
+    for (ReferralClient referralClient : referralClientArrayList) {
       hoiReferrals.add(createHOIReferral(referralClient));
     }
-    Collections.sort(hoiReferrals);
+ 
     hoiReferralResponse.setHoiReferrals(hoiReferrals);
     return hoiReferralResponse;
   }
