@@ -72,8 +72,8 @@ public class HOIReferralService
       return emptyHoiReferralResponse();
     }
     // eliminate duplicate ReferralClient records
-    ArrayList<ReferralClient> referralClientArrayList = new ArrayList<ReferralClient>(referralClientList);
-    Set<ReferralClient> referralClientSet = new LinkedHashSet<ReferralClient>(referralClientList);
+    ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
+    Set<ReferralClient> referralClientSet = new LinkedHashSet<>(referralClientList);
     referralClientArrayList.clear();
     referralClientArrayList.addAll(referralClientSet);
     
