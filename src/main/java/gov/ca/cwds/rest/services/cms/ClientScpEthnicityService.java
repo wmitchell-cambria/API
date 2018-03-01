@@ -52,7 +52,7 @@ public class ClientScpEthnicityService
     try {
       gov.ca.cwds.data.persistence.cms.ClientScpEthnicity managed =
           new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(
-              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
               clientScpEthnicity, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = clientScpEthnicityDao.create(managed);
@@ -125,7 +125,7 @@ public class ClientScpEthnicityService
       for (Short code : otherRaceCodes) {
         gov.ca.cwds.data.persistence.cms.ClientScpEthnicity clientScpEthnicity =
             new gov.ca.cwds.data.persistence.cms.ClientScpEthnicity(
-                CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+                CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
                 CLIENT_ESTABLISHED_CODE, clientId, code,
                 RequestExecutionContext.instance().getStaffId(),
                 RequestExecutionContext.instance().getRequestStartTime());

@@ -23,8 +23,8 @@ import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.IndividualDeliveredService;
+import gov.ca.cwds.rest.api.domain.LastUpdatedBy;
 import gov.ca.cwds.rest.api.domain.investigation.contact.Contact;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactList;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
@@ -45,8 +45,6 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ContactService.class);
 
-  private String currentUserStaffId = RequestExecutionContext.instance().getStaffId();
-  private Date currentRequestStartTime = RequestExecutionContext.instance().getRequestStartTime();
   private DeliveredService deliveredService;
   private ReferralClientDeliveredService referralClientDeliveredService;
   private DeliveredToIndividualService deliveredToIndividualService;
@@ -175,7 +173,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    */
   @Override
   public Response create(ContactReferralRequest request) {
-    validateCurrentUserStaffId(currentUserStaffId);
+    validateCurrentUserStaffId(RequestExecutionContext.instance().getStaffId());
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
     validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate(),
@@ -190,8 +188,10 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
         contactRequest, countySpecificCode);
 
     contactPartyDeliveredServiceDao.create(new ContactPartyDeliveredServiceEntity(
-        CmsKeyIdGenerator.generate(currentUserStaffId), serviceContactType.shortValue(),
-        countySpecificCode, deliveredServiceId, currentUserStaffId, currentRequestStartTime));
+        CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+        serviceContactType.shortValue(), countySpecificCode, deliveredServiceId,
+        RequestExecutionContext.instance().getStaffId(),
+        RequestExecutionContext.instance().getRequestStartTime()));
 
     return this.find(referralId + ":" + deliveredServiceId);
   }
@@ -242,7 +242,7 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    */
   @Override
   public Response update(String primaryKey, ContactReferralRequest request) {
-    validateCurrentUserStaffId(currentUserStaffId);
+    validateCurrentUserStaffId(RequestExecutionContext.instance().getStaffId());
     ContactRequest contactRequest = request.getContactRequest();
     Referral referral = validateReferral(request);
     validateContactStartDate(contactRequest.getStartedAt(), referral.getReceivedDate(),
@@ -260,7 +260,8 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
         contactPartyDeliveredServiceDao.findByDeliveredServiceId(primaryKey);
     contactPartyDeliveredServiceDao.update(new ContactPartyDeliveredServiceEntity(
         entity.getPrimaryKey(), serviceContactType.shortValue(), countySpecificCode,
-        deliveredServiceId, currentUserStaffId, currentRequestStartTime));
+        deliveredServiceId, RequestExecutionContext.instance().getStaffId(),
+        RequestExecutionContext.instance().getRequestStartTime()));
 
     return this.find(referralId + ":" + deliveredServiceId);
   }

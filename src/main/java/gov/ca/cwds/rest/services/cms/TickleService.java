@@ -50,7 +50,7 @@ public class TickleService implements
 
     try {
       gov.ca.cwds.data.persistence.cms.Tickle managed = new gov.ca.cwds.data.persistence.cms.Tickle(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), tickle,
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), tickle,
           RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
       managed = tickleDao.create(managed);

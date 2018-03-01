@@ -139,7 +139,7 @@ public class ClientAddressService implements
     try {
       ClientAddress managedClientAddress;
       managedClientAddress = new ClientAddress(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
           clientAddress, RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
 
@@ -210,7 +210,7 @@ public class ClientAddressService implements
         addressId = updateExistingAddress(messageBuilder, addressId, address, domainAddress);
       }
 
-      if (hasAddress(messageBuilder, addressId) && hasClient(clientId, messageBuilder) ){
+      if (hasAddress(messageBuilder, addressId) && hasClient(clientId, messageBuilder)) {
         Short addressType = address.getType() != null ? address.getType().shortValue()
             : LegacyDefaultValues.DEFAULT_ADDRESS_TYPE;
         gov.ca.cwds.rest.api.domain.cms.ClientAddress clientAddress =
@@ -252,11 +252,9 @@ public class ClientAddressService implements
       gov.ca.cwds.rest.api.domain.Address address, Address domainAddress) {
     Address foundAddress = this.addressService.find(address.getLegacyId());
     if (foundAddress != null) {
-      addressId = updateAddress(messageBuilder, addressId, address, domainAddress,
-          foundAddress);
+      addressId = updateAddress(messageBuilder, addressId, address, domainAddress, foundAddress);
     } else {
-      String message =
-          " Legacy Id on Address does not correspond to an existing CMS/CWS Address ";
+      String message = " Legacy Id on Address does not correspond to an existing CMS/CWS Address ";
       ServiceException se = new ServiceException(message);
       messageBuilder.addMessageAndLog(message, se, LOGGER);
     }
@@ -264,9 +262,7 @@ public class ClientAddressService implements
   }
 
   private String updateAddress(MessageBuilder messageBuilder, String addressId,
-      gov.ca.cwds.rest.api.domain.Address address,
-      Address domainAddress,
-      Address foundAddress) {
+      gov.ca.cwds.rest.api.domain.Address address, Address domainAddress, Address foundAddress) {
     boolean okToUpdate = okToUpdateAddress(address, foundAddress);
     if (okToUpdate) {
       addressId = updateAddress(messageBuilder, address, domainAddress);

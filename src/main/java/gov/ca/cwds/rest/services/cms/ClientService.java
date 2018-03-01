@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.rest.business.rules.R04880EstimatedDOBCodeSetting;
-import gov.ca.cwds.rest.business.rules.R04966NamesMustHaveAtLeastOneAlphaChar;
 import java.io.Serializable;
 
 import javax.persistence.EntityExistsException;
@@ -23,6 +21,8 @@ import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.R04880EstimatedDOBCodeSetting;
+import gov.ca.cwds.rest.business.rules.R04966NamesMustHaveAtLeastOneAlphaChar;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -129,10 +129,10 @@ public class ClientService implements
     gov.ca.cwds.rest.api.domain.cms.Client client = request;
 
     try {
-      Client managed =
-          new Client(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-              client, RequestExecutionContext.instance().getStaffId(),
-              RequestExecutionContext.instance().getRequestStartTime());
+      Client managed = new Client(
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), client,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
       validateByRuleR04966(managed);
       executeRuleR04880(managed);
 
@@ -195,8 +195,8 @@ public class ClientService implements
 
   private void validateByRuleR04966(Client managed) {
     if (!new R04966NamesMustHaveAtLeastOneAlphaChar(managed).isValid()) {
-      throw new ServiceException("Client must have at least one alpha character " +
-          "in at least one of the name fields (first, middle, last)");
+      throw new ServiceException("Client must have at least one alpha character "
+          + "in at least one of the name fields (first, middle, last)");
     }
   }
 

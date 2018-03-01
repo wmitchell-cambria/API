@@ -58,8 +58,9 @@ public class DeliveredService
     try {
       gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity managed =
           new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(
-              CmsKeyIdGenerator.generate(lastUpdatedId), deliveredServiceDomain, lastUpdatedId,
-              lastUpdatedTime);
+              CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+              deliveredServiceDomain, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       managed = deliveredServiceDao.create(managed);
       return new gov.ca.cwds.rest.api.contact.DeliveredServiceDomain(managed);
     } catch (EntityExistsException e) {

@@ -33,6 +33,8 @@ public class AuthorizationResource {
 
   /**
    * Constructor
+   * 
+   * @param simpleResourceDelegate - simpleResourceDelegate
    */
   @Inject
   public AuthorizationResource(

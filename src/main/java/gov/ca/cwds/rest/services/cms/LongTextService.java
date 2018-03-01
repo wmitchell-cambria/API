@@ -81,9 +81,9 @@ public class LongTextService implements
     gov.ca.cwds.rest.api.domain.cms.LongText longText = request;
 
     try {
-      LongText managed =
-          new LongText(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-              longText, RequestExecutionContext.instance().getStaffId());
+      LongText managed = new LongText(
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), longText,
+          RequestExecutionContext.instance().getStaffId());
       managed = longTextDao.create(managed);
       return new PostedLongText(managed);
     } catch (EntityExistsException e) {

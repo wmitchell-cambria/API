@@ -1,8 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.data.persistence.cms.Assignment;
-import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeAction;
-import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeValidator;
+import static java.lang.Math.min;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,13 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 import javax.xml.bind.DatatypeConverter;
 
-import gov.ca.cwds.rest.api.domain.DomainObject;
-import gov.ca.cwds.rest.api.domain.Participant;
-import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
-import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
-import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
-import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
-import gov.ca.cwds.rest.util.DocUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +23,20 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.persistence.cms.Assignment;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
+import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
@@ -46,14 +45,15 @@ import gov.ca.cwds.rest.business.rules.CountyOfAssignedStaffWorker;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.R00818SetReferredResourceType;
+import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeAction;
+import gov.ca.cwds.rest.business.rules.R04611ReferralStartDateTimeValidator;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
+import gov.ca.cwds.rest.util.DocUtils;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
-
-import static java.lang.Math.min;
 
 /**
  * Business layer object to work on {@link Referral}
@@ -167,9 +167,9 @@ public class ReferralService implements
           staffPersonValidate(RequestExecutionContext.instance().getStaffId());
       validateCountyOfAssignedStaffWorker(request);
 
-      //work around to be able to pass externally generated ID
-      String referralId = CmsKeyIdGenerator
-          .generate(RequestExecutionContext.instance().getStaffId());
+      // work around to be able to pass externally generated ID
+      String referralId =
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId());
       if (!StringUtils.isBlank(request.getUiIdentifier())
           && request.getUiIdentifier().length() == 10) {
         referralId = request.getUiIdentifier();
@@ -177,8 +177,7 @@ public class ReferralService implements
       }
 
       Referral managed =
-          new Referral(referralId,
-              request, RequestExecutionContext.instance().getStaffId(),
+          new Referral(referralId, request, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
 
       managed = referralDao.create(managed);
@@ -257,11 +256,11 @@ public class ReferralService implements
       /*
        * Attach default screener narrative created from template
        */
-      referralId = CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId());
-      String screenerNarrativeId = createDefaultSreenerNarrativeForNewReferral(screeningToReferral,
-          referral, referralId);
+      referralId = CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId());
+      String screenerNarrativeId =
+          createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referral, referralId);
       if (!StringUtils.isBlank(screenerNarrativeId)) {
-        //Pass the referral Id
+        // Pass the referral Id
         referral.setUiIdentifier(referralId);
         referral.setDrmsAllegationDescriptionDoc(screenerNarrativeId);
       }
@@ -290,7 +289,7 @@ public class ReferralService implements
    * @param dateStarted - dateStarted
    * @param timeStarted - timeStarted
    * @param strsMessageBuilder - the ScreeningToReferralService messageBuilder object responsible
-   * for handling errors
+   *        for handling errors
    * @return the referral
    * @throws ServiceException - ServiceException
    */
@@ -331,17 +330,14 @@ public class ReferralService implements
         ParticipantValidator.anonymousReporter(screeningToReferral),
         screeningToReferral.getCommunicationMethod(), currentLocationOfChildrenLongTextId,
         drmsAllegationDescriptionDoc, drmsErReferralDoc, drmsInvestigationDoc,
-        screeningToReferral.isFamilyAwareness(), govEnt,
-        screeningToReferral.getName(), dateStarted, timeStarted,
-        screeningToReferral.getResponseTime(),
+        screeningToReferral.isFamilyAwareness(), govEnt, screeningToReferral.getName(), dateStarted,
+        timeStarted, screeningToReferral.getResponseTime(),
         referredToResourceType ? NOT_REFERRED : 0, allegesAbuseOccurredAtAddressId,
         firstResponseDeterminedByStaffPersonId(), longTextId,
-        screeningToReferral.getIncidentCounty(),
-        (short) screeningToReferral.getApprovalStatus(), screeningToReferral.getAssigneeStaffId(),
-        responseRationalLongTextId, screeningToReferral.getResponsibleAgency(),
-        screeningToReferral.getLimitedAccessCode(),
-        screeningToReferral.getLimitedAccessDescription(),
-        limitedAccessDate, agencyCode);
+        screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
+        screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
+        screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
+        screeningToReferral.getLimitedAccessDescription(), limitedAccessDate, agencyCode);
   }
 
   private Short convertLimitedAccessAgencyToNumericCode(ScreeningToReferral screeningToReferral) {
@@ -462,8 +458,8 @@ public class ReferralService implements
       gov.ca.cwds.rest.api.domain.cms.Referral request) {
     try {
       /*
-       * Reuse the validation of DocTool Rule 04611
-       * in the gov.ca.cwds.rest.services.ScreeningToReferralService
+       * Reuse the validation of DocTool Rule 04611 in the
+       * gov.ca.cwds.rest.services.ScreeningToReferralService
        */
       validateMaxReferralStartDateTime(primaryKey, request);
 
@@ -499,8 +495,7 @@ public class ReferralService implements
   }
 
   private String createDefaultSreenerNarrativeForNewReferral(
-      ScreeningToReferral screeningToReferral,
-      gov.ca.cwds.rest.api.domain.cms.Referral referral,
+      ScreeningToReferral screeningToReferral, gov.ca.cwds.rest.api.domain.cms.Referral referral,
       String referralId) {
     String screenerNarrativeId = null;
     DrmsDocumentTemplate drmsTemplate =
@@ -509,7 +504,7 @@ public class ReferralService implements
     if (drmsTemplate != null) {
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
 
-      //Make Word doc from Template with new DOC_HANDLE etc.
+      // Make Word doc from Template with new DOC_HANDLE etc.
 
       Date now = new Date();
       String docAuth = RequestExecutionContext.instance().getUserId();
@@ -519,38 +514,27 @@ public class ReferralService implements
       Short segments = 1;
       Long docLength = 1L;
 
-      // TO1DO ???  The server name through which the document was added.
+      // TO1DO ??? The server name through which the document was added.
       String docServ = "AUTOCRTD";
 
       String docDate = new SimpleDateFormat(DomainObject.DATE_FORMAT).format(now);
       String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
 
-      //TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
+      // TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
       String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
       String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0, 5)
           .concat(nameNumber).concat(".DOC");
 
-      String base64Blob = DatatypeConverter.printBase64Binary(
-          screenerNarrativeFromTemplate(
-              screeningToReferral,
-              referralId,
-              referral,
-              DatatypeConverter.parseBase64Binary(cmsTemplate.getBase64Blob())));
+      String base64Blob = DatatypeConverter
+          .printBase64Binary(screenerNarrativeFromTemplate(screeningToReferral, referralId,
+              referral, DatatypeConverter.parseBase64Binary(cmsTemplate.getBase64Blob())));
 
-      CmsDocument cmsDocument = new CmsDocument(docHandle, segments, docLength,
-          docAuth,
-          docServ,
-          docDate, docTime, docName,
-          cmsTemplate.getCompressionMethod(),
-          base64Blob);
+      CmsDocument cmsDocument = new CmsDocument(docHandle, segments, docLength, docAuth, docServ,
+          docDate, docTime, docName, cmsTemplate.getCompressionMethod(), base64Blob);
       cmsDocument = cmsDocumentService.create(cmsDocument);
 
-      DrmsDocument document = new DrmsDocument(
-          new Date(),
-          drmsTemplate.getThirdId(),
-          null,
-          RequestExecutionContext.instance().getStaffId(),
-          cmsDocument.getId());
+      DrmsDocument document = new DrmsDocument(new Date(), drmsTemplate.getThirdId(), null,
+          RequestExecutionContext.instance().getStaffId(), cmsDocument.getId());
 
       PostedDrmsDocument posted = drmsDocumentService.create(document);
       screenerNarrativeId = posted.getId();
@@ -560,9 +544,7 @@ public class ReferralService implements
   }
 
   private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral,
-      String referralId,
-      gov.ca.cwds.rest.api.domain.cms.Referral referral,
-      byte[] template) {
+      String referralId, gov.ca.cwds.rest.api.domain.cms.Referral referral, byte[] template) {
     Map<String, String> keyValuePairs = new HashMap<>();
 
     String childName = "";

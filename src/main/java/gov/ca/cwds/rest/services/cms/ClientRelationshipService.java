@@ -78,7 +78,7 @@ public class ClientRelationshipService
     try {
       gov.ca.cwds.data.persistence.cms.ClientRelationship managed =
           new gov.ca.cwds.data.persistence.cms.ClientRelationship(
-              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
               clientRelationship, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = clientRelationshipDao.create(managed);

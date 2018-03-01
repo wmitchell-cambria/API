@@ -28,7 +28,7 @@ public class CrossReportService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossReportService.class);
 
   private CrossReportDao crossReportDao;
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RICrossReport riCrossReport;
 
   /**
@@ -86,8 +86,8 @@ public class CrossReportService implements
     gov.ca.cwds.rest.api.domain.cms.CrossReport crossReport = request;
     try {
       CrossReport managed = new CrossReport(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), crossReport,
-          RequestExecutionContext.instance().getStaffId(),
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+          crossReport, RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
       managed = crossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
