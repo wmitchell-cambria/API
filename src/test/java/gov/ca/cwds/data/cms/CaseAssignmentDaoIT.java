@@ -115,7 +115,7 @@ public class CaseAssignmentDaoIT implements DaoTestTemplate {
         DomainChef.uncookDateString(startDate), DomainChef.uncookTimeString(startTime),
         typeOfReferralAssignmentCode, weightingNumber);
 
-    pa.setId(CmsKeyIdGenerator.generate(staffId));
+    pa.setId(CmsKeyIdGenerator.getNextValue(staffId));
     CaseAssignment create = dao.create(pa);
     assertThat(pa, is(create));
   }
@@ -129,7 +129,7 @@ public class CaseAssignmentDaoIT implements DaoTestTemplate {
         DomainChef.uncookDateString(startDate), DomainChef.uncookTimeString(startTime),
         typeOfReferralAssignmentCode, weightingNumber);
 
-    pa.setId(CmsKeyIdGenerator.generate(staffId));
+    pa.setId(CmsKeyIdGenerator.getNextValue(staffId));
     CaseAssignment create = dao.create(pa);
 
     try {

@@ -30,7 +30,7 @@ public class AllegationPerpetratorHistoryService implements
       LoggerFactory.getLogger(AllegationPerpetratorHistoryService.class);
 
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
 
   /**
@@ -96,7 +96,7 @@ public class AllegationPerpetratorHistoryService implements
 
     try {
       AllegationPerpetratorHistory managed = new AllegationPerpetratorHistory(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
           allegationPerpetratoryHistory, RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
 

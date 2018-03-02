@@ -29,7 +29,7 @@ public class AllegationService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(AllegationService.class);
 
   private AllegationDao allegationDao;
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIAllegation riAllegation;
 
   /**
@@ -88,8 +88,8 @@ public class AllegationService implements
 
     try {
       Allegation managed = new Allegation(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), allegation,
-          RequestExecutionContext.instance().getStaffId(),
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+          allegation, RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
       managed = allegationDao.create(managed);
       return new PostedAllegation(managed);

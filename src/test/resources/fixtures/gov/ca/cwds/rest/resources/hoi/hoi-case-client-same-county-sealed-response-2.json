@@ -1,0 +1,90 @@
+[
+  {
+    "id": "Cg1wwQj75A",
+    "start_date": "1997-08-13",
+    "county": {
+      "id": "1101",
+      "description": "Sacramento"
+    },
+    "service_component": {
+      "id": "1692",
+      "description": "Emergency Response"
+    },
+    "focus_child": {
+      "id": "Ba29OOP75A",
+      "first_name": "Jared",
+      "last_name": "Smith",
+      "legacy_descriptor": {
+        "legacy_id": "Ba29OOP75A",
+        "legacy_ui_id": "0657-8151-6476-9027228",
+        "legacy_last_updated": "1997-09-10T10:33:32.895-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "75A",
+      "first_name": "Richard",
+      "last_name": "Costa",
+      "legacy_descriptor": {
+        "legacy_id": "75A",
+        "legacy_ui_id": "75A",
+        "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "SEALED",
+      "limited_access_date": "2014-06-17",
+      "limited_access_description": "County determined by primary assignment as of Release 7.1 implementation date of May 2014",
+      "limited_access_government_entity": {
+        "id": "1101",
+        "description": "Sacramento"
+      }
+    },
+    "parents": [
+      {
+        "id": "TBnxEbR75A",
+        "first_name": "Vernon",
+        "last_name": "Bertin",
+        "legacy_descriptor": {
+          "legacy_id": "TBnxEbR75A",
+          "legacy_ui_id": "1658-0224-5104-1027228",
+          "legacy_last_updated": "1997-09-10T10:33:32.895-0700",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        },
+        "relationship": {
+          "id": "211",
+          "description": "Father/Son (Birth)"
+        },
+        "limited_access_code": "SEALED"
+      },
+      {
+        "id": "RpPPcq975A",
+        "first_name": "Consuela",
+        "last_name": "Snowman",
+        "legacy_descriptor": {
+          "legacy_id": "RpPPcq975A",
+          "legacy_ui_id": "1580-7046-5110-5027228",
+          "legacy_last_updated": "1997-09-10T10:33:32.895-0700",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        },
+        "relationship": {
+          "id": "252",
+          "description": "Mother/Son (Birth)"
+        },
+        "limited_access_code": "SEALED"
+      }
+    ],
+    "legacy_descriptor": {
+      "legacy_id": "Cg1wwQj75A",
+      "legacy_ui_id": "0720-1092-2992-1027228",
+      "legacy_last_updated": "2014-06-17T12:18:28.673-0700",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]

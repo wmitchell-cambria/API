@@ -24,7 +24,7 @@ public class HOIScreeningResourceApplicationTest extends IntakeBaseTest {
   @Test
   public void testHandleFindNonExistingClientId() throws Exception {
     WebTarget target =
-        clientTestRule.withSecurityToken("security/social-worker-only-principal.json")
+        clientTestRule.withSecurityToken("fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json")
             .target(RESOURCE_HOI_SCREENINGS);
 
     HOIRequest request = new HOIRequest();

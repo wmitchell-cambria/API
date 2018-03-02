@@ -48,7 +48,7 @@ public class GovernmentOrganizationCrossReportService implements
 
   }
 
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIGovernmentOrganizationCrossReport riGovernmentOrganizationCrossReport;
 
   /**
@@ -77,7 +77,7 @@ public class GovernmentOrganizationCrossReportService implements
     try {
       gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport managed =
           new gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport(
-              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
               governmentOrganizationCrossReport, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = governmentOrganizationCrossReportDao.create(managed);

@@ -4,11 +4,15 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.EntityExistsException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
@@ -31,9 +35,6 @@ import gov.ca.cwds.rest.services.ServiceException;
 public class DeliveredService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DeliveredService.class);
-
-  private String currentUserStaffId = RequestExecutionContext.instance().getStaffId();
-  private Date currentRequestStartTime = RequestExecutionContext.instance().getRequestStartTime();
 
   private DeliveredServiceDao deliveredServiceDao;
   private StaffPersonDao staffPersonDao;
@@ -120,8 +121,9 @@ public class DeliveredService {
 
         gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity persistedDeliveredService =
             new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(
-                CmsKeyIdGenerator.generate(currentUserStaffId), deliveredServiceDomain,
-                currentUserStaffId, currentRequestStartTime);
+                CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+                deliveredServiceDomain, RequestExecutionContext.instance().getStaffId(),
+                RequestExecutionContext.instance().getRequestStartTime());
         persistedDeliveredService = deliveredServiceDao.create(persistedDeliveredService);
         if (StringUtils.isBlank(primaryDeliveredServiceId)) {
           primaryDeliveredServiceId = persistedDeliveredService.getId();
@@ -223,7 +225,8 @@ public class DeliveredService {
     try {
       gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity persistedDeliveredService =
           new gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity(contactId,
-              deliveredServiceDomain, currentUserStaffId, currentRequestStartTime);
+              deliveredServiceDomain, RequestExecutionContext.instance().getStaffId(),
+              RequestExecutionContext.instance().getRequestStartTime());
       persistedDeliveredService = deliveredServiceDao.update(persistedDeliveredService);
       return new gov.ca.cwds.rest.api.contact.DeliveredServiceDomain(persistedDeliveredService);
 
@@ -240,7 +243,7 @@ public class DeliveredService {
    * Construct the DeliveredService object for update
    *
    * @param contactId the Delivered Service Identifier
-   * @param contactRequest the request
+   * @param request the request
    * @param countySpecificCode
    * @return the DeliveredServiceDomain
    */
@@ -296,7 +299,7 @@ public class DeliveredService {
 
   /**
    * 
-   * @param note - complete full long text which comes from UI.
+   * @param longNote - complete full long text which comes from UI.
    * @return list of split text
    */
   private List<String> extractLongText(String longNote) {

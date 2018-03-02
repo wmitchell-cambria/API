@@ -1,0 +1,50 @@
+[
+  {
+    "id": "SKFCpV500E",
+    "start_date": "1999-07-16",
+    "county": {
+      "id": "0",
+      "description": ""
+    },
+    "service_component": {
+      "id": "1692",
+      "description": "Emergency Response"
+    },
+    "focus_child": {
+      "id": "F187hFj00E",
+      "first_name": "Bud",
+      "last_name": "Swainger",
+      "legacy_descriptor": {
+        "legacy_id": "F187hFj00E",
+        "legacy_ui_id": "0853-0397-1184-3000014",
+        "legacy_last_updated": "1999-07-16T17:03:03.675-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "00i",
+      "first_name": "L",
+      "last_name": "STATE",
+      "legacy_descriptor": {
+        "legacy_id": "00i",
+        "legacy_ui_id": "00i",
+        "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "SENSITIVE",
+      "limited_access_government_entity": {}
+    },
+    "parents": [],
+    "legacy_descriptor": {
+      "legacy_id": "SKFCpV500E",
+      "legacy_ui_id": "1608-9539-5593-9000014",
+      "legacy_last_updated": "2014-03-03T11:00:50.315-0800",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]

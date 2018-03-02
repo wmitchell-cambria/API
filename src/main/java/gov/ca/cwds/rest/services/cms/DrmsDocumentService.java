@@ -53,8 +53,8 @@ public class DrmsDocumentService implements
 
     try {
       DrmsDocument managed = new DrmsDocument(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), drmsDocument,
-          RequestExecutionContext.instance().getStaffId(),
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+          drmsDocument, RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
       managed = drmsDocumentDao.create(managed);
       return new PostedDrmsDocument(managed);

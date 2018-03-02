@@ -1,0 +1,18 @@
+{
+  "user": "BRADYG",
+  "staffId": "aaw",
+  "roles": [
+    "SocialWorker"
+  ],
+  "county_code": "17",
+  "county_cws_code": "1084",
+  "county_name": "Lake",
+  "privileges": [
+    "County License Case Management",
+    "Adoptions",
+    "Statewide Read",
+    "System Administration",
+    "Create Service Provider",
+    "CWS Case Management System"
+  ]
+}

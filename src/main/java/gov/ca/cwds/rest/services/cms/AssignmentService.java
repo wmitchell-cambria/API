@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.util.Set;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
@@ -78,8 +79,8 @@ public class AssignmentService implements
   public AssignmentService(AssignmentDao assignmentDao, NonLACountyTriggers nonLACountyTriggers,
       StaffPersonDao staffpersonDao, TriggerTablesDao triggerTablesDao, Validator validator,
       ExternalInterfaceTables externalInterfaceTables, CaseLoadDao caseLoadDao,
-      ReferralDao referralDao, AssignmentUnitDao assignmentUnitDao,
-      CwsOfficeDao cwsOfficeDao, MessageBuilder messageBuilder) {
+      ReferralDao referralDao, AssignmentUnitDao assignmentUnitDao, CwsOfficeDao cwsOfficeDao,
+      MessageBuilder messageBuilder) {
     this.assignmentDao = assignmentDao;
     this.nonLACountyTriggers = nonLACountyTriggers;
     this.staffpersonDao = staffpersonDao;
@@ -135,7 +136,7 @@ public class AssignmentService implements
 
     try {
       Assignment managed = new Assignment(
-          CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()), request,
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), request,
           RequestExecutionContext.instance().getStaffId(),
           RequestExecutionContext.instance().getRequestStartTime());
       this.validateAssignmentEndDate(request);
@@ -245,9 +246,8 @@ public class AssignmentService implements
     if (assignment1.getStartDate().before(assignment2.getStartDate())) {
       return true;
     }
-    return assignment1.getStartDate().equals(assignment2.getStartDate()) && assignment1
-        .getStartTime()
-        .before(assignment2.getStartTime());
+    return assignment1.getStartDate().equals(assignment2.getStartDate())
+        && assignment1.getStartTime().before(assignment2.getStartTime());
   }
 
   public MessageBuilder getMessageBuilder() {

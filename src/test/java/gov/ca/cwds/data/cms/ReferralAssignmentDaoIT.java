@@ -105,7 +105,7 @@ public class ReferralAssignmentDaoIT {
         secondaryReferralAssignmentRoleType, DomainChef.uncookDateString(startDate),
         DomainChef.uncookTimeString(startTime), typeOfReferralAssignmentCode, weightingNumber);
 
-    pa.setId(CmsKeyIdGenerator.generate(staffId));
+    pa.setId(CmsKeyIdGenerator.getNextValue(staffId));
 
     ReferralAssignment create = dao.create(pa);
     assertThat(pa, is(create));

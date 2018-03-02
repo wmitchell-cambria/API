@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -187,6 +189,7 @@ public class CmsCase extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
+  @NotFound(action= NotFoundAction.IGNORE)
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral riReferral;

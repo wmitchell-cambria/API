@@ -1,0 +1,32 @@
+1. login with
+{
+    "user": "CLUSTR",
+    "staffId": "0UX",
+    "roles": [
+        "SocialWorker"
+    ],
+    "county_code": "34",
+    "county_name": "Sacramento",
+    "privileges": [
+        "CWS Case Management System",
+        "Resource Management",
+        "Create Service Provider",
+        "System Administration",
+        "Closed Case/Referral Update",
+        "Statewide Read",
+        "Sealed",
+        "Merge Client",
+        "Adoptions"
+    ]
+}
+
+2. Clients
+No Conditions:              AhGPhcm0T1
+Same County Sensitive:      PQ3s1OD01t unauthorized
+Same County Sealed:         Ba29OOP75A ?
+Different County Sensitive: 8ROySNV00T unauthorized
+Different County Sealed:    4jCKVgx0GE unauthorized
+No County Sensitive:        F187hFj00E unauthorized
+No County Sealed:           SIfUah90GD
+
+

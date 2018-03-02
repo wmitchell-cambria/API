@@ -1,0 +1,18 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="schema.name" value="cwsrs1"/>
+    <changeSet author="System" id="0" runAlways="true" dbms="db2">
+        <sql>
+            set schema 'cwsrs1'
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <include file="liquibase/cwscms_data_types.xml"/>
+
+    <include file="liquibase/ddl/cwsrs_client_county.xml"/>
+    <include file="liquibase/dml/cwsrs_client_county_data.xml"/>
+</databaseChangeLog>

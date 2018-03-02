@@ -1,0 +1,22 @@
+1. login with
+{
+    "user": "TESTIE",
+    "staffId": "0RG",
+    "roles": [
+        "Supervisor"
+    ],
+    "county_code": "99",
+    "county_name": "State of California",
+    "privileges": [
+        "Sensitive Persons"
+    ]
+}
+
+2. Clients
+No Conditions:              AhGPhcm0T1
+Same County Sensitive:      AbA4BJy0Aq ?
+Same County Sealed:         Abxl9D005Y unauthorized
+Different County Sensitive: 8ROySNV00T unauthorized
+Different County Sealed:    4jCKVgx0GE unauthorized
+No County Sensitive:        F187hFj00E unauthorized
+No County Sealed:           SIfUah90GD unauthorized

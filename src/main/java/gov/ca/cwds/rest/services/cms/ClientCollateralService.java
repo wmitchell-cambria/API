@@ -29,7 +29,7 @@ public class ClientCollateralService
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientCollateralService.class);
 
   private ClientCollateralDao clientCollateralDao;
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIClientCollateral ri;
 
   /**
@@ -82,7 +82,7 @@ public class ClientCollateralService
     try {
       gov.ca.cwds.data.persistence.cms.ClientCollateral managed =
           new gov.ca.cwds.data.persistence.cms.ClientCollateral(
-              CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
+              CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
               clientCollateral, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = clientCollateralDao.create(managed);

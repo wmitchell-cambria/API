@@ -1,0 +1,24 @@
+{
+  "user": "BRADYP",
+  "staffId": "aax",
+  "roles": [
+    "SocialWorker"
+  ],
+  "county_code": "17",
+  "county_cws_code": "1084",
+  "county_name": "Lake",
+  "privileges": [
+    "Closed Case/Referral Update",
+    "CWS Case Management System",
+    "Merge Client",
+    "System Administration",
+    "County License Case Management",
+    "Adoptions",
+    "Resource Management",
+    "Sensitive Persons",
+    "Create Service Provider",
+    "Resource Mgmt Placement Facility Maint",
+    "Countywide Read/Write",
+    "Program Management Reports"
+  ]
+}

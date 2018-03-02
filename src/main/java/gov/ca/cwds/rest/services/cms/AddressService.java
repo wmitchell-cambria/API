@@ -56,10 +56,10 @@ public class AddressService implements
   @Override
   public PostedAddress create(gov.ca.cwds.rest.api.domain.cms.Address request) {
     try {
-      Address managed =
-          new Address(CmsKeyIdGenerator.generate(RequestExecutionContext.instance().getStaffId()),
-              request, RequestExecutionContext.instance().getStaffId(),
-              RequestExecutionContext.instance().getRequestStartTime());
+      Address managed = new Address(
+          CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), request,
+          RequestExecutionContext.instance().getStaffId(),
+          RequestExecutionContext.instance().getRequestStartTime());
 
       managed = addressDao.create(managed);
       if (managed.getId() == null) {

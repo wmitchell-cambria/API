@@ -33,7 +33,7 @@ public class HOIReferralResourceApplicationTest extends IntakeBaseTest {
 	 */
 	@Test
 	public void testHandleFindNonExistingClientId() throws Exception {
-		WebTarget target = clientTestRule.withSecurityToken("security/social-worker-only-principal.json")
+		WebTarget target = clientTestRule.withSecurityToken("fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json")
 				.target(RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT);
 
 		HOIRequest request = new HOIRequest();

@@ -83,6 +83,7 @@ import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
 import gov.ca.cwds.rest.resources.hoi.HOICaseResource;
 import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
+import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
 import gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResource;
 import gov.ca.cwds.rest.resources.investigation.ContactResource;
 import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
@@ -193,6 +194,7 @@ public class ResourcesModule extends AbstractModule {
     bind(InvolvementHistoryResource.class);
     bind(HOIReferralResource.class);
     bind(HOICaseResource.class);
+    bind(HOIScreeningResource.class);
     bind(AuthorizationResource.class);
   }
 

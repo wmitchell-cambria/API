@@ -1,0 +1,28 @@
+{
+  "user": "BURNSM",
+  "staffId": "0MJ",
+  "roles": [
+    "SocialWorker"
+  ],
+  "county_code": "99",
+  "county_cws_code": "1126",
+  "county_name": "State of California",
+  "privileges": [
+    "Program Management Reports",
+    "Create Service Provider",
+    "Closed Case/Referral Update",
+    "County License Case Management",
+    "Resource Management",
+    "Countywide Read/Write",
+    "Code Table Maintenance",
+    "Sealed",
+    "Resource Mgmt Placement Facility Maint",
+    "Adoptions",
+    "CWS Case Management System",
+    "Merge Client",
+    "Bulletin Administrator",
+    "Probation",
+    "System Administration",
+    "Non-CWD"
+  ]
+}

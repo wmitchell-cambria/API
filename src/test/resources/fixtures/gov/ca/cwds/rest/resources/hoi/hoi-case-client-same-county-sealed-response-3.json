@@ -1,0 +1,50 @@
+[
+  {
+    "id": "C7j436I05Y",
+    "start_date": "1998-04-02",
+    "county": {
+      "id": "1126",
+      "description": "State of California"
+    },
+    "service_component": {
+      "id": "1695",
+      "description": "Permanent Placement"
+    },
+    "focus_child": {
+      "id": "Abxl9D005Y",
+      "first_name": "Wes",
+      "last_name": "Wooten",
+      "legacy_descriptor": {
+        "legacy_id": "Abxl9D005Y",
+        "legacy_ui_id": "0602-7823-1126-6000344",
+        "legacy_last_updated": "1998-04-02T16:45:52.244-0800",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "05Y",
+      "first_name": "Supervisor",
+      "last_name": "King",
+      "legacy_descriptor": {
+        "legacy_id": "05Y",
+        "legacy_ui_id": "05Y",
+        "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "SEALED",
+      "limited_access_government_entity": {}
+    },
+    "parents": [],
+    "legacy_descriptor": {
+      "legacy_id": "C7j436I05Y",
+      "legacy_ui_id": "0688-6816-5718-6000344",
+      "legacy_last_updated": "1998-04-03T15:29:16.173-0800",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]
