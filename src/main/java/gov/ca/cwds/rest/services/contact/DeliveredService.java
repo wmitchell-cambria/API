@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services.contact;
 
-import java.util.Date;
-
 import javax.persistence.EntityExistsException;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -28,9 +26,6 @@ public class DeliveredService
     implements TypedCrudsService<String, DeliveredServiceDomain, DeliveredServiceDomain> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DeliveredService.class);
-
-  private String lastUpdatedId = RequestExecutionContext.instance().getUserId();
-  private Date lastUpdatedTime = RequestExecutionContext.instance().getRequestStartTime();
 
   private DeliveredServiceDao deliveredServiceDao;
 
