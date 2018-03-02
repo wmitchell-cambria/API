@@ -29,8 +29,9 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 
 project.ext {
     apiVersion = '0.39'
-    coreApiVersion = '0.5.8-SNAPSHOT'
-    cwdsModelVersion = '0.5.6_466-RC'
+    coreApiVersion = '0.5.8_366-RC'
+    cwdsModelVersion = '0.5.6-SNAPSHOT'
+//    cwdsModelVersion = '0.5.6_470-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
     dropwizardFlywayVersion = '1.0.0-1'
@@ -196,8 +197,7 @@ dependencies {
     testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
 
     testCompile group: 'gov.ca.cwds.cals', name: 'intake-ns-data-model', version: cwdsModelVersion
-    testCompile group: 'gov.ca.cwds.cals', name: 'intake-cws-data-model', version: cwdsModelVersion
-    testCompile group: 'gov.ca.cwds.cals', name: 'cws-rs1-data-model', version: cwdsModelVersion
+    testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: cwdsModelVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
     testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion

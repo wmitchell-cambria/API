@@ -243,7 +243,7 @@ public class DeliveredService {
    * Construct the DeliveredService object for update
    *
    * @param contactId the Delivered Service Identifier
-   * @param contactRequest the request
+   * @param request the request
    * @param countySpecificCode
    * @return the DeliveredServiceDomain
    */
@@ -299,7 +299,7 @@ public class DeliveredService {
 
   /**
    * 
-   * @param note - complete full long text which comes from UI.
+   * @param longNote - complete full long text which comes from UI.
    * @return list of split text
    */
   private List<String> extractLongText(String longNote) {

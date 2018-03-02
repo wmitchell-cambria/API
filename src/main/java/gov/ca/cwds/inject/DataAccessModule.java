@@ -197,6 +197,7 @@ public class DataAccessModule extends AbstractModule {
       new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
           //legacy-data-access
           gov.ca.cwds.data.legacy.cms.entity.Client.class,
+          gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
           gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
           gov.ca.cwds.data.legacy.cms.entity.LicensingVisit.class,
@@ -206,6 +207,7 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.legacy.cms.entity.OutOfHomePlacement.class,
           gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck.class,
           gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory.class,
           gov.ca.cwds.data.legacy.cms.entity.PlacementHome.class,
           gov.ca.cwds.data.legacy.cms.entity.PlacementHomeNotes.class,
           gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile.class,

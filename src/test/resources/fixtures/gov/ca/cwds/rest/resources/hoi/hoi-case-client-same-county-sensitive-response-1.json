@@ -1,0 +1,90 @@
+[
+  {
+    "id": "EewE1uT00T",
+    "start_date": "1997-09-03",
+    "county": {
+      "id": "1084",
+      "description": "Lake"
+    },
+    "service_component": {
+      "id": "1694",
+      "description": "Family Reunification"
+    },
+    "focus_child": {
+      "id": "1S3k0iv00T",
+      "first_name": "Jenna",
+      "last_name": "Castanos",
+      "legacy_descriptor": {
+        "legacy_id": "1S3k0iv00T",
+        "legacy_ui_id": "0082-5072-4976-1000029",
+        "legacy_last_updated": "1997-09-11T09:06:31.315-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "0N3",
+      "first_name": "Kaaren",
+      "last_name": "Longaberger",
+      "legacy_descriptor": {
+        "legacy_id": "0N3",
+        "legacy_ui_id": "0N3",
+        "legacy_last_updated": "2002-08-20T16:12:14.029-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "SENSITIVE",
+      "limited_access_date": "2014-06-17",
+      "limited_access_description": "County determined by primary assignment as of Release 7.1 implementation date of May 2014",
+      "limited_access_government_entity": {
+        "id": "1084",
+        "description": "Lake"
+      }
+    },
+    "parents": [
+      {
+        "id": "6NMBCV700T",
+        "first_name": "George",
+        "last_name": "Durtnel",
+        "legacy_descriptor": {
+          "legacy_id": "6NMBCV700T",
+          "legacy_ui_id": "0362-2002-1769-7000029",
+          "legacy_last_updated": "1998-03-25T11:35:48.961-0800",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        },
+        "relationship": {
+          "id": "205",
+          "description": "Father/Daughter (Birth)"
+        },
+        "limited_access_code": "SENSITIVE"
+      },
+      {
+        "id": "GbQ5OoD00T",
+        "first_name": "Julie",
+        "last_name": "Kopta",
+        "legacy_descriptor": {
+          "legacy_id": "GbQ5OoD00T",
+          "legacy_ui_id": "0943-0861-5587-3000029",
+          "legacy_last_updated": "1998-03-25T11:35:48.961-0800",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        },
+        "relationship": {
+          "id": "247",
+          "description": "Mother/Daughter (Birth)"
+        },
+        "limited_access_code": "SENSITIVE"
+      }
+    ],
+    "legacy_descriptor": {
+      "legacy_id": "EewE1uT00T",
+      "legacy_ui_id": "0832-7089-8288-1000029",
+      "legacy_last_updated": "2014-06-17T12:18:28.673-0700",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]

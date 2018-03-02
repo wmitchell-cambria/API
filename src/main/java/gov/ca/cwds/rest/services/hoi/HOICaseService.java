@@ -133,12 +133,10 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
         clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       String secondaryClientId = relationship.getSecondaryClientId();
-      authorizeClient(secondaryClientId);
       clientIds.add(secondaryClientId);
     }
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
       String primaryClientId = relation.getPrimaryClientId();
-      authorizeClient(primaryClientId);
       clientIds.add(primaryClientId);
     }
     return clientIds;
@@ -167,7 +165,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
   private HOIVictim getFocusChild(CmsCase cmscase) {
     String focusChildId = cmscase.getFkchldClt();
-    authorizeClient(focusChildId);
     Client client = clientDao.find(focusChildId);
     String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =

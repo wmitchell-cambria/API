@@ -3,15 +3,17 @@
     "id": "B014gP20T1",
     "start_date": "2004-03-31",
     "county": {
-      "id": "1068"
+      "id": "1068",
+      "description": "Alameda"
     },
     "service_component": {
-      "id": "1692"
+      "id": "1692",
+      "description": "Emergency Response"
     },
     "focus_child": {
       "id": "AhGPhcm0T1",
       "first_name": "Peter",
-      "last_name": "Gasticke",
+      "last_name": "Smith",
       "legacy_descriptor": {
         "legacy_id": "AhGPhcm0T1",
         "legacy_ui_id": "0607-6386-1488-8001799",
@@ -49,7 +51,8 @@
           "legacy_table_description": "Client"
         },
         "relationship": {
-          "id": "291"
+          "id": "291",
+          "description": "Son/Mother (Birth)"
         },
         "limited_access_code": "NONE"
       },
@@ -65,7 +68,8 @@
           "legacy_table_description": "Client"
         },
         "relationship": {
-          "id": "285"
+          "id": "285",
+          "description": "Son/Father (Birth)"
         },
         "limited_access_code": "NONE"
       }

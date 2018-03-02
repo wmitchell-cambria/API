@@ -1,34 +1,34 @@
 [
   {
-    "id": "SKFCpV500E",
-    "start_date": "1999-07-16",
+    "id": "C6vN5DG0Aq",
+    "start_date": "1997-09-30",
     "county": {
-      "id": "0",
-      "description": ""
+      "id": "1126",
+      "description": "State of California"
     },
     "service_component": {
       "id": "1692",
       "description": "Emergency Response"
     },
     "focus_child": {
-      "id": "F187hFj00E",
-      "first_name": "Bud",
-      "last_name": "Swainger",
+      "id": "AbA4BJy0Aq",
+      "first_name": "Cronathan",
+      "last_name": "Jemer",
       "legacy_descriptor": {
-        "legacy_id": "F187hFj00E",
-        "legacy_ui_id": "0853-0397-1184-3000014",
-        "legacy_last_updated": "1999-07-16T17:03:03.675-0700",
+        "legacy_id": "AbA4BJy0Aq",
+        "legacy_ui_id": "0602-0480-3081-8000672",
+        "legacy_last_updated": "1998-09-30T14:04:15.516-0700",
         "legacy_table_name": "CLIENT_T",
         "legacy_table_description": "Client"
       }
     },
     "assigned_social_worker": {
-      "id": "00i",
-      "first_name": "L",
-      "last_name": "STATE",
+      "id": "0Aq",
+      "first_name": "Isaac",
+      "last_name": "Chickenhawk",
       "legacy_descriptor": {
-        "legacy_id": "00i",
-        "legacy_ui_id": "00i",
+        "legacy_id": "0Aq",
+        "legacy_ui_id": "0Aq",
         "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
         "legacy_table_name": "STFPERST",
         "legacy_table_description": "Staff"
@@ -40,9 +40,9 @@
     },
     "parents": [],
     "legacy_descriptor": {
-      "legacy_id": "SKFCpV500E",
-      "legacy_ui_id": "1608-9539-5593-9000014",
-      "legacy_last_updated": "2014-03-03T11:00:50.315-0800",
+      "legacy_id": "C6vN5DG0Aq",
+      "legacy_ui_id": "0687-9473-7673-8000672",
+      "legacy_last_updated": "1998-09-30T14:52:36.814-0700",
       "legacy_table_name": "CASE_T",
       "legacy_table_description": "Case"
     }

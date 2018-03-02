@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.resources.hoi;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CASE_HISTORY_OF_INVOLVEMENT;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
-
 import gov.ca.cwds.IntakeBaseTest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +16,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -36,17 +34,21 @@ public class HOICaseResourceTest extends IntakeBaseTest {
   private static final String CLIENT_NO_CONDITIONS_ID = "AhGPhcm0T1";
   private static final String CLIENT_NO_CONDITIONS_HOI_RESPONSE = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-no-conditions-response.json";
 
-  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID = "1S3k0iv00T";
-  private static final String CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sensitive-response.json";
+  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID_1 = "1S3k0iv00T";
+  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID_2 = "PQ3s1OD01t";
+  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID_3 = "AbA4BJy0Aq";
+  private static final String CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE_1 = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sensitive-response-1.json";
+  private static final String CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE_3 = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sensitive-response-3.json";
 
-  private static final String CLIENT_SAME_COUNTY_SEALED_ID = "4kgIiDy00T";
-  private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response.json";
+  private static final String CLIENT_SAME_COUNTY_SEALED_ID_1 = "4kgIiDy00T";
+  private static final String CLIENT_SAME_COUNTY_SEALED_ID_2 = "Ba29OOP75A";
+  private static final String CLIENT_SAME_COUNTY_SEALED_ID_3 = "Abxl9D005Y";
+  private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_2 = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-2.json";
+  private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_3 = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-3.json";
 
   private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "8ROySNV00T";
-  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_HOI_RESPONSE = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-differrent-county-sensitive-response.json";
 
   private static final String CLIENT_DIFFERENT_COUNTY_SEALED_ID = "4jCKVgx0GE";
-  private static final String CLIENT_DIFFERENT_COUNTY_SEALED_HOI_RESPONSE = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-differrent-county-sealed-response.json";
 
   private static final String CLIENT_NO_COUNTY_SENSITIVE_ID = "F187hFj00E";
   private static final String CLIENT_NO_COUNTY_SENSITIVE_HOI_RESPONSE = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-no-county-sensitive-response.json";
@@ -67,12 +69,12 @@ public class HOICaseResourceTest extends IntakeBaseTest {
   //social worker only
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientSameCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SENSITIVE_ID);
+    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SENSITIVE_ID_1);
   }
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientSameCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SEALED_ID);
+    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SEALED_ID_1);
   }
 
   @Test
@@ -104,12 +106,12 @@ public class HOICaseResourceTest extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserCountySensitiveAndClientSameCountySensitive() throws Exception {
-    assertHandleFind(USER_COUNTY_SENSITIVE, CLIENT_SAME_COUNTY_SENSITIVE_ID, fixture(CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE));
+    assertHandleFind(USER_COUNTY_SENSITIVE, CLIENT_SAME_COUNTY_SENSITIVE_ID_1, fixture(CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE_1));
   }
 
   @Test
   public void testHandleFindForUserCountySensitiveAndClientSameCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID);
+    assertNonAuthorizedHandleFind(USER_COUNTY_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID_1);
   }
 
   @Test
@@ -141,13 +143,12 @@ public class HOICaseResourceTest extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserCountySealedAndClientSameCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID);
+    assertNonAuthorizedHandleFind(USER_COUNTY_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID_2);
   }
 
   @Test
-//  @Ignore
   public void testHandleFindForUserCountySealedAndClientSameCountySealed() throws Exception {
-    assertHandleFind(USER_COUNTY_SEALED, CLIENT_SAME_COUNTY_SEALED_ID, fixture(CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE));
+    assertHandleFind(USER_COUNTY_SEALED, CLIENT_SAME_COUNTY_SEALED_ID_2, fixture(CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_2));
   }
 
   @Test
@@ -178,14 +179,13 @@ public class HOICaseResourceTest extends IntakeBaseTest {
   }
 
   @Test
-  @Ignore
   public void testHandleFindForUserStateSensitiveAndClientSameCountySensitive() throws Exception {
-    assertHandleFind(USER_STATE_SENSITIVE, CLIENT_SAME_COUNTY_SENSITIVE_ID, fixture(CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE));
+    assertHandleFind(USER_STATE_SENSITIVE, CLIENT_SAME_COUNTY_SENSITIVE_ID_3, fixture(CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE_3));
   }
 
   @Test
   public void testHandleFindForUserStateSensitiveAndClientSameCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID);
+    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID_3);
   }
 
   @Test
@@ -217,13 +217,12 @@ public class HOICaseResourceTest extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserStateSealedAndClientSameCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID);
+    assertNonAuthorizedHandleFind(USER_STATE_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID_3);
   }
 
   @Test
-  @Ignore
   public void testHandleFindForUserStateSealedAndClientSameCountySealed() throws Exception {
-    assertHandleFind(USER_STATE_SEALED, CLIENT_SAME_COUNTY_SEALED_ID, fixture(CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE));
+    assertHandleFind(USER_STATE_SEALED, CLIENT_SAME_COUNTY_SEALED_ID_3, fixture(CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_3));
   }
 
   @Test
