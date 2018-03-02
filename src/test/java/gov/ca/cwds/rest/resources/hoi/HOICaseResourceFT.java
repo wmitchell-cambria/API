@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -25,8 +24,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
  * @author CWDS API Team
  *
  */
-@Ignore
-public class HOICaseResourceTest extends IntakeBaseTest {
+public class HOICaseResourceFT extends IntakeBaseTest {
   private static final String USER_SOCIAL_WORKER_ONLY = "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";
   private static final String USER_COUNTY_SENSITIVE = "fixtures/gov/ca/cwds/rest/resources/hoi/user-county-sensitive.json";
   private static final String USER_COUNTY_SEALED = "fixtures/gov/ca/cwds/rest/resources/hoi/user-county-sealed.json";
