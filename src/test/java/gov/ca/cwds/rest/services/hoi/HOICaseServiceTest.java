@@ -260,44 +260,4 @@ public class HOICaseServiceTest {
     spyTarget.handleFind(request);
   }
 
-  @Test(expected = AuthorizationException.class)
-  public void testUnAuthorizedPrimaryRelationClient() {
-    HOICaseService spyTarget = spy(target);
-    ClientRelationship clientRelationshipsByPrimaryClient =
-        new ClientRelationshipEntityBuilder().setSecondaryClientId("unauthorizedId").build();
-    when(clientRelationshipDao.findByPrimaryClientId("123"))
-        .thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
-    when(clientRelationshipDao.findBySecondaryClientId("123"))
-        .thenReturn(new ClientRelationship[] {});
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
-    spyTarget.handleFind(request);
-  }
-
-  @Test(expected = AuthorizationException.class)
-  public void testUnAuthorizedSecondaryRelationClient() {
-    HOICaseService spyTarget = spy(target);
-    ClientRelationship clientRelationshipsByPrimaryClient =
-        new ClientRelationshipEntityBuilder().setSecondaryClientId("secondaryId").build();
-    when(clientRelationshipDao.findByPrimaryClientId("123"))
-        .thenReturn(new ClientRelationship[] {clientRelationshipsByPrimaryClient});
-    ClientRelationship clientRelationshipsBySecondaryClient =
-        new ClientRelationshipEntityBuilder().setPrimaryClientId("unauthorizedId").build();
-    when(clientRelationshipDao.findBySecondaryClientId("123"))
-        .thenReturn(new ClientRelationship[] {clientRelationshipsBySecondaryClient});
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
-    spyTarget.handleFind(request);
-  }
-
-  @Test(expected = AuthorizationException.class)
-  public void testUnAuthorizedFocusChildClient() {
-    HOICaseService spyTarget = spy(target);
-    when(clientRelationshipDao.findByPrimaryClientId("123"))
-        .thenReturn(new ClientRelationship[] {});
-    when(clientRelationshipDao.findBySecondaryClientId("123"))
-        .thenReturn(new ClientRelationship[] {});
-    CmsCase cmsCase = new CmsCaseEntityBuilder().setFkchldClt("unauthorizedId").build();
-    when(caseDao.findByVictimClientIds(any(Set.class))).thenReturn(new CmsCase[] {cmsCase});
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
-    spyTarget.handleFind(request);
-  }
 }

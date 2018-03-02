@@ -30,8 +30,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 project.ext {
     apiVersion = '0.39'
     coreApiVersion = '0.5.8_366-RC'
-    cwdsModelVersion = '0.5.6-SNAPSHOT'
-//    cwdsModelVersion = '0.5.6_470-RC'
+    cwdsModelVersion = '0.5.8_474-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
     dropwizardFlywayVersion = '1.0.0-1'
