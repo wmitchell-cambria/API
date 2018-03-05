@@ -211,10 +211,14 @@ public class ClientRelationship extends CmsPersistentObject {
   }
 
   public boolean relatedTo(ClientRelationship relationship) {
-    if (relationship == null) return false;
-    if (relationship.getPrimaryClientId() == null) return false;
+    if (relationship == null) {
+      return false;
+    }
+    if (relationship.getPrimaryClientId() == null) {
+      return false;
+    }
 
-    return isRelated(this, relationship) ? true : false;
+    return isRelated(this, relationship);
   }
 
   private boolean isRelated(ClientRelationship relation1, ClientRelationship relation2) {

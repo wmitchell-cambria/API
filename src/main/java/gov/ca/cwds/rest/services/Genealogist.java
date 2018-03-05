@@ -23,7 +23,9 @@ public class Genealogist {
     }
 
     public Relationship buildRelationships(List<RelationshipWrapper> relationships, String clientId){
-        if (relationships == null || clientId == null) return new Relationship();
+        if (relationships == null || clientId == null) {
+            return new Relationship();
+        }
 
         Set<RelationshipTo> relations = new HashSet<>();
         for(RelationshipWrapper relationship : relationships){

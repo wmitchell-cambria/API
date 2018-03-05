@@ -1,9 +1,7 @@
 package gov.ca.cwds.rest.services;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.authorizer.ClientAbstractReadAuthorizer;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.Response;
@@ -11,6 +9,8 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.shiro.authz.AuthorizationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -18,6 +18,7 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
     ClientRelationshipDao relationshipDao;
     Genealogist genealogist;
     AuthorizationService authCheckService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningToReferralService.class);
 
     /**
      * Constructor and injecting the beans
@@ -56,6 +57,7 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
         try{
             authCheckService.ensureClientAccessAuthorized(clientId);
         } catch(AuthorizationException e){
+            LOGGER.warn("User tried to access unathorized client id:" + clientId);
             authorized = false;
         }
         return authorized;

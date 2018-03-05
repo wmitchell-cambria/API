@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.cms;
 
 import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
-import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
