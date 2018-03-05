@@ -18,7 +18,7 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
     ClientRelationshipDao relationshipDao;
     Genealogist genealogist;
     AuthorizationService authCheckService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningToReferralService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipsService.class);
 
     /**
      * Constructor and injecting the beans
@@ -57,7 +57,7 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
         try{
             authCheckService.ensureClientAccessAuthorized(clientId);
         } catch(AuthorizationException e){
-            LOGGER.warn("User tried to access unathorized client id:" + clientId);
+            LOGGER.warn("User tried to access unathorized client id: {}", clientId.replaceAll("[\r\n]",""));
             authorized = false;
         }
         return authorized;
