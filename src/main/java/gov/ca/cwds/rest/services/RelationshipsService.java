@@ -44,14 +44,14 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
     public Response findForIds(List<String> clientIds) {
         Set relationships = new HashSet();
         for (String id : clientIds) {
-          if(notAuthorized(id)) {
+          if(authorized(id)) {
             relationships.add(find(id));
           }
         }
         return new RelationshipList(relationships);
     }
 
-    private boolean notAuthorized(String clientId){
+    private boolean authorized(String clientId){
         boolean authorized = true;
         try{
             authCheckService.ensureClientAccessAuthorized(clientId);
