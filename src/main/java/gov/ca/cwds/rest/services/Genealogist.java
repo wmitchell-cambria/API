@@ -3,12 +3,11 @@ package gov.ca.cwds.rest.services;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.persistence.cms.Client;
-import gov.ca.cwds.data.persistence.cms.ClientRelationship;
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Genealogist {
     ClientDao clientDao;
@@ -23,47 +22,44 @@ public class Genealogist {
         this.clientDao = clientDao;
     }
 
-    public Relationship buildRelationForClient(String clientId, ClientRelationship[] primaryRelatedClients, ClientRelationship[] secondaryRelatedClients) {
+    public Relationship buildRelationships(List<RelationshipWrapper> relationships, String clientId){
+        if (relationships == null || clientId == null) return new Relationship();
+
         Set<RelationshipTo> relations = new HashSet<>();
-        Client primaryClient;
-        relations.addAll(addRelatedToClients(primaryRelatedClients, clientId));
-        relations.addAll(addRelatedFromClients(secondaryRelatedClients, clientId));
-        primaryClient = findClient(clientId);
+        for(RelationshipWrapper relationship : relationships){
+            boolean clientIsPrimary = clientId.equals(relationship.getPrimaryLegacyId());
+            relations.add(createBar( relationship, clientIsPrimary));
+        }
+
+        Client primaryClient = findClient(clientId);
         return new Relationship(primaryClient, relations);
     }
-
-    private Set<RelationshipTo>  addRelatedToClients(ClientRelationship[] relatedClients, String clientId) {
-        Set<RelationshipTo> relations = new HashSet<>();
-        for (ClientRelationship clientRelationship : relatedClients) {
-            if( clientId.equals(clientRelationship.getPrimaryClientId())){
-                RelationshipTo relationship = buildRelatedToClient(clientRelationship);
-                relations.add(relationship);
-            }
+    private RelationshipTo createBar(RelationshipWrapper relationship, boolean clientIsPrimary) {
+        RelationshipTo relationshipTo;
+        if(clientIsPrimary){
+            relationshipTo = createRelationShipTo(
+                  relationship.getSecondaryLegacyId(),
+                  relationship.getPrimaryRelationshipCode(),
+                  relationship.getSecondaryRelationshipCode(),
+                  relationship.getSecondaryFirstName(),
+                  relationship.getSecondaryLastName(),
+                  "" );
+        } else{
+            relationshipTo = createRelationShipTo(
+                    relationship.getSecondaryLegacyId(),
+                    relationship.getSecondaryRelationshipCode(),
+                    relationship.getPrimaryRelationshipCode(),
+                    relationship.getPrimaryFirstName(),
+                    relationship.getPrimaryLastName(),
+                    "" );
         }
-        return relations;
+        return relationshipTo;
     }
+    private RelationshipTo createRelationShipTo(String relationId, String primaryRelationCode, String secondaryRelation,
+                                                String secondaryFirstname, String secodnaryLastName, String relationContext ){
+        return new RelationshipTo(secondaryFirstname, secodnaryLastName, secondaryRelation,
+                relationContext, primaryRelationCode, relationId);
 
-    private RelationshipTo buildRelatedToClient(ClientRelationship clientRelationship ){
-        String secondaryClientId = clientRelationship.getSecondaryClientId();
-        Client secondaryClient = findClient(secondaryClientId);
-        return new RelationshipTo(clientRelationship, secondaryClient);
-    }
-
-    private Set<RelationshipTo>  addRelatedFromClients(ClientRelationship[] relatedClients, String clientId) {
-        Set<RelationshipTo> relations = new HashSet<>();
-        for (ClientRelationship clientRelationship : relatedClients) {
-            if( clientId.equals(clientRelationship.getSecondaryClientId())){
-                RelationshipTo relationship = buildRelatedFromClient(clientRelationship);
-                relations.add(relationship);
-            }
-        }
-        return relations;
-    }
-
-    private RelationshipTo buildRelatedFromClient(ClientRelationship clientRelationship ){
-        String primaryClientId = clientRelationship.getPrimaryClientId();
-        Client primaryClient = findClient(primaryClientId);
-        return new RelationshipTo(clientRelationship, primaryClient);
     }
 
     private Client findClient(String id){

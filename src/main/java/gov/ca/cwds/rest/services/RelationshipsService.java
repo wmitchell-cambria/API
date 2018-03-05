@@ -1,20 +1,23 @@
 package gov.ca.cwds.rest.services;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.authorizer.ClientAbstractReadAuthorizer;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.shiro.authz.AuthorizationException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RelationshipsService  implements TypedCrudsService<String, Relationship, Response> {
     ClientRelationshipDao relationshipDao;
     Genealogist genealogist;
+    AuthorizationService authCheckService;
 
     /**
      * Constructor and injecting the beans
@@ -23,23 +26,39 @@ public class RelationshipsService  implements TypedCrudsService<String, Relation
      * @param genealogist - genealogist instance
      */
     @Inject
-    public RelationshipsService(ClientRelationshipDao relationshipDao, Genealogist genealogist){
+    public RelationshipsService(ClientRelationshipDao relationshipDao, Genealogist genealogist, AuthorizationService authCheckService){
         this.relationshipDao = relationshipDao;
         this.genealogist = genealogist;
+        this.authCheckService = authCheckService;
     }
 
     public Response find(String id) {
-        ClientRelationship[] primaryRelations = relationshipDao.findByPrimaryClientId(id);
-        ClientRelationship[] secondaryRelations = relationshipDao.findBySecondaryClientId(id);
-        return genealogist.buildRelationForClient(id, primaryRelations, secondaryRelations);
+        List <RelationshipWrapper> relations = getClientRelationships(id);
+        return genealogist.buildRelationships(relations, id);
+    }
+
+    private List<RelationshipWrapper> getClientRelationships( String clientId){
+        return relationshipDao.findRelationshipsByClientId(clientId);
     }
 
     public Response findForIds(List<String> clientIds) {
         Set relationships = new HashSet();
-        for (String id : clientIds){
+        for (String id : clientIds) {
+          if(notAuthorized(id)) {
             relationships.add(find(id));
+          }
         }
         return new RelationshipList(relationships);
+    }
+
+    private boolean notAuthorized(String clientId){
+        boolean authorized = true;
+        try{
+            authCheckService.ensureClientAccessAuthorized(clientId);
+        } catch(AuthorizationException e){
+            authorized = false;
+        }
+        return authorized;
     }
 
     @Override

@@ -38,14 +38,14 @@ public class RelationshipToTest {
   @Test
   public void testDomainConstructorSuccess() throws Exception {
     RelationshipTo relationshipTo = new RelationshipTo(relatedFirstName, relatedLastName,
-        relationship, relationshipContext, relationshipToPerson, cmsRecordDescriptor);
+        relationship, relationshipContext, relationshipToPerson, id);
 
     assertThat(relatedFirstName, is(equalTo(relationshipTo.getRelatedFirstName())));
     assertThat(relatedLastName, is(equalTo(relationshipTo.getRelatedLastName())));
     assertThat(relationshipContext, is(equalTo(relationshipTo.getRelationshipContext())));
     assertThat(relationship, is(equalTo(relationshipTo.getRelationshipToPerson())));
     assertThat(relationshipToPerson, is(equalTo(relationshipTo.getRelatedPersonRelationship())));
-    assertThat(cmsRecordDescriptor, is(equalTo(relationshipTo.getCmsRecordDescriptor())));
+    assertThat(cmsRecordDescriptor.getId(), is(equalTo(relationshipTo.getCmsRecordDescriptor().getId())));
   }
 
   @Test

@@ -1,10 +1,12 @@
 package gov.ca.cwds.rest.services;
 
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.persistence.cms.ClientRelationship;
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.fixture.investigation.RelationshipEntityBuilder;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
+import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.commons.lang3.NotImplementedException;
@@ -14,95 +16,100 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class RelationshipsServiceTest {
     private RelationshipsService service;
+    private AuthorizationService authService;
     private ClientRelationshipDao relationshipDao;
     private Genealogist genealogist;
-    private ClientRelationship[] primaryRelationships;
-    private ClientRelationship[] secondaryRelationships;
     private String clientId;
-    private String clientId2 = "1XVZ43D";
+    private String clientId2;
 
     private List<String> clientIds = Arrays.asList(clientId, clientId2);
-    private ClientRelationship [] client2PrimaryRelationships = new ClientRelationship[2];
-    private ClientRelationship [] client2SecondaryRelationships = new ClientRelationship[2];
+    private List clientRelationships;
+
+    Relationship client1Relationship;
+    Relationship client2Relationship;
 
     @Before
     public void setup(){
         clientId = "1XVZ43D";
-        primaryRelationships = new ClientRelationship[2];
-        secondaryRelationships = new ClientRelationship[2];
-
         clientId2 = "2ZY52Q";
-        client2PrimaryRelationships = new ClientRelationship[2];
-        client2SecondaryRelationships = new ClientRelationship[2];
 
         clientIds = Arrays.asList(clientId, clientId2);
 
-        relationshipDao = mock(ClientRelationshipDao.class);
-        when(relationshipDao.findByPrimaryClientId(clientId)).thenReturn(primaryRelationships);
-        when(relationshipDao.findBySecondaryClientId(clientId)).thenReturn(secondaryRelationships);
-        when(relationshipDao.findByPrimaryClientId(clientId2)).thenReturn(client2PrimaryRelationships);
-        when(relationshipDao.findBySecondaryClientId(clientId2)).thenReturn(client2SecondaryRelationships);
+        RelationshipWrapper relationship = mock(RelationshipWrapper.class);
+        clientRelationships = Arrays.asList(relationship);
 
+        relationshipDao = mock(ClientRelationshipDao.class);
+        when(relationshipDao.findRelationshipsByClientId(clientId)).thenReturn(clientRelationships);
+        when(relationshipDao.findRelationshipsByClientId(clientId2)).thenReturn(clientRelationships);
+
+        authService = mock(AuthorizationService.class);
         genealogist = mock(Genealogist.class);
-        service = new RelationshipsService(relationshipDao, genealogist);
+        service = new RelationshipsService(relationshipDao, genealogist, authService);
+
+        client1Relationship = new RelationshipEntityBuilder().setFirstName("Fred").build();
+        client2Relationship = new RelationshipEntityBuilder().setFirstName("Bill").build();
+        when(genealogist.buildRelationships(clientRelationships, clientId)).thenReturn(client1Relationship);
+        when(genealogist.buildRelationships(clientRelationships, clientId2)).thenReturn(client2Relationship);
     }
 
     @Test
     public void shouldSearchForClientsRelatedToClient(){
         service.find(clientId);
-        verify(relationshipDao).findByPrimaryClientId(clientId);
-        verify(relationshipDao).findBySecondaryClientId(clientId);
+        verify(relationshipDao).findRelationshipsByClientId(clientId);
     }
 
     @Test
     public void shouldBuildRelationshipForClient(){
         service.find(clientId);
-        verify(genealogist).buildRelationForClient(clientId, primaryRelationships, secondaryRelationships);
+        verify(genealogist).buildRelationships(clientRelationships, clientId);
     }
 
     @Test
     public void findShouldReturnTheClientAndHisRelations(){
         Relationship relationship = new Relationship();
-        when(genealogist.buildRelationForClient(clientId, primaryRelationships, secondaryRelationships)).thenReturn(relationship);
+        when(genealogist.buildRelationships(clientRelationships, clientId)).thenReturn(relationship);
 
         Relationship foundRelationship = (Relationship)service.find(clientId);
         assertSame(relationship, foundRelationship);
     }
 
     @Test
-    public void shouldSearchRelationshipsForMultipleClients(){
+    public void findForIdsShouldSearchRelationshipsForMultipleClients(){
         service.findForIds(clientIds);
-        verify(relationshipDao).findByPrimaryClientId(clientId);
-        verify(relationshipDao).findBySecondaryClientId(clientId);
-        verify(relationshipDao).findByPrimaryClientId(clientId2);
-        verify(relationshipDao).findBySecondaryClientId(clientId2);
+        verify(relationshipDao).findRelationshipsByClientId(clientId);
+        verify(relationshipDao).findRelationshipsByClientId(clientId2);
 
     }
 
     @Test
-    public void shouldBuildRelationshipForMultipleClients(){
+    public void findForIdsShouldBuildRelationshipForMultipleClients(){
         service.findForIds(clientIds);
-        verify(genealogist).buildRelationForClient(clientId, primaryRelationships, secondaryRelationships);
-        verify(genealogist).buildRelationForClient(clientId2, client2PrimaryRelationships, client2SecondaryRelationships);
+        verify(genealogist).buildRelationships(clientRelationships, clientId);
+        verify(genealogist).buildRelationships(clientRelationships, clientId2);
     }
+
     @Test
-    public void findShouldReturnTheMultipleClientsRelations(){
-        Relationship client1Relationship = new RelationshipEntityBuilder().setFirstName("Fred").build();
-        Relationship client2Relationship = new RelationshipEntityBuilder().setFirstName("Bill").build();
-        when(genealogist.buildRelationForClient(clientId, primaryRelationships, secondaryRelationships)).thenReturn(client1Relationship);
-        when(genealogist.buildRelationForClient(clientId2, client2PrimaryRelationships, client2SecondaryRelationships)).thenReturn(client2Relationship);
+    public void findForIdsShouldReturnTheMultipleClientsRelations(){
 
         RelationshipList foundRelationship = (RelationshipList)service.findForIds(clientIds);
         List relationships = new ArrayList();
         relationships.addAll(foundRelationship.getRelationship());
         assertTrue(relationships.contains(client1Relationship));
         assertTrue(relationships.contains(client2Relationship));
+    }
+
+    @Test
+    public void givenNotAuthorizedIdsThenRelationshipsShouldNotBeReturned(){
+        doThrow(new AuthorizationException()).when(authService).ensureClientAccessAuthorized(anyString());
+
+        RelationshipList foundRelationship = (RelationshipList)service.findForIds(clientIds);
+        assertEquals(0, foundRelationship.getRelationship().size());
     }
 
     @Test(expected = NotImplementedException.class)

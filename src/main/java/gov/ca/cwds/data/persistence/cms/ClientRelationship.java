@@ -75,7 +75,7 @@ public class ClientRelationship extends CmsPersistentObject {
 
   /**
    * Default constructor
-   * 
+   * <p>
    * Required for Hibernate
    */
   public ClientRelationship() {
@@ -84,16 +84,16 @@ public class ClientRelationship extends CmsPersistentObject {
 
   /**
    * Constructor
-   * 
-   * @param absentParentCode indicates if the parent CLIENT is absent for the child with whom the
-   *        relationship is being defined (N)
+   *
+   * @param absentParentCode       indicates if the parent CLIENT is absent for the child with whom the
+   *                               relationship is being defined (N)
    * @param clientRelationshipType Client Relationship Type from System Code table
-   * @param endDate date the relationship ended
-   * @param secondaryClientId Mandatory Foreign key that includes a secondary individual as a CLIENT
-   * @param primaryClientId Mandatory Foreign key that includes a primary individual as a CLIENT
-   * @param id unique key
-   * @param sameHomeCode indicates whether the two CLIENTs live in the same home (Y)
-   * @param startDate date the relationship began
+   * @param endDate                date the relationship ended
+   * @param secondaryClientId      Mandatory Foreign key that includes a secondary individual as a CLIENT
+   * @param primaryClientId        Mandatory Foreign key that includes a primary individual as a CLIENT
+   * @param id                     unique key
+   * @param sameHomeCode           indicates whether the two CLIENTs live in the same home (Y)
+   * @param startDate              date the relationship began
    */
   public ClientRelationship(String absentParentCode, Short clientRelationshipType, Date endDate,
       String secondaryClientId, String primaryClientId, String id, String sameHomeCode,
@@ -110,11 +110,10 @@ public class ClientRelationship extends CmsPersistentObject {
   }
 
   /**
-   * 
-   * @param id unique key
+   * @param id                 unique key
    * @param clientRelationship the domain object to construct this object from
-   * @param lastUpdatedId the id of the last person to update this object
-   * @param lastUpdatedTime the time when this object is last updated
+   * @param lastUpdatedId      the id of the last person to update this object
+   * @param lastUpdatedTime    the time when this object is last updated
    */
   public ClientRelationship(String id,
       gov.ca.cwds.rest.api.domain.cms.ClientRelationship clientRelationship, String lastUpdatedId,
@@ -193,7 +192,7 @@ public class ClientRelationship extends CmsPersistentObject {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -203,11 +202,52 @@ public class ClientRelationship extends CmsPersistentObject {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  public boolean relatedTo(ClientRelationship relationship) {
+    if (relationship == null) return false;
+    if (relationship.getPrimaryClientId() == null) return false;
+
+    return isRelated(this, relationship) ? true : false;
+  }
+
+  private boolean isRelated(ClientRelationship relation1, ClientRelationship relation2) {
+    boolean same = false;
+    if (isSameRelation(relation1, relation2)) {
+      same = true;
+    } else if (isReverseRelation(relation1, relation2)) {
+      same = true;
+    }
+    return same;
+  }
+
+  private boolean isSameRelation(ClientRelationship relation1, ClientRelationship relation2) {
+    return isPrimarySame(relation1, relation2) && isSecondarySame(relation1, relation2);
+  }
+
+  private boolean isPrimarySame(ClientRelationship relation1, ClientRelationship relation2) {
+    return relation1.getPrimaryClientId().equals(relation2.getPrimaryClientId());
+  }
+
+  private boolean isSecondarySame(ClientRelationship relation1, ClientRelationship relation2) {
+    return relation1.getSecondaryClientId().equals(relation2.getSecondaryClientId());
+  }
+
+  private boolean isReverseRelation(ClientRelationship relation1, ClientRelationship relation2) {
+    return isPrimarySameAsSecondary(relation1, relation2) && isSecondarySameAsPrimary(relation1, relation2);
+  }
+
+  private boolean isPrimarySameAsSecondary(ClientRelationship relation1, ClientRelationship relation2) {
+    return relation1.getPrimaryClientId().equals(relation2.getSecondaryClientId());
+  }
+
+  private boolean isSecondarySameAsPrimary(ClientRelationship relation1, ClientRelationship relation2) {
+    return relation1.getSecondaryClientId().equals(relation2.getPrimaryClientId());
   }
 }

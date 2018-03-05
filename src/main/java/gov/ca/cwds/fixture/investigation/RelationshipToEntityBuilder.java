@@ -13,8 +13,7 @@ public class RelationshipToEntityBuilder {
   private String relationshipToPerson = "Sister";
   private String relationshipContext = "step";
 
-  private CmsRecordDescriptor cmsRecordDescriptor =
-      new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
+  private CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
 
   public RelationshipTo build() {
     return new RelationshipTo(relatedFirstName, relatedLastName, relationship, relationshipContext,
@@ -75,6 +74,14 @@ public class RelationshipToEntityBuilder {
     return this;
   }
 
+  public CmsRecordDescriptor getCmsRecordDescriptor() {
+    return cmsRecordDescriptor;
+  }
+
+  public void setCmsRecordDescriptor(CmsRecordDescriptor cmsRecordDescriptor) {
+    this.cmsRecordDescriptor = cmsRecordDescriptor;
+  }
+
   public String getRelationshipContext() {
     return relationshipContext;
   }
@@ -83,15 +90,4 @@ public class RelationshipToEntityBuilder {
     this.relationshipContext = relationshipContext;
     return this;
   }
-
-  public CmsRecordDescriptor getCmsRecordDescriptor() {
-    return cmsRecordDescriptor;
-  }
-
-  public RelationshipToEntityBuilder setCmsRecordDescriptor(
-      CmsRecordDescriptor cmsRecordDescriptor) {
-    this.cmsRecordDescriptor = cmsRecordDescriptor;
-    return this;
-  }
-
 }

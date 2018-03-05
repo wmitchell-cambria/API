@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.RelationshipsService;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -70,6 +71,7 @@ public class ClientRelationshipResource {
      *
      * @return A list of client relationships
      */
+    @UnitOfWork(value = "cms")
     @GET
     @Path("/relationships" )
     @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

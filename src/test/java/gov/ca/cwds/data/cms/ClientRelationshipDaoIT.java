@@ -10,6 +10,7 @@ import static org.junit.Assert.assertThat;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import org.hamcrest.junit.ExpectedException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,6 +28,8 @@ import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.fixture.ClientRelationshipResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import io.dropwizard.jackson.Jackson;
+
+import java.util.List;
 
 /**
  * 
@@ -231,6 +234,36 @@ public class ClientRelationshipDaoIT {
     assertThat(clientRelationship, notNullValue());
     assertThat(clientRelationship.length, greaterThanOrEqualTo(1));
 
+  }
+
+  /**
+   * Test to find the client relationship by returning all relationships for a client.
+   * The query should find related clients where the searched for client is either on
+   * the Primary or Secondary side of the relation.
+   *
+   * @throws Exception - Exception
+   */
+  @Test
+  public void givenAPrimaryClientIDWeShouldFindRelationsWhenSearchingByClientId() throws Exception {
+    List<RelationshipWrapper> clientRelationship =
+            clientRelationshipDao.findRelationshipsByClientId("0LIZAWH00h");
+    assertThat(clientRelationship, notNullValue());
+    assertThat(clientRelationship.size(), greaterThanOrEqualTo(1));
+  }
+
+  /**
+   * Test to find the client relationship by returning all relationships for a client.
+   * The query should find related clients where the searched for client is either on
+   * the Primary or Secondary side of the relation.
+   *
+   * @throws Exception - Exception
+   */
+  @Test
+  public void givenASecondaryClientIDWeShouldFindRelationsWhenSearchingByClientId() throws Exception {
+    List<RelationshipWrapper> clientRelationship =
+            clientRelationshipDao.findRelationshipsByClientId("GjRyRJh00h");
+    assertThat(clientRelationship, notNullValue());
+    assertThat(clientRelationship.size(), greaterThanOrEqualTo(1));
   }
 
 }

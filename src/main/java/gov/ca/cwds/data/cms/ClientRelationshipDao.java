@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.cms;
 
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,6 +12,8 @@ import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.inject.CmsSessionFactory;
+
+import java.util.List;
 
 /**
  * DAO for {@link ClientRelationship}.
@@ -60,12 +63,12 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
 		return query.list().toArray(new ClientRelationship[0]);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ClientRelationship[] findAllRelatedClientsByClientId(String clientId) {
-		ClientRelationship[] primaryClients = findByPrimaryClientId(clientId);
-		ClientRelationship[] secondaryClients = findBySecondaryClientId(clientId);
-
-		return ArrayUtils.addAll(primaryClients, secondaryClients);
+	public List<RelationshipWrapper> findRelationshipsByClientId(String clientId){
+		final Query<RelationshipWrapper> query = this.getSessionFactory()
+				.getCurrentSession()
+				.getNamedNativeQuery("gov.ca.cwds.data.persistence.cms.RelationshipWrapper.findAllRelatedClientsByClientId")
+				.addEntity(RelationshipWrapper.class)
+		        .setParameter("clientId", clientId, StringType.INSTANCE);
+		return query.list();
 	}
-
 }

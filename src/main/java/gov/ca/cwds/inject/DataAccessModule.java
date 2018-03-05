@@ -88,6 +88,7 @@ import gov.ca.cwds.data.persistence.cms.OtherClientName;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralAssignment;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.ServiceProvider;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -232,9 +233,9 @@ public class DataAccessModule extends AbstractModule {
           Tickle.class, ClientRelationship.class, ClientCollateral.class, AddressUc.class,
           ExternalInterface.class, DeliveredServiceEntity.class,
           ContactPartyDeliveredServiceEntity.class, ReferralClientDeliveredServiceEntity.class,
-          IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class, CaseLoad.class,
-          StaffPersonCaseLoad.class, ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
-          DrmsDocumentTemplate.class, OtherCaseReferralDrmsDocument.class,
+          RelationshipWrapper.class, IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class,
+          CaseLoad.class, StaffPersonCaseLoad.class, ClientScpEthnicity.class,
+          GovernmentOrganizationEntity.class, DrmsDocumentTemplate.class, OtherCaseReferralDrmsDocument.class,
           GovernmentOrganizationCrossReport.class, InjuryHarmDetail.class, InjuryBodyDetail.class),
           new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
 

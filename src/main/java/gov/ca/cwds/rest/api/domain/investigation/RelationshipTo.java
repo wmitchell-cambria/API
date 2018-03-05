@@ -73,7 +73,7 @@ public final class RelationshipTo implements Serializable {
    * @param relationshipToPerson - relation of owning person
    * @param relationshipContext - context information
    * @param relatedPersonRelationship - relation to owning person
-   * @param cmsRecordDescriptor - CMS record description
+   * @param cmsRecordDescriptor - The record descriptor containing meta data about legacy information
    */
   public RelationshipTo(String relatedFirstName, String relatedLastName,
       String relationshipToPerson, String relationshipContext, String relatedPersonRelationship,
@@ -85,6 +85,25 @@ public final class RelationshipTo implements Serializable {
     this.relationshipContext = relationshipContext;
     this.relatedPersonRelationship = relatedPersonRelationship;
     this.cmsRecordDescriptor = cmsRecordDescriptor;
+  }
+
+  /**
+   * @param relatedFirstName - related persons first name
+   * @param relatedLastName - related persons last name
+   * @param relationshipToPerson - relation of owning person
+   * @param relationshipContext - context information
+   * @param relatedPersonRelationship - relation to owning person
+   * @param clientId - The Client this relationship pertains too
+   */
+  public RelationshipTo(String relatedFirstName, String relatedLastName,
+      String relationshipToPerson, String relationshipContext, String relatedPersonRelationship,
+      String clientId) {
+    this(relatedFirstName,
+            relatedLastName,
+            relationshipToPerson,
+            relationshipContext,
+            relatedPersonRelationship,
+            CmsRecordUtils.createLegacyDescriptor(clientId,LegacyTable.CLIENT_RELATIONSHIP));
   }
 
   /**
