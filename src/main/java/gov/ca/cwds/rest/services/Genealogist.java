@@ -34,7 +34,13 @@ public class Genealogist {
         }
 
         Client primaryClient = findClient(clientId);
-        return new Relationship(primaryClient, relations);
+        Relationship relationship;
+        if (primaryClient != null){
+            relationship = new Relationship(primaryClient, relations);
+        }else{
+            relationship = new Relationship();
+        }
+        return relationship;
     }
     private RelationshipTo createBar(RelationshipWrapper relationship, boolean clientIsPrimary) {
         RelationshipTo relationshipTo;
