@@ -11,7 +11,7 @@ swagger:
   title: CWDS API
   description: RESTful API definitions for the CWS New System.
   logo: images/CWDS-API-Logo-Horizontal.png  
-  showSwagger: ${SHOW_SWAGGER:-false}
+  showSwagger: ${SHOW_SWAGGER:-true}
   jsonUrl: ${SWAGGER_JSON_URL:-http://localhost:8080/swagger.json}
   loginUrl: ${LOGIN_URL:-http://localhost:8090/authn/login}
   callbackUrl: ${SWAGGER_CALLBACK_URL:-http://localhost:8080/swagger}
