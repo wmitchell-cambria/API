@@ -60,7 +60,7 @@ public class HOICaseResourceFT extends IntakeBaseTest {
   private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_3 =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-3.json";
 
-  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "8ROySNV00T";
+  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "SZdBGYk75C";
 
   private static final String CLIENT_DIFFERENT_COUNTY_SEALED_ID = "4jCKVgx0GE";
 
@@ -77,13 +77,13 @@ public class HOICaseResourceFT extends IntakeBaseTest {
     assertHandleFind(USER_SOCIAL_WORKER_ONLY, "-1", "[]");
   }
 
+  // social worker only
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientNoCondition() throws Exception {
     assertHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_NO_CONDITIONS_ID,
         fixture(CLIENT_NO_CONDITIONS_HOI_RESPONSE));
   }
 
-  // social worker only
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientSameCountySensitive() throws Exception {
     assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SENSITIVE_ID_1);
