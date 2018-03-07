@@ -264,14 +264,8 @@ public class CmsDocReferralClient extends ReportingDomain
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public final int hashCode() {
-      final int PRIME = 43;
-      int result = 1;
-
-      result = (PRIME * result) + ((name == null) ? PRIME : name.hashCode());
-      result = (PRIME * result) + ((content == null) ? PRIME : content.hashCode());
-
-      return result;
+    public int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
     }
 
     /**

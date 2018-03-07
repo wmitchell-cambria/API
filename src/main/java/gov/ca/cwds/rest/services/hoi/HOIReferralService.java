@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.services.hoi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,12 +70,18 @@ public class HOIReferralService
     if (referralClientList.isEmpty()) {
       return emptyHoiReferralResponse();
     }
-    // eliminate duplicate ReferralClient records
+    // eliminate  rows  with duplicate referral Id's from referralClientArrayList
     ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
-    Set<ReferralClient> referralClientSet = new LinkedHashSet<>(referralClientList);
+    HashMap<String, ReferralClient> uniqueReferralIds = new HashMap<String, ReferralClient>();
+    for (ReferralClient referralClient : referralClientArrayList) {
+      uniqueReferralIds.put(referralClient.getReferralId(), referralClient);
+    }
     referralClientArrayList.clear();
-    referralClientArrayList.addAll(referralClientSet);
     
+    for (Map.Entry<String, ReferralClient> uniqueReferral:uniqueReferralIds.entrySet()) {
+      referralClientArrayList.add(uniqueReferral.getValue());
+    }
+        
     List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
     for (ReferralClient referralClient : referralClientArrayList) {
       hoiReferrals.add(createHOIReferral(referralClient));

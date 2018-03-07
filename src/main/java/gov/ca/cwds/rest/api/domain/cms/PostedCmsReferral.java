@@ -38,11 +38,10 @@ public class PostedCmsReferral extends ReportingDomain {
     super();
     this.referral = referral;
     this.client = new LinkedHashSet<>();
-    for (PostedClient resultClient : client)
-      this.client.add(resultClient);
+    this.client.addAll(client);
     this.allegation = new LinkedHashSet<>();
-    for (PostedAllegation resultAllegation : allegation)
-      this.allegation.add(resultAllegation);
+    this.allegation.addAll(allegation);
+    
     this.crossReport = crossReport;
     this.referralClient = referralClient;
     this.reporter = reporter;

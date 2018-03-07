@@ -146,6 +146,14 @@ public class GenealogistTest {
     }
 
     @Test
+    public void givenAClientIdThatDoesNotExistThenWeShouldGetAnEmptyRelationshipReturned(){
+        when(clientDao.find(sonClientId)).thenReturn(null);
+        Relationship relationship = genealogist.buildRelationships(relationships,sonClientId);
+        assertNull(relationship.getId());
+        assertNull(relationship.getRelatedTo());
+    }
+
+    @Test
     public void givenAClientThatIsSensitiveThenRelationShouldBeSensitive(){
         sonClient = new ClientEntityBuilder().setId("1").setCommonFirstName("Charlie").setSensitivityIndicator("S").build();
         when(clientDao.find(sonClientId)).thenReturn(sonClient);
