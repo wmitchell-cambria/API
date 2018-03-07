@@ -77,13 +77,13 @@ public class HOICaseResourceFT extends IntakeBaseTest {
     assertHandleFind(USER_SOCIAL_WORKER_ONLY, "-1", "[]");
   }
 
+  // social worker only
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientNoCondition() throws Exception {
     assertHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_NO_CONDITIONS_ID,
         fixture(CLIENT_NO_CONDITIONS_HOI_RESPONSE));
   }
 
-  // social worker only
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientSameCountySensitive() throws Exception {
     assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SENSITIVE_ID_1);
