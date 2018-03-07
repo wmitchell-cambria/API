@@ -46,7 +46,7 @@ public class HOICaseResourceFT extends IntakeBaseTest {
   private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_2 = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-2.json";
   private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_3 = "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-3.json";
 
-  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "8ROySNV00T";
+  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "SZdBGYk75C";
 
   private static final String CLIENT_DIFFERENT_COUNTY_SEALED_ID = "4jCKVgx0GE";
 
