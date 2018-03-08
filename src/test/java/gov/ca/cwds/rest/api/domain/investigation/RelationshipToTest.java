@@ -30,6 +30,13 @@ public class RelationshipToTest {
   private String relationship = "Brother";
   private String relationshipToPerson = "Sister";
   private String relationshipContext = "step";
+  private String newTableName = "REFERL_T";
+  private String newId = "3456789ABC";
+  private String newRelatedFirstName = "new first name";
+  private String newRelatedLastName = "new last name";
+  private String newRelationship = "new Brother";
+  private String newRelationshipToPerson = "new Sister";
+  private String newRelationshipContext = "maternal";
 
   private CmsRecordDescriptor cmsRecordDescriptor =
       new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
@@ -99,6 +106,25 @@ public class RelationshipToTest {
   @Test
   public void equalsHashCodeWork() {
     EqualsVerifier.forClass(RelationshipTo.class).suppress(Warning.NONFINAL_FIELDS).verify();
+  }
+  
+  @Test
+  public void shouldSetValuesWithBuilderSetters() {
+    RelationshipTo relationshipTo = new RelationshipToEntityBuilder().setId(newId)
+    	.setRelatedFirstName(newRelatedFirstName)
+    	.setRelatedLastName(newRelatedLastName)
+    	.setRelationship(newRelationship)
+    	.setRelationshipContext(newRelationshipContext)
+    	.setRelationshipToPerson(newRelationshipToPerson)
+    	.setTableName(newTableName)
+    	.build();
+
+    assertThat(relationshipTo.getRelatedFirstName(), is(equalTo(newRelatedFirstName)));
+    assertThat(relationshipTo.getRelatedLastName(), is(equalTo(newRelatedLastName)));
+    assertThat(relationshipTo.getRelationshipToPerson(), is(equalTo(newRelationship)));
+    assertThat(relationshipTo.getRelationshipContext(), is(equalTo(newRelationshipContext)));
+    assertThat(relationshipTo.getRelatedPersonRelationship(), is(equalTo(newRelationshipToPerson)));
+    
   }
 
 }

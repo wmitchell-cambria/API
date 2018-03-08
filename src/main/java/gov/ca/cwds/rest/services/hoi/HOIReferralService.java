@@ -72,7 +72,7 @@ public class HOIReferralService
     }
     // eliminate  rows  with duplicate referral Id's from referralClientArrayList
     ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
-    HashMap<String, ReferralClient> uniqueReferralIds = new HashMap<String, ReferralClient>();
+    HashMap<String, ReferralClient> uniqueReferralIds = new HashMap<>();
     for (ReferralClient referralClient : referralClientArrayList) {
       uniqueReferralIds.put(referralClient.getReferralId(), referralClient);
     }

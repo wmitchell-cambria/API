@@ -20,17 +20,9 @@ public class RelationshipToEntityBuilder {
         relationshipToPerson, cmsRecordDescriptor);
   }
 
-  public String getTableName() {
-    return tableName;
-  }
-
   public RelationshipToEntityBuilder setTableName(String tableName) {
     this.tableName = tableName;
     return this;
-  }
-
-  public String getId() {
-    return id;
   }
 
   public RelationshipToEntityBuilder setId(String id) {
@@ -38,26 +30,14 @@ public class RelationshipToEntityBuilder {
     return this;
   }
 
-  public String getRelatedFirstName() {
-    return relatedFirstName;
-  }
-
   public RelationshipToEntityBuilder setRelatedFirstName(String relatedFirstName) {
     this.relatedFirstName = relatedFirstName;
     return this;
   }
 
-  public String getRelatedLastName() {
-    return relatedLastName;
-  }
-
   public RelationshipToEntityBuilder setRelatedLastName(String relatedLastName) {
     this.relatedLastName = relatedLastName;
     return this;
-  }
-
-  public String getRelationship() {
-    return relationship;
   }
 
   public RelationshipToEntityBuilder setRelationship(String relationship) {
@@ -74,16 +54,8 @@ public class RelationshipToEntityBuilder {
     return this;
   }
 
-  public CmsRecordDescriptor getCmsRecordDescriptor() {
-    return cmsRecordDescriptor;
-  }
-
   public void setCmsRecordDescriptor(CmsRecordDescriptor cmsRecordDescriptor) {
     this.cmsRecordDescriptor = cmsRecordDescriptor;
-  }
-
-  public String getRelationshipContext() {
-    return relationshipContext;
   }
 
   public RelationshipToEntityBuilder setRelationshipContext(String relationshipContext) {
