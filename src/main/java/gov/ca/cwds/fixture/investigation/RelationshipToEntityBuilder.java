@@ -5,13 +5,13 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 
 @SuppressWarnings("javadoc")
 public class RelationshipToEntityBuilder {
-  private String tableName = "CLIENT_T";
-  private String id = "2345678ABC";
-  private String relatedFirstName = "Steve";
-  private String relatedLastName = "Briggs";
-  private String relationship = "Brother";
-  private String relationshipToPerson = "Sister";
-  private String relationshipContext = "step";
+  protected String tableName = "CLIENT_T";
+  protected String id = "2345678ABC";
+  protected String relatedFirstName = "Steve";
+  protected String relatedLastName = "Briggs";
+  protected String relationship = "Brother";
+  protected String relationshipToPerson = "Sister";
+  protected String relationshipContext = "step";
 
   private CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
 
