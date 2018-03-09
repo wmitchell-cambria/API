@@ -77,16 +77,6 @@ rsDataSourceFactory:
       hibernate.connection.autocommit: false
 
 elasticsearch:
-  # People index
-  peopleIndex:
-    elasticsearch.host: ${ES_HOST_PEOPLE:-es.dev.cwds.tabordasolutions.net}
-    elasticsearch.port: ${ES_PORT_PEOPLE:-9300}
-    elasticsearch.cluster: ${ES_CLUSTER_PEOPLE:-taborda-dev-es}
-    elasticsearch.alias: ${ES_ALIAS_PEOPLE:-people}
-    elasticsearch.doctype: ${ES_DOCTYPE_PEOPLE:-person}  
-    elasticsearch.xpack.user: ${XPACK_USER_PEOPLE:-}
-    elasticsearch.xpack.password: ${XPACK_PASSWORD_PEOPLE:-}
-    
   # Screenings index
   screeningsIndex:
     elasticsearch.host: ${ES_HOST_SCREENINGS:-es.dev.cwds.tabordasolutions.net}

@@ -7,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.EthnicityDao;
 import gov.ca.cwds.data.ns.LanguageDao;
@@ -27,7 +25,6 @@ import gov.ca.cwds.data.persistence.ns.PersonEthnicity;
 import gov.ca.cwds.data.persistence.ns.PersonLanguage;
 import gov.ca.cwds.data.persistence.ns.PersonPhone;
 import gov.ca.cwds.data.persistence.ns.PersonRace;
-import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -50,7 +47,6 @@ public class PersonService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
 
   private PersonDao personDao;
-  private ElasticsearchDao elasticsearchDao;
   private PersonAddressDao personAddressDao;
   private AddressDao addressDao;
   private PhoneNumberDao phoneNumberDao;
@@ -67,7 +63,6 @@ public class PersonService implements CrudsService {
    * 
    * @param personDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Person}
    *        objects.
-   * @param elasticsearchDao The ElasticSearch DAO
    * @param personAddressDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.ns.PersonAddress}
    * @param addressDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address}
@@ -86,13 +81,11 @@ public class PersonService implements CrudsService {
    * @param ethnicityDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Ethnicity}
    */
   @Inject
-  public PersonService(PersonDao personDao,
-      @Named("people.index") ElasticsearchDao elasticsearchDao, PersonAddressDao personAddressDao,
+  public PersonService(PersonDao personDao, PersonAddressDao personAddressDao,
       AddressDao addressDao, PersonPhoneDao personPhoneDao, PhoneNumberDao phoneNumberDao,
       PersonLanguageDao personLanguageDao, LanguageDao languageDao, PersonRaceDao personRaceDao,
       RaceDao raceDao, PersonEthnicityDao personEthnicityDao, EthnicityDao ethnicityDao) {
     this.personDao = personDao;
-    this.elasticsearchDao = elasticsearchDao;
     this.personAddressDao = personAddressDao;
     this.addressDao = addressDao;
     this.personPhoneDao = personPhoneDao;
@@ -136,13 +129,6 @@ public class PersonService implements CrudsService {
     populatePersonDetails(person, managedPerson);
     managedPerson = personDao.find(managedPerson.getId());
     PostedPerson postedPerson = new PostedPerson(managedPerson);
-    try {
-      // If the people index is missing, create it.
-      elasticsearchDao.createIndexIfNeeded(elasticsearchDao.getDefaultAlias());
-    } catch (Exception e) {
-      LOGGER.error("Unable to Index Person in ElasticSearch", e);
-      throw new ApiException("Unable to Index Person in ElasticSearch", e);
-    }
 
     return postedPerson;
   }

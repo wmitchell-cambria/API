@@ -32,8 +32,6 @@ import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.api.domain.es.IndexQueryRequest;
-import gov.ca.cwds.rest.api.domain.es.IndexQueryResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
@@ -120,7 +118,6 @@ import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
-import gov.ca.cwds.rest.services.es.IndexQueryService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
@@ -417,13 +414,6 @@ public class ResourcesModule extends AbstractModule {
   public SimpleResourceDelegate<String, GovernmentOrganization, GovernmentOrganizationResponse, GovernmentOrganizationService> governmentOrganizationResource(
       Injector injector) {
     return new SimpleResourceDelegate<>(injector.getInstance(GovernmentOrganizationService.class));
-  }
-
-  @Provides
-  @IntakeIndexQueryServiceResource
-  public SimpleResourceDelegate<String, IndexQueryRequest, IndexQueryResponse, IndexQueryService> intakeIndexQueryResource(
-      Injector injector) {
-    return new SimpleResourceDelegate<>(injector.getInstance(IndexQueryService.class));
   }
 
   @Provides

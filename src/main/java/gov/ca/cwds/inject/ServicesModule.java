@@ -52,7 +52,6 @@ import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
-import gov.ca.cwds.rest.services.es.IndexQueryService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
@@ -140,7 +139,6 @@ public class ServicesModule extends AbstractModule {
     bind(DrmsDocumentTemplateService.class);
     bind(OtherCaseReferralDrmsDocumentService.class);
     bind(GovernmentOrganizationCrossReportService.class);
-    bind(IndexQueryService.class);
     bind(LegacyKeyService.class);
     bind(PersonService.class);
     bind(ReferralClientService.class);
