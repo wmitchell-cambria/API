@@ -28,7 +28,7 @@ sourceCompatibility = 1.8
 applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/workspace/API/lib:/usr/local/lib"]
 
 project.ext {
-    apiVersion = '0.5.8'
+    apiVersion = '0.6.1'
     coreApiVersion = '0.5.8_394-RC'
     cwdsModelVersion = '0.5.8_476-RC'
     configPath = '$rootProject.projectDir/config/'
