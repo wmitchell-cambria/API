@@ -169,6 +169,7 @@ dependencies {
     compile (group: 'gov.ca.cwds.api', name: 'api-core', version: coreApiVersion) {
 	    exclude group: 'org.glassfish.jersey.core'
 	}
+    compile group: 'gov.ca.cwds.api', name: 'legacy-data-access-services', version: coreApiVersion
 
 	// LOGGING:	
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
