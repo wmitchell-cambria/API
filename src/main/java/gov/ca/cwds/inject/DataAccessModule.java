@@ -1,20 +1,12 @@
 package gov.ca.cwds.inject;
 
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
@@ -160,10 +152,10 @@ import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.data.validation.SmartyStreetsDao;
 import gov.ca.cwds.rest.ApiConfiguration;
+import gov.ca.cwds.rest.ElasticUtils;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.SmartyStreetsConfiguration;
 import gov.ca.cwds.rest.TriggerTablesConfiguration;
-import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.Reminders;
@@ -189,8 +181,6 @@ import io.dropwizard.setup.Bootstrap;
  * @see ApiSessionFactoryFactory
  */
 public class DataAccessModule extends AbstractModule {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessModule.class);
 
   private Map<String, Client> clients;
 
@@ -478,17 +468,8 @@ public class DataAccessModule extends AbstractModule {
 
       for (Map.Entry<String, ElasticsearchConfiguration> esConfigKey : esConfigs.entrySet()) {
         ElasticsearchConfiguration config = esConfigs.get(esConfigKey.getKey());
-
-        try {
-          TransportClient transportClient = makeESTransportClient(config);
-          transportClient.addTransportAddress(
-              new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
-                  Integer.parseInt(config.getElasticsearchPort())));
-          clients.put(esConfigKey.getKey(), transportClient);
-        } catch (Exception e) {
-          LOGGER.error("Error initializing Elasticsearch client: {}", e.getMessage(), e);
-          throw new ApiException("Error initializing Elasticsearch client: " + e.getMessage(), e);
-        }
+        TransportClient transportClient = ElasticUtils.buildElasticsearchClient(config);
+        clients.put(esConfigKey.getKey(), transportClient);
       }
     }
 
@@ -504,23 +485,4 @@ public class DataAccessModule extends AbstractModule {
     return clients;
   }
 
-  private static TransportClient makeESTransportClient(final ElasticsearchConfiguration config) {
-    TransportClient esClient;
-    String cluster = config.getElasticsearchCluster();
-    String user = config.getUser();
-    String password = config.getPassword();
-    boolean secureClient = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(password);
-
-    if (secureClient) {
-      LOGGER.info("ENABLE X-PACK - cluster: {}", cluster);
-      final Settings.Builder settings = Settings.builder().put("cluster.name", cluster);
-      settings.put("xpack.security.user", user + ":" + password);
-      esClient = new PreBuiltXPackTransportClient(settings.build());
-    } else {
-      LOGGER.info("DISABLE X-PACK - cluster: {}", cluster);
-      esClient =
-          new PreBuiltTransportClient(Settings.builder().put("cluster.name", cluster).build());
-    }
-    return esClient;
-  }
 }

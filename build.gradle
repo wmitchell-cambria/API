@@ -29,7 +29,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 
 project.ext {
     apiVersion = '0.6.1'
-    coreApiVersion = '0.5.8_394-RC'
+    coreApiVersion = '1.6.1_414-RC'
     cwdsModelVersion = '0.5.8_476-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
@@ -169,6 +169,7 @@ dependencies {
     compile (group: 'gov.ca.cwds.api', name: 'api-core', version: coreApiVersion) {
 	    exclude group: 'org.glassfish.jersey.core'
 	}
+    compile group: 'gov.ca.cwds.api', name: 'legacy-data-access-services', version: coreApiVersion
 
 	// LOGGING:	
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
