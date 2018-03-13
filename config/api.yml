@@ -84,7 +84,7 @@ elasticsearch:
     elasticsearch.port: ${ES_PORT_SCREENINGS:-9300}
     elasticsearch.cluster: ${ES_CLUSTER_SCREENINGS:-taborda-dev-es}
     #Comma "," separated List of host:port pairs. Example: host1:port1,host2:port2
-    elasticsearch.nodes: ${ES_NODES_SCREENINGS:-es.dev.cwds.tabordasolutions.net:9300}
+    elasticsearch.nodes: ${ES_NODES_SCREENINGS}
     elasticsearch.alias: ${ES_ALIAS_SCREENINGS:-screenings}
     elasticsearch.doctype: ${ES_DOCTYPE:-screening}
     elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-}
