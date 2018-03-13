@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.services;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -43,8 +41,6 @@ import io.dropwizard.hibernate.UnitOfWork;
  * @author CWDS API Team
  */
 public class PersonService implements CrudsService {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
 
   private PersonDao personDao;
   private PersonAddressDao personAddressDao;
@@ -128,9 +124,7 @@ public class PersonService implements CrudsService {
     managedPerson = personDao.create(managedPerson);
     populatePersonDetails(person, managedPerson);
     managedPerson = personDao.find(managedPerson.getId());
-    PostedPerson postedPerson = new PostedPerson(managedPerson);
-
-    return postedPerson;
+    return new PostedPerson(managedPerson);
   }
 
   // ===================
