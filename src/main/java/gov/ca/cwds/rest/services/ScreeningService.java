@@ -69,13 +69,7 @@ public class ScreeningService implements CrudsService {
    */
   @Override
   public Screening create(Request request) {
-    IndexResponse response = index(request);
-    RestStatus status = response.status();
-
-    if (201 != status.getStatus()) {
-      throw new ServiceException("create -> Could not index screening. " + response);
-    }
-
+    index(request);
     return (Screening) request;
   }
 
@@ -96,13 +90,7 @@ public class ScreeningService implements CrudsService {
           "Primary key mismatch, [" + primaryKey + " != " + screening.getId() + "]");
     }
 
-    IndexResponse response = index(request);
-    RestStatus status = response.status();
-
-    if (200 != status.getStatus()) {
-      throw new ServiceException("update -> Could not index screening. " + response);
-    }
-
+    index(request);
     return (Screening) request;
   }
 
@@ -138,7 +126,16 @@ public class ScreeningService implements CrudsService {
             esDao.getConfig().getElasticsearchDocType(), screening.getId());
     builder.setSource(screeningJson, XContentType.JSON);
 
-    return builder.get();
+    IndexResponse response = builder.get();
+    RestStatus status = response.status();
+    boolean success = RestStatus.OK == status || RestStatus.CREATED == status;
+
+    if (!success) {
+      throw new ServiceException(
+          "Could not index screening. Status: " + status.getStatus() + ", Response: " + response);
+    }
+
+    return response;
   }
 
 }

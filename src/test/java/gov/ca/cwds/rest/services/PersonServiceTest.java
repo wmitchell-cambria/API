@@ -76,7 +76,6 @@ public class PersonServiceTest {
   @Before
   public void setup() throws Exception {
     personDao = mock(PersonDao.class);
-    elasticsearchDao = mock(ElasticsearchDao.class);
     addressDao = mock(AddressDao.class);
     personAddressDao = mock(PersonAddressDao.class);
     phoneNumberDao = mock(PhoneNumberDao.class);
@@ -87,9 +86,9 @@ public class PersonServiceTest {
     personRaceDao = mock(PersonRaceDao.class);
     ethinictyDao = mock(EthnicityDao.class);
     personEthnicityDao = mock(PersonEthnicityDao.class);
-    personService = new PersonService(personDao, elasticsearchDao, personAddressDao, addressDao,
-        personPhoneDao, phoneNumberDao, personLanguageDao, languageDao, personRaceDao, raceDao,
-        personEthnicityDao, ethinictyDao);
+    personService = new PersonService(personDao, personAddressDao, addressDao, personPhoneDao,
+        phoneNumberDao, personLanguageDao, languageDao, personRaceDao, raceDao, personEthnicityDao,
+        ethinictyDao);
   }
 
   /*

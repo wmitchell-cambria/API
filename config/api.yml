@@ -77,19 +77,6 @@ rsDataSourceFactory:
       hibernate.connection.autocommit: false
 
 elasticsearch:
-  # People index
-  peopleIndex:
-    # The old "elasticsearch.host" and "elasticsearch.port" will still work but not required when "elasticsearch.nodes" is provided.
-    elasticsearch.host: ${ES_HOST_PEOPLE:-es.dev.cwds.tabordasolutions.net}
-    elasticsearch.port: ${ES_PORT_PEOPLE:-9300}
-    elasticsearch.cluster: ${ES_CLUSTER_PEOPLE:-taborda-dev-es}
-    #Comma "," separated List of host:port pairs. Example: host1:port1,host2:port2
-    elasticsearch.nodes: ${ES_NODES_PEOPLE:-es.dev.cwds.tabordasolutions.net:9300}
-    elasticsearch.alias: ${ES_ALIAS_PEOPLE:-people}
-    elasticsearch.doctype: ${ES_DOCTYPE_PEOPLE:-person}  
-    elasticsearch.xpack.user: ${XPACK_USER_PEOPLE:-}
-    elasticsearch.xpack.password: ${XPACK_PASSWORD_PEOPLE:-}
-    
   # Screenings index
   screeningsIndex:
     # The old "elasticsearch.host" and "elasticsearch.port" will still work but not required when "elasticsearch.nodes" is provided.
@@ -97,7 +84,7 @@ elasticsearch:
     elasticsearch.port: ${ES_PORT_SCREENINGS:-9300}
     elasticsearch.cluster: ${ES_CLUSTER_SCREENINGS:-taborda-dev-es}
     #Comma "," separated List of host:port pairs. Example: host1:port1,host2:port2
-    elasticsearch.nodes: ${ES_NODES_SCREENINGS:-es.dev.cwds.tabordasolutions.net:9300}
+    elasticsearch.nodes: ${ES_NODES_SCREENINGS}
     elasticsearch.alias: ${ES_ALIAS_SCREENINGS:-screenings}
     elasticsearch.doctype: ${ES_DOCTYPE:-screening}
     elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-}

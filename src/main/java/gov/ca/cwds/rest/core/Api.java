@@ -111,11 +111,6 @@ public final class Api {
   public static final String RESOURCE_DRMS_DOCUMENT = "_drmsDocument";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ELASTICSEARCH_INDEX_QUERY} API.
-   */
-  public static final String RESOURCE_ELASTICSEARCH_INDEX_QUERY = "dora";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_GOVERNMENT_ORG} API.
    */
   public static final String RESOURCE_GOVERNMENT_ORG = "cross_report_agency";

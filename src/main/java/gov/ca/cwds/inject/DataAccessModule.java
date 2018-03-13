@@ -1,10 +1,17 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.hibernate.SessionFactory;
+
+import com.google.common.collect.ImmutableList;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
 
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
@@ -45,6 +52,25 @@ import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
+import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
+import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
+import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
+import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
+import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.AddressDao;
+import gov.ca.cwds.data.ns.EthnicityDao;
+import gov.ca.cwds.data.ns.IntakeLovDao;
+import gov.ca.cwds.data.ns.LanguageDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.ns.PersonAddressDao;
+import gov.ca.cwds.data.ns.PersonDao;
+import gov.ca.cwds.data.ns.PersonEthnicityDao;
+import gov.ca.cwds.data.ns.PersonLanguageDao;
+import gov.ca.cwds.data.ns.PersonPhoneDao;
+import gov.ca.cwds.data.ns.PersonRaceDao;
+import gov.ca.cwds.data.ns.PhoneNumberDao;
+import gov.ca.cwds.data.ns.RaceDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.cms.AddressUc;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory;
@@ -91,50 +117,23 @@ import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.ServiceProvider;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.data.persistence.cms.StateId;
 import gov.ca.cwds.data.persistence.cms.StaffPersonCaseLoad;
+import gov.ca.cwds.data.persistence.cms.StateId;
 import gov.ca.cwds.data.persistence.cms.SubstituteCareProvider;
 import gov.ca.cwds.data.persistence.cms.SystemCode;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.cms.SystemMeta;
 import gov.ca.cwds.data.persistence.cms.Tickle;
-import gov.ca.cwds.rest.ElasticUtils;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.hibernate.SessionFactory;
-
-import com.google.common.collect.ImmutableList;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
-
-import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
-import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
-import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.EthnicityDao;
-import gov.ca.cwds.data.ns.IntakeLovDao;
-import gov.ca.cwds.data.ns.LanguageDao;
-import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.ns.PersonAddressDao;
-import gov.ca.cwds.data.ns.PersonDao;
-import gov.ca.cwds.data.ns.PersonEthnicityDao;
-import gov.ca.cwds.data.ns.PersonLanguageDao;
-import gov.ca.cwds.data.ns.PersonPhoneDao;
-import gov.ca.cwds.data.ns.PersonRaceDao;
-import gov.ca.cwds.data.ns.PhoneNumberDao;
-import gov.ca.cwds.data.ns.RaceDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity;
 import gov.ca.cwds.data.persistence.ns.Address;
 import gov.ca.cwds.data.persistence.ns.Ethnicity;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.data.persistence.ns.Language;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.Person;
 import gov.ca.cwds.data.persistence.ns.PersonAddress;
@@ -153,6 +152,7 @@ import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.data.validation.SmartyStreetsDao;
 import gov.ca.cwds.rest.ApiConfiguration;
+import gov.ca.cwds.rest.ElasticUtils;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.SmartyStreetsConfiguration;
 import gov.ca.cwds.rest.TriggerTablesConfiguration;
@@ -186,7 +186,7 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
-          //legacy-data-access
+          // legacy-data-access
           gov.ca.cwds.data.legacy.cms.entity.Client.class,
           gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
@@ -218,14 +218,15 @@ public class DataAccessModule extends AbstractModule {
           AllegationPerpetratorHistory.class, ClientUc.class, ChildClient.class,
           gov.ca.cwds.data.persistence.cms.Address.class, ClientAddress.class,
           CountyOwnership.class, CountyTrigger.class, CountyTriggerEmbeddable.class,
-          SystemCode.class, SystemMeta.class, DrmsDocument.class, Assignment.class, AssignmentUnit.class,
-          CwsOffice.class, BaseAssignment.class, ReferralAssignment.class, CaseAssignment.class, CmsCase.class,
-          Tickle.class, ClientRelationship.class, ClientCollateral.class, AddressUc.class,
-          ExternalInterface.class, DeliveredServiceEntity.class,
-          ContactPartyDeliveredServiceEntity.class, ReferralClientDeliveredServiceEntity.class,
-          RelationshipWrapper.class, IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class,
-          CaseLoad.class, StaffPersonCaseLoad.class, ClientScpEthnicity.class,
-          GovernmentOrganizationEntity.class, DrmsDocumentTemplate.class, OtherCaseReferralDrmsDocument.class,
+          SystemCode.class, SystemMeta.class, DrmsDocument.class, Assignment.class,
+          AssignmentUnit.class, CwsOffice.class, BaseAssignment.class, ReferralAssignment.class,
+          CaseAssignment.class, CmsCase.class, Tickle.class, ClientRelationship.class,
+          ClientCollateral.class, AddressUc.class, ExternalInterface.class,
+          DeliveredServiceEntity.class, ContactPartyDeliveredServiceEntity.class,
+          ReferralClientDeliveredServiceEntity.class, RelationshipWrapper.class,
+          IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class, CaseLoad.class,
+          StaffPersonCaseLoad.class, ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
+          DrmsDocumentTemplate.class, OtherCaseReferralDrmsDocument.class,
           GovernmentOrganizationCrossReport.class, InjuryHarmDetail.class, InjuryBodyDetail.class),
           new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
 
@@ -242,11 +243,11 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(Person.class, Address.class, ScreeningEntity.class,
-          LegacyDescriptorEntity.class, IntakeLOVCodeEntity.class,
-          ParticipantEntity.class, PersonAddressId.class, PersonAddress.class, PersonPhoneId.class,
-          PhoneNumber.class, PersonPhone.class, PersonLanguageId.class, Language.class,
-          PersonLanguage.class, PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class,
-          PersonRaceId.class, PersonRace.class, Race.class, IntakeLov.class,
+          LegacyDescriptorEntity.class, IntakeLOVCodeEntity.class, ParticipantEntity.class,
+          PersonAddressId.class, PersonAddress.class, PersonPhoneId.class, PhoneNumber.class,
+          PersonPhone.class, PersonLanguageId.class, Language.class, PersonLanguage.class,
+          PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class, PersonRaceId.class,
+          PersonRace.class, Race.class, IntakeLov.class,
           gov.ca.cwds.data.persistence.ns.Allegation.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
@@ -261,16 +262,16 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> rsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(ImmutableList.of(), new ApiSessionFactoryFactory()) {
-    @Override
-    public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-      return configuration.getRsDataSourceFactory();
-    }
+        @Override
+        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getRsDataSourceFactory();
+        }
 
-    @Override
-    public String name() {
-      return "rs";
-    }
-  };
+        @Override
+        public String name() {
+          return "rs";
+        }
+      };
 
   /**
    * Constructor takes the API configuration.
@@ -449,13 +450,6 @@ public class DataAccessModule extends AbstractModule {
       esDaos.put(esKey.getKey(), dao);
     }
     return esDaos;
-  }
-
-  @Provides
-  @Named("people.index")
-  public ElasticsearchDao provideElasticSearchDaoPeople(
-      @Named("elasticsearch.daos") Map<String, ElasticsearchDao> esDaos) {
-    return esDaos.get("peopleIndex");
   }
 
   @Provides
