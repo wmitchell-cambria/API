@@ -214,9 +214,9 @@ public class PeopleService implements TypedCrudsService<String, People, Response
 	  }
 
 	  if (isHispanicCode) {
-		hispanicCodes.add(systemCode.getSystemId());
+		hispanicCodes.add(codeId);
 	  } else {
-		raceCodes.add(systemCode.getSystemId());
+		raceCodes.add(codeId);
 		}
 	}
   }
