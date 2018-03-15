@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.dao.investigation.PeopleDao;
@@ -22,6 +25,8 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
 import gov.ca.cwds.rest.api.domain.investigation.People;
@@ -40,6 +45,8 @@ public class PeopleService implements TypedCrudsService<String, People, Response
   private PeopleDao peopleDao;
   private ReporterDao reporterDao;
   private ClientScpEthnicityDao clientScpEthnicityDao;
+  private static final String HISPANIC_CODE_OTHER_ID = "02";
+  private static final Short CARIBBEAN_RACE_CODE = 3162;
 
   private People validPeople = new PeopleEntityBuilder().build();
 
@@ -182,16 +189,36 @@ public class PeopleService implements TypedCrudsService<String, People, Response
    * @return constructed RaceAndEthnicity object
    */
   private RaceAndEthnicity populateRaceAndEthnicity(Client client) {
-    List<Short> raceCode = new ArrayList<>();
-    List<Short> hispanicCode = new ArrayList<>();
-    raceCode.add(client.getPrimaryEthnicityType());
+    List<Short> raceCodes = new ArrayList<>();
+    List<Short> hispanicCodes = new ArrayList<>();
+    addRaceAndEthnicity(client.getPrimaryEthnicityType(), raceCodes, hispanicCodes);
+
     List<ClientScpEthnicity> clientScpEthnicityList =
         clientScpEthnicityDao.getClientScp(client.getId());
     for (ClientScpEthnicity clientScpEthnicity : clientScpEthnicityList) {
-      hispanicCode.add(clientScpEthnicity.getEthnicity());
-
+      addRaceAndEthnicity(clientScpEthnicity.getEthnicity(), raceCodes, hispanicCodes);
     }
-    return new RaceAndEthnicity(client, raceCode, hispanicCode);
+    return new RaceAndEthnicity(client, raceCodes, hispanicCodes);
+  }
+  
+  private static void addRaceAndEthnicity(Short codeId,
+    final List<Short> raceCodes,
+    final List<Short> hispanicCodes) {	
+	if (codeId != null && codeId != 0) {	
+	  boolean isHispanicCode = false;
+
+	  final SystemCode systemCode = SystemCodeCache.global().getSystemCode(codeId);
+	  if (systemCode != null) {
+		// if OTHER_CD is '02' and not Caribbean race - then put in hispanic codes array
+		isHispanicCode = (HISPANIC_CODE_OTHER_ID.equals(systemCode.getOtherCd()) && (!CARIBBEAN_RACE_CODE.equals(systemCode.getSystemId())));
+	  }
+
+	  if (isHispanicCode) {
+		hispanicCodes.add(systemCode.getSystemId());
+	  } else {
+		raceCodes.add(systemCode.getSystemId());
+		}
+	}
   }
 
   /**
