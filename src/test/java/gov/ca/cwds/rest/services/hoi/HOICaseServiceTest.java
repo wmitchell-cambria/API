@@ -125,34 +125,10 @@ public class HOICaseServiceTest {
   }
 
   @Test
-  public void testFindParentsByPrimaryRelationshipTypeSonDeFactoParent282Success()
-      throws Exception {
-    HOICaseResponse response =
-        getCaseResponseWhereChildIsPrimaryClientInTheRelationship((short) 282);
-    assertEquals(1, response.getHoiCases().get(0).getParents().size());
-  }
-
-  @Test
   public void testFindParentsBySecondaryRelationshipType6361MotherSonPresumedSuccess()
       throws Exception {
     HOICaseResponse response =
         getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship((short) 6361);
-    assertEquals(1, response.getHoiCases().get(0).getParents().size());
-  }
-
-  @Test
-  public void testFindParentsByPrimaryRelationshipType294SonNonCustodialParentSuccess()
-      throws Exception {
-    HOICaseResponse response =
-        getCaseResponseWhereChildIsPrimaryClientInTheRelationship((short) 294);
-    assertEquals(1, response.getHoiCases().get(0).getParents().size());
-  }
-
-  @Test
-  public void testFindParentsBySecondaryRelationshipType273NonCustodialParentSonSuccess()
-      throws Exception {
-    HOICaseResponse response =
-        getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship((short) 273);
     assertEquals(1, response.getHoiCases().get(0).getParents().size());
   }
 
@@ -175,13 +151,23 @@ public class HOICaseServiceTest {
   public void testFindParentsWhereChildIsSecondaryClientInTheRelationshipForAllValidTypesSuccess()
       throws Exception {
     List<Integer> parentToChildTypes = new ArrayList<>();
-    parentToChildTypes.addAll(Arrays.asList(272, 273, 5620, 6361));
-    for (Integer i = 201; i <= 214; i++) {
+    parentToChildTypes.addAll(Arrays.asList(243, 254, 5620, 6361));
+    for (Integer i = 203; i <= 205; i++) {
       parentToChildTypes.add(i);
     }
-    for (Integer i = 245; i <= 254; i++) {
+    for (Integer i = 207; i <= 211; i++) {
       parentToChildTypes.add(i);
     }
+    for (Integer i = 213; i <= 214; i++) {
+      parentToChildTypes.add(i);
+    }
+    for (Integer i = 245; i <= 247; i++) {
+      parentToChildTypes.add(i);
+    }
+    for (Integer i = 249; i <= 252; i++) {
+      parentToChildTypes.add(i);
+    }
+
     for (Integer parentToChildType : parentToChildTypes) {
       HOICaseResponse response = getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(
           parentToChildType.shortValue());
@@ -193,11 +179,17 @@ public class HOICaseServiceTest {
   public void testFindParentsWhereChildIsPrimaryClientInTheRelationshipForAllValidTypesSuccess()
       throws Exception {
     List<Integer> childToParentTypes = new ArrayList<>();
-    childToParentTypes.addAll(Arrays.asList(6360));
-    for (Integer i = 187; i <= 200; i++) {
+    childToParentTypes.addAll(Arrays.asList(198, 199, 242, 293, 242, 6360));
+    for (Integer i = 188; i <= 190; i++) {
       childToParentTypes.add(i);
     }
-    for (Integer i = 282; i <= 294; i++) {
+    for (Integer i = 192; i <= 196; i++) {
+      childToParentTypes.add(i);
+    }
+    for (Integer i = 287; i <= 291; i++) {
+      childToParentTypes.add(i);
+    }
+    for (Integer i = 283; i <= 285; i++) {
       childToParentTypes.add(i);
     }
     for (Integer childToParentType : childToParentTypes) {

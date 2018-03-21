@@ -132,12 +132,18 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     List<String> clientIds = new ArrayList<>(
         clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
-      String secondaryClientId = relationship.getSecondaryClientId();
-      clientIds.add(secondaryClientId);
+      Short relationshipType = relationship.getClientRelationshipType();
+      if (HOIRelationshipTypeService.isParentChildOrSiblingRelationshipType(relationshipType)) {
+        String secondaryClientId = relationship.getSecondaryClientId();
+        clientIds.add(secondaryClientId);
+      }
     }
     for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-      String primaryClientId = relation.getPrimaryClientId();
-      clientIds.add(primaryClientId);
+      Short relationshipType = relation.getClientRelationshipType();
+      if (HOIRelationshipTypeService.isParentChildOrSiblingRelationshipType(relationshipType)) {
+        String primaryClientId = relation.getPrimaryClientId();
+        clientIds.add(primaryClientId);
+      }
     }
     return clientIds;
   }
