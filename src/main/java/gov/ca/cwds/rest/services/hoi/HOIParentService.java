@@ -47,8 +47,8 @@ public class HOIParentService {
   protected List<HOIRelatedPerson> getParents(String victimClientId) {
     ClientRelationship[] clientRelationshipByPrimaryClient =
         clientRelationshipDao.findByPrimaryClientId(victimClientId);
-    List<HOIRelatedPerson> parents = new ArrayList<>(
-        findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
+    List<HOIRelatedPerson> parents =
+        new ArrayList<>(findParentsByPrimaryRelationship(clientRelationshipByPrimaryClient));
     ClientRelationship[] clientRelationshipBySecondaryClient =
         clientRelationshipDao.findBySecondaryClientId(victimClientId);
     parents.addAll(findParentsBySecondaryRelationship(clientRelationshipBySecondaryClient));
@@ -60,7 +60,7 @@ public class HOIParentService {
     List<HOIRelatedPerson> parents = new ArrayList<>();
     for (ClientRelationship relation : clientRelationship) {
       Short type = relation.getClientRelationshipType();
-      if (isRelationTypeChild(type)) {
+      if (HOIRelationshipTypeService.isRelationTypeChild(type)) {
         String clientId = relation.getSecondaryClientId();
         parents.add(findPersonByClientId(clientId, type));
       }
@@ -73,7 +73,7 @@ public class HOIParentService {
     List<HOIRelatedPerson> parents = new ArrayList<>();
     for (ClientRelationship relation : clientRelationship) {
       Short type = relation.getClientRelationshipType();
-      if (isRelationTypeParent(type)) {
+      if (HOIRelationshipTypeService.isRelationTypeParent(type)) {
         String clientId = relation.getPrimaryClientId();
         parents.add(findPersonByClientId(clientId, type));
       }
@@ -88,8 +88,7 @@ public class HOIParentService {
     return createHOIRelatedPerson(client, relationship);
   }
 
-  static HOIRelatedPerson createHOIRelatedPerson(Client client,
-      SystemCodeDescriptor relationship) {
+  static HOIRelatedPerson createHOIRelatedPerson(Client client, SystemCodeDescriptor relationship) {
     String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
@@ -103,21 +102,6 @@ public class HOIParentService {
     person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
     person.setLegacyDescriptor(legacyDescriptor);
     return person;
-  }
-
-  private boolean isRelationTypeParent(Short type) {
-    boolean fatherToChildRelationship = type <= 214 && type >= 201;
-    boolean motherToChildRelationship = type <= 254 && type >= 245;
-    boolean parentToChildRelationship = type == 272 || type == 273 || type == 5620 || type == 6361;
-    return fatherToChildRelationship || motherToChildRelationship || parentToChildRelationship;
-  }
-
-  private boolean isRelationTypeChild(Short type) {
-    boolean daughterToParentRelationship = type <= 200 && type >= 187;
-    boolean sonToParentRelationship = type <= 294 && type >= 282;
-    boolean sonToMotherPresumedRelationship = type == 6360;
-    return daughterToParentRelationship || sonToParentRelationship
-        || sonToMotherPresumedRelationship;
   }
 
 }
