@@ -14,6 +14,7 @@ import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -49,6 +50,7 @@ public class AuthorizationResource {
    * @param id the id
    * @return the response
    */
+  @UnitOfWork(value = "cms")
   @GET
   @Path("/client/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
