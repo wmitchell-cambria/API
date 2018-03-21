@@ -50,7 +50,7 @@ public class AuthorizationResource {
    * @param id the id
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "rs")
   @GET
   @Path("/client/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
