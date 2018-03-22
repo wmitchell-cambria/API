@@ -10,14 +10,18 @@ package gov.ca.cwds.rest.services.hoi;
  */
 public class HOIRelationshipTypeService {
 
-  static boolean isRelationTypeParent(Short type) {
+  private HOIRelationshipTypeService() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  public static boolean isRelationTypeParent(Short type) {
     boolean fatherToChildRelationship = type <= 214 && type >= 203 && type != 206 && type != 212;
     boolean motherToChildRelationship = type <= 254 && type >= 245 && type != 248 && type != 253;
     boolean parentToChildRelationship = type == 243 || type == 5620 || type == 6361;
     return fatherToChildRelationship || motherToChildRelationship || parentToChildRelationship;
   }
 
-  static boolean isRelationTypeChild(Short type) {
+  public static boolean isRelationTypeChild(Short type) {
     boolean daughterToParentRelationship = type <= 199 && type >= 188 && type != 191 && type != 197;
     boolean sonToParentRelationship = type <= 293 && type >= 283 && type != 286 && type != 292;
     boolean sonToMotherPresumedRelationship = type == 6360;
@@ -26,13 +30,13 @@ public class HOIRelationshipTypeService {
         || sonToMotherPresumedRelationship || childToParentRelationship;
   }
 
-  static boolean isRelationTypeSibling(Short type) {
+  public static boolean isRelationTypeSibling(Short type) {
     boolean brotherToSiblingRelationship = type <= 184 && type >= 179;
     boolean sisterToSiblingRelationship = type <= 281 && type >= 276;
     return brotherToSiblingRelationship || sisterToSiblingRelationship;
   }
 
-  static boolean isParentChildOrSiblingRelationshipType(Short type) {
+  public static boolean isParentChildOrSiblingRelationshipType(Short type) {
     return isRelationTypeParent(type) || isRelationTypeChild(type) || isRelationTypeSibling(type);
   }
 
