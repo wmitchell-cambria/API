@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
@@ -125,24 +127,35 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private List<String> findAllRelatedClientIds(String clientId) {
-    ClientRelationship[] clientRelationshipsByPrimaryClient =
-        clientRelationshipDao.findByPrimaryClientId(clientId);
+    return Stream
+        .concat(getClientRelationshipsByPrimaryClient(clientId).stream(),
+            getClientRelationshipsBySecondaryClient(clientId).stream())
+        .collect(Collectors.toList());
+  }
+
+  private List<String> getClientRelationshipsBySecondaryClient(String clientId) {
     ClientRelationship[] clientRelationshipBySecondaryClient =
         clientRelationshipDao.findBySecondaryClientId(clientId);
-    List<String> clientIds = new ArrayList<>(
-        clientRelationshipsByPrimaryClient.length + clientRelationshipBySecondaryClient.length + 1);
+    List<String> clientIds = new ArrayList<>(clientRelationshipBySecondaryClient.length);
+    for (ClientRelationship relationship : clientRelationshipBySecondaryClient) {
+      Short relationshipType = relationship.getClientRelationshipType();
+      if (HOIRelationshipTypeService.isParentChildOrSiblingRelationshipType(relationshipType)) {
+        String primaryClientId = relationship.getPrimaryClientId();
+        clientIds.add(primaryClientId);
+      }
+    }
+    return clientIds;
+  }
+
+  private List<String> getClientRelationshipsByPrimaryClient(String clientId) {
+    ClientRelationship[] clientRelationshipsByPrimaryClient =
+        clientRelationshipDao.findByPrimaryClientId(clientId);
+    List<String> clientIds = new ArrayList<>(clientRelationshipsByPrimaryClient.length);
     for (ClientRelationship relationship : clientRelationshipsByPrimaryClient) {
       Short relationshipType = relationship.getClientRelationshipType();
       if (HOIRelationshipTypeService.isParentChildOrSiblingRelationshipType(relationshipType)) {
         String secondaryClientId = relationship.getSecondaryClientId();
         clientIds.add(secondaryClientId);
-      }
-    }
-    for (ClientRelationship relation : clientRelationshipBySecondaryClient) {
-      Short relationshipType = relation.getClientRelationshipType();
-      if (HOIRelationshipTypeService.isParentChildOrSiblingRelationshipType(relationshipType)) {
-        String primaryClientId = relation.getPrimaryClientId();
-        clientIds.add(primaryClientId);
       }
     }
     return clientIds;
