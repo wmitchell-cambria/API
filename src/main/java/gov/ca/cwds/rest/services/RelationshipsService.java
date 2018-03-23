@@ -61,9 +61,7 @@ public class RelationshipsService implements TypedCrudsService<String, Relations
   private boolean authorized(String clientId) {
     boolean authorized = true;
     try {
-      if (clientId == "TempDisabledCode") {
-        authCheckService.ensureClientAccessAuthorized(clientId);
-      }
+      authCheckService.ensureClientAccessAuthorized(clientId);
     } catch (AuthorizationException e) {
       LOGGER.warn("User tried to access unathorized client id: {}",
           clientId.replaceAll("[\r\n]", ""));
