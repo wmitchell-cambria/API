@@ -50,6 +50,7 @@ public class ClientRelationshipResource {
      *
      * @return client relationships
      */
+    @UnitOfWork(value = "cms")
     @GET
     @Path("/{id}/relationships" )
     @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
