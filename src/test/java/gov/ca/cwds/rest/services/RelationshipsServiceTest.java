@@ -104,13 +104,13 @@ public class RelationshipsServiceTest {
         assertTrue(relationships.contains(client2Relationship));
     }
 
-//    @Test
-//    public void givenNotAuthorizedIdsThenRelationshipsShouldNotBeReturned(){
-//        doThrow(new AuthorizationException()).when(authService).ensureClientAccessAuthorized(anyString());
-//
-//        RelationshipList foundRelationship = (RelationshipList)service.findForIds(clientIds);
-//        assertEquals(0, foundRelationship.getRelationship().size());
-//    }
+    @Test
+    public void givenNotAuthorizedIdsThenRelationshipsShouldNotBeReturned(){
+        doThrow(new AuthorizationException()).when(authService).ensureClientAccessAuthorized(anyString());
+
+        RelationshipList foundRelationship = (RelationshipList)service.findForIds(clientIds);
+        assertEquals(0, foundRelationship.getRelationship().size());
+    }
 
     @Test(expected = NotImplementedException.class)
     public void shouldNotImplementDelete(){
