@@ -83,7 +83,7 @@ public class AddressService implements
       MessageBuilder messageBuilder) {
     gov.ca.cwds.rest.api.domain.Address address = scr.getAddress();
     if (address == null || address.getZip() == null
-        || StringUtils.isBlank(address.getStreetAddress()) || address.getType() == null) {
+        || StringUtils.isBlank(address.getStreetAddress())) {
       String message = "Screening address is null or empty";
       messageBuilder.addMessageAndLog(message, LOGGER);
       return address;

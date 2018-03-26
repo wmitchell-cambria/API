@@ -53,21 +53,6 @@ public class ReferralTest implements PersistentTestTemplate {
     assertThat(Referral.class.newInstance(), is(notNullValue()));
   }
 
-  /**
-   *  R - 02366 County drop douwns
-   */
-  @Test
-  public void testCmsCaseCounty(){
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    validator = factory.getValidator();
-    gov.ca.cwds.rest.api.domain.cms.Referral domainReferral = new ReferralResourceBuilder().build();
-    Referral persistent = new Referral(id, domainReferral, "0X5");
-    persistent.setLastUpdatedId("10");
-    assertThat(validator.validate(persistent).isEmpty(), is(true));
-    persistent.setGovtEntityType(new Short(STATE_OF_CALIFORNIA_COUNTY_ID));
-    assertThat(validator.validate(persistent).isEmpty(), is(false));
-  }
-
   @Override
   @Test
   public void testConstructorUsingDomain() throws Exception {
