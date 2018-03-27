@@ -20,7 +20,7 @@
       "legacy_table_name" : "CLIENT_T"
     }
   } ],
-  "legacy_descirptor" : {
+  "legacy_descriptor" : {
     "legacy_id" : "1234567ABC",
     "legacy_ui_id" : "111-222-333-4444",
     "legacy_table_description" : "Client",
