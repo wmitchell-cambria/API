@@ -85,7 +85,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
   @ApiModelProperty(required = true, readOnly = false, value = "sealed", example = "false")
   private Boolean sealed;
 
-  @JsonProperty("legacy_descirptor")
+  @JsonProperty("legacy_descriptor")
   private CmsRecordDescriptor cmsRecordDescriptor;
 
   @JsonProperty("relationship_to")
@@ -141,10 +141,12 @@ public final class Relationship extends ReportingDomain implements Request, Resp
     this.middleName = client.getMiddleName();
     this.lastName = client.getLastName();
     this.suffixName = client.getNameSuffix();
-    this.sealed = StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "R")
-        ? Boolean.TRUE : Boolean.FALSE;
-    this.sensitive = StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "S")
-        ? Boolean.TRUE : Boolean.FALSE;
+    this.sealed =
+        StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "R") ? Boolean.TRUE
+            : Boolean.FALSE;
+    this.sensitive =
+        StringUtils.equalsAnyIgnoreCase(client.getSensitivityIndicator(), "S") ? Boolean.TRUE
+            : Boolean.FALSE;
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
     this.relatedTo = relationships;
