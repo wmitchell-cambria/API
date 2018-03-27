@@ -82,7 +82,7 @@ import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
 import gov.ca.cwds.rest.resources.hoi.HOICaseResource;
 import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
 import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
-import gov.ca.cwds.rest.resources.hoi.HOIUsingClientIdResource;
+import gov.ca.cwds.rest.resources.hoi.HoiUsingClientIdResource;
 import gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResource;
 import gov.ca.cwds.rest.resources.investigation.ContactResource;
 import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
@@ -122,7 +122,7 @@ import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
-import gov.ca.cwds.rest.services.hoi.HOIUsingClientIdService;
+import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.ClientsRelationshipsService;
@@ -195,7 +195,7 @@ public class ResourcesModule extends AbstractModule {
     bind(HOICaseResource.class);
     bind(HOIScreeningResource.class);
     bind(AuthorizationResource.class);
-    bind(HOIUsingClientIdResource.class);
+    bind(HoiUsingClientIdResource.class);
   }
 
   @Provides
@@ -505,7 +505,7 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @InvolvementHistoryServiceBackedResource
-  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> involvementHistoryServiceBackedResource(
+  public TypedResourceDelegate<String, InvolvementHistory> involvementHistoryServiceBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(InvolvementHistoryService.class));
@@ -513,10 +513,10 @@ public class ResourcesModule extends AbstractModule {
 
   @Provides
   @HOIUsingClientIdServiceBackedResource
-  public TypedResourceDelegate<String, gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory> hoiUsingClientIdServiceBackedResource(
+  public TypedResourceDelegate<String, InvolvementHistory> hoiUsingClientIdServiceBackedResource(
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(HOIUsingClientIdService.class));
+        injector.getInstance(HoiUsingClientIdService.class));
   }
 
   @Provides

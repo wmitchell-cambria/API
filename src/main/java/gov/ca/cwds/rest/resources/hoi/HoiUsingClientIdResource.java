@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
-import gov.ca.cwds.rest.services.hoi.HOIUsingClientIdService;
+import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,9 +38,9 @@ import io.swagger.annotations.ApiResponses;
 @Path(value = RESOURCE_CLIENT)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HOIUsingClientIdResource {
+public class HoiUsingClientIdResource {
 
-  private HOIUsingClientIdService hoiUsingClientIdService;
+  private HoiUsingClientIdService hoiUsingClientIdService;
 
   /**
    * Constructor to inject the hoiUsingClientIdService.
@@ -49,7 +49,7 @@ public class HOIUsingClientIdResource {
    *
    */
   @Inject
-  public HOIUsingClientIdResource(HOIUsingClientIdService hoiUsingClientIdService) {
+  public HoiUsingClientIdResource(HoiUsingClientIdService hoiUsingClientIdService) {
     this.hoiUsingClientIdService = hoiUsingClientIdService;
   }
 

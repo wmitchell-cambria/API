@@ -31,7 +31,7 @@ import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 public class HOIUsingClientIdServiceTest {
 
   private InvolvementHistoryService involvementHistoryService;
-  private HOIUsingClientIdService hoiUsingClientIdService;
+  private HoiUsingClientIdService hoiUsingClientIdService;
 
   private String clientId;
   private String clientId2;
@@ -51,7 +51,7 @@ public class HOIUsingClientIdServiceTest {
 
     clientIds = Arrays.asList(clientId, clientId2);
     involvementHistoryService = mock(InvolvementHistoryService.class);
-    hoiUsingClientIdService = new HOIUsingClientIdService();
+    hoiUsingClientIdService = new HoiUsingClientIdService();
     hoiUsingClientIdService.involvementHistoryService = involvementHistoryService;
   }
 
@@ -60,7 +60,7 @@ public class HOIUsingClientIdServiceTest {
    */
   @Test
   public void instantiation() throws Exception {
-    HOIUsingClientIdService target = new HOIUsingClientIdService();
+    HoiUsingClientIdService target = new HoiUsingClientIdService();
     assertThat(target, notNullValue());
   }
 

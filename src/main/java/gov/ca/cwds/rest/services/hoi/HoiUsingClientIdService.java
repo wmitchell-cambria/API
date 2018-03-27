@@ -20,7 +20,7 @@ import io.dropwizard.hibernate.UnitOfWork;
  * @author CWDS API Team
  *
  */
-public class HOIUsingClientIdService
+public class HoiUsingClientIdService
     implements TypedCrudsService<String, InvolvementHistory, Response> {
 
   @Inject
@@ -29,7 +29,7 @@ public class HOIUsingClientIdService
   /**
    * Default constructor.
    */
-  public HOIUsingClientIdService() {
+  public HoiUsingClientIdService() {
     super();
   }
 
