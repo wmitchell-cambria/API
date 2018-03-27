@@ -30,16 +30,16 @@ import io.dropwizard.setup.Environment;
 
 /**
  * Core execution class of CWDS REST API server application.
- * 
+ * <p>
  * <h3>Standard command line arguments:</h3>
- * 
+ * <p>
  * <blockquote> server config/api.yml </blockquote>
- * 
+ * <p>
  * <h3>Standard JVM arguments:</h3>
- * 
+ * <p>
  * <blockquote> -Ddb2.jcc.charsetDecoderEncoder=3
  * -Djava.library.path=${workspace_loc:CWDS_API}/lib:/usr/local/lib/ </blockquote>
- * 
+ *
  * @author CWDS API Team
  */
 public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
@@ -53,7 +53,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
   /**
    * Start the CWDS RESTful API application.
-   * 
+   *
    * @param args command line
    * @throws Exception if startup fails
    */
@@ -63,7 +63,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.BaseApiApplication#applicationModule(io.dropwizard.setup.Bootstrap)
    */
   @Override
@@ -73,22 +73,20 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
   @Override
   public void runInternal(final ApiConfiguration configuration, final Environment environment) {
-    Injector injector = guiceBundle.getInjector();
-
     if (configuration.isUpgradeDbOnStart()) {
-      upgardeCalsNsDB(configuration);
+      upgradeNsDb(configuration);
     }
 
     environment.getApplicationContext().setAttribute(
-            MetricsServlet.METRICS_REGISTRY,
-            environment.metrics());
+        MetricsServlet.METRICS_REGISTRY,
+        environment.metrics());
     environment.getApplicationContext().setAttribute(
-            HealthCheckServlet.HEALTH_CHECK_REGISTRY,
-            environment.healthChecks());
+        HealthCheckServlet.HEALTH_CHECK_REGISTRY,
+        environment.healthChecks());
     environment.getApplicationContext().addServlet(
-            new NonblockingServletHolder(new AdminServlet()), "/admin/*");
+        new NonblockingServletHolder(new AdminServlet()), "/admin/*");
 
-
+    Injector injector = guiceBundle.getInjector();
     environment.servlets()
         .addFilter("RequestExecutionContextManagingFilter",
             injector.getInstance(RequestExecutionContextFilter.class))
@@ -114,7 +112,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     injector.getInstance(SystemCodeCache.class);
   }
 
-  private void upgardeCalsNsDB(ApiConfiguration configuration) {
+  private void upgradeNsDb(ApiConfiguration configuration) {
     LOG.info("Upgrading INTAKE_NS DB...");
 
     DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();

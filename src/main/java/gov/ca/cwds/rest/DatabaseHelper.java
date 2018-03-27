@@ -13,7 +13,9 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 /**
- * CWDS API Team
+ * Liquibase scripts loading support.
+ *
+ * @author CWDS API Team
  */
 class DatabaseHelper {
 
@@ -37,13 +39,14 @@ class DatabaseHelper {
     }
   }
 
-  public void runScript(String script, Map<String, Object> parameters, String schema) throws LiquibaseException {
+  public void runScript(String script, Map<String, Object> parameters, String schema)
+      throws LiquibaseException {
     try {
-      String defaultSchema = getDatabase().getDefaultSchemaName();
       getDatabase().setDefaultSchemaName(schema);
       Liquibase liquibase = new Liquibase(script, new ClassLoaderResourceAccessor(), getDatabase());
       parameters.forEach(liquibase::setChangeLogParameter);
       liquibase.update((String) null);
+      String defaultSchema = getDatabase().getDefaultSchemaName();
       getDatabase().setDefaultSchemaName(defaultSchema);
     } catch (Exception e) {
       throw new LiquibaseException(e);
