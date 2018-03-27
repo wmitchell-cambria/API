@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest;
 
+import io.dropwizard.db.DataSourceFactory;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -42,6 +43,10 @@ import io.dropwizard.setup.Environment;
  * @author CWDS API Team
  */
 public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
+  private static final Logger LOG = LoggerFactory.getLogger(ApiApplication.class);
+  private static final String LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML =
+      "liquibase/intake_ns_database_master.xml";
+  private static final String HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME = "hibernate.default_schema";
 
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
@@ -69,6 +74,10 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
   @Override
   public void runInternal(final ApiConfiguration configuration, final Environment environment) {
     Injector injector = guiceBundle.getInjector();
+
+    if (configuration.isUpgradeDbOnStart()) {
+      upgardeCalsNsDB(configuration);
+    }
 
     environment.getApplicationContext().setAttribute(
             MetricsServlet.METRICS_REGISTRY,
@@ -103,5 +112,22 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
+  }
+
+  private void upgardeCalsNsDB(ApiConfiguration configuration) {
+    LOG.info("Upgrading INTAKE_NS DB...");
+
+    DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
+    DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
+        nsDataSourceFactory.getUser(),
+        nsDataSourceFactory.getPassword());
+    try {
+      databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,
+          nsDataSourceFactory.getProperties().get(HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME));
+    } catch (Exception e) {
+      LOG.error("Upgarding of INTAKE_NS DB is failed. ", e);
+    }
+
+    LOG.info("Finish Upgrading INTAKE_NS DB");
   }
 }
