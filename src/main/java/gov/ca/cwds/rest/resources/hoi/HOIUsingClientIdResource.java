@@ -43,7 +43,7 @@ public class HOIUsingClientIdResource {
   private HOIUsingClientIdService hoiUsingClientIdService;
 
   /**
-   * Constructor
+   * Constructor to inject the hoiUsingClientIdService
    * 
    * @param hoiUsingClientIdService - hoiUsingClientIdService
    *
