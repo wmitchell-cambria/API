@@ -30,13 +30,13 @@ import io.dropwizard.setup.Environment;
 
 /**
  * Core execution class of CWDS REST API server application.
- * <p>
+ *
  * <h3>Standard command line arguments:</h3>
- * <p>
+ *
  * <blockquote> server config/api.yml </blockquote>
- * <p>
+ *
  * <h3>Standard JVM arguments:</h3>
- * <p>
+ *
  * <blockquote> -Ddb2.jcc.charsetDecoderEncoder=3
  * -Djava.library.path=${workspace_loc:CWDS_API}/lib:/usr/local/lib/ </blockquote>
  *
