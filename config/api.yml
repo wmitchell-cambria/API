@@ -18,6 +18,8 @@ swagger:
   callbackUrl: ${SWAGGER_CALLBACK_URL:-http://localhost:8080/swagger}
   tokenUrl: ${SWAGGER_TOKEN_URL:-http://localhost:8080/perry/authn/token}
 
+upgradeDbOnStart: ${UPGRADE_DB_ON_START:-false}
+
 nsDataSourceFactory:
   driverClass: org.postgresql.Driver
   user: ${DB_NS_USER}

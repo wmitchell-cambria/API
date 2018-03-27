@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest;
 
+import io.dropwizard.db.DataSourceFactory;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -29,26 +30,30 @@ import io.dropwizard.setup.Environment;
 
 /**
  * Core execution class of CWDS REST API server application.
- * 
+ *
  * <h3>Standard command line arguments:</h3>
- * 
+ *
  * <blockquote> server config/api.yml </blockquote>
- * 
+ *
  * <h3>Standard JVM arguments:</h3>
- * 
+ *
  * <blockquote> -Ddb2.jcc.charsetDecoderEncoder=3
  * -Djava.library.path=${workspace_loc:CWDS_API}/lib:/usr/local/lib/ </blockquote>
- * 
+ *
  * @author CWDS API Team
  */
 public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
+  private static final Logger LOG = LoggerFactory.getLogger(ApiApplication.class);
+  private static final String LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML =
+      "liquibase/intake_ns_database_master.xml";
+  private static final String HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME = "hibernate.default_schema";
 
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
   /**
    * Start the CWDS RESTful API application.
-   * 
+   *
    * @param args command line
    * @throws Exception if startup fails
    */
@@ -58,7 +63,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.BaseApiApplication#applicationModule(io.dropwizard.setup.Bootstrap)
    */
   @Override
@@ -68,18 +73,20 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
   @Override
   public void runInternal(final ApiConfiguration configuration, final Environment environment) {
-    Injector injector = guiceBundle.getInjector();
+    if (configuration.isUpgradeDbOnStart()) {
+      upgradeNsDb(configuration);
+    }
 
     environment.getApplicationContext().setAttribute(
-            MetricsServlet.METRICS_REGISTRY,
-            environment.metrics());
+        MetricsServlet.METRICS_REGISTRY,
+        environment.metrics());
     environment.getApplicationContext().setAttribute(
-            HealthCheckServlet.HEALTH_CHECK_REGISTRY,
-            environment.healthChecks());
+        HealthCheckServlet.HEALTH_CHECK_REGISTRY,
+        environment.healthChecks());
     environment.getApplicationContext().addServlet(
-            new NonblockingServletHolder(new AdminServlet()), "/admin/*");
+        new NonblockingServletHolder(new AdminServlet()), "/admin/*");
 
-
+    Injector injector = guiceBundle.getInjector();
     environment.servlets()
         .addFilter("RequestExecutionContextManagingFilter",
             injector.getInstance(RequestExecutionContextFilter.class))
@@ -103,5 +110,22 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
+  }
+
+  private void upgradeNsDb(ApiConfiguration configuration) {
+    LOG.info("Upgrading INTAKE_NS DB...");
+
+    DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
+    DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
+        nsDataSourceFactory.getUser(),
+        nsDataSourceFactory.getPassword());
+    try {
+      databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,
+          nsDataSourceFactory.getProperties().get(HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME));
+    } catch (Exception e) {
+      LOG.error("Upgarding of INTAKE_NS DB is failed. ", e);
+    }
+
+    LOG.info("Finish Upgrading INTAKE_NS DB");
   }
 }
