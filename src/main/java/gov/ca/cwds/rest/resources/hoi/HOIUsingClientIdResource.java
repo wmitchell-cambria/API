@@ -54,7 +54,7 @@ public class HOIUsingClientIdResource {
   }
 
   /**
-   * Finds history of involvement by screening id.
+   * Finds history of involvement by client id.
    * 
    * @param clientIds the clientId
    * 
