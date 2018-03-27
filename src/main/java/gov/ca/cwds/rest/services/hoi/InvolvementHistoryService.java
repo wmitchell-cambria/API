@@ -68,6 +68,24 @@ public class InvolvementHistoryService
         new ArrayList<HOIReferral>(), new ArrayList<HOIScreening>());
   }
 
+  /**
+   * @param clientIds - clientIds
+   * @return the history of involvement for the clients
+   */
+  public InvolvementHistory findInvolvementHistoryByClientIds(Set<String> clientIds) {
+    if (!clientIds.isEmpty()) {
+      List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
+      List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
+      HOIRequest hoiScreeningRequest = new HOIRequest();
+      hoiScreeningRequest.setClientIds(clientIds);
+      List<HOIScreening> hoiScreenings =
+          new ArrayList<>(hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings());
+      return new InvolvementHistory(null, hoiCases, hoiReferrals, hoiScreenings);
+    }
+    return new InvolvementHistory(null, new ArrayList<HOICase>(), new ArrayList<HOIReferral>(),
+        new ArrayList<HOIScreening>());
+  }
+
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   protected Set<String> findClientIdsByScreeningId(String screeningId) {
     return participantDao.findLegacyIdListByScreeningId(screeningId);
