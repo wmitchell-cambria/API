@@ -14,9 +14,8 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * <p>
- * This is service class to give all the referrals, cases and screenings based on the clientId
- * <p>
+ * 
+ * This is service class to give all the referrals, cases and screenings based on the clientId.
  * 
  * @author CWDS API Team
  *
@@ -28,7 +27,7 @@ public class HOIUsingClientIdService
   InvolvementHistoryService involvementHistoryService;
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public HOIUsingClientIdService() {
     super();
@@ -40,7 +39,7 @@ public class HOIUsingClientIdService
   }
 
   /**
-   * Find the history of involvements for client, cases and screenings using clientIds
+   * Find the history of involvements for client, cases and screenings using clientIds.
    * 
    * @param clientIds - all clients Id's to get hoi
    * @return the clients history
