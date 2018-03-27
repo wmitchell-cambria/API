@@ -29,8 +29,8 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 
 project.ext {
     apiVersion = '0.6.2'
-    coreApiVersion = '1.6.1-SNAPSHOT'
-    cwdsModelVersion = '0.5.8_476-RC'
+    coreApiVersion = '1.6.2_522-RC'
+    cwdsModelVersion = '0.6.2_491-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
     dropwizardFlywayVersion = '1.0.0-1'
@@ -151,6 +151,8 @@ dependencies {
 	compile group: "io.dropwizard.metrics", name: "metrics-core", version: metricsVersion
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
 
+    compile group: 'gov.ca.cwds.cals', name: 'intake-ns-data-model', version: cwdsModelVersion
+    compile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
     compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: "2.23.2"
 	compile group: "javax.el", name: "javax.el-api", version: "2.2.4"
 	compile group: "org.glassfish.web", name: "javax.el", version: "2.2.4"
@@ -196,7 +198,6 @@ dependencies {
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
     testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
 
-    testCompile group: 'gov.ca.cwds.cals', name: 'intake-ns-data-model', version: cwdsModelVersion
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: cwdsModelVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
