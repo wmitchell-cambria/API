@@ -118,10 +118,10 @@ webSecurity:
 server:
   applicationConnectors:
   - type: http 
-    port: ${APP_STD_PORT:-18080}
+    port: ${APP_STD_PORT:-8080}
   adminConnectors:
   - type: http
-    port: ${APP_ADMIN_PORT:-18081}
+    port: ${APP_ADMIN_PORT:-8081}
     
   requestLog:
     appenders:
