@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -131,7 +130,6 @@ public class Referral extends ReportingDomain implements Request, Response {
 
   @NotNull
   @ApiModelProperty(required = false, readOnly = false, value = "0", example = "1234")
-  @ValidCounty
   private Short govtEntityType;
 
   @NotEmpty
