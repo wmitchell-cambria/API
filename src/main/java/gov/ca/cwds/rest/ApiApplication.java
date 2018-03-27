@@ -43,13 +43,11 @@ import io.dropwizard.setup.Environment;
  * @author CWDS API Team
  */
 public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
-  private static final Logger LOG = LoggerFactory.getLogger(ApiApplication.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
+
   private static final String LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML =
       "liquibase/intake_ns_database_master.xml";
   private static final String HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME = "hibernate.default_schema";
-
-  @SuppressWarnings("unused")
-  private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
   /**
    * Start the CWDS RESTful API application.
@@ -113,7 +111,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
   }
 
   private void upgradeNsDb(ApiConfiguration configuration) {
-    LOG.info("Upgrading INTAKE_NS DB...");
+    LOGGER.info("Upgrading INTAKE_NS DB...");
 
     DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
     DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
@@ -123,9 +121,9 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
       databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,
           nsDataSourceFactory.getProperties().get(HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME));
     } catch (Exception e) {
-      LOG.error("Upgarding of INTAKE_NS DB is failed. ", e);
+      LOGGER.error("Upgarding of INTAKE_NS DB is failed. ", e);
     }
 
-    LOG.info("Finish Upgrading INTAKE_NS DB");
+    LOGGER.info("Finish Upgrading INTAKE_NS DB");
   }
 }
