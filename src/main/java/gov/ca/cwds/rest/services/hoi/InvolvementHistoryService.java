@@ -69,11 +69,10 @@ public class InvolvementHistoryService
   }
 
   /**
-   * @param clientIds
-   * @return
+   * @param clientIds - clientIds
+   * @return the history of involvement for the clients
    */
   public InvolvementHistory findInvolvementHistoryByClientIds(Set<String> clientIds) {
-
     if (!clientIds.isEmpty()) {
       List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
       List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
@@ -83,10 +82,8 @@ public class InvolvementHistoryService
           new ArrayList<>(hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings());
       return new InvolvementHistory(null, hoiCases, hoiReferrals, hoiScreenings);
     }
-
     return new InvolvementHistory(null, new ArrayList<HOICase>(), new ArrayList<HOIReferral>(),
         new ArrayList<HOIScreening>());
-
   }
 
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)

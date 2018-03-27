@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Response;
@@ -30,7 +32,7 @@ public class HOIUsingClientIdService
 
   @Override
   public Response find(String arg0) {
-    return null;
+    throw new NotImplementedException("request get not implemented");
   }
 
   /**
@@ -41,22 +43,21 @@ public class HOIUsingClientIdService
   public Response findByClientIds(List<String> clientIds) {
     Set<String> clientIdSet = new HashSet<>(clientIds);
     return involvementHistoryService.findInvolvementHistoryByClientIds(clientIdSet);
-
   }
 
   @Override
   public Response create(InvolvementHistory arg0) {
-    return null;
+    throw new NotImplementedException("request create not implemented");
   }
 
   @Override
   public Response delete(String arg0) {
-    return null;
+    throw new NotImplementedException("request delete not implemented");
   }
 
   @Override
   public Response update(String arg0, InvolvementHistory arg1) {
-    return null;
+    throw new NotImplementedException("request update not implemented");
   }
 
 }
