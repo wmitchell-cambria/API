@@ -58,11 +58,11 @@ node ('tpt4-slave'){
     }
     stage('Test Coverage Report'){
       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
-      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test')
+      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test'])
     }
     stage('JavaDoc'){
       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
-      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true)
+      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true])
     }
     stage('Functional Tests (temp)'){
       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest', switches: '--stacktrace -D build=${BUILD_NUMBER}'
