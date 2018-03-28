@@ -50,22 +50,30 @@ node ('tpt4-slave'){
 	  checkout scm
     }
     stage('Build'){
-	  def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
+	    def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
     }
     stage('Tests'){
-      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test', switches: '--stacktrace -D build=${BUILD_NUMBER}'
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
     }
+    stage('Test Coverage Report'){
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test')
+    }
+    stage('JavaDoc'){
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true)
+    }
     stage('Functional Tests (temp)'){
-      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest', switches: '--stacktrace -D build=${BUILD_NUMBER}'
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/functionalTest', reportFiles: 'index.html', reportName: 'FT JUnit Report', reportTitles: 'FT JUnit tests summary'])
     }
-	stage('JMeter Tests'){
-	  build job: 'tpt4-api-jmeter-tests', propagate: false
-}
+    stage('JMeter Tests'){
+      build job: 'tpt4-api-jmeter-tests', propagate: false
+    }
     stage('SonarQube analysis'){
-	  withSonarQubeEnv('Core-SonarQube') {
-	    buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info -D build=${BUILD_NUMBER}', tasks: 'sonarqube -Dsonar.projectKey=api-pull-request -Dsonar.projectName=api-pull-request'
+	    withSonarQubeEnv('Core-SonarQube') {
+	      buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info -D build=${BUILD_NUMBER}', tasks: 'sonarqube -Dsonar.projectKey=api-pull-request -Dsonar.projectName=api-pull-request'
       }
     }
   } catch (Exception e){
