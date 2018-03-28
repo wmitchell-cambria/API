@@ -39,16 +39,15 @@ node ('tpt4-slave'){
   properties(
     [ buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')),
       disableConcurrentBuilds(),
-      [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-      pipelineTriggers([pollSCM('H/5 * * * *')])
+      [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false]
     ]
   )
   try {
     stage('Preparation'){
-	  git branch: env.BRANCH_NAME, url: 'git@github.com:ca-cwds/API.git'
 	  rtGradle.tool = "Gradle_35"
 	  rtGradle.resolver repo:'repo', server: serverArti
 	  rtGradle.useWrapper = false
+	  checkout scm
     }
     stage('Build'){
 	  def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
