@@ -4,22 +4,43 @@ prepare:
     - "https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/main/resources/google_checks.xml"
 checks:
   argument-count:
-    enabled: false
+    enabled: true
+    config:
+      threshold: 4
   complex-logic:
-    enabled: false
+    enabled: true
+    config:
+      threshold: 5
   file-lines:
-    enabled: false
+    enabled: true
+    config:
+      threshold: 250
+  identical-code:
+    enabled: true
   method-complexity:
-    enabled: false
+    enabled: true
+    config:
+      threshold: 5
   method-count:
     enabled: false
   method-lines:
-    enabled: false
+    enabled: true
+    config:
+      threshold: 10
+  nested-control-flow:
+    enabled: true
+    config:
+      threshold: 4
   return-statements:
-    enabled: false
-  identical-code:
-    enabled: false    
+    enabled: true
+  similar-code:
+    enabled: true
+
 plugins:
+  sonar-java:
+    enabled: true
+    config:
+      sonar.java.source: 8
   checkstyle:
     enabled: true
     config:
