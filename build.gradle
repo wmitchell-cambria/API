@@ -29,7 +29,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 
 project.ext {
     apiVersion = '0.6.2'
-    coreApiVersion = '1.6.2_522-RC'
+    coreApiVersion = '1.6.2_562-RC'
     cwdsModelVersion = '0.6.2_491-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
@@ -209,6 +209,10 @@ dependencies {
 	testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {
 		exclude group: 'javax.servlet', module: 'javax.servlet-api'
 		exclude group: 'junit', module: 'junit'
+		
+	// functional testing
+    testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'	
 	}
 	
 	// https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
