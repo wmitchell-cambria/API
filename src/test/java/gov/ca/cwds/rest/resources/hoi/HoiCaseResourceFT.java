@@ -28,7 +28,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
  *
  */
 @SuppressWarnings("javadoc")
-public class HOICaseResourceFT extends IntakeBaseTest {
+public class HoiCaseResourceFT extends IntakeBaseTest {
   private static final String USER_SOCIAL_WORKER_ONLY =
       "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";
   private static final String USER_COUNTY_SENSITIVE =

@@ -19,7 +19,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 
 @Ignore
-public class HOIScreeningResourceApplicationTest extends IntakeBaseTest {
+public class HoiScreeningResourceApplicationTest extends IntakeBaseTest {
 
   @Test
   public void testHandleFindNonExistingClientId() throws Exception {
