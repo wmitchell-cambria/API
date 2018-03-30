@@ -24,6 +24,7 @@ import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -83,6 +84,16 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       return new HOICaseResponse(cases);
     }
     return emptyHoiCaseResponse();
+  }
+
+  /**
+   * @param clientIds - clientIds
+   * @return the list of cases using clientIds
+   */
+  public Response findHoiCasesbyClientIds(List<String> clientIds) {
+    HOIRequest hoiRequest = new HOIRequest();
+    hoiRequest.setClientIds(new HashSet<>(clientIds));
+    return handleFind(hoiRequest);
   }
 
   /**

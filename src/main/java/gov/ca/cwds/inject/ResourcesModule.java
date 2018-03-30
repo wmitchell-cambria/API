@@ -79,9 +79,9 @@ import gov.ca.cwds.rest.resources.cms.ReferralResource;
 import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
-import gov.ca.cwds.rest.resources.hoi.HOICaseResource;
-import gov.ca.cwds.rest.resources.hoi.HOIReferralResource;
-import gov.ca.cwds.rest.resources.hoi.HOIScreeningResource;
+import gov.ca.cwds.rest.resources.hoi.HoiCaseResource;
+import gov.ca.cwds.rest.resources.hoi.HoiReferralResource;
+import gov.ca.cwds.rest.resources.hoi.HoiScreeningResource;
 import gov.ca.cwds.rest.resources.hoi.HoiUsingClientIdResource;
 import gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResource;
 import gov.ca.cwds.rest.resources.investigation.ContactResource;
@@ -191,9 +191,9 @@ public class ResourcesModule extends AbstractModule {
     bind(GovernmentOrganizationResource.class);
     bind(SafetyAlertsResource.class);
     bind(InvolvementHistoryResource.class);
-    bind(HOIReferralResource.class);
-    bind(HOICaseResource.class);
-    bind(HOIScreeningResource.class);
+    bind(HoiReferralResource.class);
+    bind(HoiCaseResource.class);
+    bind(HoiScreeningResource.class);
     bind(AuthorizationResource.class);
     bind(HoiUsingClientIdResource.class);
   }

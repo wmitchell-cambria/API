@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services.hoi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,7 @@ import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
@@ -70,25 +72,35 @@ public class HOIReferralService
     if (referralClientList.isEmpty()) {
       return emptyHoiReferralResponse();
     }
-    // eliminate  rows  with duplicate referral Id's from referralClientArrayList
+    // eliminate rows with duplicate referral Id's from referralClientArrayList
     ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
     HashMap<String, ReferralClient> uniqueReferralIds = new HashMap<>();
     for (ReferralClient referralClient : referralClientArrayList) {
       uniqueReferralIds.put(referralClient.getReferralId(), referralClient);
     }
     referralClientArrayList.clear();
-    
-    for (Map.Entry<String, ReferralClient> uniqueReferral:uniqueReferralIds.entrySet()) {
+
+    for (Map.Entry<String, ReferralClient> uniqueReferral : uniqueReferralIds.entrySet()) {
       referralClientArrayList.add(uniqueReferral.getValue());
     }
-        
+
     List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
     for (ReferralClient referralClient : referralClientArrayList) {
       hoiReferrals.add(createHOIReferral(referralClient));
     }
- 
+
     hoiReferralResponse.setHoiReferrals(hoiReferrals);
     return hoiReferralResponse;
+  }
+
+  /**
+   * @param clientIds - clientIds
+   * @return the list of referrals using clientIds
+   */
+  public Response findHoiReferralbyClientIds(List<String> clientIds) {
+    HOIRequest hoiRequest = new HOIRequest();
+    hoiRequest.setClientIds(new HashSet<>(clientIds));
+    return handleFind(hoiRequest);
   }
 
   private HOIReferral createHOIReferral(ReferralClient referralClient) {
