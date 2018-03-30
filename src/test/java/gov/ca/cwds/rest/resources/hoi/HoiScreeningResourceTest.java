@@ -40,7 +40,7 @@ public class HoiScreeningResourceTest {
   }
 
   @Test
-  public void findDelegatesToResourceDelegate() {
+  public void findHoiScreeningsByClientIds() {
     List<String> clientIds = new ArrayList<String>();
     clientIds.add("1zxcydd");
     inMemoryResource.client().target("/hoi_screenings").queryParam("clientIds", "1zxcydd").request()
