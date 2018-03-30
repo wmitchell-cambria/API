@@ -223,7 +223,7 @@ dependencies {
 	testCompile group: 'com.google.errorprone', name: 'error_prone_annotations', version: '2.0.19'
 }
 
-task printProps << {
+task printProps doLast {
     println System.properties['DB_CMS_JDBC_URL']
 }
 
@@ -407,9 +407,9 @@ public class CWDSTextReportRenderer implements ReportRenderer {
             project.version else ''}
 ================================================================
 """
-      output << "\n\n"
+      output doLast "\n\n"
         printDependencies(data)
-        output << """
+        output doLast """
 This report was generated at ${new Date()}.
 """
     }
@@ -422,11 +422,11 @@ This report was generated at ${new Date()}.
 
     private String printDependency(ModuleData data) {
         boolean projectUrlDone = false
-        if (data.name) output << "License Name: $data.name "
-        if (data.version) output << " Version: $data.version\n\n"
+        if (data.name) output doLast "License Name: $data.name "
+        if (data.version) output doLast " Version: $data.version\n\n"
 
         if (data.poms.isEmpty() && data.manifests.isEmpty()) {
-            output << "No license information found\n\n"
+            output doLast "No license information found\n\n"
             return
         }
 
@@ -434,7 +434,7 @@ This report was generated at ${new Date()}.
             ManifestData manifest = data.manifests.first()
             PomData pomData = data.poms.first()
             if (manifest.url && pomData.projectUrl && manifest.url == pomData.projectUrl) {
-                output << "Project URL: $manifest.url\n\n"
+                output doLast "Project URL: $manifest.url\n\n"
                 projectUrlDone = true
             }
         }
@@ -442,15 +442,15 @@ This report was generated at ${new Date()}.
         if (!data.manifests.isEmpty()) {
             ManifestData manifest = data.manifests.first()
             if (manifest.url && !projectUrlDone) {
-                output << "Manifest Project URL: $manifest.url\n\n"
+                output doLast "Manifest Project URL: $manifest.url\n\n"
             }
             if (manifest.license) {
                 if (manifest.license.startsWith("http")) {
-                    output << "Manifest license URL: $manifest.license\n\n"
+                    output doLast "Manifest license URL: $manifest.license\n\n"
                 } else if (manifest.hasPackagedLicense) {
-                    output << "Packaged License File: $manifest.license\n\n"
+                    output doLast "Packaged License File: $manifest.license\n\n"
                 } else {
-                    output << "Manifest License: $manifest.license (Not packaged)\n\n"
+                    output doLast "Manifest License: $manifest.license (Not packaged)\n\n"
                 }
             }
         }
@@ -458,29 +458,29 @@ This report was generated at ${new Date()}.
         if (!data.poms.isEmpty()) {
             PomData pomData = data.poms.first()
             if (pomData.projectUrl && !projectUrlDone) {
-                output << "POM Project URL: $pomData.projectUrl\n\n"
+                output doLast "POM Project URL: $pomData.projectUrl\n\n"
             }
             if (pomData.licenses) {
                 pomData.licenses.each { License license ->
-                    output << "POM License: $license.name"
+                    output doLast "POM License: $license.name"
                     if (license.url) {
                         if (license.url.startsWith("http")) {
-                            output << " - $license.url\n\n"
+                            output doLast " - $license.url\n\n"
                         } else {
-                            output << "License: $license.url\n\n"
+                            output doLast "License: $license.url\n\n"
                         }
                     }
                 }
             }
         }
         if (!data.licenseFiles.isEmpty() && !data.licenseFiles.first().files.isEmpty()) {
-            output << 'Embedded license: '
-            output << "\n\n"
-            output << data.licenseFiles.first().files.collect({ "                    " +
+            output doLast 'Embedded license: '
+            output doLast "\n\n"
+            output doLast data.licenseFiles.first().files.collect({ "                    " +
                     "****************************************\n\n \t\t\t$it\n\n" + new
                     File("$config.outputDir/$it").text + "\n"}).join('')
         }
-        output <<
+        output doLast
                 "\n\n================================================================================\n\n"
     }
 }
@@ -517,7 +517,7 @@ class CWDSHtmlReportRenderer implements ReportRenderer {
 <h1>Dependency License Report for $project.name ${if (!'unspecified'.equals(project.version)) project.version else ''}</h1>
 """
         printDependencies(data)
-        output << """
+        output doLast """
 <hr />
 <p id="timestamp">This report was generated at <em>${new Date()}</em>.</p>
 </body>
@@ -526,15 +526,15 @@ class CWDSHtmlReportRenderer implements ReportRenderer {
     }
 
     private void printDependencies(ProjectData data) {
-        output << "<table >"
-        output << "<hr><th>name</th><th>project url</th><th>license</th>" +
+        output doLast "<table >"
+        output doLast "<hr><th>name</th><th>project url</th><th>license</th>" +
                        "<th>Embeded License</th></hr>"
         data.allDependencies.sort().each {
-            output << "<tr>"
+            output doLast "<tr>"
             printDependency(it)
-            output << "</tr>"
+            output doLast "</tr>"
         }
-        output << "</table>"
+        output doLast "</table>"
     }
 
     private String printDependency(ModuleData data) {
@@ -594,19 +594,19 @@ class CWDSHtmlReportRenderer implements ReportRenderer {
             }
         }
 
-        output << "<td>$name</td>"
-        output << "<td>$urls</td>"
-        output << "<td>$licenses</td>"
+        output doLast "<td>$name</td>"
+        output doLast "<td>$urls</td>"
+        output doLast "<td>$licenses</td>"
 
-        output << "<td>"
+        output doLast "<td>"
         if (!data.licenseFiles.isEmpty() && !data.licenseFiles.first().files.isEmpty()) {
-            output << '<p>'
-            output << data.licenseFiles.first().files.collect({ "<a " +
+            output doLast '<p>'
+            output doLast data.licenseFiles.first().files.collect({ "<a " +
                     "href=\"$libLicenseUrl/$it\">$it</a>" +
                     " " +
                     "" }).join('')
-            output << '</p>'
+            output doLast '</p>'
         }
-        output << "</td>"
+        output doLast "</td>"
     }
 }
