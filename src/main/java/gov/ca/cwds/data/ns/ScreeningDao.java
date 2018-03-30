@@ -1,14 +1,19 @@
 package gov.ca.cwds.data.ns;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
@@ -70,5 +75,18 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
         .setParameter("intakeCode", intakeCode);
     List<IntakeLOVCodeEntity> codes = query.list();
     return codes.isEmpty() ? null : codes.get(0);
+  }
+  
+  public List<ScreeningWrapper> findScreeningsByUserId(String userId, List<String> screeningDecisionDetail,
+	  List<String> screeningDecision, String referralId) {
+	final Query<ScreeningWrapper> query = this.getSessionFactory()
+		.getCurrentSession()
+		.getNamedNativeQuery("gov.ca.cwds.data.persistence.nw.findScreeningsOfUser")
+		.addEntity(ScreeningWrapper.class)
+		.setParameter("userId", userId, StringType.INSTANCE)
+		.setParameter("screeningDecisionDetail", screeningDecisionDetail)
+		.setParameter("screeningDecision", screeningDecision)
+		.setParameter("referralId", referralId);
+	return query.list();
   }
 }

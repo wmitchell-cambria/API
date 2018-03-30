@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.elasticsearch.action.index.IndexRequestBuilder;
@@ -15,9 +17,13 @@ import com.google.inject.name.Named;
 
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Screening;
+import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
+import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
 
 /**
  * Business layer object to work on {@link Screening}
@@ -29,6 +35,7 @@ public class ScreeningService implements CrudsService {
   private static final ObjectMapper OBJECT_MAPPER = ObjectMapperUtils.createObjectMapper();
 
   private ElasticsearchDao esDao;
+  private ScreeningDao screeningDao;
 
   /**
    * Construct the object
@@ -36,8 +43,9 @@ public class ScreeningService implements CrudsService {
    * @param esDao Screenings ES DAO
    */
   @Inject
-  public ScreeningService(@Named("screenings.index") ElasticsearchDao esDao) {
-    this.esDao = esDao;
+  public ScreeningService(@Named("screenings.index") ElasticsearchDao esDao, ScreeningDao screeningDao) {
+	this.esDao = esDao;
+    this.screeningDao = screeningDao;
   }
 
   /**
@@ -49,7 +57,25 @@ public class ScreeningService implements CrudsService {
   public Response find(Serializable primaryKey) {
     throw new NotImplementedException("Find is not implemented");
   }
+  
+  public Response findScreeningDashboard(String userId, List<String> screeningDecisionDetail, List<String> screeningDecision, String referralId) {
+	return getScreeningsOfUsers(userId, screeningDecisionDetail,
+		screeningDecision, referralId);
+  }
 
+  private ScreeningDashboardList getScreeningsOfUsers(String userId, List<String> screeningDecisionDetail,
+	  List<String> screeningDecision, String referralId) {
+	
+	List<ScreeningDashboard> screeningDashboard = new ArrayList<>();
+	List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(userId, screeningDecisionDetail, screeningDecision, referralId);
+	for (ScreeningWrapper screening: screenings) {
+	  ScreeningDashboard aScreening = new ScreeningDashboard(screening);
+	  screeningDashboard.add(aScreening);
+	}
+	ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboard);
+	return screeningDashboardList;	
+  }
+  
   /**
    * {@inheritDoc}
    * 
