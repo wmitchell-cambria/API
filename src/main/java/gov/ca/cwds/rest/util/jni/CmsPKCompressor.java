@@ -230,7 +230,7 @@ public class CmsPKCompressor {
   }
 
   private File createFile(String file) {
-    return new File(FilenameUtils.getFullPath(file), FilenameUtils.getName(file));
+    return new File(FilenameUtils.getFullPath(file), FilenameUtils.getName(file)); //NOSONAR
   }
 
 }

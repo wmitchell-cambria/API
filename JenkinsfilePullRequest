@@ -37,36 +37,38 @@ node ('tpt4-slave'){
   def serverArti = Artifactory.server 'CWDS_DEV'
   def rtGradle = Artifactory.newGradleBuild()
   properties(
-    [ buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')),
+    [ buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
       disableConcurrentBuilds(),
-      [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-      pipelineTriggers([pollSCM('H/5 * * * *')])
+      [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false]
     ]
   )
   try {
     stage('Preparation'){
-	  git branch: env.BRANCH_NAME, url: 'git@github.com:ca-cwds/API.git'
 	  rtGradle.tool = "Gradle_35"
 	  rtGradle.resolver repo:'repo', server: serverArti
 	  rtGradle.useWrapper = false
+	  checkout scm
     }
     stage('Build'){
-	  def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
+	    def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
     }
     stage('Tests'){
-      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
     }
+    stage('JavaDoc'){
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+    }
     stage('Functional Tests (temp)'){
-      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest  jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/functionalTest', reportFiles: 'index.html', reportName: 'FT JUnit Report', reportTitles: 'FT JUnit tests summary'])
     }
-	stage('JMeter Tests'){
-	  build job: 'tpt4-api-jmeter-tests', propagate: false
-}
+    stage('JMeter Tests'){
+      build job: 'tpt4-api-jmeter-tests', propagate: false
+    }
     stage('SonarQube analysis'){
-	  withSonarQubeEnv('Core-SonarQube') {
-	    buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info -D build=${BUILD_NUMBER}', tasks: 'sonarqube -Dsonar.projectKey=api-pull-request -Dsonar.projectName=api-pull-request'
+	    withSonarQubeEnv('Core-SonarQube') {
+	      buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info -D build=${BUILD_NUMBER}', tasks: 'sonarqube -Dsonar.projectKey=api-pull-request -Dsonar.projectName=api-pull-request'
       }
     }
   } catch (Exception e){

@@ -2,20 +2,21 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.HOIReferralServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
-import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
-import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
+import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
@@ -39,38 +40,38 @@ import io.swagger.annotations.ApiResponses;
 @Path(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HOIReferralResource {
+public class HoiReferralResource {
 
-  private SimpleResourceDelegate<HOIRequest, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate;
+  private HOIReferralService hoiReferralService;
 
   /**
-   * Constructor
+   * Constructor.
    * 
-   * @param simpleResourceDelegate - typedResourceDelegate
+   * @param hoiReferralService - hoiReferralService
    */
   @Inject
-  public HOIReferralResource(
-      @HOIReferralServiceBackedResource SimpleResourceDelegate<HOIRequest, HOIReferral, HOIReferralResponse, HOIReferralService> simpleResourceDelegate) {
-    super();
-    this.simpleResourceDelegate = simpleResourceDelegate;
+  public HoiReferralResource(HOIReferralService hoiReferralService) {
+    this.hoiReferralService = hoiReferralService;
   }
 
   /**
    * Finds an referrals HOI by client ids.
    * 
-   * @param hoiReferralRequest HOI Referral Request containing a list of Client Id-s
-   * @return the response
+   * @param clientIds - clientIds
+   * @return the hoi referrals
    */
   @UnitOfWork(value = "cms")
-  @POST
+  @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find referrals history of involvement by clientId",
       response = HOIReferral[].class, code = 200)
-  public Response post(@ApiParam(required = true, name = "clientIds",
-      value = "List of Client Id-s") HOIRequest hoiReferralRequest) {
-    return simpleResourceDelegate.find(hoiReferralRequest);
+  public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
+      value = "List of Client Id-s") List<String> clientIds) {
+    gov.ca.cwds.rest.api.Response clients =
+        hoiReferralService.findHoiReferralbyClientIds(clientIds);
+    return new ResponseConverter().withDataResponse(clients);
   }
 
 }

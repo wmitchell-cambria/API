@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.services.hoi;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +40,7 @@ import io.dropwizard.jackson.Jackson;
  * @author CWDS API Team
  *
  */
+@SuppressWarnings("javadoc")
 public class InvolvementHistoryServiceTest {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -103,6 +104,22 @@ public class InvolvementHistoryServiceTest {
     Set<String> clientIds = Stream.of("123").collect(Collectors.toSet());
     when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(clientIds);
     Response returned = involvementHistoryService.find("1");
+    assertThat(returned, is(notNullValue()));
+  }
+
+  // Test for the method findInvolvementHistoryByClientIds
+  @Test
+  public void hOiNotReturingForEmptyClientId() throws Exception {
+    Set<String> clientIds = new HashSet<>();
+    Response returned = involvementHistoryService.findInvolvementHistoryByClientIds(clientIds);
+    assertThat(returned, is(notNullValue()));
+  }
+
+  @Test
+  public void findHOIUsingClientId() throws Exception {
+    Set<String> clientIds = new HashSet<>();
+    clientIds.add("123");
+    Response returned = involvementHistoryService.findInvolvementHistoryByClientIds(clientIds);
     assertThat(returned, is(notNullValue()));
   }
 

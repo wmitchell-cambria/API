@@ -1,17 +1,15 @@
 package gov.ca.cwds.rest;
 
-import io.dropwizard.db.DataSourceFactory;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
-import com.codahale.metrics.servlets.AdminServlet;
-import com.codahale.metrics.servlets.HealthCheckServlet;
-import com.codahale.metrics.servlets.MetricsServlet;
-import io.dropwizard.jetty.NonblockingServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codahale.metrics.servlets.AdminServlet;
+import com.codahale.metrics.servlets.HealthCheckServlet;
+import com.codahale.metrics.servlets.MetricsServlet;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
@@ -25,6 +23,8 @@ import gov.ca.cwds.inject.ApplicationModule;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContextFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.jetty.NonblockingServletHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -75,14 +75,12 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
       upgradeNsDb(configuration);
     }
 
-    environment.getApplicationContext().setAttribute(
-        MetricsServlet.METRICS_REGISTRY,
+    environment.getApplicationContext().setAttribute(MetricsServlet.METRICS_REGISTRY,
         environment.metrics());
-    environment.getApplicationContext().setAttribute(
-        HealthCheckServlet.HEALTH_CHECK_REGISTRY,
+    environment.getApplicationContext().setAttribute(HealthCheckServlet.HEALTH_CHECK_REGISTRY,
         environment.healthChecks());
-    environment.getApplicationContext().addServlet(
-        new NonblockingServletHolder(new AdminServlet()), "/admin/*");
+    environment.getApplicationContext().addServlet(new NonblockingServletHolder(new AdminServlet()),
+        "/admin/*");
 
     Injector injector = guiceBundle.getInjector();
     environment.servlets()
@@ -115,8 +113,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
     DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
     DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
-        nsDataSourceFactory.getUser(),
-        nsDataSourceFactory.getPassword());
+        nsDataSourceFactory.getUser(), nsDataSourceFactory.getPassword());
     try {
       databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,
           nsDataSourceFactory.getProperties().get(HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME));
