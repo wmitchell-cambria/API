@@ -2,7 +2,6 @@ package gov.ca.cwds.server;
 
 import gov.ca.cwds.config.TestConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
-import io.dropwizard.Configuration;
 import java.io.InputStream;
 import org.yaml.snakeyaml.Yaml;
 

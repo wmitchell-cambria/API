@@ -26,7 +26,12 @@ public class ApiConfiguration extends BaseApiConfiguration {
     return testConfig;
   }
 
-    @JsonProperty
+  @JsonProperty
+  public void setTestConfig(TestingConfiguration testConfig) {
+    this.testConfig = testConfig;
+  }
+
+  @JsonProperty
   public boolean isUpgradeDbOnStart() {
     return upgradeDbOnStart;
   }

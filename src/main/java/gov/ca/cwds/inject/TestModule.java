@@ -8,16 +8,15 @@ import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.server.TestingYmlConfig;
 
 public class TestModule extends AbstractModule {
-  public TestModule()  {
-  }
 
   @Override
   protected void configure() {
+    //An implementation of abstract module. No configuration is needed.
   }
 
   @Named("testConfig")
   @Provides
-  public TestConfig getTestConfig(ApiConfiguration configuration){
+  public TestConfig getTestConfig(ApiConfiguration configuration) {
     return new TestingYmlConfig(configuration).createTestConfig();
   }
 }
