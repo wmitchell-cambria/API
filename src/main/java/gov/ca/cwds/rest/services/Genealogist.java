@@ -54,7 +54,7 @@ public class Genealogist {
                   "" );
         } else{
             relationshipTo = createRelationShipTo(
-                    relationship.getSecondaryLegacyId(),
+                    relationship.getPrimaryLegacyId(),
                     relationship.getSecondaryRelationshipCode(),
                     relationship.getPrimaryRelationshipCode(),
                     relationship.getPrimaryFirstName(),
