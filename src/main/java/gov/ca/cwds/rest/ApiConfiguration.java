@@ -9,7 +9,7 @@ import io.dropwizard.db.DataSourceFactory;
  */
 public class ApiConfiguration extends BaseApiConfiguration {
   private DataSourceFactory rsDataSourceFactory;
-
+  private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
 
   public void setRsDataSourceFactory(DataSourceFactory rsDataSourceFactory) {
@@ -22,6 +22,11 @@ public class ApiConfiguration extends BaseApiConfiguration {
   }
 
   @JsonProperty
+  public TestingConfiguration getTestConfig() {
+    return testConfig;
+  }
+
+    @JsonProperty
   public boolean isUpgradeDbOnStart() {
     return upgradeDbOnStart;
   }

@@ -1,0 +1,59 @@
+
+sourceSets {
+    functionalTest {
+        java.srcDir 'src/test/functional/java'
+        resources.srcDir 'src/test/functional/resources'
+    }
+}
+
+dependencies {
+    functionalTestCompile sourceSets.main.output
+    functionalTestCompile sourceSets.test.output
+
+    functionalTestCompile configurations.compile
+    functionalTestCompile configurations.testCompile
+
+    functionalTestRuntime configurations.runtime
+    functionalTestRuntime configurations.testRuntime
+}
+
+task functionalQATest(type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the functional tests.'
+
+    maxHeapSize = '1024m'
+
+    testClassesDir = sourceSets.functionalTest.output.classesDir
+    classpath = sourceSets.functionalTest.runtimeClasspath
+
+    binResultsDir = file("$buildDir/functional-test-results/binary/functionalTest")
+
+    reports {
+        html.destination = "$buildDir/reports/functional-test"
+        junitXml.destination = "$buildDir/functional-test-results"
+    }
+
+    println "The env path:" + System.getenv("TEST_FILE_PATH")
+    println "The env path:" + System.env.DB_CMS_JDBC_URL
+    println "The env path:" + System.env.PATH
+    environment 'TEST_FILE_PATH', System.getenv('TEST_FILE_PATH')
+    systemProperties = [
+        TEST_FILE_PATH: System.getProperty('TEST_FILE_PATH')
+    ]
+
+    mustRunAfter tasks.test
+}
+
+check.dependsOn functionalQATest
+
+gradle.projectsEvaluated {
+    def quickTasks = []
+
+    gradle.rootProject.allprojects.each { project ->
+        quickTasks.addAll(project.tasks.findAll { it.name == 'test' })
+    }
+
+    quickTasks.each { task ->
+        project.tasks.functionalQATest.mustRunAfter task
+    }
+}

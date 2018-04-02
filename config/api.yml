@@ -92,6 +92,9 @@ elasticsearch:
     elasticsearch.doctype: ${ES_DOCTYPE:-screening}
     elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-}
     elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS:-}
+
+testConfig:
+  path: ${TEST_FILE_PATH:-config/testConfig.yml}
     
 smartystreets:
   clientId: ${FERB_SS_ID:-193cc984-be1d-4b18-90c2-2399ebcf67bb}           

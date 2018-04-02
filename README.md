@@ -28,6 +28,7 @@ In order for the CWDS API successfully connect to the above databases the follow
 - DB_NS_USER -- the CWDS NS database username
 - DB_NS_PASSWORD -- the CWDS NS database password
 - DB_NS_JDBC_URL -- the CWDS NS database URL in Java Database Connectivity format
+- DB_CMS_SCHEMA  -- the CWDS NS database schema the tables belong to.
 
 
 - DB_CMS_USER -- the CWDS CMS database username
@@ -46,6 +47,19 @@ In order for the CWDS API successfully connect to the above databases the follow
 - DB_CWSRS_CP_INITIAL_SIZE -- the CWDS RS database connection pool initial size
 - DB_CWSRS_CP_MIN_SIZE -- the CWDS RS database connection pool minimum size
 - DB_CWSRS_CP_MAX_SIZE -- the CWDS RS database connection pool maximum size
+
+
+- LOGIN_URL -- The application login URL
+- LOGOUT_URL -- The application logout URL
+
+
+optional
+- UPGRADE_DB_ON_START -- Runs liquidbase DB Update scripts
+- SWAGGER_JSON_URL -- The JSON API Endpoint for Swagger
+- SWAGGER_CALLBACK_URL -- The API Endpoint for Swagger
+- SWAGGER_TOKEN_URL -- The login url for Swagger
+- SHOW_SWAGGER -- enable Swagger
+- LOGLEVEL -- The logging level for the application
 
 The Docker env-file option provides a convenient method to supply these variables. These instructions assume an env file called .env located in the current directory. The repository contains a sample env file called env.sample.
 
@@ -124,12 +138,30 @@ Use the gradlew command to execute the test task:
     % ./gradlew test
 
 ### Integration Testing
-Tests that access the database utilize the src/test/resources/hibernate.cfg.xml configuration file. Edit this file to utilize a local testing database.
+Tests that access external resources such as the Database or that require the Dropwizard framework to
+be spun up. These tests are often longer running tests and are therefore seperated from unit tests
+for TDD purposes. The database utilize the src/test/resources/hibernate.cfg.xml configuration file.
+Edit this file to utilize a local testing database.
 
 Use the gradlew command to execute the test task:
 
     % ./gradlew integrationTest
-    
+
+
+### Functional Testing
+Functional tests are tests that run against a complete environment. These are sometimes called QA or
+Acceptance tests. Functional Tests cannot be ran without all the dependent systems running. These tests
+are typically ran against a pre-production environment to verify both the code and the enviornment.
+
+
+Functional tests have a configuration file that is defaulted to the config/testConfig.yml. Local
+configurations are overwritten by creating a local copy on your disk and setting the TEST_FILE_PATH
+environment variable to the file path.
+
+Use the gradlew command to execute the functional task:
+
+    % ./gradlew functionalTest
+
 ### Commiting Changes
 
 Before commiting changes to the reporsitory please run the following to ensure the build is successful.
