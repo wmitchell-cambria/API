@@ -18,6 +18,7 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
@@ -111,9 +112,9 @@ public class ClientService implements
   public gov.ca.cwds.rest.api.domain.cms.Client delete(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.delete(primaryKey);
     if (persistedClient != null) {
-      ssaname3Dao.deleteSsaname3("CLT_PHTT", primaryKey, "C");
+      ssaname3Dao.deleteSsaname3(LegacyTable.CLINET_PHONETIC.getName(), primaryKey, "C");
       upperCaseTables.deleteClientUc(primaryKey);
-      externalInterfaceTables.createExtInterForDelete(primaryKey, "CLIENT_T");
+      externalInterfaceTables.createExtInterForDelete(primaryKey, LegacyTable.CLIENT.getName());
       return new gov.ca.cwds.rest.api.domain.cms.Client(persistedClient, true);
     }
     return null;

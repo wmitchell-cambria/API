@@ -8,8 +8,6 @@ import java.util.Set;
 
 import javax.validation.Validator;
 
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.rest.business.rules.R08740SetNonProtectingParentCode;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -28,9 +27,11 @@ import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.AgencyType;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
+import gov.ca.cwds.rest.business.rules.R08740SetNonProtectingParentCode;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
@@ -45,7 +46,7 @@ import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * Business layer object to work on {@link Screening}
+ * Business layer object to work on {@link Screening}.
  * 
  * @author CWDS API Team
  */
@@ -53,10 +54,7 @@ public class ScreeningToReferralService implements CrudsService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningToReferralService.class);
 
-  private static final String ALLEGATION_TABLE_NAME = "ALLGTN_T";
-  private static final String CROSS_REPORT_TABLE_NAME = "CRSS_RPT";
   private Validator validator;
-
   private MessageBuilder messageBuilder;
 
   private ReferralService referralService;
@@ -159,8 +157,7 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private Set<Allegation> createAllegations(ScreeningToReferral screeningToReferral,
-      String referralId, Map<Long, String> victimClient,
-      Map<Long, String> perpatratorClient) {
+      String referralId, Map<Long, String> victimClient, Map<Long, String> perpatratorClient) {
     Set<Allegation> resultAllegations = null;
     try {
       resultAllegations =
@@ -260,10 +257,10 @@ public class ScreeningToReferralService implements CrudsService {
   @Override
   public Response update(Serializable primaryKey, Request request) {
     /*
-     * Reuse part of functionality from legacy gov.ca.cwds.rest.services.cms.ReferralService:
-     * the ReferralService.update method executes validation according to DocTool Rule R04611.
-     * The R04611ReferralStartDateTimeValidator and R04611ReferralStartDateTimeAction shell be used
-     * here similarly.
+     * Reuse part of functionality from legacy gov.ca.cwds.rest.services.cms.ReferralService: the
+     * ReferralService.update method executes validation according to DocTool Rule R04611. The
+     * R04611ReferralStartDateTimeValidator and R04611ReferralStartDateTimeAction shell be used here
+     * similarly.
      */
     assert primaryKey instanceof String;
     throw new NotImplementedException("Update is not implemented");
@@ -362,7 +359,7 @@ public class ScreeningToReferralService implements CrudsService {
     governmentOrganizationCrossReportService.createDomainConstructor(postedCrossReport,
         crossReport.getAgencies());
     crossReport.setLegacyId(postedCrossReport.getThirdId());
-    crossReport.setLegacySourceTable(CROSS_REPORT_TABLE_NAME);
+    crossReport.setLegacySourceTable(LegacyTable.CROSS_REPORT.getName());
     resultCrossReports.add(crossReport);
   }
 
@@ -420,18 +417,18 @@ public class ScreeningToReferralService implements CrudsService {
 
     for (Allegation allegation : allegations) {
 
-      if (! validateAllegationHasVictim(scr, allegation)) {
+      if (!validateAllegationHasVictim(scr, allegation)) {
         victimClientId =
             getClientLegacyId(victimClient, victimClientId, allegation.getVictimPersonId());
 
         boolean allegationHasPerpPersonId = allegation.getPerpetratorPersonId() != 0;
-        boolean isNotPerpetrator =
-            !ParticipantValidator.isPerpetratorParticipant(scr, allegation.getPerpetratorPersonId());
+        boolean isNotPerpetrator = !ParticipantValidator.isPerpetratorParticipant(scr,
+            allegation.getPerpetratorPersonId());
         validateAllegationHasPerpetrator(allegationHasPerpPersonId, isNotPerpetrator);
 
         perpatratorClientId = getClientLegacyId(perpatratorClient, perpatratorClientId,
             allegation.getPerpetratorPersonId());
-        if (! validateAllegationVictimExists(victimClientId)) {
+        if (!validateAllegationVictimExists(victimClientId)) {
           saveAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
               allegationDispositionType, allegation);
         }
@@ -516,7 +513,7 @@ public class ScreeningToReferralService implements CrudsService {
 
     PostedAllegation postedAllegation = this.allegationService.create(cmsAllegation);
     allegation.setLegacyId(postedAllegation.getId());
-    allegation.setLegacySourceTable(ALLEGATION_TABLE_NAME);
+    allegation.setLegacySourceTable(LegacyTable.ALLEGATION.getName());
     allegation.setNonProtectingParent(postedAllegation.getNonProtectingParentCode());
     processedAllegations.add(allegation);
 
@@ -524,13 +521,10 @@ public class ScreeningToReferralService implements CrudsService {
     processAllegationPerpetratorHistory(scr, postedAllegation);
   }
 
-  private void executeR08740(
-      gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation,
-      String victimClientId,
-      String perpetratorClientId) {
-    R08740SetNonProtectingParentCode r08740 =
-        new R08740SetNonProtectingParentCode(
-            cmsAllegation, clientRelationshipDao, victimClientId, perpetratorClientId);
+  private void executeR08740(gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation,
+      String victimClientId, String perpetratorClientId) {
+    R08740SetNonProtectingParentCode r08740 = new R08740SetNonProtectingParentCode(cmsAllegation,
+        clientRelationshipDao, victimClientId, perpetratorClientId);
     r08740.execute();
   }
 

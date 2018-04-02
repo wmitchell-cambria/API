@@ -15,6 +15,7 @@ import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
@@ -98,7 +99,7 @@ public class AddressService implements
       PostedAddress postedAddress = this.create(domainAddress);
 
       address.setLegacyId(postedAddress.getExistingAddressId());
-      address.setLegacySourceTable("ADDRS_T");
+      address.setLegacySourceTable(LegacyTable.ADDRESS.getName());
     } catch (Exception e) {
       messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
     }

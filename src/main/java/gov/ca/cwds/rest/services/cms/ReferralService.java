@@ -35,6 +35,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
@@ -319,8 +320,8 @@ public class ReferralService implements
 
     String limitedAccessDate = DomainChef.cookDate(screeningToReferral.getLimitedAccessDate());
 
-    int govEnt =
-        convertLogicalIdToSystemCodeFor(screeningToReferral.getIncidentCounty(), "GVR_ENTC");
+    int govEnt = convertLogicalIdToSystemCodeFor(screeningToReferral.getIncidentCounty(),
+        LegacyTable.GOVERNMENT_ORGANIZATION_ENTITY.getName());
     Short agencyCode = convertLimitedAccessAgencyToNumericCode(screeningToReferral);
 
     boolean referredToResourceType =
