@@ -12,6 +12,7 @@ import gov.ca.cwds.data.cms.ExternalInterfaceDao;
 import gov.ca.cwds.data.persistence.cms.Assignment;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ExternalInterface;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContext.Parameter;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -27,9 +28,6 @@ public class ExternalInterfaceTables {
   private static final String INSERT_TO_EXTINF_FAILED = "Insert to extinf failed - ";
   private static final String EXTERNAL_INTERFACE_ROW_IS_CREATED =
       "External Interface row is created";
-  private static final String SOURCE_TBL_CLIENT = "CLIENT_T";
-  private static final String SOURCE_TBL_ASSIGNMENT = "ASGNM_T";
-  private static final String SOURCE_TBL_REFERRAL = "REFERL_T";
   private static final String OPERATION_TYPE_DELETE = "D";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalInterfaceTables.class);
@@ -53,7 +51,7 @@ public class ExternalInterfaceTables {
     ExternalInterface externalInterface = new ExternalInterface();
     externalInterface.setSequenceNumber(incrementAndGetSequenceExternalTable());
     externalInterface.setSubmitlTimestamp(client.getLastUpdatedTime());
-    externalInterface.setTableName(SOURCE_TBL_CLIENT);
+    externalInterface.setTableName(LegacyTable.CLIENT.getName());
     externalInterface.setOperationType(operType);
     externalInterface.setPrimaryKey1(client.getId());
     externalInterface.setLogonUserId(requestExecutionContext.getUserId());
@@ -75,7 +73,7 @@ public class ExternalInterfaceTables {
     ExternalInterface externalInterface = new ExternalInterface();
     externalInterface.setSequenceNumber(incrementAndGetSequenceExternalTable());
     externalInterface.setSubmitlTimestamp(assignment.getLastUpdatedTime());
-    externalInterface.setTableName(SOURCE_TBL_ASSIGNMENT);
+    externalInterface.setTableName(LegacyTable.ASSIGNMENT.getName());
     externalInterface.setOperationType(operType);
     externalInterface.setPrimaryKey1(assignment.getId());
     externalInterface.setLogonUserId(requestExecutionContext.getUserId());
@@ -118,7 +116,7 @@ public class ExternalInterfaceTables {
     ExternalInterface externalInterface = new ExternalInterface();
     externalInterface.setSequenceNumber(incrementAndGetSequenceExternalTable());
     externalInterface.setSubmitlTimestamp(requestExecutionContext.getRequestStartTime());
-    externalInterface.setTableName(SOURCE_TBL_REFERRAL);
+    externalInterface.setTableName(LegacyTable.REFERRAL.getName());
     externalInterface.setOperationType(operType);
     externalInterface.setPrimaryKey1(referralId);
     externalInterface.setLogonUserId(requestExecutionContext.getUserId());
