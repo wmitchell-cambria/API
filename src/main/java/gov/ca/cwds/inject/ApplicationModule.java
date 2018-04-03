@@ -44,6 +44,7 @@ public class ApplicationModule extends AbstractModule {
     install(new ResourcesModule());
     install(new FiltersModule());
     install(new AuditingModule());
+    install(new TestModule());
     install(new HealthCheckModule());
     install(new SecurityModule(BaseApiApplication::getInjector)
         .addAuthorizer("client:read", ClientAbstractReadAuthorizer.class)
