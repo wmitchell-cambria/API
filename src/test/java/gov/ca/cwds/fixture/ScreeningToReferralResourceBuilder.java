@@ -231,12 +231,14 @@ public class ScreeningToReferralResourceBuilder {
     return this;
   }
 
-  public void setCurrentLocationOfChildren(String currentLocationOfChildren) {
+  public ScreeningToReferralResourceBuilder setCurrentLocationOfChildren(String currentLocationOfChildren) {
     this.currentLocationOfChildren = currentLocationOfChildren;
+    return this;
   }
 
-  public void setAssigneeStaffId(String assigneeStaffId) {
+  public ScreeningToReferralResourceBuilder setAssigneeStaffId(String assigneeStaffId) {
     this.assigneeStaffId = assigneeStaffId;
+    return this;
   }
 
   public ScreeningToReferralResourceBuilder setName(String name) {
