@@ -2,8 +2,6 @@ package gov.ca.cwds.rest.api.domain;
 
 import java.util.List;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -47,13 +45,4 @@ public class ScreeningDashboardList extends ReportingDomain implements Response 
 	return screeningDashboard;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
 }

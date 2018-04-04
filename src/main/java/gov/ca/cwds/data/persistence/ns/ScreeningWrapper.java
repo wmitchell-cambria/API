@@ -6,19 +6,20 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.NamedNativeQuery;
+import org.hibernate.annotations.NamedQuery;
 
 @Entity
-@NamedNativeQuery(
-	name = "gov.ca.cwds.data.persistence.nw.findScreeningsOfUser",
-	resultClass = ScreeningWrapper.class, readOnly = true,
-	query = "SELECT \n"
-	+ "  ")
+@NamedQuery(
+	name = "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser",
+	query = "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId")
+
+@Table(name = "screenings")
 
 public class ScreeningWrapper {
 

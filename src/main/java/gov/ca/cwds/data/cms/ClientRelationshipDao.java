@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.cms;
 
-import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
@@ -10,9 +11,8 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
+import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.inject.CmsSessionFactory;
-
-import java.util.List;
 
 /**
  * DAO for {@link ClientRelationship}.
@@ -62,6 +62,7 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
 		return query.list().toArray(new ClientRelationship[0]);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<RelationshipWrapper> findRelationshipsByClientId(String clientId){
 		final Query<RelationshipWrapper> query = this.getSessionFactory()
 				.getCurrentSession()

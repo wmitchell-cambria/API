@@ -15,8 +15,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.fixture.ScreeningDashboardResourceBuilder;
 import io.dropwizard.jackson.Jackson;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 
 public class ScreeningDashboardListTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -49,17 +47,13 @@ public class ScreeningDashboardListTest {
   public void testWhenEmpty() throws Exception {
 	List<ScreeningDashboard> empty = new ArrayList<>();
 	ScreeningDashboardList emptyScreeningDashboardList = new ScreeningDashboardList(empty);
-	System.out.println(MAPPER.writeValueAsString(emptyScreeningDashboardList));
+//	System.out.println(MAPPER.writeValueAsString(emptyScreeningDashboardList));
   }
   
   @Test
   public void testSerializeToJSON() throws Exception {
 	ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboardArray);
-	System.out.println(MAPPER.writeValueAsString(screeningDashboardList));
+//	System.out.println(MAPPER.writeValueAsString(screeningDashboardList));
   }
   
-  @Test
-  public void testEquaslHashCodeWorks() throws Exception {
-	EqualsVerifier.forClass(ScreeningDashboardList.class).suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS).verify();
-  }  
 }

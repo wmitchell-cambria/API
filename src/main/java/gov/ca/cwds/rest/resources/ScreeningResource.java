@@ -4,7 +4,6 @@ import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -19,7 +18,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ScreeningServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Screening;
-import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,32 +103,4 @@ public class ScreeningResource {
     return resourceDelegate.update(id, screening);
   }
   
-  /**
-   * Get list of Screenings
-   * 
-   * @param authorizationToken - string of Authorization Token
-   * @param screeningDecisionDetail - array of screening decision detail
-   * @param screeningDecision - array of screening decision detail
-   * @param referralId - Referral ID
-   * 
-   * @return the {@link Response}
-   */
-  @UnitOfWork(value = "ns")
-  @GET
-  @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
-      @ApiResponse(code = 401, message = "Not Authorized"),
-      @ApiResponse(code = 406, message = "Accept Header not supported"),
-      @ApiResponse(code = 422, message = "Unable to validate Screening")})
-  @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(value = "Returns screening summary", code = HttpStatus.SC_OK,
-      response = ScreeningDashboard.class)
-  public Response find(String authenticationToken, String screeningDecisionDetail, String screeingDecision, 
-	  String ReferralId) {
-	
-
-	
-	return null;
-	
-
-  }
 }

@@ -9,6 +9,8 @@ import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +26,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 
 /**
  * Business layer object to work on {@link Screening}
@@ -36,6 +39,7 @@ public class ScreeningService implements CrudsService {
 
   private ElasticsearchDao esDao;
   private ScreeningDao screeningDao;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningService.class);
 
   /**
    * Construct the object
@@ -58,16 +62,18 @@ public class ScreeningService implements CrudsService {
     throw new NotImplementedException("Find is not implemented");
   }
   
-  public Response findScreeningDashboard(String userId, List<String> screeningDecisionDetail, List<String> screeningDecision, String referralId) {
-	return getScreeningsOfUsers(userId, screeningDecisionDetail,
+  public Response findScreeningDashboard(List<String> screeningDecisionDetail, List<String> screeningDecision, String referralId) {
+	final String staffId = RequestExecutionContext.instance().getStaffId();
+	
+	return getScreeningsOfUser(staffId, screeningDecisionDetail,
 		screeningDecision, referralId);
   }
 
-  private ScreeningDashboardList getScreeningsOfUsers(String userId, List<String> screeningDecisionDetail,
+  private ScreeningDashboardList getScreeningsOfUser(String staffId, List<String> screeningDecisionDetail,
 	  List<String> screeningDecision, String referralId) {
 	
 	List<ScreeningDashboard> screeningDashboard = new ArrayList<>();
-	List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(userId, screeningDecisionDetail, screeningDecision, referralId);
+	List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId, screeningDecisionDetail, screeningDecision, referralId);
 	for (ScreeningWrapper screening: screenings) {
 	  ScreeningDashboard aScreening = new ScreeningDashboard(screening);
 	  screeningDashboard.add(aScreening);

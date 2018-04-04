@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
@@ -55,11 +54,11 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    */
   @SuppressWarnings("unchecked")
   public Set<ScreeningEntity> findScreeningsByClientIds(Set<String> clientIds) {
-    final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(
-            "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
-        .setParameter("clientIds", clientIds);
-    return new HashSet(query.list());
+    final Query<ScreeningEntity> query = this.getSessionFactory()
+    	  .getCurrentSession()
+      .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
+    	  .setParameter("clientIds", clientIds);
+    return new HashSet<ScreeningEntity>(query.list());
   }
 
   /**
@@ -69,7 +68,8 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    * @return IntakeLOVCodeEntity
    */
   public IntakeLOVCodeEntity findIntakeLOVCodeByIntakeCode(String intakeCode) {
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
+    @SuppressWarnings("unchecked")
+	final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode")
         .setParameter("intakeCode", intakeCode);
@@ -77,16 +77,23 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
     return codes.isEmpty() ? null : codes.get(0);
   }
   
-  public List<ScreeningWrapper> findScreeningsByUserId(String userId, List<String> screeningDecisionDetail,
+  /**
+   * Find screenings of current user (staff ID)
+   * 
+   * @param staffId - staff Id
+   * @param screeningDecisionDetail - list of screening decision details (not used)
+   * @param screeningDecision - list of screening decisions (not used)
+   * @param referralId - referral ID
+   * @return - list of screenings
+   */
+  public List<ScreeningWrapper> findScreeningsByUserId(String staffId, List<String> screeningDecisionDetail,
 	  List<String> screeningDecision, String referralId) {
+	@SuppressWarnings("unchecked")
 	final Query<ScreeningWrapper> query = this.getSessionFactory()
 		.getCurrentSession()
-		.getNamedNativeQuery("gov.ca.cwds.data.persistence.nw.findScreeningsOfUser")
-		.addEntity(ScreeningWrapper.class)
-		.setParameter("userId", userId, StringType.INSTANCE)
-		.setParameter("screeningDecisionDetail", screeningDecisionDetail)
-		.setParameter("screeningDecision", screeningDecision)
-		.setParameter("referralId", referralId);
+		.getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser")
+		.setParameter("staffId", staffId);
 	return query.list();
   }
+  
 }

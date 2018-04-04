@@ -30,6 +30,8 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 public class ScreeningServiceTest {
 
@@ -70,6 +72,9 @@ public class ScreeningServiceTest {
     
 
     screeningService = new ScreeningService(esDao, screeningDao);
+    
+	new TestingRequestExecutionContext("0X5");
+
   }
 
   @Test
@@ -150,7 +155,7 @@ public class ScreeningServiceTest {
   
   @Test
   public void testFindScreeningDashboard() throws Exception {
-	final String userId = "";
+	final String staffId = RequestExecutionContext.instance().getStaffId();
 	final List<String> screeningDecisionDetail = new ArrayList<>();
 	final List<String> screeningDecision = new ArrayList<>();
 	final String referralId = "";
@@ -163,14 +168,14 @@ public class ScreeningServiceTest {
 	when(screeningDao.findScreeningsByUserId(any(), any(), any(), any()))
 		.thenReturn(screenings);
 	
-	ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard(userId, screeningDecisionDetail, screeningDecision, referralId);
+	ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
 	List<ScreeningDashboard> screeningDashboard = sdl.getScreeningDashboard();
 	assertThat(screeningDashboard.size(), is(2));
   }
   
   @Test
   public void testFindScreeningDashboardWhenEmptyShouldBeZero() throws Exception {
-	final String userId = "";
+	final String staffId = RequestExecutionContext.instance().getStaffId();
 	final List<String> screeningDecisionDetail = new ArrayList<>();
 	final List<String> screeningDecision = new ArrayList<>();
 	final String referralId = "";
@@ -179,7 +184,7 @@ public class ScreeningServiceTest {
 	when(screeningDao.findScreeningsByUserId(any(), any(), any(), any()))
 	.thenReturn(screenings);
 
-	ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard(userId, screeningDecisionDetail, screeningDecision, referralId);
+	ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
 	List<ScreeningDashboard> screeningDashboard = sdl.getScreeningDashboard();
 	assertThat(screeningDashboard.size(), is(0));
 
