@@ -168,7 +168,7 @@ public class HOIReferralService
       clients.add(clientDao.find(authorizeClient(allegation.getVictimClientId())));
     }
     if (allegation.getPerpetratorClientId() != null) {
-      clients.add(clientDao.find(authorizeClient(allegation.getPerpetratorClientId())));
+      clients.add(clientDao.find(allegation.getPerpetratorClientId()));
     }
   }
 
