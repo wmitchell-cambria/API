@@ -8,8 +8,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,6 +30,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
@@ -2394,113 +2395,97 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void testFailGenderCodeInvalid() throws Exception {
-
     Client validClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Client/invalid/genderCodeInvalid.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(422)));
   }
 
   @Test
   public void testFailGenderCodeEmpty() throws Exception {
-
     Client validClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Client/invalid/genderCodeEmpty.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(422)));
   }
 
   @Test
   public void testFailGenderCodeMissing() throws Exception {
-
     Client validClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Client/invalid/genderCodeMissing.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(422)));
 
   }
 
   @Test
   public void testFailGenderCodeNull() throws Exception {
-
     Client validClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Client/invalid/genderCodeNull.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(422)));
 
   }
 
   @Test
   public void testFailGenderCodeWhiteSpace() throws Exception {
-
     Client validClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/Client/invalid/genderCodeWhiteSpace.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("genderCode must be one of [M, F, U]"),
+    assertThat(response.readEntity(String.class).indexOf("genderCode must be one of [M, F, U, I]"),
         is(greaterThanOrEqualTo(0)));
   }
 
   @Test
   public void testSuccessGenderCodeM() throws Exception {
-
     Client validClient = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/genderCodeM.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(204)));
 
   }
 
   @Test
   public void testSuccessGenderCodeF() throws Exception {
-
     Client validClient = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/genderCodeF.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(204)));
 
   }
 
   @Test
   public void testSuccessGenderCodeU() throws Exception {
-
     Client validClient = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Client/valid/genderCodeU.json"), Client.class);
-
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-
     assertThat(response.getStatus(), is(equalTo(204)));
+  }
 
+  @Test
+  public void testSuccessGenderCodeI() throws Exception {
+    Client validClient = new ClientResourceBuilder().setGenderCode("I").build();
+    Response response =
+        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
+    assertThat(response.getStatus(), is(equalTo(204)));
   }
 
   /*
