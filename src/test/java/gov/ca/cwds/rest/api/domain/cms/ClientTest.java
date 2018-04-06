@@ -635,7 +635,6 @@ public class ClientTest implements DomainTestTemplate {
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
-
   /*
    * adoption status code test
    */
@@ -2395,18 +2394,18 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void testFailGenderCodeInvalid() throws Exception {
-    Client validClient = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Client/invalid/genderCodeInvalid.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode("Z").build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(422)));
+    assertThat(response.readEntity(String.class).indexOf("genderCode must be one of [M, F, U, I]"),
+        is(greaterThanOrEqualTo(0)));
   }
 
   @Test
   public void testFailGenderCodeEmpty() throws Exception {
-    Client validClient = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Client/invalid/genderCodeEmpty.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode("").build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
@@ -2426,8 +2425,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void testFailGenderCodeNull() throws Exception {
-    Client validClient = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Client/invalid/genderCodeNull.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode(null).build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
@@ -2437,8 +2435,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void testFailGenderCodeWhiteSpace() throws Exception {
-    Client validClient = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Client/invalid/genderCodeWhiteSpace.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode(" ").build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
@@ -2449,8 +2446,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void testSuccessGenderCodeM() throws Exception {
-    Client validClient = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/genderCodeM.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode("M").build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
@@ -2460,8 +2456,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void testSuccessGenderCodeF() throws Exception {
-    Client validClient = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/genderCodeF.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode("F").build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
@@ -2471,8 +2466,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void testSuccessGenderCodeU() throws Exception {
-    Client validClient = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/genderCodeU.json"), Client.class);
+    Client validClient = new ClientResourceBuilder().setGenderCode("U").build();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
