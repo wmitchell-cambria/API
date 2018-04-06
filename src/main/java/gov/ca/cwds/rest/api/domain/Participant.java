@@ -81,16 +81,16 @@ public class Participant extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "name suffix", example = "Jr.")
   private String nameSuffix;
 
-  @OneOf(value = {"M", "F", "U"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"M", "F", "U", "I"}, ignoreCase = true, ignoreWhitespace = true)
   @NotNull
   @JsonProperty("gender")
   @ApiModelProperty(required = false, readOnly = false, value = "Gender Code", example = "M",
-      allowableValues = "M, F, U")
+      allowableValues = "M, F, U, I")
   private String gender;
 
   @JsonProperty("ssn")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "123456789")
-  // This regualr expression(regexp) validates the ssn should be only numeric and length 9
+  // This regular expression(regexp) validates the ssn should be only numeric and length 9
   @Pattern(regexp = "^(|[0-9]{9})$")
   private String ssn;
 

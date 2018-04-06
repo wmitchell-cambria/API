@@ -229,7 +229,7 @@ public class Client extends ReportingDomain implements Request, Response {
 
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
-  @OneOf(value = {"M", "F", "U"}, ignoreCase = false, ignoreWhitespace = true)
+  @OneOf(value = {"M", "F", "U", "I"}, ignoreCase = false, ignoreWhitespace = true)
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String genderCode;
 
