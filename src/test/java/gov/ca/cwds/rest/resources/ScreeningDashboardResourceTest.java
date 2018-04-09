@@ -15,16 +15,20 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.fixture.ScreeningDashboardResourceBuilder;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ScreeningService;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 public class ScreeningDashboardResourceTest {
 
   private final static ScreeningService service = mock(ScreeningService.class);
+  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @ClassRule
   public static final ResourceTestRule resources = ResourceTestRule.builder()
@@ -35,14 +39,17 @@ public class ScreeningDashboardResourceTest {
 	reset(service);
 	new TestingRequestExecutionContext("0X5");
   }
-
+  
   @Test
   public void shouldCallScreeningsEndPoint() throws Exception {
-	String sdd = "sdd1, sdd2";
-	String sd = "screening decision, next screening decision";
 	String referralId = "1234567ABC";
+	String sdd[] = {"sdd"};
 	List<String> screeningDecisionDetail = Arrays.asList(sdd);
+	
+	String sd[] = {"screening decision"};
 	List<String> screeningDecision = Arrays.asList(sd);
+	
+	
 	ScreeningDashboard screeningDashboard1 = new ScreeningDashboardResourceBuilder().build();
 	ScreeningDashboard screeningDashboard2 = new ScreeningDashboardResourceBuilder().build();
 	List<ScreeningDashboard> sdList = new ArrayList<>();
@@ -53,8 +60,8 @@ public class ScreeningDashboardResourceTest {
 	when(service.findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId))
 		.thenReturn(screeningDashboardList);
 
-	resources.client().target("/screenings").queryParam("screening_decision_detail", sdd)
-		.queryParam("screening_decision", sd).queryParam("referral_id", referralId).request()
+	resources.client().target("/screenings").queryParam("screening_decision_detail", "sdd")
+		.queryParam("screening_decision", "screening decision").queryParam("referral_id", referralId).request()
 		.accept(MediaType.APPLICATION_JSON).get();
 	verify(service).findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
   }

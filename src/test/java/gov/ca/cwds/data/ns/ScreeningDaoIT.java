@@ -19,22 +19,19 @@ import org.junit.rules.ExpectedException;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 
 public class ScreeningDaoIT {
-
-  @Rule
-
-  public ExpectedException thrown = ExpectedException.none();
-
   private static ScreeningDao screeningDao;
   private static SessionFactory sessionFactory;
   private Session session;
 
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
   @BeforeClass
   public static void beforeClass() {
-	sessionFactory = new Configuration().configure("ns-hibernate.cfg.xml").buildSessionFactory();
+	sessionFactory = new Configuration().configure().buildSessionFactory();
 	screeningDao = new ScreeningDao(sessionFactory);
   }
 
-  @SuppressWarnings("javadoc")
   @AfterClass
   public static void afterClass() {
 	sessionFactory.close();
@@ -59,9 +56,17 @@ public class ScreeningDaoIT {
 	assertThat(query, is(notNullValue()));
   }
 
-  public void testFindAllReturnsCorrectList() throws Exception {
-	// TODO Auto-generated method stub
+  @Test
+  public void testThatFindIntakeLOVCodeByIntakeCodeExist() throws Exception {
+	Query query = session
+		.getNamedQuery("gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode");
+	assertThat(query, is(notNullValue()));
+  }
 
+  @Test
+  public void testThatFindScreeningsByClientIdsExist() throws Exception {
+	Query query = session.getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds");
+	assertThat(query, is(notNullValue()));
   }
 
   public void testFind() throws Exception {

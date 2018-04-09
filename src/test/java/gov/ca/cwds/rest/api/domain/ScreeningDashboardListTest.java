@@ -1,8 +1,9 @@
 package gov.ca.cwds.rest.api.domain;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +11,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.fixture.ScreeningDashboardResourceBuilder;
 import io.dropwizard.jackson.Jackson;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class ScreeningDashboardListTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -47,13 +51,33 @@ public class ScreeningDashboardListTest {
   public void testWhenEmpty() throws Exception {
 	List<ScreeningDashboard> empty = new ArrayList<>();
 	ScreeningDashboardList emptyScreeningDashboardList = new ScreeningDashboardList(empty);
-//	System.out.println(MAPPER.writeValueAsString(emptyScreeningDashboardList));
+	assertThat(emptyScreeningDashboardList.getScreeningDashboard(), is(empty));
   }
   
   @Test
   public void testSerializeToJSON() throws Exception {
+	TypeReference<List<ScreeningDashboard>> typeReference = new TypeReference<List<ScreeningDashboard>>() {};
 	ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboardArray);
-//	System.out.println(MAPPER.writeValueAsString(screeningDashboardList));
+	String expected = MAPPER.writeValueAsString(screeningDashboardList);
+    List<ScreeningDashboard> sdlList = MAPPER.readValue(fixture("fixtures/domain/screening/valid/screeningDashboardList.json"), typeReference);
+    String sdl = MAPPER.writeValueAsString(sdlList);
+    assertThat(sdl, is(expected));
   }
-  
+
+  @Test
+  public void testDeserializationFromJSON() throws Exception {
+	TypeReference<List<ScreeningDashboard>> typeReference = new TypeReference<List<ScreeningDashboard>>() {};
+	
+	ScreeningDashboardList expectedScreeningDashboardList = new ScreeningDashboardList(screeningDashboardArray);
+    List<ScreeningDashboard> sdlList = MAPPER.readValue(fixture("fixtures/domain/screening/valid/screeningDashboardList.json"), typeReference);
+
+    ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(sdlList);
+     assertThat(screeningDashboardList, is(expectedScreeningDashboardList));
+  }
+ 
+  @Test
+  public void testEquaslHashCodeWorks() throws Exception {
+	EqualsVerifier.forClass(ScreeningDashboard.class).suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS).verify();
+  }
+
 }

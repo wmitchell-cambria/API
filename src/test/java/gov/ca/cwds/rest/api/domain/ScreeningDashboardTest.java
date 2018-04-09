@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -56,12 +57,20 @@ public class ScreeningDashboardTest {
   
   @Test
   public void testSerializeToJSON() throws Exception {
-	String now = "2018-03-30.11.12.14.000";
+	ScreeningDashboard screeningDashboard = new ScreeningDashboardResourceBuilder().build();
+	String sdJSON  = MAPPER.writeValueAsString(screeningDashboard);
+	String expected = MAPPER.writeValueAsString(MAPPER.readValue(fixture("fixtures/domain/screening/valid/screeningDashboard.json"), ScreeningDashboard.class));
+	assertThat(sdJSON, is(expected));
 	
-	ScreeningDashboard screeningDashboard = new ScreeningDashboardResourceBuilder().setStartedAt(now).build();
-	System.out.println(MAPPER.writeValueAsString(screeningDashboard));
   }
   
+  @Test
+  public void testDeserializationFromJSON() throws Exception {
+	ScreeningDashboard screeningDashboard = new ScreeningDashboardResourceBuilder().build();
+	ScreeningDashboard sdObject = MAPPER.readValue(fixture("fixtures/domain/screening/valid/screeningDashboard.json"), ScreeningDashboard.class);
+	assertThat(screeningDashboard, is(sdObject));
+  }
+
   @Test
   public void testEquaslHashCodeWorks() throws Exception {
 	EqualsVerifier.forClass(ScreeningDashboard.class).suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS).verify();
