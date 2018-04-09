@@ -8,6 +8,11 @@ import org.joda.time.format.DateTimeFormat;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ClientResourceBuilder {
   String existingClientId = "";
   private DateTime lastUpdatedTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
@@ -44,6 +49,9 @@ public class ClientResourceBuilder {
   String ethUnableToDetReasonCode = "A";
   String fatherParentalRightTermDate = "";
   String genderCode = "M";
+  Short genderIdentityType = Client.DEFAULT_GENDER_IDENTITY_TYPE;
+  String giNotListedDescription = "";
+  Short genderExpressionType = Client.DEFAULT_GENDER_EXPRESSION_TYPE;
   String healthSummaryText = "";
   String hispUnableToDetReasonCode = "";
   String hispanicOriginCode = "X";
@@ -69,6 +77,9 @@ public class ClientResourceBuilder {
   Short secondaryLanguageType = Client.DEFAULT_SECONDARY_LANGUAGE_TYPE;
   Boolean sensitiveHlthInfoOnFileIndicator = false;
   String sensitivityIndicator = Client.DEFAULT_SENSITIVITY_INDICATOR;
+  Short sexualOrientationType = Client.DEFAULT_SEXUAL_ORIENTATION_TYPE;
+  String soUnableToDetermineCode = Client.DEFAULT_SO_UNABLE_TO_DETERMINE_CODE;
+  String soNotListedDescrption = "";
   String soc158PlacementCode = Client.DEFAULT_SOC158_PLACEMENT_CODE;
   Boolean soc158SealedClientIndicator = false;
   String socialSecurityNumChangedCode = Client.DEFAULT_SOCIAL_SECURITY_NUM_CHANGE_CODE;
@@ -386,6 +397,60 @@ public class ClientResourceBuilder {
 
   public ClientResourceBuilder setGenderCode(String genderCode) {
     this.genderCode = genderCode;
+    return this;
+  }
+
+  public Short getGenderIdentityType() {
+    return genderIdentityType;
+  }
+
+  public ClientResourceBuilder setGenderIdentityType(Short genderIdentityType) {
+    this.genderIdentityType = genderIdentityType;
+    return this;
+  }
+
+  public String getGiNotListedDescription() {
+    return giNotListedDescription;
+  }
+
+  public ClientResourceBuilder setGiNotListedDescription(String giNotListedDescription) {
+    this.giNotListedDescription = giNotListedDescription;
+    return this;
+  }
+
+  public Short getGenderExpressionType() {
+    return genderExpressionType;
+  }
+
+  public ClientResourceBuilder setGenderExpressionType(Short genderExpressionType) {
+    this.genderExpressionType = genderExpressionType;
+    return this;
+  }
+
+  public Short getSexualOrientationType() {
+    return sexualOrientationType;
+  }
+
+  public ClientResourceBuilder setSexualOrientationType(Short sexualOrientationType) {
+    this.sexualOrientationType = sexualOrientationType;
+    return this;
+  }
+
+  public String getSoUnableToDetermineCode() {
+    return soUnableToDetermineCode;
+  }
+
+  public ClientResourceBuilder setSoUnableToDetermineCode(String soUnableToDetermineCode) {
+    this.soUnableToDetermineCode = soUnableToDetermineCode;
+    return this;
+  }
+
+  public String getSoNotListedDescrption() {
+    return soNotListedDescrption;
+  }
+
+  public ClientResourceBuilder setSoNotListedDescrption(String soNotListedDescrption) {
+    this.soNotListedDescrption = soNotListedDescrption;
     return this;
   }
 
@@ -720,14 +785,16 @@ public class ClientResourceBuilder {
         currCaChildrenServIndicator, currentlyOtherDescription, currentlyRegionalCenterIndicator,
         deathDate, deathDateVerifiedIndicator, deathPlace, deathReasonText, driverLicenseNumber,
         driverLicenseStateCodeType, emailAddress, estimatedDobCode, ethUnableToDetReasonCode,
-        fatherParentalRightTermDate, genderCode, healthSummaryText, hispUnableToDetReasonCode,
-        hispanicOriginCode, immigrationCountryCodeType, immigrationStatusType,
-        incapacitatedParentCode, individualHealthCarePlanIndicator, limitationOnScpHealthIndicator,
-        literateCode, maritalCohabitatnHstryIndicatorVar, maritalStatusType, militaryStatusCode,
+        fatherParentalRightTermDate, genderCode, genderIdentityType, giNotListedDescription,
+        genderExpressionType, healthSummaryText, hispUnableToDetReasonCode, hispanicOriginCode,
+        immigrationCountryCodeType, immigrationStatusType, incapacitatedParentCode,
+        individualHealthCarePlanIndicator, limitationOnScpHealthIndicator, literateCode,
+        maritalCohabitatnHstryIndicatorVar, maritalStatusType, militaryStatusCode,
         motherParentalRightTermDate, namePrefixDescription, nameType, outstandingWarrantIndicator,
         prevCaChildrenServIndicator, prevOtherDescription, prevRegionalCenterIndicator,
         primaryEthnicityType, primaryLanguageType, religionType, secondaryLanguageType,
-        sensitiveHlthInfoOnFileIndicator, sensitivityIndicator, soc158PlacementCode,
+        sensitiveHlthInfoOnFileIndicator, sensitivityIndicator, sexualOrientationType,
+        soUnableToDetermineCode, soNotListedDescrption, soc158PlacementCode,
         soc158SealedClientIndicator, socialSecurityNumChangedCode, socialSecurityNumber,
         suffixTitleDescription, tribalAncestryClientIndicatorVar,
         tribalMembrshpVerifctnIndicatorVar, unemployedParentCode, zippyCreatedIndicator, address);

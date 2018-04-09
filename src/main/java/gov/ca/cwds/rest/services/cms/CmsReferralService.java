@@ -94,7 +94,7 @@ public class CmsReferralService implements CrudsService {
 
     Set<ReferralClient> resultReferralClient = new LinkedHashSet<>();
     saveReferralClients(cmsReferral, referralId, clientIds.toArray()[clientInst], clientInst,
-          resultReferralClient);
+        resultReferralClient);
 
     PostedReporter savedreporter = saveReporter(cmsReferral, referralId);
 
@@ -106,23 +106,23 @@ public class CmsReferralService implements CrudsService {
     PostedReporter savedreporter = new PostedReporter();
     if (cmsReferral.getReporter() != null) {
       Reporter incomingReporter = cmsReferral.getReporter();
-      Reporter reporter = new Reporter(incomingReporter.getLastUpdatedTime(),
-          incomingReporter.getBadgeNumber(), incomingReporter.getCityName(),
-          incomingReporter.getColltrClientRptrReltnshpType(),
-          incomingReporter.getCommunicationMethodType(),
-          incomingReporter.getConfidentialWaiverIndicator(),
-          incomingReporter.getDrmsMandatedRprtrFeedback(), incomingReporter.getEmployerName(),
-          incomingReporter.getFeedbackDate(), incomingReporter.getFeedbackRequiredIndicator(),
-          incomingReporter.getFirstName(), incomingReporter.getLastName(),
-          incomingReporter.getMandatedReporterIndicator(),
-          incomingReporter.getMessagePhoneExtensionNumber(),
-          incomingReporter.getMessagePhoneNumber(), incomingReporter.getMiddleInitialName(),
-          incomingReporter.getNamePrefixDescription(), incomingReporter.getPrimaryPhoneNumber(),
-          incomingReporter.getPrimaryPhoneExtensionNumber(), incomingReporter.getStateCodeType(),
-          incomingReporter.getStreetName(), incomingReporter.getStreetNumber(),
-          incomingReporter.getSuffixTitleDescription(), incomingReporter.getZipcode(), referralId,
-          incomingReporter.getLawEnforcementId(), incomingReporter.getZipSuffixNumber(),
-          incomingReporter.getCountySpecificCode());
+      Reporter reporter =
+          new Reporter(incomingReporter.getLastUpdatedTime(), incomingReporter.getBadgeNumber(),
+              incomingReporter.getCityName(), incomingReporter.getColltrClientRptrReltnshpType(),
+              incomingReporter.getCommunicationMethodType(),
+              incomingReporter.getConfidentialWaiverIndicator(),
+              incomingReporter.getDrmsMandatedRprtrFeedback(), incomingReporter.getEmployerName(),
+              incomingReporter.getFeedbackDate(), incomingReporter.getFeedbackRequiredIndicator(),
+              incomingReporter.getFirstName(), incomingReporter.getLastName(),
+              incomingReporter.getMandatedReporterIndicator(),
+              incomingReporter.getMessagePhoneExtensionNumber(),
+              incomingReporter.getMessagePhoneNumber(), incomingReporter.getMiddleInitialName(),
+              incomingReporter.getNamePrefixDescription(), incomingReporter.getPrimaryPhoneNumber(),
+              incomingReporter.getPrimaryPhoneExtensionNumber(),
+              incomingReporter.getStateCodeType(), incomingReporter.getStreetName(),
+              incomingReporter.getStreetNumber(), incomingReporter.getSuffixTitleDescription(),
+              incomingReporter.getZipcode(), referralId, incomingReporter.getLawEnforcementId(),
+              incomingReporter.getZipSuffixNumber(), incomingReporter.getCountySpecificCode());
       PostedReporter postedreporter = this.reporterService.create(reporter);
       savedreporter = postedreporter;
     }
@@ -130,7 +130,7 @@ public class CmsReferralService implements CrudsService {
   }
 
   private void saveReferralClients(CmsReferral cmsReferral, String referralId, Object o,
-    int clientInst, Set<ReferralClient> resultReferralClient) {
+      int clientInst, Set<ReferralClient> resultReferralClient) {
     if (cmsReferral.getReferralClient() != null && !cmsReferral.getReferralClient().isEmpty()) {
       for (ReferralClient incomingReferralClient : cmsReferral.getReferralClient()) {
         clientInst = saveReferralClient(referralId, (String) o, clientInst, resultReferralClient,
@@ -141,21 +141,17 @@ public class CmsReferralService implements CrudsService {
 
   private int saveReferralClient(String referralId, String o, int clientInst,
       Set<ReferralClient> resultReferralClient, ReferralClient incomingReferralClient) {
-    ReferralClient referralClient =
-        new ReferralClient(incomingReferralClient.getApprovalNumber(),
-            incomingReferralClient.getApprovalStatusType(),
-            incomingReferralClient.getDispositionClosureReasonType(),
-            incomingReferralClient.getDispositionCode(),
-            incomingReferralClient.getDispositionDate(),
-            incomingReferralClient.getSelfReportedIndicator(),
-            incomingReferralClient.getStaffPersonAddedIndicator(), referralId,
-            o,
-            incomingReferralClient.getDispositionClosureDescription(),
-            incomingReferralClient.getAgeNumber(), incomingReferralClient.getAgePeriodCode(),
-            incomingReferralClient.getCountySpecificCode(),
-            incomingReferralClient.getMentalHealthIssuesIndicator(),
-            incomingReferralClient.getAlcoholIndicator(),
-            incomingReferralClient.getDrugIndicator());
+    ReferralClient referralClient = new ReferralClient(incomingReferralClient.getApprovalNumber(),
+        incomingReferralClient.getApprovalStatusType(),
+        incomingReferralClient.getDispositionClosureReasonType(),
+        incomingReferralClient.getDispositionCode(), incomingReferralClient.getDispositionDate(),
+        incomingReferralClient.getSelfReportedIndicator(),
+        incomingReferralClient.getStaffPersonAddedIndicator(), referralId, o,
+        incomingReferralClient.getDispositionClosureDescription(),
+        incomingReferralClient.getAgeNumber(), incomingReferralClient.getAgePeriodCode(),
+        incomingReferralClient.getCountySpecificCode(),
+        incomingReferralClient.getMentalHealthIssuesIndicator(),
+        incomingReferralClient.getAlcoholIndicator(), incomingReferralClient.getDrugIndicator());
     referralClient = this.referralClientService.create(referralClient);
     resultReferralClient.add(referralClient);
     clientInst++;
@@ -194,30 +190,26 @@ public class CmsReferralService implements CrudsService {
   }
 
   private void saveAllegations(CmsReferral cmsReferral, String referralId,
-     Set<PostedAllegation> resultAllegation) {
-     if (cmsReferral.getAllegation() != null && !cmsReferral.getAllegation().isEmpty()) {
-       for (Allegation incomingAllegation : cmsReferral.getAllegation()) {
-         saveAllegation(referralId, resultAllegation, incomingAllegation);
-       }
+      Set<PostedAllegation> resultAllegation) {
+    if (cmsReferral.getAllegation() != null && !cmsReferral.getAllegation().isEmpty()) {
+      for (Allegation incomingAllegation : cmsReferral.getAllegation()) {
+        saveAllegation(referralId, resultAllegation, incomingAllegation);
+      }
     }
   }
 
   private void saveAllegation(String referralId, Set<PostedAllegation> resultAllegation,
       Allegation incomingAllegation) {
     Allegation allegation = new Allegation(incomingAllegation.getAbuseEndDate(),
-        incomingAllegation.getAbuseFrequency(),
-        incomingAllegation.getAbuseFrequencyPeriodCode(),
-        incomingAllegation.getAbuseLocationDescription(),
-        incomingAllegation.getAbuseStartDate(),
-        incomingAllegation.getAllegationDispositionType(),
-        incomingAllegation.getAllegationType(), incomingAllegation.getDispositionDescription(),
-        incomingAllegation.getDispositionDate(),
+        incomingAllegation.getAbuseFrequency(), incomingAllegation.getAbuseFrequencyPeriodCode(),
+        incomingAllegation.getAbuseLocationDescription(), incomingAllegation.getAbuseStartDate(),
+        incomingAllegation.getAllegationDispositionType(), incomingAllegation.getAllegationType(),
+        incomingAllegation.getDispositionDescription(), incomingAllegation.getDispositionDate(),
         incomingAllegation.getInjuryHarmDetailIndicator(),
         incomingAllegation.getNonProtectingParentCode(),
-        incomingAllegation.getStaffPersonAddedIndicator(),
-        incomingAllegation.getVictimClientId(), incomingAllegation.getPerpetratorClientId(),
-        referralId, incomingAllegation.getCountySpecificCode(),
-        incomingAllegation.getZippyCreatedIndicator(),
+        incomingAllegation.getStaffPersonAddedIndicator(), incomingAllegation.getVictimClientId(),
+        incomingAllegation.getPerpetratorClientId(), referralId,
+        incomingAllegation.getCountySpecificCode(), incomingAllegation.getZippyCreatedIndicator(),
         incomingAllegation.getPlacementFacilityType());
     PostedAllegation postedallegation = this.allegationService.create(allegation);
     resultAllegation.add(postedallegation);
@@ -241,19 +233,17 @@ public class CmsReferralService implements CrudsService {
 
     if (savedClient == null) {
       Client client = new Client(incomingClient.getExistingClientId(),
-          incomingClient.getLastUpdatedTime(),
-          incomingClient.getAdjudicatedDelinquentIndicator(),
+          incomingClient.getLastUpdatedTime(), incomingClient.getAdjudicatedDelinquentIndicator(),
           incomingClient.getAdoptionStatusCode(), incomingClient.getAlienRegistrationNumber(),
           incomingClient.getBirthCity(), incomingClient.getBirthCountryCodeType(),
           incomingClient.getBirthDate(), incomingClient.getBirthFacilityName(),
-          incomingClient.getBirthStateCodeType(),
-          incomingClient.getBirthplaceVerifiedIndicator(),
+          incomingClient.getBirthStateCodeType(), incomingClient.getBirthplaceVerifiedIndicator(),
           incomingClient.getChildClientIndicatorVar(), incomingClient.getClientIndexNumber(),
           incomingClient.getCommentDescription(), incomingClient.getCommonFirstName(),
           incomingClient.getCommonMiddleName(), incomingClient.getCommonLastName(),
           incomingClient.getConfidentialityActionDate(),
-          incomingClient.getConfidentialityInEffectIndicator(),
-          incomingClient.getCreationDate(), incomingClient.getCurrCaChildrenServIndicator(),
+          incomingClient.getConfidentialityInEffectIndicator(), incomingClient.getCreationDate(),
+          incomingClient.getCurrCaChildrenServIndicator(),
           incomingClient.getCurrentlyOtherDescription(),
           incomingClient.getCurrentlyRegionalCenterIndicator(), incomingClient.getDeathDate(),
           incomingClient.getDeathDateVerifiedIndicator(), incomingClient.getDeathPlace(),
@@ -261,10 +251,10 @@ public class CmsReferralService implements CrudsService {
           incomingClient.getDriverLicenseStateCodeType(), incomingClient.getEmailAddress(),
           incomingClient.getEstimatedDobCode(), incomingClient.getEthUnableToDetReasonCode(),
           incomingClient.getFatherParentalRightTermDate(), incomingClient.getGenderCode(),
-          incomingClient.getHealthSummaryText(), incomingClient.getHispUnableToDetReasonCode(),
-          incomingClient.getHispanicOriginCode(),
-          incomingClient.getImmigrationCountryCodeType(),
-          incomingClient.getImmigrationStatusType(),
+          incomingClient.getGenderIdentityType(), incomingClient.getGiNotListedDescription(),
+          incomingClient.getGenderExpressionType(), incomingClient.getHealthSummaryText(),
+          incomingClient.getHispUnableToDetReasonCode(), incomingClient.getHispanicOriginCode(),
+          incomingClient.getImmigrationCountryCodeType(), incomingClient.getImmigrationStatusType(),
           incomingClient.getIncapacitatedParentCode(),
           incomingClient.getIndividualHealthCarePlanIndicator(),
           incomingClient.getLimitationOnScpHealthIndicator(), incomingClient.getLiterateCode(),
@@ -273,14 +263,14 @@ public class CmsReferralService implements CrudsService {
           incomingClient.getMotherParentalRightTermDate(),
           incomingClient.getNamePrefixDescription(), incomingClient.getNameType(),
           incomingClient.getOutstandingWarrantIndicator(),
-          incomingClient.getPrevCaChildrenServIndicator(),
-          incomingClient.getPrevOtherDescription(),
-          incomingClient.getPrevRegionalCenterIndicator(),
-          incomingClient.getPrimaryEthnicityType(), incomingClient.getPrimaryLanguage(),
-          incomingClient.getReligionType(), incomingClient.getSecondaryLanguage(),
+          incomingClient.getPrevCaChildrenServIndicator(), incomingClient.getPrevOtherDescription(),
+          incomingClient.getPrevRegionalCenterIndicator(), incomingClient.getPrimaryEthnicityType(),
+          incomingClient.getPrimaryLanguage(), incomingClient.getReligionType(),
+          incomingClient.getSecondaryLanguage(),
           incomingClient.getSensitiveHlthInfoOnFileIndicator(),
-          incomingClient.getSensitivityIndicator(), incomingClient.getSoc158PlacementCode(),
-          incomingClient.getSoc158SealedClientIndicator(),
+          incomingClient.getSensitivityIndicator(), incomingClient.getSexualOrientationType(),
+          incomingClient.getSoUnableToDetermineCode(), incomingClient.getSoNotListedDescrption(),
+          incomingClient.getSoc158PlacementCode(), incomingClient.getSoc158SealedClientIndicator(),
           incomingClient.getSocialSecurityNumChangedCode(),
           incomingClient.getSocialSecurityNumber(), incomingClient.getSuffixTitleDescription(),
           incomingClient.getTribalAncestryClientIndicatorVar(),
