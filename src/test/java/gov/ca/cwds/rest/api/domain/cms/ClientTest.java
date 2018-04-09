@@ -862,7 +862,6 @@ public class ClientTest implements DomainTestTemplate {
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-    System.out.println(response.readEntity(String.class));
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
