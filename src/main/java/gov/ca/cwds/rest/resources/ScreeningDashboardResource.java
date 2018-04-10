@@ -74,8 +74,7 @@ public class ScreeningDashboardResource {
           value = "List of screening decisions") final List<String> screeningDecision,
       @QueryParam("referral_id") @ApiParam(required = true,
           name = "referral_id") final String referralId) {
-    gov.ca.cwds.rest.api.Response screenings = screeningService
-        .findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
+    gov.ca.cwds.rest.api.Response screenings = screeningService.findScreeningDashboard();
     return new ResponseConverter().withDataResponse(screenings);
   }
 

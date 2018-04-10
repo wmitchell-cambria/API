@@ -58,18 +58,16 @@ public class ScreeningService implements CrudsService {
     throw new NotImplementedException("Find is not implemented");
   }
 
-  public Response findScreeningDashboard(List<String> screeningDecisionDetail,
-      List<String> screeningDecision, String referralId) {
+  public Response findScreeningDashboard() {
     final String staffId = RequestExecutionContext.instance().getStaffId();
 
-    return getScreeningsOfUser(staffId, screeningDecisionDetail, screeningDecision, referralId);
+    return getScreeningsOfUser(staffId);
   }
 
-  private ScreeningDashboardList getScreeningsOfUser(String staffId,
-      List<String> screeningDecisionDetail, List<String> screeningDecision, String referralId) {
+  private ScreeningDashboardList getScreeningsOfUser(String staffId) {
 
-    List<ScreeningDashboard> screeningDashboard = new ArrayList<>();
     List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
+    List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
     for (ScreeningWrapper screening : screenings) {
       ScreeningDashboard aScreening = new ScreeningDashboard(screening);
       screeningDashboard.add(aScreening);
