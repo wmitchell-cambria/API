@@ -22,7 +22,7 @@ import org.joda.time.format.DateTimeFormatter;
 @JsonSnakeCase
 @JsonPropertyOrder({"legacy_id", "legacy_ui_id", "legacy_last_updated", "legacy_table_name",
     "legacy_table_description"})
-public class LegacyDescriptor implements Serializable {
+public class LegacyDescriptor extends DomainObject {
 
   /**
    *
@@ -40,7 +40,7 @@ public class LegacyDescriptor implements Serializable {
   private String uiId;
 
   @JsonProperty("legacy_last_updated")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIMESTAMP_ISO8601_FORMAT)
   @ApiModelProperty(required = false, readOnly = false, value = "CWS/CMS Last Updated Time",
       example = "2010-10-01T15:26:42.000-0700")
   private DateTime lastUpdated;
@@ -88,8 +88,7 @@ public class LegacyDescriptor implements Serializable {
     this.id = legacyDescriptorEntity.getLegacyId();
     this.uiId = legacyDescriptorEntity.getLegacyUiId();
     if (legacyDescriptorEntity.getLegacyLastUpdated() != null) {
-      DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-      this.lastUpdated = formatter.parseDateTime(legacyDescriptorEntity.getLegacyLastUpdated());
+      this.lastUpdated = DateTimeFormat.forPattern(TIMESTAMP_ISO8601_FORMAT).parseDateTime(legacyDescriptorEntity.getLegacyLastUpdated());
     }
     this.tableName = legacyDescriptorEntity.getLegacyTableName();
     this.tableDescription = legacyDescriptorEntity.getLegacyTableDescription();

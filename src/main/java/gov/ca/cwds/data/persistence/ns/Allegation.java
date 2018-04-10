@@ -9,14 +9,27 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 
+import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_PERPETRATOR_ID;
+import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_VICTIM_ID;
+import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_VICTIM_OR_PERPETRATOR_ID;
+
+@NamedQuery(name = FIND_BY_VICTIM_ID,
+    query = "FROM Allegation a WHERE a.victimId = :victimId")
+@NamedQuery(name = FIND_BY_PERPETRATOR_ID,
+    query = "FROM Allegation a WHERE a.perpetratorId = :perpetratorId")
+@NamedQuery(name = FIND_BY_VICTIM_OR_PERPETRATOR_ID,
+    query = "FROM Allegation a WHERE a.victimId = :id OR a.perpetratorId = :id")
 @Entity
 @Table(name = "allegations")
 public class Allegation implements PersistentObject {
+  public static final String FIND_BY_VICTIM_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByVictimId";
+  public static final String FIND_BY_PERPETRATOR_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByPerpetratorId";
+  public static final String FIND_BY_VICTIM_OR_PERPETRATOR_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByVictimOrPerpetratorId";
 
   @Id
   @Column(name = "id")

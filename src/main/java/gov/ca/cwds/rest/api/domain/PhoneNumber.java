@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -41,6 +42,16 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneNumber persistence level address object
    */
   public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumber phoneNumber) {
+    this.number = phoneNumber.getNumber();
+    this.type = phoneNumber.getType();
+  }
+
+  /**
+   * Construct from persistence class
+   *
+   * @param phoneNumber persistence level address object
+   */
+  public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumbers phoneNumber) {
     this.number = phoneNumber.getNumber();
     this.type = phoneNumber.getType();
   }

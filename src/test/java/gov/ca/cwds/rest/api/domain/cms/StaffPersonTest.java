@@ -1091,7 +1091,7 @@ public class StaffPersonTest {
   }
 
   /*
-   * Utils
+   * utils
    */
   private StaffPerson validStaffPerson() {
     return new StaffPerson("2016-10-31", "John", "CEO", "Doe", "C", "Mr",

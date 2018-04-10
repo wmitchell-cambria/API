@@ -187,10 +187,10 @@ public class HOIScreeningServiceTest {
     switch (participantId) {
       case DEFAULT_PERSON_ID:
         return new LegacyDescriptorEntity(DEFAULT_PERSON_ID, "jhdgfkhaj-hohj-jkj",
-            LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription(), null);
+            LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription(), null, LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT, 1L);
       case DEFAULT_REPORTER_ID:
         return new LegacyDescriptorEntity(DEFAULT_REPORTER_ID, "reporterabc-hohj-jkj",
-            LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription(), null);
+            LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription(),null,  LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT, 2L);
       default:
         return null;
     }

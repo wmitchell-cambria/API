@@ -146,6 +146,11 @@ public final class Api {
   public static final String RESOURCE_PARTICIPANTS = "participants";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS} API..
+   */
+  public static final String RESOURCE_PARTICIPANTS_INTAKE_API = "participants_intakeapi";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_PEOPLE} API..
    */
   public static final String RESOURCE_PEOPLE = "people";

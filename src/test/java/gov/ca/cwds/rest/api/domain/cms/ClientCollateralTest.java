@@ -306,7 +306,7 @@ public class ClientCollateralTest {
   }
 
   /*
-   * Utils
+   * utils
    */
   private ClientCollateral validClientCollateral() {
     return new ClientCollateral(activeIndicator, collateralClientReporterRelationshipType,

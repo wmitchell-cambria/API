@@ -389,7 +389,7 @@ public class ClientRelationshipTest {
   }
 
   /*
-   * Utils
+   * utils
    */
   private ClientRelationship validClientRelationship() {
     return new ClientRelationship(absentParentCode, clientRelationshipType, endDate,
