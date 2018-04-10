@@ -1,38 +1,35 @@
 package gov.ca.cwds.data.persistence.ns;
-import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 @Entity
-@NamedQuery(
-	name = "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser",
-	query = "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser",
+    query = "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at")
 
 @Table(name = "screenings")
 
-public class ScreeningWrapper implements Serializable{
+public class ScreeningWrapper implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "id")
   private String id;
-  
+
   @Column(name = "reference")
   private String reference;
-  
+
   @Column(name = "name")
   private String name;
 
@@ -51,19 +48,19 @@ public class ScreeningWrapper implements Serializable{
   @Column(name = "started_at")
   @Temporal(TemporalType.TIMESTAMP)
   private Date startedAt;
-  
+
   public ScreeningWrapper() {}
-  
-  public ScreeningWrapper( String id, String reference, String name, String screeningDecision,
-	  String screeningDecisionDetail, String assignee, String assigneeStaffId, Date startedAt) {
-	this.id = id;
-	this.reference = reference;
-	this.name = name;
-	this.screeningDecision = screeningDecision;
-	this.screeningDecisionDetail = screeningDecisionDetail;
-	this.assignee = assignee;
-	this.assigneeStaffId = assigneeStaffId;
-	this.startedAt = freshDate(startedAt);	
+
+  public ScreeningWrapper(String id, String reference, String name, String screeningDecision,
+      String screeningDecisionDetail, String assignee, String assigneeStaffId, Date startedAt) {
+    this.id = id;
+    this.reference = reference;
+    this.name = name;
+    this.screeningDecision = screeningDecision;
+    this.screeningDecisionDetail = screeningDecisionDetail;
+    this.assignee = assignee;
+    this.assigneeStaffId = assigneeStaffId;
+    this.startedAt = freshDate(startedAt);
   }
 
   public String getId() {
@@ -129,6 +126,7 @@ public class ScreeningWrapper implements Serializable{
   public void setStartedAt(Date startedAt) {
     this.startedAt = startedAt;
   }
+
   /**
    * {@inheritDoc}
    *
@@ -148,6 +146,6 @@ public class ScreeningWrapper implements Serializable{
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
-  
-  
+
+
 }
