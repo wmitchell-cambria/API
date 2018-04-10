@@ -28,7 +28,7 @@ public class StaffPersonIdRetriever {
   private static final String DEFAULT_STAFF_ID = "0X5";
   private static final String DEFAULT_USER_ID = "CWDST";
 
-  public StaffPersonIdRetriever() {}
+  StaffPersonIdRetriever() {}
 
   /**
    * Retrieves the Staff Person Id of the current user. Defaults to a hard-coded value if

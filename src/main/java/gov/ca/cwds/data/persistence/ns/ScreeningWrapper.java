@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,11 +18,13 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @NamedQuery(
 	name = "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser",
-	query = "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId")
+	query = "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at")
 
 @Table(name = "screenings")
 
-public class ScreeningWrapper {
+public class ScreeningWrapper implements Serializable{
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "id")

@@ -36,7 +36,7 @@ public class ScreeningDashboardListTest {
   }
   
   @Test
-  public void testConstrutor() throws Exception {
+  public void testConstrutorAndGetter() throws Exception {
 	ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboardArray);
 	assertThat(screeningDashboardList.getScreeningDashboard(), is(equalTo(screeningDashboardArray)));
   }

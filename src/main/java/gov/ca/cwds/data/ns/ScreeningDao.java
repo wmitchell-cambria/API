@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
@@ -81,18 +82,14 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    * Find screenings of current user (staff ID)
    * 
    * @param staffId - staff Id
-   * @param screeningDecisionDetail - list of screening decision details (not used)
-   * @param screeningDecision - list of screening decisions (not used)
-   * @param referralId - referral ID
-   * @return - list of screenings
+   * @return - array of screeningDashboard object
    */
-  public List<ScreeningWrapper> findScreeningsByUserId(String staffId, List<String> screeningDecisionDetail,
-	  List<String> screeningDecision, String referralId) {
+  public List<ScreeningWrapper> findScreeningsByUserId(String staffId) {
 	@SuppressWarnings("unchecked")
 	final Query<ScreeningWrapper> query = this.getSessionFactory()
 		.getCurrentSession()
 		.getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser")
-		.setParameter("staffId", staffId);
+		.setParameter("staffId", staffId, StringType.INSTANCE);
 	return query.list();
   }
   

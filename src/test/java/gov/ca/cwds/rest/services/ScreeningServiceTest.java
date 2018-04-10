@@ -155,7 +155,6 @@ public class ScreeningServiceTest {
   
   @Test
   public void testFindScreeningDashboard() throws Exception {
-	final String staffId = RequestExecutionContext.instance().getStaffId();
 	final List<String> screeningDecisionDetail = new ArrayList<>();
 	final List<String> screeningDecision = new ArrayList<>();
 	final String referralId = "";
@@ -165,7 +164,7 @@ public class ScreeningServiceTest {
 	List<ScreeningWrapper> screenings = new ArrayList<>();
 	screenings.add(sw1);
 	screenings.add(sw2);
-	when(screeningDao.findScreeningsByUserId(any(), any(), any(), any()))
+	when(screeningDao.findScreeningsByUserId(any()))
 		.thenReturn(screenings);
 	
 	ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
@@ -175,13 +174,12 @@ public class ScreeningServiceTest {
   
   @Test
   public void testFindScreeningDashboardWhenEmptyShouldBeZero() throws Exception {
-	final String staffId = RequestExecutionContext.instance().getStaffId();
 	final List<String> screeningDecisionDetail = new ArrayList<>();
 	final List<String> screeningDecision = new ArrayList<>();
 	final String referralId = "";
 	List<ScreeningWrapper> screenings = new ArrayList<>();
 	
-	when(screeningDao.findScreeningsByUserId(any(), any(), any(), any()))
+	when(screeningDao.findScreeningsByUserId(any()))
 	.thenReturn(screenings);
 
 	ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);

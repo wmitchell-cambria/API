@@ -23,7 +23,7 @@ public class ScreeningWrapperTest {
   private Date startedAt;
 
   @Test
-  public void testConstructor() throws Exception {
+  public void testConstructorAndGetters() throws Exception {
 	ScreeningWrapper screeningWrapper = new ScreeningWrapper(id, reference, name, screeningDecision,
 		screeningDecisionDetail, assignee, assigneeStaffId, startedAt);
 	assertThat(screeningWrapper.getId(), is(equalTo(id)));
@@ -34,6 +34,30 @@ public class ScreeningWrapperTest {
 	assertThat(screeningWrapper.getAssignee(), is(equalTo(assignee)));
 	assertThat(screeningWrapper.getAssigneeStaffId(), is(equalTo(assigneeStaffId)));
 	assertThat(screeningWrapper.getStartedAt(), is(equalTo(startedAt)));
+  }
+  
+  @Test
+  public void testSetters() throws Exception {
+	
+	ScreeningWrapper screeningWrapper = new ScreeningWrapper(id, reference, name, screeningDecision,
+		screeningDecisionDetail, assignee, assigneeStaffId, startedAt);
+	screeningWrapper.setId("setscreeningid");
+	assertThat(screeningWrapper.getId(), is(equalTo("setscreeningid")));
+	screeningWrapper.setReference("new reference");
+	assertThat(screeningWrapper.getReference(), is(equalTo("new reference")));
+	screeningWrapper.setName("new name");
+	assertThat(screeningWrapper.getName(), is(equalTo("new name")));
+	screeningWrapper.setScreeningDecision("new screening decision");
+	assertThat(screeningWrapper.getScreeningDecision(), is(equalTo("new screening decision")));
+	screeningWrapper.setScreeningDecisionDetail("new screening decision detail");
+	assertThat(screeningWrapper.getScreeningDecisionDetail(), is(equalTo("new screening decision detail")));
+	screeningWrapper.setAssignee("new assignee");
+	assertThat(screeningWrapper.getAssignee(), is(equalTo("new assignee")));
+	screeningWrapper.setAssigneeStaffId("new staff id");
+	assertThat(screeningWrapper.getAssigneeStaffId(), is(equalTo("new staff id")));
+	startedAt = new Date();
+	screeningWrapper.setStartedAt(startedAt);
+	assertThat(screeningWrapper.getStartedAt(), is(equalTo(startedAt)));	
   }
   
   @Test
