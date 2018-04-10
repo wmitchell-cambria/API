@@ -30,18 +30,15 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
- * This service handle request from the user to get all the referral involved for the client given.
+ * This service handles retrieves all referrals by client.
  * <p>
  * 
  * @author CWDS API Team
- *
  */
 public class HOIReferralService
-    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
+    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse>
+    implements SensitiveClientOverride {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   private ClientDao clientDao;
@@ -178,7 +175,9 @@ public class HOIReferralService
   }
 
   String authorizeClient(String clientId) {
-    authorizationService.ensureClientAccessAuthorized(clientId);
+    if (!developmentOnlyClientSensitivityOverride()) {
+      authorizationService.ensureClientAccessAuthorized(clientId);
+    }
     return clientId;
   }
 

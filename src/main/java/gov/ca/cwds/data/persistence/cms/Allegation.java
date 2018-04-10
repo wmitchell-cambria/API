@@ -124,9 +124,9 @@ public class Allegation extends CmsPersistentObject {
   @JoinColumn(name = "FKCLIENT_0", nullable = true, insertable = false, updatable = false)
   private Client perpetratorClients;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
-  private Referral referral;
+  // @ManyToOne(optional = false)
+  // @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
+  // private Referral referral;
 
   /**
    * Default constructor
@@ -390,9 +390,9 @@ public class Allegation extends CmsPersistentObject {
     return perpetratorClients;
   }
 
-  public Referral getReferral() {
-    return this.referral;
-  }
+  // public Referral getReferral() {
+  // return this.referral;
+  // }
 
   @Override
   public String toString() {

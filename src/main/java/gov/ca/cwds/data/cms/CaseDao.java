@@ -3,6 +3,7 @@ package gov.ca.cwds.data.cms;
 import java.util.Collection;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
 
@@ -51,8 +52,9 @@ public class CaseDao extends CrudsDaoImpl<CmsCase> {
    */
   @SuppressWarnings("unchecked")
   public CmsCase[] findAllRelatedByVictimClientId(String clientId) {
-    final Query<CmsCase> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId");
+    final NativeQuery<CmsCase> query =
+        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
+            "gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId");
     query.setParameter("clientId", clientId, StringType.INSTANCE);
     return query.list().toArray(new CmsCase[0]);
   }

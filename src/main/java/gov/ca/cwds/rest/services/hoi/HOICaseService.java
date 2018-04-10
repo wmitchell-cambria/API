@@ -44,9 +44,9 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  * <p>
  * 
  * @author CWDS API Team
- *
  */
-public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, HOICaseResponse> {
+public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, HOICaseResponse>
+    implements SensitiveClientOverride {
 
   /**
    * Serial Version UID
@@ -212,7 +212,9 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   String authorizeClient(String clientId) {
-    authorizationService.ensureClientAccessAuthorized(clientId);
+    if (!developmentOnlyClientSensitivityOverride()) {
+      authorizationService.ensureClientAccessAuthorized(clientId);
+    }
     return clientId;
   }
 
