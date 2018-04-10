@@ -52,6 +52,7 @@ public class InvolvementHistoryService
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   public Response find(String screeningId) {
     return findInvolvementHistoryByScreeningId(screeningId);
   }
@@ -72,6 +73,7 @@ public class InvolvementHistoryService
    * @param clientIds - clientIds
    * @return the history of involvement for the clients
    */
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   public InvolvementHistory findInvolvementHistoryByClientIds(Set<String> clientIds) {
     if (!clientIds.isEmpty()) {
       List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
@@ -101,7 +103,6 @@ public class InvolvementHistoryService
         .collect(Collectors.toList());
   }
 
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   protected List<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
     HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(clientIds);
@@ -111,7 +112,6 @@ public class InvolvementHistoryService
     return hoiReferrals;
   }
 
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   protected List<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
     HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(clientIds);
