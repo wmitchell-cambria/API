@@ -10,13 +10,16 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import gov.ca.cwds.rest.api.Response;
+
 import io.dropwizard.jackson.JsonSnakeCase;
 
 /**
- * Container of {@link ScreeningDashboard} objects, represented as an unnamed array.
+ * Container of {@link ScreeningDashboard} objects, represented as an unnamed
+ * array.
  *
- * Jackson best practice: annotation, {@code @JsonValue}, on getter {@link #getScreeningDashboard()},
- * serializes this object as an unnamed array of ScreeningDashboard objects.
+ * Jackson best practice: annotation, {@code @JsonValue}, on getter
+ * {@link #getScreeningDashboard()}, serializes this object as an unnamed array
+ * of ScreeningDashboard objects.
  * 
  * @author CWDS API Team
  */
@@ -27,19 +30,20 @@ public class ScreeningDashboardList extends ReportingDomain implements Response 
 
   private static final long serialVersionUID = 1L;
   private List<ScreeningDashboard> screeningDashboard;
-  
+
   public ScreeningDashboardList() {
 	super();
   }
-  
+
   public ScreeningDashboardList(List<ScreeningDashboard> screeningDashboard) {
 	super();
 	this.screeningDashboard = screeningDashboard;
   }
-    
+
   /**
-   * Jackson best practice: annotation, {@code @JsonValue}, on this getter tells Jackson to
-   * serialize this object as an unnamed array of ScreeningDashboard objects.
+   * Jackson best practice: annotation, {@code @JsonValue}, on this getter tells
+   * Jackson to serialize this object as an unnamed array of ScreeningDashboard
+   * objects.
    * 
    * @return - allegations of an investigation
    */
@@ -47,7 +51,7 @@ public class ScreeningDashboardList extends ReportingDomain implements Response 
   public List<ScreeningDashboard> getScreeningDashboard() {
 	return screeningDashboard;
   }
-  
+
   /**
    * {@inheritDoc}
    *
@@ -55,7 +59,7 @@ public class ScreeningDashboardList extends ReportingDomain implements Response 
    */
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
+	return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   /**
@@ -65,7 +69,7 @@ public class ScreeningDashboardList extends ReportingDomain implements Response 
    */
   @Override
   public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
+	return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

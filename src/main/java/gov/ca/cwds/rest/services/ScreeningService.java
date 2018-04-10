@@ -3,20 +3,15 @@ package gov.ca.cwds.rest.services;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
@@ -39,16 +34,17 @@ public class ScreeningService implements CrudsService {
 
   private ElasticsearchDao esDao;
   private ScreeningDao screeningDao;
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningService.class);
 
   /**
    * Construct the object
    * 
    * @param esDao Screenings ES DAO
+   * @param screeningDao - Screening DAO
    */
   @Inject
-  public ScreeningService(@Named("screenings.index") ElasticsearchDao esDao, ScreeningDao screeningDao) {
-	this.esDao = esDao;
+  public ScreeningService(@Named("screenings.index") ElasticsearchDao esDao,
+      ScreeningDao screeningDao) {
+    this.esDao = esDao;
     this.screeningDao = screeningDao;
   }
 
@@ -61,27 +57,27 @@ public class ScreeningService implements CrudsService {
   public Response find(Serializable primaryKey) {
     throw new NotImplementedException("Find is not implemented");
   }
-  
-  public Response findScreeningDashboard(List<String> screeningDecisionDetail, List<String> screeningDecision, String referralId) {
-	final String staffId = RequestExecutionContext.instance().getStaffId();
-	
-	return getScreeningsOfUser(staffId, screeningDecisionDetail,
-		screeningDecision, referralId);
+
+  public Response findScreeningDashboard(List<String> screeningDecisionDetail,
+      List<String> screeningDecision, String referralId) {
+    final String staffId = RequestExecutionContext.instance().getStaffId();
+
+    return getScreeningsOfUser(staffId, screeningDecisionDetail, screeningDecision, referralId);
   }
 
-  private ScreeningDashboardList getScreeningsOfUser(String staffId, List<String> screeningDecisionDetail,
-	  List<String> screeningDecision, String referralId) {
-	
-	List<ScreeningDashboard> screeningDashboard = new ArrayList<>();
-	List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
-	for (ScreeningWrapper screening: screenings) {
-	  ScreeningDashboard aScreening = new ScreeningDashboard(screening);
-	  screeningDashboard.add(aScreening);
-	}
-	ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboard);
-	return screeningDashboardList;	
+  private ScreeningDashboardList getScreeningsOfUser(String staffId,
+      List<String> screeningDecisionDetail, List<String> screeningDecision, String referralId) {
+
+    List<ScreeningDashboard> screeningDashboard = new ArrayList<>();
+    List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
+    for (ScreeningWrapper screening : screenings) {
+      ScreeningDashboard aScreening = new ScreeningDashboard(screening);
+      screeningDashboard.add(aScreening);
+    }
+    ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboard);
+    return screeningDashboardList;
   }
-  
+
   /**
    * {@inheritDoc}
    * 

@@ -1,9 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
-
 import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,11 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.apache.http.HttpStatus;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.ScreeningService;
@@ -27,11 +22,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link Resource}. It delegates functions
- * to {@link ScreeningService}.
+ * A resource providing a RESTful interface for {@link Resource}. It delegates functions to
+ * {@link ScreeningService}.
  * <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
  * Annotations</a> and
- * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
+ * <a href= "https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
  *
  * @author CWDS API Team
@@ -43,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ScreeningDashboardResource {
   private ScreeningService screeningService;
-  
+
   /**
    * Constructor
    *
@@ -51,9 +46,9 @@ public class ScreeningDashboardResource {
    */
   @Inject
   public ScreeningDashboardResource(ScreeningService screeningService) {
-	this.screeningService = screeningService;
+    this.screeningService = screeningService;
   }
-  
+
   /**
    * Get list of Screenings (dash board)
    * 
@@ -72,11 +67,16 @@ public class ScreeningDashboardResource {
   @ApiOperation(value = "Returns screening summary", code = HttpStatus.SC_OK,
       response = ScreeningDashboard.class)
   public Response getScreenings(
-	  @QueryParam("screening_decision_detail") @ApiParam(required = true, name = "screening_decision_detail", value = "List of screening decision detail") final List<String> screeningDecisionDetail,
-	  @QueryParam("screening_decision") @ApiParam(required = true, name = "screening_decision", value = "List of screening decisions") final List<String> screeningDecision,
-	  @QueryParam("referral_id") @ApiParam(required = true, name = "referral_id") final String referralId) {
-	gov.ca.cwds.rest.api.Response screenings = screeningService.findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
-	return new ResponseConverter().withDataResponse(screenings);
+      @QueryParam("screening_decision_detail") @ApiParam(required = true,
+          name = "screening_decision_detail",
+          value = "List of screening decision detail") final List<String> screeningDecisionDetail,
+      @QueryParam("screening_decision") @ApiParam(required = true, name = "screening_decision",
+          value = "List of screening decisions") final List<String> screeningDecision,
+      @QueryParam("referral_id") @ApiParam(required = true,
+          name = "referral_id") final String referralId) {
+    gov.ca.cwds.rest.api.Response screenings = screeningService
+        .findScreeningDashboard(screeningDecisionDetail, screeningDecision, referralId);
+    return new ResponseConverter().withDataResponse(screenings);
   }
 
 }

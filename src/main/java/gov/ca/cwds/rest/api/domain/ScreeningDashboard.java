@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
+
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -25,8 +26,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonInclude(Include.ALWAYS)
 @JsonSnakeCase
-@JsonPropertyOrder({"id", "reference", "name", "screening_decision", "screening_decision_detail", "assignee",
-    "assignee_staff_id", "started_at"})
+@JsonPropertyOrder({ "id", "reference", "name", "screening_decision", "screening_decision_detail", "assignee",
+	"assignee_staff_id", "started_at" })
 
 public class ScreeningDashboard extends ReportingDomain {
 
@@ -37,8 +38,7 @@ public class ScreeningDashboard extends ReportingDomain {
   private String id;
 
   @JsonProperty("reference")
-  @ApiModelProperty(required = false, readOnly = false, value = "Screening Reference",
-      example = "Screening Reference")
+  @ApiModelProperty(required = false, readOnly = false, value = "Screening Reference", example = "Screening Reference")
   private String reference;
 
   @JsonProperty("name")
@@ -54,44 +54,46 @@ public class ScreeningDashboard extends ReportingDomain {
   private String screeningDecisionDetail;
 
   @JsonProperty("assignee")
-  @ApiModelProperty(required = false, readOnly = false, value = "Screening Assignee",
-      example = "Test User")
+  @ApiModelProperty(required = false, readOnly = false, value = "Screening Assignee", example = "Test User")
   private String assignee;
 
   @JsonProperty("assignee_staff_id")
-  @ApiModelProperty(required = true, readOnly = false, value = "Screening Assignee Id",
-      example = "aab")
+  @ApiModelProperty(required = true, readOnly = false, value = "Screening Assignee Id", example = "aab")
   private String assigneeStaffId;
 
   @JsonProperty("started_at")
-  @ApiModelProperty(required = false, readOnly = false, value = "",
-      example = "2018-03-029T16:48:05.457Z")
+  @ApiModelProperty(required = false, readOnly = false, value = "", example = "2018-03-029T16:48:05.457Z")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT)
   private Date startedAt;
-  
+
   public ScreeningDashboard() {
-	super();	
+	super();
   }
-    
+
   /**
    *
-   * @param id - screening id
-   * @param reference - reference
-   * @param name - screening name
-   * @param screeningDecision - screening decision
-   * @param screeningDecisionDetail - screening decision detail
-   * @param assignee - assignee
-   * @param assigneeStaffId - assignee staff id
-   * @param startedAt = started at
+   * @param id
+   *          - screening id
+   * @param reference
+   *          - reference
+   * @param name
+   *          - screening name
+   * @param screeningDecision
+   *          - screening decision
+   * @param screeningDecisionDetail
+   *          - screening decision detail
+   * @param assignee
+   *          - assignee
+   * @param assigneeStaffId
+   *          - assignee staff id
+   * @param startedAt
+   *          = started at
    */
   @JsonCreator
-  public ScreeningDashboard(@JsonProperty("id") String id,
-	  @JsonProperty("reference") String reference,
-	  @JsonProperty("name") String name,
-	  @JsonProperty("screening_decision") String screeningDecision,
+  public ScreeningDashboard(@JsonProperty("id") String id, @JsonProperty("reference") String reference,
+	  @JsonProperty("name") String name, @JsonProperty("screening_decision") String screeningDecision,
 	  @JsonProperty("screening_decision_detail") String screeningDecisionDetail,
-	  @JsonProperty("assignee") String assignee,
-	  @JsonProperty("assignee_staff_id") String assigneeStaffId,
+	  @JsonProperty("assignee") String assignee, @JsonProperty("assignee_staff_id") String assigneeStaffId,
 	  @JsonProperty("started_at") Date startedAt) {
 	super();
 	this.id = id;
@@ -114,39 +116,39 @@ public class ScreeningDashboard extends ReportingDomain {
 	this.assigneeStaffId = screening.getAssigneeStaffId();
 	this.startedAt = screening.getStartedAt();
   }
-  
+
   public String getId() {
-    return id;
+	return id;
   }
 
   public String getReference() {
-    return reference;
+	return reference;
   }
 
   public String getName() {
-    return name;
+	return name;
   }
 
   public String getScreeningDecision() {
-    return screeningDecision;
+	return screeningDecision;
   }
 
   public String getScreeningDecisionDetail() {
-    return screeningDecisionDetail;
+	return screeningDecisionDetail;
   }
 
   public String getAssignee() {
-    return assignee;
+	return assignee;
   }
 
   public String getAssigneeStaffId() {
-    return assigneeStaffId;
+	return assigneeStaffId;
   }
 
   public Date getStartedAt() {
-    return freshDate(startedAt);
+	return freshDate(startedAt);
   }
-  
+
   /**
    * {@inheritDoc}
    *
@@ -154,7 +156,7 @@ public class ScreeningDashboard extends ReportingDomain {
    */
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
+	return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   /**
@@ -164,6 +166,6 @@ public class ScreeningDashboard extends ReportingDomain {
    */
   @Override
   public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
+	return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }
