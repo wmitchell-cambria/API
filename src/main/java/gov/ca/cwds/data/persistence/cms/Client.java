@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -362,92 +363,7 @@ public class Client extends BaseClient {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("Client{");
-    sb.append("clientAddress=").append(clientAddress);
-    sb.append(", adjudicatedDelinquentIndicator='").append(adjudicatedDelinquentIndicator)
-        .append('\'');
-    sb.append(", adoptionStatusCode='").append(adoptionStatusCode).append('\'');
-    sb.append(", alienRegistrationNumber='").append(alienRegistrationNumber).append('\'');
-    sb.append(", birthCity='").append(birthCity).append('\'');
-    sb.append(", birthCountryCodeType=").append(birthCountryCodeType);
-    sb.append(", birthDate=").append(birthDate);
-    sb.append(", birthFacilityName='").append(birthFacilityName).append('\'');
-    sb.append(", birthStateCodeType=").append(birthStateCodeType);
-    sb.append(", birthplaceVerifiedIndicator='").append(birthplaceVerifiedIndicator).append('\'');
-    sb.append(", childClientIndicatorVar='").append(childClientIndicatorVar).append('\'');
-    sb.append(", clientIndexNumber='").append(clientIndexNumber).append('\'');
-    sb.append(", commentDescription='").append(commentDescription).append('\'');
-    sb.append(", commonFirstName='").append(commonFirstName).append('\'');
-    sb.append(", commonLastName='").append(commonLastName).append('\'');
-    sb.append(", commonMiddleName='").append(commonMiddleName).append('\'');
-    sb.append(", confidentialityActionDate=").append(confidentialityActionDate);
-    sb.append(", confidentialityInEffectIndicator='").append(confidentialityInEffectIndicator)
-        .append('\'');
-    sb.append(", creationDate=").append(creationDate);
-    sb.append(", currCaChildrenServIndicator='").append(currCaChildrenServIndicator).append('\'');
-    sb.append(", currentlyOtherDescription='").append(currentlyOtherDescription).append('\'');
-    sb.append(", currentlyRegionalCenterIndicator='").append(currentlyRegionalCenterIndicator)
-        .append('\'');
-    sb.append(", deathDate=").append(deathDate);
-    sb.append(", deathDateVerifiedIndicator='").append(deathDateVerifiedIndicator).append('\'');
-    sb.append(", deathPlace='").append(deathPlace).append('\'');
-    sb.append(", deathReasonText='").append(deathReasonText).append('\'');
-    sb.append(", driverLicenseNumber='").append(driverLicenseNumber).append('\'');
-    sb.append(", driverLicenseStateCodeType=").append(driverLicenseStateCodeType);
-    sb.append(", emailAddress='").append(emailAddress).append('\'');
-    sb.append(", estimatedDobCode='").append(estimatedDobCode).append('\'');
-    sb.append(", ethUnableToDetReasonCode='").append(ethUnableToDetReasonCode).append('\'');
-    sb.append(", fatherParentalRightTermDate=").append(fatherParentalRightTermDate);
-    sb.append(", genderCode='").append(genderCode).append('\'');
-    sb.append(", genderIdentityType=").append(genderIdentityType);
-    sb.append(", giNotListedDescription='").append(giNotListedDescription).append('\'');
-    sb.append(", genderExpressionType=").append(genderExpressionType);
-    sb.append(", healthSummaryText='").append(healthSummaryText).append('\'');
-    sb.append(", hispUnableToDetReasonCode='").append(hispUnableToDetReasonCode).append('\'');
-    sb.append(", hispanicOriginCode='").append(hispanicOriginCode).append('\'');
-    sb.append(", id='").append(id).append('\'');
-    sb.append(", immigrationCountryCodeType=").append(immigrationCountryCodeType);
-    sb.append(", immigrationStatusType=").append(immigrationStatusType);
-    sb.append(", incapacitatedParentCode='").append(incapacitatedParentCode).append('\'');
-    sb.append(", individualHealthCarePlanIndicator='").append(individualHealthCarePlanIndicator)
-        .append('\'');
-    sb.append(", limitationOnScpHealthIndicator='").append(limitationOnScpHealthIndicator)
-        .append('\'');
-    sb.append(", literateCode='").append(literateCode).append('\'');
-    sb.append(", maritalCohabitatnHstryIndicatorVar='").append(maritalCohabitatnHstryIndicatorVar)
-        .append('\'');
-    sb.append(", maritalStatusType=").append(maritalStatusType);
-    sb.append(", militaryStatusCode='").append(militaryStatusCode).append('\'');
-    sb.append(", motherParentalRightTermDate=").append(motherParentalRightTermDate);
-    sb.append(", namePrefixDescription='").append(namePrefixDescription).append('\'');
-    sb.append(", nameType=").append(nameType);
-    sb.append(", outstandingWarrantIndicator='").append(outstandingWarrantIndicator).append('\'');
-    sb.append(", prevCaChildrenServIndicator='").append(prevCaChildrenServIndicator).append('\'');
-    sb.append(", prevOtherDescription='").append(prevOtherDescription).append('\'');
-    sb.append(", prevRegionalCenterIndicator='").append(prevRegionalCenterIndicator).append('\'');
-    sb.append(", primaryEthnicityType=").append(primaryEthnicityType);
-    sb.append(", primaryLanguageType=").append(primaryLanguageType);
-    sb.append(", religionType=").append(religionType);
-    sb.append(", secondaryLanguageType=").append(secondaryLanguageType);
-    sb.append(", sensitiveHlthInfoOnFileIndicator='").append(sensitiveHlthInfoOnFileIndicator)
-        .append('\'');
-    sb.append(", sensitivityIndicator='").append(sensitivityIndicator).append('\'');
-    sb.append(", sexualOrientationType=").append(sexualOrientationType);
-    sb.append(", soUnableToDetermineCode='").append(soUnableToDetermineCode).append('\'');
-    sb.append(", soNotListedDescrption='").append(soNotListedDescrption).append('\'');
-    sb.append(", soc158PlacementCode='").append(soc158PlacementCode).append('\'');
-    sb.append(", soc158SealedClientIndicator='").append(soc158SealedClientIndicator).append('\'');
-    sb.append(", socialSecurityNumChangedCode='").append(socialSecurityNumChangedCode).append('\'');
-    sb.append(", socialSecurityNumber='").append(socialSecurityNumber).append('\'');
-    sb.append(", suffixTitleDescription='").append(suffixTitleDescription).append('\'');
-    sb.append(", tribalAncestryClientIndicatorVar='").append(tribalAncestryClientIndicatorVar)
-        .append('\'');
-    sb.append(", tribalMembrshpVerifctnIndicatorVar='").append(tribalMembrshpVerifctnIndicatorVar)
-        .append('\'');
-    sb.append(", unemployedParentCode='").append(unemployedParentCode).append('\'');
-    sb.append(", zippyCreatedIndicator='").append(zippyCreatedIndicator).append('\'');
-    sb.append('}');
-    return sb.toString();
+    return ToStringBuilder.reflectionToString(this);
   }
 
   /**
