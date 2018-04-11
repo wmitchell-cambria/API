@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -88,6 +89,9 @@ public class Client extends BaseClient {
    * @param ethUnableToDetReasonCode The ethUnableToDetReasonCode
    * @param fatherParentalRightTermDate The fatherParentalRightTermDate
    * @param genderCode The genderCode
+   * @param genderIdentityType - genderIdentityType
+   * @param giNotListedDescription - giNotListedDescription
+   * @param genderExpressionType - genderExpressionType
    * @param healthSummaryText The healthSummaryText
    * @param hispUnableToDetReasonCode The hispUnableToDetReasonCode
    * @param hispanicOriginCode The hispanicOriginCode
@@ -114,6 +118,9 @@ public class Client extends BaseClient {
    * @param secondaryLanguageType The secondaryLanguageType
    * @param sensitiveHlthInfoOnFileIndicator The sensitiveHlthInfoOnFileIndicator
    * @param sensitivityIndicator The sensitivityIndicator
+   * @param sexualOrientationType - sexualOrientationType
+   * @param soUnableToDetermineCode - soUnableToDetermineCode
+   * @param soNotListedDescrption - soNotListedDescrption
    * @param soc158PlacementCode The soc158PlacementCode
    * @param soc158SealedClientIndicator The soc158SealedClientIndicator
    * @param socialSecurityNumChangedCode The socialSecurityNumChangedCode
@@ -136,6 +143,7 @@ public class Client extends BaseClient {
       String deathPlace, String deathReasonText, String driverLicenseNumber,
       Short driverLicenseStateCodeType, String emailAddress, String estimatedDobCode,
       String ethUnableToDetReasonCode, Date fatherParentalRightTermDate, String genderCode,
+      Short genderIdentityType, String giNotListedDescription, Short genderExpressionType,
       String healthSummaryText, String hispUnableToDetReasonCode, String hispanicOriginCode,
       String id, Short immigrationCountryCodeType, Short immigrationStatusType,
       String incapacitatedParentCode, String individualHealthCarePlanIndicator,
@@ -146,6 +154,7 @@ public class Client extends BaseClient {
       String prevOtherDescription, String prevRegionalCenterIndicator, Short primaryEthnicityType,
       Short primaryLanguageType, Short religionType, Short secondaryLanguageType,
       String sensitiveHlthInfoOnFileIndicator, String sensitivityIndicator,
+      Short sexualOrientationType, String soUnableToDetermineCode, String soNotListedDescrption,
       String soc158PlacementCode, String soc158SealedClientIndicator,
       String socialSecurityNumChangedCode, String socialSecurityNumber,
       String suffixTitleDescription, String tribalAncestryClientIndicatorVar,
@@ -184,6 +193,9 @@ public class Client extends BaseClient {
     this.ethUnableToDetReasonCode = ethUnableToDetReasonCode;
     this.fatherParentalRightTermDate = freshDate(fatherParentalRightTermDate);
     this.genderCode = genderCode;
+    this.genderIdentityType = genderIdentityType;
+    this.giNotListedDescription = giNotListedDescription;
+    this.genderExpressionType = genderExpressionType;
     this.healthSummaryText = healthSummaryText;
     this.hispUnableToDetReasonCode = hispUnableToDetReasonCode;
     this.hispanicOriginCode = hispanicOriginCode;
@@ -210,6 +222,9 @@ public class Client extends BaseClient {
     this.secondaryLanguageType = secondaryLanguageType;
     this.sensitiveHlthInfoOnFileIndicator = sensitiveHlthInfoOnFileIndicator;
     this.sensitivityIndicator = sensitivityIndicator;
+    this.sexualOrientationType = sexualOrientationType;
+    this.soUnableToDetermineCode = soUnableToDetermineCode;
+    this.soNotListedDescrption = soNotListedDescrption;
     this.soc158PlacementCode = soc158PlacementCode;
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
     this.socialSecurityNumChangedCode = socialSecurityNumChangedCode;
@@ -272,14 +287,19 @@ public class Client extends BaseClient {
       this.driverLicenseStateCodeType = client.getDriverLicenseStateCodeType();
       this.emailAddress = client.getEmailAddress();
       this.estimatedDobCode = client.getEstimatedDobCode();
-      this.ethUnableToDetReasonCode = StringUtils.isBlank(client.getEthUnableToDetReasonCode())
-          ? null : client.getEthUnableToDetReasonCode();
+      this.ethUnableToDetReasonCode =
+          StringUtils.isBlank(client.getEthUnableToDetReasonCode()) ? null
+              : client.getEthUnableToDetReasonCode();
       this.fatherParentalRightTermDate =
           DomainChef.uncookDateString(client.getFatherParentalRightTermDate());
       this.genderCode = client.getGenderCode();
+      this.genderIdentityType = client.getGenderIdentityType();
+      this.giNotListedDescription = client.getGiNotListedDescription();
+      this.genderExpressionType = client.getGenderExpressionType();
       this.healthSummaryText = client.getHealthSummaryText();
-      this.hispUnableToDetReasonCode = StringUtils.isBlank(client.getHispUnableToDetReasonCode())
-          ? null : client.getHispUnableToDetReasonCode();
+      this.hispUnableToDetReasonCode =
+          StringUtils.isBlank(client.getHispUnableToDetReasonCode()) ? null
+              : client.getHispUnableToDetReasonCode();
       this.hispanicOriginCode =
           StringUtils.isBlank(client.getHispanicOriginCode()) ? "" : client.getHispanicOriginCode();
       this.immigrationCountryCodeType = client.getImmigrationCountryCodeType();
@@ -312,6 +332,9 @@ public class Client extends BaseClient {
       this.sensitiveHlthInfoOnFileIndicator =
           DomainChef.cookBoolean(client.getSensitiveHlthInfoOnFileIndicator());
       this.sensitivityIndicator = client.getSensitivityIndicator();
+      this.sexualOrientationType = client.getSexualOrientationType();
+      this.soUnableToDetermineCode = client.getSoUnableToDetermineCode();
+      this.soNotListedDescrption = client.getSoNotListedDescrption();
       this.soc158PlacementCode = client.getSoc158PlacementCode();
       this.soc158SealedClientIndicator =
           DomainChef.cookBoolean(client.getSoc158SealedClientIndicator());
@@ -340,51 +363,7 @@ public class Client extends BaseClient {
 
   @Override
   public String toString() {
-    return "Client [adjudicatedDelinquentIndicator=" + adjudicatedDelinquentIndicator
-        + ", adoptionStatusCode=" + adoptionStatusCode + ", alienRegistrationNumber="
-        + alienRegistrationNumber + ", birthCity=" + birthCity + ", birthCountryCodeType="
-        + birthCountryCodeType + ", birthDate=" + birthDate + ", birthFacilityName="
-        + birthFacilityName + ", birthStateCodeType=" + birthStateCodeType
-        + ", birthplaceVerifiedIndicator=" + birthplaceVerifiedIndicator
-        + ", childClientIndicatorVar=" + childClientIndicatorVar + ", clientIndexNumber="
-        + clientIndexNumber + ", commentDescription=" + commentDescription + ", commonFirstName="
-        + commonFirstName + ", commonLastName=" + commonLastName + ", commonMiddleName="
-        + commonMiddleName + ", confidentialityActionDate=" + confidentialityActionDate
-        + ", confidentialityInEffectIndicator=" + confidentialityInEffectIndicator
-        + ", creationDate=" + creationDate + ", currCaChildrenServIndicator="
-        + currCaChildrenServIndicator + ", currentlyOtherDescription=" + currentlyOtherDescription
-        + ", currentlyRegionalCenterIndicator=" + currentlyRegionalCenterIndicator + ", deathDate="
-        + deathDate + ", deathDateVerifiedIndicator=" + deathDateVerifiedIndicator + ", deathPlace="
-        + deathPlace + ", deathReasonText=" + deathReasonText + ", driverLicenseNumber="
-        + driverLicenseNumber + ", driverLicenseStateCodeType=" + driverLicenseStateCodeType
-        + ", emailAddress=" + emailAddress + ", estimatedDobCode=" + estimatedDobCode
-        + ", ethUnableToDetReasonCode=" + ethUnableToDetReasonCode
-        + ", fatherParentalRightTermDate=" + fatherParentalRightTermDate + ", genderCode="
-        + genderCode + ", healthSummaryText=" + healthSummaryText + ", hispUnableToDetReasonCode="
-        + hispUnableToDetReasonCode + ", hispanicOriginCode=" + hispanicOriginCode + ", id=" + id
-        + ", immigrationCountryCodeType=" + immigrationCountryCodeType + ", immigrationStatusType="
-        + immigrationStatusType + ", incapacitatedParentCode=" + incapacitatedParentCode
-        + ", individualHealthCarePlanIndicator=" + individualHealthCarePlanIndicator
-        + ", limitationOnScpHealthIndicator=" + limitationOnScpHealthIndicator + ", literateCode="
-        + literateCode + ", maritalCohabitatnHstryIndicatorVar="
-        + maritalCohabitatnHstryIndicatorVar + ", maritalStatusType=" + maritalStatusType
-        + ", militaryStatusCode=" + militaryStatusCode + ", motherParentalRightTermDate="
-        + motherParentalRightTermDate + ", namePrefixDescription=" + namePrefixDescription
-        + ", nameType=" + nameType + ", outstandingWarrantIndicator=" + outstandingWarrantIndicator
-        + ", prevCaChildrenServIndicator=" + prevCaChildrenServIndicator + ", prevOtherDescription="
-        + prevOtherDescription + ", prevRegionalCenterIndicator=" + prevRegionalCenterIndicator
-        + ", primaryEthnicityType=" + primaryEthnicityType + ", primaryLanguageType="
-        + primaryLanguageType + ", religionType=" + religionType + ", secondaryLanguageType="
-        + secondaryLanguageType + ", sensitiveHlthInfoOnFileIndicator="
-        + sensitiveHlthInfoOnFileIndicator + ", sensitivityIndicator=" + sensitivityIndicator
-        + ", soc158PlacementCode=" + soc158PlacementCode + ", soc158SealedClientIndicator="
-        + soc158SealedClientIndicator + ", socialSecurityNumChangedCode="
-        + socialSecurityNumChangedCode + ", socialSecurityNumber=" + socialSecurityNumber
-        + ", suffixTitleDescription=" + suffixTitleDescription
-        + ", tribalAncestryClientIndicatorVar=" + tribalAncestryClientIndicatorVar
-        + ", tribalMembrshpVerifctnIndicatorVar=" + tribalMembrshpVerifctnIndicatorVar
-        + ", unemployedParentCode=" + unemployedParentCode + ", zippyCreatedIndicator="
-        + zippyCreatedIndicator + "]";
+    return ToStringBuilder.reflectionToString(this);
   }
 
   /**

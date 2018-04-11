@@ -19,6 +19,7 @@ import gov.ca.cwds.data.persistence.cms.OtherClientName;
 import gov.ca.cwds.data.persistence.cms.SubstituteCareProvider;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 
 /**
  * Hibernate DAO for DB2 Stored Procedure.
@@ -49,9 +50,9 @@ public class SsaName3Dao {
    * @param address address
    */
   public void addressSsaname3(String crudOperation, Address address) {
-    callStoredProc("ADR_PHTT", crudOperation, address.getId(), "A", " ", " ", " ",
-        address.getStreetNumber(), address.getStreetName(), address.getGovernmentEntityCd(),
-        address.getLastUpdatedTime(), address.getLastUpdatedId());
+    callStoredProc(LegacyTable.ADDRESS_PHONETIC.getName(), crudOperation, address.getId(), "A", " ",
+        " ", " ", address.getStreetNumber(), address.getStreetName(),
+        address.getGovernmentEntityCd(), address.getLastUpdatedTime(), address.getLastUpdatedId());
   }
 
   /**
@@ -59,9 +60,9 @@ public class SsaName3Dao {
    * @param client client
    */
   public void clientSsaname3(String crudOperation, Client client) {
-    callStoredProc("CLT_PHTT", crudOperation, client.getId(), "C", client.getFirstName(),
-        client.getMiddleName(), client.getLastName(), " ", " ", s, client.getLastUpdatedTime(),
-        client.getLastUpdatedId());
+    callStoredProc(LegacyTable.CLINET_PHONETIC.getName(), crudOperation, client.getId(), "C",
+        client.getFirstName(), client.getMiddleName(), client.getLastName(), " ", " ", s,
+        client.getLastUpdatedTime(), client.getLastUpdatedId());
   }
 
   /**
@@ -69,10 +70,10 @@ public class SsaName3Dao {
    * @param otherClientName other client name object
    */
   public void otherClientSsaname3(String crudOperation, OtherClientName otherClientName) {
-    callStoredProc("CLT_PHTT", crudOperation, otherClientName.getThirdId(), "N",
-        otherClientName.getFirstName(), otherClientName.getMiddleName(),
-        otherClientName.getLastName(), " ", " ", s, otherClientName.getLastUpdatedTime(),
-        otherClientName.getLastUpdatedId());
+    callStoredProc(LegacyTable.CLINET_PHONETIC.getName(), crudOperation,
+        otherClientName.getThirdId(), "N", otherClientName.getFirstName(),
+        otherClientName.getMiddleName(), otherClientName.getLastName(), " ", " ", s,
+        otherClientName.getLastUpdatedTime(), otherClientName.getLastUpdatedId());
   }
 
   /**
@@ -81,9 +82,9 @@ public class SsaName3Dao {
    */
   public void subCareProviderSsaname3(String crudOperation,
       SubstituteCareProvider substituteCareProvider) {
-    callStoredProc("SCP_PHTT", crudOperation, substituteCareProvider.getId(), " ",
-        substituteCareProvider.getFirstName(), substituteCareProvider.getMiddleName(),
-        substituteCareProvider.getLastName(), " ", " ", s,
+    callStoredProc(LegacyTable.SUBSTITUTE_CARE_PROVIDER_PHONETIC.getName(), crudOperation,
+        substituteCareProvider.getId(), " ", substituteCareProvider.getFirstName(),
+        substituteCareProvider.getMiddleName(), substituteCareProvider.getLastName(), " ", " ", s,
         substituteCareProvider.getLastUpdatedTime(), substituteCareProvider.getLastUpdatedId());
   }
 

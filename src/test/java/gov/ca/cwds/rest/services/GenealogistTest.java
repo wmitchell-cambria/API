@@ -33,7 +33,7 @@ public class GenealogistTest {
     private String dadClientId = "XZD876DS7";
     private String momClientId = "ZZYW3214D";
     private String sisterClientId = "ZZYW3214D";
-    private String brotherClientId = "ZZYW3214D";
+    private String brotherClientId = "ZZYW3216D";
 
     private Client sonClient;
     private Client dadClient;
@@ -115,6 +115,11 @@ public class GenealogistTest {
         assertEquals(sisterClient.getCommonLastName(), orderedRelationships.get(0).getRelatedLastName());
         assertEquals(BROTHER_SISTER, orderedRelationships.get(0).getRelationshipToPerson());
         assertEquals(SISTER_BROTHER, orderedRelationships.get(0).getRelatedPersonRelationship());
+
+        assertEquals(sisterClientId, orderedRelationships.get(0).getCmsRecordDescriptor().getId());
+        assertEquals(brotherClientId, orderedRelationships.get(1).getCmsRecordDescriptor().getId());
+        assertNotEquals(orderedRelationships.get(0).getCmsRecordDescriptor().getId(),
+                orderedRelationships.get(1).getCmsRecordDescriptor().getId());
     }
     @Test
     public void givenTwoSecondaryRelationshipsThenWeShouldOnlySearchForPrimaryClients(){

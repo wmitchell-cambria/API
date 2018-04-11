@@ -25,6 +25,7 @@ import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.cms.Address;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
@@ -45,8 +46,6 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 public class ClientAddressService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.ClientAddress, gov.ca.cwds.rest.api.domain.cms.ClientAddress> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientAddressService.class);
-
-  private static final String CLIENT_ADDRESS_TABLE_NAME = "ADDRS_T";
 
   private ClientAddressDao clientAddressDao;
   private StaffPersonDao staffpersonDao;
@@ -220,7 +219,7 @@ public class ClientAddressService implements
         messageBuilder.addDomainValidationError(validator.validate(clientAddress));
         create(clientAddress);
         messageBuilder.addDomainValidationError(validator.validate(clientAddress));
-        address.setLegacySourceTable(CLIENT_ADDRESS_TABLE_NAME);
+        address.setLegacySourceTable(LegacyTable.ADDRESS.getName());
         address.setLegacyId(addressId);
       }
     }

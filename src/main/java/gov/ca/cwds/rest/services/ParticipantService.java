@@ -26,6 +26,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
@@ -54,9 +55,6 @@ public class ParticipantService implements CrudsService {
   private static final String ASSESMENT = "A";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
-
-  private static final String REPORTER_TABLE_NAME = "REPTR_T";
-  private static final String CLIENT_TABLE_NAME = "CLIENT_T";
 
   private Validator validator;
 
@@ -224,7 +222,7 @@ public class ParticipantService implements CrudsService {
       Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
           screeningToReferral.getIncidentCounty(), messageBuilder);
       incomingParticipant.setLegacyId(savedReporter.getReferralId());
-      incomingParticipant.setLegacySourceTable(REPORTER_TABLE_NAME);
+      incomingParticipant.setLegacySourceTable(LegacyTable.REPORTER.getName());
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedReporter.getLastUpdatedTime());
     } catch (ServiceException e) {
       String message = e.getMessage();
@@ -298,8 +296,9 @@ public class ParticipantService implements CrudsService {
       executeR04466ClientSensitivityIndicator(foundClient, screeningToReferral);
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
-          incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
-          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
+          incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
+          incomingParticipant.getGender(), primaryRaceCode, unableToDetermineCode,
+          hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
@@ -350,7 +349,7 @@ public class ParticipantService implements CrudsService {
     PostedClient postedClient = this.clientService.create(client);
     clientId = postedClient.getId();
     incomingParticipant.setLegacyId(clientId);
-    incomingParticipant.setLegacySourceTable(CLIENT_TABLE_NAME);
+    incomingParticipant.setLegacySourceTable(LegacyTable.CLIENT.getName());
     incomingParticipant.getLegacyDescriptor().setLastUpdated(postedClient.getLastUpdatedTime());
     clientScpEthnicityService.createOtherEthnicity(postedClient.getId(), otherRaceCodes);
     return clientId;
@@ -364,7 +363,7 @@ public class ParticipantService implements CrudsService {
       Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>(ip.getAddresses());
 
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
-        if (address != null){
+        if (address != null) {
           reporterAddress = address;
           // use the first address node only
           break;

@@ -1,0 +1,9 @@
+authenticationMode: TEST
+testUrl:
+  baseUrl: ${BASE_URL}
+  authenticationBaseUrl: ${BASE_URL}
+  perryLoginUrl: ${PERRY_LOGIN_URL}
+  authLoginUrl: ${AUTH_LOGIN_URL}
+  tokenUrl: ${TOKEN_URL}
+  callBackUrl: ${CALL_BACK_URL}
+  logOutUrl: ${LOG_OUT_URL}

@@ -54,10 +54,12 @@ cmsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.DB2Dialect
       hibernate.jdbc.time_zone: America/Los_Angeles
+      hibernate.show_sql: false
       hibernate.format_sql: true
       hibernate.use_sql_comments: false
       hibernate.default_schema: ${DB_CMS_SCHEMA}
       hibernate.connection.autocommit: false
+      hibernate.connection.isolation: 1
 
 rsDataSourceFactory:
   autoCommitByDefault: false
@@ -74,10 +76,12 @@ rsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.DB2Dialect
       hibernate.jdbc.time_zone: America/Los_Angeles
+      hibernate.show_sql: false
       hibernate.format_sql: true
       hibernate.use_sql_comments: false
       hibernate.default_schema: ${DB_CWSRS_SCHEMA}
       hibernate.connection.autocommit: false
+      hibernate.connection.isolation: 1
 
 elasticsearch:
   # Screenings index
@@ -92,12 +96,10 @@ elasticsearch:
     elasticsearch.doctype: ${ES_DOCTYPE:-screening}
     elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-}
     elasticsearch.xpack.password: ${XPACK_PASSWORD_SCREENINGS:-}
+
+testConfig:
+  path: ${TEST_FILE_PATH:-config/testConfig.yml}
     
-smartystreets:
-  clientId: ${FERB_SS_ID:-193cc984-be1d-4b18-90c2-2399ebcf67bb}           
-  token: ${FERB_SS_TOKEN:-f15BXf61uOidswnnFZAc}     
-  maxCandidates: ${FERB_SS_MAX:-10}
-  
 triggertables:
   laCountySpecificCode: 19
  

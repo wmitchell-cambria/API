@@ -77,11 +77,9 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
-import gov.ca.cwds.data.validation.SmartyStreetsDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
-import gov.ca.cwds.rest.SmartyStreetsConfiguration;
 import gov.ca.cwds.rest.TriggerTablesConfiguration;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
@@ -368,9 +366,6 @@ public class DataAccessModule extends AbstractModule {
     // Downstream Tables:
     bind(Reminders.class);
 
-    // Miscellaneous:
-    bind(SmartyStreetsDao.class);
-
     // System code loader DAO:
     bind(ApiSystemCodeDao.class).to(SystemCodeDaoFileImpl.class);
 
@@ -428,11 +423,6 @@ public class DataAccessModule extends AbstractModule {
   public Map<String, ElasticsearchConfiguration> elasticSearchConfigs(
       ApiConfiguration apiConfiguration) {
     return apiConfiguration.getElasticsearchConfigurations();
-  }
-
-  @Provides
-  public SmartyStreetsConfiguration smartystreetsConfig(ApiConfiguration apiConfiguration) {
-    return apiConfiguration.getSmartyStreetsConfiguration();
   }
 
   @Provides

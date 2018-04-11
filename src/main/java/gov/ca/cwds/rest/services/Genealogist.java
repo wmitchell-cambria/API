@@ -27,10 +27,10 @@ public class Genealogist {
             return new Relationship();
         }
 
-        Set<RelationshipTo> relations = new HashSet<>();
+        Set<RelationshipTo> relations = new HashSet<>(relationships.size());
         for(RelationshipWrapper relationship : relationships){
             boolean clientIsPrimary = clientId.equals(relationship.getPrimaryLegacyId());
-            relations.add(createBar( relationship, clientIsPrimary));
+            relations.add(createBar(relationship, clientIsPrimary));
         }
 
         Client primaryClient = findClient(clientId);
@@ -54,7 +54,7 @@ public class Genealogist {
                   "" );
         } else{
             relationshipTo = createRelationShipTo(
-                    relationship.getSecondaryLegacyId(),
+                    relationship.getPrimaryLegacyId(),
                     relationship.getSecondaryRelationshipCode(),
                     relationship.getPrimaryRelationshipCode(),
                     relationship.getPrimaryFirstName(),

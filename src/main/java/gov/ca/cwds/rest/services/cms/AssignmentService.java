@@ -22,6 +22,7 @@ import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedAssignment;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
@@ -119,7 +120,7 @@ public class AssignmentService implements
   public gov.ca.cwds.rest.api.domain.cms.Assignment delete(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.Assignment persistedAssignment =
         assignmentDao.delete(primaryKey);
-    externalInterfaceTables.createExtInterForDelete(primaryKey, "ASGNM_T");
+    externalInterfaceTables.createExtInterForDelete(primaryKey, LegacyTable.ASSIGNMENT.getName());
     if (persistedAssignment != null) {
       return new gov.ca.cwds.rest.api.domain.cms.Assignment(persistedAssignment);
     }
