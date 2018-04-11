@@ -170,6 +170,9 @@ dependencies {
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
     compile group: 'org.json', name: 'json', version: '20090211'
 
+    compile group: 'com.atomikos', name: 'transactions-hibernate4', version: '4.0.4'
+    compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.8.Final'
+    
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
     testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
 

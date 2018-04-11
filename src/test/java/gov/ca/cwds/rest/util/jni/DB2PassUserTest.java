@@ -33,16 +33,16 @@ public class DB2PassUserTest {
         db2conn.setDB2ClientWorkstation("127.0.0.1");
         conn.setAutoCommit(true);
         conn.prepareStatement(
-            "update cwsint.tscntrlt c set c.LST_UPD_ID = CURRENT CLIENT_USERID where c.doc_handle = '0001121506110220*RAMESHA 00001'")
+            "UPDATE CWSINT.TSCNTRLT C SET C.LST_UPD_ID = CURRENT CLIENT_USERID WHERE C.DOC_HANDLE = '0001121506110220*RAMESHA 00001'")
             .executeUpdate();
 
         // Execute SQL to force extended client information to be sent to the server.
         // Auto-close the ResultSet upon block exit.
         try (ResultSet rs = conn.prepareStatement(
-            "select c.doc_handle, c.DOC_SEGS, c.CMPRS_PRG, c.DOC_NAME, c.DOC_DATE, c.DOC_TIME, c.DOC_LEN, c.LST_UPD_ID, c.LST_UPD_TS, c.DOC_AUTH, c.DOC_SERV "
-                + "from cwsint.TSCNTRLT c "
-                + "where c.doc_handle = '0001121506110220*RAMESHA 00001' "
-                + "order by c.DOC_HANDLE for read only")
+            "SELECT C.DOC_HANDLE, C.DOC_SEGS, C.CMPRS_PRG, C.DOC_NAME, C.DOC_DATE, C.DOC_TIME, C.DOC_LEN, C.LST_UPD_ID, C.LST_UPD_TS, C.DOC_AUTH, C.DOC_SERV "
+                + "FROM CWSINT.TSCNTRLT C "
+                + "WHERE C.DOC_HANDLE = '0001121506110220*RAMESHA 00001' "
+                + "ORDER BY C.DOC_HANDLE FOR READ ONLY WITH UR")
             .executeQuery()) {
 
           while (rs.next()) {
