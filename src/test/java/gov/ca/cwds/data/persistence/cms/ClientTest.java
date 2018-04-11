@@ -58,7 +58,8 @@ public class ClientTest implements PersistentTestTemplate {
         vc.getDeathDateVerifiedIndicator(), vc.getDeathPlace(), vc.getDeathReasonText(),
         vc.getDriverLicenseNumber(), vc.getDriverLicenseStateCodeType(), vc.getEmailAddress(),
         vc.getEstimatedDobCode(), vc.getEthUnableToDetReasonCode(),
-        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getHealthSummaryText(),
+        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getGenderIdentityType(),
+        vc.getGiNotListedDescription(), vc.getGenderExpressionType(), vc.getHealthSummaryText(),
         vc.getHispUnableToDetReasonCode(), vc.getHispanicOriginCode(), vc.getId(),
         vc.getImmigrationCountryCodeType(), vc.getImmigrationStatusType(),
         vc.getIncapacitatedParentCode(), vc.getIndividualHealthCarePlanIndicator(),
@@ -70,10 +71,12 @@ public class ClientTest implements PersistentTestTemplate {
         vc.getPrevRegionalCenterIndicator(), vc.getPrimaryEthnicityType(),
         vc.getPrimaryLanguageType(), vc.getReligionType(), vc.getSecondaryLanguageType(),
         vc.getSensitiveHlthInfoOnFileIndicator(), vc.getSensitivityIndicator(),
-        vc.getSoc158PlacementCode(), vc.getSoc158SealedClientIndicator(),
-        vc.getSocialSecurityNumChangedCode(), vc.getSocialSecurityNumber(), aNullValue,
-        vc.getTribalAncestryClientIndicatorVar(), vc.getTribalMembrshpVerifctnIndicatorVar(),
-        vc.getUnemployedParentCode(), vc.getZippyCreatedIndicator(), null);
+        vc.getSexualOrientationType(), vc.getSoUnableToDetermineCode(),
+        vc.getSoNotListedDescrption(), vc.getSoc158PlacementCode(),
+        vc.getSoc158SealedClientIndicator(), vc.getSocialSecurityNumChangedCode(),
+        vc.getSocialSecurityNumber(), aNullValue, vc.getTribalAncestryClientIndicatorVar(),
+        vc.getTribalMembrshpVerifctnIndicatorVar(), vc.getUnemployedParentCode(),
+        vc.getZippyCreatedIndicator(), null);
     assertThat(pers.getCommonMiddleName(), is(equalTo("")));
     assertThat(pers.getSuffixTitleDescription(), is(equalTo("")));
   }
@@ -94,7 +97,8 @@ public class ClientTest implements PersistentTestTemplate {
         vc.getDeathDateVerifiedIndicator(), vc.getDeathPlace(), vc.getDeathReasonText(),
         vc.getDriverLicenseNumber(), vc.getDriverLicenseStateCodeType(), vc.getEmailAddress(),
         vc.getEstimatedDobCode(), vc.getEthUnableToDetReasonCode(),
-        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getHealthSummaryText(),
+        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getGenderIdentityType(),
+        vc.getGiNotListedDescription(), vc.getGenderExpressionType(), vc.getHealthSummaryText(),
         vc.getHispUnableToDetReasonCode(), vc.getHispanicOriginCode(), vc.getId(),
         vc.getImmigrationCountryCodeType(), vc.getImmigrationStatusType(),
         vc.getIncapacitatedParentCode(), vc.getIndividualHealthCarePlanIndicator(),
@@ -106,11 +110,12 @@ public class ClientTest implements PersistentTestTemplate {
         vc.getPrevRegionalCenterIndicator(), vc.getPrimaryEthnicityType(),
         vc.getPrimaryLanguageType(), vc.getReligionType(), vc.getSecondaryLanguageType(),
         vc.getSensitiveHlthInfoOnFileIndicator(), vc.getSensitivityIndicator(),
-        vc.getSoc158PlacementCode(), vc.getSoc158SealedClientIndicator(),
-        vc.getSocialSecurityNumChangedCode(), vc.getSocialSecurityNumber(),
-        vc.getSuffixTitleDescription(), vc.getTribalAncestryClientIndicatorVar(),
-        vc.getTribalMembrshpVerifctnIndicatorVar(), vc.getUnemployedParentCode(),
-        vc.getZippyCreatedIndicator(), null);
+        vc.getSexualOrientationType(), vc.getSoUnableToDetermineCode(),
+        vc.getSoNotListedDescrption(), vc.getSoc158PlacementCode(),
+        vc.getSoc158SealedClientIndicator(), vc.getSocialSecurityNumChangedCode(),
+        vc.getSocialSecurityNumber(), vc.getSuffixTitleDescription(),
+        vc.getTribalAncestryClientIndicatorVar(), vc.getTribalMembrshpVerifctnIndicatorVar(),
+        vc.getUnemployedParentCode(), vc.getZippyCreatedIndicator(), null);
     assertThat(pers.getAdjudicatedDelinquentIndicator(),
         is(equalTo(vc.getAdjudicatedDelinquentIndicator())));
     assertThat(pers.getAdoptionStatusCode(), is(equalTo(vc.getAdoptionStatusCode())));
@@ -149,7 +154,9 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(pers.getEthUnableToDetReasonCode(), is(equalTo(vc.getEthUnableToDetReasonCode())));
     assertThat(pers.getFatherParentalRightTermDate(),
         is(equalTo(vc.getFatherParentalRightTermDate())));
-    assertThat(pers.getGenderCode(), is(equalTo(vc.getGenderCode())));
+    assertThat(pers.getGenderIdentityType(), is(equalTo(vc.getGenderIdentityType())));
+    assertThat(pers.getGiNotListedDescription(), is(equalTo(vc.getGiNotListedDescription())));
+    assertThat(pers.getGenderExpressionType(), is(equalTo(vc.getGenderExpressionType())));
     assertThat(pers.getHealthSummaryText(), is(equalTo(vc.getHealthSummaryText())));
     assertThat(pers.getHispUnableToDetReasonCode(), is(equalTo(vc.getHispUnableToDetReasonCode())));
     assertThat(pers.getHispanicOriginCode(), is(equalTo(vc.getHispanicOriginCode())));
@@ -182,6 +189,9 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(pers.getSensitiveHlthInfoOnFileIndicator(),
         is(equalTo(vc.getSensitiveHlthInfoOnFileIndicator())));
     assertThat(pers.getSensitivityIndicator(), is(equalTo(vc.getSensitivityIndicator())));
+    assertThat(pers.getSexualOrientationType(), is(equalTo(vc.getSexualOrientationType())));
+    assertThat(pers.getSoUnableToDetermineCode(), is(equalTo(vc.getSoUnableToDetermineCode())));
+    assertThat(pers.getSoNotListedDescrption(), is(equalTo(vc.getSoNotListedDescrption())));
     assertThat(pers.getSoc158PlacementCode(), is(equalTo(vc.getSoc158PlacementCode())));
     assertThat(pers.getSoc158SealedClientIndicator(),
         is(equalTo(vc.getSoc158SealedClientIndicator())));
@@ -308,7 +318,8 @@ public class ClientTest implements PersistentTestTemplate {
         vc.getDeathDateVerifiedIndicator(), vc.getDeathPlace(), vc.getDeathReasonText(),
         vc.getDriverLicenseNumber(), vc.getDriverLicenseStateCodeType(), vc.getEmailAddress(),
         vc.getEstimatedDobCode(), vc.getEthUnableToDetReasonCode(),
-        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getHealthSummaryText(),
+        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getGenderIdentityType(),
+        vc.getGiNotListedDescription(), vc.getGenderExpressionType(), vc.getHealthSummaryText(),
         vc.getHispUnableToDetReasonCode(), vc.getHispanicOriginCode(), vc.getId(),
         vc.getImmigrationCountryCodeType(), vc.getImmigrationStatusType(),
         vc.getIncapacitatedParentCode(), vc.getIndividualHealthCarePlanIndicator(),
@@ -320,11 +331,12 @@ public class ClientTest implements PersistentTestTemplate {
         vc.getPrevRegionalCenterIndicator(), vc.getPrimaryEthnicityType(),
         vc.getPrimaryLanguageType(), vc.getReligionType(), vc.getSecondaryLanguageType(),
         vc.getSensitiveHlthInfoOnFileIndicator(), vc.getSensitivityIndicator(),
-        vc.getSoc158PlacementCode(), vc.getSoc158SealedClientIndicator(),
-        vc.getSocialSecurityNumChangedCode(), vc.getSocialSecurityNumber(),
-        vc.getSuffixTitleDescription(), vc.getTribalAncestryClientIndicatorVar(),
-        vc.getTribalMembrshpVerifctnIndicatorVar(), vc.getUnemployedParentCode(),
-        vc.getZippyCreatedIndicator(), null);
+        vc.getSexualOrientationType(), vc.getSoUnableToDetermineCode(),
+        vc.getSoNotListedDescrption(), vc.getSoc158PlacementCode(),
+        vc.getSoc158SealedClientIndicator(), vc.getSocialSecurityNumChangedCode(),
+        vc.getSocialSecurityNumber(), vc.getSuffixTitleDescription(),
+        vc.getTribalAncestryClientIndicatorVar(), vc.getTribalMembrshpVerifctnIndicatorVar(),
+        vc.getUnemployedParentCode(), vc.getZippyCreatedIndicator(), null);
     final String expected = MAPPER.writeValueAsString((MAPPER.readValue(
         fixture("fixtures/persistent/Client/valid/validWithSysCodes.json"), Client.class)));
     assertThat(MAPPER.writeValueAsString(pers)).isEqualTo(expected);

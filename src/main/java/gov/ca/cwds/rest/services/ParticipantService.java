@@ -296,8 +296,9 @@ public class ParticipantService implements CrudsService {
       executeR04466ClientSensitivityIndicator(foundClient, screeningToReferral);
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
-          incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(), primaryRaceCode,
-          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
+          incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
+          incomingParticipant.getGender(), primaryRaceCode, unableToDetermineCode,
+          hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
