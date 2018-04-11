@@ -1,12 +1,16 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.util.List;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import gov.ca.cwds.rest.api.Response;
+
 import io.dropwizard.jackson.JsonSnakeCase;
 
 /**

@@ -1,7 +1,9 @@
 package gov.ca.cwds.rest.resources;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
+
 import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,11 +11,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.apache.http.HttpStatus;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.ScreeningService;
+
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +48,7 @@ public class ScreeningDashboardResource {
   /**
    * Constructor
    *
-   * @param screeningService The service to delegate to
+   * @param screeningService The service to delegate to.
    */
   @Inject
   public ScreeningDashboardResource(ScreeningService screeningService) {
@@ -50,7 +56,7 @@ public class ScreeningDashboardResource {
   }
 
   /**
-   * Get list of Screenings (dash board)
+   * Get list of Screenings (dash board).
    * 
    * @param screeningDecisionDetail - array of screening decision detail
    * @param screeningDecision - array of screening decision detail
