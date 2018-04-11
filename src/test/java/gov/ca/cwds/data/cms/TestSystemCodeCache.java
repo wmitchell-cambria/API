@@ -146,6 +146,24 @@ public class TestSystemCodeCache implements SystemCodeCache {
         return true;
       }
     }
+
+    if (SystemCodeCategoryId.GENDER_IDENTITY_TYPE.equals(metaId)) {
+      if (7075 == systemCodeId.intValue()) {
+        return true;
+      }
+    }
+
+    if (SystemCodeCategoryId.GENDER_EXPRESSION_TYPE.equals(metaId)) {
+      if (7081 == systemCodeId.intValue()) {
+        return true;
+      }
+    }
+
+    if (SystemCodeCategoryId.SEXUAL_ORIENTATION_TYPE.equals(metaId)) {
+      if (7066 == systemCodeId.intValue()) {
+        return true;
+      }
+    }
     return false;
   }
 
