@@ -32,7 +32,7 @@ nsDataSourceFactory:
   maxSize: ${DB_NS_CP_MAX_SIZE:-8}
   minIdleTime: 1 minute
   properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+      hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
       hibernate.jdbc.time_zone: America/Los_Angeles
       hibernate.id.new_generator_mappings: false
       hibernate.format_sql: true
@@ -45,7 +45,7 @@ cmsDataSourceFactory:
   user: ${DB_CMS_USER}
   password: ${DB_CMS_PASSWORD}
   url: ${DB_CMS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR"
+  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only"
   logValidationErrors: true
   initialSize: ${DB_CMS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_CMS_CP_MIN_SIZE:-2}
@@ -60,17 +60,6 @@ cmsDataSourceFactory:
       hibernate.default_schema: ${DB_CMS_SCHEMA}
       hibernate.connection.autocommit: false
       hibernate.connection.isolation: 1
-#     hibernate.c3p0.statementCacheNumDeferredCloseThreads: 1
-      hibernate.connection.provider_class: org.hibernate.connection.C3P0ConnectionProvider
-      hibernate.c3p0.min_size: 8
-      hibernate.c3p0.max_size: 20
-      hibernate.c3p0.maxAdministrativeTaskTime: 90
-      hibernate.c3p0.timeout: 180
-      hibernate.c3p0.max_statements: 0
-      hibernate.c3p0.maxStatementsPerConnection: 0
-      hibernate.c3p0.idle_test_period: 300
-      hibernate.c3p0.acquire_increment: 3
-      hibernate.c3p0.preferredTestQuery: SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR
 
 rsDataSourceFactory:
   autoCommitByDefault: false
@@ -78,7 +67,7 @@ rsDataSourceFactory:
   user: ${DB_CWSRS_USER}
   password: ${DB_CWSRS_PASSWORD}
   url: ${DB_CWSRS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR"
+  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only"
   logValidationErrors: true
   initialSize: ${DB_CWSRS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_CWSRS_CP_MIN_SIZE:-2}
@@ -127,7 +116,7 @@ webSecurity:
     
     # Prevent everything other than same origin
     Content-Security-Policy: default-src 'self' 'unsafe-inline';
-
+     
 server:
   applicationConnectors:
   - type: http 
