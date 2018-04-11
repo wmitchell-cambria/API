@@ -28,10 +28,10 @@ public class FunctionalTest {
     ConfigImpl configImpl = new ConfigImpl();
     config = configImpl.readConfig();
     url = config.getTestUrl().getBaseUrl();
-    token = socialWorkerlogin(configImpl);
+    token = login(configImpl);
   }
 
-  private String socialWorkerlogin(ConfigImpl configImpl) {
+  private String login(ConfigImpl configImpl) {
     AuthenticationUtils authentication = new AuthenticationUtils(configImpl);
     return authentication.getToken(UserGroup.SOCIAL_WORKER);
   }
