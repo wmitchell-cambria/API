@@ -55,7 +55,6 @@ import gov.ca.cwds.rest.validation.ValidCounty;
         + "   WITH UR",
     resultClass = CmsCase.class, readOnly = true)
 
-@SuppressWarnings("javadoc")
 @Entity
 @Table(name = "CASE_T")
 @JsonPropertyOrder(alphabetic = true)
@@ -190,7 +189,7 @@ public class CmsCase extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
-  @NotFound(action= NotFoundAction.IGNORE)
+  @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(optional = true)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral riReferral;
