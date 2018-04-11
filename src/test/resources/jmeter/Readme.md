@@ -25,7 +25,6 @@ _referralClients.jmx
 _referrals.jmx
 _reporters.jmx
 _staffpersons.jmx
-address_validation.jmx
 addresses.jmx
 autocomplete.jmx
 people_search.jmx
