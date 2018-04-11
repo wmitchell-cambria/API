@@ -1369,18 +1369,20 @@ public class Client extends ReportingDomain implements Request, Response {
    * @param lastName last name
    * @param middleName middle name
    * @param nameSuffix name suffix
+   * @param gender gender
    * @param raceCode race code
    * @param unableToDetermineCode unable to determine code
    * @param hispanicUnableToDetermineCode hispanic unable to determine code
    * @param hispanicOriginCode hispanic origin code
    */
   public void update(String firstName, String middleName, String lastName, String nameSuffix,
-      Short raceCode, String unableToDetermineCode, String hispanicUnableToDetermineCode,
-      String hispanicOriginCode) {
+      String gender, Short raceCode, String unableToDetermineCode,
+      String hispanicUnableToDetermineCode, String hispanicOriginCode) {
     this.commonFirstName = firstName;
     this.commonLastName = lastName;
     this.commonMiddleName = middleName;
     this.suffixTitleDescription = nameSuffix;
+    this.genderCode = gender;
     this.primaryEthnicityType = raceCode;
     this.ethUnableToDetReasonCode = unableToDetermineCode;
     this.hispUnableToDetReasonCode = hispanicUnableToDetermineCode;
