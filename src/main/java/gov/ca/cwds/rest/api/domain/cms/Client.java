@@ -28,8 +28,10 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.business.rules.R06998ZippyIndicator;
 import gov.ca.cwds.rest.validation.AfterDateValid;
+import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -58,6 +60,10 @@ public class Client extends ReportingDomain implements Request, Response {
   public static final String DEFAULT_SOC158_PLACEMENT_CODE = "N";
   public static final String DEFAULT_SOCIAL_SECURITY_NUM_CHANGE_CODE = "N";
   public static final String DEFAULT_UNEMPLOYED_PARENT_CODE = "U";
+  public static final short DEFAULT_SEXUAL_ORIENTATION_TYPE = 7066;
+  public static final String DEFAULT_SO_UNABLE_TO_DETERMINE_CODE = "D";
+  public static final short DEFAULT_GENDER_IDENTITY_TYPE = 7075;
+  public static final short DEFAULT_GENDER_EXPRESSION_TYPE = 7081;
 
   private static final long serialVersionUID = 1L;
 
@@ -233,6 +239,22 @@ public class Client extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "U")
   private String genderCode;
 
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false, example = "7075")
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.GENDER_IDENTITY_TYPE,
+      ignoreable = false)
+  private Short genderIdentityType;
+
+  @Size(max = 254)
+  @ApiModelProperty(required = false, readOnly = false, example = "gi not listed descrption")
+  private String giNotListedDescription;
+
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false, example = "7081")
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.GENDER_EXPRESSION_TYPE,
+      ignoreable = false)
+  private Short genderExpressionType;
+
   @Size(max = 10)
   @ApiModelProperty(required = false, readOnly = false, value = "Health Summary Text",
       example = "0123456ABC")
@@ -356,6 +378,20 @@ public class Client extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "R")
   private String sensitivityIndicator;
 
+  @NotNull
+  @ApiModelProperty(required = true, readOnly = false, example = "7066")
+  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.SEXUAL_ORIENTATION_TYPE,
+      ignoreable = false)
+  private Short sexualOrientationType;
+
+  @OneOf(value = {"D", "C", ""}, ignoreCase = false, ignoreWhitespace = true)
+  @ApiModelProperty(required = false, readOnly = false, example = "D")
+  private String soUnableToDetermineCode;
+
+  @Size(max = 254)
+  @ApiModelProperty(required = false, readOnly = false, example = "So not listed descrption")
+  private String soNotListedDescrption;
+
   @NotEmpty
   @Size(min = 1, max = 1, message = "size must be 1")
   @OneOf(value = {"Y", "M", "N"}, ignoreCase = false, ignoreWhitespace = true)
@@ -441,6 +477,9 @@ public class Client extends ReportingDomain implements Request, Response {
    * @param ethUnableToDetReasonCode - ethUnableToDetReasonCode
    * @param fatherParentalRightTermDate - fatherParentalRightTermDate
    * @param genderCode - genderCode
+   * @param genderIdentityType - genderIdentityType
+   * @param giNotListedDescription - giNotListedDescription
+   * @param genderExpressionType - genderExpressionType
    * @param healthSummaryText - healthSummaryText
    * @param hispUnableToDetReasonCode - hispUnableToDetReasonCode
    * @param hispanicOriginCode - hispanicOriginCode
@@ -466,6 +505,9 @@ public class Client extends ReportingDomain implements Request, Response {
    * @param secondaryLanguage - secondaryLanguage
    * @param sensitiveHlthInfoOnFileIndicator - sensitiveHlthInfoOnFileIndicator
    * @param sensitivityIndicator - sensitivityIndicator
+   * @param sexualOrientationType - sexualOrientationType
+   * @param soUnableToDetermineCode - soUnableToDetermineCode
+   * @param soNotListedDescrption - soNotListedDescrption
    * @param soc158PlacementCode - soc158PlacementCode
    * @param soc158SealedClientIndicator - soc158SealedClientIndicator
    * @param socialSecurityNumChangedCode - socialSecurityNumChangedCode
@@ -512,6 +554,9 @@ public class Client extends ReportingDomain implements Request, Response {
       @JsonProperty("ethUnableToDetReasonCode") String ethUnableToDetReasonCode,
       @JsonProperty("fatherParentalRightTermDate") String fatherParentalRightTermDate,
       @JsonProperty("genderCode") String genderCode,
+      @JsonProperty("genderIdentityType") Short genderIdentityType,
+      @JsonProperty("giNotListedDescription") String giNotListedDescription,
+      @JsonProperty("genderExpressionType") Short genderExpressionType,
       @JsonProperty("healthSummaryText") String healthSummaryText,
       @JsonProperty("hispUnableToDetReasonCode") String hispUnableToDetReasonCode,
       @JsonProperty("hispanicOriginCode") String hispanicOriginCode,
@@ -537,6 +582,9 @@ public class Client extends ReportingDomain implements Request, Response {
       @JsonProperty("secondaryLanguage") Short secondaryLanguage,
       @JsonProperty("sensitiveHlthInfoOnFileIndicator") Boolean sensitiveHlthInfoOnFileIndicator,
       @JsonProperty("sensitivityIndicator") String sensitivityIndicator,
+      @JsonProperty("sexualOrientationType") Short sexualOrientationType,
+      @JsonProperty("soUnableToDetermineCode") String soUnableToDetermineCode,
+      @JsonProperty("soNotListedDescrption") String soNotListedDescrption,
       @JsonProperty("soc158PlacementCode") String soc158PlacementCode,
       @JsonProperty("soc158SealedClientIndicator") Boolean soc158SealedClientIndicator,
       @JsonProperty("socialSecurityNumChangedCode") String socialSecurityNumChangedCode,
@@ -582,6 +630,9 @@ public class Client extends ReportingDomain implements Request, Response {
     this.ethUnableToDetReasonCode = ethUnableToDetReasonCode;
     this.fatherParentalRightTermDate = fatherParentalRightTermDate;
     this.genderCode = genderCode;
+    this.genderIdentityType = genderIdentityType;
+    this.giNotListedDescription = giNotListedDescription;
+    this.genderExpressionType = genderExpressionType;
     this.healthSummaryText = healthSummaryText;
     this.hispUnableToDetReasonCode = hispUnableToDetReasonCode;
     this.hispanicOriginCode = hispanicOriginCode;
@@ -607,6 +658,9 @@ public class Client extends ReportingDomain implements Request, Response {
     this.secondaryLanguage = secondaryLanguage != null ? secondaryLanguage : 0;
     this.sensitiveHlthInfoOnFileIndicator = sensitiveHlthInfoOnFileIndicator;
     this.sensitivityIndicator = sensitivityIndicator;
+    this.sexualOrientationType = sexualOrientationType;
+    this.soUnableToDetermineCode = soUnableToDetermineCode;
+    this.soNotListedDescrption = soNotListedDescrption;
     this.soc158PlacementCode = soc158PlacementCode;
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
     this.socialSecurityNumChangedCode = socialSecurityNumChangedCode;
@@ -670,6 +724,9 @@ public class Client extends ReportingDomain implements Request, Response {
     this.fatherParentalRightTermDate =
         DomainChef.cookDate(persistedClient.getFatherParentalRightTermDate());
     this.genderCode = persistedClient.getGenderCode();
+    this.genderIdentityType = persistedClient.getGenderIdentityType();
+    this.giNotListedDescription = persistedClient.getGiNotListedDescription();
+    this.genderExpressionType = persistedClient.getGenderExpressionType();
     this.healthSummaryText = persistedClient.getHealthSummaryText();
     this.hispUnableToDetReasonCode =
         StringUtils.isBlank(persistedClient.getHispUnableToDetReasonCode()) ? null
@@ -710,6 +767,9 @@ public class Client extends ReportingDomain implements Request, Response {
     this.sensitiveHlthInfoOnFileIndicator =
         DomainChef.uncookBooleanString(persistedClient.getSensitiveHlthInfoOnFileIndicator());
     this.sensitivityIndicator = persistedClient.getSensitivityIndicator();
+    this.sexualOrientationType = persistedClient.getSexualOrientationType();
+    this.soUnableToDetermineCode = persistedClient.getSoUnableToDetermineCode();
+    this.soNotListedDescrption = persistedClient.getSoNotListedDescrption();
     this.soc158PlacementCode = persistedClient.getSoc158PlacementCode();
     this.soc158SealedClientIndicator =
         DomainChef.uncookBooleanString(persistedClient.getSoc158SealedClientIndicator());
@@ -759,13 +819,15 @@ public class Client extends ReportingDomain implements Request, Response {
         DEFAULT_CODE, Boolean.FALSE, childClientIndicatorVar, "", "", participant.getFirstName(),
         participant.getMiddleName(), participant.getLastName(), "", Boolean.FALSE, dateStarted,
         Boolean.FALSE, "", Boolean.FALSE, "", Boolean.FALSE, "", "", "", DEFAULT_CODE, "",
-        ESTIMATED_DOB_CODE_ACTUALLY_ENTERED, unableToDetermineCode, "", genderCode, "",
+        ESTIMATED_DOB_CODE_ACTUALLY_ENTERED, unableToDetermineCode, "", genderCode,
+        DEFAULT_GENDER_IDENTITY_TYPE, "", DEFAULT_GENDER_EXPRESSION_TYPE, "",
         hispanicUnableToDetermineCode, hispanicOriginCode, DEFAULT_CODE, DEFAULT_CODE,
         DEFAULT_INCAPCITATED_PARENT_CODE, Boolean.FALSE, Boolean.FALSE, DEFAULT_LITERATE_CODE,
         Boolean.FALSE, DEFAULT_CODE, DEFAULT_MILITARY_STATUS_CODE, "", "", DEFAULT_NAME_TYPE,
         Boolean.FALSE, Boolean.FALSE, "", Boolean.FALSE, raceCode, participant.getPrimaryLanguage(),
         DEFAULT_CODE, participant.getSecondaryLanguage(), Boolean.FALSE,
-        DEFAULT_SENSITIVITY_INDICATOR, DEFAULT_SOC158_PLACEMENT_CODE, Boolean.FALSE,
+        DEFAULT_SENSITIVITY_INDICATOR, DEFAULT_SEXUAL_ORIENTATION_TYPE,
+        DEFAULT_SO_UNABLE_TO_DETERMINE_CODE, "", DEFAULT_SOC158_PLACEMENT_CODE, Boolean.FALSE,
         DEFAULT_SOCIAL_SECURITY_NUM_CHANGE_CODE, participant.getSsn(), participant.getNameSuffix(),
         Boolean.FALSE, Boolean.FALSE, DEFAULT_UNEMPLOYED_PARENT_CODE,
         R06998ZippyIndicator.YES.getCode(), null);
@@ -1231,6 +1293,48 @@ public class Client extends ReportingDomain implements Request, Response {
    */
   public Boolean getTribalMembrshpVerifctnIndicatorVar() {
     return tribalMembrshpVerifctnIndicatorVar;
+  }
+
+  /**
+   * @return the genderIdentityType
+   */
+  public Short getGenderIdentityType() {
+    return genderIdentityType;
+  }
+
+  /**
+   * @return the giNotListedDescription
+   */
+  public String getGiNotListedDescription() {
+    return giNotListedDescription;
+  }
+
+  /**
+   * @return the genderExpressionType
+   */
+  public Short getGenderExpressionType() {
+    return genderExpressionType;
+  }
+
+  /**
+   * @return the sexualOrientationType
+   */
+  public Short getSexualOrientationType() {
+    return sexualOrientationType;
+  }
+
+  /**
+   * @return the soUnableToDetermineCode
+   */
+  public String getSoUnableToDetermineCode() {
+    return soUnableToDetermineCode;
+  }
+
+  /**
+   * @return the soNotListedDescrption
+   */
+  public String getSoNotListedDescrption() {
+    return soNotListedDescrption;
   }
 
   /**

@@ -88,6 +88,9 @@ public class Client extends BaseClient {
    * @param ethUnableToDetReasonCode The ethUnableToDetReasonCode
    * @param fatherParentalRightTermDate The fatherParentalRightTermDate
    * @param genderCode The genderCode
+   * @param genderIdentityType - genderIdentityType
+   * @param giNotListedDescription - giNotListedDescription
+   * @param genderExpressionType - genderExpressionType
    * @param healthSummaryText The healthSummaryText
    * @param hispUnableToDetReasonCode The hispUnableToDetReasonCode
    * @param hispanicOriginCode The hispanicOriginCode
@@ -114,6 +117,9 @@ public class Client extends BaseClient {
    * @param secondaryLanguageType The secondaryLanguageType
    * @param sensitiveHlthInfoOnFileIndicator The sensitiveHlthInfoOnFileIndicator
    * @param sensitivityIndicator The sensitivityIndicator
+   * @param sexualOrientationType - sexualOrientationType
+   * @param soUnableToDetermineCode - soUnableToDetermineCode
+   * @param soNotListedDescrption - soNotListedDescrption
    * @param soc158PlacementCode The soc158PlacementCode
    * @param soc158SealedClientIndicator The soc158SealedClientIndicator
    * @param socialSecurityNumChangedCode The socialSecurityNumChangedCode
@@ -136,6 +142,7 @@ public class Client extends BaseClient {
       String deathPlace, String deathReasonText, String driverLicenseNumber,
       Short driverLicenseStateCodeType, String emailAddress, String estimatedDobCode,
       String ethUnableToDetReasonCode, Date fatherParentalRightTermDate, String genderCode,
+      Short genderIdentityType, String giNotListedDescription, Short genderExpressionType,
       String healthSummaryText, String hispUnableToDetReasonCode, String hispanicOriginCode,
       String id, Short immigrationCountryCodeType, Short immigrationStatusType,
       String incapacitatedParentCode, String individualHealthCarePlanIndicator,
@@ -146,6 +153,7 @@ public class Client extends BaseClient {
       String prevOtherDescription, String prevRegionalCenterIndicator, Short primaryEthnicityType,
       Short primaryLanguageType, Short religionType, Short secondaryLanguageType,
       String sensitiveHlthInfoOnFileIndicator, String sensitivityIndicator,
+      Short sexualOrientationType, String soUnableToDetermineCode, String soNotListedDescrption,
       String soc158PlacementCode, String soc158SealedClientIndicator,
       String socialSecurityNumChangedCode, String socialSecurityNumber,
       String suffixTitleDescription, String tribalAncestryClientIndicatorVar,
@@ -184,6 +192,9 @@ public class Client extends BaseClient {
     this.ethUnableToDetReasonCode = ethUnableToDetReasonCode;
     this.fatherParentalRightTermDate = freshDate(fatherParentalRightTermDate);
     this.genderCode = genderCode;
+    this.genderIdentityType = genderIdentityType;
+    this.giNotListedDescription = giNotListedDescription;
+    this.genderExpressionType = genderExpressionType;
     this.healthSummaryText = healthSummaryText;
     this.hispUnableToDetReasonCode = hispUnableToDetReasonCode;
     this.hispanicOriginCode = hispanicOriginCode;
@@ -210,6 +221,9 @@ public class Client extends BaseClient {
     this.secondaryLanguageType = secondaryLanguageType;
     this.sensitiveHlthInfoOnFileIndicator = sensitiveHlthInfoOnFileIndicator;
     this.sensitivityIndicator = sensitivityIndicator;
+    this.sexualOrientationType = sexualOrientationType;
+    this.soUnableToDetermineCode = soUnableToDetermineCode;
+    this.soNotListedDescrption = soNotListedDescrption;
     this.soc158PlacementCode = soc158PlacementCode;
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
     this.socialSecurityNumChangedCode = socialSecurityNumChangedCode;
@@ -272,14 +286,19 @@ public class Client extends BaseClient {
       this.driverLicenseStateCodeType = client.getDriverLicenseStateCodeType();
       this.emailAddress = client.getEmailAddress();
       this.estimatedDobCode = client.getEstimatedDobCode();
-      this.ethUnableToDetReasonCode = StringUtils.isBlank(client.getEthUnableToDetReasonCode())
-          ? null : client.getEthUnableToDetReasonCode();
+      this.ethUnableToDetReasonCode =
+          StringUtils.isBlank(client.getEthUnableToDetReasonCode()) ? null
+              : client.getEthUnableToDetReasonCode();
       this.fatherParentalRightTermDate =
           DomainChef.uncookDateString(client.getFatherParentalRightTermDate());
       this.genderCode = client.getGenderCode();
+      this.genderIdentityType = client.getGenderIdentityType();
+      this.giNotListedDescription = client.getGiNotListedDescription();
+      this.genderExpressionType = client.getGenderExpressionType();
       this.healthSummaryText = client.getHealthSummaryText();
-      this.hispUnableToDetReasonCode = StringUtils.isBlank(client.getHispUnableToDetReasonCode())
-          ? null : client.getHispUnableToDetReasonCode();
+      this.hispUnableToDetReasonCode =
+          StringUtils.isBlank(client.getHispUnableToDetReasonCode()) ? null
+              : client.getHispUnableToDetReasonCode();
       this.hispanicOriginCode =
           StringUtils.isBlank(client.getHispanicOriginCode()) ? "" : client.getHispanicOriginCode();
       this.immigrationCountryCodeType = client.getImmigrationCountryCodeType();
@@ -312,6 +331,9 @@ public class Client extends BaseClient {
       this.sensitiveHlthInfoOnFileIndicator =
           DomainChef.cookBoolean(client.getSensitiveHlthInfoOnFileIndicator());
       this.sensitivityIndicator = client.getSensitivityIndicator();
+      this.sexualOrientationType = client.getSexualOrientationType();
+      this.soUnableToDetermineCode = client.getSoUnableToDetermineCode();
+      this.soNotListedDescrption = client.getSoNotListedDescrption();
       this.soc158PlacementCode = client.getSoc158PlacementCode();
       this.soc158SealedClientIndicator =
           DomainChef.cookBoolean(client.getSoc158SealedClientIndicator());

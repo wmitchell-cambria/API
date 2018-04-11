@@ -99,6 +99,21 @@ public final class SystemCodeCategoryId {
    */
   public static final String INJURY_TO_BODY_PART_TYPE = "ABS_BPTC";
 
+  /**
+   * Sexual orientation type
+   */
+  public static final String SEXUAL_ORIENTATION_TYPE = "CLNT_SOC";
+
+  /**
+   * Gender identity type
+   */
+  public static final String GENDER_IDENTITY_TYPE = "CLNT_GIC";
+
+  /**
+   * Gender expression type
+   */
+  public static final String GENDER_EXPRESSION_TYPE = "CLNT_GEC";
+
 
   /**
    * Private constructor
