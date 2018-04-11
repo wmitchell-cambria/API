@@ -1,9 +1,32 @@
 authenticationMode: TEST
 testUrl:
-  baseUrl: ${BASE_URL}
-  authenticationBaseUrl: ${BASE_URL}
-  perryLoginUrl: ${PERRY_LOGIN_URL}
-  authLoginUrl: ${AUTH_LOGIN_URL}
-  tokenUrl: ${TOKEN_URL}
-  callBackUrl: ${CALL_BACK_URL}
-  logOutUrl: ${LOG_OUT_URL}
+   baseUrl: ${BASE_URL:-https://ferbapi.preint.cwds.io}
+   authenticationBaseUrl: ${BASE_URL:-https://localhost:8070}
+   perryLoginUrl: ${PERRY_LOGIN_URL:-https://localhost:8090/perry/login}
+   authLoginUrl: ${AUTH_LOGIN_URL:-https://localhost:8090/perry/authn/login}
+   tokenUrl: ${TOKEN_URL:-https://localhost:8090/perry/authn/token}
+   callBackUrl: ${CALL_BACK_URL:-https://ferbapi.preint.cwds.io/swagger}
+   logOutUrl: ${LOG_OUT_URL:-}
+   validateUrl: ${VALIDATE_URL:-https://localhost:8090/perry/authn/validate}
+   
+defaultUsers:
+    -  userType: socialWorkerOnly
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}
+       
+    -  userType: countySensitivePrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}  
+        
+    -  userType: countySealedPrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-} 
+       
+    -  userType: stateSensitivePrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}
+       
+    -  userType: stateSealedPrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-} 
+ 
