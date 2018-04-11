@@ -28,27 +28,7 @@ public class ClientAddressTest {
     ClientAddress address = new ClientAddress(id, addressType, bkInmtId, effEndDt, effStartDt,
         fkAddress, fkClient, homelessInd, fkReferral, addresses);
     assertNotNull("Expected an addresss to be created", address);
-<<<<<<< HEAD
-    assertEquals("Expected id to have been set in constructor", id, address.getId());
-    assertEquals("Expected addressType to have been set in constructor", addressType,
-        address.getAddressType());
-    assertEquals("Expected bkInmtId to have been set in constructor", bkInmtId,
-        address.getBkInmtId());
-    assertEquals("Expected effEndDt to have been set in constructor", effEndDt,
-        address.getEffEndDt());
-    assertEquals("Expected effStartDt to have been set in constructor", effStartDt,
-        address.getEffStartDt());
-    assertEquals("Expected fkAddress to have been set in constructor", fkAddress,
-        address.getFkAddress());
-    assertEquals("Expected fkClient to have been set in constructor", fkClient,
-        address.getFkClient());
-    assertEquals("Expected homelessInd to have been set in constructor", homelessInd,
-        address.getHomelessInd());
-    assertEquals("Expected fkReferral to have been set in constructor", fkReferral,
-        address.getFkReferral());
-    assertEquals("Expected addresses to have been set in constructor", addresses,
-        address.getAddresses());
-=======
+
     assertEquals("Expected id set in ctor", id, address.getId());
     assertEquals("Expected addressType set in ctor", addressType, address.getAddressType());
     assertEquals("Expected bkInmtId set in ctor", bkInmtId, address.getBkInmtId());
@@ -59,7 +39,6 @@ public class ClientAddressTest {
     assertEquals("Expected homelessInd set in ctor", homelessInd, address.getHomelessInd());
     assertEquals("Expected fkReferral set in ctor", fkReferral, address.getFkReferral());
     assertEquals("Expected addresses set in ctor", addresses, address.getAddresses());
->>>>>>> c3e31b4733664d4cb1f2ef25fdbfbfe97947f704
     assertEquals("Expected Client to be null", null, address.getClient());
     // assertEquals("Expected Referral to be null", null, address.getReferral());
   }
@@ -80,29 +59,7 @@ public class ClientAddressTest {
     ClientAddress address = new ClientAddress(id, addressType, bkInmtId, effEndDt, effStartDt,
         fkAddress, fkClient, homelessInd, fkReferral, addresses, lastUpdateId);
     assertNotNull("Expected an addresss to be created", address);
-<<<<<<< HEAD
-    assertEquals("Expected id to have been set in constructor", id, address.getId());
-    assertEquals("Expected addressType to have been set in constructor", addressType,
-        address.getAddressType());
-    assertEquals("Expected bkInmtId to have been set in constructor", bkInmtId,
-        address.getBkInmtId());
-    assertEquals("Expected effEndDt to have been set in constructor", effEndDt,
-        address.getEffEndDt());
-    assertEquals("Expected effStartDt to have been set in constructor", effStartDt,
-        address.getEffStartDt());
-    assertEquals("Expected fkAddress to have been set in constructor", fkAddress,
-        address.getFkAddress());
-    assertEquals("Expected fkClient to have been set in constructor", fkClient,
-        address.getFkClient());
-    assertEquals("Expected homelessInd to have been set in constructor", homelessInd,
-        address.getHomelessInd());
-    assertEquals("Expected fkReferral to have been set in constructor", fkReferral,
-        address.getFkReferral());
-    assertEquals("Expected addresses to have been set in constructor", addresses,
-        address.getAddresses());
-    assertEquals("Expected lastUpdateId to have been set in constructor", lastUpdateId,
-        address.getLastUpdatedId());
-=======
+
     assertEquals("Expected id set in ctor", id, address.getId());
     assertEquals("Expected addressType set in ctor", addressType, address.getAddressType());
     assertEquals("Expected bkInmtId set in ctor", bkInmtId, address.getBkInmtId());
@@ -114,9 +71,6 @@ public class ClientAddressTest {
     assertEquals("Expected fkReferral set in ctor", fkReferral, address.getFkReferral());
     assertEquals("Expected addresses set in ctor", addresses, address.getAddresses());
     assertEquals("Expected lastUpdateId set in ctor", lastUpdateId, address.getLastUpdatedId());
->>>>>>> c3e31b4733664d4cb1f2ef25fdbfbfe97947f704
-
-
   }
 
   @Test
@@ -129,8 +83,5 @@ public class ClientAddressTest {
     ClientAddress ca = new ClientAddress();
     assertTrue(ca.equals(ca));
   }
-<<<<<<< HEAD
 
-=======
->>>>>>> c3e31b4733664d4cb1f2ef25fdbfbfe97947f704
 }
