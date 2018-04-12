@@ -58,7 +58,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
         .setParameter("clientIds", clientIds);
-    return new HashSet<ScreeningEntity>(query.list());
+    return new HashSet<>(query.list());
   }
 
   /**

@@ -64,10 +64,6 @@ public class ClientAddress extends BaseClientAddress {
    * referral records.
    * </p>
    */
-  // @ManyToOne(optional = true)
-  // @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
-  // private Referral referral;
-
   /**
    * Default constructor
    * 
@@ -170,10 +166,6 @@ public class ClientAddress extends BaseClientAddress {
   public Client getClient() {
     return client;
   }
-
-  // public Referral getReferral() {
-  // return referral;
-  // }
 
   /**
    * {@inheritDoc}

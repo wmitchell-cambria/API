@@ -82,8 +82,7 @@ public class ScreeningService implements CrudsService {
       ScreeningDashboard thisScreening = new ScreeningDashboard(screening);
       screeningDashboard.add(thisScreening);
     }
-    ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboard);
-    return screeningDashboardList;
+    return new ScreeningDashboardList(screeningDashboard);
   }
 
   /**
