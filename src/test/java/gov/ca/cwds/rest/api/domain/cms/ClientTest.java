@@ -50,7 +50,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 /**
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ClientTest implements DomainTestTemplate {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LEGACY_CLIENT + "/";

@@ -36,7 +36,6 @@ public class DB2PassUserTest {
           db2conn.setDB2ClientUser(userId); // staff id
           db2conn.setDB2ClientWorkstation("127.0.0.1");
           db2conn.setAutoCommit(true);
-
           // db2conn.setDB2ClientDebugInfo(arg0, arg1);
 
           System.out.println("Driver properties: " + db2conn.getClientInfo());
@@ -50,8 +49,8 @@ public class DB2PassUserTest {
           .executeUpdate();
          //@formatter:on
 
-          // Execute SQL to force extended client information to be sent to the server.
-          // Auto-close the ResultSet upon block exit.
+          // Execute SQL to send extended client information to the server.
+          // ResultSet auto-closes upon block exit.
           try (ResultSet rs = conn.prepareStatement(
           //@formatter:off
               "SELECT C.DOC_HANDLE, C.DOC_SEGS, C.CMPRS_PRG, C.DOC_NAME, C.DOC_DATE, C.DOC_TIME, C.DOC_LEN \n"
