@@ -1,14 +1,19 @@
 package gov.ca.cwds.data.ns;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
@@ -51,19 +56,19 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
   @SuppressWarnings("unchecked")
   public Set<ScreeningEntity> findScreeningsByClientIds(Set<String> clientIds) {
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(
-            "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
+        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
         .setParameter("clientIds", clientIds);
-    return new HashSet(query.list());
+    return new HashSet<ScreeningEntity>(query.list());
   }
 
   /**
-   * Find IntakeLOVCodeEntity object by intakeCode
+   * Find IntakeLOVCodeEntity object by intakeCode.
    *
    * @param intakeCode intakeCode
    * @return IntakeLOVCodeEntity
    */
   public IntakeLOVCodeEntity findIntakeLOVCodeByIntakeCode(String intakeCode) {
+    @SuppressWarnings("unchecked")
     final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode")
@@ -71,4 +76,19 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
     List<IntakeLOVCodeEntity> codes = query.list();
     return codes.isEmpty() ? null : codes.get(0);
   }
+
+  /**
+   * Find screenings of current user (staff ID).
+   * 
+   * @param staffId - staff Id
+   * @return - array of screeningDashboard object
+   */
+  public List<ScreeningWrapper> findScreeningsByUserId(String staffId) {
+    @SuppressWarnings("unchecked")
+    final Query<ScreeningWrapper> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser")
+        .setParameter("staffId", staffId, StringType.INSTANCE);
+    return query.list();
+  }
+
 }

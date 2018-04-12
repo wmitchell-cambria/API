@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ScreeningServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Screening;
+
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -102,4 +103,5 @@ public class ScreeningResource {
           value = "The screening request") gov.ca.cwds.rest.api.domain.Screening screening) {
     return resourceDelegate.update(id, screening);
   }
+
 }

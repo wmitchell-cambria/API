@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.security.realm.PerryAccount;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
+import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * @author CWDS API Team

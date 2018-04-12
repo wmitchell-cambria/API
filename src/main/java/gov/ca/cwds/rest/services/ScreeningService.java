@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.elasticsearch.action.index.IndexRequestBuilder;
@@ -15,9 +17,14 @@ import com.google.inject.name.Named;
 
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Screening;
+import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
+import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 
 /**
  * Business layer object to work on {@link Screening}
@@ -29,15 +36,19 @@ public class ScreeningService implements CrudsService {
   private static final ObjectMapper OBJECT_MAPPER = ObjectMapperUtils.createObjectMapper();
 
   private ElasticsearchDao esDao;
+  private ScreeningDao screeningDao;
 
   /**
    * Construct the object
    * 
    * @param esDao Screenings ES DAO
+   * @param screeningDao - Screening DAO
    */
   @Inject
-  public ScreeningService(@Named("screenings.index") ElasticsearchDao esDao) {
+  public ScreeningService(@Named("screenings.index") ElasticsearchDao esDao,
+      ScreeningDao screeningDao) {
     this.esDao = esDao;
+    this.screeningDao = screeningDao;
   }
 
   /**
@@ -48,6 +59,31 @@ public class ScreeningService implements CrudsService {
   @Override
   public Response find(Serializable primaryKey) {
     throw new NotImplementedException("Find is not implemented");
+  }
+
+  /**
+   * {@inheritDoc} return the screening dashboard of the logged in user.
+   * 
+   * @return - array of screening dashboard objects
+   * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
+   * 
+   */
+  public Response findScreeningDashboard() {
+    final String staffId = RequestExecutionContext.instance().getStaffId();
+
+    return getScreeningsOfUser(staffId);
+  }
+
+  private ScreeningDashboardList getScreeningsOfUser(String staffId) {
+
+    List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
+    List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
+    for (ScreeningWrapper screening : screenings) {
+      ScreeningDashboard thisScreening = new ScreeningDashboard(screening);
+      screeningDashboard.add(thisScreening);
+    }
+    ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboard);
+    return screeningDashboardList;
   }
 
   /**

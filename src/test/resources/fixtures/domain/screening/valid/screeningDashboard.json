@@ -1,0 +1,10 @@
+{
+  "id" : "testscreeningdashboard",
+  "reference" : "screening dashboard reference",
+  "name" : "screening name",
+  "screening_decision" : "5 days",
+  "screening_decision_detail" : "screening decision detail",
+  "assignee" : "Test User",
+  "assignee_staff_id" : "abb",
+  "started_at" : null
+}
