@@ -61,6 +61,13 @@ public class ScreeningService implements CrudsService {
     throw new NotImplementedException("Find is not implemented");
   }
 
+  /**
+   * {@inheritDoc} return the screening dashboard of the logged in user.
+   * 
+   * @return - array of screening dashboard objects
+   * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
+   * 
+   */
   public Response findScreeningDashboard() {
     final String staffId = RequestExecutionContext.instance().getStaffId();
 
@@ -72,8 +79,8 @@ public class ScreeningService implements CrudsService {
     List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
     List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
     for (ScreeningWrapper screening : screenings) {
-      ScreeningDashboard aScreening = new ScreeningDashboard(screening);
-      screeningDashboard.add(aScreening);
+      ScreeningDashboard thisScreening = new ScreeningDashboard(screening);
+      screeningDashboard.add(thisScreening);
     }
     ScreeningDashboardList screeningDashboardList = new ScreeningDashboardList(screeningDashboard);
     return screeningDashboardList;

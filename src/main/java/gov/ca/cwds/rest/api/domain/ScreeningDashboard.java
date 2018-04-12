@@ -75,7 +75,7 @@ public class ScreeningDashboard extends ReportingDomain {
   }
 
   /**
-   * Constructor
+   * Constructor.
    * 
    * @param id - screening id
    * @param reference - reference
@@ -105,6 +105,11 @@ public class ScreeningDashboard extends ReportingDomain {
     this.startedAt = freshDate(startedAt);
   }
 
+  /**
+   * Constructor using persistent screening wrapper.
+   * 
+   * @param screening - persistent screening wrapper
+   */
   public ScreeningDashboard(ScreeningWrapper screening) {
     this.id = screening.getId();
     this.reference = screening.getReference();

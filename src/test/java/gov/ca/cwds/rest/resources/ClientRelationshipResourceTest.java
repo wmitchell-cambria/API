@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.IntakeBaseTest;
 import gov.ca.cwds.rest.services.RelationshipsService;
+
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
@@ -23,17 +24,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class ClientRelationshipResourceTest extends IntakeBaseTest {
 
-    @Test
-    public void shouldCallGetReleationshipsByClientIdsResourceEndpoint(){
-        List<String> clientIds = Arrays.asList("1zxcydd");
-        resources.client()
-                .target("/clients/relationships")
-                .queryParam("clientIds", "1zxcydd")
-                .request()
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
-        verify(service).findForIds(clientIds);
-    }
   private static final RelationshipsService service = mock(RelationshipsService.class);
 
   @ClassRule
