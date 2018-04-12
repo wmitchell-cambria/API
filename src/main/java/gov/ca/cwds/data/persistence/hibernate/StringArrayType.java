@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.util;
+package gov.ca.cwds.data.persistence.hibernate;
 
 import java.io.Serializable;
 import java.sql.Array;

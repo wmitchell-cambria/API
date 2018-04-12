@@ -40,4 +40,11 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
     List<LegacyDescriptorEntity> entityList = query.getResultList();
     return entityList.isEmpty() ? null : entityList.get(0);
   }
+
+  public List<Addresses> findByParticipant(String participantId){
+    final Query<Addresses> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(Addresses.FIND_BY_PARTICIPANT_ID)
+        .setParameter(Addresses.PARAM_PARTICIPANT_ID, participantId);
+    return query.getResultList();
+  }
 }

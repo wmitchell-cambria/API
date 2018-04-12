@@ -214,42 +214,60 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param ssn The social security number
    * @param roles The roles of the participant
    * @param addresses The addresses of the participant
-   * @param races The race And Ethnicity
-   * @param Ethnicity The race And Ethnicity
-   * @throws ServiceException throw any exception
    */
   @JsonCreator
   public ParticipantIntakeApi(@JsonProperty("id") String id,
       @JsonProperty("legacy_source_table") String legacySourceTable,
       @JsonProperty("legacy_client_id") String clientId,
       @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor,
-      @JsonProperty("first_name") String firstName, @JsonProperty("middle_name") String middleName,
-      @JsonProperty("last_name") String lastName, @JsonProperty("name_suffix") String nameSuffix,
-      @JsonProperty("gender") String gender, @JsonProperty("ssn") String ssn,
+      @JsonProperty("first_name") String firstName,
+      @JsonProperty("middle_name") String middleName,
+      @JsonProperty("last_name") String lastName,
+      @JsonProperty("name_suffix") String nameSuffix,
+      @JsonProperty("gender") String gender,
+      @JsonProperty("approximate_age") String approximateAge,
+      @JsonProperty("approximate_age_units") String approximateAgeUnits,
+      @JsonProperty("ssn") String ssn,
       @JsonProperty("date_of_birth") String dateOfBirth,
       @JsonProperty("languages") Set<String> languages,
       @JsonProperty("screening_id") long screeningId,
       @JsonProperty("roles") Set<String> roles,
-      @JsonProperty("addresses") Set<AddressIntakeApi> addresses
+      @JsonProperty("addresses") Set<AddressIntakeApi> addresses,
+      @JsonProperty("phone_numbers") Set<PhoneNumber> phoneNumbers,
+      @JsonProperty("seales") boolean sealed,
+      @JsonProperty("sensitive") boolean sensitive
       ) {
     super();
     this.id = id;
-    this.legacySourceTable = legacySourceTable;
-    this.legacyId = clientId;
-    this.legacyDescriptor = legacyDescriptor;
-    this.screeningId = screeningId;
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
     this.nameSuffix = nameSuffix;
     this.gender = gender;
-    this.dateOfBirth = dateOfBirth;
     this.ssn = ssn;
+    this.dateOfBirth = dateOfBirth;
+    this.approximateAge = approximateAge;
+    this.approximateAgeUnits = approximateAgeUnits;
     this.roles = roles;
+    this.languages = languages;
+    this.legacyId = clientId;
+    this.legacySourceTable = legacySourceTable;
+    this.legacyDescriptor = legacyDescriptor;
+    this.races = races;
+    this.ethnicity = ethnicity;
+    this.screeningId = screeningId;
     this.addresses = addresses;
+    this.phoneNumbers = phoneNumbers;
+    this.sealed = sealed;
+    this.sensitive = sensitive;
+
 
   }
 
+  /**
+   *
+   * @param participantEntity
+   */
   public ParticipantIntakeApi(ParticipantEntity participantEntity){
     super();
     this.id = participantEntity.getId();
@@ -265,20 +283,18 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     }
     this.approximateAge = participantEntity.getApproximateAge();
     this.approximateAgeUnits = participantEntity.getApproximateAgeUnits();
-    this.languages =  Arrays.stream(participantEntity.getLanguages().split(",")).collect(Collectors.toCollection(HashSet::new));
+    this.roles = new HashSet<>(Arrays.asList(participantEntity.getRoles()));
+    this.languages = new HashSet<>(Arrays.asList(participantEntity.getLanguages()));
     this.legacyId = participantEntity.getLegacyId();
     this.legacySourceTable = participantEntity.getLegacySourceTable();
     this.legacyDescriptor = new LegacyDescriptor();
     this.races = participantEntity.getRaces();
     this.ethnicity = participantEntity.getEthnicity();
-    this.screeningId = Long.valueOf(participantEntity.getScreening().getId());
-    this.roles = new HashSet<>(Arrays.asList(participantEntity.getRoles().split(",")));
-
-//    this.addresses
-//    this.phoneNumbers
-
-    this.sealed = Boolean.parseBoolean(participantEntity.getSealed());
-    this.sensitive = Boolean.parseBoolean(participantEntity.getSensitive());
+    if (participantEntity.getScreening() != null) {
+      this.screeningId = Long.valueOf(participantEntity.getScreening().getId());
+    }
+    this.sealed = participantEntity.getSealed();
+    this.sensitive = participantEntity.getSensitive();
 
 
   }

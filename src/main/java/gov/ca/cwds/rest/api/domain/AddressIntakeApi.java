@@ -113,12 +113,14 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
     this.state = address.getState();
     this.zip = address.getZip();
     this.type = address.getType();
-    this.legacyDescriptor = new LegacyDescriptor();
-
   }
 
   public String getId() {
     return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**
@@ -153,10 +155,7 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    * @return - CMS record description
    */
   public LegacyDescriptor getLegacyDescriptor() {
-    if (legacyDescriptor == null) {
-      legacyDescriptor = new LegacyDescriptor();
-    }
-    return this.legacyDescriptor;
+    return legacyDescriptor;
   }
 
   /**

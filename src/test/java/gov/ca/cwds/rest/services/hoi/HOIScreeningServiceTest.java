@@ -162,7 +162,7 @@ public class HOIScreeningServiceTest {
     screening1.setAccessRestrictions(accessRestriction);
 
     ParticipantEntity reporter = new ParticipantEntityBuilder().setId(DEFAULT_REPORTER_ID)
-        .setFirstName("Alec").setLastName("Nite").setRoles("{Mandated Reporter}").build();
+        .setFirstName("Alec").setLastName("Nite").setRoles(new String[]{"Mandated Reporter"}).build();
 
     ScreeningEntity screening2 = new ScreeningEntityBuilder().setId("224")
         .setStartedAt("2017-11-30").setEndedAt("2017-12-10").setIncidentCounty("sacramento")

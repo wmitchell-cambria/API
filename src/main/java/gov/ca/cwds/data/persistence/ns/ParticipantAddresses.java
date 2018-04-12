@@ -1,21 +1,18 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,39 +22,39 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "participant_addresses")
-public class ParticipantAddresses implements HasPaperTrail {
+public class ParticipantAddresses implements PersistentObject, Serializable {
 
   /**
    * Base serialization value. Increment by version
    */
-//  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-//  @Id
-//  @Column(name = "id")
-//  @GenericGenerator(
-//      name = "participant_addresses_id",
-//      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-//      parameters = {
-//          @org.hibernate.annotations.Parameter(
-//              name = "sequence_name", value = "participant_addresses_id_seq")
-//      }
-//  )
-//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_addresses_id")
-////  @SequenceGenerator(name = "participant_addresses_id", sequenceName = "participant_addresses_id_seq")
-//  private String id;
+  @Id
+  @Column(name = "id")
+//  @Column(name = "id", insertable = false, updatable = false)
+  @GenericGenerator(
+      name = "participant_addresses_id",
+      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(
+              name = "sequence_name", value = "participant_addresses_id_seq")
+      }
+  )
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_addresses_id")
+  private String id;
 
   @EmbeddedId
   private ParticipantAddressId participantAddressId;
 
 
-  @ManyToOne(fetch = FetchType.LAZY)
-//  @MapsId("participantId")
-  @JoinColumn(name = "participant_id", insertable=false, updatable = false)
+  @ManyToOne(fetch = FetchType.EAGER)
+  @MapsId("participantId")
+//  @JoinColumn(name = "participant_id")
   private ParticipantEntity  participant;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-//  @MapsId("addressId")
-  @JoinColumn(name = "address_id", insertable=false, updatable = false)
+  @ManyToOne(fetch = FetchType.EAGER)
+  @MapsId("addressId")
+//  @JoinColumn(name = "address_id")
   private Addresses address;
 
   /**
@@ -73,9 +70,14 @@ public class ParticipantAddresses implements HasPaperTrail {
     this.participantAddressId = new ParticipantAddressId(participant.getId(), address.getId());
   }
 
-//  public String getId() {
-//    return id;
-//  }
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public String getPrimaryKey() {
+    return getId();
+  }
 
   public ParticipantAddressId getParticipantAddressId() {
     return participantAddressId;
@@ -114,5 +116,72 @@ public class ParticipantAddresses implements HasPaperTrail {
   public int hashCode() {
 
     return Objects.hash(participant, address);
+  }
+
+  /**
+   * @author Intake Team 4
+   *
+   */
+  @Embeddable
+  public static class ParticipantAddressId implements Serializable {
+
+    /**
+     * Base serialization value. Increment by version
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "participant_id")
+//    @Column(name = "participant_id", updatable = false, insertable = false)
+    private String participantId;
+
+    @Column(name = "address_id")
+//    @Column(name = "address_id", updatable = false, insertable = false)
+    private String addressId;
+
+    /**
+     * Default constructor
+     */
+    public ParticipantAddressId() {
+    }
+
+    public ParticipantAddressId(String participantId, String addressId) {
+      this.participantId = participantId;
+      this.addressId = addressId;
+    }
+
+    public String getParticipantId() {
+      return participantId;
+    }
+
+    public void setParticipantId(String person) {
+      this.participantId = person;
+    }
+
+    public String getAddressId() {
+      return addressId;
+    }
+
+    public void setAddressId(String address) {
+      this.addressId = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      ParticipantAddressId that = (ParticipantAddressId) o;
+      return Objects.equals(participantId, that.participantId) &&
+          Objects.equals(addressId, that.addressId);
+    }
+
+    @Override
+    public int hashCode() {
+
+      return Objects.hash(participantId, addressId);
+    }
   }
 }

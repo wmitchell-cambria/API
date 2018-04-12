@@ -5,10 +5,13 @@ import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -51,8 +54,8 @@ public class Allegation implements PersistentObject {
   private String updatedAt;
 
   @Column(name = "allegation_types")
-  @Type(type = "gov.ca.cwds.rest.util.StringArrayType")
-  private String[] allegationTypes;
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
+  private String[] allegationTypes = new String[0];
 
   @ManyToOne
   @JoinColumn(name = "screening_id", insertable = false, updatable = false)
@@ -156,6 +159,27 @@ public class Allegation implements PersistentObject {
    */
   public ScreeningEntity getScreening() {
     return screeningEntity;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

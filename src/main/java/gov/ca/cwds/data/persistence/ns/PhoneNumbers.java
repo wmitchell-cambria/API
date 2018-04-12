@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.data.persistence.ns.PhoneNumbers.FIND_BY_PARTICIPANT_ID;
+import static gov.ca.cwds.data.persistence.ns.PhoneNumbers.FIND_BY_PARTICIPANT_ID_QUERY;
+
 import gov.ca.cwds.Identifiable;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
@@ -8,19 +11,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NamedQuery;
 
 /**
  * {@link PersistentObject} representing an PhoneNumbers
  * 
  * @author Intake Team 4
  */
+
+@NamedQuery(
+    name = FIND_BY_PARTICIPANT_ID,
+    query = FIND_BY_PARTICIPANT_ID_QUERY
+)
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "phone_numbers")
 public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiable<String> {
+
+  public static final String FIND_BY_PARTICIPANT_ID = "gov.ca.cwds.data.persistence.ns.PhoneNumbers.findByParticipantId";
+  public static final String PARAM_PARTICIPANT_ID = "participantId";
+  static final String FIND_BY_PARTICIPANT_ID_QUERY =
+      "SELECT ppn.phoneNumber FROM ParticipantPhoneNumbers ppn"
+      + " WHERE ppn.participant.id = :"
+      + PARAM_PARTICIPANT_ID;
+
+
+
 
   @Id
   @GenericGenerator(
@@ -32,8 +53,6 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
       }
   )
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone_numbers_id")
-//  @SequenceGenerator(name = "phone_numbers_id", sequenceName = "phone_numbers_id_seq",
-//      allocationSize = 50)
   @Column(name = "id")
   private String id;
 
@@ -62,6 +81,7 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
    * @param phoneNumber The domain object to construct this object from
    */
   public PhoneNumbers(gov.ca.cwds.rest.api.domain.PhoneNumber phoneNumber) {
+    this.id = String.valueOf(phoneNumber.getId());
     this.number = phoneNumber.getPhoneNumber();
     this.type = phoneNumber.getPhoneType();
   }
@@ -97,5 +117,26 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
   public String getType() {
     return type;
   }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 
 }

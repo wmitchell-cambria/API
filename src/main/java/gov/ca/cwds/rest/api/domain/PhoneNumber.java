@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -26,6 +25,10 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    */
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("id")
+  @ApiModelProperty(example = "478")
+  Long id;
+
   @JsonProperty("number")
   @ApiModelProperty(example = "4083455678")
   @Size(max = 50)
@@ -42,6 +45,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneNumber persistence level address object
    */
   public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumber phoneNumber) {
+    this.id = phoneNumber.getId();
     this.number = phoneNumber.getNumber();
     this.type = phoneNumber.getType();
   }
@@ -52,6 +56,7 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneNumber persistence level address object
    */
   public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumbers phoneNumber) {
+    this.id = Long.valueOf(phoneNumber.getId());
     this.number = phoneNumber.getNumber();
     this.type = phoneNumber.getType();
   }
@@ -60,11 +65,25 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneNumber - phone number
    * @param phoneType - phone number type
    */
-  public PhoneNumber(@JsonProperty("number") String phoneNumber,
+  public PhoneNumber(@JsonProperty("id") Long id, @JsonProperty("number") String phoneNumber,
       @JsonProperty("phone_number_type_id") String phoneType) {
     super();
+    this.id = id;
     this.number = phoneNumber;
     this.type = phoneType;
+  }
+
+  public PhoneNumber(String number, String type) {
+    this.number = number;
+    this.type = type;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   /**

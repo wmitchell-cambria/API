@@ -1,6 +1,8 @@
 package gov.ca.cwds.inject;
 
 import gov.ca.cwds.data.ns.PaperTrailDao;
+import gov.ca.cwds.data.persistence.ns.ParticipantAddresses.ParticipantAddressId;
+import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.ParticipantPhoneNumberId;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +100,6 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
-import org.hibernate.cfg.Configuration;
 
 /**
  * DI (dependency injection) setup for data access objects (DAO).
@@ -220,9 +221,9 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
           gov.ca.cwds.data.persistence.ns.PaperTrail.class,
           gov.ca.cwds.data.persistence.ns.ParticipantEntity.class,
-          gov.ca.cwds.data.persistence.ns.ParticipantAddressId.class,
+          ParticipantAddressId.class,
           gov.ca.cwds.data.persistence.ns.ParticipantAddresses.class,
-          gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumberId.class,
+          ParticipantPhoneNumberId.class,
           gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.class,
           gov.ca.cwds.data.persistence.ns.PersonAddressId.class,
           gov.ca.cwds.data.persistence.ns.PersonAddress.class,

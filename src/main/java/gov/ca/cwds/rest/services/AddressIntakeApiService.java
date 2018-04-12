@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.services;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
@@ -11,7 +10,6 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.PostedAddress;
 import java.io.Serializable;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -81,17 +79,15 @@ public class AddressIntakeApiService implements CrudsService {
     assert request instanceof AddressIntakeApi;
 
     AddressIntakeApi address = (AddressIntakeApi) request;
+
     gov.ca.cwds.data.persistence.ns.Addresses managed =
         new gov.ca.cwds.data.persistence.ns.Addresses(address);
 
     managed = addressesDao.create(managed);
-    //Save legacy descriptor entity
-    LegacyDescriptorEntity legacyDescriptorEntity = new LegacyDescriptorEntity(
-        address.getLegacyDescriptor(), LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS, Long.valueOf(managed.getId()));
-    legacyDescriptorEntity = legacyDescriptorDao.create(legacyDescriptorEntity);
 
     address = new AddressIntakeApi(managed);
-    address.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
+    address.setLegacyDescriptor(
+        saveLegacyDescriptor(address.getLegacyDescriptor(), managed.getId()));
 
     return address;
   }
@@ -108,4 +104,15 @@ public class AddressIntakeApiService implements CrudsService {
     throw new NotImplementedException("Update is not implemented");
   }
 
+
+  public LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor, String describableId ){
+    if (legacyDescriptor == null){
+      return null;
+    }
+    //Save legacy descriptor entity
+    LegacyDescriptorEntity legacyDescriptorEntity = new LegacyDescriptorEntity(
+        legacyDescriptor, LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS, Long.valueOf(describableId));
+    legacyDescriptorEntity = legacyDescriptorDao.create(legacyDescriptorEntity);
+    return new LegacyDescriptor(legacyDescriptorEntity);
+  }
 }

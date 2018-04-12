@@ -1,23 +1,18 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author Intake Team 4
@@ -25,15 +20,16 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "participant_phone_numbers")
-public class ParticipantPhoneNumbers implements HasPaperTrail {
+//public class ParticipantPhoneNumbers implements Identifiable<String>, Serializable {
+public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
 
   /**
    * Base serialization value. Increment by version
    */
-//  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 //
 //  @Id
-//  @Column(name = "id")
+  @Column(name = "id")
 //  @GenericGenerator(
 //      name = "participant_phone_numbers_id",
 //      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
@@ -44,20 +40,20 @@ public class ParticipantPhoneNumbers implements HasPaperTrail {
 //  )
 //  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_phone_numbers_id")
 ////  @SequenceGenerator(name = "participant_phone_numbers_id", sequenceName = "participant_phone_numbers_id_seq")
-//  private String id;
+  private String id;
 
   @EmbeddedId
   private ParticipantPhoneNumberId participantPhoneNumberId;
 
 
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
-  @MapsId("participantId")
+  @ManyToOne(fetch = FetchType.EAGER)
+//  @MapsId("participantId")
+  @JoinColumn(name = "participant_id", updatable = false, insertable = false)
   private ParticipantEntity  participant;
 
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("phoneNumberId")
+  @JoinColumn(name = "phone_number_id", updatable = false, insertable = false)
   private PhoneNumbers phoneNumber;
 
   @Column(name = "created_at")
@@ -79,9 +75,14 @@ public class ParticipantPhoneNumbers implements HasPaperTrail {
     this.participantPhoneNumberId = new ParticipantPhoneNumberId(participant.getId(), phoneNumber.getId());
   }
 
-//  public String getId() {
-//    return id;
-//  }
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public String getPrimaryKey() {
+    return getId();
+  }
 
   public ParticipantPhoneNumberId getParticipantPhoneNumberId() {
     return participantPhoneNumberId;
@@ -104,15 +105,19 @@ public class ParticipantPhoneNumbers implements HasPaperTrail {
   }
 
   public Date getCreatedAt() {
-    return createdAt;
+    return (Date)createdAt.clone();
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = (Date)createdAt.clone();
   }
 
   public Date getUpdatedAt() {
-    return updatedAt;
+    return (Date)updatedAt.clone();
   }
 
   public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+    this.updatedAt = (Date)updatedAt.clone();
   }
 
   @Override
@@ -132,5 +137,70 @@ public class ParticipantPhoneNumbers implements HasPaperTrail {
   public int hashCode() {
 
     return Objects.hash(participant, phoneNumber);
+  }
+
+  /**
+   * @author Intake Team 4
+   *
+   */
+  @Embeddable
+  public static class ParticipantPhoneNumberId implements Serializable {
+
+    /**
+     * Base serialization value. Increment by version
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "participant_id")
+    private String participantId;
+
+    @Column(name = "phone_number_id")
+    private String phoneNumberId;
+
+    /**
+     * Default constructor
+     */
+    public ParticipantPhoneNumberId() {
+    }
+
+    public ParticipantPhoneNumberId(String participantId, String phoneNumberId) {
+      this.participantId = participantId;
+      this.phoneNumberId = phoneNumberId;
+    }
+
+    public String getParticipantId() {
+      return participantId;
+    }
+
+    public void setParticipantId(String person) {
+      this.participantId = person;
+    }
+
+    public String getPhoneNumberId() {
+      return phoneNumberId;
+    }
+
+    public void setPhoneNumberId(String address) {
+      this.phoneNumberId = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      ParticipantPhoneNumberId that = (ParticipantPhoneNumberId) o;
+      return Objects.equals(participantId, that.participantId) &&
+          Objects.equals(phoneNumberId, that.phoneNumberId);
+    }
+
+    @Override
+    public int hashCode() {
+
+      return Objects.hash(participantId, phoneNumberId);
+    }
   }
 }

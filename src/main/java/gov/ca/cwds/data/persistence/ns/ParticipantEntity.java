@@ -7,8 +7,8 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -22,10 +22,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
@@ -55,7 +55,6 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
       }
   )
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_id")
-//  @SequenceGenerator(name = "participant_id", sequenceName = "participants_id_seq")
   private String id;
 
   @Column(name = "date_of_birth")
@@ -73,18 +72,21 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Column(name = "ssn")
   private String ssn;
 
+  @HashCodeExclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "screening_id", nullable = false, insertable = false, updatable = false)
+  @JoinColumn(name = "screening_id", nullable = false)
   private ScreeningEntity screeningEntity;
 
   @Column(name = "legacy_id")
   private String legacyId;
 
   @Column(name = "roles")
-  private String roles;
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
+  private String[] roles;
 
   @Column(name = "languages")
-  private String languages;
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
+  private String[] languages;
 
   @Column(name = "middle_name")
   private String middleName;
@@ -104,10 +106,10 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   private String legacySourceTable;
 
   @Column(name = "sensitive")
-  private String sensitive;
+  private Boolean sensitive;
 
   @Column(name = "sealed")
-  private String sealed;
+  private Boolean sealed;
 
   @Column(name = "approximate_age")
   private String approximateAge;
@@ -115,22 +117,17 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Column(name = "approximate_age_units")
   private String approximateAgeUnits;
 
-  @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<ParticipantAddresses> participantAddresses = new ArrayList<>();
-
-  @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<ParticipantPhoneNumbers> participantPhoneNumbers = new ArrayList<>();
-
-
   /**
    * Default constructor
    *
    * Required for Hibernate
    */
   public ParticipantEntity() {
+    super();
   }
 
-  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi, ScreeningEntity screeningEntity, Set<Addresses> addresses, Set<PhoneNumbers> phoneNumbers) {
+//  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi, ScreeningEntity screeningEntity, Set<Addresses> addresses, Set<PhoneNumbers> phoneNumbers) {
+  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi, ScreeningEntity screeningEntity) {
     id = participantIntakeApi.getId();
     try {
       dateOfBirth = new SimpleDateFormat(DomainObject.DATE_FORMAT).parse(participantIntakeApi.getDateOfBirth());
@@ -143,51 +140,51 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     ssn = participantIntakeApi.getSsn();
     this.screeningEntity = screeningEntity;
     legacyId = participantIntakeApi.getLegacyId();
-    roles = String.join(",", participantIntakeApi.getRoles());
-    languages = String.join(",", participantIntakeApi.getLanguages());
+    roles = participantIntakeApi.getRoles().toArray(new String[0]);
+    languages = participantIntakeApi.getLanguages().toArray(new String[0]);
     middleName = participantIntakeApi.getMiddleName();
     nameSuffix = participantIntakeApi.getNameSuffix();
     races = participantIntakeApi.getRaces();
     ethnicity = participantIntakeApi.getEthnicity();
     legacySourceTable = participantIntakeApi.getLegacySourceTable();
-    sensitive = String.valueOf(participantIntakeApi.isSensitive());
-    sealed = String.valueOf(participantIntakeApi.isSealed());
+    sensitive = participantIntakeApi.isSensitive();
+    sealed = participantIntakeApi.isSealed();
     approximateAge = participantIntakeApi.getApproximateAge();
     approximateAgeUnits = participantIntakeApi.getApproximateAgeUnits();
 
-    addresses.forEach(this::addAddress);
-    phoneNumbers.forEach(this::addPhoneNumber);
+//    addresses.forEach(this::addAddress);
+//    phoneNumbers.forEach(this::addPhoneNumber);
 
  }
 
 
 
-  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
-		  String gender, String lastName, String ssn, 
-		  ScreeningEntity screeningEntity, String legacyId, String roles,
-		  String languages, String middleName, String nameSuffix,
-		  String races, String ethnicity, String legacySourceTable,
-		  String sensitive, String sealed, String approximateAge,
-		  String approximateAgeUnits,
-      List<ParticipantAddresses> participantAddresses,
-      List<ParticipantPhoneNumbers> participantPhoneNumbers) {
-    this( id,  dateOfBirth,  firstName,
-         gender,  lastName,  ssn,
-         screeningEntity,  legacyId,  roles,
-         languages,  middleName,  nameSuffix,
-         races,  ethnicity,  legacySourceTable,
-         sensitive,  sealed,  approximateAge,
-         approximateAgeUnits);
-    this.participantAddresses = participantAddresses;
-    this.participantPhoneNumbers = participantPhoneNumbers;
-  }
+//  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
+//		  String gender, String lastName, String ssn,
+//		  ScreeningEntity screeningEntity, String legacyId, String[] roles,
+//		  String[] languages, String middleName, String nameSuffix,
+//		  String races, String ethnicity, String legacySourceTable,
+//		  Boolean sensitive, Boolean sealed, String approximateAge,
+//		  String approximateAgeUnits,
+//      Set<ParticipantAddresses> participantAddresses,
+//      Set<ParticipantPhoneNumbers> participantPhoneNumbers) {
+//    this( id,  dateOfBirth,  firstName,
+//         gender,  lastName,  ssn,
+//         screeningEntity,  legacyId,  roles,
+//         languages,  middleName,  nameSuffix,
+//         races,  ethnicity,  legacySourceTable,
+//         sensitive,  sealed,  approximateAge,
+//         approximateAgeUnits);
+//    this.participantAddresses = participantAddresses;
+//    this.participantPhoneNumbers = participantPhoneNumbers;
+//  }
 
   public ParticipantEntity(String id, Date dateOfBirth, String firstName,
 		  String gender, String lastName, String ssn,
-		  ScreeningEntity screeningEntity, String legacyId, String roles,
-		  String languages, String middleName, String nameSuffix,
+		  ScreeningEntity screeningEntity, String legacyId, String[] roles,
+		  String[] languages, String middleName, String nameSuffix,
 		  String races, String ethnicity, String legacySourceTable,
-		  String sensitive, String sealed, String approximateAge,
+		  Boolean sensitive, Boolean sealed, String approximateAge,
 		  String approximateAgeUnits) {
 	  this.id = id;
 	  this.dateOfBirth = dateOfBirth;
@@ -248,11 +245,11 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     return legacyId;
   }
 
-  public String getRoles() {
+  public String[] getRoles() {
     return roles;
   }
 
-  public String getLanguages() {
+  public String[] getLanguages() {
     return languages;
   }
 
@@ -276,11 +273,11 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     return legacySourceTable;
   }
 
-  public String getSensitive() {
+  public Boolean getSensitive() {
     return sensitive;
   }
 
-  public String getSealed() {
+  public Boolean getSealed() {
     return sealed;
   }
 
@@ -292,40 +289,40 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     return approximateAgeUnits;
   }
 
-  public List<ParticipantAddresses> getParticipantAddresses() {
-    return participantAddresses;
-  }
-
-
-  public void addAddress(Addresses address){
-    participantAddresses.add(new ParticipantAddresses(this, address));
-  }
-
-  public void removeAddress(Addresses address){
-    for (Iterator<ParticipantAddresses> iterator = participantAddresses.iterator(); iterator.hasNext();){
-      ParticipantAddresses participantAddress = iterator.next();
-      if (participantAddress.getParticipant().equals(this) && participantAddress.getAddress().equals(address)){
-        iterator.remove();
-        participantAddress.setAddress(null);
-        participantAddress.setParticipant(null);
-      }
-    }
-  }
-
-  public void addPhoneNumber(PhoneNumbers phoneNumber){
-    participantPhoneNumbers.add(new ParticipantPhoneNumbers(this, phoneNumber));
-  }
-
-  public void removePhone(PhoneNumbers phoneNumber){
-    for (Iterator<ParticipantPhoneNumbers> iterator = participantPhoneNumbers.iterator(); iterator.hasNext();){
-      ParticipantPhoneNumbers participantPhoneNumber = iterator.next();
-      if (participantPhoneNumber.getParticipant().equals(this) && participantPhoneNumber.getPhoneNumber().equals(phoneNumber)){
-        iterator.remove();
-        participantPhoneNumber.setPhoneNumber(null);
-        participantPhoneNumber.setParticipant(null);
-      }
-    }
-  }
+//  public Set<ParticipantAddresses> getParticipantAddresses() {
+//    return participantAddresses;
+//  }
+//
+//
+//  public void addAddress(Addresses address){
+//    participantAddresses.add(new ParticipantAddresses(this, address));
+//  }
+//
+//  public void removeAddress(Addresses address){
+//    for (Iterator<ParticipantAddresses> iterator = participantAddresses.iterator(); iterator.hasNext();){
+//      ParticipantAddresses participantAddress = iterator.next();
+//      if (participantAddress.getParticipant().equals(this) && participantAddress.getAddress().equals(address)){
+//        iterator.remove();
+//        participantAddress.setAddress(null);
+//        participantAddress.setParticipant(null);
+//      }
+//    }
+//  }
+//
+//  public void addPhoneNumber(PhoneNumbers phoneNumber){
+//    participantPhoneNumbers.add(new ParticipantPhoneNumbers(this, phoneNumber));
+//  }
+//
+//  public void removePhone(PhoneNumbers phoneNumber){
+//    for (Iterator<ParticipantPhoneNumbers> iterator = participantPhoneNumbers.iterator(); iterator.hasNext();){
+//      ParticipantPhoneNumbers participantPhoneNumber = iterator.next();
+//      if (participantPhoneNumber.getParticipant().equals(this) && participantPhoneNumber.getPhoneNumber().equals(phoneNumber)){
+//        iterator.remove();
+//        participantPhoneNumber.setPhoneNumber(null);
+//        participantPhoneNumber.setParticipant(null);
+//      }
+//    }
+//  }
 
   /**
    * {@inheritDoc}
