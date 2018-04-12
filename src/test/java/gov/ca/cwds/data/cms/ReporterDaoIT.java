@@ -47,8 +47,8 @@ public class ReporterDaoIT implements DaoTestTemplate {
    */
   @BeforeClass
   public static void beforeClass() {
-    sessionFactory = new Configuration().configure().buildSessionFactory();
-    reporterDao = new ReporterDao(sessionFactory);
+	sessionFactory = new Configuration().configure().buildSessionFactory();
+	reporterDao = new ReporterDao(sessionFactory);
   }
 
   /**
@@ -56,114 +56,110 @@ public class ReporterDaoIT implements DaoTestTemplate {
    */
   @AfterClass
   public static void afterClass() {
-    sessionFactory.close();
+	sessionFactory.close();
   }
 
   @Override
   @Before
   public void setup() {
-    session = sessionFactory.getCurrentSession();
-    session.beginTransaction();
+	session = sessionFactory.getCurrentSession();
+	session.beginTransaction();
   }
 
   @Override
   @After
   public void teardown() {
-    session.getTransaction().rollback();
+	session.getTransaction().rollback();
   }
 
   @Override
   @Test
   public void testFind() throws Exception {
-    String id = "AbiQCgu0Hj";
-    Reporter found = reporterDao.find(id);
-    assertThat(found.getReferralId(), is(id));
+	String id = "AbiQCgu0Hj";
+	Reporter found = reporterDao.find(id);
+	assertThat(found.getReferralId(), is(id));
   }
 
   @Override
   @Test
   public void testFindEntityNotFoundException() throws Exception {
-    String id = "ZZZZZZZ999";
-    Reporter found = reporterDao.find(id);
-    assertThat(found, is(nullValue()));
+	String id = "ZZZZZZZ999";
+	Reporter found = reporterDao.find(id);
+	assertThat(found, is(nullValue()));
   }
 
   @Override
   @Test
   public void testCreate() throws Exception {
-    Reporter reporter =
-        new Reporter("AbiQCgu0AA", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
-            "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0,
-            (short) 1828, "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
-    Reporter created = reporterDao.create(reporter);
-    assertThat(created, is(reporter));
+	Reporter reporter = new Reporter("AbiQCgu0AA", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
+		"Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828, "Street", "12345", " ", new Integer(95845), null,
+		(short) 0, "51");
+	Reporter created = reporterDao.create(reporter);
+	assertThat(created, is(reporter));
   }
 
   @Override
   @Test(expected = EntityExistsException.class)
   public void testCreateExistingEntityException() throws Exception {
-    Reporter reporter =
-        new Reporter("AbiQCgu0Hj", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
-            "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0,
-            (short) 1828, "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
-    reporterDao.create(reporter);
+	Reporter reporter = new Reporter("AbiQCgu0Hj", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
+		"Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828, "Street", "12345", " ", new Integer(95845), null,
+		(short) 0, "51");
+	reporterDao.create(reporter);
   }
 
   @Override
   @Test
   public void testDelete() throws Exception {
-    String id = "AbiQCgu0Hj";
-    Reporter deleted = reporterDao.delete(id);
-    assertThat(deleted.getReferralId(), is(id));
+	String id = "AbiQCgu0Hj";
+	Reporter deleted = reporterDao.delete(id);
+	assertThat(deleted.getReferralId(), is(id));
   }
 
   @Override
   @Test
   public void testDeleteEntityNotFoundException() throws Exception {
-    String id = "ZZZZZZZ999";
-    Reporter deleted = reporterDao.delete(id);
-    assertThat(deleted, is(nullValue()));
+	String id = "ZZZZZZZ999";
+	Reporter deleted = reporterDao.delete(id);
+	assertThat(deleted, is(nullValue()));
   }
 
   @Override
   // @Test
   public void testUpdate() throws Exception {
-    Reporter reporter = new Reporter("AbiQCgu0Hj", "  ", "City", (short) 591, (short) 0, "N", null,
-        " ", null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ",
-        0L, 0, (short) 1828, "Street", "12345", " ", 95845,
-        "AbiQCgu0Hk", (short) 0, "51");
-    Reporter updated = reporterDao.update(reporter);
-    assertThat(reporter, is(updated));
+	Reporter reporter = new Reporter("AbiQCgu0Hj", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N",
+		"Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828, "Street", "12345", " ", 95845, "AbiQCgu0Hk",
+		(short) 0, "51");
+	Reporter updated = reporterDao.update(reporter);
+	assertThat(reporter, is(updated));
   }
 
   @Override
   @Test(expected = EntityNotFoundException.class)
   public void testUpdateEntityNotFoundException() throws Exception {
-    Reporter reporter = new Reporter("ZZZZZZ", "  ", "City", (short) 591, (short) 0, "N", null, " ",
-        null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ",
-        0L, 0, (short) 1828, "Street", "12345", " ", 95845,
-        "AbiQCgu0Hk", (short) 0, "51");
-    reporterDao.update(reporter);
+	Reporter reporter = new Reporter("ZZZZZZ", "  ", "City", (short) 591, (short) 0, "N", null, " ", null, "N", "Fred",
+		"Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828, "Street", "12345", " ", 95845, "AbiQCgu0Hk", (short) 0,
+		"51");
+	reporterDao.update(reporter);
   }
 
   @Override
   @Test
   public void testFindAllNamedQueryExist() throws Exception {
-    Query query = session.getNamedQuery("gov.ca.cwds.data.persistence.cms.Reporter.findAll");
-    assertThat(query, is(notNullValue()));
+	Query query = session.getNamedQuery("gov.ca.cwds.data.persistence.cms.Reporter.findAll");
+	assertThat(query, is(notNullValue()));
   }
 
   @Override
   @Test
   public void testFindAllReturnsCorrectList() throws Exception {
-    Query query = session.getNamedQuery("gov.ca.cwds.data.persistence.cms.Reporter.findAll");
-    @SuppressWarnings("unchecked")
-    final List<Reporter> list = query.list();
-    System.out.println("size of query list is: " + list.size());
-    for (Reporter c : list) {
-      System.out.println("id " + c.getPrimaryKey() + " " + c.getLastName());
-    }
-    assertThat(query.list().size(), greaterThanOrEqualTo(0));
+	Query query = session.getNamedQuery("gov.ca.cwds.data.persistence.cms.Reporter.findAll");
+	@SuppressWarnings("unchecked")
+	final List<Reporter> list = query.list();
+	System.out.println("size of query list is: " + list.size());
+	for (Reporter c : list) {
+	  System.out.println("id " + c.getPrimaryKey() + " " + c.getLastName());
+	}
+	assertThat(query.list().size(), greaterThanOrEqualTo(0));
   }
 
   // TODO: #138438305: move to jobs project.

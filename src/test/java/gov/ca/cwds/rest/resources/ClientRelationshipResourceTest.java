@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.IntakeBaseTest;
 import gov.ca.cwds.rest.services.RelationshipsService;
+
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**

@@ -3,9 +3,12 @@ package gov.ca.cwds.rest.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
@@ -19,9 +22,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
+import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.Screening;
+import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
+import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
 public class ScreeningServiceTest {
 
@@ -32,6 +41,9 @@ public class ScreeningServiceTest {
 
   @Mock
   private ElasticsearchDao esDao;
+
+  @Mock
+  private ScreeningDao screeningDao;
 
   @Mock
   private Client esClient;
@@ -57,7 +69,11 @@ public class ScreeningServiceTest {
     when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
     when(indexRequestBuilder.get()).thenReturn(indexResponse);
 
-    screeningService = new ScreeningService(esDao);
+
+    screeningService = new ScreeningService(esDao, screeningDao);
+
+    new TestingRequestExecutionContext("0X5");
+
   }
 
   @Test
@@ -134,5 +150,31 @@ public class ScreeningServiceTest {
       fail("Expected exception");
     } catch (java.lang.AssertionError e) {
     }
+  }
+
+  @Test
+  public void testFindScreeningDashboard() throws Exception {
+    ScreeningWrapper sw1 = new ScreeningWrapperEntityBuilder().build();
+    ScreeningWrapper sw2 = new ScreeningWrapperEntityBuilder().build();
+    List<ScreeningWrapper> screenings = new ArrayList<>();
+    screenings.add(sw1);
+    screenings.add(sw2);
+    when(screeningDao.findScreeningsByUserId(any())).thenReturn(screenings);
+
+    ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard();
+    List<ScreeningDashboard> screeningDashboard = sdl.getScreeningDashboard();
+    assertThat(screeningDashboard.size(), is(2));
+  }
+
+  @Test
+  public void testFindScreeningDashboardWhenEmptyShouldBeZero() throws Exception {
+    List<ScreeningWrapper> screenings = new ArrayList<>();
+
+    when(screeningDao.findScreeningsByUserId(any())).thenReturn(screenings);
+
+    ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard();
+    List<ScreeningDashboard> screeningDashboard = sdl.getScreeningDashboard();
+    assertThat(screeningDashboard.size(), is(0));
+
   }
 }

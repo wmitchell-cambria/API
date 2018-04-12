@@ -1,14 +1,10 @@
 package gov.ca.cwds.data.cms;
 
 import java.util.List;
-
 import org.hibernate.SessionFactory;
-import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
@@ -60,13 +56,19 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     return query.list().toArray(new ClientRelationship[0]);
   }
 
+  /**
+   * Find related clients by client Id
+   * 
+   * @param clientId - the client Id
+   * @return - the client relationships
+   */
+  @SuppressWarnings("unchecked")
   public List<RelationshipWrapper> findRelationshipsByClientId(String clientId) {
-    final NativeQuery<RelationshipWrapper> query = this.getSessionFactory().getCurrentSession()
+    final Query<RelationshipWrapper> query = this.getSessionFactory().getCurrentSession()
         .getNamedNativeQuery(
             "gov.ca.cwds.data.persistence.cms.RelationshipWrapper.findAllRelatedClientsByClientId")
         .addEntity(RelationshipWrapper.class)
         .setParameter("clientId", clientId, StringType.INSTANCE);
     return query.list();
   }
-
 }
