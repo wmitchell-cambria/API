@@ -6,10 +6,6 @@ import org.junit.Before;
 
 import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.authenticate.AuthenticationUtils;
-<<<<<<< HEAD
-// import gov.ca.cwds.rest.authenticate.TokenInfo;
-=======
->>>>>>> 175950639d99c5e0e7c1c499acf7c91fced914bc
 import gov.ca.cwds.rest.authenticate.UserGroup;
 
 /**
@@ -21,10 +17,6 @@ public class FunctionalTest {
   CwdsAuthenticationClientConfig config;
   String url;
   String token;
-<<<<<<< HEAD
-  // TokenInfo tokeninfo;
-=======
->>>>>>> 175950639d99c5e0e7c1c499acf7c91fced914bc
 
   /**
    * @throws FileNotFoundException - FileNotFoundException
@@ -34,7 +26,7 @@ public class FunctionalTest {
     ConfigImpl configImpl = new ConfigImpl();
     config = configImpl.readConfig();
     url = config.getTestUrl().getBaseUrl();
-    // token = login(configImpl);
+    token = login(configImpl);
   }
 
   private String login(ConfigImpl configImpl) {

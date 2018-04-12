@@ -15,9 +15,6 @@ public class DB2PassUserTest {
     try {
       Class.forName("com.ibm.db2.jcc.DB2Driver");
 
-      // MAINFRAME:
-      // final String url =
-      // "jdbc:db2://localhost:9000/DB0TSOC:retrieveMessagesFromServerOnGetMessage=true;emulateParameterMetaDataForZCalls=1;";
       final String url = System.getenv("DB_CMS_JDBC_URL");
       final String user = System.getenv("DB_CMS_USER");
       final String password = System.getenv("DB_CMS_PASSWORD");
