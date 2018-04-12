@@ -11,7 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import gov.ca.cwds.authenticate.config.YmlLoader;
+import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
@@ -20,12 +20,12 @@ import io.dropwizard.jackson.Jackson;
 
 /**
  * This class will overwrite the yaml file in api-core and read the API yaml file by implements
- * {@link YmlLoader}.
+ * {@link ConfigReader}.
  * 
  * @author CWDS API Team
  *
  */
-public class ConfigImpl implements YmlLoader {
+public class ConfigImpl implements ConfigReader {
 
   public static final String API_CONF_YML_PATH = "config/api.yml";
   public static final String FILE_PATH_KEY = "TEST_FILE_PATH";
