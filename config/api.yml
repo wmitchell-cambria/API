@@ -45,7 +45,7 @@ cmsDataSourceFactory:
   user: ${DB_CMS_USER}
   password: ${DB_CMS_PASSWORD}
   url: ${DB_CMS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only"
+  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only with ur"
   logValidationErrors: true
   initialSize: ${DB_CMS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_CMS_CP_MIN_SIZE:-2}
@@ -68,7 +68,7 @@ rsDataSourceFactory:
   user: ${DB_CWSRS_USER}
   password: ${DB_CWSRS_PASSWORD}
   url: ${DB_CWSRS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only"
+  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only with ur"
   logValidationErrors: true
   initialSize: ${DB_CWSRS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_CWSRS_CP_MIN_SIZE:-2}
