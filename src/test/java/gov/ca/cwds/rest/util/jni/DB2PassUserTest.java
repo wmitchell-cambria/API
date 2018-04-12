@@ -25,6 +25,7 @@ public class DB2PassUserTest {
 
       try (final Connection conn = DriverManager.getConnection(url, user, password)) {
         conn.setSchema(schema);
+        conn.setCatalog(schema);
         conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
         if (conn instanceof DB2Connection) {
@@ -53,10 +54,10 @@ public class DB2PassUserTest {
           // ResultSet auto-closes upon block exit.
           try (ResultSet rs = conn.prepareStatement(
           //@formatter:off
-              "SELECT C.DOC_HANDLE, C.DOC_SEGS, C.CMPRS_PRG, C.DOC_NAME, C.DOC_DATE, C.DOC_TIME, C.DOC_LEN \n"
-                  + ", C.LST_UPD_ID, C.LST_UPD_TS, C.DOC_AUTH, C.DOC_SERV \n"
-                  + "FROM "+ schema + ".TSCNTRLT C \n" 
-                  + "WHERE C.DOC_HANDLE = '0001121506110220*RAMESHA 00001' \n"
+              "SELECT C.DOC_HANDLE, C.DOC_SEGS, C.CMPRS_PRG, C.DOC_NAME, C.DOC_DATE, C.DOC_TIME, C.DOC_LEN "
+                  + ", C.LST_UPD_ID, C.LST_UPD_TS, C.DOC_AUTH, C.DOC_SERV "
+                  + "FROM " + schema + ".TSCNTRLT C \n" 
+                  + "WHERE C.DOC_HANDLE = '0001121506110220*RAMESHA 00001' "
                   + "ORDER BY C.DOC_HANDLE \n"
                   + "FOR READ ONLY WITH UR")
               //@formatter:on
