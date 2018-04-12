@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -9,6 +11,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
@@ -75,6 +78,16 @@ public class HOIScreeningService
     }
 
     return new HOIScreeningResponse(screenings);
+  }
+
+  /**
+   * @param clientIds - clientIds
+   * @return the list of screenings using clientIds
+   */
+  public Response findHoiScreeningsByClientIds(List<String> clientIds) {
+    HOIRequest hoiRequest = new HOIRequest();
+    hoiRequest.setClientIds(new HashSet<>(clientIds));
+    return handleFind(hoiRequest);
   }
 
   @Override

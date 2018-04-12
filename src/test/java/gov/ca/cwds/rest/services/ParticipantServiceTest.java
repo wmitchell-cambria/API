@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -374,11 +374,10 @@ public class ParticipantServiceTest {
 
     Participant reporter = new ParticipantResourceBuilder().createReporterParticipant();
     reporter.setAddresses(null);
-    Set<Participant> participants =
-            new HashSet<>(Arrays.asList(reporter, defaultVictim));
+    Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, defaultVictim));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-            .setParticipants(participants).createScreeningToReferral();
+        .setParticipants(participants).createScreeningToReferral();
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
@@ -496,10 +495,10 @@ public class ParticipantServiceTest {
     when(clientService.find(existingPerpId)).thenReturn(foundPerp);
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", (short) 841, "A",
-        "A", "X");
-    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", (short) 841, "A",
-        "A", "X");
+    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", "M", (short) 841,
+        "A", "A", "X");
+    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", "M", (short) 841,
+        "A", "A", "X");
     verify(clientService).update(eq(existingPerpId), any());
   }
 

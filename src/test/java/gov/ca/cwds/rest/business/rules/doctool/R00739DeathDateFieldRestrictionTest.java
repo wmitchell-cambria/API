@@ -12,6 +12,7 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.validation.AfterDateValid;
@@ -25,6 +26,11 @@ import gov.ca.cwds.rest.validation.AfterDateValid;
 public class R00739DeathDateFieldRestrictionTest {
 
   private Validator validator;
+
+  /**
+   * Initialize system code cache
+   */
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   /**
    * 

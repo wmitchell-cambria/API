@@ -176,7 +176,8 @@ public class ClientDaoIT {
         vc.getDeathDateVerifiedIndicator(), vc.getDeathPlace(), vc.getDeathReasonText(),
         vc.getDriverLicenseNumber(), vc.getDriverLicenseStateCodeType(), vc.getEmailAddress(),
         vc.getEstimatedDobCode(), vc.getEthUnableToDetReasonCode(),
-        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getHealthSummaryText(),
+        vc.getFatherParentalRightTermDate(), vc.getGenderCode(), vc.getGenderIdentityType(),
+        vc.getGiNotListedDescription(), vc.getGenderExpressionType(), vc.getHealthSummaryText(),
         vc.getHispUnableToDetReasonCode(), vc.getHispanicOriginCode(), clientId,
         vc.getImmigrationCountryCodeType(), vc.getImmigrationStatusType(),
         vc.getIncapacitatedParentCode(), vc.getIndividualHealthCarePlanIndicator(),
@@ -188,11 +189,12 @@ public class ClientDaoIT {
         vc.getPrevRegionalCenterIndicator(), vc.getPrimaryEthnicityType(),
         vc.getPrimaryLanguageType(), vc.getReligionType(), vc.getSecondaryLanguageType(),
         vc.getSensitiveHlthInfoOnFileIndicator(), vc.getSensitivityIndicator(),
-        vc.getSoc158PlacementCode(), vc.getSoc158SealedClientIndicator(),
-        vc.getSocialSecurityNumChangedCode(), vc.getSocialSecurityNumber(),
-        vc.getSuffixTitleDescription(), vc.getTribalAncestryClientIndicatorVar(),
-        vc.getTribalMembrshpVerifctnIndicatorVar(), vc.getUnemployedParentCode(),
-        vc.getZippyCreatedIndicator(), null);
+        vc.getSexualOrientationType(), vc.getSoUnableToDetermineCode(),
+        vc.getSoNotListedDescrption(), vc.getSoc158PlacementCode(),
+        vc.getSoc158SealedClientIndicator(), vc.getSocialSecurityNumChangedCode(),
+        vc.getSocialSecurityNumber(), vc.getSuffixTitleDescription(),
+        vc.getTribalAncestryClientIndicatorVar(), vc.getTribalMembrshpVerifctnIndicatorVar(),
+        vc.getUnemployedParentCode(), vc.getZippyCreatedIndicator(), null);
   }
 
 }

@@ -18,6 +18,12 @@ import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
+/**
+ * Business layer object to work on {@link Relationship}.
+ * 
+ * @author CWDS API Team
+ *
+ */
 public class RelationshipsService implements TypedCrudsService<String, Relationship, Response> {
   ClientRelationshipDao relationshipDao;
   Genealogist genealogist;
@@ -39,6 +45,7 @@ public class RelationshipsService implements TypedCrudsService<String, Relations
     this.authCheckService = authCheckService;
   }
 
+  @Override
   public Response find(String id) {
     List<RelationshipWrapper> relations = getClientRelationships(id);
     return genealogist.buildRelationships(relations, id);
@@ -48,8 +55,15 @@ public class RelationshipsService implements TypedCrudsService<String, Relations
     return relationshipDao.findRelationshipsByClientId(clientId);
   }
 
+  /**
+   * Find the relationships for a list of clients
+   * 
+   * @param clientIds - clientIds
+   * @return the relationships
+   */
+  @SuppressWarnings("unchecked")
   public Response findForIds(List<String> clientIds) {
-    Set relationships = new HashSet();
+    Set relationships = new HashSet<>();
     for (String id : clientIds) {
       if (authorized(id)) {
         relationships.add(find(id));

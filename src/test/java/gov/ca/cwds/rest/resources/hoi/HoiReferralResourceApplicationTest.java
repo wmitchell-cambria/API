@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
  *
  */
 @Ignore
-public class HOIReferralResourceApplicationTest extends IntakeBaseTest {
+public class HoiReferralResourceApplicationTest extends IntakeBaseTest {
 
   /**
    * Test to find the non existing client

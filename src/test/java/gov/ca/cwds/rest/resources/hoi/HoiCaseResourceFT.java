@@ -5,11 +5,8 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.nio.charset.StandardCharsets;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,14 +18,13 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import gov.ca.cwds.IntakeBaseTest;
-import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 
 /**
  * @author CWDS API Team
  *
  */
 @SuppressWarnings("javadoc")
-public class HOICaseResourceFT extends IntakeBaseTest {
+public class HoiCaseResourceFT extends IntakeBaseTest {
   private static final String USER_SOCIAL_WORKER_ONLY =
       "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";
   private static final String USER_COUNTY_SENSITIVE =
@@ -279,7 +275,6 @@ public class HOICaseResourceFT extends IntakeBaseTest {
         fixture(CLIENT_NO_COUNTY_SEALED_HOI_RESPONSE));
   }
 
-
   private void assertHandleFind(String userFilePath, String clientIds, String expectedResponse)
       throws java.io.IOException, JSONException {
     String actualJson = doHandleFindCall(userFilePath, clientIds);
@@ -299,11 +294,8 @@ public class HOICaseResourceFT extends IntakeBaseTest {
     WebTarget target =
         clientTestRule.withSecurityToken(userFilePath).target(RESOURCE_CASE_HISTORY_OF_INVOLVEMENT);
 
-    HOIRequest request = new HOIRequest();
-    request.setClientIds(Stream.of(clientIds).collect(Collectors.toSet()));
-
-    Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON_TYPE);
-    Response response = invocation.post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
-    return IOUtils.toString((InputStream) response.getEntity(), "UTF-8");
+    Response response = target.queryParam("clientIds", clientIds).request()
+        .accept(MediaType.APPLICATION_JSON).get();
+    return IOUtils.toString((InputStream) response.getEntity(), StandardCharsets.UTF_8);
   }
 }

@@ -9,7 +9,6 @@ import org.junit.Test;
 import com.google.inject.Injector;
 
 import gov.ca.cwds.rest.services.AddressService;
-import gov.ca.cwds.rest.services.AddressValidationService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.PersonService;
@@ -175,12 +174,6 @@ public class ResourcesModuleTest {
   public void systemCodeServiceBackedResourceShouldRetrieveServiceFromInjector() {
     resourceModule.systemCodeServiceBackedResource(injector);
     verify(injector).getInstance(SystemCodeService.class);
-  }
-
-  @Test
-  public void addressValidationServiceBackedResourceShouldRetrieveServiceFromInjector() {
-    resourceModule.addressValidationServiceBackedResource(injector);
-    verify(injector).getInstance(AddressValidationService.class);
   }
 
   @Test

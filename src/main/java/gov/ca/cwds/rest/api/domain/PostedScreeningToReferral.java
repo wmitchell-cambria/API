@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 
@@ -21,8 +22,6 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
    * Serialization version
    */
   private static final long serialVersionUID = 1L;
-
-  private static final String REFERRAL_TABLE_NAME = "REFERL_T";
 
   /**
    * Default, no-op constructor.
@@ -94,7 +93,7 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
       ScreeningToReferral referral, Set<Participant> resultParticipants,
       Set<CrossReport> resultCrossReports, Set<Allegation> resultAllegations) {
 
-    return new PostedScreeningToReferral(referral.getId(), id, REFERRAL_TABLE_NAME,
+    return new PostedScreeningToReferral(referral.getId(), id, LegacyTable.REFERRAL.getName(),
         referral.getEndedAt(), referral.getIncidentCounty(), referral.getIncidentDate(),
         referral.getLocationType(), referral.getCommunicationMethod(),
         referral.getCurrentLocationOfChildren(), referral.getName(), referral.getReportNarrative(),

@@ -24,7 +24,6 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.AddressService;
-import gov.ca.cwds.rest.services.AddressValidationService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
@@ -123,7 +122,6 @@ public class ServicesModule extends AbstractModule {
     bind(gov.ca.cwds.rest.services.StaffPersonService.class);
 
     bind(AddressService.class);
-    bind(AddressValidationService.class);
     bind(AllegationService.class);
     bind(AssignmentService.class);
     bind(ClientCollateralService.class);
