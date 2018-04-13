@@ -81,9 +81,9 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
    * @param phoneNumber The domain object to construct this object from
    */
   public PhoneNumbers(gov.ca.cwds.rest.api.domain.PhoneNumber phoneNumber) {
-    this.id = String.valueOf(phoneNumber.getId());
-    this.number = phoneNumber.getPhoneNumber();
-    this.type = phoneNumber.getPhoneType();
+    this.id = phoneNumber.getId() == null ? null : String.valueOf(phoneNumber.getId());
+    this.number = phoneNumber.getNumber();
+    this.type = phoneNumber.getType();
   }
 
 

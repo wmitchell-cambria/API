@@ -3,15 +3,8 @@ package gov.ca.cwds.data.persistence.ns;
 import gov.ca.cwds.Identifiable;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
-import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -126,14 +118,9 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     super();
   }
 
-//  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi, ScreeningEntity screeningEntity, Set<Addresses> addresses, Set<PhoneNumbers> phoneNumbers) {
   public ParticipantEntity(ParticipantIntakeApi participantIntakeApi, ScreeningEntity screeningEntity) {
     id = participantIntakeApi.getId();
-    try {
-      dateOfBirth = new SimpleDateFormat(DomainObject.DATE_FORMAT).parse(participantIntakeApi.getDateOfBirth());
-    } catch (ParseException e){
-      //swallow it
-    }
+    dateOfBirth = participantIntakeApi.getDateOfBirth();
     firstName = participantIntakeApi.getFirstName();
     gender = participantIntakeApi.getGender();
     lastName = participantIntakeApi.getLastName();
@@ -151,33 +138,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     sealed = participantIntakeApi.isSealed();
     approximateAge = participantIntakeApi.getApproximateAge();
     approximateAgeUnits = participantIntakeApi.getApproximateAgeUnits();
-
-//    addresses.forEach(this::addAddress);
-//    phoneNumbers.forEach(this::addPhoneNumber);
-
  }
-
-
-
-//  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
-//		  String gender, String lastName, String ssn,
-//		  ScreeningEntity screeningEntity, String legacyId, String[] roles,
-//		  String[] languages, String middleName, String nameSuffix,
-//		  String races, String ethnicity, String legacySourceTable,
-//		  Boolean sensitive, Boolean sealed, String approximateAge,
-//		  String approximateAgeUnits,
-//      Set<ParticipantAddresses> participantAddresses,
-//      Set<ParticipantPhoneNumbers> participantPhoneNumbers) {
-//    this( id,  dateOfBirth,  firstName,
-//         gender,  lastName,  ssn,
-//         screeningEntity,  legacyId,  roles,
-//         languages,  middleName,  nameSuffix,
-//         races,  ethnicity,  legacySourceTable,
-//         sensitive,  sealed,  approximateAge,
-//         approximateAgeUnits);
-//    this.participantAddresses = participantAddresses;
-//    this.participantPhoneNumbers = participantPhoneNumbers;
-//  }
 
   public ParticipantEntity(String id, Date dateOfBirth, String firstName,
 		  String gender, String lastName, String ssn,
@@ -288,41 +249,6 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   public String getApproximateAgeUnits() {
     return approximateAgeUnits;
   }
-
-//  public Set<ParticipantAddresses> getParticipantAddresses() {
-//    return participantAddresses;
-//  }
-//
-//
-//  public void addAddress(Addresses address){
-//    participantAddresses.add(new ParticipantAddresses(this, address));
-//  }
-//
-//  public void removeAddress(Addresses address){
-//    for (Iterator<ParticipantAddresses> iterator = participantAddresses.iterator(); iterator.hasNext();){
-//      ParticipantAddresses participantAddress = iterator.next();
-//      if (participantAddress.getParticipant().equals(this) && participantAddress.getAddress().equals(address)){
-//        iterator.remove();
-//        participantAddress.setAddress(null);
-//        participantAddress.setParticipant(null);
-//      }
-//    }
-//  }
-//
-//  public void addPhoneNumber(PhoneNumbers phoneNumber){
-//    participantPhoneNumbers.add(new ParticipantPhoneNumbers(this, phoneNumber));
-//  }
-//
-//  public void removePhone(PhoneNumbers phoneNumber){
-//    for (Iterator<ParticipantPhoneNumbers> iterator = participantPhoneNumbers.iterator(); iterator.hasNext();){
-//      ParticipantPhoneNumbers participantPhoneNumber = iterator.next();
-//      if (participantPhoneNumber.getParticipant().equals(this) && participantPhoneNumber.getPhoneNumber().equals(phoneNumber)){
-//        iterator.remove();
-//        participantPhoneNumber.setPhoneNumber(null);
-//        participantPhoneNumber.setParticipant(null);
-//      }
-//    }
-//  }
 
   /**
    * {@inheritDoc}

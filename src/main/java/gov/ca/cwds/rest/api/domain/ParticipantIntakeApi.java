@@ -11,26 +11,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.Type;
-import org.joda.time.format.DateTimeFormat;
 
 /**
  * {@link DomainObject} representing a Participant.
@@ -81,11 +73,9 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   @JsonProperty("date_of_birth")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
-  @Type(type = "date")
   @ApiModelProperty(required = false, readOnly = false, value = "Date of Birth",
       example = "2001-09-11")
-  @Date
-  private String dateOfBirth;
+  private Date dateOfBirth;
 
   @JsonProperty("approximate_age")
   @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age",
@@ -129,42 +119,14 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @ApiModelProperty(required = true, readOnly = false, value = "Races",
      example = "['White', 'Black or African American']")
   private String races;
-  @JsonRawValue
-  public String getRaces(){
-    return races;
-  }
-  public void setRaces(final String races){
-    this.races = races;
-  }
-  @JsonProperty(value = "races")
-  public void setRacesRaw(JsonNode jsonNode){
-    setRaces(jsonNode.toString());
-  }
 
-  /*
-   * Workafoung for fields containing raw json
-   * races
-   * ethnicity
-   *
-   */
   @ApiModelProperty(required = true, readOnly = false, value = "Ethnicity",
-      dataType = "List[gov.ca.cwds.rest.api.domain.PhoneNumber]", example = "{\"hispanic_latino_origin\":\"Yes\",\"ethnicity_detail\":[\"Hispanic\"]}")
+      example = "{\"hispanic_latino_origin\":\"Yes\",\"ethnicity_detail\":[\"Hispanic\"]}")
   private String ethnicity;
-  @JsonRawValue
-  public String getEthnicity(){
-    return ethnicity;
-  }
-  public void setEthnicity(final String ethnicity){
-    this.ethnicity = ethnicity;
-  }
-  @JsonProperty(value = "ethnicity")
-  public void setEthnicityRaw(JsonNode jsonNode){
-    setEthnicity(jsonNode.toString());
-  }
 
   @JsonProperty("screening_id")
   @ApiModelProperty(required = false, readOnly = false, value = "Screening Id", example = "12345")
-  private long screeningId;
+  private Long screeningId;
 
   @Valid
   @JsonProperty("roles")
@@ -180,15 +142,15 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @Valid
   @ApiModelProperty(dataType = "List[gov.ca.cwds.rest.api.domain.PhoneNumber]")
   @JsonProperty("phone_numbers")
-  private Set<PhoneNumber> phoneNumbers;
+  private Set<gov.ca.cwds.rest.api.domain.PhoneNumber> phoneNumbers;
 
   @JsonProperty("sealed")
   @ApiModelProperty(required = false, readOnly = false, value = "sealed", example = "true")
-  private boolean sealed;
+  private Boolean sealed;
 
   @JsonProperty("sensitive")
   @ApiModelProperty(required = false, readOnly = false, value = "sensitive", example = "true")
-  private boolean sensitive;
+  private Boolean sensitive;
 
   /**
    * empty constructor
@@ -228,14 +190,14 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
       @JsonProperty("approximate_age") String approximateAge,
       @JsonProperty("approximate_age_units") String approximateAgeUnits,
       @JsonProperty("ssn") String ssn,
-      @JsonProperty("date_of_birth") String dateOfBirth,
+      @JsonProperty("date_of_birth") Date dateOfBirth,
       @JsonProperty("languages") Set<String> languages,
-      @JsonProperty("screening_id") long screeningId,
+      @JsonProperty("screening_id") Long screeningId,
       @JsonProperty("roles") Set<String> roles,
       @JsonProperty("addresses") Set<AddressIntakeApi> addresses,
       @JsonProperty("phone_numbers") Set<PhoneNumber> phoneNumbers,
-      @JsonProperty("seales") boolean sealed,
-      @JsonProperty("sensitive") boolean sensitive
+      @JsonProperty("seales") Boolean sealed,
+      @JsonProperty("sensitive") Boolean sensitive
       ) {
     super();
     this.id = id;
@@ -277,27 +239,55 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.nameSuffix = participantEntity.getNameSuffix();
     this.gender = participantEntity.getGender();
     this.ssn = participantEntity.getSsn();
-    if(participantEntity.getDateOfBirth() != null) {
-      this.dateOfBirth = new SimpleDateFormat(DATE_FORMAT)
-          .format(participantEntity.getDateOfBirth());
-    }
+    this.dateOfBirth = participantEntity.getDateOfBirth();
     this.approximateAge = participantEntity.getApproximateAge();
     this.approximateAgeUnits = participantEntity.getApproximateAgeUnits();
     this.roles = new HashSet<>(Arrays.asList(participantEntity.getRoles()));
     this.languages = new HashSet<>(Arrays.asList(participantEntity.getLanguages()));
     this.legacyId = participantEntity.getLegacyId();
     this.legacySourceTable = participantEntity.getLegacySourceTable();
-    this.legacyDescriptor = new LegacyDescriptor();
     this.races = participantEntity.getRaces();
     this.ethnicity = participantEntity.getEthnicity();
     if (participantEntity.getScreening() != null) {
-      this.screeningId = Long.valueOf(participantEntity.getScreening().getId());
+      this.screeningId = participantEntity.getScreening().getId() == null ?
+          null : Long.valueOf(participantEntity.getScreening().getId());
     }
     this.sealed = participantEntity.getSealed();
     this.sensitive = participantEntity.getSensitive();
 
 
   }
+
+  /*
+   * Workafoung for fields containing raw json to embed into/extract from generated json
+   * races
+   * ethnicity
+   *
+   */
+  @JsonRawValue
+  public String getRaces(){
+    return races;
+  }
+  public void setRaces(final String races){
+    this.races = races;
+  }
+  @JsonProperty(value = "races")
+  public void setRacesRaw(JsonNode jsonNode){
+    setRaces(jsonNode.toString());
+  }
+
+  @JsonRawValue
+  public String getEthnicity(){
+    return ethnicity;
+  }
+  public void setEthnicity(final String ethnicity){
+    this.ethnicity = ethnicity;
+  }
+  @JsonProperty(value = "ethnicity")
+  public void setEthnicityRaw(JsonNode jsonNode){
+    setEthnicity(jsonNode.toString());
+  }
+
 
 
   /**
@@ -339,9 +329,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @return the legacyDescriptor
    */
   public LegacyDescriptor getLegacyDescriptor() {
-    if (legacyDescriptor == null) {
-      legacyDescriptor = new LegacyDescriptor();
-    }
     return legacyDescriptor;
   }
 
@@ -391,7 +378,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * @return the screeningId
    */
-  public long getScreeningId() {
+  public Long getScreeningId() {
     return screeningId;
   }
 
@@ -405,7 +392,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * @return the dateOfBirth
    */
-  public String getDateOfBirth() {
+  public Date getDateOfBirth() {
     return dateOfBirth;
   }
 
@@ -498,11 +485,11 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     return approximateAgeUnits;
   }
 
-  public boolean isSealed() {
+  public Boolean isSealed() {
     return sealed;
   }
 
-  public boolean isSensitive() {
+  public Boolean isSensitive() {
     return sensitive;
   }
 

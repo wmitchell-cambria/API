@@ -49,12 +49,10 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("participantId")
-//  @JoinColumn(name = "participant_id")
   private ParticipantEntity  participant;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("addressId")
-//  @JoinColumn(name = "address_id")
   private Addresses address;
 
   /**
@@ -131,11 +129,9 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "participant_id")
-//    @Column(name = "participant_id", updatable = false, insertable = false)
     private String participantId;
 
     @Column(name = "address_id")
-//    @Column(name = "address_id", updatable = false, insertable = false)
     private String addressId;
 
     /**

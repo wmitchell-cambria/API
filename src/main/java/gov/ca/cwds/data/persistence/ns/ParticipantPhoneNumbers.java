@@ -9,10 +9,13 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author Intake Team 4
@@ -20,7 +23,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "participant_phone_numbers")
-//public class ParticipantPhoneNumbers implements Identifiable<String>, Serializable {
 public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
 
   /**
@@ -28,18 +30,17 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
    */
   private static final long serialVersionUID = 1L;
 //
-//  @Id
+  @Id
   @Column(name = "id")
-//  @GenericGenerator(
-//      name = "participant_phone_numbers_id",
-//      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-//      parameters = {
-//          @org.hibernate.annotations.Parameter(
-//              name = "sequence_name", value = "participant_phone_numbers_id_seq")
-//      }
-//  )
-//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_phone_numbers_id")
-////  @SequenceGenerator(name = "participant_phone_numbers_id", sequenceName = "participant_phone_numbers_id_seq")
+  @GenericGenerator(
+      name = "participant_phone_numbers_id",
+      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(
+              name = "sequence_name", value = "participant_phone_numbers_id_seq")
+      }
+  )
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_phone_numbers_id")
   private String id;
 
   @EmbeddedId
@@ -47,13 +48,11 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
 
 
   @ManyToOne(fetch = FetchType.EAGER)
-//  @MapsId("participantId")
-  @JoinColumn(name = "participant_id", updatable = false, insertable = false)
+  @MapsId("participantId")
   private ParticipantEntity  participant;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("phoneNumberId")
-  @JoinColumn(name = "phone_number_id", updatable = false, insertable = false)
   private PhoneNumbers phoneNumber;
 
   @Column(name = "created_at")
@@ -155,7 +154,7 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
     private String participantId;
 
     @Column(name = "phone_number_id")
-    private String phoneNumberId;
+    private String phNumberId;
 
     /**
      * Default constructor
@@ -165,7 +164,7 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
 
     public ParticipantPhoneNumberId(String participantId, String phoneNumberId) {
       this.participantId = participantId;
-      this.phoneNumberId = phoneNumberId;
+      this.phNumberId = phoneNumberId;
     }
 
     public String getParticipantId() {
@@ -176,12 +175,12 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
       this.participantId = person;
     }
 
-    public String getPhoneNumberId() {
-      return phoneNumberId;
+    public String getPhNumberId() {
+      return phNumberId;
     }
 
-    public void setPhoneNumberId(String address) {
-      this.phoneNumberId = address;
+    public void setPhNumberId(String address) {
+      this.phNumberId = address;
     }
 
     @Override
@@ -194,13 +193,13 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
       }
       ParticipantPhoneNumberId that = (ParticipantPhoneNumberId) o;
       return Objects.equals(participantId, that.participantId) &&
-          Objects.equals(phoneNumberId, that.phoneNumberId);
+          Objects.equals(phNumberId, that.phNumberId);
     }
 
     @Override
     public int hashCode() {
 
-      return Objects.hash(participantId, phoneNumberId);
+      return Objects.hash(participantId, phNumberId);
     }
   }
 }
