@@ -1,8 +1,7 @@
 package gov.ca.cwds.data.persistence.hibernate.dialect;
 
-import org.hibernate.dialect.PostgreSQL9Dialect;
-
 import java.sql.Types;
+import org.hibernate.dialect.PostgreSQL9Dialect;
 
 /**
  * Wrap default PostgreSQL9Dialect with 'json' type.

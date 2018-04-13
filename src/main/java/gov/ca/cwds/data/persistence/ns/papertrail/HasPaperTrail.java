@@ -6,4 +6,5 @@ package gov.ca.cwds.data.persistence.ns.papertrail;
  * @author Intake Team 4
  */
 public interface HasPaperTrail {
+
 }

@@ -2,7 +2,6 @@ package gov.ca.cwds.data.ns;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.ParticipantAddresses;
 import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
 import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.Date;
@@ -12,7 +11,7 @@ import org.hibernate.SessionFactory;
  * Participant Phone Numbers DAO
  *
  * @author Intake Team 4
-*/
+ */
 public class ParticipantPhoneNumbersDao extends CrudsDaoImpl<ParticipantPhoneNumbers> {
 
   /**
@@ -38,4 +37,5 @@ public class ParticipantPhoneNumbersDao extends CrudsDaoImpl<ParticipantPhoneNum
     object.setUpdatedAt(new Date());
     return super.update(object);
   }
+
 }

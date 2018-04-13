@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 
 /**
  * Address DAO
- * 
+ *
  * @author Intake Team 4
  */
 public class LegacyDescriptorDao extends CrudsDaoImpl<LegacyDescriptorEntity> {

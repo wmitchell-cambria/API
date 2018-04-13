@@ -19,7 +19,7 @@ import org.hibernate.annotations.NamedQuery;
 
 /**
  * {@link PersistentObject} representing an Addresses
- * 
+ *
  * @author Intake Team 4
  */
 
@@ -37,8 +37,8 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
   public static final String PARAM_PARTICIPANT_ID = "participantId";
   static final String FIND_BY_PARTICIPANT_ID_QUERY =
       "SELECT pa.address FROM ParticipantAddresses pa"
-      + " WHERE pa.participant.id = :"
-      + PARAM_PARTICIPANT_ID;
+          + " WHERE pa.participant.id = :"
+          + PARAM_PARTICIPANT_ID;
 
 
   @Id
@@ -96,7 +96,8 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
    * @param legacyId - legacy id
    * @param legacySourceTable - legacy source table
    */
-  public Addresses(String streetAddress, String city, String state, String zip, String type, String legacyId, String legacySourceTable) {
+  public Addresses(String streetAddress, String city, String state, String zip, String type,
+      String legacyId, String legacySourceTable) {
     this.streetAddress = streetAddress;
     this.city = city;
     this.state = state;
@@ -140,7 +141,7 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override

@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
@@ -19,7 +20,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author Intake Team 4
- * 
  */
 @Entity
 @Table(name = "participant_phone_numbers")
@@ -29,7 +29,7 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
    * Base serialization value. Increment by version
    */
   private static final long serialVersionUID = 1L;
-//
+
   @Id
   @Column(name = "id")
   @GenericGenerator(
@@ -49,10 +49,12 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("participantId")
-  private ParticipantEntity  participant;
+  @JoinColumn(name = "participant_id", updatable = false, insertable = false)
+  private ParticipantEntity participant;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @MapsId("phoneNumberId")
+  @MapsId("phNumberId")
+  @JoinColumn(name = "phone_number_id", updatable = false, insertable = false)
   private PhoneNumbers phoneNumber;
 
   @Column(name = "created_at")
@@ -65,13 +67,14 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
    * Default constructor
    */
   public ParticipantPhoneNumbers() {
-      }
+  }
 
   public ParticipantPhoneNumbers(ParticipantEntity participant,
-      PhoneNumbers  phoneNumber) {
+      PhoneNumbers phoneNumber) {
     this.participant = participant;
     this.phoneNumber = phoneNumber;
-    this.participantPhoneNumberId = new ParticipantPhoneNumberId(participant.getId(), phoneNumber.getId());
+    this.participantPhoneNumberId = new ParticipantPhoneNumberId(participant.getId(),
+        phoneNumber.getId());
   }
 
   public String getId() {
@@ -104,19 +107,19 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
   }
 
   public Date getCreatedAt() {
-    return (Date)createdAt.clone();
+    return (Date) createdAt.clone();
   }
 
   public void setCreatedAt(Date createdAt) {
-    this.createdAt = (Date)createdAt.clone();
+    this.createdAt = (Date) createdAt.clone();
   }
 
   public Date getUpdatedAt() {
-    return (Date)updatedAt.clone();
+    return (Date) updatedAt.clone();
   }
 
   public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = (Date)updatedAt.clone();
+    this.updatedAt = (Date) updatedAt.clone();
   }
 
   @Override
@@ -138,10 +141,6 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
     return Objects.hash(participant, phoneNumber);
   }
 
-  /**
-   * @author Intake Team 4
-   *
-   */
   @Embeddable
   public static class ParticipantPhoneNumberId implements Serializable {
 
@@ -162,7 +161,7 @@ public class ParticipantPhoneNumbers implements PersistentObject, Serializable {
     public ParticipantPhoneNumberId() {
     }
 
-    public ParticipantPhoneNumberId(String participantId, String phoneNumberId) {
+    ParticipantPhoneNumberId(String participantId, String phoneNumberId) {
       this.participantId = participantId;
       this.phNumberId = phoneNumberId;
     }
