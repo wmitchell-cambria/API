@@ -27,6 +27,7 @@ public class RelationshipToTest {
   private String id = "2345678ABC";
   private String relatedFirstName = "Steve";
   private String relatedLastName = "Briggs";
+  private String relatednameSuffix = "Jr";
   private String relationship = "Brother";
   private String relationshipToPerson = "Sister";
   private String relationshipContext = "step";
@@ -34,6 +35,7 @@ public class RelationshipToTest {
   private String newId = "3456789ABC";
   private String newRelatedFirstName = "new first name";
   private String newRelatedLastName = "new last name";
+  private String newRelatedNameSuffix = "Sr";
   private String newRelationship = "new Brother";
   private String newRelationshipToPerson = "new Sister";
   private String newRelationshipContext = "maternal";
@@ -44,7 +46,7 @@ public class RelationshipToTest {
 
   @Test
   public void testDomainConstructorSuccess() throws Exception {
-    RelationshipTo relationshipTo = new RelationshipTo(relatedFirstName, relatedLastName,
+    RelationshipTo relationshipTo = new RelationshipTo(relatedFirstName, relatedLastName, relatednameSuffix,
         relationship, relationshipContext, relationshipToPerson, id);
 
     assertThat(relatedFirstName, is(equalTo(relationshipTo.getRelatedFirstName())));
@@ -69,6 +71,7 @@ public class RelationshipToTest {
 
     assertThat(relationshipTo.getRelatedFirstName(), is(equalTo(client.getFirstName())));
     assertThat(relationshipTo.getRelatedLastName(), is(equalTo(client.getLastName())));
+    assertThat(relationshipTo.getRelatedNameSuffix(), is(equalTo(client.getNameSuffix())));
     assertThat(relationshipTo.getRelationshipToPerson(),
         is(equalTo(clientRelationship.getClientRelationshipType().toString())));
   }
@@ -113,6 +116,7 @@ public class RelationshipToTest {
     RelationshipTo relationshipTo = new RelationshipToEntityBuilder().setId(newId)
     	.setRelatedFirstName(newRelatedFirstName)
     	.setRelatedLastName(newRelatedLastName)
+      .setRelatedNameSuffix(newRelatedNameSuffix)
     	.setRelationship(newRelationship)
     	.setRelationshipContext(newRelationshipContext)
     	.setRelationshipToPerson(newRelationshipToPerson)
@@ -121,6 +125,7 @@ public class RelationshipToTest {
 
     assertThat(relationshipTo.getRelatedFirstName(), is(equalTo(newRelatedFirstName)));
     assertThat(relationshipTo.getRelatedLastName(), is(equalTo(newRelatedLastName)));
+    assertThat(relationshipTo.getRelatedNameSuffix(), is(equalTo(newRelatedNameSuffix)));
     assertThat(relationshipTo.getRelationshipToPerson(), is(equalTo(newRelationship)));
     assertThat(relationshipTo.getRelationshipContext(), is(equalTo(newRelationshipContext)));
     assertThat(relationshipTo.getRelatedPersonRelationship(), is(equalTo(newRelationshipToPerson)));

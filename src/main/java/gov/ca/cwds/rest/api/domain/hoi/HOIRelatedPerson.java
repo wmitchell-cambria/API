@@ -12,7 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
  * 
  * @author CWDS API Team
  */
-@JsonPropertyOrder({"id", "first_name", "last_name", "legacy_descriptor", "relationship"})
+@JsonPropertyOrder({"id", "first_name", "last_name", "name_suffix", "legacy_descriptor", "relationship"})
 public class HOIRelatedPerson extends HOIPerson {
 
   /**
@@ -34,18 +34,23 @@ public class HOIRelatedPerson extends HOIPerson {
   }
 
   /**
-   * 
    * @param id id
    * @param firstName first name
    * @param lastName last name
+   * @param nameSuffix nameSuffix
    * @param legacyDescriptor legacy descriptor
    * @param relationship relationship
    * @param limitedAccessType limited access type
    */
-  public HOIRelatedPerson(String id, String firstName, String lastName,
-      LegacyDescriptor legacyDescriptor, SystemCodeDescriptor relationship,
+  public HOIRelatedPerson(
+      String id,
+      String firstName,
+      String lastName,
+      String nameSuffix,
+      LegacyDescriptor legacyDescriptor,
+      SystemCodeDescriptor relationship,
       LimitedAccessType limitedAccessType) {
-    super(id, firstName, lastName, legacyDescriptor);
+    super(id, firstName, lastName, nameSuffix, legacyDescriptor);
     this.relationship = relationship;
     this.limitedAccessType = limitedAccessType;
   }

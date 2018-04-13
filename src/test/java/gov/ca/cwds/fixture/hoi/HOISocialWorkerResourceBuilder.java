@@ -15,6 +15,7 @@ public class HOISocialWorkerResourceBuilder {
   private String id = "socialwkrz";
   private String firstName = "Jane";
   private String lastName = "Worker";
+  private String nameSuffix = "Sr.";
   private LegacyDescriptor legacyDescriptor;
 
   public HOISocialWorkerResourceBuilder setId(String id) {
@@ -50,6 +51,6 @@ public class HOISocialWorkerResourceBuilder {
    * @return the HOISocialWorker
    */
   public HOISocialWorker createHOISocialWorker() {
-    return new HOISocialWorker(id, firstName, lastName, legacyDescriptor);
+    return new HOISocialWorker(id, firstName, lastName, nameSuffix, legacyDescriptor);
   }
 }

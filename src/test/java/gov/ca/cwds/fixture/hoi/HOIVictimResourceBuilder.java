@@ -16,6 +16,7 @@ public class HOIVictimResourceBuilder {
   private String id = "victimabc";
   private String firstName = "Victim1";
   private String lastName = "Dino";
+  private String nameSuffix = "Jr.";
   private LegacyDescriptor legacyDescriptor;
   private LimitedAccessType limitedAccessType;
 
@@ -61,7 +62,7 @@ public class HOIVictimResourceBuilder {
    */
   public gov.ca.cwds.rest.api.domain.hoi.HOIVictim createHOIVictim() {
 
-    HOIVictim victim = new HOIVictim(id, firstName, lastName, legacyDescriptor);
+    HOIVictim victim = new HOIVictim(id, firstName, lastName, nameSuffix, legacyDescriptor);
     victim.setLimitedAccessType(limitedAccessType);
     return victim;
   }
