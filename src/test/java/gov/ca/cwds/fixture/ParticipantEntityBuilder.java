@@ -21,7 +21,7 @@ public class ParticipantEntityBuilder {
   private String roles;
   private String languages;
   private String middleName;
-  private String nameSuffix;
+  private String nameSuffix = "Jr.";
   private String races;
   private String ethnicity;
   private String legacySourceTable;
