@@ -1,12 +1,14 @@
 package gov.ca.cwds.data.ns;
 
+import java.io.Serializable;
+
+import org.hibernate.SessionFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.PaperTrail;
 import gov.ca.cwds.inject.NsSessionFactory;
-import org.hibernate.SessionFactory;
-
-import java.io.Serializable;
 
 /**
  * Address DAO
@@ -27,7 +29,8 @@ public class PaperTrailDao extends CrudsDaoImpl<PaperTrail> {
 
   @Override
   public PaperTrail delete(Serializable id) {
-    //Rerstrict deleting paper trail.
+    // Restrict deleting paper trail.
     return this.get(id);
   }
+
 }

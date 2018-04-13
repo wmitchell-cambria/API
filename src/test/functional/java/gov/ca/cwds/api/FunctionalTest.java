@@ -1,22 +1,23 @@
 package gov.ca.cwds.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import gov.ca.cwds.config.TestConfig;
-import gov.ca.cwds.rest.ApiConfiguration;
-import gov.ca.cwds.rest.authenticate.AuthenticationUtils;
-import gov.ca.cwds.rest.authenticate.UserGroup;
-import io.dropwizard.configuration.ConfigurationSourceProvider;
-import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
-import io.dropwizard.configuration.SubstitutingSourceProvider;
-import io.dropwizard.jackson.Jackson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.junit.Before;
 import org.yaml.snakeyaml.Yaml;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import gov.ca.cwds.config.TestConfig;
+import gov.ca.cwds.rest.ApiConfiguration;
+import io.dropwizard.configuration.ConfigurationSourceProvider;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.jackson.Jackson;
 
 public class FunctionalTest implements ConfigurationSourceProvider {
 
@@ -34,9 +35,10 @@ public class FunctionalTest implements ConfigurationSourceProvider {
     token = login();
   }
 
-  private String login(){
-    AuthenticationUtils authentication = new AuthenticationUtils();
-    return authentication.getToken(UserGroup.SOCIAL_WORKER);
+  private String login() {
+    // AuthenticationUtils authentication = new AuthenticationUtils();
+    // return authentication.getToken(UserGroup.SOCIAL_WORKER);
+    return null;
   }
 
   @Override
@@ -62,10 +64,9 @@ public class FunctionalTest implements ConfigurationSourceProvider {
 
   private TestConfig loadTestConfigurations(Yaml yaml, String testConfFilePath) {
     TestConfig testConf = null;
-    try(
-        InputStream ymlTestingSourceProvider = new SubstitutingSourceProvider(this,
-        new EnvironmentVariableSubstitutor(false)).open(testConfFilePath);
-    ) {
+    try (InputStream ymlTestingSourceProvider =
+        new SubstitutingSourceProvider(this, new EnvironmentVariableSubstitutor(false))
+            .open(testConfFilePath);) {
       testConf = yaml.loadAs(ymlTestingSourceProvider, TestConfig.class);
     } catch (IOException e) {
       e.printStackTrace();
@@ -75,27 +76,26 @@ public class FunctionalTest implements ConfigurationSourceProvider {
 
   private String retrieveTestConfFilePath() {
     String testConfFilePath = "";
-    try (
-        InputStream ymlAppSourceProvider = new SubstitutingSourceProvider(this,
-        new EnvironmentVariableSubstitutor(false)).open(API_CONF_YML_PATH)
-    ){
-      ObjectMapper mapper =  Jackson.newObjectMapper(new YAMLFactory());
+    try (InputStream ymlAppSourceProvider =
+        new SubstitutingSourceProvider(this, new EnvironmentVariableSubstitutor(false))
+            .open(API_CONF_YML_PATH)) {
+      ObjectMapper mapper = Jackson.newObjectMapper(new YAMLFactory());
       ApiConfiguration appConf = mapper.readValue(ymlAppSourceProvider, ApiConfiguration.class);
 
       String defaultLocation = appConf.getTestConfig().getConfigFile();
       testConfFilePath = getApiYmlPath(defaultLocation);
-    }catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     return testConfFilePath;
   }
 
-  private String getApiYmlPath(String defaultPath){
+  private String getApiYmlPath(String defaultPath) {
     String filepath = retreiveTestConfigFromEnvVar();
     return filepath.isEmpty() ? defaultPath : filepath;
   }
 
-  private String retreiveTestConfigFromEnvVar(){
+  private String retreiveTestConfigFromEnvVar() {
     String filePath = System.getenv().get(FILE_PATH_KEY);
     return filePath != null ? filePath : "";
   }

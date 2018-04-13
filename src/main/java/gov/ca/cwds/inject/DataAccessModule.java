@@ -1,9 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.ns.PaperTrailDao;
-import gov.ca.cwds.data.persistence.ns.ParticipantAddresses.ParticipantAddressId;
-import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.ParticipantPhoneNumberId;
-import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,6 +61,7 @@ import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.EthnicityDao;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.ns.LanguageDao;
+import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.PersonAddressDao;
 import gov.ca.cwds.data.ns.PersonDao;
@@ -78,6 +75,9 @@ import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
+import gov.ca.cwds.data.persistence.ns.ParticipantAddresses.ParticipantAddressId;
+import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.ParticipantPhoneNumberId;
+import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
@@ -111,93 +111,93 @@ public class DataAccessModule extends AbstractModule {
 
   private Map<String, Client> clients;
 
-  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(
-          ImmutableList.<Class<?>>of(
-            // legacy-data-access
-            gov.ca.cwds.data.legacy.cms.entity.Client.class,
-            gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
-            gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
-            gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
-            gov.ca.cwds.data.legacy.cms.entity.LicensingVisit.class,
-            gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome.class,
-            gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome.class,
-            gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship.class,
-            gov.ca.cwds.data.legacy.cms.entity.OutOfHomePlacement.class,
-            gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck.class,
-            gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.class,
-            gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory.class,
-            gov.ca.cwds.data.legacy.cms.entity.PlacementHome.class,
-            gov.ca.cwds.data.legacy.cms.entity.PlacementHomeNotes.class,
-            gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile.class,
-            gov.ca.cwds.data.legacy.cms.entity.StaffPerson.class,
-            gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider.class,
-            gov.ca.cwds.data.legacy.cms.entity.syscodes.County.class,
-            gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType.class,
-            gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType.class,
+  private final PaperTrailInterceptor paperTrailInterceptor = new PaperTrailInterceptor();
 
-            gov.ca.cwds.data.persistence.cms.Address.class,
-            gov.ca.cwds.data.persistence.cms.Allegation.class,
-            gov.ca.cwds.data.persistence.cms.ClientAddress.class,
-            gov.ca.cwds.data.persistence.cms.ClientCollateral.class,
-            gov.ca.cwds.data.persistence.cms.Client.class,
-            gov.ca.cwds.data.persistence.cms.CmsDocReferralClient.class,
-            gov.ca.cwds.data.persistence.cms.CmsDocument.class,
-            gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment.class,
-            gov.ca.cwds.data.persistence.cms.CollateralIndividual.class,
-            gov.ca.cwds.data.persistence.cms.CrossReport.class,
-            gov.ca.cwds.data.persistence.cms.EducationProviderContact.class,
-            gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.class,
-            gov.ca.cwds.data.persistence.cms.OtherChildInPlacemtHome.class,
-            gov.ca.cwds.data.persistence.cms.OtherClientName.class,
-            gov.ca.cwds.data.persistence.cms.Referral.class,
-            gov.ca.cwds.data.persistence.cms.ReferralClient.class,
-            gov.ca.cwds.data.persistence.cms.Reporter.class,
-            gov.ca.cwds.data.persistence.cms.ServiceProvider.class,
-            gov.ca.cwds.data.persistence.cms.StaffPerson.class,
-            gov.ca.cwds.data.persistence.cms.StateId.class,
-            gov.ca.cwds.data.persistence.cms.SubstituteCareProvider.class,
-            gov.ca.cwds.data.persistence.cms.LongText.class,
-            gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class,
-            gov.ca.cwds.data.persistence.cms.ClientUc.class,
-            gov.ca.cwds.data.persistence.cms.ChildClient.class,
-            gov.ca.cwds.data.persistence.cms.Address.class,
-            gov.ca.cwds.data.persistence.cms.ClientAddress.class,
-            gov.ca.cwds.data.persistence.cms.CountyOwnership.class,
-            gov.ca.cwds.data.persistence.cms.CountyTrigger.class,
-            gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable.class,
-            gov.ca.cwds.data.persistence.cms.SystemCode.class,
-            gov.ca.cwds.data.persistence.cms.SystemMeta.class,
-            gov.ca.cwds.data.persistence.cms.DrmsDocument.class,
-            gov.ca.cwds.data.persistence.cms.Assignment.class,
-            gov.ca.cwds.data.persistence.cms.AssignmentUnit.class,
-            gov.ca.cwds.data.persistence.cms.CwsOffice.class,
-            gov.ca.cwds.data.persistence.cms.BaseAssignment.class,
-            gov.ca.cwds.data.persistence.cms.ReferralAssignment.class,
-            gov.ca.cwds.data.persistence.cms.CaseAssignment.class,
-            gov.ca.cwds.data.persistence.cms.CmsCase.class,
-            gov.ca.cwds.data.persistence.cms.Tickle.class,
-            gov.ca.cwds.data.persistence.cms.ClientRelationship.class,
-            gov.ca.cwds.data.persistence.cms.ClientCollateral.class,
-            gov.ca.cwds.data.persistence.cms.AddressUc.class,
-            gov.ca.cwds.data.persistence.cms.ExternalInterface.class,
-            gov.ca.cwds.data.persistence.cms.RelationshipWrapper.class,
-            gov.ca.cwds.data.persistence.cms.LawEnforcementEntity.class,
-            gov.ca.cwds.data.persistence.cms.CaseLoad.class,
-            gov.ca.cwds.data.persistence.cms.StaffPersonCaseLoad.class,
-            gov.ca.cwds.data.persistence.cms.ClientScpEthnicity.class,
-            gov.ca.cwds.data.persistence.cms.GovernmentOrganizationEntity.class,
-            gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.class,
-            gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument.class,
-            gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport.class,
-            gov.ca.cwds.data.persistence.cms.InjuryHarmDetail.class,
-            gov.ca.cwds.data.persistence.cms.InjuryBodyDetail.class,
-            gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.class,
-            gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
-            gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
-            gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class
-          ),
-          new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
+  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
+          // legacy-data-access
+          gov.ca.cwds.data.legacy.cms.entity.Client.class,
+          gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
+          gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
+          gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
+          gov.ca.cwds.data.legacy.cms.entity.LicensingVisit.class,
+          gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome.class,
+          gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome.class,
+          gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship.class,
+          gov.ca.cwds.data.legacy.cms.entity.OutOfHomePlacement.class,
+          gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementHome.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementHomeNotes.class,
+          gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile.class,
+          gov.ca.cwds.data.legacy.cms.entity.StaffPerson.class,
+          gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.County.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType.class,
+
+          gov.ca.cwds.data.persistence.cms.Address.class,
+          gov.ca.cwds.data.persistence.cms.Allegation.class,
+          gov.ca.cwds.data.persistence.cms.ClientAddress.class,
+          gov.ca.cwds.data.persistence.cms.ClientCollateral.class,
+          gov.ca.cwds.data.persistence.cms.Client.class,
+          gov.ca.cwds.data.persistence.cms.CmsDocReferralClient.class,
+          gov.ca.cwds.data.persistence.cms.CmsDocument.class,
+          gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment.class,
+          gov.ca.cwds.data.persistence.cms.CollateralIndividual.class,
+          gov.ca.cwds.data.persistence.cms.CrossReport.class,
+          gov.ca.cwds.data.persistence.cms.EducationProviderContact.class,
+          gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.class,
+          gov.ca.cwds.data.persistence.cms.OtherChildInPlacemtHome.class,
+          gov.ca.cwds.data.persistence.cms.OtherClientName.class,
+          gov.ca.cwds.data.persistence.cms.Referral.class,
+          gov.ca.cwds.data.persistence.cms.ReferralClient.class,
+          gov.ca.cwds.data.persistence.cms.Reporter.class,
+          gov.ca.cwds.data.persistence.cms.ServiceProvider.class,
+          gov.ca.cwds.data.persistence.cms.StaffPerson.class,
+          gov.ca.cwds.data.persistence.cms.StateId.class,
+          gov.ca.cwds.data.persistence.cms.SubstituteCareProvider.class,
+          gov.ca.cwds.data.persistence.cms.LongText.class,
+          gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class,
+          gov.ca.cwds.data.persistence.cms.ClientUc.class,
+          gov.ca.cwds.data.persistence.cms.ChildClient.class,
+          gov.ca.cwds.data.persistence.cms.Address.class,
+          gov.ca.cwds.data.persistence.cms.ClientAddress.class,
+          gov.ca.cwds.data.persistence.cms.CountyOwnership.class,
+          gov.ca.cwds.data.persistence.cms.CountyTrigger.class,
+          gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable.class,
+          gov.ca.cwds.data.persistence.cms.SystemCode.class,
+          gov.ca.cwds.data.persistence.cms.SystemMeta.class,
+          gov.ca.cwds.data.persistence.cms.DrmsDocument.class,
+          gov.ca.cwds.data.persistence.cms.Assignment.class,
+          gov.ca.cwds.data.persistence.cms.AssignmentUnit.class,
+          gov.ca.cwds.data.persistence.cms.CwsOffice.class,
+          gov.ca.cwds.data.persistence.cms.BaseAssignment.class,
+          gov.ca.cwds.data.persistence.cms.ReferralAssignment.class,
+          gov.ca.cwds.data.persistence.cms.CaseAssignment.class,
+          gov.ca.cwds.data.persistence.cms.CmsCase.class,
+          gov.ca.cwds.data.persistence.cms.Tickle.class,
+          gov.ca.cwds.data.persistence.cms.ClientRelationship.class,
+          gov.ca.cwds.data.persistence.cms.ClientCollateral.class,
+          gov.ca.cwds.data.persistence.cms.AddressUc.class,
+          gov.ca.cwds.data.persistence.cms.ExternalInterface.class,
+          gov.ca.cwds.data.persistence.cms.RelationshipWrapper.class,
+          gov.ca.cwds.data.persistence.cms.LawEnforcementEntity.class,
+          gov.ca.cwds.data.persistence.cms.CaseLoad.class,
+          gov.ca.cwds.data.persistence.cms.StaffPersonCaseLoad.class,
+          gov.ca.cwds.data.persistence.cms.ClientScpEthnicity.class,
+          gov.ca.cwds.data.persistence.cms.GovernmentOrganizationEntity.class,
+          gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.class,
+          gov.ca.cwds.data.persistence.cms.OtherCaseReferralDrmsDocument.class,
+          gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport.class,
+          gov.ca.cwds.data.persistence.cms.InjuryHarmDetail.class,
+          gov.ca.cwds.data.persistence.cms.InjuryBodyDetail.class,
+          gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.class,
+          gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
+          gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
+          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class),
+          new ApiSessionFactoryFactory()) { // init hibernate interceptor:
 
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
@@ -212,36 +212,36 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(
-          gov.ca.cwds.data.persistence.ns.Person.class,
-          gov.ca.cwds.data.persistence.ns.Address.class,
-          gov.ca.cwds.data.persistence.ns.Addresses.class,
-          gov.ca.cwds.data.persistence.ns.Allegation.class,
-          gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
-          gov.ca.cwds.data.persistence.ns.IntakeLov.class,
-          gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
-          gov.ca.cwds.data.persistence.ns.PaperTrail.class,
-          gov.ca.cwds.data.persistence.ns.ParticipantEntity.class,
-          ParticipantAddressId.class,
-          gov.ca.cwds.data.persistence.ns.ParticipantAddresses.class,
-          ParticipantPhoneNumberId.class,
-          gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.class,
-          gov.ca.cwds.data.persistence.ns.PersonAddressId.class,
-          gov.ca.cwds.data.persistence.ns.PersonAddress.class,
-          gov.ca.cwds.data.persistence.ns.PersonPhoneId.class,
-          gov.ca.cwds.data.persistence.ns.PhoneNumber.class,
-          gov.ca.cwds.data.persistence.ns.PhoneNumbers.class,
-          gov.ca.cwds.data.persistence.ns.PersonPhone.class,
-          gov.ca.cwds.data.persistence.ns.PersonLanguageId.class,
-          gov.ca.cwds.data.persistence.ns.Language.class,
-          gov.ca.cwds.data.persistence.ns.PersonLanguage.class,
-          gov.ca.cwds.data.persistence.ns.PersonEthnicityId.class,
-          gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
-          gov.ca.cwds.data.persistence.ns.Ethnicity.class,
-          gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
-          gov.ca.cwds.data.persistence.ns.PersonRace.class,
-          gov.ca.cwds.data.persistence.ns.Race.class,
-          gov.ca.cwds.data.persistence.ns.ScreeningEntity.class
-      ) {
+          ImmutableList.<Class<?>>of(gov.ca.cwds.data.persistence.ns.Person.class,
+              gov.ca.cwds.data.persistence.ns.Address.class,
+              gov.ca.cwds.data.persistence.ns.Addresses.class,
+              gov.ca.cwds.data.persistence.ns.Allegation.class,
+              gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
+              gov.ca.cwds.data.persistence.ns.IntakeLov.class,
+              gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
+              gov.ca.cwds.data.persistence.ns.PaperTrail.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantEntity.class, ParticipantAddressId.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantAddresses.class,
+              ParticipantPhoneNumberId.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.class,
+              gov.ca.cwds.data.persistence.ns.PersonAddressId.class,
+              gov.ca.cwds.data.persistence.ns.PersonAddress.class,
+              gov.ca.cwds.data.persistence.ns.PersonPhoneId.class,
+              gov.ca.cwds.data.persistence.ns.PhoneNumber.class,
+              gov.ca.cwds.data.persistence.ns.PhoneNumbers.class,
+              gov.ca.cwds.data.persistence.ns.PersonPhone.class,
+              gov.ca.cwds.data.persistence.ns.PersonLanguageId.class,
+              gov.ca.cwds.data.persistence.ns.Language.class,
+              gov.ca.cwds.data.persistence.ns.PersonLanguage.class,
+              gov.ca.cwds.data.persistence.ns.PersonEthnicityId.class,
+              gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
+              gov.ca.cwds.data.persistence.ns.Ethnicity.class,
+              gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
+              gov.ca.cwds.data.persistence.ns.PersonRace.class,
+              gov.ca.cwds.data.persistence.ns.Race.class,
+              gov.ca.cwds.data.persistence.ns.ScreeningEntity.class),
+          new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
+
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -251,12 +251,6 @@ public class DataAccessModule extends AbstractModule {
         public String name() {
           return "ns";
         }
-
-//        @Override
-//        protected void configure(Configuration configuration) {
-//          configuration.setInterceptor(new PaperTrailInterceptor());
-//          super.configure(configuration);
-//        }
       };
 
   private final HibernateBundle<ApiConfiguration> rsHibernateBundle =
@@ -354,8 +348,6 @@ public class DataAccessModule extends AbstractModule {
     bind(PaperTrailDao.class);
     bind(PaperTrailInterceptor.class);
 
-
-
     // Trigger Tables:
     bind(CountyOwnershipDao.class);
     bind(CountyTriggerDao.class);
@@ -382,6 +374,8 @@ public class DataAccessModule extends AbstractModule {
     bind(RIReferral.class);
     bind(RIReferralClient.class);
     bind(RIGovernmentOrganizationCrossReport.class);
+
+    requestInjection(paperTrailInterceptor);
   }
 
   @Provides
@@ -479,6 +473,15 @@ public class DataAccessModule extends AbstractModule {
     }
 
     return clients;
+  }
+
+  public PaperTrailInterceptor get() {
+    this.requestInjection(this.paperTrailInterceptor);
+    return this.paperTrailInterceptor;
+  }
+
+  public PaperTrailInterceptor getPaperTrailInterceptor() {
+    return paperTrailInterceptor;
   }
 
 }
