@@ -49,6 +49,8 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
       "liquibase/intake_ns_database_master.xml";
   private static final String HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME = "hibernate.default_schema";
 
+  private ApplicationModule applicationModule;
+
   /**
    * Start the CWDS RESTful API application.
    *
@@ -66,7 +68,8 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
    */
   @Override
   public Module applicationModule(Bootstrap<ApiConfiguration> bootstrap) {
-    return new ApplicationModule(bootstrap);
+    applicationModule = new ApplicationModule(bootstrap);
+    return applicationModule;
   }
 
   @Override
@@ -82,7 +85,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.getApplicationContext().addServlet(new NonblockingServletHolder(new AdminServlet()),
         "/admin/*");
 
-    Injector injector = guiceBundle.getInjector();
+    final Injector injector = guiceBundle.getInjector();
     environment.servlets()
         .addFilter("RequestExecutionContextManagingFilter",
             injector.getInstance(RequestExecutionContextFilter.class))
@@ -106,6 +109,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
+    // applicationModule.finishDependecies(); // DRS: fails here.
   }
 
   private void upgradeNsDb(ApiConfiguration configuration) {
@@ -123,4 +127,5 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
     LOGGER.info("Finished Upgrading INTAKE_NS DB");
   }
+
 }

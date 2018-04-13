@@ -73,7 +73,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   }
 
   private void createPaperTrail(String event, String id, HasPaperTrail entity) {
-    PaperTrail paperTrail = new PaperTrail(entity.getClass().getSimpleName(), id, event);
+    final PaperTrail paperTrail = new PaperTrail(entity.getClass().getSimpleName(), id, event);
     paperTrailDao.create(paperTrail);
   }
 
