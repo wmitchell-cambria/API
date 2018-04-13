@@ -107,7 +107,7 @@ import io.dropwizard.setup.Bootstrap;
  * @author CWDS API Team
  * @see ApiSessionFactoryFactory
  */
-public class DataAccessModule extends AbstractModule {
+public class DataAccessModule extends AbstractModule implements FerbFinishModule {
 
   private Map<String, Client> clients;
 
@@ -375,6 +375,8 @@ public class DataAccessModule extends AbstractModule {
     bind(RIReferralClient.class);
     bind(RIGovernmentOrganizationCrossReport.class);
 
+    bind(PaperTrailInterceptor.class).toInstance(paperTrailInterceptor);
+
     // FAILS: null returned by binding at gov.ca.cwds.inject.DataAccessModule.nsSessionFactory().
     // Premature to request injection, until session factories and DAO's are initialized.
     // requestInjection(paperTrailInterceptor);
@@ -465,9 +467,6 @@ public class DataAccessModule extends AbstractModule {
       }
     }
 
-    // Cheesy hack, but it works.
-    // Alternative is to finish dependencies for *this* module in the *next* module. Even worse.
-    finishDependencies();
     return clients;
   }
 
@@ -480,6 +479,7 @@ public class DataAccessModule extends AbstractModule {
     return clients;
   }
 
+  @Override
   public void finishDependencies() {
     this.requestInjection(this.paperTrailInterceptor);
   }

@@ -43,7 +43,7 @@ public class ApplicationModule extends AbstractModule {
     dataAccessModule = new DataAccessModule(bootstrap);
     install(dataAccessModule);
     install(new DataAccessServicesModule());
-    install(new ServicesModule());
+    install(new ServicesModule(dataAccessModule));
     install(new ResourcesModule());
     install(new FiltersModule());
     install(new AuditingModule());
@@ -52,12 +52,10 @@ public class ApplicationModule extends AbstractModule {
     install(new SecurityModule(BaseApiApplication::getInjector)
         .addAuthorizer("client:read", ClientAbstractReadAuthorizer.class)
         .addAuthorizer("screening.read", ScreeningAuthorizer.class));
-
-    // finishDependencies(); // Can't request injection here? Lame.
   }
 
-  public void finishDependencies() {
-    this.dataAccessModule.finishDependencies();
+  public DataAccessModule getDataAccessModule() {
+    return dataAccessModule;
   }
 
 }

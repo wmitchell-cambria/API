@@ -13,6 +13,7 @@ import com.codahale.metrics.servlets.MetricsServlet;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.health.AuthHealthCheck;
 import gov.ca.cwds.health.DB2HealthCheck;
 import gov.ca.cwds.health.SwaggerHealthCheck;
@@ -20,6 +21,7 @@ import gov.ca.cwds.health.resource.AuthServer;
 import gov.ca.cwds.health.resource.DB2Database;
 import gov.ca.cwds.health.resource.SwaggerEndpoint;
 import gov.ca.cwds.inject.ApplicationModule;
+import gov.ca.cwds.inject.InjectorHolder;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContextFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
@@ -43,6 +45,7 @@ import io.dropwizard.setup.Environment;
  * @author CWDS API Team
  */
 public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
   private static final String LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML =
@@ -109,7 +112,13 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
-    // applicationModule.finishDependecies(); // DRS: fails here.
+
+    // ERROR: "binder can only be called inside configure."
+    // Chicken and egg dilemma: HibernateBundle demands that Hibernate interceptors be constructed
+    // before DAO's, entities, session factories, etc.
+    final PaperTrailDao paperTrailDao = InjectorHolder.INSTANCE.getInstance(PaperTrailDao.class);
+    LOGGER.info("PaperTrailInterceptor: {}",
+        applicationModule.getDataAccessModule().getPaperTrailInterceptor());
   }
 
   private void upgradeNsDb(ApiConfiguration configuration) {

@@ -85,4 +85,9 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     this.paperTrailDao = paperTrailDao;
   }
 
+  @Override
+  public String toString() {
+    return "PaperTrailInterceptor [paperTrailDao=" + paperTrailDao + "]";
+  }
+
 }

@@ -93,10 +93,10 @@ public class ServicesModule extends AbstractModule {
 
       proxyFactory =
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
-      UnitOfWorkAspect aspect = proxyFactory.newAspect();
+      final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
-        Object result = mi.proceed();
+        final Object result = mi.proceed();
         aspect.afterEnd();
         return result;
       } catch (Exception e) {
@@ -109,11 +109,13 @@ public class ServicesModule extends AbstractModule {
 
   }
 
+  private FerbFinishModule priorModule;
+
   /**
    * Default, no-op constructor.
    */
-  public ServicesModule() {
-    // Default, no-op.
+  public ServicesModule(FerbFinishModule priorModule) {
+    this.priorModule = priorModule;
   }
 
   @Override
@@ -162,8 +164,11 @@ public class ServicesModule extends AbstractModule {
     p.setProperty("something", "Some String");
     Names.bindProperties(binder(), p);
 
-    // @Singleton does not work with DropWizard Guice.
+    // @Singleton does not work with DropWizard Guice. :-(
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
+
+    // ERROR: "The binder can only be used inside configure()"
+    this.priorModule.finishDependencies();
   }
 
   /**
@@ -219,5 +224,9 @@ public class ServicesModule extends AbstractModule {
   public CmsSystemCodeSerializer provideCmsSystemCodeSerializer(SystemCodeCache systemCodeCache) {
     LOGGER.debug("provide syscode serializer");
     return new CmsSystemCodeSerializer(systemCodeCache);
+  }
+
+  public FerbFinishModule getPriorModule() {
+    return priorModule;
   }
 }
