@@ -14,6 +14,7 @@
       "id": "Abxl9D005Y",
       "first_name": "Wes",
       "last_name": "Wooten",
+      "name_suffix": "",
       "legacy_descriptor": {
         "legacy_id": "Abxl9D005Y",
         "legacy_ui_id": "0602-7823-1126-6000344",
@@ -26,6 +27,7 @@
       "id": "05Y",
       "first_name": "Supervisor",
       "last_name": "King",
+      "name_suffix": "MSW",
       "legacy_descriptor": {
         "legacy_id": "05Y",
         "legacy_ui_id": "05Y",
