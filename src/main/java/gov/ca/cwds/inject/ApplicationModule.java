@@ -43,7 +43,7 @@ public class ApplicationModule extends AbstractModule {
     dataAccessModule = new DataAccessModule(bootstrap);
     install(dataAccessModule);
     install(new DataAccessServicesModule());
-    install(new ServicesModule(dataAccessModule));
+    install(new ServicesModule());
     install(new ResourcesModule());
     install(new FiltersModule());
     install(new AuditingModule());

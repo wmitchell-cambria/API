@@ -113,10 +113,15 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
 
     injector.getInstance(SystemCodeCache.class);
 
-    // ERROR: "binder can only be called inside configure."
+    // ERROR: "binder can only be called inside configure" -- but can't call it in configure()
+    // either.
     // Chicken and egg dilemma: HibernateBundle demands that Hibernate interceptors be constructed
     // before DAO's, entities, session factories, etc.
+    // Without succumbing to convoluted Guice listeners, "assisted injection", or statics, this is
+    // the best we can do.
     final PaperTrailDao paperTrailDao = InjectorHolder.INSTANCE.getInstance(PaperTrailDao.class);
+    applicationModule.getDataAccessModule().getPaperTrailInterceptor()
+        .setPaperTrailDao(paperTrailDao);
     LOGGER.info("PaperTrailInterceptor: {}",
         applicationModule.getDataAccessModule().getPaperTrailInterceptor());
   }
@@ -124,8 +129,8 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
   private void upgradeNsDb(ApiConfiguration configuration) {
     LOGGER.info("Upgrading INTAKE_NS DB...");
 
-    DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
-    DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
+    final DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
+    final DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
         nsDataSourceFactory.getUser(), nsDataSourceFactory.getPassword());
     try {
       databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,

@@ -347,6 +347,7 @@ public class DataAccessModule extends AbstractModule implements FerbFinishModule
 
     bind(PaperTrailDao.class);
     bind(PaperTrailInterceptor.class);
+    // bind(PaperTrailInterceptor.class).toInstance(paperTrailInterceptor); // Can't. Sucks.
 
     // Trigger Tables:
     bind(CountyOwnershipDao.class);
@@ -375,10 +376,8 @@ public class DataAccessModule extends AbstractModule implements FerbFinishModule
     bind(RIReferralClient.class);
     bind(RIGovernmentOrganizationCrossReport.class);
 
-    bind(PaperTrailInterceptor.class).toInstance(paperTrailInterceptor);
-
-    // FAILS: null returned by binding at gov.ca.cwds.inject.DataAccessModule.nsSessionFactory().
-    // Premature to request injection, until session factories and DAO's are initialized.
+    // FAILS: "null returned by binding at gov.ca.cwds.inject.DataAccessModule.nsSessionFactory()"
+    // Premature to request injection at this point, until session factories and DAO's initialize.
     // requestInjection(paperTrailInterceptor);
   }
 

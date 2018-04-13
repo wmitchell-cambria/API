@@ -114,9 +114,7 @@ public class ServicesModule extends AbstractModule {
   /**
    * Default, no-op constructor.
    */
-  public ServicesModule(FerbFinishModule priorModule) {
-    this.priorModule = priorModule;
-  }
+  public ServicesModule() {}
 
   @Override
   protected void configure() {
@@ -168,7 +166,7 @@ public class ServicesModule extends AbstractModule {
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
 
     // ERROR: "The binder can only be used inside configure()"
-    this.priorModule.finishDependencies();
+    // this.priorModule.finishDependencies();
   }
 
   /**
