@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,7 +34,6 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.CmsReporterResourceBuilder;
-import gov.ca.cwds.fixture.ReferralClientEntityBuilder;
 import gov.ca.cwds.fixture.ReferralClientResourceBuilder;
 import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
@@ -467,21 +465,6 @@ public class HOIReferralServiceTest {
     HOIReferralService spyTarget = spy(hoiService);
     request = new HOIRequest();
     request.setClientIds(Stream.of("unauthorizedId").collect(Collectors.toSet()));
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
-    spyTarget.handleFind(request);
-  }
-
-  @Test(expected = AuthorizationException.class)
-  public void testUnAuthorizedVictimClient() {
-    HOIReferralService spyTarget = spy(hoiService);
-    Allegation allegation =
-        new AllegationEntityBuilder().setVictimClientId("unauthorizedId").build();
-    Set<Allegation> allegations = Stream.of(allegation).collect(Collectors.toSet());
-    Referral referral = new ReferralEntityBuilder().setAllegations(allegations).build();
-    gov.ca.cwds.data.persistence.cms.ReferralClient referralClient =
-        new ReferralClientEntityBuilder().setReferral(referral).build();
-    gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {referralClient};
-    when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
     doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
     spyTarget.handleFind(request);
   }
