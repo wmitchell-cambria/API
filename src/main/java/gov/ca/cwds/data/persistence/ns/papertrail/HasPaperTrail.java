@@ -6,4 +6,5 @@ package gov.ca.cwds.data.persistence.ns.papertrail;
  * CWDS API Team
  */
 public interface HasPaperTrail {
+
 }

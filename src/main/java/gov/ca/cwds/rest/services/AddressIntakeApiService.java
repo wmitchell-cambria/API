@@ -15,10 +15,11 @@ import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * Business layer object to work on {@link Address}
- * 
- * @author CWDS API Team
+ *
+ * @author Intake Team 4
  */
 public class AddressIntakeApiService implements CrudsService {
+
   private AddressesDao addressesDao;
   private LegacyDescriptorDao legacyDescriptorDao;
 
@@ -26,10 +27,11 @@ public class AddressIntakeApiService implements CrudsService {
    * Constructor
    *
    * @param addressesDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address}
-   *        objects.
+   * objects.
    */
   @Inject
-  public AddressIntakeApiService(AddressesDao addressesDao, LegacyDescriptorDao legacyDescriptorDao) {
+  public AddressIntakeApiService(AddressesDao addressesDao,
+      LegacyDescriptorDao legacyDescriptorDao) {
     this.addressesDao = addressesDao;
     this.legacyDescriptorDao = legacyDescriptorDao;
   }
@@ -49,8 +51,9 @@ public class AddressIntakeApiService implements CrudsService {
     }
     AddressIntakeApi addressIntakeApi = new AddressIntakeApi(persistedAddress);
     //Get it's legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = addressesDao.findAddressLegacyDescriptor(persistedAddress.getId());
-    if (legacyDescriptorEntity != null){
+    LegacyDescriptorEntity legacyDescriptorEntity = addressesDao
+        .findAddressLegacyDescriptor(persistedAddress.getId());
+    if (legacyDescriptorEntity != null) {
       addressIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
 
@@ -95,8 +98,7 @@ public class AddressIntakeApiService implements CrudsService {
   /**
    * {@inheritDoc}
    *
-   * @see CrudsService#update(Serializable,
-   *      Request)
+   * @see CrudsService#update(Serializable, Request)
    */
   @Override
   public Response update(Serializable primaryKey, Request request) {
@@ -105,13 +107,15 @@ public class AddressIntakeApiService implements CrudsService {
   }
 
 
-  public LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor, String describableId ){
-    if (legacyDescriptor == null || describableId ==  null){
+  public LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor,
+      String describableId) {
+    if (legacyDescriptor == null || describableId == null) {
       return null;
     }
     //Save legacy descriptor entity
     LegacyDescriptorEntity legacyDescriptorEntity = new LegacyDescriptorEntity(
-        legacyDescriptor, LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS, Long.valueOf(describableId));
+        legacyDescriptor, LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS,
+        Long.valueOf(describableId));
     legacyDescriptorEntity = legacyDescriptorDao.create(legacyDescriptorEntity);
     return new LegacyDescriptor(legacyDescriptorEntity);
   }

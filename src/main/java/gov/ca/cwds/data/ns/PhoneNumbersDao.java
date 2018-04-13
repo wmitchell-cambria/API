@@ -10,7 +10,7 @@ import org.hibernate.query.Query;
 
 /**
  * PhoneNumber DAO
- * 
+ *
  * @author Intake Team 4
  */
 public class PhoneNumbersDao extends CrudsDaoImpl<PhoneNumbers> {
@@ -25,11 +25,10 @@ public class PhoneNumbersDao extends CrudsDaoImpl<PhoneNumbers> {
     super(sessionFactory);
   }
 
-  public List<PhoneNumbers> findByParticipant(String participantId){
+  public List<PhoneNumbers> findByParticipant(String participantId) {
     final Query<PhoneNumbers> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(PhoneNumbers.FIND_BY_PARTICIPANT_ID)
         .setParameter(PhoneNumbers.PARAM_PARTICIPANT_ID, participantId);
     return query.getResultList();
   }
-
 }

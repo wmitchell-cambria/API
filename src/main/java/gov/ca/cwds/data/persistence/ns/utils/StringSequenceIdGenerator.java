@@ -31,18 +31,19 @@ public class StringSequenceIdGenerator implements IdentifierGenerator, Configura
     final Dialect dialect = jdbcEnvironment.getDialect();
 
     final String sequencePerEntitySuffix = ConfigurationHelper.getString(
-        SequenceStyleGenerator.CONFIG_SEQUENCE_PER_ENTITY_SUFFIX, params, SequenceStyleGenerator.DEF_SEQUENCE_SUFFIX);
+        SequenceStyleGenerator.CONFIG_SEQUENCE_PER_ENTITY_SUFFIX, params,
+        SequenceStyleGenerator.DEF_SEQUENCE_SUFFIX);
 
-    final String defaultSequenceName = ConfigurationHelper.getBoolean(SequenceStyleGenerator.CONFIG_PREFER_SEQUENCE_PER_ENTITY, params, false)
+    final String defaultSequenceName = ConfigurationHelper
+        .getBoolean(SequenceStyleGenerator.CONFIG_PREFER_SEQUENCE_PER_ENTITY, params, false)
         ? params.getProperty(JPA_ENTITY_NAME) + sequencePerEntitySuffix
         : SequenceStyleGenerator.DEF_SEQUENCE_NAME;
 
-    String sequenceName = ConfigurationHelper.getString(SequenceStyleGenerator.SEQUENCE_PARAM, params, defaultSequenceName );
-    if ( sequenceName.contains( "." ) ) {
-      sequenceName =  QualifiedNameParser.INSTANCE.parse( sequenceName ).render();
-    }
-    else {
-      // todo : need to incorporate implicit catalog and schema names
+    String sequenceName = ConfigurationHelper
+        .getString(SequenceStyleGenerator.SEQUENCE_PARAM, params, defaultSequenceName);
+    if (sequenceName.contains(".")) {
+      sequenceName = QualifiedNameParser.INSTANCE.parse(sequenceName).render();
+    } else {
       final Identifier catalog = jdbcEnvironment.getIdentifierHelper().toIdentifier(
           ConfigurationHelper.getString(PersistentIdentifierGenerator.CATALOG, params)
       );
@@ -57,8 +58,6 @@ public class StringSequenceIdGenerator implements IdentifierGenerator, Configura
 
     }
     sequenceCallSyntax = dialect.getSequenceNextValString(sequenceName);
-
-
   }
 
   @Override

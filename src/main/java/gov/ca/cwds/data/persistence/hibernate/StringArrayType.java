@@ -10,14 +10,13 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 /**
- * Plagiarized from <a href=
- * "https://madhavivaram.wordpress.com/2015/06/12/mapping-array-column-of-postgres-in-hibernate/">here</a>.
- * 
+ * Plagiarized from <a href= "https://madhavivaram.wordpress.com/2015/06/12/mapping-array-column-of-postgres-in-hibernate/">here</a>.
+ *
  * @author CWDS API Team
  */
 public class StringArrayType implements UserType {
 
-  private static final int[] arrayTypes = new int[] {Types.ARRAY};
+  private static final int[] arrayTypes = new int[]{Types.ARRAY};
 
   @Override
   public int[] sqlTypes() {

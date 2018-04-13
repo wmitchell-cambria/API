@@ -18,7 +18,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author Intake Team 4
- * 
  */
 @Entity
 @Table(name = "participant_addresses")
@@ -49,7 +48,7 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("participantId")
-  private ParticipantEntity  participant;
+  private ParticipantEntity participant;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @MapsId("addressId")
@@ -116,10 +115,6 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
     return Objects.hash(participant, address);
   }
 
-  /**
-   * @author Intake Team 4
-   *
-   */
   @Embeddable
   public static class ParticipantAddressId implements Serializable {
 
@@ -140,7 +135,7 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
     public ParticipantAddressId() {
     }
 
-    public ParticipantAddressId(String participantId, String addressId) {
+    ParticipantAddressId(String participantId, String addressId) {
       this.participantId = participantId;
       this.addressId = addressId;
     }

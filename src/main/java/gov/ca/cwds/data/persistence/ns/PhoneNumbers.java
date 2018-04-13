@@ -19,7 +19,7 @@ import org.hibernate.annotations.NamedQuery;
 
 /**
  * {@link PersistentObject} representing an PhoneNumbers
- * 
+ *
  * @author Intake Team 4
  */
 
@@ -37,10 +37,8 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
   public static final String PARAM_PARTICIPANT_ID = "participantId";
   static final String FIND_BY_PARTICIPANT_ID_QUERY =
       "SELECT ppn.phoneNumber FROM ParticipantPhoneNumbers ppn"
-      + " WHERE ppn.participant.id = :"
-      + PARAM_PARTICIPANT_ID;
-
-
+          + " WHERE ppn.participant.id = :"
+          + PARAM_PARTICIPANT_ID;
 
 
   @Id
@@ -89,7 +87,7 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override

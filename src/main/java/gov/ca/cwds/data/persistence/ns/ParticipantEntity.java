@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import gov.ca.cwds.Identifiable;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
@@ -22,19 +25,20 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
-
 /**
  * {@link PersistentObject} representing Participant.
  *
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId",
+@NamedQuery(name = FIND_LEGACY_ID_LIST_BY_SCREENING_ID,
     query = "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
 @Entity
 @Table(name = "participants")
 public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String> {
+
+  public static final String FIND_LEGACY_ID_LIST_BY_SCREENING_ID =
+      "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId";
 
   @Id
   @Column(name = "id")
@@ -118,7 +122,8 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     super();
   }
 
-  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi, ScreeningEntity screeningEntity) {
+  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi,
+      ScreeningEntity screeningEntity) {
     id = participantIntakeApi.getId();
     dateOfBirth = participantIntakeApi.getDateOfBirth();
     firstName = participantIntakeApi.getFirstName();
@@ -138,37 +143,37 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     sealed = participantIntakeApi.isSealed();
     approximateAge = participantIntakeApi.getApproximateAge();
     approximateAgeUnits = participantIntakeApi.getApproximateAgeUnits();
- }
+  }
 
   public ParticipantEntity(String id, Date dateOfBirth, String firstName,
-		  String gender, String lastName, String ssn,
-		  ScreeningEntity screeningEntity, String legacyId, String[] roles,
-		  String[] languages, String middleName, String nameSuffix,
-		  String races, String ethnicity, String legacySourceTable,
-		  Boolean sensitive, Boolean sealed, String approximateAge,
-		  String approximateAgeUnits) {
-	  this.id = id;
-	  this.dateOfBirth = dateOfBirth;
-	  this.firstName = firstName;
-	  this.gender = gender;
-	  this.lastName = lastName;
-	  this.ssn = ssn;
-	  this.languages = languages;
-	  this.middleName = middleName;
-	  this.nameSuffix = nameSuffix;
-	  this.screeningEntity = screeningEntity;
-	  this.legacyId = legacyId;
-	  this.roles = roles;
-	  this.races = races;
-	  this.ethnicity = ethnicity;
-	  this.legacySourceTable = legacySourceTable;
-	  this.sensitive = sensitive;
-	  this.sealed = sealed;
-	  this.approximateAge = approximateAge;
-	  this.approximateAgeUnits = approximateAgeUnits;	  
+      String gender, String lastName, String ssn,
+      ScreeningEntity screeningEntity, String legacyId, String[] roles,
+      String[] languages, String middleName, String nameSuffix,
+      String races, String ethnicity, String legacySourceTable,
+      Boolean sensitive, Boolean sealed, String approximateAge,
+      String approximateAgeUnits) {
+    this.id = id;
+    this.dateOfBirth = dateOfBirth;
+    this.firstName = firstName;
+    this.gender = gender;
+    this.lastName = lastName;
+    this.ssn = ssn;
+    this.languages = languages;
+    this.middleName = middleName;
+    this.nameSuffix = nameSuffix;
+    this.screeningEntity = screeningEntity;
+    this.legacyId = legacyId;
+    this.roles = roles;
+    this.races = races;
+    this.ethnicity = ethnicity;
+    this.legacySourceTable = legacySourceTable;
+    this.sensitive = sensitive;
+    this.sealed = sealed;
+    this.approximateAge = approximateAge;
+    this.approximateAgeUnits = approximateAgeUnits;
   }
-  
-		  
+
+
   @Override
   public String getPrimaryKey() {
     return id;

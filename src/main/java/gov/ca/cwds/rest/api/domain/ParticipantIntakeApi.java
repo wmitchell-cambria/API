@@ -111,13 +111,13 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
 
   /*
-  * Workafoung for fields containing raw json
-  * races
-  * ethnicity
-  *
-  */
+   * Workafoung for fields containing raw json
+   * races
+   * ethnicity
+   *
+   */
   @ApiModelProperty(required = true, readOnly = false, value = "Races",
-     example = "['White', 'Black or African American']")
+      example = "['White', 'Black or African American']")
   private String races;
 
   @ApiModelProperty(required = true, readOnly = false, value = "Ethnicity",
@@ -198,7 +198,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
       @JsonProperty("phone_numbers") Set<PhoneNumber> phoneNumbers,
       @JsonProperty("seales") Boolean sealed,
       @JsonProperty("sensitive") Boolean sensitive
-      ) {
+  ) {
     super();
     this.id = id;
     this.firstName = firstName;
@@ -230,7 +230,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    *
    * @param participantEntity
    */
-  public ParticipantIntakeApi(ParticipantEntity participantEntity){
+  public ParticipantIntakeApi(ParticipantEntity participantEntity) {
     super();
     this.id = participantEntity.getId();
     this.firstName = participantEntity.getFirstName();
@@ -265,29 +265,32 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    *
    */
   @JsonRawValue
-  public String getRaces(){
+  public String getRaces() {
     return races;
   }
-  public void setRaces(final String races){
+
+  public void setRaces(final String races) {
     this.races = races;
   }
+
   @JsonProperty(value = "races")
-  public void setRacesRaw(JsonNode jsonNode){
+  public void setRacesRaw(JsonNode jsonNode) {
     setRaces(jsonNode.toString());
   }
 
   @JsonRawValue
-  public String getEthnicity(){
+  public String getEthnicity() {
     return ethnicity;
   }
-  public void setEthnicity(final String ethnicity){
+
+  public void setEthnicity(final String ethnicity) {
     this.ethnicity = ethnicity;
   }
+
   @JsonProperty(value = "ethnicity")
-  public void setEthnicityRaw(JsonNode jsonNode){
+  public void setEthnicityRaw(JsonNode jsonNode) {
     setEthnicity(jsonNode.toString());
   }
-
 
 
   /**
@@ -470,7 +473,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     }
     getPhoneNumbers().addAll(phoneNumbers);
   }
-
 
 
   /**

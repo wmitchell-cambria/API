@@ -10,7 +10,7 @@ import org.hibernate.SessionFactory;
  * Participant Addresses DAO
  *
  * @author Intake Team 4
-*/
+ */
 public class ParticipantAddressesDao extends CrudsDaoImpl<ParticipantAddresses> {
 
   /**
@@ -22,4 +22,5 @@ public class ParticipantAddressesDao extends CrudsDaoImpl<ParticipantAddresses> 
   public ParticipantAddressesDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
 }

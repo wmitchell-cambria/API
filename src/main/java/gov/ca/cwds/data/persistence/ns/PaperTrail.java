@@ -40,11 +40,11 @@ public class PaperTrail implements PersistentObject {
   @Column(name = "whodunnit")
   private String whoDunnIt;
 
-//  @Type(type = "json")
+  //  @Type(type = "json")
   @Column(name = "object")
   private String object;
 
-//  @Type(type = "json")
+  //  @Type(type = "json")
   @Column(name = "object_change")
   private String objectChange;
 

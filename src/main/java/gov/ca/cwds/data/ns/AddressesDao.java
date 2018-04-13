@@ -11,7 +11,7 @@ import org.hibernate.query.Query;
 
 /**
  * Address DAO
- * 
+ *
  * @author Intake Team 4
  */
 public class AddressesDao extends CrudsDaoImpl<Addresses> {
@@ -33,7 +33,7 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
    * @return LegacyDescriptorEntity
    */
   public LegacyDescriptorEntity findAddressLegacyDescriptor(String addressId) {
-    if(addressId == null){
+    if (addressId == null) {
       return null;
     }
     final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
@@ -44,7 +44,7 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
     return entityList.isEmpty() ? null : entityList.get(0);
   }
 
-  public List<Addresses> findByParticipant(String participantId){
+  public List<Addresses> findByParticipant(String participantId) {
     final Query<Addresses> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(Addresses.FIND_BY_PARTICIPANT_ID)
         .setParameter(Addresses.PARAM_PARTICIPANT_ID, participantId);

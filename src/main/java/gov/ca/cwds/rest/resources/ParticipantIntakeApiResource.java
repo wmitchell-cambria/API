@@ -56,7 +56,7 @@ public class ParticipantIntakeApiResource {
    * @param id the id
    * @return the response
    */
-  @UnitOfWork(value = "ns")
+  @UnitOfWork(value = "ns", readOnly = true)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -71,6 +71,7 @@ public class ParticipantIntakeApiResource {
 
   /**
    * Delete a participant
+   *
    * @param id The id of the {@link ParticipantIntakeApi}
    * @return {@link Response}
    */

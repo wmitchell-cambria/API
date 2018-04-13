@@ -1,15 +1,11 @@
 package gov.ca.cwds.data.persistence.ns.papertrail;
 
-import java.io.Serializable;
-import java.util.Iterator;
-
-import javax.inject.Inject;
-
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.Type;
-
 import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.data.persistence.ns.PaperTrail;
+import java.io.Serializable;
+import javax.inject.Inject;
+import org.hibernate.EmptyInterceptor;
+import org.hibernate.type.Type;
 
 /**
  * onSave – Called when you save an object, the object is not save into database yet. onFlushDirty –
@@ -20,8 +16,6 @@ import gov.ca.cwds.data.persistence.ns.PaperTrail;
  */
 public class PaperTrailInterceptor extends EmptyInterceptor {
 
-  private static final long serialVersionUID = 300726554791183645L;
-
   private static final String CREATE = "create";
   private static final String UPDATE = "update";
   private static final String DESTROY = "destroy";
@@ -29,11 +23,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Inject
   private PaperTrailDao paperTrailDao;
 
-  public PaperTrailInterceptor() {
-    super();
-  }
-
-  // Create
+  //Create
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
@@ -44,7 +34,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     return super.onSave(entity, id, state, propertyNames, types);
   }
 
-  // Update
+  //Update
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
@@ -55,7 +45,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
   }
 
-  // Delete
+  //Delete
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
@@ -66,28 +56,9 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     super.onDelete(entity, id, state, propertyNames, types);
   }
 
-  @SuppressWarnings("rawtypes")
-  @Override
-  public void postFlush(Iterator entities) {
-    super.postFlush(entities);
-  }
-
   private void createPaperTrail(String event, String id, HasPaperTrail entity) {
-    final PaperTrail paperTrail = new PaperTrail(entity.getClass().getSimpleName(), id, event);
+    PaperTrail paperTrail = new PaperTrail(entity.getClass().getSimpleName(), id, event);
     paperTrailDao.create(paperTrail);
-  }
-
-  public PaperTrailDao getPaperTrailDao() {
-    return paperTrailDao;
-  }
-
-  public void setPaperTrailDao(PaperTrailDao paperTrailDao) {
-    this.paperTrailDao = paperTrailDao;
-  }
-
-  @Override
-  public String toString() {
-    return "PaperTrailInterceptor [paperTrailDao=" + paperTrailDao + "]";
   }
 
 }
