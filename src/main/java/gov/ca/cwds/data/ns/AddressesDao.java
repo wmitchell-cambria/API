@@ -33,6 +33,9 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
    * @return LegacyDescriptorEntity
    */
   public LegacyDescriptorEntity findAddressLegacyDescriptor(String addressId) {
+    if(addressId == null){
+      return null;
+    }
     final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE)
         .setParameter("describableId", Long.valueOf(addressId))

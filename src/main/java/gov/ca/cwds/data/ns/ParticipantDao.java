@@ -37,6 +37,9 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
    * @return LegacyDescriptorEntity
    */
   public LegacyDescriptorEntity findParticipantLegacyDescriptor(String participantId) {
+    if (participantId == null){
+      return null;
+    }
     final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE)
         .setParameter("describableId", Long.valueOf(participantId))

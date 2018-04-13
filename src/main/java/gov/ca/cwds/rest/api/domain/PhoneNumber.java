@@ -56,21 +56,20 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneNumber persistence level address object
    */
   public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumbers phoneNumber) {
-    this.id = Long.valueOf(phoneNumber.getId());
+    this.id = phoneNumber.getId() == null ? null : Long.valueOf(phoneNumber.getId());
     this.number = phoneNumber.getNumber();
     this.type = phoneNumber.getType();
   }
 
   /**
-   * @param phoneNumber - phone number
-   * @param phoneType - phone number type
+   * @param number - phone number
+   * @param type - phone number type
    */
-  public PhoneNumber(@JsonProperty("id") Long id, @JsonProperty("number") String phoneNumber,
-      @JsonProperty("phone_number_type_id") String phoneType) {
+  public PhoneNumber(@JsonProperty("id") Long id, @JsonProperty("number") String number, @JsonProperty("type") String type) {
     super();
     this.id = id;
-    this.number = phoneNumber;
-    this.type = phoneType;
+    this.number = number;
+    this.type = type;
   }
 
   public PhoneNumber(String number, String type) {
@@ -89,14 +88,14 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   /**
    * @return - phone number
    */
-  public String getPhoneNumber() {
+  public String getNumber() {
     return number;
   }
 
   /**
    * @return - phone type
    */
-  public String getPhoneType() {
+  public String getType() {
     return type;
   }
 

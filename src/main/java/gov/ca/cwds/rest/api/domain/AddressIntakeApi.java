@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -82,10 +81,13 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    * @param legacyDescriptor - legacyDescriptor
    */
   @JsonCreator
-  public AddressIntakeApi(@JsonProperty("legacy_source_table") String legacySourceTable,
+  public AddressIntakeApi(
+      @JsonProperty("legacy_source_table") String legacySourceTable,
       @JsonProperty("legacy_id") String addressId,
-      @JsonProperty("street_address") String streetAddress, @JsonProperty("city") String city,
-      @JsonProperty("state") String state, @JsonProperty("zip") String zip,
+      @JsonProperty("street_address") String streetAddress,
+      @JsonProperty("city") String city,
+      @JsonProperty("state") String state,
+      @JsonProperty("zip") String zip,
       @JsonProperty("type") String type,
       @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor) {
     super();

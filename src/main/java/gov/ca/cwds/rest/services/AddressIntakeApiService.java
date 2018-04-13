@@ -106,7 +106,7 @@ public class AddressIntakeApiService implements CrudsService {
 
 
   public LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor, String describableId ){
-    if (legacyDescriptor == null){
+    if (legacyDescriptor == null || describableId ==  null){
       return null;
     }
     //Save legacy descriptor entity
