@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.authenticate;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -51,7 +52,7 @@ public class StaffPersonRetrieval extends HttpClientBuild {
       URI uri = new URIBuilder(validateUrl).addParameters(postParams).build();
       httpGet.setURI(uri);
       HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
-      String json = EntityUtils.toString(httpResponse.getEntity());
+      String json = EntityUtils.toString(httpResponse.getEntity(), StandardCharsets.UTF_8);
       byte[] jsonArray = json.getBytes();
       ObjectMapper mapper = new ObjectMapper();
       JsonNode rootNode = mapper.readTree(jsonArray);
