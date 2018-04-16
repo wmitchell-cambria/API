@@ -9,7 +9,7 @@ import gov.ca.cwds.data.persistence.ns.Ethnicity;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
- * Ethnicity DAO
+ * Ethnicity DAO.
  *
  * @author CWDS API Team
  */
@@ -24,6 +24,5 @@ public class EthnicityDao extends CrudsDaoImpl<Ethnicity> {
   public EthnicityDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
-
 
 }

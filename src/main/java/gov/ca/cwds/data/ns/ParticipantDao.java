@@ -38,9 +38,8 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
    * @return LegacyDescriptorEntity
    */
   public LegacyDescriptorEntity findParticipantLegacyDescriptor(String participantId) {
-    final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(
-            "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findParticipantLegacyDescriptor")
+    final Query<LegacyDescriptorEntity> query = grabSession().getNamedQuery(
+        "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findParticipantLegacyDescriptor")
         .setParameter("participantId", Long.valueOf(participantId));
     List<LegacyDescriptorEntity> entityList = query.getResultList();
     return entityList.isEmpty() ? null : entityList.get(0);
@@ -53,10 +52,11 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
    * @return Set of Legacy Id's
    */
   public Set<String> findLegacyIdListByScreeningId(String screeningId) {
-    final Query<String> query = this.getSessionFactory().getCurrentSession()
+    final Query<String> query = grabSession()
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId")
         .setParameter("screeningId", screeningId);
     return new HashSet<>(query.list());
   }
+
 }

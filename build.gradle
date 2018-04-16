@@ -171,7 +171,9 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20090211'
 
     // Distributed XA transactions:
-    compile group: 'com.atomikos', name: 'transactions-hibernate4', version: '4.0.4'
+    compile group: 'com.atomikos', name: 'atomikos-util', version: '4.0.6'
+    compile group: 'com.atomikos', name: 'transactions-jta', version: '4.0.6'
+    compile group: 'com.atomikos', name: 'transactions-hibernate4', version: '4.0.6'
     compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.8.Final'
     
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'

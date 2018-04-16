@@ -100,7 +100,7 @@ public class ServicesModule extends AbstractModule {
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
       proxyFactory = UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle,
           nsHibernateBundle, xaCmsHibernateBundle, xaNsHibernateBundle);
-      UnitOfWorkAspect aspect = proxyFactory.newAspect();
+      final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
         final Object result = mi.proceed();

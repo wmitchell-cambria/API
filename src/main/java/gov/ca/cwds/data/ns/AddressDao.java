@@ -9,7 +9,7 @@ import gov.ca.cwds.data.persistence.ns.Address;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
- * Address DAO
+ * Address DAO.
  * 
  * @author CWDS API Team
  */

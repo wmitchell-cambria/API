@@ -9,7 +9,7 @@ import gov.ca.cwds.data.persistence.ns.Person;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
- * Person DAO
+ * Person DAO.
  * 
  * @author CWDS API Team
  */

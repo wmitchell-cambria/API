@@ -69,7 +69,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    */
   public IntakeLOVCodeEntity findIntakeLOVCodeByIntakeCode(String intakeCode) {
     @SuppressWarnings("unchecked")
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
+    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().openSession()
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode")
         .setParameter("intakeCode", intakeCode);
@@ -85,7 +85,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    */
   public List<ScreeningWrapper> findScreeningsByUserId(String staffId) {
     @SuppressWarnings("unchecked")
-    final Query<ScreeningWrapper> query = this.getSessionFactory().getCurrentSession()
+    final Query<ScreeningWrapper> query = this.getSessionFactory().openSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser")
         .setParameter("staffId", staffId, StringType.INSTANCE);
     return query.list();

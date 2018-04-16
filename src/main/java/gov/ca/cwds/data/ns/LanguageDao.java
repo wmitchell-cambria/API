@@ -9,7 +9,7 @@ import gov.ca.cwds.data.persistence.ns.Language;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
- * Language DAO
+ * Language DAO.
  * 
  * @author CWDS API Team
  */

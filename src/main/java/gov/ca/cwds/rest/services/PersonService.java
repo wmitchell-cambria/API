@@ -32,6 +32,7 @@ import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
 import gov.ca.cwds.rest.api.domain.Race;
+import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on {@link Person} and {@link Person}.
@@ -106,10 +107,11 @@ public class PersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  // @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "xa_ns")
   public PostedPerson create(Request request) {
     assert request instanceof Person;
     final Person person = (Person) request;
+
     gov.ca.cwds.data.persistence.ns.Person managedPerson =
         new gov.ca.cwds.data.persistence.ns.Person(person, null, null);
     managedPerson = personDao.create(managedPerson);
