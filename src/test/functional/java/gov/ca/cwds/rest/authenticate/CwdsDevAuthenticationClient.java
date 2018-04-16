@@ -3,8 +3,10 @@ package gov.ca.cwds.rest.authenticate;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -73,16 +75,16 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   @Override
   public String getToken() {
     try {
+      ArrayList<NameValuePair> postParams = new ArrayList<>();
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
       LOGGER.info("GET: {}", authLoginUrl);
       postParams.add(new BasicNameValuePair("callback", callBackUrl));
       postParams.add(new BasicNameValuePair("sp_id", null));
-      httpGet = new HttpGet(authLoginUrl);
-      uri = new URIBuilder(authLoginUrl).addParameters(postParams).build();
+      HttpGet httpGet = new HttpGet(authLoginUrl);
+      URI uri = new URIBuilder(authLoginUrl).addParameters(postParams).build();
       httpGet.setURI(uri);
-      httpResponse = httpClient.execute(httpGet, httpContext);
-      redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
-      LOGGER.info("Redirect URL: {}", redirectUrl);
+      HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
+      httpResponse.getFirstHeader(LOCATION).getValue();
       httpGet.releaseConnection();
 
       redirectUrl = giveUsernameCredentials();
@@ -96,8 +98,8 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
     return token;
   }
 
-
   private String requestToken(String redirectUrl) throws IOException, URISyntaxException {
+    ArrayList<NameValuePair> postParams = new ArrayList<>();
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("GET ACCESS CODE: {}", redirectUrl);
     httpGet = new HttpGet(redirectUrl);
@@ -121,6 +123,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   }
 
   private String giveUsernameCredentials() throws IOException {
+    ArrayList<NameValuePair> postParams = new ArrayList<>();
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("POST: {}", perryLoginUrl);
     HttpPost httpPost = new HttpPost(perryLoginUrl);

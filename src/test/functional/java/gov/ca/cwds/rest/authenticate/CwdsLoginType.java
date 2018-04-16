@@ -47,18 +47,7 @@ public class CwdsLoginType {
    * @return the valid user token
    */
   public String login(UserGroup userType) {
-    if (!"TEST".equals(ymlLoader.readConfig().getAuthenticationMode())) {
-      List<User> users = ymlLoader.readConfig().getDefaultUsers();
-      Optional<User> user = users.stream()
-          .filter(value -> userType.getName().equals(value.getUserType())).findFirst();
-      String userName = null;
-      String password = null;
-      if (user.isPresent()) {
-        userName = user.get().getUsername();
-        password = user.get().getPassword();
-      }
-      cwdsClientCommon = new CwdsAuthenticationClient(ymlLoader, userName, password);
-    } else {
+    if ("TEST".equals(ymlLoader.readConfig().getAuthenticationMode())) {
       String jsonFile = "/LoginUser/" + userType.getName() + ".json";
       String userJson = "";
       try {
@@ -69,6 +58,17 @@ public class CwdsLoginType {
       } catch (IOException e) {
         LOGGER.error("Unable to parse the json into String {}", e);
       }
+    } else {
+      List<User> users = ymlLoader.readConfig().getDefaultUsers();
+      Optional<User> user = users.stream()
+          .filter(value -> userType.getName().equals(value.getUserType())).findFirst();
+      String userName = null;
+      String password = null;
+      if (user.isPresent()) {
+        userName = user.get().getUsername();
+        password = user.get().getPassword();
+      }
+      cwdsClientCommon = new CwdsAuthenticationClient(ymlLoader, userName, password);
     }
     return cwdsClientCommon.getToken();
   }

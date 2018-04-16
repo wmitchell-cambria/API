@@ -2,8 +2,10 @@ package gov.ca.cwds.rest.authenticate;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -44,6 +46,7 @@ public class StaffPersonRetrieval extends HttpClientBuild {
    */
   public UserInfo getStaffPersonInfo(String token) {
     UserInfo userInfo = new UserInfo();
+    ArrayList<NameValuePair> postParams = new ArrayList<>();
     try {
       LOGGER.info(validateUrl);
       LOGGER.info("GET: {}", validateUrl);

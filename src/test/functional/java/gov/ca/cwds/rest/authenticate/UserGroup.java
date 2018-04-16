@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.authenticate;
 
 /**
+ * Enums.
+ * 
  * @author CWDS TPT-4 Team
  *
  */
@@ -26,6 +28,8 @@ public enum UserGroup {
   }
 
   /**
+   * getName.
+   * 
    * @return the name
    */
   public final String getName() {
