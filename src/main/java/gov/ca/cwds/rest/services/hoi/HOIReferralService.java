@@ -162,7 +162,7 @@ public class HOIReferralService
 
   private void fetchForClients(Allegation allegation, List<Client> clients) {
     if (allegation.getVictimClientId() != null) {
-      clients.add(clientDao.find(authorizeClient(allegation.getVictimClientId())));
+      clients.add(clientDao.find(allegation.getVictimClientId()));
     }
     if (allegation.getPerpetratorClientId() != null) {
       clients.add(clientDao.find(allegation.getPerpetratorClientId()));
