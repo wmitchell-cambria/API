@@ -123,11 +123,11 @@ public class ScreeningWrapper implements Serializable {
   }
 
   public Date getStartedAt() {
-    return startedAt;
+    return freshDate(startedAt);
   }
 
   public void setStartedAt(Date startedAt) {
-    this.startedAt = startedAt;
+    this.startedAt = freshDate(startedAt);
   }
 
   /**
