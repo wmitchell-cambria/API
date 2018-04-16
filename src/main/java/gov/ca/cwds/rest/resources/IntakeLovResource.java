@@ -101,7 +101,7 @@ public class IntakeLovResource {
    * 
    * @return web service response
    */
-  @UnitOfWork(value = "ns")
+  @UnitOfWork(value = "xa_ns")
   @GET
   // @Path("/all")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

@@ -40,7 +40,6 @@ nsDataSourceFactory:
       hibernate.use_sql_comments: false
       hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}
 
-
 cmsDataSourceFactory:
   autoCommitByDefault: false
   driverClass: com.ibm.db2.jcc.DB2Driver
@@ -63,7 +62,6 @@ cmsDataSourceFactory:
       hibernate.connection.autocommit: false
       hibernate.connection.isolation: 1
       hibernate.connection.provider_disables_autocommit: true
-
 
 rsDataSourceFactory:
   autoCommitByDefault: false
@@ -109,12 +107,13 @@ xaCmsDataSourceFactory:
       hibernate.current_session_context_class: jta
       hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
+      hibernate.connection.provider_disables_autocommit: true
       connection.release_mode: auto
   xaProperties:
       # Properties for DB2XADataSource
-      serverName: ${DB_CMS_DB2_HOST:-192.168.99.100}
-      portNumber: ${DB_CMS_DB2_PORT:-50000}
-      databaseName: ${DB_CMS_DB2_NAME:-DB0TDEV}
+      serverName: ${DB_CMS_HOST:-192.168.99.100}
+      portNumber: ${DB_CMS_PORT:-50000}
+      databaseName: ${DB_CMS_NAME:-DB0TDEV}
       driverType: 4 # Type4 connection for DB2 DataSource
 
 xaNsDataSourceFactory:
@@ -130,10 +129,10 @@ xaNsDataSourceFactory:
   maxSize: ${DB_NS_CP_MAX_SIZE:-8}
   minIdleTime: 1 minute
   properties:
-      hibernate.dialect: gov.ca.cwds.cals.persistence.hibernate.dialect.JsonbSupportPostgreSQL95Dialect
+      hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
       hibernate.id.new_generator_mappings: false
       hibernate.show_sql: false
-      hibernate.default_schema: ${DB_NS_DEFAULT_SCHEMA:-calsns}
+      hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
       hibernate.cache.use_query_cache: false
@@ -141,6 +140,7 @@ xaNsDataSourceFactory:
       hibernate.current_session_context_class: jta
       hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
+      hibernate.connection.provider_disables_autocommit: true
       connection.release_mode: auto
   xaProperties:
       url: ${DB_NS_JDBC_URL:-jdbc:postgresql://192.168.99.100:5432/postgres_data}

@@ -1,6 +1,12 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
@@ -13,10 +19,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author CWDS API Team
@@ -35,7 +37,8 @@ public final class HOIPersonFactory {
    */
   public HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
     HOIPerson result = new HOIPerson(participantEntity);
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao.findParticipantLegacyDescriptor(participantEntity.getId());
+    LegacyDescriptorEntity legacyDescriptorEntity =
+        participantDao.findParticipantLegacyDescriptor(participantEntity.getId());
     if (legacyDescriptorEntity != null) {
       result.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
@@ -55,8 +58,7 @@ public final class HOIPersonFactory {
       return null;
     }
     return new HOIReporter(reporterRole, participantEntity.getId(),
-        participantEntity.getFirstName(), participantEntity.getLastName(),
-        legacyDescriptor);
+        participantEntity.getFirstName(), participantEntity.getLastName(), legacyDescriptor);
   }
 
   /**
@@ -69,12 +71,12 @@ public final class HOIPersonFactory {
       return null;
     }
 
-    CmsRecordDescriptor cmsRecordDescriptor = CmsRecordUtils
-        .createLegacyDescriptor(assigneeStaffId, LegacyTable.STAFF_PERSON);
+    CmsRecordDescriptor cmsRecordDescriptor =
+        CmsRecordUtils.createLegacyDescriptor(assigneeStaffId, LegacyTable.STAFF_PERSON);
 
-    LegacyDescriptor legacyDescriptor = new LegacyDescriptor(cmsRecordDescriptor.getId(),
-        cmsRecordDescriptor.getUiId(), null, cmsRecordDescriptor.getTableName(),
-        cmsRecordDescriptor.getTableDescription());
+    LegacyDescriptor legacyDescriptor =
+        new LegacyDescriptor(cmsRecordDescriptor.getId(), cmsRecordDescriptor.getUiId(), null,
+            cmsRecordDescriptor.getTableName(), cmsRecordDescriptor.getTableDescription());
 
     return new HOISocialWorker(assigneeStaffId, staffPerson.getFirstName(),
         staffPerson.getLastName(), legacyDescriptor);
@@ -82,7 +84,7 @@ public final class HOIPersonFactory {
 
   /**
    * @param roles string like "{Perpetrator,Mandated Reporter}"
-   * @return set of roles parsed from the input string
+   * @return set of roles parsed from the input string,
    */
   private Set<String> parseRoles(String roles) {
     if (roles != null && roles.length() > 1) {

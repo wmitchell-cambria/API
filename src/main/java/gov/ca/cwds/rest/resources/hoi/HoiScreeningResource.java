@@ -61,7 +61,7 @@ public class HoiScreeningResource {
    * @param clientIds - clientIds
    * @return the hoi screenings
    */
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  @UnitOfWork(value = "xa_ns", readOnly = true, transactional = false)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
@@ -74,7 +74,5 @@ public class HoiScreeningResource {
         hoiScreeningService.findHoiScreeningsByClientIds(clientIds);
     return new ResponseConverter().withDataResponse(clients);
   }
-
-
 
 }
