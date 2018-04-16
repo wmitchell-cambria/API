@@ -6,9 +6,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -24,7 +24,6 @@ import java.util.Set;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -54,6 +53,7 @@ import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
@@ -296,10 +296,11 @@ public class ScreeningToReferralServiceTest {
     messageBuilder = new MessageBuilder();
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService,
-        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, messageBuilder,
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, messageBuilder, allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
 
   }
 
@@ -535,17 +536,19 @@ public class ScreeningToReferralServiceTest {
       Set<IssueDetails> issues = e.getValidationDetailsList();
       assertThat(issues.size(), is(equalTo(3)));
       IssueDetails issue = issues.iterator().next();
-      assertTrue("Expected to contain missing victim error message",exceptionContainsErrorMessage(e, "Allegation/Victim Person Id does not contain a Participant with a role of Victim"));
+      assertTrue("Expected to contain missing victim error message", exceptionContainsErrorMessage(
+          e, "Allegation/Victim Person Id does not contain a Participant with a role of Victim"));
       assertThat(IssueType.CONSTRAINT_VALIDATION, is(equalTo(issue.getType())));
       // assertThat("Incompatiable participants included in request",
       // is(equalTo(issue.getUserMessage())));
     }
   }
 
-  private boolean exceptionContainsErrorMessage(BusinessValidationException e, String errorMessage) {
+  private boolean exceptionContainsErrorMessage(BusinessValidationException e,
+      String errorMessage) {
     boolean containsMessage = false;
-    for (IssueDetails detail : e.getValidationDetailsList()){
-      if (detail.getUserMessage().contains(errorMessage)){
+    for (IssueDetails detail : e.getValidationDetailsList()) {
+      if (detail.getUserMessage().contains(errorMessage)) {
         containsMessage = true;
       }
     }
@@ -891,8 +894,10 @@ public class ScreeningToReferralServiceTest {
     } catch (BusinessValidationException e) {
       // not interested in exception for this test
     }
-    verify(foundClient, times(0)).update(any(), any(), any(), any(), any(), any(), any(), any());
-    verify(foundClient, times(0)).update(any(), any(), any(), any(), any(), any(), any(), any());
+    verify(foundClient, times(0)).update(any(), any(), any(), any(), any(), any(), any(), any(),
+        any());
+    verify(foundClient, times(0)).update(any(), any(), any(), any(), any(), any(), any(), any(),
+        any());
   }
 
   @SuppressWarnings("javadoc")
@@ -1145,10 +1150,11 @@ public class ScreeningToReferralServiceTest {
     when(clientAddressService.findByAddressAndClient(eq(victimAddress), any())).thenReturn(null);
     when(clientAddressService.findByAddressAndClient(eq(perpAddress), any())).thenReturn(null);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService,
-        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
 
     mockParticipantService(screeningToReferral);
 

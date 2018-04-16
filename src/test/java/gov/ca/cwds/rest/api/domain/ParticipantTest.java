@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
@@ -318,11 +319,11 @@ public class ParticipantTest {
 
   @Test
   public void testGenderInvalidFail() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/invalid/genderInvalid.json"), Participant.class);
+    Participant toValidate = new ParticipantResourceBuilder().setGender("Z").createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
-    assertEquals("must be one of [M, F, U]", constraintViolations.iterator().next().getMessage());
+    assertEquals("must be one of [M, F, U, I]",
+        constraintViolations.iterator().next().getMessage());
   }
 
   @Test

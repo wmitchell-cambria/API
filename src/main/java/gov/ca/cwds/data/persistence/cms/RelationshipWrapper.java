@@ -27,9 +27,9 @@ import javax.persistence.Id;
                 + "JOIN {h-schema}CLIENT_T CLNP  ON CLNR.FKCLIENT_T = CLNP.IDENTIFIER \n"
                 + "JOIN {h-schema}SYS_CD_C SC  ON SC.SYS_ID         = CLNR.CLNTRELC AND SC.FKS_META_T = 'CLNTRELC' \n"
                 + "JOIN {h-schema}SYS_CD_C SC2 ON SC2.SYS_ID        = CAST(SC.LONG_DSC AS SMALLINT) \n"
-                + "WHERE \n"
-                + "    CLNS.IDENTIFIER = :clientId \n"
-                + "    OR CLNP.IDENTIFIER = :clientId \n"
+                +  "WHERE \n"
+                +  "    CLNR.FKCLIENT_0 = :clientId \n"
+                +  "    OR CLNR.FKCLIENT_T = :clientId \n"
                 + "UNION \n"
                 + "SELECT DISTINCT \n"
                 + "    CLNS.IDENTIFIER        AS Primary_LEGACY_ID, \n"
@@ -49,8 +49,9 @@ import javax.persistence.Id;
                 + "JOIN {h-schema}SYS_CD_C SC  ON SC.SYS_ID        = CLNR.CLNTRELC AND SC.FKS_META_T = 'CLNTRELC' \n"
                 + "JOIN {h-schema}SYS_CD_C SC2 ON SC2.SYS_ID       = CAST(SC.LONG_DSC AS SMALLINT) \n"
                 + "WHERE \n"
-                + "    CLNS.IDENTIFIER = :clientId \n"
-                + "    OR CLNP.IDENTIFIER = :clientId \n"
+                + "    CLNR.FKCLIENT_0 =  :clientId \n"
+                + "    OR CLNR.FKCLIENT_T = :clientId \n"
+                + "WITH UR"
                 )
 public class RelationshipWrapper {
     @Id

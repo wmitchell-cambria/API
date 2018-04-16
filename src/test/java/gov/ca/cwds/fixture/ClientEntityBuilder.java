@@ -42,6 +42,9 @@ public class ClientEntityBuilder {
   protected String ethUnableToDetReasonCode = "";
   protected Date fatherParentalRightTermDate = new Date();
   protected String genderCode = "";
+  protected Short genderIdentityType = 7075;
+  protected String giNotListedDescription = "";
+  protected Short genderExpressionType = 7081;
   protected String healthSummaryText = "";
   protected String hispUnableToDetReasonCode = "";
   protected String hispanicOriginCode = "";
@@ -68,6 +71,9 @@ public class ClientEntityBuilder {
   protected Short secondaryLanguageType = 0;
   protected String sensitiveHlthInfoOnFileIndicator = "";
   protected String sensitivityIndicator = "";
+  protected Short sexualOrientationType = 7066;
+  protected String soUnableToDetermineCode = "D";
+  protected String soNotListedDescrption = "";
   protected String soc158PlacementCode = "";
   protected String soc158SealedClientIndicator = "";
   protected String socialSecurityNumChangedCode = "";
@@ -239,6 +245,36 @@ public class ClientEntityBuilder {
 
   public ClientEntityBuilder setGenderCode(String genderCode) {
     this.genderCode = genderCode;
+    return this;
+  }
+
+  public ClientEntityBuilder setGenderIdentityType(Short genderIdentityType) {
+    this.genderIdentityType = genderIdentityType;
+    return this;
+  }
+
+  public ClientEntityBuilder setGiNotListedDescription(String giNotListedDescription) {
+    this.giNotListedDescription = giNotListedDescription;
+    return this;
+  }
+
+  public ClientEntityBuilder setGenderExpressionType(Short genderExpressionType) {
+    this.genderExpressionType = genderExpressionType;
+    return this;
+  }
+
+  public ClientEntityBuilder setSexualOrientationType(Short sexualOrientationType) {
+    this.sexualOrientationType = sexualOrientationType;
+    return this;
+  }
+
+  public ClientEntityBuilder setSoUnableToDetermineCode(String soUnableToDetermineCode) {
+    this.soUnableToDetermineCode = soUnableToDetermineCode;
+    return this;
+  }
+
+  public ClientEntityBuilder setSoNotListedDescrption(String soNotListedDescrption) {
+    this.soNotListedDescrption = soNotListedDescrption;
     return this;
   }
 
@@ -437,14 +473,16 @@ public class ClientEntityBuilder {
         currentlyOtherDescription, currentlyRegionalCenterIndicator, deathDate,
         deathDateVerifiedIndicator, deathPlace, deathReasonText, driverLicenseNumber,
         driverLicenseStateCodeType, emailAddress, estimatedDobCode, ethUnableToDetReasonCode,
-        fatherParentalRightTermDate, genderCode, healthSummaryText, hispUnableToDetReasonCode,
-        hispanicOriginCode, id, immigrationCountryCodeType, immigrationStatusType,
-        incapacitatedParentCode, individualHealthCarePlanIndicator, limitationOnScpHealthIndicator,
-        literateCode, maritalCohabitatnHstryIndicatorVar, maritalStatusType, militaryStatusCode,
+        fatherParentalRightTermDate, genderCode, genderIdentityType, giNotListedDescription,
+        genderExpressionType, healthSummaryText, hispUnableToDetReasonCode, hispanicOriginCode, id,
+        immigrationCountryCodeType, immigrationStatusType, incapacitatedParentCode,
+        individualHealthCarePlanIndicator, limitationOnScpHealthIndicator, literateCode,
+        maritalCohabitatnHstryIndicatorVar, maritalStatusType, militaryStatusCode,
         motherParentalRightTermDate, namePrefixDescription, nameType, outstandingWarrantIndicator,
         prevCaChildrenServIndicator, prevOtherDescription, prevRegionalCenterIndicator,
         primaryEthnicityType, primaryLanguageType, religionType, secondaryLanguageType,
-        sensitiveHlthInfoOnFileIndicator, sensitivityIndicator, soc158PlacementCode,
+        sensitiveHlthInfoOnFileIndicator, sensitivityIndicator, sexualOrientationType,
+        soUnableToDetermineCode, soNotListedDescrption, soc158PlacementCode,
         soc158SealedClientIndicator, socialSecurityNumChangedCode, socialSecurityNumber,
         suffixTitleDescription, tribalAncestryClientIndicatorVar,
         tribalMembrshpVerifctnIndicatorVar, unemployedParentCode, zippyCreatedIndicator,

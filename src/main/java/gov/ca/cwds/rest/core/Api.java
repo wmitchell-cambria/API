@@ -13,12 +13,6 @@ public final class Api {
   public static final String RESOURCE_ADDRESSES = "addresses";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ADDRESS_VALIDATION} API.
-   */
-  public static final String RESOURCE_ADDRESS_VALIDATION = "address_validation";
-
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_APPLICATION} API..
    */
   public static final String RESOURCE_APPLICATION = "application";

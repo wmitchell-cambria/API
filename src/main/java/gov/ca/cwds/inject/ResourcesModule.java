@@ -46,11 +46,11 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipList;
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.resources.AddressResource;
-import gov.ca.cwds.rest.resources.AddressValidationResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ParticipantResource;
 import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
+import gov.ca.cwds.rest.resources.ScreeningDashboardResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
@@ -90,7 +90,6 @@ import gov.ca.cwds.rest.resources.investigation.PeopleResource;
 import gov.ca.cwds.rest.resources.investigation.RelationshipListResource;
 import gov.ca.cwds.rest.resources.investigation.SafetyAlertsResource;
 import gov.ca.cwds.rest.services.AddressService;
-import gov.ca.cwds.rest.services.AddressValidationService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.PersonService;
@@ -156,6 +155,7 @@ public class ResourcesModule extends AbstractModule {
     bind(ParticipantResource.class);
     bind(PersonResource.class);
     bind(ScreeningResource.class);
+    bind(ScreeningDashboardResource.class);
     bind(AllegationResource.class);
     bind(ClientResource.class);
     bind(CmsDocReferralClientResource.class);
@@ -166,7 +166,6 @@ public class ResourcesModule extends AbstractModule {
     bind(ReferralResource.class);
     bind(ReporterResource.class);
     bind(StaffPersonResource.class);
-    bind(AddressValidationResource.class);
     bind(ScreeningToReferralResource.class);
     bind(LongTextResource.class);
     bind(AllegationPerpetratorHistoryResource.class);
@@ -377,12 +376,6 @@ public class ResourcesModule extends AbstractModule {
   @SystemCodeServiceBackedResource
   public ResourceDelegate systemCodeServiceBackedResource(Injector injector) {
     return new ServiceBackedResourceDelegate(injector.getInstance(SystemCodeService.class));
-  }
-
-  @Provides
-  @AddressValidationServiceBackedResource
-  public ResourceDelegate addressValidationServiceBackedResource(Injector injector) {
-    return new ServiceBackedResourceDelegate(injector.getInstance(AddressValidationService.class));
   }
 
   @Provides
