@@ -7,7 +7,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 /**
- * This interface is used to implement the {@link ConfigUtils}.
+ * This interface is used to implement the {@link ConfigImpl}.
  * 
  * @author CWDS TPT-4 Team
  *
