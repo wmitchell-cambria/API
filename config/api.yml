@@ -107,7 +107,7 @@ xaCmsDataSourceFactory:
       hibernate.current_session_context_class: jta
       hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
-      hibernate.connection.provider_disables_autocommit: true
+      # hibernate.connection.provider_disables_autocommit: true
       connection.release_mode: auto
   xaProperties:
       # Properties for DB2XADataSource
@@ -133,14 +133,14 @@ xaNsDataSourceFactory:
       hibernate.id.new_generator_mappings: false
       hibernate.show_sql: false
       hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}
-      hibernate.cache.use_second_level_cache: false
-      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
-      hibernate.cache.use_query_cache: false
       hibernate.connection.autocommit: false
       hibernate.current_session_context_class: jta
       hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
-      hibernate.connection.provider_disables_autocommit: true
+      # hibernate.cache.use_second_level_cache: false
+      # hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+      # hibernate.cache.use_query_cache: false
+      # hibernate.connection.provider_disables_autocommit: true
       connection.release_mode: auto
   xaProperties:
       url: ${DB_NS_JDBC_URL:-jdbc:postgresql://192.168.99.100:5432/postgres_data}

@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
-import gov.ca.cwds.inject.NsSessionFactory;
+import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
  * NS Participant DAO.
@@ -27,7 +27,7 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public ParticipantDao(@NsSessionFactory SessionFactory sessionFactory) {
+  public ParticipantDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
@@ -47,10 +47,10 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
   }
 
   /**
-   * Find Legacy Id-s by screeningId
+   * Find Legacy Id's by screeningId
    *
    * @param screeningId screeningId
-   * @return Set of Legacy Id-s
+   * @return Set of Legacy Id's
    */
   public Set<String> findLegacyIdListByScreeningId(String screeningId) {
     final Query<String> query = this.getSessionFactory().getCurrentSession()

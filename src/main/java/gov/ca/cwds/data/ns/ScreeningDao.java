@@ -41,7 +41,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    */
   @SuppressWarnings("unchecked")
   public ScreeningEntity[] findScreeningsByReferralId(String referralId) {
-    final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
+    final Query<ScreeningEntity> query = this.getSessionFactory().openSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByReferralId")
         .setParameter("referralId", referralId);
     return query.list().toArray(new ScreeningEntity[0]);
@@ -55,7 +55,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    */
   @SuppressWarnings("unchecked")
   public Set<ScreeningEntity> findScreeningsByClientIds(Set<String> clientIds) {
-    final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
+    final Query<ScreeningEntity> query = this.getSessionFactory().openSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
         .setParameter("clientIds", clientIds);
     return new HashSet<>(query.list());
