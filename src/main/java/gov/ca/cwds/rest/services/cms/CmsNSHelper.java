@@ -11,6 +11,7 @@ import org.hibernate.context.internal.ManagedSessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.data.persistence.XADataSourceFactory;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -18,8 +19,11 @@ import gov.ca.cwds.rest.services.CrudsService;
 /**
  * <strong>NOTE:</strong> XA transactions make this helper class obsolete.
  * 
+ * @deprecated Prefer XA transactions
  * @author CWDS API Team
+ * @see XADataSourceFactory
  */
+@Deprecated
 public class CmsNSHelper {
 
   @SuppressWarnings("unused")
@@ -37,16 +41,17 @@ public class CmsNSHelper {
   public Map<String, Map<CrudsService, Response>> handleResponse(
       Map<CrudsService, Request> cmsRequests, Map<CrudsService, Request> nsRequests) {
 
-    Map<CrudsService, Response> cmsResponse = new HashMap<>();
-    Map<CrudsService, Response> nsResponse = new HashMap<>();
-    Map<String, Map<CrudsService, Response>> response = new HashMap<>();
+    final Map<CrudsService, Response> cmsResponse = new HashMap<>();
+    final Map<CrudsService, Response> nsResponse = new HashMap<>();
+    final Map<String, Map<CrudsService, Response>> response = new HashMap<>();
+
     Response referral = null;
     Response person;
 
     try (Session sessionCMS = cmsSessionFactory.openSession();
         Session sessionNS = nsSessionFactory.openSession();) {
       ManagedSessionContext.bind(sessionCMS); // NOSONAR
-      Transaction transactionCMS = sessionCMS.beginTransaction();
+      final Transaction transactionCMS = sessionCMS.beginTransaction();
       for (Entry<CrudsService, Request> cmsRequestsService : cmsRequests.entrySet()) {
         try {
           CrudsService service = cmsRequestsService.getKey();
@@ -60,7 +65,7 @@ public class CmsNSHelper {
       }
 
       ManagedSessionContext.bind(sessionNS); // NOSONAR
-      Transaction transactionNS = sessionNS.beginTransaction();
+      final Transaction transactionNS = sessionNS.beginTransaction();
       for (Entry<CrudsService, Request> nsRequestsService : nsRequests.entrySet()) {
         try {
           CrudsService service = nsRequestsService.getKey();
@@ -82,13 +87,12 @@ public class CmsNSHelper {
     } finally {
       ManagedSessionContext.unbind(cmsSessionFactory); // NOSONAR
       ManagedSessionContext.unbind(nsSessionFactory); // NOSONAR
-
     }
+
     response.put("cms", cmsResponse);
     response.put("ns", nsResponse);
 
     return response;
-
   }
 
 }

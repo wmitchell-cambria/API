@@ -1,8 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.hibernate.SessionFactory;
@@ -68,17 +66,21 @@ public class CmsNSReferralService implements CrudsService {
     assert request instanceof CmsNSReferral;
     final CmsNSReferral cmsReferral = (CmsNSReferral) request;
 
-    final CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
-    Map<CrudsService, Request> cmsRequest = new HashMap<>();
-    Map<CrudsService, Request> nsRequest = new HashMap<>();
+    // final CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
+    // final Map<CrudsService, Request> cmsRequest = new HashMap<>();
+    // final Map<CrudsService, Request> nsRequest = new HashMap<>();
+    //
+    // cmsRequest.put((CrudsService) referralService, cmsReferral.getReferral());
+    // nsRequest.put(personService, cmsReferral.getPerson());
+    //
+    // final Map<String, Map<CrudsService, Response>> response =
+    // helper.handleResponse(cmsRequest, nsRequest);
+    // return new PostedCmsNSReferral((PostedReferral) response.get("cms").get(referralService),
+    // (PostedPerson) response.get("ns").get(personService));
 
-    cmsRequest.put((CrudsService) referralService, cmsReferral.getReferral());
-    nsRequest.put(personService, cmsReferral.getPerson());
-
-    Map<String, Map<CrudsService, Response>> response =
-        helper.handleResponse(cmsRequest, nsRequest);
-    return new PostedCmsNSReferral((PostedReferral) response.get("cms").get(referralService),
-        (PostedPerson) response.get("ns").get(personService));
+    final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());
+    final PostedPerson postedPerson = personService.create(cmsReferral.getPerson());
+    return new PostedCmsNSReferral(postedReferral, postedPerson);
   }
 
   /**
@@ -88,7 +90,7 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response find(Serializable primaryKey) {
-    throw new NotImplementedException("find not implement");
+    throw new NotImplementedException("find not implemented");
   }
 
   /**
@@ -98,7 +100,7 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response delete(Serializable primaryKey) {
-    throw new NotImplementedException("delete not implement");
+    throw new NotImplementedException("delete not implemented");
   }
 
   /**
@@ -109,7 +111,7 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response update(Serializable primaryKey, Request request) {
-    throw new NotImplementedException("update not implement");
+    throw new NotImplementedException("update not implemented");
   }
 
 }

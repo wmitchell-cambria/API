@@ -29,6 +29,7 @@ public class AllegationService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(AllegationService.class);
 
   private AllegationDao allegationDao;
+
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIAllegation riAllegation;
 
@@ -37,7 +38,7 @@ public class AllegationService implements
    * 
    * @param allegationDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.Allegation} objects.
-   * @param riAllegation the ri for allegation
+   * @param riAllegation the RI for allegation
    */
   @Inject
   public AllegationService(AllegationDao allegationDao, RIAllegation riAllegation) {
@@ -122,5 +123,8 @@ public class AllegationService implements
     }
   }
 
+  public RIAllegation getRiAllegation() {
+    return riAllegation;
+  }
 
 }
