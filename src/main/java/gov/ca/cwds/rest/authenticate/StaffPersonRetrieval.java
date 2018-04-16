@@ -52,8 +52,8 @@ public class StaffPersonRetrieval extends HttpClientBuild {
       URI uri = new URIBuilder(validateUrl).addParameters(postParams).build();
       httpGet.setURI(uri);
       HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
-      String json = EntityUtils.toString(httpResponse.getEntity(), StandardCharsets.UTF_8);
-      byte[] jsonArray = json.getBytes();
+      String json = EntityUtils.toString(httpResponse.getEntity());
+      byte[] jsonArray = json.getBytes(StandardCharsets.UTF_8);
       ObjectMapper mapper = new ObjectMapper();
       JsonNode rootNode = mapper.readTree(jsonArray);
       userInfo.setStaffId(rootNode.path("staffId").asText());
