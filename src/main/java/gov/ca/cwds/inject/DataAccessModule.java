@@ -294,7 +294,7 @@ public class DataAccessModule extends AbstractModule {
       new HibernateBundle<ApiConfiguration>(nsEntities, new ApiSessionFactoryFactory()) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaCmsDataSourceFactory();
+          return configuration.getXaNsDataSourceFactory();
         }
 
         @Override
@@ -431,6 +431,18 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
+  @XaNsSessionFactory
+  SessionFactory provideXaNsSessionFactory() {
+    return xaNsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
+  @XaCmsSessionFactory
+  SessionFactory provideXaCmsSessionFactory() {
+    return xaNsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
   @CmsHibernateBundle
   HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
     return cmsHibernateBundle;
@@ -455,14 +467,8 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  @XaNsSessionFactory
-  SessionFactory xaCalsnsSessionFactory() {
-    return xaNsHibernateBundle.getSessionFactory();
-  }
-
-  @Provides
   @XaNsHibernateBundle
-  public HibernateBundle<ApiConfiguration> getXaCalsnsHibernateBundle() {
+  public HibernateBundle<ApiConfiguration> getXaNsHibernateBundle() {
     return xaNsHibernateBundle;
   }
 
