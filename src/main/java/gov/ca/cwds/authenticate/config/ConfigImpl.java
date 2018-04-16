@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -34,7 +35,7 @@ public class ConfigImpl implements YmlLoader {
 
   @Override
   public InputStream open(String path) throws IOException {
-    final File file = new File(path);
+    final File file = new File(FilenameUtils.getName(path));
     if (!file.exists()) {
       throw new FileNotFoundException("File " + file + " not found");
     }
