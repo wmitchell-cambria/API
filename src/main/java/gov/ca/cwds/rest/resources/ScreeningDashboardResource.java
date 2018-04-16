@@ -19,7 +19,6 @@ import com.google.inject.Inject;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.ScreeningService;
-
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ScreeningDashboardResource {
+
   private ScreeningService screeningService;
 
   /**
@@ -61,7 +61,6 @@ public class ScreeningDashboardResource {
    * @param screeningDecisionDetail - array of screening decision detail
    * @param screeningDecision - array of screening decision detail
    * @param referralId - Referral ID
-   * 
    * @return the {@link Response}
    */
   @UnitOfWork(value = "ns")

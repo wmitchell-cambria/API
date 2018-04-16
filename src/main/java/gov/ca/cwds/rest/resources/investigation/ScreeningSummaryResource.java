@@ -62,7 +62,7 @@ public class ScreeningSummaryResource {
    * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @UnitOfWork(value = "xa_ns")
   @GET
   @Path("/{id}/screening")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

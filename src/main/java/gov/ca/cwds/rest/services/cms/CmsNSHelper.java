@@ -2,8 +2,8 @@ package gov.ca.cwds.rest.services.cms;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.Map.Entry;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,8 +16,9 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.CrudsService;
 
 /**
+ * <strong>NOTE:</strong> XA transactions make this helper class obsolete.
+ * 
  * @author CWDS API Team
- *
  */
 public class CmsNSHelper {
 
@@ -28,13 +29,11 @@ public class CmsNSHelper {
 
   private SessionFactory nsSessionFactory;
 
-  @SuppressWarnings("javadoc")
   public CmsNSHelper(SessionFactory sessionFactory, SessionFactory nsSessionFactory) {
     this.cmsSessionFactory = sessionFactory;
     this.nsSessionFactory = nsSessionFactory;
   }
 
-  @SuppressWarnings("javadoc")
   public Map<String, Map<CrudsService, Response>> handleResponse(
       Map<CrudsService, Request> cmsRequests, Map<CrudsService, Request> nsRequests) {
 
@@ -44,8 +43,8 @@ public class CmsNSHelper {
     Response referral = null;
     Response person;
 
-    try( Session sessionCMS = cmsSessionFactory.openSession();
-         Session sessionNS = nsSessionFactory.openSession(); ) {
+    try (Session sessionCMS = cmsSessionFactory.openSession();
+        Session sessionNS = nsSessionFactory.openSession();) {
       ManagedSessionContext.bind(sessionCMS); // NOSONAR
       Transaction transactionCMS = sessionCMS.beginTransaction();
       for (Entry<CrudsService, Request> cmsRequestsService : cmsRequests.entrySet()) {

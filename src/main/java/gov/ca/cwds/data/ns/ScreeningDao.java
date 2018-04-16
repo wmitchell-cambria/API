@@ -14,7 +14,7 @@ import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
-import gov.ca.cwds.inject.NsSessionFactory;
+import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
  * Screening DAO
@@ -29,7 +29,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public ScreeningDao(@NsSessionFactory SessionFactory sessionFactory) {
+  public ScreeningDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
@@ -73,7 +73,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode")
         .setParameter("intakeCode", intakeCode);
-    List<IntakeLOVCodeEntity> codes = query.list();
+    final List<IntakeLOVCodeEntity> codes = query.list();
     return codes.isEmpty() ? null : codes.get(0);
   }
 

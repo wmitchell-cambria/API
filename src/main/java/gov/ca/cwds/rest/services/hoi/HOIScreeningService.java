@@ -51,7 +51,8 @@ public class HOIScreeningService
     Set<HOIScreening> screenings =
         new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
 
-    Set<String> clientIds = hoiScreeningRequest.getClientIds();
+    final Set<String> clientIds = hoiScreeningRequest.getClientIds();
+
     /**
      * NOTE: When we want to enable authorizations for screening history, we can add following line
      * of code back at this spot.
@@ -85,7 +86,7 @@ public class HOIScreeningService
    * @return the list of screenings using clientIds
    */
   public Response findHoiScreeningsByClientIds(List<String> clientIds) {
-    HOIRequest hoiRequest = new HOIRequest();
+    final HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(new HashSet<>(clientIds));
     return handleFind(hoiRequest);
   }
@@ -95,4 +96,5 @@ public class HOIScreeningService
     LOGGER.info("HOIScreeningService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
+
 }

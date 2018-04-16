@@ -55,13 +55,12 @@ public class PersonResource {
   }
 
   /**
-   * Finds an person by id.
+   * Finds a {@link Person} by id.
    * 
    * @param id the id
-   * 
    * @return the response
    */
-  @UnitOfWork(value = "ns")
+  @UnitOfWork(value = "xa_ns")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -74,12 +73,12 @@ public class PersonResource {
   }
 
   /**
-   * Delete an person
+   * Delete a {@link Person}.
    * 
    * @param id The id of the {@link Person}
-   * 
    * @return {@link Response}
    */
+  @UnitOfWork(value = "xa_ns")
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -91,13 +90,12 @@ public class PersonResource {
   }
 
   /**
-   * Create an {@link Person}
+   * Create a {@link Person}.
    * 
    * @param person The {@link Person}
-   * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @UnitOfWork(value = "xa_ns")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -111,14 +109,13 @@ public class PersonResource {
   }
 
   /**
-   * Update an {@link Person}
+   * Update an {@link Person}.
    * 
    * @param id the id
    * @param person {@link Person}
-   *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @UnitOfWork(value = "xa_ns")
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -135,4 +132,5 @@ public class PersonResource {
           value = "The person request") Person person) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
+
 }

@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.PersonLanguage;
-import gov.ca.cwds.inject.NsSessionFactory;
+import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
  * Person Language DAO
@@ -21,7 +21,7 @@ public class PersonLanguageDao extends CrudsDaoImpl<PersonLanguage> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public PersonLanguageDao(@NsSessionFactory SessionFactory sessionFactory) {
+  public PersonLanguageDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 }
