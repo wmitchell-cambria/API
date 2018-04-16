@@ -113,7 +113,7 @@ xaCmsDataSourceFactory:
       # hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       # Properties for DB2XADataSource
-      serverName: ${DB_CMS_HOST:-192.168.99.100}
+      serverName: ${DB_CMS_HOST:-localhost}
       portNumber: ${DB_CMS_PORT:-50000}
       databaseName: ${DB_CMS_NAME:-DB0TDEV}
       driverType: 4 # Type4 connection for DB2 DataSource
@@ -147,7 +147,7 @@ xaNsDataSourceFactory:
       # hibernate.cache.use_query_cache: false
       # hibernate.connection.provider_disables_autocommit: true
   xaProperties:
-      url: ${DB_NS_JDBC_URL:-jdbc:postgresql://192.168.99.100:5432/postgres_data}
+      url: ${DB_NS_JDBC_URL:-jdbc:postgresql://localhost:5432/postgres_data}
 
 elasticsearch:
   # Screenings index

@@ -66,18 +66,6 @@ public class CmsNSReferralService implements CrudsService {
     assert request instanceof CmsNSReferral;
     final CmsNSReferral cmsReferral = (CmsNSReferral) request;
 
-    // final CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
-    // final Map<CrudsService, Request> cmsRequest = new HashMap<>();
-    // final Map<CrudsService, Request> nsRequest = new HashMap<>();
-    //
-    // cmsRequest.put((CrudsService) referralService, cmsReferral.getReferral());
-    // nsRequest.put(personService, cmsReferral.getPerson());
-    //
-    // final Map<String, Map<CrudsService, Response>> response =
-    // helper.handleResponse(cmsRequest, nsRequest);
-    // return new PostedCmsNSReferral((PostedReferral) response.get("cms").get(referralService),
-    // (PostedPerson) response.get("ns").get(personService));
-
     final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());
     final PostedPerson postedPerson = personService.create(cmsReferral.getPerson());
     return new PostedCmsNSReferral(postedReferral, postedPerson);

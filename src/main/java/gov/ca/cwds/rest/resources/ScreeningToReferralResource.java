@@ -42,6 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ScreeningToReferralResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -62,7 +63,7 @@ public class ScreeningToReferralResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "xa_cms")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -76,13 +77,13 @@ public class ScreeningToReferralResource {
   }
 
   /**
-   * Create an {@link ScreeningToReferral}
+   * Create an {@link ScreeningToReferral}.
    * 
    * @param screeningToReferral The {@link ScreeningToReferral}
    * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "xa_cms")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),

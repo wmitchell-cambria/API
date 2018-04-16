@@ -103,7 +103,7 @@ public class ReferralService implements
    * @param drmsDocumentTemplateService the service for DRMS Document Templates
    * @param addressService the service for creating addresses
    * @param longTextService the longText Service
-   * @param riReferral the ri
+   * @param riReferral FK to Referral
    */
   @Inject
   public ReferralService(final ReferralDao referralDao, NonLACountyTriggers nonLaTriggers,
@@ -570,6 +570,10 @@ public class ReferralService implements
     keyValuePairs.put("bkBody", screeningToReferral.getReportNarrative());
 
     return DocUtils.createFromTemplateUseBookmarks(template, keyValuePairs);
+  }
+
+  public RIReferral getRiReferral() {
+    return riReferral;
   }
 
 }

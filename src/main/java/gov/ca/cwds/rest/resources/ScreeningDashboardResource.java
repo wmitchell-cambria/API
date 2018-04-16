@@ -36,7 +36,6 @@ import io.swagger.annotations.ApiResponses;
  *
  * @author CWDS API Team
  */
-
 @Api(value = RESOURCE_SCREENINGS, tags = {RESOURCE_SCREENINGS})
 @Path(value = RESOURCE_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
@@ -56,7 +55,7 @@ public class ScreeningDashboardResource {
   }
 
   /**
-   * Get list of Screenings (dash board).
+   * Get list of Screenings (dashboard).
    * 
    * @param screeningDecisionDetail - array of screening decision detail
    * @param screeningDecision - array of screening decision detail
