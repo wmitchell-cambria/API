@@ -118,7 +118,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
       databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,
           nsDataSourceFactory.getProperties().get(HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME));
     } catch (Exception e) {
-      LOGGER.error("Upgarding of INTAKE_NS DB is failed. ", e);
+      LOGGER.error("INTAKE_NS DB UPGRADE FAILED! ", e);
     }
 
     LOGGER.info("Finish Upgrading INTAKE_NS DB");

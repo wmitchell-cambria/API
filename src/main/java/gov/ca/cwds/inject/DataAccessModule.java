@@ -169,6 +169,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 
@@ -182,10 +183,9 @@ public class DataAccessModule extends AbstractModule {
 
   private Map<String, Client> clients;
 
-  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(ImmutableList.of(
-          // legacy-data-access
-          gov.ca.cwds.data.legacy.cms.entity.Client.class,
+  // legacy-data-access
+  private final ImmutableList<Class<?>> cmsEntities = ImmutableList.<Class<?>>builder()
+      .add(gov.ca.cwds.data.legacy.cms.entity.Client.class,
           gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
           gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
@@ -225,8 +225,20 @@ public class DataAccessModule extends AbstractModule {
           IndividualDeliveredServiceEntity.class, LawEnforcementEntity.class, CaseLoad.class,
           StaffPersonCaseLoad.class, ClientScpEthnicity.class, GovernmentOrganizationEntity.class,
           DrmsDocumentTemplate.class, OtherCaseReferralDrmsDocument.class,
-          GovernmentOrganizationCrossReport.class, InjuryHarmDetail.class, InjuryBodyDetail.class),
-          new ApiSessionFactoryFactory()) { // init API hibernate interceptor:
+          GovernmentOrganizationCrossReport.class, InjuryHarmDetail.class, InjuryBodyDetail.class)
+      .build();
+
+  private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder()
+      .add(Person.class, Address.class, ScreeningEntity.class, LegacyDescriptorEntity.class,
+          IntakeLOVCodeEntity.class, ParticipantEntity.class, PersonAddressId.class,
+          PersonAddress.class, PersonPhoneId.class, PhoneNumber.class, PersonPhone.class,
+          PersonLanguageId.class, Language.class, PersonLanguage.class, PersonEthnicityId.class,
+          PersonEthnicity.class, Ethnicity.class, PersonRaceId.class, PersonRace.class, Race.class,
+          IntakeLov.class, gov.ca.cwds.data.persistence.ns.Allegation.class)
+      .build();
+
+  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(cmsEntities, new ApiSessionFactoryFactory()) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
@@ -240,13 +252,7 @@ public class DataAccessModule extends AbstractModule {
       };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(Person.class, Address.class, ScreeningEntity.class,
-          LegacyDescriptorEntity.class, IntakeLOVCodeEntity.class, ParticipantEntity.class,
-          PersonAddressId.class, PersonAddress.class, PersonPhoneId.class, PhoneNumber.class,
-          PersonPhone.class, PersonLanguageId.class, Language.class, PersonLanguage.class,
-          PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class, PersonRaceId.class,
-          PersonRace.class, Race.class, IntakeLov.class,
-          gov.ca.cwds.data.persistence.ns.Allegation.class) {
+      new HibernateBundle<ApiConfiguration>(nsEntities, new ApiSessionFactoryFactory()) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -271,6 +277,32 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
+  private final HibernateBundle<ApiConfiguration> xaCmsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(cmsEntities, new ApiSessionFactoryFactory()) {
+        @Override
+        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getXaCmsDataSourceFactory();
+        }
+
+        @Override
+        public String name() {
+          return "xa_cms";
+        }
+      };
+
+  private final HibernateBundle<ApiConfiguration> xaNsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(nsEntities, new ApiSessionFactoryFactory()) {
+        @Override
+        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getXaCmsDataSourceFactory();
+        }
+
+        @Override
+        public String name() {
+          return "xa_ns";
+        }
+      };
+
   /**
    * Constructor takes the API configuration.
    *
@@ -280,6 +312,8 @@ public class DataAccessModule extends AbstractModule {
     bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
     bootstrap.addBundle(rsHibernateBundle);
+    bootstrap.addBundle(xaCmsHibernateBundle);
+    bootstrap.addBundle(xaNsHibernateBundle);
   }
 
   /**
@@ -412,6 +446,24 @@ public class DataAccessModule extends AbstractModule {
   @CwsRsHibernateBundle
   HibernateBundle<ApiConfiguration> rsHibernateBundle() {
     return rsHibernateBundle;
+  }
+
+  @Provides
+  @XaCmsHibernateBundle
+  public HibernateBundle<ApiConfiguration> getXaCmsHibernateBundle() {
+    return xaCmsHibernateBundle;
+  }
+
+  @Provides
+  @XaNsSessionFactory
+  SessionFactory xaCalsnsSessionFactory() {
+    return xaNsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
+  @XaNsHibernateBundle
+  public HibernateBundle<ApiConfiguration> getXaCalsnsHibernateBundle() {
+    return xaNsHibernateBundle;
   }
 
   @Provides

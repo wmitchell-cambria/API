@@ -10,6 +10,7 @@ import io.dropwizard.db.DataSourceFactory;
  * @author CWDS API Team
  */
 public class ApiConfiguration extends BaseApiConfiguration {
+
   private DataSourceFactory rsDataSourceFactory;
   private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
