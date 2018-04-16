@@ -12,6 +12,8 @@ public class AuthenticationUtils {
   private YmlLoader ymlLoader;
 
   /**
+   * Constructor.
+   * 
    * @param ymlLoader - ymlLoader
    */
   public AuthenticationUtils(YmlLoader ymlLoader) {
@@ -19,6 +21,8 @@ public class AuthenticationUtils {
   }
 
   /**
+   * This is used to get the token.
+   * 
    * @param userType - Type of user to get the token {@link UserGroup}
    * @return the user based token
    */
@@ -28,6 +32,8 @@ public class AuthenticationUtils {
   }
 
   /**
+   * This method is used to get the user info based on the token.
+   * 
    * @param token - token
    * @return the staff Person details
    */
