@@ -25,17 +25,18 @@ nsDataSourceFactory:
   user: ${DB_NS_USER}
   password: ${DB_NS_PASSWORD}
   url: ${DB_NS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1"
+  validationQuery: "/* NS Health Check */ SELECT 1"
   logValidationErrors: true
   initialSize: ${DB_NS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_NS_CP_MIN_SIZE:-2}
   maxSize: ${DB_NS_CP_MAX_SIZE:-8}
   minIdleTime: 1 minute
   properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
+      hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
       hibernate.jdbc.time_zone: America/Los_Angeles
       hibernate.id.new_generator_mappings: false
       hibernate.format_sql: true
+      hibernate.connection.autocommit: false
       hibernate.use_sql_comments: false
       hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}
 
@@ -45,7 +46,7 @@ cmsDataSourceFactory:
   user: ${DB_CMS_USER}
   password: ${DB_CMS_PASSWORD}
   url: ${DB_CMS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only with ur"
+  validationQuery: "/* CMS Health Check */ SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR"
   logValidationErrors: true
   initialSize: ${DB_CMS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_CMS_CP_MIN_SIZE:-2}
@@ -68,7 +69,7 @@ rsDataSourceFactory:
   user: ${DB_CWSRS_USER}
   password: ${DB_CWSRS_PASSWORD}
   url: ${DB_CWSRS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1 FROM sysibm.sysdummy1 for read only with ur"
+  validationQuery: "/* RS Health Check */ SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR"
   logValidationErrors: true
   initialSize: ${DB_CWSRS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_CWSRS_CP_MIN_SIZE:-2}
@@ -92,7 +93,7 @@ xaCmsDataSourceFactory:
   password: ${DB_CMS_PASSWORD:-db2inst1-pwd}
   xaDataSourceClassName: com.ibm.db2.jcc.DB2XADataSource
   url: ${DB_CMS_JDBC_URL:-jdbc:db2://192.168.99.100:50000/DB0TDEV}
-  validationQuery: "select count(*) from ${DB_CMS_SCHEMA:-CWSCMS}.PLC_HM_T"
+  validationQuery: "/* XA/CMS Health Check */ SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR"
   logValidationErrors: true
   initialSize: 0
   minSize: 0
@@ -113,6 +114,35 @@ xaCmsDataSourceFactory:
       portNumber: ${DB_CMS_DB2_PORT:-50000}
       databaseName: ${DB_CMS_DB2_NAME:-DB0TDEV}
       driverType: 4 # Type4 connection for DB2 DataSource
+
+
+xaNsDataSourceFactory:
+  driverClass: org.postgresql.Driver
+  user: ${DB_NS_USER:-postgres_data}
+  password: ${DB_NS_PASSWORD:-postgres_data}
+  xaDataSourceClassName: org.postgresql.xa.PGXADataSource
+  url: ${DB_NS_JDBC_URL:-jdbc:postgresql://192.168.99.100:5432/postgres_data}
+  validationQuery: "/* XA/NS Health Check */ SELECT 1 FROM SYSIBM.SYSDUMMY1 FOR READ ONLY WITH UR"
+  logValidationErrors: true
+  initialSize: 0
+  minSize: 0
+  maxSize: ${DB_NS_CP_MAX_SIZE:-8}
+  minIdleTime: 1 minute
+  properties:
+      hibernate.dialect: gov.ca.cwds.cals.persistence.hibernate.dialect.JsonbSupportPostgreSQL9Dialect
+      hibernate.id.new_generator_mappings: false
+      hibernate.show_sql: false
+      hibernate.default_schema: ${DB_NS_DEFAULT_SCHEMA:-calsns}
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.autocommit: false
+      hibernate.current_session_context_class: jta
+      hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
+      hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
+      connection.release_mode: auto
+  xaProperties:
+      url: ${DB_NS_JDBC_URL:-jdbc:postgresql://192.168.99.100:5432/postgres_data}
 
 elasticsearch:
   # Screenings index
