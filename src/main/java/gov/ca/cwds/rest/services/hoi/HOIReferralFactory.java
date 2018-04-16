@@ -99,16 +99,30 @@ public class HOIReferralFactory {
     String clientId = eachclient.getId();
     if (eachclient.getId().equals(allegation.getKey().getVictimClientId())) {
 
-      hoiAllegation
-          .setVictim(new HOIVictim(clientId, eachclient.getFirstName(), eachclient.getLastName(),
-              new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
-                  new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+      hoiAllegation.setVictim(
+          new HOIVictim(
+              clientId,
+              eachclient.getFirstName(),
+              eachclient.getLastName(),
+              eachclient.getNameSuffix(),
+              new LegacyDescriptor(
+                  clientId,
+                  CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+                  new DateTime(eachclient.getLastUpdatedTime()),
+                  LegacyTable.CLIENT.getName(),
                   LegacyTable.CLIENT.getDescription())));
     } else {
       hoiAllegation.setPerpetrator(
-          new HOIPerpetrator(clientId, eachclient.getFirstName(), eachclient.getLastName(),
-              new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
-                  new DateTime(eachclient.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+          new HOIPerpetrator(
+              clientId,
+              eachclient.getFirstName(),
+              eachclient.getLastName(),
+              eachclient.getNameSuffix(),
+              new LegacyDescriptor(
+                  clientId,
+                  CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+                  new DateTime(eachclient.getLastUpdatedTime()),
+                  LegacyTable.CLIENT.getName(),
                   LegacyTable.CLIENT.getDescription())));
     }
   }
@@ -117,23 +131,37 @@ public class HOIReferralFactory {
     HOIReporter hoiReporter = null;
     if (reporter != null) {
       String reporterId = reporter.getReferralId();
-      hoiReporter = new HOIReporter(role, reporter.getReferralId(), reporter.getFirstName(),
-          reporter.getLastName(),
-          new LegacyDescriptor(reporterId, CmsKeyIdGenerator.getUIIdentifierFromKey(reporterId),
-              new DateTime(reporter.getLastUpdatedTime()), LegacyTable.REPORTER.getName(),
-              LegacyTable.REPORTER.getDescription()));
+      hoiReporter =
+          new HOIReporter(
+              role,
+              reporter.getReferralId(),
+              reporter.getFirstName(),
+              reporter.getLastName(),
+              reporter.getNameSuffix(),
+              new LegacyDescriptor(
+                  reporterId,
+                  CmsKeyIdGenerator.getUIIdentifierFromKey(reporterId),
+                  new DateTime(reporter.getLastUpdatedTime()),
+                  LegacyTable.REPORTER.getName(),
+                  LegacyTable.REPORTER.getDescription()));
     } else {
-      hoiReporter = new HOIReporter(role, null, null, null, null);
+      hoiReporter = new HOIReporter(role, null, null, null, null, null);
     }
     return hoiReporter;
   }
 
   private HOISocialWorker buildAssignedSocialWorkerDomain(StaffPerson staffPerson) {
     String staffId = staffPerson.getId();
-    return new HOISocialWorker(staffPerson.getId(), staffPerson.getFirstName(),
+    return new HOISocialWorker(
+        staffPerson.getId(),
+        staffPerson.getFirstName(),
         staffPerson.getLastName(),
-        new LegacyDescriptor(staffId, staffId, new DateTime(staffPerson.getLastUpdatedTime()),
-            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription()));
+        staffPerson.getNameSuffix(),
+        new LegacyDescriptor(
+            staffId,
+            staffId,
+            new DateTime(staffPerson.getLastUpdatedTime()),
+            LegacyTable.STAFF_PERSON.getName(),
+            LegacyTable.STAFF_PERSON.getDescription()));
   }
-
 }

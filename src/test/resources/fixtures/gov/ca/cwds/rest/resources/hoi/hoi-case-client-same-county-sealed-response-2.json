@@ -14,6 +14,7 @@
       "id": "Ba29OOP75A",
       "first_name": "Jared",
       "last_name": "Smith",
+      "name_suffix": "",
       "legacy_descriptor": {
         "legacy_id": "Ba29OOP75A",
         "legacy_ui_id": "0657-8151-6476-9027228",
@@ -26,6 +27,7 @@
       "id": "75A",
       "first_name": "Richard",
       "last_name": "Costa",
+      "name_suffix": "",
       "legacy_descriptor": {
         "legacy_id": "75A",
         "legacy_ui_id": "75A",
@@ -48,6 +50,7 @@
         "id": "TBnxEbR75A",
         "first_name": "Vernon",
         "last_name": "Bertin",
+        "name_suffix": "",
         "legacy_descriptor": {
           "legacy_id": "TBnxEbR75A",
           "legacy_ui_id": "1658-0224-5104-1027228",
@@ -65,6 +68,7 @@
         "id": "RpPPcq975A",
         "first_name": "Consuela",
         "last_name": "Snowman",
+        "name_suffix": "",
         "legacy_descriptor": {
           "legacy_id": "RpPPcq975A",
           "legacy_ui_id": "1580-7046-5110-5027228",

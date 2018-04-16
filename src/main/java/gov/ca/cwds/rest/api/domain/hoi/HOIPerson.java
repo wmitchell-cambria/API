@@ -32,6 +32,10 @@ public class HOIPerson extends ApiObjectIdentity implements ApiTypedIdentifier<S
   @ApiModelProperty(example = "west")
   private String lastName;
 
+  @JsonProperty("name_suffix")
+  @ApiModelProperty(example = "Jr.")
+  private String nameSuffix;
+
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
@@ -47,14 +51,16 @@ public class HOIPerson extends ApiObjectIdentity implements ApiTypedIdentifier<S
    * @param id - id
    * @param firstName - firstName
    * @param lastName - lastName
+   * @param nameSuffix - name_suffix
    * @param legacyDescriptor - legacyDescriptor
    */
-  public HOIPerson(String id, String firstName, String lastName,
+  public HOIPerson(String id, String firstName, String lastName, String nameSuffix,
       LegacyDescriptor legacyDescriptor) {
     super();
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.nameSuffix = nameSuffix;
     this.legacyDescriptor = legacyDescriptor;
   }
 
@@ -67,6 +73,7 @@ public class HOIPerson extends ApiObjectIdentity implements ApiTypedIdentifier<S
     this.id = participantEntity.getId();
     this.firstName = participantEntity.getFirstName();
     this.lastName = participantEntity.getLastName();
+    this.nameSuffix = participantEntity.getNameSuffix();
   }
 
   @Override
@@ -93,6 +100,14 @@ public class HOIPerson extends ApiObjectIdentity implements ApiTypedIdentifier<S
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public String getNameSuffix() {
+    return nameSuffix;
+  }
+
+  public void setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
   }
 
   public LegacyDescriptor getLegacyDescriptor() {

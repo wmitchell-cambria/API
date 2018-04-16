@@ -24,9 +24,9 @@ public class HOIAllegationTest {
   private String id = "ABC1234567";
   private SystemCodeDescriptor type = new SystemCodeDescriptor((short) 123, "descrption");
   private SystemCodeDescriptor disposition = new SystemCodeDescriptor((short) 123, "descrption");
-  private HOIVictim victim = new HOIVictim(id, "Kak", "Man",
+  private HOIVictim victim = new HOIVictim(id, "Kak", "Man", "Jr.",
       new LegacyDescriptor("Abc1234589", null, new DateTime(), null, null));
-  private HOIPerpetrator perpetrator = new HOIPerpetrator("Abc1234580", "Kak1", "Man2",
+  private HOIPerpetrator perpetrator = new HOIPerpetrator("Abc1234580", "Kak1", "Man2", null,
       new LegacyDescriptor(id, null, new DateTime(), null, null));
   private LegacyDescriptor legacyDescriptor =
       new LegacyDescriptor("Abc1209877", null, new DateTime(), null, null);
