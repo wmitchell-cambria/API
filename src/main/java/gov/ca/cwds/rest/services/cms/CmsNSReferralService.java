@@ -65,7 +65,7 @@ public class CmsNSReferralService implements CrudsService {
     final UserTransaction txn = new UserTransactionImp();
     try {
       // Start XA transaction:
-      txn.setTransactionTimeout(60);
+      txn.setTransactionTimeout(80);
       txn.begin();
 
       final Session sessionCMS = xaCmsSessionFactory.openSession();

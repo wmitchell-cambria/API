@@ -77,21 +77,29 @@ public class ServicesModule extends AbstractModule {
    */
   public static class UnitOfWorkInterceptor implements org.aopalliance.intercept.MethodInterceptor {
 
+    UnitOfWorkAwareProxyFactory proxyFactory;
+
     @Inject
     @CmsHibernateBundle
     HibernateBundle<ApiConfiguration> cmsHibernateBundle;
-
-    UnitOfWorkAwareProxyFactory proxyFactory;
 
     @Inject
     @NsHibernateBundle
     HibernateBundle<ApiConfiguration> nsHibernateBundle;
 
+    @Inject
+    @XaCmsHibernateBundle
+    HibernateBundle<ApiConfiguration> xaCmsHibernateBundle;
+
+    @Inject
+    @XaNsHibernateBundle
+    HibernateBundle<ApiConfiguration> xaNsHibernateBundle;
+
     @SuppressWarnings("unchecked")
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-      proxyFactory =
-          UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
+      proxyFactory = UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle,
+          nsHibernateBundle, xaCmsHibernateBundle, xaNsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
