@@ -95,6 +95,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIGovernmentOrganizationCr
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -236,7 +237,8 @@ public class DataAccessModule extends AbstractModule {
               gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
               gov.ca.cwds.data.persistence.ns.PersonRace.class,
               gov.ca.cwds.data.persistence.ns.Race.class,
-              gov.ca.cwds.data.persistence.ns.ScreeningEntity.class),
+              gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
+              gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class),
           new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
 
         @Override
