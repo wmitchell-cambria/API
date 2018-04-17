@@ -9,6 +9,7 @@ public class RelationshipToEntityBuilder {
   protected String id = "2345678ABC";
   protected String relatedFirstName = "Steve";
   protected String relatedLastName = "Briggs";
+  protected String relatedNameSuffix = "Jr";
   protected String relationship = "Brother";
   protected String relationshipToPerson = "Sister";
   protected String relationshipContext = "step";
@@ -16,7 +17,7 @@ public class RelationshipToEntityBuilder {
   private CmsRecordDescriptor cmsRecordDescriptor = new CmsRecordDescriptor(id, "111-222-333-4444", tableName, "Client");
 
   public RelationshipTo build() {
-    return new RelationshipTo(relatedFirstName, relatedLastName, relationship, relationshipContext,
+    return new RelationshipTo(relatedFirstName, relatedLastName, relatedNameSuffix, relationship, relationshipContext,
         relationshipToPerson, cmsRecordDescriptor);
   }
 
@@ -37,6 +38,11 @@ public class RelationshipToEntityBuilder {
 
   public RelationshipToEntityBuilder setRelatedLastName(String relatedLastName) {
     this.relatedLastName = relatedLastName;
+    return this;
+  }
+
+  public RelationshipToEntityBuilder setRelatedNameSuffix(String relatedNameSuffix) {
+    this.relatedNameSuffix = relatedNameSuffix;
     return this;
   }
 

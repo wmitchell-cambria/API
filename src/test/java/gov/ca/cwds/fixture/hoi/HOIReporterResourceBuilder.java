@@ -17,6 +17,7 @@ public class HOIReporterResourceBuilder {
   private String id = DEFAULT_REPORTER_ID;
   private String firstName = "Reporter1";
   private String lastName = "Dino";
+  private String nameSuffix = "Jr.";
   private LegacyDescriptor legacyDescriptor;
   private Role role;
 
@@ -45,6 +46,11 @@ public class HOIReporterResourceBuilder {
     return this;
   }
 
+  public HOIReporterResourceBuilder setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
+    return this;
+  }
+
   HOIReporterResourceBuilder() {
     this(new DateTime());
   }
@@ -60,6 +66,6 @@ public class HOIReporterResourceBuilder {
    * @return the HOIReporter
    */
   public gov.ca.cwds.rest.api.domain.hoi.HOIReporter createHOIReporter() {
-    return new HOIReporter(role, id, firstName, lastName, legacyDescriptor);
+    return new HOIReporter(role, id, firstName, lastName, nameSuffix, legacyDescriptor);
   }
 }

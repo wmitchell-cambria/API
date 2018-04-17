@@ -14,6 +14,7 @@
       "id": "AhGPhcm0T1",
       "first_name": "Peter",
       "last_name": "Smith",
+      "name_suffix": "",
       "legacy_descriptor": {
         "legacy_id": "AhGPhcm0T1",
         "legacy_ui_id": "0607-6386-1488-8001799",
@@ -26,6 +27,7 @@
       "id": "0Hw",
       "first_name": "William",
       "last_name": "Ne",
+      "name_suffix": "",
       "legacy_descriptor": {
         "legacy_id": "0Hw",
         "legacy_ui_id": "0Hw",
@@ -43,6 +45,7 @@
         "id": "4VP2prc0T1",
         "first_name": "Lisa",
         "last_name": "Kopelman",
+        "name_suffix": "",
         "legacy_descriptor": {
           "legacy_id": "4VP2prc0T1",
           "legacy_ui_id": "0255-9711-4455-2001799",
@@ -60,6 +63,7 @@
         "id": "6tftuP20T1",
         "first_name": "Donald",
         "last_name": "Desorts",
+        "name_suffix": "",
         "legacy_descriptor": {
           "legacy_id": "6tftuP20T1",
           "legacy_ui_id": "0391-8078-7389-6001799",
