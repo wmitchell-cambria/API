@@ -25,6 +25,10 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    */
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("id")
+  @ApiModelProperty(example = "478")
+  Long id;
+
   @JsonProperty("number")
   @ApiModelProperty(example = "4083455678")
   @Size(max = 50)
@@ -41,32 +45,57 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
    * @param phoneNumber persistence level address object
    */
   public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumber phoneNumber) {
+    this.id = phoneNumber.getId();
     this.number = phoneNumber.getNumber();
     this.type = phoneNumber.getType();
   }
 
   /**
-   * @param phoneNumber - phone number
-   * @param phoneType - phone number type
+   * Construct from persistence class
+   *
+   * @param phoneNumber persistence level address object
    */
-  public PhoneNumber(@JsonProperty("number") String phoneNumber,
-      @JsonProperty("phone_number_type_id") String phoneType) {
+  public PhoneNumber(gov.ca.cwds.data.persistence.ns.PhoneNumbers phoneNumber) {
+    this.id = phoneNumber.getId() == null ? null : Long.valueOf(phoneNumber.getId());
+    this.number = phoneNumber.getNumber();
+    this.type = phoneNumber.getType();
+  }
+
+  /**
+   * @param number - phone number
+   * @param type - phone number type
+   */
+  public PhoneNumber(@JsonProperty("id") Long id, @JsonProperty("number") String number, @JsonProperty("type") String type) {
     super();
-    this.number = phoneNumber;
-    this.type = phoneType;
+    this.id = id;
+    this.number = number;
+    this.type = type;
+  }
+
+  public PhoneNumber(String number, String type) {
+    this.number = number;
+    this.type = type;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   /**
    * @return - phone number
    */
-  public String getPhoneNumber() {
+  public String getNumber() {
     return number;
   }
 
   /**
    * @return - phone type
    */
-  public String getPhoneType() {
+  public String getType() {
     return type;
   }
 

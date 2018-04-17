@@ -10,6 +10,7 @@
   "relationship_to" : [ {
     "related_person_first_name" : "Steve",
     "related_person_last_name" : "Briggs",
+    "related_person_name_suffix" : "Jr",
     "relationship_context" : "step",
     "related_person_relationship" : "Sister",
     "indexed_person_relationship" : "Brother",

@@ -181,9 +181,18 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     StaffPerson staffPerson = cmscase.getStaffPerson();
     String staffId = staffPerson.getId();
     LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(staffId, staffId, new DateTime(staffPerson.getLastUpdatedTime()),
-            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription());
-    return new HOISocialWorker(staffId, staffPerson.getFirstName(), staffPerson.getLastName(),
+        new LegacyDescriptor(
+            staffId,
+            staffId,
+            new DateTime(staffPerson.getLastUpdatedTime()),
+            LegacyTable.STAFF_PERSON.getName(),
+            LegacyTable.STAFF_PERSON.getDescription());
+
+    return new HOISocialWorker(
+        staffId,
+        staffPerson.getFirstName(),
+        staffPerson.getLastName(),
+        staffPerson.getNameSuffix(),
         legacyDescriptor);
   }
 
@@ -200,10 +209,17 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   private HOIVictim constructFocusChild(Client client) {
     String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
-            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+        new LegacyDescriptor(
+            clientId,
+            CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+            new DateTime(client.getLastUpdatedTime()),
+            LegacyTable.CLIENT.getName(),
             LegacyTable.CLIENT.getDescription());
-    return new HOIVictim(client.getId(), client.getCommonFirstName(), client.getCommonLastName(),
+    return new HOIVictim(
+        client.getId(),
+        client.getCommonFirstName(),
+        client.getCommonLastName(),
+        client.getNameSuffix(),
         legacyDescriptor);
   }
 

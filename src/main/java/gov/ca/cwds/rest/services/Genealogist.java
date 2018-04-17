@@ -51,19 +51,21 @@ public class Genealogist {
     if (clientIsPrimary) {
       relationshipTo = createRelationShipTo(relationship.getSecondaryLegacyId(),
           relationship.getPrimaryRelationshipCode(), relationship.getSecondaryRelationshipCode(),
-          relationship.getSecondaryFirstName(), relationship.getSecondaryLastName(), "");
+          relationship.getSecondaryFirstName(), relationship.getSecondaryLastName(),
+          relationship.getSecondaryNameSuffix(), "");
     } else {
       relationshipTo = createRelationShipTo(relationship.getPrimaryLegacyId(),
           relationship.getSecondaryRelationshipCode(), relationship.getPrimaryRelationshipCode(),
-          relationship.getPrimaryFirstName(), relationship.getPrimaryLastName(), "");
+          relationship.getPrimaryFirstName(), relationship.getPrimaryLastName(),
+          relationship.getPrimaryNameSuffix(),"");
     }
     return relationshipTo;
   }
 
   private RelationshipTo createRelationShipTo(String relationId, String primaryRelationCode,
       String secondaryRelation, String secondaryFirstname, String secodnaryLastName,
-      String relationContext) {
-    return new RelationshipTo(secondaryFirstname, secodnaryLastName, secondaryRelation,
+      String nameSuffix, String relationContext) {
+    return new RelationshipTo(secondaryFirstname, secodnaryLastName, nameSuffix, secondaryRelation,
         relationContext, primaryRelationCode, relationId);
 
   }
