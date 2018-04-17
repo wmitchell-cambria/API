@@ -127,6 +127,13 @@ public class Address extends NsPersistentObject {
   }
 
   /**
+   * @return the zip
+   */
+  public String getZip() {
+    return zip;
+  }
+
+  /**
    * @return the city
    */
   public String getCity() {
@@ -138,13 +145,6 @@ public class Address extends NsPersistentObject {
    */
   public String getState() {
     return state;
-  }
-
-  /**
-   * @return the zip
-   */
-  public String getZip() {
-    return zip;
   }
 
   /**
