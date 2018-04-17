@@ -17,7 +17,9 @@ public class LegacyDescriptorEntityTest {
 	private String legacyTableName = "CLIENT_T";
 	private String legacyTableDescription = "Client";
 	private String legacyLastUpdated = "";
-	
+	private String describableType = LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT;
+	private Long describableId = 1L;
+
 	@Test
 	public void testEmptyConstructor() throws Exception {
 	  assertThat(LegacyDescriptorEntity.class.newInstance(), is(notNullValue()));
@@ -26,7 +28,7 @@ public class LegacyDescriptorEntityTest {
 	@Test
 	public void testConstructor() throws Exception {
 	  LegacyDescriptorEntity descriptor = new LegacyDescriptorEntity(legacyId, legacyUiId,
-		  legacyTableName, legacyTableDescription, legacyLastUpdated);
+		  legacyTableName, legacyTableDescription, legacyLastUpdated, describableType, describableId);
 	  assertThat(descriptor.getId(), is(equalTo(id)));
 	  assertThat(descriptor.getPrimaryKey(), is(equalTo(id)));
 	  assertThat(descriptor.getLegacyId(), is(equalTo(legacyId)));
@@ -34,8 +36,8 @@ public class LegacyDescriptorEntityTest {
 	  assertThat(descriptor.getLegacyTableDescription(), is(equalTo(legacyTableDescription)));
 	  assertThat(descriptor.getLegacyTableName(), is(equalTo(legacyTableName)));
 	  assertThat(descriptor.getLegacyLastUpdated(), is(equalTo(legacyLastUpdated)));
-	  assertThat(descriptor.getDescribableId(), is(equalTo(null)));
-	  assertThat(descriptor.getDescribableType(), is(equalTo(null)));
+	  assertThat(descriptor.getDescribableId(), is(equalTo(describableId)));
+	  assertThat(descriptor.getDescribableType(), is(equalTo(describableType)));
 	}
 	
 	@Test
@@ -47,9 +49,9 @@ public class LegacyDescriptorEntityTest {
 	@Test
 	public void shouldHaveEqualsHashcode() throws Exception {
 	  LegacyDescriptorEntity descriptor = new LegacyDescriptorEntity(legacyId, legacyUiId,
-		  legacyTableName, legacyTableDescription, legacyLastUpdated);
+		  legacyTableName, legacyTableDescription, legacyLastUpdated, describableType, describableId);
 	  LegacyDescriptorEntity descriptor1 = new LegacyDescriptorEntity(legacyId, legacyUiId,
-		  legacyTableName, legacyTableDescription, legacyLastUpdated);
+		  legacyTableName, legacyTableDescription, legacyLastUpdated, describableType, describableId);
 	  assertEquals("Expecting legacy descriptor to have same hash code", descriptor.hashCode(), descriptor1.hashCode());
 	}
 }

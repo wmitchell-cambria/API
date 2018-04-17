@@ -1,13 +1,16 @@
 package gov.ca.cwds.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.dropwizard.db.DataSourceFactory;
+
 /**
  * 
  * 
  * @author CWDS API Team
  */
 public class ApiConfiguration extends BaseApiConfiguration {
+
   private DataSourceFactory rsDataSourceFactory;
   private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
@@ -39,4 +42,5 @@ public class ApiConfiguration extends BaseApiConfiguration {
   public void setUpgradeDbOnStart(boolean upgradeDbOnStart) {
     this.upgradeDbOnStart = upgradeDbOnStart;
   }
+
 }

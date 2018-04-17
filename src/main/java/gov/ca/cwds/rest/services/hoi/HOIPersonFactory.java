@@ -93,17 +93,11 @@ public final class HOIPersonFactory {
   }
 
   /**
-   * @param roles string like "{Perpetrator,Mandated Reporter}"
+   * @param roles string array
    * @return set of roles parsed from the input string
    */
-  private Set<String> parseRoles(String roles) {
-    if (roles != null && roles.length() > 1) {
-      return Arrays.stream(roles.substring(1, roles.length() - 1).split(","))
-          .map(role -> role.replaceAll("\"", " ").trim()).filter(role -> !role.isEmpty())
-          .collect(Collectors.toSet());
-    } else {
-      return new HashSet<>();
-    }
+  private Set<String> parseRoles(String[] roles) {
+    return roles == null ? new HashSet<>() : new HashSet<>(Arrays.asList(roles));
   }
 
   /**
