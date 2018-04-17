@@ -1397,7 +1397,7 @@ public class CrossReportTest {
   }
 
   /*
-   * utils
+   * Utils
    */
   private CrossReport validCrossReport() throws Exception {
 

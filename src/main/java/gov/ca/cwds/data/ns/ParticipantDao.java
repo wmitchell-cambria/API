@@ -40,8 +40,8 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
     }
     final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE)
-        .setParameter("describableId", Long.valueOf(participantId))
-        .setParameter("describableType", LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT);
+        .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_ID, Long.valueOf(participantId))
+        .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_TYPE, LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT);
     List<LegacyDescriptorEntity> entityList = query.getResultList();
     return entityList.isEmpty() ? null : entityList.get(0);
   }

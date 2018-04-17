@@ -88,11 +88,11 @@ public class AddressIntakeApiService implements CrudsService {
 
     managed = addressesDao.create(managed);
 
-    address = new AddressIntakeApi(managed);
+    AddressIntakeApi addressPosted = new AddressIntakeApi(managed);
     address.setLegacyDescriptor(
         saveLegacyDescriptor(address.getLegacyDescriptor(), managed.getId()));
 
-    return address;
+    return addressPosted;
   }
 
   /**

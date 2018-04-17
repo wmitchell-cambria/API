@@ -344,7 +344,6 @@ public class DataAccessModule extends AbstractModule {
 
     bind(PaperTrailDao.class);
     bind(PaperTrailInterceptor.class);
-    // bind(PaperTrailInterceptor.class).toInstance(paperTrailInterceptor); // Can't. Sucks.
 
     // Trigger Tables:
     bind(CountyOwnershipDao.class);

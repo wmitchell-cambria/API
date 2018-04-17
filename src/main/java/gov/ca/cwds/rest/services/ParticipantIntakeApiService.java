@@ -222,9 +222,10 @@ public class ParticipantIntakeApiService implements CrudsService {
         //Create only those that don't exist or differs (were changed) from existing ones
         addressIntakeApi.setId(null);
         addressesEntityManaged = addressesDao.create(new Addresses(addressIntakeApi));
+        LegacyDescriptor legacyDescriptor = addressIntakeApi.getLegacyDescriptor();
         addressIntakeApi = new AddressIntakeApi(addressesEntityManaged);
         addressIntakeApi.setLegacyDescriptor(
-            addressIntakeApiService.saveLegacyDescriptor(addressIntakeApi.getLegacyDescriptor(),
+            addressIntakeApiService.saveLegacyDescriptor(legacyDescriptor,
                 addressesEntityManaged.getId()));
       }
       addressIntakeApiSetPosted.add(addressIntakeApi);
@@ -254,9 +255,10 @@ public class ParticipantIntakeApiService implements CrudsService {
         //Create only those that don't exist or differs (were changed) from existing ones
         addressIntakeApi.setId(null);
         addressesEntityManaged = addressesDao.create(new Addresses(addressIntakeApi));
+        LegacyDescriptor legacyDescriptor = addressIntakeApi.getLegacyDescriptor();
         addressIntakeApi = new AddressIntakeApi(addressesEntityManaged);
         addressIntakeApi.setLegacyDescriptor(
-            addressIntakeApiService.saveLegacyDescriptor(addressIntakeApi.getLegacyDescriptor(),
+            addressIntakeApiService.saveLegacyDescriptor(legacyDescriptor,
                 addressesEntityManaged.getId()));
       }
       addressIntakeApiSetPosted.add(addressIntakeApi);

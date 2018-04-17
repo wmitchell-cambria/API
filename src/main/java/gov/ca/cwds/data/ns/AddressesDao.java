@@ -38,8 +38,8 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
     }
     final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE)
-        .setParameter("describableId", Long.valueOf(addressId))
-        .setParameter("describableType", LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS);
+        .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_ID, Long.valueOf(addressId))
+        .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_TYPE, LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS);
     List<LegacyDescriptorEntity> entityList = query.getResultList();
     return entityList.isEmpty() ? null : entityList.get(0);
   }

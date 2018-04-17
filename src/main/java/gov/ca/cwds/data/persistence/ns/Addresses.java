@@ -52,7 +52,6 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
       }
   )
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_id")
-//  @SequenceGenerator(name = "addresses_id", sequenceName = "addresses_id_seq", allocationSize = 50)
   private String id;
 
   @Column(name = "street_address")

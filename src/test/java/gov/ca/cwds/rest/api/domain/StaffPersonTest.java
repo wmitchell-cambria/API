@@ -137,7 +137,7 @@ public class StaffPersonTest {
   }
 
   /*
-   * utils
+   * Utils
    */
   private StaffPerson validStaffPerson() {
     return new StaffPerson("2016-10-31", "John", "CEO", "Doe", "C", "Mr", new BigDecimal(

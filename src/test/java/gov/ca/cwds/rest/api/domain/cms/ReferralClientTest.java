@@ -1073,7 +1073,7 @@ public class ReferralClientTest {
   }
 
   /*
-   * utils
+   * Utils
    */
   private ReferralClient validReferralClient()
       throws JsonParseException, JsonMappingException, IOException {

@@ -1581,7 +1581,7 @@ public class AllegationTest {
   }
 
   /*
-   * utils
+   * Utils
    */
   private Allegation validAllegation() {
     return new Allegation("2016-10-31", (short) 2, "M", "Barber Shop", "2016-10-31", (short) 0,
