@@ -28,7 +28,7 @@ public class ParticipantAddressesDao extends CrudsDaoImpl<ParticipantAddresses> 
 
   public Set<ParticipantAddresses> findByParticipantId(String participantId){
     final Query<ParticipantAddresses> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(ParticipantAddresses.FIND_BY_PARTICIPANT_ID)
+        .getNamedQuery(ParticipantAddresses.PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID)
         .setParameter(ParticipantAddresses.PARAM_PARTICIPANT_ID, participantId);
     return new HashSet<>(query.getResultList());
   }

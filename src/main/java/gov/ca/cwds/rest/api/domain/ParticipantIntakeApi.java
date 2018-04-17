@@ -105,11 +105,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
       example = "CLIENT_T")
   private String legacySourceTable;
 
-  @ApiModelProperty(required = true, readOnly = false)
-  @JsonProperty("legacy_descriptor")
-  @Valid
-  private LegacyDescriptor legacyDescriptor;
-
 
   /*
    * Workafoung for fields containing raw json
@@ -152,6 +147,11 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @JsonProperty("sensitive")
   @ApiModelProperty(required = false, readOnly = false, value = "sensitive", example = "true")
   private Boolean sensitive;
+
+  @JsonProperty("legacy_descriptor")
+  @ApiModelProperty(required = true, readOnly = false)
+  @Valid
+  private LegacyDescriptor legacyDescriptor;
 
   /**
    * empty constructor
@@ -315,20 +315,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   }
 
   /**
-   * @return the legacy clientId
-   */
-  public String getLegacyId() {
-    return legacyId;
-  }
-
-  /**
-   * @param clientId - the legacy Id
-   */
-  public void setLegacyId(String clientId) {
-    this.legacyId = clientId;
-  }
-
-  /**
    * @return the legacyDescriptor
    */
   public LegacyDescriptor getLegacyDescriptor() {
@@ -343,10 +329,31 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   }
 
   /**
+   * @return the legacy clientId
+   */
+  public String getLegacyId() {
+    return legacyId;
+  }
+
+  /**
+   * @param clientId - the legacy Id
+   */
+  public void setLegacyId(String clientId) {
+    this.legacyId = clientId;
+  }
+
+  /**
    * @return the firstName
    */
   public String getFirstName() {
     return firstName;
+  }
+
+  /**
+   * @return the lastName
+   */
+  public String getLastName() {
+    return lastName;
   }
 
   /**
@@ -355,13 +362,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   public String getMiddleName() {
 
     return middleName;
-  }
-
-  /**
-   * @return the lastName
-   */
-  public String getLastName() {
-    return lastName;
   }
 
   /**
