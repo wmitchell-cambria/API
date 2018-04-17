@@ -60,7 +60,7 @@ public class PersonResource {
    * @param id the id
    * @return the response
    */
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -78,7 +78,7 @@ public class PersonResource {
    * @param id The id of the {@link Person}
    * @return {@link Response}
    */
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -95,7 +95,7 @@ public class PersonResource {
    * @param person The {@link Person}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -115,7 +115,7 @@ public class PersonResource {
    * @param person {@link Person}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

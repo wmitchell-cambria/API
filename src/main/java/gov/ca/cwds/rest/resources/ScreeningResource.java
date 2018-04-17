@@ -60,7 +60,7 @@ public class ScreeningResource {
    * @param screening - screening
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -82,7 +82,7 @@ public class ScreeningResource {
    * @param screening the screening
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

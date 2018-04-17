@@ -2,15 +2,19 @@ package gov.ca.cwds.rest.services.cms;
 
 import java.io.Serializable;
 
+import javax.transaction.UserTransaction;
+
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.CmsSessionFactory;
-import gov.ca.cwds.inject.NsSessionFactory;
+import gov.ca.cwds.inject.XaCmsSessionFactory;
+import gov.ca.cwds.inject.XaNsSessionFactory;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
@@ -19,25 +23,25 @@ import gov.ca.cwds.rest.api.domain.cms.PostedCmsNSReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.PersonService;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * @author CWDS API Team
  */
 public class CmsNSReferralService implements CrudsService {
 
-  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsNSReferralService.class);
 
   private ReferralService referralService;
   private PersonService personService;
 
   @Inject
-  @CmsSessionFactory
-  private SessionFactory cmsSessionFactory;
+  @XaCmsSessionFactory
+  private SessionFactory xaCmsSessionFactory;
 
   @Inject
-  @NsSessionFactory
-  private SessionFactory nsSessionFactory;
+  @XaNsSessionFactory
+  private SessionFactory xaNsSessionFactory;
 
   /**
    * Constructor
@@ -48,12 +52,41 @@ public class CmsNSReferralService implements CrudsService {
    * @param nsSessionFactory the NsSessionFactory
    */
   @Inject
-  public CmsNSReferralService(@CmsSessionFactory SessionFactory sessionFactory,
-      @NsSessionFactory SessionFactory nsSessionFactory, ReferralService referralService,
+  public CmsNSReferralService(@XaCmsSessionFactory SessionFactory sessionFactory,
+      @XaNsSessionFactory SessionFactory nsSessionFactory, ReferralService referralService,
       PersonService personService) {
     super();
     this.referralService = referralService;
     this.personService = personService;
+  }
+
+  protected PostedCmsNSReferral createReferral(CmsNSReferral cmsReferral) {
+    final UserTransaction txn = new UserTransactionImp();
+    try {
+      // Start XA transaction:
+      txn.setTransactionTimeout(60);
+      txn.begin();
+
+      // Do work:
+      final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());
+      final PostedPerson postedPerson = personService.create(cmsReferral.getPerson());
+
+      // Commit XA transaction:
+      txn.commit();
+
+      // Return shiny new Referral.
+      return new PostedCmsNSReferral(postedReferral, postedPerson);
+    } catch (Exception e) {
+      try {
+        txn.rollback();
+      } catch (Exception e2) {
+        LOGGER.warn(e2.getMessage(), e2);
+      }
+
+      final String oops =
+          String.format("XA TRANSACTION ERROR! stack trace: %s", ExceptionUtils.getStackTrace(e));
+      throw new ServiceException(oops, e);
+    }
   }
 
   /**
@@ -64,11 +97,25 @@ public class CmsNSReferralService implements CrudsService {
   @Override
   public Response create(Request request) {
     assert request instanceof CmsNSReferral;
-    final CmsNSReferral cmsReferral = (CmsNSReferral) request;
 
-    final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());
-    final PostedPerson postedPerson = personService.create(cmsReferral.getPerson());
-    return new PostedCmsNSReferral(postedReferral, postedPerson);
+    try {
+      return createReferral((CmsNSReferral) request);
+    } catch (Exception e) {
+      LOGGER.error("XA TRANSACTION ERROR!", e);
+      throw new ServiceException("XA TRANSACTION ERROR!", e);
+    }
+
+    // final CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
+    // Map<CrudsService, Request> cmsRequest = new HashMap<>();
+    // Map<CrudsService, Request> nsRequest = new HashMap<>();
+    //
+    // cmsRequest.put((CrudsService) referralService, cmsReferral.getReferral());
+    // nsRequest.put(personService, cmsReferral.getPerson());
+    //
+    // Map<String, Map<CrudsService, Response>> response =
+    // helper.handleResponse(cmsRequest, nsRequest);
+    // return new PostedCmsNSReferral((PostedReferral) response.get("cms").get(referralService),
+    // (PostedPerson) response.get("ns").get(personService));
   }
 
   /**

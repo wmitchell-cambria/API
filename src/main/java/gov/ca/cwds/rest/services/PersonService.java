@@ -107,7 +107,7 @@ public class PersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  @UnitOfWork(value = "xa_ns")
+  @UnitOfWork(value = "ns")
   public PostedPerson create(Request request) {
     assert request instanceof Person;
     final Person person = (Person) request;

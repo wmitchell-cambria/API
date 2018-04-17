@@ -60,7 +60,7 @@ public class CmsNSReferralResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "xa_cms")
+  @UnitOfWork(value = "cms")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -80,7 +80,7 @@ public class CmsNSReferralResource {
    * 
    * @return {@link Response}
    */
-  @UnitOfWork(value = "xa_cms")
+  @UnitOfWork(value = "cms")
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -98,7 +98,7 @@ public class CmsNSReferralResource {
    * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_cms")
+  // @UnitOfWork(value = "cms")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -121,7 +121,7 @@ public class CmsNSReferralResource {
    *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_cms")
+  @UnitOfWork(value = "cms")
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

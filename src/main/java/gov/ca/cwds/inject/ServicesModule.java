@@ -87,19 +87,11 @@ public class ServicesModule extends AbstractModule {
     @NsHibernateBundle
     HibernateBundle<ApiConfiguration> nsHibernateBundle;
 
-    @Inject
-    @XaCmsHibernateBundle
-    HibernateBundle<ApiConfiguration> xaCmsHibernateBundle;
-
-    @Inject
-    @XaNsHibernateBundle
-    HibernateBundle<ApiConfiguration> xaNsHibernateBundle;
-
     @SuppressWarnings("unchecked")
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-      proxyFactory = UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle,
-          nsHibernateBundle, xaCmsHibernateBundle, xaNsHibernateBundle);
+      proxyFactory =
+          UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
