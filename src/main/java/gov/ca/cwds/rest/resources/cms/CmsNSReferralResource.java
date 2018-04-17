@@ -98,7 +98,7 @@ public class CmsNSReferralResource {
    * 
    * @return The {@link Response}
    */
-  // @UnitOfWork(value = "cms")
+  // @UnitOfWork(value = "cms") // Uses XA
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
