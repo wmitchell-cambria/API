@@ -1,7 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import static gov.ca.cwds.data.persistence.ns.ParticipantAddresses.FIND_BY_PARTICIPANT_ID;
-import static gov.ca.cwds.data.persistence.ns.ParticipantAddresses.FIND_BY_PARTICIPANT_ID_QUERY;
+import static gov.ca.cwds.data.persistence.ns.ParticipantAddresses.PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID;
+import static gov.ca.cwds.data.persistence.ns.ParticipantAddresses.PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID_QUERY;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
@@ -24,8 +24,8 @@ import org.hibernate.annotations.NamedQuery;
  */
 
 @NamedQuery(
-    name = FIND_BY_PARTICIPANT_ID,
-    query = FIND_BY_PARTICIPANT_ID_QUERY
+    name = PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID,
+    query = PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID_QUERY
 )
 
 @Entity
@@ -33,8 +33,8 @@ import org.hibernate.annotations.NamedQuery;
 public class ParticipantAddresses implements PersistentObject, HasPaperTrail, Serializable {
 
   public static final String PARAM_PARTICIPANT_ID = "participantId";
-  public static final String FIND_BY_PARTICIPANT_ID = "gov.ca.cwds.data.persistence.ns.ParticipantAddresses.findByParticipantId";
-  static final String FIND_BY_PARTICIPANT_ID_QUERY =
+  public static final String PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID = "gov.ca.cwds.data.persistence.ns.ParticipantAddresses.findByParticipantId";
+  static final String PARTICIPANT_ADDRESSES_BY_PARTICIPANT_ID_QUERY =
       " FROM ParticipantAddresses pa"
           + " WHERE pa.participant.id = :"
           + PARAM_PARTICIPANT_ID;

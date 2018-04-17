@@ -36,20 +36,21 @@ public class Address extends NsPersistentObject {
   @Column(name = "address_id")
   private Long id;
 
+  @Column(name = "zip")
+  private String zip;
+
   @Column(name = "street_address")
   private String streetAddress;
-
-  @Column(name = "city")
-  private String city;
 
   @Column(name = "state")
   private String state;
 
-  @Column(name = "zip")
-  private String zip;
+  @Column(name = "city")
+  private String city;
 
   @Column(name = "address_type_id")
   private String type;
+
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "personAddressId.address")
   private Set<PersonAddress> personAddress = new HashSet<>();
