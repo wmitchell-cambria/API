@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -207,7 +208,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.nameSuffix = nameSuffix;
     this.gender = gender;
     this.ssn = ssn;
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = new Date(dateOfBirth.getTime());
     this.approximateAge = approximateAge;
     this.approximateAgeUnits = approximateAgeUnits;
     this.roles = roles;
@@ -215,8 +216,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.legacyId = clientId;
     this.legacySourceTable = legacySourceTable;
     this.legacyDescriptor = legacyDescriptor;
-    this.races = races;
-    this.ethnicity = ethnicity;
     this.screeningId = screeningId;
     this.addresses = addresses;
     this.phoneNumbers = phoneNumbers;
@@ -397,7 +396,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @return the dateOfBirth
    */
   public Date getDateOfBirth() {
-    return dateOfBirth;
+    return freshDate(dateOfBirth);
   }
 
   /**

@@ -97,6 +97,6 @@ public class PaperTrail implements PersistentObject {
   }
 
   public Date getCreatedAt() {
-    return createdAt;
+    return new Date(createdAt.getTime());
   }
 }

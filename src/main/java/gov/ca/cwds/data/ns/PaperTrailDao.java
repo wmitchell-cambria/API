@@ -2,8 +2,6 @@ package gov.ca.cwds.data.ns;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
-
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -27,11 +25,6 @@ public class PaperTrailDao extends CrudsDaoImpl<PaperTrail> {
   @Inject
   public PaperTrailDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
-  }
-
-  @PostConstruct
-  public void wasteMyTime() {
-    System.out.println(this);
   }
 
   @Override
