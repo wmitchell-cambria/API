@@ -203,10 +203,10 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   }
 
  /**
-   * {@inheritDoc}
-   *
-   * @see Object#hashCode()
-   */
+  * {@inheritDoc}
+  *
+  * @see Object#hashCode()
+  */
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);

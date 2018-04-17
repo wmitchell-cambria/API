@@ -35,7 +35,8 @@ import org.hibernate.annotations.NamedQuery;
 public class ParticipantPhoneNumbers implements PersistentObject, HasPaperTrail, Serializable {
 
   public static final String PARAM_PARTICIPANT_ID = "participantId";
-  public static final String PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID = "gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.findByParticipantId";
+  public static final String PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID =
+      "gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.findByParticipantId";
   static final String PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID_QUERY =
       " FROM ParticipantPhoneNumbers pa"
           + " WHERE pa.participant.id = :"
