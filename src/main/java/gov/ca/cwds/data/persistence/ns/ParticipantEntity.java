@@ -142,12 +142,12 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     this.gender = gender;
     this.lastName = lastName;
     this.ssn = ssn;
-    this.languages = Arrays.copyOf(languages, languages.length);
+    this.languages = languages == null ? new String[0] : Arrays.copyOf(languages, languages.length);
     this.middleName = middleName;
     this.nameSuffix = nameSuffix;
     this.screeningEntity = screeningEntity;
     this.legacyId = legacyId;
-    this.roles = Arrays.copyOf(roles, roles.length);
+    this.roles = roles == null ? new String[0] : Arrays.copyOf(roles, roles.length);
     this.races = races;
     this.ethnicity = ethnicity;
     this.legacySourceTable = legacySourceTable;
