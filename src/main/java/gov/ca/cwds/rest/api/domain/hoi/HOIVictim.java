@@ -33,8 +33,8 @@ public class HOIVictim extends HOIPerson {
    * @param lastName - lastName
    * @param legacyDescriptor - legacyDescriptor
    */
-  public HOIVictim(String id, String firstName, String lastName, LegacyDescriptor legacyDescriptor) {
-    super(id, firstName, lastName, legacyDescriptor);
+  public HOIVictim(String id, String firstName, String lastName, String nameSuffix, LegacyDescriptor legacyDescriptor) {
+    super(id, firstName, lastName, nameSuffix, legacyDescriptor);
   }
 
   /**

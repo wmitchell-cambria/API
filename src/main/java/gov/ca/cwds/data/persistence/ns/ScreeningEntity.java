@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -92,7 +93,7 @@ public class ScreeningEntity implements PersistentObject {
   private String safetyInformation;
 
   @Column(name = "safety_alerts")
-  @Type(type = "gov.ca.cwds.rest.util.StringArrayType")
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
   private String[] safetyAlerts;
 
   @Column(name = "referral_id")
@@ -116,9 +117,11 @@ public class ScreeningEntity implements PersistentObject {
   @Column(name = "indexable")
   private Boolean indexable;
 
+  @HashCodeExclude
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<Allegation> allegations = new HashSet<>();
 
+  @HashCodeExclude
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<ParticipantEntity> participants = new HashSet<>();
 

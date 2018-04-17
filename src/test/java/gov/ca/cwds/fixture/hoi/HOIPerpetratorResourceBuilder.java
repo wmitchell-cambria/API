@@ -16,6 +16,7 @@ public class HOIPerpetratorResourceBuilder {
   private String id = "perpabc";
   private String firstName = "Perpatrator1";
   private String lastName = "Dino";
+  private String nameSuffix = "Sr.";
   private LegacyDescriptor legacyDescriptor;
   private LimitedAccessType limitedAccessType;
 
@@ -61,7 +62,7 @@ public class HOIPerpetratorResourceBuilder {
    * @return the HOIPerpetrator
    */
   public HOIPerpetrator createHOIPerpetrator() {
-    HOIPerpetrator perpetrator = new HOIPerpetrator(id, firstName, lastName, legacyDescriptor);
+    HOIPerpetrator perpetrator = new HOIPerpetrator(id, firstName, lastName, nameSuffix, legacyDescriptor);
     perpetrator.setLimitedAccessType(limitedAccessType);
     return perpetrator;
   }

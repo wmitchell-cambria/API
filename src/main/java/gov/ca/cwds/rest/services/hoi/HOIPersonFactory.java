@@ -47,15 +47,19 @@ public final class HOIPersonFactory {
    * @param legacyDescriptor domain LegacyDescriptor
    * @return HOIReporter instance; can be null if the given participant has no reporter role
    */
-  public HOIReporter buidHOIReporter(ParticipantEntity participantEntity,
-      LegacyDescriptor legacyDescriptor) {
+  public HOIReporter buidHOIReporter(
+      ParticipantEntity participantEntity, LegacyDescriptor legacyDescriptor) {
     Set<String> roles = parseRoles(participantEntity.getRoles());
     HOIReporter.Role reporterRole = findReporterRole(roles);
     if (reporterRole == null) {
       return null;
     }
-    return new HOIReporter(reporterRole, participantEntity.getId(),
-        participantEntity.getFirstName(), participantEntity.getLastName(),
+    return new HOIReporter(
+        reporterRole,
+        participantEntity.getId(),
+        participantEntity.getFirstName(),
+        participantEntity.getLastName(),
+        participantEntity.getNameSuffix(),
         legacyDescriptor);
   }
 
@@ -72,26 +76,28 @@ public final class HOIPersonFactory {
     CmsRecordDescriptor cmsRecordDescriptor = CmsRecordUtils
         .createLegacyDescriptor(assigneeStaffId, LegacyTable.STAFF_PERSON);
 
-    LegacyDescriptor legacyDescriptor = new LegacyDescriptor(cmsRecordDescriptor.getId(),
-        cmsRecordDescriptor.getUiId(), null, cmsRecordDescriptor.getTableName(),
-        cmsRecordDescriptor.getTableDescription());
+    LegacyDescriptor legacyDescriptor =
+        new LegacyDescriptor(
+            cmsRecordDescriptor.getId(),
+            cmsRecordDescriptor.getUiId(),
+            null,
+            cmsRecordDescriptor.getTableName(),
+            cmsRecordDescriptor.getTableDescription());
 
-    return new HOISocialWorker(assigneeStaffId, staffPerson.getFirstName(),
-        staffPerson.getLastName(), legacyDescriptor);
+    return new HOISocialWorker(
+        assigneeStaffId,
+        staffPerson.getFirstName(),
+        staffPerson.getLastName(),
+        staffPerson.getNameSuffix(),
+        legacyDescriptor);
   }
 
   /**
-   * @param roles string like "{Perpetrator,Mandated Reporter}"
+   * @param roles string array
    * @return set of roles parsed from the input string
    */
-  private Set<String> parseRoles(String roles) {
-    if (roles != null && roles.length() > 1) {
-      return Arrays.stream(roles.substring(1, roles.length() - 1).split(","))
-          .map(role -> role.replaceAll("\"", " ").trim()).filter(role -> !role.isEmpty())
-          .collect(Collectors.toSet());
-    } else {
-      return new HashSet<>();
-    }
+  private Set<String> parseRoles(String[] roles) {
+    return roles == null ? new HashSet<>() : new HashSet<>(Arrays.asList(roles));
   }
 
   /**

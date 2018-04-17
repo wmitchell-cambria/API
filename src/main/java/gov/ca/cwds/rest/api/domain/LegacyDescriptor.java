@@ -1,20 +1,15 @@
 package gov.ca.cwds.rest.api.domain;
 
-import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
-import java.io.Serializable;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  * @author CWDS API Team
@@ -22,11 +17,10 @@ import org.joda.time.format.DateTimeFormatter;
 @JsonSnakeCase
 @JsonPropertyOrder({"legacy_id", "legacy_ui_id", "legacy_last_updated", "legacy_table_name",
     "legacy_table_description"})
-public class LegacyDescriptor implements Serializable {
+public class LegacyDescriptor extends DomainObject {
 
-  /**
-   *
-   */
+  public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("legacy_id")
@@ -40,7 +34,7 @@ public class LegacyDescriptor implements Serializable {
   private String uiId;
 
   @JsonProperty("legacy_last_updated")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATETIME_FORMAT)
   @ApiModelProperty(required = false, readOnly = false, value = "CWS/CMS Last Updated Time",
       example = "2010-10-01T15:26:42.000-0700")
   private DateTime lastUpdated;
@@ -88,8 +82,8 @@ public class LegacyDescriptor implements Serializable {
     this.id = legacyDescriptorEntity.getLegacyId();
     this.uiId = legacyDescriptorEntity.getLegacyUiId();
     if (legacyDescriptorEntity.getLegacyLastUpdated() != null) {
-      DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-      this.lastUpdated = formatter.parseDateTime(legacyDescriptorEntity.getLegacyLastUpdated());
+      this.lastUpdated = DateTimeFormat.forPattern(DATETIME_FORMAT)
+          .parseDateTime(legacyDescriptorEntity.getLegacyLastUpdated());
     }
     this.tableName = legacyDescriptorEntity.getLegacyTableName();
     this.tableDescription = legacyDescriptorEntity.getLegacyTableDescription();

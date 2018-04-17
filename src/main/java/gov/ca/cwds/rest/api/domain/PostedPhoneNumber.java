@@ -18,9 +18,6 @@ public class PostedPhoneNumber extends PhoneNumber {
 
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("id")
-  private long id;
-
   /**
    * Constructor
    * 
@@ -29,7 +26,7 @@ public class PostedPhoneNumber extends PhoneNumber {
    * @param type - phone number type
    */
   public PostedPhoneNumber(long id, String number, String type) {
-    super(number, type);
+    super(id, number, type);
     this.id = id;
   }
 
@@ -42,13 +39,6 @@ public class PostedPhoneNumber extends PhoneNumber {
     super(phoneNumber);
     assert phoneNumber.getId() != null;
     this.id = phoneNumber.getId();
-  }
-
-  /**
-   * @return the id
-   */
-  public long getId() {
-    return id;
   }
 
   @Override

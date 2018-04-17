@@ -98,6 +98,7 @@ public class HOIParentService {
     person.setId(clientId);
     person.setFirstName(client.getFirstName());
     person.setLastName(client.getLastName());
+    person.setNameSuffix(client.getNameSuffix());
     person.setRelationship(relationship);
     person.setLimitedAccessType(LimitedAccessType.getByValue(client.getSensitivityIndicator()));
     person.setLegacyDescriptor(legacyDescriptor);

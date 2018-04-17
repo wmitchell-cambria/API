@@ -64,16 +64,16 @@ public class PhoneNumberTest {
 
     PhoneNumber totest = new PhoneNumber(persistent);
 
-    assertThat(totest.getPhoneNumber(), is(equalTo(persistent.getNumber())));
-    assertThat(totest.getPhoneType(), is(equalTo(persistent.getType())));
+    assertThat(totest.getNumber(), is(equalTo(persistent.getNumber())));
+    assertThat(totest.getType(), is(equalTo(persistent.getType())));
   }
 
   @Test
   public void testJSONConstructorTest() throws Exception {
     PhoneNumber domain = new PhoneNumber(number, type);
 
-    assertThat(domain.getPhoneNumber(), is(equalTo(number)));
-    assertThat(domain.getPhoneType(), is(equalTo(type)));
+    assertThat(domain.getNumber(), is(equalTo(number)));
+    assertThat(domain.getType(), is(equalTo(type)));
   }
 
   private PhoneNumber validPhoneNumber() {

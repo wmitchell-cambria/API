@@ -14,13 +14,15 @@ import javax.persistence.Id;
                 + "    CLNS.IDENTIFIER        AS Primary_LEGACY_ID, \n"
                 + "    CLNS.COM_FST_NM        AS Primary_FIRST_NAME, \n"
                 + "    CLNS.COM_LST_NM        AS Primary_LAST_NAME, \n"
+                + "    CLNS.SUFX_TLDSC        AS Primary_NAME_SUFFIX, \n"
                 + "    CLNR.IDENTIFIER        AS RELATION_ID, \n"
                 + "    CLNR.CLNTRELC          AS Primary_REL_ID, \n"
                 + "    sc2.SHORT_DSC          AS Secondary_REL_TYPE, \n"
                 + "    sc2.SYS_ID             AS Secondary_REL_CODE, \n"
                 + "    CLNP.IDENTIFIER        AS Secondary_LEGACY_ID, \n"
                 + "    CLNP.COM_FST_NM        AS Secondary_FIRST_NAME, \n"
-                + "    CLNP.COM_LST_NM        AS Secondary_LAST_NAME \n"
+                + "    CLNP.COM_LST_NM        AS Secondary_LAST_NAME, \n"
+                + "    CLNP.SUFX_TLDSC        AS Secondary_NAME_SUFFIX \n"
                 + "FROM  {h-schema}CLIENT_T  GT \n"
                 + "JOIN {h-schema}CLN_RELT CLNR  ON GT.IDENTIFIER   = CLNR.FKCLIENT_T \n"
                 + "JOIN {h-schema}CLIENT_T CLNS  ON CLNR.FKCLIENT_0 = CLNS.IDENTIFIER \n"
@@ -35,13 +37,15 @@ import javax.persistence.Id;
                 + "    CLNS.IDENTIFIER        AS Primary_LEGACY_ID, \n"
                 + "    CLNS.COM_FST_NM        AS Primary_FIRST_NAME, \n"
                 + "    CLNS.COM_LST_NM        AS Primary_LAST_NAME, \n"
+                + "    CLNS.SUFX_TLDSC        AS Primary_NAME_SUFFIX, \n"
                 + "    CLNR.IDENTIFIER        AS RELATION_ID, \n"
                 + "    CLNR.CLNTRELC          AS Primary_REL_ID, \n"
                 + "    sc2.SHORT_DSC          AS Secondary_REL_TYPE, \n"
                 + "    sc2.SYS_ID             AS Secondary_REL_CODE, \n"
                 + "    CLNP.IDENTIFIER        AS Secondary_LEGACY_ID, \n"
                 + "    CLNP.COM_FST_NM        AS Secondary_FIRST_NAME, \n"
-                + "    CLNP.COM_LST_NM        AS Secondary_LAST_NAME \n"
+                + "    CLNP.COM_LST_NM        AS Secondary_LAST_NAME, \n"
+                + "    CLNP.SUFX_TLDSC        AS Secondary_NAME_SUFFIX \n"
                 + "FROM  {h-schema}CLIENT_T GT \n"
                 + "JOIN {h-schema}CLN_RELT CLNR ON GT.IDENTIFIER   = CLNR.FKCLIENT_0 \n"
                 + "JOIN {h-schema}CLIENT_T CLNS ON CLNR.FKCLIENT_0 = CLNS.IDENTIFIER \n"
@@ -63,12 +67,16 @@ public class RelationshipWrapper {
     private String primaryFirstName;
     @Column(name = "Primary_LAST_NAME")
     private String primaryLastName;
+    @Column(name = "Primary_NAME_SUFFIX")
+    private String primaryNameSuffix;
     @Column(name = "Secondary_LEGACY_ID")
     private String secondaryLegacyId;
     @Column(name = "Secondary_FIRST_NAME")
     private String secondaryFirstName;
     @Column(name = "Secondary_LAST_NAME")
     private String secondaryLastName;
+    @Column(name = "Secondary_NAME_SUFFIX")
+    private String secondaryNameSuffix;
     @Column(name = "Primary_REL_ID")
     private String primaryRelationshipCode;
     @Column(name = "Secondary_REL_CODE")
@@ -158,5 +166,21 @@ public class RelationshipWrapper {
 
     public void setSecondaryRelationshipCode(String secondaryRelationshipCode) {
         this.secondaryRelationshipCode = secondaryRelationshipCode;
+    }
+
+    public String getPrimaryNameSuffix() {
+        return primaryNameSuffix;
+    }
+
+    public void setPrimaryNameSuffix(String primaryNameSuffix) {
+        this.primaryNameSuffix = primaryNameSuffix;
+    }
+
+    public String getSecondaryNameSuffix() {
+        return secondaryNameSuffix;
+    }
+
+    public void setSecondaryNameSuffix(String secondaryNameSuffix) {
+        this.secondaryNameSuffix = secondaryNameSuffix;
     }
 }
