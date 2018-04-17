@@ -236,8 +236,6 @@ public class Participant extends ReportingDomain implements Request, Response {
     this.secondaryLanguage = secondaryLanguage;
     this.roles = roles;
     this.addresses = addresses;
-    this.reporterConfidentialWaiver = reporterConfidentialWaiver;
-    this.reporterEmployerName = reporterEmployerName;
     this.clientStaffPersonAdded = clientStaffPersonAdded;
     this.sensitivityIndicator = sensitivityIndicator;
     this.raceAndEthnicity = raceAndEthnicity;

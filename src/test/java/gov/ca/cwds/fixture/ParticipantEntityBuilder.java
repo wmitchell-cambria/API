@@ -18,15 +18,15 @@ public class ParticipantEntityBuilder {
   private String ssn;
   private ScreeningEntity screeningEntity;
   private String legacyId;
-  private String roles;
-  private String languages;
+  private String[] roles;
+  private String[] languages;
   private String middleName;
   private String nameSuffix = "Jr.";
   private String races;
   private String ethnicity;
   private String legacySourceTable;
-  private String sensitive;
-  private String sealed;
+  private Boolean sensitive;
+  private Boolean sealed;
   private String approximateAge;
   private String approximateAgeUnits;
 
@@ -80,12 +80,12 @@ public class ParticipantEntityBuilder {
     return this;
   }
 
-  public ParticipantEntityBuilder setRoles(String roles) {
+  public ParticipantEntityBuilder setRoles(String[] roles) {
     this.roles = roles;
     return this;
   }
 
-  public ParticipantEntityBuilder setLanguages(String languages) {
+  public ParticipantEntityBuilder setLanguages(String[] languages) {
     this.languages = languages;
     return this;
   }
@@ -115,12 +115,12 @@ public class ParticipantEntityBuilder {
     return this;
   }
 
-  public ParticipantEntityBuilder setSensitive(String sensitive) {
+  public ParticipantEntityBuilder setSensitive(Boolean sensitive) {
     this.sensitive = sensitive;
     return this;
   }
 
-  public ParticipantEntityBuilder setSealed(String sealed) {
+  public ParticipantEntityBuilder setSealed(Boolean sealed) {
     this.sealed = sealed;
     return this;
   }

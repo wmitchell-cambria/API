@@ -93,10 +93,10 @@ public class ServicesModule extends AbstractModule {
 
       proxyFactory =
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
-      UnitOfWorkAspect aspect = proxyFactory.newAspect();
+      final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
-        Object result = mi.proceed();
+        final Object result = mi.proceed();
         aspect.afterEnd();
         return result;
       } catch (Exception e) {
@@ -162,8 +162,9 @@ public class ServicesModule extends AbstractModule {
     p.setProperty("something", "Some String");
     Names.bindProperties(binder(), p);
 
-    // @Singleton does not work with DropWizard Guice.
+    // @Singleton does not work with DropWizard Guice. :-(
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
+
   }
 
   /**
@@ -220,4 +221,5 @@ public class ServicesModule extends AbstractModule {
     LOGGER.debug("provide syscode serializer");
     return new CmsSystemCodeSerializer(systemCodeCache);
   }
+
 }
