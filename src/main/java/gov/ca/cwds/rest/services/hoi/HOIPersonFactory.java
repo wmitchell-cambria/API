@@ -97,7 +97,7 @@ public final class HOIPersonFactory {
    * @return set of roles parsed from the input string
    */
   private Set<String> parseRoles(String[] roles) {
-    return new HashSet<>(Arrays.asList(roles));
+    return roles == null ? new HashSet<>() : new HashSet<>(Arrays.asList(roles));
   }
 
   /**
