@@ -149,6 +149,7 @@ import gov.ca.cwds.data.persistence.ns.PersonRaceId;
 import gov.ca.cwds.data.persistence.ns.PhoneNumber;
 import gov.ca.cwds.data.persistence.ns.Race;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
@@ -168,6 +169,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIGovernmentOrganizationCr
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -246,7 +248,7 @@ public class DataAccessModule extends AbstractModule {
           PersonPhone.class, PersonLanguageId.class, Language.class, PersonLanguage.class,
           PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class, PersonRaceId.class,
           PersonRace.class, Race.class, IntakeLov.class,
-          gov.ca.cwds.data.persistence.ns.Allegation.class) {
+          gov.ca.cwds.data.persistence.ns.Allegation.class, ScreeningWrapper.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
