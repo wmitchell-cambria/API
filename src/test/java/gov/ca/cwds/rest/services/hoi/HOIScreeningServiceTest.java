@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -67,6 +68,7 @@ public class HOIScreeningServiceTest {
     new TestingRequestExecutionContext(DEFAULT_ASSIGNEE_STAFF_ID);
 
     screeningDao = mock(ScreeningDao.class);
+    IntakeLOVCodeDao intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
     ParticipantDao participantDao = mock(ParticipantDao.class);
     StaffPersonResource staffPersonResource = mock(StaffPersonResource.class);
 
@@ -85,11 +87,11 @@ public class HOIScreeningServiceTest {
     IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
     mockIntakeLOVCodeEntity.setLgSysId(1101L);
     mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
-    when(screeningDao.findIntakeLOVCodeByIntakeCode(any(String.class)))
+    when(intakeLOVCodeDao.findIntakeLOVCodeByIntakeCode(any(String.class)))
         .thenReturn(mockIntakeLOVCode());
 
     HOIScreeningFactory hoiScreeningFactory = new HOIScreeningFactory();
-    hoiScreeningFactory.screeningDao = screeningDao;
+    hoiScreeningFactory.intakeLOVCodeDao = intakeLOVCodeDao;
     hoiScreeningFactory.hoiPersonFactory = hoiPersonFactory;
 
     AuthorizationService authorizationService = mock(AuthorizationService.class);

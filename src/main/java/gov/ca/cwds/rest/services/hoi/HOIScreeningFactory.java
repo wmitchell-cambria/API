@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 public final class HOIScreeningFactory {
 
   @Inject
-  ScreeningDao screeningDao;
+  IntakeLOVCodeDao intakeLOVCodeDao;
 
   @Inject
   HOIPersonFactory hoiPersonFactory;
@@ -24,11 +24,11 @@ public final class HOIScreeningFactory {
    * @param screeningEntity ns ScreeningEntity
    * @return HOIScreening
    */
-  public HOIScreening buildHOIScreening(ScreeningEntity screeningEntity) {
+  HOIScreening buildHOIScreening(ScreeningEntity screeningEntity) {
     HOIScreening result = new HOIScreening(screeningEntity);
 
     if (screeningEntity.getIncidentCounty() != null) {
-      IntakeLOVCodeEntity code = screeningDao
+      IntakeLOVCodeEntity code = intakeLOVCodeDao
           .findIntakeLOVCodeByIntakeCode(screeningEntity.getIncidentCounty());
       if (code != null) {
         result.setCounty(

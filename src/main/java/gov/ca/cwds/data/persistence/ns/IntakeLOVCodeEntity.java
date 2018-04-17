@@ -5,10 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedQuery;
 
 /**
  * {@link PersistentObject} representing IntakeLOVCode.
@@ -19,6 +19,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Table(name = "intake_lov_codes")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode",
     query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode = :intakeCode")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes",
+    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN (:intakeCodes)")
 public class IntakeLOVCodeEntity implements PersistentObject {
 
   @Id
