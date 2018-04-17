@@ -89,9 +89,9 @@ public class ScreeningSummaryService
     if (screeningEntity != null && screeningEntity.getAllegations() != null) {
       for (Allegation allegation : screeningEntity.getAllegations()) {
         allegations.add(new SimpleAllegation(allegation));
-
       }
     }
+
     return allegations;
   }
 
