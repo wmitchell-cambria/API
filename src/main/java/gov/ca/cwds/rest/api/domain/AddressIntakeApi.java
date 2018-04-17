@@ -30,6 +30,16 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
       example = "28")
   private String id;
 
+  @JsonProperty("legacy_id")
+  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Id", example = "ABC0123456")
+  @Size(max = CMS_ID_LEN)
+  private String legacyId;
+
+  @JsonProperty("legacy_source_table")
+  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Source Table",
+      example = "ADDRS_T")
+  private String legacySourceTable;
+
   @JsonProperty("type")
   @ApiModelProperty(example = "32")
   private String type;
@@ -53,18 +63,8 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   @Size(min = 5, max = 5)
   private String zip;
 
-  @JsonProperty("legacy_id")
-  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Id", example = "ABC0123456")
-  @Size(max = CMS_ID_LEN)
-  private String legacyId;
-
-  @JsonProperty("legacy_source_table")
-  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Source Table",
-      example = "ADDRS_T")
-  private String legacySourceTable;
-
-  @ApiModelProperty(required = true, readOnly = false)
   @JsonProperty("legacy_descriptor")
+  @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private LegacyDescriptor legacyDescriptor;
 
@@ -123,6 +123,13 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  /**
+   * @return address type
+   */
+  public String getType() {
+    return type;
   }
 
   /**
@@ -195,14 +202,7 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
     return zip;
   }
 
-  /**
-   * @return address type
-   */
-  public String getType() {
-    return type;
-  }
-
-  /**
+ /**
    * {@inheritDoc}
    *
    * @see Object#hashCode()
