@@ -26,6 +26,7 @@ public class HOISocialWorkerTest {
   private String id = "jhdgfkhaj";
   private String firstName = "Barney";
   private String lastName = "Dino";
+  private String nameSuffix = "Jr.";
   private LegacyDescriptor legacyDescriptor =
       new LegacyDescriptor("jhdgfkhaj", "jhdgfkhaj-hohj-jkj", new DateTime(),
           LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription());
@@ -120,10 +121,11 @@ public class HOISocialWorkerTest {
 
   @Test
   public void constructorTest() throws Exception {
-    HOISocialWorker domain = new HOISocialWorker(id, firstName, lastName, legacyDescriptor);
+    HOISocialWorker domain = new HOISocialWorker(id, firstName, lastName, nameSuffix, legacyDescriptor);
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getFirstName(), is(equalTo(firstName)));
     assertThat(domain.getLastName(), is(equalTo(lastName)));
+    assertThat(domain.getNameSuffix(), is(equalTo(nameSuffix)));
     assertThat(domain.getLegacyDescriptor(), is(equalTo(legacyDescriptor)));
   }
 

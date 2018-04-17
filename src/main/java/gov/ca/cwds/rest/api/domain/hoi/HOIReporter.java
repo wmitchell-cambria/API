@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author CWDS API Team
  */
-@JsonPropertyOrder({"id", "first_name", "last_name", "role", "legacy_descriptor"})
+@JsonPropertyOrder({"id", "first_name", "last_name", "name_suffix", "role", "legacy_descriptor"})
 public class HOIReporter extends HOIPerson {
 
   private static final long serialVersionUID = 1L;
@@ -84,11 +84,12 @@ public class HOIReporter extends HOIPerson {
    * @param id - id
    * @param firstName - firstName
    * @param lastName - lastName
+   * @param nameSuffix - nameSuffix
    * @param legacyDescriptor - legacyDescriptor
    */
-  public HOIReporter(Role role, String id, String firstName, String lastName,
+  public HOIReporter(Role role, String id, String firstName, String lastName, String nameSuffix,
       LegacyDescriptor legacyDescriptor) {
-    super(id, firstName, lastName, legacyDescriptor);
+    super(id, firstName, lastName, nameSuffix, legacyDescriptor);
     checkRole(role);
     this.role = role;
   }
