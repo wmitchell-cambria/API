@@ -6,6 +6,7 @@ import javax.transaction.UserTransaction;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +67,9 @@ public class CmsNSReferralService implements CrudsService {
       // Start XA transaction:
       txn.setTransactionTimeout(60);
       txn.begin();
+
+      final Session sessionCMS = xaCmsSessionFactory.openSession();
+      final Session sessionNS = xaNsSessionFactory.openSession();
 
       // Do work:
       final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());

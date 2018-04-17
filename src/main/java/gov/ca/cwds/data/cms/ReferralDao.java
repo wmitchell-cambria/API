@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Referral;
-import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.inject.XaCmsSessionFactory;
 
 /**
  * DAO for {@link Referral}.
@@ -21,7 +21,7 @@ public class ReferralDao extends CrudsDaoImpl<Referral> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public ReferralDao(@CmsSessionFactory SessionFactory sessionFactory) {
+  public ReferralDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
