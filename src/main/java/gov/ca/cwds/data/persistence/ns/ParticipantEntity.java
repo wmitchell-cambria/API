@@ -7,6 +7,7 @@ import gov.ca.cwds.Identifiable;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
+import java.util.Arrays;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -141,12 +142,12 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     this.gender = gender;
     this.lastName = lastName;
     this.ssn = ssn;
-    this.languages = languages;
+    this.languages = languages == null ? new String[0] : Arrays.copyOf(languages, languages.length);
     this.middleName = middleName;
     this.nameSuffix = nameSuffix;
     this.screeningEntity = screeningEntity;
     this.legacyId = legacyId;
-    this.roles = roles;
+    this.roles = roles == null ? new String[0] : Arrays.copyOf(roles, roles.length);
     this.races = races;
     this.ethnicity = ethnicity;
     this.legacySourceTable = legacySourceTable;
@@ -156,14 +157,15 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     this.approximateAgeUnits = approximateAgeUnits;
   }
 
-  public ParticipantEntity updateFrom(ParticipantIntakeApi participantIntakeApi){
+  public final ParticipantEntity updateFrom(ParticipantIntakeApi participantIntakeApi) {
     id = participantIntakeApi.getId();
     dateOfBirth = participantIntakeApi.getDateOfBirth();
     firstName = participantIntakeApi.getFirstName();
     gender = participantIntakeApi.getGender();
     lastName = participantIntakeApi.getLastName();
     ssn = participantIntakeApi.getSsn();
-    screeningId = participantIntakeApi.getScreeningId()==null ? null : String.valueOf(participantIntakeApi.getScreeningId());
+    screeningId = participantIntakeApi.getScreeningId() == null ? null
+        : String.valueOf(participantIntakeApi.getScreeningId());
     legacyId = participantIntakeApi.getLegacyId();
     roles = participantIntakeApi.getRoles().toArray(new String[0]);
     languages = participantIntakeApi.getLanguages().toArray(new String[0]);
@@ -221,11 +223,17 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   }
 
   public String[] getRoles() {
-    return roles;
+    if (roles == null) {
+      return new String[0];
+    }
+    return Arrays.copyOf(roles, roles.length);
   }
 
   public String[] getLanguages() {
-    return languages;
+    if (languages == null) {
+      return new String[0];
+    }
+    return Arrays.copyOf(languages, languages.length);
   }
 
   public String getMiddleName() {
