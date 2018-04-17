@@ -54,10 +54,6 @@ public class ScreeningDashboardResource {
   /**
    * Get list of Screenings (dash board).
    * 
-   * @param screeningDecisionDetail - array of screening decision detail
-   * @param screeningDecision - array of screening decision detail
-   * @param referralId - Referral ID
-   * 
    * @return the {@link Response}
    */
   @UnitOfWork(value = "ns")
