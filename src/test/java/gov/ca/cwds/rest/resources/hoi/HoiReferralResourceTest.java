@@ -41,12 +41,12 @@ public class HoiReferralResourceTest {
    * test to find the hoi referrals using clientIds
    */
   @Test
-  public void findHoiReferralbyClientIds() {
-    List<String> clientIds = new ArrayList<String>();
+  public void findHoiReferralByClientIds() {
+    List<String> clientIds = new ArrayList<>();
     clientIds.add("1zxcydd");
     inMemoryResource.client().target("/hoi_referrals").queryParam("clientIds", "1zxcydd").request()
         .accept(MediaType.APPLICATION_JSON).get();
-    verify(hoiReferralService, atLeastOnce()).findHoiReferralbyClientIds(clientIds);
+    verify(hoiReferralService, atLeastOnce()).findHoiReferralByClientIds(clientIds);
   }
 
 }
