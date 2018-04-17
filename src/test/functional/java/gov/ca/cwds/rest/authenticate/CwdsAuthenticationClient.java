@@ -1,10 +1,16 @@
 package gov.ca.cwds.rest.authenticate;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +86,14 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
     this.password = password;
   }
 
+  public static void main(String[] args) {
+    String userName = "CWDSIntake+BRADYG@gmail.com";
+    String password = "CWS1kids*";
+    CwdsAuthenticationClient cwdsAuthenticationClient =
+        new CwdsAuthenticationClient(null, userName, password);
+    cwdsAuthenticationClient.getToken();
+  }
+
   /**
    * Default method to get the token.
    * 
@@ -88,15 +102,86 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
   @Override
   public String getToken() {
     try {
-      // Working on chnagin it to new Perry V3
+
+      ArrayList<NameValuePair> postParams = new ArrayList<>();
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info(GET_LOGGER, AUTH_LOGIN_URL);
+      postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
+      postParams.add(new BasicNameValuePair("sp_id", null));
+      httpGet = new HttpGet(AUTH_LOGIN_URL);
+      uri = new URIBuilder(AUTH_LOGIN_URL).addParameters(postParams).build();
+      httpGet.setURI(uri);
+      httpResponse = httpClient.execute(httpGet, httpContext);
+      String redirectUrl = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
+      LOGGER.info(REDIRECT_URL_LOGGER, redirectUrl);
+
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info(GET_LOGGER, redirectUrl);
+      httpGet = new HttpGet(redirectUrl);
+      httpResponse = httpClient.execute(httpGet, httpContext);
+      location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
+      LOGGER.info(REDIRECT_URL_LOGGER, location);
+
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info(GET_LOGGER, location);
+      httpGet = new HttpGet(location);
+      httpResponse = httpClient.execute(httpGet, httpContext);
+      String response = EntityUtils.toString(httpResponse.getEntity());
+
+      String csrfIndex = response.substring(response.indexOf("_csrf"));
+      int startIndex = csrfIndex.indexOf(VALUE) + GET_ONLY_THE_VALUE;
+      int endIndex = csrfIndex.indexOf("/>") - 1;
+      String csrf = csrfIndex.substring(startIndex, endIndex);
+
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info(POST_LOGGER, location);
+      httpPost = new HttpPost(location);
+      postParams.clear();
+      postParams.add(new BasicNameValuePair("_csrf", csrf));
+      postParams.add(new BasicNameValuePair("password", password));
+      postParams.add(new BasicNameValuePair("signInSubmitButton", "Sign+in"));
+      postParams.add(new BasicNameValuePair("username", userName));
+      httpPost.setEntity(new UrlEncodedFormEntity(postParams));
+      httpResponse = httpClient.execute(httpPost, httpContext);
+      location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
+
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info(GET_LOGGER, location);
+      httpGet = new HttpGet(location);
+      httpResponse = httpClient.execute(httpGet, httpContext);
+      location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
+
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info(GET_LOGGER, location);
+      httpGet = new HttpGet(location);
+      httpResponse = httpClient.execute(httpGet, httpContext);
+      location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
+      String accessCode = getAccessCode(location);
+      LOGGER.info(REDIRECT_URL_LOGGER, accessCode);
+
+      LOGGER.info(NEW_REQUEST_TO_BEGIN);
+      LOGGER.info("GET TOKEN: {}", TOKEN_URL);
+      postParams.clear();
+      postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
+      httpGet = new HttpGet(TOKEN_URL);
+      uri = new URIBuilder(TOKEN_URL).addParameters(postParams).build();
+      httpGet.setURI(uri);
+      httpResponse = httpClient.execute(httpGet, httpContext);
+      token = EntityUtils.toString(httpResponse.getEntity());
+      LOGGER.info("TOKEN: {}", token);
+
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
     } finally {
       this.httpGet.reset();
     }
     return token;
-
   }
 
+  private String getAccessCode(String location) {
+    String accessCodeParm = location.substring(location.indexOf(ACCESS_CODE));
+    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + GET_ONLY_ACCESS_CODE_VALUE;
+    return accessCodeParm.substring(startIndex);
+  }
 
 }
