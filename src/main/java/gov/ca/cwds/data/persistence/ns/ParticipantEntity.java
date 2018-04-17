@@ -8,7 +8,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -68,9 +67,12 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Column(name = "ssn")
   private String ssn;
 
+  @Column(name = "screening_id")
+  private String screeningId;
+
   @HashCodeExclude
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "screening_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "screening_id", nullable = false, insertable = false, updatable = false)
   private ScreeningEntity screeningEntity;
 
   @Column(name = "legacy_id")
@@ -122,27 +124,8 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     super();
   }
 
-  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi,
-      ScreeningEntity screeningEntity) {
-    id = participantIntakeApi.getId();
-    dateOfBirth = participantIntakeApi.getDateOfBirth();
-    firstName = participantIntakeApi.getFirstName();
-    gender = participantIntakeApi.getGender();
-    lastName = participantIntakeApi.getLastName();
-    ssn = participantIntakeApi.getSsn();
-    this.screeningEntity = screeningEntity;
-    legacyId = participantIntakeApi.getLegacyId();
-    roles = participantIntakeApi.getRoles().toArray(new String[0]);
-    languages = participantIntakeApi.getLanguages().toArray(new String[0]);
-    middleName = participantIntakeApi.getMiddleName();
-    nameSuffix = participantIntakeApi.getNameSuffix();
-    races = participantIntakeApi.getRaces();
-    ethnicity = participantIntakeApi.getEthnicity();
-    legacySourceTable = participantIntakeApi.getLegacySourceTable();
-    sensitive = participantIntakeApi.isSensitive();
-    sealed = participantIntakeApi.isSealed();
-    approximateAge = participantIntakeApi.getApproximateAge();
-    approximateAgeUnits = participantIntakeApi.getApproximateAgeUnits();
+  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi) {
+    updateFrom(participantIntakeApi);
   }
 
   public ParticipantEntity(String id, Date dateOfBirth, String firstName,
@@ -173,6 +156,28 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     this.approximateAgeUnits = approximateAgeUnits;
   }
 
+  public ParticipantEntity updateFrom(ParticipantIntakeApi participantIntakeApi){
+    id = participantIntakeApi.getId();
+    dateOfBirth = participantIntakeApi.getDateOfBirth();
+    firstName = participantIntakeApi.getFirstName();
+    gender = participantIntakeApi.getGender();
+    lastName = participantIntakeApi.getLastName();
+    ssn = participantIntakeApi.getSsn();
+    screeningId = participantIntakeApi.getScreeningId()==null ? null : String.valueOf(participantIntakeApi.getScreeningId());
+    legacyId = participantIntakeApi.getLegacyId();
+    roles = participantIntakeApi.getRoles().toArray(new String[0]);
+    languages = participantIntakeApi.getLanguages().toArray(new String[0]);
+    middleName = participantIntakeApi.getMiddleName();
+    nameSuffix = participantIntakeApi.getNameSuffix();
+    races = participantIntakeApi.getRaces();
+    ethnicity = participantIntakeApi.getEthnicity();
+    legacySourceTable = participantIntakeApi.getLegacySourceTable();
+    sensitive = participantIntakeApi.isSensitive();
+    sealed = participantIntakeApi.isSealed();
+    approximateAge = participantIntakeApi.getApproximateAge();
+    approximateAgeUnits = participantIntakeApi.getApproximateAgeUnits();
+    return this;
+  }
 
   @Override
   public String getPrimaryKey() {
@@ -201,6 +206,10 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
 
   public String getSsn() {
     return ssn;
+  }
+
+  public String getScreeningId() {
+    return screeningId;
   }
 
   public ScreeningEntity getScreening() {

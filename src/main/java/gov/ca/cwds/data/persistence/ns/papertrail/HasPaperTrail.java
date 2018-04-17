@@ -5,6 +5,9 @@ package gov.ca.cwds.data.persistence.ns.papertrail;
  *
  * CWDS API Team
  */
+@FunctionalInterface
 public interface HasPaperTrail {
+
+  String getId();
 
 }

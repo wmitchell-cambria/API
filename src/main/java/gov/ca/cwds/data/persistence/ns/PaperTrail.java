@@ -19,13 +19,13 @@ import org.hibernate.annotations.Type;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "varsions")
+@Table(name = "versions")
 public class PaperTrail implements PersistentObject {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "varsions_id")
-  @SequenceGenerator(name = "varsions_id", sequenceName = "varsions_id_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "versions_id")
+  @SequenceGenerator(name = "versions_id", sequenceName = "versions_id_seq")
   private Long id;
 
   @Column(name = "item_type")
@@ -40,15 +40,14 @@ public class PaperTrail implements PersistentObject {
   @Column(name = "whodunnit")
   private String whoDunnIt;
 
-  //  @Type(type = "json")
   @Column(name = "object")
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringJsonUserType")
   private String object;
 
-  //  @Type(type = "json")
-  @Column(name = "object_change")
+  @Column(name = "object_changes")
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringJsonUserType")
   private String objectChange;
 
-  @Type(type = "timestamp")
   @Column(name = "created_at")
   private Date createdAt;
 
@@ -65,8 +64,8 @@ public class PaperTrail implements PersistentObject {
   }
 
   @Override
-  public String getPrimaryKey() {
-    return id.toString();
+  public Long getPrimaryKey() {
+    return getId();
   }
 
   public Long getId() {

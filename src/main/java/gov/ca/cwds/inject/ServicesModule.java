@@ -109,12 +109,12 @@ public class ServicesModule extends AbstractModule {
 
   }
 
-  private FerbFinishModule priorModule;
-
   /**
    * Default, no-op constructor.
    */
-  public ServicesModule() {}
+  public ServicesModule() {
+    // Default, no-op.
+  }
 
   @Override
   protected void configure() {
@@ -165,8 +165,6 @@ public class ServicesModule extends AbstractModule {
     // @Singleton does not work with DropWizard Guice. :-(
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
 
-    // ERROR: "The binder can only be used inside configure()"
-    // this.priorModule.finishDependencies();
   }
 
   /**
@@ -224,7 +222,4 @@ public class ServicesModule extends AbstractModule {
     return new CmsSystemCodeSerializer(systemCodeCache);
   }
 
-  public FerbFinishModule getPriorModule() {
-    return priorModule;
-  }
 }

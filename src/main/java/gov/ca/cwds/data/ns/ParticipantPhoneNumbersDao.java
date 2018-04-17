@@ -5,7 +5,10 @@ import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
 import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 /**
  * Participant Phone Numbers DAO
@@ -22,6 +25,13 @@ public class ParticipantPhoneNumbersDao extends CrudsDaoImpl<ParticipantPhoneNum
   @Inject
   public ParticipantPhoneNumbersDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
+  }
+
+  public Set<ParticipantPhoneNumbers> findByParticipantId(String participantId){
+    final Query<ParticipantPhoneNumbers> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(ParticipantPhoneNumbers.FIND_BY_PARTICIPANT_ID)
+        .setParameter(ParticipantPhoneNumbers.PARAM_PARTICIPANT_ID, participantId);
+    return new HashSet<>(query.getResultList());
   }
 
   @Override

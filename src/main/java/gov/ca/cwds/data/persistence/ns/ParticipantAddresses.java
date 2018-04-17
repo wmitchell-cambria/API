@@ -1,11 +1,13 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.data.persistence.ns.ParticipantAddresses.FIND_BY_PARTICIPANT_ID;
+import static gov.ca.cwds.data.persistence.ns.ParticipantAddresses.FIND_BY_PARTICIPANT_ID_QUERY;
+
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,13 +17,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NamedQuery;
 
 /**
  * @author Intake Team 4
  */
+
+@NamedQuery(
+    name = FIND_BY_PARTICIPANT_ID,
+    query = FIND_BY_PARTICIPANT_ID_QUERY
+)
+
 @Entity
 @Table(name = "participant_addresses")
-public class ParticipantAddresses implements PersistentObject, Serializable {
+public class ParticipantAddresses implements PersistentObject, HasPaperTrail, Serializable {
+
+  public static final String PARAM_PARTICIPANT_ID = "participantId";
+  public static final String FIND_BY_PARTICIPANT_ID = "gov.ca.cwds.data.persistence.ns.ParticipantAddresses.findByParticipantId";
+  static final String FIND_BY_PARTICIPANT_ID_QUERY =
+      " FROM ParticipantAddresses pa"
+          + " WHERE pa.participant.id = :"
+          + PARAM_PARTICIPANT_ID;
 
   /**
    * Base serialization value. Increment by version
@@ -30,7 +46,6 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
 
   @Id
   @Column(name = "id")
-//  @Column(name = "id", insertable = false, updatable = false)
   @GenericGenerator(
       name = "participant_addresses_id",
       strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
@@ -42,8 +57,11 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_addresses_id")
   private String id;
 
-  @EmbeddedId
-  private ParticipantAddressId participantAddressId;
+  @Column(name = "participant_id")
+  private String participantId;
+
+  @Column(name = "address_id")
+  private String addressId;
 
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -62,9 +80,10 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
   }
 
   public ParticipantAddresses(ParticipantEntity participant, Addresses address) {
+    this.participantId = participant.getId();
+    this.addressId = address.getId();
     this.participant = participant;
     this.address = address;
-    this.participantAddressId = new ParticipantAddressId(participant.getId(), address.getId());
   }
 
   public String getId() {
@@ -74,10 +93,6 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
   @Override
   public String getPrimaryKey() {
     return getId();
-  }
-
-  public ParticipantAddressId getParticipantAddressId() {
-    return participantAddressId;
   }
 
   public ParticipantEntity getParticipant() {
@@ -115,64 +130,4 @@ public class ParticipantAddresses implements PersistentObject, Serializable {
     return Objects.hash(participant, address);
   }
 
-  @Embeddable
-  public static class ParticipantAddressId implements Serializable {
-
-    /**
-     * Base serialization value. Increment by version
-     */
-    private static final long serialVersionUID = 1L;
-
-    @Column(name = "participant_id")
-    private String participantId;
-
-    @Column(name = "address_id")
-    private String addressId;
-
-    /**
-     * Default constructor
-     */
-    public ParticipantAddressId() {
-    }
-
-    ParticipantAddressId(String participantId, String addressId) {
-      this.participantId = participantId;
-      this.addressId = addressId;
-    }
-
-    public String getParticipantId() {
-      return participantId;
-    }
-
-    public void setParticipantId(String person) {
-      this.participantId = person;
-    }
-
-    public String getAddressId() {
-      return addressId;
-    }
-
-    public void setAddressId(String address) {
-      this.addressId = address;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      ParticipantAddressId that = (ParticipantAddressId) o;
-      return Objects.equals(participantId, that.participantId) &&
-          Objects.equals(addressId, that.addressId);
-    }
-
-    @Override
-    public int hashCode() {
-
-      return Objects.hash(participantId, addressId);
-    }
-  }
 }

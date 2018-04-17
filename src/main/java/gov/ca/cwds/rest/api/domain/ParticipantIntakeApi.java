@@ -248,10 +248,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.legacySourceTable = participantEntity.getLegacySourceTable();
     this.races = participantEntity.getRaces();
     this.ethnicity = participantEntity.getEthnicity();
-    if (participantEntity.getScreening() != null) {
-      this.screeningId = participantEntity.getScreening().getId() == null ?
-          null : Long.valueOf(participantEntity.getScreening().getId());
-    }
+    this.screeningId = participantEntity.getScreeningId() == null ? null : Long.valueOf(participantEntity.getScreeningId());
     this.sealed = participantEntity.getSealed();
     this.sensitive = participantEntity.getSensitive();
 
@@ -298,6 +295,10 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    */
   public String getId() {
     return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**

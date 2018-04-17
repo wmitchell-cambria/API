@@ -75,8 +75,6 @@ import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
-import gov.ca.cwds.data.persistence.ns.ParticipantAddresses.ParticipantAddressId;
-import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.ParticipantPhoneNumberId;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
@@ -107,7 +105,7 @@ import io.dropwizard.setup.Bootstrap;
  * @author CWDS API Team
  * @see ApiSessionFactoryFactory
  */
-public class DataAccessModule extends AbstractModule implements FerbFinishModule {
+public class DataAccessModule extends AbstractModule {
 
   private Map<String, Client> clients;
 
@@ -220,9 +218,8 @@ public class DataAccessModule extends AbstractModule implements FerbFinishModule
               gov.ca.cwds.data.persistence.ns.IntakeLov.class,
               gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
               gov.ca.cwds.data.persistence.ns.PaperTrail.class,
-              gov.ca.cwds.data.persistence.ns.ParticipantEntity.class, ParticipantAddressId.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantEntity.class,
               gov.ca.cwds.data.persistence.ns.ParticipantAddresses.class,
-              ParticipantPhoneNumberId.class,
               gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.class,
               gov.ca.cwds.data.persistence.ns.PersonAddressId.class,
               gov.ca.cwds.data.persistence.ns.PersonAddress.class,
@@ -376,9 +373,6 @@ public class DataAccessModule extends AbstractModule implements FerbFinishModule
     bind(RIReferralClient.class);
     bind(RIGovernmentOrganizationCrossReport.class);
 
-    // FAILS: "null returned by binding at gov.ca.cwds.inject.DataAccessModule.nsSessionFactory()"
-    // Premature to request injection at this point, until session factories and DAO's initialize.
-    // requestInjection(paperTrailInterceptor);
   }
 
   @Provides
@@ -476,11 +470,6 @@ public class DataAccessModule extends AbstractModule implements FerbFinishModule
     }
 
     return clients;
-  }
-
-  @Override
-  public void finishDependencies() {
-    this.requestInjection(this.paperTrailInterceptor);
   }
 
   public PaperTrailInterceptor getPaperTrailInterceptor() {

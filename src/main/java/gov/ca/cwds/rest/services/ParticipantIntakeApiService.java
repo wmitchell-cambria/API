@@ -16,7 +16,6 @@ import gov.ca.cwds.data.persistence.ns.ParticipantAddresses;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
 import gov.ca.cwds.data.persistence.ns.PhoneNumbers;
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
@@ -24,7 +23,10 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -103,18 +105,32 @@ public class ParticipantIntakeApiService implements CrudsService {
   @Override
   public Response delete(Serializable primaryKey) {
     assert primaryKey instanceof String;
+    ParticipantEntity participantEntity = participantDao.find(primaryKey);
+    if (participantEntity == null) {
+      return null;
+    }
     participantDao.delete(primaryKey);
+
     //Delete all allegations for this participant
     allegationDao.deleteByIdList(
-        allegationDao.findByVictimOrPerpetratorId((String) primaryKey)
-            .stream().map(Allegation::getId).collect(Collectors.toList()));
+        allegationDao.findByVictimOrPerpetratorId((String) primaryKey).stream()
+            .map(Allegation::getId).collect(Collectors.toList()));
+
+    //Delete Participant Addresses & PhoneNumbers
+    participantAddressesDao.findByParticipantId((String) primaryKey).forEach(
+        participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
+
+    participantPhoneNumbersDao.findByParticipantId((String) primaryKey).forEach(
+        participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
+
     //Delete legacy descriptor
     LegacyDescriptorEntity legacyDescriptorEntity = participantDao
         .findParticipantLegacyDescriptor((String) primaryKey);
     if (legacyDescriptorEntity != null) {
       legacyDescriptorDao.delete(legacyDescriptorEntity.getId());
     }
-    return null;
+
+    return new ParticipantIntakeApi(participantEntity);
   }
 
   /**
@@ -127,11 +143,8 @@ public class ParticipantIntakeApiService implements CrudsService {
     assert request instanceof ParticipantIntakeApi;
     ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;
 
-    ScreeningEntity screeningEntity = participantIntakeApi.getScreeningId() == null ?
-        null : screeningDao.find(String.valueOf(participantIntakeApi.getScreeningId()));
-
     ParticipantEntity participantEntityManaged = participantDao.create(
-        new ParticipantEntity(participantIntakeApi, screeningEntity));
+        new ParticipantEntity(participantIntakeApi));
 
     //Create Participant Addresses & PhoneNumbers
     Set<AddressIntakeApi> addressIntakeApiSet = createParticipantAddresses(
@@ -157,6 +170,42 @@ public class ParticipantIntakeApiService implements CrudsService {
       participantIntakeApiPosted
           .setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntityManaged));
     }
+    return participantIntakeApiPosted;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see gov.ca.cwds.rest.services.CrudsService#update(Serializable, gov.ca.cwds.rest.api.Request)
+   */
+  @Override
+  public Response update(Serializable primaryKey, Request request) {
+    assert primaryKey instanceof String;
+    assert request instanceof ParticipantIntakeApi;
+    ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;
+    participantIntakeApi.setId((String) primaryKey);
+
+    ParticipantEntity participantEntityManaged = participantDao.find(primaryKey);
+    if (participantEntityManaged == null) {
+      return null;
+    }
+
+    participantEntityManaged = participantDao
+        .update(participantEntityManaged.updateFrom(participantIntakeApi));
+
+    //Update Participant Addresses & PhoneNumbers
+    Set<AddressIntakeApi> addressIntakeApiSet = updateParticipantAddresses(
+        participantIntakeApi.getAddresses(),
+        participantEntityManaged);
+
+    Set<PhoneNumber> phoneNumberSet = updateParticipantPhoneNumbers(
+        participantIntakeApi.getPhoneNumbers(),
+        participantEntityManaged);
+
+    ParticipantIntakeApi participantIntakeApiPosted = new ParticipantIntakeApi(
+        participantEntityManaged);
+    participantIntakeApiPosted.addAddresses(addressIntakeApiSet);
+    participantIntakeApiPosted.addPhoneNumbers(phoneNumberSet);
     return participantIntakeApiPosted;
   }
 
@@ -186,6 +235,53 @@ public class ParticipantIntakeApiService implements CrudsService {
     return addressIntakeApiSetPosted;
   }
 
+  private Set<AddressIntakeApi> updateParticipantAddresses(
+      Set<AddressIntakeApi> addressIntakeApiSet, ParticipantEntity participantEntityManaged) {
+    Set<AddressIntakeApi> addressIntakeApiSetPosted = new HashSet<>();
+
+    Map<String, ParticipantAddresses> participantAddressesOldMap = new HashMap<>();
+    participantAddressesDao.findByParticipantId(participantEntityManaged.getId()).forEach(
+        participantAddresses -> participantAddressesOldMap
+            .put(participantAddresses.getAddress().getId(), participantAddresses));
+
+    for (AddressIntakeApi addressIntakeApi : addressIntakeApiSet) {
+
+      Addresses addressesEntityManaged = addressIntakeApi.getId() == null ?
+          null : addressesDao.find(addressIntakeApi.getId());
+
+      if (addressesEntityManaged == null || !addressIntakeApi
+          .equals(new AddressIntakeApi(addressesEntityManaged))) {
+        //Create only those that don't exist or differs (were changed) from existing ones
+        addressIntakeApi.setId(null);
+        addressesEntityManaged = addressesDao.create(new Addresses(addressIntakeApi));
+        addressIntakeApi = new AddressIntakeApi(addressesEntityManaged);
+        addressIntakeApi.setLegacyDescriptor(
+            addressIntakeApiService.saveLegacyDescriptor(addressIntakeApi.getLegacyDescriptor(),
+                addressesEntityManaged.getId()));
+      }
+      addressIntakeApiSetPosted.add(addressIntakeApi);
+
+      //See if we had this ParticipantAddresses entity before. Otherwise create
+      ParticipantAddresses participantAddresses = participantAddressesOldMap
+          .get(addressesEntityManaged.getId());
+      if (participantAddresses != null) {
+        //Remove from the Old map
+        participantAddressesOldMap.remove(addressesEntityManaged.getId());
+        participantAddressesDao.update(participantAddresses);
+      } else {
+        participantAddressesDao
+            .create(new ParticipantAddresses(participantEntityManaged, addressesEntityManaged));
+      }
+
+    }
+
+    //Delete old ones that are not in the new.
+    participantAddressesOldMap.values().forEach(
+        participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
+
+    return addressIntakeApiSetPosted;
+  }
+
   private Set<PhoneNumber> createParticipantPhoneNumbers(Set<PhoneNumber> phoneNumberSet,
       ParticipantEntity participantEntityManaged) {
     Set<PhoneNumber> phoneNumberSetPosted = new HashSet<>();
@@ -204,21 +300,57 @@ public class ParticipantIntakeApiService implements CrudsService {
       }
       phoneNumberSetPosted.add(phoneNumber);
 
-      participantPhoneNumbersDao
-          .create(new ParticipantPhoneNumbers(participantEntityManaged, phoneNumbersEntityManaged));
+      ParticipantPhoneNumbers participantPhoneNumbers = new ParticipantPhoneNumbers(
+          participantEntityManaged, phoneNumbersEntityManaged);
+      participantPhoneNumbers.setCreatedAt(new Date());
+      participantPhoneNumbers.setUpdatedAt(participantPhoneNumbers.getCreatedAt());
+      participantPhoneNumbersDao.create(participantPhoneNumbers);
 
     }
     return phoneNumberSetPosted;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see gov.ca.cwds.rest.services.CrudsService#update(Serializable, gov.ca.cwds.rest.api.Request)
-   */
-  @Override
-  public Response update(Serializable arg0, Request arg1) {
-    return null;
+  private Set<PhoneNumber> updateParticipantPhoneNumbers(Set<PhoneNumber> phoneNumberSet,
+      ParticipantEntity participantEntityManaged) {
+    Set<PhoneNumber> phoneNumberSetPosted = new HashSet<>();
+
+    Map<String, ParticipantPhoneNumbers> participantPhoneNumbersOldMap = new HashMap<>();
+    participantPhoneNumbersDao.findByParticipantId(participantEntityManaged.getId()).forEach(
+        participantPhoneNumbers -> participantPhoneNumbersOldMap
+            .put(participantPhoneNumbers.getPhoneNumber().getId(), participantPhoneNumbers));
+
+    for (PhoneNumber phoneNumber : phoneNumberSet) {
+
+      PhoneNumbers phoneNumbersEntityManaged = phoneNumber.getId() == null ?
+          null : phoneNumbersDao.find(String.valueOf(phoneNumber.getId()));
+
+      if (phoneNumbersEntityManaged == null || !phoneNumber
+          .equals(new PhoneNumber(phoneNumbersEntityManaged))) {
+        //Create only those that don't exist or differs (were changed) from existing ones
+        phoneNumber.setId(null);
+        phoneNumbersEntityManaged = phoneNumbersDao.create(new PhoneNumbers(phoneNumber));
+        phoneNumber = new PhoneNumber(phoneNumbersEntityManaged);
+      }
+
+      phoneNumberSetPosted.add(phoneNumber);
+
+      //See if we had this ParticipantPhoneNumber entity before. Otherwise create
+      ParticipantPhoneNumbers participantPhoneNumbers = participantPhoneNumbersOldMap
+          .get(phoneNumbersEntityManaged.getId());
+      if (participantPhoneNumbers != null) {
+        //Remove from the Old map
+        participantPhoneNumbersOldMap.remove(phoneNumbersEntityManaged.getId());
+        participantPhoneNumbersDao.update(participantPhoneNumbers);
+      } else {
+        participantPhoneNumbersDao.create(new ParticipantPhoneNumbers(
+            participantEntityManaged, phoneNumbersEntityManaged));
+      }
+    }
+    //Delete old ones that are not in the new.
+    participantPhoneNumbersOldMap.values().forEach(
+        participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
+
+    return phoneNumberSetPosted;
   }
 
 }
