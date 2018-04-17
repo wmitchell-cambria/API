@@ -30,15 +30,9 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
       example = "28")
   private String id;
 
-  @JsonProperty("legacy_source_table")
-  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Source Table",
-      example = "ADDRS_T")
-  private String legacySourceTable;
-
-  @JsonProperty("legacy_id")
-  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Id", example = "ABC1234567")
-  @Size(max = CMS_ID_LEN)
-  private String legacyId;
+  @JsonProperty("type")
+  @ApiModelProperty(example = "32")
+  private String type;
 
   @JsonProperty("street_address")
   @ApiModelProperty(example = "742 Evergreen Terrace")
@@ -46,7 +40,7 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   private String streetAddress;
 
   @JsonProperty("city")
-  @ApiModelProperty(value = "City", example = "Springfield")
+  @ApiModelProperty(value = "City", example = "Sacramento")
   @Size(max = 50)
   private String city;
 
@@ -55,13 +49,19 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   private String state;
 
   @JsonProperty("zip")
-  @ApiModelProperty(value = "Zip", example = "95757")
+  @ApiModelProperty(value = "Zip", example = "95835")
   @Size(min = 5, max = 5)
   private String zip;
 
-  @JsonProperty("type")
-  @ApiModelProperty(example = "32")
-  private String type;
+  @JsonProperty("legacy_id")
+  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Id", example = "ABC0123456")
+  @Size(max = CMS_ID_LEN)
+  private String legacyId;
+
+  @JsonProperty("legacy_source_table")
+  @ApiModelProperty(required = true, readOnly = false, value = "Legacy Source Table",
+      example = "ADDRS_T")
+  private String legacySourceTable;
 
   @ApiModelProperty(required = true, readOnly = false)
   @JsonProperty("legacy_descriptor")
