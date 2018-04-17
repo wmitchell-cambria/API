@@ -75,7 +75,6 @@ import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
-import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
@@ -211,13 +210,6 @@ public class DataAccessModule extends AbstractModule {
       };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(Person.class, Address.class, ScreeningEntity.class,
-          LegacyDescriptorEntity.class, IntakeLOVCodeEntity.class, ParticipantEntity.class,
-          PersonAddressId.class, PersonAddress.class, PersonPhoneId.class, PhoneNumber.class,
-          PersonPhone.class, PersonLanguageId.class, Language.class, PersonLanguage.class,
-          PersonEthnicityId.class, PersonEthnicity.class, Ethnicity.class, PersonRaceId.class,
-          PersonRace.class, Race.class, IntakeLov.class,
-          gov.ca.cwds.data.persistence.ns.Allegation.class, ScreeningWrapper.class) {
       new HibernateBundle<ApiConfiguration>(
           ImmutableList.<Class<?>>of(gov.ca.cwds.data.persistence.ns.Person.class,
               gov.ca.cwds.data.persistence.ns.Address.class,
@@ -245,7 +237,7 @@ public class DataAccessModule extends AbstractModule {
               gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
               gov.ca.cwds.data.persistence.ns.PersonRace.class,
               gov.ca.cwds.data.persistence.ns.Race.class,
-              gov.ca.cwds.data.persistence.ns.ScreeningEntity.class, 
+              gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
               gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class),
           new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
 
