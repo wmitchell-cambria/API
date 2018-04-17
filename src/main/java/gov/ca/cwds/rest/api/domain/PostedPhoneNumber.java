@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.api.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.Response;
 import io.dropwizard.jackson.JsonSnakeCase;
 
