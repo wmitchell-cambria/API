@@ -5,7 +5,7 @@ import org.hibernate.SessionFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.Address;
+import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
@@ -13,7 +13,7 @@ import gov.ca.cwds.inject.XaNsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class XaNsAddressDao extends CrudsDaoImpl<Address> {
+public class XaNsAddressDao extends CrudsDaoImpl<Addresses> {
 
   /**
    * Constructor

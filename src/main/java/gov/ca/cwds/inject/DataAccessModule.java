@@ -284,7 +284,7 @@ public class DataAccessModule extends AbstractModule {
           new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaCmsDataSourceFactory();
+          return configuration.getXaNsDataSourceFactory();
         }
 
         @Override

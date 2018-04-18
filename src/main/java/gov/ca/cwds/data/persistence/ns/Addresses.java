@@ -20,7 +20,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 
 /**
- * {@link PersistentObject} representing an Addresses
+ * {@link PersistentObject} representing an Address (Postgres table "addresses").
  *
  * @author CWDS API Team
  */
@@ -214,6 +214,38 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setStreetAddress(String streetAddress) {
+    this.streetAddress = streetAddress;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setLegacyId(String legacyId) {
+    this.legacyId = legacyId;
+  }
+
+  public void setLegacySourceTable(String legacySourceTable) {
+    this.legacySourceTable = legacySourceTable;
   }
 
 }

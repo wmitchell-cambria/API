@@ -2,8 +2,15 @@ package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.NotImplementedException;
+import javax.transaction.UserTransaction;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
@@ -16,11 +23,13 @@ import gov.ca.cwds.rest.api.domain.PostedAddress;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 
 /**
- * Business layer object to work on Postgres {@link Address}.
+ * Business layer object to work on Postgres (NS) {@link Address}.
  * 
  * @author CWDS API Team
  */
 public class AddressService implements CrudsService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddressService.class);
 
   private AddressDao addressDao;
   private XaNsAddressDao xaAddressDao;
@@ -85,7 +94,7 @@ public class AddressService implements CrudsService {
    * {@inheritDoc}
    * 
    * <p>
-   * Update NS and CMS with XA transaction.
+   * Update NS and CMS with XA transaction. See INT-1592.
    * </p>
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
@@ -95,11 +104,43 @@ public class AddressService implements CrudsService {
   public Response update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof Long;
     assert request instanceof Address;
-    final Address address = (Address) request;
+
+    final Address reqAddress = (Address) request;
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
-    return new PostedAddress(
-        xaAddressDao.update(new gov.ca.cwds.data.persistence.ns.Address(address, staffId, null)));
+
+    final UserTransaction txn = new UserTransactionImp();
+    try {
+      // Start XA transaction:
+      txn.setTransactionTimeout(80);
+      txn.begin();
+
+      // FUTURE: switch to XA session factories.
+      // final Session sessionCMS = cmsSessionFactory.openSession();
+      final Session sessionNS = xaAddressDao.grabSession();
+
+      // Do work:
+      final gov.ca.cwds.data.persistence.ns.Addresses persistedAddress =
+          xaAddressDao.find(primaryKey);
+      persistedAddress.setStreetAddress(reqAddress.getStreetAddress());
+      final gov.ca.cwds.data.persistence.ns.Addresses ret = xaAddressDao.update(persistedAddress);
+
+      // Commit XA transaction:
+      txn.commit();
+
+      // Return results.
+      return new PostedAddress(ret);
+    } catch (Exception e) {
+      try {
+        txn.rollback();
+      } catch (Exception e2) {
+        LOGGER.warn(e2.getMessage(), e2);
+      }
+
+      final String oops =
+          String.format("XA TRANSACTION ERROR! stack trace: %s", ExceptionUtils.getStackTrace(e));
+      throw new ServiceException(oops, e);
+    }
   }
 
 }

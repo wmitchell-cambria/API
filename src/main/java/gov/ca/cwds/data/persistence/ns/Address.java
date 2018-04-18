@@ -27,7 +27,7 @@ import gov.ca.cwds.data.ns.NsPersistentObject;
     query = "FROM Address WHERE lastUpdatedTime > :after")
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "address")
+@Table(name = "addresses")
 public class Address extends NsPersistentObject {
 
   @Id
@@ -158,6 +158,34 @@ public class Address extends NsPersistentObject {
    */
   public Set<PersonAddress> getPersonAddress() {
     return personAddress;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
+
+  public void setStreetAddress(String streetAddress) {
+    this.streetAddress = streetAddress;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setPersonAddress(Set<PersonAddress> personAddress) {
+    this.personAddress = personAddress;
   }
 
 }
