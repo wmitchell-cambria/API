@@ -6,7 +6,6 @@ import javax.transaction.UserTransaction;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,6 +104,7 @@ public class AddressService implements CrudsService {
     assert primaryKey instanceof Long;
     assert request instanceof Address;
 
+    final String strId = String.valueOf((long) primaryKey);
     final Address reqAddress = (Address) request;
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
@@ -115,13 +115,8 @@ public class AddressService implements CrudsService {
       txn.setTransactionTimeout(80);
       txn.begin();
 
-      // FUTURE: switch to XA session factories.
-      // final Session sessionCMS = cmsSessionFactory.openSession();
-      final Session sessionNS = xaAddressDao.grabSession();
-
       // Do work:
-      final gov.ca.cwds.data.persistence.ns.Addresses persistedAddress =
-          xaAddressDao.find(primaryKey);
+      final gov.ca.cwds.data.persistence.ns.Addresses persistedAddress = xaAddressDao.find(strId);
       persistedAddress.setStreetAddress(reqAddress.getStreetAddress());
       final gov.ca.cwds.data.persistence.ns.Addresses ret = xaAddressDao.update(persistedAddress);
 
