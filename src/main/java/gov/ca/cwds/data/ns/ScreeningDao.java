@@ -11,7 +11,6 @@ import org.hibernate.type.StringType;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.inject.NsSessionFactory;
@@ -59,22 +58,6 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
         .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
         .setParameter("clientIds", clientIds);
     return new HashSet<>(query.list());
-  }
-
-  /**
-   * Find IntakeLOVCodeEntity object by intakeCode.
-   *
-   * @param intakeCode intakeCode
-   * @return IntakeLOVCodeEntity
-   */
-  public IntakeLOVCodeEntity findIntakeLOVCodeByIntakeCode(String intakeCode) {
-    @SuppressWarnings("unchecked")
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(
-            "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode")
-        .setParameter("intakeCode", intakeCode);
-    List<IntakeLOVCodeEntity> codes = query.list();
-    return codes.isEmpty() ? null : codes.get(0);
   }
 
   /**

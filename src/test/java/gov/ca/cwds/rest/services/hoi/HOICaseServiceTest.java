@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,9 +54,7 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 public class HOICaseServiceTest {
 
   private CaseDao caseDao;
-  private ClientDao clientDao;
   private ClientRelationshipDao clientRelationshipDao;
-  private AuthorizationService authorizationService;
   private HOICaseService target;
   private HOIRequest request;
 
@@ -71,87 +72,91 @@ public class HOICaseServiceTest {
    * @throws Exception - Exception
    */
   @Before
-  public void setup() throws Exception {
+  public void setUp() {
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
     caseDao = mock(CaseDao.class);
-    clientDao = mock(ClientDao.class);
+
+    ClientDao clientDao = mock(ClientDao.class);
+    Client client123 = new ClientEntityBuilder().setId("CLIENT-123").build();
+    when(clientDao.find(any(String.class))).thenReturn(client123);
+    Map<String, Client> clientMap = new HashMap<>();
+    Client client1 = new ClientEntityBuilder().setId("FOCUS-CHILD-1").build();
+    Client client2 = new ClientEntityBuilder().setId("FOCUS-CHILD-2").build();
+    clientMap.put(client1.getId(), client1);
+    clientMap.put(client2.getId(), client2);
+    when(clientDao.findClientsByIds(any(Set.class))).thenReturn(clientMap);
+
     clientRelationshipDao = mock(ClientRelationshipDao.class);
-    authorizationService = new AuthorizationService();
+    AuthorizationService authorizationService = new AuthorizationService();
     target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, authorizationService);
     request = new HOIRequest();
-    request.setClientIds(Stream.of("123").collect(Collectors.toSet()));
+    request.setClientIds(Stream.of("CLIENT-123").collect(Collectors.toSet()));
   }
 
   @Test
-  public void testHandleFind() throws Exception {
+  public void testHandleFind() {
     CmsCase cmscase1 = new CmsCaseEntityBuilder().setId("TAZGOO205C").setStartDate(new Date())
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHOLD").build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-1").build();
     CmsCase cmscase2 = new CmsCaseEntityBuilder().setId("RAZGOO205C").setStartDate(new Date())
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FC2").build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-2").build();
     CmsCase[] cases = {cmscase1, cmscase2};
     ClientRelationship relationship = new ClientRelationshipEntityBuilder().build();
     ClientRelationship[] relationships = {relationship};
     when(clientRelationshipDao.findByPrimaryClientId(any(String.class))).thenReturn(relationships);
     when(clientRelationshipDao.findBySecondaryClientId(any(String.class)))
         .thenReturn(relationships);
-    Client client = new ClientEntityBuilder().build();
     when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
-    when(clientDao.find(any(String.class))).thenReturn(client);
     HOICaseResponse response = target.handleFind(request);
     assertThat(response, notNullValue());
   }
 
   @Test
-  public void testHandleFindWhenNoClientIdsProvided() throws Exception {
+  public void testHandleFindWhenNoClientIdsProvided() {
     HOIRequest emptyRequest = new HOIRequest();
-    emptyRequest.setClientIds(new HashSet<String>());
+    emptyRequest.setClientIds(new HashSet<>());
     HOICaseResponse response = target.handleFind(emptyRequest);
     assertThat(response, notNullValue());
   }
 
   @Test
-  public void testFindParentsBySecondaryRelationship254MotherSonStepSuccess() throws Exception {
+  public void testFindParentsBySecondaryRelationship254MotherSonStepSuccess() {
     HOICaseResponse response =
         getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship((short) 254);
     assertEquals(1, response.getHoiCases().get(0).getParents().size());
   }
 
   @Test
-  public void testFindParentsBySecondaryRelationshipType214FatherSonStepSuccess() throws Exception {
+  public void testFindParentsBySecondaryRelationshipType214FatherSonStepSuccess() {
     HOICaseResponse response =
         getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship((short) 214);
     assertEquals(1, response.getHoiCases().get(0).getParents().size());
   }
 
   @Test
-  public void testFindParentsBySecondaryRelationshipType6361MotherSonPresumedSuccess()
-      throws Exception {
+  public void testFindParentsBySecondaryRelationshipType6361MotherSonPresumedSuccess() {
     HOICaseResponse response =
         getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship((short) 6361);
     assertEquals(1, response.getHoiCases().get(0).getParents().size());
   }
 
   @Test
-  public void testFindParentsByPrimaryRelationshipType254MotherSonStepFails() throws Exception {
+  public void testFindParentsByPrimaryRelationshipType254MotherSonStepFails() {
     HOICaseResponse response =
         getCaseResponseWhereChildIsPrimaryClientInTheRelationship((short) 254);
     assertEquals(0, response.getHoiCases().get(0).getParents().size());
   }
 
   @Test
-  public void testFindParentsByPrimaryRelationshipType296UncleNephewMaternalFails()
-      throws Exception {
+  public void testFindParentsByPrimaryRelationshipType296UncleNephewMaternalFails() {
     HOICaseResponse response =
         getCaseResponseWhereChildIsPrimaryClientInTheRelationship((short) 296);
     assertEquals(0, response.getHoiCases().get(0).getParents().size());
   }
 
   @Test
-  public void testFindParentsWhereChildIsSecondaryClientInTheRelationshipForAllValidTypesSuccess()
-      throws Exception {
-    List<Integer> parentToChildTypes = new ArrayList<>();
-    parentToChildTypes.addAll(Arrays.asList(243, 254, 5620, 6361));
+  public void testFindParentsWhereChildIsSecondaryClientInTheRelationshipForAllValidTypesSuccess() {
+    List<Integer> parentToChildTypes = new ArrayList<>(Arrays.asList(243, 254, 5620, 6361));
     for (Integer i = 203; i <= 205; i++) {
       parentToChildTypes.add(i);
     }
@@ -176,10 +181,9 @@ public class HOICaseServiceTest {
   }
 
   @Test
-  public void testFindParentsWhereChildIsPrimaryClientInTheRelationshipForAllValidTypesSuccess()
-      throws Exception {
-    List<Integer> childToParentTypes = new ArrayList<>();
-    childToParentTypes.addAll(Arrays.asList(198, 199, 242, 293, 242, 6360));
+  public void testFindParentsWhereChildIsPrimaryClientInTheRelationshipForAllValidTypesSuccess() {
+    List<Integer> childToParentTypes = new ArrayList<>(
+        Arrays.asList(198, 199, 242, 293, 242, 6360));
     for (Integer i = 188; i <= 190; i++) {
       childToParentTypes.add(i);
     }
@@ -201,14 +205,13 @@ public class HOICaseServiceTest {
 
 
   @Test(expected = NotImplementedException.class)
-  public void testHandleRequest() throws Exception {
+  public void testHandleRequest() {
     target.handleRequest(new HOICase());
   }
 
-  public HOICaseResponse getCaseResponseWhereChildIsPrimaryClientInTheRelationship(short type)
-      throws Exception {
+  private HOICaseResponse getCaseResponseWhereChildIsPrimaryClientInTheRelationship(short type) {
     CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD").build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-1").build();
     CmsCase[] cases = {cmscase};
     ClientRelationship relationship =
         new ClientRelationshipEntityBuilder().setClientRelationshipType(type).build();
@@ -217,17 +220,13 @@ public class HOICaseServiceTest {
     when(clientRelationshipDao.findByPrimaryClientId(any(String.class))).thenReturn(relationships);
     when(clientRelationshipDao.findBySecondaryClientId(any(String.class)))
         .thenReturn(emptyRelationships);
-    Client client = new ClientEntityBuilder().build();
     when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
-    when(clientDao.find(any(String.class))).thenReturn(client);
-    HOICaseResponse response = target.handleFind(request);
-    return response;
+    return target.handleFind(request);
   }
 
-  public HOICaseResponse getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(short type)
-      throws Exception {
+  private HOICaseResponse getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(short type) {
     CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("CHILDCLIENT").build();
+        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-2").build();
     CmsCase[] cases = {cmscase};
     ClientRelationship relationship =
         new ClientRelationshipEntityBuilder().setClientRelationshipType(type).build();
@@ -237,17 +236,14 @@ public class HOICaseServiceTest {
         .thenReturn(emptyRelationships);
     when(clientRelationshipDao.findBySecondaryClientId(any(String.class)))
         .thenReturn(relationships);
-    Client client = new ClientEntityBuilder().build();
     when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
-    when(clientDao.find(any(String.class))).thenReturn(client);
-    HOICaseResponse response = target.handleFind(request);
-    return response;
+    return target.handleFind(request);
   }
 
   @Test(expected = AuthorizationException.class)
   public void testUnAuthorizedClient() {
     HOICaseService spyTarget = spy(target);
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("123");
+    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("CLIENT-123");
     spyTarget.handleFind(request);
   }
 
