@@ -70,7 +70,7 @@ public class HoiReferralResource {
   public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") List<String> clientIds) {
     gov.ca.cwds.rest.api.Response clients =
-        hoiReferralService.findHoiReferralbyClientIds(clientIds);
+        hoiReferralService.findHoiReferralByClientIds(clientIds);
     return new ResponseConverter().withDataResponse(clients);
   }
 
