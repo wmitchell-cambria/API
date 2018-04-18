@@ -410,37 +410,37 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @CmsSessionFactory
-  SessionFactory cmsSessionFactory() {
+  public SessionFactory cmsSessionFactory() {
     return cmsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @NsSessionFactory
-  SessionFactory nsSessionFactory() {
+  public SessionFactory nsSessionFactory() {
     return nsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @CwsRsSessionFactory
-  SessionFactory rsSessionFactory() {
+  public SessionFactory rsSessionFactory() {
     return rsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @CmsHibernateBundle
-  HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
+  public HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
     return cmsHibernateBundle;
   }
 
   @Provides
   @NsHibernateBundle
-  HibernateBundle<ApiConfiguration> nsHibernateBundle() {
+  public HibernateBundle<ApiConfiguration> nsHibernateBundle() {
     return nsHibernateBundle;
   }
 
   @Provides
   @CwsRsHibernateBundle
-  HibernateBundle<ApiConfiguration> rsHibernateBundle() {
+  public HibernateBundle<ApiConfiguration> rsHibernateBundle() {
     return rsHibernateBundle;
   }
 
@@ -452,8 +452,14 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @XaNsSessionFactory
-  SessionFactory xaCalsnsSessionFactory() {
+  public SessionFactory xaNsSessionFactory() {
     return xaNsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
+  @XaCmsSessionFactory
+  public SessionFactory xaCmsSessionFactory() {
+    return xaCmsHibernateBundle.getSessionFactory();
   }
 
   @Provides
