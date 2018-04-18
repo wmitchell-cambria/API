@@ -17,8 +17,6 @@ import org.hibernate.annotations.NamedQuery;
  */
 @Entity
 @Table(name = "intake_lov_codes")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode",
-    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode = :intakeCode")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes",
     query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN (:intakeCodes)")
 public class IntakeLOVCodeEntity implements PersistentObject {
@@ -65,6 +63,10 @@ public class IntakeLOVCodeEntity implements PersistentObject {
 
   public String getIntakeCode() {
     return intakeCode;
+  }
+
+  public void setIntakeCode(String intakeCode) {
+    this.intakeCode = intakeCode;
   }
 
   public String getIntakeDisplay() {

@@ -4,7 +4,9 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.inject.NsSessionFactory;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
@@ -21,18 +23,20 @@ public class IntakeLOVCodeDao extends CrudsDaoImpl<IntakeLOVCodeEntity> {
   }
 
   /**
-   * Find IntakeLOVCodeEntity object by intakeCode.
+   * Find map of IntakeLOVCodeEntity by Set of intake codes
    *
-   * @param intakeCode intakeCode
-   * @return IntakeLOVCodeEntity
+   * @param intakeCodes Set of intake codes
+   * @return map where key is an intake code and value is an IntakeLOVCodeEntity
    */
-  public IntakeLOVCodeEntity findIntakeLOVCodeByIntakeCode(String intakeCode) {
-    @SuppressWarnings("unchecked")
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(
-            "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode")
-        .setParameter("intakeCode", intakeCode);
-    List<IntakeLOVCodeEntity> codes = query.list();
-    return codes.isEmpty() ? null : codes.get(0);
+  @SuppressWarnings("unchecked")
+  public Map<String, IntakeLOVCodeEntity> findIntakeLOVCodesByIntakeCodes(Set<String> intakeCodes) {
+    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
+        "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes")
+        .setParameter("intakeCodes", intakeCodes);
+    Map<String, IntakeLOVCodeEntity> intakeLOVCodesMap = new HashMap<>();
+    for (IntakeLOVCodeEntity intakeLOVCode : query.list()) {
+      intakeLOVCodesMap.put(intakeLOVCode.getIntakeCode(), intakeLOVCode);
+    }
+    return intakeLOVCodesMap;
   }
 }

@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
@@ -15,25 +14,21 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 public final class HOIScreeningFactory {
 
   @Inject
-  IntakeLOVCodeDao intakeLOVCodeDao;
-
-  @Inject
   HOIPersonFactory hoiPersonFactory;
 
   /**
-   * @param screeningEntity ns ScreeningEntity
+   * @param screeningEntity NS ScreeningEntity
+   * @param countyIntakeLOVCodeEntity NS IntakeLOVCodeEntity
    * @return HOIScreening
    */
-  HOIScreening buildHOIScreening(ScreeningEntity screeningEntity) {
+  HOIScreening buildHOIScreening(ScreeningEntity screeningEntity,
+      IntakeLOVCodeEntity countyIntakeLOVCodeEntity) {
     HOIScreening result = new HOIScreening(screeningEntity);
 
-    if (screeningEntity.getIncidentCounty() != null) {
-      IntakeLOVCodeEntity code = intakeLOVCodeDao
-          .findIntakeLOVCodeByIntakeCode(screeningEntity.getIncidentCounty());
-      if (code != null) {
-        result.setCounty(
-            new SystemCodeDescriptor(code.getLgSysId().shortValue(), code.getIntakeDisplay()));
-      }
+    if (countyIntakeLOVCodeEntity != null) {
+      result.setCounty(
+          new SystemCodeDescriptor(countyIntakeLOVCodeEntity.getLgSysId().shortValue(),
+              countyIntakeLOVCodeEntity.getIntakeDisplay()));
     }
 
     if (screeningEntity.getParticipants() != null) {

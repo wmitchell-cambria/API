@@ -10,8 +10,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -84,20 +86,23 @@ public class HOIScreeningServiceTest {
     hoiPersonFactory.participantDao = participantDao;
     hoiPersonFactory.staffPersonResource = staffPersonResource;
 
-    IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
-    mockIntakeLOVCodeEntity.setLgSysId(1101L);
-    mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
-    when(intakeLOVCodeDao.findIntakeLOVCodeByIntakeCode(any(String.class)))
-        .thenReturn(mockIntakeLOVCode());
+    IntakeLOVCodeEntity intakeLOVCodeEntity = new IntakeLOVCodeEntity();
+    intakeLOVCodeEntity.setLgSysId(1101L);
+    intakeLOVCodeEntity.setIntakeCode("sacramento");
+    intakeLOVCodeEntity.setIntakeDisplay("Sacramento");
+    Map<String, IntakeLOVCodeEntity> intakeLOVCodeEntityMap = new HashMap<>();
+    intakeLOVCodeEntityMap.put(intakeLOVCodeEntity.getIntakeCode(), intakeLOVCodeEntity);
+    when(intakeLOVCodeDao.findIntakeLOVCodesByIntakeCodes(any(Set.class)))
+        .thenReturn(intakeLOVCodeEntityMap);
 
     HOIScreeningFactory hoiScreeningFactory = new HOIScreeningFactory();
-    hoiScreeningFactory.intakeLOVCodeDao = intakeLOVCodeDao;
     hoiScreeningFactory.hoiPersonFactory = hoiPersonFactory;
 
     AuthorizationService authorizationService = mock(AuthorizationService.class);
 
     hoiScreeningService = new HOIScreeningService();
     hoiScreeningService.screeningDao = screeningDao;
+    hoiScreeningService.intakeLOVCodeDao = intakeLOVCodeDao;
     hoiScreeningService.hoiScreeningFactory = hoiScreeningFactory;
     hoiScreeningService.authorizationService = authorizationService;
   }
@@ -176,13 +181,6 @@ public class HOIScreeningServiceTest {
     result.add(screening1);
     result.add(screening2);
     return result;
-  }
-
-  private IntakeLOVCodeEntity mockIntakeLOVCode() {
-    IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
-    mockIntakeLOVCodeEntity.setLgSysId(1101L);
-    mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
-    return mockIntakeLOVCodeEntity;
   }
 
   private LegacyDescriptorEntity mockLegacyDescriptorEntity(String participantId) {
