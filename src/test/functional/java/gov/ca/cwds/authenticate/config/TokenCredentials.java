@@ -10,8 +10,6 @@ public class TokenCredentials {
 
   private String baseUrl;
 
-  private String authenticationBaseUrl;
-
   private String perryLoginUrl;
 
   private String authLoginUrl;
@@ -23,15 +21,6 @@ public class TokenCredentials {
   private String logOutUrl;
 
   private String validateUrl;
-
-  /**
-   * getAuthenticationBaseUrl.
-   * 
-   * @return the authenticationBaseUrl
-   */
-  public String getAuthenticationBaseUrl() {
-    return authenticationBaseUrl;
-  }
 
   /**
    * getBaseUrl.
@@ -94,15 +83,6 @@ public class TokenCredentials {
    */
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
-  }
-
-  /**
-   * authenticationBaseUrl.
-   * 
-   * @param authenticationBaseUrl - authenticationBaseUrl
-   */
-  public void setAuthenticationBaseUrl(String authenticationBaseUrl) {
-    this.authenticationBaseUrl = authenticationBaseUrl;
   }
 
   /**
