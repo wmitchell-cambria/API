@@ -1,7 +1,7 @@
 package gov.ca.cwds.data.ns;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Set;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-public class IntakeLOVCodeDao extends CrudsDaoImpl<IntakeLOVCodeEntity> {
+public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
 
   /**
    * Constructor
@@ -30,8 +30,8 @@ public class IntakeLOVCodeDao extends CrudsDaoImpl<IntakeLOVCodeEntity> {
    */
   @SuppressWarnings("unchecked")
   public Map<String, IntakeLOVCodeEntity> findIntakeLOVCodesByIntakeCodes(Set<String> intakeCodes) {
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
-        "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes")
+    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
         .setParameter("intakeCodes", intakeCodes);
     Map<String, IntakeLOVCodeEntity> intakeLOVCodesMap = new HashMap<>();
     for (IntakeLOVCodeEntity intakeLOVCode : query.list()) {
