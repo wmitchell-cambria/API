@@ -102,7 +102,7 @@ xaCmsDataSourceFactory:
   properties:
       hibernate.dialect: org.hibernate.dialect.DB2Dialect
       hibernate.show_sql: false
-      hibernate.default_schema: ${DB_CMS_SCHEMA:-CWSCMS}
+      hibernate.default_schema: ${DB_CMS_SCHEMA}
       hibernate.connection.autocommit: false
       hibernate.current_session_context_class: jta
       hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
@@ -146,7 +146,7 @@ xaNsDataSourceFactory:
       # hibernate.cache.use_query_cache: false
       # hibernate.connection.provider_disables_autocommit: true
   xaProperties:
-      url: ${DB_NS_JDBC_URL:-jdbc:postgresql://192.168.99.100:5432/postgres_data}
+      url: ${DB_NS_JDBC_URL}
 
 elasticsearch:
   # Screenings index

@@ -138,4 +138,5 @@ public class ClientResource {
       @Valid @ApiParam(hidden = false) Client client) {
     return typedResourceDelegate.update(id, client);
   }
+
 }

@@ -70,6 +70,7 @@ public class CmsNSReferralService implements CrudsService {
       txn.setTransactionTimeout(80);
       txn.begin();
 
+      // FUTURE: switch to XA session factories.
       final Session sessionCMS = cmsSessionFactory.openSession();
       final Session sessionNS = nsSessionFactory.openSession();
 
