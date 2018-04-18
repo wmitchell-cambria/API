@@ -8,6 +8,8 @@ import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
 
 /**
+ * To load the Yaml file and read the values.
+ * 
  * @author CWDS API Team
  *
  */
@@ -22,6 +24,8 @@ public class TestingYmlConfig {
   }
 
   /**
+   * createTestConfig.
+   * 
    * @return the createdTestConfig
    */
   public CwdsAuthenticationClientConfig createTestConfig() {

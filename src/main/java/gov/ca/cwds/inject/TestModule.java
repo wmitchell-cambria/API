@@ -9,6 +9,8 @@ import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.server.TestingYmlConfig;
 
 /**
+ * To initialize the testConfig location.
+ * 
  * @author CWDS API Team
  *
  */
@@ -20,6 +22,8 @@ public class TestModule extends AbstractModule {
   }
 
   /**
+   * getTestConfig.
+   * 
    * @param configuration - configuration
    * @return the configuration
    */
