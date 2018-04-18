@@ -14,7 +14,6 @@ import gov.ca.cwds.rest.services.AddressService;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ReferentialIntegrityModule extends AbstractModule {
 
   /**

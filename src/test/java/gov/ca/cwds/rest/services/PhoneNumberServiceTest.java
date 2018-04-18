@@ -59,7 +59,7 @@ public class PhoneNumberServiceTest implements ServiceTestTemplate {
     when(phoneNumberDao.find(new Long(1)))
         .thenReturn(new gov.ca.cwds.data.persistence.ns.PhoneNumber(1L, "408 987-6543", "Home"));
 
-    PhoneNumber expected = new PhoneNumber("408 987-6543", "Home");
+    PhoneNumber expected = new PhoneNumber(1L,"408 987-6543", "Home");
 
     PhoneNumber found = phoneNumberService.find(new Long(1));
 

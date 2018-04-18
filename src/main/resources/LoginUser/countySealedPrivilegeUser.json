@@ -1,0 +1,14 @@
+{
+  "user": "CLUSTR",
+  "staffId": "0UX",
+  "roles": [
+    "SocialWorker"
+  ],
+  "county_code": "34",
+  "county_cws_code": "1101",
+  "county_name": "Sacramento",
+  "privileges": [
+    "CWS Case Management System",
+    "Sealed"
+  ]
+}

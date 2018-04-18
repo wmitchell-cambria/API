@@ -93,8 +93,8 @@ public class PersonTest {
 
     assertEquals(1, person.getPersonPhone().size());
     for (PersonPhone personPhone : person.getPersonPhone()) {
-      assertEquals(personPhone.getPhoneNumber().getNumber(), phoneNumber.getPhoneNumber());
-      assertEquals(personPhone.getPhoneNumber().getType(), phoneNumber.getPhoneType());
+      assertEquals(personPhone.getPhoneNumber().getNumber(), phoneNumber.getNumber());
+      assertEquals(personPhone.getPhoneNumber().getType(), phoneNumber.getType());
     }
 
     assertEquals(1, person.getPersonEthnicity().size());

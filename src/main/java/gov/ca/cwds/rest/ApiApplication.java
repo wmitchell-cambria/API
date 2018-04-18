@@ -13,6 +13,7 @@ import com.codahale.metrics.servlets.MetricsServlet;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.health.AuthHealthCheck;
 import gov.ca.cwds.health.DB2HealthCheck;
 import gov.ca.cwds.health.SwaggerHealthCheck;
@@ -20,6 +21,7 @@ import gov.ca.cwds.health.resource.AuthServer;
 import gov.ca.cwds.health.resource.DB2Database;
 import gov.ca.cwds.health.resource.SwaggerEndpoint;
 import gov.ca.cwds.inject.ApplicationModule;
+import gov.ca.cwds.inject.InjectorHolder;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContextFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
@@ -43,11 +45,14 @@ import io.dropwizard.setup.Environment;
  * @author CWDS API Team
  */
 public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
 
   private static final String LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML =
       "liquibase/intake_ns_database_master.xml";
   private static final String HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME = "hibernate.default_schema";
+
+  private ApplicationModule applicationModule;
 
   /**
    * Start the CWDS RESTful API application.
@@ -66,7 +71,8 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
    */
   @Override
   public Module applicationModule(Bootstrap<ApiConfiguration> bootstrap) {
-    return new ApplicationModule(bootstrap);
+    applicationModule = new ApplicationModule(bootstrap);
+    return applicationModule;
   }
 
   @Override
@@ -82,7 +88,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.getApplicationContext().addServlet(new NonblockingServletHolder(new AdminServlet()),
         "/admin/*");
 
-    Injector injector = guiceBundle.getInjector();
+    final Injector injector = guiceBundle.getInjector();
     environment.servlets()
         .addFilter("RequestExecutionContextManagingFilter",
             injector.getInstance(RequestExecutionContextFilter.class))
@@ -106,21 +112,34 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
+
+    // ERROR: "binder can only be called inside configure" -- but can't call it in configure()
+    // either.
+    // Chicken and egg dilemma: HibernateBundle demands that Hibernate interceptors be constructed
+    // before DAO's, entities, session factories, etc.
+    // Without succumbing to convoluted Guice listeners, "assisted injection", or statics, this is
+    // the best we can do.
+    final PaperTrailDao paperTrailDao = InjectorHolder.INSTANCE.getInstance(PaperTrailDao.class);
+    applicationModule.getDataAccessModule().getPaperTrailInterceptor()
+        .setPaperTrailDao(paperTrailDao);
+    LOGGER.info("PaperTrailInterceptor: {}",
+        applicationModule.getDataAccessModule().getPaperTrailInterceptor());
   }
 
   private void upgradeNsDb(ApiConfiguration configuration) {
     LOGGER.info("Upgrading INTAKE_NS DB...");
 
-    DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
-    DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
+    final DataSourceFactory nsDataSourceFactory = configuration.getNsDataSourceFactory();
+    final DatabaseHelper databaseHelper = new DatabaseHelper(nsDataSourceFactory.getUrl(),
         nsDataSourceFactory.getUser(), nsDataSourceFactory.getPassword());
     try {
       databaseHelper.runScript(LIQUIBASE_INTAKE_NS_DATABASE_MASTER_XML,
           nsDataSourceFactory.getProperties().get(HIBERNATE_DEFAULT_SCHEMA_PROPERTY_NAME));
     } catch (Exception e) {
-      LOGGER.error("INTAKE_NS DB UPGRADE FAILED! ", e);
+      LOGGER.error("INTAKE_NS DB upgrade failed. ", e);
     }
 
-    LOGGER.info("Finish Upgrading INTAKE_NS DB");
+    LOGGER.info("Finished Upgrading INTAKE_NS DB");
   }
+
 }
