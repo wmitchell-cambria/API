@@ -128,12 +128,12 @@ public class AddressResource {
       @ApiResponse(code = 422, message = "Unable to validate Address")})
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(hidden = false, value = "Update Address", code = HttpStatus.SC_OK,
-      response = Object.class)
+      response = PostedAddress.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The id of the Address to update") long id,
-      @ApiParam(hidden = true) Address address) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+      @ApiParam(hidden = false, required = true) Address address) {
+    return resourceDelegate.update(id, address);
   }
 
 }

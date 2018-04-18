@@ -84,6 +84,10 @@ public class AddressService implements CrudsService {
   /**
    * {@inheritDoc}
    * 
+   * <p>
+   * Update NS and CMS with XA transaction.
+   * </p>
+   * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)
    */
