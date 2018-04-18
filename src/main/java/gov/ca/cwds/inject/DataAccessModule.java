@@ -72,6 +72,7 @@ import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
@@ -239,7 +240,8 @@ public class DataAccessModule extends AbstractModule {
       };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(nsEntities, new ApiSessionFactoryFactory()) {
+      new HibernateBundle<ApiConfiguration>(nsEntities,
+          new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -278,7 +280,8 @@ public class DataAccessModule extends AbstractModule {
       };
 
   private final HibernateBundle<ApiConfiguration> xaNsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(nsEntities, new ApiSessionFactoryFactory()) {
+      new HibernateBundle<ApiConfiguration>(nsEntities,
+          new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getXaCmsDataSourceFactory();
@@ -354,9 +357,12 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
+    bind(gov.ca.cwds.data.cms.XaAddressDao.class);
 
     // NS:
     bind(AddressDao.class);
+    bind(XaNsAddressDao.class);
+
     bind(PersonDao.class);
     bind(ScreeningDao.class);
     bind(ParticipantDao.class);

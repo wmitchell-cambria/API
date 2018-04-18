@@ -43,6 +43,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AddressResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -59,7 +60,6 @@ public class AddressResource {
    * Finds an address by id.
    * 
    * @param id The id
-   * 
    * @return The response
    */
   @UnitOfWork(value = "ns")
@@ -75,10 +75,9 @@ public class AddressResource {
   }
 
   /**
-   * Delete an address
+   * Delete an address.
    * 
    * @param id The id of the {@link Address}
-   * 
    * @return {@link Response}
    */
   @UnitOfWork(value = "ns")
@@ -96,7 +95,6 @@ public class AddressResource {
    * Create an {@link Address}
    * 
    * @param address The {@link Address}
-   * 
    * @return The {@link Response}
    */
   @UnitOfWork(value = "ns")
@@ -114,11 +112,10 @@ public class AddressResource {
   }
 
   /**
-   * Update an {@link Address}
+   * Update an {@link Address}.
    *
    * @param id the id
    * @param address {@link Address}
-   *
    * @return The {@link Response}
    */
   @UnitOfWork(value = "ns")

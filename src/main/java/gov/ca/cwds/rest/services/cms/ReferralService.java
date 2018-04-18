@@ -521,7 +521,7 @@ public class ReferralService implements
       String docDate = new SimpleDateFormat(DomainObject.DATE_FORMAT).format(now);
       String docTime = new SimpleDateFormat(DomainObject.TIME_FORMAT).format(now);
 
-      // TO1DO Not sure about numberring alghorithm. Will use random from "000" to "999" for now.
+      // TO1DO Not sure about numbering algorithm. Will use random from "000" to "999" for now.
       String nameNumber = StringUtils.leftPad(String.valueOf(random.nextInt(999)), 3, "0");
       String docName = drmsTemplate.getDocumentDOSFilePrefixName().substring(0, 5)
           .concat(nameNumber).concat(".DOC");

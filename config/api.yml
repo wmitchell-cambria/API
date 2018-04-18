@@ -25,7 +25,7 @@ nsDataSourceFactory:
   user: ${DB_NS_USER}
   password: ${DB_NS_PASSWORD}
   url: ${DB_NS_JDBC_URL}
-  validationQuery: "/* MyService Health Check */ SELECT 1"
+  validationQuery: "/* MyService Health Check */ SELECT 1 FOR READ ONLY"
   logValidationErrors: true
   initialSize: ${DB_NS_CP_INITIAL_SIZE:-2}
   minSize: ${DB_NS_CP_MIN_SIZE:-2}
@@ -123,14 +123,14 @@ xaNsDataSourceFactory:
   password: ${DB_NS_PASSWORD}
   url: ${DB_NS_JDBC_URL}
   xaDataSourceClassName: org.postgresql.xa.PGXADataSource
-  validationQuery: "/* XA/NS Health Check */ SELECT 1"
+  validationQuery: "/* XA/NS Health Check */ SELECT 1 FOR READ ONLY"
   logValidationErrors: true
   initialSize: 2
   minSize: 2
   maxSize: ${DB_NS_CP_MAX_SIZE:-8}
   minIdleTime: 1 minute
   properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+      hibernate.dialect: gov.ca.cwds.data.persistence.hibernate.dialect.JsonPostgreSQLDialect
       hibernate.id.new_generator_mappings: false
       hibernate.show_sql: false
       hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}

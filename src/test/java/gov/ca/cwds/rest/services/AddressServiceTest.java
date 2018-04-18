@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.ns.AddressDao;
+import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
@@ -32,10 +33,10 @@ public class AddressServiceTest implements ServiceTestTemplate {
   private AddressService addressService;
 
   private AddressDao addressDao;
+  private XaNsAddressDao xaAddressDao;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -43,7 +44,7 @@ public class AddressServiceTest implements ServiceTestTemplate {
   @Before
   public void setup() throws Exception {
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao);
+    addressService = new AddressService(addressDao, xaAddressDao);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
   }
 
@@ -186,7 +187,6 @@ public class AddressServiceTest implements ServiceTestTemplate {
     // System.out.println(r);
 
     assertThat(returned, is(expected));
-
   }
 
   /*

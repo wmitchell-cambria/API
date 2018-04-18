@@ -3,54 +3,45 @@ package gov.ca.cwds.data.persistence.ns;
 import static gov.ca.cwds.data.persistence.ns.Addresses.FIND_BY_PARTICIPANT_ID;
 import static gov.ca.cwds.data.persistence.ns.Addresses.FIND_BY_PARTICIPANT_ID_QUERY;
 
-import gov.ca.cwds.Identifiable;
-import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 
+import gov.ca.cwds.Identifiable;
+import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
+
 /**
  * {@link PersistentObject} representing an Addresses
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
-
-@NamedQuery(
-    name = FIND_BY_PARTICIPANT_ID,
-    query = FIND_BY_PARTICIPANT_ID_QUERY
-)
-
+@NamedQuery(name = FIND_BY_PARTICIPANT_ID, query = FIND_BY_PARTICIPANT_ID_QUERY)
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "addresses")
 public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<String> {
 
-  public static final String FIND_BY_PARTICIPANT_ID = "gov.ca.cwds.data.persistence.ns.Addresses.findByParticipantId";
+  public static final String FIND_BY_PARTICIPANT_ID =
+      "gov.ca.cwds.data.persistence.ns.Addresses.findByParticipantId";
   public static final String PARAM_PARTICIPANT_ID = "participantId";
   static final String FIND_BY_PARTICIPANT_ID_QUERY =
-      "SELECT pa.address FROM ParticipantAddresses pa"
-          + " WHERE pa.participant.id = :"
+      "SELECT pa.address FROM ParticipantAddresses pa" + " WHERE pa.participant.id = :"
           + PARAM_PARTICIPANT_ID;
-
 
   @Id
   @Column(name = "id")
-  @GenericGenerator(
-      name = "addresses_id",
-      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-      parameters = {
-          @org.hibernate.annotations.Parameter(
-              name = "sequence_name", value = "addresses_id_seq")
-      }
-  )
+  @GenericGenerator(name = "addresses_id",
+      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator", parameters = {
+          @org.hibernate.annotations.Parameter(name = "sequence_name", value = "addresses_id_seq")})
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_id")
   private String id;
 
@@ -104,7 +95,6 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
     this.type = type;
     this.legacyId = legacyId;
     this.legacySourceTable = legacySourceTable;
-
   }
 
   /**
@@ -151,6 +141,7 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
   /**
    * @return the id
    */
+  @Override
   public String getId() {
     return id;
   }

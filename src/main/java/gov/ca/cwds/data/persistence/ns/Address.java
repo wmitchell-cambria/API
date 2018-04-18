@@ -18,7 +18,7 @@ import org.hibernate.annotations.NamedQuery;
 import gov.ca.cwds.data.ns.NsPersistentObject;
 
 /**
- * {@link NsPersistentObject} representing an Address
+ * {@link NsPersistentObject} representing an Address.
  * 
  * @author CWDS API Team
  */
@@ -50,7 +50,6 @@ public class Address extends NsPersistentObject {
 
   @Column(name = "address_type_id")
   private String type;
-
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "personAddressId.address")
   private Set<PersonAddress> personAddress = new HashSet<>();
