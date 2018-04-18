@@ -56,14 +56,6 @@ public class ScreeningDaoIT {
     assertThat(query, is(notNullValue()));
   }
 
-  // todo other test
-  @Test
-  public void testThatFindIntakeLOVCodeByIntakeCodeExist() throws Exception {
-    Query query = session.getNamedQuery(
-        "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode");
-    assertThat(query, is(notNullValue()));
-  }
-
   @Test
   public void testThatFindScreeningsByClientIdsExist() throws Exception {
     Query query = session
