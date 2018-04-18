@@ -49,7 +49,6 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
   private String userName;
   private String password;
 
-  private YmlLoader ymlLoader;
   private HttpGet httpGet;
   private String authLoginUrl;
   private String callBackUrl;
@@ -63,13 +62,8 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
    * @param password - password
    */
   public CwdsAuthenticationClient(YmlLoader ymlLoader, String userName, String password) {
-    this.ymlLoader = ymlLoader;
     this.userName = userName;
     this.password = password;
-    init();
-  }
-
-  private void init() {
     this.authLoginUrl = ymlLoader.readConfig().getTestUrl().getAuthLoginUrl();
     this.callBackUrl = ymlLoader.readConfig().getTestUrl().getCallBackUrl();
     this.tokenUrl = ymlLoader.readConfig().getTestUrl().getTokenUrl();

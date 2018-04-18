@@ -33,8 +33,6 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   private static final String NEW_REQUEST_TO_BEGIN = "=========================================";
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
-  private YmlLoader ymlLoader;
-
   private String authLoginUrl;
   private String tokenUrl;
   private String perryLoginUrl;
@@ -52,11 +50,6 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
    */
   public CwdsDevAuthenticationClient(YmlLoader ymlLoader, String userName) {
     this.userName = userName;
-    this.ymlLoader = ymlLoader;
-    init();
-  }
-
-  private void init() {
     this.authLoginUrl = ymlLoader.readConfig().getTestUrl().getAuthLoginUrl();
     this.tokenUrl = ymlLoader.readConfig().getTestUrl().getTokenUrl();
     this.perryLoginUrl = ymlLoader.readConfig().getTestUrl().getPerryLoginUrl();
