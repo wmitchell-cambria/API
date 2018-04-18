@@ -14,7 +14,7 @@ import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
-import gov.ca.cwds.inject.XaNsSessionFactory;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * Screening DAO
@@ -29,7 +29,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public ScreeningDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public ScreeningDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

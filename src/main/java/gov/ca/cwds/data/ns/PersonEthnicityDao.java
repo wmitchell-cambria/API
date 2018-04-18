@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.PersonEthnicity;
-import gov.ca.cwds.inject.XaNsSessionFactory;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * PersonEthnicity Dao.
@@ -21,7 +21,7 @@ public class PersonEthnicityDao extends CrudsDaoImpl<PersonEthnicity> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public PersonEthnicityDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public PersonEthnicityDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

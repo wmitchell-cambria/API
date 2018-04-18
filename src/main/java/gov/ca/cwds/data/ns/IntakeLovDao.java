@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
-import gov.ca.cwds.inject.XaNsSessionFactory;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * DAO for Intake LOV codes.
@@ -21,7 +21,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public IntakeLovDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public IntakeLovDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

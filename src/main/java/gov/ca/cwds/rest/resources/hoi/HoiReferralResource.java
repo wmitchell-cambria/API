@@ -60,7 +60,7 @@ public class HoiReferralResource {
    * @param clientIds - clientIds
    * @return the hoi referrals
    */
-  @UnitOfWork(value = "xa_cms")
+  @UnitOfWork(value = "cms")
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),

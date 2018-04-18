@@ -63,7 +63,7 @@ public class ScreeningToReferralResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "xa_cms")
+  @UnitOfWork(value = "cms")
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -83,7 +83,7 @@ public class ScreeningToReferralResource {
    * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "xa_cms")
+  @UnitOfWork(value = "cms")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),

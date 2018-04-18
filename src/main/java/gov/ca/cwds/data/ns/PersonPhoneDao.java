@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.ns.PersonPhone;
-import gov.ca.cwds.inject.XaNsSessionFactory;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * PersonPhone DAO
@@ -21,7 +21,7 @@ public class PersonPhoneDao extends BaseDaoImpl<PersonPhone> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public PersonPhoneDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public PersonPhoneDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

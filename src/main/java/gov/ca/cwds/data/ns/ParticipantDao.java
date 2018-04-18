@@ -1,18 +1,21 @@
 package gov.ca.cwds.data.ns;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.inject.NsSessionFactory;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 
 /**
- * Address DAO
+ * DAO for Postgres Participant.
  *
  * @author CWDS API Team
  */
@@ -41,7 +44,8 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
     final Query<LegacyDescriptorEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE)
         .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_ID, Long.valueOf(participantId))
-        .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_TYPE, LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT);
+        .setParameter(LegacyDescriptorEntity.PARAM_DESCRIBABLE_TYPE,
+            LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT);
     List<LegacyDescriptorEntity> entityList = query.getResultList();
     return entityList.isEmpty() ? null : entityList.get(0);
   }

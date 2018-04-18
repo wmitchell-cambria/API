@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.Race;
-import gov.ca.cwds.inject.XaNsSessionFactory;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * PhoneNumber DAO
@@ -21,7 +21,7 @@ public class RaceDao extends CrudsDaoImpl<Race> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public RaceDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public RaceDao(@NsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
