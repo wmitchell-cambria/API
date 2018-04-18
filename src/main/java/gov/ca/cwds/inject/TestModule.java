@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 
-import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
+import gov.ca.cwds.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.server.TestingYmlConfig;
 

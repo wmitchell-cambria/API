@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import org.yaml.snakeyaml.Yaml;
 
-import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
+import gov.ca.cwds.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
 
 /**

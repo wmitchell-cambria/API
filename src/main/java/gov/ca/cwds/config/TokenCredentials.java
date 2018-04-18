@@ -1,4 +1,4 @@
-package gov.ca.cwds.authenticate.config;
+package gov.ca.cwds.config;
 
 /**
  * This class provide all the values of the url's to get the token.
