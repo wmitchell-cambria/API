@@ -8,10 +8,10 @@ import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaAddressDao extends BaseDaoImpl<Address> {
+public class XaCmsAddressDao extends BaseDaoImpl<Address> {
 
   @Inject
-  public XaAddressDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsAddressDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

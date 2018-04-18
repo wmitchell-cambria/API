@@ -357,7 +357,7 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
-    bind(gov.ca.cwds.data.cms.XaAddressDao.class);
+    bind(gov.ca.cwds.data.cms.XaCmsAddressDao.class);
 
     // NS:
     bind(AddressDao.class);

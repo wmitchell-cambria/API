@@ -17,6 +17,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import gov.ca.cwds.data.cms.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -30,11 +31,16 @@ import io.dropwizard.jackson.Jackson;
  *
  */
 public class AddressServiceTest implements ServiceTestTemplate {
+
+  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+
   private AddressService addressService;
 
   private AddressDao addressDao;
-  private XaNsAddressDao xaAddressDao;
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+
+  private XaNsAddressDao xaNsAddressDao;
+  private XaCmsAddressDao xaCmsAddressDao;
+
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
   @Rule
@@ -44,7 +50,9 @@ public class AddressServiceTest implements ServiceTestTemplate {
   @Before
   public void setup() throws Exception {
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao, xaAddressDao);
+    xaNsAddressDao = mock(XaNsAddressDao.class);
+    xaCmsAddressDao = mock(XaCmsAddressDao.class);
+    addressService = new AddressService(addressDao, xaNsAddressDao, xaCmsAddressDao);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
   }
 

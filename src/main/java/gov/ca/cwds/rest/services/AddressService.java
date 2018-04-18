@@ -13,6 +13,7 @@ import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
+import gov.ca.cwds.data.cms.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.rest.api.Request;
@@ -31,7 +32,8 @@ public class AddressService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressService.class);
 
   private AddressDao addressDao;
-  private XaNsAddressDao xaAddressDao;
+  private XaNsAddressDao xaNsAddressDao;
+  private XaCmsAddressDao xaCmsAddressDao;
 
   /**
    * Constructor
@@ -40,9 +42,11 @@ public class AddressService implements CrudsService {
    *        objects.
    */
   @Inject
-  public AddressService(AddressDao addressDao, XaNsAddressDao xaAddressDao) {
+  public AddressService(AddressDao addressDao, XaNsAddressDao xaNsAddressDao,
+      XaCmsAddressDao xaCmsAddressDao) {
     this.addressDao = addressDao;
-    this.xaAddressDao = xaAddressDao;
+    this.xaNsAddressDao = xaNsAddressDao;
+    this.xaCmsAddressDao = xaCmsAddressDao;
   }
 
   /**
@@ -104,23 +108,40 @@ public class AddressService implements CrudsService {
     assert primaryKey instanceof Long;
     assert request instanceof Address;
 
-    final String strId = String.valueOf((long) primaryKey);
-    final Address reqAddress = (Address) request;
+    final String strNsId = String.valueOf((long) primaryKey);
+    final Address reqAddr = (Address) request;
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
 
     final UserTransaction txn = new UserTransactionImp();
     try {
-      // Start XA transaction:
+      // Start XA transaction.
       txn.setTransactionTimeout(80);
       txn.begin();
 
-      // Do work:
-      final gov.ca.cwds.data.persistence.ns.Addresses persistedAddress = xaAddressDao.find(strId);
-      persistedAddress.setStreetAddress(reqAddress.getStreetAddress());
-      final gov.ca.cwds.data.persistence.ns.Addresses ret = xaAddressDao.update(persistedAddress);
+      // Work it!
+      // PostgreSQL:
+      // Proof of concept. Don't bother parsing the raw street address.
+      final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
+      // nsAddr.setStreetAddress(reqAddr.getStreetAddress());
+      nsAddr.setZip(reqAddr.getZip());
+      nsAddr.setCity(reqAddr.getCity());
+      nsAddr.setLegacyId(reqAddr.getLegacyId());
+      nsAddr.setLegacySourceTable("ADDR_T");
+      final gov.ca.cwds.data.persistence.ns.Addresses ret = xaNsAddressDao.update(nsAddr);
 
-      // Commit XA transaction:
+      // DB2:
+      final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
+          xaCmsAddressDao.find(nsAddr.getLegacyId());
+      cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
+      // cmsAddr.setStreetNumber(streetNumber);
+      cmsAddr.setCity(reqAddr.getCity());
+      cmsAddr.setZip(reqAddr.getZip());
+      cmsAddr.setLastUpdatedId(staffId);
+      cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
+      xaCmsAddressDao.update(cmsAddr);
+
+      // Commit XA transaction.
       txn.commit();
 
       // Return results.
