@@ -58,7 +58,7 @@ public class PostedAddress extends Address {
    */
   public PostedAddress(gov.ca.cwds.data.persistence.ns.Addresses addr) {
     super(new gov.ca.cwds.data.persistence.ns.Address(Long.valueOf(addr.getId()),
-        addr.getStreetAddress(), addr.getCity(), addr.getState(), addr.getZip(), addr.getType()));
+        addr.getStreetAddress(), addr.getCity(), "1828", addr.getZip(), addr.getType()));
     assert addr.getId() != null;
     this.id = Long.valueOf(addr.getId());
   }
