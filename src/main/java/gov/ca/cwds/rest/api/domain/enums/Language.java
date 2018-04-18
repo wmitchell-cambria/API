@@ -5,7 +5,6 @@ import java.util.Collection;
 
 /**
  * @author Intake Team 4
- *
  */
 public enum Language {
 
@@ -47,8 +46,9 @@ public enum Language {
   TURKISH_LANGUAGE("Turkish"),
   VIETNAMESE_LANGUAGE("Vietnamese");
 
+  private static final String[] allTheLanguages = Arrays.stream(values())
+      .map(Language::getTheLanguage).toArray(String[]::new);
   private final String theLanguage;
-  private static final String[] allTheLanguages = Arrays.stream(values()).map(Language::getTheLanguage).toArray(String[]::new);
 
   Language(String theLanguage) {
     this.theLanguage = theLanguage;
@@ -98,12 +98,11 @@ public enum Language {
   }
 
 
-
   /**
    * @return string array of all the languages
    */
   public static String[] getAllTheLanguages() {
-    return allTheLanguages;
+    return Arrays.copyOf(allTheLanguages, allTheLanguages.length);
   }
 
   /**

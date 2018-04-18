@@ -46,6 +46,11 @@ public class ScreeningDashboard extends ReportingDomain {
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "Henderson Screening")
   private String name;
 
+  @JsonProperty("assignee")
+  @ApiModelProperty(required = false, readOnly = false, value = "Screening Assignee",
+      example = "Test User")
+  private String assignee;
+
   @JsonProperty("screening_decision")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "promote_to_referral")
   private String screeningDecision;
@@ -53,11 +58,6 @@ public class ScreeningDashboard extends ReportingDomain {
   @JsonProperty("screening_decision_detail")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "immediate")
   private String screeningDecisionDetail;
-
-  @JsonProperty("assignee")
-  @ApiModelProperty(required = false, readOnly = false, value = "Screening Assignee",
-      example = "Test User")
-  private String assignee;
 
   @JsonProperty("assignee_staff_id")
   @ApiModelProperty(required = true, readOnly = false, value = "Screening Assignee Id",

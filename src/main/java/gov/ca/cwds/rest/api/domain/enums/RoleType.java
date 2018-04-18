@@ -5,7 +5,6 @@ import java.util.Collection;
 
 /**
  * @author Intake Team 4
- *
  */
 public enum RoleType {
 
@@ -18,8 +17,9 @@ public enum RoleType {
   PERPETRATOR("Perpetrator"),
   VICTIM("Victim");
 
+  private static final String[] allTheTypes = Arrays.stream(values()).map(RoleType::getTheType)
+      .toArray(String[]::new);
   private final String theType;
-  private static final String[] allTheTypes = Arrays.stream(values()).map(RoleType::getTheType).toArray(String[]::new);
 
   RoleType(String theType) {
     this.theType = theType;
@@ -72,7 +72,7 @@ public enum RoleType {
    * @return string array of all the role types
    */
   public static String[] getAllTheTypes() {
-    return allTheTypes;
+    return Arrays.copyOf(allTheTypes, allTheTypes.length);
   }
 
   /**

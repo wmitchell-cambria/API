@@ -19,86 +19,102 @@ import org.junit.rules.ExpectedException;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 
 public class ScreeningDaoIT {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
   private static ScreeningDao screeningDao;
   private static SessionFactory sessionFactory;
   private Session session;
 
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
   @BeforeClass
   public static void beforeClass() {
-	sessionFactory = new Configuration().configure().buildSessionFactory();
-	screeningDao = new ScreeningDao(sessionFactory);
+    sessionFactory = new Configuration().configure("ns-hibernate.cfg.xml").buildSessionFactory();
+    screeningDao = new ScreeningDao(sessionFactory);
   }
 
   @AfterClass
   public static void afterClass() {
-	sessionFactory.close();
+    sessionFactory.close();
   }
 
   @Before
   public void setup() throws Exception {
-	session = sessionFactory.getCurrentSession();
-	session.beginTransaction();
+    session = sessionFactory.getCurrentSession();
+    session.beginTransaction();
   }
 
   @After
   public void teardown() throws Exception {
-	session.getTransaction().rollback();
+    session.getTransaction().rollback();
   }
 
   @Test
   public void testThatFindScreeningsByUserIdQueryExist() throws Exception {
 
-	Query<ScreeningWrapper> query = session
-		.getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser");
-	assertThat(query, is(notNullValue()));
+    Query<ScreeningWrapper> query = session
+        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser");
+    assertThat(query, is(notNullValue()));
+  }
+
+  // todo other test
+  @Test
+  public void testThatFindIntakeLOVCodeByIntakeCodeExist() throws Exception {
+    Query query = session.getNamedQuery(
+        "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodeByIntakeCode");
+    assertThat(query, is(notNullValue()));
   }
 
   @Test
   public void testThatFindScreeningsByClientIdsExist() throws Exception {
-	Query query = session.getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds");
-	assertThat(query, is(notNullValue()));
+    Query query = session
+        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds");
+    assertThat(query, is(notNullValue()));
+  }
+
+  @Test
+  public void testThatFindScreeningByUserIdExist() throws Exception {
+    Query query = session
+        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser");
+    assertThat(query, is(notNullValue()));
   }
 
   public void testFind() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testFindEntityNotFoundException() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testCreate() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testCreateExistingEntityException() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testDelete() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testDeleteEntityNotFoundException() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testUpdate() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 
   public void testUpdateEntityNotFoundException() throws Exception {
-	// TODO Auto-generated method stub
+    // TODO Auto-generated method stub
 
   }
 

@@ -17,36 +17,43 @@ public class ScreeningWrapperEntityBuilder {
   private Date startedAt;
 
   public ScreeningWrapper build() {
-	return new ScreeningWrapper(id, reference, name, screeningDecision, screeningDecisionDetail,
-		assignee, assigneeStaffId, startedAt);
-	
+    return new ScreeningWrapper(id, reference, name, screeningDecision, screeningDecisionDetail,
+        assigneeStaffId, startedAt);
+
   }
+
   public ScreeningWrapperEntityBuilder setId(String id) {
-	this.id = id;
-	return this;
+    this.id = id;
+    return this;
   }
+
   public ScreeningWrapperEntityBuilder setName(String name) {
     this.name = name;
     return this;
   }
+
   public ScreeningWrapperEntityBuilder setReference(String reference) {
     this.reference = reference;
     return this;
   }
+
   public ScreeningWrapperEntityBuilder setScreeningDecisionDetail(String screeningDecisionDetail) {
     this.screeningDecisionDetail = screeningDecisionDetail;
     return this;
   }
+
   public ScreeningWrapperEntityBuilder setAssignee(String assignee) {
-	this.assignee =  assignee;
-	return this;
+    this.assignee = assignee;
+    return this;
   }
+
   public ScreeningWrapperEntityBuilder setAssigneeStaffId(String assigneeStaffId) {
-	this.assigneeStaffId = assigneeStaffId;
-	return this;
+    this.assigneeStaffId = assigneeStaffId;
+    return this;
   }
+
   public ScreeningWrapperEntityBuilder setStartedAt(String startedAt) {
-	this.startedAt = DomainChef.uncookDateString(startedAt);
-	return this;
+    this.startedAt = DomainChef.uncookDateString(startedAt);
+    return this;
   }
 }
