@@ -127,7 +127,7 @@ public class AddressResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 422, message = "Unable to validate Address")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(hidden = true, value = "Update Address", code = HttpStatus.SC_OK,
+  @ApiOperation(hidden = false, value = "Update Address", code = HttpStatus.SC_OK,
       response = Object.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
