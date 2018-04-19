@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.ns;
 
-import gov.ca.cwds.data.BaseDaoImpl;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +10,7 @@ import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.inject.NsSessionFactory;
@@ -68,9 +68,9 @@ public class ScreeningDao extends BaseDaoImpl<ScreeningEntity> {
    */
   public List<ScreeningWrapper> findScreeningsByUserId(String staffId) {
     @SuppressWarnings("unchecked")
-    final Query<ScreeningWrapper> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(constructNamedQueryName("findScreeningsOfUser"))
-        .setParameter("staffId", staffId, StringType.INSTANCE);
+    final Query<ScreeningWrapper> query =
+        this.getSessionFactory().getCurrentSession().getNamedQuery(ScreeningWrapper.FIND_BY_USER_ID)
+            .setParameter("staffId", staffId, StringType.INSTANCE);
     return query.list();
   }
 
