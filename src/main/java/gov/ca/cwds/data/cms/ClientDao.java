@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.cms;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -7,6 +10,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import org.hibernate.query.Query;
 
 /**
  * Hibernate DAO for DB2 {@link Client}.
@@ -27,4 +31,20 @@ public class ClientDao extends BaseDaoImpl<Client> {
     super(sessionFactory);
   }
 
+  /**
+   * Find Clients by id-s
+   * @param ids Set of Client id-s
+   * @return map where key is a Client id and value is a Client itself
+   */
+  @SuppressWarnings("unchecked")
+  public Map<String, Client> findClientsByIds(Set<String> ids) {
+    final Query<Client> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
+            "gov.ca.cwds.data.persistence.cms.Client.findByIds")
+        .setParameter("ids", ids);
+    Map<String, Client> clientMap = new HashMap<>();
+    for (Client client : query.list()) {
+      clientMap.put(client.getId(), client);
+    }
+    return clientMap;
+  }
 }

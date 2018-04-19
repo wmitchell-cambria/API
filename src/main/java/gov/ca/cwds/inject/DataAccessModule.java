@@ -1,5 +1,6 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -330,6 +331,8 @@ public class DataAccessModule extends AbstractModule {
 
     // NS:
     bind(AddressDao.class);
+    bind(IntakeLOVCodeDao.class);
+    bind(IntakeLovDao.class);
     bind(PersonDao.class);
     bind(ScreeningDao.class);
     bind(ParticipantDao.class);
@@ -342,7 +345,6 @@ public class DataAccessModule extends AbstractModule {
     bind(EthnicityDao.class);
     bind(PersonRaceDao.class);
     bind(RaceDao.class);
-    bind(IntakeLovDao.class);
 
     bind(PaperTrailDao.class);
     bind(PaperTrailInterceptor.class);
