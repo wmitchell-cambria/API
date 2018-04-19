@@ -23,6 +23,7 @@ import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
+import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
 import gov.ca.cwds.rest.services.junit.template.ServiceTestTemplate;
 import io.dropwizard.jackson.Jackson;
 
@@ -54,6 +55,8 @@ public class AddressServiceTest implements ServiceTestTemplate {
     xaCmsAddressDao = mock(XaCmsAddressDao.class);
     addressService = new AddressService(addressDao, xaNsAddressDao, xaCmsAddressDao);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
+
+    new RequestExecutionContextImplTest().setup();
   }
 
   /*
@@ -249,10 +252,8 @@ public class AddressServiceTest implements ServiceTestTemplate {
   }
 
   @Override
-  @Test
+  @Test(expected = ServiceException.class)
   public void testUpdateThrowsNotImplementedException() throws Exception {
-    thrown.expect(NotImplementedException.class);
-
     addressService.update(1L,
         new Address("", "", "street", "city", 1828, "95555", 32, legacyDescriptor));
   }
