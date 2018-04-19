@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -46,24 +47,24 @@ public class PostedClient extends Client {
     return id;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#hashCode()
-   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    PostedClient that = (PostedClient) o;
+    return Objects.equals(id, that.id);
+  }
+
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
+    return Objects.hash(super.hashCode(), id);
   }
-
 }
