@@ -95,8 +95,9 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
    * @param legacyId - legacy id
    * @param legacySourceTable - legacy source table
    */
-  public Addresses(String streetAddress, String city, String state, String zip, String type,
+  public Addresses(String id, String streetAddress, String city, String state, String zip, String type,
       String legacyId, String legacySourceTable) {
+    this.id = id;
     this.streetAddress = streetAddress;
     this.city = city;
     this.state = state;
