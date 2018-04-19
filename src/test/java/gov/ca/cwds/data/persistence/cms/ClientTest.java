@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Date;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -356,7 +357,7 @@ public class ClientTest implements PersistentTestTemplate {
     return validDomainClient;
   }
 
-  @SuppressWarnings("javadoc")
+  @Ignore
   @Test
   public void testSerializeAndDeserialize() throws Exception {
     final Client tgt = validBean();
