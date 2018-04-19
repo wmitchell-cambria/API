@@ -31,21 +31,15 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
 
   private static final int GET_ONLY_ACCESS_CODE_VALUE = 11;
   private static final String NEW_REQUEST_TO_BEGIN = "=========================================";
-
+  private static final String ACCESS_CODE = "accessCode";
+  private static final String LOCATION = "Location";
   private String authLoginUrl;
   private String tokenUrl;
   private String perryLoginUrl;
   private String callBackUrl;
 
-  private static final String ACCESS_CODE = "accessCode";
-  private static final String LOCATION = "Location";
-  private YmlLoader ymlLoader;
-
   private HttpGet httpGet;
-  private URI uri;
-  private HttpResponse httpResponse;
   private String redirectUrl;
-  private String token = null;
   private String userName;
 
   /**
@@ -56,11 +50,6 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
    */
   public CwdsDevAuthenticationClient(YmlLoader ymlLoader, String userName) {
     this.userName = userName;
-    this.ymlLoader = ymlLoader;
-    init();
-  }
-
-  private void init() {
     this.authLoginUrl = ymlLoader.readConfig().getTestUrl().getAuthLoginUrl();
     this.tokenUrl = ymlLoader.readConfig().getTestUrl().getTokenUrl();
     this.perryLoginUrl = ymlLoader.readConfig().getTestUrl().getPerryLoginUrl();
@@ -74,6 +63,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
    */
   @Override
   public String getToken() {
+    String token = null;
     try {
       ArrayList<NameValuePair> postParams = new ArrayList<>();
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
@@ -103,7 +93,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("GET ACCESS CODE: {}", redirectUrl);
     httpGet = new HttpGet(redirectUrl);
-    httpResponse = httpClient.execute(httpGet, httpContext);
+    HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
     redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
     String accessCodeParm = redirectUrl.substring(redirectUrl.indexOf(ACCESS_CODE));
     int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + GET_ONLY_ACCESS_CODE_VALUE;
@@ -114,10 +104,10 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
     postParams.clear();
     postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
     httpGet = new HttpGet(tokenUrl);
-    uri = new URIBuilder(tokenUrl).addParameters(postParams).build();
+    URI uri = new URIBuilder(tokenUrl).addParameters(postParams).build();
     httpGet.setURI(uri);
     httpResponse = httpClient.execute(httpGet, httpContext);
-    token = EntityUtils.toString(httpResponse.getEntity());
+    String token = EntityUtils.toString(httpResponse.getEntity());
     LOGGER.info("TOKEN: {}", token);
     return token;
   }
@@ -130,7 +120,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
     postParams.clear();
     postParams.add(new BasicNameValuePair("username", userName));
     httpPost.setEntity(new UrlEncodedFormEntity(postParams));
-    httpResponse = httpClient.execute(httpPost, httpContext);
+    HttpResponse httpResponse = httpClient.execute(httpPost, httpContext);
     LOGGER.info("Status: {}", httpResponse.getStatusLine());
     redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
     LOGGER.info("Redirect URL: {}", redirectUrl);
