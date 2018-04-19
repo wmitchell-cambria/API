@@ -9,8 +9,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.authenticate.config.User;
 import gov.ca.cwds.authenticate.config.YmlLoader;
+import gov.ca.cwds.config.User;
 
 /**
  * This class will handle the different type of login based on the authentication mode, If the
