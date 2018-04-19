@@ -13,6 +13,7 @@ import org.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import gov.ca.cwds.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
