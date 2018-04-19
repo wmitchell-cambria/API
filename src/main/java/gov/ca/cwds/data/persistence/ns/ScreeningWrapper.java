@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.data.persistence.ns.ScreeningWrapper.FIND_BY_USER_ID;
+import static gov.ca.cwds.data.persistence.ns.ScreeningWrapper.FIND_BY_USER_ID_QUERY;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.io.Serializable;
@@ -17,12 +19,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 
 @Entity
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser",
-    query = "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at")
+@NamedQuery(name = FIND_BY_USER_ID, query = FIND_BY_USER_ID_QUERY)
 
 @Table(name = "screenings")
 
 public class ScreeningWrapper implements Serializable {
+
+  public static final String FIND_BY_USER_ID =
+      "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser";
+  static final String FIND_BY_USER_ID_QUERY =
+      "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at";
+
 
   private static final long serialVersionUID = 1L;
 
