@@ -42,14 +42,14 @@ public enum RoleType {
   }
 
   /**
-   * @param values - role types values - comma separated
+   * @param values - role types values array
    * @return true or false
    */
-  public static boolean hasTypes(String values) {
+  public static boolean hasTypes(String[] values) {
     if (values == null) {
       return false;
     }
-    return hasTypes(Arrays.asList(values.split(",")));
+    return hasTypes(Arrays.asList(values));
   }
 
   /**

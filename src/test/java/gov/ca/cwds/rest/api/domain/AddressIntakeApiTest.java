@@ -41,7 +41,7 @@ public class AddressIntakeApiTest {
   @Test
   public void testConstructorUsingPersistentObject() throws Exception {
     Addresses persistent =
-        new Addresses(streetAddress, city, state, zip, type, legacyId, legacySourceTable);
+        new Addresses(id, streetAddress, city, state, zip, type, legacyId, legacySourceTable);
     AddressIntakeApi domain = new AddressIntakeApi(persistent);
     assertThat(domain.getLegacySourceTable(), is(equalTo(persistent.getLegacySourceTable())));
     assertThat(domain.getLegacyId(), is(equalTo(persistent.getLegacyId())));
