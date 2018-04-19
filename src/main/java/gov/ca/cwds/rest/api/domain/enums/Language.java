@@ -74,11 +74,11 @@ public enum Language {
    * @param values - languages values - comma separated
    * @return true or false
    */
-  public static boolean hasLanguages(String values) {
+  public static boolean hasLanguages(String[] values) {
     if (values == null) {
       return false;
     }
-    return hasLanguages(Arrays.asList(values.split(",")));
+    return hasLanguages(Arrays.asList(values));
   }
 
   /**

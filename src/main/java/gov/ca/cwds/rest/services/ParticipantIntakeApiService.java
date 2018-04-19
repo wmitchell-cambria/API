@@ -17,7 +17,6 @@ import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
 import gov.ca.cwds.data.persistence.ns.PhoneNumbers;
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
@@ -103,7 +102,7 @@ public class ParticipantIntakeApiService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#delete(Serializable)
    */
   @Override
-  public Response delete(Serializable primaryKey) {
+  public ParticipantIntakeApi delete(Serializable primaryKey) {
     assert primaryKey instanceof String;
     ParticipantEntity participantEntity = participantDao.find(primaryKey);
     if (participantEntity == null) {
@@ -139,7 +138,7 @@ public class ParticipantIntakeApiService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public Response create(Request request) {
+  public ParticipantIntakeApi create(Request request) {
     assert request instanceof ParticipantIntakeApi;
     ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;
 
@@ -179,7 +178,7 @@ public class ParticipantIntakeApiService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#update(Serializable, gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public Response update(Serializable primaryKey, Request request) {
+  public ParticipantIntakeApi update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof String;
     assert request instanceof ParticipantIntakeApi;
     ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;
