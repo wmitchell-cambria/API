@@ -1817,20 +1817,6 @@ public class ClientTest implements DomainTestTemplate {
     assertThat(response.getStatus(), is(equalTo(204)));
   }
 
-  @Test
-  public void failWhenEmailAddressTooLong() throws Exception {
-    Client validClient = new ClientResourceBuilder().setEmailAddress(
-        "abc def ghi jkl mno pqrs tuv wxyz ABC DEF GHI JKL MNO PQRS TUV WXYZ !§ $%& /() =?* '<> #|; ²³~ @`´ ©«» ¤¼× {}abc def ghi jkl mno pqrs tuv wxyz ABC DEF GHI JKL MNO PQRS TUV WXYZ !§ $%& /() =?* '<> #|; ²³~ 123@`´\"")
-        .build();
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("emailAddress size must be between 0 and 50"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
   /*
    * estimatedDobCode test
    */
