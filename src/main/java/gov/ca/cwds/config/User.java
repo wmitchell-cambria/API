@@ -1,4 +1,4 @@
-package gov.ca.cwds.authenticate.config;
+package gov.ca.cwds.config;
 
 /**
  * username and password credentials to login based on the userType.
