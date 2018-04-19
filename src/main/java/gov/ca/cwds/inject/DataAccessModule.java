@@ -1,5 +1,6 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,7 +73,6 @@ import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
-import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
@@ -96,8 +96,8 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIGovernmentOrganizationCr
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 
@@ -113,9 +113,10 @@ public class DataAccessModule extends AbstractModule {
 
   private final PaperTrailInterceptor paperTrailInterceptor = new PaperTrailInterceptor();
 
-  // CMS:
-  private final ImmutableList<Class<?>> cmsEntities = ImmutableList.<Class<?>>builder()
-      .add(gov.ca.cwds.data.legacy.cms.entity.Client.class,
+  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
+      new HibernateBundle<ApiConfiguration>(ImmutableList.<Class<?>>of(
+          // legacy-data-access
+          gov.ca.cwds.data.legacy.cms.entity.Client.class,
           gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
           gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
@@ -135,6 +136,7 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.legacy.cms.entity.syscodes.County.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType.class,
+
           gov.ca.cwds.data.persistence.cms.Address.class,
           gov.ca.cwds.data.persistence.cms.Allegation.class,
           gov.ca.cwds.data.persistence.cms.ClientAddress.class,
@@ -194,39 +196,8 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
-          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class)
-      .build();
-
-  private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
-      gov.ca.cwds.data.persistence.ns.Person.class, gov.ca.cwds.data.persistence.ns.Address.class,
-      gov.ca.cwds.data.persistence.ns.Addresses.class,
-      gov.ca.cwds.data.persistence.ns.Allegation.class,
-      gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
-      gov.ca.cwds.data.persistence.ns.IntakeLov.class,
-      gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
-      gov.ca.cwds.data.persistence.ns.PaperTrail.class,
-      gov.ca.cwds.data.persistence.ns.ParticipantEntity.class,
-      gov.ca.cwds.data.persistence.ns.ParticipantAddresses.class,
-      gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.class,
-      gov.ca.cwds.data.persistence.ns.PersonAddressId.class,
-      gov.ca.cwds.data.persistence.ns.PersonAddress.class,
-      gov.ca.cwds.data.persistence.ns.PersonPhoneId.class,
-      gov.ca.cwds.data.persistence.ns.PhoneNumber.class,
-      gov.ca.cwds.data.persistence.ns.PhoneNumbers.class,
-      gov.ca.cwds.data.persistence.ns.PersonPhone.class,
-      gov.ca.cwds.data.persistence.ns.PersonLanguageId.class,
-      gov.ca.cwds.data.persistence.ns.Language.class,
-      gov.ca.cwds.data.persistence.ns.PersonLanguage.class,
-      gov.ca.cwds.data.persistence.ns.PersonEthnicityId.class,
-      gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
-      gov.ca.cwds.data.persistence.ns.Ethnicity.class,
-      gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
-      gov.ca.cwds.data.persistence.ns.PersonRace.class, gov.ca.cwds.data.persistence.ns.Race.class,
-      gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
-      gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class).build();
-
-  private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(cmsEntities, new ApiSessionFactoryFactory()) {
+          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class),
+          new ApiSessionFactoryFactory()) { // init hibernate interceptor:
 
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
@@ -240,8 +211,37 @@ public class DataAccessModule extends AbstractModule {
       };
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(nsEntities,
+      new HibernateBundle<ApiConfiguration>(
+          ImmutableList.<Class<?>>of(gov.ca.cwds.data.persistence.ns.Person.class,
+              gov.ca.cwds.data.persistence.ns.Address.class,
+              gov.ca.cwds.data.persistence.ns.Addresses.class,
+              gov.ca.cwds.data.persistence.ns.Allegation.class,
+              gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
+              gov.ca.cwds.data.persistence.ns.IntakeLov.class,
+              gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
+              gov.ca.cwds.data.persistence.ns.PaperTrail.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantEntity.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantAddresses.class,
+              gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.class,
+              gov.ca.cwds.data.persistence.ns.PersonAddressId.class,
+              gov.ca.cwds.data.persistence.ns.PersonAddress.class,
+              gov.ca.cwds.data.persistence.ns.PersonPhoneId.class,
+              gov.ca.cwds.data.persistence.ns.PhoneNumber.class,
+              gov.ca.cwds.data.persistence.ns.PhoneNumbers.class,
+              gov.ca.cwds.data.persistence.ns.PersonPhone.class,
+              gov.ca.cwds.data.persistence.ns.PersonLanguageId.class,
+              gov.ca.cwds.data.persistence.ns.Language.class,
+              gov.ca.cwds.data.persistence.ns.PersonLanguage.class,
+              gov.ca.cwds.data.persistence.ns.PersonEthnicityId.class,
+              gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
+              gov.ca.cwds.data.persistence.ns.Ethnicity.class,
+              gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
+              gov.ca.cwds.data.persistence.ns.PersonRace.class,
+              gov.ca.cwds.data.persistence.ns.Race.class,
+              gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
+              gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class),
           new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
+
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -266,33 +266,6 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
-  private final HibernateBundle<ApiConfiguration> xaCmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(cmsEntities, new ApiSessionFactoryFactory()) {
-        @Override
-        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaCmsDataSourceFactory();
-        }
-
-        @Override
-        public String name() {
-          return "xa_cms";
-        }
-      };
-
-  private final HibernateBundle<ApiConfiguration> xaNsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(nsEntities,
-          new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
-        @Override
-        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaNsDataSourceFactory();
-        }
-
-        @Override
-        public String name() {
-          return "xa_ns";
-        }
-      };
-
   /**
    * Constructor takes the API configuration.
    *
@@ -302,8 +275,6 @@ public class DataAccessModule extends AbstractModule {
     bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
     bootstrap.addBundle(rsHibernateBundle);
-    bootstrap.addBundle(xaCmsHibernateBundle);
-    bootstrap.addBundle(xaNsHibernateBundle);
   }
 
   /**
@@ -357,12 +328,11 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
-    bind(gov.ca.cwds.data.cms.XaCmsAddressDao.class);
 
     // NS:
     bind(AddressDao.class);
-    bind(XaNsAddressDao.class);
-
+    bind(IntakeLOVCodeDao.class);
+    bind(IntakeLovDao.class);
     bind(PersonDao.class);
     bind(ScreeningDao.class);
     bind(ParticipantDao.class);
@@ -375,7 +345,6 @@ public class DataAccessModule extends AbstractModule {
     bind(EthnicityDao.class);
     bind(PersonRaceDao.class);
     bind(RaceDao.class);
-    bind(IntakeLovDao.class);
 
     bind(PaperTrailDao.class);
     bind(PaperTrailInterceptor.class);
@@ -406,66 +375,43 @@ public class DataAccessModule extends AbstractModule {
     bind(RIReferral.class);
     bind(RIReferralClient.class);
     bind(RIGovernmentOrganizationCrossReport.class);
+
   }
 
   @Provides
   @CmsSessionFactory
-  public SessionFactory cmsSessionFactory() {
+  SessionFactory cmsSessionFactory() {
     return cmsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @NsSessionFactory
-  public SessionFactory nsSessionFactory() {
+  SessionFactory nsSessionFactory() {
     return nsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @CwsRsSessionFactory
-  public SessionFactory rsSessionFactory() {
+  SessionFactory rsSessionFactory() {
     return rsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @CmsHibernateBundle
-  public HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
+  HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
     return cmsHibernateBundle;
   }
 
   @Provides
   @NsHibernateBundle
-  public HibernateBundle<ApiConfiguration> nsHibernateBundle() {
+  HibernateBundle<ApiConfiguration> nsHibernateBundle() {
     return nsHibernateBundle;
   }
 
   @Provides
   @CwsRsHibernateBundle
-  public HibernateBundle<ApiConfiguration> rsHibernateBundle() {
+  HibernateBundle<ApiConfiguration> rsHibernateBundle() {
     return rsHibernateBundle;
-  }
-
-  @Provides
-  @XaCmsHibernateBundle
-  public HibernateBundle<ApiConfiguration> getXaCmsHibernateBundle() {
-    return xaCmsHibernateBundle;
-  }
-
-  @Provides
-  @XaNsSessionFactory
-  public SessionFactory xaNsSessionFactory() {
-    return xaNsHibernateBundle.getSessionFactory();
-  }
-
-  @Provides
-  @XaCmsSessionFactory
-  public SessionFactory xaCmsSessionFactory() {
-    return xaCmsHibernateBundle.getSessionFactory();
-  }
-
-  @Provides
-  @XaNsHibernateBundle
-  public HibernateBundle<ApiConfiguration> getXaCalsnsHibernateBundle() {
-    return xaNsHibernateBundle;
   }
 
   @Provides

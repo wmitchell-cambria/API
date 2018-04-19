@@ -1,10 +1,14 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -30,6 +34,9 @@ public class HOIScreeningService
   ScreeningDao screeningDao;
 
   @Inject
+  IntakeLOVCodeDao intakeLOVCodeDao;
+
+  @Inject
   HOIScreeningFactory hoiScreeningFactory;
 
   @Inject
@@ -51,31 +58,36 @@ public class HOIScreeningService
     Set<HOIScreening> screenings =
         new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
 
-    final Set<String> clientIds = hoiScreeningRequest.getClientIds();
-
-    /**
+    Set<String> clientIds = hoiScreeningRequest.getClientIds();
+    /*
      * NOTE: When we want to enable authorizations for screening history, we can add following line
      * of code back at this spot.
-     * 
+     *
      * <pre>
-     * 
+     *
      * authorizationService.ensureClientAccessAuthorized(clientIds);
-     * 
+     *
      * </pre>
      */
 
-    for (ScreeningEntity screeningEntity : screeningDao.findScreeningsByClientIds(clientIds)) {
-      /**
+    Set<ScreeningEntity> screeningEntities = screeningDao.findScreeningsByClientIds(clientIds);
+    Set<String> counties = screeningEntities.stream().map(ScreeningEntity::getIncidentCounty)
+        .collect(Collectors.toSet());
+    Map<String, IntakeLOVCodeEntity> countyIntakeLOVCodeEntityMap = intakeLOVCodeDao
+        .findIntakeLOVCodesByIntakeCodes(counties);
+    for (ScreeningEntity screeningEntity : screeningEntities) {
+      /*
        * NOTE: When we want to enable authorizations for screening history, we can add following
        * line of code back at this spot.
-       * 
+       *
        * <pre>
-       * 
+       *
        * authorizationService.ensureScreeningAccessAuthorized(screeningEntity);
-       * 
+       *
        * </pre>
        */
-      screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity));
+      screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity,
+          countyIntakeLOVCodeEntityMap.get(screeningEntity.getIncidentCounty())));
     }
 
     return new HOIScreeningResponse(screenings);
@@ -86,7 +98,7 @@ public class HOIScreeningService
    * @return the list of screenings using clientIds
    */
   public Response findHoiScreeningsByClientIds(List<String> clientIds) {
-    final HOIRequest hoiRequest = new HOIRequest();
+    HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(new HashSet<>(clientIds));
     return handleFind(hoiRequest);
   }
@@ -96,5 +108,4 @@ public class HOIScreeningService
     LOGGER.info("HOIScreeningService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
-
 }

@@ -119,6 +119,7 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
    * @param address The domain object to construct this object from
    */
   public Addresses(String id, gov.ca.cwds.rest.api.domain.AddressIntakeApi address) {
+    this.id = id;
     this.streetAddress = address.getStreetAddress();
     this.city = address.getCity();
     this.state = address.getState();

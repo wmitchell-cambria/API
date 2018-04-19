@@ -30,16 +30,14 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
- * This service handles retrieves all referrals by client.
+ * This service handle request from the user to get all the referral involved for the client given.
  * <p>
  * 
  * @author CWDS API Team
+ *
  */
 public class HOIReferralService
-    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse>
-    implements SensitiveClientOverride {
-
-  private static final long serialVersionUID = 1L;
+    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
 
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
@@ -94,19 +92,18 @@ public class HOIReferralService
    * @param clientIds - clientIds
    * @return the list of referrals using clientIds
    */
-  public Response findHoiReferralbyClientIds(List<String> clientIds) {
+  public Response findHoiReferralByClientIds(List<String> clientIds) {
     HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(new HashSet<>(clientIds));
     return handleFind(hoiRequest);
   }
 
   private HOIReferral createHOIReferral(ReferralClient referralClient) {
-    Role role = null;
     Referral referral = referralClient.getReferral();
 
     StaffPerson staffPerson = referral.getStaffPerson();
     Reporter reporter = referral.getReporter();
-    role = fetchForReporterRole(role, referral, referralClient, reporter);
+    Role role = fetchForReporterRole(referral, referralClient, reporter);
 
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
     return new HOIReferralFactory().createHOIReferral(referral, staffPerson, reporter,
@@ -131,8 +128,9 @@ public class HOIReferralService
     }
   }
 
-  private Role fetchForReporterRole(Role role, Referral referral, ReferralClient referralClient,
+  private Role fetchForReporterRole(Referral referral, ReferralClient referralClient,
       Reporter reporter) {
+    Role role = null;
     if (reporter == null) {
       if ("Y".equals(referral.getAnonymousReporterIndicator())) {
         role = Role.ANONYMOUS_REPORTER;
@@ -151,22 +149,30 @@ public class HOIReferralService
 
   private Map<Allegation, List<Client>> fetchForAllegation(Referral referral) {
     Set<Allegation> allegations = referral.getAllegations();
+
+    Set<String> allegationsClientsIds = new HashSet<>();
+    for (Allegation allegation : allegations) {
+      if (allegation.getVictimClientId() != null) {
+        allegationsClientsIds.add(allegation.getVictimClientId());
+      }
+      if (allegation.getPerpetratorClientId() != null) {
+        allegationsClientsIds.add(allegation.getPerpetratorClientId());
+      }
+    }
+    Map<String, Client> clientMap = clientDao.findClientsByIds(allegationsClientsIds);
+
     Map<Allegation, List<Client>> allegationMap = new HashMap<>();
     for (Allegation allegation : allegations) {
-      List<Client> clients = new ArrayList<>();
-      fetchForClients(allegation, clients);
-      allegationMap.put(allegation, clients);
+      List<Client> allegationClients = new ArrayList<>();
+      if (allegation.getVictimClientId() != null) {
+        allegationClients.add(clientMap.get(allegation.getVictimClientId()));
+      }
+      if (allegation.getPerpetratorClientId() != null) {
+        allegationClients.add(clientMap.get(allegation.getPerpetratorClientId()));
+      }
+      allegationMap.put(allegation, allegationClients);
     }
     return allegationMap;
-  }
-
-  private void fetchForClients(Allegation allegation, List<Client> clients) {
-    if (allegation.getVictimClientId() != null) {
-      clients.add(clientDao.find(allegation.getVictimClientId()));
-    }
-    if (allegation.getPerpetratorClientId() != null) {
-      clients.add(clientDao.find(allegation.getPerpetratorClientId()));
-    }
   }
 
   @Override
@@ -174,11 +180,8 @@ public class HOIReferralService
     throw new NotImplementedException("handle request not implemented");
   }
 
-  String authorizeClient(String clientId) {
-    if (!developmentOnlyClientSensitivityOverride()) {
-      authorizationService.ensureClientAccessAuthorized(clientId);
-    }
-    return clientId;
+  void authorizeClient(String clientId) {
+    authorizationService.ensureClientAccessAuthorized(clientId);
   }
 
 }
