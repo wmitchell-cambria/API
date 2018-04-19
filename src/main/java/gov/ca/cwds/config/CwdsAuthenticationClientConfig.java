@@ -1,4 +1,4 @@
-package gov.ca.cwds.authenticate.config;
+package gov.ca.cwds.config;
 
 import java.util.List;
 
