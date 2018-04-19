@@ -10,7 +10,7 @@ import org.hibernate.type.StringType;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.inject.NsSessionFactory;
@@ -20,7 +20,7 @@ import gov.ca.cwds.inject.NsSessionFactory;
  *
  * @author CWDS API Team
  */
-public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
+public class ScreeningDao extends BaseDaoImpl<ScreeningEntity> {
 
   /**
    * Constructor
@@ -41,7 +41,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
   @SuppressWarnings("unchecked")
   public ScreeningEntity[] findScreeningsByReferralId(String referralId) {
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByReferralId")
+        .getNamedQuery(constructNamedQueryName("findScreeningsByReferralId"))
         .setParameter("referralId", referralId);
     return query.list().toArray(new ScreeningEntity[0]);
   }
@@ -55,7 +55,7 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
   @SuppressWarnings("unchecked")
   public Set<ScreeningEntity> findScreeningsByClientIds(Set<String> clientIds) {
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds")
+        .getNamedQuery(constructNamedQueryName("findScreeningsByClientIds"))
         .setParameter("clientIds", clientIds);
     return new HashSet<>(query.list());
   }
@@ -68,9 +68,9 @@ public class ScreeningDao extends CrudsDaoImpl<ScreeningEntity> {
    */
   public List<ScreeningWrapper> findScreeningsByUserId(String staffId) {
     @SuppressWarnings("unchecked")
-    final Query<ScreeningWrapper> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser")
-        .setParameter("staffId", staffId, StringType.INSTANCE);
+    final Query<ScreeningWrapper> query =
+        this.getSessionFactory().getCurrentSession().getNamedQuery(ScreeningWrapper.FIND_BY_USER_ID)
+            .setParameter("staffId", staffId, StringType.INSTANCE);
     return query.list();
   }
 
