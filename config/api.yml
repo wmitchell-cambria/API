@@ -114,7 +114,7 @@ xaCmsDataSourceFactory:
       # Properties for DB2XADataSource
       serverName: ${DB_CMS_HOST:-localhost}
       portNumber: ${DB_CMS_PORT:-50000}
-      databaseName: ${DB_CMS_NAME:-DB0TDEV}
+      databaseName: ${DB_CMS_SERVICE:-DB0TDEV}
       driverType: 4 # Type4 connection for DB2 DataSource
 
 xaNsDataSourceFactory:

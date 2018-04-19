@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest;
 
 import java.util.EnumSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.DispatcherType;
 
@@ -61,7 +63,27 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
    * @throws Exception if startup fails
    */
   public static void main(final String[] args) throws Exception {
+    setSysPropsFromEnvVars();
     new ApiApplication().run(args);
+  }
+
+  /**
+   * Populates list of System properties from environment variables. Convenience for DB2 XA
+   * parameters without adding new environment variables.
+   */
+  public static void setSysPropsFromEnvVars() throws Exception {
+    final String url = System.getenv("DB_CMS_JDBC_URL");
+    final Pattern pat = Pattern.compile("^jdbc:db2://([a-zA-Z0-9_\\.]+):(\\d+)/(\\w+).*$");
+    final Matcher m = pat.matcher(url);
+
+    if (m.matches()) {
+      final String host = m.group(1);
+      final String port = m.group(2);
+      final String svc = m.group(3);
+      System.setProperty("DB_CMS_HOST", host);
+      System.setProperty("DB_CMS_PORT", port);
+      System.setProperty("DB_CMS_SERVICE", svc);
+    }
   }
 
   /**
