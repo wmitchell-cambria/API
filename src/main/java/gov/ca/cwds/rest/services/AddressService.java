@@ -144,8 +144,13 @@ public class AddressService implements CrudsService {
       // Commit XA transaction.
       txn.commit();
 
+      ret.setLegacyId(reqAddr.getLegacyId());
+      ret.setLegacySourceTable(reqAddr.getLegacyDescriptor().getTableName());
+
       // Return results.
-      return new PostedAddress(ret);
+      final PostedAddress result = new PostedAddress(ret);
+      result.setLegacyDescriptor(reqAddr.getLegacyDescriptor());
+      return result;
     } catch (Exception e) {
       try {
         txn.rollback();
