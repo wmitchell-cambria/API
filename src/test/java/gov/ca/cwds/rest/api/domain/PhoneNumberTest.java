@@ -22,6 +22,8 @@ public class PhoneNumberTest {
 
   String number = "408 672-5583";
   String type = "Home";
+  Long id = 1234L;
+  Long newId = 234L;
 
   private static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
@@ -56,7 +58,7 @@ public class PhoneNumberTest {
   }
 
   @Test
-  public void persistentObjectConstructorTest() throws Exception {
+  public void persistentObjectConstructorWithLastUpdatedTest() throws Exception {
     PhoneNumber domain = this.validPhoneNumber();
 
     gov.ca.cwds.data.persistence.ns.PhoneNumber persistent =
@@ -68,6 +70,24 @@ public class PhoneNumberTest {
     assertThat(totest.getType(), is(equalTo(persistent.getType())));
   }
 
+  @Test
+  public void testConstructorWithPersistentObject() throws Exception {
+    gov.ca.cwds.data.persistence.ns.PhoneNumber persistent =
+        new gov.ca.cwds.data.persistence.ns.PhoneNumber(id, number, type);
+    PhoneNumber domain = new PhoneNumber(persistent);
+    assertThat(domain.getId(), is(equalTo(persistent.getId())));
+    assertThat(domain.getNumber(), is(equalTo(persistent.getNumber())));
+    assertThat(domain.getType(), is(equalTo(persistent.getType())));
+    
+  }
+  
+  @Test
+  public void testSetters() throws Exception {
+    PhoneNumber domain = new PhoneNumber(number, type);
+    domain.setId(newId);
+    assertThat(domain.getId(), is(equalTo(newId)));
+  }
+  
   @Test
   public void testJSONConstructorTest() throws Exception {
     PhoneNumber domain = new PhoneNumber(number, type);

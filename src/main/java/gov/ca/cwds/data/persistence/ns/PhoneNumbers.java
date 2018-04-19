@@ -67,7 +67,8 @@ public class PhoneNumbers implements PersistentObject, HasPaperTrail, Identifiab
    * @param number - the phone number
    * @param type - the phone number type
    */
-  public PhoneNumbers(String number, String type) {
+  public PhoneNumbers(String id, String number, String type) {
+    this.id = id;
     this.number = number;
     this.type = type;
   }
