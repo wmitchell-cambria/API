@@ -29,7 +29,7 @@ public class AddressesTest {
   @Test
   public void testConstructor() throws Exception {
     Addresses addresses =
-        new Addresses(streetAddress, city, state, zip, type, legacyId, legacySourceTable);
+        new Addresses(id, streetAddress, city, state, zip, type, legacyId, legacySourceTable);
     assertThat(addresses.getStreetAddress(), is(equalTo(streetAddress)));
     assertThat(addresses.getCity(), is(equalTo(city)));
     assertThat(addresses.getState(), is(equalTo(state)));

@@ -62,12 +62,6 @@ public class HOIScreeningService
     /*
      * NOTE: When we want to enable authorizations for screening history, we can add following line
      * of code back at this spot.
-     *
-     * <pre>
-     *
-     * authorizationService.ensureClientAccessAuthorized(clientIds);
-     *
-     * </pre>
      */
 
     Set<ScreeningEntity> screeningEntities = screeningDao.findScreeningsByClientIds(clientIds);
@@ -79,12 +73,6 @@ public class HOIScreeningService
       /*
        * NOTE: When we want to enable authorizations for screening history, we can add following
        * line of code back at this spot.
-       *
-       * <pre>
-       *
-       * authorizationService.ensureScreeningAccessAuthorized(screeningEntity);
-       *
-       * </pre>
        */
       screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity,
           countyIntakeLOVCodeEntityMap.get(screeningEntity.getIncidentCounty())));
