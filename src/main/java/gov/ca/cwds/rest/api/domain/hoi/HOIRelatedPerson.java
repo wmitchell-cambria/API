@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.api.domain.hoi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
@@ -10,10 +9,11 @@ import java.util.Objects;
 
 /**
  * Related person.
- * 
+ *
  * @author CWDS API Team
  */
-@JsonPropertyOrder({"id", "first_name", "last_name", "name_suffix", "legacy_descriptor", "relationship"})
+@JsonPropertyOrder({"id", "first_name", "last_name", "name_suffix", "legacy_descriptor",
+    "relationship"})
 public class HOIRelatedPerson extends HOIPerson {
 
   /**
@@ -84,8 +84,8 @@ public class HOIRelatedPerson extends HOIPerson {
       return false;
     }
     HOIRelatedPerson that = (HOIRelatedPerson) o;
-    return Objects.equals(relationship, that.relationship) &&
-        limitedAccessType == that.limitedAccessType;
+    return (limitedAccessType == that.limitedAccessType) && Objects
+        .equals(relationship, that.relationship);
   }
 
   @Override
