@@ -28,6 +28,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Business layer object to work on {@link ParticipantIntakeApi}
@@ -35,6 +38,8 @@ import java.util.stream.Collectors;
  * @author Intake Team 4
  */
 public class ParticipantIntakeApiService implements CrudsService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantIntakeApiService.class);
 
   @Inject
   private ParticipantDao participantDao;
@@ -120,7 +125,8 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
 
     participantPhoneNumbersDao.findByParticipantId((String) primaryKey).forEach(
-        participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
+        participantPhoneNumbers -> participantPhoneNumbersDao
+            .delete(participantPhoneNumbers.getId()));
 
     //Delete legacy descriptor
     LegacyDescriptorEntity legacyDescriptorEntity = participantDao
@@ -183,12 +189,11 @@ public class ParticipantIntakeApiService implements CrudsService {
     assert request instanceof ParticipantIntakeApi;
     ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;
     participantIntakeApi.setId((String) primaryKey);
-
     ParticipantEntity participantEntityManaged = participantDao.find(primaryKey);
     if (participantEntityManaged == null) {
-      return null;
+      LOGGER.info("participant not found : {}", participantIntakeApi);
+      throw new ServiceException(new EntityNotFoundException("Entity ParticipantEntity with id = [" + primaryKey + "] was not found."));
     }
-
     participantEntityManaged = participantDao
         .update(participantEntityManaged.updateFrom(participantIntakeApi));
 
@@ -349,7 +354,8 @@ public class ParticipantIntakeApiService implements CrudsService {
     }
     //Delete old ones that are not in the new.
     participantPhoneNumbersOldMap.values().forEach(
-        participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
+        participantPhoneNumbers -> participantPhoneNumbersDao
+            .delete(participantPhoneNumbers.getId()));
 
     return phoneNumberSetPosted;
   }

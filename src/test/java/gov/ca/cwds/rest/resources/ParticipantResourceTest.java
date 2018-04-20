@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.RESOURCE_PARTICIPANTS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -38,8 +39,8 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 @SuppressWarnings("javadoc")
 public class ParticipantResourceTest {
 
-  private static final String ROOT_RESOURCE = "/participants/";
-  private static final String FOUND_RESOURCE = "/participants/1";
+  private static final String ROOT_RESOURCE = "/"+RESOURCE_PARTICIPANTS+"/";
+  private static final String FOUND_RESOURCE = "/"+RESOURCE_PARTICIPANTS+"/1";
   private final Short primaryLanguage = 1253;
   private final Short secondaryLanguage = 1271;
   private boolean reporterConfidentialWaiver = true;
