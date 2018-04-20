@@ -137,12 +137,12 @@ public final class Api {
   /**
    * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS} API..
    */
-  public static final String RESOURCE_PARTICIPANTS = "participants";
+  public static final String RESOURCE_PARTICIPANTS = "_participants";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS_INTAKE_API} API..
    */
-  public static final String RESOURCE_PARTICIPANTS_INTAKE_API = "participants_intakeapi";
+  public static final String RESOURCE_PARTICIPANTS_INTAKE_API = "participants";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_PEOPLE} API..
