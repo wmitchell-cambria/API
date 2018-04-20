@@ -33,11 +33,11 @@ public class TokenCredentialsTest {
     testUrl.setValidateUrl(validateUrl);
 
     assertEquals(authLoginUrl, testUrl.getAuthLoginUrl());
-    assertEquals(baseUrl, testUrl.getAuthLoginUrl());
-    assertEquals(callBackUrl, testUrl.getAuthLoginUrl());
-    assertEquals(perryLoginUrl, testUrl.getAuthLoginUrl());
-    assertEquals(tokenUrl, testUrl.getAuthLoginUrl());
-    assertEquals(validateUrl, testUrl.getAuthLoginUrl());
+    assertEquals(baseUrl, testUrl.getBaseUrl());
+    assertEquals(callBackUrl, testUrl.getCallBackUrl());
+    assertEquals(perryLoginUrl, testUrl.getPerryLoginUrl());
+    assertEquals(tokenUrl, testUrl.getTokenUrl());
+    assertEquals(validateUrl, testUrl.getValidateUrl());
   }
 
 }

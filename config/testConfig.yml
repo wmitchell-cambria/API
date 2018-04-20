@@ -1,7 +1,6 @@
 authenticationMode: TEST
 testUrl:
    baseUrl: ${BASE_URL:-https://ferbapi.preint.cwds.io}
-   authenticationBaseUrl: ${BASE_URL:-https://localhost:8070}
    perryLoginUrl: ${PERRY_LOGIN_URL:-https://localhost:8090/perry/login}
    authLoginUrl: ${AUTH_LOGIN_URL:-https://localhost:8090/perry/authn/login}
    tokenUrl: ${TOKEN_URL:-https://localhost:8090/perry/authn/token}
@@ -28,5 +27,4 @@ defaultUsers:
        
     -  userType: stateSealedPrivilegeUser
        username: ${USERNAME:-}
-       password: ${PASSWORD:-} 
- 
+       password: ${PASSWORD:-}
