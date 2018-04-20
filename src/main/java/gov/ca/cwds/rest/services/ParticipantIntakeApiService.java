@@ -254,7 +254,7 @@ public class ParticipantIntakeApiService implements CrudsService {
     return addressIntakeApiSetPosted;
   }
 
-  private class AddressesWrapper {
+  private static class AddressesWrapper {
 
     private AddressIntakeApi addressIntakeApi;
     private Addresses addresses;
