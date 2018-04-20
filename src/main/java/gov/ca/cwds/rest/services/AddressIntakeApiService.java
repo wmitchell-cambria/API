@@ -51,14 +51,13 @@ public class AddressIntakeApiService implements CrudsService {
     }
     AddressIntakeApi addressIntakeApi = new AddressIntakeApi(persistedAddress);
     //Get it's legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = addressesDao
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
         .findAddressLegacyDescriptor(persistedAddress.getId());
     if (legacyDescriptorEntity != null) {
       addressIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
 
     return addressIntakeApi;
-
   }
 
   /**
@@ -106,8 +105,7 @@ public class AddressIntakeApiService implements CrudsService {
     throw new NotImplementedException("Update is not implemented");
   }
 
-
-  public LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor,
+  LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor,
       String describableId) {
     if (legacyDescriptor == null || describableId == null) {
       return null;

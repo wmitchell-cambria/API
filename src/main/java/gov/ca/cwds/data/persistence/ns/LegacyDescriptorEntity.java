@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE;
-import static gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE_QUERY;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -23,23 +22,15 @@ import org.joda.time.format.DateTimeFormat;
  *
  * @author CWDS API Team
  */
-@NamedQuery(name = FIND_BY_DESCRIBABLE_ID_AND_TYPE,
-    query = FIND_BY_DESCRIBABLE_ID_AND_TYPE_QUERY)
-
+@NamedQuery(name = FIND_BY_DESCRIBABLE_ID_AND_TYPE, query = "FROM LegacyDescriptorEntity l"
+    + " WHERE l.describableId = :describableId AND l.describableType = :describableType")
 @Entity
 @Table(name = "legacy_descriptors")
 public class LegacyDescriptorEntity implements PersistentObject {
-  public static final String PARAM_DESCRIBABLE_ID = "describableId";
-  public static final String PARAM_DESCRIBABLE_TYPE = "describableType";
+
+  public static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE = "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdAndType";
   public static final String DESCRIBABLE_TYPE_ADDRESS = "Address";
   public static final String DESCRIBABLE_TYPE_PARTICIPANT = "Participant";
-  public static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE = "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdAndType";
-  static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE_QUERY =
-      "SELECT l FROM LegacyDescriptorEntity l"
-          + " WHERE l.describableId = :"
-          + PARAM_DESCRIBABLE_ID
-          + " AND l.describableType = :"
-          + PARAM_DESCRIBABLE_TYPE;
 
   @Id
   @Column(name = "id")
@@ -77,18 +68,21 @@ public class LegacyDescriptorEntity implements PersistentObject {
     super();
   }
 
-  public LegacyDescriptorEntity(LegacyDescriptor legacyDescriptor, String describableType, Long describableId) {
+  public LegacyDescriptorEntity(LegacyDescriptor legacyDescriptor, String describableType,
+      Long describableId) {
     this.legacyId = legacyDescriptor.getId();
     this.legacyUiId = legacyDescriptor.getUiId();
     this.legacyTableName = legacyDescriptor.getTableName();
     this.legacyTableDescription = legacyDescriptor.getTableDescription();
-    this.legacyLastUpdated = DateTimeFormat.forPattern(LegacyDescriptor.DATETIME_FORMAT).print(legacyDescriptor.getLastUpdated());
+    this.legacyLastUpdated = DateTimeFormat.forPattern(LegacyDescriptor.DATETIME_FORMAT)
+        .print(legacyDescriptor.getLastUpdated());
     this.describableType = describableType;
     this.describableId = describableId;
   }
 
   public LegacyDescriptorEntity(String legacyId, String legacyUiId, String legacyTableName,
-      String legacyTableDescription, String legacyLastUpdated, String describableType, Long describableId) {
+      String legacyTableDescription, String legacyLastUpdated, String describableType,
+      Long describableId) {
     this.legacyId = legacyId;
     this.legacyUiId = legacyUiId;
     this.legacyTableName = legacyTableName;
@@ -97,8 +91,6 @@ public class LegacyDescriptorEntity implements PersistentObject {
     this.describableType = describableType;
     this.describableId = describableId;
   }
-
-
 
   public Long getId() {
     return id;
