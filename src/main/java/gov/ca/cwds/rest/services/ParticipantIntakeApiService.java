@@ -8,7 +8,6 @@ import gov.ca.cwds.data.ns.ParticipantAddressesDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ParticipantPhoneNumbersDao;
 import gov.ca.cwds.data.ns.PhoneNumbersDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.Allegation;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
@@ -43,8 +42,6 @@ public class ParticipantIntakeApiService implements CrudsService {
   @Inject
   private LegacyDescriptorDao legacyDescriptorDao;
   @Inject
-  private ScreeningDao screeningDao;
-  @Inject
   private AddressesDao addressesDao;
   @Inject
   private ParticipantAddressesDao participantAddressesDao;
@@ -71,7 +68,7 @@ public class ParticipantIntakeApiService implements CrudsService {
     ParticipantIntakeApi participantIntakeApi = new ParticipantIntakeApi(participantEntity);
 
     //Get it's legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
         .findParticipantLegacyDescriptor(participantEntity.getId());
     if (legacyDescriptorEntity != null) {
       participantIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
@@ -83,7 +80,7 @@ public class ParticipantIntakeApiService implements CrudsService {
       participantIntakeApi.getAddresses().add(addressIntakeApi);
 
       //Get it's legacy descriptor
-      legacyDescriptorEntity = addressesDao.findAddressLegacyDescriptor(addresses.getId());
+      legacyDescriptorEntity = legacyDescriptorDao.findAddressLegacyDescriptor(addresses.getId());
       if (legacyDescriptorEntity != null) {
         addressIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
       }
@@ -123,7 +120,7 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
 
     //Delete legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
         .findParticipantLegacyDescriptor((String) primaryKey);
     if (legacyDescriptorEntity != null) {
       legacyDescriptorDao.delete(legacyDescriptorEntity.getId());
