@@ -1,14 +1,16 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -35,6 +37,9 @@ public class HOIScreeningService
 
   @Inject
   IntakeLOVCodeDao intakeLOVCodeDao;
+
+  @Inject
+  LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
   HOIScreeningFactory hoiScreeningFactory;
@@ -66,18 +71,34 @@ public class HOIScreeningService
      */
 
     Set<ScreeningEntity> screeningEntities = screeningDao.findScreeningsByClientIds(clientIds);
-    Set<String> counties = screeningEntities.stream().map(ScreeningEntity::getIncidentCounty)
-        .collect(Collectors.toSet());
+
+    Set<String> counties = new HashSet<>();
+    Set<String> participantIds = new HashSet<>();
+    for (ScreeningEntity screeningEntity : screeningEntities) {
+      counties.add(screeningEntity.getIncidentCounty());
+      if (screeningEntity.getParticipants() != null) {
+        for (ParticipantEntity participantEntity : screeningEntity.getParticipants()) {
+          participantIds.add(participantEntity.getId());
+        }
+      }
+    }
+
     Map<String, IntakeLOVCodeEntity> countyIntakeLOVCodeEntityMap = intakeLOVCodeDao
         .findIntakeLOVCodesByIntakeCodes(counties);
+    Map<String, LegacyDescriptorEntity> participantLegacyDescriptors = legacyDescriptorDao
+        .findParticipantLegacyDescriptors(participantIds);
+
     for (ScreeningEntity screeningEntity : screeningEntities) {
       /*
        * NOTE: When we want to enable authorizations for screening history, we can add following
        * line of code back at this spot:<br/>
        * authorizationService&#46;ensureScreeningAccessAuthorized&#40;screeningEntity&#41;&#59;
        */
-      screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity,
-          countyIntakeLOVCodeEntityMap.get(screeningEntity.getIncidentCounty())));
+      screenings.add(hoiScreeningFactory.buildHOIScreening(
+          screeningEntity,
+          countyIntakeLOVCodeEntityMap.get(screeningEntity.getIncidentCounty()),
+          participantLegacyDescriptors)
+      );
     }
 
     return new HOIScreeningResponse(screenings);
