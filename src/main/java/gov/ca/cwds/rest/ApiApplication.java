@@ -70,6 +70,8 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
   /**
    * Populates list of System properties from environment variables. Convenience for DB2 XA
    * parameters without adding new environment variables.
+   * 
+   * @throws Exception on JDBC URL parsing error
    */
   public static void setSysPropsFromEnvVars() throws Exception {
     final String url = System.getenv("DB_CMS_JDBC_URL");
