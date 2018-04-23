@@ -22,6 +22,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  * @author CWDS API Team
  *
  */
+@Ignore
 public class ClientRelationshipResourceTest extends IntakeBaseTest {
 
   private static final RelationshipsService service = mock(RelationshipsService.class);
@@ -41,7 +42,6 @@ public class ClientRelationshipResourceTest extends IntakeBaseTest {
   /**
    * Test to get the relationships by Id
    */
-  @Ignore
   @Test
   public void shouldCallGetRelationsipsByClientIdResourceEndpoint() {
     resources.target("/clients/1/relationships").request().accept(MediaType.APPLICATION_JSON).get();
@@ -51,7 +51,6 @@ public class ClientRelationshipResourceTest extends IntakeBaseTest {
   /**
    * Test to see the relationship for a list of clients
    */
-  @Ignore
   @Test
   public void shouldCallGetReleationshipsByClientIdsResourceEndpoint() {
     List<String> clientIds = Arrays.asList("1zxcydd");

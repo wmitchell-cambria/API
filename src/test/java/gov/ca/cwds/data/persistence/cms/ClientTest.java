@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Date;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -358,7 +357,6 @@ public class ClientTest implements PersistentTestTemplate {
     return validDomainClient;
   }
 
-  @Ignore
   @Test
   public void testSerializeAndDeserialize() throws Exception {
     final Client tgt = validBean();
@@ -448,7 +446,6 @@ public class ClientTest implements PersistentTestTemplate {
         gov.ca.cwds.rest.api.domain.cms.Client.class);
     Client pers = new Client(id, vc, lastUpdatedId, lastUpdatedTime);
     assertThat(pers.getSuffixTitleDescription(), is(equalTo("")));
-
   }
 
   @Test

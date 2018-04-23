@@ -195,4 +195,10 @@ public class TestSystemCodeCache implements SystemCodeCache {
     // TODO Auto-generated method stub
     return null;
   }
+
+  @Override
+  public Short getSystemCodeId(String arg0, String arg1) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
