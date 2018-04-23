@@ -153,9 +153,10 @@ public class AddressService implements CrudsService {
       try {
         txn.rollback();
       } catch (Exception e2) {
-        LOGGER.warn("FAILED TO ROLLBACK XA TRANSACTION! {}", e2.getMessage());
+        LOGGER.warn("FAILED TO ROLLBACK XA TRANSACTION! {}", e2.getMessage(), e2);
       }
 
+      LOGGER.error("XA TRANSACTION ERROR!", e);
       throw new ServiceException("XA TRANSACTION ERROR!", e);
     }
   }
