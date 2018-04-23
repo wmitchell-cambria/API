@@ -8,7 +8,6 @@ import javax.transaction.UserTransaction;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,9 +70,6 @@ public class CmsNSReferralService implements CrudsService {
       txn.begin();
 
       // FUTURE: switch to XA session factories.
-      final Session sessionCMS = cmsSessionFactory.openSession();
-      final Session sessionNS = nsSessionFactory.openSession();
-
       // Do work:
       final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());
       final PostedPerson postedPerson = personService.create(cmsReferral.getPerson());
