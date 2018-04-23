@@ -19,11 +19,9 @@ import gov.ca.cwds.rest.services.CrudsService;
 /**
  * <strong>NOTE:</strong> XA transactions make this helper class obsolete.
  * 
- * @deprecated Prefer XA transactions
  * @author CWDS API Team
  * @see XADataSourceFactory
  */
-@Deprecated
 public class CmsNSHelper {
 
   @SuppressWarnings("unused")

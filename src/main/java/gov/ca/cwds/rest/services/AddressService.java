@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.transaction.UserTransaction;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +123,6 @@ public class AddressService implements CrudsService {
       // PostgreSQL:
       // Proof of concept. Don't bother parsing the raw street address.
       final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
-      // nsAddr.setStreetAddress(reqAddr.getStreetAddress());
       nsAddr.setZip(reqAddr.getZip());
       nsAddr.setCity(reqAddr.getCity());
       nsAddr.setLegacyId(reqAddr.getLegacyId());
@@ -135,7 +133,6 @@ public class AddressService implements CrudsService {
       final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
           xaCmsAddressDao.find(nsAddr.getLegacyId());
       cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
-      // cmsAddr.setStreetNumber(streetNumber);
       cmsAddr.setCity(reqAddr.getCity());
       cmsAddr.setZip(reqAddr.getZip());
       cmsAddr.setLastUpdatedId(staffId);
@@ -156,12 +153,10 @@ public class AddressService implements CrudsService {
       try {
         txn.rollback();
       } catch (Exception e2) {
-        LOGGER.warn(e2.getMessage(), e2);
+        LOGGER.warn("FAILED TO ROLLBACK XA TRANSACTION! {}", e2.getMessage());
       }
 
-      final String oops =
-          String.format("XA TRANSACTION ERROR! stack trace: %s", ExceptionUtils.getStackTrace(e));
-      throw new ServiceException(oops, e);
+      throw new ServiceException("XA TRANSACTION ERROR!", e);
     }
   }
 

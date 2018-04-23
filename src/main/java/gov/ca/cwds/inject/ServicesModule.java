@@ -87,6 +87,35 @@ public class ServicesModule extends AbstractModule {
     @NsHibernateBundle
     HibernateBundle<ApiConfiguration> nsHibernateBundle;
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
+      proxyFactory =
+          UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
+      final UnitOfWorkAspect aspect = proxyFactory.newAspect();
+      try {
+        aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
+        final Object result = mi.proceed();
+        aspect.afterEnd();
+        return result;
+      } catch (Exception e) {
+        aspect.onError();
+        throw e;
+      } finally {
+        aspect.onFinish();
+      }
+    }
+
+  }
+
+  /**
+   * @author CWDS API Team
+   */
+  public static class XAUnitOfWorkInterceptor
+      implements org.aopalliance.intercept.MethodInterceptor {
+
+    UnitOfWorkAwareProxyFactory proxyFactory;
+
     @Inject
     @XaCmsHibernateBundle
     HibernateBundle<ApiConfiguration> xaCmsHibernateBundle;
@@ -98,8 +127,8 @@ public class ServicesModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-      proxyFactory = UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle,
-          nsHibernateBundle, xaCmsHibernateBundle, xaNsHibernateBundle);
+      proxyFactory =
+          UnitOfWorkModule.getUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));

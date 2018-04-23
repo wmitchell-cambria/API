@@ -101,14 +101,6 @@ public class CmsNSReferralService implements CrudsService {
   public Response create(Request request) {
     assert request instanceof CmsNSReferral;
 
-    // XA:
-    // try {
-    // return createReferral((CmsNSReferral) request);
-    // } catch (Exception e) {
-    // LOGGER.error("XA TRANSACTION ERROR!", e);
-    // throw new ServiceException("XA TRANSACTION ERROR!", e);
-    // }
-
     // ORIGINAL, "fake-the-funk":
     final CmsNSReferral cmsReferral = (CmsNSReferral) request;
     final CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);

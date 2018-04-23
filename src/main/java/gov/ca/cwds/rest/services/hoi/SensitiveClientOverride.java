@@ -5,15 +5,15 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 
 public interface SensitiveClientOverride extends ApiMarker {
 
-  static boolean sensitivityOverride =
+  static boolean SENSITIVITY_OVERRIDE =
       DomainChef.uncookBooleanString(System.getProperty("OVERRIDE_CLIENT_SENSITIVITY"));
 
   static boolean getClientSensitivityOverride() {
-    return sensitivityOverride;
+    return SENSITIVITY_OVERRIDE;
   }
 
   default boolean developmentOnlyClientSensitivityOverride() {
-    return sensitivityOverride;
+    return SENSITIVITY_OVERRIDE;
   }
 
 }

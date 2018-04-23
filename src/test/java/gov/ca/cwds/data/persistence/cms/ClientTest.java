@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.data.persistence.junit.template.PersistentTestTemplate;
 import gov.ca.cwds.data.std.ApiLanguageAware;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 /**
  * @author CWDS API Team
@@ -303,7 +305,6 @@ public class ClientTest implements PersistentTestTemplate {
         is(equalTo(DomainChef.cookBoolean(vc.getZippyCreatedIndicator()))));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testSerializeJson() throws Exception {
     Client vc = validClient();
@@ -374,20 +375,17 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(validBean())));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void type() throws Exception {
     assertThat(Client.class, notNullValue());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void instantiation() throws Exception {
     final Client target = validBean();
     assertThat(target, notNullValue());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getPrimaryKey_Args$() throws Exception {
     final Client target = validBean();
@@ -396,7 +394,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getMiddleName_Args$() throws Exception {
     final Client target = validBean();
@@ -405,7 +402,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getFirstName_Args$() throws Exception {
     final Client target = validBean();
@@ -414,7 +410,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getLastName_Args$() throws Exception {
     final Client target = validBean();
@@ -423,7 +418,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getSsn_Args$() throws Exception {
     final Client target = validBean();
@@ -432,7 +426,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getNameSuffix_Args$() throws Exception {
     final Client target = validBean();
@@ -441,7 +434,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void getLanguages_Args$() throws Exception {
     final Client target = validBean();
@@ -449,7 +441,6 @@ public class ClientTest implements PersistentTestTemplate {
     assertTrue(actual.length > 0);
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testConstructorWithNullSuffixTitleDescription() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Client vc = MAPPER.readValue(
@@ -460,30 +451,32 @@ public class ClientTest implements PersistentTestTemplate {
 
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testToString() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.Client vc = validDomainClient();
     Client pers = new Client(id, vc, lastUpdatedId, lastUpdatedTime);
     assertThat(pers.toString(), is(not(equalTo(""))));
-
   }
 
-  // @SuppressWarnings("javadoc")
-  // @Test
+  // // @Test
   // public void hashCode_Args$() throws Exception {
   // EqualsVerifier.forClass(Client.class).suppress(Warning.NONFINAL_FIELDS).verify();
   // }
 
   //
-  // @SuppressWarnings("javadoc")
-  // @Test
+  // // @Test
   // public void equals_Args$Object() throws Exception {
   // EqualsVerifier.forClass(Client.class).suppress(Warning.NONFINAL_FIELDS).verify();
   // }
 
   private Client validBean() throws JsonParseException, JsonMappingException, IOException {
     return MAPPER.readValue(fixture("fixtures/persistence/legacy/Client/valid.json"), Client.class);
+  }
+
+  @Test
+  public void testEqualsHashCodeWorks() throws Exception {
+    EqualsVerifier.forClass(gov.ca.cwds.data.persistence.cms.ClientRelationship.class)
+        .suppress(Warning.STRICT_INHERITANCE).withRedefinedSuperclass().verify();
   }
 
 }
