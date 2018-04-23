@@ -30,6 +30,7 @@ public class AllegationService implements
 
   private AllegationDao allegationDao;
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
+  @SuppressWarnings("unused")
   private RIAllegation riAllegation;
 
   /**
@@ -121,6 +122,5 @@ public class AllegationService implements
       throw new ServiceException(e);
     }
   }
-
 
 }
