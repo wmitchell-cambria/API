@@ -123,4 +123,11 @@ public class AllegationService implements
     }
   }
 
+  /**
+   * @return the riAllegation
+   */
+  public RIAllegation getRiAllegation() {
+    return riAllegation;
+  }
+
 }
