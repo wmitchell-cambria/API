@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import org.junit.Before;
 
 import gov.ca.cwds.authenticate.config.ConfigImpl;
-import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
+import gov.ca.cwds.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.authenticate.AuthenticationUtils;
 import gov.ca.cwds.rest.authenticate.UserGroup;
 import gov.ca.cwds.rest.authenticate.UserInfo;

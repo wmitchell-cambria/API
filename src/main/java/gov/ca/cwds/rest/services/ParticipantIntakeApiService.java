@@ -8,7 +8,6 @@ import gov.ca.cwds.data.ns.ParticipantAddressesDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ParticipantPhoneNumbersDao;
 import gov.ca.cwds.data.ns.PhoneNumbersDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.Allegation;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
@@ -28,6 +27,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Business layer object to work on {@link ParticipantIntakeApi}
@@ -36,14 +38,14 @@ import java.util.stream.Collectors;
  */
 public class ParticipantIntakeApiService implements CrudsService {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantIntakeApiService.class);
+
   @Inject
   private ParticipantDao participantDao;
   @Inject
   private AllegationDao allegationDao;
   @Inject
   private LegacyDescriptorDao legacyDescriptorDao;
-  @Inject
-  private ScreeningDao screeningDao;
   @Inject
   private AddressesDao addressesDao;
   @Inject
@@ -71,7 +73,7 @@ public class ParticipantIntakeApiService implements CrudsService {
     ParticipantIntakeApi participantIntakeApi = new ParticipantIntakeApi(participantEntity);
 
     //Get it's legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
         .findParticipantLegacyDescriptor(participantEntity.getId());
     if (legacyDescriptorEntity != null) {
       participantIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
@@ -83,7 +85,7 @@ public class ParticipantIntakeApiService implements CrudsService {
       participantIntakeApi.getAddresses().add(addressIntakeApi);
 
       //Get it's legacy descriptor
-      legacyDescriptorEntity = addressesDao.findAddressLegacyDescriptor(addresses.getId());
+      legacyDescriptorEntity = legacyDescriptorDao.findAddressLegacyDescriptor(addresses.getId());
       if (legacyDescriptorEntity != null) {
         addressIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
       }
@@ -120,10 +122,11 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
 
     participantPhoneNumbersDao.findByParticipantId((String) primaryKey).forEach(
-        participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
+        participantPhoneNumbers -> participantPhoneNumbersDao
+            .delete(participantPhoneNumbers.getId()));
 
     //Delete legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
         .findParticipantLegacyDescriptor((String) primaryKey);
     if (legacyDescriptorEntity != null) {
       legacyDescriptorDao.delete(legacyDescriptorEntity.getId());
@@ -183,12 +186,11 @@ public class ParticipantIntakeApiService implements CrudsService {
     assert request instanceof ParticipantIntakeApi;
     ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;
     participantIntakeApi.setId((String) primaryKey);
-
     ParticipantEntity participantEntityManaged = participantDao.find(primaryKey);
     if (participantEntityManaged == null) {
-      return null;
+      LOGGER.info("participant not found : {}", participantIntakeApi);
+      throw new ServiceException(new EntityNotFoundException("Entity ParticipantEntity with id = [" + primaryKey + "] was not found."));
     }
-
     participantEntityManaged = participantDao
         .update(participantEntityManaged.updateFrom(participantIntakeApi));
 
@@ -211,27 +213,11 @@ public class ParticipantIntakeApiService implements CrudsService {
   private Set<AddressIntakeApi> createParticipantAddresses(
       Set<AddressIntakeApi> addressIntakeApiSet, ParticipantEntity participantEntityManaged) {
     Set<AddressIntakeApi> addressIntakeApiSetPosted = new HashSet<>();
-    for (AddressIntakeApi addressIntakeApi : addressIntakeApiSet) {
-
-      Addresses addressesEntityManaged = addressIntakeApi.getId() == null ?
-          null : addressesDao.find(addressIntakeApi.getId());
-
-      if (addressesEntityManaged == null || !addressIntakeApi
-          .equals(new AddressIntakeApi(addressesEntityManaged))) {
-        //Create only those that don't exist or differs (were changed) from existing ones
-        addressIntakeApi.setId(null);
-        addressesEntityManaged = addressesDao.create(new Addresses(addressIntakeApi));
-        LegacyDescriptor legacyDescriptor = addressIntakeApi.getLegacyDescriptor();
-        addressIntakeApi = new AddressIntakeApi(addressesEntityManaged);
-        addressIntakeApi.setLegacyDescriptor(
-            addressIntakeApiService.saveLegacyDescriptor(legacyDescriptor,
-                addressesEntityManaged.getId()));
-      }
-      addressIntakeApiSetPosted.add(addressIntakeApi);
-
+    addressIntakeApiSet.stream().map(this::createAddresses).forEach(addressesWrapper -> {
+      addressIntakeApiSetPosted.add(addressesWrapper.addressIntakeApi);
       participantAddressesDao
-          .create(new ParticipantAddresses(participantEntityManaged, addressesEntityManaged));
-    }
+          .create(new ParticipantAddresses(participantEntityManaged, addressesWrapper.addresses));
+    });
     return addressIntakeApiSetPosted;
   }
 
@@ -244,25 +230,11 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantAddresses -> participantAddressesOldMap
             .put(participantAddresses.getAddress().getId(), participantAddresses));
 
-    for (AddressIntakeApi addressIntakeApi : addressIntakeApiSet) {
-
-      Addresses addressesEntityManaged = addressIntakeApi.getId() == null ?
-          null : addressesDao.find(addressIntakeApi.getId());
-
-      if (addressesEntityManaged == null || !addressIntakeApi
-          .equals(new AddressIntakeApi(addressesEntityManaged))) {
-        //Create only those that don't exist or differs (were changed) from existing ones
-        addressIntakeApi.setId(null);
-        addressesEntityManaged = addressesDao.create(new Addresses(addressIntakeApi));
-        LegacyDescriptor legacyDescriptor = addressIntakeApi.getLegacyDescriptor();
-        addressIntakeApi = new AddressIntakeApi(addressesEntityManaged);
-        addressIntakeApi.setLegacyDescriptor(
-            addressIntakeApiService.saveLegacyDescriptor(legacyDescriptor,
-                addressesEntityManaged.getId()));
-      }
-      addressIntakeApiSetPosted.add(addressIntakeApi);
+    addressIntakeApiSet.stream().map(this::createAddresses).forEach(addressesWrapper -> {
+      addressIntakeApiSetPosted.add(addressesWrapper.addressIntakeApi);
 
       //See if we had this ParticipantAddresses entity before. Otherwise create
+      Addresses addressesEntityManaged = addressesWrapper.addresses;
       ParticipantAddresses participantAddresses = participantAddressesOldMap
           .get(addressesEntityManaged.getId());
       if (participantAddresses != null) {
@@ -273,14 +245,41 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantAddressesDao
             .create(new ParticipantAddresses(participantEntityManaged, addressesEntityManaged));
       }
-
-    }
+    });
 
     //Delete old ones that are not in the new.
     participantAddressesOldMap.values().forEach(
         participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
 
     return addressIntakeApiSetPosted;
+  }
+
+  private static class AddressesWrapper {
+
+    private AddressIntakeApi addressIntakeApi;
+    private Addresses addresses;
+
+    AddressesWrapper(AddressIntakeApi addressIntakeApi, Addresses addresses) {
+      this.addressIntakeApi = addressIntakeApi;
+      this.addresses = addresses;
+    }
+  }
+
+  private AddressesWrapper createAddresses(AddressIntakeApi addressIntakeApi) {
+    Addresses addressesEntityManaged = addressIntakeApi.getId() == null ?
+        null : addressesDao.find(addressIntakeApi.getId());
+    if (addressesEntityManaged == null || !addressIntakeApi
+        .equals(new AddressIntakeApi(addressesEntityManaged))) {
+      //Create only those that don't exist or differs (were changed) from existing ones
+      addressIntakeApi.setId(null);
+      addressesEntityManaged = addressesDao.create(new Addresses(addressIntakeApi));
+      LegacyDescriptor legacyDescriptor = addressIntakeApi.getLegacyDescriptor();
+      addressIntakeApi = new AddressIntakeApi(addressesEntityManaged);
+      addressIntakeApi.setLegacyDescriptor(
+          addressIntakeApiService.saveLegacyDescriptor(legacyDescriptor,
+              addressesEntityManaged.getId()));
+    }
+    return new AddressesWrapper(addressIntakeApi, addressesEntityManaged);
   }
 
   private Set<PhoneNumber> createParticipantPhoneNumbers(Set<PhoneNumber> phoneNumberSet,
@@ -349,7 +348,8 @@ public class ParticipantIntakeApiService implements CrudsService {
     }
     //Delete old ones that are not in the new.
     participantPhoneNumbersOldMap.values().forEach(
-        participantPhoneNumbers -> participantPhoneNumbersDao.delete(participantPhoneNumbers.getId()));
+        participantPhoneNumbers -> participantPhoneNumbersDao
+            .delete(participantPhoneNumbers.getId()));
 
     return phoneNumberSetPosted;
   }

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
@@ -71,19 +71,19 @@ public class HOIScreeningServiceTest {
 
     screeningDao = mock(ScreeningDao.class);
     IntakeLOVCodeDao intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
-    ParticipantDao participantDao = mock(ParticipantDao.class);
+    LegacyDescriptorDao legacyDescriptorDao = mock(LegacyDescriptorDao.class);
     StaffPersonResource staffPersonResource = mock(StaffPersonResource.class);
 
-    when(participantDao.findParticipantLegacyDescriptor(DEFAULT_PERSON_ID))
+    when(legacyDescriptorDao.findParticipantLegacyDescriptor(DEFAULT_PERSON_ID))
         .thenReturn(mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
-    when(participantDao.findParticipantLegacyDescriptor(DEFAULT_REPORTER_ID))
+    when(legacyDescriptorDao.findParticipantLegacyDescriptor(DEFAULT_REPORTER_ID))
         .thenReturn(mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
 
     StaffPerson mockStaffPerson = new StaffPersonResourceBuilder().build();
     when(staffPersonResource.get(DEFAULT_ASSIGNEE_STAFF_ID))
         .thenReturn(Response.ok(mockStaffPerson).build());
     HOIPersonFactory hoiPersonFactory = new HOIPersonFactory();
-    hoiPersonFactory.participantDao = participantDao;
+    hoiPersonFactory.legacyDescriptorDao = legacyDescriptorDao;
     hoiPersonFactory.staffPersonResource = staffPersonResource;
 
     IntakeLOVCodeEntity intakeLOVCodeEntity = new IntakeLOVCodeEntity();

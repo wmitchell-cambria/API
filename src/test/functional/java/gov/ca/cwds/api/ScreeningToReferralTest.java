@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gov.ca.cwds.api.builder.FunctionalTestingBuilder;
+import gov.ca.cwds.api.builder.ResourceEndPoint;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 
@@ -25,7 +26,7 @@ public class ScreeningToReferralTest extends FunctionalTest {
    */
   @Before
   public void setup() {
-    referralPath = getResourceUrlFor("/referrals");
+    referralPath = getResourceUrlFor(ResourceEndPoint.REFERRALS.getResourcePath());
     functionalTestingBuilder = new FunctionalTestingBuilder();
   }
 
@@ -59,8 +60,7 @@ public class ScreeningToReferralTest extends FunctionalTest {
     ScreeningToReferral referral =
         new ScreeningToReferralResourceBuilder().setParticipants(null).createScreeningToReferral();
 
-    given().queryParam("token", token).header("Content-Type", "application/json")
-        .header("Accept", "application/json").body(referral).when().post(referralPath).then()
+    functionalTestingBuilder.processPostRequest(referral, referralPath, token).then()
         .body("issue_details.user_message",
             hasItem("must contain at least one victim, only one reporter, and compatible roles"))
         .and().statusCode(422);
@@ -75,8 +75,7 @@ public class ScreeningToReferralTest extends FunctionalTest {
         new ScreeningToReferralResourceBuilder().setAssigneeStaffId(userInfo.getStaffId())
             .setIncidentCounty(userInfo.getIncidentCounty()).createScreeningToReferral();
 
-    given().queryParam("token", token).header("Content-Type", "application/json")
-        .header("Accept", "application/json").body(referral).when().post(referralPath).then()
+    functionalTestingBuilder.processPostRequest(referral, referralPath, token).then()
         .statusCode(201).and().body("legacy_id", notNullValue());
   }
 

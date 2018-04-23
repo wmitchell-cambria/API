@@ -1,10 +1,10 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE;
-import static gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE_QUERY;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,37 +12,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.joda.time.format.DateTimeFormat;
-
-import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 
 /**
  * {@link PersistentObject} representing Legacy Descriptor in NS
  *
  * @author CWDS API Team
  */
-@NamedQuery(name = FIND_BY_DESCRIBABLE_ID_AND_TYPE, query = FIND_BY_DESCRIBABLE_ID_AND_TYPE_QUERY)
-
+@NamedQuery(name = FIND_BY_DESCRIBABLE_ID_AND_TYPE, query = "FROM LegacyDescriptorEntity l"
+    + " WHERE l.describableId = :describableId AND l.describableType = :describableType")
 @Entity
 @Table(name = "legacy_descriptors")
 public class LegacyDescriptorEntity implements PersistentObject {
 
-  private static final long serialVersionUID = 1L;
-
-  public static final String PARAM_DESCRIBABLE_ID = "describableId";
-  public static final String PARAM_DESCRIBABLE_TYPE = "describableType";
+  public static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE = "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdAndType";
   public static final String DESCRIBABLE_TYPE_ADDRESS = "Address";
   public static final String DESCRIBABLE_TYPE_PARTICIPANT = "Participant";
-  public static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE =
-      "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdAndType";
-  static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE_QUERY =
-      "SELECT l FROM LegacyDescriptorEntity l" + " WHERE l.describableId = :" + PARAM_DESCRIBABLE_ID
-          + " AND l.describableType = :" + PARAM_DESCRIBABLE_TYPE;
 
   @Id
   @Column(name = "id")
@@ -103,8 +91,6 @@ public class LegacyDescriptorEntity implements PersistentObject {
     this.describableType = describableType;
     this.describableId = describableId;
   }
-
-
 
   public Long getId() {
     return id;

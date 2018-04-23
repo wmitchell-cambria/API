@@ -24,7 +24,6 @@ import gov.ca.cwds.data.persistence.ns.PhoneNumbers;
 import gov.ca.cwds.fixture.AddressesEntityBuilder;
 import gov.ca.cwds.fixture.ParticipantEntityBuilder;
 import gov.ca.cwds.fixture.PhoneNumbersEntityBuilder;
-import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
@@ -206,9 +205,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
 
     ParticipantIntakeApi found = participantIntakeApiService.create(expected);
     assertThat(found, is(expected00));
-
-
-
   }
 
   @Override

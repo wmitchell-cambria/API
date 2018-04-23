@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -23,7 +23,7 @@ import java.util.Set;
 public final class HOIPersonFactory {
 
   @Inject
-  ParticipantDao participantDao;
+  LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
   StaffPersonResource staffPersonResource;
@@ -32,9 +32,9 @@ public final class HOIPersonFactory {
    * @param participantEntity ns ParticipantEntity
    * @return HOIPerson
    */
-  public HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
+  HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
     HOIPerson result = new HOIPerson(participantEntity);
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao.findParticipantLegacyDescriptor(participantEntity.getId());
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao.findParticipantLegacyDescriptor(participantEntity.getId());
     if (legacyDescriptorEntity != null) {
       result.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
@@ -46,7 +46,7 @@ public final class HOIPersonFactory {
    * @param legacyDescriptor domain LegacyDescriptor
    * @return HOIReporter instance; can be null if the given participant has no reporter role
    */
-  public HOIReporter buidHOIReporter(
+  HOIReporter buidHOIReporter(
       ParticipantEntity participantEntity, LegacyDescriptor legacyDescriptor) {
     Set<String> roles = parseRoles(participantEntity.getRoles());
     HOIReporter.Role reporterRole = findReporterRole(roles);
@@ -66,7 +66,7 @@ public final class HOIPersonFactory {
    * @param assigneeStaffId staff person id
    * @return corresponding instance of HOISocialWorker or null
    */
-  public HOISocialWorker buildHOISocialWorker(String assigneeStaffId) {
+  HOISocialWorker buildHOISocialWorker(String assigneeStaffId) {
     StaffPerson staffPerson = (StaffPerson) staffPersonResource.get(assigneeStaffId).getEntity();
     if (staffPerson == null) {
       return null;
