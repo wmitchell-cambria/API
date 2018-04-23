@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * Business layer object to work on Screening History Of Involvement
+ * Business layer object to work on Screening History Of Involvement.
  *
  * @author CWDS API Team
  */
@@ -58,11 +58,11 @@ public class InvolvementHistoryService
   }
 
   private Response findInvolvementHistoryByScreeningId(String screeningId) {
-    Set<String> clientIds = findClientIdsByScreeningId(screeningId);
+    final Set<String> clientIds = findClientIdsByScreeningId(screeningId);
     if (!clientIds.isEmpty()) {
-      List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
-      List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
-      List<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
+      final List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
+      final List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
+      final List<HOIScreening> hoiScreenings = findHOIScreeningsByClientIds(clientIds, screeningId);
       return new InvolvementHistory(screeningId, hoiCases, hoiReferrals, hoiScreenings);
     }
     return new InvolvementHistory(screeningId, new ArrayList<HOICase>(),
@@ -76,11 +76,12 @@ public class InvolvementHistoryService
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   public InvolvementHistory findInvolvementHistoryByClientIds(Set<String> clientIds) {
     if (!clientIds.isEmpty()) {
-      List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
-      List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
-      HOIRequest hoiScreeningRequest = new HOIRequest();
+      final List<HOICase> hoiCases = findHOICasesByClientIds(clientIds);
+      final List<HOIReferral> hoiReferrals = findHOIReferralsByClientIds(clientIds);
+      final HOIRequest hoiScreeningRequest = new HOIRequest();
       hoiScreeningRequest.setClientIds(clientIds);
-      List<HOIScreening> hoiScreenings =
+
+      final List<HOIScreening> hoiScreenings =
           new ArrayList<>(hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings());
       return new InvolvementHistory(null, hoiCases, hoiReferrals, hoiScreenings);
     }
@@ -96,7 +97,7 @@ public class InvolvementHistoryService
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   protected List<HOIScreening> findHOIScreeningsByClientIds(Set<String> clientIds,
       String exceptScreeningId) {
-    HOIRequest hoiScreeningRequest = new HOIRequest();
+    final HOIRequest hoiScreeningRequest = new HOIRequest();
     hoiScreeningRequest.setClientIds(clientIds);
     return hoiScreeningService.handleFind(hoiScreeningRequest).getScreenings().stream()
         .filter(hoiScreening -> !hoiScreening.getId().equals(exceptScreeningId))
@@ -104,19 +105,22 @@ public class InvolvementHistoryService
   }
 
   protected List<HOIReferral> findHOIReferralsByClientIds(Set<String> clientIds) {
-    HOIRequest hoiRequest = new HOIRequest();
+    final HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(clientIds);
-    HOIReferralResponse referralResponse = hoiReferralService.handleFind(hoiRequest);
-    List<HOIReferral> hoiReferrals = referralResponse.getHoiReferrals();
+
+    final HOIReferralResponse referralResponse = hoiReferralService.handleFind(hoiRequest);
+    final List<HOIReferral> hoiReferrals = referralResponse.getHoiReferrals();
     Collections.sort(hoiReferrals);
     return hoiReferrals;
   }
 
   protected List<HOICase> findHOICasesByClientIds(Set<String> clientIds) {
-    HOIRequest hoiRequest = new HOIRequest();
+    final HOIRequest hoiRequest = new HOIRequest();
     hoiRequest.setClientIds(clientIds);
-    HOICaseResponse hoiCaseResponse = hoiCaseService.handleFind(hoiRequest);
-    List<HOICase> hoicases = hoiCaseResponse.getHoiCases();
+
+    final HOICaseResponse hoiCaseResponse = hoiCaseService.handleFind(hoiRequest);
+    final List<HOICase> hoicases = hoiCaseResponse.getHoiCases();
+
     Collections.sort(hoicases);
     return hoicases;
   }
