@@ -172,12 +172,18 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param firstName The first Name
    * @param middleName The middle Name
    * @param lastName The last Name
-   * @param nameSuffix The participants suffix Name
-   * @param gender The gender
-   * @param dateOfBirth The date Of Birth
+   * @param nameSuffix participant's suffix Name
+   * @param gender participant's gender
+   * @param approximateAge - guesstimate age
+   * @param approximateAgeUnits - years or months/weeks for infants
+   * @param dateOfBirth date of birth
+   * @param languages - languages spoken
    * @param ssn The social security number
    * @param roles The roles of the participant
    * @param addresses The addresses of the participant
+   * @param phoneNumbers take a guess
+   * @param sealed true if sealed
+   * @param sensitive true if sensitive
    */
   @JsonCreator
   public ParticipantIntakeApi(@JsonProperty("id") String id,
@@ -249,6 +255,8 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * Work-around for fields containing raw JSON to embed into/extract from generated JSON races
    * ethnicity.
+   * 
+   * @return JSON race codes
    */
   @JsonRawValue
   public String getRaces() {
@@ -277,7 +285,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   public void setEthnicityRaw(JsonNode jsonNode) {
     setEthnicity(jsonNode.toString());
   }
-
 
   /**
    * @return id

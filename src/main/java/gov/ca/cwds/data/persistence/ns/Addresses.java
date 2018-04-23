@@ -78,6 +78,7 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
   /**
    * Constructor
    *
+   * @param id - primary key
    * @param streetAddress - street address
    * @param city - city
    * @param state - state
@@ -86,8 +87,8 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
    * @param legacyId - legacy id
    * @param legacySourceTable - legacy source table
    */
-  public Addresses(String id, String streetAddress, String city, String state, String zip, String type,
-      String legacyId, String legacySourceTable) {
+  public Addresses(String id, String streetAddress, String city, String state, String zip,
+      String type, String legacyId, String legacySourceTable) {
     this.id = id;
     this.streetAddress = streetAddress;
     this.city = city;
@@ -117,7 +118,8 @@ public class Addresses implements PersistentObject, HasPaperTrail, Identifiable<
   /**
    * Constructor
    *
-   * @param address The domain object to construct this object from
+   * @param id - primary key
+   * @param address - domain object to construct this object from
    */
   public Addresses(String id, gov.ca.cwds.rest.api.domain.AddressIntakeApi address) {
     this.id = id;

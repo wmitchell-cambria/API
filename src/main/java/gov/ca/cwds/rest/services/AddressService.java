@@ -38,8 +38,9 @@ public class AddressService implements CrudsService {
   /**
    * Constructor
    * 
-   * @param addressDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address}
-   *        objects.
+   * @param addressDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address} objects.
+   * @param xaNsAddressDao {@link Dao} for XA (two-phase commit) transactions for PostgreSQL
+   * @param xaCmsAddressDao {@link Dao} for XA (two-phase commit) transactions for CMS (DB2)
    */
   @Inject
   public AddressService(AddressDao addressDao, XaNsAddressDao xaNsAddressDao,

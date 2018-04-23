@@ -94,6 +94,7 @@ public class ClientService implements
    * This method is the representation of postedCmsReferral to find the existing client
    * 
    * @param primaryKey client key
+   * @return {@link PostedClient} if found else null
    */
   public PostedClient findInboundId(Serializable primaryKey) {
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.find(primaryKey);

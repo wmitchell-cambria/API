@@ -54,7 +54,7 @@ public class PostedAddress extends Address {
   /**
    * Copy constructor
    * 
-   * @param address The persisted address
+   * @param addr The persisted address
    */
   public PostedAddress(gov.ca.cwds.data.persistence.ns.Addresses addr) {
     super(new gov.ca.cwds.data.persistence.ns.Address(Long.valueOf(addr.getId()),

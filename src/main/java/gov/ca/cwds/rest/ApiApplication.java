@@ -71,6 +71,11 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
    * Populates list of System properties from environment variables. Convenience for DB2 XA
    * parameters without adding new environment variables.
    * 
+   * <p>
+   * Sadness. DropWizard can substitute variables from a file or environment variables or even from
+   * a URL -- but not from the most obvious place of all, system properties!
+   * </p>
+   * 
    * @throws Exception on JDBC URL parsing error
    */
   public static void setSysPropsFromEnvVars() throws Exception {
@@ -143,6 +148,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     // before DAO's, entities, session factories, etc.
     // Without succumbing to convoluted Guice listeners, "assisted injection", or statics, this is
     // the best we can do.
+    // BETTER: inject a **delegate** with all dependencies.
     final PaperTrailDao paperTrailDao = InjectorHolder.INSTANCE.getInstance(PaperTrailDao.class);
     applicationModule.getDataAccessModule().getPaperTrailInterceptor()
         .setPaperTrailDao(paperTrailDao);
