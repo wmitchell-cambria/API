@@ -2,11 +2,13 @@ package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
+import java.util.Map;
 
 /**
  * @author CWDS API Team
@@ -22,7 +24,8 @@ public final class HOIScreeningFactory {
    * @return HOIScreening
    */
   HOIScreening buildHOIScreening(ScreeningEntity screeningEntity,
-      IntakeLOVCodeEntity countyIntakeLOVCodeEntity) {
+      IntakeLOVCodeEntity countyIntakeLOVCodeEntity,
+      Map<String, LegacyDescriptorEntity> participantLegacyDescriptors) {
     HOIScreening result = new HOIScreening(screeningEntity);
 
     if (countyIntakeLOVCodeEntity != null) {
@@ -33,7 +36,8 @@ public final class HOIScreeningFactory {
 
     if (screeningEntity.getParticipants() != null) {
       for (ParticipantEntity participantEntity : screeningEntity.getParticipants()) {
-        HOIPerson participant = hoiPersonFactory.buildHOIPerson(participantEntity);
+        HOIPerson participant = hoiPersonFactory
+            .buildHOIPerson(participantEntity, participantLegacyDescriptors);
         result.getAllPeople().add(participant);
 
         if (result.getReporter() == null) {

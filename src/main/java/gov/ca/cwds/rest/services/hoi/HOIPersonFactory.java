@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -15,6 +14,7 @@ import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,18 +23,17 @@ import java.util.Set;
 public final class HOIPersonFactory {
 
   @Inject
-  LegacyDescriptorDao legacyDescriptorDao;
-
-  @Inject
   StaffPersonResource staffPersonResource;
 
   /**
    * @param participantEntity ns ParticipantEntity
    * @return HOIPerson
    */
-  HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
+  HOIPerson buildHOIPerson(ParticipantEntity participantEntity,
+      Map<String, LegacyDescriptorEntity> participantLegacyDescriptors) {
     HOIPerson result = new HOIPerson(participantEntity);
-    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao.findParticipantLegacyDescriptor(participantEntity.getId());
+    LegacyDescriptorEntity legacyDescriptorEntity = participantLegacyDescriptors
+        .get(participantEntity.getId());
     if (legacyDescriptorEntity != null) {
       result.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
