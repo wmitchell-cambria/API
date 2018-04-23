@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing an address
+ * {@link DomainObject} representing an address.
  * 
  * @author CWDS API Team
  */
@@ -115,7 +115,6 @@ public class Address extends ReportingDomain implements Request, Response {
     this.zip = address.getZip();
     this.type = address.getType() != null ? Integer.valueOf(address.getType()) : null;
     this.legacyDescriptor = new LegacyDescriptor();
-
   }
 
   /**

@@ -51,8 +51,7 @@ import gov.ca.cwds.rest.validation.ValidCounty;
         + "     {h-schema}CASE_T Y                  \n"
         + "     WHERE Z.FKCLIENT_0  = :clientId     \n"
         + "     AND Z.FKCLIENT_T <> :clientId       \n"
-        + "     AND Z.FKCLIENT_T = Y.FKCHLD_CLT     \n"
-        + "   WITH UR",
+        + "     AND Z.FKCLIENT_T = Y.FKCHLD_CLT     \n" + "   WITH UR",
     resultClass = CmsCase.class, readOnly = true)
 
 @Entity
@@ -184,7 +183,7 @@ public class CmsCase extends CmsPersistentObject {
   private StaffPerson staffPerson;
 
   /**
-   * referential integrity check.
+   * Referential integrity check.
    * <p>
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>

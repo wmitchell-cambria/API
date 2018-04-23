@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.investigation;
 
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +12,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.Allegation;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.fixture.investigation.ScreeningSummaryEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
@@ -20,7 +20,7 @@ import gov.ca.cwds.rest.api.domain.investigation.SimpleAllegation;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on Screening Summary
+ * Business layer object to work on Screening Summary.
  * 
  * @author CWDS API Team
  */
@@ -41,13 +41,11 @@ public class ScreeningSummaryService
     this.screeningDao = screeningDao;
   }
 
-
   /**
    * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
-
   @Override
   public Response find(String referralId) {
     if (StringUtils.equals(referralId, DEFAULT_STUB_KEY)) {
@@ -56,17 +54,15 @@ public class ScreeningSummaryService
     }
 
     return this.findScreeningSummaryByReferralId(referralId);
-
   }
 
   /**
-   * finding screening summary by referral id
+   * Find screening summary by referral id.
    * 
    * @param referralId - referral id
    * @return - Screening Summary object.
    */
   private ScreeningSummary findScreeningSummaryByReferralId(String referralId) {
-
     ScreeningSummary screeningSummary = null;
     // SessionFactory from postgres DB and need to open session in order to execute.
     SessionFactory sessionFactory = screeningDao.getSessionFactory();
@@ -80,7 +76,6 @@ public class ScreeningSummaryService
         : new ScreeningSummary();
     session.close();
     return screeningSummary;
-
   }
 
   /**
@@ -94,14 +89,11 @@ public class ScreeningSummaryService
     if (screeningEntity != null && screeningEntity.getAllegations() != null) {
       for (Allegation allegation : screeningEntity.getAllegations()) {
         allegations.add(new SimpleAllegation(allegation));
-
       }
     }
+
     return allegations;
-
   }
-
-
 
   @Override
   public Response create(ScreeningSummary request) {

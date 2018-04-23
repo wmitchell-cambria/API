@@ -20,9 +20,6 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 public class PhoneNumber extends ReportingDomain implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
@@ -62,10 +59,12 @@ public class PhoneNumber extends ReportingDomain implements Request, Response {
   }
 
   /**
+   * @param id - primary key
    * @param number - phone number
    * @param type - phone number type
    */
-  public PhoneNumber(@JsonProperty("id") Long id, @JsonProperty("number") String number, @JsonProperty("type") String type) {
+  public PhoneNumber(@JsonProperty("id") Long id, @JsonProperty("number") String number,
+      @JsonProperty("type") String type) {
     super();
     this.id = id;
     this.number = number;

@@ -1,13 +1,13 @@
 package gov.ca.cwds.data.cms;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+
+import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.inject.CmsSessionFactory;
-
-import org.hibernate.query.Query;
-import org.hibernate.SessionFactory;
-
-import com.google.inject.Inject;
 
 /**
  * DAO for {@link Allegation}.
@@ -28,12 +28,10 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
 
   @SuppressWarnings("unchecked")
   public Allegation[] findByReferralId(String referralId) {
-    Query query =
-        this.getSessionFactory().getCurrentSession()
-            .getNamedQuery("gov.ca.cwds.data.persistence.cms.Allegation.findByReferral")
+    final Query<Allegation> query =
+        grabSession().getNamedQuery("gov.ca.cwds.data.persistence.cms.Allegation.findByReferral")
             .setParameter("referralId", referralId);
-    return (Allegation[]) query.list().toArray(new Allegation[0]);
-
+    return query.list().toArray(new Allegation[0]);
   }
 
 }

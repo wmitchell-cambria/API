@@ -1,24 +1,28 @@
 package gov.ca.cwds.data.persistence.ns.papertrail;
 
-import gov.ca.cwds.data.ns.PaperTrailDao;
-import gov.ca.cwds.data.persistence.ns.PaperTrail;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.inject.Inject;
+
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
+
+import gov.ca.cwds.data.ns.PaperTrailDao;
+import gov.ca.cwds.data.persistence.ns.PaperTrail;
 
 /**
  * @author Intake Team 4
  *
- * onSave – Called when you save an object, the object is not save into database yet. onFlushDirty –
- * Called when you update an object, the object is not update into database yet. onDelete – Called
- * when you delete an object, the object is not delete into database yet. preFlush – Called before
- * the saved, updated or deleted objects are committed to database (usually before postFlush).
- * postFlush – Called after the saved, updated or deleted objects are committed to database.
+ *         onSave - Called when you save an object, the object is not save into database yet.
+ *         onFlushDirty - Called when you update an object, the object is not update into database
+ *         yet. onDelete - Called when you delete an object, the object is not delete into database
+ *         yet. preFlush - Called before the saved, updated or deleted objects are committed to
+ *         database (usually before postFlush). postFlush - Called after the saved, updated or
+ *         deleted objects are committed to database.
  */
 public class PaperTrailInterceptor extends EmptyInterceptor {
 
@@ -28,12 +32,12 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   private static final String UPDATE = "update";
   private static final String DESTROY = "destroy";
 
-  private static final ThreadLocal<Map<String, Object>> insertsTlMap = ThreadLocal
-      .withInitial(HashMap::new);
-  private static final ThreadLocal<Map<String, Object>> updatesTlMap = ThreadLocal
-      .withInitial(HashMap::new);
-  private static final ThreadLocal<Map<String, Object>> deletesTlMap = ThreadLocal
-      .withInitial(HashMap::new);
+  private static final ThreadLocal<Map<String, Object>> insertsTlMap =
+      ThreadLocal.withInitial(HashMap::new);
+  private static final ThreadLocal<Map<String, Object>> updatesTlMap =
+      ThreadLocal.withInitial(HashMap::new);
+  private static final ThreadLocal<Map<String, Object>> deletesTlMap =
+      ThreadLocal.withInitial(HashMap::new);
 
 
   @Inject
@@ -113,8 +117,8 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   }
 
   private void createPaperTrail(String event, HasPaperTrail entity) {
-    PaperTrail paperTrail = new PaperTrail(entity.getClass().getSimpleName(), entity.getId(),
-        event);
+    PaperTrail paperTrail =
+        new PaperTrail(entity.getClass().getSimpleName(), entity.getId(), event);
     paperTrailDao.create(paperTrail);
   }
 
