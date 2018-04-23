@@ -320,9 +320,9 @@ public class ParticipantService implements CrudsService {
     Client savedClient = this.clientService.update(incomingParticipant.getLegacyId(), foundClient);
     clientScpEthnicityService.createOtherEthnicity(foundClient.getExistingClientId(),
         otherRaceCodes);
-    processChildClient(foundClient.getExistingClientId(), messageBuilder, incomingParticipant);
     if (savedClient != null) {
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedClient.getLastUpdatedTime());
+      processChildClient(foundClient.getExistingClientId(), messageBuilder, incomingParticipant);
     } else {
       messageBuilder.addMessageAndLog("Unable to save Client", LOGGER);
     }
