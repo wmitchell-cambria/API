@@ -17,7 +17,7 @@ public class UnitOfWorkModule {
   }
 
   /**
-   * @param bundles the hibernate bundle
+   * @param bundles the Hibernate bundles
    * @return the proxyFactory
    */
   @SuppressWarnings("unchecked")

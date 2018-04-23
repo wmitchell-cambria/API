@@ -11,17 +11,18 @@ import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import gov.ca.cwds.IntakeBaseTest;
 import gov.ca.cwds.rest.services.RelationshipsService;
-
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * @author CWDS API Team
  *
  */
+@Ignore
 public class ClientRelationshipResourceTest extends IntakeBaseTest {
 
   private static final RelationshipsService service = mock(RelationshipsService.class);

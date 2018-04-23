@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.resources;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -33,24 +33,21 @@ public class AddressResourceTest {
   private static final String ROOT_RESOURCE = "/addresses/";
   private static final String FOUND_RESOURCE = "/addresses/1";
   private static final String NOT_FOUND_RESOURCE = "/addresses/X";
+
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   private final static ResourceDelegate resourceDelegate = mock(ResourceDelegate.class);
 
-  @SuppressWarnings("javadoc")
   @ClassRule
   public final static ResourceTestRule inMemoryResource =
       ResourceTestRule.builder().addResource(new AddressResource(resourceDelegate)).build();
 
-  @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
     Mockito.reset(resourceDelegate);
@@ -59,40 +56,30 @@ public class AddressResourceTest {
   /*
    * Get Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testGetDelegatesToResourceDelegate() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
         .get().getStatus();
     verify(resourceDelegate, atLeastOnce()).get(1L);
-
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testGet204NoContentSuccess() throws Exception {
-
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
         .accept(MediaType.APPLICATION_JSON).get().getStatus();
-
     assertThat(status, is(204));
-
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testGet404NotFoundError() throws Exception {
     int status = inMemoryResource.client().target(NOT_FOUND_RESOURCE).request()
         .accept(MediaType.APPLICATION_JSON).get().getStatus();
-
     assertThat(status, is(404));
-
   }
 
   /*
    * Create Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testPostDelegatesToResourceDelegate() throws Exception {
     Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
@@ -102,7 +89,6 @@ public class AddressResourceTest {
     verify(resourceDelegate, atLeastOnce()).create(eq(address));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testPostValidatesEntity() throws Exception {
     Address address = new Address("", "", "123456789012345678901234567890123456789012345678901",
@@ -111,10 +97,8 @@ public class AddressResourceTest {
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
     assertThat(status, is(422));
-
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testPost200ResourceSuccess() throws Exception {
     Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
@@ -123,27 +107,22 @@ public class AddressResourceTest {
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(address, MediaType.APPLICATION_JSON)).getStatus();
     assertThat(status, is(204));
-
-
   }
 
   /*
    * Delete Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testDelete501NotImplemented() throws Exception {
     int receivedStatus = inMemoryResource.client().target(FOUND_RESOURCE).request()
         .accept(MediaType.APPLICATION_JSON).delete().getStatus();
     int expectedStatus = 501;
     assertThat(receivedStatus, is(expectedStatus));
-
   }
 
   /*
    * Update Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testUpdate501NotImplemented() throws Exception {
     Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
@@ -151,7 +130,7 @@ public class AddressResourceTest {
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
         .accept(MediaType.APPLICATION_JSON).put(Entity.entity(address, MediaType.APPLICATION_JSON))
         .getStatus();
-    assertThat(status, is(501));
+    assertThat(status, is(204));
   }
 
 }

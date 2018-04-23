@@ -24,7 +24,7 @@ import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
- * {@link PersistentObject} representing a Client Address
+ * {@link PersistentObject} representing a Client Address.
  * 
  * @author CWDS API Team
  */
@@ -58,7 +58,7 @@ public class ClientAddress extends BaseClientAddress {
   private Client client;
 
   /**
-   * referential integrity check.
+   * Referential integrity check.
    * <p>
    * Doesn't actually load the data. Just checks the existence of the parent address, client and
    * referral records.

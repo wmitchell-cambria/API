@@ -77,11 +77,11 @@ public class ServicesModule extends AbstractModule {
    */
   public static class UnitOfWorkInterceptor implements org.aopalliance.intercept.MethodInterceptor {
 
+    UnitOfWorkAwareProxyFactory proxyFactory;
+
     @Inject
     @CmsHibernateBundle
     HibernateBundle<ApiConfiguration> cmsHibernateBundle;
-
-    UnitOfWorkAwareProxyFactory proxyFactory;
 
     @Inject
     @NsHibernateBundle
@@ -90,7 +90,6 @@ public class ServicesModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-
       proxyFactory =
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
@@ -162,9 +161,8 @@ public class ServicesModule extends AbstractModule {
     p.setProperty("something", "Some String");
     Names.bindProperties(binder(), p);
 
-    // @Singleton does not work with DropWizard Guice. :-(
+    // @Singleton does not work with DropWizard Guice.
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
-
   }
 
   /**
@@ -221,5 +219,4 @@ public class ServicesModule extends AbstractModule {
     LOGGER.debug("provide syscode serializer");
     return new CmsSystemCodeSerializer(systemCodeCache);
   }
-
 }

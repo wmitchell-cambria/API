@@ -62,20 +62,16 @@ public class ScreeningService implements CrudsService {
   }
 
   /**
-   * {@inheritDoc} return the screening dashboard of the logged in user.
+   * Return the screening dashboard of the logged in user.
    * 
    * @return - array of screening dashboard objects
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
-   * 
    */
   public Response findScreeningDashboard() {
-    final String staffId = RequestExecutionContext.instance().getStaffId();
-
-    return getScreeningsOfUser(staffId);
+    return getScreeningsOfUser(RequestExecutionContext.instance().getStaffId());
   }
 
   private ScreeningDashboardList getScreeningsOfUser(String staffId) {
-
     List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
     List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
     for (ScreeningWrapper screening : screenings) {

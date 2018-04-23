@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -55,6 +56,7 @@ public class Allegation extends CmsPersistentObject {
   private String abuseFrequencyPeriodCode;
 
   @Column(name = "LOC_DSC")
+  @ColumnTransformer(read = "trim(LOC_DSC)")
   private String abuseLocationDescription;
 
   @Type(type = "date")

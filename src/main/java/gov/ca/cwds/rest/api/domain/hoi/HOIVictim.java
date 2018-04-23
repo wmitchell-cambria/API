@@ -12,9 +12,6 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
  */
 public class HOIVictim extends HOIPerson {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("limited_access_code")
@@ -28,12 +25,14 @@ public class HOIVictim extends HOIPerson {
   }
 
   /**
-   * @param id - id
-   * @param firstName - firstName
-   * @param lastName - lastName
-   * @param legacyDescriptor - legacyDescriptor
+   * @param id - primary key
+   * @param firstName - first name
+   * @param lastName - last name
+   * @param nameSuffix - name suffix
+   * @param legacyDescriptor - legacy descriptor
    */
-  public HOIVictim(String id, String firstName, String lastName, String nameSuffix, LegacyDescriptor legacyDescriptor) {
+  public HOIVictim(String id, String firstName, String lastName, String nameSuffix,
+      LegacyDescriptor legacyDescriptor) {
     super(id, firstName, lastName, nameSuffix, legacyDescriptor);
   }
 
@@ -50,5 +49,5 @@ public class HOIVictim extends HOIPerson {
   public void setLimitedAccessType(LimitedAccessType limitedAccessType) {
     this.limitedAccessType = limitedAccessType;
   }
-}
 
+}
