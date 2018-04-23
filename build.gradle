@@ -30,7 +30,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 
 project.ext {
     apiVersion = '0.6.4'
-    coreApiVersion = '1.6.3_681-RC'
+    coreApiVersion = '1.6.4_740-RC'
     cwdsModelVersion = '0.6.2_500-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
@@ -101,7 +101,7 @@ publishing {
 }
 
 dependencies {
-    //third party libs
+    // third party libs
     compile group: "gov.ca.cwds.api.libs", name: "bcprov-jdk15on", version: "150"
     compile group: "gov.ca.cwds.api.libs", name: "cryptojFIPS", version: "1"
     compile group: "gov.ca.cwds.api.libs", name: "db2jcc", version: "4"
@@ -116,9 +116,9 @@ dependencies {
     compile group: "gov.ca.cwds.api.libs", name: "msvcp", version: "140" ,ext: "dll"
     compile group: "gov.ca.cwds.api.libs", name: "securezip-toolkit", version: "1"
     compile group: "gov.ca.cwds.api.libs", name: "vcruntime", version: "140" ,ext: "dll"
+    // end thirdparty libs
 
-    //end thirdparty libs
-	compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
+    compile group: "io.dropwizard", name: "dropwizard-client", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-views", version: dropwizardVersion
 	compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
@@ -170,6 +170,12 @@ dependencies {
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
     compile group: 'org.json', name: 'json', version: '20090211'
 
+    // Distributed XA transactions:
+    compile group: 'com.atomikos', name: 'atomikos-util', version: '4.0.6'
+    compile group: 'com.atomikos', name: 'transactions-jta', version: '4.0.6'
+    compile group: 'com.atomikos', name: 'transactions-hibernate4', version: '4.0.6'
+    compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.8.Final'
+    
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
     testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
 
