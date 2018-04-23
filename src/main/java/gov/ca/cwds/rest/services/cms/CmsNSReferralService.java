@@ -4,15 +4,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.transaction.UserTransaction;
-
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.CmsSessionFactory;
@@ -25,13 +21,14 @@ import gov.ca.cwds.rest.api.domain.cms.PostedCmsNSReferral;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.PersonService;
-import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * @author CWDS API Team
+ *
  */
 public class CmsNSReferralService implements CrudsService {
 
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsNSReferralService.class);
 
   private ReferralService referralService;
@@ -62,36 +59,6 @@ public class CmsNSReferralService implements CrudsService {
     this.personService = personService;
   }
 
-  protected PostedCmsNSReferral createReferral(CmsNSReferral cmsReferral) {
-    final UserTransaction txn = new UserTransactionImp();
-    try {
-      // Start XA transaction:
-      txn.setTransactionTimeout(80);
-      txn.begin();
-
-      // FUTURE: switch to XA session factories.
-      // Do work:
-      final PostedReferral postedReferral = referralService.create(cmsReferral.getReferral());
-      final PostedPerson postedPerson = personService.create(cmsReferral.getPerson());
-
-      // Commit XA transaction:
-      txn.commit();
-
-      // Return shiny new Referral.
-      return new PostedCmsNSReferral(postedReferral, postedPerson);
-    } catch (Exception e) {
-      try {
-        txn.rollback();
-      } catch (Exception e2) {
-        LOGGER.warn(e2.getMessage(), e2);
-      }
-
-      final String oops =
-          String.format("XA TRANSACTION ERROR! stack trace: %s", ExceptionUtils.getStackTrace(e));
-      throw new ServiceException(oops, e);
-    }
-  }
-
   /**
    * {@inheritDoc}
    * 
@@ -99,11 +66,12 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-    assert request instanceof CmsNSReferral;
 
-    // ORIGINAL, "fake-the-funk":
-    final CmsNSReferral cmsReferral = (CmsNSReferral) request;
-    final CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
+    assert request instanceof CmsNSReferral;
+    CmsNSReferral cmsReferral = (CmsNSReferral) request;
+
+    CmsNSHelper helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
+
     Map<CrudsService, Request> cmsRequest = new HashMap<>();
     Map<CrudsService, Request> nsRequest = new HashMap<>();
 
@@ -114,7 +82,9 @@ public class CmsNSReferralService implements CrudsService {
         helper.handleResponse(cmsRequest, nsRequest);
     return new PostedCmsNSReferral((PostedReferral) response.get("cms").get(referralService),
         (PostedPerson) response.get("ns").get(personService));
+
   }
+
 
   /**
    * {@inheritDoc}
@@ -123,7 +93,7 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response find(Serializable primaryKey) {
-    throw new NotImplementedException("find not implemented");
+    throw new NotImplementedException("find not implement");
   }
 
   /**
@@ -133,7 +103,7 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response delete(Serializable primaryKey) {
-    throw new NotImplementedException("delete not implemented");
+    throw new NotImplementedException("delete not implement");
   }
 
   /**
@@ -144,7 +114,7 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response update(Serializable primaryKey, Request request) {
-    throw new NotImplementedException("update not implemented");
+    throw new NotImplementedException("update not implement");
   }
 
 }
