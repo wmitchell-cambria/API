@@ -1,4 +1,4 @@
-package gov.ca.cwds.api;
+package gov.ca.cwds.authenticate.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,13 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import gov.ca.cwds.authenticate.config.ConfigReader;
-import gov.ca.cwds.authenticate.config.CwdsAuthenticationClientConfig;
+import gov.ca.cwds.config.CwdsAuthenticationClientConfig;
 import gov.ca.cwds.rest.ApiConfiguration;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
@@ -20,12 +21,14 @@ import io.dropwizard.jackson.Jackson;
 
 /**
  * This class will overwrite the yaml file in api-core and read the API yaml file by implements
- * {@link ConfigReader}.
+ * {@link YmlLoader}.
  * 
  * @author CWDS API Team
  *
  */
-public class ConfigImpl implements ConfigReader {
+public class ConfigImpl implements YmlLoader {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigImpl.class);
 
   public static final String API_CONF_YML_PATH = "config/api.yml";
   public static final String FILE_PATH_KEY = "TEST_FILE_PATH";
@@ -36,7 +39,6 @@ public class ConfigImpl implements ConfigReader {
     if (!file.exists()) {
       throw new FileNotFoundException("File " + file + " not found");
     }
-
     return new FileInputStream(file);
   }
 
@@ -48,9 +50,7 @@ public class ConfigImpl implements ConfigReader {
   private CwdsAuthenticationClientConfig loadTestConfiguratin() {
     Yaml yaml = getYaml();
     String testConfFilePath = retrieveTestConfFilePath();
-    CwdsAuthenticationClientConfig testConf = loadTestConfigurations(yaml, testConfFilePath);
-
-    return testConf;
+    return loadTestConfigurations(yaml, testConfFilePath);
   }
 
   private CwdsAuthenticationClientConfig loadTestConfigurations(Yaml yaml,
@@ -61,7 +61,7 @@ public class ConfigImpl implements ConfigReader {
             .open(testConfFilePath);) {
       testConf = yaml.loadAs(ymlTestingSourceProvider, CwdsAuthenticationClientConfig.class);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.error("Unable to load the yaml test config file {}", e);
     }
     return testConf;
   }
@@ -77,7 +77,7 @@ public class ConfigImpl implements ConfigReader {
       String defaultLocation = appConf.getTestConfig().getConfigFile();
       testConfFilePath = getApiYmlPath(defaultLocation);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.error("Unable to retrieve the test config file path {}", e);
     }
     return testConfFilePath;
   }

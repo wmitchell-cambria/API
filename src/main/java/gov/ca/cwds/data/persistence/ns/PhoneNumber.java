@@ -68,8 +68,8 @@ public class PhoneNumber extends NsPersistentObject {
   public PhoneNumber(gov.ca.cwds.rest.api.domain.PhoneNumber domain, String lastUpdatedId,
       String createUserId) {
     super(lastUpdatedId, createUserId);
-    this.number = domain.getPhoneNumber();
-    this.type = domain.getPhoneType();
+    this.number = domain.getNumber();
+    this.type = domain.getType();
   }
 
   /**

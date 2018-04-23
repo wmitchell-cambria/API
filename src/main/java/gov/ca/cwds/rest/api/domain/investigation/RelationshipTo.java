@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"related_person_first_name", "related_person_last_name",
+@JsonPropertyOrder({"related_person_first_name", "related_person_last_name", "related_person_name_suffix",
     "index_person_relationship", "relationship_context", "related_person_relationship",
     "legacy_description"})
 public final class RelationshipTo implements Serializable {
@@ -41,6 +41,11 @@ public final class RelationshipTo implements Serializable {
   @Size(min = 1, max = 25)
   @ApiModelProperty(required = true, readOnly = false, value = "last name", example = "sufer")
   private String relatedLastName;
+
+  @JsonProperty("related_person_name_suffix")
+  @Size(min = 1, max = 4)
+  @ApiModelProperty(required = false, readOnly = false, value = "name suffix", example = "Jr")
+  private String relatedNameSuffix;
 
   @JsonProperty("indexed_person_relationship")
   @ApiModelProperty(required = true, readOnly = false, value = "relationship to the person",
@@ -75,12 +80,13 @@ public final class RelationshipTo implements Serializable {
    * @param relatedPersonRelationship - relation to owning person
    * @param cmsRecordDescriptor - The record descriptor containing meta data about legacy information
    */
-  public RelationshipTo(String relatedFirstName, String relatedLastName,
+  public RelationshipTo(String relatedFirstName, String relatedLastName, String relatedNameSuffix,
       String relationshipToPerson, String relationshipContext, String relatedPersonRelationship,
       CmsRecordDescriptor cmsRecordDescriptor) {
     super();
     this.relatedFirstName = relatedFirstName;
     this.relatedLastName = relatedLastName;
+    this.relatedNameSuffix = relatedNameSuffix;
     this.relationshipToPerson = relationshipToPerson;
     this.relationshipContext = relationshipContext;
     this.relatedPersonRelationship = relatedPersonRelationship;
@@ -90,16 +96,18 @@ public final class RelationshipTo implements Serializable {
   /**
    * @param relatedFirstName - related persons first name
    * @param relatedLastName - related persons last name
+   * @param relatedNameSuffix - related persons name suffix
    * @param relationshipToPerson - relation of owning person
    * @param relationshipContext - context information
    * @param relatedPersonRelationship - relation to owning person
    * @param clientId - The Client this relationship pertains too
    */
   public RelationshipTo(String relatedFirstName, String relatedLastName,
-      String relationshipToPerson, String relationshipContext, String relatedPersonRelationship,
-      String clientId) {
+      String relatedNameSuffix, String relationshipToPerson, String relationshipContext,
+      String relatedPersonRelationship, String clientId) {
     this(relatedFirstName,
             relatedLastName,
+            relatedNameSuffix,
             relationshipToPerson,
             relationshipContext,
             relatedPersonRelationship,
@@ -115,6 +123,7 @@ public final class RelationshipTo implements Serializable {
   public RelationshipTo(ClientRelationship clientRelationship, Client client) {
     this.relatedFirstName = client.getFirstName();
     this.relatedLastName = client.getLastName();
+    this.relatedNameSuffix = client.getNameSuffix();
     this.relationshipToPerson = String.valueOf(clientRelationship.getClientRelationshipType());
     relationshipContext = " ";
     relatedPersonRelationship = " ";
@@ -129,6 +138,12 @@ public final class RelationshipTo implements Serializable {
     return relatedFirstName;
   }
 
+  /**
+   * @return - related name suffix
+   */
+  public String getRelatedNameSuffix() {
+    return relatedNameSuffix;
+  }
 
   /**
    * @return - related last name

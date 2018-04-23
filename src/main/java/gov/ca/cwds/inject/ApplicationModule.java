@@ -20,6 +20,8 @@ public class ApplicationModule extends AbstractModule {
 
   private Bootstrap<ApiConfiguration> bootstrap;
 
+  private DataAccessModule dataAccessModule;
+
   /**
    * Constructor. {@link AbstractModule#AbstractModule()}
    * 
@@ -38,7 +40,8 @@ public class ApplicationModule extends AbstractModule {
    */
   @Override
   protected void configure() {
-    install(new DataAccessModule(bootstrap));
+    dataAccessModule = new DataAccessModule(bootstrap);
+    install(dataAccessModule);
     install(new DataAccessServicesModule());
     install(new ServicesModule());
     install(new ResourcesModule());
@@ -49,6 +52,10 @@ public class ApplicationModule extends AbstractModule {
     install(new SecurityModule(BaseApiApplication::getInjector)
         .addAuthorizer("client:read", ClientAbstractReadAuthorizer.class)
         .addAuthorizer("screening.read", ScreeningAuthorizer.class));
+  }
+
+  public DataAccessModule getDataAccessModule() {
+    return dataAccessModule;
   }
 
 }

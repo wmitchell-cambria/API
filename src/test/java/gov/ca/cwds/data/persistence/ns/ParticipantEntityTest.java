@@ -23,14 +23,14 @@ public class ParticipantEntityTest {
   private Date birthDate = new Date();
   private String ssn = "222331111";
   private String legacyId = "1234567ABC";
-  private String roles = "Victim";
-  private String languages = "English";
+  private String[] roles = {"Victim"};
+  private String[] languages = {"English"};
   private String nameSuffix = "Esq.";
   private String races;
   private String ethnicity;
   private String legacySourceTable = "REFERL_T";
-  private String sensitivity = "";
-  private String sealed = "";
+  private Boolean sensitivity = false;
+  private Boolean sealed = false;
   private String approximateAge = "24";
   private String approximateAgeUnits = "YR";
   

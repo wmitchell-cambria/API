@@ -90,11 +90,12 @@ public class ClientRelationshipResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
 
-  @ApiOperation(value = "Find referral by id", response = Relationship.class, code = 200)
+  @ApiOperation(value = "Find relationships by client id's", response = Relationship.class,
+      code = 200)
 
   public Response getRelationships(
       @QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
-          value = "The id of the client to find relationships for") final List<String> clientIds) {
+          value = "A list of client id's to find relationships for") final List<String> clientIds) {
     gov.ca.cwds.rest.api.Response relationships = relationshipsService.findForIds(clientIds);
     return new ResponseConverter().withDataResponse(relationships);
   }

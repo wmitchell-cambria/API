@@ -16,6 +16,7 @@ public class HOIPersonResourceBuilder {
   private String id = DEFAULT_PERSON_ID;
   private String firstName = "Barney";
   private String lastName = "Dino";
+  private String nameSuffix = "Jr.";
   private LegacyDescriptor legacyDescriptor;
 
   public HOIPersonResourceBuilder setId(String id) {
@@ -38,6 +39,11 @@ public class HOIPersonResourceBuilder {
     return this;
   }
 
+  public HOIPersonResourceBuilder setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
+    return this;
+  }
+
   HOIPersonResourceBuilder() {
     this(new DateTime());
   }
@@ -52,6 +58,6 @@ public class HOIPersonResourceBuilder {
    * @return the HOIPerson
    */
   public HOIPerson createHOIPerson() {
-    return new HOIPerson(id, firstName, lastName, legacyDescriptor);
+    return new HOIPerson(id, firstName, lastName, nameSuffix, legacyDescriptor);
   }
 }

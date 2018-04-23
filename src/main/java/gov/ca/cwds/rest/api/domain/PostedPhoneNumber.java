@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.api.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import gov.ca.cwds.rest.api.Response;
 import io.dropwizard.jackson.JsonSnakeCase;
 
@@ -18,9 +16,6 @@ public class PostedPhoneNumber extends PhoneNumber {
 
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("id")
-  private long id;
-
   /**
    * Constructor
    * 
@@ -29,7 +24,7 @@ public class PostedPhoneNumber extends PhoneNumber {
    * @param type - phone number type
    */
   public PostedPhoneNumber(long id, String number, String type) {
-    super(number, type);
+    super(id, number, type);
     this.id = id;
   }
 
@@ -42,13 +37,6 @@ public class PostedPhoneNumber extends PhoneNumber {
     super(phoneNumber);
     assert phoneNumber.getId() != null;
     this.id = phoneNumber.getId();
-  }
-
-  /**
-   * @return the id
-   */
-  public long getId() {
-    return id;
   }
 
   @Override

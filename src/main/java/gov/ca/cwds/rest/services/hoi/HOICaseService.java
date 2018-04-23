@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.rest.services.ServiceException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,16 +50,13 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  */
 public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, HOICaseResponse> {
 
-  /**
-   * Serial Version UID
-   */
-  private static final long serialVersionUID = 1L;
   private static final Logger LOGGER = LoggerFactory.getLogger(HOICaseService.class);
 
   private CaseDao caseDao;
   private ClientDao clientDao;
   private ClientRelationshipDao clientRelationshipDao;
   private AuthorizationService authorizationService;
+  private HOIParentService hoiParentService;
 
   /**
    * @param caseDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.CmsCase} objects
@@ -74,12 +73,13 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     this.clientDao = clientDao;
     this.clientRelationshipDao = clientRelationshipDao;
     this.authorizationService = authorizationService;
+    this.hoiParentService = new HOIParentService(clientDao, clientRelationshipDao);
   }
 
   @Override
   protected HOICaseResponse handleFind(HOIRequest hoiRequest) {
     if (!hoiRequest.getClientIds().isEmpty()) {
-      List<HOICase> cases = findByClientId(hoiRequest);
+      List<HOICase> cases = findByClientIds(hoiRequest);
       Collections.sort(cases);
       return new HOICaseResponse(cases);
     }
@@ -100,9 +100,14 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
    * @param hoiRequest - hoiCaseRequest
    * @return the cases linked to multiple client
    */
-  public List<HOICase> findByClientId(HOIRequest hoiRequest) {
+  private List<HOICase> findByClientIds(HOIRequest hoiRequest) {
     Set<String> clientIds = hoiRequest.getClientIds();
-    return findAllCasesForAllClients(clientIds);
+    Set<String> allClientIds = new HashSet<>(clientIds);
+    for (String clientId : clientIds) {
+      clientId = authorizeClient(clientId);
+      allClientIds.addAll(findAllRelatedClientIds(clientId));
+    }
+    return findCasesForClients(allClientIds);
   }
 
   private HOICaseResponse emptyHoiCaseResponse() {
@@ -111,28 +116,28 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     return hoiCaseResponse;
   }
 
-  private List<HOICase> findAllCasesForAllClients(Set<String> clientIds) {
-    Set<String> allClientIds = new HashSet<>(clientIds);
-    for (String clientId : clientIds) {
-      clientId = authorizeClient(clientId);
-      allClientIds.addAll(findAllRelatedClientIds(clientId));
-    }
-    CmsCase[] cmscases = caseDao.findByVictimClientIds(allClientIds);
+  private List<HOICase> findCasesForClients(Set<String> clientIds) {
+    CmsCase[] cmscases = caseDao.findByVictimClientIds(clientIds);
+    Map<String, Client> clientMap = clientDao.findClientsByIds(clientIds);
     List<HOICase> hoicases = new ArrayList<>(cmscases.length);
     for (CmsCase cmscase : cmscases) {
-      HOICase hoicase = constructHOICase(cmscase);
+      Client client = clientMap.get(cmscase.getFkchldClt());
+      if (client == null) {
+        throw new ServiceException("Inconsistent CWS/CMS data: there is a case for child id "
+            + cmscase.getFkchldClt() + " but the client entity is absent.");
+      }
+      HOICase hoicase = constructHOICase(cmscase, client);
       hoicases.add(hoicase);
     }
     return hoicases;
   }
 
-  private HOICase constructHOICase(CmsCase cmscase) {
-    HOIVictim focusChild = getFocusChild(cmscase);
-    SystemCodeDescriptor county = getCounty(cmscase);
-    SystemCodeDescriptor serviceComponent = getServiceComponent(cmscase);
-    HOISocialWorker assignedSocialWorker = getAssignedSocialWorker(cmscase);
-    List<HOIRelatedPerson> parents =
-        new HOIParentService(clientDao, clientRelationshipDao).getParents(cmscase.getFkchldClt());
+  private HOICase constructHOICase(CmsCase cmscase, Client client) {
+    HOIVictim focusChild = constructFocusChild(client);
+    SystemCodeDescriptor county = constructCounty(cmscase);
+    SystemCodeDescriptor serviceComponent = constructServiceComponent(cmscase);
+    HOISocialWorker assignedSocialWorker = constructAssignedSocialWorker(cmscase);
+    List<HOIRelatedPerson> parents = hoiParentService.getParents(cmscase.getFkchldClt());
     return new HOICaseFactory().createHOICase(cmscase, county, serviceComponent, focusChild,
         assignedSocialWorker, parents);
   }
@@ -172,36 +177,49 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     return clientIds;
   }
 
-  private HOISocialWorker getAssignedSocialWorker(CmsCase cmscase) {
+  private HOISocialWorker constructAssignedSocialWorker(CmsCase cmscase) {
     StaffPerson staffPerson = cmscase.getStaffPerson();
     String staffId = staffPerson.getId();
     LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(staffId, staffId, new DateTime(staffPerson.getLastUpdatedTime()),
-            LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription());
+        new LegacyDescriptor(
+            staffId,
+            staffId,
+            new DateTime(staffPerson.getLastUpdatedTime()),
+            LegacyTable.STAFF_PERSON.getName(),
+            LegacyTable.STAFF_PERSON.getDescription());
 
-    return new HOISocialWorker(staffId, staffPerson.getFirstName(), staffPerson.getLastName(),
+    return new HOISocialWorker(
+        staffId,
+        staffPerson.getFirstName(),
+        staffPerson.getLastName(),
+        staffPerson.getNameSuffix(),
         legacyDescriptor);
   }
 
-  private SystemCodeDescriptor getServiceComponent(CmsCase cmscase) {
+  private SystemCodeDescriptor constructServiceComponent(CmsCase cmscase) {
     return new SystemCodeDescriptor(cmscase.getActiveServiceComponentType(), SystemCodeCache
         .global().getSystemCodeShortDescription(cmscase.getActiveServiceComponentType()));
   }
 
-  private SystemCodeDescriptor getCounty(CmsCase cmscase) {
+  private SystemCodeDescriptor constructCounty(CmsCase cmscase) {
     return new SystemCodeDescriptor(cmscase.getGovernmentEntityType(),
         SystemCodeCache.global().getSystemCodeShortDescription(cmscase.getGovernmentEntityType()));
   }
 
-  private HOIVictim getFocusChild(CmsCase cmscase) {
-    String focusChildId = cmscase.getFkchldClt();
-    Client client = clientDao.find(focusChildId);
+  private HOIVictim constructFocusChild(Client client) {
     String clientId = client.getId();
     LegacyDescriptor legacyDescriptor =
-        new LegacyDescriptor(clientId, CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
-            new DateTime(client.getLastUpdatedTime()), LegacyTable.CLIENT.getName(),
+        new LegacyDescriptor(
+            clientId,
+            CmsKeyIdGenerator.getUIIdentifierFromKey(clientId),
+            new DateTime(client.getLastUpdatedTime()),
+            LegacyTable.CLIENT.getName(),
             LegacyTable.CLIENT.getDescription());
-    return new HOIVictim(client.getId(), client.getCommonFirstName(), client.getCommonLastName(),
+    return new HOIVictim(
+        client.getId(),
+        client.getCommonFirstName(),
+        client.getCommonLastName(),
+        client.getNameSuffix(),
         legacyDescriptor);
   }
 

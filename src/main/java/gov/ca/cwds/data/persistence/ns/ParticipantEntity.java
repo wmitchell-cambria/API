@@ -1,8 +1,14 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
+import gov.ca.cwds.Identifiable;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
+import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
+import java.util.Arrays;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +17,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
-import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+import org.hibernate.annotations.Type;
 
 /**
  * {@link PersistentObject} representing Participant.
@@ -24,16 +31,26 @@ import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId",
+@NamedQuery(name = FIND_LEGACY_ID_LIST_BY_SCREENING_ID,
     query = "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
 @Entity
 @Table(name = "participants")
-public class ParticipantEntity implements PersistentObject {
+public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String> {
+
+  public static final String FIND_LEGACY_ID_LIST_BY_SCREENING_ID =
+      "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId";
 
   @Id
   @Column(name = "id")
+  @GenericGenerator(
+      name = "participant_id",
+      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(
+              name = "sequence_name", value = "participants_id_seq")
+      }
+  )
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_id")
-  @SequenceGenerator(name = "participant_id", sequenceName = "participants_id_seq")
   private String id;
 
   @Column(name = "date_of_birth")
@@ -51,7 +68,11 @@ public class ParticipantEntity implements PersistentObject {
   @Column(name = "ssn")
   private String ssn;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @Column(name = "screening_id")
+  private String screeningId;
+
+  @HashCodeExclude
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "screening_id", nullable = false, insertable = false, updatable = false)
   private ScreeningEntity screeningEntity;
 
@@ -59,10 +80,12 @@ public class ParticipantEntity implements PersistentObject {
   private String legacyId;
 
   @Column(name = "roles")
-  private String roles;
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
+  private String[] roles;
 
   @Column(name = "languages")
-  private String languages;
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
+  private String[] languages;
 
   @Column(name = "middle_name")
   private String middleName;
@@ -71,19 +94,21 @@ public class ParticipantEntity implements PersistentObject {
   private String nameSuffix;
 
   @Column(name = "races")
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringJsonUserType")
   private String races;
 
   @Column(name = "ethnicity")
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringJsonUserType")
   private String ethnicity;
 
   @Column(name = "legacy_source_table")
   private String legacySourceTable;
 
   @Column(name = "sensitive")
-  private String sensitive;
+  private Boolean sensitive;
 
   @Column(name = "sealed")
-  private String sealed;
+  private Boolean sealed;
 
   @Column(name = "approximate_age")
   private String approximateAge;
@@ -100,35 +125,62 @@ public class ParticipantEntity implements PersistentObject {
     super();
   }
 
-  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
-		  String gender, String lastName, String ssn, 
-		  ScreeningEntity screeningEntity, String legacyId, String roles,
-		  String languages, String middleName, String nameSuffix,
-		  String races, String ethnicity, String legacySourceTable,
-		  String sensitive, String sealed, String approximateAge,
-		  String approximateAgeUnits) {
-	  this.id = id;
-	  this.dateOfBirth = dateOfBirth;
-	  this.firstName = firstName;
-	  this.gender = gender;
-	  this.lastName = lastName;
-	  this.ssn = ssn;
-	  this.languages = languages;
-	  this.middleName = middleName;
-	  this.nameSuffix = nameSuffix;
-	  this.screeningEntity = screeningEntity;
-	  this.legacyId = legacyId;
-	  this.roles = roles;
-	  this.races = races;
-	  this.ethnicity = ethnicity;
-	  this.legacySourceTable = legacySourceTable;
-	  this.sensitive = sensitive;
-	  this.sealed = sealed;
-	  this.approximateAge = approximateAge;
-	  this.approximateAgeUnits = approximateAgeUnits;	  
+  public ParticipantEntity(ParticipantIntakeApi participantIntakeApi) {
+    updateFrom(participantIntakeApi);
   }
-  
-		  
+
+  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
+      String gender, String lastName, String ssn,
+      ScreeningEntity screeningEntity, String legacyId, String[] roles,
+      String[] languages, String middleName, String nameSuffix,
+      String races, String ethnicity, String legacySourceTable,
+      Boolean sensitive, Boolean sealed, String approximateAge,
+      String approximateAgeUnits) {
+    this.id = id;
+    this.dateOfBirth = dateOfBirth;
+    this.firstName = firstName;
+    this.gender = gender;
+    this.lastName = lastName;
+    this.ssn = ssn;
+    this.languages = languages == null ? new String[0] : Arrays.copyOf(languages, languages.length);
+    this.middleName = middleName;
+    this.nameSuffix = nameSuffix;
+    this.screeningEntity = screeningEntity;
+    this.legacyId = legacyId;
+    this.roles = roles == null ? new String[0] : Arrays.copyOf(roles, roles.length);
+    this.races = races;
+    this.ethnicity = ethnicity;
+    this.legacySourceTable = legacySourceTable;
+    this.sensitive = sensitive;
+    this.sealed = sealed;
+    this.approximateAge = approximateAge;
+    this.approximateAgeUnits = approximateAgeUnits;
+  }
+
+  public final ParticipantEntity updateFrom(ParticipantIntakeApi participantIntakeApi) {
+    id = participantIntakeApi.getId();
+    dateOfBirth = participantIntakeApi.getDateOfBirth();
+    firstName = participantIntakeApi.getFirstName();
+    gender = participantIntakeApi.getGender();
+    lastName = participantIntakeApi.getLastName();
+    ssn = participantIntakeApi.getSsn();
+    screeningId = participantIntakeApi.getScreeningId() == null ? null
+        : String.valueOf(participantIntakeApi.getScreeningId());
+    legacyId = participantIntakeApi.getLegacyId();
+    roles = participantIntakeApi.getRoles().toArray(new String[0]);
+    languages = participantIntakeApi.getLanguages().toArray(new String[0]);
+    middleName = participantIntakeApi.getMiddleName();
+    nameSuffix = participantIntakeApi.getNameSuffix();
+    races = participantIntakeApi.getRaces();
+    ethnicity = participantIntakeApi.getEthnicity();
+    legacySourceTable = participantIntakeApi.getLegacySourceTable();
+    sensitive = participantIntakeApi.isSensitive();
+    sealed = participantIntakeApi.isSealed();
+    approximateAge = participantIntakeApi.getApproximateAge();
+    approximateAgeUnits = participantIntakeApi.getApproximateAgeUnits();
+    return this;
+  }
+
   @Override
   public String getPrimaryKey() {
     return id;
@@ -158,6 +210,10 @@ public class ParticipantEntity implements PersistentObject {
     return ssn;
   }
 
+  public String getScreeningId() {
+    return screeningId;
+  }
+
   public ScreeningEntity getScreening() {
     return screeningEntity;
   }
@@ -166,12 +222,18 @@ public class ParticipantEntity implements PersistentObject {
     return legacyId;
   }
 
-  public String getRoles() {
-    return roles;
+  public String[] getRoles() {
+    if (roles == null) {
+      return new String[0];
+    }
+    return Arrays.copyOf(roles, roles.length);
   }
 
-  public String getLanguages() {
-    return languages;
+  public String[] getLanguages() {
+    if (languages == null) {
+      return new String[0];
+    }
+    return Arrays.copyOf(languages, languages.length);
   }
 
   public String getMiddleName() {
@@ -194,11 +256,11 @@ public class ParticipantEntity implements PersistentObject {
     return legacySourceTable;
   }
 
-  public String getSensitive() {
+  public Boolean getSensitive() {
     return sensitive;
   }
 
-  public String getSealed() {
+  public Boolean getSealed() {
     return sealed;
   }
 

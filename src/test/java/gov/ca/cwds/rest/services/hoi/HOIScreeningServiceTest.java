@@ -9,8 +9,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -23,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
@@ -67,35 +70,39 @@ public class HOIScreeningServiceTest {
     new TestingRequestExecutionContext(DEFAULT_ASSIGNEE_STAFF_ID);
 
     screeningDao = mock(ScreeningDao.class);
-    ParticipantDao participantDao = mock(ParticipantDao.class);
+    IntakeLOVCodeDao intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
+    LegacyDescriptorDao legacyDescriptorDao = mock(LegacyDescriptorDao.class);
     StaffPersonResource staffPersonResource = mock(StaffPersonResource.class);
 
-    when(participantDao.findParticipantLegacyDescriptor(DEFAULT_PERSON_ID))
+    when(legacyDescriptorDao.findParticipantLegacyDescriptor(DEFAULT_PERSON_ID))
         .thenReturn(mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
-    when(participantDao.findParticipantLegacyDescriptor(DEFAULT_REPORTER_ID))
+    when(legacyDescriptorDao.findParticipantLegacyDescriptor(DEFAULT_REPORTER_ID))
         .thenReturn(mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
 
     StaffPerson mockStaffPerson = new StaffPersonResourceBuilder().build();
     when(staffPersonResource.get(DEFAULT_ASSIGNEE_STAFF_ID))
         .thenReturn(Response.ok(mockStaffPerson).build());
     HOIPersonFactory hoiPersonFactory = new HOIPersonFactory();
-    hoiPersonFactory.participantDao = participantDao;
+    hoiPersonFactory.legacyDescriptorDao = legacyDescriptorDao;
     hoiPersonFactory.staffPersonResource = staffPersonResource;
 
-    IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
-    mockIntakeLOVCodeEntity.setLgSysId(1101L);
-    mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
-    when(screeningDao.findIntakeLOVCodeByIntakeCode(any(String.class)))
-        .thenReturn(mockIntakeLOVCode());
+    IntakeLOVCodeEntity intakeLOVCodeEntity = new IntakeLOVCodeEntity();
+    intakeLOVCodeEntity.setLgSysId(1101L);
+    intakeLOVCodeEntity.setIntakeCode("sacramento");
+    intakeLOVCodeEntity.setIntakeDisplay("Sacramento");
+    Map<String, IntakeLOVCodeEntity> intakeLOVCodeEntityMap = new HashMap<>();
+    intakeLOVCodeEntityMap.put(intakeLOVCodeEntity.getIntakeCode(), intakeLOVCodeEntity);
+    when(intakeLOVCodeDao.findIntakeLOVCodesByIntakeCodes(any(Set.class)))
+        .thenReturn(intakeLOVCodeEntityMap);
 
     HOIScreeningFactory hoiScreeningFactory = new HOIScreeningFactory();
-    hoiScreeningFactory.screeningDao = screeningDao;
     hoiScreeningFactory.hoiPersonFactory = hoiPersonFactory;
 
     AuthorizationService authorizationService = mock(AuthorizationService.class);
 
     hoiScreeningService = new HOIScreeningService();
     hoiScreeningService.screeningDao = screeningDao;
+    hoiScreeningService.intakeLOVCodeDao = intakeLOVCodeDao;
     hoiScreeningService.hoiScreeningFactory = hoiScreeningFactory;
     hoiScreeningService.authorizationService = authorizationService;
   }
@@ -131,13 +138,13 @@ public class HOIScreeningServiceTest {
         .createHOIPerson();
 
     HOIReporter reporter = new HOIReporterResourceBuilder(null).setRole(Role.MANDATED_REPORTER)
-        .setFirstName("Alec").setLastName("Nite").createHOIReporter();
+        .setFirstName("Alec").setLastName("Nite").setNameSuffix("Jr.").createHOIReporter();
 
     HOIPerson personReporter = new HOIPersonResourceBuilder(null).setId(DEFAULT_REPORTER_ID)
-        .setFirstName("Alec").setLastName("Nite")
+        .setFirstName("Alec").setLastName("Nite").setNameSuffix("Jr.")
         .setLegacyDescriptor(reporter.getLegacyDescriptor()).createHOIPerson();
 
-    HOISocialWorker socialWorker = new HOISocialWorker(DEFAULT_ASSIGNEE_STAFF_ID, "b", "d",
+    HOISocialWorker socialWorker = new HOISocialWorker(DEFAULT_ASSIGNEE_STAFF_ID, "b", "d", "g",
         expectedSocialWorkerLegacyDescriptor(DEFAULT_ASSIGNEE_STAFF_ID));
 
     Set<HOIScreening> screenings =
@@ -162,7 +169,7 @@ public class HOIScreeningServiceTest {
     screening1.setAccessRestrictions(accessRestriction);
 
     ParticipantEntity reporter = new ParticipantEntityBuilder().setId(DEFAULT_REPORTER_ID)
-        .setFirstName("Alec").setLastName("Nite").setRoles("{Mandated Reporter}").build();
+        .setFirstName("Alec").setLastName("Nite").setRoles(new String[]{"Mandated Reporter"}).setNameSuffix("Jr.").build();
 
     ScreeningEntity screening2 = new ScreeningEntityBuilder().setId("224")
         .setStartedAt("2017-11-30").setEndedAt("2017-12-10").setIncidentCounty("sacramento")
@@ -176,21 +183,14 @@ public class HOIScreeningServiceTest {
     return result;
   }
 
-  private IntakeLOVCodeEntity mockIntakeLOVCode() {
-    IntakeLOVCodeEntity mockIntakeLOVCodeEntity = new IntakeLOVCodeEntity();
-    mockIntakeLOVCodeEntity.setLgSysId(1101L);
-    mockIntakeLOVCodeEntity.setIntakeDisplay("Sacramento");
-    return mockIntakeLOVCodeEntity;
-  }
-
   private LegacyDescriptorEntity mockLegacyDescriptorEntity(String participantId) {
     switch (participantId) {
       case DEFAULT_PERSON_ID:
         return new LegacyDescriptorEntity(DEFAULT_PERSON_ID, "jhdgfkhaj-hohj-jkj",
-            LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription(), null);
+            LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription(), null, LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT, 1L);
       case DEFAULT_REPORTER_ID:
         return new LegacyDescriptorEntity(DEFAULT_REPORTER_ID, "reporterabc-hohj-jkj",
-            LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription(), null);
+            LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription(),null,  LegacyDescriptorEntity.DESCRIBABLE_TYPE_PARTICIPANT, 2L);
       default:
         return null;
     }

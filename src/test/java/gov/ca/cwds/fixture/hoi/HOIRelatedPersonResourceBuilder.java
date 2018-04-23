@@ -17,6 +17,7 @@ public class HOIRelatedPersonResourceBuilder {
   private String id = "motherabc";
   private String firstName = "Mother";
   private String lastName = "Dino";
+  private String nameSuffix = "Sr.";
   private LegacyDescriptor legacyDescriptor;
   private LimitedAccessType limitedAccessType;
   private SystemCodeDescriptor relationship;
@@ -63,7 +64,7 @@ public class HOIRelatedPersonResourceBuilder {
    * @return the HOIRelatedPerson
    */
   public HOIRelatedPerson createHOIRelatedPerson() {
-    return new HOIRelatedPerson(id, firstName, lastName, legacyDescriptor, relationship,
+    return new HOIRelatedPerson(id, firstName, lastName, nameSuffix, legacyDescriptor, relationship,
         limitedAccessType);
 
   }

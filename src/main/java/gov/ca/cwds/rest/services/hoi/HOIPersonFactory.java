@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -16,7 +16,6 @@ import gov.ca.cwds.rest.util.CmsRecordUtils;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author CWDS API Team
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public final class HOIPersonFactory {
 
   @Inject
-  ParticipantDao participantDao;
+  LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
   StaffPersonResource staffPersonResource;
@@ -33,9 +32,9 @@ public final class HOIPersonFactory {
    * @param participantEntity ns ParticipantEntity
    * @return HOIPerson
    */
-  public HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
+  HOIPerson buildHOIPerson(ParticipantEntity participantEntity) {
     HOIPerson result = new HOIPerson(participantEntity);
-    LegacyDescriptorEntity legacyDescriptorEntity = participantDao.findParticipantLegacyDescriptor(participantEntity.getId());
+    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao.findParticipantLegacyDescriptor(participantEntity.getId());
     if (legacyDescriptorEntity != null) {
       result.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
@@ -47,15 +46,19 @@ public final class HOIPersonFactory {
    * @param legacyDescriptor domain LegacyDescriptor
    * @return HOIReporter instance; can be null if the given participant has no reporter role
    */
-  public HOIReporter buidHOIReporter(ParticipantEntity participantEntity,
-      LegacyDescriptor legacyDescriptor) {
+  HOIReporter buidHOIReporter(
+      ParticipantEntity participantEntity, LegacyDescriptor legacyDescriptor) {
     Set<String> roles = parseRoles(participantEntity.getRoles());
     HOIReporter.Role reporterRole = findReporterRole(roles);
     if (reporterRole == null) {
       return null;
     }
-    return new HOIReporter(reporterRole, participantEntity.getId(),
-        participantEntity.getFirstName(), participantEntity.getLastName(),
+    return new HOIReporter(
+        reporterRole,
+        participantEntity.getId(),
+        participantEntity.getFirstName(),
+        participantEntity.getLastName(),
+        participantEntity.getNameSuffix(),
         legacyDescriptor);
   }
 
@@ -63,7 +66,7 @@ public final class HOIPersonFactory {
    * @param assigneeStaffId staff person id
    * @return corresponding instance of HOISocialWorker or null
    */
-  public HOISocialWorker buildHOISocialWorker(String assigneeStaffId) {
+  HOISocialWorker buildHOISocialWorker(String assigneeStaffId) {
     StaffPerson staffPerson = (StaffPerson) staffPersonResource.get(assigneeStaffId).getEntity();
     if (staffPerson == null) {
       return null;
@@ -72,26 +75,28 @@ public final class HOIPersonFactory {
     CmsRecordDescriptor cmsRecordDescriptor = CmsRecordUtils
         .createLegacyDescriptor(assigneeStaffId, LegacyTable.STAFF_PERSON);
 
-    LegacyDescriptor legacyDescriptor = new LegacyDescriptor(cmsRecordDescriptor.getId(),
-        cmsRecordDescriptor.getUiId(), null, cmsRecordDescriptor.getTableName(),
-        cmsRecordDescriptor.getTableDescription());
+    LegacyDescriptor legacyDescriptor =
+        new LegacyDescriptor(
+            cmsRecordDescriptor.getId(),
+            cmsRecordDescriptor.getUiId(),
+            null,
+            cmsRecordDescriptor.getTableName(),
+            cmsRecordDescriptor.getTableDescription());
 
-    return new HOISocialWorker(assigneeStaffId, staffPerson.getFirstName(),
-        staffPerson.getLastName(), legacyDescriptor);
+    return new HOISocialWorker(
+        assigneeStaffId,
+        staffPerson.getFirstName(),
+        staffPerson.getLastName(),
+        staffPerson.getNameSuffix(),
+        legacyDescriptor);
   }
 
   /**
-   * @param roles string like "{Perpetrator,Mandated Reporter}"
+   * @param roles string array
    * @return set of roles parsed from the input string
    */
-  private Set<String> parseRoles(String roles) {
-    if (roles != null && roles.length() > 1) {
-      return Arrays.stream(roles.substring(1, roles.length() - 1).split(","))
-          .map(role -> role.replaceAll("\"", " ").trim()).filter(role -> !role.isEmpty())
-          .collect(Collectors.toSet());
-    } else {
-      return new HashSet<>();
-    }
+  private Set<String> parseRoles(String[] roles) {
+    return roles == null ? new HashSet<>() : new HashSet<>(Arrays.asList(roles));
   }
 
   /**
