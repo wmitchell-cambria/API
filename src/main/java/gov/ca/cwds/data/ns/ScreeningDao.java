@@ -38,8 +38,8 @@ public class ScreeningDao extends BaseDaoImpl<ScreeningEntity> {
    * @param referralId - referral Id
    * @return list of ScreeningEntity object
    */
-  @SuppressWarnings("unchecked")
   public ScreeningEntity[] findScreeningsByReferralId(String referralId) {
+    @SuppressWarnings("unchecked")
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(constructNamedQueryName("findScreeningsByReferralId"))
         .setParameter("referralId", referralId);
@@ -52,8 +52,8 @@ public class ScreeningDao extends BaseDaoImpl<ScreeningEntity> {
    * @param clientIds - Legacy Client Id-s
    * @return list of ScreeningEntity objects
    */
-  @SuppressWarnings("unchecked")
   public Set<ScreeningEntity> findScreeningsByClientIds(Set<String> clientIds) {
+    @SuppressWarnings("unchecked")
     final Query<ScreeningEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(constructNamedQueryName("findScreeningsByClientIds"))
         .setParameter("clientIds", clientIds);
