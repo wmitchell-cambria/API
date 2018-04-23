@@ -1,15 +1,17 @@
 package gov.ca.cwds.rest.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
-import io.dropwizard.jackson.JsonSnakeCase;
-import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
+import io.dropwizard.jackson.JsonSnakeCase;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author CWDS API Team
@@ -61,7 +63,7 @@ public class LegacyDescriptor extends DomainObject {
    * @param uiId - the CMS user interface Id
    * @param lastUpdated - date/time of last update to CMS record
    * @param tableName - the physical table name
-   * @param tableDescription - the table Descrption
+   * @param tableDescription - the table description
    */
   public LegacyDescriptor(String id, String uiId, DateTime lastUpdated, String tableName,
       String tableDescription) {
@@ -77,8 +79,7 @@ public class LegacyDescriptor extends DomainObject {
    *
    * @param legacyDescriptorEntity persistence level LegacyDescriptorEntity object
    */
-  public LegacyDescriptor(
-      LegacyDescriptorEntity legacyDescriptorEntity) {
+  public LegacyDescriptor(LegacyDescriptorEntity legacyDescriptorEntity) {
     this.id = legacyDescriptorEntity.getLegacyId();
     this.uiId = legacyDescriptorEntity.getLegacyUiId();
     if (legacyDescriptorEntity.getLegacyLastUpdated() != null) {

@@ -42,6 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ScreeningToReferralResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -76,7 +77,7 @@ public class ScreeningToReferralResource {
   }
 
   /**
-   * Create an {@link ScreeningToReferral}
+   * Create an {@link ScreeningToReferral}.
    * 
    * @param screeningToReferral The {@link ScreeningToReferral}
    * 

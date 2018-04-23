@@ -1,6 +1,11 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
@@ -10,8 +15,6 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import java.io.Serializable;
-import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * Business layer object to work on {@link Address}
@@ -26,8 +29,9 @@ public class AddressIntakeApiService implements CrudsService {
   /**
    * Constructor
    *
-   * @param addressesDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address}
-   * objects.
+   * @param addressesDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address}
+   *        objects.
+   * @param legacyDescriptorDao - {@link Dao} for {@link LegacyDescriptorDao}
    */
   @Inject
   public AddressIntakeApiService(AddressesDao addressesDao,
@@ -50,9 +54,9 @@ public class AddressIntakeApiService implements CrudsService {
       return null;
     }
     AddressIntakeApi addressIntakeApi = new AddressIntakeApi(persistedAddress);
-    //Get it's legacy descriptor
-    LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
-        .findAddressLegacyDescriptor(persistedAddress.getId());
+    // Get it's legacy descriptor
+    LegacyDescriptorEntity legacyDescriptorEntity =
+        legacyDescriptorDao.findAddressLegacyDescriptor(persistedAddress.getId());
     if (legacyDescriptorEntity != null) {
       addressIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
@@ -88,8 +92,8 @@ public class AddressIntakeApiService implements CrudsService {
     managed = addressesDao.create(managed);
 
     AddressIntakeApi addressPosted = new AddressIntakeApi(managed);
-    address.setLegacyDescriptor(
-        saveLegacyDescriptor(address.getLegacyDescriptor(), managed.getId()));
+    address
+        .setLegacyDescriptor(saveLegacyDescriptor(address.getLegacyDescriptor(), managed.getId()));
 
     return addressPosted;
   }
@@ -105,15 +109,13 @@ public class AddressIntakeApiService implements CrudsService {
     throw new NotImplementedException("Update is not implemented");
   }
 
-  LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor,
-      String describableId) {
+  LegacyDescriptor saveLegacyDescriptor(LegacyDescriptor legacyDescriptor, String describableId) {
     if (legacyDescriptor == null || describableId == null) {
       return null;
     }
-    //Save legacy descriptor entity
-    LegacyDescriptorEntity legacyDescriptorEntity = new LegacyDescriptorEntity(
-        legacyDescriptor, LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS,
-        Long.valueOf(describableId));
+    // Save legacy descriptor entity
+    LegacyDescriptorEntity legacyDescriptorEntity = new LegacyDescriptorEntity(legacyDescriptor,
+        LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS, Long.valueOf(describableId));
     legacyDescriptorEntity = legacyDescriptorDao.create(legacyDescriptorEntity);
     return new LegacyDescriptor(legacyDescriptorEntity);
   }

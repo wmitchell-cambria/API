@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,10 +17,13 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import gov.ca.cwds.data.cms.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
+import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
+import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
 import gov.ca.cwds.rest.services.junit.template.ServiceTestTemplate;
 import io.dropwizard.jackson.Jackson;
 
@@ -29,13 +32,18 @@ import io.dropwizard.jackson.Jackson;
  *
  */
 public class AddressServiceTest implements ServiceTestTemplate {
+
+  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+
   private AddressService addressService;
 
   private AddressDao addressDao;
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+
+  private XaNsAddressDao xaNsAddressDao;
+  private XaCmsAddressDao xaCmsAddressDao;
+
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -43,8 +51,12 @@ public class AddressServiceTest implements ServiceTestTemplate {
   @Before
   public void setup() throws Exception {
     addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao);
+    xaNsAddressDao = mock(XaNsAddressDao.class);
+    xaCmsAddressDao = mock(XaCmsAddressDao.class);
+    addressService = new AddressService(addressDao, xaNsAddressDao, xaCmsAddressDao);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
+
+    new RequestExecutionContextImplTest().setup();
   }
 
   /*
@@ -186,7 +198,6 @@ public class AddressServiceTest implements ServiceTestTemplate {
     // System.out.println(r);
 
     assertThat(returned, is(expected));
-
   }
 
   /*
@@ -241,10 +252,8 @@ public class AddressServiceTest implements ServiceTestTemplate {
   }
 
   @Override
-  @Test
+  @Test(expected = ServiceException.class)
   public void testUpdateThrowsNotImplementedException() throws Exception {
-    thrown.expect(NotImplementedException.class);
-
     addressService.update(1L,
         new Address("", "", "street", "city", 1828, "95555", 32, legacyDescriptor));
   }

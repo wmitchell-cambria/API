@@ -13,9 +13,6 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonSnakeCase
 public class HOIRequest implements Request {
 
-  /**
-   * default
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("client_ids")

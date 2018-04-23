@@ -75,6 +75,4 @@ public class HoiScreeningResource {
     return new ResponseConverter().withDataResponse(clients);
   }
 
-
-
 }

@@ -15,6 +15,7 @@ import gov.ca.cwds.rest.api.domain.investigation.Person;
  * @author CWDS API Team
  */
 public class PeopleDao extends CrudsDaoImpl<Client> {
+
   /**
    * Constructor
    * 
@@ -24,4 +25,5 @@ public class PeopleDao extends CrudsDaoImpl<Client> {
   public PeopleDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
 }
