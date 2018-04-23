@@ -60,16 +60,12 @@ public class HOIScreeningService
    */
   @Override
   protected HOIScreeningResponse handleFind(HOIRequest hoiScreeningRequest) {
-    Set<HOIScreening> screenings =
-        new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
-
     Set<String> clientIds = hoiScreeningRequest.getClientIds();
     /*
      * NOTE: When we want to enable authorizations for screening history, we can add following line
      * of code back at this spot:<br/>
      * authorizationService&#46;ensureClientAccessAuthorized&#40;clientIds&#41;&#59;
      */
-
     Set<ScreeningEntity> screeningEntities = screeningDao.findScreeningsByClientIds(clientIds);
 
     Set<String> counties = new HashSet<>();
@@ -88,6 +84,8 @@ public class HOIScreeningService
     Map<String, LegacyDescriptorEntity> participantLegacyDescriptors = legacyDescriptorDao
         .findParticipantLegacyDescriptors(participantIds);
 
+    Set<HOIScreening> screenings =
+        new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
     for (ScreeningEntity screeningEntity : screeningEntities) {
       /*
        * NOTE: When we want to enable authorizations for screening history, we can add following
