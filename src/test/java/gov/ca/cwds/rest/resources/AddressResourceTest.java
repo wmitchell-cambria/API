@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -37,22 +36,18 @@ public class AddressResourceTest {
 
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   private final static ResourceDelegate resourceDelegate = mock(ResourceDelegate.class);
 
-  @SuppressWarnings("javadoc")
   @ClassRule
   public final static ResourceTestRule inMemoryResource =
       ResourceTestRule.builder().addResource(new AddressResource(resourceDelegate)).build();
 
-  @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
     Mockito.reset(resourceDelegate);
@@ -61,7 +56,6 @@ public class AddressResourceTest {
   /*
    * Get Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testGetDelegatesToResourceDelegate() throws Exception {
     inMemoryResource.client().target(FOUND_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -69,7 +63,6 @@ public class AddressResourceTest {
     verify(resourceDelegate, atLeastOnce()).get(1L);
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testGet204NoContentSuccess() throws Exception {
     int status = inMemoryResource.client().target(FOUND_RESOURCE).request()
@@ -77,7 +70,6 @@ public class AddressResourceTest {
     assertThat(status, is(204));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testGet404NotFoundError() throws Exception {
     int status = inMemoryResource.client().target(NOT_FOUND_RESOURCE).request()
@@ -88,8 +80,6 @@ public class AddressResourceTest {
   /*
    * Create Tests
    */
-  @Ignore
-  @SuppressWarnings("javadoc")
   @Test
   public void testPostDelegatesToResourceDelegate() throws Exception {
     Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
@@ -99,8 +89,6 @@ public class AddressResourceTest {
     verify(resourceDelegate, atLeastOnce()).create(eq(address));
   }
 
-  @Ignore
-  @SuppressWarnings("javadoc")
   @Test
   public void testPostValidatesEntity() throws Exception {
     Address address = new Address("", "", "123456789012345678901234567890123456789012345678901",
@@ -111,8 +99,6 @@ public class AddressResourceTest {
     assertThat(status, is(422));
   }
 
-  @Ignore
-  @SuppressWarnings("javadoc")
   @Test
   public void testPost200ResourceSuccess() throws Exception {
     Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
@@ -126,7 +112,6 @@ public class AddressResourceTest {
   /*
    * Delete Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testDelete501NotImplemented() throws Exception {
     int receivedStatus = inMemoryResource.client().target(FOUND_RESOURCE).request()
@@ -138,7 +123,6 @@ public class AddressResourceTest {
   /*
    * Update Tests
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testUpdate501NotImplemented() throws Exception {
     Address address = new Address("", "", "742 Evergreen Terrace", "Springfield", 1828, "98700", 32,
