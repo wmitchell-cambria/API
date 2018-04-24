@@ -32,6 +32,10 @@ import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
 import gov.ca.cwds.data.persistence.ns.PersonAddress;
+import gov.ca.cwds.data.persistence.ns.PersonEthnicity;
+import gov.ca.cwds.data.persistence.ns.PersonLanguage;
+import gov.ca.cwds.data.persistence.ns.PersonPhone;
+import gov.ca.cwds.data.persistence.ns.PersonRace;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.DomainChef;
@@ -166,6 +170,60 @@ public class PersonServiceTest {
   }
 
   @Test
+  public void createReturnsPostedPersonWithAll() throws Exception {
+    gov.ca.cwds.data.persistence.ns.Address toCreateAddress =
+        new gov.ca.cwds.data.persistence.ns.Address(1L, "742 Evergreen Terrace", "Springfield",
+            "1877", "98700", "32");
+    Set<PersonAddress> personAddresses = new HashSet<>();
+
+    PersonAddress personAddress = new PersonAddress();
+    personAddress.setAddress(toCreateAddress);
+    personAddresses.add(personAddress);
+
+    gov.ca.cwds.data.persistence.ns.Ethnicity toCreateEthnicity =
+        new gov.ca.cwds.data.persistence.ns.Ethnicity(1L, "American", "Indian");
+    Set<PersonEthnicity> personEthnicities = new HashSet<>();
+
+    PersonEthnicity personEthnicity = new PersonEthnicity();
+    personEthnicity.setEthnicity(toCreateEthnicity);
+    personEthnicities.add(personEthnicity);
+
+    gov.ca.cwds.data.persistence.ns.PhoneNumber toCreatePhoneNumer =
+        new gov.ca.cwds.data.persistence.ns.PhoneNumber(1L, "4046410289", "phone");
+    Set<PersonPhone> personPhones = new HashSet<>();
+
+    PersonPhone personPhone = new PersonPhone();
+    personPhone.setPhoneNumber(toCreatePhoneNumer);
+    personPhones.add(personPhone);
+
+    gov.ca.cwds.data.persistence.ns.Language toCreateLanguage =
+        new gov.ca.cwds.data.persistence.ns.Language(1L, "12356");
+    Set<PersonLanguage> personLanguages = new HashSet<>();
+
+    PersonLanguage personLanguage = new PersonLanguage();
+    personLanguage.setLanguage(toCreateLanguage);
+    personLanguages.add(personLanguage);
+
+    gov.ca.cwds.data.persistence.ns.Race toCreateRace =
+        new gov.ca.cwds.data.persistence.ns.Race(1L, "African", "Balck");
+    Set<PersonRace> personRaces = new HashSet<>();
+
+    PersonRace personRace = new PersonRace();
+    personRace.setRace(toCreateRace);
+    personRaces.add(personRace);
+
+    gov.ca.cwds.data.persistence.ns.Person toCreate = new gov.ca.cwds.data.persistence.ns.Person(2L,
+        "Bart", "S", "Simpson", "M", DomainChef.uncookDateString("2013-10-31"), "1234556789",
+        personAddresses, personPhones, personLanguages, personRaces, personEthnicities);
+
+    Person request = new Person(toCreate);
+    when(personDao.create(any(gov.ca.cwds.data.persistence.ns.Person.class))).thenReturn(toCreate);
+    when(personDao.find(any(Long.class))).thenReturn(toCreate);
+    Response response = personService.create(request);
+    assertThat(response.getClass(), is(PostedPerson.class));
+  }
+
+  @Test
   public void createReturnsNonNull() throws Exception {
     gov.ca.cwds.data.persistence.ns.Address toCreateAddress =
         new gov.ca.cwds.data.persistence.ns.Address(1L, "742 Evergreen Terrace", "Springfield",
@@ -200,9 +258,8 @@ public class PersonServiceTest {
   /*
    * delete tests
    */
-  @Test
+  @Test(expected = NotImplementedException.class)
   public void deleteThrowsNotImplementedException() throws Exception {
-    thrown.expect(NotImplementedException.class);
     personService.delete(124L);
   }
 
