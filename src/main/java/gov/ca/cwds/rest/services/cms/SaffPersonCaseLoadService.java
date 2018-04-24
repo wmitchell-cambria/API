@@ -30,12 +30,12 @@ public class SaffPersonCaseLoadService
   }
 
   @Override
-  public StaffPersonCaseLoad create(StaffPersonCaseLoad arg0) {
+  public StaffPersonCaseLoad create(StaffPersonCaseLoad primaryKey) {
     throw new NotImplementedException("Create is not implemented");
   }
 
   @Override
-  public StaffPersonCaseLoad delete(String arg0) {
+  public StaffPersonCaseLoad delete(String primaryKey) {
     throw new NotImplementedException("Delete is not implemented");
   }
 

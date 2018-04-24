@@ -9,9 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.StaffPersonCaseLoadDao;
 import gov.ca.cwds.fixture.StaffPersonCaseLoadEntityBuilder;
@@ -26,9 +24,6 @@ public class SaffPersonCaseLoadServiceTest {
 
   private SaffPersonCaseLoadService staffPersonCaseLoadService;
   private StaffPersonCaseLoadDao staffPersonCaseLoadDao;
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
 
   /**
    * @throws Exception - Exception
@@ -71,7 +66,7 @@ public class SaffPersonCaseLoadServiceTest {
    * 
    */
   @Test(expected = NotImplementedException.class)
-  public void notImplementreate() {
+  public void notImplementedCreate() {
     staffPersonCaseLoadService.create(new StaffPersonCaseLoad());
   }
 
