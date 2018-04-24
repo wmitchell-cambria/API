@@ -1,22 +1,21 @@
 package gov.ca.cwds.rest.services.cms;
 
-import java.io.Serializable;
+import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.StaffPersonCaseLoadDao;
-import gov.ca.cwds.data.persistence.cms.StaffPersonCaseLoad;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.api.domain.cms.StaffPersonCaseLoad;
+import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
  * Business layer object to work on {@link StaffPersonCaseLoad}
  * 
  * @author CWDS API Team
  */
-public class SaffPersonCaseLoadService implements CrudsService {
+public class SaffPersonCaseLoadService
+    implements TypedCrudsService<String, StaffPersonCaseLoad, StaffPersonCaseLoad> {
 
   private StaffPersonCaseLoadDao staffPersonCaseLoadDao;
 
@@ -31,21 +30,19 @@ public class SaffPersonCaseLoadService implements CrudsService {
   }
 
   @Override
-  public Response create(Request arg0) {
-    return null;
+  public StaffPersonCaseLoad create(StaffPersonCaseLoad primaryKey) {
+    throw new NotImplementedException("Create is not implemented");
   }
 
   @Override
-  public Response delete(Serializable arg0) {
-    return null;
+  public StaffPersonCaseLoad delete(String primaryKey) {
+    throw new NotImplementedException("Delete is not implemented");
   }
 
   @Override
-  public Response find(Serializable primaryKey) {
-    assert primaryKey instanceof String;
+  public StaffPersonCaseLoad find(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.StaffPersonCaseLoad persistedStaffPersonCaseLoad =
         staffPersonCaseLoadDao.find(primaryKey);
-
     if (persistedStaffPersonCaseLoad != null) {
       return new gov.ca.cwds.rest.api.domain.cms.StaffPersonCaseLoad(persistedStaffPersonCaseLoad);
     }
@@ -53,8 +50,8 @@ public class SaffPersonCaseLoadService implements CrudsService {
   }
 
   @Override
-  public Response update(Serializable arg0, Request arg1) {
-    return null;
+  public StaffPersonCaseLoad update(String primaryKey, StaffPersonCaseLoad request) {
+    throw new NotImplementedException("Update is not implemented");
   }
 
 }

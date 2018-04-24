@@ -32,8 +32,8 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
    * @param screeningId screeningId
    * @return Set of Legacy Id-s
    */
-  @SuppressWarnings("unchecked")
   public Set<String> findLegacyIdListByScreeningId(String screeningId) {
+    @SuppressWarnings("unchecked")
     final Query<String> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID)
         .setParameter("screeningId", screeningId);

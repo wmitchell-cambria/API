@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -10,18 +8,16 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 
 /**
- * Business layer object to work on {@link Address}
+ * Business layer object to work on {@link AddressIntakeApi}
  *
- * @author Intake Team 4
+ * @author CWDS API team
  */
-public class AddressIntakeApiService implements CrudsService {
+public class AddressIntakeApiService
+    implements TypedCrudsService<String, AddressIntakeApi, AddressIntakeApi> {
 
   private AddressesDao addressesDao;
   private LegacyDescriptorDao legacyDescriptorDao;
@@ -42,13 +38,38 @@ public class AddressIntakeApiService implements CrudsService {
 
   /**
    * {@inheritDoc}
-   *
-   * @see CrudsService#find(Serializable)
+   * 
+   * @see gov.ca.cwds.rest.services.TypedCrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public AddressIntakeApi find(Serializable primaryKey) {
-    assert primaryKey instanceof Long;
+  public AddressIntakeApi create(AddressIntakeApi request) {
+    AddressIntakeApi address = request;
+    gov.ca.cwds.data.persistence.ns.Addresses managed =
+        new gov.ca.cwds.data.persistence.ns.Addresses(address);
+    managed = addressesDao.create(managed);
+    AddressIntakeApi addressPosted = new AddressIntakeApi(managed);
+    addressPosted
+        .setLegacyDescriptor(saveLegacyDescriptor(address.getLegacyDescriptor(), managed.getId()));
+    return addressPosted;
+  }
 
+  /**
+   * {@inheritDoc}
+   * 
+   * @see gov.ca.cwds.rest.services.TypedCrudsService#delete(java.io.Serializable)
+   */
+  @Override
+  public AddressIntakeApi delete(String primaryKey) {
+    throw new NotImplementedException("Delete is not implemented");
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see gov.ca.cwds.rest.services.TypedCrudsService#find(java.io.Serializable)
+   */
+  @Override
+  public AddressIntakeApi find(String primaryKey) {
     gov.ca.cwds.data.persistence.ns.Addresses persistedAddress = addressesDao.find(primaryKey);
     if (persistedAddress == null) {
       return null;
@@ -60,52 +81,17 @@ public class AddressIntakeApiService implements CrudsService {
     if (legacyDescriptorEntity != null) {
       addressIntakeApi.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
     }
-
     return addressIntakeApi;
   }
 
   /**
    * {@inheritDoc}
-   *
-   * @see CrudsService#delete(Serializable)
+   * 
+   * @see gov.ca.cwds.rest.services.TypedCrudsService#update(java.io.Serializable,
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
-  public Response delete(Serializable primaryKey) {
-    assert primaryKey instanceof Long;
-    throw new NotImplementedException("Delete is not implemented");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see CrudsService#create(Request)
-   */
-  @Override
-  public AddressIntakeApi create(Request request) {
-    assert request instanceof AddressIntakeApi;
-
-    AddressIntakeApi address = (AddressIntakeApi) request;
-
-    gov.ca.cwds.data.persistence.ns.Addresses managed =
-        new gov.ca.cwds.data.persistence.ns.Addresses(address);
-
-    managed = addressesDao.create(managed);
-
-    AddressIntakeApi addressPosted = new AddressIntakeApi(managed);
-    address
-        .setLegacyDescriptor(saveLegacyDescriptor(address.getLegacyDescriptor(), managed.getId()));
-
-    return addressPosted;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see CrudsService#update(Serializable, Request)
-   */
-  @Override
-  public Response update(Serializable primaryKey, Request request) {
-    assert primaryKey instanceof Long;
+  public AddressIntakeApi update(String primaryKey, AddressIntakeApi request) {
     throw new NotImplementedException("Update is not implemented");
   }
 
