@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,7 +45,6 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
-import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
@@ -76,7 +76,8 @@ public class HOIScreeningServiceTest {
 
     Map<String, LegacyDescriptorEntity> participantDescriptors = new HashMap<>();
     participantDescriptors.put(DEFAULT_PERSON_ID, mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
-    participantDescriptors.put(DEFAULT_REPORTER_ID, mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
+    participantDescriptors
+        .put(DEFAULT_REPORTER_ID, mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
     when(legacyDescriptorDao.findParticipantLegacyDescriptors(any(Set.class)))
         .thenReturn(participantDescriptors);
 
@@ -117,9 +118,8 @@ public class HOIScreeningServiceTest {
     when(screeningDao.findScreeningsByClientIds(clientIds))
         .thenReturn(mockScreeningEntityList(null));
 
-    HOIRequest hoiScreeningRequest = new HOIRequest();
-    hoiScreeningRequest.setClientIds(Stream.of("1").collect(Collectors.toSet()));
-    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
+    HOIScreeningResponse actualResponse = (HOIScreeningResponse) hoiScreeningService
+        .findHoiScreeningsByClientIds(Stream.of("1").collect(Collectors.toList()));
     assertThat(actualResponse, is(expectedResponse));
 
     Iterator<HOIScreening> actualScreenings = actualResponse.getScreenings().iterator();
@@ -206,5 +206,10 @@ public class HOIScreeningServiceTest {
 
     return new LegacyDescriptor(cmsRecordDescriptor.getId(), cmsRecordDescriptor.getUiId(), null,
         cmsRecordDescriptor.getTableName(), cmsRecordDescriptor.getTableDescription());
+  }
+
+  @Test(expected = NotImplementedException.class)
+  public void handleRequestNotImplemented() {
+    hoiScreeningService.handleRequest(new HOIScreening());
   }
 }
