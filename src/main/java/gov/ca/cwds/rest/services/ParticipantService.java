@@ -190,7 +190,7 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder);
+        processChildClient(clientId, messageBuilder, incomingParticipant);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -322,6 +322,7 @@ public class ParticipantService implements CrudsService {
         otherRaceCodes);
     if (savedClient != null) {
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedClient.getLastUpdatedTime());
+      processChildClient(foundClient.getExistingClientId(), messageBuilder, incomingParticipant);
     } else {
       messageBuilder.addMessageAndLog("Unable to save Client", LOGGER);
     }
@@ -383,9 +384,10 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder) {
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder,
+      Participant incomingParticipant) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
-    if (exsistingChild == null) {
+    if (exsistingChild == null && StringUtils.isNotBlank(incomingParticipant.getDateOfBirth())) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
       messageBuilder.addDomainValidationError(validator.validate(childClient));
       exsistingChild = this.childClientService.create(childClient);
