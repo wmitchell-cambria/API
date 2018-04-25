@@ -53,7 +53,6 @@ import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
-import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
@@ -151,7 +150,6 @@ public class ServicesModule extends AbstractModule {
     bind(InvolvementHistoryService.class);
     bind(HOICaseService.class);
     bind(AuthorizationService.class);
-    bind(HoiUsingClientIdService.class);
 
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);

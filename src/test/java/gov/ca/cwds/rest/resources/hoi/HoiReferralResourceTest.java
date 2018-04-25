@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class HoiReferralResourceTest {
     clientIds.add("1zxcydd");
     inMemoryResource.client().target("/hoi_referrals").queryParam("clientIds", "1zxcydd").request()
         .accept(MediaType.APPLICATION_JSON).get();
-    verify(hoiReferralService, atLeastOnce()).findHoiReferralByClientIds(clientIds);
+    verify(hoiReferralService, atLeastOnce()).handleFind(new HOIRequest(clientIds));
   }
 
 }
