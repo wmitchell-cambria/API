@@ -64,7 +64,14 @@ node ('tpt4-slave'){
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/functionalTest', reportFiles: 'index.html', reportName: 'FT JUnit Report', reportTitles: 'FT JUnit tests summary'])
     }
     stage('JMeter Tests'){
-      build job: 'tpt4-api-jmeter-tests', propagate: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_referrals.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_reporters.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_referralClients.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_staffpersons.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_allegations.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_clients.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/referrals.jmx', printDebugOutput: true, useBztExitCode: false
+      bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/CmsReferralLegacyNSComparison.jmx', printDebugOutput: true, useBztExitCode: false
     }
     stage('SonarQube analysis'){
 	    withSonarQubeEnv('Core-SonarQube') {
