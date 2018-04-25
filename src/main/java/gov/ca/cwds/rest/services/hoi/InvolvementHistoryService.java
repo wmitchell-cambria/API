@@ -67,7 +67,7 @@ public class InvolvementHistoryService
   }
 
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
-  private void loadDataFromNS(InvolvementHistoryData ihd) {
+  protected void loadDataFromNS(InvolvementHistoryData ihd) {
     if (ihd.getClientIds().isEmpty() && ihd.getScreeningId() != null) {
       // load client ID-s by incoming screening ID-s
       ihd.setClientIds(participantDao.findLegacyIdListByScreeningId(ihd.getScreeningId()));
@@ -87,7 +87,7 @@ public class InvolvementHistoryService
   }
 
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
-  private void loadDataFromCMS(InvolvementHistoryData ihd) {
+  protected void loadDataFromCMS(InvolvementHistoryData ihd) {
     if (!ihd.getClientIds().isEmpty()) {
       HOIRequest hoiRequest = new HOIRequest(ihd.getClientIds());
       ihd.setHoiCases(hoiCaseService.handleFind(hoiRequest).getHoiCases());
