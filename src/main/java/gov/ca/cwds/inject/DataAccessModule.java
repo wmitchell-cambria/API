@@ -466,7 +466,7 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @XaNsHibernateBundle
-  public HibernateBundle<ApiConfiguration> getXaCalsnsHibernateBundle() {
+  public HibernateBundle<ApiConfiguration> getXaNsHibernateBundle() {
     return xaNsHibernateBundle;
   }
 
@@ -500,7 +500,7 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @Named("screenings.index")
-  public ElasticsearchDao provideEelasticSearchDaoScreenings(
+  public ElasticsearchDao provideElasticSearchDaoScreenings(
       @Named("elasticsearch.daos") Map<String, ElasticsearchDao> esDaos) {
     return esDaos.get("screeningsIndex");
   }

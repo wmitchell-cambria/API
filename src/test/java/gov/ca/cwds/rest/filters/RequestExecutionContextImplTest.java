@@ -45,6 +45,10 @@ public class RequestExecutionContextImplTest extends AbstractShiroTest {
     RequestExecutionContext actual = RequestExecutionContext.instance();
   }
 
+  public static void startRequest() {
+    RequestExecutionContextImpl.startRequest();
+  }
+
   @Test
   public void type() throws Exception {
     assertThat(RequestExecutionContextImpl.class, notNullValue());

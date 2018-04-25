@@ -3,11 +3,10 @@ package gov.ca.cwds.data.persistence.ns;
 import static gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID;
 import static gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID_QUERY;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,18 +17,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
+
+import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
 
 /**
  * @author Intake Team 4
  */
-
-@NamedQuery(
-    name = PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID,
-    query = PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID_QUERY
-)
-
+@NamedQuery(name = PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID,
+    query = PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID_QUERY)
 @Entity
 @Table(name = "participant_phone_numbers")
 public class ParticipantPhoneNumbers implements PersistentObject, HasPaperTrail, Serializable {
@@ -38,25 +37,16 @@ public class ParticipantPhoneNumbers implements PersistentObject, HasPaperTrail,
   public static final String PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID =
       "gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers.findByParticipantId";
   static final String PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID_QUERY =
-      " FROM ParticipantPhoneNumbers pa"
-          + " WHERE pa.participant.id = :"
-          + PARAM_PARTICIPANT_ID;
+      " FROM ParticipantPhoneNumbers pa" + " WHERE pa.participant.id = :" + PARAM_PARTICIPANT_ID;
 
-  /**
-   * Base serialization value. Increment by version
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "id")
-  @GenericGenerator(
-      name = "participant_phone_numbers_id",
+  @GenericGenerator(name = "participant_phone_numbers_id",
       strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-      parameters = {
-          @org.hibernate.annotations.Parameter(
-              name = "sequence_name", value = "participant_phone_numbers_id_seq")
-      }
-  )
+      parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name",
+          value = "participant_phone_numbers_id_seq")})
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_phone_numbers_id")
   private String id;
 
@@ -85,17 +75,27 @@ public class ParticipantPhoneNumbers implements PersistentObject, HasPaperTrail,
   /**
    * Default constructor
    */
-  public ParticipantPhoneNumbers() {
+  public ParticipantPhoneNumbers() {}
+
+  public ParticipantPhoneNumbers(ParticipantPhoneNumbers src) {
+    super();
+    this.id = src.id;
+    this.participantId = src.participantId;
+    this.phNumberId = src.phNumberId;
+    this.participant = src.participant;
+    this.phoneNumber = src.phoneNumber;
+    this.createdAt = src.createdAt;
+    this.updatedAt = src.updatedAt;
   }
 
-  public ParticipantPhoneNumbers(ParticipantEntity participant,
-      PhoneNumbers phoneNumber) {
+  public ParticipantPhoneNumbers(ParticipantEntity participant, PhoneNumbers phoneNumber) {
     this.participantId = participant.getId();
     this.phNumberId = phoneNumber.getId();
     this.participant = participant;
     this.phoneNumber = phoneNumber;
   }
 
+  @Override
   public String getId() {
     return id;
   }
@@ -137,6 +137,10 @@ public class ParticipantPhoneNumbers implements PersistentObject, HasPaperTrail,
     this.updatedAt = (Date) updatedAt.clone();
   }
 
+  public void setId(String id) {
+    this.id = id;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -146,13 +150,12 @@ public class ParticipantPhoneNumbers implements PersistentObject, HasPaperTrail,
       return false;
     }
     ParticipantPhoneNumbers that = (ParticipantPhoneNumbers) o;
-    return Objects.equals(participant, that.participant) &&
-        Objects.equals(phoneNumber, that.phoneNumber);
+    return Objects.equals(participant, that.participant)
+        && Objects.equals(phoneNumber, that.phoneNumber);
   }
 
   @Override
   public int hashCode() {
-
     return Objects.hash(participant, phoneNumber);
   }
 
