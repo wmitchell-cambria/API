@@ -124,7 +124,6 @@ public class CmsDocument extends ReportingDomain implements Request, Response, S
    */
   public CmsDocument(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
     this.id = doc.getId();
-
     this.segmentCount = doc.getSegmentCount();
     this.docLength = doc.getDocLength();
     this.docAuth = doc.getDocAuth();

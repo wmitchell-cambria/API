@@ -601,6 +601,40 @@ public class ParticipantServiceTest {
         clientArgCaptor.getValue().getSensitivityIndicator());
   }
 
+  /**
+   * 
+   */
+  @Test
+  public void testWhereChildClientNotCreatedWhenClientDOBIsNull() {
+    Participant victim =
+        new ParticipantResourceBuilder().setDateOfBirth(null).createVictimParticipant();
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    PostedClient createdClient = mock(PostedClient.class);
+    when(clientService.create(any())).thenReturn(createdClient);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
+    verify(childClientService, times(0)).create(any());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testWhereChildClientCreatedWhenDOBIsNotNull() {
+    Participant victim =
+        new ParticipantResourceBuilder().setDateOfBirth("2005-08-14").createVictimParticipant();
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    PostedClient createdClient = mock(PostedClient.class);
+    when(clientService.create(any())).thenReturn(createdClient);
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
+    verify(childClientService, times(1)).create(any());
+  }
+
   // @Test
   // public void shouldApplySensitivityIndicatorFromReferralWhenUpdatingClient() {
   // String victimClientLegacyId = "ABC123DSAF";

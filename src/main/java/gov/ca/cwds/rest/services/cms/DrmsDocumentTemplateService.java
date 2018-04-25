@@ -31,7 +31,7 @@ import gov.ca.cwds.rest.util.DocUtils;
 /**
  * Business layer object to work on {@link DrmsDocumentTemplate}
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class DrmsDocumentTemplateService
     implements TypedCrudsService<String, DrmsDocumentTemplate, DrmsDocumentTemplate> {
@@ -40,8 +40,13 @@ public class DrmsDocumentTemplateService
 
   private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
   private CmsDocumentService cmsDocumentService;
+  @SuppressWarnings("javadoc")
   public static final String TEMPLATE_DOC_NAME_SCREENER_NARRATIVE_NS = "INALG_NS.DOC";
 
+  /**
+   * @param drmsDocumentTemplateDao - drmsDocumentTemplateDao
+   * @param cmsDocumentService - cmsDocumentService
+   */
   @Inject
   public DrmsDocumentTemplateService(DrmsDocumentTemplateDao drmsDocumentTemplateDao,
       CmsDocumentService cmsDocumentService) {
@@ -49,6 +54,10 @@ public class DrmsDocumentTemplateService
     this.cmsDocumentService = cmsDocumentService;
   }
 
+  /**
+   * @param govermentEntity - govermentEntity
+   * @return the document template
+   */
   public DrmsDocumentTemplate findScreenerNarrativeTemplateNs(Short govermentEntity) {
     gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate template = null;
     gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[] templates = drmsDocumentTemplateDao
