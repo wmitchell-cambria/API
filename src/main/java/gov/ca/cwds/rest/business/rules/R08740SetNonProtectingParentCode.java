@@ -55,6 +55,12 @@ public class R08740SetNonProtectingParentCode implements RuleAction {
   private String perpatratorClientId;
   private Allegation cmsAllegation;
 
+  /**
+   * @param cmsAllegation - cmsAllegation
+   * @param clientRelationshipDao - clientRelationshipDao
+   * @param victimClientId - victimClientId
+   * @param perpatratorClientId - perpatratorClientId
+   */
   public R08740SetNonProtectingParentCode(gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation,
       ClientRelationshipDao clientRelationshipDao, String victimClientId,
       String perpatratorClientId) {

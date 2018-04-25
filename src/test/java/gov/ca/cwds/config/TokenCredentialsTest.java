@@ -38,6 +38,7 @@ public class TokenCredentialsTest {
     assertEquals(perryLoginUrl, testUrl.getPerryLoginUrl());
     assertEquals(tokenUrl, testUrl.getTokenUrl());
     assertEquals(validateUrl, testUrl.getValidateUrl());
+    assertEquals(logOutUrl, testUrl.getLogOutUrl());
   }
 
 }
