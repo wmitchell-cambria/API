@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CASE_HISTORY_OF_INVOLVEMENT;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -65,11 +66,10 @@ public class HoiCaseResource {
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-  @ApiOperation(value = "Find cases history of involvement by clientId", response = HOICase[].class,
-      code = 200)
+  @ApiOperation(value = "Find cases history of involvement by clientId", response = HOICase[].class)
   public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") final List<String> clientIds) {
-    gov.ca.cwds.rest.api.Response clients = hoiCaseService.findHoiCasesbyClientIds(clientIds);
+    gov.ca.cwds.rest.api.Response clients = hoiCaseService.handleFind(new HOIRequest(clientIds));
     return new ResponseConverter().withDataResponse(clients);
   }
 

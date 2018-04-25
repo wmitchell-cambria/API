@@ -20,8 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.fixture.hoi.HOICaseResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIReferralResourceBuilder;
@@ -33,7 +31,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import io.dropwizard.jackson.Jackson;
 
 /***
  *
@@ -43,13 +40,7 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("javadoc")
 public class InvolvementHistoryServiceTest {
 
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
-  private HOICaseService hoiCaseService;
-  private HOIReferralService hoiReferralService;
-  private HOIScreeningService hoiScreeningService;
   private InvolvementHistoryService involvementHistoryService;
-  private HOIRequest hoiRequest;
   private ParticipantDao participantDao;
 
   @Rule
@@ -58,9 +49,7 @@ public class InvolvementHistoryServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    hoiRequest = new HOIRequest();
-    hoiRequest.setClientIds(Stream.of("123").collect(Collectors.toSet()));
-    hoiCaseService = mock(HOICaseService.class);
+    HOICaseService hoiCaseService = mock(HOICaseService.class);
     HOICase hoicase = new HOICaseResourceBuilder().createHOICase();
     List<HOICase> hoicases = new ArrayList<>();
     hoicases.add(hoicase);
@@ -69,15 +58,14 @@ public class InvolvementHistoryServiceTest {
     when(hoiCaseService.handleFind(any(HOIRequest.class))).thenReturn(hoiCaseResponse);
     when(hoiCaseService.find(any(HOIRequest.class))).thenReturn(hoiCaseResponse);
 
-    hoiReferralService = mock(HOIReferralService.class);
+    HOIReferralService hoiReferralService = mock(HOIReferralService.class);
     HOIReferral hoireferral = new HOIReferralResourceBuilder().createHOIReferral();
     List<HOIReferral> hoireferrals = new ArrayList<>();
     hoireferrals.add(hoireferral);
-    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-    hoiReferralResponse.setHoiReferrals(hoireferrals);
+    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse(hoireferrals);
     when(hoiReferralService.handleFind(any(HOIRequest.class))).thenReturn(hoiReferralResponse);
 
-    hoiScreeningService = mock(HOIScreeningService.class);
+    HOIScreeningService hoiScreeningService = mock(HOIScreeningService.class);
     HOIScreeningResponse hoiScreeningResponse = new HOIScreeningResponse(new HashSet<>());
     when(hoiScreeningService.handleFind(any(HOIRequest.class))).thenReturn(hoiScreeningResponse);
 
@@ -87,36 +75,34 @@ public class InvolvementHistoryServiceTest {
     involvementHistoryService.hoiScreeningService = hoiScreeningService;
 
     participantDao = mock(ParticipantDao.class);
-    when(participantDao.findLegacyIdListByScreeningId(any(String.class)))
-        .thenReturn(new HashSet<>());
+    when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(new HashSet<>());
     involvementHistoryService.participantDao = participantDao;
   }
 
   // find tests
   @Test
-  public void findReturnsHistoryOfInvolvementWhenScreeningHasNoLegacyClientId() throws Exception {
+  public void findReturnsHistoryOfInvolvementWhenScreeningHasNoLegacyClientId() {
     Response returned = involvementHistoryService.find("1");
     assertThat(returned, is(notNullValue()));
   }
 
   @Test
-  public void findReturnsHistoryOfInvolvementWhenScreeningHasALegacyClientId() throws Exception {
+  public void findReturnsHistoryOfInvolvementWhenScreeningHasALegacyClientId() {
     Set<String> clientIds = Stream.of("123").collect(Collectors.toSet());
     when(participantDao.findLegacyIdListByScreeningId(any(String.class))).thenReturn(clientIds);
     Response returned = involvementHistoryService.find("1");
     assertThat(returned, is(notNullValue()));
   }
 
-  // Test for the method findInvolvementHistoryByClientIds
   @Test
-  public void hOiNotReturingForEmptyClientId() throws Exception {
+  public void findInvolvementHistoryByClientIdsWhenEmptyRequest() {
     Set<String> clientIds = new HashSet<>();
     Response returned = involvementHistoryService.findInvolvementHistoryByClientIds(clientIds);
     assertThat(returned, is(notNullValue()));
   }
 
   @Test
-  public void findHOIUsingClientId() throws Exception {
+  public void findInvolvementHistoryByClientIdsWhenNonEmptyRequest() {
     Set<String> clientIds = new HashSet<>();
     clientIds.add("123");
     Response returned = involvementHistoryService.findInvolvementHistoryByClientIds(clientIds);
@@ -125,14 +111,14 @@ public class InvolvementHistoryServiceTest {
 
   // delete test
   @Test
-  public void deleteThrowsNotImplementedException() throws Exception {
+  public void deleteThrowsNotImplementedException() {
     thrown.expect(NotImplementedException.class);
     involvementHistoryService.delete("string");
   }
 
   // update test
   @Test
-  public void updateThrowsNotImplementedException() throws Exception {
+  public void updateThrowsNotImplementedException() {
     thrown.expect(NotImplementedException.class);
     involvementHistoryService.update("string", null);
   }
@@ -140,7 +126,7 @@ public class InvolvementHistoryServiceTest {
 
   // create test
   @Test
-  public void createThrowsNotImplementedException() throws Exception {
+  public void createThrowsNotImplementedException() {
     thrown.expect(NotImplementedException.class);
     involvementHistoryService.create(null);
   }

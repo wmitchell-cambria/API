@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -47,7 +48,7 @@ public class HoiScreeningResource {
 
   /**
    * Constructor.
-   * 
+   *
    * @param hoiScreeningService - hoiScreeningService
    */
   @Inject
@@ -57,7 +58,7 @@ public class HoiScreeningResource {
 
   /**
    * Finds history of involvement by screening id.
-   * 
+   *
    * @param clientIds - clientIds
    * @return the hoi screenings
    */
@@ -70,8 +71,8 @@ public class HoiScreeningResource {
       response = HOIScreeningResponse.class)
   public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") List<String> clientIds) {
-    gov.ca.cwds.rest.api.Response clients =
-        hoiScreeningService.findHoiScreeningsByClientIds(clientIds);
+    gov.ca.cwds.rest.api.Response clients = hoiScreeningService
+        .handleFind(new HOIRequest(clientIds));
     return new ResponseConverter().withDataResponse(clients);
   }
 

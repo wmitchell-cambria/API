@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,6 @@ import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
@@ -58,14 +58,13 @@ public class HOIReferralService
   }
 
   @Override
-  protected HOIReferralResponse handleFind(HOIRequest hoiRequest) {
-    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
+  public HOIReferralResponse handleFind(HOIRequest hoiRequest) {
     List<ReferralClient> referralClientList = new ArrayList<>();
     if (!hoiRequest.getClientIds().isEmpty()) {
-      referralClientList = fetchReferralClient(hoiRequest.getClientIds());
+      referralClientList = fetchReferralClients(hoiRequest.getClientIds());
     }
     if (referralClientList.isEmpty()) {
-      return emptyHoiReferralResponse();
+      return new HOIReferralResponse();
     }
     // eliminate rows with duplicate referral Id's from referralClientArrayList
     ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
@@ -84,18 +83,8 @@ public class HOIReferralService
       hoiReferrals.add(createHOIReferral(referralClient));
     }
 
-    hoiReferralResponse.setHoiReferrals(hoiReferrals);
-    return hoiReferralResponse;
-  }
-
-  /**
-   * @param clientIds - clientIds
-   * @return the list of referrals using clientIds
-   */
-  public Response findHoiReferralByClientIds(List<String> clientIds) {
-    HOIRequest hoiRequest = new HOIRequest();
-    hoiRequest.setClientIds(new HashSet<>(clientIds));
-    return handleFind(hoiRequest);
+    hoiReferrals.sort((r1, r2) -> r2.getStartDate().compareTo(r1.getStartDate()));
+    return new HOIReferralResponse(hoiReferrals);
   }
 
   private HOIReferral createHOIReferral(ReferralClient referralClient) {
@@ -110,19 +99,13 @@ public class HOIReferralService
         allegationMap, role);
   }
 
-  private HOIReferralResponse emptyHoiReferralResponse() {
-    HOIReferralResponse hoiReferralResponse = new HOIReferralResponse();
-    hoiReferralResponse.setHoiReferrals(new ArrayList<>());
-    return hoiReferralResponse;
-  }
-
-  private List<ReferralClient> fetchReferralClient(Set<String> clientIds) {
+  private List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
     authorizeClients(clientIds);
     ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
     return Arrays.asList(referralClients);
   }
 
-  private void authorizeClients(Set<String> clientIds) {
+  private void authorizeClients(Collection<String> clientIds) {
     for (String clientId : clientIds) {
       authorizeClient(clientId);
     }

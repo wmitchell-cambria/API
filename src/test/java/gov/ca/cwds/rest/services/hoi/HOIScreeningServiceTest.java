@@ -11,6 +11,8 @@ import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -113,13 +115,13 @@ public class HOIScreeningServiceTest {
   public void findReturnsExpectedAndSortedHOIScreenings() {
     HOIScreeningResponse expectedResponse = createExpectedResponse();
 
-    Set<String> clientIds = new HashSet<>();
+    Collection<String> clientIds = new HashSet<>();
     clientIds.add("1");
     when(screeningDao.findScreeningsByClientIds(clientIds))
         .thenReturn(mockScreeningEntityList(null));
 
-    HOIScreeningResponse actualResponse = (HOIScreeningResponse) hoiScreeningService
-        .findHoiScreeningsByClientIds(Stream.of("1").collect(Collectors.toList()));
+    HOIRequest hoiRequest = new HOIRequest(Stream.of("1").collect(Collectors.toSet()));
+    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiRequest);
     assertThat(actualResponse, is(expectedResponse));
 
     Iterator<HOIScreening> actualScreenings = actualResponse.getScreenings().iterator();

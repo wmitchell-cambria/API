@@ -5,8 +5,8 @@ import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
-import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
@@ -55,12 +54,12 @@ public class HOIScreeningService
   }
 
   /**
-   * @param hoiScreeningRequest HOI Screening Request containing a list of Client Id-s
+   * @param hoiRequest HOI Request containing a list of Client Id-s
    * @return list of HOI Screenings
    */
   @Override
-  protected HOIScreeningResponse handleFind(HOIRequest hoiScreeningRequest) {
-    Set<String> clientIds = hoiScreeningRequest.getClientIds();
+  public HOIScreeningResponse handleFind(HOIRequest hoiRequest) {
+    Collection<String> clientIds = hoiRequest.getClientIds();
     /*
      * NOTE: When we want to enable authorizations for screening history, we can add following line
      * of code back at this spot:<br/>
@@ -100,16 +99,6 @@ public class HOIScreeningService
     }
 
     return new HOIScreeningResponse(screenings);
-  }
-
-  /**
-   * @param clientIds - clientIds
-   * @return the list of screenings using clientIds
-   */
-  public Response findHoiScreeningsByClientIds(List<String> clientIds) {
-    HOIRequest hoiRequest = new HOIRequest();
-    hoiRequest.setClientIds(new HashSet<>(clientIds));
-    return handleFind(hoiRequest);
   }
 
   @Override

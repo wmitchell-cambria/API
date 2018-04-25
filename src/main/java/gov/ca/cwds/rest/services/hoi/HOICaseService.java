@@ -1,11 +1,10 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,7 +24,6 @@ import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -79,23 +77,13 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   @Override
-  protected HOICaseResponse handleFind(HOIRequest hoiRequest) {
-    if (!hoiRequest.getClientIds().isEmpty()) {
-      List<HOICase> cases = findByClientIds(hoiRequest);
-      Collections.sort(cases);
-      return new HOICaseResponse(cases);
+  public HOICaseResponse handleFind(HOIRequest hoiRequest) {
+    if (hoiRequest.getClientIds().isEmpty()) {
+      return new HOICaseResponse();
     }
-    return emptyHoiCaseResponse();
-  }
-
-  /**
-   * @param clientIds - clientIds
-   * @return the list of cases using clientIds
-   */
-  public Response findHoiCasesbyClientIds(List<String> clientIds) {
-    HOIRequest hoiRequest = new HOIRequest();
-    hoiRequest.setClientIds(new HashSet<>(clientIds));
-    return handleFind(hoiRequest);
+    List<HOICase> cases = findByClientIds(hoiRequest);
+    cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
+    return new HOICaseResponse(cases);
   }
 
   /**
@@ -103,8 +91,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
    * @return the cases linked to multiple client
    */
   private List<HOICase> findByClientIds(HOIRequest hoiRequest) {
-    Set<String> clientIds = hoiRequest.getClientIds();
-    Set<String> allClientIds = new HashSet<>(clientIds);
+    Collection<String> clientIds = hoiRequest.getClientIds();
+    Collection<String> allClientIds = new HashSet<>(clientIds);
     for (String clientId : clientIds) {
       clientId = authorizeClient(clientId);
       allClientIds.addAll(findAllRelatedClientIds(clientId));
@@ -112,13 +100,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     return findCasesForClients(allClientIds);
   }
 
-  private HOICaseResponse emptyHoiCaseResponse() {
-    HOICaseResponse hoiCaseResponse = new HOICaseResponse();
-    hoiCaseResponse.setHoiCases(new ArrayList<>());
-    return hoiCaseResponse;
-  }
-
-  private List<HOICase> findCasesForClients(Set<String> clientIds) {
+  private List<HOICase> findCasesForClients(Collection<String> clientIds) {
     CmsCase[] cmscases = caseDao.findByVictimClientIds(clientIds);
     Map<String, Client> clientMap = clientDao.findClientsByIds(clientIds);
     List<HOICase> hoicases = new ArrayList<>(cmscases.length);
