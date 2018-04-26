@@ -177,7 +177,7 @@ public class ParticipantService implements CrudsService {
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId, dateStarted);
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
@@ -257,10 +257,12 @@ public class ParticipantService implements CrudsService {
   }
 
   private boolean updateClient(ScreeningToReferral screeningToReferral,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
+      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId,
+      String dateStarted) {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
-      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient);
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient,
+          dateStarted);
     } else {
       String message =
           " Legacy Id of Participant does not correspond to an existing CWS/CMS Client ";
@@ -272,7 +274,7 @@ public class ParticipantService implements CrudsService {
   }
 
   private void updateClient(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder,
-      Participant incomingParticipant, Client foundClient) {
+      Participant incomingParticipant, Client foundClient, String dateStarted) {
     DateTimeComparatorInterface comparator = new DateTimeComparator();
     if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
       List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -295,10 +297,17 @@ public class ParticipantService implements CrudsService {
        */
       executeR04466ClientSensitivityIndicator(foundClient, screeningToReferral);
 
+      boolean childClientIndicatorVar = false;
+      if (StringUtils.isBlank(foundClient.getBirthDate())
+          && StringUtils.isNotBlank(incomingParticipant.getDateOfBirth())) {
+        childClientIndicatorVar =
+            new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
+      }
+
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
-          incomingParticipant.getGender(), primaryRaceCode, unableToDetermineCode,
-          hispanicUnableToDetermineCode, hispanicOriginCode);
+          incomingParticipant.getGender(), childClientIndicatorVar, primaryRaceCode,
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {

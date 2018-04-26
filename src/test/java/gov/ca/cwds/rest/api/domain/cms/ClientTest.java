@@ -50,6 +50,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 /**
  * @author CWDS API Team
  */
+@SuppressWarnings("javadoc")
 public class ClientTest implements DomainTestTemplate {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LEGACY_CLIENT + "/";
@@ -59,6 +60,7 @@ public class ClientTest implements DomainTestTemplate {
   /**
    * Initialize system code cache
    */
+  @SuppressWarnings("unused")
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @ClassRule
@@ -447,7 +449,7 @@ public class ClientTest implements DomainTestTemplate {
 
     Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 
-    client.update("Barney", "middlestone", "Rubble", "jr", "F", (short) 0, "A", "A", "X");
+    client.update("Barney", "middlestone", "Rubble", "jr", "F", true, (short) 0, "A", "A", "X");
 
     assertEquals("Expected Client first name to have been changed", "Barney",
         client.getCommonFirstName());
