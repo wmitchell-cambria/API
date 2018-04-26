@@ -6,8 +6,6 @@ import org.hibernate.SessionFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.hibernate.UnitOfWorkAspect;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 
@@ -27,15 +25,6 @@ public class XAUnitOfWorkAwareProxyFactory {
   public XAUnitOfWorkAwareProxyFactory(String name, SessionFactory sessionFactory) {
     sessionFactories = ImmutableMap.of(name, sessionFactory);
   }
-
-  // public XAUnitOfWorkAwareProxyFactory(HibernateBundle<?>... bundles) {
-  // final ImmutableMap.Builder<String, SessionFactory> sessionFactoriesBuilder =
-  // ImmutableMap.builder();
-  // for (HibernateBundle<?> bundle : bundles) {
-  // sessionFactoriesBuilder.put(bundle.name(), bundle.getSessionFactory());
-  // }
-  // sessionFactories = sessionFactoriesBuilder.build();
-  // }
 
   /**
    * Creates a new <b>@UnitOfWork</b> aware proxy of a class with the default constructor.
@@ -82,21 +71,21 @@ public class XAUnitOfWorkAwareProxyFactory {
           ? factory.createClass().getConstructor().newInstance()
           : factory.create(constructorParamTypes, constructorArguments));
       proxy.setHandler((self, overridden, proceed, args) -> {
-        final UnitOfWork unitOfWork = overridden.getAnnotation(UnitOfWork.class);
-        final UnitOfWorkAspect unitOfWorkAspect = newAspect(sessionFactories);
+        final XAUnitOfWork xaUnitOfWork = overridden.getAnnotation(XAUnitOfWork.class);
+        final XAUnitOfWorkAspect aspect = newAspect();
         try {
-          unitOfWorkAspect.beforeStart(unitOfWork);
+          aspect.beforeStart(xaUnitOfWork);
           Object result = proceed.invoke(self, args);
-          unitOfWorkAspect.afterEnd();
+          aspect.afterEnd();
           return result;
         } catch (InvocationTargetException e) {
-          unitOfWorkAspect.onError();
+          aspect.onError();
           throw e.getCause();
         } catch (Exception e) {
-          unitOfWorkAspect.onError();
+          aspect.onError();
           throw e;
         } finally {
-          unitOfWorkAspect.onFinish();
+          aspect.onFinish();
         }
       });
       return (T) proxy;
@@ -109,16 +98,8 @@ public class XAUnitOfWorkAwareProxyFactory {
   /**
    * @return a new aspect
    */
-  public UnitOfWorkAspect newAspect() {
-    return new UnitOfWorkAspect(sessionFactories);
-  }
-
-  /**
-   * @return a new aspect
-   * @param sessionFactories
-   */
-  public UnitOfWorkAspect newAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
-    return new UnitOfWorkAspect(sessionFactories);
+  public XAUnitOfWorkAspect newAspect() {
+    return new XAUnitOfWorkAspect();
   }
 
 }
