@@ -22,7 +22,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 
 /**
- * Hibernate DAO for DB2 Stored Procedure.
+ * Hibernate DAO for DB2 stored procedure that calls soundex SSA Name3 and saves to the client
+ * phonetic tables .
  * 
  * @author CWDS API Team
  * @see CmsSessionFactory

@@ -123,7 +123,6 @@ import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
-import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.ClientsRelationshipsService;
@@ -139,7 +138,6 @@ import gov.ca.cwds.rest.services.investigation.contact.ContactService;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ResourcesModule extends AbstractModule {
 
   /**
@@ -511,14 +509,6 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(InvolvementHistoryService.class));
-  }
-
-  @Provides
-  @HOIUsingClientIdServiceBackedResource
-  public TypedResourceDelegate<String, InvolvementHistory> hoiUsingClientIdServiceBackedResource(
-      Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(HoiUsingClientIdService.class));
   }
 
   @Provides

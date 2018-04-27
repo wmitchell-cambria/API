@@ -33,4 +33,5 @@ public class ReferentialIntegrityModule extends AbstractModule {
   public ResourceDelegate addressServiceBackedResource(Injector injector) {
     return new ServiceBackedResourceDelegate(injector.getInstance(AddressService.class));
   }
+
 }

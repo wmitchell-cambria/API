@@ -1,8 +1,9 @@
 package gov.ca.cwds.data.cms;
 
-import java.util.HashMap;
+import gov.ca.cwds.data.persistence.cms.BaseClient;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -14,7 +15,7 @@ import org.hibernate.query.Query;
 
 /**
  * Hibernate DAO for DB2 {@link Client}.
- * 
+ *
  * @author CWDS API Team
  * @see CmsSessionFactory
  * @see SessionFactory
@@ -23,7 +24,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
 
   /**
    * Constructor
-   * 
+   *
    * @param sessionFactory The sessionFactory
    */
   @Inject
@@ -33,18 +34,14 @@ public class ClientDao extends BaseDaoImpl<Client> {
 
   /**
    * Find Clients by id-s
+   *
    * @param ids Set of Client id-s
    * @return map where key is a Client id and value is a Client itself
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Client> findClientsByIds(Set<String> ids) {
-    final Query<Client> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
-            "gov.ca.cwds.data.persistence.cms.Client.findByIds")
-        .setParameter("ids", ids);
-    Map<String, Client> clientMap = new HashMap<>();
-    for (Client client : query.list()) {
-      clientMap.put(client.getId(), client);
-    }
-    return clientMap;
+  public Map<String, Client> findClientsByIds(Collection<String> ids) {
+    final Query<Client> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(constructNamedQueryName("findByIds")).setParameter("ids", ids);
+    return query.list().stream().collect(Collectors.toMap(BaseClient::getId, c -> c));
   }
 }

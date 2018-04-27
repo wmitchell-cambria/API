@@ -60,6 +60,7 @@ public class ClientTest implements DomainTestTemplate {
   /**
    * Initialize system code cache
    */
+  @SuppressWarnings("unused")
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @ClassRule
@@ -448,7 +449,7 @@ public class ClientTest implements DomainTestTemplate {
 
     Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 
-    client.update("Barney", "middlestone", "Rubble", "jr", "F", (short) 0, "A", "A", "X");
+    client.update("Barney", "middlestone", "Rubble", "jr", "F", true, (short) 0, "A", "A", "X");
 
     assertEquals("Expected Client first name to have been changed", "Barney",
         client.getCommonFirstName());
@@ -1816,20 +1817,6 @@ public class ClientTest implements DomainTestTemplate {
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
     assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void failWhenEmailAddressTooLong() throws Exception {
-    Client validClient = new ClientResourceBuilder().setEmailAddress(
-        "abc def ghi jkl mno pqrs tuv wxyz ABC DEF GHI JKL MNO PQRS TUV WXYZ !§ $%& /() =?* '<> #|; ²³~ @`´ ©«» ¤¼× {}abc def ghi jkl mno pqrs tuv wxyz ABC DEF GHI JKL MNO PQRS TUV WXYZ !§ $%& /() =?* '<> #|; ²³~ 123@`´\"")
-        .build();
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(validClient, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("emailAddress size must be between 0 and 50"),
-        is(greaterThanOrEqualTo(0)));
   }
 
   /*

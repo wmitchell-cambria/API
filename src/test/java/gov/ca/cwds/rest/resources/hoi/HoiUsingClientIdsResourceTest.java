@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
+import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
@@ -23,19 +23,19 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class HoiUsingClientIdsResourceTest {
 
-  private static final HoiUsingClientIdService hoiUsingClientIdService =
-      mock(HoiUsingClientIdService.class);
+  private static final InvolvementHistoryService involvementHistoryService =
+      mock(InvolvementHistoryService.class);
 
   @ClassRule
   public final static ResourceTestRule inMemoryResource = ResourceTestRule.builder()
-      .addResource(new HoiUsingClientIdResource(hoiUsingClientIdService)).build();
+      .addResource(new HoiUsingClientIdResource(involvementHistoryService)).build();
 
   /**
    * 
    */
   @Before
   public void setup() {
-    reset(hoiUsingClientIdService);
+    reset(involvementHistoryService);
   }
 
   /**
@@ -43,11 +43,11 @@ public class HoiUsingClientIdsResourceTest {
    */
   @Test
   public void findByClientIds() {
-    List<String> clientIds = new ArrayList<String>();
+    List<String> clientIds = new ArrayList<>();
     clientIds.add("1zxcydd");
     inMemoryResource.client().target("/clients/history_of_involvements")
         .queryParam("clientIds", "1zxcydd").request().accept(MediaType.APPLICATION_JSON).get();
-    verify(hoiUsingClientIdService, atLeastOnce()).findByClientIds(clientIds);
+    verify(involvementHistoryService, atLeastOnce()).findInvolvementHistoryByClientIds(clientIds);
   }
 
 }

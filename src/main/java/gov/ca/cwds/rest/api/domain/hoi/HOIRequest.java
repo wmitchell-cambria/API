@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,23 +13,24 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonSnakeCase
 public class HOIRequest implements Request {
 
-  /**
-   * default
-   */
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   @JsonProperty("client_ids")
-  private Set<String> clientIds;
+  private Collection<String> clientIds;
 
   public HOIRequest() {
     // default
   }
 
-  public Set<String> getClientIds() {
+  public HOIRequest(Collection<String> clientIds) {
+    this.clientIds = clientIds;
+  }
+
+  public Collection<String> getClientIds() {
     return clientIds;
   }
 
-  public void setClientIds(Set<String> clientIds) {
+  public void setClientIds(Collection<String> clientIds) {
     this.clientIds = clientIds;
   }
 

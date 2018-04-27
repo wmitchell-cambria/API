@@ -17,12 +17,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.utils.JsonUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -124,7 +126,6 @@ public class CmsDocument extends ReportingDomain implements Request, Response, S
    */
   public CmsDocument(gov.ca.cwds.data.persistence.cms.CmsDocument doc) {
     this.id = doc.getId();
-
     this.segmentCount = doc.getSegmentCount();
     this.docLength = doc.getDocLength();
     this.docAuth = doc.getDocAuth();
@@ -283,6 +284,15 @@ public class CmsDocument extends ReportingDomain implements Request, Response, S
   @Override
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  @Override
+  public String toString() {
+    try {
+      return JsonUtils.to(this);
+    } catch (Exception e) {
+      throw new ApiException(e);
+    }
   }
 
 }

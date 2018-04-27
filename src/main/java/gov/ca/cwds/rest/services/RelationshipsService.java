@@ -22,13 +22,14 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  * Business layer object to work on {@link Relationship}.
  * 
  * @author CWDS API Team
- *
  */
 public class RelationshipsService implements TypedCrudsService<String, Relationship, Response> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipsService.class);
+
   ClientRelationshipDao relationshipDao;
   Genealogist genealogist;
   AuthorizationService authCheckService;
-  private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipsService.class);
 
   /**
    * Constructor and injecting the beans
@@ -63,7 +64,7 @@ public class RelationshipsService implements TypedCrudsService<String, Relations
    */
   @SuppressWarnings("unchecked")
   public Response findForIds(List<String> clientIds) {
-    Set relationships = new HashSet<>();
+    final Set relationships = new HashSet<>();
     for (String id : clientIds) {
       if (authorized(id)) {
         relationships.add(find(id));

@@ -12,6 +12,7 @@ import java.util.Date;
 import org.junit.Test;
 
 public class ClientAddressTest {
+
   @Test
   public void shouldCreateClientAddressFromValues() {
     String id = "111";
@@ -27,6 +28,7 @@ public class ClientAddressTest {
     ClientAddress address = new ClientAddress(id, addressType, bkInmtId, effEndDt, effStartDt,
         fkAddress, fkClient, homelessInd, fkReferral, addresses);
     assertNotNull("Expected an addresss to be created", address);
+
     assertEquals("Expected id set in ctor", id, address.getId());
     assertEquals("Expected addressType set in ctor", addressType, address.getAddressType());
     assertEquals("Expected bkInmtId set in ctor", bkInmtId, address.getBkInmtId());
@@ -57,6 +59,7 @@ public class ClientAddressTest {
     ClientAddress address = new ClientAddress(id, addressType, bkInmtId, effEndDt, effStartDt,
         fkAddress, fkClient, homelessInd, fkReferral, addresses, lastUpdateId);
     assertNotNull("Expected an addresss to be created", address);
+
     assertEquals("Expected id set in ctor", id, address.getId());
     assertEquals("Expected addressType set in ctor", addressType, address.getAddressType());
     assertEquals("Expected bkInmtId set in ctor", bkInmtId, address.getBkInmtId());
@@ -68,8 +71,6 @@ public class ClientAddressTest {
     assertEquals("Expected fkReferral set in ctor", fkReferral, address.getFkReferral());
     assertEquals("Expected addresses set in ctor", addresses, address.getAddresses());
     assertEquals("Expected lastUpdateId set in ctor", lastUpdateId, address.getLastUpdatedId());
-
-
   }
 
   @Test
@@ -82,4 +83,5 @@ public class ClientAddressTest {
     ClientAddress ca = new ClientAddress();
     assertTrue(ca.equals(ca));
   }
+
 }

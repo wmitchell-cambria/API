@@ -29,19 +29,24 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.util.DocUtils;
 
 /**
- * Business layer object to work on {@link DrmsDocumentTemplate}
+ * Business layer object to work on {@link DrmsDocumentTemplate}.
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class DrmsDocumentTemplateService
     implements TypedCrudsService<String, DrmsDocumentTemplate, DrmsDocumentTemplate> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DrmsDocumentTemplateService.class);
 
-  private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
-  private CmsDocumentService cmsDocumentService;
   public static final String TEMPLATE_DOC_NAME_SCREENER_NARRATIVE_NS = "INALG_NS.DOC";
 
+  private DrmsDocumentTemplateDao drmsDocumentTemplateDao;
+  private CmsDocumentService cmsDocumentService;
+
+  /**
+   * @param drmsDocumentTemplateDao - drmsDocumentTemplateDao
+   * @param cmsDocumentService - cmsDocumentService
+   */
   @Inject
   public DrmsDocumentTemplateService(DrmsDocumentTemplateDao drmsDocumentTemplateDao,
       CmsDocumentService cmsDocumentService) {
@@ -49,6 +54,10 @@ public class DrmsDocumentTemplateService
     this.cmsDocumentService = cmsDocumentService;
   }
 
+  /**
+   * @param govermentEntity - govermentEntity
+   * @return the document template
+   */
   public DrmsDocumentTemplate findScreenerNarrativeTemplateNs(Short govermentEntity) {
     gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate template = null;
     gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate[] templates = drmsDocumentTemplateDao
@@ -106,12 +115,12 @@ public class DrmsDocumentTemplateService
 
   @Override
   public DrmsDocumentTemplate find(String s) {
-    throw new NotImplementedException("find not implement");
+    throw new NotImplementedException("FIND NOT IMPLEMENTED");
   }
 
   @Override
   public DrmsDocumentTemplate delete(String s) {
-    throw new NotImplementedException("delete not implement");
+    throw new NotImplementedException("DELETE NOT IMPLEMENTED");
   }
 
   @Override
@@ -132,6 +141,6 @@ public class DrmsDocumentTemplateService
 
   @Override
   public DrmsDocumentTemplate update(String s, DrmsDocumentTemplate request) {
-    throw new NotImplementedException("update not implement");
+    throw new NotImplementedException("UPDATE NOT IMPLEMENTED");
   }
 }

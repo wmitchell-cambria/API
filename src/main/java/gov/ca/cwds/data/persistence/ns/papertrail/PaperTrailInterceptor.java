@@ -1,24 +1,59 @@
 package gov.ca.cwds.data.persistence.ns.papertrail;
 
-import gov.ca.cwds.data.ns.PaperTrailDao;
-import gov.ca.cwds.data.persistence.ns.PaperTrail;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.inject.Inject;
+
 import org.hibernate.EmptyInterceptor;
+import org.hibernate.Transaction;
 import org.hibernate.type.Type;
 
+import gov.ca.cwds.data.ns.PaperTrailDao;
+import gov.ca.cwds.data.persistence.ns.PaperTrail;
+
 /**
- * @author Intake Team 4
+ * Synthetic triggers for PostgreSQL via Hibernate interceptor.
  *
- * onSave – Called when you save an object, the object is not save into database yet. onFlushDirty –
- * Called when you update an object, the object is not update into database yet. onDelete – Called
- * when you delete an object, the object is not delete into database yet. preFlush – Called before
- * the saved, updated or deleted objects are committed to database (usually before postFlush).
- * postFlush – Called after the saved, updated or deleted objects are committed to database.
+ * <p>
+ * Parameter Defaults
+ * </p>
+ * <table summary="Event Method">
+ * <tr>
+ * <th align="justify">Method</th>
+ * <th align="justify">Description</th>
+ * </tr>
+ * <tr>
+ * <td align="justify">onSave</td>
+ * <td align="justify">Called when you save an object, the object is not yet saved to the
+ * database</td>
+ * </tr>
+ * <tr>
+ * <td align="justify">onFlushDirty</td>
+ * <td align="justify">Called when you update an object, the object is not yet saved to the
+ * database</td>
+ * </tr>
+ * <tr>
+ * <td align="justify">onDelete</td>
+ * <td align="justify">Called when you delete an object, the object is not yet saved to the
+ * database</td>
+ * </tr>
+ * <tr>
+ * <td align="justify">preFlush</td>
+ * <td align="justify">Called before the saved, updated or deleted objects are committed to database
+ * (usually before postFlush)</td>
+ * </tr>
+ * <tr>
+ * <td align="justify">postFlush</td>
+ * <td align="justify">Called after the saved, updated or deleted objects are committed to
+ * database</td>
+ * </tr>
+ * </table>
+ * 
+ * @author Intake Team 4
  */
 public class PaperTrailInterceptor extends EmptyInterceptor {
 
@@ -28,13 +63,12 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   private static final String UPDATE = "update";
   private static final String DESTROY = "destroy";
 
-  private static final ThreadLocal<Map<String, Object>> insertsTlMap = ThreadLocal
-      .withInitial(HashMap::new);
-  private static final ThreadLocal<Map<String, Object>> updatesTlMap = ThreadLocal
-      .withInitial(HashMap::new);
-  private static final ThreadLocal<Map<String, Object>> deletesTlMap = ThreadLocal
-      .withInitial(HashMap::new);
-
+  private static final ThreadLocal<Map<String, Object>> insertsTlMap =
+      ThreadLocal.withInitial(HashMap::new);
+  private static final ThreadLocal<Map<String, Object>> updatesTlMap =
+      ThreadLocal.withInitial(HashMap::new);
+  private static final ThreadLocal<Map<String, Object>> deletesTlMap =
+      ThreadLocal.withInitial(HashMap::new);
 
   @Inject
   private PaperTrailDao paperTrailDao;
@@ -84,7 +118,6 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
 
   private void processPaperTrail() {
     try {
-
       for (Entry<String, Object> entry : insertsTlMap.get().entrySet()) {
         HasPaperTrail entity = (HasPaperTrail) entry.getValue();
         createPaperTrail(CREATE, entity);
@@ -101,11 +134,14 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
       }
 
     } finally {
-      insertsTlMap.get().clear();
-      updatesTlMap.get().clear();
-      deletesTlMap.get().clear();
+      clearMaps();
     }
+  }
 
+  private void clearMaps() {
+    insertsTlMap.get().clear();
+    updatesTlMap.get().clear();
+    deletesTlMap.get().clear();
   }
 
   private String getItemTypeAndId(HasPaperTrail entity) {
@@ -113,8 +149,8 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   }
 
   private void createPaperTrail(String event, HasPaperTrail entity) {
-    PaperTrail paperTrail = new PaperTrail(entity.getClass().getSimpleName(), entity.getId(),
-        event);
+    PaperTrail paperTrail =
+        new PaperTrail(entity.getClass().getSimpleName(), entity.getId(), event);
     paperTrailDao.create(paperTrail);
   }
 
@@ -129,6 +165,18 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public String toString() {
     return "PaperTrailInterceptor [paperTrailDao=" + paperTrailDao + "]";
+  }
+
+  @Override
+  public void afterTransactionBegin(Transaction tx) {
+    super.afterTransactionBegin(tx);
+    clearMaps();
+  }
+
+  @Override
+  public void afterTransactionCompletion(Transaction tx) {
+    super.afterTransactionCompletion(tx);
+    clearMaps();
   }
 
 }

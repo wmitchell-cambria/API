@@ -43,6 +43,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class StaffPersonResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -92,7 +93,7 @@ public class StaffPersonResource {
   }
 
   /**
-   * Create an {@link StaffPerson}
+   * Create an {@link StaffPerson}.
    * 
    * @param staffPerson The {@link StaffPerson}
    * 
@@ -114,7 +115,7 @@ public class StaffPersonResource {
   }
 
   /**
-   * Update an {@link StaffPerson}
+   * Update an {@link StaffPerson}.
    * 
    * @param id the id
    * @param staffPerson {@link StaffPerson}
@@ -138,4 +139,5 @@ public class StaffPersonResource {
       @Valid @ApiParam(hidden = false, required = true) StaffPerson staffPerson) {
     return resourceDelegate.update(id, staffPerson);
   }
+
 }

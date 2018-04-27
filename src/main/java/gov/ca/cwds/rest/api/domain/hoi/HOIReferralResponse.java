@@ -38,6 +38,10 @@ public class HOIReferralResponse implements Response {
     // no -opt
   }
 
+  public HOIReferralResponse(List<HOIReferral> hoiReferrals) {
+    this.hoiReferrals = hoiReferrals;
+  }
+
   /**
    * Preferred constructor. Build from HOI Referral array.
    * 
@@ -53,7 +57,7 @@ public class HOIReferralResponse implements Response {
    * 
    * @param hoiReferrals - hoiReferrals
    */
-  public void setHoiReferrals(List<HOIReferral> hoiReferrals) {
+  void setHoiReferrals(List<HOIReferral> hoiReferrals) {
     this.hoiReferrals = hoiReferrals;
   }
 
@@ -62,7 +66,7 @@ public class HOIReferralResponse implements Response {
    * 
    * @param hoiReferral - hoiReferral
    */
-  public void addHoiReferral(HOIReferral hoiReferral) {
+  void addHoiReferral(HOIReferral hoiReferral) {
     if (hoiReferral != null) {
       hoiReferrals.add(hoiReferral);
     }

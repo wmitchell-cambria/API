@@ -15,44 +15,63 @@ public class DB2PassUserTest {
     try {
       Class.forName("com.ibm.db2.jcc.DB2Driver");
 
-      // DOCKER:
-      // final String url = "jdbc:db2://localhost:50000/DB0TDEV";
-
-      // MAINFRAME:
-      final String url =
-          "jdbc:db2://localhost:9000/DB0TSOC:retrieveMessagesFromServerOnGetMessage=true;emulateParameterMetaDataForZCalls=1;";
+      final String url = System.getenv("DB_CMS_JDBC_URL");
       final String user = System.getenv("DB_CMS_USER");
       final String password = System.getenv("DB_CMS_PASSWORD");
+      final String schema = System.getenv("DB_CMS_SCHEMA");
 
-      Connection conn = DriverManager.getConnection(url, user, password);
+      try (final Connection conn = DriverManager.getConnection(url, user, password)) {
+        conn.setSchema(schema);
+        conn.setCatalog(schema);
+        conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
-      if (conn instanceof DB2Connection) {
-        DB2Connection db2conn = (DB2Connection) conn;
-        db2conn.setDB2ClientUser("0X5"); // staff id
-        // db2conn.setDB2ClientWorkstation("192.168.9.121");
-        db2conn.setDB2ClientWorkstation("127.0.0.1");
-        conn.setAutoCommit(true);
-        conn.prepareStatement(
-            "update cwsint.tscntrlt c set c.LST_UPD_ID = CURRENT CLIENT_USERID where c.doc_handle = '0001121506110220*RAMESHA 00001'")
-            .executeUpdate();
+        if (conn instanceof DB2Connection) {
+          final String userId = "0X5";
+          final DB2Connection db2conn = (DB2Connection) conn;
 
-        // Execute SQL to force extended client information to be sent to the server.
-        // Auto-close the ResultSet upon block exit.
-        try (ResultSet rs = conn.prepareStatement(
-            "select c.doc_handle, c.DOC_SEGS, c.CMPRS_PRG, c.DOC_NAME, c.DOC_DATE, c.DOC_TIME, c.DOC_LEN, c.LST_UPD_ID, c.LST_UPD_TS, c.DOC_AUTH, c.DOC_SERV "
-                + "from cwsint.TSCNTRLT c "
-                + "where c.doc_handle = '0001121506110220*RAMESHA 00001' "
-                + "order by c.DOC_HANDLE for read only")
-            .executeQuery()) {
+          db2conn.setDB2ClientProgramId("CARES/FERB");
+          db2conn.setClientInfo("ClientUser", userId);
+          db2conn.setDB2ClientUser(userId); // staff id
+          db2conn.setDB2ClientWorkstation("127.0.0.1");
+          db2conn.setAutoCommit(true);
+          // db2conn.setDB2ClientDebugInfo(arg0, arg1);
 
-          while (rs.next()) {
-            final String staffId = rs.getString("LST_UPD_ID");
-            System.out.println("staffId = " + staffId);
+          System.out.println("Driver properties: " + db2conn.getClientInfo());
+
+          conn.prepareStatement(
+          //@formatter:off
+                "UPDATE " + schema + ".TSCNTRLT C \n"
+              + "SET C.LST_UPD_TS = CURRENT TIMESTAMP \n"
+              + ", C.LST_UPD_ID = CURRENT CLIENT_USERID \n"
+              + "WHERE C.DOC_HANDLE = '0001121506110220*RAMESHA 00001'")
+          .executeUpdate();
+         //@formatter:on
+
+          // Execute SQL to send extended client information to the server.
+          // ResultSet auto-closes upon block exit.
+          try (ResultSet rs = conn.prepareStatement(
+          //@formatter:off
+              "SELECT C.DOC_HANDLE, C.DOC_SEGS, C.CMPRS_PRG, C.DOC_NAME, C.DOC_DATE, C.DOC_TIME, C.DOC_LEN "
+                  + ", C.LST_UPD_ID, C.LST_UPD_TS, C.DOC_AUTH, C.DOC_SERV "
+                  + "FROM " + schema + ".TSCNTRLT C \n" 
+                  + "WHERE C.DOC_HANDLE = '0001121506110220*RAMESHA 00001' "
+                  + "ORDER BY C.DOC_HANDLE \n"
+                  + "FOR READ ONLY WITH UR")
+              //@formatter:on
+              .executeQuery()) {
+
+            while (rs.next()) {
+              final String staffId = rs.getString("LST_UPD_ID");
+              System.out.println("Found staffId: " + staffId);
+            }
           }
         }
+
+      } finally {
+        // auto-close
       }
 
-    } catch (Throwable e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
