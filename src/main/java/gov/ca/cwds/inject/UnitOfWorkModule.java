@@ -32,9 +32,10 @@ public class UnitOfWorkModule {
     return proxyFactory;
   }
 
-  public static XAUnitOfWorkAwareProxyFactory getXAUnitOfWorkProxyFactory() {
+  public static XAUnitOfWorkAwareProxyFactory getXAUnitOfWorkProxyFactory(
+      FerbHibernateBundle... bundles) {
     if (xaProxyFactory == null) {
-      xaProxyFactory = new XAUnitOfWorkAwareProxyFactory();
+      xaProxyFactory = new XAUnitOfWorkAwareProxyFactory(bundles);
     }
     return xaProxyFactory;
   }

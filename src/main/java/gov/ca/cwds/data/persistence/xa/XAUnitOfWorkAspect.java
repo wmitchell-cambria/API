@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.persistence.xa;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -12,24 +15,19 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
+import com.google.common.collect.ImmutableMap;
 
 public class XAUnitOfWorkAspect {
 
-  // Context variables
   private XAUnitOfWork xaUnitOfWork;
-  private Session session;
-  private SessionFactory sessionFactory;
 
-  private SessionFactory[] sessionFactories;
-  private Session[] sessions;
+  private ImmutableMap<String, SessionFactory> sessionFactories;
+
+  private List<Session> sessions = new ArrayList<>();
 
   private final UserTransaction txn = new UserTransactionImp();
 
-  public XAUnitOfWorkAspect() {
-    // Default, no-op
-  }
-
-  public XAUnitOfWorkAspect(SessionFactory... sessionFactories) {
+  public XAUnitOfWorkAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
   }
 
@@ -41,14 +39,26 @@ public class XAUnitOfWorkAspect {
       session = sessionFactory.openSession();
     }
 
+    sessions.add(session);
+    configureSession(session);
     return session;
   }
 
-  protected void closeSession(Session session) {
-
+  protected void openSessions() {
+    sessionFactories.values().stream().forEach(this::grabSession);
   }
 
-  protected void configureSession() {
+  protected void closeSessions() {
+    sessions.stream().forEach(this::closeSession);
+  }
+
+  protected void closeSession(Session session) {
+    if (session != null) {
+      session.close();
+    }
+  }
+
+  protected void configureSession(Session session) {
     session.setDefaultReadOnly(xaUnitOfWork.readOnly());
     session.setCacheMode(xaUnitOfWork.cacheMode());
     session.setHibernateFlushMode(xaUnitOfWork.flushMode());
@@ -60,6 +70,7 @@ public class XAUnitOfWorkAspect {
     }
     this.xaUnitOfWork = xaUnitOfWork;
 
+    openSessions();
     beginTransaction();
 
     // session = grabSession(sessionFactory);
@@ -76,9 +87,9 @@ public class XAUnitOfWorkAspect {
   }
 
   public void afterEnd() throws Exception {
-    // if (session == null) {
-    // return;
-    // }
+    if (sessions.isEmpty()) {
+      return;
+    }
 
     try {
       commitTransaction();
@@ -87,13 +98,13 @@ public class XAUnitOfWorkAspect {
       throw e;
     }
 
-    // onFinish() closes the session.
+    // NOTE: method onFinish() closes the session.
   }
 
   public void onError() throws Exception {
-    // if (session == null) {
-    // return;
-    // }
+    if (sessions.isEmpty()) {
+      return;
+    }
 
     try {
       rollbackTransaction();
@@ -103,6 +114,8 @@ public class XAUnitOfWorkAspect {
   }
 
   public void onFinish() throws Exception {
+    closeSessions();
+
     // try {
     // if (session != null) {
     // session.close();
@@ -130,11 +143,6 @@ public class XAUnitOfWorkAspect {
       return;
     }
 
-    // final Transaction txn = session.getTransaction();
-    // if (txn != null && txn.getStatus().canRollback()) {
-    // txn.rollback();
-    // }
-
     txn.rollback();
   }
 
@@ -149,11 +157,11 @@ public class XAUnitOfWorkAspect {
     txn.commit();
   }
 
-  public SessionFactory[] getSessionFactories() {
+  public ImmutableMap<String, SessionFactory> getSessionFactories() {
     return sessionFactories;
   }
 
-  public void setSessionFactories(SessionFactory[] sessionFactories) {
+  public void setSessionFactories(ImmutableMap<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
   }
 

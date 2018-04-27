@@ -2,13 +2,13 @@ package gov.ca.cwds.data.persistence.xa;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
+import gov.ca.cwds.inject.FerbHibernateBundle;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 
@@ -27,19 +27,13 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private final ImmutableMap<String, SessionFactory> sessionFactories;
 
-  public XAUnitOfWorkAwareProxyFactory() {
-    sessionFactories = ImmutableMap.of();
-  }
-
-  public XAUnitOfWorkAwareProxyFactory(Pair<String, SessionFactory>... pairs) {
-    final ImmutableMap.Builder<String, SessionFactory> builder =
-        ImmutableMap.<String, SessionFactory>builder();
-
-    for (Pair<String, SessionFactory> p : pairs) {
-      builder.put(p.getLeft(), p.getRight());
+  public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
+    final ImmutableMap.Builder<String, SessionFactory> sessionFactoriesBuilder =
+        ImmutableMap.builder();
+    for (FerbHibernateBundle bundle : bundles) {
+      sessionFactoriesBuilder.put(bundle.name(), bundle.getSessionFactory());
     }
-
-    sessionFactories = builder.build();
+    sessionFactories = sessionFactoriesBuilder.build();
   }
 
   /**
@@ -88,22 +82,24 @@ public class XAUnitOfWorkAwareProxyFactory {
           : factory.create(constructorParamTypes, constructorArguments));
       proxy.setHandler((self, overridden, proceed, args) -> {
         final XAUnitOfWork xaUnitOfWork = overridden.getAnnotation(XAUnitOfWork.class);
-        final XAUnitOfWorkAspect aspect = newAspect();
+        final XAUnitOfWorkAspect aspect = newAspect(sessionFactories);
 
         try {
-          // Begin XA transaction.
+          LOGGER.debug("Begin XA transaction.");
           aspect.beforeStart(xaUnitOfWork);
 
-          // Call the method.
+          LOGGER.debug("Call the method.");
           final Object result = proceed.invoke(self, args);
 
-          // Commit XA transaction.
+          LOGGER.debug("Commit XA transaction.");
           aspect.afterEnd();
           return result;
         } catch (InvocationTargetException e) {
+          LOGGER.error("XA ERROR! InvocationTargetException: {}", e.getCause(), e);
           aspect.onError();
           throw e.getCause();
         } catch (Exception e) {
+          LOGGER.error("XA ERROR! {}", e);
           aspect.onError();
           throw e;
         } finally {
@@ -117,11 +113,15 @@ public class XAUnitOfWorkAwareProxyFactory {
     }
   }
 
-  /**
-   * @return a new aspect
-   */
   public XAUnitOfWorkAspect newAspect() {
-    return new XAUnitOfWorkAspect();
+    return new XAUnitOfWorkAspect(sessionFactories);
   }
 
+  /**
+   * @return a new aspect
+   * @param sessionFactories
+   */
+  public XAUnitOfWorkAspect newAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
+    return new XAUnitOfWorkAspect(sessionFactories);
+  }
 }

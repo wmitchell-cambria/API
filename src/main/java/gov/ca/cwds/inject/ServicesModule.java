@@ -118,9 +118,18 @@ public class ServicesModule extends AbstractModule {
 
     XAUnitOfWorkAwareProxyFactory proxyFactory;
 
+    @Inject
+    @XaCmsHibernateBundle
+    FerbHibernateBundle xaCmsHibernateBundle;
+
+    @Inject
+    @XaNsHibernateBundle
+    FerbHibernateBundle xaNsHibernateBundle;
+
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-      proxyFactory = UnitOfWorkModule.getXAUnitOfWorkProxyFactory();
+      proxyFactory =
+          UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));

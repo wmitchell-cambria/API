@@ -268,8 +268,8 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
-  private final HibernateBundle<ApiConfiguration> xaCmsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(cmsEntities, new ApiSessionFactoryFactory()) {
+  private final FerbHibernateBundle xaCmsHibernateBundle =
+      new FerbHibernateBundle(cmsEntities, new ApiSessionFactoryFactory()) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getXaCmsDataSourceFactory();
@@ -281,19 +281,18 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
-  private final HibernateBundle<ApiConfiguration> xaNsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(nsEntities,
-          new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
-        @Override
-        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaNsDataSourceFactory();
-        }
+  private final FerbHibernateBundle xaNsHibernateBundle = new FerbHibernateBundle(nsEntities,
+      new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
+    @Override
+    public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+      return configuration.getXaNsDataSourceFactory();
+    }
 
-        @Override
-        public String name() {
-          return "xa_ns";
-        }
-      };
+    @Override
+    public String name() {
+      return "xa_ns";
+    }
+  };
 
   /**
    * Constructor takes the API configuration.
@@ -448,7 +447,7 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @XaCmsHibernateBundle
-  public HibernateBundle<ApiConfiguration> getXaCmsHibernateBundle() {
+  public FerbHibernateBundle getXaCmsHibernateBundle() {
     return xaCmsHibernateBundle;
   }
 
@@ -466,7 +465,7 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @XaNsHibernateBundle
-  public HibernateBundle<ApiConfiguration> getXaNsHibernateBundle() {
+  public FerbHibernateBundle getXaNsHibernateBundle() {
     return xaNsHibernateBundle;
   }
 
