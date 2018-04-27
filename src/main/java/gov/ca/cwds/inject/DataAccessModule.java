@@ -104,7 +104,7 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 
 /**
- * DI (dependency injection) setup for data access objects (DAO).
+ * Dependency injection (DI) setup for data access objects (DAO).
  *
  * @author CWDS API Team
  * @see ApiSessionFactoryFactory
@@ -268,6 +268,9 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
+  /**
+   * XA pooled datasource factory for CMS DB2.
+   */
   private final FerbHibernateBundle xaCmsHibernateBundle =
       new FerbHibernateBundle(cmsEntities, new ApiSessionFactoryFactory()) {
         @Override
@@ -281,6 +284,9 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
+  /**
+   * XA pooled datasource factory for NS PostgreSQL.
+   */
   private final FerbHibernateBundle xaNsHibernateBundle = new FerbHibernateBundle(nsEntities,
       new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
     @Override

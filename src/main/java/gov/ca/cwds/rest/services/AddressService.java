@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,16 +112,28 @@ public class AddressService implements CrudsService {
     final String staffId = ctx.getStaffId();
 
     try {
+      // ==================
       // PostgreSQL:
-      // Proof of concept. Don't bother parsing the raw street address.
+      // ==================
+
+      // Proof of concept only. Don't bother parsing raw street addresses.
       final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
       nsAddr.setZip(reqAddr.getZip());
       nsAddr.setCity(reqAddr.getCity());
       nsAddr.setLegacyId(reqAddr.getLegacyId());
-      nsAddr.setLegacySourceTable("ADDR_T");
+
+      if (StringUtils.isNotEmpty(reqAddr.getLegacySourceTable())) {
+        nsAddr.setLegacySourceTable(reqAddr.getLegacySourceTable().trim().toUpperCase());
+      } else {
+        nsAddr.setLegacySourceTable("ADDRS_T");
+      }
+
       final gov.ca.cwds.data.persistence.ns.Addresses ret = xaNsAddressDao.update(nsAddr);
 
+      // ==================
       // DB2:
+      // ==================
+
       final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
           xaCmsAddressDao.find(nsAddr.getLegacyId());
       cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
@@ -131,7 +144,7 @@ public class AddressService implements CrudsService {
       xaCmsAddressDao.update(cmsAddr);
 
       ret.setLegacyId(reqAddr.getLegacyId());
-      ret.setLegacySourceTable(reqAddr.getLegacyDescriptor().getTableName());
+      ret.setLegacySourceTable(reqAddr.getLegacySourceTable());
 
       // Return results.
       final PostedAddress result = new PostedAddress(ret);

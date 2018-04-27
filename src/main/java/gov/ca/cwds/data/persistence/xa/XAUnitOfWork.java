@@ -10,6 +10,13 @@ import java.lang.annotation.Target;
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 
+/**
+ * Ferb annotation identifies XA transactions. When attribute {@link #transactional()} is set to
+ * true (the default), then execute an XA transaction across all participating XA datasources.
+ * Callers may optionally specify datasources by name in the {@link #value()} attribute.
+ * 
+ * @author CWDS API Team
+ */
 @Target(METHOD)
 @Retention(RUNTIME)
 @Documented
@@ -32,7 +39,7 @@ public @interface XAUnitOfWork {
   boolean transactional() default true;
 
   /**
-   * The {@link CacheMode} for the session.
+   * The Hibernate {@link CacheMode} for the session.
    *
    * @return chose CacheMode, defaults to CacheMode.NORMAL
    * @see CacheMode
@@ -41,7 +48,7 @@ public @interface XAUnitOfWork {
   CacheMode cacheMode() default CacheMode.NORMAL;
 
   /**
-   * The {@link FlushMode} for the session.
+   * The Hibernate {@link FlushMode} for the session.
    *
    * @return chosen Flush mode, defaults to FlushMode.Auto
    * @see FlushMode
@@ -55,6 +62,6 @@ public @interface XAUnitOfWork {
    * 
    * @return array of Hibernate bundle names
    */
-  String[] value() default "cms";
+  String[] value() default {"cms", "ns"};
 
 }

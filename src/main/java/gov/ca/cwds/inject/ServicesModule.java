@@ -111,7 +111,16 @@ public class ServicesModule extends AbstractModule {
   }
 
   /**
+   * AOP method interception for Ferb annotation {@link XAUnitOfWork}. Automatically manages
+   * Hibernate sessions and XA transactions.
+   * 
+   * <p>
+   * NEXT: In the future all data sources should be XA and all resources should use
+   * {@link XAUnitOfWork} instead of {@link UnitOfWork}.
+   * </p>
+   * 
    * @author CWDS API Team
+   * @see XAUnitOfWorkAspect
    */
   public static class XAUnitOfWorkInterceptor
       implements org.aopalliance.intercept.MethodInterceptor {
@@ -190,10 +199,12 @@ public class ServicesModule extends AbstractModule {
     bind(HOICaseService.class);
     bind(AuthorizationService.class);
 
+    // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
     requestInjection(interceptor);
 
+    // Enable AOP for Ferb @XAUnitOfWork.
     final XAUnitOfWorkInterceptor xaInterceptor = new XAUnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(XAUnitOfWork.class), xaInterceptor);
     requestInjection(xaInterceptor);

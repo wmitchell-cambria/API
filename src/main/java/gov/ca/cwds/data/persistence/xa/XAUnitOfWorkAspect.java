@@ -17,53 +17,31 @@ import org.hibernate.SessionFactory;
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * AOP aspect supports {@link XAUnitOfWork}.
+ * 
+ * @author CWDS API Team
+ */
 public class XAUnitOfWorkAspect {
 
   private XAUnitOfWork xaUnitOfWork;
+
+  private UserTransaction txn = new UserTransactionImp();
 
   private ImmutableMap<String, SessionFactory> sessionFactories;
 
   private List<Session> sessions = new ArrayList<>();
 
-  private final UserTransaction txn = new UserTransactionImp();
-
   public XAUnitOfWorkAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
   }
 
-  public Session grabSession(SessionFactory sessionFactory) {
-    Session session;
-    try {
-      session = sessionFactory.getCurrentSession();
-    } catch (HibernateException e) {
-      session = sessionFactory.openSession();
-    }
-
-    sessions.add(session);
-    configureSession(session);
-    return session;
-  }
-
-  protected void openSessions() {
-    sessionFactories.values().stream().forEach(this::grabSession);
-  }
-
-  protected void closeSessions() {
-    sessions.stream().forEach(this::closeSession);
-  }
-
-  protected void closeSession(Session session) {
-    if (session != null) {
-      session.close();
-    }
-  }
-
-  protected void configureSession(Session session) {
-    session.setDefaultReadOnly(xaUnitOfWork.readOnly());
-    session.setCacheMode(xaUnitOfWork.cacheMode());
-    session.setHibernateFlushMode(xaUnitOfWork.flushMode());
-  }
-
+  /**
+   * Aspect entry point.
+   * 
+   * @param xaUnitOfWork - take settings from annotation
+   * @throws Exception on database error
+   */
   public void beforeStart(XAUnitOfWork xaUnitOfWork) throws Exception {
     if (xaUnitOfWork == null) {
       return;
@@ -92,6 +70,10 @@ public class XAUnitOfWorkAspect {
     }
   }
 
+  /**
+   * 
+   * @throws Exception on database error
+   */
   public void onError() throws Exception {
     if (sessions.isEmpty()) {
       return;
@@ -104,8 +86,64 @@ public class XAUnitOfWorkAspect {
     }
   }
 
+  /**
+   * Close open sessions.
+   * 
+   * @throws Exception on database error
+   */
   public void onFinish() throws Exception {
+    txn = null;
     closeSessions();
+  }
+
+  /**
+   * Get the current Hibernate session, if open, or open a new session.
+   * 
+   * @param sessionFactory - open a session for this datasource
+   * @return session
+   */
+  protected Session grabSession(SessionFactory sessionFactory) {
+    Session session;
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    sessions.add(session);
+    configureSession(session);
+    return session;
+  }
+
+  /**
+   * Open sessions for selected datasources.
+   */
+  protected void openSessions() {
+    sessionFactories.values().stream().forEach(this::grabSession);
+  }
+
+  /**
+   * Close all sessions.
+   */
+  protected void closeSessions() {
+    sessions.stream().forEach(this::closeSession);
+  }
+
+  protected void closeSession(Session session) {
+    if (session != null) {
+      session.close();
+    }
+  }
+
+  /**
+   * Set cache mode, flush mode, and read-only properties on a Hibernate session.
+   * 
+   * @param session - target Hibernate session
+   */
+  protected void configureSession(Session session) {
+    session.setDefaultReadOnly(xaUnitOfWork.readOnly());
+    session.setCacheMode(xaUnitOfWork.cacheMode());
+    session.setHibernateFlushMode(xaUnitOfWork.flushMode());
   }
 
   protected void beginTransaction() throws SystemException, NotSupportedException {
