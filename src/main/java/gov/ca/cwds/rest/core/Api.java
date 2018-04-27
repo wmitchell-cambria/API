@@ -18,11 +18,6 @@ public final class Api {
   public static final String RESOURCE_APPLICATION = "application";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION} API..
-   */
-  public static final String RESOURCE_ALLEGATION = "_allegations";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
    */
   public static final String RESOURCE_ALLEGATION_PERPETRATOR_HISTORY =

@@ -62,7 +62,6 @@ import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.auth.AuthorizationResource;
 import gov.ca.cwds.rest.resources.cms.AllegationPerpetratorHistoryResource;
-import gov.ca.cwds.rest.resources.cms.AllegationResource;
 import gov.ca.cwds.rest.resources.cms.AssignmentResource;
 import gov.ca.cwds.rest.resources.cms.ChildClientResource;
 import gov.ca.cwds.rest.resources.cms.ClientCollateralResource;
@@ -159,7 +158,6 @@ public class ResourcesModule extends AbstractModule {
     bind(ScreeningResource.class);
     bind(ScreeningIntakeResource.class);
     bind(ScreeningDashboardResource.class);
-    bind(AllegationResource.class);
     bind(ClientResource.class);
     bind(CmsDocReferralClientResource.class);
     bind(CmsDocumentResource.class);
