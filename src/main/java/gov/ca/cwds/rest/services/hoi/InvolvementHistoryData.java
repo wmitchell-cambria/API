@@ -12,7 +12,7 @@ class InvolvementHistoryData {
 
   private String screeningId = null;
 
-  private Collection<String> clientIds = new HashSet<>();
+  private HOIScreeningData hoiScreeningData;
 
   private List<HOIScreening> hoiScreenings = new ArrayList<>();
 
@@ -22,22 +22,19 @@ class InvolvementHistoryData {
 
   InvolvementHistoryData(String screeningId) {
     this.screeningId = screeningId;
+    this.hoiScreeningData = new HOIScreeningData(new HashSet<>());
   }
 
   InvolvementHistoryData(Collection<String> clientIds) {
-    this.clientIds = clientIds;
+    this.hoiScreeningData = new HOIScreeningData(clientIds);
   }
 
   String getScreeningId() {
     return screeningId;
   }
 
-  Collection<String> getClientIds() {
-    return clientIds;
-  }
-
-  void setClientIds(Collection<String> clientIds) {
-    this.clientIds = clientIds;
+  HOIScreeningData getHoiScreeningData() {
+    return hoiScreeningData;
   }
 
   List<HOIScreening> getHoiScreenings() {
