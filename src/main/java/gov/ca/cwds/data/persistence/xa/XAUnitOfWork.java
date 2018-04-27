@@ -28,7 +28,7 @@ public @interface XAUnitOfWork {
    * If {@code true}, a transaction will be automatically started before the resource method is
    * invoked, committed if the method returned, and rolled back if an exception was thrown.
    */
-  boolean transactional() default false;
+  boolean transactional() default true;
 
   /**
    * The {@link CacheMode} for the session.
@@ -50,6 +50,6 @@ public @interface XAUnitOfWork {
    * The name of a hibernate bundle (session factory) that specifies a datasource against which a
    * transaction will be opened.
    */
-  String value() default HibernateBundle.DEFAULT_NAME;
+  String[] value() default HibernateBundle.DEFAULT_NAME;
 
 }

@@ -11,7 +11,7 @@ import javassist.util.proxy.ProxyFactory;
 
 /**
  * A factory for creating proxies for components that use Hibernate data access objects outside
- * Jersey resources.
+ * Jersey resources using two-phase commit, XA transactions.
  * 
  * <p>
  * A created proxy will be aware of the {@link XAUnitOfWork} annotation on the original class
@@ -22,12 +22,16 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private final ImmutableMap<String, SessionFactory> sessionFactories;
 
+  public XAUnitOfWorkAwareProxyFactory() {
+    sessionFactories = ImmutableMap.of();
+  }
+
   public XAUnitOfWorkAwareProxyFactory(String name, SessionFactory sessionFactory) {
     sessionFactories = ImmutableMap.of(name, sessionFactory);
   }
 
   /**
-   * Creates a new <b>@UnitOfWork</b> aware proxy of a class with the default constructor.
+   * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with the default constructor.
    *
    * @param clazz the specified class definition
    * @param <T> the type of the class
@@ -38,7 +42,7 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   /**
-   * Creates a new <b>@UnitOfWork</b> aware proxy of a class with an one-parameter constructor.
+   * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with an one-parameter constructor.
    *
    * @param clazz the specified class definition
    * @param constructorParamType the type of the constructor parameter
@@ -52,7 +56,7 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   /**
-   * Creates a new <b>@UnitOfWork</b> aware proxy of a class with a complex constructor.
+   * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with a complex constructor.
    *
    * @param clazz the specified class definition
    * @param constructorParamTypes the types of the constructor parameters

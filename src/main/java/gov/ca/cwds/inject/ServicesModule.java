@@ -19,6 +19,9 @@ import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspect;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -94,6 +97,33 @@ public class ServicesModule extends AbstractModule {
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
+        final Object result = mi.proceed();
+        aspect.afterEnd();
+        return result;
+      } catch (Exception e) {
+        aspect.onError();
+        throw e;
+      } finally {
+        aspect.onFinish();
+      }
+    }
+
+  }
+
+  /**
+   * @author CWDS API Team
+   */
+  public static class XAUnitOfWorkInterceptor
+      implements org.aopalliance.intercept.MethodInterceptor {
+
+    XAUnitOfWorkAwareProxyFactory proxyFactory;
+
+    @Override
+    public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
+      proxyFactory = UnitOfWorkModule.getXAUnitOfWorkProxyFactory();
+      final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
+      try {
+        aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
         return result;

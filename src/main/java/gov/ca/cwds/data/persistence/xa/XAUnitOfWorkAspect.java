@@ -1,24 +1,37 @@
 package gov.ca.cwds.data.persistence.xa;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.context.internal.ManagedSessionContext;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
+
+import com.atomikos.icatch.jta.UserTransactionImp;
 
 public class XAUnitOfWorkAspect {
-
-  public XAUnitOfWorkAspect() {}
 
   // Context variables
   private XAUnitOfWork xaUnitOfWork;
   private Session session;
   private SessionFactory sessionFactory;
 
-  private UserTransaction txn;
+  private SessionFactory[] sessionFactories;
+  private Session[] sessions;
+
+  private final UserTransaction txn = new UserTransactionImp();
+
+  public XAUnitOfWorkAspect() {
+    // Default, no-op
+  }
+
+  public XAUnitOfWorkAspect(SessionFactory... sessionFactories) {
+    this.sessionFactories = sessionFactories;
+  }
 
   public Session grabSession(SessionFactory sessionFactory) {
     Session session;
@@ -31,76 +44,12 @@ public class XAUnitOfWorkAspect {
     return session;
   }
 
-  public Transaction joinTransaction(Session session) {
-    Transaction txn = session.getTransaction();
-    txn = txn != null ? txn : session.beginTransaction();
-
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
-      txn.begin();
-    }
-
-    return txn;
-  }
-
-  public void beforeStart(XAUnitOfWork xaUnitOfWork) {
-    if (xaUnitOfWork == null) {
-      return;
-    }
-    this.xaUnitOfWork = xaUnitOfWork;
-
-
-    session = sessionFactory.openSession();
-    try {
-      configureSession();
-      ManagedSessionContext.bind(session);
-      beginTransaction();
-    } catch (Throwable th) {
-      session.close();
-      session = null;
-      ManagedSessionContext.unbind(sessionFactory);
-      throw th;
-    }
+  protected void openSession() {
 
   }
 
-  public void afterEnd() {
-    if (session == null) {
-      return;
-    }
+  protected void closeSession() {
 
-    try {
-      commitTransaction();
-    } catch (Exception e) {
-      rollbackTransaction();
-      throw e;
-    }
-    // We should not close the session to let the lazy loading work during serializing a response to
-    // the client.
-    // If the response successfully serialized, then the session will be closed by the `onFinish`
-    // method
-  }
-
-  public void onError() {
-    if (session == null) {
-      return;
-    }
-
-    try {
-      rollbackTransaction();
-    } finally {
-      onFinish();
-    }
-  }
-
-  public void onFinish() {
-    try {
-      if (session != null) {
-        session.close();
-      }
-    } finally {
-      session = null;
-      ManagedSessionContext.unbind(sessionFactory);
-    }
   }
 
   protected void configureSession() {
@@ -109,31 +58,107 @@ public class XAUnitOfWorkAspect {
     session.setHibernateFlushMode(xaUnitOfWork.flushMode());
   }
 
-  protected void beginTransaction() {
-    if (!xaUnitOfWork.transactional()) {
+  public void beforeStart(XAUnitOfWork xaUnitOfWork) throws Exception {
+    if (xaUnitOfWork == null) {
       return;
     }
-    session.beginTransaction();
+    this.xaUnitOfWork = xaUnitOfWork;
+
+    beginTransaction();
+
+    // session = sessionFactory.openSession();
+    // try {
+    // configureSession();
+    // ManagedSessionContext.bind(session);
+    // beginTransaction();
+    // } catch (Throwable th) {
+    // session.close();
+    // session = null;
+    // ManagedSessionContext.unbind(sessionFactory);
+    // throw th;
+    // }
   }
 
-  protected void rollbackTransaction() {
-    if (!xaUnitOfWork.transactional()) {
-      return;
+  public void afterEnd() throws Exception {
+    // if (session == null) {
+    // return;
+    // }
+
+    try {
+      commitTransaction();
+    } catch (Exception e) {
+      rollbackTransaction();
+      throw e;
     }
-    final Transaction txn = session.getTransaction();
-    if (txn != null && txn.getStatus().canRollback()) {
-      txn.rollback();
+
+    // onFinish() closes the session.
+  }
+
+  public void onError() throws Exception {
+    // if (session == null) {
+    // return;
+    // }
+
+    try {
+      rollbackTransaction();
+    } finally {
+      onFinish();
     }
   }
 
-  protected void commitTransaction() {
+  public void onFinish() throws Exception {
+    // try {
+    // if (session != null) {
+    // session.close();
+    // }
+    // } finally {
+    // session = null;
+    // ManagedSessionContext.unbind(sessionFactory);
+    // }
+  }
+
+  protected void beginTransaction() throws SystemException, NotSupportedException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
-    final Transaction txn = session.getTransaction();
-    if (txn != null && txn.getStatus().canRollback()) {
-      txn.commit();
+
+    // Start XA transaction.
+    txn.setTransactionTimeout(80);
+    txn.begin();
+  }
+
+  protected void rollbackTransaction()
+      throws SystemException, NotSupportedException, HeuristicRollbackException,
+      HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
+    if (!xaUnitOfWork.transactional()) {
+      return;
     }
+
+    // final Transaction txn = session.getTransaction();
+    // if (txn != null && txn.getStatus().canRollback()) {
+    // txn.rollback();
+    // }
+
+    txn.rollback();
+  }
+
+  protected void commitTransaction()
+      throws SystemException, NotSupportedException, HeuristicRollbackException,
+      HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
+    if (!xaUnitOfWork.transactional()) {
+      return;
+    }
+
+    // Commit XA transaction.
+    txn.commit();
+  }
+
+  public SessionFactory[] getSessionFactories() {
+    return sessionFactories;
+  }
+
+  public void setSessionFactories(SessionFactory[] sessionFactories) {
+    this.sessionFactories = sessionFactories;
   }
 
 }
