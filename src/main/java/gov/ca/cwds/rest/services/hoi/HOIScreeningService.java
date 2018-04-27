@@ -1,13 +1,12 @@
 package gov.ca.cwds.rest.services.hoi;
 
+import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -41,6 +40,9 @@ public class HOIScreeningService
   LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
+  StaffPersonDao staffPersonDao;
+
+  @Inject
   HOIScreeningFactory hoiScreeningFactory;
 
   @Inject
@@ -59,16 +61,31 @@ public class HOIScreeningService
    */
   @Override
   public HOIScreeningResponse handleFind(HOIRequest hoiRequest) {
-    Collection<String> clientIds = hoiRequest.getClientIds();
+    HOIScreeningData hoiScreeningData = new HOIScreeningData(hoiRequest.getClientIds());
+    loadDataFromNS(hoiScreeningData);
+    loadDataFromCMS(hoiScreeningData);
+    return new HOIScreeningResponse(buildHoiScreenings(hoiScreeningData));
+  }
+
+  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
+  protected void loadDataFromNS(HOIScreeningData hoiScreeningData) {
+    fetchDataFromNS(hoiScreeningData);
+  }
+
+  void fetchDataFromNS(HOIScreeningData hsd) {
     /*
      * NOTE: When we want to enable authorizations for screening history, we can add following line
      * of code back at this spot:<br/>
      * authorizationService&#46;ensureClientAccessAuthorized&#40;clientIds&#41;&#59;
      */
-    Set<ScreeningEntity> screeningEntities = screeningDao.findScreeningsByClientIds(clientIds);
+    Set<ScreeningEntity> screeningEntities = screeningDao
+        .findScreeningsByClientIds(hsd.getClientIds());
+    hsd.setScreeningEntities(screeningEntities);
 
     Set<String> counties = new HashSet<>();
     Set<String> participantIds = new HashSet<>();
+    Collection<String> assigneeStaffIds = new HashSet<>();
     for (ScreeningEntity screeningEntity : screeningEntities) {
       counties.add(screeningEntity.getIncidentCounty());
       if (screeningEntity.getParticipants() != null) {
@@ -76,16 +93,31 @@ public class HOIScreeningService
           participantIds.add(participantEntity.getId());
         }
       }
+      if (screeningEntity.getAssigneeStaffId() != null) {
+        assigneeStaffIds.add(screeningEntity.getAssigneeStaffId());
+      }
     }
 
-    Map<String, IntakeLOVCodeEntity> countyIntakeLOVCodeEntityMap = intakeLOVCodeDao
-        .findIntakeLOVCodesByIntakeCodes(counties);
-    Map<String, LegacyDescriptorEntity> participantLegacyDescriptors = legacyDescriptorDao
-        .findParticipantLegacyDescriptors(participantIds);
+    hsd.setCountyIntakeLOVCodeEntityMap(intakeLOVCodeDao.findIntakeLOVCodesByIntakeCodes(counties));
+    hsd.setParticipantLegacyDescriptors(
+        legacyDescriptorDao.findParticipantLegacyDescriptors(participantIds));
+    hsd.setAssigneeStaffIds(assigneeStaffIds);
+  }
 
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
+  @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
+  protected void loadDataFromCMS(HOIScreeningData hoiScreeningData) {
+    fetchDataFromCMS(hoiScreeningData);
+  }
+
+  void fetchDataFromCMS(HOIScreeningData hsd) {
+    hsd.setStaffPersonMap(staffPersonDao.findByIds(hsd.getAssigneeStaffIds()));
+  }
+
+  Set<HOIScreening> buildHoiScreenings(HOIScreeningData hsd) {
     Set<HOIScreening> screenings =
         new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
-    for (ScreeningEntity screeningEntity : screeningEntities) {
+    for (ScreeningEntity screeningEntity : hsd.getScreeningEntities()) {
       /*
        * NOTE: When we want to enable authorizations for screening history, we can add following
        * line of code back at this spot:<br/>
@@ -93,12 +125,12 @@ public class HOIScreeningService
        */
       screenings.add(hoiScreeningFactory.buildHOIScreening(
           screeningEntity,
-          countyIntakeLOVCodeEntityMap.get(screeningEntity.getIncidentCounty()),
-          participantLegacyDescriptors)
+          hsd.getCountyIntakeLOVCodeEntityMap().get(screeningEntity.getIncidentCounty()),
+          hsd.getParticipantLegacyDescriptors(),
+          hsd.getStaffPersonMap().get(screeningEntity.getAssigneeStaffId()))
       );
     }
-
-    return new HOIScreeningResponse(screenings);
+    return screenings;
   }
 
   @Override
