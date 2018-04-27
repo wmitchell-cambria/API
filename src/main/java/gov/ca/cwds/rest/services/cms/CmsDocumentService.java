@@ -10,8 +10,6 @@ import java.util.List;
 import javax.persistence.EntityExistsException;
 import javax.xml.bind.DatatypeConverter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -20,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.CmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
@@ -99,7 +98,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       doc.setDocServ(request.getDocServ().trim());
     }
 
-    //Force PKWare compression for new documents
+    // Force PKWare compression for new documents
     doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
 
     final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(doc, request.getBase64Blob().trim());
@@ -144,7 +143,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         doc.setCompressionMethod(request.getCompressionMethod().trim());
       }
 
-      //Force PKWare compression for updated documents
+      // Force PKWare compression for updated documents
       doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
 
       final List<CmsDocumentBlobSegment> blobs =
@@ -159,8 +158,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       try {
         dao.update(managed);
       } catch (Exception e) {
-        LOGGER.error("FAILED TO SAVE DOCUMENT MAIN: {}", e.getMessage(), e);
-        throw new ServiceException("FAILED TO SAVE DOCUMENT MAIN: {" + request + "}", e);
+        LOGGER.error("FAILED TO UPDATE DOCUMENT! {}", e.getMessage(), e);
+        throw new ServiceException("FAILED TO UPDATE DOCUMENT! {" + request + "}", e);
       }
       retval = new CmsDocument(managed);
       String base64Doc = dao.decompressDoc(managed);
@@ -175,15 +174,13 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   protected String blobToInsert(CmsDocumentBlobSegment blob) {
     return new StringBuilder().append("INSERT INTO ").append(getCurrentSchema())
         .append(".TSBLOBT(DOC_HANDLE, DOC_SEGSEQ, DOC_BLOB) VALUES").append("('")
-        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence())
-        .append("',x'").append(DatatypeConverter.printHexBinary(blob.getDocBlob())).append("')")
-        .toString();
+        .append(blob.getDocHandle()).append("','").append(blob.getSegmentSequence()).append("',x'")
+        .append(DatatypeConverter.printHexBinary(blob.getDocBlob())).append("')").toString();
   }
 
   protected String blobsDelete() {
-    return new StringBuilder()
-        .append("DELETE FROM ").append(getCurrentSchema()).append(".TSBLOBT WHERE DOC_HANDLE = ?")
-        .toString();
+    return new StringBuilder().append("DELETE FROM ").append(getCurrentSchema())
+        .append(".TSBLOBT WHERE DOC_HANDLE = ?").toString();
   }
 
   protected String getCurrentSchema() {
@@ -192,11 +189,10 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   @SuppressFBWarnings("SQL_INJECTION_JDBC") // There is no sql injection here
-  private void insertBlobsJdbc(final Connection con, gov.ca.cwds.data.persistence.cms.CmsDocument doc,
-    List<CmsDocumentBlobSegment> blobs)
-    throws SQLException {
-    try (
-        final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
+  private void insertBlobsJdbc(final Connection con,
+      gov.ca.cwds.data.persistence.cms.CmsDocument doc, List<CmsDocumentBlobSegment> blobs)
+      throws SQLException {
+    try (final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
         final Statement insStmt = con.createStatement()) {
 
       delStmt.setString(1, doc.getId());
@@ -214,10 +210,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   @SuppressFBWarnings("SQL_INJECTION_JDBC") // There is no sql injection here
-  private void deleteBlobsJdbc(final Connection con, String docId)
-      throws SQLException {
-    try (
-        final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
+  private void deleteBlobsJdbc(final Connection con, String docId) throws SQLException {
+    try (final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
 
       delStmt.setString(1, docId);
       delStmt.executeUpdate();

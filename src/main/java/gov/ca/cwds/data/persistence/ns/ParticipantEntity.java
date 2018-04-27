@@ -3,12 +3,9 @@ package gov.ca.cwds.data.persistence.ns;
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import gov.ca.cwds.Identifiable;
-import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
-import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import java.util.Arrays;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,12 +15,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.Identifiable;
+import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
+import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 
 /**
  * {@link PersistentObject} representing Participant.
@@ -42,14 +45,10 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
 
   @Id
   @Column(name = "id")
-  @GenericGenerator(
-      name = "participant_id",
+  @GenericGenerator(name = "participant_id",
       strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-      parameters = {
-          @org.hibernate.annotations.Parameter(
-              name = "sequence_name", value = "participants_id_seq")
-      }
-  )
+      parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name",
+          value = "participants_id_seq")})
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_id")
   private String id;
 
@@ -129,12 +128,10 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     updateFrom(participantIntakeApi);
   }
 
-  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
-      String gender, String lastName, String ssn,
-      ScreeningEntity screeningEntity, String legacyId, String[] roles,
-      String[] languages, String middleName, String nameSuffix,
-      String races, String ethnicity, String legacySourceTable,
-      Boolean sensitive, Boolean sealed, String approximateAge,
+  public ParticipantEntity(String id, Date dateOfBirth, String firstName, String gender,
+      String lastName, String ssn, ScreeningEntity screeningEntity, String legacyId, String[] roles,
+      String[] languages, String middleName, String nameSuffix, String races, String ethnicity,
+      String legacySourceTable, Boolean sensitive, Boolean sealed, String approximateAge,
       String approximateAgeUnits) {
     this.id = id;
     this.dateOfBirth = dateOfBirth;
@@ -186,6 +183,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     return id;
   }
 
+  @Override
   public String getId() {
     return id;
   }
@@ -290,5 +288,9 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }

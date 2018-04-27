@@ -148,6 +148,7 @@ public class AddressService implements CrudsService {
       // Return results.
       final PostedAddress result = new PostedAddress(ret);
       result.setLegacyDescriptor(reqAddr.getLegacyDescriptor());
+      result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
       return result;
     } catch (Exception e) {
       try {

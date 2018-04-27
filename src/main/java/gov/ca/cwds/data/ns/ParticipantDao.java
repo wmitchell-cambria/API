@@ -1,16 +1,19 @@
 package gov.ca.cwds.data.ns;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
-import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import gov.ca.cwds.inject.NsSessionFactory;
+
 /**
- * Address DAO
+ * Participant DAO in PostgreSQL.
  *
  * @author CWDS API Team
  */
