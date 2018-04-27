@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.CreationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -71,10 +70,9 @@ public class ServicesModuleTest {
     assertThat(target, notNullValue());
   }
 
-  @Test(expected = CreationException.class)
-  public void configure_A$() throws Exception {
+  @Test
+  public void configure_A$() {
     Bootstrap<ApiConfiguration> bootstrap = mock(Bootstrap.class);
-    ApiConfiguration apiConfiguration = mock(ApiConfiguration.class);
     DataAccessModule dataAccessModule = new DataAccessModule(bootstrap);
 
     final TestDataAccessModule module1 = new TestDataAccessModule();
