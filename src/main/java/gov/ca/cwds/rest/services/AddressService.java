@@ -2,13 +2,10 @@ package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
 
-import javax.transaction.UserTransaction;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
@@ -113,11 +110,11 @@ public class AddressService implements CrudsService {
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
 
-    final UserTransaction txn = new UserTransactionImp();
+    // final UserTransaction txn = new UserTransactionImp();
     try {
       // Start XA transaction.
-      txn.setTransactionTimeout(80);
-      txn.begin();
+      // txn.setTransactionTimeout(80);
+      // txn.begin();
 
       // Work it!
       // PostgreSQL:
@@ -140,7 +137,7 @@ public class AddressService implements CrudsService {
       xaCmsAddressDao.update(cmsAddr);
 
       // Commit XA transaction.
-      txn.commit();
+      // txn.commit();
 
       ret.setLegacyId(reqAddr.getLegacyId());
       ret.setLegacySourceTable(reqAddr.getLegacyDescriptor().getTableName());
@@ -151,11 +148,11 @@ public class AddressService implements CrudsService {
       result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
       return result;
     } catch (Exception e) {
-      try {
-        txn.rollback();
-      } catch (Exception e2) {
-        LOGGER.warn("FAILED TO ROLLBACK XA TRANSACTION! {}", e2.getMessage(), e2);
-      }
+      // try {
+      // txn.rollback();
+      // } catch (Exception e2) {
+      // LOGGER.warn("FAILED TO ROLLBACK XA TRANSACTION! {}", e2.getMessage(), e2);
+      // }
 
       LOGGER.error("XA TRANSACTION ERROR!", e);
       throw new ServiceException("XA TRANSACTION ERROR!", e);

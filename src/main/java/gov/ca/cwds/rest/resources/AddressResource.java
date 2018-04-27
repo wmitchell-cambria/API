@@ -119,7 +119,6 @@ public class AddressResource {
    * @param address - {@link Address}
    * @return The {@link Response}
    */
-  // @UnitOfWork(value = "ns")
   @XAUnitOfWork(value = {"ns", "cms"})
   @PUT
   @Path("/{id}")

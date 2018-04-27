@@ -44,11 +44,7 @@ public class XAUnitOfWorkAspect {
     return session;
   }
 
-  protected void openSession() {
-
-  }
-
-  protected void closeSession() {
+  protected void closeSession(Session session) {
 
   }
 
@@ -66,7 +62,7 @@ public class XAUnitOfWorkAspect {
 
     beginTransaction();
 
-    // session = sessionFactory.openSession();
+    // session = grabSession(sessionFactory);
     // try {
     // configureSession();
     // ManagedSessionContext.bind(session);

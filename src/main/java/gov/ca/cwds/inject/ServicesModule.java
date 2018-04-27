@@ -185,6 +185,10 @@ public class ServicesModule extends AbstractModule {
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
     requestInjection(interceptor);
 
+    final XAUnitOfWorkInterceptor xaInterceptor = new XAUnitOfWorkInterceptor();
+    bindInterceptor(Matchers.any(), Matchers.annotatedWith(XAUnitOfWork.class), xaInterceptor);
+    requestInjection(xaInterceptor);
+
     final Properties p = new Properties();
     p.setProperty("something", "Some String");
     Names.bindProperties(binder(), p);

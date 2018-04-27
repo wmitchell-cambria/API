@@ -2,7 +2,10 @@ package gov.ca.cwds.data.persistence.xa;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -20,14 +23,23 @@ import javassist.util.proxy.ProxyFactory;
  */
 public class XAUnitOfWorkAwareProxyFactory {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAwareProxyFactory.class);
+
   private final ImmutableMap<String, SessionFactory> sessionFactories;
 
   public XAUnitOfWorkAwareProxyFactory() {
     sessionFactories = ImmutableMap.of();
   }
 
-  public XAUnitOfWorkAwareProxyFactory(String name, SessionFactory sessionFactory) {
-    sessionFactories = ImmutableMap.of(name, sessionFactory);
+  public XAUnitOfWorkAwareProxyFactory(Pair<String, SessionFactory>... pairs) {
+    final ImmutableMap.Builder<String, SessionFactory> builder =
+        ImmutableMap.<String, SessionFactory>builder();
+
+    for (Pair<String, SessionFactory> p : pairs) {
+      builder.put(p.getLeft(), p.getRight());
+    }
+
+    sessionFactories = builder.build();
   }
 
   /**
@@ -77,9 +89,15 @@ public class XAUnitOfWorkAwareProxyFactory {
       proxy.setHandler((self, overridden, proceed, args) -> {
         final XAUnitOfWork xaUnitOfWork = overridden.getAnnotation(XAUnitOfWork.class);
         final XAUnitOfWorkAspect aspect = newAspect();
+
         try {
+          // Begin XA transaction.
           aspect.beforeStart(xaUnitOfWork);
-          Object result = proceed.invoke(self, args);
+
+          // Call the method.
+          final Object result = proceed.invoke(self, args);
+
+          // Commit XA transaction.
           aspect.afterEnd();
           return result;
         } catch (InvocationTargetException e) {
