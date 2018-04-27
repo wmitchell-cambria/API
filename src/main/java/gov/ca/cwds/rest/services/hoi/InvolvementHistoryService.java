@@ -62,37 +62,45 @@ public class InvolvementHistoryService
   private InvolvementHistory findInvolvementHistory(InvolvementHistoryData ihd) {
     loadDataFromNS(ihd);
     loadDataFromCMS(ihd);
+    buildHoiScreenings(ihd);
     return new InvolvementHistory(ihd.getScreeningId(), ihd.getHoiCases(), ihd.getHoiReferrals(),
         ihd.getHoiScreenings());
   }
 
   @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(InvolvementHistoryData ihd) {
-    if (ihd.getClientIds().isEmpty() && ihd.getScreeningId() != null) {
+    HOIScreeningData hsd = ihd.getHoiScreeningData();
+    if (hsd.getClientIds().isEmpty() && ihd.getScreeningId() != null) {
       // load client ID-s by incoming screening ID-s
-      ihd.setClientIds(participantDao.findLegacyIdListByScreeningId(ihd.getScreeningId()));
+      hsd.setClientIds(participantDao.findLegacyIdListByScreeningId(ihd.getScreeningId()));
     }
-    if (!ihd.getClientIds().isEmpty()) {
-      // load screenings by client ID-s
-      Set<HOIScreening> hoiScreeningSet = hoiScreeningService
-          .handleFind(new HOIRequest(ihd.getClientIds())).getScreenings();
-
-      List<HOIScreening> hoiScreenings = new ArrayList<>(hoiScreeningSet);
-      if (ihd.getScreeningId() != null) {
-        // exclude the screening with the incoming screening ID
-        hoiScreenings.removeIf(screening -> screening.getId().equals(ihd.getScreeningId()));
-      }
-      ihd.setHoiScreenings(hoiScreenings);
+    if (!hsd.getClientIds().isEmpty()) {
+      hoiScreeningService.fetchDataFromNS(hsd);
     }
   }
 
   @UnitOfWork(value = "cms", readOnly = true, transactional = false)
+  @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(InvolvementHistoryData ihd) {
-    if (!ihd.getClientIds().isEmpty()) {
-      HOIRequest hoiRequest = new HOIRequest(ihd.getClientIds());
+    HOIScreeningData hsd = ihd.getHoiScreeningData();
+    if (!hsd.getClientIds().isEmpty()) {
+      hoiScreeningService.fetchDataFromCMS(hsd);
+      HOIRequest hoiRequest = new HOIRequest(hsd.getClientIds());
       ihd.setHoiCases(hoiCaseService.handleFind(hoiRequest).getHoiCases());
       ihd.setHoiReferrals(hoiReferralService.handleFind(hoiRequest).getHoiReferrals());
     }
+  }
+
+  private void buildHoiScreenings(InvolvementHistoryData ihd) {
+    Set<HOIScreening> hoiScreeningSet = hoiScreeningService
+        .buildHoiScreenings(ihd.getHoiScreeningData());
+    List<HOIScreening> hoiScreenings = new ArrayList<>(hoiScreeningSet);
+    if (ihd.getScreeningId() != null) {
+      // exclude the screening with the incoming screening ID
+      hoiScreenings.removeIf(screening -> screening.getId().equals(ihd.getScreeningId()));
+    }
+    ihd.setHoiScreenings(hoiScreenings);
   }
 
   @Override

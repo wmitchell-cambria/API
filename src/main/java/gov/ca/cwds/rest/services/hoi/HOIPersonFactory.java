@@ -1,20 +1,17 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import com.google.inject.Inject;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
-import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,20 +19,16 @@ import java.util.Set;
  */
 public final class HOIPersonFactory {
 
-  @Inject
-  StaffPersonResource staffPersonResource;
-
   /**
-   * @param participantEntity ns ParticipantEntity
+   * @param participantEntity NS ParticipantEntity
+   * @param participantLegacyDescriptor NS LegacyDescriptorEntity
    * @return HOIPerson
    */
   HOIPerson buildHOIPerson(ParticipantEntity participantEntity,
-      Map<String, LegacyDescriptorEntity> participantLegacyDescriptors) {
+      LegacyDescriptorEntity participantLegacyDescriptor) {
     HOIPerson result = new HOIPerson(participantEntity);
-    LegacyDescriptorEntity legacyDescriptorEntity = participantLegacyDescriptors
-        .get(participantEntity.getId());
-    if (legacyDescriptorEntity != null) {
-      result.setLegacyDescriptor(new LegacyDescriptor(legacyDescriptorEntity));
+    if (participantLegacyDescriptor != null) {
+      result.setLegacyDescriptor(new LegacyDescriptor(participantLegacyDescriptor));
     }
     return result;
   }
@@ -62,17 +55,12 @@ public final class HOIPersonFactory {
   }
 
   /**
-   * @param assigneeStaffId staff person id
+   * @param staffPerson StaffPerson CMS StaffPerson entity
    * @return corresponding instance of HOISocialWorker or null
    */
-  HOISocialWorker buildHOISocialWorker(String assigneeStaffId) {
-    StaffPerson staffPerson = (StaffPerson) staffPersonResource.get(assigneeStaffId).getEntity();
-    if (staffPerson == null) {
-      return null;
-    }
-
+  HOISocialWorker buildHOISocialWorker(StaffPerson staffPerson) {
     CmsRecordDescriptor cmsRecordDescriptor = CmsRecordUtils
-        .createLegacyDescriptor(assigneeStaffId, LegacyTable.STAFF_PERSON);
+        .createLegacyDescriptor(staffPerson.getId(), LegacyTable.STAFF_PERSON);
 
     LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(
@@ -83,7 +71,7 @@ public final class HOIPersonFactory {
             cmsRecordDescriptor.getTableDescription());
 
     return new HOISocialWorker(
-        assigneeStaffId,
+        staffPerson.getId(),
         staffPerson.getFirstName(),
         staffPerson.getLastName(),
         staffPerson.getNameSuffix(),
