@@ -119,7 +119,7 @@ public class AddressResource {
    * @param address - {@link Address}
    * @return The {@link Response}
    */
-  @XAUnitOfWork(value = {"ns", "cms"})
+  @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

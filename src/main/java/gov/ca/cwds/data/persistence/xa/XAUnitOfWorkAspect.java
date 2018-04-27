@@ -72,20 +72,13 @@ public class XAUnitOfWorkAspect {
 
     openSessions();
     beginTransaction();
-
-    // session = grabSession(sessionFactory);
-    // try {
-    // configureSession();
-    // ManagedSessionContext.bind(session);
-    // beginTransaction();
-    // } catch (Throwable th) {
-    // session.close();
-    // session = null;
-    // ManagedSessionContext.unbind(sessionFactory);
-    // throw th;
-    // }
   }
 
+  /**
+   * NOTE: method onFinish() closes the session.
+   * 
+   * @throws Exception on database error
+   */
   public void afterEnd() throws Exception {
     if (sessions.isEmpty()) {
       return;
@@ -97,8 +90,6 @@ public class XAUnitOfWorkAspect {
       rollbackTransaction();
       throw e;
     }
-
-    // NOTE: method onFinish() closes the session.
   }
 
   public void onError() throws Exception {
@@ -115,15 +106,6 @@ public class XAUnitOfWorkAspect {
 
   public void onFinish() throws Exception {
     closeSessions();
-
-    // try {
-    // if (session != null) {
-    // session.close();
-    // }
-    // } finally {
-    // session = null;
-    // ManagedSessionContext.unbind(sessionFactory);
-    // }
   }
 
   protected void beginTransaction() throws SystemException, NotSupportedException {

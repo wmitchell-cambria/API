@@ -110,13 +110,7 @@ public class AddressService implements CrudsService {
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
 
-    // final UserTransaction txn = new UserTransactionImp();
     try {
-      // Start XA transaction.
-      // txn.setTransactionTimeout(80);
-      // txn.begin();
-
-      // Work it!
       // PostgreSQL:
       // Proof of concept. Don't bother parsing the raw street address.
       final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
@@ -136,9 +130,6 @@ public class AddressService implements CrudsService {
       cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
       xaCmsAddressDao.update(cmsAddr);
 
-      // Commit XA transaction.
-      // txn.commit();
-
       ret.setLegacyId(reqAddr.getLegacyId());
       ret.setLegacySourceTable(reqAddr.getLegacyDescriptor().getTableName());
 
@@ -148,12 +139,6 @@ public class AddressService implements CrudsService {
       result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
       return result;
     } catch (Exception e) {
-      // try {
-      // txn.rollback();
-      // } catch (Exception e2) {
-      // LOGGER.warn("FAILED TO ROLLBACK XA TRANSACTION! {}", e2.getMessage(), e2);
-      // }
-
       LOGGER.error("XA TRANSACTION ERROR!", e);
       throw new ServiceException("XA TRANSACTION ERROR!", e);
     }
