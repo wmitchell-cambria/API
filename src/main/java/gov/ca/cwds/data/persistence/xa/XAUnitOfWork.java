@@ -10,8 +10,6 @@ import java.lang.annotation.Target;
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 
-import io.dropwizard.hibernate.HibernateBundle;
-
 @Target(METHOD)
 @Retention(RUNTIME)
 @Documented
@@ -21,18 +19,22 @@ public @interface XAUnitOfWork {
    * If {@code true}, the Hibernate session will default to loading read-only entities.
    *
    * @see org.hibernate.Session#setDefaultReadOnly(boolean)
+   * @return true = read only
    */
   boolean readOnly() default false;
 
   /**
    * If {@code true}, a transaction will be automatically started before the resource method is
    * invoked, committed if the method returned, and rolled back if an exception was thrown.
+   * 
+   * @return true = XA transaction is required
    */
   boolean transactional() default true;
 
   /**
    * The {@link CacheMode} for the session.
    *
+   * @return chose CacheMode, default to {@link CacheMode.NORMAL}
    * @see CacheMode
    * @see org.hibernate.Session#setCacheMode(CacheMode)
    */
@@ -41,6 +43,7 @@ public @interface XAUnitOfWork {
   /**
    * The {@link FlushMode} for the session.
    *
+   * @return chosen Flush mode, defaults to {@link FlushMode.Auto}
    * @see FlushMode
    * @see org.hibernate.Session#setFlushMode(org.hibernate.FlushMode)
    */
@@ -49,7 +52,9 @@ public @interface XAUnitOfWork {
   /**
    * The name of a hibernate bundle (session factory) that specifies a datasource against which a
    * transaction will be opened.
+   * 
+   * @return array of Hibernate bundle names
    */
-  String[] value() default HibernateBundle.DEFAULT_NAME;
+  String[] value() default "cms";
 
 }

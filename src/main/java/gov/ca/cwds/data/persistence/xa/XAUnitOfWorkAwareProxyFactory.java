@@ -118,8 +118,8 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   /**
+   * @param sessionFactories Hibernate session factories for this transaction
    * @return a new aspect
-   * @param sessionFactories
    */
   public XAUnitOfWorkAspect newAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
     return new XAUnitOfWorkAspect(sessionFactories);
