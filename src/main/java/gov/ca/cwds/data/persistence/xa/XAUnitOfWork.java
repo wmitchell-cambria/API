@@ -34,7 +34,7 @@ public @interface XAUnitOfWork {
   /**
    * The {@link CacheMode} for the session.
    *
-   * @return chose CacheMode, default to {@link CacheMode.NORMAL}
+   * @return chose CacheMode, defaults to CacheMode.NORMAL
    * @see CacheMode
    * @see org.hibernate.Session#setCacheMode(CacheMode)
    */
@@ -43,7 +43,7 @@ public @interface XAUnitOfWork {
   /**
    * The {@link FlushMode} for the session.
    *
-   * @return chosen Flush mode, defaults to {@link FlushMode.Auto}
+   * @return chosen Flush mode, defaults to FlushMode.Auto
    * @see FlushMode
    * @see org.hibernate.Session#setFlushMode(org.hibernate.FlushMode)
    */
