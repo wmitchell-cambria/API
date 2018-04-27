@@ -24,11 +24,6 @@ public final class Api {
       "_allegationPerpetratorHistory";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ASSIGNMENT} API..
-   */
-  public static final String RESOURCE_ASSIGNMENT = "_assignments";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
    */
   public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
