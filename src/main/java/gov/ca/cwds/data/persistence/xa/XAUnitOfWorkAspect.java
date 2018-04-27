@@ -32,6 +32,10 @@ public class XAUnitOfWorkAspect {
 
   private List<Session> sessions = new ArrayList<>();
 
+  /**
+   * 
+   * @param sessionFactories - all datasources to participate in the XA transaction
+   */
   public XAUnitOfWorkAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
   }
