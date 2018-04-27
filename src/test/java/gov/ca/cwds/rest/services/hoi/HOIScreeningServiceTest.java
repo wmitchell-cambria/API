@@ -9,8 +9,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,8 +24,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
@@ -37,12 +38,10 @@ import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.fixture.ParticipantEntityBuilder;
 import gov.ca.cwds.fixture.ScreeningEntityBuilder;
-import gov.ca.cwds.fixture.StaffPersonResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIPersonResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIReporterResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIScreeningBuilder;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
@@ -52,7 +51,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 
@@ -74,7 +72,7 @@ public class HOIScreeningServiceTest {
     screeningDao = mock(ScreeningDao.class);
     IntakeLOVCodeDao intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
     LegacyDescriptorDao legacyDescriptorDao = mock(LegacyDescriptorDao.class);
-    StaffPersonResource staffPersonResource = mock(StaffPersonResource.class);
+    StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
 
     Map<String, LegacyDescriptorEntity> participantDescriptors = new HashMap<>();
     participantDescriptors.put(DEFAULT_PERSON_ID, mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
@@ -83,11 +81,13 @@ public class HOIScreeningServiceTest {
     when(legacyDescriptorDao.findParticipantLegacyDescriptors(any(Set.class)))
         .thenReturn(participantDescriptors);
 
-    StaffPerson mockStaffPerson = new StaffPersonResourceBuilder().build();
-    when(staffPersonResource.get(DEFAULT_ASSIGNEE_STAFF_ID))
-        .thenReturn(Response.ok(mockStaffPerson).build());
+    StaffPerson mockStaffPerson = new StaffPersonEntityBuilder().setId(DEFAULT_ASSIGNEE_STAFF_ID)
+        .setFirstName("b").setLastName("d").setNameSuffix("g").build();
+    Map<String, StaffPerson> staffPersonMap = new HashMap<>();
+    staffPersonMap.put(mockStaffPerson.getId(), mockStaffPerson);
+    when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersonMap);
+
     HOIPersonFactory hoiPersonFactory = new HOIPersonFactory();
-    hoiPersonFactory.staffPersonResource = staffPersonResource;
 
     IntakeLOVCodeEntity intakeLOVCodeEntity = new IntakeLOVCodeEntity();
     intakeLOVCodeEntity.setLgSysId(1101L);
@@ -107,6 +107,7 @@ public class HOIScreeningServiceTest {
     hoiScreeningService.screeningDao = screeningDao;
     hoiScreeningService.legacyDescriptorDao = legacyDescriptorDao;
     hoiScreeningService.intakeLOVCodeDao = intakeLOVCodeDao;
+    hoiScreeningService.staffPersonDao = staffPersonDao;
     hoiScreeningService.hoiScreeningFactory = hoiScreeningFactory;
     hoiScreeningService.authorizationService = authorizationService;
   }
