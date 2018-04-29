@@ -115,8 +115,8 @@ public class ServicesModule extends AbstractModule {
    * Hibernate sessions and XA transactions.
    * 
    * <p>
-   * NEXT: In the future all data sources should be XA and all resources should use
-   * {@link XAUnitOfWork} instead of {@link UnitOfWork}.
+   * NEXT: switch *all* data sources to XA and change all resources to use {@link XAUnitOfWork}
+   * instead of {@link UnitOfWork}.
    * </p>
    * 
    * @author CWDS API Team
@@ -141,9 +141,11 @@ public class ServicesModule extends AbstractModule {
           UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
+        LOGGER.debug("Before XA annotation");
         aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
+        LOGGER.debug("After XA annotation");
         return result;
       } catch (Exception e) {
         aspect.onError();
