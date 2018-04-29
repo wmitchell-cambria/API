@@ -18,6 +18,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.resources.AddressResource;
 
 /**
  * Business layer object to work on Postgres (NS) {@link Address}.
@@ -96,6 +97,11 @@ public class AddressService implements CrudsService {
    * 
    * <p>
    * Update NS and CMS with XA transaction. See INT-1592.
+   * </p>
+   * 
+   * <p>
+   * Note that the only transaction annotation is on {@link AddressResource#update(long, Address)},
+   * and transactions are managed auto-magically.
    * </p>
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,

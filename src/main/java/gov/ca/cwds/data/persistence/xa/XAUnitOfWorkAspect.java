@@ -167,8 +167,7 @@ public class XAUnitOfWorkAspect {
     txn.begin();
   }
 
-  protected void rollbackTransaction()
-      throws SystemException, NotSupportedException, HeuristicRollbackException,
+  protected void rollbackTransaction() throws SystemException, HeuristicRollbackException,
       HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
     if (!xaUnitOfWork.transactional()) {
       return;
@@ -177,8 +176,7 @@ public class XAUnitOfWorkAspect {
     txn.rollback();
   }
 
-  protected void commitTransaction()
-      throws SystemException, NotSupportedException, HeuristicRollbackException,
+  protected void commitTransaction() throws SystemException, HeuristicRollbackException,
       HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
     if (!xaUnitOfWork.transactional()) {
       return;
@@ -194,6 +192,14 @@ public class XAUnitOfWorkAspect {
 
   public void setSessionFactories(ImmutableMap<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
+  }
+
+  public XAUnitOfWork getXaUnitOfWork() {
+    return xaUnitOfWork;
+  }
+
+  public void setXaUnitOfWork(XAUnitOfWork xaUnitOfWork) {
+    this.xaUnitOfWork = xaUnitOfWork;
   }
 
 }
