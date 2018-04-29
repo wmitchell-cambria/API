@@ -4,7 +4,7 @@ import java.util.Date;
 
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 
-public class DmrsDocumentEntityResourceBuilder {
+public class DrmsDocumentEntityBuilder {
   private String id = "2";
   private Date creationTimeStamp = new Date();
   private String drmsDocumentTemplateId = "DUMMY";
@@ -17,7 +17,7 @@ public class DmrsDocumentEntityResourceBuilder {
    * @param id key
    * @return The Builder
    */
-  public DmrsDocumentEntityResourceBuilder setId(String id) {
+  public DrmsDocumentEntityBuilder setId(String id) {
     this.id = id;
     return this;
   }
@@ -27,7 +27,7 @@ public class DmrsDocumentEntityResourceBuilder {
    * @param creationTimeStamp record creation moment
    * @return The Builder
    */
-  public DmrsDocumentEntityResourceBuilder setCreationTimeStamp(Date creationTimeStamp) {
+  public DrmsDocumentEntityBuilder setCreationTimeStamp(Date creationTimeStamp) {
     this.creationTimeStamp = creationTimeStamp;
     return this;
   }
@@ -37,7 +37,7 @@ public class DmrsDocumentEntityResourceBuilder {
    * @param drmsDocumentTemplateId primary key
    * @return The Builder
    */
-  public DmrsDocumentEntityResourceBuilder setDrmsDocumentTemplateId(
+  public DrmsDocumentEntityBuilder setDrmsDocumentTemplateId(
       String drmsDocumentTemplateId) {
     this.drmsDocumentTemplateId = drmsDocumentTemplateId;
     return this;
@@ -48,7 +48,7 @@ public class DmrsDocumentEntityResourceBuilder {
    * @param fingerprintStaffPerson primary key
    * @return The Builder
    */
-  public DmrsDocumentEntityResourceBuilder setFingerprintStaffPerson(
+  public DrmsDocumentEntityBuilder setFingerprintStaffPerson(
       String fingerprintStaffPerson) {
     this.fingerprintStaffPerson = fingerprintStaffPerson;
     return this;
@@ -59,7 +59,7 @@ public class DmrsDocumentEntityResourceBuilder {
    * @param staffPersonId key
    * @return The Builder
    */
-  public DmrsDocumentEntityResourceBuilder setStaffPersonId(String staffPersonId) {
+  public DrmsDocumentEntityBuilder setStaffPersonId(String staffPersonId) {
     this.staffPersonId = staffPersonId;
     return this;
   }
@@ -69,7 +69,7 @@ public class DmrsDocumentEntityResourceBuilder {
    * @param handleName doc me!
    * @return The Builder
    */
-  public DmrsDocumentEntityResourceBuilder setHandleName(String handleName) {
+  public DrmsDocumentEntityBuilder setHandleName(String handleName) {
     this.handleName = handleName;
     return this;
   }
