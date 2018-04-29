@@ -157,12 +157,17 @@ public class XAUnitOfWorkAspect {
     session.setHibernateFlushMode(xaUnitOfWork.flushMode());
   }
 
+  /**
+   * Start XA transaction. Set timeout to 80 seconds.
+   * 
+   * @throws SystemException
+   * @throws NotSupportedException
+   */
   protected void beginTransaction() throws SystemException, NotSupportedException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
 
-    // Start XA transaction.
     txn.setTransactionTimeout(80);
     txn.begin();
   }
@@ -176,13 +181,22 @@ public class XAUnitOfWorkAspect {
     txn.rollback();
   }
 
+  /**
+   * Commit XA transaction.
+   * 
+   * @throws SystemException internal error
+   * @throws HeuristicRollbackException internal error
+   * @throws HeuristicMixedException internal error
+   * @throws SecurityException internal error
+   * @throws IllegalStateException internal error
+   * @throws RollbackException internal error
+   */
   protected void commitTransaction() throws SystemException, HeuristicRollbackException,
       HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
 
-    // Commit XA transaction.
     txn.commit();
   }
 
