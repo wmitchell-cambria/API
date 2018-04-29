@@ -160,8 +160,8 @@ public class XAUnitOfWorkAspect {
   /**
    * Start XA transaction. Set timeout to 80 seconds.
    * 
-   * @throws SystemException
-   * @throws NotSupportedException
+   * @throws SystemException internal error
+   * @throws NotSupportedException internal error
    */
   protected void beginTransaction() throws SystemException, NotSupportedException {
     if (!xaUnitOfWork.transactional()) {
