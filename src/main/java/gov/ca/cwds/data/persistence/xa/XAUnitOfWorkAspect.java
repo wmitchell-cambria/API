@@ -10,6 +10,7 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -123,7 +124,13 @@ public class XAUnitOfWorkAspect {
    * Open sessions for selected datasources.
    */
   protected void openSessions() {
-    sessionFactories.values().stream().forEach(this::grabSession);
+    final String[] sources = xaUnitOfWork.value();
+    if (sources != null && sources.length > 0) {
+      sessionFactories.values().stream().filter(e -> ArrayUtils.contains(sources, e))
+          .forEach(this::grabSession);
+    } else {
+      sessionFactories.values().stream().forEach(this::grabSession);
+    }
   }
 
   /**
