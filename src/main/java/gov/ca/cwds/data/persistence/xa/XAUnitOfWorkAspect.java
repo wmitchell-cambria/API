@@ -173,7 +173,7 @@ public class XAUnitOfWorkAspect {
   }
 
   protected void rollbackTransaction() throws SystemException, HeuristicRollbackException,
-      HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
+      HeuristicMixedException, RollbackException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
@@ -192,7 +192,7 @@ public class XAUnitOfWorkAspect {
    * @throws RollbackException internal error
    */
   protected void commitTransaction() throws SystemException, HeuristicRollbackException,
-      HeuristicMixedException, SecurityException, IllegalStateException, RollbackException {
+      HeuristicMixedException, RollbackException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
