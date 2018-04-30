@@ -70,7 +70,7 @@ public class XAUnitOfWorkAwareProxyFactory {
    * @param <T> the type of the class
    * @return a new proxy
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "squid:S1166"})
   public <T> T create(Class<T> clazz, Class<?>[] constructorParamTypes,
       Object[] constructorArguments) {
     final ProxyFactory factory = new ProxyFactory();
