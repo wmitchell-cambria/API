@@ -15,8 +15,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.ns.Addresses;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
@@ -174,7 +174,7 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
     target.commitTransaction();
   }
 
-  @Test(expected = DaoException.class)
+  @Test(expected = ServiceException.class)
   public void commitTransaction_A$_T$Exception() throws Exception {
     target.commitTransaction();
   }
