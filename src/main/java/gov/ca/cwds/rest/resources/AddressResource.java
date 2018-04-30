@@ -18,6 +18,7 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.AddressServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
@@ -112,13 +113,13 @@ public class AddressResource {
   }
 
   /**
-   * Update an {@link Address}.
+   * Update an {@link Address}. Update both DB2 and Postgres using XA transactions.
    *
-   * @param id the id
-   * @param address {@link Address}
+   * @param id - the id
+   * @param address - {@link Address}
    * @return The {@link Response}
    */
-  // @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
