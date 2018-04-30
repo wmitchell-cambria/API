@@ -46,6 +46,7 @@ public class XAUnitOfWorkAspect {
    * Aspect entry point.
    * 
    * @param xaUnitOfWork - take settings from annotation
+   * @throws CaresXAException on database error
    */
   public void beforeStart(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
     if (xaUnitOfWork == null) {
