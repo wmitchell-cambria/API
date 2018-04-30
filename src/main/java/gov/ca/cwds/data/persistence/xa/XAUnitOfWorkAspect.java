@@ -90,7 +90,7 @@ public class XAUnitOfWorkAspect {
     try {
       rollbackTransaction();
     } finally {
-      onFinish();
+      // nix
     }
   }
 

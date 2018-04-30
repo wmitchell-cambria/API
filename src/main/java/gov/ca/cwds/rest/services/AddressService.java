@@ -13,6 +13,7 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.XaNsAddressDao;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -107,6 +108,7 @@ public class AddressService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)
    */
+  @XAUnitOfWork
   @Override
   public Response update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof Long;
