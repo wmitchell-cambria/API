@@ -387,6 +387,9 @@ public class ScreeningService implements CrudsService {
 
   private void createOrUpdateAddresses(Screening screening) {
     AddressIntakeApi address = screening.getIncidentAddress();
+    if (address == null) {
+      return;
+    }
     Addresses addressEntity = addressMapper.map(address);
     if (addressEntity.getId() == null) {
       Addresses createdAddress = addressesDao.create(addressEntity);
