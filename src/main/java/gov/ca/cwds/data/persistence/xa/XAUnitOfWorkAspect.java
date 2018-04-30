@@ -117,6 +117,7 @@ public class XAUnitOfWorkAspect {
       session = sessionFactory.openSession();
     }
 
+    // Add user info to DB2 connections.
     session.doWork(new WorkDB2UserInfo());
 
     sessions.add(session);
