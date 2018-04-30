@@ -118,7 +118,7 @@ public class XAUnitOfWorkAspect {
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
-      LOGGER.warn("No current session. Open a new one. {}", e.getCause());
+      LOGGER.warn("No current session. Open a new one. {}", e.getMessage());
       session = sessionFactory.openSession();
     }
 
