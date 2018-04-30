@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.transaction.UserTransaction;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -53,7 +52,7 @@ public class XAUnitOfWorkAspect {
     }
     this.xaUnitOfWork = xaUnitOfWork;
 
-    LOGGER.error("XA beforeStart(): open sessions");
+    LOGGER.info("XA beforeStart(): open sessions");
     openSessions();
     beginTransaction();
   }
@@ -124,10 +123,12 @@ public class XAUnitOfWorkAspect {
       session = sessionFactory.openSession();
     }
 
-    // Add user info to DB2 connections.
-    session.doWork(new WorkDB2UserInfo());
     configureSession(session);
     sessions.add(session);
+
+    // Add user info to DB2 connections.
+    session.doWork(new WorkDB2UserInfo());
+
     return session;
   }
 
@@ -136,15 +137,15 @@ public class XAUnitOfWorkAspect {
    */
   protected void openSessions() {
     LOGGER.info("XA OPEN SESSIONS.");
-    final String[] sources = xaUnitOfWork.value();
-    if (sources != null && sources.length > 0) {
-      LOGGER.info("XA OPEN SESSIONS: named XA sources");
-      sessionFactories.values().stream().filter(e -> ArrayUtils.contains(sources, e))
-          .forEach(this::grabSession);
-    } else {
-      LOGGER.info("XA OPEN SESSIONS: all XA sources");
-      sessionFactories.values().stream().forEach(this::grabSession);
-    }
+    // final String[] sources = xaUnitOfWork.value();
+    // if (sources != null && sources.length > 0) {
+    // LOGGER.info("XA OPEN SESSIONS: named XA sources");
+    // sessionFactories.values().stream().filter(e -> ArrayUtils.contains(sources, e))
+    // .forEach(this::grabSession);
+    // } else {
+    LOGGER.info("XA OPEN SESSIONS: all XA sources");
+    sessionFactories.values().stream().forEach(this::grabSession);
+    // }
   }
 
   /**
@@ -157,6 +158,7 @@ public class XAUnitOfWorkAspect {
 
   protected void closeSession(Session session) {
     if (session != null) {
+      LOGGER.info("XA CLOSE SESSION");
       session.close();
     }
   }
@@ -179,6 +181,7 @@ public class XAUnitOfWorkAspect {
    */
   protected void beginTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
+      LOGGER.info("XA BEGIN TRANSACTION: not transactional");
       return;
     }
 
@@ -199,16 +202,16 @@ public class XAUnitOfWorkAspect {
    */
   protected void rollbackTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
-      LOGGER.info("XA ROLLBACK: not transactional");
+      LOGGER.info("XA ROLLBACK TRANSACTION: not transactional");
       return;
     }
 
     try {
-      LOGGER.info("XA ROLLBACK!");
+      LOGGER.info("XA ROLLBACK TRANSACTION!");
       txn.rollback();
     } catch (Exception e) {
-      LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
-      throw new CaresXAException("XA ROLLBACK FAILED!", e);
+      LOGGER.error("XA ROLLBACK TRANSACTION FAILED! {}", e.getMessage(), e);
+      throw new CaresXAException("XA ROLLBACK TRANSACTION FAILED!", e);
     }
   }
 
@@ -217,15 +220,16 @@ public class XAUnitOfWorkAspect {
    */
   protected void commitTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
+      LOGGER.info("XA COMMIT TRANSACTION: not transactional");
       return;
     }
 
     try {
-      LOGGER.info("XA COMMIT!");
+      LOGGER.info("XA COMMIT TRANSACTION!");
       txn.commit();
     } catch (Exception e) {
-      LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
-      throw new CaresXAException("XA COMMIT FAILED!", e);
+      LOGGER.error("XA COMMIT  TRANSACTIONFAILED! {}", e.getMessage(), e);
+      throw new CaresXAException("XA COMMIT TRANSACTION FAILED!", e);
     }
   }
 
