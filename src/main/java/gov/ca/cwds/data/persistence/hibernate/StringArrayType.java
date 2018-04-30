@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.hibernate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
 import java.io.Serializable;
 import java.sql.Array;
@@ -18,7 +19,7 @@ import org.hibernate.usertype.UserType;
  * @author CWDS API Team
  */
 public class StringArrayType implements UserType {
-
+  private final ObjectMapper objectMapper = Jackson.newObjectMapper();
   private static final int[] arrayTypes = new int[] {Types.ARRAY};
 
   @Override
@@ -54,7 +55,7 @@ public class StringArrayType implements UserType {
         Object[] objArray = (Object[]) array;
 //        results = Arrays.copyOf(objArray, objArray.length, String[].class);
         try {
-          results = Jackson.newObjectMapper().readValue(((String) objArray[0]).replace('{', '[')
+          results = objectMapper.readValue(((String) objArray[0]).replace('{', '[')
               .replace('}', ']'), String[].class);
         } catch (Exception e) {
           throw new SQLException("Cannot convert " + objArray[0] + " to String[]", e);
