@@ -47,7 +47,7 @@ public class XAUnitOfWorkAspect {
    * 
    * @param xaUnitOfWork - take settings from annotation
    */
-  public void beforeStart(XAUnitOfWork xaUnitOfWork) {
+  public void beforeStart(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
     if (xaUnitOfWork == null) {
       return;
     }
@@ -58,9 +58,14 @@ public class XAUnitOfWorkAspect {
   }
 
   /**
+   * Commit or rollback.
+   * <p>
    * NOTE: method onFinish() closes the session.
+   * </p>
+   * 
+   * @throws CaresXAException on database error
    */
-  public void afterEnd() {
+  public void afterEnd() throws CaresXAException {
     if (sessions.isEmpty()) {
       return;
     }
@@ -75,8 +80,10 @@ public class XAUnitOfWorkAspect {
 
   /**
    * Call on error to rollback transactions and close sessions.
+   * 
+   * @throws CaresXAException on database error
    */
-  public void onError() {
+  public void onError() throws CaresXAException {
     if (sessions.isEmpty()) {
       return;
     }
@@ -107,7 +114,7 @@ public class XAUnitOfWorkAspect {
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
-      LOGGER.warn("No current session. Open a new one.", e.getCause(), e);
+      LOGGER.warn("No current session. Open a new one. {}", e.getCause(), e);
       session = sessionFactory.openSession();
     }
 
@@ -155,8 +162,10 @@ public class XAUnitOfWorkAspect {
 
   /**
    * Start XA transaction. Set timeout to 80 seconds.
+   * 
+   * @throws CaresXAException on database error
    */
-  protected void beginTransaction() {
+  protected void beginTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
@@ -166,14 +175,16 @@ public class XAUnitOfWorkAspect {
       txn.begin();
     } catch (Exception e) {
       LOGGER.error("XA BEGIN FAILED! {}", e.getMessage(), e);
-      throw new ServiceException("XA BEGIN FAILED!", e);
+      throw new CaresXAException("XA BEGIN FAILED!", e);
     }
   }
 
   /**
    * Roll back XA transaction.
+   * 
+   * @throws CaresXAException on database error
    */
-  protected void rollbackTransaction() {
+  protected void rollbackTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
@@ -182,7 +193,7 @@ public class XAUnitOfWorkAspect {
       txn.rollback();
     } catch (Exception e) {
       LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
-      throw new ServiceException("XA ROLLBACK FAILED!", e);
+      throw new CaresXAException("XA ROLLBACK FAILED!", e);
     }
   }
 
