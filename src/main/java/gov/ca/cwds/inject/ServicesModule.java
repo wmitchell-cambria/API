@@ -19,6 +19,9 @@ import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspect;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -108,6 +111,53 @@ public class ServicesModule extends AbstractModule {
   }
 
   /**
+   * AOP method interception for Ferb annotation {@link XAUnitOfWork}. Automatically manages
+   * Hibernate sessions and XA transactions.
+   * 
+   * <p>
+   * NEXT: switch *all* data sources to XA and change all resources to use {@link XAUnitOfWork}
+   * instead of {@link UnitOfWork}.
+   * </p>
+   * 
+   * @author CWDS API Team
+   * @see XAUnitOfWorkAspect
+   */
+  public static class XAUnitOfWorkInterceptor
+      implements org.aopalliance.intercept.MethodInterceptor {
+
+    XAUnitOfWorkAwareProxyFactory proxyFactory;
+
+    @Inject
+    @XaCmsHibernateBundle
+    FerbHibernateBundle xaCmsHibernateBundle;
+
+    @Inject
+    @XaNsHibernateBundle
+    FerbHibernateBundle xaNsHibernateBundle;
+
+    @Override
+    public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
+      proxyFactory =
+          UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
+      final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
+      try {
+        LOGGER.debug("Before XA annotation");
+        aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
+        final Object result = mi.proceed();
+        aspect.afterEnd();
+        LOGGER.debug("After XA annotation");
+        return result;
+      } catch (Exception e) {
+        aspect.onError();
+        throw e;
+      } finally {
+        aspect.onFinish();
+      }
+    }
+
+  }
+
+  /**
    * Default, no-op constructor.
    */
   public ServicesModule() {
@@ -151,9 +201,15 @@ public class ServicesModule extends AbstractModule {
     bind(HOICaseService.class);
     bind(AuthorizationService.class);
 
+    // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
     requestInjection(interceptor);
+
+    // Enable AOP for Ferb @XAUnitOfWork.
+    final XAUnitOfWorkInterceptor xaInterceptor = new XAUnitOfWorkInterceptor();
+    bindInterceptor(Matchers.any(), Matchers.annotatedWith(XAUnitOfWork.class), xaInterceptor);
+    requestInjection(xaInterceptor);
 
     final Properties p = new Properties();
     p.setProperty("something", "Some String");
