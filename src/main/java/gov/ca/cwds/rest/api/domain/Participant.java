@@ -38,8 +38,8 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonSnakeCase
 @OnlyIf(ifProperty = "primaryLanguage", property = "secondaryLanguage")
 @NotEqual(ifProperty = "primaryLanguage", thenProperty = "secondaryLanguage")
-@JsonPropertyOrder({"id", "legacySourceTable", "legacyId", "firstName", "lastName", "gender", "ssn",
-    "dateOfBirth", "roles", "addresses", "race_ethnicity"})
+@JsonPropertyOrder({"id", "legacySourceTable", "legacyId", "firstName", "lastName", "sexAtBirth",
+    "ssn", "dateOfBirth", "roles", "addresses", "race_ethnicity"})
 public class Participant extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
@@ -83,10 +83,10 @@ public class Participant extends ReportingDomain implements Request, Response {
 
   @OneOf(value = {"M", "F", "U", "I"}, ignoreCase = true, ignoreWhitespace = true)
   @NotNull
-  @JsonProperty("gender")
+  @JsonProperty("sex_at_birth")
   @ApiModelProperty(required = false, readOnly = false, value = "Gender Code", example = "M",
       allowableValues = "M, F, U, I")
-  private String gender;
+  private String sexAtBirth;
 
   @JsonProperty("ssn")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "123456789")
@@ -185,7 +185,7 @@ public class Participant extends ReportingDomain implements Request, Response {
    * @param middleName The middle Name
    * @param lastName The last Name
    * @param nameSuffix The participants suffix Name
-   * @param gender The gender
+   * @param sexAtBirth The sex At Birth
    * @param dateOfBirth The date Of Birth
    * @param ssn The social security number
    * @param primaryLanguage primary language
@@ -206,7 +206,7 @@ public class Participant extends ReportingDomain implements Request, Response {
       @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor,
       @JsonProperty("first_name") String firstName, @JsonProperty("middle_name") String middleName,
       @JsonProperty("last_name") String lastName, @JsonProperty("name_suffix") String nameSuffix,
-      @JsonProperty("gender") String gender, @JsonProperty("ssn") String ssn,
+      @JsonProperty("sex_at_birth") String sexAtBirth, @JsonProperty("ssn") String ssn,
       @JsonProperty("date_of_birth") String dateOfBirth,
       @JsonProperty("primary_language") Short primaryLanguage,
       @JsonProperty("secondary_language") Short secondaryLanguage,
@@ -229,7 +229,7 @@ public class Participant extends ReportingDomain implements Request, Response {
     this.nameSuffix = nameSuffix;
     this.reporterConfidentialWaiver = reporterConfidentialWaiver;
     this.reporterEmployerName = reporterEmployerName;
-    this.gender = gender;
+    this.sexAtBirth = sexAtBirth;
     this.dateOfBirth = dateOfBirth;
     this.ssn = ssn;
     this.primaryLanguage = primaryLanguage;
@@ -331,10 +331,10 @@ public class Participant extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * @return the gender
+   * @return the sexAtBirth
    */
-  public String getGender() {
-    return gender;
+  public String getSexAtBirth() {
+    return sexAtBirth;
   }
 
   /**

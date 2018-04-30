@@ -61,7 +61,7 @@ public class ParticipantTest {
   private String middleName = "T.";
   private String lastName = "Smith";
   private String suffix = "";
-  private String gender = "M";
+  private String getSexAtBirth = "M";
   private String dateOfBirth = "2001-03-15";
   private String ssn = "123456789";
   private boolean reporterConfidentialWaiver = false;
@@ -150,7 +150,7 @@ public class ParticipantTest {
   @Test
   public void testConstructorUsingDomain() throws Exception {
     Participant domain = new Participant(id, legacySourceTable, clientId, new LegacyDescriptor(),
-        firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
+        firstName, middleName, lastName, suffix, getSexAtBirth, ssn, dateOfBirth, primaryLanguage,
         secondaryLanguage, personId, screeningId, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, roles, addresses, raceAndEthnicity);
 
@@ -162,7 +162,7 @@ public class ParticipantTest {
     assertThat(domain.getMiddleName(), is(equalTo(middleName)));
     assertThat(domain.getLastName(), is(equalTo(lastName)));
     assertThat(domain.getNameSuffix(), is(equalTo(suffix)));
-    assertThat(domain.getGender(), is(equalTo(gender)));
+    assertThat(domain.getSexAtBirth(), is(equalTo(getSexAtBirth)));
     assertThat(domain.getDateOfBirth(), is(equalTo(dateOfBirth)));
     assertThat(domain.getSsn(), is(equalTo(ssn)));
     assertThat(domain.isReporterConfidentialWaiver(), is(equalTo(reporterConfidentialWaiver)));
@@ -177,7 +177,7 @@ public class ParticipantTest {
     List<String> acceptableGenders = Arrays.asList("M", "F", "U");
     acceptableGenders.forEach(gender -> {
       Participant participant =
-          new ParticipantResourceBuilder().setGender(gender).createParticipant();
+          new ParticipantResourceBuilder().setSexAtBirth(gender).createParticipant();
       String errorMessage = "Expected no validation error for gender value: " + gender;
       Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
       assertEquals(errorMessage, 0, violations.size());
@@ -189,7 +189,7 @@ public class ParticipantTest {
     List<String> acceptableGenders = Arrays.asList("q", "1", "6", null, "Male", "Female", "O");
     acceptableGenders.forEach(gender -> {
       Participant participant =
-          new ParticipantResourceBuilder().setGender(gender).createParticipant();
+          new ParticipantResourceBuilder().setSexAtBirth(gender).createParticipant();
       String errorMessage = "Expected a validation error for gender value: " + gender;
       Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
       assertEquals(errorMessage, 1, violations.size());
@@ -209,9 +209,8 @@ public class ParticipantTest {
 
   @Test
   public void testNullLegacySourceTableSuccess() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/valid/nullLegacySourceTable.json"), Participant.class);
-
+    Participant toValidate =
+        new ParticipantResourceBuilder().setLegacySourceTable(null).createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -236,8 +235,7 @@ public class ParticipantTest {
 
   @Test
   public void testWithNullClientIdSuccess() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/valid/nullClientId.json"), Participant.class);
+    Participant toValidate = new ParticipantResourceBuilder().setLegacyId(null).createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -252,8 +250,8 @@ public class ParticipantTest {
 
   @Test
   public void testLegacyIdTooLongFail() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/invalid/legacyIdTooLong.json"), Participant.class);
+    Participant toValidate =
+        new ParticipantResourceBuilder().setLegacyId("lkjghsgss333").createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
     assertEquals("size must be between 0 and 10",
@@ -319,7 +317,8 @@ public class ParticipantTest {
 
   @Test
   public void testGenderInvalidFail() throws Exception {
-    Participant toValidate = new ParticipantResourceBuilder().setGender("Z").createParticipant();
+    Participant toValidate =
+        new ParticipantResourceBuilder().setSexAtBirth("Z").createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
     assertEquals("must be one of [M, F, U, I]",
@@ -364,7 +363,7 @@ public class ParticipantTest {
     Participant validParticipant = null;
     try {
       validParticipant = new Participant(id, legacySourceTable, clientId, new LegacyDescriptor(),
-          firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
+          firstName, middleName, lastName, suffix, getSexAtBirth, ssn, dateOfBirth, primaryLanguage,
           secondaryLanguage, personId, screeningId, reporterConfidentialWaiver,
           reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, roles, addresses,
           raceAndEthnicity);
