@@ -5,6 +5,7 @@ import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ class HOIScreeningData {
 
   private Collection<String> clientIds;
 
-  private Set<ScreeningEntity> screeningEntities;
+  private Set<ScreeningEntity> screeningEntities = new HashSet<>();
 
   private Map<String, IntakeLOVCodeEntity> countyIntakeLOVCodeEntityMap;
 
@@ -36,11 +37,6 @@ class HOIScreeningData {
 
   Set<ScreeningEntity> getScreeningEntities() {
     return screeningEntities;
-  }
-
-  void setScreeningEntities(
-      Set<ScreeningEntity> screeningEntities) {
-    this.screeningEntities = screeningEntities;
   }
 
   Map<String, IntakeLOVCodeEntity> getCountyIntakeLOVCodeEntityMap() {
