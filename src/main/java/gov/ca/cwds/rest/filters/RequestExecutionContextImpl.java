@@ -109,7 +109,6 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     return staffId;
   }
 
-
   /**
    * Get request start time if stored
    * 
