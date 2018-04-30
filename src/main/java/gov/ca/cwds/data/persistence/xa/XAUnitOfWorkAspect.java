@@ -59,8 +59,6 @@ public class XAUnitOfWorkAspect {
 
   /**
    * NOTE: method onFinish() closes the session.
-   * 
-   * @throws Exception on database error
    */
   public void afterEnd() {
     if (sessions.isEmpty()) {
@@ -76,8 +74,7 @@ public class XAUnitOfWorkAspect {
   }
 
   /**
-   * 
-   * @throws Exception on database error
+   * Call on error to rollback transactions and close sessions.
    */
   public void onError() {
     if (sessions.isEmpty()) {
@@ -92,9 +89,7 @@ public class XAUnitOfWorkAspect {
   }
 
   /**
-   * Close open sessions.
-   * 
-   * @throws Exception on database error
+   * Close open sessions, set transaction to null.
    */
   public void onFinish() {
     txn = null;
@@ -105,7 +100,7 @@ public class XAUnitOfWorkAspect {
    * Get the current Hibernate session, if open, or open a new session.
    * 
    * @param sessionFactory - open a session for this datasource
-   * @return session
+   * @return session current session for this datasource
    */
   protected Session grabSession(SessionFactory sessionFactory) {
     Session session;
