@@ -117,6 +117,8 @@ public class XAUnitOfWorkAspect {
       session = sessionFactory.openSession();
     }
 
+    session.doWork(new WorkDB2UserInfo());
+
     sessions.add(session);
     configureSession(session);
     return session;
