@@ -52,6 +52,10 @@ node ('tpt4-slave'){
     stage('Build'){
 	    def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
     }
+    stage('Functional Tests (temp)'){
+      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest  jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
+      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/functionalTest', reportFiles: 'index.html', reportName: 'FT JUnit Report', reportTitles: 'FT JUnit tests summary'])
+    }
     stage('Tests'){
       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
@@ -59,10 +63,7 @@ node ('tpt4-slave'){
     stage('JavaDoc'){
       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
     }
-    stage('Functional Tests (temp)'){
-      buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'functionalTest  jacocoTestReport', switches: '--stacktrace -D build=${BUILD_NUMBER}'
-      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/functionalTest', reportFiles: 'index.html', reportName: 'FT JUnit Report', reportTitles: 'FT JUnit tests summary'])
-    }
+    
     stage('JMeter Tests'){
       bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_referrals.jmx', printDebugOutput: true, useBztExitCode: false
       bzt generatePerformanceTrend: false, params: 'src/test/resources/jmeter/_reporters.jmx', printDebugOutput: true, useBztExitCode: false
