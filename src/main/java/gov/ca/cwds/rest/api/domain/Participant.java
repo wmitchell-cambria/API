@@ -146,6 +146,7 @@ public class Participant extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age", example = "12")
   private String approximateAge;
 
+  @OneOf(value = {"Y", "M", "W", "D"}, ignoreCase = true, ignoreWhitespace = true)
   @JsonProperty("approximate_age_units")
   @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age Units",
       example = "years")

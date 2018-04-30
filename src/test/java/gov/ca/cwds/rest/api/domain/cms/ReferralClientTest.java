@@ -287,9 +287,8 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenApprovalNumberEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/approvalNumberempty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setApprovalNumber("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -298,9 +297,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenApprovalNumberNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/approvalNumbernull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setApprovalNumber(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -309,9 +307,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenApprovalNumberTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/approvalNumberTooLong.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setApprovalNumber("12345678901").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -340,10 +337,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionClosureReasonTypeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate = new ReferralClientResourceBuilder()
+        .setDispositionClosureReasonType(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -369,10 +364,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionClosureReasonTypeZero() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/valid/dispositionClosureReasonTypeZero.json"),
-        ReferralClient.class);
+    ReferralClient toCreate = new ReferralClientResourceBuilder()
+        .setDispositionClosureReasonType((short) 0).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -397,9 +390,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenApprovalStatusTypeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/approvalStatusTypeNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setApprovalStatusType(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -439,9 +431,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionCodeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -452,9 +443,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionCodeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -463,9 +453,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionCodeTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeTooLong.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("AA").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -476,9 +465,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionCodeInvalid() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeInvalid.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("Z").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -490,9 +478,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionCodeA() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeA.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("A").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -501,9 +488,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionCodeI() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeI.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("I").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -512,9 +498,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionCodeS() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeS.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("S").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -523,9 +508,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionCodeX() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeX.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionCode("X").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -537,9 +521,8 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenDispositionDateEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionDateEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionDate("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -548,9 +531,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionDateNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionDateNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionDate(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -559,9 +541,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionDateWrongFormat() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionDateWrongFormat.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDispositionDate("06/18/1992").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -588,9 +569,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenSelfReportedIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setSelfReportedIndicator(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -645,9 +625,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenStaffPersonAddedIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate = new ReferralClientResourceBuilder().setStaffPersonAddedIndicator(null)
+        .buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -704,9 +683,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenReferralIdNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setReferralId(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -717,9 +695,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenReferralIdEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setReferralId("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -730,9 +707,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenReferralIdTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdTooLong.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setReferralId("Apy139By601").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -744,9 +720,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenReferralIdAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdAllWhiteSpace.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setReferralId("  ").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -774,8 +749,7 @@ public class ReferralClientTest {
   @Test
   public void failsWhenClientIdNull() throws Exception {
     ReferralClient toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdNull.json"),
-            ReferralClient.class);
+        new ReferralClientResourceBuilder().setClientId(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -786,9 +760,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenClientIdEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setClientId("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -812,9 +785,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenClientIdAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdAllWhiteSpace.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setClientId("  ").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -829,10 +801,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenDispositionClosureDescriptionNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureDescriptionNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate = new ReferralClientResourceBuilder()
+        .setDispositionClosureDescription(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -844,10 +814,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDispositionClosureDescriptionEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/valid/dispositionClosureDescriptionEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate = new ReferralClientResourceBuilder()
+        .setDispositionClosureDescription("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -872,9 +840,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenAgeNumberNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/ageNumberNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setAgeNumber(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -911,9 +878,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenAgePeriodCodeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/agePeriodCodeEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setAgePeriodCode("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -922,9 +888,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenAgePeriodCodeTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/agePeriodCodeTooLong.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setAgePeriodCode("YM").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -935,9 +900,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenAgePeriodCodeAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/agePeriodCodeAllWhiteSpace.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setAgePeriodCode("  ").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -962,9 +926,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenCountySpecificCodeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setCountySpecificCode(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -975,9 +938,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenCountySpecificCodeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeEmpty.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setCountySpecificCode("").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -988,9 +950,8 @@ public class ReferralClientTest {
 
   @Test
   public void failsWhenCountySpecificCodeTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeTooLong.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setCountySpecificCode("100").buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -1016,9 +977,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenMentalHealthIssuesIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/mentalHealthIssuesIndicatorNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate = new ReferralClientResourceBuilder()
+        .setMentalHealthIssuesIndicator(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -1041,9 +1001,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenAlcoholIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/alcoholIndicatorNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setAlcoholIndicator(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
@@ -1066,9 +1025,8 @@ public class ReferralClientTest {
 
   @Test
   public void successWhenDrugIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/drugIndicatorNull.json"),
-        ReferralClient.class);
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setDrugIndicator(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));

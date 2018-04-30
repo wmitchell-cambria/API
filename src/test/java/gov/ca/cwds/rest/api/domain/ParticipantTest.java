@@ -202,7 +202,6 @@ public class ParticipantTest {
       Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
       assertEquals(errorMessage, 1, violations.size());
     });
-
   }
 
   @Test
@@ -353,16 +352,34 @@ public class ParticipantTest {
     Participant participant =
         new ParticipantResourceBuilder().setLegacyDescriptor(null).createParticipant();
     assertNotNull(participant.getLegacyDescriptor());
-
   }
 
   private Participant createParticipantWithRoles(Set<String> roles) {
     return createParticipant(roles);
-
   }
 
   private Participant validParticipant() {
     return createParticipant(roles);
+  }
+
+  @Test
+  public void shouldNotHaveValidationErrorForValidAgeCodes() {
+    List<String> acceptableAgeCodes = Arrays.asList("Y", "M", "W", "D");
+    acceptableAgeCodes.forEach(ageCode -> {
+      Participant participant =
+          new ParticipantResourceBuilder().setApproximateAgeUnits(ageCode).createParticipant();
+      String errorMessage = "Expected no validation error for gender value: " + ageCode;
+      Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
+      assertEquals(errorMessage, 0, violations.size());
+    });
+  }
+
+  @Test
+  public void shouldHaveValidationErrorsForInvaldAgeCodes() {
+    Participant participant =
+        new ParticipantResourceBuilder().setApproximateAgeUnits("Z").createParticipant();
+    Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
+    assertEquals(1, violations.size());
   }
 
   private Participant createParticipant(Set<String> roles) {
@@ -381,4 +398,3 @@ public class ParticipantTest {
   }
 
 }
-
