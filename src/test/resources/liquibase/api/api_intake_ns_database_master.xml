@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+  <include file="liquibase/intake_ns_data_types.xml"/>
+  <include file="liquibase/intake_ns_schema.xml"/>
+  <!--<include file="../liquibase-local/intake_ns_structure.xml" relativeToChangelogFile="true"/>-->
+  <include file="liquibase/intake_ns_structure.xml"/>
+  <include file="liquibase/intake_ns_data.xml"/>
+
+  <include file="data/screening_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/addresses_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/screening_addresses_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/participants_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/participant_addresses_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/phone_numbers_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/participant_phone_numbers_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/allegations_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/cross_reports_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/agencies_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/legacy_descriptors_data.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

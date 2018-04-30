@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522794912070-1">
+    <insert tableName="addresses">
+      <column name="id" value="79"/>
+      <column name="street_address" value="erfsgd"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="95833"/>
+      <column name="type" value="Other"/>
+      <column name="legacy_id" value="79VrmIT00c"/>
+      <column name="legacy_source_table" value="ADDRS_T"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="142"/>
+      <column name="street_address" value="erfsgd101"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="95833"/>
+      <column name="type" value="Other"/>
+      <column name="legacy_id" value="79VrmIT00c"/>
+      <column name="legacy_source_table" value="ADDRS_T"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="143"/>
+      <column name="street_address" value="erfsgd102"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="95833"/>
+      <column name="type" value="Other"/>
+      <column name="legacy_id" value="79VrmIT00c"/>
+      <column name="legacy_source_table" value="ADDRS_T"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

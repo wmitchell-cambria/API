@@ -1,0 +1,68 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522795007311-1">
+    <insert tableName="participants">
+      <column name="id" value="42"/>
+      <column name="date_of_birth" valueDate="2002-11-15"/>
+      <column name="first_name" value="john"/>
+      <column name="gender" value="male"/>
+      <column name="last_name" value="Curteis"/>
+      <column name="ssn" value="456-47-8798"/>
+      <column name="screening_id" value="52"/>
+      <column name="legacy_id" value="6YtTyyc0ND"/>
+      <column name="roles" value="{&quot;Victim&quot;}"/>
+      <column name="languages" value="{&quot;English&quot;}"/>
+      <column name="middle_name" value="T"/>
+      <column name="name_suffix" value="Jr"/>
+      <column name="races" value="[{&quot;race&quot;:&quot;White&quot;,&quot;race_detail&quot;:null}]"/>
+      <column name="ethnicity" value="{&quot;hispanic_latino_origin&quot;:&quot;No&quot;,&quot;ethnicity_detail&quot;:[]}"/>
+      <column name="legacy_source_table" value="CLIENT_T"/>
+      <column name="sensitive" valueBoolean="false"/>
+      <column name="sealed" valueBoolean="false"/>
+      <column name="approximate_age" value="12"/>
+      <column name="approximate_age_units" value="year"/>
+    </insert>
+    <insert tableName="participants">
+      <column name="id" value="43"/>
+      <column name="date_of_birth" valueDate="1990-03-03"/>
+      <column name="first_name" value="John"/>
+      <column name="gender" value="male"/>
+      <column name="last_name" value="Kightly"/>
+      <column name="ssn" value="435-64-7898"/>
+      <column name="screening_id" value="52"/>
+      <column name="legacy_id" value="D4aDcoM75C"/>
+      <column name="roles" value="{&quot;Perpetrator&quot;}"/>
+      <column name="languages" value="{&quot;German&quot;}"/>
+      <column name="middle_name" value=""/>
+      <column name="name_suffix"/>
+      <column name="races" value="[{&quot;race&quot;:&quot;Asian&quot;,&quot;race_detail&quot;:&quot;Cambodian&quot;}]"/>
+      <column name="ethnicity" value="{&quot;hispanic_latino_origin&quot;:&quot;Unknown&quot;,&quot;ethnicity_detail&quot;:[]}"/>
+      <column name="legacy_source_table"/>
+      <column name="sensitive" valueBoolean="false"/>
+      <column name="sealed" valueBoolean="false"/>
+      <column name="approximate_age"/>
+      <column name="approximate_age_units"/>
+    </insert>
+    <insert tableName="participants">
+      <column name="id" value="44"/>
+      <column name="date_of_birth" valueDate="1967-09-05"/>
+      <column name="first_name" value="Catrina"/>
+      <column name="gender" value="female"/>
+      <column name="last_name" value="Sam"/>
+      <column name="ssn" value="435-40-1360"/>
+      <column name="screening_id" value="52"/>
+      <column name="legacy_id" value="FGisWCk0Ki"/>
+      <column name="roles" value="{&quot;Mandated Reporter&quot;}"/>
+      <column name="languages" value="{&quot;English&quot;}"/>
+      <column name="middle_name" value=""/>
+      <column name="name_suffix"/>
+      <column name="races" value="[]"/>
+      <column name="ethnicity" value="{&quot;hispanic_latino_origin&quot;:&quot;Unknown&quot;,&quot;ethnicity_detail&quot;:[]}"/>
+      <column name="legacy_source_table"/>
+      <column name="sensitive" valueBoolean="false"/>
+      <column name="sealed" valueBoolean="false"/>
+      <column name="approximate_age"/>
+      <column name="approximate_age_units"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

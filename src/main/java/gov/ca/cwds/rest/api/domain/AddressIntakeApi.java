@@ -89,13 +89,12 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    * @param type the address type
    * @param legacyDescriptor - legacyDescriptor
    */
-  @JsonCreator
-  public AddressIntakeApi(@JsonProperty("legacy_source_table") String legacySourceTable,
-      @JsonProperty("legacy_id") String addressId,
-      @JsonProperty("street_address") String streetAddress, @JsonProperty("city") String city,
-      @JsonProperty("state") String state, @JsonProperty("zip") String zip,
-      @JsonProperty("type") String type,
-      @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor) {
+  public AddressIntakeApi(String legacySourceTable,
+      String addressId,
+      String streetAddress,  String city,
+      String state, String zip,
+      String type,
+      LegacyDescriptor legacyDescriptor) {
     super();
     this.legacySourceTable = legacySourceTable;
     this.legacyId = addressId;
@@ -136,6 +135,26 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    */
   public String getType() {
     return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setStreetAddress(String streetAddress) {
+    this.streetAddress = streetAddress;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public void setZip(String zip) {
+    this.zip = zip;
   }
 
   /**

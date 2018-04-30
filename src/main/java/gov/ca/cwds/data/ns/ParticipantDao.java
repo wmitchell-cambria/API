@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.ns;
 
+import gov.ca.cwds.data.BaseDaoImpl;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
@@ -8,7 +10,6 @@ import org.hibernate.query.Query;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.inject.NsSessionFactory;
 
@@ -17,7 +18,7 @@ import gov.ca.cwds.inject.NsSessionFactory;
  *
  * @author CWDS API Team
  */
-public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
+public class ParticipantDao extends BaseDaoImpl<ParticipantEntity> {
 
   /**
    * Constructor
@@ -41,5 +42,13 @@ public class ParticipantDao extends CrudsDaoImpl<ParticipantEntity> {
         .getNamedQuery(ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID)
         .setParameter("screeningId", screeningId);
     return new HashSet<>(query.list());
+  }
+
+  public List<ParticipantEntity> getByScreeningId(String screeningId) {
+    @SuppressWarnings("unchecked")
+    final Query<ParticipantEntity> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(constructNamedQueryName("findByScreeningId"))
+        .setParameter("screeningId", screeningId);
+    return query.list();
   }
 }

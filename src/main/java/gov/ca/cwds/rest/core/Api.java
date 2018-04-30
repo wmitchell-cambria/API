@@ -185,6 +185,11 @@ public final class Api {
   public static final String RESOURCE_SCREENINGS = "screenings";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_INTAKE_SCREENINGS} API..
+   */
+  public static final String RESOURCE_INTAKE_SCREENINGS = "intake/screenings";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} API.
    */
   public static final String RESOURCE_STAFF_PERSON = "_staffpersons";

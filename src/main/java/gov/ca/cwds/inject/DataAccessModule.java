@@ -1,5 +1,9 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.ns.AddressesDao;
+import gov.ca.cwds.data.ns.AgencyDao;
+import gov.ca.cwds.data.ns.AllegationIntakeDao;
+import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -200,9 +204,13 @@ public class DataAccessModule extends AbstractModule {
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
-      gov.ca.cwds.data.persistence.ns.Person.class, gov.ca.cwds.data.persistence.ns.Address.class,
+      gov.ca.cwds.data.persistence.ns.Person.class,
+      gov.ca.cwds.data.persistence.ns.Address.class,
       gov.ca.cwds.data.persistence.ns.Addresses.class,
       gov.ca.cwds.data.persistence.ns.Allegation.class,
+      gov.ca.cwds.data.persistence.ns.AllegationEntity.class,
+      gov.ca.cwds.data.persistence.ns.CrossReportEntity.class,
+      gov.ca.cwds.data.persistence.ns.GovernmentAgencyEntity.class,
       gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
       gov.ca.cwds.data.persistence.ns.IntakeLov.class,
       gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.class,
@@ -223,8 +231,10 @@ public class DataAccessModule extends AbstractModule {
       gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
       gov.ca.cwds.data.persistence.ns.Ethnicity.class,
       gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
-      gov.ca.cwds.data.persistence.ns.PersonRace.class, gov.ca.cwds.data.persistence.ns.Race.class,
+      gov.ca.cwds.data.persistence.ns.PersonRace.class,
+      gov.ca.cwds.data.persistence.ns.Race.class,
       gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
+      gov.ca.cwds.data.persistence.ns.ScreeningAddressEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class).build();
 
   private final HibernateBundle<ApiConfiguration> cmsHibernateBundle =
@@ -363,10 +373,15 @@ public class DataAccessModule extends AbstractModule {
 
     // NS:
     bind(AddressDao.class);
+    bind(AddressesDao.class);
     bind(XaNsAddressDao.class);
 
     bind(PersonDao.class);
     bind(ScreeningDao.class);
+    bind(ScreeningAddressDao.class);
+    bind(AgencyDao.class);
+    bind(gov.ca.cwds.data.ns.CrossReportDao.class);
+    bind(AllegationIntakeDao.class);
     bind(ParticipantDao.class);
     bind(PhoneNumberDao.class);
     bind(LanguageDao.class);

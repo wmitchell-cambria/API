@@ -1,0 +1,45 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522794985902-1">
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1"/>
+      <column name="legacy_id" value="3FVrmIT00c"/>
+      <column name="legacy_ui_id" value="0184-6135-8268-9000038"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1997-08-27T10:16:08.264-0700"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="42"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="2"/>
+      <column name="legacy_id" value="9FVrmIT00c"/>
+      <column name="legacy_ui_id" value="9184-6135-8268-9000038"/>
+      <column name="legacy_table_name" value="CRSS_RPT"/>
+      <column name="legacy_table_description" value="Cross Report"/>
+      <column name="legacy_last_updated" value="1997-08-26T10:16:08.264-0700"/>
+      <column name="describable_type" value="CrossReport"/>
+      <column name="describable_id" valueNumeric="9"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="3"/>
+      <column name="legacy_id" value="79VrmIT00c"/>
+      <column name="legacy_ui_id" value="7984-6135-8268-9000038"/>
+      <column name="legacy_table_name" value="ADDRS_T"/>
+      <column name="legacy_table_description" value="Cross Report"/>
+      <column name="legacy_last_updated" value="1997-08-25T10:16:08.264-0700"/>
+      <column name="describable_type" value="Address"/>
+      <column name="describable_id" valueNumeric="79"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="4"/>
+      <column name="legacy_id" value="ABC1234567"/>
+      <column name="legacy_ui_id" value="3284-6135-8268-9000038"/>
+      <column name="legacy_table_name" value="ALLGTN_T"/>
+      <column name="legacy_table_description" value="Allegation"/>
+      <column name="legacy_last_updated" value="1997-08-25T10:16:08.264-0700"/>
+      <column name="describable_type" value="Allegation"/>
+      <column name="describable_id" valueNumeric="32"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

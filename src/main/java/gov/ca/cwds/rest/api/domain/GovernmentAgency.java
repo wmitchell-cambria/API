@@ -39,6 +39,9 @@ public class GovernmentAgency implements Serializable {
       "DEPARTMENT_OF_JUSTICE", "LAW_ENFORCEMENT"})
   private String type;
 
+  public GovernmentAgency() {
+  }
+
   /**
    * @param id - id
    * @param type - type
@@ -56,6 +59,14 @@ public class GovernmentAgency implements Serializable {
    */
   public String getId() {
     return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 
   /**

@@ -123,13 +123,13 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   @JsonProperty("screening_id")
   @ApiModelProperty(required = false, readOnly = false, value = "Screening Id", example = "12345")
-  private Long screeningId;
+  private String screeningId;
 
   @Valid
   @JsonProperty("roles")
   @ApiModelProperty(required = true, readOnly = false, value = "Role of participant",
       dataType = "java.util.List", example = "['Victim', 'Mandated Reporter']")
-  private Set<String> roles;
+  private Set<String> roles = new HashSet<>();
 
   @Valid
   @ApiModelProperty(dataType = "List[gov.ca.cwds.rest.api.domain.AddressIntakeApi]")
@@ -139,7 +139,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @Valid
   @ApiModelProperty(dataType = "List[gov.ca.cwds.rest.api.domain.PhoneNumber]")
   @JsonProperty("phone_numbers")
-  private Set<gov.ca.cwds.rest.api.domain.PhoneNumber> phoneNumbers;
+  private Set<gov.ca.cwds.rest.api.domain.PhoneNumber> phoneNumbers = new HashSet<>();
 
   @JsonProperty("sealed")
   @ApiModelProperty(required = false, readOnly = false, value = "sealed", example = "true")
@@ -185,21 +185,20 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param sealed true if sealed
    * @param sensitive true if sensitive
    */
-  @JsonCreator
-  public ParticipantIntakeApi(@JsonProperty("id") String id,
-      @JsonProperty("legacy_source_table") String legacySourceTable,
-      @JsonProperty("legacy_client_id") String clientId,
-      @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor,
-      @JsonProperty("first_name") String firstName, @JsonProperty("middle_name") String middleName,
-      @JsonProperty("last_name") String lastName, @JsonProperty("name_suffix") String nameSuffix,
-      @JsonProperty("gender") String gender, @JsonProperty("approximate_age") String approximateAge,
-      @JsonProperty("approximate_age_units") String approximateAgeUnits,
-      @JsonProperty("ssn") String ssn, @JsonProperty("date_of_birth") Date dateOfBirth,
-      @JsonProperty("languages") Set<String> languages,
-      @JsonProperty("screening_id") Long screeningId, @JsonProperty("roles") Set<String> roles,
-      @JsonProperty("addresses") Set<AddressIntakeApi> addresses,
-      @JsonProperty("phone_numbers") Set<PhoneNumber> phoneNumbers,
-      @JsonProperty("seales") Boolean sealed, @JsonProperty("sensitive") Boolean sensitive) {
+  public ParticipantIntakeApi(String id,
+      String legacySourceTable,
+      String clientId,
+      LegacyDescriptor legacyDescriptor,
+      String firstName, String middleName,
+      String lastName, String nameSuffix,
+      String gender, String approximateAge,
+      String approximateAgeUnits,
+      String ssn, Date dateOfBirth,
+      Set<String> languages,
+      String screeningId, Set<String> roles,
+      Set<AddressIntakeApi> addresses,
+      Set<PhoneNumber> phoneNumbers,
+      Boolean sealed, Boolean sensitive) {
     super();
     this.id = id;
     this.firstName = firstName;
@@ -225,7 +224,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   /**
    * Copy constructor.
-   * 
+   *
    * @param participantEntity participant to copy from
    */
   public ParticipantIntakeApi(ParticipantEntity participantEntity) {
@@ -246,8 +245,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.legacySourceTable = participantEntity.getLegacySourceTable();
     this.races = participantEntity.getRaces();
     this.ethnicity = participantEntity.getEthnicity();
-    this.screeningId = participantEntity.getScreeningId() == null ? null
-        : Long.valueOf(participantEntity.getScreeningId());
+    this.screeningId = participantEntity.getScreeningId();
     this.sealed = participantEntity.getSealed();
     this.sensitive = participantEntity.getSensitive();
   }
@@ -255,7 +253,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * Work-around for fields containing raw JSON to embed into/extract from generated JSON races
    * ethnicity.
-   * 
+   *
    * @return JSON race codes
    */
   @JsonRawValue
@@ -353,6 +351,70 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     return lastName;
   }
 
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public void setSsn(String ssn) {
+    this.ssn = ssn;
+  }
+
+  public void setDateOfBirth(Date dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public void setApproximateAge(String approximateAge) {
+    this.approximateAge = approximateAge;
+  }
+
+  public void setApproximateAgeUnits(String approximateAgeUnits) {
+    this.approximateAgeUnits = approximateAgeUnits;
+  }
+
+  public void setLanguages(Set<String> languages) {
+    this.languages = languages;
+  }
+
+  public void setScreeningId(String screeningId) {
+    this.screeningId = screeningId;
+  }
+
+  public void setRoles(Set<String> roles) {
+    this.roles = roles;
+  }
+
+  public Boolean getSealed() {
+    return sealed;
+  }
+
+  public void setSealed(Boolean sealed) {
+    this.sealed = sealed;
+  }
+
+  public Boolean getSensitive() {
+    return sensitive;
+  }
+
+  public void setSensitive(Boolean sensitive) {
+    this.sensitive = sensitive;
+  }
+
   /**
    * @return the middleName
    */
@@ -378,7 +440,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * @return the screeningId
    */
-  public Long getScreeningId() {
+  public String getScreeningId() {
     return screeningId;
   }
 

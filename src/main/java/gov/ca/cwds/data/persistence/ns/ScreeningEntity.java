@@ -14,14 +14,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -43,15 +41,22 @@ public class ScreeningEntity implements PersistentObject {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screening_id")
-  @SequenceGenerator(name = "screening_id", sequenceName = "screenings_id_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screenings_id_seq")
+  @GenericGenerator(
+      name = "screenings_id_seq",
+      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(
+              name = "sequence_name", value = "screenings_id_seq")
+      }
+  )
   private String id;
 
   @Column(name = "reference")
   private String reference;
 
   @Column(name = "ended_at")
-  @Type(type = "date")
+  @Type(type = "timestamp")
   private Date endedAt;
 
   @Column(name = "incident_county")
@@ -74,7 +79,7 @@ public class ScreeningEntity implements PersistentObject {
   private String screeningDecision;
 
   @Column(name = "started_at")
-  @Temporal(TemporalType.TIMESTAMP)
+  @Type(type = "timestamp")
   private Date startedAt;
 
   @Column(name = "report_narrative")
@@ -112,6 +117,7 @@ public class ScreeningEntity implements PersistentObject {
   private Integer userCountyCode;
 
   @Column(name = "restrictions_date")
+  @Type(type = "date")
   private Date restrictionsDate;
 
   @Column(name = "indexable")
@@ -201,6 +207,98 @@ public class ScreeningEntity implements PersistentObject {
    */
   public String getId() {
     return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
+  }
+
+  public void setEndedAt(Date endedAt) {
+    this.endedAt = endedAt;
+  }
+
+  public void setIncidentCounty(String incidentCounty) {
+    this.incidentCounty = incidentCounty;
+  }
+
+  public void setIncidentDate(Date incidentDate) {
+    this.incidentDate = incidentDate;
+  }
+
+  public void setLocationType(String locationType) {
+    this.locationType = locationType;
+  }
+
+  public void setCommunicationMethod(String communicationMethod) {
+    this.communicationMethod = communicationMethod;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setScreeningDecision(String screeningDecision) {
+    this.screeningDecision = screeningDecision;
+  }
+
+  public void setStartedAt(Date startedAt) {
+    this.startedAt = startedAt;
+  }
+
+  public void setNarrative(String narrative) {
+    this.narrative = narrative;
+  }
+
+  public void setAssignee(String assignee) {
+    this.assignee = assignee;
+  }
+
+  public void setAdditionalInformation(String additionalInformation) {
+    this.additionalInformation = additionalInformation;
+  }
+
+  public void setScreeningDecisionDetail(String screeningDecisionDetail) {
+    this.screeningDecisionDetail = screeningDecisionDetail;
+  }
+
+  public void setSafetyInformation(String safetyInformation) {
+    this.safetyInformation = safetyInformation;
+  }
+
+  public void setSafetyAlerts(String[] safetyAlerts) {
+    this.safetyAlerts = safetyAlerts;
+  }
+
+  public void setReferralId(String referralId) {
+    this.referralId = referralId;
+  }
+
+  public void setAssigneeStaffId(String assigneeStaffId) {
+    this.assigneeStaffId = assigneeStaffId;
+  }
+
+  public void setRestrictionsRationale(String restrictionsRationale) {
+    this.restrictionsRationale = restrictionsRationale;
+  }
+
+  public void setUserCountyCode(Integer userCountyCode) {
+    this.userCountyCode = userCountyCode;
+  }
+
+  public void setRestrictionsDate(Date restrictionsDate) {
+    this.restrictionsDate = restrictionsDate;
+  }
+
+  public Boolean getIndexable() {
+    return indexable;
+  }
+
+  public void setIndexable(Boolean indexable) {
+    this.indexable = indexable;
   }
 
   /**

@@ -1,0 +1,202 @@
+{
+  "id": "52",
+  "referral_id": "1234567890",
+  "name": "dfsf",
+  "reference": "GBA10B",
+  "screening_decision": "promote_to_referral",
+  "screening_decision_detail": "3_days",
+  "assignee": "Testing CWDS - State of California",
+  "assignee_staff_id": "0X5",
+  "started_at": "2018-03-29",
+  "ended_at": "2018-03-30",
+  "additional_information": "add",
+  "incident_county": "99",
+  "incident_date": "2018-03-29",
+  "indexable": false,
+  "location_type": "Child's Home",
+  "communication_method": "phone",
+  "access_restrictions": "acc",
+  "restrictions_rationale": "res",
+  "report_narrative": "tsrgdhr",
+  "safety_alerts": [
+    "Dangerous Environment",
+    "Hostile"
+  ],
+  "safety_information": "saf",
+  "cross_reports": [
+    {
+      "id": "9",
+      "legacy_source_table": "CRSS_RPT",
+      "legacy_id": "9FVrmIT00c",
+      "method": 2094,
+      "filed_out_of_state": false,
+      "inform_date": "2018-03-29",
+      "county_id": "1101",
+      "agencies": [
+        {
+          "id": "10",
+          "type": "DISTRICT_ATTORNEY"
+        },
+        {
+          "id": "9",
+          "type": "LAW_ENFORCEMENT"
+        }
+      ]
+    }
+  ],
+  "incident_address": {
+    "messages": [],
+    "id": "79",
+    "legacy_id": "79VrmIT00c",
+    "legacy_source_table": "ADDRS_T",
+    "type": "Other",
+    "street_address": "erfsgd",
+    "city": "Sacramento",
+    "state": "CA",
+    "zip": "95833"
+  },
+  "allegations": [
+    {
+      "id": "32",
+      "victim_person_id": 42,
+      "perpetrator_person_id": 43,
+      "type": 5625
+    }
+  ],
+  "participants": [
+    {
+      "id": "44",
+      "legacy_id": "FGisWCk0Ki",
+      "first_name": "Catrina",
+      "last_name": "Sam",
+      "gender": "female",
+      "ssn": "435-40-1360",
+      "date_of_birth": "1967-09-05",
+      "roles": [
+        "Mandated Reporter"
+      ],
+      "addresses": [],
+      "races": [],
+      "ethnicity": {
+        "hispanic_latino_origin": "Unknown",
+        "ethnicity_detail": []
+      },
+      "middle_name": "",
+      "languages": [
+        "English"
+      ],
+      "screening_id": "52",
+      "phone_numbers": [],
+      "sealed": false,
+      "sensitive": false
+    },
+    {
+      "id": "43",
+      "legacy_id": "D4aDcoM75C",
+      "first_name": "John",
+      "last_name": "Kightly",
+      "gender": "male",
+      "ssn": "435-64-7898",
+      "date_of_birth": "1990-03-03",
+      "roles": [
+        "Perpetrator"
+      ],
+      "addresses": [
+        {
+          "messages": [],
+          "id": "143",
+          "legacy_id": "79VrmIT00c",
+          "legacy_source_table": "ADDRS_T",
+          "type": "Other",
+          "street_address": "erfsgd102",
+          "city": "Sacramento",
+          "state": "CA",
+          "zip": "95833"
+        }
+      ],
+      "races": [
+        {
+          "race": "Asian",
+          "race_detail": "Cambodian"
+        }
+      ],
+      "ethnicity": {
+        "hispanic_latino_origin": "Unknown",
+        "ethnicity_detail": []
+      },
+      "middle_name": "",
+      "languages": [
+        "German"
+      ],
+      "screening_id": "52",
+      "phone_numbers": [
+        {
+          "id": 243,
+          "number": "6666666666",
+          "type": "Cell"
+        }
+      ],
+      "sealed": false,
+      "sensitive": false
+    },
+    {
+      "id": "42",
+      "legacy_source_table": "CLIENT_T",
+      "legacy_id": "6YtTyyc0ND",
+      "first_name": "john",
+      "last_name": "Curteis",
+      "gender": "male",
+      "ssn": "456-47-8798",
+      "date_of_birth": "2002-11-15",
+      "roles": [
+        "Victim"
+      ],
+      "addresses": [
+        {
+          "messages": [],
+          "id": "142",
+          "legacy_id": "79VrmIT00c",
+          "legacy_source_table": "ADDRS_T",
+          "type": "Other",
+          "street_address": "erfsgd101",
+          "city": "Sacramento",
+          "state": "CA",
+          "zip": "95833"
+        }
+      ],
+      "races": [
+        {
+          "race": "White",
+          "race_detail": null
+        }
+      ],
+      "ethnicity": {
+        "hispanic_latino_origin": "No",
+        "ethnicity_detail": []
+      },
+      "middle_name": "T",
+      "name_suffix": "Jr",
+      "approximate_age": "12",
+      "approximate_age_units": "year",
+      "languages": [
+        "English"
+      ],
+      "screening_id": "52",
+      "phone_numbers": [
+        {
+          "id": 242,
+          "number": "9660007290"
+        }
+      ],
+      "sealed": false,
+      "sensitive": false,
+      "legacy_descriptor": {
+        "legacy_id": "3FVrmIT00c",
+        "legacy_ui_id": "0184-6135-8268-9000038",
+        "legacy_last_updated": "1997-08-27T10:16:08.264-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    }
+  ]
+}

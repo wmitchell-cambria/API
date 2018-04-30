@@ -1,0 +1,192 @@
+package gov.ca.cwds.data.persistence.ns;
+
+import java.io.Serializable;
+import java.util.Arrays;
+
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.data.persistence.PersistentObject;
+
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.AllegationEntity.findByScreeningId",
+    query = "FROM gov.ca.cwds.data.persistence.ns.AllegationEntity"
+        + " WHERE screeningId = :screeningId")
+@Entity
+@Table(name = "allegations")
+public class AllegationEntity implements PersistentObject {
+
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "allegations_id")
+  @SequenceGenerator(name = "allegations_id", sequenceName = "allegations_id_seq")
+  private Integer id;
+
+  @Column(name = "screening_id")
+  private String screeningId;
+
+  @Column(name = "perpetrator_id")
+  private String perpetratorId;
+
+  @Column(name = "victim_id")
+  private String victimId;
+
+  @Column(name = "created_at")
+  @Type(type = "timestamp")
+  private Date createdAt;
+
+  @Column(name = "updated_at")
+  @Type(type = "timestamp")
+  private Date updatedAt;
+
+  @Column(name = "allegation_types")
+  @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
+  private String[] allegationTypes = new String[0];
+
+  @ManyToOne
+  @JoinColumn(name = "screening_id", insertable = false, updatable = false)
+  private ScreeningEntity screeningEntity;
+
+  /**
+   * Default constructor
+   *
+   * Required for Hibernate
+   */
+  public AllegationEntity() {
+    // default
+  }
+
+  @Override
+  public Serializable getPrimaryKey() {
+    return this.getId();
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setScreeningId(String screeningId) {
+    this.screeningId = screeningId;
+  }
+
+  public void setPerpetratorId(String perpetratorId) {
+    this.perpetratorId = perpetratorId;
+  }
+
+  public void setVictimId(String victimId) {
+    this.victimId = victimId;
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public ScreeningEntity getScreeningEntity() {
+    return screeningEntity;
+  }
+
+  public void setScreeningEntity(ScreeningEntity screeningEntity) {
+    this.screeningEntity = screeningEntity;
+  }
+
+  /**
+   * @return the id
+   */
+  public Integer getId() {
+    return id;
+  }
+
+  /**
+   * @return the screeningId
+   */
+  public String getScreeningId() {
+    return screeningId;
+  }
+
+  /**
+   * @return the perpetratorId
+   */
+  public String getPerpetratorId() {
+    return perpetratorId;
+  }
+
+  /**
+   * @return the victimId
+   */
+  public String getVictimId() {
+    return victimId;
+  }
+
+  /**
+   * @return the createdAt
+   */
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  /**
+   * @return the updatedAt
+   */
+  public Date getUpdatedAt() {
+    return updatedAt;
+  }
+
+  /**
+   * @return the allegationTypes
+   */
+  public String[] getAllegationTypes() {
+    return allegationTypes != null ? Arrays.copyOf(allegationTypes, allegationTypes.length) : null;
+  }
+
+  /**
+   * @param allegationTypes the allegationTypes to set
+   */
+  public void setAllegationTypes(String[] allegationTypes) {
+    this.allegationTypes =
+        allegationTypes != null ? Arrays.copyOf(allegationTypes, allegationTypes.length) : null;
+  }
+
+  /**
+   * @return the screeningEntity
+   */
+  public ScreeningEntity getScreening() {
+    return screeningEntity;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+}

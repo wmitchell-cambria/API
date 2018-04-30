@@ -2,6 +2,8 @@ package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
+
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -34,7 +36,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class CrossReport extends ReportingDomain implements Request, Response {
 
   @JsonProperty("id")
-  @ApiModelProperty(required = false, value = "", example = "1234")
+  @ApiModelProperty(required = false, value = "Id", example = "1234")
   private String id;
 
   @JsonProperty("legacy_source_table")
@@ -72,7 +74,10 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   @JsonProperty("agencies")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
-  private Set<GovernmentAgency> agencies;
+  private Set<GovernmentAgency> agencies = new HashSet<>();
+
+  public CrossReport() {
+  }
 
   /**
    * Construct from all fields.
@@ -86,13 +91,8 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    * @param countyId - countyId
    * @param agencies - agencies
    */
-  public CrossReport(@JsonProperty("id") String id,
-      @JsonProperty("legacy_source_table") String legacySourceTable,
-      @JsonProperty("legacy_id") String legacyId,
-      @JsonProperty("filed_out_of_state") boolean filedOutOfState,
-      @JsonProperty("method") Integer method, @JsonProperty("inform_date") String informDate,
-      @JsonProperty("county_id") String countyId,
-      @JsonProperty("agencies") Set<GovernmentAgency> agencies) {
+  public CrossReport(String id, String legacySourceTable, String legacyId, boolean filedOutOfState,
+      Integer method, String informDate, String countyId, Set<GovernmentAgency> agencies) {
     super();
     this.id = id;
     this.legacySourceTable = legacySourceTable;
@@ -106,6 +106,26 @@ public class CrossReport extends ReportingDomain implements Request, Response {
     } else {
       this.agencies = agencies;
     }
+  }
+
+  public void setMethod(Integer method) {
+    this.method = method;
+  }
+
+  public void setFiledOutOfState(boolean filedOutOfState) {
+    this.filedOutOfState = filedOutOfState;
+  }
+
+  public void setInformDate(String informDate) {
+    this.informDate = informDate;
+  }
+
+  public void setCountyId(String countyId) {
+    this.countyId = countyId;
+  }
+
+  public void setAgencies(Set<GovernmentAgency> agencies) {
+    this.agencies = agencies;
   }
 
   /**
