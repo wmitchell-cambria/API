@@ -57,7 +57,7 @@ public class XAUnitOfWorkAwareProxyFactoryTest extends Doofenshmirtz<Addresses> 
     assertThat(target, notNullValue());
   }
 
-  @Test
+  @Test(expected = Exception.class)
   public void create_A$Class() throws Exception {
     final Class<?> clazz = AddressResource.class;
     Object actual = target.create(clazz);
