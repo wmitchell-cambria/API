@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.common.collect.ImmutableMap;
 
-import gov.ca.cwds.rest.services.ServiceException;
-
 /**
  * AOP aspect supports {@link XAUnitOfWork}.
  * 
@@ -201,7 +199,7 @@ public class XAUnitOfWorkAspect {
   /**
    * Commit XA transaction.
    */
-  protected void commitTransaction() {
+  protected void commitTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
@@ -210,7 +208,7 @@ public class XAUnitOfWorkAspect {
       txn.commit();
     } catch (Exception e) {
       LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
-      throw new ServiceException("XA COMMIT FAILED!", e);
+      throw new CaresXAException("XA COMMIT FAILED!", e);
     }
   }
 
