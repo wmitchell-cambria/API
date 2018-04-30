@@ -1,6 +1,10 @@
 package gov.ca.cwds.fixture;
 
-import org.assertj.core.util.Sets;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import gov.ca.cwds.rest.api.domain.GovernmentAgency;
 
 /**
  * 
@@ -15,6 +19,15 @@ public class CrossReportResourceBuilder {
   Integer method = 2095; // "electronic report"
   String informDate = "2017-03-15";
   String countyId = "1101";
+  Set<GovernmentAgency> agencies;
+
+  /**
+   * 
+   */
+  public CrossReportResourceBuilder() {
+    GovernmentAgency governmentAgency = new GovernmentAgencyResourceBuilder().build();
+    this.agencies = new HashSet<>(Arrays.asList(governmentAgency));
+  }
 
   /**
    * @param id - id
@@ -80,10 +93,19 @@ public class CrossReportResourceBuilder {
   }
 
   /**
+   * @param agencies - agencies
+   * @return the agencies
+   */
+  public CrossReportResourceBuilder setAgencies(Set<GovernmentAgency> agencies) {
+    this.agencies = agencies;
+    return this;
+  }
+
+  /**
    * @return the CrossReport
    */
   public gov.ca.cwds.rest.api.domain.CrossReport createCrossReport() {
     return new gov.ca.cwds.rest.api.domain.CrossReport(id, legacySourceTable, legacyId,
-        filedOutOfState, method, informDate, countyId, Sets.newHashSet());
+        filedOutOfState, method, informDate, countyId, agencies);
   }
 }

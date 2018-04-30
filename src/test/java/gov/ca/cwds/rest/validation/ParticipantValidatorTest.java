@@ -5,16 +5,21 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -41,8 +46,8 @@ public class ParticipantValidatorTest {
 
   @Test
   public void testHasValidParticipantsSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
+    ScreeningToReferral toValidate =
+        new ScreeningToReferralResourceBuilder().createScreeningToReferral();
     assertThat(ParticipantValidator.hasValidParticipants(toValidate), equalTo(true));
   }
 
@@ -88,22 +93,22 @@ public class ParticipantValidatorTest {
 
   @Test
   public void testAllegationVictimPersonIdNotParticipantVictimFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
+    ScreeningToReferral toValidate =
+        new ScreeningToReferralResourceBuilder().createScreeningToReferral();
     assertThat(ParticipantValidator.isVictimParticipant(toValidate, 9999), equalTo(false));
   }
 
   @Test
   public void testAllegationVictimPersonIdIsParticipantVictimSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
+    ScreeningToReferral toValidate =
+        new ScreeningToReferralResourceBuilder().createScreeningToReferral();
     assertThat(ParticipantValidator.isVictimParticipant(toValidate, 5432), equalTo(true));
   }
 
   @Test
   public void testAllegationPerpetratorPersonIdNotParticipantPerpetratorFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/valid.json"), ScreeningToReferral.class);
+    ScreeningToReferral toValidate =
+        new ScreeningToReferralResourceBuilder().createScreeningToReferral();
     assertThat(ParticipantValidator.isPerpetratorParticipant(toValidate, 9999), equalTo(false));
   }
 

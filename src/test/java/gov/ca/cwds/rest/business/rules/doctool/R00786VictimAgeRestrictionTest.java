@@ -140,12 +140,12 @@ public class R00786VictimAgeRestrictionTest {
 
     String victimDob = DomainChef.cookDate(screeningStartedAtDateTime.minusYears(victimAgeYears)
         .minusDays(overAgeDays).plusDays(underAgeDays).toDate());
-    Participant victim = new ParticipantResourceBuilder().setGender("M").setDateOfBirth(victimDob)
-        .createVictimParticipant();
+    Participant victim = new ParticipantResourceBuilder().setSexAtBirth("M")
+        .setDateOfBirth(victimDob).createVictimParticipant();
 
-    Participant perp = new ParticipantResourceBuilder().setGender("F").createPerpParticipant();
+    Participant perp = new ParticipantResourceBuilder().setSexAtBirth("F").createPerpParticipant();
     Participant reporter =
-        new ParticipantResourceBuilder().setGender("M").createReporterParticipant();
+        new ParticipantResourceBuilder().setSexAtBirth("M").createReporterParticipant();
 
     Set<Participant> participants = new HashSet<>(Arrays.asList(victim, perp, reporter));
     builder.setParticipants(participants);
