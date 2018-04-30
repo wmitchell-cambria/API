@@ -528,7 +528,8 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  public Map<String, Client> provideElasticsearchClients(ApiConfiguration apiConfiguration) {
+  public synchronized Map<String, Client> provideElasticsearchClients(
+      ApiConfiguration apiConfiguration) {
     if (clients == null) {
       makeElasticsearchClients(apiConfiguration);
     }
