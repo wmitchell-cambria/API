@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.inject.FerbHibernateBundle;
+import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 public class XAUnitOfWorkAwareProxyFactoryTest extends Doofenshmirtz<Addresses> {
@@ -56,13 +57,12 @@ public class XAUnitOfWorkAwareProxyFactoryTest extends Doofenshmirtz<Addresses> 
     assertThat(target, notNullValue());
   }
 
-  // @Test
-  // public void create_A$Class() throws Exception {
-  // final Class<?> clazz = AddressResource.class;
-  // Object actual = target.create(clazz);
-  // Object expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
+  @Test
+  public void create_A$Class() throws Exception {
+    final Class<?> clazz = AddressResource.class;
+    Object actual = target.create(clazz);
+    assertThat(actual, is(notNullValue()));
+  }
 
   // @Test
   // public void create_A$Class$Class$Object() throws Exception {

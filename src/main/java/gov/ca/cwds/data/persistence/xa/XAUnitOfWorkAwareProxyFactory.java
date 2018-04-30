@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
+import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.inject.FerbHibernateBundle;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
@@ -85,13 +86,8 @@ public class XAUnitOfWorkAwareProxyFactory {
         final XAUnitOfWorkAspect aspect = newAspect(sessionFactories);
 
         try {
-          LOGGER.debug("Begin XA transaction.");
           aspect.beforeStart(xaUnitOfWork);
-
-          LOGGER.debug("Call the method.");
           final Object result = proceed.invoke(self, args);
-
-          LOGGER.debug("Commit XA transaction.");
           aspect.afterEnd();
           return result;
         } catch (InvocationTargetException e) {
@@ -109,7 +105,7 @@ public class XAUnitOfWorkAwareProxyFactory {
       return (T) proxy;
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
         | InvocationTargetException e) {
-      throw new IllegalStateException("Unable to create a proxy for the class '" + clazz + "'", e);
+      throw new DaoException("Unable to create a proxy for the class '" + clazz + "'", e);
     }
   }
 
