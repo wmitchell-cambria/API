@@ -36,8 +36,8 @@ public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
    * @param intakeCodes Set of intake codes
    * @return map where key is an intake code and value is an IntakeLOVCodeEntity
    */
-  @SuppressWarnings("unchecked")
   public Map<String, IntakeLOVCodeEntity> findIntakeLOVCodesByIntakeCodes(Set<String> intakeCodes) {
+    @SuppressWarnings("unchecked")
     final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
         .setParameter("intakeCodes", intakeCodes);
