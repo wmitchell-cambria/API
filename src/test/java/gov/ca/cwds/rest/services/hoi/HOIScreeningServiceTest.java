@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
@@ -74,6 +75,9 @@ public class HOIScreeningServiceTest {
     LegacyDescriptorDao legacyDescriptorDao = mock(LegacyDescriptorDao.class);
     StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
 
+    ParticipantDao participantDao = mock(ParticipantDao.class);
+    when(participantDao.findByScreeningIds(any(Set.class))).thenReturn(mockParticipants());
+
     Map<String, LegacyDescriptorEntity> participantDescriptors = new HashMap<>();
     participantDescriptors.put(DEFAULT_PERSON_ID, mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
     participantDescriptors
@@ -105,6 +109,7 @@ public class HOIScreeningServiceTest {
 
     hoiScreeningService = new HOIScreeningService();
     hoiScreeningService.screeningDao = screeningDao;
+    hoiScreeningService.participantDao = participantDao;
     hoiScreeningService.legacyDescriptorDao = legacyDescriptorDao;
     hoiScreeningService.intakeLOVCodeDao = intakeLOVCodeDao;
     hoiScreeningService.staffPersonDao = staffPersonDao;
@@ -163,28 +168,39 @@ public class HOIScreeningServiceTest {
   }
 
   private Set<ScreeningEntity> mockScreeningEntityList(String accessRestriction) {
-    ParticipantEntity participant1 =
-        new ParticipantEntityBuilder().setId(DEFAULT_PERSON_ID).build();
-
     ScreeningEntity screening1 = new ScreeningEntityBuilder().setId("223")
         .setStartedAt("2017-09-25").setEndedAt("2017-10-01").setIncidentCounty("sacramento")
         .setName(null).setScreeningDecision("promote to referral")
-        .setScreeningDecisionDetail("drug counseling").addParticipant(participant1).build();
+        .setScreeningDecisionDetail("drug counseling").build();
     screening1.setAccessRestrictions(accessRestriction);
-
-    ParticipantEntity reporter = new ParticipantEntityBuilder().setId(DEFAULT_REPORTER_ID)
-        .setFirstName("Alec").setLastName("Nite").setRoles(new String[]{"Mandated Reporter"})
-        .setNameSuffix("Jr.").build();
 
     ScreeningEntity screening2 = new ScreeningEntityBuilder().setId("224")
         .setStartedAt("2017-11-30").setEndedAt("2017-12-10").setIncidentCounty("sacramento")
         .setName(null).setScreeningDecision("promote to referral")
-        .setScreeningDecisionDetail("drug counseling").addParticipant(reporter).build();
+        .setScreeningDecisionDetail("drug counseling").build();
     screening2.setAccessRestrictions(accessRestriction);
 
     Set<ScreeningEntity> result = new HashSet<>();
     result.add(screening1);
     result.add(screening2);
+    return result;
+  }
+
+  private Map<String, Set<ParticipantEntity>> mockParticipants() {
+    ParticipantEntity participant = new ParticipantEntityBuilder().setId(DEFAULT_PERSON_ID).build();
+    ParticipantEntity reporter = new ParticipantEntityBuilder().setId(DEFAULT_REPORTER_ID)
+        .setFirstName("Alec").setLastName("Nite").setRoles(new String[]{"Mandated Reporter"})
+        .setNameSuffix("Jr.").build();
+
+    Set<ParticipantEntity> participants1 = new HashSet<>();
+    participants1.add(participant);
+
+    Set<ParticipantEntity> participants2 = new HashSet<>();
+    participants2.add(reporter);
+
+    Map<String, Set<ParticipantEntity>> result = new HashMap<>();
+    result.put("223", participants1);
+    result.put("224", participants2);
     return result;
   }
 

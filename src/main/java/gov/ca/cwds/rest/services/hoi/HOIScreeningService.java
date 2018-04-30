@@ -3,13 +3,16 @@ package gov.ca.cwds.rest.services.hoi;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -32,6 +35,9 @@ public class HOIScreeningService
 
   @Inject
   ScreeningDao screeningDao;
+
+  @Inject
+  ParticipantDao participantDao;
 
   @Inject
   IntakeLOVCodeDao intakeLOVCodeDao;
@@ -83,10 +89,17 @@ public class HOIScreeningService
         .findScreeningsByClientIds(hsd.getClientIds());
     hsd.setScreeningEntities(screeningEntities);
 
+    Map<String, Set<ParticipantEntity>> participantEntitiesMap = participantDao.findByScreeningIds(
+        screeningEntities.stream().map(ScreeningEntity::getId).collect(Collectors.toSet()));
+
     Set<String> counties = new HashSet<>();
     Set<String> participantIds = new HashSet<>();
     Collection<String> assigneeStaffIds = new HashSet<>();
     for (ScreeningEntity screeningEntity : screeningEntities) {
+      if (participantEntitiesMap.containsKey(screeningEntity.getId())) {
+        screeningEntity.setParticipants(participantEntitiesMap.get(screeningEntity.getId()));
+      }
+
       counties.add(screeningEntity.getIncidentCounty());
       if (screeningEntity.getParticipants() != null) {
         for (ParticipantEntity participantEntity : screeningEntity.getParticipants()) {

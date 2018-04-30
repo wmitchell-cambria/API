@@ -122,7 +122,7 @@ public class ScreeningEntity implements PersistentObject {
   private Set<Allegation> allegations = new HashSet<>();
 
   @HashCodeExclude
-  @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<ParticipantEntity> participants = new HashSet<>();
 
   /**
@@ -376,6 +376,10 @@ public class ScreeningEntity implements PersistentObject {
 
   public Set<ParticipantEntity> getParticipants() {
     return participants;
+  }
+
+  public void setParticipants(Set<ParticipantEntity> participants) {
+    this.participants = participants;
   }
 
   /**
