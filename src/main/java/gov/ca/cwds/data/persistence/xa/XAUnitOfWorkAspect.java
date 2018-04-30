@@ -3,11 +3,6 @@ package gov.ca.cwds.data.persistence.xa;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -19,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.common.collect.ImmutableMap;
+
+import gov.ca.cwds.data.DaoException;
 
 /**
  * AOP aspect supports {@link XAUnitOfWork}.
@@ -49,9 +46,8 @@ public class XAUnitOfWorkAspect {
    * Aspect entry point.
    * 
    * @param xaUnitOfWork - take settings from annotation
-   * @throws Exception on database error
    */
-  public void beforeStart(XAUnitOfWork xaUnitOfWork) throws Exception {
+  public void beforeStart(XAUnitOfWork xaUnitOfWork) {
     if (xaUnitOfWork == null) {
       return;
     }
@@ -164,43 +160,51 @@ public class XAUnitOfWorkAspect {
 
   /**
    * Start XA transaction. Set timeout to 80 seconds.
-   * 
-   * @throws SystemException internal error
-   * @throws NotSupportedException internal error
    */
-  protected void beginTransaction() throws SystemException, NotSupportedException {
+  protected void beginTransaction() {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
 
-    txn.setTransactionTimeout(80);
-    txn.begin();
+    try {
+      txn.setTransactionTimeout(80);
+      txn.begin();
+    } catch (Exception e) {
+      LOGGER.error("XA BEGIN FAILED! {}", e.getMessage(), e);
+      throw new DaoException("XA BEGIN FAILED!", e);
+    }
   }
 
-  protected void rollbackTransaction() throws SystemException, HeuristicRollbackException,
-      HeuristicMixedException, RollbackException {
+  /**
+   * Roll back XA transaction.
+   */
+  protected void rollbackTransaction() {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
 
-    txn.rollback();
+    try {
+      txn.rollback();
+    } catch (Exception e) {
+      LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
+      throw new DaoException("XA ROLLBACK FAILED!", e);
+    }
   }
 
   /**
    * Commit XA transaction.
-   * 
-   * @throws SystemException internal error
-   * @throws HeuristicRollbackException internal error
-   * @throws HeuristicMixedException internal error
-   * @throws RollbackException internal error
    */
-  protected void commitTransaction() throws SystemException, HeuristicRollbackException,
-      HeuristicMixedException, RollbackException {
+  protected void commitTransaction() {
     if (!xaUnitOfWork.transactional()) {
       return;
     }
 
-    txn.commit();
+    try {
+      txn.commit();
+    } catch (Exception e) {
+      LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
+      throw new DaoException("XA COMMIT FAILED!", e);
+    }
   }
 
   public ImmutableMap<String, SessionFactory> getSessionFactories() {
