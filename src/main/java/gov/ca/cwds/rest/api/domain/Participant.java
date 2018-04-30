@@ -142,7 +142,7 @@ public class Participant extends ReportingDomain implements Request, Response {
   private long screeningId;
 
   @JsonProperty("approximate_age")
-  @Size(max = 2)
+  @Size(max = 3)
   @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age", example = "12")
   private String approximateAge;
 
