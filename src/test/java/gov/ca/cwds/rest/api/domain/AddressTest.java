@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.LegacyDescriptorEntityBuilder;
 import io.dropwizard.jackson.Jackson;
 
@@ -64,7 +65,6 @@ public class AddressTest {
   public void serializesToJSON() throws Exception {
     String expected = MAPPER.writeValueAsString(
         new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor));
-
     String serialized = MAPPER.writeValueAsString(MAPPER.readValue(
         fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class));
 
@@ -75,7 +75,6 @@ public class AddressTest {
   public void testDeserializesFromJSON() throws Exception {
     Address expected =
         new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
-
     Address serialized = MAPPER.readValue(
         fixture("fixtures/domain/address/valid/validLegacyDescriptorAddress.json"), Address.class);
     assertThat(serialized, is(expected));
@@ -89,7 +88,7 @@ public class AddressTest {
 
   @Test
   public void persistentObjectConstructorTest() throws Exception {
-    Address domain = this.validAddress();
+    Address domain = new AddressResourceBuilder().createAddress();
 
     gov.ca.cwds.data.persistence.ns.Address persistent =
         new gov.ca.cwds.data.persistence.ns.Address(domain, "12345", "12345");
@@ -119,8 +118,7 @@ public class AddressTest {
   @Test
   // R - 03232 Zip codes are five digits
   public void testZipCodeTooLongFail() throws Exception {
-    Address toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/address/invalid/zipTooLong.json"), Address.class);
+    Address toValidate = new AddressResourceBuilder().setZip("958333").createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     System.out.println(constraintViolations.iterator().next().getMessage());
     assertEquals(1, constraintViolations.size());
@@ -130,8 +128,7 @@ public class AddressTest {
 
   @Test
   public void testBlankLegacySourceTableSuccess() throws Exception {
-    Address toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/address/valid/blankLegacySourceTable.json"), Address.class);
+    Address toValidate = new AddressResourceBuilder().setLegacySourceTable("").createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
 
@@ -139,8 +136,7 @@ public class AddressTest {
 
   @Test
   public void testNullLegacySourceTableSuccess() throws Exception {
-    Address toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/address/valid/nullLegacySourceTable.json"), Address.class);
+    Address toValidate = new AddressResourceBuilder().setLegacySourceTable(null).createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
 
@@ -156,8 +152,7 @@ public class AddressTest {
 
   @Test
   public void testBlankLegacyIdSuccess() throws Exception {
-    Address toValidate = MAPPER
-        .readValue(fixture("fixtures/domain/address/valid/blankLegacyId.json"), Address.class);
+    Address toValidate = new AddressResourceBuilder().setLegacyId("").createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -165,8 +160,7 @@ public class AddressTest {
 
   @Test
   public void testNullLegacyIdSuccess() throws Exception {
-    Address toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/address/valid/nullLegacyId.json"), Address.class);
+    Address toValidate = new AddressResourceBuilder().setLegacyId(null).createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -181,8 +175,7 @@ public class AddressTest {
 
   @Test
   public void testLegacyIdTooLongFail() throws Exception {
-    Address toValidate = MAPPER
-        .readValue(fixture("fixtures/domain/address/invalid/legacyIdTooLong.json"), Address.class);
+    Address toValidate = new AddressResourceBuilder().setLegacyId("A16H6gt06Bg").createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
     assertEquals("size must be between 0 and 10",
@@ -191,12 +184,13 @@ public class AddressTest {
 
   @Test
   public void testLegacyDescriptorSetter() throws Exception {
-    Address domain = new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
+    Address domain =
+        new Address("", "", "123 Main", "Sacramento", 1828, "95757", 32, legacyDescriptor);
     LegacyDescriptor newLegacyDescriptor = new LegacyDescriptorEntityBuilder().build();
     domain.setLegacyDescriptor(newLegacyDescriptor);
-    assertThat(domain.getLegacyDescriptor(), is(equalTo(newLegacyDescriptor)));	
+    assertThat(domain.getLegacyDescriptor(), is(equalTo(newLegacyDescriptor)));
   }
-  
+
   private Address validAddress() {
 
     try {

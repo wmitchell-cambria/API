@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.AllegationResourceBuilder;
 import io.dropwizard.jackson.Jackson;
 
 /**
@@ -79,9 +80,6 @@ public class AllegationTest {
 
   @Test
   public void equalsHashCodeWork() throws Exception {
-    // EqualsVerifier.forClass(Allegation.class).suppress(Warning.NONFINAL_FIELDS,
-    // Warning.NULL_FIELDS)
-    // .verify();
     Allegation domain = new Allegation(legacySourceTable, legacyId, victimPersonId,
         perpetratorPersonId, type, county);
     assertThat(domain.hashCode(), is(not(0)));
@@ -102,8 +100,8 @@ public class AllegationTest {
 
   @Test
   public void testBlankLegacySourceTableSuccess() throws Exception {
-    Allegation toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/Allegation/valid/blankLegacySourceTable.json"), Allegation.class);
+    Allegation toValidate =
+        new AllegationResourceBuilder().setLegacySourceTable("").createAllegation();
 
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -111,15 +109,10 @@ public class AllegationTest {
 
   @Test
   public void testNullLegacySourceTableSuccess() throws Exception {
-    Allegation toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/Allegation/valid/nullLegacySourceTable.json"), Allegation.class);
-
+    Allegation toValidate =
+        new AllegationResourceBuilder().setLegacySourceTable(null).createAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
-    // System.out.println(constraintViolations.iterator().next().getMessage());
     assertEquals(0, constraintViolations.size());
-    // assertEquals(
-    // "may not be null",
-    // constraintViolations.iterator().next().getMessage()
   }
 
   @Test
@@ -133,16 +126,16 @@ public class AllegationTest {
 
   @Test
   public void testBlankLegacyIdSuccess() throws Exception {
-    Allegation toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/Allegation/valid/blankLegacyId.json"), Allegation.class);
+    Allegation toValidate =
+        new AllegationResourceBuilder().setLegacySourceTable("").createAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
 
   @Test
   public void testNullLegacyIdFail() throws Exception {
-    Allegation toValidate = MAPPER
-        .readValue(fixture("fixtures/domain/Allegation/valid/nullLegacyId.json"), Allegation.class);
+    Allegation toValidate =
+        new AllegationResourceBuilder().setLegacySourceTable(null).createAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
 
@@ -158,13 +151,12 @@ public class AllegationTest {
 
   @Test
   public void testLegacyIdTooLongFail() throws Exception {
-    Allegation toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/Allegation/invalid/legacyIdTooLong.json"), Allegation.class);
+    Allegation toValidate =
+        new AllegationResourceBuilder().setLegacyId("09OkH321LKh").createAllegation();
     Set<ConstraintViolation<Allegation>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
     assertEquals("size must be between 0 and 10",
         constraintViolations.iterator().next().getMessage());
-    // System.out.println(constraintViolations.iterator().next().getMessage());
   }
 
   @SuppressWarnings("unused")
@@ -185,5 +177,3 @@ public class AllegationTest {
   }
 
 }
-
-
