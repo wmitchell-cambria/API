@@ -221,9 +221,9 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithNullAllegationsFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/nullAllegations.json"),
-        ScreeningToReferral.class);
+    Set<Allegation> allegatiopns = null;
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegatiopns).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
@@ -232,9 +232,9 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithEmptyAllegationsFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/emptyAllegations.json"),
-        ScreeningToReferral.class);
+    Set<Allegation> allegatiopns = new HashSet<>();
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegatiopns).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());

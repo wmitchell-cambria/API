@@ -44,12 +44,13 @@
 	  "sex_at_birth": "M",
 	  "date_of_birth": "2001-03-15",
 	  "ssn": "123456789",
-    "primary_language": 1253,
-    "secondary_language": 1271,
-    "reporter_employer_name": "employerName",
-    "reporter_confidential_waiver" : true,
-	  "person_id": 12345,
+      "primary_language": 1253,
+      "secondary_language": 1271,
+      "reporter_employer_name": "employerName",
+      "reporter_confidential_waiver" : true,
 	  "screening_id": 12345,
+	  "approximate_age": "12",
+      "approximate_age_units": "Y",
 	  "roles" : [
 	  	"Victim"
 	  	],
@@ -77,7 +78,6 @@
     "secondary_language": 1271,
     "reporter_employer_name": "employerName",
     "reporter_confidential_waiver" : true,
-    "person_id":"",
     "roles":[
        "Mandated Reporter"
     ],
@@ -107,7 +107,8 @@
       "secondary_language": 1271,
       "reporter_employer_name": "employerName",
       "reporter_confidential_waiver" : true,
-      "person_id":"",
+      "approximate_age": "12",
+      "approximate_age_units": "Y",
       "roles":[
          "Perpetrator"
        ],
