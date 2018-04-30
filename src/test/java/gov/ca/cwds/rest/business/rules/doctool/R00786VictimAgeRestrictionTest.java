@@ -37,6 +37,9 @@ public class R00786VictimAgeRestrictionTest {
 
   private Validator validator;
 
+  /**
+   * 
+   */
   @Before
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -122,6 +125,98 @@ public class R00786VictimAgeRestrictionTest {
   }
 
   /**
+   * 
+   */
+  @Test
+  public void testForVictimAgeIsAbove18Years() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("19").setApproximateAgeUnits("Y").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(1, constraintViolations.size());
+    assertEquals("Victim's age must be less than 18 years",
+        constraintViolations.iterator().next().getMessage());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForValidatingAgeWithMonths() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("228").setApproximateAgeUnits("M").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(1, constraintViolations.size());
+    assertEquals("Victim's age must be less than 18 years",
+        constraintViolations.iterator().next().getMessage());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForValidatingAgeWithWeeks() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("228").setApproximateAgeUnits("W").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForValidatinAgeWithDays() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("228").setApproximateAgeUnits("D").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testReturnFalseWhenDobAndAgeIsNull() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge(null).setApproximateAgeUnits(null).createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  private Set<Participant> buildPerpAndReporter(Participant victim) {
+    Participant Perp = new ParticipantResourceBuilder().setGender("M").createParticipant();
+    Participant reporter =
+        new ParticipantResourceBuilder().setGender("M").createReporterParticipant();
+    Set<Participant> participants = new HashSet<>(Arrays.asList(victim, Perp, reporter));
+    return participants;
+  }
+
+  /**
    * Create ScreeningToReferral for test and validate it for give victim age.
    * 
    * @param victimAgeYears
@@ -140,12 +235,12 @@ public class R00786VictimAgeRestrictionTest {
 
     String victimDob = DomainChef.cookDate(screeningStartedAtDateTime.minusYears(victimAgeYears)
         .minusDays(overAgeDays).plusDays(underAgeDays).toDate());
-    Participant victim = new ParticipantResourceBuilder().setSexAtBirth("M")
-        .setDateOfBirth(victimDob).createVictimParticipant();
+    Participant victim = new ParticipantResourceBuilder().setGender("M").setDateOfBirth(victimDob)
+        .createVictimParticipant();
 
-    Participant perp = new ParticipantResourceBuilder().setSexAtBirth("F").createPerpParticipant();
+    Participant perp = new ParticipantResourceBuilder().setGender("F").createPerpParticipant();
     Participant reporter =
-        new ParticipantResourceBuilder().setSexAtBirth("M").createReporterParticipant();
+        new ParticipantResourceBuilder().setGender("M").createReporterParticipant();
 
     Set<Participant> participants = new HashSet<>(Arrays.asList(victim, perp, reporter));
     builder.setParticipants(participants);
