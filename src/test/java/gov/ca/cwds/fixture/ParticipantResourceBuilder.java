@@ -25,7 +25,7 @@ public class ParticipantResourceBuilder {
   String middleName = "S";
   String lastName = "Smith";
   String suffix = "Jr.";
-  String sexAtBirth = "M";
+  String gender = "M";
   String dateOfBirth = "2001-03-15";
   String ssn = "123456789";
   Short primaryLanguage = 1271;
@@ -113,11 +113,11 @@ public class ParticipantResourceBuilder {
   }
 
   /**
-   * @param sexAtBirth - sexAtBirth
-   * @return the sexAtBirth
+   * @param gender - gender
+   * @return the gender
    */
-  public ParticipantResourceBuilder setSexAtBirth(String sexAtBirth) {
-    this.sexAtBirth = sexAtBirth;
+  public ParticipantResourceBuilder setGender(String gender) {
+    this.gender = gender;
     return this;
   }
 
@@ -305,8 +305,8 @@ public class ParticipantResourceBuilder {
    */
   public Participant createParticipant() {
     return new Participant(id, legacySourceTable, legacyId, legacyDescriptor, firstName, middleName,
-        lastName, suffix, sexAtBirth, ssn, dateOfBirth, primaryLanguage, secondaryLanguage,
-        screeningId, reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
+        lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage, secondaryLanguage, screeningId,
+        reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
         sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
         raceAndEthnicity);
   }

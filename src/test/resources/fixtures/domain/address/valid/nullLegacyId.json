@@ -1,9 +1,0 @@
-{
-  "legacy_source_table" : "CLIENT_T",
-  "legacy_id" : null,
-  "street_address": "123 Main",
-  "city": "Sacramento",
-  "state": 1828,
-  "zip": 95757,
-  "type": 32
-}
