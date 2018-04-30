@@ -14,6 +14,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.common.collect.ImmutableMap;
@@ -24,6 +26,8 @@ import com.google.common.collect.ImmutableMap;
  * @author CWDS API Team
  */
 public class XAUnitOfWorkAspect {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAspect.class);
 
   private XAUnitOfWork xaUnitOfWork;
 
@@ -112,6 +116,7 @@ public class XAUnitOfWorkAspect {
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
+      LOGGER.warn("No current session. Open a new one.", e.getCause());
       session = sessionFactory.openSession();
     }
 
@@ -187,8 +192,6 @@ public class XAUnitOfWorkAspect {
    * @throws SystemException internal error
    * @throws HeuristicRollbackException internal error
    * @throws HeuristicMixedException internal error
-   * @throws SecurityException internal error
-   * @throws IllegalStateException internal error
    * @throws RollbackException internal error
    */
   protected void commitTransaction() throws SystemException, HeuristicRollbackException,
