@@ -117,50 +117,45 @@ public class AddressService implements CrudsService {
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
 
-    try {
-      // ==================
-      // PostgreSQL:
-      // ==================
+    // ==================
+    // PostgreSQL:
+    // ==================
 
-      // Proof of concept only. Don't bother parsing raw street addresses.
-      final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
-      nsAddr.setZip(reqAddr.getZip());
-      nsAddr.setCity(reqAddr.getCity());
-      nsAddr.setLegacyId(reqAddr.getLegacyId());
+    // Proof of concept only. Don't bother parsing raw street addresses.
+    final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
+    nsAddr.setZip(reqAddr.getZip());
+    nsAddr.setCity(reqAddr.getCity());
+    nsAddr.setLegacyId(reqAddr.getLegacyId());
 
-      if (StringUtils.isNotEmpty(reqAddr.getLegacySourceTable())) {
-        nsAddr.setLegacySourceTable(reqAddr.getLegacySourceTable().trim().toUpperCase());
-      } else {
-        nsAddr.setLegacySourceTable("ADDRS_T");
-      }
-
-      final gov.ca.cwds.data.persistence.ns.Addresses ret = xaNsAddressDao.update(nsAddr);
-
-      // ==================
-      // DB2:
-      // ==================
-
-      final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
-          xaCmsAddressDao.find(nsAddr.getLegacyId());
-      cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
-      cmsAddr.setCity(reqAddr.getCity());
-      cmsAddr.setZip(reqAddr.getZip());
-      cmsAddr.setLastUpdatedId(staffId);
-      cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
-      xaCmsAddressDao.update(cmsAddr);
-
-      ret.setLegacyId(reqAddr.getLegacyId());
-      ret.setLegacySourceTable(reqAddr.getLegacySourceTable());
-
-      // Return results.
-      final PostedAddress result = new PostedAddress(ret);
-      result.setLegacyDescriptor(reqAddr.getLegacyDescriptor());
-      result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
-      return result;
-    } catch (Exception e) {
-      LOGGER.error("XA TRANSACTION ERROR!", e);
-      throw new ServiceException("XA TRANSACTION ERROR!", e);
+    if (StringUtils.isNotEmpty(reqAddr.getLegacySourceTable())) {
+      nsAddr.setLegacySourceTable(reqAddr.getLegacySourceTable().trim().toUpperCase());
+    } else {
+      nsAddr.setLegacySourceTable("ADDRS_T");
     }
+
+    final gov.ca.cwds.data.persistence.ns.Addresses ret = xaNsAddressDao.update(nsAddr);
+
+    // ==================
+    // DB2:
+    // ==================
+
+    final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
+        xaCmsAddressDao.find(nsAddr.getLegacyId());
+    cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
+    cmsAddr.setCity(reqAddr.getCity());
+    cmsAddr.setZip(reqAddr.getZip());
+    cmsAddr.setLastUpdatedId(staffId);
+    cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
+    xaCmsAddressDao.update(cmsAddr);
+
+    ret.setLegacyId(reqAddr.getLegacyId());
+    ret.setLegacySourceTable(reqAddr.getLegacySourceTable());
+
+    // Return results.
+    final PostedAddress result = new PostedAddress(ret);
+    result.setLegacyDescriptor(reqAddr.getLegacyDescriptor());
+    result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
+    return result;
   }
 
 }

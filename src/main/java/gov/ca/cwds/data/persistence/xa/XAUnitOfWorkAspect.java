@@ -119,9 +119,8 @@ public class XAUnitOfWorkAspect {
 
     // Add user info to DB2 connections.
     session.doWork(new WorkDB2UserInfo());
-
-    sessions.add(session);
     configureSession(session);
+    sessions.add(session);
     return session;
   }
 
@@ -129,6 +128,7 @@ public class XAUnitOfWorkAspect {
    * Open sessions for selected datasources.
    */
   protected void openSessions() {
+    LOGGER.info("XA OPEN SESSIONS!");
     final String[] sources = xaUnitOfWork.value();
     if (sources != null && sources.length > 0) {
       sessionFactories.values().stream().filter(e -> ArrayUtils.contains(sources, e))
@@ -142,6 +142,7 @@ public class XAUnitOfWorkAspect {
    * Close all sessions.
    */
   protected void closeSessions() {
+    LOGGER.info("XA CLOSE SESSIONS!");
     sessions.stream().forEach(this::closeSession);
   }
 
@@ -173,6 +174,7 @@ public class XAUnitOfWorkAspect {
     }
 
     try {
+      LOGGER.info("XA BEGIN TRANSACTION!");
       txn.setTransactionTimeout(80);
       txn.begin();
     } catch (Exception e) {
@@ -192,6 +194,7 @@ public class XAUnitOfWorkAspect {
     }
 
     try {
+      LOGGER.info("XA ROLLBACK!");
       txn.rollback();
     } catch (Exception e) {
       LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
@@ -208,6 +211,7 @@ public class XAUnitOfWorkAspect {
     }
 
     try {
+      LOGGER.info("XA COMMIT!");
       txn.commit();
     } catch (Exception e) {
       LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
