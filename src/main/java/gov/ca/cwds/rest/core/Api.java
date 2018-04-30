@@ -29,11 +29,6 @@ public final class Api {
   public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_LEGACY_CLIENT} API..
-   */
-  public static final String RESOURCE_LEGACY_CLIENT = "_clients";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} API..
    */
   public static final String RESOURCE_CLIENT = "clients";
