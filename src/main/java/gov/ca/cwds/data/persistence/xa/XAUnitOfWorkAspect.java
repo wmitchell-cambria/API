@@ -48,10 +48,12 @@ public class XAUnitOfWorkAspect {
    */
   public void beforeStart(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
     if (xaUnitOfWork == null) {
+      LOGGER.error("XA beforeStart(): no annotation");
       return;
     }
     this.xaUnitOfWork = xaUnitOfWork;
 
+    LOGGER.error("XA beforeStart(): open sessions");
     openSessions();
     beginTransaction();
   }
@@ -66,10 +68,12 @@ public class XAUnitOfWorkAspect {
    */
   public void afterEnd() throws CaresXAException {
     if (sessions.isEmpty()) {
+      LOGGER.error("XA afterEnd(): no sessions");
       return;
     }
 
     try {
+      LOGGER.error("XA afterEnd(): commit");
       commitTransaction();
     } catch (Exception e) {
       rollbackTransaction();
@@ -84,9 +88,11 @@ public class XAUnitOfWorkAspect {
    */
   public void onError() throws CaresXAException {
     if (sessions.isEmpty()) {
+      LOGGER.error("XA onError(): no sessions");
       return;
     }
 
+    LOGGER.error("XA onError(): rollback");
     try {
       rollbackTransaction();
     } finally {
@@ -109,6 +115,7 @@ public class XAUnitOfWorkAspect {
    * @return session current session for this datasource
    */
   protected Session grabSession(SessionFactory sessionFactory) {
+    LOGGER.error("XA grabSession()!");
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
@@ -128,12 +135,14 @@ public class XAUnitOfWorkAspect {
    * Open sessions for selected datasources.
    */
   protected void openSessions() {
-    LOGGER.info("XA OPEN SESSIONS!");
+    LOGGER.info("XA OPEN SESSIONS.");
     final String[] sources = xaUnitOfWork.value();
     if (sources != null && sources.length > 0) {
+      LOGGER.info("XA OPEN SESSIONS: named XA sources");
       sessionFactories.values().stream().filter(e -> ArrayUtils.contains(sources, e))
           .forEach(this::grabSession);
     } else {
+      LOGGER.info("XA OPEN SESSIONS: all XA sources");
       sessionFactories.values().stream().forEach(this::grabSession);
     }
   }
@@ -190,6 +199,7 @@ public class XAUnitOfWorkAspect {
    */
   protected void rollbackTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
+      LOGGER.info("XA ROLLBACK: not transactional");
       return;
     }
 
