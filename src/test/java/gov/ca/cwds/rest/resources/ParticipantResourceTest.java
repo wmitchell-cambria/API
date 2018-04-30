@@ -39,14 +39,16 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 @SuppressWarnings("javadoc")
 public class ParticipantResourceTest {
 
-  private static final String ROOT_RESOURCE = "/"+RESOURCE_PARTICIPANTS+"/";
-  private static final String FOUND_RESOURCE = "/"+RESOURCE_PARTICIPANTS+"/1";
+  private static final String ROOT_RESOURCE = "/" + RESOURCE_PARTICIPANTS + "/";
+  private static final String FOUND_RESOURCE = "/" + RESOURCE_PARTICIPANTS + "/1";
   private final Short primaryLanguage = 1253;
   private final Short secondaryLanguage = 1271;
   private boolean reporterConfidentialWaiver = true;
   private String reporterEmployerName = "Employer Name";
   private boolean clientStaffPersonAdded = true;
   private String sensitivityIndicator = "R";
+  private String approximateAge = "12";
+  private String approximateAgeUnits = "Y";
   private Set<String> roles = new HashSet<>();
   private Set<Address> addresses = new HashSet<>();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
@@ -107,9 +109,10 @@ public class ParticipantResourceTest {
         new Address("", "", "123 First St", "San Jose", 1828, "94321", 32, legacyDescriptor);
     addresses.add(address);
     Participant participant = new Participant(1, "", "", new LegacyDescriptor(), "Marge", "J",
-        "Simpson", "F", "", "11122333", "11-01-2017", primaryLanguage, secondaryLanguage, 123, 456,
+        "Simpson", "F", "", "11122333", "11-01-2017", primaryLanguage, secondaryLanguage, 456,
         reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
-        sensitivityIndicator, roles, addresses, raceAndEthnicity);
+        sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
+        raceAndEthnicity);
 
     int status =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -131,9 +134,10 @@ public class ParticipantResourceTest {
         new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");
 
     Participant participant = new Participant(1, "", "", new LegacyDescriptor(), "Marge", "J",
-        "Simpson", "", "F", "111223333", "2017-01-23", primaryLanguage, secondaryLanguage, 123, 456,
+        "Simpson", "", "F", "111223333", "2017-01-23", primaryLanguage, secondaryLanguage, 456,
         reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
-        sensitivityIndicator, roles, addresses, raceAndEthnicity);
+        sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
+        raceAndEthnicity);
 
     int status =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
@@ -158,9 +162,10 @@ public class ParticipantResourceTest {
         new Address("", "", "123 First St", "San Jose", 1828, "94321", 32, legacyDescriptor);
     addresses.add(address);
     Participant participant = new Participant(1, "", "", new LegacyDescriptor(), "Marge", "J",
-        "Simpson", "", "Female", "111223333", "2017-01-11", primaryLanguage, secondaryLanguage, 123,
-        456, reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
-        sensitivityIndicator, roles, addresses, raceAndEthnicity);
+        "Simpson", "", "Female", "111223333", "2017-01-11", primaryLanguage, secondaryLanguage, 456,
+        reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
+        sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
+        raceAndEthnicity);
 
     int receivedStatus =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)

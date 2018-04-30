@@ -20,7 +20,6 @@ public class ParticipantResourceBuilder {
   String legacySourceTable = "";
   String legacyId = "";
   LegacyDescriptor legacyDescriptor = null;
-  long personId = 12345;
   long screeningId = 12345;
   String firstName = "John";
   String middleName = "S";
@@ -35,6 +34,8 @@ public class ParticipantResourceBuilder {
   String reporterEmployerName = "Employer Name";
   String sensitivityIndicator = "N";
   boolean clientStaffPersonAdded = false;
+  String approximateAge = "12";
+  String approximateAgeUnits = "Y";
   Set<String> roles;
   Set<gov.ca.cwds.rest.api.domain.Address> addresses;
   RaceAndEthnicity raceAndEthnicity;
@@ -76,15 +77,6 @@ public class ParticipantResourceBuilder {
   }
 
   /**
-   * @param personId person id
-   * @return the ParticipantResourceBuilder
-   */
-  public ParticipantResourceBuilder setPersonId(long personId) {
-    this.personId = personId;
-    return this;
-  }
-
-  /**
    * @param screeningId - screeningId
    * @return the ParticipantResourceBuilder
    */
@@ -122,7 +114,7 @@ public class ParticipantResourceBuilder {
 
   /**
    * @param sexAtBirth - sexAtBirth
-   * @return the ParticipantResourceBuilder
+   * @return the sexAtBirth
    */
   public ParticipantResourceBuilder setSexAtBirth(String sexAtBirth) {
     this.sexAtBirth = sexAtBirth;
@@ -211,6 +203,23 @@ public class ParticipantResourceBuilder {
     return this;
   }
 
+  /**
+   * @param approximateAge - approximateAge
+   * @return the approximateAge
+   */
+  public ParticipantResourceBuilder setApproximateAge(String approximateAge) {
+    this.approximateAge = approximateAge;
+    return this;
+  }
+
+  /**
+   * @param approximateAgeUnits
+   * @return the approximateAge
+   */
+  public ParticipantResourceBuilder setApproximateAgeUnits(String approximateAgeUnits) {
+    this.approximateAgeUnits = approximateAgeUnits;
+    return this;
+  }
 
   /**
    * @param roles - roles
@@ -231,7 +240,9 @@ public class ParticipantResourceBuilder {
     return this;
   }
 
-
+  /**
+   * 
+   */
   public ParticipantResourceBuilder() {
     this.roles = new HashSet<>(Arrays.asList("Victim"));
     List<Short> racecodes = new ArrayList<>();
@@ -245,7 +256,6 @@ public class ParticipantResourceBuilder {
     gov.ca.cwds.rest.api.domain.Address address = new AddressResourceBuilder()
         .setStreetAddress("123 First St").setCity("San Jose").setZip("94321").createAddress();
     this.addresses = new HashSet<>(Arrays.asList(address));
-
   }
 
   /**
@@ -296,7 +306,8 @@ public class ParticipantResourceBuilder {
   public Participant createParticipant() {
     return new Participant(id, legacySourceTable, legacyId, legacyDescriptor, firstName, middleName,
         lastName, suffix, sexAtBirth, ssn, dateOfBirth, primaryLanguage, secondaryLanguage,
-        personId, screeningId, reporterConfidentialWaiver, reporterEmployerName,
-        clientStaffPersonAdded, sensitivityIndicator, roles, addresses, raceAndEthnicity);
+        screeningId, reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
+        sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
+        raceAndEthnicity);
   }
 }

@@ -6,8 +6,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +29,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -232,12 +233,14 @@ public class ReporterTest {
     String lastName = "lastName";
     String employerName = "Employer Name";
     boolean confidentialityWaver = true;
+    String approximateAge = "12";
+    String approximateAgeUnits = "Y";
     String suffix = "";
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), firstName, middleName, lastName, suffix, "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, approximateAge,
+        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     String countyCode = "countyCode";
     Short stateCode = new Short("0");
@@ -300,11 +303,13 @@ public class ReporterTest {
     String middleName = "middleName";
     String lastName = "lastName";
     String suffix = "jr";
+    String approximateAge = "12";
+    String approximateAgeUnits = "Y";
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), firstName, middleName, lastName, "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, approximateAge,
+        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     String countyCode = "countyCode";
     Short stateCode = new Short("0");
@@ -353,9 +358,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -377,9 +382,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -400,9 +405,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -424,9 +429,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");

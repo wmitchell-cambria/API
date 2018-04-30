@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -140,6 +141,17 @@ public class Participant extends ReportingDomain implements Request, Response {
   @ApiModelProperty(required = false, readOnly = false, value = "Screening Id", example = "12345")
   private long screeningId;
 
+  @JsonProperty("approximate_age")
+  @Size(max = 3)
+  @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age", example = "12")
+  private String approximateAge;
+
+  @OneOf(value = {"Y", "M", "W", "D"}, ignoreCase = true, ignoreWhitespace = true)
+  @JsonProperty("approximate_age_units")
+  @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age Units",
+      example = "years")
+  private String approximateAgeUnits;
+
   @Valid
   @JsonProperty("roles")
   @ApiModelProperty(required = true, readOnly = false, value = "Role of participant",
@@ -179,7 +191,6 @@ public class Participant extends ReportingDomain implements Request, Response {
    * @param legacySourceTable - legacy source table name
    * @param clientId - the legacy clientId
    * @param legacyDescriptor legacy descriptor
-   * @param personId The person Id
    * @param screeningId The screening Id
    * @param firstName The first Name
    * @param middleName The middle Name
@@ -194,6 +205,8 @@ public class Participant extends ReportingDomain implements Request, Response {
    * @param reporterEmployerName Reporter Employer Name
    * @param clientStaffPersonAdded Client Staff person Added indicator
    * @param sensitivityIndicator Sensitivity Indicator
+   * @param approximateAge Approximate Age
+   * @param approximateAgeUnits Approximate Age Units
    * @param roles The roles of the participant
    * @param addresses The addresses of the participant
    * @param raceAndEthnicity The race And Ethnicity
@@ -210,11 +223,13 @@ public class Participant extends ReportingDomain implements Request, Response {
       @JsonProperty("date_of_birth") String dateOfBirth,
       @JsonProperty("primary_language") Short primaryLanguage,
       @JsonProperty("secondary_language") Short secondaryLanguage,
-      @JsonProperty("person_id") long personId, @JsonProperty("screening_id") long screeningId,
+      @JsonProperty("screening_id") long screeningId,
       @JsonProperty("reporter_confidential_waiver") boolean reporterConfidentialWaiver,
       @JsonProperty("reporter_employer_name") String reporterEmployerName,
       @JsonProperty("client_staff_person_added") boolean clientStaffPersonAdded,
       @JsonProperty("limited_access_code") String sensitivityIndicator,
+      @JsonProperty("approximate_age") String approximateAge,
+      @JsonProperty("approximate_age_units") String approximateAgeUnits,
       @JsonProperty("roles") Set<String> roles, @JsonProperty("addresses") Set<Address> addresses,
       @JsonProperty("race_ethnicity") RaceAndEthnicity raceAndEthnicity) {
     super();
@@ -234,6 +249,8 @@ public class Participant extends ReportingDomain implements Request, Response {
     this.ssn = ssn;
     this.primaryLanguage = primaryLanguage;
     this.secondaryLanguage = secondaryLanguage;
+    this.approximateAge = StringUtils.isNotBlank(approximateAge) ? approximateAge : "0";
+    this.approximateAgeUnits = approximateAgeUnits;
     this.roles = roles;
     this.addresses = addresses;
     this.clientStaffPersonAdded = clientStaffPersonAdded;
@@ -405,6 +422,20 @@ public class Participant extends ReportingDomain implements Request, Response {
    */
   public String getSensitivityIndicator() {
     return sensitivityIndicator;
+  }
+
+  /**
+   * @return the approximateAge
+   */
+  public String getApproximateAge() {
+    return approximateAge;
+  }
+
+  /**
+   * @return the approximateAgeUnits
+   */
+  public String getApproximateAgeUnits() {
+    return approximateAgeUnits;
   }
 
   /**
