@@ -87,7 +87,7 @@ public class HOIScreeningService
      */
     Set<ScreeningEntity> screeningEntities = screeningDao
         .findScreeningsByClientIds(hsd.getClientIds());
-    hsd.setScreeningEntities(screeningEntities);
+    hsd.getScreeningEntities().addAll(screeningEntities);
 
     Map<String, Set<ParticipantEntity>> participantEntitiesMap = participantDao.findByScreeningIds(
         screeningEntities.stream().map(ScreeningEntity::getId).collect(Collectors.toSet()));
