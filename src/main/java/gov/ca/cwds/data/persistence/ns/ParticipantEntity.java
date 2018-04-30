@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID;
+import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_PARTICIPANTS_BY_SCREENING_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Arrays;
@@ -36,12 +37,16 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 @SuppressWarnings("serial")
 @NamedQuery(name = FIND_LEGACY_ID_LIST_BY_SCREENING_ID,
     query = "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
+@NamedQuery(name = FIND_PARTICIPANTS_BY_SCREENING_IDS,
+    query = "FROM ParticipantEntity WHERE screeningId IN (:screeningIds)")
 @Entity
 @Table(name = "participants")
 public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String> {
 
   public static final String FIND_LEGACY_ID_LIST_BY_SCREENING_ID =
       "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId";
+  public static final String FIND_PARTICIPANTS_BY_SCREENING_IDS =
+      "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findByScreeningIds";
 
   @Id
   @Column(name = "id")
