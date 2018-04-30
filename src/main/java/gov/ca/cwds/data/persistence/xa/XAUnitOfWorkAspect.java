@@ -52,7 +52,6 @@ public class XAUnitOfWorkAspect {
     }
     this.xaUnitOfWork = xaUnitOfWork;
 
-    LOGGER.info("XA beforeStart(): open sessions");
     openSessions();
     beginTransaction();
   }
@@ -67,7 +66,7 @@ public class XAUnitOfWorkAspect {
    */
   public void afterEnd() throws CaresXAException {
     if (sessions.isEmpty()) {
-      LOGGER.error("XA afterEnd(): no sessions");
+      LOGGER.warn("XA afterEnd(): no sessions");
       return;
     }
 
@@ -87,7 +86,7 @@ public class XAUnitOfWorkAspect {
    */
   public void onError() throws CaresXAException {
     if (sessions.isEmpty()) {
-      LOGGER.error("XA onError(): no sessions");
+      LOGGER.warn("XA onError(): no sessions");
       return;
     }
 
@@ -114,12 +113,12 @@ public class XAUnitOfWorkAspect {
    * @return session current session for this datasource
    */
   protected Session grabSession(SessionFactory sessionFactory) {
-    LOGGER.error("XA grabSession()!");
+    LOGGER.info("XA grabSession()!");
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
-      LOGGER.warn("No current session. Open a new one. {}", e.getCause(), e);
+      LOGGER.warn("No current session. Open a new one. {}", e.getCause());
       session = sessionFactory.openSession();
     }
 
