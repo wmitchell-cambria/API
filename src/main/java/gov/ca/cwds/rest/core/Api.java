@@ -65,11 +65,6 @@ public final class Api {
   public static final String RESOURCE_CMS_UI_IDENTIFIER = "cms_ui_id";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_CROSS_REPORT} API.
-   */
-  public static final String RESOURCE_CROSS_REPORT = "_crossReports";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_DELIVERY_SERVICE} API.
    */
   public static final String RESOURCE_DELIVERY_SERVICE = "contacts";

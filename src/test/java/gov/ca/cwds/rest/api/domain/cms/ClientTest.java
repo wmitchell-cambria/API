@@ -803,7 +803,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-      System.out.println(message.getMessage());
+//      System.out.println(message.getMessage());
       if (message.getMessage().equals("birthCountryCodeType may not be null")) {
         theErrorDetected = true;
       }
