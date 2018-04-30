@@ -127,8 +127,8 @@ public class ParticipantService implements CrudsService {
         continue;
       }
       String sexAtBirth = "";
-      if (!incomingParticipant.getSexAtBirth().isEmpty()) {
-        sexAtBirth = incomingParticipant.getSexAtBirth().toUpperCase().substring(0, 1);
+      if (!incomingParticipant.getGender().isEmpty()) {
+        sexAtBirth = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
       Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
       processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
@@ -307,7 +307,7 @@ public class ParticipantService implements CrudsService {
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
-          incomingParticipant.getSexAtBirth(), childClientIndicatorVar, primaryRaceCode,
+          incomingParticipant.getGender(), childClientIndicatorVar, primaryRaceCode,
           unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
