@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.common.collect.ImmutableMap;
 
-import gov.ca.cwds.data.DaoException;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * AOP aspect supports {@link XAUnitOfWork}.
@@ -62,7 +62,7 @@ public class XAUnitOfWorkAspect {
    * 
    * @throws Exception on database error
    */
-  public void afterEnd() throws Exception {
+  public void afterEnd() {
     if (sessions.isEmpty()) {
       return;
     }
@@ -79,7 +79,7 @@ public class XAUnitOfWorkAspect {
    * 
    * @throws Exception on database error
    */
-  public void onError() throws Exception {
+  public void onError() {
     if (sessions.isEmpty()) {
       return;
     }
@@ -96,7 +96,7 @@ public class XAUnitOfWorkAspect {
    * 
    * @throws Exception on database error
    */
-  public void onFinish() throws Exception {
+  public void onFinish() {
     txn = null;
     closeSessions();
   }
@@ -112,7 +112,7 @@ public class XAUnitOfWorkAspect {
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
-      LOGGER.warn("No current session. Open a new one.", e.getCause());
+      LOGGER.warn("No current session. Open a new one.", e.getCause(), e);
       session = sessionFactory.openSession();
     }
 
@@ -171,7 +171,7 @@ public class XAUnitOfWorkAspect {
       txn.begin();
     } catch (Exception e) {
       LOGGER.error("XA BEGIN FAILED! {}", e.getMessage(), e);
-      throw new DaoException("XA BEGIN FAILED!", e);
+      throw new ServiceException("XA BEGIN FAILED!", e);
     }
   }
 
@@ -187,7 +187,7 @@ public class XAUnitOfWorkAspect {
       txn.rollback();
     } catch (Exception e) {
       LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
-      throw new DaoException("XA ROLLBACK FAILED!", e);
+      throw new ServiceException("XA ROLLBACK FAILED!", e);
     }
   }
 
@@ -203,7 +203,7 @@ public class XAUnitOfWorkAspect {
       txn.commit();
     } catch (Exception e) {
       LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
-      throw new DaoException("XA COMMIT FAILED!", e);
+      throw new ServiceException("XA COMMIT FAILED!", e);
     }
   }
 

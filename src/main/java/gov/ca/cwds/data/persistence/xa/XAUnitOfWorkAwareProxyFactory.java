@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.inject.FerbHibernateBundle;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
@@ -43,8 +42,9 @@ public class XAUnitOfWorkAwareProxyFactory {
    * @param clazz the specified class definition
    * @param <T> the type of the class
    * @return a new proxy
+   * @throws CaresXAException on database error
    */
-  public <T> T create(Class<T> clazz) {
+  public <T> T create(Class<T> clazz) throws CaresXAException {
     return create(clazz, new Class<?>[] {}, new Object[] {});
   }
 
@@ -56,8 +56,10 @@ public class XAUnitOfWorkAwareProxyFactory {
    * @param constructorArguments the argument passed to the constructor
    * @param <T> the type of the class
    * @return a new proxy
+   * @throws CaresXAException on database error
    */
-  public <T> T create(Class<T> clazz, Class<?> constructorParamType, Object constructorArguments) {
+  public <T> T create(Class<T> clazz, Class<?> constructorParamType, Object constructorArguments)
+      throws CaresXAException {
     return create(clazz, new Class<?>[] {constructorParamType},
         new Object[] {constructorArguments});
   }
@@ -70,10 +72,11 @@ public class XAUnitOfWorkAwareProxyFactory {
    * @param constructorArguments the arguments passed to the constructor
    * @param <T> the type of the class
    * @return a new proxy
+   * @throws CaresXAException on database error
    */
   @SuppressWarnings({"unchecked", "squid:S1166"})
   public <T> T create(Class<T> clazz, Class<?>[] constructorParamTypes,
-      Object[] constructorArguments) {
+      Object[] constructorArguments) throws CaresXAException {
     final ProxyFactory factory = new ProxyFactory();
     factory.setSuperclass(clazz);
 
@@ -105,7 +108,7 @@ public class XAUnitOfWorkAwareProxyFactory {
       return (T) proxy;
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
         | InvocationTargetException e) {
-      throw new DaoException("Unable to create a proxy for the class '" + clazz + "'", e);
+      throw new CaresXAException("Unable to create a proxy for the class '" + clazz + "'", e);
     }
   }
 
