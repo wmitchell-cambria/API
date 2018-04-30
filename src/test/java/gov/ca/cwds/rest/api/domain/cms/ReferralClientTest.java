@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,8 +29,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.fixture.ReferralClientResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
@@ -184,9 +186,12 @@ public class ReferralClientTest {
     String countyCode = "countyCode";
     Short approvalCode = 1;
     String dispositionCode = "";
+    Short ageNumber = 12;
+    String agePeriodCode = "Y";
 
-    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported,
-        staffPersonAddedIndicator, dispositionCode, referralId, clientId, countyCode, approvalCode);
+    ReferralClient referralClient =
+        ReferralClient.createWithDefault(selfReported, staffPersonAddedIndicator, dispositionCode,
+            referralId, clientId, countyCode, approvalCode, ageNumber, agePeriodCode);
 
     assertEquals("Expected selfReported field to be initialized with values", selfReported,
         referralClient.getSelfReportedIndicator());
@@ -198,6 +203,10 @@ public class ReferralClientTest {
         referralClient.getCountySpecificCode());
     assertEquals("Expected approvalCode field to be initialized with values", approvalCode,
         referralClient.getApprovalStatusType());
+    assertEquals("Expected ageNumber field to be initialized with values", ageNumber,
+        referralClient.getAgeNumber());
+    assertEquals("Expected agePeriodCode field to be initialized with values", agePeriodCode,
+        referralClient.getAgePeriodCode());
   }
 
   @Test
@@ -207,6 +216,8 @@ public class ReferralClientTest {
     String clientId = "clientId";
     String countyCode = "countyCode";
     Short approvalCode = 1;
+    Short ageNumber = 12;
+    String agePeriodCode = "Y";
 
     String approvalNumber = "";
     Short dispositionClosureReasonType = 0;
@@ -214,14 +225,13 @@ public class ReferralClientTest {
     String dispositionDate = "";
     Boolean staffPersonAddedIndicator = false;
     String dispositionClosureDescription = "";
-    Short ageNumber = 0;
-    String agePeriodCode = "";
     Boolean mentalHealthIssuesIndicator = false;
     Boolean alcoholIndicator = false;
     Boolean drugIndicator = false;
 
-    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported,
-        staffPersonAddedIndicator, dispositionCode, referralId, clientId, countyCode, approvalCode);
+    ReferralClient referralClient =
+        ReferralClient.createWithDefault(selfReported, staffPersonAddedIndicator, dispositionCode,
+            referralId, clientId, countyCode, approvalCode, ageNumber, agePeriodCode);
 
     assertEquals("Expected approvalNumber field to be initialized with default values",
         approvalNumber, referralClient.getApprovalNumber());
@@ -237,10 +247,6 @@ public class ReferralClientTest {
     assertEquals(
         "Expected dispositionClosureDescription field to be initialized with default values",
         dispositionClosureDescription, referralClient.getDispositionClosureDescription());
-    assertEquals("Expected ageNumber field to be initialized with default values", ageNumber,
-        referralClient.getAgeNumber());
-    assertEquals("Expected agePeriodCode field to be initialized with default values",
-        agePeriodCode, referralClient.getAgePeriodCode());
     assertEquals("Expected mentalHealthIssuesIndicator field to be initialized with default values",
         mentalHealthIssuesIndicator, referralClient.getMentalHealthIssuesIndicator());
     assertEquals("Expected alcoholIndicator field to be initialized with default values",
@@ -881,29 +887,26 @@ public class ReferralClientTest {
    * agePeriodCode Tests
    */
   @Test
-  public void failsWhenAgePeriodCodeMissing() throws Exception {
+  public void shouldConvertMissingValuesToDefaultEmpty() throws Exception {
     ReferralClient toCreate = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/invalid/agePeriodCodeMissing.json"),
         ReferralClient.class);
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
+    assertEquals("", toCreate.getAgePeriodCode());
   }
 
   @Test
-  public void failsWhenAgePeriodCodeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/agePeriodCodeNull.json"),
-        ReferralClient.class);
+  public void shouldConvertNullValuesToDefaultEmpty() throws Exception {
+    ReferralClient toCreate =
+        new ReferralClientResourceBuilder().setAgePeriodCode(null).buildReferralClient();
     Response response =
         resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    assertThat(response.getStatus(), is(equalTo(204)));
+    assertEquals("", toCreate.getAgePeriodCode());
   }
 
   @Test
