@@ -79,8 +79,8 @@ rsDataSourceFactory:
 xaCmsDataSourceFactory:
   autoCommitByDefault: false
   driverClass: org.h2.Driver
-  user: ${DB_CMS_USER:-sa}
-  password: ${DB_CMS_PASSWORD:-}
+  user: sa
+  password:
   url: ${DB_CMS_JDBC_URL:-jdbc:h2:mem:cwsint;INIT=create schema if not exists cwsint\;set schema cwsint}
   xaDataSourceClassName: org.h2.jdbcx.JdbcDataSource
   validationQuery: "/* MyService Health Check */ SELECT 1"
@@ -94,18 +94,14 @@ xaCmsDataSourceFactory:
       hibernate.show_sql: false
       hibernate.default_schema: ${DB_CMS_SCHEMA:-cwsint}
       hibernate.connection.autocommit: false
-#      hibernate.current_session_context_class: jta
-#      hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
-#      hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
+      hibernate.current_session_context_class: jta
+      hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
+      hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
       hibernate.connection.release_mode: auto
       connection.release_mode: auto
-      # hibernate.connection.provider_disables_autocommit: true
-#  xaProperties:
-      # Properties for DB2XADataSource
-#      serverName: ${DB_CMS_HOST:-localhost}
-#      portNumber: ${DB_CMS_PORT:-50000}
-#      databaseName: ${DB_CMS_SERVICE:-DB0TDEV}
-#      driverType: 4 # Type4 connection for DB2 DataSource
+      hibernate.connection.provider_disables_autocommit: true
+  xaProperties:
+      url: ${DB_CMS_JDBC_URL:-jdbc:h2:mem:cwsint;INIT=create schema if not exists cwsint\;set schema cwsint}
 
 xaNsDataSourceFactory:
   driverClass: org.h2.Driver
@@ -126,17 +122,17 @@ xaNsDataSourceFactory:
       hibernate.default_schema: ${DB_NS_SCHEMA:-intakens}
       hibernate.connection.autocommit: false
       hibernate.current_session_context_class: jta
-#      hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
-#      hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
+      hibernate.transaction.jta.platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
+      hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
       hibernate.connection.release_mode: auto
       connection.release_mode: auto
-      hibernate.temp.use_jdbc_metadata_defaults: false
-      # hibernate.cache.use_second_level_cache: false
-      # hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
-      # hibernate.cache.use_query_cache: false
+      # hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+      hibernate.cache.use_query_cache: false
       # hibernate.connection.provider_disables_autocommit: true
-#  xaProperties:
-#      url: ${DB_NS_JDBC_URL}
+  xaProperties:
+      url: ${DB_NS_JDBC_URL:-jdbc:h2:mem:intakens;INIT=create schema if not exists intakens\;set schema intakens}
 
 elasticsearch:
   # People index

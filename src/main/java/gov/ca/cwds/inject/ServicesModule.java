@@ -249,7 +249,7 @@ public class ServicesModule extends AbstractModule {
       SystemMetaDao systemMetaDao) {
     LOGGER.debug("provide syscode service");
     final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
-    return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache, true);
+    return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache, false);
   }
 
   /**
