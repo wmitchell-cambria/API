@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +15,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
 
+import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
@@ -174,13 +174,9 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
     target.commitTransaction();
   }
 
-  @Test
+  @Test(expected = DaoException.class)
   public void commitTransaction_A$_T$Exception() throws Exception {
-    try {
-      target.commitTransaction();
-      fail("Expected exception was not thrown!");
-    } catch (IllegalStateException e) {
-    }
+    target.commitTransaction();
   }
 
   @Test
