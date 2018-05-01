@@ -52,7 +52,7 @@ public class AllegationEntity implements PersistentObject {
 
   @Column(name = "allegation_types")
   @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
-  private String[] allegationTypes = new String[0];
+  private String[] allegationTypes;
 
   @ManyToOne
   @JoinColumn(name = "screening_id", insertable = false, updatable = false)

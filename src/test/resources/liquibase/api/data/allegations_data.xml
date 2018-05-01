@@ -8,7 +8,7 @@
       <column name="victim_id" value="42"/>
       <column name="created_at" valueDate="2018-03-26 16:16:55.708901"/>
       <column name="updated_at" valueDate="2018-03-26 16:16:55.708901"/>
-      <column name="allegation_types" value="{&quot;Physical abuse&quot;}"/>
+      <column name="allegation_types" value="{&quot;Physical Abuse&quot;,&quot;General Neglect&quot;}"/>
     </insert>
   </changeSet>
 </databaseChangeLog>

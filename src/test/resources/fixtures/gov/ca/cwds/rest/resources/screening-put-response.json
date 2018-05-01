@@ -26,7 +26,7 @@
   "cross_reports": [
     {
       "id": "9",
-      "method": 2094,
+      "method": "Child Abuse Form",
       "legacy_source_table": "CRSS_RPT",
       "legacy_id": "9FVrmIT00c",
       "filed_out_of_state": false,
@@ -60,7 +60,10 @@
       "id": "32",
       "victim_person_id": 42,
       "perpetrator_person_id": 43,
-      "type": 5625
+      "types": [
+        "General Neglect",
+        "Physical Abuse"
+      ]
     }
   ],
   "participants": [

@@ -28,7 +28,7 @@
       "id": "9",
       "legacy_source_table": "CRSS_RPT",
       "legacy_id": "9FVrmIT00c",
-      "method": 2094,
+      "method": "Child Abuse Form",
       "filed_out_of_state": false,
       "inform_date": "2018-03-29",
       "county_id": "1101",
@@ -60,7 +60,10 @@
       "id": "32",
       "victim_person_id": 42,
       "perpetrator_person_id": 43,
-      "type": 5625
+      "types": [
+        "General Neglect",
+        "Physical Abuse"
+      ]
     }
   ],
   "participants": [

@@ -131,7 +131,7 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   @JsonProperty("cross_reports")
   @ApiModelProperty(value = "Cross Reports")
-  private Set<CrossReport> crossReports = new HashSet<>();
+  private Set<CrossReportIntake> crossReports = new HashSet<>();
 
   @JsonProperty("incident_address")
   @ApiModelProperty(value = "Addresses")
@@ -139,7 +139,7 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   @JsonProperty("allegations")
   @ApiModelProperty(value = "Allegations")
-  private Set<Allegation> allegations = new HashSet<>();
+  private Set<AllegationIntake> allegations = new HashSet<>();
 
   @JsonProperty("participants")
   @ApiModelProperty(value = "Participants")
@@ -374,12 +374,8 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.safetyInformation = safetyInformation;
   }
 
-  public Set<CrossReport> getCrossReports() {
+  public Set<CrossReportIntake> getCrossReports() {
     return crossReports;
-  }
-
-  public void setCrossReports(Set<CrossReport> crossReports) {
-    this.crossReports = crossReports;
   }
 
   public AddressIntakeApi getIncidentAddress() {
@@ -390,7 +386,7 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.incidentAddress = incidentAddress;
   }
 
-  public Set<Allegation> getAllegations() {
+  public Set<AllegationIntake> getAllegations() {
     return allegations;
   }
 

@@ -13,7 +13,8 @@ import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningAddressEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
-import gov.ca.cwds.rest.api.domain.CrossReport;
+import gov.ca.cwds.rest.api.domain.AllegationIntake;
+import gov.ca.cwds.rest.api.domain.CrossReportIntake;
 import gov.ca.cwds.rest.api.domain.GovernmentAgency;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.services.mapper.AddressMapper;
@@ -228,15 +229,14 @@ public class ScreeningService implements CrudsService {
     String screeningId = screeningEntity.getId();
 
     List<AllegationEntity> allegationEntities = allegationDao.findByScreeningId(screeningId);
-    Set<gov.ca.cwds.rest.api.domain.Allegation> allegations =
-        allegationMapper.map(allegationEntities);
+    Set<AllegationIntake> allegations = allegationMapper.map(allegationEntities);
     screening.getAllegations().addAll(allegations);
 
     List<CrossReportEntity> crossReportEntities = crossReportDao.findByScreeningId(screeningId);
-    Set<CrossReport> crossReports = crossReportMapper.map(crossReportEntities);
+    Set<CrossReportIntake> crossReports = crossReportMapper.map(crossReportEntities);
     screening.getCrossReports().addAll(crossReports);
 
-    for (CrossReport crossReport : crossReports) {
+    for (CrossReportIntake crossReport : crossReports) {
       List<GovernmentAgencyEntity> agencyEntities = agencyDao.findByCrossReportId(
           crossReport.getId());
       Set<gov.ca.cwds.rest.api.domain.GovernmentAgency> agencies = agencyMapper.map(agencyEntities);
@@ -315,7 +315,7 @@ public class ScreeningService implements CrudsService {
   }
 
   private void createOrUpdateAllegations(Screening screening) {
-    for (gov.ca.cwds.rest.api.domain.Allegation allegation : screening.getAllegations()) {
+    for (AllegationIntake allegation : screening.getAllegations()) {
       AllegationEntity allegationEntity = allegationMapper.map(allegation);
       allegationEntity.setScreeningId(screening.getId());
       Date now = new Date();
@@ -338,7 +338,7 @@ public class ScreeningService implements CrudsService {
   }
 
   private void createOrUpdateCrossReports(Screening screening) {
-    for (CrossReport crossReport : screening.getCrossReports()) {
+    for (CrossReportIntake crossReport : screening.getCrossReports()) {
       CrossReportEntity crossReportEntity = crossReportMapper.map(crossReport);
       crossReportEntity.setScreeningId(screening.getId());
       Date now = new Date();
@@ -362,7 +362,7 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateAgencies(CrossReport crossReport) {
+  private void createOrUpdateAgencies(CrossReportIntake crossReport) {
     for (GovernmentAgency agency : crossReport.getAgencies()) {
       GovernmentAgencyEntity agencyEntity = agencyMapper.map(agency);
       agencyEntity.setCrossReportId(crossReport.getId());

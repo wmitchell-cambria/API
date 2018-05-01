@@ -34,7 +34,7 @@ public class GovernmentAgency implements Serializable {
   private String id;
 
   @JsonProperty("type")
-  @ApiModelProperty(required = true, value = "", example = "1234")
+  @ApiModelProperty(required = true, value = "", example = "COMMUNITY_CARE_LICENSING")
   @OneOf(value = {"COMMUNITY_CARE_LICENSING", "COUNTY_LICENSING", "DISTRICT_ATTORNEY",
       "DEPARTMENT_OF_JUSTICE", "LAW_ENFORCEMENT"})
   private String type;
