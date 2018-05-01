@@ -37,6 +37,9 @@ public class R00786VictimAgeRestrictionTest {
 
   private Validator validator;
 
+  /**
+   * 
+   */
   @Before
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -119,6 +122,98 @@ public class R00786VictimAgeRestrictionTest {
     int overAgeDays = 0;
     int expectedViolations = 0;
     validateVictimAge(ageYears, overAgeDays, underAgeDays, expectedViolations);
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForVictimAgeIsAbove18Years() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("19").setApproximateAgeUnits("Y").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(1, constraintViolations.size());
+    assertEquals("Victim's age must be less than 18 years",
+        constraintViolations.iterator().next().getMessage());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForValidatingAgeWithMonths() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("228").setApproximateAgeUnits("M").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(1, constraintViolations.size());
+    assertEquals("Victim's age must be less than 18 years",
+        constraintViolations.iterator().next().getMessage());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForValidatingAgeWithWeeks() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("228").setApproximateAgeUnits("W").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testForValidatinAgeWithDays() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge("228").setApproximateAgeUnits("D").createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testReturnFalseWhenDobAndAgeIsNull() {
+    Participant victim = new ParticipantResourceBuilder().setDateOfBirth(null)
+        .setApproximateAge(null).setApproximateAgeUnits(null).createParticipant();
+
+    Set<Participant> participants = buildPerpAndReporter(victim);
+    ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
+        .setParticipants(participants).createScreeningToReferral();
+    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
+        validator.validate(screeningToReferral);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  private Set<Participant> buildPerpAndReporter(Participant victim) {
+    Participant Perp = new ParticipantResourceBuilder().setGender("M").createParticipant();
+    Participant reporter =
+        new ParticipantResourceBuilder().setGender("M").createReporterParticipant();
+    Set<Participant> participants = new HashSet<>(Arrays.asList(victim, Perp, reporter));
+    return participants;
   }
 
   /**
