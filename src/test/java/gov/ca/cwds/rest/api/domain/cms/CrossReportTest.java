@@ -94,8 +94,6 @@ public class CrossReportTest {
     
     messageBuilder = new MessageBuilder();
     
-    CrossReport validCrossReport = validCrossReport();
-
   }
 
   /*

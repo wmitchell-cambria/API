@@ -90,11 +90,6 @@ public final class Api {
   public static final String RESOURCE_INTAKE_LOV = "lov";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_LONG_TEXT} API
-   */
-  public static final String RESOURCE_LONG_TEXT = "_longText";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_LOV} API..
    */
   public static final String RESOURCE_LOV = "__oldlov";
