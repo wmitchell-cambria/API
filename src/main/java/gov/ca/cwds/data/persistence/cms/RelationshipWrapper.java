@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.data.persistence.cms.RelationshipWrapper.FIND_ALL_RELATED_CLIENTS_BY_CLIENT_ID;
+
 import org.hibernate.annotations.NamedNativeQuery;
 
 import javax.persistence.Column;
@@ -8,7 +10,7 @@ import javax.persistence.Id;
 
 @Entity
 @NamedNativeQuery(
-        name = "gov.ca.cwds.data.persistence.cms.RelationshipWrapper.findAllRelatedClientsByClientId",
+        name = FIND_ALL_RELATED_CLIENTS_BY_CLIENT_ID,
         resultClass = RelationshipWrapper.class, readOnly = true,
         query = "SELECT DISTINCT \n"
                 + "    CLNS.IDENTIFIER        AS Primary_LEGACY_ID, \n"
@@ -58,6 +60,9 @@ import javax.persistence.Id;
                 + "WITH UR"
                 )
 public class RelationshipWrapper {
+
+    public static final String FIND_ALL_RELATED_CLIENTS_BY_CLIENT_ID = "gov.ca.cwds.data.persistence.cms.RelationshipWrapper.findAllRelatedClientsByClientId";
+
     @Id
     @Column(name = "RELATION_ID")
     private String relationId;
