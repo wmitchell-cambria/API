@@ -24,10 +24,21 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ZipCodeValidator.class)
 public @interface ValidZipCode {
 
+  /**
+   * Return the violation message
+   * 
+   * @return The violation message
+   */
   String message() default "Zip should be empty/blank, null, or 5 digits";
 
+  /**
+   * @return groups
+   */
   Class<?>[] groups() default {};
 
+  /**
+   * @return payload
+   */
   Class<? extends Payload>[] payload() default {};
 
 }

@@ -20,7 +20,6 @@ public class ZipCodeValidator implements ConstraintValidator<ValidZipCode, Strin
   }
 
   /**
-   *
    * Validates that provided zip code is either null, empty (blank), or 5 digits long.
    *
    * @param value Zip code

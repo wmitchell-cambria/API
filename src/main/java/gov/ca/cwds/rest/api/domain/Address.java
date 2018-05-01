@@ -28,8 +28,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("nsAddress")
 public class Address extends ReportingDomain implements Request, Response {
 
-  private static final String DEFAULT_ZIP = "0";
-
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("legacy_source_table")
