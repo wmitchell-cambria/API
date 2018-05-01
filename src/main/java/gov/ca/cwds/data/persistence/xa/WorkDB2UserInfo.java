@@ -25,7 +25,6 @@ public class WorkDB2UserInfo implements Work {
     if (connection instanceof DB2Connection) {
       LOGGER.info("DB2 connection! Set user info ...");
       final DB2Connection db2conn = (DB2Connection) connection;
-
       final RequestExecutionContext ctx = RequestExecutionContext.instance();
       final String staffId = ctx.getStaffId();
       final String userId = ctx.getUserId();
