@@ -120,11 +120,6 @@ public final class Api {
   public static final String RESOURCE_REFERRALS = "referrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_CLIENT} API.
-   */
-  public static final String RESOURCE_REFERRAL_CLIENT = "_referralClients";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
    */
   public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
