@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @ApiModel("nsAllegation")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Allegation extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;

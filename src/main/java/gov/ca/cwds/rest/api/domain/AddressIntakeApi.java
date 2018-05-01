@@ -88,6 +88,7 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    * @param type the address type
    * @param legacyDescriptor - legacyDescriptor
    */
+  @SuppressWarnings("squid:S00107")
   public AddressIntakeApi(String legacySourceTable,
       String addressId,
       String streetAddress,  String city,

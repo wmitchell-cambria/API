@@ -30,10 +30,12 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("serial")
 @JsonSnakeCase
 @ApiModel("NsCrossReport")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class CrossReport extends ReportingDomain implements Request, Response {
+
+  private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
   @ApiModelProperty(required = false, value = "Id", example = "1234")
@@ -95,6 +97,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
    * @param countyId - countyId
    * @param agencies - agencies
    */
+  @SuppressWarnings("squid:S00107")
   public CrossReport(String id, String legacySourceTable, String legacyId, boolean filedOutOfState,
       Integer method, String informDate, String countyId, Set<GovernmentAgency> agencies) {
     super();

@@ -314,11 +314,18 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   }
 
   public void setRoles(String[] roles) {
-    this.roles = roles;
+    if (roles == null) {
+      this.roles = new String[0];
+    }
+    this.roles = Arrays.copyOf(roles, roles.length);
   }
 
   public void setLanguages(String[] languages) {
-    this.languages = languages;
+    if (languages == null) {
+      this.languages = new String[0];
+    }
+
+    this.languages = Arrays.copyOf(languages, languages.length);
   }
 
   public void setMiddleName(String middleName) {

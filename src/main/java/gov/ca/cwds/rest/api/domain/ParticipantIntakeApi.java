@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.api.domain;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+
+import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -184,6 +186,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param sealed true if sealed
    * @param sensitive true if sensitive
    */
+  @SuppressWarnings("squid:S00107")
   public ParticipantIntakeApi(String id,
       String legacySourceTable,
       String clientId,
@@ -226,6 +229,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    *
    * @param participantEntity participant to copy from
    */
+  @SuppressWarnings("squid:S00107")
   public ParticipantIntakeApi(ParticipantEntity participantEntity) {
     super();
     this.id = participantEntity.getId();
@@ -375,7 +379,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   }
 
   public void setDateOfBirth(Date dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = FerbDateUtils.freshDate(dateOfBirth);
   }
 
   public void setApproximateAge(String approximateAge) {

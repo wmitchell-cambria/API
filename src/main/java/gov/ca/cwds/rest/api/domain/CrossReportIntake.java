@@ -23,10 +23,12 @@ import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 /**
  * CWDS API Team
  */
-@SuppressWarnings("serial")
 @JsonSnakeCase
 @ApiModel("NsCrossReportIntake")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class CrossReportIntake extends ReportingDomain implements Request, Response {
+
+  private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
   @ApiModelProperty(required = false, value = "Id", example = "1234")

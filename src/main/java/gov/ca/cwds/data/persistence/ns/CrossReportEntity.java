@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -94,19 +95,19 @@ public class CrossReportEntity implements PersistentObject {
   }
 
   public Date getCreatedAt() {
-    return createdAt;
+    return FerbDateUtils.freshDate(createdAt);
   }
 
   public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
+    this.createdAt = FerbDateUtils.freshDate(createdAt);
   }
 
   public Date getUpdatedAt() {
-    return updatedAt;
+    return FerbDateUtils.freshDate(updatedAt);
   }
 
   public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+    this.updatedAt = FerbDateUtils.freshDate(updatedAt);
   }
 
   public String getLegacyId() {
@@ -142,11 +143,11 @@ public class CrossReportEntity implements PersistentObject {
   }
 
   public Date getInformDate() {
-    return informDate;
+    return FerbDateUtils.freshDate(informDate);
   }
 
   public void setInformDate(Date informDate) {
-    this.informDate = informDate;
+    this.informDate = FerbDateUtils.freshDate(informDate);
   }
 
   public String getCountyId() {

@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -89,11 +90,11 @@ public class AllegationEntity implements PersistentObject {
   }
 
   public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
+    this.createdAt = FerbDateUtils.freshDate(createdAt);
   }
 
   public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+    this.updatedAt = FerbDateUtils.freshDate(updatedAt);
   }
 
   public ScreeningEntity getScreeningEntity() {
@@ -136,14 +137,14 @@ public class AllegationEntity implements PersistentObject {
    * @return the createdAt
    */
   public Date getCreatedAt() {
-    return createdAt;
+    return FerbDateUtils.freshDate(createdAt);
   }
 
   /**
    * @return the updatedAt
    */
   public Date getUpdatedAt() {
-    return updatedAt;
+    return FerbDateUtils.freshDate(updatedAt);
   }
 
   /**

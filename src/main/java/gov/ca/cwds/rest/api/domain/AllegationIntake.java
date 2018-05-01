@@ -22,6 +22,7 @@ import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
  */
 @JsonSnakeCase
 @ApiModel("nsAllegationIntake")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class AllegationIntake extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;

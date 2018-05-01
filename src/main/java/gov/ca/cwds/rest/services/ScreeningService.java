@@ -266,6 +266,7 @@ public class ScreeningService implements CrudsService {
     return screening;
   }
 
+  @SuppressWarnings("fb-contrib:CFS_CONFUSING_FUNCTION_SEMANTICS")
   public Screening createScreening(Screening screening) {
     if (screening == null) {
       throw new ServiceException("Screening for create is null");

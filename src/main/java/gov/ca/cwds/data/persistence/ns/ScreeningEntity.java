@@ -2,6 +2,8 @@ package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +11,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -218,7 +219,7 @@ public class ScreeningEntity implements PersistentObject {
   }
 
   public void setEndedAt(Date endedAt) {
-    this.endedAt = endedAt;
+    this.endedAt = freshDate(endedAt);
   }
 
   public void setIncidentCounty(String incidentCounty) {
@@ -226,7 +227,7 @@ public class ScreeningEntity implements PersistentObject {
   }
 
   public void setIncidentDate(Date incidentDate) {
-    this.incidentDate = incidentDate;
+    this.incidentDate = freshDate(incidentDate);
   }
 
   public void setLocationType(String locationType) {
@@ -246,7 +247,7 @@ public class ScreeningEntity implements PersistentObject {
   }
 
   public void setStartedAt(Date startedAt) {
-    this.startedAt = startedAt;
+    this.startedAt = freshDate(startedAt);
   }
 
   public void setNarrative(String narrative) {
@@ -270,7 +271,10 @@ public class ScreeningEntity implements PersistentObject {
   }
 
   public void setSafetyAlerts(String[] safetyAlerts) {
-    this.safetyAlerts = safetyAlerts;
+    if (safetyAlerts == null) {
+      this.safetyAlerts = new String[0];
+    }
+    this.safetyAlerts = Arrays.copyOf(safetyAlerts, safetyAlerts.length);
   }
 
   public void setReferralId(String referralId) {
@@ -290,7 +294,7 @@ public class ScreeningEntity implements PersistentObject {
   }
 
   public void setRestrictionsDate(Date restrictionsDate) {
-    this.restrictionsDate = restrictionsDate;
+    this.restrictionsDate = freshDate(restrictionsDate);
   }
 
   public Boolean getIndexable() {
@@ -404,7 +408,10 @@ public class ScreeningEntity implements PersistentObject {
    * @return the safetyAlerts
    */
   public String[] getSafetyAlerts() {
-    return safetyAlerts;
+    if (safetyAlerts == null) {
+      return new String[0];
+    }
+    return Arrays.copyOf(safetyAlerts, safetyAlerts.length);
   }
 
   /**

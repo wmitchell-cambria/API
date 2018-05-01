@@ -28,6 +28,7 @@ import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_VICTIM_OR_PERPE
     query = "FROM Allegation a WHERE a.victimId = :id OR a.perpetratorId = :id")
 @Entity
 @Table(name = "allegations")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Allegation implements PersistentObject {
   public static final String FIND_BY_VICTIM_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByVictimId";
   public static final String FIND_BY_PERPETRATOR_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByPerpetratorId";

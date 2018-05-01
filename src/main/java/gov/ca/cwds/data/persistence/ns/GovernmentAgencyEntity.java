@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -104,19 +106,19 @@ public class GovernmentAgencyEntity implements PersistentObject {
   }
 
   public Date getCreatedAt() {
-    return createdAt;
+    return FerbDateUtils.freshDate(createdAt);
   }
 
   public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
+    this.createdAt = FerbDateUtils.freshDate(createdAt);
   }
 
   public Date getUpdatedAt() {
-    return updatedAt;
+    return FerbDateUtils.freshDate(updatedAt);
   }
 
   public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+    this.updatedAt = FerbDateUtils.freshDate(updatedAt);
   }
 
   @Override
