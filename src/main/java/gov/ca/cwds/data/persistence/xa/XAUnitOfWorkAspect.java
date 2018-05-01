@@ -216,6 +216,8 @@ public class XAUnitOfWorkAspect {
 
   /**
    * Commit XA transaction.
+   * 
+   * @throws CaresXAException on database error
    */
   protected void commitTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
