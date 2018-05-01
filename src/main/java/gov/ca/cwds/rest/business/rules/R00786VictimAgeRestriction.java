@@ -29,6 +29,9 @@ public class R00786VictimAgeRestriction
    */
   public static final int MAX_VICTIM_AGE_YEARS = 18;
 
+  /**
+   * DAYS, WEEKS, MONTHS, YEARS
+   */
   private static final String DAYS = "D";
   private static final String WEEKS = "W";
   private static final String MONTHS = "M";
