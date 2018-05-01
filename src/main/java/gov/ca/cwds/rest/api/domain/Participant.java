@@ -41,6 +41,7 @@ import io.swagger.annotations.ApiModelProperty;
 @NotEqual(ifProperty = "primaryLanguage", thenProperty = "secondaryLanguage")
 @JsonPropertyOrder({"id", "legacySourceTable", "legacyId", "firstName", "lastName", "gender", "ssn",
     "dateOfBirth", "roles", "addresses", "race_ethnicity"})
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Participant extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;

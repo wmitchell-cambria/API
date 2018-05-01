@@ -44,6 +44,7 @@ public class ApplicationModule extends AbstractModule {
     install(dataAccessModule);
     install(new DataAccessServicesModule());
     install(new ServicesModule());
+    install(new MappingModule());
     install(new ResourcesModule());
     install(new FiltersModule());
     install(new AuditingModule());

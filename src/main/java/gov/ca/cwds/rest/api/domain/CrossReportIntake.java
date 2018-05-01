@@ -1,39 +1,32 @@
 package gov.ca.cwds.rest.api.domain;
 
-import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
-
-
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.Sets;
-
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
-import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.dropwizard.jackson.JsonSnakeCase;
+import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.HashSet;
+import java.util.Set;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+
+import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
 /**
- * {@link DomainObject} representing an cross_report
- * 
- * @author CWDS API Team
+ * CWDS API Team
  */
 @JsonSnakeCase
-@ApiModel("NsCrossReport")
+@ApiModel("NsCrossReportIntake")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class CrossReport extends ReportingDomain implements Request, Response {
+public class CrossReportIntake extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
 
@@ -51,11 +44,11 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   private String legacyId;
 
   @JsonProperty("method")
-  @ApiModelProperty(required = true,
-      value = "Communication method system code ID e.g) 2097 -> Telephone Report", example = "2097")
   @NotNull
-  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.CROSS_REPORT_METHOD)
-  private Integer method;
+  @ApiModelProperty(required = true, value = "Communication method", example = "Child Abuse Form")
+  @OneOf(value = {"Child Abuse Form", "Electronic Report", "Suspected Child Abuse Report",
+      "Telephone Report"})
+  private String method;
 
   @JsonProperty("filed_out_of_state")
   @ApiModelProperty(required = false, value = "Cross Report was filed out of state", example = "N")
@@ -70,7 +63,6 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   @JsonProperty("county_id")
   @ApiModelProperty(required = true, readOnly = false, value = "County of the crossReport agency",
       example = "34")
-  @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.COUNTY_CODE)
   private String countyId;
 
   @JsonProperty("agencies")
@@ -81,43 +73,10 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   /**
    * default constructor
    */
-  public CrossReport() {
+  public CrossReportIntake() {
     // default
   }
 
-  /**
-   * Construct from all fields.
-   * 
-   * @param id primary key identifier
-   * @param legacySourceTable - legacy source table name
-   * @param legacyId - legacy Id
-   * @param filedOutOfState - filedOutOfState
-   * @param method - reporting method
-   * @param informDate - reported date
-   * @param countyId - countyId
-   * @param agencies - agencies
-   */
-  @SuppressWarnings("squid:S00107")
-  public CrossReport(String id, String legacySourceTable, String legacyId, boolean filedOutOfState,
-      Integer method, String informDate, String countyId, Set<GovernmentAgency> agencies) {
-    super();
-    this.id = id;
-    this.legacySourceTable = legacySourceTable;
-    this.legacyId = legacyId;
-    this.method = method;
-    this.filedOutOfState = filedOutOfState;
-    this.informDate = informDate;
-    this.countyId = countyId;
-    if (agencies == null) {
-      this.agencies = Sets.newHashSet();
-    } else {
-      this.agencies = agencies;
-    }
-  }
-
-  public void setMethod(Integer method) {
-    this.method = method;
-  }
 
   public void setFiledOutOfState(boolean filedOutOfState) {
     this.filedOutOfState = filedOutOfState;
@@ -180,8 +139,12 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   /**
    * @return method
    */
-  public Integer getMethod() {
+  public String getMethod() {
     return method;
+  }
+
+  public void setMethod(String method) {
+    this.method = method;
   }
 
   /**
@@ -200,7 +163,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
 
   /**
    * Get agencies
-   * 
+   *
    * @return Agencies
    */
   public Set<GovernmentAgency> getAgencies() {

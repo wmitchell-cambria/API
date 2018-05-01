@@ -70,7 +70,9 @@ public class ScreeningServiceTest {
     when(indexRequestBuilder.get()).thenReturn(indexResponse);
 
 
-    screeningService = new ScreeningService(esDao, screeningDao);
+    screeningService = new ScreeningService();
+    screeningService.setEsDao(esDao);
+    screeningService.setScreeningDao(screeningDao);
 
     new TestingRequestExecutionContext("0X5");
 

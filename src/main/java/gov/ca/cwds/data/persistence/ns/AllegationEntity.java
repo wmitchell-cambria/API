@@ -1,13 +1,18 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -16,27 +21,18 @@ import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 
-import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_PERPETRATOR_ID;
-import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_VICTIM_ID;
-import static gov.ca.cwds.data.persistence.ns.Allegation.FIND_BY_VICTIM_OR_PERPETRATOR_ID;
-
-@NamedQuery(name = FIND_BY_VICTIM_ID,
-    query = "FROM Allegation a WHERE a.victimId = :victimId")
-@NamedQuery(name = FIND_BY_PERPETRATOR_ID,
-    query = "FROM Allegation a WHERE a.perpetratorId = :perpetratorId")
-@NamedQuery(name = FIND_BY_VICTIM_OR_PERPETRATOR_ID,
-    query = "FROM Allegation a WHERE a.victimId = :id OR a.perpetratorId = :id")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.AllegationEntity.findByScreeningId",
+    query = "FROM gov.ca.cwds.data.persistence.ns.AllegationEntity"
+        + " WHERE screeningId = :screeningId")
 @Entity
 @Table(name = "allegations")
-@SuppressWarnings("common-java:DuplicatedBlocks")
-public class Allegation implements PersistentObject {
-  public static final String FIND_BY_VICTIM_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByVictimId";
-  public static final String FIND_BY_PERPETRATOR_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByPerpetratorId";
-  public static final String FIND_BY_VICTIM_OR_PERPETRATOR_ID = "gov.ca.cwds.data.persistence.ns.Allegation.findByVictimOrPerpetratorId";
+public class AllegationEntity implements PersistentObject {
 
   @Id
   @Column(name = "id")
-  private String id;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "allegations_id")
+  @SequenceGenerator(name = "allegations_id", sequenceName = "allegations_id_seq")
+  private Integer id;
 
   @Column(name = "screening_id")
   private String screeningId;
@@ -48,14 +44,16 @@ public class Allegation implements PersistentObject {
   private String victimId;
 
   @Column(name = "created_at")
-  private String createdAt;
+  @Type(type = "timestamp")
+  private Date createdAt;
 
   @Column(name = "updated_at")
-  private String updatedAt;
+  @Type(type = "timestamp")
+  private Date updatedAt;
 
   @Column(name = "allegation_types")
   @Type(type = "gov.ca.cwds.data.persistence.hibernate.StringArrayType")
-  private String[] allegationTypes = new String[0];
+  private String[] allegationTypes;
 
   @ManyToOne
   @JoinColumn(name = "screening_id", insertable = false, updatable = false)
@@ -66,30 +64,8 @@ public class Allegation implements PersistentObject {
    *
    * Required for Hibernate
    */
-  public Allegation() {
+  public AllegationEntity() {
     // default
-  }
-
-  /**
-   * @param id - id
-   * @param screeningId - screeningEntity id
-   * @param perpetratorId - perpetrator id
-   * @param victimId - victim id
-   * @param createdAt - date created
-   * @param updatedAt - date updated
-   * @param allegationType - allegation type array
-   */
-  public Allegation(String id, String screeningId, String perpetratorId, String victimId,
-      String createdAt, String updatedAt, String[] allegationType) {
-    this.id = id;
-    this.screeningId = screeningId;
-    this.perpetratorId = perpetratorId;
-    this.victimId = victimId;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.allegationTypes =
-        allegationType != null ? Arrays.copyOf(allegationType, allegationType.length) : null;
-    this.screeningEntity = null;
   }
 
   @Override
@@ -97,10 +73,42 @@ public class Allegation implements PersistentObject {
     return this.getId();
   }
 
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setScreeningId(String screeningId) {
+    this.screeningId = screeningId;
+  }
+
+  public void setPerpetratorId(String perpetratorId) {
+    this.perpetratorId = perpetratorId;
+  }
+
+  public void setVictimId(String victimId) {
+    this.victimId = victimId;
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = FerbDateUtils.freshDate(createdAt);
+  }
+
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = FerbDateUtils.freshDate(updatedAt);
+  }
+
+  public ScreeningEntity getScreeningEntity() {
+    return screeningEntity;
+  }
+
+  public void setScreeningEntity(ScreeningEntity screeningEntity) {
+    this.screeningEntity = screeningEntity;
+  }
+
   /**
    * @return the id
    */
-  public String getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -128,15 +136,15 @@ public class Allegation implements PersistentObject {
   /**
    * @return the createdAt
    */
-  public String getCreatedAt() {
-    return createdAt;
+  public Date getCreatedAt() {
+    return FerbDateUtils.freshDate(createdAt);
   }
 
   /**
    * @return the updatedAt
    */
-  public String getUpdatedAt() {
-    return updatedAt;
+  public Date getUpdatedAt() {
+    return FerbDateUtils.freshDate(updatedAt);
   }
 
   /**
