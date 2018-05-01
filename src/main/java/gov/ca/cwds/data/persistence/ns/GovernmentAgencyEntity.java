@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.io.Serializable;
 import java.util.Date;

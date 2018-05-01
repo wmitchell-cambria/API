@@ -273,8 +273,9 @@ public class ScreeningEntity implements PersistentObject {
   public void setSafetyAlerts(String[] safetyAlerts) {
     if (safetyAlerts == null) {
       this.safetyAlerts = new String[0];
+    } else {
+      this.safetyAlerts = Arrays.copyOf(safetyAlerts, safetyAlerts.length);
     }
-    this.safetyAlerts = Arrays.copyOf(safetyAlerts, safetyAlerts.length);
   }
 
   public void setReferralId(String referralId) {

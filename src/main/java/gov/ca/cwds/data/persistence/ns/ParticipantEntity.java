@@ -230,15 +230,17 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   public String[] getRoles() {
     if (roles == null) {
       return new String[0];
+    } else {
+      return Arrays.copyOf(roles, roles.length);
     }
-    return Arrays.copyOf(roles, roles.length);
   }
 
   public String[] getLanguages() {
     if (languages == null) {
       return new String[0];
+    } else {
+      return Arrays.copyOf(languages, languages.length);
     }
-    return Arrays.copyOf(languages, languages.length);
   }
 
   public String getMiddleName() {
@@ -282,7 +284,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   }
 
   public void setDateOfBirth(Date dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = freshDate(dateOfBirth);
   }
 
   public void setFirstName(String firstName) {
