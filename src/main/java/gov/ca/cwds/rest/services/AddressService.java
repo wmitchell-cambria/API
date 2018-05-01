@@ -17,6 +17,7 @@ import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.AddressUtils;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.resources.AddressResource;
@@ -147,7 +148,7 @@ public class AddressService implements CrudsService {
         xaCmsAddressDao.find(nsAddr.getLegacyId());
     cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
     cmsAddr.setCity(reqAddr.getCity());
-    cmsAddr.setZip(reqAddr.getZip());
+    cmsAddr.setZip(AddressUtils.defaultIfBlank(reqAddr.getZip()));
     cmsAddr.setLastUpdatedId(staffId);
     cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
     xaCmsAddressDao.update(cmsAddr);
