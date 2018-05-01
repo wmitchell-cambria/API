@@ -11,6 +11,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper
 public interface LegacyDescriptorMapper {
+  @SuppressWarnings("squid:S1214")
   LegacyDescriptorMapper INSTANCE = Mappers.getMapper(LegacyDescriptorMapper.class);
 
   LegacyDescriptor map(LegacyDescriptorEntity legacyDescriptorEntity);

@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper
 public interface AgencyMapper {
+  @SuppressWarnings("squid:S1214")
   AgencyMapper INSTANCE = Mappers.getMapper(AgencyMapper.class);
 
   @Mapping(target = "type", source = "category")

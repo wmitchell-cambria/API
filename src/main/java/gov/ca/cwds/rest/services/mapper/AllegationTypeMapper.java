@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper
 public interface AllegationTypeMapper {
+  @SuppressWarnings("squid:S1214")
   AllegationTypeMapper INSTANCE = Mappers.getMapper(AllegationTypeMapper.class);
 
   Set<String> mapToDomain(String[] allegationType);

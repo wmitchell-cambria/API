@@ -13,6 +13,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(imports = DomainChef.class)
 public interface ScreeningMapper {
+  @SuppressWarnings("squid:S1214")
   ScreeningMapper INSTANCE = Mappers.getMapper(ScreeningMapper.class);
 
   @Mapping(target = "reportNarrative", source = "narrative")

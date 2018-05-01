@@ -13,6 +13,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(uses = LegacyDescriptorMapper.class)
 public interface AddressMapper {
+  @SuppressWarnings("squid:S1214")
   AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
   AddressIntakeApi map(Addresses addressEntity);

@@ -53,7 +53,7 @@ public class StringArrayType implements UserType {
         results = (String[]) array;
       } else if (array instanceof Object[]) { //h2
         Object[] objArray = (Object[]) array;
-//        results = Arrays.copyOf(objArray, objArray.length, String[].class);
+//        results = Arrays.copyOf(objArray, objArray.length, String[].class); NOSONAR
         try {
           results = objectMapper.readValue(((String) objArray[0]).replace('{', '[')
               .replace('}', ']'), String[].class);

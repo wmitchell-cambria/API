@@ -42,6 +42,15 @@ public class ScreeningAddressEntity implements PersistentObject {
   @Column(name = "address_id")
   private String addressId;
 
+  /**
+   * Default constructor
+   *
+   * Required for Hibernate
+   */
+  public ScreeningAddressEntity() {
+    // default
+  }
+
   public String getId() {
     return id;
   }
@@ -64,15 +73,6 @@ public class ScreeningAddressEntity implements PersistentObject {
 
   public void setAddressId(String addressId) {
     this.addressId = addressId;
-  }
-
-  /**
-   * Default constructor
-   *
-   * Required for Hibernate
-   */
-  public ScreeningAddressEntity() {
-    // default
   }
 
   @Override

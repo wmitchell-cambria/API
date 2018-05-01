@@ -71,14 +71,6 @@ public class CrossReportEntity implements PersistentObject {
   @Column(name = "county_id")
   private String countyId;
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
   /**
    * Default constructor
    *
@@ -86,6 +78,14 @@ public class CrossReportEntity implements PersistentObject {
    */
   public CrossReportEntity() {
     // default
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   @Override

@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(uses = AllegationTypeMapper.class)
 public interface AllegationMapper {
+  @SuppressWarnings("squid:S1214")
   AllegationMapper INSTANCE = Mappers.getMapper(AllegationMapper.class);
 
   @Mapping(target = "perpetratorPersonId", source = "perpetratorId")

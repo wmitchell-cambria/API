@@ -17,6 +17,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(uses = AgencyMapper.class)
 public interface CrossReportMapper {
+  @SuppressWarnings("squid:S1214")
   CrossReportMapper INSTANCE = Mappers.getMapper(CrossReportMapper.class);
 
   @Mapping(target = "method", source = "communicationMethod")

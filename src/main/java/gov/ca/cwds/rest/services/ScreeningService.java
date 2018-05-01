@@ -248,7 +248,6 @@ public class ScreeningService implements CrudsService {
     if (screeningAddressEntities.size() > 1) {
       throw new ServiceException("Screening should have no more then 1 address");
     }
-    Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>();
     for (ScreeningAddressEntity screeningAddressEntity : screeningAddressEntities) {
       Addresses addressEntity = addressesDao.find(screeningAddressEntity.getAddressId());
       AddressIntakeApi address = addressMapper.map(addressEntity);

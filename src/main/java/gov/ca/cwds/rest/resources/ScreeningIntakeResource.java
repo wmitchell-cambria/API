@@ -41,7 +41,6 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = RESOURCE_INTAKE_SCREENINGS, tags = {RESOURCE_INTAKE_SCREENINGS})
 @Path(value = RESOURCE_INTAKE_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class ScreeningIntakeResource {
 
   private ScreeningService screeningService;
@@ -70,7 +69,6 @@ public class ScreeningIntakeResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate Screening")})
-  @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Creates a new screening", code = HttpStatus.SC_CREATED,
       response = Screening.class)
   public Screening get(@PathParam("id") @ApiParam(required = true,
@@ -91,7 +89,7 @@ public class ScreeningIntakeResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 409, message = "Conflict - already exists"),
       @ApiResponse(code = 422, message = "Unable to validate Screening")})
-  @Consumes(value = MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Creates a new screening", code = HttpStatus.SC_CREATED,
       response = Screening.class)
   public Screening create(@Valid @ApiParam(hidden = false, required = true,
@@ -114,7 +112,7 @@ public class ScreeningIntakeResource {
       @ApiResponse(code = 404, message = "Not Found"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 422, message = "Unable to validate Screening")})
-  @Consumes(value = MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Update Screening", code = HttpStatus.SC_OK, response = Screening.class)
   public Screening update(
       @PathParam("id") @ApiParam(required = true,
