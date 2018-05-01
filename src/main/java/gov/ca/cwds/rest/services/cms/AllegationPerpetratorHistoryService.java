@@ -137,4 +137,11 @@ public class AllegationPerpetratorHistoryService implements
     }
   }
 
+  /**
+   * @return the riAllegationPerpetratorHistory
+   */
+  public RIAllegationPerpetratorHistory getRiAllegationPerpetratorHistory() {
+    return riAllegationPerpetratorHistory;
+  }
+
 }

@@ -171,4 +171,11 @@ public class GovernmentOrganizationCrossReportService implements
     }
   }
 
+  /**
+   * @return the riGovernmentOrganizationCrossReport
+   */
+  public RIGovernmentOrganizationCrossReport getRiGovernmentOrganizationCrossReport() {
+    return riGovernmentOrganizationCrossReport;
+  }
+
 }
