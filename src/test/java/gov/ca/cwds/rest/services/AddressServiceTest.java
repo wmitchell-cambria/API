@@ -266,7 +266,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   }
 
   @Override
-  @Test(expected = ServiceException.class)
+  @Test(expected = SQLException.class)
   public void testUpdateThrowsNotImplementedException() throws Exception {
     when(xaCmsAddressDao.update(any())).thenThrow(SQLException.class);
     target.update(1L, new Address("", "", "street", "city", 1828, "95555", 32, legacyDescriptor));

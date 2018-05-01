@@ -11,8 +11,10 @@ import javax.persistence.EntityExistsException;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -229,7 +231,6 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     } catch (SQLException e) {
       throw new ServiceException("FAILED TO DELETE DOCUMENT SEGMENTS", e);
     }
-
   }
 
   protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc,
@@ -243,6 +244,11 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
 
   /**
    * Synchronize grabbing connections from the connection pool to prevent deadlocks in C3P0.
+   * 
+   * <p>
+   * ALTERNATIVE: call Hibernate {@link Session#doWork(Work)} to execute JDBC statements in the same
+   * session.
+   * </p>
    * 
    * @return a connection
    * @throws SQLException on database error

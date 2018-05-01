@@ -141,11 +141,11 @@ public class ServicesModule extends AbstractModule {
           UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
-        LOGGER.debug("Before XA annotation");
+        LOGGER.info("Before XA annotation");
         aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
-        LOGGER.debug("After XA annotation");
+        LOGGER.info("After XA annotation");
         return result;
       } catch (Exception e) {
         aspect.onError();

@@ -200,6 +200,16 @@ public final class Api {
   public static final String RESOURCE_STAFF_PERSONS = "staffpersons";
 
   /**
+   * Identifer for CMS DB2 datasources.
+   */
+  public static final String DATASOURCE_CMS = "cms";
+
+  /**
+   * Identifer for CMS DB2 datasources for XA transactions.
+   */
+  public static final String DATASOURCE_XA_CMS = "xa_cms";
+
+  /**
    * Default private constructor
    */
   private Api() {
