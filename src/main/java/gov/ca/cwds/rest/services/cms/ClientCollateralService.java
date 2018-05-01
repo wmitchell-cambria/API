@@ -104,4 +104,11 @@ public class ClientCollateralService
     throw new NotImplementedException("Update is not implemented");
   }
 
+  /**
+   * @return the ri
+   */
+  public RIClientCollateral getRi() {
+    return ri;
+  }
+
 }

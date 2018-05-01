@@ -27,7 +27,7 @@ public class ChildClientService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(ChildClientService.class);
 
   private ChildClientDao childClientDao;
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIChildClient riChildClient;
 
   /**
@@ -122,6 +122,13 @@ public class ChildClientService implements
       LOGGER.info("childClient not found : {}", childClient);
       throw new ServiceException(e);
     }
+  }
+
+  /**
+   * @return the riChildClient
+   */
+  public RIChildClient getRiChildClient() {
+    return riChildClient;
   }
 
 }

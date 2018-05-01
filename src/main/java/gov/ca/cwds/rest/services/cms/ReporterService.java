@@ -27,7 +27,7 @@ public class ReporterService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(ReporterService.class);
 
   private ReporterDao reporterDao;
-  //Used to implicitly check for referential Integrity. Better to find way to make explicit
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIReporter riReporter;
 
   /**
@@ -113,6 +113,13 @@ public class ReporterService implements
       LOGGER.info("Reporter not found : {}", reporter);
       throw new ServiceException(e);
     }
+  }
+
+  /**
+   * @return the riReporter
+   */
+  public RIReporter getRiReporter() {
+    return riReporter;
   }
 
 }
