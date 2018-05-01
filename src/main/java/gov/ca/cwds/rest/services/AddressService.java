@@ -123,6 +123,7 @@ public class AddressService implements CrudsService {
     // PostgreSQL:
     // ==================
 
+    LOGGER.info("XA for Postgres");
     // Proof of concept only. Don't bother parsing raw street addresses.
     final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
     nsAddr.setZip(reqAddr.getZip());
@@ -141,6 +142,7 @@ public class AddressService implements CrudsService {
     // DB2:
     // ==================
 
+    LOGGER.info("XA for DB2");
     final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
         xaCmsAddressDao.find(nsAddr.getLegacyId());
     cmsAddr.setAddressDescription(reqAddr.getStreetAddress());

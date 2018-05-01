@@ -20,6 +20,7 @@ public class WorkDB2UserInfo implements Work {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WorkDB2UserInfo.class);
 
+  @SuppressWarnings("squid:CallToDeprecatedMethod")
   @Override
   public void execute(Connection connection) throws SQLException {
     if (connection instanceof DB2Connection) {
