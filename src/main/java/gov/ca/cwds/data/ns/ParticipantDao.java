@@ -57,15 +57,18 @@ public class ParticipantDao extends BaseDaoImpl<ParticipantEntity> {
         .getCurrentSession()
         .getNamedQuery(FIND_PARTICIPANTS_BY_SCREENING_IDS)
         .setParameter("screeningIds", screeningIds);
-    Map<String, Set<ParticipantEntity>> result = new HashMap<>();
-    if (screeningIds != null && !screeningIds.isEmpty()) {
-      for (ParticipantEntity participantEntity : query.list()) {
-        String screeningId = participantEntity.getScreeningId();
-        if (!result.containsKey(screeningId)) {
-          result.put(screeningId, new HashSet<>());
-        }
-        result.get(screeningId).add(participantEntity);
+
+    if (screeningIds == null || screeningIds.isEmpty()) {
+      return new HashMap<>();
+    }
+
+    Map<String, Set<ParticipantEntity>> result = new HashMap<>(screeningIds.size());
+    for (ParticipantEntity participantEntity : query.list()) {
+      String screeningId = participantEntity.getScreeningId();
+      if (!result.containsKey(screeningId)) {
+        result.put(screeningId, new HashSet<>());
       }
+      result.get(screeningId).add(participantEntity);
     }
     return result;
   }
