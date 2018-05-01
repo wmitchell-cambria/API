@@ -109,6 +109,11 @@ public class XAUnitOfWorkAspect {
   /**
    * Get the current Hibernate session, if open, or open a new session.
    * 
+   * <p>
+   * For DB2 sessions, this method calls {@link WorkDB2UserInfo} to populate user information fields
+   * on the JDBC connection.
+   * </p>
+   * 
    * @param sessionFactory - open a session for this datasource
    * @return session current session for this datasource
    */
@@ -127,7 +132,6 @@ public class XAUnitOfWorkAspect {
 
     // Add user info to DB2 connections.
     session.doWork(new WorkDB2UserInfo());
-
     return session;
   }
 
@@ -136,15 +140,8 @@ public class XAUnitOfWorkAspect {
    */
   protected void openSessions() {
     LOGGER.info("XA OPEN SESSIONS.");
-    // final String[] sources = xaUnitOfWork.value();
-    // if (sources != null && sources.length > 0) {
-    // LOGGER.info("XA OPEN SESSIONS: named XA sources");
-    // sessionFactories.values().stream().filter(e -> ArrayUtils.contains(sources, e))
-    // .forEach(this::grabSession);
-    // } else {
     LOGGER.info("XA OPEN SESSIONS: all XA sources");
     sessionFactories.values().stream().forEach(this::grabSession);
-    // }
   }
 
   /**
