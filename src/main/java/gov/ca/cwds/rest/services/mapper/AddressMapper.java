@@ -12,8 +12,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper(uses = LegacyDescriptorMapper.class)
+@SuppressWarnings("squid:S1214")
 public interface AddressMapper {
-  @SuppressWarnings("squid:S1214")
   AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
   AddressIntakeApi map(Addresses addressEntity);

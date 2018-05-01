@@ -10,8 +10,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper
+@SuppressWarnings("squid:S1214")
 public interface LegacyDescriptorMapper {
-  @SuppressWarnings("squid:S1214")
   LegacyDescriptorMapper INSTANCE = Mappers.getMapper(LegacyDescriptorMapper.class);
 
   LegacyDescriptor map(LegacyDescriptorEntity legacyDescriptorEntity);

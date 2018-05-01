@@ -9,8 +9,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper
+@SuppressWarnings("squid:S1214")
 public interface AllegationTypeMapper {
-  @SuppressWarnings("squid:S1214")
   AllegationTypeMapper INSTANCE = Mappers.getMapper(AllegationTypeMapper.class);
 
   Set<String> mapToDomain(String[] allegationType);

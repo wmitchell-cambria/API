@@ -13,8 +13,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper(uses = AllegationTypeMapper.class)
+@SuppressWarnings("squid:S1214")
 public interface AllegationMapper {
-  @SuppressWarnings("squid:S1214")
   AllegationMapper INSTANCE = Mappers.getMapper(AllegationMapper.class);
 
   @Mapping(target = "perpetratorPersonId", source = "perpetratorId")

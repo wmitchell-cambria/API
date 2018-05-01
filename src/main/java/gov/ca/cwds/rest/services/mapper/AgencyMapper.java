@@ -13,8 +13,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper
+@SuppressWarnings("squid:S1214")
 public interface AgencyMapper {
-  @SuppressWarnings("squid:S1214")
   AgencyMapper INSTANCE = Mappers.getMapper(AgencyMapper.class);
 
   @Mapping(target = "type", source = "category")

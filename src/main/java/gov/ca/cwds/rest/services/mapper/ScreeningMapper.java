@@ -12,8 +12,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper(imports = DomainChef.class)
+@SuppressWarnings("squid:S1214")
 public interface ScreeningMapper {
-  @SuppressWarnings("squid:S1214")
   ScreeningMapper INSTANCE = Mappers.getMapper(ScreeningMapper.class);
 
   @Mapping(target = "reportNarrative", source = "narrative")

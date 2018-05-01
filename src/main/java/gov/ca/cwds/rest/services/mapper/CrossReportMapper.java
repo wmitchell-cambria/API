@@ -16,8 +16,8 @@ import org.mapstruct.factory.Mappers;
  * CWDS API Team
  */
 @Mapper(uses = AgencyMapper.class)
+@SuppressWarnings("squid:S1214")
 public interface CrossReportMapper {
-  @SuppressWarnings("squid:S1214")
   CrossReportMapper INSTANCE = Mappers.getMapper(CrossReportMapper.class);
 
   @Mapping(target = "method", source = "communicationMethod")
