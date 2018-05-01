@@ -1,5 +1,10 @@
 package gov.ca.cwds.data.persistence.xa;
 
+/**
+ * Checked exception for XA transaction errors.
+ * 
+ * @author CWDS API Team
+ */
 public class CaresXAException extends Exception {
 
   private static final long serialVersionUID = 1L;
