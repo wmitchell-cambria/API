@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.investigation;
 
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,7 +9,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.ClientDao;
-import gov.ca.cwds.data.dao.investigation.RelationshipsDao;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -28,7 +28,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 public class ClientsRelationshipsService
     implements TypedCrudsService<String, RelationshipList, Response> {
 
-  private RelationshipsDao relationshipsDao;
+  private ClientRelationshipDao clientRelationshipDao;
   private ClientDao clientDao;
 
   private RelationshipList validRelationshipList = new RelationshipListEntityBuilder().build();
@@ -36,13 +36,13 @@ public class ClientsRelationshipsService
   /**
    * Constructor and injecting the beans
    * 
-   * @param relationshipsDao - relationshipsDao instance
+   * @param clientRelationshipDao - ClientRelationshipDao instance
    * @param clientDao - clientDao instance
    */
   @Inject
-  public ClientsRelationshipsService(RelationshipsDao relationshipsDao, ClientDao clientDao) {
+  public ClientsRelationshipsService(ClientRelationshipDao clientRelationshipDao, ClientDao clientDao) {
     super();
-    this.relationshipsDao = relationshipsDao;
+    this.clientRelationshipDao = clientRelationshipDao;
     this.clientDao = clientDao;
   }
 
@@ -77,7 +77,7 @@ public class ClientsRelationshipsService
     Relationship relationship;
     for (ReferralClient refClient : referral.getReferralClients()) {
       ClientRelationship[] persistedClientRelationships =
-          this.relationshipsDao.findClientRelationshipByPrimaryClientId(refClient.getClientId());
+          this.clientRelationshipDao.findByPrimaryClientId(refClient.getClientId());
       if (persistedClientRelationships.length > 0) {
         relationship =
             this.constructRelationshipData(persistedClientRelationships, refClient.getClientId());

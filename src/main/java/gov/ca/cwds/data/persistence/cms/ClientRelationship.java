@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.data.persistence.cms.ClientRelationship.FIND_CLIENT_RELATIONSHIP_BY_PRIMARY_CLIENT_ID;
+import static gov.ca.cwds.data.persistence.cms.ClientRelationship.FIND_CLIENT_RELATIONSHIP_BY_SECONDARY_CLIENT_ID;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Date;
@@ -30,10 +32,10 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * @author CWDS API Team
  */
 @NamedQuery(
-    name = "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipByPrimaryClientId",
+    name = FIND_CLIENT_RELATIONSHIP_BY_PRIMARY_CLIENT_ID,
     query = "FROM gov.ca.cwds.data.persistence.cms.ClientRelationship WHERE primaryClientId = :primaryClientId")
 @NamedQuery(
-    name = "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipBySecondaryClientId",
+    name = FIND_CLIENT_RELATIONSHIP_BY_SECONDARY_CLIENT_ID,
     query = "FROM gov.ca.cwds.data.persistence.cms.ClientRelationship WHERE secondaryClientId = :secondaryClientId")
 @Entity
 @Table(name = "CLN_RELT")
@@ -42,6 +44,9 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 public class ClientRelationship extends CmsPersistentObject {
 
   private static final long serialVersionUID = 1L;
+
+  public static final String FIND_CLIENT_RELATIONSHIP_BY_PRIMARY_CLIENT_ID = "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipByPrimaryClientId";
+  public static final String FIND_CLIENT_RELATIONSHIP_BY_SECONDARY_CLIENT_ID = "gov.ca.cwds.data.persistence.cms.ClientRelationship.findClientRelationshipBySecondaryClientId";
 
   @Column(name = "ABSENT_CD")
   private String absentParentCode;
