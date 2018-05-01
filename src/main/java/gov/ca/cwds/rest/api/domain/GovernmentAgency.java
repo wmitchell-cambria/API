@@ -39,7 +39,11 @@ public class GovernmentAgency implements Serializable {
       "DEPARTMENT_OF_JUSTICE", "LAW_ENFORCEMENT"})
   private String type;
 
+  /**
+   * default constructor
+   */
   public GovernmentAgency() {
+    // default
   }
 
   /**

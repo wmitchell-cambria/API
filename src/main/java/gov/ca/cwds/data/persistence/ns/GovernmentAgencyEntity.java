@@ -62,7 +62,13 @@ public class GovernmentAgencyEntity implements PersistentObject {
   @Temporal(TemporalType.TIMESTAMP)
   private Date updatedAt;
 
+  /**
+   * Default constructor
+   *
+   * Required for Hibernate
+   */
   public GovernmentAgencyEntity() {
+    // default
   }
 
   public String getId() {

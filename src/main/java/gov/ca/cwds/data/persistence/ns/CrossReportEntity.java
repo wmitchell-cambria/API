@@ -79,7 +79,13 @@ public class CrossReportEntity implements PersistentObject {
     this.id = id;
   }
 
+  /**
+   * Default constructor
+   *
+   * Required for Hibernate
+   */
   public CrossReportEntity() {
+    // default
   }
 
   @Override

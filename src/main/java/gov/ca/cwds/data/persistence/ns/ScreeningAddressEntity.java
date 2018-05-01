@@ -66,6 +66,15 @@ public class ScreeningAddressEntity implements PersistentObject {
     this.addressId = addressId;
   }
 
+  /**
+   * Default constructor
+   *
+   * Required for Hibernate
+   */
+  public ScreeningAddressEntity() {
+    // default
+  }
+
   @Override
   public Serializable getPrimaryKey() {
     return getId();

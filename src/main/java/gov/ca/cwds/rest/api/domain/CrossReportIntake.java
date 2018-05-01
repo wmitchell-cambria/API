@@ -68,7 +68,11 @@ public class CrossReportIntake extends ReportingDomain implements Request, Respo
   @Valid
   private Set<GovernmentAgency> agencies = new HashSet<>();
 
+  /**
+   * default constructor
+   */
   public CrossReportIntake() {
+    // default
   }
 
 

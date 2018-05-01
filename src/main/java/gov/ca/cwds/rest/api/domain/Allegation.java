@@ -64,7 +64,11 @@ public class Allegation extends ReportingDomain implements Request, Response {
   @ApiModelProperty(example = "34")
   private String county;
 
+  /**
+   * default constructor
+   */
   public Allegation() {
+    // default
   }
 
   /**
