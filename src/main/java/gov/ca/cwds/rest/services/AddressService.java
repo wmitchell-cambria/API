@@ -16,6 +16,7 @@ import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
+import gov.ca.cwds.rest.api.domain.AddressUtils;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.resources.AddressResource;
@@ -124,7 +125,7 @@ public class AddressService implements CrudsService {
 
       // Proof of concept only. Don't bother parsing raw street addresses.
       final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
-      nsAddr.setZip(reqAddr.getZip());
+      nsAddr.setZip(AddressUtils.defaultIfBlank(reqAddr.getZip()));
       nsAddr.setCity(reqAddr.getCity());
       nsAddr.setLegacyId(reqAddr.getLegacyId());
 
