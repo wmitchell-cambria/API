@@ -177,7 +177,7 @@ public class ParticipantService implements CrudsService {
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
-      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId, dateStarted);
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
@@ -190,7 +190,7 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder, incomingParticipant);
+        processChildClient(clientId, messageBuilder);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -258,12 +258,10 @@ public class ParticipantService implements CrudsService {
   }
 
   private boolean updateClient(ScreeningToReferral screeningToReferral,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId,
-      String dateStarted) {
+      MessageBuilder messageBuilder, Participant incomingParticipant, String clientId) {
     Client foundClient = this.clientService.find(clientId);
     if (foundClient != null) {
-      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient,
-          dateStarted);
+      updateClient(screeningToReferral, messageBuilder, incomingParticipant, foundClient);
     } else {
       String message =
           " Legacy Id of Participant does not correspond to an existing CWS/CMS Client ";
@@ -275,7 +273,7 @@ public class ParticipantService implements CrudsService {
   }
 
   private void updateClient(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder,
-      Participant incomingParticipant, Client foundClient, String dateStarted) {
+      Participant incomingParticipant, Client foundClient) {
     DateTimeComparatorInterface comparator = new DateTimeComparator();
     if (okToUpdateClient(incomingParticipant, foundClient, comparator)) {
       List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -298,17 +296,10 @@ public class ParticipantService implements CrudsService {
        */
       executeR04466ClientSensitivityIndicator(foundClient, screeningToReferral);
 
-      boolean childClientIndicatorVar = false;
-      if (StringUtils.isBlank(foundClient.getBirthDate())
-          && StringUtils.isNotBlank(incomingParticipant.getDateOfBirth())) {
-        childClientIndicatorVar =
-            new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
-      }
-
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
-          incomingParticipant.getGender(), childClientIndicatorVar, primaryRaceCode,
-          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
+          incomingParticipant.getGender(), primaryRaceCode, unableToDetermineCode,
+          hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
@@ -332,7 +323,6 @@ public class ParticipantService implements CrudsService {
         otherRaceCodes);
     if (savedClient != null) {
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedClient.getLastUpdatedTime());
-      processChildClient(foundClient.getExistingClientId(), messageBuilder, incomingParticipant);
     } else {
       messageBuilder.addMessageAndLog("Unable to save Client", LOGGER);
     }
@@ -394,10 +384,9 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder,
-      Participant incomingParticipant) {
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
-    if (exsistingChild == null && StringUtils.isNotBlank(incomingParticipant.getDateOfBirth())) {
+    if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
       messageBuilder.addDomainValidationError(validator.validate(childClient));
       exsistingChild = this.childClientService.create(childClient);
