@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.ValidSystemCodeId;
+import gov.ca.cwds.rest.validation.ValidZipCode;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -57,7 +58,7 @@ public class Address extends ReportingDomain implements Request, Response {
 
   @JsonProperty("zip")
   @ApiModelProperty(value = "Zip", example = "95757")
-  @Size(min = 5, max = 5)
+  @ValidZipCode
   private String zip;
 
   @JsonProperty("type")
