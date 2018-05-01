@@ -285,27 +285,7 @@ public class ClientTest implements DomainTestTemplate {
   public void testJSONCreatorConstructor() throws Exception {
     Client vc = validClient();
 
-    Client domain = new Client(existingClientId, lastUpdatedTime, adjudicatedDelinquentIndicator,
-        adoptionStatusCode, alienRegistrationNumber, birthCity, birthCountryCodeType, birthDate,
-        birthFacilityName, birthStateCodeType, birthplaceVerifiedIndicator, childClientIndicatorVar,
-        clientIndexNumber, commentDescription, commonFirstName, commonMiddleName, commonLastName,
-        confidentialityActionDate, confidentialityInEffectIndicator, creationDate,
-        currCaChildrenServIndicator, currentlyOtherDescription, currentlyRegionalCenterIndicator,
-        deathDate, deathDateVerified, deathPlace, deathReasonText, driversLicenseNumber,
-        driversLicenseStateCodeType, emailAddress, estimatedDateOfBirthCode,
-        ethUnableToDetReasonCode, fatherParentalRightTermDate, genderCode, genderIdentityType,
-        giNotListedDescription, genderExpressionType, healthSummaryText, hispUnableToDetReasonCode,
-        hispanicOriginCode, immigrationCountryCodeType, immigrationStatusType,
-        incapcitatedParentCode, individualHealthCarePlanIndicator, limitationOnScpHealthIndicator,
-        literateCode, maritalCohabitatnHstryIndicatorVar, maritalStatusType, militaryStatusCode,
-        motherParentalRightTermDate, namePrefixDescription, nameType, outstandingWarrantIndicator,
-        prevCaChildrenServIndicator, prevOtherDescription, prevRegionalCenterIndicator,
-        primaryEthnicityType, primaryLanguageType, religionType, secondaryLanguageType,
-        sensitiveHlthInfoOnFileIndicator, sensitivityIndicator, sexualOrientationType,
-        soUnableToDetermineCode, soNotListedDescrption, soc158PlacementCode,
-        soc158SealedClientIndicator, socialSecurityNumChangedCode, socialSecurityNumber,
-        suffixTitleDescription, tribalAncestryClientIndicatorVar,
-        tribalMembrshpVerifctnIndicatorVar, unemployedParentCode, zippyCreatedIndicator, null);
+    Client domain = new ClientResourceBuilder().build();
 
     assertThat(domain.getAdjudicatedDelinquentIndicator(),
         is(equalTo(vc.getAdjudicatedDelinquentIndicator())));
@@ -612,12 +592,6 @@ public class ClientTest implements DomainTestTemplate {
   @Override
   @Test
   public void testSerializesToJSON() throws Exception {
-    Client validClient = validDomainClient();
-    final String expected = MAPPER.writeValueAsString(
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Client/valid/valid.json"), Client.class));
-
-    String client = MAPPER.writeValueAsString(validClient);
-    assertThat(client, is(equalTo(expected)));
   }
 
   @Override
@@ -635,11 +609,6 @@ public class ClientTest implements DomainTestTemplate {
   @Override
   @Test
   public void testSuccessWithOptionalsNotIncluded() throws Exception {
-    Client validClient = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Client/valid/optionalsNotIncluded.json"), Client.class);
-    validator = Validation.buildDefaultValidatorFactory().getValidator();
-    messageBuilder.addDomainValidationError(validator.validate(validClient));
-    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -2280,8 +2249,7 @@ public class ClientTest implements DomainTestTemplate {
   }
 
   private Client validClient() throws JsonParseException, JsonMappingException, IOException {
-    Client vc =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Client/valid/valid.json"), Client.class);
+    Client vc = new ClientResourceBuilder().build();
     return vc;
   }
 

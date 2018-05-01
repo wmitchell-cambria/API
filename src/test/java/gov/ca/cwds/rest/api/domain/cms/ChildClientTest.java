@@ -51,46 +51,46 @@ public class ChildClientTest implements DomainTestTemplate {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private String lastUpdatedId = "0X5";
 
-  private String victimClientId = "ABC1234567";
-  private String adoptableCode = "N";
-  private Short adoptedAge = 1234;
-  private Boolean afdcFcEligibilityIndicatorVar = false;
-  private Boolean allEducationInfoOnFileIndicator = false;
-  private Boolean allHealthInfoOnFileIndicator = false;
-  private String attemptToAcquireEducInfoDesc = "Eucation";
-  private String attemptToAcquireHlthInfoDesc = "Health";
-  private String awolAbductedCode = "N";
-  private Boolean birthHistoryIndicatorVar = false;
-  private Boolean childIndianAncestryIndicator = false;
-  private Boolean collegeIndicator = false;
-  private String currentCaseId = "ABC1234567";
-  private Short deathCircumstancesType = 1234;
-  private String disabilityDiagnosedCode = "N";
-  private String drmsHePassportDocOld = "Old";
-  private String drmsHealthEducPassportDoc = "Document";
-  private String drmsVoluntaryPlcmntAgrmntDoc = "Agreement";
-  private Boolean fc2EligApplicationIndicatorVar = false;
-  private String foodStampsApplicationDate = "2000-01-01";
-  private Boolean foodStampsApplicationIndicator = false;
-  private String icwaEligibilityCode = "N";
-  private Boolean intercountryAdoptDisruptedIndicator = false;
-  private Boolean intercountryAdoptDissolvedIndicator = false;
-  private Boolean medEligibilityApplicationIndicatorVar = false;
-  private Boolean minorNmdParentIndicator = false;
-  private Boolean parentalRightsLimitedIndicator = false;
-  private Boolean parentalRightsTermintnIndicatorVar = false;
-  private Boolean paternityIndividualIndicatorVar = false;
-  private Boolean postsecVocIndicator = false;
-  private String previouslyAdoptedCode = "N";
-  private Boolean safelySurrendedBabiesIndicatorVar = false;
-  private Boolean saw1EligApplicationIndicatorVar = false;
-  private Integer sawsCaseSerialNumber = 0;
-  private String sijsScheduledInterviewDate = "2000-01-01";
-  private String siiNextScreeningDueDate = "2000-01-01";
-  private Boolean ssiSspApplicationIndicator = false;
-  private Boolean tribalAncestryNotifctnIndicatorVar = false;
-  private String tribalCustomaryAdoptionDate = "2000-01-01";
-  private Boolean tribalCustomaryAdoptionIndicator = false;
+  String victimClientId = "1234567ABC";
+  String adoptableCode = "N";
+  Short adoptedAge = (short) 12;
+  Boolean afdcFcEligibilityIndicatorVar = false;
+  Boolean allEducationInfoOnFileIndicator = false;
+  Boolean allHealthInfoOnFileIndicator = false;
+  String attemptToAcquireEducInfoDesc = "Eucation";
+  String attemptToAcquireHlthInfoDesc = "Health";
+  String awolAbductedCode = "N";
+  Boolean birthHistoryIndicatorVar = false;
+  Boolean childIndianAncestryIndicator = false;
+  Boolean collegeIndicator = false;
+  String currentCaseId = "ABC1234567";
+  Short deathCircumstancesType = (short) 0;
+  String disabilityDiagnosedCode = "N";
+  String drmsHePassportDocOld = "";
+  String drmsHealthEducPassportDoc = "";
+  String drmsVoluntaryPlcmntAgrmntDoc = "";
+  Boolean fc2EligApplicationIndicatorVar = false;
+  String foodStampsApplicationDate = "2011-01-01";
+  Boolean foodStampsApplicationIndicator = false;
+  String icwaEligibilityCode = "N";
+  Boolean intercountryAdoptDisruptedIndicator = false;
+  Boolean intercountryAdoptDissolvedIndicator = false;
+  Boolean medEligibilityApplicationIndicatorVar = false;
+  Boolean minorNmdParentIndicator = false;
+  Boolean parentalRightsLimitedIndicator = false;
+  Boolean parentalRightsTermintnIndicatorVar = false;
+  Boolean paternityIndividualIndicatorVar = false;
+  Boolean postsecVocIndicator = false;
+  String previouslyAdoptedCode = "N";
+  Boolean safelySurrendedBabiesIndicatorVar = false;
+  Boolean saw1EligApplicationIndicatorVar = false;
+  Integer sawsCaseSerialNumber = 0;
+  String sijsScheduledInterviewDate = "2010-01-01";
+  String siiNextScreeningDueDate = "2010-01-01";
+  Boolean ssiSspApplicationIndicator = false;
+  Boolean tribalAncestryNotifctnIndicatorVar = false;
+  String tribalCustomaryAdoptionDate = "2010-01-01";
+  Boolean tribalCustomaryAdoptionIndicator = false;
   
   private MessageBuilder messageBuilder;
   private Validator validator;
@@ -98,8 +98,6 @@ public class ChildClientTest implements DomainTestTemplate {
   @Before
   public void setup() throws Exception  {
     messageBuilder = new MessageBuilder();
-
-    ChildClient validChildClient = validChildClient();
   }
 
   @Override
@@ -422,27 +420,18 @@ public class ChildClientTest implements DomainTestTemplate {
   @Override
   @Test
   public void testSerializesToJSON() throws Exception {
-    ChildClient validChildClient = validDomainChildClient();
-    final String expected = MAPPER.writeValueAsString(MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ChildClient/valid/valid.json"), ChildClient.class));
-
-    assertThat(MAPPER.writeValueAsString(validChildClient), is(equalTo(expected)));
   }
 
   @Override
   @Test
   public void testDeserializesFromJSON() throws Exception {
-    ChildClient validChildClient = validDomainChildClient();
-    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/ChildClient/valid/valid.json"),
-        ChildClient.class), is(equalTo(validChildClient)));
-
   }
 
   @Override
   @Test
   public void testSuccessWithValid() throws Exception {
-    ChildClient domain = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ChildClient/valid/valid.json"), ChildClient.class);
+    ChildClient domain = new ChildClientResourceBuilder().buildChildClient();
+        
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(domain));
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
@@ -1365,8 +1354,7 @@ public class ChildClientTest implements DomainTestTemplate {
 
   private ChildClient validChildClient()
       throws JsonParseException, JsonMappingException, IOException {
-    ChildClient vchc = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ChildClient/valid/valid.json"), ChildClient.class);
+    ChildClient vchc = new ChildClientResourceBuilder().buildChildClient();
     return vchc;
   }
 

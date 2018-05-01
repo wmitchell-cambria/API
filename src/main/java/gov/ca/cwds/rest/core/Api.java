@@ -110,11 +110,6 @@ public final class Api {
   public static final String RESOURCE_PEOPLE = "people";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRAL} API.
-   */
-  public static final String RESOURCE_REFERRAL = "_referrals";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_REFERRALS} API..
    */
   public static final String RESOURCE_REFERRALS = "referrals";
