@@ -63,13 +63,13 @@ public class CrossReportServiceTest {
   @Test
   public void findReturnsCorrectCrossReportWhenFound() throws Exception {
     CrossReport expected = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
 
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport(expected.getThirdId(), expected, "0X5",
             new Date());
     when(crossReportDao.find(eq(expected.getThirdId()))).thenReturn(crossReport);
-    CrossReport found = crossReportService.find("ABC1234567");
+    CrossReport found = crossReportService.find("1234ABC123");
     assertThat(found, is(expected));
   }
 
@@ -98,9 +98,9 @@ public class CrossReportServiceTest {
   @SuppressWarnings("javadoc")
   @Test
   public void crossReportServiceDeleteReturnsNotNull() throws Exception {
-    String thirdId = "ABC1234567";
+    String thirdId = "1234ABC123";
     CrossReport expected = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport(thirdId, expected, "0XA", new Date());
 
@@ -114,15 +114,15 @@ public class CrossReportServiceTest {
   @Test
   public void updateReturnsCrossReportResponseOnSuccess() throws Exception {
     CrossReport expected = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
 
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport(expected.getThirdId(), expected, "ABC",
             new Date());
 
-    when(crossReportDao.find("ABC1234567")).thenReturn(crossReport);
+    when(crossReportDao.find("1234ABC123")).thenReturn(crossReport);
     when(crossReportDao.update(any())).thenReturn(crossReport);
-    Object retval = crossReportService.update("ABC1234567", expected);
+    Object retval = crossReportService.update("1234ABC123", expected);
     assertThat(retval.getClass(), is(CrossReport.class));
   }
 
@@ -130,17 +130,17 @@ public class CrossReportServiceTest {
   @Test
   public void updateReturnsCorrectCrossReportOnSuccess() throws Exception {
     CrossReport crossReportRequest = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
 
     gov.ca.cwds.data.persistence.cms.CrossReport crossReport =
         new gov.ca.cwds.data.persistence.cms.CrossReport(crossReportRequest.getThirdId(),
             crossReportRequest, "ABC", new Date());
 
-    when(crossReportDao.find("ABC1234567")).thenReturn(crossReport);
+    when(crossReportDao.find("1234ABC123")).thenReturn(crossReport);
     when(crossReportDao.update(any())).thenReturn(crossReport);
 
     CrossReport expected = new CrossReport(crossReport);
-    CrossReport updated = crossReportService.update("ABC1234567", expected);
+    CrossReport updated = crossReportService.update("1234ABC123", expected);
     assertThat(updated, is(expected));
   }
 
@@ -150,7 +150,7 @@ public class CrossReportServiceTest {
 
     try {
       CrossReport crossReportRequest = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+          fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
 
       when(crossReportDao.update(any())).thenThrow(EntityNotFoundException.class);
 
@@ -165,7 +165,7 @@ public class CrossReportServiceTest {
   @Test
   public void createReturnsPostedCrossReportClass() throws Exception {
     CrossReport crossReportDomain = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     gov.ca.cwds.data.persistence.cms.CrossReport toCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
             crossReportDomain, "ABC", new Date());
@@ -183,7 +183,7 @@ public class CrossReportServiceTest {
   public void crossReportServiceCreateThrowsEntityExistsException() throws Exception {
     try {
       CrossReport crossReportRequest = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+          fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
 
       when(crossReportDao.create(any())).thenThrow(EntityExistsException.class);
 
@@ -197,7 +197,7 @@ public class CrossReportServiceTest {
   @Test
   public void createReturnsNonNull() throws Exception {
     CrossReport crossReportDomain = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     gov.ca.cwds.data.persistence.cms.CrossReport toCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
             crossReportDomain, "ABC", new Date());
@@ -214,7 +214,7 @@ public class CrossReportServiceTest {
   @Test
   public void createReturnsCorrectPostedCrossReport() throws Exception {
     CrossReport crossReportDomain = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     gov.ca.cwds.data.persistence.cms.CrossReport toCreate =
         new gov.ca.cwds.data.persistence.cms.CrossReport(crossReportDomain.getThirdId(),
             crossReportDomain, "ABC", new Date());
@@ -236,7 +236,7 @@ public class CrossReportServiceTest {
   @Test
   public void createReturnsGeneratedThirdId() throws Exception {
     CrossReport crossReportDomain = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     when(crossReportDao.create(any(gov.ca.cwds.data.persistence.cms.CrossReport.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.CrossReport>() {
 

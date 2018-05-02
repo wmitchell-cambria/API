@@ -9,17 +9,21 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -40,29 +44,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("javadoc")
 public class R00849ReporterEmployerNameTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REPORTER + "/";
-
-  private static final ReporterResource mockedReporterResource = mock(ReporterResource.class);
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @ClassRule
-  public static final ResourceTestRule resources = ResourceTestRule.builder()
-      .addResource(mockedReporterResource).build();
-
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+  
   @Before
   public void setup() throws Exception {
-    @SuppressWarnings("rawtypes")
-    CrudsDao crudsDao = mock(CrudsDao.class);
-    when(crudsDao.find(any())).thenReturn(mock(gov.ca.cwds.data.persistence.cms.Reporter.class));
-    Reporter validReporter = validReporter();
-
-    when(mockedReporterResource.create(eq(validReporter))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    messageBuilder = new MessageBuilder();
   }
 
 
@@ -82,67 +76,42 @@ public class R00849ReporterEmployerNameTest {
    */
   @Test
   public void testBothLawEnforcementIdExistsAndEmployerNameExistsFails() throws Exception {
-    Reporter toCreate =
-        MAPPER
-            .readValue(
-                fixture("fixtures/domain/legacy/Reporter/invalid/LawEnforcementIdAndEmployerName.json"),
-                Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"Properties [employerName, lawEnforcementId] are mutually exclusive but multiple values are set\"]}")));
+    Reporter toCreate = new ReporterResourceBuilder().setLawEnforcementId("lawid").setEmployerName("name").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
+
+   List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+   for (ErrorMessage message : validationErrors) {
+//     System.out.println(message.getMessage());
+     if (message.getMessage().equals("Properties [employerName, lawEnforcementId] are mutually exclusive but multiple values are set")) {
+       theErrorDetected = true;
+     }
+   }
+   assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void testBothLawEnforcementIdIsEmptyAndEmployerNameIsEmptySuccess() throws Exception {
-    Reporter toCreate =
-        MAPPER
-            .readValue(
-                fixture("fixtures/domain/legacy/Reporter/valid/notLawEnforcementIdNotEmployerName.json"),
-                Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-
+    Reporter toCreate = new ReporterResourceBuilder().setLawEnforcementId("").setEmployerName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+   messageBuilder.addDomainValidationError(validator.validate(toCreate));
+   assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testLawEnforcementIdIsEmptyAndEmployerNameExistsSuccess() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/domain/legacy/Reporter/valid/lawEnforcementIdNullEmployerName.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter toCreate = new ReporterResourceBuilder().setLawEnforcementId("").setEmployerName("name").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+   messageBuilder.addDomainValidationError(validator.validate(toCreate));
+   assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testLawEnforcementIdExistsAndEmployerNameIsEmptySuccess() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/domain/legacy/Reporter/valid/lawEnforcementIdEmployerNameNot.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter toCreate = new ReporterResourceBuilder().setLawEnforcementId("lawid").setEmployerName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+   messageBuilder.addDomainValidationError(validator.validate(toCreate));
+   assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
-
-  /*
-   * Utilities
-   */
-  private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {
-
-    Reporter validReporter =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
-            Reporter.class);
-    return validReporter;
-
   }
-}

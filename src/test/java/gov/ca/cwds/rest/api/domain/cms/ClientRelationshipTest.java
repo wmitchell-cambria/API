@@ -11,7 +11,9 @@ import static org.mockito.Mockito.when;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,27 +21,19 @@ import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.cms.ClientRelationshipResource;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 public class ClientRelationshipTest {
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LEGACY_RELATIONSHIPS + "/";
-
-  private static final ClientRelationshipResource mockedResource =
-      mock(ClientRelationshipResource.class);
-
   @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedResource).build();
   private ClientRelationship validClientRelationship = validClientRelationship();
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -52,10 +46,12 @@ public class ClientRelationshipTest {
   private String primaryClientId = "PRICLIENT";
   private String sameHomeCode = "Y";
 
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+
   @Before
   public void setup() {
-    when(mockedResource.create(eq(validClientRelationship)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    messageBuilder = new MessageBuilder();
   }
 
   @Test
@@ -102,22 +98,20 @@ public class ClientRelationshipTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    assertThat(
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successfulWithOptionalsNotIncluded() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         null, secondaryClientId, primaryClientId, sameHomeCode, null);
-    assertThat(
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -125,38 +119,56 @@ public class ClientRelationshipTest {
    */
   @Test
   public void failsWhenAbsentParentCodeNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(null, clientRelationshipType, endDate,
+    ClientRelationship clientRelationship = new ClientRelationship(null, clientRelationshipType, endDate,
         secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("absentParentCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("absentParentCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenAbsentParentCodeEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship("", clientRelationshipType, endDate,
+    ClientRelationship clientRelationship = new ClientRelationship("", clientRelationshipType, endDate,
         secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("absentParentCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("absentParentCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenAbsentParentCodeTooLong() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship("AB", clientRelationshipType, endDate,
+    ClientRelationship clientRelationship = new ClientRelationship("AB", clientRelationshipType, endDate,
         secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("absentParentCode size must be 1"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("absentParentCode size must be 1")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -164,26 +176,38 @@ public class ClientRelationshipTest {
    */
   @Test
   public void failsWhenClientRelationshipTypeNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, null, endDate,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, null, endDate,
         secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientRelationshipType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("clientRelationshipType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenClientRelationshipTypeEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, null, endDate,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, null, endDate,
         secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientRelationshipType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("clientRelationshipType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -191,35 +215,38 @@ public class ClientRelationshipTest {
    */
   @Test
   public void successWhenEndDateEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         "", secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenEndDateNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         null, secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenEndDateWrongFormat() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         "09-09-2012", secondaryClientId, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("endDate must be in the format of yyyy-MM-dd"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("endDate must be in the format of yyyy-MM-dd")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -227,38 +254,56 @@ public class ClientRelationshipTest {
    */
   @Test
   public void failsWhenSecondaryClientIdNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, null, primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("secondaryClientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("secondaryClientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenSecondaryClientIdEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, "", primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("secondaryClientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("secondaryClientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenSecondaryClientIdTooLong() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, "123456789012", primaryClientId, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("secondaryClientId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("secondaryClientId size must be between 1 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -266,39 +311,56 @@ public class ClientRelationshipTest {
    */
   @Test
   public void failsWhenPrimaryClientIdNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, null, sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("primaryClientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("primaryClientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenPrimaryClientIdEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, "", sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("primaryClientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("primaryClientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenPrimaryClientIdTooLong() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, "123456789012", sameHomeCode, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("primaryClientId size must be between 1 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("primaryClientId size must be between 1 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -306,50 +368,74 @@ public class ClientRelationshipTest {
    */
   @Test
   public void failsWhenSameHomeCodeMissing() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, "", startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("sameHomeCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("sameHomeCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenSameHomeCodeNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, null, startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("sameHomeCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("sameHomeCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenSameHomeCodeEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, "", startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("sameHomeCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("sameHomeCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenSameHomeCodeTooLong() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, "AB", startDate);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("sameHomeCode size must be 1"),
-        is(greaterThanOrEqualTo(0)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("sameHomeCode size must be 1")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -357,36 +443,39 @@ public class ClientRelationshipTest {
    */
   @Test
   public void successWhenStartDateEmpty() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, sameHomeCode, "");
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenStartDateNull() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, sameHomeCode, null);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenStartDateWrongFormat() throws Exception {
-    ClientRelationship toCreate = new ClientRelationship(absentParentCode, clientRelationshipType,
+    ClientRelationship clientRelationship = new ClientRelationship(absentParentCode, clientRelationshipType,
         endDate, secondaryClientId, primaryClientId, sameHomeCode, "12-12-2000");
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("startDate must be in the format of yyyy-MM-dd"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(clientRelationship));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("startDate must be in the format of yyyy-MM-dd")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   /*
    * Utils

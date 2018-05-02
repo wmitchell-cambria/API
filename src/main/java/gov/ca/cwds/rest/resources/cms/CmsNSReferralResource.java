@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
 
 
 /**
- * Implementation of {@link CmsReferralResource}.
+ * Implementation of {@link CmsNSReferralResource}.
  * 
  * @author CWDS API Team
  */
