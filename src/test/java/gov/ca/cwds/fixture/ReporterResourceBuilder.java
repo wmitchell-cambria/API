@@ -12,7 +12,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 public class ReporterResourceBuilder {
   DateTime lastUpdatedTime = new DateTime();
   String badgeNumber = "";
-  String cityName = "";
+  String cityName = "city";
   Short colltrClientRptrReltnshpType = 0;
   Short communicationMethodType = 0;
   Boolean confidentialWaiverIndicator = false;
@@ -34,7 +34,7 @@ public class ReporterResourceBuilder {
   String streetNumber = "";
   String suffixTitleDescription = "";
   String zipcode = "";
-  String referralId = "";
+  String referralId = "1234567ABC";
   String lawEnforcementId = null;
   Short zipSuffixNumber = 0;
   String countySpecificCode = "99";
