@@ -9,7 +9,9 @@ import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,9 +21,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gov.ca.cwds.fixture.LongTextResourceBuilder;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.LongTextResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
@@ -31,19 +35,9 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class LongTextTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_LONG_TEXT + "/";
-  private static final LongTextResource mockedLongTextResource = mock(LongTextResource.class);
-
   @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  /**
-   * 
-   */
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedLongTextResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private LongText validLongText = validLongText();
@@ -52,13 +46,15 @@ public class LongTextTest {
   private String countySpecificCode = "57";
   private String textDescription = "Child Education level is below average";
 
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+  
   /**
    * 
    */
   @Before
   public void setup() {
-    when(mockedLongTextResource.create(eq(validLongText)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    messageBuilder = new MessageBuilder();
   }
 
   /*
@@ -132,137 +128,85 @@ public class LongTextTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    LongText toCreate = MAPPER
+    LongText longText = MAPPER
         .readValue(fixture("fixtures/domain/legacy/LongText/valid/valid.json"), LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(longText));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * countySpecificCode Tests
    */
-  /**
-   * @throws Exception test standard
-   * 
-   */
-  @Test
-  public void failsWhenCountySpecificCodeMissing() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/countySpecificCodeMissing.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /**
-   * @throws Exception test standard
-   * 
-   */
   @Test
   public void failsWhenCountySpecificCodeNull() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/countySpecificCodeNull.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    LongText longText = new LongTextResourceBuilder().setCountySpecificCode(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(longText));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  /**
-   * @throws Exception test standard
-   * 
-   */
-  @Test
-  public void failsWhenCountySpecificCodeEmpty() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/countySpecificCodeEmpty.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /**
-   * @throws Exception test standard
-   * 
-   */
   @Test
   public void failsWhenCountySpecificCodeTooLong() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/countySpecificCodeTooLong.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("countySpecificCode size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
+    LongText longText = new LongTextResourceBuilder().setCountySpecificCode("123").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(longText));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode size must be between 1 and 2")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * textDescription Tests
    */
-  /**
-   * @throws Exception test standard
-   * 
-   */
-  @Test
-  public void failsWhenTextDescriptionMissing() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/textDescriptionMissing.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("textDescription may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /**
-   * @throws Exception test standard
-   * 
-   */
   @Test
   public void failsWhenTextDescriptionNull() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/textDescriptionNull.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("textDescription may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    LongText longText = new LongTextResourceBuilder().setTextDescription(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(longText));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("textDescription may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  /**
-   * @throws Exception test standard
-   * 
-   */
   @Test
   public void failsWhenTextDescriptionEmpty() throws Exception {
-    LongText toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/LongText/invalid/textDescriptionEmpty.json"),
-        LongText.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("textDescription may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    LongText longText = new LongTextResourceBuilder().setTextDescription("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(longText));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("textDescription may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*

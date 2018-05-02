@@ -130,7 +130,7 @@ public class R05360ReferralCityMandatoryTest {
   @Test
   public void shouldNotBeValidReporterWithStreetNameOnly() {
     Reporter reporter = new ReporterResourceBuilder().setReferralId("1234567ABC")
-        .setStreetName("the street name").setStreetNumber("").build();
+        .setStreetName("the street name").setStreetNumber("").setCityName("").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(reporter));
     Boolean theErrorDetected = false;
