@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -24,7 +23,6 @@ import gov.ca.cwds.IntakeBaseTest;
  * @author CWDS API Team
  *
  */
-@Ignore
 public class HoiCaseResourceFT extends IntakeBaseTest {
   private static final String USER_SOCIAL_WORKER_ONLY =
       "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";

@@ -29,12 +29,10 @@ public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
 
     // DRS: Please document **why** this code is commented out.
     // Telepathy not working. Too much tin foil in hat.
-    /*
-     * new DatabaseHelper( configuration.getNsDataSourceFactory().getUrl(),
-     * configuration.getNsDataSourceFactory().getUser(),
-     * configuration.getNsDataSourceFactory().getPassword()).runScript(
-     * "liquibase/intake_ns_database_master.xml");
-     */
+     new DatabaseHelper( configuration.getNsDataSourceFactory().getUrl(),
+       configuration.getNsDataSourceFactory().getUser(),
+       configuration.getNsDataSourceFactory().getPassword())
+         .runScript("liquibase/api/api_intake_ns_database_master.xml");
 
     new DatabaseHelper(configuration.getCmsDataSourceFactory().getUrl(),
         configuration.getCmsDataSourceFactory().getUser(),

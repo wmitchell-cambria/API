@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQuery;
 
 import gov.ca.cwds.data.ns.NsPersistentObject;
+import gov.ca.cwds.rest.api.domain.AddressUtils;
 
 /**
  * {@link NsPersistentObject} representing an Address.
@@ -97,7 +98,7 @@ public class Address extends NsPersistentObject {
     this.streetAddress = address.getStreetAddress();
     this.city = address.getCity();
     this.state = address.getState() != null ? address.getState().toString() : null;
-    this.zip = address.getZip();
+    this.zip = AddressUtils.defaultIfBlank(address.getZip());
     this.type = address.getType() != null ? address.getType().toString() : null;
   }
 

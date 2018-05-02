@@ -31,10 +31,12 @@ public class ServicesModuleTest {
   public static class TestServicesModule extends AbstractModule {
 
     private ServicesModule servicesModule;
+    private MappingModule mappingModule = new MappingModule();
 
     @Override
     protected void configure() {
       install(servicesModule);
+      install(mappingModule);
     }
 
     public ServicesModule getServicesModule() {

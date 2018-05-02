@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522794924694-1">
+    <insert tableName="allegations">
+      <column name="id" valueNumeric="32"/>
+      <column name="screening_id" value="52"/>
+      <column name="perpetrator_id" value="43"/>
+      <column name="victim_id" value="42"/>
+      <column name="created_at" valueDate="2018-03-26 16:16:55.708901"/>
+      <column name="updated_at" valueDate="2018-03-26 16:16:55.708901"/>
+      <column name="allegation_types" value="{&quot;Physical Abuse&quot;,&quot;General Neglect&quot;}"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

@@ -6,6 +6,7 @@ import gov.ca.cwds.data.BaseDaoImpl;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
@@ -71,5 +72,13 @@ public class ParticipantDao extends BaseDaoImpl<ParticipantEntity> {
       result.get(screeningId).add(participantEntity);
     }
     return result;
+  }
+
+  public List<ParticipantEntity> getByScreeningId(String screeningId) {
+    @SuppressWarnings("unchecked")
+    final Query<ParticipantEntity> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(constructNamedQueryName("findByScreeningId"))
+        .setParameter("screeningId", screeningId);
+    return query.list();
   }
 }
