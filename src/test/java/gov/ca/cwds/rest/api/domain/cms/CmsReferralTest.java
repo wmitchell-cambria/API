@@ -355,17 +355,6 @@ public class CmsReferralTest {
   }
 
   @Test
-  public void SucessWhenCmsReferralEqualsOtherObjectType() throws Exception {
-    CmsReferral validCmsReferral = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
-
-    Referral validReferral = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
-
-    assertThat(validCmsReferral.equals(validReferral), is(equalTo(Boolean.FALSE)));
-  }
-
-  @Test
   public void SucessWhenCmsReferralAndEmptyReferralClient() throws Exception {
     CmsReferral validCmsReferral = this.validCmsReferral();
 

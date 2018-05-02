@@ -544,22 +544,6 @@ public class ReferralTest {
     EqualsVerifier.forClass(Referral.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
-  @Test
-  public void serializesToJSON() throws Exception {
-    final String expected = MAPPER.writeValueAsString(MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/valid/SerializeJsonValid.json"), Referral.class));
-
-    assertThat(MAPPER.writeValueAsString(validReferral()), is(equalTo(expected)));
-  }
-
-  @Test
-  public void deserializesFromJSON() throws Exception {
-    assertThat(
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Referral/valid/deserializeJsonValid.json"),
-            Referral.class),
-        is(equalTo(validReferral())));
-  }
-
   /*
    * Successful Tests
    */
@@ -570,15 +554,6 @@ public class ReferralTest {
     messageBuilder.addDomainValidationError(validator.validate(referral));
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
    }
-
-  @Test
-  public void successfulWithOptionalsNotIncluded() throws Exception {
-    Referral referral = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Referral/valid/optionalsNotIncluded.json"), Referral.class);
-    validator = Validation.buildDefaultValidatorFactory().getValidator();
-    messageBuilder.addDomainValidationError(validator.validate(referral));
-    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
-  }
 
   /*
    * additionalInfoIncludedCode Tests

@@ -99,13 +99,8 @@ public class ReporterTest {
   private Validator validator;
 
   @Before
-  public void setup() throws Exception {
-    
+  public void setup() throws Exception {   
     messageBuilder = new MessageBuilder();
-    
-    CrudsDao crudsDao = mock(CrudsDao.class);
-    when(crudsDao.find(any())).thenReturn(mock(gov.ca.cwds.data.persistence.cms.Reporter.class));
-    Reporter validReporter = validReporter();
   }
 
   /*
@@ -458,14 +453,14 @@ public class ReporterTest {
   @Test
   public void serializesToJSON() throws Exception {
     final String expected = MAPPER.writeValueAsString(MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class));
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class));
 
     assertThat(MAPPER.writeValueAsString(validReporter()), is(equalTo(expected)));
   }
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"),
         Reporter.class), is(equalTo(validReporter())));
   }
 
@@ -474,8 +469,7 @@ public class ReporterTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    Reporter reporter = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+    Reporter reporter = new ReporterResourceBuilder().build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(reporter));
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
@@ -1477,7 +1471,7 @@ public class ReporterTest {
   private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {
 
     Reporter validReporter = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
     return validReporter;
 
   }

@@ -638,7 +638,7 @@ public class R04464CrossReportLawEnforcementDueTest {
             new Date());
 
     Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
 
     gov.ca.cwds.data.persistence.cms.Reporter savedReporter =
         new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
@@ -791,7 +791,7 @@ public class R04464CrossReportLawEnforcementDueTest {
         new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "0X5", new Date());
 
     gov.ca.cwds.rest.api.domain.cms.CrossReport cmsCrossReport =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"),
+        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid.json"),
             gov.ca.cwds.rest.api.domain.cms.CrossReport.class);
 
     gov.ca.cwds.data.persistence.cms.CrossReport savedCrossReport =

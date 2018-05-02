@@ -154,7 +154,7 @@ public class ClientServiceTest {
   public void testUpdateReturnsCorrectEntity() throws Exception {
     String id = "Aaeae9r0F4";
     Client expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
 
     gov.ca.cwds.data.persistence.cms.Client client =
         new gov.ca.cwds.data.persistence.cms.Client(id, expected, "ABC", new Date());
@@ -170,7 +170,7 @@ public class ClientServiceTest {
   public void testUpdateThrowsExceptionWhenNotFound() throws Exception {
     try {
       Client clientRequest = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
 
       Address address = new AddressResourceBuilder().createAddress();
       RaceAndEthnicity raceAndEthnicity =
@@ -196,7 +196,7 @@ public class ClientServiceTest {
   public void testCreateReturnsPostedClass() throws Exception {
     String id = "Aaeae9r0F4";
     Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
@@ -211,7 +211,7 @@ public class ClientServiceTest {
   public void testFindInboundIdReturnsExisting() throws Exception {
     String id = "Aaeae9r0F4";
     Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
@@ -226,7 +226,7 @@ public class ClientServiceTest {
   public void reporterServiceCreateThrowsEntityExistsException() throws Exception {
     try {
       Client clientRequest = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
 
       when(clientDao.create(any())).thenThrow(EntityExistsException.class);
 
@@ -240,7 +240,7 @@ public class ClientServiceTest {
   public void testCreateReturnsNonNull() throws Exception {
     String id = "Aaeae9r0F4";
     Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
@@ -256,7 +256,7 @@ public class ClientServiceTest {
   public void testCreateReturnsCorrectEntity() throws Exception {
     String id = "Aaeae9r0F4";
     Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
 
@@ -272,7 +272,7 @@ public class ClientServiceTest {
   public void testCreateNullIDError() throws Exception {
     try {
       Client clientDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
       gov.ca.cwds.data.persistence.cms.Client toCreate =
           new gov.ca.cwds.data.persistence.cms.Client(null, clientDomain, "ABC", new Date());
 
@@ -290,7 +290,7 @@ public class ClientServiceTest {
 
     try {
       Client clientDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
       gov.ca.cwds.data.persistence.cms.Client toCreate =
           new gov.ca.cwds.data.persistence.cms.Client("    ", clientDomain, "ABC", new Date());
 
@@ -309,7 +309,7 @@ public class ClientServiceTest {
   @Test
   public void createReturnsGeneratedId() throws Exception {
     Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/valid/serviceValid.json"), Client.class);
+        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Client>() {
 

@@ -264,14 +264,14 @@ public class CrossReportTest {
   @Test
   public void serializesToJSON() throws Exception {
     final String expected = MAPPER.writeValueAsString(MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class));
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class));
 
     assertThat(MAPPER.writeValueAsString(validCrossReport()), is(equalTo(expected)));
   }
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"),
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid.json"),
         CrossReport.class), is(equalTo(validCrossReport())));
   }
 
@@ -289,10 +289,14 @@ public class CrossReportTest {
   @Test
   public void successfulWithOptionalsNotIncluded() throws Exception {
     CrossReport crossReport = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/optionalsNotIncluded.json"),
+        fixture("fixtures/domain/legacy/CrossReport/optionalsNotIncluded.json"),
         CrossReport.class);
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+      System.out.println(message.getMessage());
+    }
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
@@ -926,7 +930,7 @@ public class CrossReportTest {
   private CrossReport validCrossReport() throws Exception {
 
     CrossReport validCrossReport = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     return validCrossReport;
   }
 }
