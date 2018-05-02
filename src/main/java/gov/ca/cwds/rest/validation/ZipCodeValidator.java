@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.api.domain.AddressUtils;
  */
 public class ZipCodeValidator implements ConstraintValidator<ValidZipCode, String> {
 
-  private static final short ZIP_CODE_LENGHT = 5;
+  private static final short ZIP_CODE_LENGTH = 5;
 
   @Override
   public void initialize(ValidZipCode constraintAnnotation) {
@@ -30,7 +30,8 @@ public class ZipCodeValidator implements ConstraintValidator<ValidZipCode, Strin
    */
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return StringUtils.isBlank(value) || AddressUtils.DEFAULT_ZIP.equals(value.trim())
-        || ZIP_CODE_LENGHT == value.trim().length();
+    String valueTrimmed = StringUtils.trim(value);
+    return StringUtils.isBlank(valueTrimmed) || AddressUtils.DEFAULT_ZIP.equals(valueTrimmed)
+        || ZIP_CODE_LENGTH == valueTrimmed.length();
   }
 }
