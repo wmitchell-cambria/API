@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.util.GetValidVictimUtils;
+import gov.ca.cwds.rest.util.GetValidParticipantUtils;
 import gov.ca.cwds.rest.validation.VictimAgeRestriction;
 
 /**
@@ -53,7 +53,7 @@ public class R00786VictimAgeRestriction
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims = GetValidVictimUtils.getVictims(screening.getParticipants());
+    Collection<Participant> victims = GetValidParticipantUtils.getVictims(screening.getParticipants());
 
     if (!victims.isEmpty()) {
       // Referral receive timestamp

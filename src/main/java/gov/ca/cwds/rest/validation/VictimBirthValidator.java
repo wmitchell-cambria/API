@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.util.GetValidVictimUtils;
+import gov.ca.cwds.rest.util.GetValidParticipantUtils;
 
 /**
  * @author CWDS API team
@@ -26,7 +26,7 @@ public class VictimBirthValidator
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims = GetValidVictimUtils.getVictims(screening.getParticipants());
+    Collection<Participant> victims = GetValidParticipantUtils.getVictims(screening.getParticipants());
     if (!victims.isEmpty()) {
       for (Participant victim : victims) {
         if (!hasValidBirthDateOrAge(victim, context)) {
