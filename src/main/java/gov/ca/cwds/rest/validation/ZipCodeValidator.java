@@ -5,6 +5,8 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import gov.ca.cwds.rest.api.domain.AddressUtils;
+
 /**
  * Validates that a zip code is either null, empty (blank), or 5 digits long.
  * 
@@ -12,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ZipCodeValidator implements ConstraintValidator<ValidZipCode, String> {
 
-  private static final short ZIP_CODE_LENGHT = 5;
+  private static final short ZIP_CODE_LENGTH = 5;
 
   @Override
   public void initialize(ValidZipCode constraintAnnotation) {
@@ -28,6 +30,8 @@ public class ZipCodeValidator implements ConstraintValidator<ValidZipCode, Strin
    */
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return StringUtils.isBlank(value) || ZIP_CODE_LENGHT == value.trim().length();
+    String valueTrimmed = StringUtils.trim(value);
+    return StringUtils.isBlank(valueTrimmed) || AddressUtils.DEFAULT_ZIP.equals(valueTrimmed)
+        || ZIP_CODE_LENGTH == valueTrimmed.length();
   }
 }

@@ -122,7 +122,7 @@ public class AddressTest {
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     System.out.println(constraintViolations.iterator().next().getMessage());
     assertEquals(1, constraintViolations.size());
-    assertEquals("Zip should be empty/blank, null, or 5 digits",
+    assertEquals("Zip should be empty, zero, or 5 digits",
         constraintViolations.iterator().next().getMessage());
   }
 
@@ -152,8 +152,22 @@ public class AddressTest {
     Address toValidate = new AddressResourceBuilder().setZip("123").createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
-    assertEquals("Zip should be empty/blank, null, or 5 digits",
+    assertEquals("Zip should be empty, zero, or 5 digits",
         constraintViolations.iterator().next().getMessage());
+  }
+
+  @Test
+  public void testZipCodeZero() throws Exception {
+    Address toValidate = new AddressResourceBuilder().setZip("0").createAddress();
+    Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
+  public void testZipCodeZeroWithWhitespaces() throws Exception {
+    Address toValidate = new AddressResourceBuilder().setZip(" 0    ").createAddress();
+    Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
+    assertEquals(0, constraintViolations.size());
   }
 
   @Test
@@ -161,7 +175,7 @@ public class AddressTest {
     Address toValidate = new AddressResourceBuilder().setZip(" 123 ").createAddress();
     Set<ConstraintViolation<Address>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
-    assertEquals("Zip should be empty/blank, null, or 5 digits",
+    assertEquals("Zip should be empty, zero, or 5 digits",
         constraintViolations.iterator().next().getMessage());
   }
 
