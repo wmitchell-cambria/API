@@ -895,9 +895,9 @@ public class ScreeningToReferralServiceTest {
       // not interested in exception for this test
     }
     verify(foundClient, times(0)).update(any(), any(), any(), any(), any(), any(), any(), any(),
-        any(), any());
+        any());
     verify(foundClient, times(0)).update(any(), any(), any(), any(), any(), any(), any(), any(),
-        any(), any());
+        any());
   }
 
   @SuppressWarnings("javadoc")
