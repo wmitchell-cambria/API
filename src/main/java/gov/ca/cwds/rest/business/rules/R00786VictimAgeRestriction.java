@@ -53,7 +53,8 @@ public class R00786VictimAgeRestriction
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims = GetValidParticipantUtils.getVictims(screening.getParticipants());
+    Collection<Participant> victims =
+        GetValidParticipantUtils.getVictims(screening.getParticipants());
 
     if (!victims.isEmpty()) {
       // Referral receive timestamp

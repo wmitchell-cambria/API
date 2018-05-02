@@ -12,6 +12,9 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.util.GetValidParticipantUtils;
 
 /**
+ * Victim Birth Validator is implemented to validate the Dob, or AgeUnit, AgeUnitCode is required
+ * for the victim.
+ * 
  * @author CWDS API team
  *
  */
@@ -26,7 +29,8 @@ public class VictimBirthValidator
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims = GetValidParticipantUtils.getVictims(screening.getParticipants());
+    Collection<Participant> victims =
+        GetValidParticipantUtils.getVictims(screening.getParticipants());
     if (!victims.isEmpty()) {
       for (Participant victim : victims) {
         if (!hasValidBirthDateOrAge(victim, context)) {
@@ -40,20 +44,22 @@ public class VictimBirthValidator
 
   private boolean hasValidBirthDateOrAge(Participant victim, ConstraintValidatorContext context) {
     if (StringUtils.isBlank(victim.getDateOfBirth()) && victim.getApproximateAge().contains("0")) {
-      context.disableDefaultConstraintViolation();
-      context.buildConstraintViolationWithTemplate(
-          "Victim's should have either of the value DOB or AgeNumber").addConstraintViolation();
+      String message = "Victim's should have either of the value DOB or AgeNumber";
+      buildMessage(context, message);
       return false;
     }
     if (StringUtils.isNotBlank(victim.getApproximateAge())
         && StringUtils.isBlank(victim.getApproximateAgeUnits())) {
-      context.disableDefaultConstraintViolation();
-      context
-          .buildConstraintViolationWithTemplate("Victim's AgeUnit must be set if AgeNumber is set")
-          .addConstraintViolation();
+      String message = "Victim's AgeUnit must be set if AgeNumber is set";
+      buildMessage(context, message);
       return false;
     }
     return true;
+  }
+
+  private void buildMessage(ConstraintValidatorContext context, String message) {
+    context.disableDefaultConstraintViolation();
+    context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
   }
 
 }
