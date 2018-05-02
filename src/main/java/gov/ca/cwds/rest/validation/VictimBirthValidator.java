@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.util.GetValidParticipantUtils;
+import gov.ca.cwds.rest.util.ParticipantUtils;
 
 /**
  * Victim Birth Validator is implemented to validate the Dob, or AgeUnit, AgeUnitCode is required
@@ -30,7 +30,7 @@ public class VictimBirthValidator
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
     Collection<Participant> victims =
-        GetValidParticipantUtils.getVictims(screening.getParticipants());
+        ParticipantUtils.getVictims(screening.getParticipants());
     if (!victims.isEmpty()) {
       for (Participant victim : victims) {
         if (!hasValidBirthDateOrAge(victim, context)) {

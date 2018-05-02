@@ -15,12 +15,12 @@ import gov.ca.cwds.rest.api.domain.Role;
  * @author CWDS API team
  *
  */
-public class GetValidParticipantUtils {
+public class ParticipantUtils {
 
   /**
    * 
    */
-  private GetValidParticipantUtils() {
+  private ParticipantUtils() {
     // no-opt
   }
 
