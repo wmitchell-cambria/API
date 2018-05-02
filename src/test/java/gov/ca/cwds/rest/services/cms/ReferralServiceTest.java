@@ -148,7 +148,7 @@ public class ReferralServiceTest {
   @Test
   public void testFindReturnsCorrectEntity() throws Exception {
     Referral expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
+        .readValue(fixture("fixtures/domain/legacy/Referral/valid.json"), Referral.class);
 
     // #145948067: the Referral domain bean doesn't store the primary key???
     final String key = "1234567ABC";
@@ -251,7 +251,7 @@ public class ReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
 
-    Referral request = MAPPER.readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"),
+    Referral request = MAPPER.readValue(fixture("fixtures/domain/legacy/Referral/valid.json"),
         Referral.class);
 
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
@@ -646,7 +646,6 @@ public class ReferralServiceTest {
     isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
     assertThat(isValid, is(false));
   }
-
 
   @Test
   public void shouldReturnCreateDefaultSreenerNarrativeForNewReferral() {
