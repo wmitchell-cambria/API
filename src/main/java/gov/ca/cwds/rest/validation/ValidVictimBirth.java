@@ -15,7 +15,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * @ValidVictimBirth.
+ * Annotation ValidVictimBirth.
  * 
  * @author CWDS API Team
  *
