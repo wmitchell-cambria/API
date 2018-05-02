@@ -13,7 +13,9 @@ import static org.mockito.Mockito.when;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,8 +25,10 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.cms.DrmsDocumentResource;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -36,21 +40,16 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 @SuppressWarnings("javadoc")
 public class DrmsDocumentTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_DRMS_DOCUMENT + "/";
-
-  private static final DrmsDocumentResource mockedDrmsDocumentResource =
-      mock(DrmsDocumentResource.class);
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
+  
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+
 
   /**
    * 
    */
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedDrmsDocumentResource).build();
-
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private final static DateFormat tf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
   private String time = "2002-10-25T11:21:02.000196";
@@ -64,13 +63,7 @@ public class DrmsDocumentTest {
 
   @Before
   public void setup() throws Exception {
-    DrmsDocument validDrmsDocument = validDrmsDocument();
-
-    when(mockedDrmsDocumentResource.create(eq(validDrmsDocument)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
-
-    when(mockedDrmsDocumentResource.create(eq(validDrmsDocument)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    messageBuilder = new MessageBuilder();
   }
 
   /*
@@ -136,150 +129,98 @@ public class DrmsDocumentTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
+    DrmsDocument drmsDocument = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/valid.json"), DrmsDocument.class);
-    assertThat(
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(drmsDocument));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successfulWithOptionalsNotIncluded() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
+    DrmsDocument drmsDocument = MAPPER.readValue(
         fixture("fixtures/domain/legacy/DrmsDocument/valid/optionalsNotIncluded.json"),
         DrmsDocument.class);
-    assertThat(
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(drmsDocument));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * creationTimeStamp test
    */
   @Test
-  public void failsWhenCreationTimeStampMissing() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/creationTimeStampMissing.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("creationTimeStamp may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenCreationTimeStampNull() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/creationTimeStampNull.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("creationTimeStamp may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    DrmsDocument drmsDocument = new DrmsDocumentResourceBuilder().setCreationTimeStamp(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(drmsDocument));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenCreationTimeStampEmpty() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/creationTimeStampEmpty.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("creationTimeStamp may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("creationTimeStamp may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   /*
    * drmsDocumentTemplateId test
    */
   @Test
-  public void failsWhenDrmsDocumentTemplateIdMissing() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/drmsDocumentTemplateIdMissing.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("drmsDocumentTemplateId may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenDrmsDocumentTemplateIdNull() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/drmsDocumentTemplateIdNull.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("drmsDocumentTemplateId may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    DrmsDocument drmsDocument = new DrmsDocumentResourceBuilder().setDrmsDocumentTemplateId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(drmsDocument));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenDrmsDocumentTemplateIdEmpty() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/drmsDocumentTemplateIdEmpty.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf(
-        "drmsDocumentTemplateId size must be between 1 and 10"), is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("drmsDocumentTemplateId may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * handleName test
    */
   @Test
-  public void failsWhenHandleNameMissing() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/handleNameMissing.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("handleName may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenHandleNameNull() throws Exception {
-    DrmsDocument toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/DrmsDocument/invalid/handleNameNull.json"),
-            DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("handleName may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    DrmsDocument drmsDocument = new DrmsDocumentResourceBuilder().setHandleName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(drmsDocument));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("handleName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
-  public void failsWhenHandleNameEmpty() throws Exception {
-    DrmsDocument toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/DrmsDocument/invalid/handleNameEmpty.json"),
-        DrmsDocument.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("handleName size must be between 1 and 30"),
-        is(greaterThanOrEqualTo(0)));
+  public void failsWhenHandleNameToLong() throws Exception {
+    DrmsDocument drmsDocument = new DrmsDocumentResourceBuilder().setHandleName("1234567890123456789012345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(drmsDocument));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+      System.out.println(message.getMessage());
+      if (message.getMessage().equals("handleName size must be between 1 and 30")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
 

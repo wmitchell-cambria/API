@@ -9,15 +9,19 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.io.IOException;
-
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -39,28 +43,17 @@ import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 @SuppressWarnings("javadoc")
 public class R00846ReporterBadgeNumberTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REPORTER + "/";
-
-  private static final ReporterResource mockedReporterResource = mock(ReporterResource.class);
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @ClassRule
-  public static final ResourceTestRule resources = ResourceTestRule.builder()
-      .addResource(mockedReporterResource).build();
-
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+
 
   @Before
   public void setup() throws Exception {
-    @SuppressWarnings("rawtypes")
-    CrudsDao crudsDao = mock(CrudsDao.class);
-    when(crudsDao.find(any())).thenReturn(mock(gov.ca.cwds.data.persistence.cms.Reporter.class));
-    Reporter validReporter = validReporter();
-
-    when(mockedReporterResource.create(eq(validReporter))).thenReturn(
-        Response.status(Response.Status.NO_CONTENT).entity(null).build());
+     messageBuilder = new MessageBuilder();
   }
 
 
@@ -82,39 +75,27 @@ public class R00846ReporterBadgeNumberTest {
    */
   @Test
   public void testBadgeNumberIsSpecifiedButLawEnforcementIdIsEmptyFails() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/domain/legacy/Reporter/invalid/badgeNumberNotLawEnforcementId.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"badgeNumber can only be set if lawEnforcementId is set\"]}")));
+    Reporter toCreate = new ReporterResourceBuilder().setBadgeNumber("ABCD").setLawEnforcementId("").build();
+         validator = Validation.buildDefaultValidatorFactory().getValidator();
+        messageBuilder.addDomainValidationError(validator.validate(toCreate));
+        Boolean theErrorDetected = false;
+
+        List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+        for (ErrorMessage message : validationErrors) {
+//          System.out.println(message.getMessage());
+          if (message.getMessage().equals("badgeNumber can only be set if lawEnforcementId is set")) {
+            theErrorDetected = true;
+          }
+        }
+        assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void testBadgeNumberIsEmptyButLawEnforcementIdIsSpecifiedSuccess() throws Exception {
-    Reporter toCreate =
-        MAPPER.readValue(
-            fixture("fixtures/domain/legacy/Reporter/valid/badgeNumberEmptyLawEnforcementId.json"),
-            Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter toCreate = new ReporterResourceBuilder().setBadgeNumber("").setLawEnforcementId("lawid").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+   messageBuilder.addDomainValidationError(validator.validate(toCreate));
+   assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
-  /*
-   * Utilities
-   */
-  private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {
-
-    Reporter validReporter =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
-            Reporter.class);
-    return validReporter;
-
-  }
 }

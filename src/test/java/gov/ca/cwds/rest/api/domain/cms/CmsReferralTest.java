@@ -11,8 +11,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
-
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,8 +31,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.cms.CmsReferralResource;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -42,38 +45,24 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 @SuppressWarnings("javadoc")
 public class CmsReferralTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CMSREFERRAL + "/";;
-
-  private static final CmsReferralResource mockedCmsReferralResource =
-      mock(CmsReferralResource.class);
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedCmsReferralResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private CmsReferral validCmsReferral = validCmsReferral();
 
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+  
+  private MessageBuilder messageBuilder;
+  private Validator validator;
 
   @Before
   public void setup() {
-    @SuppressWarnings("rawtypes")
-    CrudsDao crudsDao = mock(CrudsDao.class);
-    when(crudsDao.find(any())).thenReturn(mock(StaffPerson.class));
-
-    when(mockedCmsReferralResource.create(eq(validCmsReferral)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    messageBuilder = new MessageBuilder();
   }
 
   @Test
   public void equalsHashCodeWork() throws Exception {
-    // EqualsVerifier.forClass(CmsReferral.class)
-    // .suppress(Warning.NONFINAL_FIELDS)
-    // .verify();
     Referral referral = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/referralCmsReferral.json"), Referral.class);
     assertThat(referral.hashCode(), is(not(0)));
@@ -136,10 +125,9 @@ public class CmsReferralTest {
   public void successfulWithValid() throws Exception {
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
@@ -147,10 +135,9 @@ public class CmsReferralTest {
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferralWithOptionalsNotIncluded.json"),
         CmsReferral.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   // failure when Referral is invalid, missing, or null
@@ -160,45 +147,56 @@ public class CmsReferralTest {
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReferral.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    // String message = response.readEntity(String.class);
-    // System.out.print(message);
-
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referral may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failureWhenReferralIsEmpty() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReferralEmpty.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referral.referralName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failureWhenReferralIsInvalid() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidReferral.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    // String message = response.readEntity(String.class);
-    // System.out.print(message);
-
-    assertThat(response.getStatus(), is(equalTo(422)));
-
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referral.referralResponseType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -206,42 +204,59 @@ public class CmsReferralTest {
    */
   @Test
   public void failureWhenClientNull() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullClient.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("client may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failureWhenClientIsEmpty() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenClientEmpty.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("client[].commonFirstName may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failureWhenClientIsInvalid() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidClient.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("client[].birthCity may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -249,86 +264,40 @@ public class CmsReferralTest {
    */
   @Test
   public void failureWhenReferralClientNull() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReferralClient.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralClient may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
-
-  @Test
-  public void failureWhenReferralClientIsEmpty() throws Exception {
-
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReferralClientEmpty.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  @Test
-  public void failureWhenReferralClientIsInvalid() throws Exception {
-
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidReferralClient.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  /*
-   * failure when Reporter is null, missing, or invalid
-   */
-  // // @Test
-  // public void failureWhenReporterNull() throws Exception {
-  //
-  // CmsReferral toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullReporter.json"),
-  // CmsReferral.class);
-  //
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // }
 
   @Test
   public void failureWhenReporterIsEmpty() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenReporterEmpty.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  @Test
-  public void failureWhenReporterInvalid() throws Exception {
-
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidReporter.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("reporter.employerName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -336,87 +305,34 @@ public class CmsReferralTest {
    */
   @Test
   public void failureWhenAllegationNull() throws Exception {
-
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralNullAllegation.json"),
         CmsReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    Boolean theErrorDetected = false;
 
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  @Test
-  public void failureWhenAllegationIsEmpty() throws Exception {
-
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralWhenAllegationEmpty.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  @Test
-  public void failureWhenAllegationInvalid() throws Exception {
-
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidAllegation.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
-
-  }
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("allegation may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+ }
 
   /*
    * cross report test - cross report is not required for minimal referral data
    */
-
   @Test
   public void successWhenCrossReportNull() throws Exception {
     CmsReferral toCreate = MAPPER.readValue(
         fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferralNullCrossReport.json"),
         CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-
-  @Test
-  public void failureWhenCrossReportIsEmpty() throws Exception {
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralEmptyCrossReport.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-  }
-
-  @Test
-  public void failureWhenCrossReportInvalid() throws Exception {
-    CmsReferral toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/invalid/cmsReferralInvalidCrossReport.json"),
-        CmsReferral.class);
-
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-
-    assertThat(response.getStatus(), is(equalTo(422)));
-
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toCreate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
@@ -436,17 +352,6 @@ public class CmsReferralTest {
         CmsReferral.class);
 
     assertThat(validReferral.equals(invalidReferral), is(equalTo(Boolean.FALSE)));
-  }
-
-  @Test
-  public void SucessWhenCmsReferralEqualsOtherObjectType() throws Exception {
-    CmsReferral validCmsReferral = MAPPER.readValue(
-        fixture("fixtures/domain/cms/CmsReferral/valid/cmsReferral.json"), CmsReferral.class);
-
-    Referral validReferral = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
-
-    assertThat(validCmsReferral.equals(validReferral), is(equalTo(Boolean.FALSE)));
   }
 
   @Test
@@ -526,22 +431,6 @@ public class CmsReferralTest {
 
     assertThat(invalidCmsReferral.equals(validCmsReferral), is(equalTo(Boolean.FALSE)));
   }
-
-  // // @Test
-  // public void failureWhenReferralIdIsDifferentReferralClient() throws Exception {
-  // CmsReferral toCreate = MAPPER.readValue(
-  // fixture(
-  // "fixtures/domain/cms/CmsReferral/invalid/cmsReferralIdIsDifferentReferralClient.json"),
-  // CmsReferral.class);
-  //
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  //
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  //
-  //
-  // }
 
   /*
    * Utilities

@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -32,9 +33,11 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.CmsCrossReportResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.cms.CrossReportResource;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -48,17 +51,9 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class CrossReportTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_CROSS_REPORT + "/";
 
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  private static final CrossReportResource mockedCrossReportResource =
-      mock(CrossReportResource.class);
-
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedCrossReportResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
@@ -86,6 +81,9 @@ public class CrossReportTest {
   private Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
   private Boolean satisfyCrossReportIndicator = Boolean.TRUE;
 
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+
   /*
    * Load system code cache
    */
@@ -93,13 +91,9 @@ public class CrossReportTest {
 
   @Before
   public void setup() throws Exception {
-    CrossReport validCrossReport = validCrossReport();
-
-    when(mockedCrossReportResource.create(eq(validCrossReport)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
-
-    when(mockedCrossReportResource.create(eq(validCrossReport)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+    
+    messageBuilder = new MessageBuilder();
+    
   }
 
   /*
@@ -241,9 +235,7 @@ public class CrossReportTest {
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
         staffId, outStateLawEnforcementAddr, lawEnforcementId, countyId,
         outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
-    // assertEquals("Expected field to be initialized with default values", new Short("0"),
-    // cmsCrossReport.getCrossReportMethodType());
-    assertEquals("Expected  field to be initialized with default values", false,
+     assertEquals("Expected  field to be initialized with default values", false,
         cmsCrossReport.getGovernmentOrgCrossRptIndicatorVar());
     assertEquals("Expected  field to be initialized with default values", "",
         cmsCrossReport.getInformTime());
@@ -259,10 +251,6 @@ public class CrossReportTest {
         cmsCrossReport.getReferenceNumber());
     assertEquals("Expected  field to be initialized with default values", "",
         cmsCrossReport.getRecipientName());
-    // assertEquals("Expected field to be initialized with default values", "",
-    // cmsCrossReport.getOutStateLawEnforcementAddr());
-    // assertEquals("Expected field to be initialized with default values", false,
-    // cmsCrossReport.getOutStateLawEnforcementIndicator());
     assertEquals("Expected  field to be initialized with default values", false,
         cmsCrossReport.getSatisfyCrossReportIndicator());
 
@@ -276,14 +264,14 @@ public class CrossReportTest {
   @Test
   public void serializesToJSON() throws Exception {
     final String expected = MAPPER.writeValueAsString(MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class));
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class));
 
     assertThat(MAPPER.writeValueAsString(validCrossReport()), is(equalTo(expected)));
   }
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"),
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid.json"),
         CrossReport.class), is(equalTo(validCrossReport())));
   }
 
@@ -292,1072 +280,612 @@ public class CrossReportTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
-    assertThat(
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successfulWithOptionalsNotIncluded() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/optionalsNotIncluded.json"),
+    CrossReport crossReport = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/CrossReport/optionalsNotIncluded.json"),
         CrossReport.class);
-    assertThat(
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON)).getStatus(),
-        is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+      System.out.println(message.getMessage());
+    }
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * thirdId Tests
    */
   @Test
-  public void failsWhenThirdIdMissing() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/thirdIdMissing.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("thirdId may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenThirdIdNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/thirdIdNull.json"), CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("thirdId may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setThirdId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("thirdId may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenThirdIdTooLong() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/thirdIdTooLong.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("thirdId size must be between 0 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setThirdId("12345678ABC").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("thirdId size must be between 0 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * crossReportMethodType Tests
    */
   @Test
-  public void failsWhenCrossReportMethodTypeMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/crossReportMethodTypeMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("crossReportMethodType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenCrossReportMethodTypeNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/crossReportMethodTypeNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("crossReportMethodType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setCrossReportMethodType(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenCrossReportMethodTypeEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/crossReportMethodTypeEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("crossReportMethodType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("crossReportMethodType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * filedOutOfStateIndicator Tests
    */
   @Test
-  public void failsWhenFiledOutOfStateIndicatorMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/filedOutOfStateIndicatorMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("filedOutOfStateIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenFiledOutOfStateIndicatorNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/filedOutOfStateIndicatorNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("filedOutOfStateIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setFiledOutOfStateIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("filedOutOfStateIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  @Test
-  public void failsWhenFiledOutOfStateIndicatorEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/filedOutOfStateIndicatorEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("filedOutOfStateIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-
-  @Test
-  public void failsWhenFiledOutOfStateIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/filedOutOfStateIndicatorAllWhitespace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("filedOutOfStateIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  /*
+   /*
    * governmentOrgCrossRptIndicatorVar Tests
    */
   @Test
-  public void failsWhenGovernmentOrgCrossRptIndicatorVarMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("governmentOrgCrossRptIndicatorVar may not be null"), is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenGovernmentOrgCrossRptIndicatorVarNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("governmentOrgCrossRptIndicatorVar may not be null"), is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setGovernmentOrgCrossRptIndicatorVar(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenGovernmentOrgCrossRptIndicatorVarEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("governmentOrgCrossRptIndicatorVar may not be null"), is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenGovernmentOrgCrossRptIndicatorVarAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/governmentOrgCrossRptIndicatorVarAllWhitespace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("governmentOrgCrossRptIndicatorVar may not be null"), is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("governmentOrgCrossRptIndicatorVar may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * informTime Tests
    */
   @Test
-  public void successWhenInformTimeEmpty() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/valid/informTimeEmpty.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
   public void successWhenInformTimeNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/informTimeNull.json"), CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setInformTime(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenInformTimeWrongFormat() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/informTimeWrongFormat.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("informTime must be in the format of HH:mm:ss"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setInformTime("59:32:24").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("informTime must be in the format of HH:mm:ss")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * recipientBadgeNumber Tests
    */
   @Test
-  public void failsWhenRecipientBadgeNumberMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientBadgeNumberMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientBadgeNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenRecipientBadgeNumberNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientBadgeNumberNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientBadgeNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientBadgeNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("recipientBadgeNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  @Test
-  public void successWhenRecipientBadgeNumberEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/recipientBadgeNumberEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
+   @Test
   public void failsWhenRecipientBadgeNumberTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientBadgeNumberTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("recipientBadgeNumber size must be between 0 and 6"), is(greaterThanOrEqualTo(0)));
+     CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientBadgeNumber("1234567").build();
+     validator = Validation.buildDefaultValidatorFactory().getValidator();
+     messageBuilder.addDomainValidationError(validator.validate(crossReport));
+     Boolean theErrorDetected = false;
+
+     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+     for (ErrorMessage message : validationErrors) {
+//       System.out.println(message.getMessage());
+       if (message.getMessage().equals("recipientBadgeNumber size must be between 0 and 6")) {
+         theErrorDetected = true;
+       }
+     }
+     assertThat(theErrorDetected, is(true));
   }
 
   /*
    * recipientPhoneExtensionNumber Tests
    */
   @Test
-  public void failsWhenRecipientPhoneExtensionNumberMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/recipientPhoneExtensionNumberMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("recipientPhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenRecipientPhoneExtensionNumberNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/recipientPhoneExtensionNumberNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("recipientPhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientPhoneExtensionNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenRecipientPhoneExtensionNumberEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/recipientPhoneExtensionNumberEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("recipientPhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("recipientPhoneExtensionNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * informDate Tests
    */
   @Test
-  public void failsWhenInformDateMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/informDateMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("informDate must be in the format of yyyy-MM-dd"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenInformDateNull() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/informDateNull.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("informDate must be in the format of"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setInformDate(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenInformDateEmpty() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/informDateEmpty.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("informDate must be in the format of"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("informDate may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenInformDateWrongFormat() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/informDateWrongFormat.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("informDate must be in the format of yyyy-MM-dd"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setInformDate("10-01-2017").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("informDate must be in the format of yyyy-MM-dd")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * recipientPositionTitleDesc Tests
    */
   @Test
-  public void failsWhenRecipientPositionTitleDescMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/recipientPositionTitleDescMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("recipientPositionTitleDesc may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenRecipientPositionTitleDescNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientPositionTitleDescNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("recipientPositionTitleDesc may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientPositionTitleDesc(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("recipientPositionTitleDesc may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  @Test
-  public void successWhenRecipientPositionTitleDescEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/recipientPositionTitleDescEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
 
   @Test
   public void failsWhenRecipientPositionTitleDescTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/recipientPositionTitleDescTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class)
-            .indexOf("recipientPositionTitleDesc size must be between 0 and 30"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientPositionTitleDesc("0123456789012345678901234567890").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("recipientPositionTitleDesc size must be between 0 and 30")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * referenceNumber Tests
    */
   @Test
-  public void failsWhenReferenceNumberMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/referenceNumberMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referenceNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenReferenceNumberNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/referenceNumberNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referenceNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setReferenceNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenReferenceNumberEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/referenceNumberEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referenceNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenReferenceNumberTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/referenceNumberTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("referenceNumber size must be between 0 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setReferenceNumber("01234567890").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referenceNumber size must be between 0 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * referralId Tests
    */
   @Test
-  public void failsWhenReferralIdMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/referralIdMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenReferralIdNull() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/referralIdNull.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    // String message = response.readEntity(String.class);
-    // System.out.print(message);
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setReferralId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenReferralIdEmpty() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/referralIdEmpty.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("referralId size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenReferralIdTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/referralIdTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("referralId size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setReferralId("12345678ABC").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId size must be between 10 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * lawEnforcementId Tests
    */
   @Test
-  public void successWhenLawEnforcementIdEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/lawEnforcementIdEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
   public void successWhenLawEnforcementIdNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/lawEnforcementIdNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setLawEnforcementId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenLawEnforcementIdTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/lawEnforcementIdTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("lawEnforcementId size must be between 0 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setLawEnforcementId("12345678ABC").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("lawEnforcementId size must be between 0 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * staffPersonId Tests
    */
   @Test
-  public void failsWhenStaffPersonIdMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/staffPersonIdMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("staffPersonId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenStaffPersonIdNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/staffPersonIdNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("staffPersonId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setStaffPersonId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenStaffPersonIdEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/staffPersonIdEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("staffPersonId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("staffPersonId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenStaffPersonIdTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/staffPersonIdTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("staffPersonId size must be between 3 and 3"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setStaffPersonId("1234").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("staffPersonId size must be between 3 and 3")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenStaffPersonIdTooShort() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/staffPersonIdTooShort.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("staffPersonId size must be between 3 and 3"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setStaffPersonId("12").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("staffPersonId size must be between 3 and 3")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * description Tests
    */
   @Test
-  public void failsWhenDescriptionMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/descriptionMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("description may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenDescriptionNull() throws Exception {
-    CrossReport toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/CrossReport/invalid/descriptionNull.json"),
-            CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("description may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setDescription(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenDescriptionEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/descriptionEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenDescriptionAllWhiteSpace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/descriptionAllWhiteSpace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("description may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * recipientName Tests
    */
   @Test
-  public void failsWhenRecipientNameMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientNameMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientName may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenRecipientNameNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientNameNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("recipientName may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenRecipientNameEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/recipientNameEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("recipientName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   @Test
   public void failsWhenRecipientNameTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/recipientNameTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("recipientName size must be between 0 and 40"),
-        is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setRecipientName("12345678901234567890123456789012345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("recipientName size must be between 0 and 40")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * outStateLawEnforcementAddr Tests
    */
   @Test
-  public void failsWhenOutstateLawEnforcementAddrMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementAddrMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("outStateLawEnforcementAddr may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenOutstateLawEnforcementAddrNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementAddrNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("outStateLawEnforcementAddr may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setOutStateLawEnforcementAddr(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenOutstateLawEnforcementAddrEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/outStateLawEnforcementAddrEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenOutstateLawEnforcementAddrAllWhiteSpace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/valid/outStateLawEnforcementAddrAllWhiteSpace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("outStateLawEnforcementAddr may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * countySpecificCode Tests
    */
   @Test
-  public void failsWhenCountySpecificCodeMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/countySpecificCodeMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenCountySpecificCodeNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/countySpecificCodeNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setCountySpecificCode(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenCountySpecificCodeEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/countySpecificCodeEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenCountySpecificCodeTooLong() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/countySpecificCodeTooLong.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("countySpecificCode size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setCountySpecificCode("123").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode size must be between 1 and 2")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * lawEnforcementIndicator Tests
    */
-  @Test
-  public void failsWhenLawEnforcementIndicatorMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/lawEnforcementIndicatorMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
 
   @Test
   public void failsWhenLawEnforcementIndicatorNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/lawEnforcementIndicatorNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setLawEnforcementIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenLawEnforcementIndicatorEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/lawEnforcementIndicatorEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenLawEnforcementIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/lawEnforcementIndicatorAllWhitespace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lawEnforcementIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("lawEnforcementIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * outStateLawEnforcementIndicator Tests
    */
   @Test
-  public void failsWhenOutStateLawEnforcementIndicatorMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("outStateLawEnforcementIndicator may not be null"), is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenOutStateLawEnforcementIndicatorNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("outStateLawEnforcementIndicator may not be null"), is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setOutStateLawEnforcementIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-
-  @Test
-  public void failsWhenOutStateLawEnforcementIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/outStateLawEnforcementIndicatorAllWhitespace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("outStateLawEnforcementIndicator may not be null"), is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("outStateLawEnforcementIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * satisfyCrossReportIndicator Tests
    */
   @Test
-  public void failsWhenSatisfyCrossReportIndicatorMissing() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/CrossReport/invalid/satisfyCrossReportIndicatorMissing.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenSatisfyCrossReportIndicatorNull() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/satisfyCrossReportIndicatorNull.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    CrossReport crossReport = new CmsCrossReportResourceBuilder().setSatisfyCrossReportIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(crossReport));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenSatisfyCrossReportIndicatorEmpty() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/invalid/satisfyCrossReportIndicatorEmpty.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenSatisfyCrossReportIndicatorAllWhitespace() throws Exception {
-    CrossReport toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/CrossReport/invalid/satisfyCrossReportIndicatorAllWhitespace.json"),
-        CrossReport.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("satisfyCrossReportIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("satisfyCrossReportIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1402,7 +930,7 @@ public class CrossReportTest {
   private CrossReport validCrossReport() throws Exception {
 
     CrossReport validCrossReport = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/CrossReport/valid/valid.json"), CrossReport.class);
+        fixture("fixtures/domain/legacy/CrossReport/valid.json"), CrossReport.class);
     return validCrossReport;
   }
 }
