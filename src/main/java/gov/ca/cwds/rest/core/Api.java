@@ -130,11 +130,6 @@ public final class Api {
   public static final String RESOURCE_INTAKE_SCREENINGS = "intake/screenings";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSON} API.
-   */
-  public static final String RESOURCE_STAFF_PERSON = "_staffpersons";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_STAFF_PERSONS} API.
    */
   public static final String RESOURCE_STAFF_PERSONS = "staffpersons";
