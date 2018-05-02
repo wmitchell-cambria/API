@@ -18,13 +18,7 @@ public final class Api {
   public static final String RESOURCE_APPLICATION = "application";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
-   */
-  public static final String RESOURCE_ALLEGATION_PERPETRATOR_HISTORY =
-      "_allegationPerpetratorHistory";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
+   * A {@code String} constant representing {@value #RESOURCE_CASE_HISTORY_OF_INVOLVEMENT} API..
    */
   public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
 
@@ -95,11 +89,6 @@ public final class Api {
   public static final String RESOURCE_LOV = "__oldlov";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS} API..
-   */
-  public static final String RESOURCE_PARTICIPANTS = "_participants";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_PARTICIPANTS_INTAKE_API} API..
    */
   public static final String RESOURCE_PARTICIPANTS_INTAKE_API = "participants";
@@ -115,7 +104,7 @@ public final class Api {
   public static final String RESOURCE_REFERRALS = "referrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_ALLEGATION_PERPETRATOR_HISTORY} API..
+   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT} API..
    */
   public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
 
