@@ -29,7 +29,7 @@ public @interface ValidZipCode {
    * 
    * @return The violation message
    */
-  String message() default "Zip should be empty/blank, null, or 5 digits";
+  String message() default "Zip should be empty, zero, or 5 digits";
 
   /**
    * @return groups
