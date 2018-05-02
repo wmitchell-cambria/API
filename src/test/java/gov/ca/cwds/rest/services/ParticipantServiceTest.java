@@ -1,8 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,8 +23,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
@@ -37,7 +32,6 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
-import gov.ca.cwds.fixture.ClientResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
@@ -502,10 +496,10 @@ public class ParticipantServiceTest {
     when(clientService.find(existingPerpId)).thenReturn(foundPerp);
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", "M", true,
-        (short) 841, "A", "A", "X");
-    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", "M", true,
-        (short) 841, "A", "A", "X");
+    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", "M", (short) 841,
+        "A", "A", "X");
+    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", "M", (short) 841,
+        "A", "A", "X");
     verify(clientService).update(eq(existingPerpId), any());
   }
 
@@ -606,80 +600,6 @@ public class ParticipantServiceTest {
     assertEquals("Expected client to have sensitivty indicator applied",
         defaultVictim.getSensitivityIndicator(),
         clientArgCaptor.getValue().getSensitivityIndicator());
-  }
-
-  /**
-   * 
-   */
-  @Test
-  public void testWhereChildClientNotCreatedWhenClientDOBIsNull() {
-    Participant victim =
-        new ParticipantResourceBuilder().setDateOfBirth(null).createVictimParticipant();
-    Set<Participant> participants =
-        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(participants).createScreeningToReferral();
-    PostedClient createdClient = mock(PostedClient.class);
-    when(clientService.create(any())).thenReturn(createdClient);
-    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-    verify(childClientService, times(0)).create(any());
-  }
-
-  /**
-   * 
-   */
-  @Test
-  public void testWhereChildClientCreatedWhenDOBIsNotNull() {
-    Participant victim =
-        new ParticipantResourceBuilder().setDateOfBirth("2005-08-14").createVictimParticipant();
-    Set<Participant> participants =
-        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(participants).createScreeningToReferral();
-    PostedClient createdClient = mock(PostedClient.class);
-    when(clientService.create(any())).thenReturn(createdClient);
-    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-    verify(childClientService, times(1)).create(any());
-  }
-
-  /**
-   * @throws Exception
-   */
-  @Test
-  public void shouldUpdateChildClientIndicatorWhenDOBIsUpdatedFromNUllToValid() throws Exception {
-    String victimClientLegacyId = "ABC123DSAF";
-
-    LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
-    Participant victim = new ParticipantResourceBuilder().setLegacyId(victimClientLegacyId)
-        .setLegacyDescriptor(descriptor).createParticipant();
-    Set<Participant> participants =
-        new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
-
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setParticipants(participants).createScreeningToReferral();
-
-    Client foundClient = new ClientResourceBuilder().setBirthDate(null)
-        .setLastUpdateTime(modifiedLastUpdateDate).build();
-    // when(foundClient.getLastUpdatedTime()).thenReturn(modifiedLastUpdateDate);
-
-    PostedClient createdClient = mock(PostedClient.class);
-    when(createdClient.getId()).thenReturn("LEGACYIDXX");
-    when(clientService.find(eq(victimClientLegacyId))).thenReturn(foundClient);
-    when(clientService.create(any())).thenReturn(createdClient);
-
-    when(clientService.update(any(String.class), any(Client.class)))
-        .thenAnswer(new Answer<Client>() {
-
-          @Override
-          public Client answer(InvocationOnMock invocation) throws Throwable {
-            Client report = (Client) invocation.getArguments()[1];
-            updatedClient = report;
-            return report;
-          }
-        });
-    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-    verify(clientService).update(eq(victim.getLegacyId()), any());
-    assertThat(updatedClient.getChildClientIndicatorVar(), is(equalTo(Boolean.TRUE)));
   }
 
   // @Test
