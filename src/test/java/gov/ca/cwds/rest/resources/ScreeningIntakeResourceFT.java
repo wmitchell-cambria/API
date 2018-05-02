@@ -16,7 +16,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -27,7 +26,6 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 /**
  * CWDS API Team
  */
-@Ignore
 public class ScreeningIntakeResourceFT extends IntakeBaseTest {
 
   @Test
