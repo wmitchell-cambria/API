@@ -34,7 +34,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByReferralId",
     query = "FROM ScreeningEntity WHERE referralId = :referralId")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds",
-    query = "SELECT s FROM ScreeningEntity s JOIN s.participants p WHERE p.legacyId IN (:clientIds)")
+    query = "SELECT s FROM ScreeningEntity s JOIN s.participants p WHERE p.legacyId IN :clientIds")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "screenings")

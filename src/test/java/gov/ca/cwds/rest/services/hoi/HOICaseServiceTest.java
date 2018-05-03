@@ -9,6 +9,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,7 +50,6 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 public class HOICaseServiceTest {
@@ -78,35 +79,50 @@ public class HOICaseServiceTest {
     caseDao = mock(CaseDao.class);
 
     ClientDao clientDao = mock(ClientDao.class);
-    Client client123 = new ClientEntityBuilder().setId("CLIENT-123").build();
-    when(clientDao.find(any(String.class))).thenReturn(client123);
+
     Map<String, Client> clientMap = new HashMap<>();
     Client client1 = new ClientEntityBuilder().setId("FOCUS-CHILD-1").build();
     Client client2 = new ClientEntityBuilder().setId("FOCUS-CHILD-2").build();
+    Client client123 = new ClientEntityBuilder().setId("CLIENT-123").build();
     clientMap.put(client1.getId(), client1);
     clientMap.put(client2.getId(), client2);
+    clientMap.put(client123.getId(), client123);
     when(clientDao.findClientsByIds(any(Set.class))).thenReturn(clientMap);
 
     clientRelationshipDao = mock(ClientRelationshipDao.class);
+
+    StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
+    Map<String, StaffPerson> staffPersons = new HashMap<>();
+    staffPersons.put("q1p", new StaffPersonEntityBuilder().build());
+    when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersons);
+
     AuthorizationService authorizationService = new AuthorizationService();
-    target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, authorizationService);
+
+    target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, staffPersonDao,
+        authorizationService);
     request = new HOIRequest();
     request.setClientIds(Stream.of("CLIENT-123").collect(Collectors.toSet()));
   }
 
   @Test
   public void testHandleFind() {
-    CmsCase cmscase1 = new CmsCaseEntityBuilder().setId("TAZGOO205C").setStartDate(new Date())
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-1").build();
-    CmsCase cmscase2 = new CmsCaseEntityBuilder().setId("RAZGOO205C").setStartDate(new Date())
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-2").build();
-    CmsCase[] cases = {cmscase1, cmscase2};
-    ClientRelationship relationship = new ClientRelationshipEntityBuilder().build();
-    ClientRelationship[] relationships = {relationship};
-    when(clientRelationshipDao.findByPrimaryClientId(any(String.class))).thenReturn(relationships);
-    when(clientRelationshipDao.findBySecondaryClientId(any(String.class)))
+    Map<String, Collection<ClientRelationship>> relationships = new HashMap<>();
+    relationships.put("FOCUS-CHILD-1", Arrays
+        .asList(new ClientRelationshipEntityBuilder().setPrimaryClientId("FOCUS-CHILD-1").build()));
+    relationships.put("FOCUS-CHILD-2", Arrays
+        .asList(new ClientRelationshipEntityBuilder().setPrimaryClientId("FOCUS-CHILD-2").build()));
+    when(clientRelationshipDao.findByPrimaryClientIds(any(Collection.class)))
         .thenReturn(relationships);
-    when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
+
+    CmsCase cmscase1 = new CmsCaseEntityBuilder().setId("TAZGOO205C").setStartDate(new Date())
+        .setFkchldClt("FOCUS-CHILD-1").build();
+    CmsCase cmscase2 = new CmsCaseEntityBuilder().setId("RAZGOO205C").setStartDate(new Date())
+        .setFkchldClt("FOCUS-CHILD-2").build();
+    Map<String, CmsCase> cmsCases = new HashMap<>();
+    cmsCases.put(cmscase1.getId(), cmscase1);
+    cmsCases.put(cmscase2.getId(), cmscase2);
+    when(caseDao.findByClientIds(any(Collection.class))).thenReturn(cmsCases);
+
     HOICaseResponse response = target.handleFind(request);
     assertThat(response, notNullValue());
   }
@@ -210,33 +226,41 @@ public class HOICaseServiceTest {
   }
 
   private HOICaseResponse getCaseResponseWhereChildIsPrimaryClientInTheRelationship(short type) {
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-1").build();
-    CmsCase[] cases = {cmscase};
-    ClientRelationship relationship =
-        new ClientRelationshipEntityBuilder().setClientRelationshipType(type).build();
-    ClientRelationship[] relationships = {relationship};
-    ClientRelationship[] emptyRelationships = {};
-    when(clientRelationshipDao.findByPrimaryClientId(any(String.class))).thenReturn(relationships);
-    when(clientRelationshipDao.findBySecondaryClientId(any(String.class)))
-        .thenReturn(emptyRelationships);
-    when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
+    Map<String, Collection<ClientRelationship>> relationships = new HashMap<>();
+    relationships.put("FOCUS-CHILD-1", Arrays.asList(
+        new ClientRelationshipEntityBuilder().setClientRelationshipType(type)
+            .setSecondaryClientId("FOCUS-CHILD-1").build()));
+    when(clientRelationshipDao.findByPrimaryClientIds(any(Collection.class)))
+        .thenReturn(relationships);
+    when(clientRelationshipDao.findBySecondaryClientIds(any(Collection.class)))
+        .thenReturn(new HashMap());
+
+    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C").setFkchldClt("FOCUS-CHILD-1")
+        .build();
+    Map<String, CmsCase> cmsCases = new HashMap<>();
+    cmsCases.put(cmscase.getId(), cmscase);
+    when(caseDao.findByClientIds(any(Collection.class))).thenReturn(cmsCases);
+
     return target.handleFind(request);
   }
 
-  private HOICaseResponse getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(short type) {
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C")
-        .setStaffPerson(new StaffPersonEntityBuilder().build()).setFkchldClt("FOCUS-CHILD-2").build();
-    CmsCase[] cases = {cmscase};
-    ClientRelationship relationship =
-        new ClientRelationshipEntityBuilder().setClientRelationshipType(type).build();
-    ClientRelationship[] relationships = {relationship};
-    ClientRelationship[] emptyRelationships = {};
-    when(clientRelationshipDao.findByPrimaryClientId(any(String.class)))
-        .thenReturn(emptyRelationships);
-    when(clientRelationshipDao.findBySecondaryClientId(any(String.class)))
+  private HOICaseResponse getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(
+      short type) {
+    Map<String, Collection<ClientRelationship>> relationships = new HashMap<>();
+    relationships.put("FOCUS-CHILD-2", Arrays.asList(
+        new ClientRelationshipEntityBuilder().setClientRelationshipType(type)
+            .setPrimaryClientId("FOCUS-CHILD-2").build()));
+    when(clientRelationshipDao.findByPrimaryClientIds(any(Collection.class)))
+        .thenReturn(new HashMap());
+    when(clientRelationshipDao.findBySecondaryClientIds(any(Collection.class)))
         .thenReturn(relationships);
-    when(caseDao.findByVictimClientIds(any(Collection.class))).thenReturn(cases);
+
+    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C").setFkchldClt("FOCUS-CHILD-2")
+        .build();
+    Map<String, CmsCase> cmsCases = new HashMap<>();
+    cmsCases.put(cmscase.getId(), cmscase);
+    when(caseDao.findByClientIds(any(Collection.class))).thenReturn(cmsCases);
+
     return target.handleFind(request);
   }
 

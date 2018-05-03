@@ -31,7 +31,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  */
 @SuppressWarnings("serial")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.StaffPerson.findByIds",
-    query = "FROM StaffPerson WHERE id IN (:ids)")
+    query = "FROM StaffPerson WHERE id IN :ids")
 @Entity
 @Table(name = "STFPERST")
 public class StaffPerson extends CmsPersistentObject {

@@ -12,7 +12,7 @@ public class AddressUtils {
   /**
    * Default zip code value in legacy/cms
    */
-  private static final String DEFAULT_ZIP = "0";
+  public static final String DEFAULT_ZIP = "0";
 
   /**
    * Private constructor

@@ -251,7 +251,7 @@ test {
 
 task functionalTest(type: Test, dependsOn: testClasses) {
     include '**/functional/java/**'
-    include '**/*FT*'
+    include '**/FTSuite*'
     exclude '**/*IT*'
     exclude '**/*Test*'
     // systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER", DB_CWSRS_JDBC_URL", "DB_CWSRS_PASSWORD", "DB_CWSRS_SCHEMA", "DB_CWSRS_USER"])
