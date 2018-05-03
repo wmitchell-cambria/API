@@ -34,7 +34,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Client.findAll",
     query = "FROM Client WHERE sensitivityIndicator = 'N' AND soc158SealedClientIndicator = 'N'")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Client.findByIds",
-    query = "FROM Client WHERE id IN (:ids)")
+    query = "FROM Client WHERE id IN :ids")
 @Entity
 @Table(name = "CLIENT_T")
 @JsonPropertyOrder(alphabetic = true)

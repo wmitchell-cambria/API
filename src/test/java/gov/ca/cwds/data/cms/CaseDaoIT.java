@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
 
+import java.util.Map;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -91,7 +92,7 @@ public class CaseDaoIT {
 
 
   @Test(expected = EntityExistsException.class)
-  public void testCreateEntityExistsException() throws Exception {
+  public void testCreateEntityExistsException() {
     CmsCase cmsCase = new CaseEntityBuilder().setId("AadfKnG07n").build();
     caseDao.create(cmsCase);
   }
@@ -124,13 +125,12 @@ public class CaseDaoIT {
   /**
    * Test to find the cases by clientId
    * 
-   * @throws Exception - Exception
    */
   @Test
-  public void testFindClientId() throws Exception {
-    CmsCase[] CmsCases = caseDao.findByVictimClientIds(Arrays.asList(clientId));
-    assertThat(CmsCases, notNullValue());
-    assertThat(CmsCases.length, greaterThanOrEqualTo(1));
+  public void testFindClientId() {
+    Map<String, CmsCase> cmsCases = caseDao.findByClientIds(Arrays.asList(clientId));
+    assertThat(cmsCases, notNullValue());
+    assertThat(cmsCases.size(), greaterThanOrEqualTo(1));
   }
 
 }

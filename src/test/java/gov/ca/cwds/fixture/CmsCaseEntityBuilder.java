@@ -27,7 +27,7 @@ public class CmsCaseEntityBuilder {
   private Date endDate;
   private String fkchldClt;
   private String fkreferlt;
-  private String fkstfperst;
+  private String fkstfperst = "q1p";
   private Short governmentEntityType;
   private String icpcOutgngPlcmtStatusIndVar;
   private String icpcOutgoingRequestIndVar;
