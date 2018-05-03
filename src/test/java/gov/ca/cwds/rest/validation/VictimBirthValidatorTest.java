@@ -51,7 +51,8 @@ public class VictimBirthValidatorTest {
     String approximateAge = null;
     String approximateAgeUnits = null;
     int expectedViolations = 1;
-    String expectedViolationMessage = "Victim's should have either of the value DOB or AgeNumber";
+    String expectedViolationMessage =
+        "Victim's should have either of the value DOB or approximateAge";
     validVictimBirth(dateOfBith, approximateAge, approximateAgeUnits, expectedViolations,
         expectedViolationMessage);
   }
@@ -79,7 +80,8 @@ public class VictimBirthValidatorTest {
     String approximateAge = "18";
     String approximateAgeUnits = null;
     int expectedViolations = 1;
-    String expectedViolationMessage = "Victim's AgeUnit must be set if AgeNumber is set";
+    String expectedViolationMessage =
+        "Victim's approximateAgeUnits must be set if approximateAge is set";
     validVictimBirth(dateOfBith, approximateAge, approximateAgeUnits, expectedViolations,
         expectedViolationMessage);
   }
