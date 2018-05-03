@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,8 +32,8 @@ import gov.ca.cwds.rest.validation.ValidCounty;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByVictimClientIds",
-    query = "FROM CmsCase WHERE fkchldClt in :clientIds")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByClientIds",
+    query = "FROM CmsCase WHERE fkchldClt IN :clientIds")
 
 @NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId",
     query = " SELECT C.*                            \n"
@@ -174,11 +175,11 @@ public class CmsCase extends CmsPersistentObject {
   @Column(name = "TICKLE_T_B")
   private String tickleIndVar;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCHLD_CLT", nullable = true, updatable = false, insertable = false)
   private ChildClient childClient;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERST", nullable = true, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
@@ -189,7 +190,7 @@ public class CmsCase extends CmsPersistentObject {
    * </p>
    */
   @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral riReferral;
 
@@ -397,6 +398,10 @@ public class CmsCase extends CmsPersistentObject {
 
   public StaffPerson getStaffPerson() {
     return staffPerson;
+  }
+
+  public void setStaffPerson(StaffPerson staffPerson) {
+    this.staffPerson = staffPerson;
   }
 
   public Referral getRiReferral() {

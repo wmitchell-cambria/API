@@ -22,7 +22,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @Table(name = "intake_lov_codes")
 @NamedQuery(
     name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes",
-    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN (:intakeCodes)")
+    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN :intakeCodes")
 public class IntakeLOVCodeEntity implements PersistentObject {
 
   /**
