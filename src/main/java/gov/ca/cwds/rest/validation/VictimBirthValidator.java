@@ -29,8 +29,7 @@ public class VictimBirthValidator
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims =
-        ParticipantUtils.getVictims(screening.getParticipants());
+    Collection<Participant> victims = ParticipantUtils.getVictims(screening.getParticipants());
     if (!victims.isEmpty()) {
       for (Participant victim : victims) {
         if (!hasValidBirthDateOrAge(victim, context)) {
@@ -44,13 +43,13 @@ public class VictimBirthValidator
 
   private boolean hasValidBirthDateOrAge(Participant victim, ConstraintValidatorContext context) {
     if (StringUtils.isBlank(victim.getDateOfBirth()) && victim.getApproximateAge().contains("0")) {
-      String message = "Victim's should have either of the value DOB or AgeNumber";
+      String message = "Victim's should have either of the value DOB or approximateAge";
       buildMessage(context, message);
       return false;
     }
     if (StringUtils.isNotBlank(victim.getApproximateAge())
         && StringUtils.isBlank(victim.getApproximateAgeUnits())) {
-      String message = "Victim's AgeUnit must be set if AgeNumber is set";
+      String message = "Victim's approximateAgeUnits must be set if approximateAge is set";
       buildMessage(context, message);
       return false;
     }
