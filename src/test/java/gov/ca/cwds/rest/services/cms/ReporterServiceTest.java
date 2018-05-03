@@ -27,6 +27,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.cms.ReporterDao;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
@@ -58,20 +59,6 @@ public class ReporterServiceTest {
     reporterService = new ReporterService(reporterDao, riReporter);
   }
 
-  // find test
-  @SuppressWarnings("javadoc")
-  @Test
-  public void findReturnsCorrectReporterWhenFound() throws Exception {
-    // Reporter expected = MAPPER
-    // .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
-    // gov.ca.cwds.data.persistence.cms.Reporter reporter =
-    // new gov.ca.cwds.data.persistence.cms.Reporter(expected, "0XA");
-    //
-    // when(reporterDao.find("AbiQCgu0Hj")).thenReturn(reporter);
-    // Reporter found = reporterService.find("AbiQCgu0Hj");
-    // assertTrue(found.equals(expected));
-  }
-
   @SuppressWarnings("javadoc")
   @Test
   public void findReturnsNullWhenNotFound() throws Exception {
@@ -99,7 +86,7 @@ public class ReporterServiceTest {
   public void reporterServiceDeleteReturnsNotNull() throws Exception {
     String referralId = "AbiQCgu0Hj";
     Reporter expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
         new gov.ca.cwds.data.persistence.cms.Reporter(expected, "0Hj", new Date());
 
@@ -113,7 +100,7 @@ public class ReporterServiceTest {
   @Test
   public void updateReturnsReporterResponseOnSuccess() throws Exception {
     Reporter expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
 
     gov.ca.cwds.data.persistence.cms.Reporter reporter =
         new gov.ca.cwds.data.persistence.cms.Reporter(expected, "ABC", new Date());
@@ -131,7 +118,7 @@ public class ReporterServiceTest {
 
     try {
       Reporter reporterRequest = MAPPER
-          .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+          .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
 
       when(reporterDao.update(any())).thenThrow(EntityNotFoundException.class);
 
@@ -148,7 +135,7 @@ public class ReporterServiceTest {
   public void reporterServiceCreateThrowsEntityExistsException() throws Exception {
     try {
       Reporter reporterRequest = MAPPER
-          .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+          .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
 
       when(reporterDao.create(any())).thenThrow(EntityExistsException.class);
 
@@ -162,7 +149,7 @@ public class ReporterServiceTest {
   @Test
   public void createReturnsPostedReporterClass() throws Exception {
     Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter toCreate =
         new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
@@ -180,7 +167,7 @@ public class ReporterServiceTest {
   @Test
   public void createReturnsNonNull() throws Exception {
     Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter toCreate =
         new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
@@ -198,7 +185,7 @@ public class ReporterServiceTest {
   @Test
   public void createReturnsCorrectPostedPerson() throws Exception {
     Reporter reporterDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
     gov.ca.cwds.data.persistence.cms.Reporter toCreate =
         new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
@@ -218,9 +205,7 @@ public class ReporterServiceTest {
   @Test
   public void failsWhenPostedReporterServiceEmpty() throws Exception {
     try {
-      Reporter reporterDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Reporter/invalid/referralIdEmpty.json"), Reporter.class);
-
+      Reporter reporterDomain = new ReporterResourceBuilder().setReferralId("").build();
       gov.ca.cwds.data.persistence.cms.Reporter toCreate =
           new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
@@ -239,8 +224,7 @@ public class ReporterServiceTest {
   @Test
   public void failsWhenPostedReporterServiceNull() throws Exception {
     try {
-      Reporter reporterDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Reporter/invalid/referralIdNull.json"), Reporter.class);
+      Reporter reporterDomain = new ReporterResourceBuilder().setReferralId(null).build();
       gov.ca.cwds.data.persistence.cms.Reporter toCreate =
           new gov.ca.cwds.data.persistence.cms.Reporter(reporterDomain, "ABC", new Date());
 
@@ -257,5 +241,4 @@ public class ReporterServiceTest {
     }
 
   }
-
 }

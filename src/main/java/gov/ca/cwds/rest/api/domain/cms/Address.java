@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain.cms;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import gov.ca.cwds.rest.validation.ValidCounty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
@@ -11,10 +10,12 @@ import org.joda.time.DateTime;
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.AddressUtils;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import gov.ca.cwds.rest.validation.IfThen;
+import gov.ca.cwds.rest.validation.ValidCounty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -167,12 +168,11 @@ public class Address extends ReportingDomain implements Request, Response {
    * @param unitNumber city unitNumber
    */
   public Address(String existingAddressId, DateTime lastUpdatedTime, String city,
-      Long emergencyNumber, Integer emergencyExtension, Boolean frgAdrtB,
-      Short governmentEntityCd, Long messageNumber, Integer messageExtension,
-      String headerAddress, Long primaryNumber, Integer primaryExtension, Short state,
-      String streetName, String streetNumber, Integer zip, String addressDescription, Short zip4,
-      String postDirCd, String preDirCd, Short streetSuffixCd, Short unitDesignationCd,
-      String unitNumber) {
+      Long emergencyNumber, Integer emergencyExtension, Boolean frgAdrtB, Short governmentEntityCd,
+      Long messageNumber, Integer messageExtension, String headerAddress, Long primaryNumber,
+      Integer primaryExtension, Short state, String streetName, String streetNumber, Integer zip,
+      String addressDescription, Short zip4, String postDirCd, String preDirCd,
+      Short streetSuffixCd, Short unitDesignationCd, String unitNumber) {
     super();
     this.existingAddressId = existingAddressId;
     this.lastUpdatedTime = lastUpdatedTime;
@@ -242,10 +242,11 @@ public class Address extends ReportingDomain implements Request, Response {
    * @return - postedAddress
    */
   public static Address createWithDefaults(gov.ca.cwds.rest.api.domain.Address address) {
-    int zipCode = Integer.parseInt(address.getZip());
+    String providedZip = address.getZip();
+    int zipCode = Integer.parseInt(AddressUtils.defaultIfBlank(providedZip));
     short zipSuffix = 0;
-    if (address.getZip().length() > 5) {
-      zipSuffix = Short.parseShort(address.getZip().substring(5));
+    if (providedZip.length() > 5) {
+      zipSuffix = Short.parseShort(providedZip.substring(5));
     }
 
     /**

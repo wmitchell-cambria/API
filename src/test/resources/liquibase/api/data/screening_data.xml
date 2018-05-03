@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522794818923-1">
+    <insert tableName="screenings">
+      <column name="id" value="52"/>
+      <column name="reference" value="GBA10B"/>
+      <column name="ended_at" valueDate="2018-03-30 16:11:37.279"/>
+      <column name="incident_date" valueDate="2018-03-29"/>
+      <column name="location_type" value="Child's Home"/>
+      <column name="communication_method" value="phone"/>
+      <column name="name" value="dfsf"/>
+      <column name="started_at" valueDate="2018-03-29 16:11:59.476"/>
+      <column name="screening_decision" value="promote_to_referral"/>
+      <column name="incident_county" value="99"/>
+      <column name="report_narrative" value="tsrgdhr"/>
+      <column name="assignee" value="Testing CWDS - State of California"/>
+      <column name="additional_information" value="add"/>
+      <column name="screening_decision_detail" value="3_days"/>
+      <column name="safety_information" value="saf"/>
+      <column name="safety_alerts" value="{&quot;Dangerous Environment&quot;,&quot;Hostile&quot;}"/>
+      <column name="referral_id" value="1234567890"/>
+      <column name="assignee_staff_id" value="0X5"/>
+      <column name="access_restrictions" value="acc"/>
+      <column name="restrictions_rationale" value="res"/>
+      <column name="user_county_code" value="-2"/>
+      <column name="restrictions_date" valueDate="2018-03-26"/>
+      <column name="indexable" value="false"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

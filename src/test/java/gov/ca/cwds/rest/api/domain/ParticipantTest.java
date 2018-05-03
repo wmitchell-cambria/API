@@ -36,7 +36,6 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.ParticipantResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -73,12 +72,8 @@ public class ParticipantTest {
   private Set<Address> addresses = new HashSet<>();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PARTICIPANTS + "/";
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private Validator validator;
-
-  private static final ParticipantResource mockedParticipantResource =
-      mock(ParticipantResource.class);
 
   List<Short> racecodes = new ArrayList<>();
   List<Short> hispaniccodes = new ArrayList<>();
@@ -88,11 +83,7 @@ public class ParticipantTest {
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedParticipantResource).build();
-
-  @Before
+   @Before
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
@@ -105,9 +96,6 @@ public class ParticipantTest {
         new Address("", "", "123 First St", "San Jose", 1828, "94321", 32, legacyDescriptor);
     addresses.add(address);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-
-    when(mockedParticipantResource.create(eq(validParticipant)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 
   }
 
@@ -132,11 +120,6 @@ public class ParticipantTest {
         .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class);
     assertThat(serialized, is(expected));
   }
-
-  // @Test
-  // public void testEqualsHashCodeWorks() {
-  // EqualsVerifier.forClass(Participant.class).suppress(Warning.NONFINAL_FIELDS).verify();
-  // }
 
   @Test
   public void testEmptyConstructor() throws Exception {

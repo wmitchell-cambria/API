@@ -7,7 +7,7 @@ import gov.ca.cwds.data.ApiHibernateInterceptor;
 import io.dropwizard.hibernate.SessionFactoryFactory;
 
 /**
- * Configure Hibernate before completing construction of a session factory.
+ * Configure Hibernate with a custom interceptor before constructing a session factory.
  * 
  * @author CWDS API Team
  * @see ApiHibernateInterceptor

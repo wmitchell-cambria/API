@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.hibernate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
 import java.io.Serializable;
 import java.sql.Array;
 import java.sql.PreparedStatement;
@@ -17,7 +19,7 @@ import org.hibernate.usertype.UserType;
  * @author CWDS API Team
  */
 public class StringArrayType implements UserType {
-
+  private final ObjectMapper objectMapper = Jackson.newObjectMapper();
   private static final int[] arrayTypes = new int[] {Types.ARRAY};
 
   @Override
@@ -40,13 +42,25 @@ public class StringArrayType implements UserType {
     return x == null ? 0 : x.hashCode();
   }
 
-  @Override
   public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session,
       Object owner) throws SQLException {
     String[] results = null;
     // Get the first column names.
     if (names != null && names.length > 0 && rs != null && rs.getArray(names[0]) != null) {
-      results = (String[]) rs.getArray(names[0]).getArray();
+
+      Object array = rs.getArray(names[0]).getArray();
+      if (array instanceof String[]) { //postgres
+        results = (String[]) array;
+      } else if (array instanceof Object[]) { //h2
+        Object[] objArray = (Object[]) array;
+//        results = Arrays.copyOf(objArray, objArray.length, String[].class); NOSONAR
+        try {
+          results = objectMapper.readValue(((String) objArray[0]).replace('{', '[')
+              .replace('}', ']'), String[].class);
+        } catch (Exception e) {
+          throw new SQLException("Cannot convert " + objArray[0] + " to String[]", e);
+        }
+      }
     }
     return results;
   }

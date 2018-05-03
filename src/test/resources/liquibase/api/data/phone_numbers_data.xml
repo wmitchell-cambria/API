@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522795015232-1">
+    <insert tableName="phone_numbers">
+      <column name="id" value="242"/>
+      <column name="number" value="9660007290"/>
+      <column name="type"/>
+    </insert>
+    <insert tableName="phone_numbers">
+      <column name="id" value="243"/>
+      <column name="number" value="6666666666"/>
+      <column name="type" value="Cell"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
