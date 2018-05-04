@@ -1,9 +1,6 @@
 package gov.ca.cwds.rest.business.rules;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,8 +10,8 @@ import org.joda.time.DateTime;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.Participant;
-import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.util.ParticipantUtils;
 import gov.ca.cwds.rest.validation.VictimAgeRestriction;
 
 /**
@@ -56,7 +53,8 @@ public class R00786VictimAgeRestriction
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims = getVictims(screening.getParticipants());
+    Collection<Participant> victims =
+        ParticipantUtils.getVictims(screening.getParticipants());
 
     if (!victims.isEmpty()) {
       // Referral receive timestamp
@@ -81,20 +79,6 @@ public class R00786VictimAgeRestriction
     }
 
     return valid;
-  }
-
-  private Collection<Participant> getVictims(Collection<Participant> participants) {
-    List<Participant> victims = new ArrayList<>();
-
-    if (participants != null) {
-      for (Participant participant : participants) {
-        Set<String> roles = participant.getRoles();
-        if (roles != null && roles.contains(Role.VICTIM_ROLE.getType())) {
-          victims.add(participant);
-        }
-      }
-    }
-    return victims;
   }
 
   private boolean isVictimOverAge(Participant victim, DateTime victimOverAgeDate) {
