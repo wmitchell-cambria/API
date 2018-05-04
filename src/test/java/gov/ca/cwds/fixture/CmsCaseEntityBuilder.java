@@ -23,7 +23,7 @@ public class CmsCaseEntityBuilder {
   private Short countryCodeType;
   private String countySpecificCode;
   private String drmsNotesDoc;
-  private String emancipationDate;
+  private Date emancipationDate;
   private Date endDate;
   private String fkchldClt;
   private String fkreferlt;
@@ -119,7 +119,7 @@ public class CmsCaseEntityBuilder {
   }
 
 
-  public CmsCaseEntityBuilder setEmancipationDate(String emancipationDate) {
+  public CmsCaseEntityBuilder setEmancipationDate(Date emancipationDate) {
     this.emancipationDate = emancipationDate;
     return this;
   }
