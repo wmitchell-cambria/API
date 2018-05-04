@@ -298,8 +298,8 @@ public class ParticipantService implements CrudsService {
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
-          incomingParticipant.getGender(), primaryRaceCode, unableToDetermineCode,
-          hispanicUnableToDetermineCode, hispanicOriginCode);
+          incomingParticipant.getGender(), incomingParticipant.getSsn(), primaryRaceCode,
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
