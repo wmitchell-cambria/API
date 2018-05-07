@@ -266,9 +266,11 @@ public class HOICaseServiceTest {
 
   @Test(expected = AuthorizationException.class)
   public void testUnAuthorizedClient() {
-    HOICaseService spyTarget = spy(target);
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("CLIENT-123");
-    spyTarget.handleFind(request);
+    AuthorizationService spyAuthorizationService = spy(new AuthorizationService());
+    doThrow(AuthorizationException.class).when(spyAuthorizationService).ensureClientAccessAuthorized(any(String.class));
+    HOICaseService target = new HOICaseService(null, null, null, null,
+        spyAuthorizationService);
+    target.handleFind(request);
   }
 
 }

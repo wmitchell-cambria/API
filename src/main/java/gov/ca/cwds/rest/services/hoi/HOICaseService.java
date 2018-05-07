@@ -87,8 +87,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     if (clientIds.isEmpty()) {
       return new HOICaseResponse();
     }
-    for (String clientId : clientIds) {
-      authorizeClient(clientId);
+    if (!developmentOnlyClientSensitivityOverride()) {
+      authorizationService.ensureClientAccessAuthorized(clientIds);
     }
 
     HOICasesData hcd = new HOICasesData(clientIds);
@@ -204,11 +204,4 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     LOGGER.info("HOICaseService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
-
-  void authorizeClient(String clientId) {
-    if (!developmentOnlyClientSensitivityOverride()) {
-      authorizationService.ensureClientAccessAuthorized(clientId);
-    }
-  }
-
 }

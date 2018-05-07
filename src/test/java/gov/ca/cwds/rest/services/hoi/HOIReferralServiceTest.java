@@ -451,11 +451,10 @@ public class HOIReferralServiceTest {
 
   @Test(expected = AuthorizationException.class)
   public void testUnAuthorizedClient() {
-    HOIReferralService spyTarget = spy(hoiService);
-    request = new HOIRequest();
-    request.setClientIds(Stream.of("unauthorizedId").collect(Collectors.toSet()));
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("unauthorizedId");
-    spyTarget.handleFind(request);
+    AuthorizationService spyAuthorizationService = spy(new AuthorizationService());
+    doThrow(AuthorizationException.class).when(spyAuthorizationService).ensureClientAccessAuthorized(any(String.class));
+    HOIReferralService target = new HOIReferralService(null, null, spyAuthorizationService);
+    target.handleFind(request);
   }
 
 }

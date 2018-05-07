@@ -2,7 +2,6 @@ package gov.ca.cwds.rest.services.hoi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,9 +31,8 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  * <p>
  * This service handle request from the user to get all the referral involved for the client given.
  * <p>
- * 
- * @author CWDS API Team
  *
+ * @author CWDS API Team
  */
 public class HOIReferralService
     extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
@@ -61,7 +59,9 @@ public class HOIReferralService
   public HOIReferralResponse handleFind(HOIRequest hoiRequest) {
     List<ReferralClient> referralClientList = new ArrayList<>();
     if (!hoiRequest.getClientIds().isEmpty()) {
-      referralClientList = fetchReferralClients(hoiRequest.getClientIds());
+      authorizationService.ensureClientAccessAuthorized(hoiRequest.getClientIds());
+      referralClientList = Arrays
+          .asList(referralClientDao.findByClientIds(hoiRequest.getClientIds()));
     }
     if (referralClientList.isEmpty()) {
       return new HOIReferralResponse();
@@ -97,18 +97,6 @@ public class HOIReferralService
     Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
     return new HOIReferralFactory().createHOIReferral(referral, staffPerson, reporter,
         allegationMap, role);
-  }
-
-  private List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
-    authorizeClients(clientIds);
-    ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
-    return Arrays.asList(referralClients);
-  }
-
-  private void authorizeClients(Collection<String> clientIds) {
-    for (String clientId : clientIds) {
-      authorizeClient(clientId);
-    }
   }
 
   private Role fetchForReporterRole(Referral referral, ReferralClient referralClient,
@@ -162,9 +150,4 @@ public class HOIReferralService
   protected HOIReferralResponse handleRequest(HOIReferral req) {
     throw new NotImplementedException("handle request not implemented");
   }
-
-  void authorizeClient(String clientId) {
-    authorizationService.ensureClientAccessAuthorized(clientId);
-  }
-
 }
