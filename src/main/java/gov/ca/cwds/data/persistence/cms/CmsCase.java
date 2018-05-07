@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,8 +32,8 @@ import gov.ca.cwds.rest.validation.ValidCounty;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByVictimClientIds",
-    query = "FROM CmsCase WHERE fkchldClt in :clientIds")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findByClientIds",
+    query = "FROM CmsCase WHERE fkchldClt IN :clientIds")
 
 @NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId",
     query = " SELECT C.*                            \n"
@@ -98,7 +99,7 @@ public class CmsCase extends CmsPersistentObject {
 
   @Type(type = "date")
   @Column(name = "EMANCPN_DT")
-  private String emancipationDate;
+  private Date emancipationDate;
 
   @Type(type = "date")
   @Column(name = "END_DT")
@@ -174,11 +175,11 @@ public class CmsCase extends CmsPersistentObject {
   @Column(name = "TICKLE_T_B")
   private String tickleIndVar;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCHLD_CLT", nullable = true, updatable = false, insertable = false)
   private ChildClient childClient;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERST", nullable = true, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
@@ -189,7 +190,7 @@ public class CmsCase extends CmsPersistentObject {
    * </p>
    */
   @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral riReferral;
 
@@ -203,7 +204,7 @@ public class CmsCase extends CmsPersistentObject {
   public CmsCase(String id, String alertText, String approvalNumber, Short approvalStatusType,
       Short caseClosureReasonType, String caseplanChildrenDetailIndVar, String closureStatementText,
       Short countryCodeType, String countySpecificCode, String drmsNotesDoc,
-      String emancipationDate, Date endDate, String fkchldClt, String fkreferlt, String fkstfperst,
+      Date emancipationDate, Date endDate, String fkchldClt, String fkreferlt, String fkstfperst,
       Short governmentEntityType, String icpcOutgngPlcmtStatusIndVar,
       String icpcOutgoingRequestIndVar, String limitedAccessCode, Date limitedAccessDate,
       String limitedAccessDesc, Short limitedAccessGovernmentEntityType, String caseName,
@@ -222,8 +223,8 @@ public class CmsCase extends CmsPersistentObject {
     this.countryCodeType = countryCodeType;
     this.countySpecificCode = countySpecificCode;
     this.drmsNotesDoc = drmsNotesDoc;
-    this.emancipationDate = emancipationDate;
-    this.endDate = endDate;
+    this.emancipationDate = freshDate(emancipationDate);
+    this.endDate = freshDate(endDate);
     this.fkchldClt = fkchldClt;
     this.fkreferlt = fkreferlt;
     this.fkstfperst = fkstfperst;
@@ -231,18 +232,18 @@ public class CmsCase extends CmsPersistentObject {
     this.icpcOutgngPlcmtStatusIndVar = icpcOutgngPlcmtStatusIndVar;
     this.icpcOutgoingRequestIndVar = icpcOutgoingRequestIndVar;
     this.limitedAccessCode = limitedAccessCode;
-    this.limitedAccessDate = limitedAccessDate;
+    this.limitedAccessDate = freshDate(limitedAccessDate);
     this.limitedAccessDesc = limitedAccessDesc;
     this.limitedAccessGovernmentEntityType = limitedAccessGovernmentEntityType;
     this.caseName = caseName;
-    this.nextTilpDueDate = nextTilpDueDate;
-    this.projectedEndDate = projectedEndDate;
+    this.nextTilpDueDate = freshDate(nextTilpDueDate);
+    this.projectedEndDate = freshDate(projectedEndDate);
     this.responsibleAgencyCode = responsibleAgencyCode;
     this.specialProjectCaseIndVar = specialProjectCaseIndVar;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
     this.stateCodeType = stateCodeType;
     this.activeServiceComponentType = activeServiceComponentType;
-    this.activeSvcComponentStartDate = activeSvcComponentStartDate;
+    this.activeSvcComponentStartDate = freshDate(activeSvcComponentStartDate);
     this.tickleIndVar = tickleIndVar;
     this.childClient = childClient;
     this.staffPerson = staffPerson;
@@ -295,8 +296,8 @@ public class CmsCase extends CmsPersistentObject {
     return drmsNotesDoc;
   }
 
-  public String getEmancipationDate() {
-    return emancipationDate;
+  public Date getEmancipationDate() {
+    return freshDate(emancipationDate);
   }
 
   public Date getEndDate() {
@@ -397,6 +398,10 @@ public class CmsCase extends CmsPersistentObject {
 
   public StaffPerson getStaffPerson() {
     return staffPerson;
+  }
+
+  public void setStaffPerson(StaffPerson staffPerson) {
+    this.staffPerson = staffPerson;
   }
 
   public Referral getRiReferral() {

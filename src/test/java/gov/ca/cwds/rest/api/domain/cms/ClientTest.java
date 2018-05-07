@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -8,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,11 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -44,11 +40,9 @@ import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.junit.template.DomainTestTemplate;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * @author CWDS API Team
@@ -147,14 +141,15 @@ public class ClientTest implements DomainTestTemplate {
   private Boolean reporterConfidentialWaiver = Boolean.FALSE;
   private String reporterEmployerName = "Employer Name";
   private Boolean clientStaffPersonAdded = Boolean.FALSE;
-  
+
   private MessageBuilder messageBuilder;
   private Validator validator;
-  
+
+  @Override
   @Before
   public void setup() throws Exception {
     messageBuilder = new MessageBuilder();
-    
+
     CrudsDao crudsDao = mock(CrudsDao.class);
     when(crudsDao.find(any())).thenReturn(mock(gov.ca.cwds.data.persistence.cms.Client.class));
 
@@ -425,7 +420,8 @@ public class ClientTest implements DomainTestTemplate {
 
     Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 
-    client.update("Barney", "middlestone", "Rubble", "jr", "F", (short) 0, "A", "A", "X");
+    client.update("Barney", "middlestone", "Rubble", "jr", "F", "765489675", (short) 0, "A", "A",
+        "X");
 
     assertEquals("Expected Client first name to have been changed", "Barney",
         client.getCommonFirstName());
@@ -591,8 +587,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Override
   @Test
-  public void testSerializesToJSON() throws Exception {
-  }
+  public void testSerializesToJSON() throws Exception {}
 
   @Override
   public void testDeserializesFromJSON() throws Exception {}
@@ -608,8 +603,7 @@ public class ClientTest implements DomainTestTemplate {
 
   @Override
   @Test
-  public void testSuccessWithOptionalsNotIncluded() throws Exception {
-  }
+  public void testSuccessWithOptionalsNotIncluded() throws Exception {}
 
   /*
    * adoption status code test
@@ -617,14 +611,14 @@ public class ClientTest implements DomainTestTemplate {
   @Test
   public void testFailAdoptionStatusCodeEmpty() throws Exception {
     Client validClient = new ClientResourceBuilder().setAdoptionStatusCode("").build();
-    
+
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(validClient));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("adoptionStatusCode may not be empty")) {
         theErrorDetected = true;
       }
@@ -641,7 +635,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("adoptionStatusCode must be one of [T, P, N, A]")) {
         theErrorDetected = true;
       }
@@ -658,7 +652,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("adoptionStatusCode may not be empty")) {
         theErrorDetected = true;
       }
@@ -678,7 +672,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("alienRegistrationNumber may not be null")) {
         theErrorDetected = true;
       }
@@ -696,7 +690,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("alienRegistrationNumber size must be between 0 and 12")) {
         theErrorDetected = true;
       }
@@ -717,7 +711,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthCity may not be null")) {
         theErrorDetected = true;
       }
@@ -735,7 +729,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthCity size must be between 0 and 35")) {
         theErrorDetected = true;
       }
@@ -772,7 +766,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthCountryCodeType may not be null")) {
         theErrorDetected = true;
       }
@@ -808,7 +802,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
@@ -836,13 +830,13 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthFacilityName may not be null")) {
         theErrorDetected = true;
       }
     }
     assertThat(theErrorDetected, is(true));
-   }
+  }
 
   @Test
   public void failWhenBirthFacilityNameTooLong() throws Exception {
@@ -854,7 +848,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthFacilityName size must be between 0 and 35")) {
         theErrorDetected = true;
       }
@@ -911,7 +905,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("birthplaceVerifiedIndicator may not be null")) {
         theErrorDetected = true;
       }
@@ -959,7 +953,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("clientIndexNumber size must be between 0 and 12")) {
         theErrorDetected = true;
       }
@@ -979,7 +973,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commentDescription may not be null")) {
         theErrorDetected = true;
       }
@@ -999,7 +993,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonFirstName may not be empty")) {
         theErrorDetected = true;
       }
@@ -1016,7 +1010,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonFirstName size must be between 1 and 20")) {
         theErrorDetected = true;
       }
@@ -1026,21 +1020,20 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void failWhenCommonFirstNameTooLong() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setCommonFirstName("123456789012345678901").build();
+    Client client = new ClientResourceBuilder().setCommonFirstName("123456789012345678901").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonFirstName size must be between 1 and 20")) {
         theErrorDetected = true;
       }
     }
     assertThat(theErrorDetected, is(true));
- }
+  }
 
   @Test
   public void failWhenCommonLastNameNull() throws Exception {
@@ -1051,7 +1044,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonLastName may not be empty")) {
         theErrorDetected = true;
       }
@@ -1068,7 +1061,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonLastName size must be between 1 and 25")) {
         theErrorDetected = true;
       }
@@ -1086,7 +1079,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonLastName size must be between 1 and 25")) {
         theErrorDetected = true;
       }
@@ -1103,7 +1096,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonLastName may not be empty")) {
         theErrorDetected = true;
       }
@@ -1129,7 +1122,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("commonMiddleName size must be between 0 and 20")) {
         theErrorDetected = true;
       }
@@ -1158,16 +1151,16 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void failWhenConfidentialityActionDateInvalid() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setConfidentialityActionDate("01-01-2010").build();
+    Client client = new ClientResourceBuilder().setConfidentialityActionDate("01-01-2010").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("confidentialityActionDate must be in the format of yyyy-MM-dd")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("confidentialityActionDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
     }
@@ -1179,15 +1172,14 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void failWhenConfidentialityInEffectIndNull() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setConfidentialityInEffectIndicator(null).build();
+    Client client = new ClientResourceBuilder().setConfidentialityInEffectIndicator(null).build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("confidentialityInEffectIndicator may not be null")) {
         theErrorDetected = true;
       }
@@ -1200,15 +1192,14 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void failWhenCreationDateNull() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setCreationDate(null).build();
+    Client client = new ClientResourceBuilder().setCreationDate(null).build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("creationDate may not be null")) {
         theErrorDetected = true;
       }
@@ -1218,15 +1209,14 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void failWhenCreationDateInvalid() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setCreationDate("01-01-1999").build();
+    Client client = new ClientResourceBuilder().setCreationDate("01-01-1999").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("creationDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
@@ -1236,36 +1226,36 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void shouldFailWhenCreationGreaterThanBirthDate() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setBirthDate("2013-01-01").setCreationDate("2011-01-01").build();
+    Client client = new ClientResourceBuilder().setBirthDate("2013-01-01")
+        .setCreationDate("2011-01-01").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("creationDate should be greater than or equal to birthDate")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("creationDate should be greater than or equal to birthDate")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));   
+    assertThat(theErrorDetected, is(true));
   }
-  
+
   /*
    * currCaChildrenServiceInd test
    */
   @Test
   public void failWhenCurrCaChildrenServIndicatorNull() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setCurrCaChildrenServIndicator(null).build();
+    Client client = new ClientResourceBuilder().setCurrCaChildrenServIndicator(null).build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("currCaChildrenServIndicator may not be null")) {
         theErrorDetected = true;
       }
@@ -1293,7 +1283,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("currentlyOtherDescription may not be null")) {
         theErrorDetected = true;
       }
@@ -1311,7 +1301,7 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("currentlyOtherDescription size must be between 0 and 25")) {
         theErrorDetected = true;
       }
@@ -1339,29 +1329,30 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("deathDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
     }
     assertThat(theErrorDetected, is(true));
   }
-  
+
   @Test
   public void shouldFailWhenDeathBeforeBirthDate() throws Exception {
-    Client client = new ClientResourceBuilder().setBirthDate("2011-01-01").setDeathDate("2010-01-01").build();
+    Client client =
+        new ClientResourceBuilder().setBirthDate("2011-01-01").setDeathDate("2010-01-01").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("deathDate should be greater than or equal to birthDate")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1376,12 +1367,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("deathDateVerifiedIndicator may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1405,12 +1396,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("deathPlace size must be between 0 and 35")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1442,12 +1433,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("deathReasonText size must be between 0 and 10")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1462,12 +1453,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("driverLicenseNumber may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1480,12 +1471,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("driverLicenseNumber size must be between 0 and 20")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1493,20 +1484,19 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void failWhenDriverLicenseStateCodeTypeNull() throws Exception {
-    Client client =
-        new ClientResourceBuilder().setDriverLicenseStateCodeType(null).build();
+    Client client = new ClientResourceBuilder().setDriverLicenseStateCodeType(null).build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("driverLicenseStateCodeType may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1532,12 +1522,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("estimatedDobCode must be one of [Y, N, U]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1549,12 +1539,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("estimatedDobCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1569,12 +1559,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("ethUnableToDetReasonCode must be one of [A, I, K, ]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1591,19 +1581,21 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void failWhenFatherParentalRightTermDateInvalid() throws Exception {
-    Client client = new ClientResourceBuilder().setFatherParentalRightTermDate("01-02-2010").build();
+    Client client =
+        new ClientResourceBuilder().setFatherParentalRightTermDate("01-02-2010").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("fatherParentalRightTermDate must be in the format of yyyy-MM-dd")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("fatherParentalRightTermDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1626,12 +1618,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("genderCode must be one of [M, F, U, I]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1643,12 +1635,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("genderCode must be one of [M, F, U, I]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1660,12 +1652,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("genderCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1696,12 +1688,13 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("genderIdentityType must be a valid system code for category CLNT_GIC")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("genderIdentityType must be a valid system code for category CLNT_GIC")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1713,13 +1706,13 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("genderIdentityType may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
-   }
+    assertThat(theErrorDetected, is(true));
+  }
 
   /*
    * giNotListedDescription test
@@ -1762,11 +1755,12 @@ public class ClientTest implements DomainTestTemplate {
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
       System.out.println(message.getMessage());
-      if (message.getMessage().equals("genderExpressionType must be a valid system code for category CLNT_GEC")) {
+      if (message.getMessage()
+          .equals("genderExpressionType must be a valid system code for category CLNT_GEC")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1778,12 +1772,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("genderExpressionType may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1807,12 +1801,13 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("sexualOrientationType must be a valid system code for category CLNT_SOC")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("sexualOrientationType must be a valid system code for category CLNT_SOC")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1824,12 +1819,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("sexualOrientationType may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1860,12 +1855,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("soUnableToDetermineCode must be one of [D, C, ]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1891,12 +1886,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("incapacitatedParentCode must be one of [N, NA, U, Y]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1908,12 +1903,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("incapacitatedParentCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1925,12 +1920,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("incapacitatedParentCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1938,19 +1933,21 @@ public class ClientTest implements DomainTestTemplate {
    */
   @Test
   public void failWhenMotherParentalRightTermDateInvalid() throws Exception {
-    Client client = new ClientResourceBuilder().setMotherParentalRightTermDate("01-02-2010").build();
+    Client client =
+        new ClientResourceBuilder().setMotherParentalRightTermDate("01-02-2010").build();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(client));
     Boolean theErrorDetected = false;
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("motherParentalRightTermDate must be in the format of yyyy-MM-dd")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("motherParentalRightTermDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1965,12 +1962,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("literateCode must be one of [Y, N, U, D]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -1987,7 +1984,7 @@ public class ClientTest implements DomainTestTemplate {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -2002,12 +1999,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("militaryStatusCode must be one of [D, A, V, N]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -2019,12 +2016,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("militaryStatusCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
 
@@ -2042,12 +2039,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("soc158PlacementCode must be one of [Y, M, N]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -2059,13 +2056,13 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("soc158PlacementCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
-   }
+    assertThat(theErrorDetected, is(true));
+  }
 
   /*
    * socialSecurityNumChangedCode test
@@ -2079,12 +2076,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("socialSecurityNumChangedCode must be one of [Y, N]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -2096,12 +2093,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("socialSecurityNumChangedCode may not be null")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -2117,12 +2114,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("socialSecurityNumber must match \"^(|[0-9]{9})$\"")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -2134,12 +2131,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("socialSecurityNumber must match \"^(|[0-9]{9})$\"")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -2154,12 +2151,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("unemployedParentCode must be one of [N, NA, U, Y]")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -2171,12 +2168,12 @@ public class ClientTest implements DomainTestTemplate {
 
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("unemployedParentCode may not be empty")) {
         theErrorDetected = true;
       }
     }
-    assertThat(theErrorDetected, is(true));    
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
