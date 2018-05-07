@@ -36,7 +36,6 @@ import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.business.rules.R04466ClientSensitivityIndicator;
-import gov.ca.cwds.rest.business.rules.R04880EstimatedDOBCodeSetting;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -341,14 +340,8 @@ public class ParticipantService implements CrudsService {
     boolean childClientIndicatorVar =
         new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
 
-    R04880EstimatedDOBCodeSetting r04880EstimatedDOBCodeSetting =
-        new R04880EstimatedDOBCodeSetting(incomingParticipant, dateStarted);
-    r04880EstimatedDOBCodeSetting.execute();
-    String estimatedDobCode = r04880EstimatedDOBCodeSetting.getEstimateDobCode();
-    String birthDate = r04880EstimatedDOBCodeSetting.getBirthDate();
-
-    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, birthDate,
-        sexAtBirth, primaryRaceCode, childClientIndicatorVar, estimatedDobCode);
+    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, sexAtBirth,
+        primaryRaceCode, childClientIndicatorVar);
 
     /*
      * IMPORTANT: A referral client record must be added after updating client sensitivity indicator
