@@ -28,8 +28,7 @@ public class ScreeningWrapper implements Serializable {
   public static final String FIND_BY_USER_ID =
       "gov.ca.cwds.data.persistence.ns.ScreeningWrapper.findScreeningsOfUser";
   static final String FIND_BY_USER_ID_QUERY =
-      "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at";
-
+      "FROM ScreeningWrapper WHERE assignee_staff_id = :staffId ORDER BY started_at DESC";
 
   private static final long serialVersionUID = 1L;
 
