@@ -20,7 +20,7 @@ public class CaseEntityBuilder {
   Short countryCodeType = 563;
   String countySpecificCode = "57";
   String drmsNotesDoc = "null";
-  String emancipationDate = null;
+  Date emancipationDate = null;
   Date endDate = null;
   String fkchldClt = "8m7hS7i07n";
   String fkreferlt = "8m7hS7i07k";
@@ -144,11 +144,11 @@ public class CaseEntityBuilder {
     return this;
   }
 
-  public String getEmancipationDate() {
+  public Date getEmancipationDate() {
     return emancipationDate;
   }
 
-  public CaseEntityBuilder setEmancipationDate(String emancipationDate) {
+  public CaseEntityBuilder setEmancipationDate(Date emancipationDate) {
     this.emancipationDate = emancipationDate;
     return this;
   }
