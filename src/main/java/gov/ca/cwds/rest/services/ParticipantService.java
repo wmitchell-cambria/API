@@ -246,7 +246,7 @@ public class ParticipantService implements CrudsService {
         dispositionCode ? ASSESMENT : "", referralId, clientId,
         screeningToReferral.getIncidentCounty(), LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE,
         StringUtils.isNotBlank(incomingParticipant.getApproximateAge())
-            ? Short.valueOf(incomingParticipant.getApproximateAge())
+            ? Short.parseShort(incomingParticipant.getApproximateAge())
             : 0,
         incomingParticipant.getApproximateAgeUnits());
     messageBuilder.addDomainValidationError(validator.validate(referralClient));

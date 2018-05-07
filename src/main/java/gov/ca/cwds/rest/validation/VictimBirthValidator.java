@@ -49,6 +49,7 @@ public class VictimBirthValidator
       return false;
     }
     if (StringUtils.isNotBlank(victim.getApproximateAge())
+        && !victim.getApproximateAge().contains("0")
         && StringUtils.isBlank(victim.getApproximateAgeUnits())) {
       String message = "Victim's approximateAgeUnits must be set if approximateAge is set";
       buildMessage(context, message);
