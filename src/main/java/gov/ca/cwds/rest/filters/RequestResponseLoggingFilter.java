@@ -66,11 +66,9 @@ public class RequestResponseLoggingFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-
     String uniqueId = loggingContext.initialize();
 
     if (request instanceof HttpServletRequest) {
-
       HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
       loggingContext.setLogParameter(LogParameter.USER_ID,
@@ -80,7 +78,6 @@ public class RequestResponseLoggingFilter implements Filter {
       loggingContext.setLogParameter(LogParameter.REMOTE_ADDRESS,
           httpServletRequest.getRemoteAddr());
       loggingContext.setLogParameter(LogParameter.REQUEST_ID, Thread.currentThread().getName());
-
 
       RequestResponseLoggingHttpServletRequest wrappedRequest =
           new RequestResponseLoggingHttpServletRequest(httpServletRequest);
@@ -109,18 +106,18 @@ public class RequestResponseLoggingFilter implements Filter {
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
-    // no opt
+    // no-op
   }
 
   @Override
   public void destroy() {
-    // no opt
+    // no-op
   }
 
   private String requestContent(HttpServletRequest request) throws IOException {
     String headerName;
-    StringBuilder sb = new StringBuilder();
-    Enumeration<String> headerNames = request.getHeaderNames();
+    final StringBuilder sb = new StringBuilder();
+    final Enumeration<String> headerNames = request.getHeaderNames();
     if (headerNames != null) {
       while (headerNames.hasMoreElements()) {
         headerName = headerNames.nextElement();
