@@ -42,12 +42,14 @@ public class VictimBirthValidator
   }
 
   private boolean hasValidBirthDateOrAge(Participant victim, ConstraintValidatorContext context) {
-    if (StringUtils.isBlank(victim.getDateOfBirth()) && victim.getApproximateAge().contains("0")) {
+    if (StringUtils.isBlank(victim.getDateOfBirth())
+        && StringUtils.isBlank(victim.getApproximateAge())) {
       String message = "Victim's should have either of the value DOB or approximateAge";
       buildMessage(context, message);
       return false;
     }
     if (StringUtils.isNotBlank(victim.getApproximateAge())
+        && !victim.getApproximateAge().contains("0")
         && StringUtils.isBlank(victim.getApproximateAgeUnits())) {
       String message = "Victim's approximateAgeUnits must be set if approximateAge is set";
       buildMessage(context, message);
