@@ -8,22 +8,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-import java.util.Set;
-
-import javax.validation.Validation;
-import javax.validation.Validator;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -103,6 +89,16 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.jackson.Jackson;
+import java.util.Date;
+import java.util.Set;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * 
@@ -276,6 +272,10 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
    *
    * <pre>
    * BUSINESS RULE: "R - 05559"
+   * When a new primary assignment is made and saved to the database, the relationship from the
+   * case or referral to the staff person is set. This relationship represents the staff person who
+   * is currently assigned to the caseload for the primary assignment. If the case or referral is
+   * closed, this relationship represents the staff person who last had the primary assignment.
    * </pre>
    *
    * </blockquote>
