@@ -113,7 +113,7 @@ public class ClientService implements
   public gov.ca.cwds.rest.api.domain.cms.Client delete(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.delete(primaryKey);
     if (persistedClient != null) {
-      ssaname3Dao.deleteSsaname3(LegacyTable.CLINET_PHONETIC.getName(), primaryKey, "C");
+      ssaname3Dao.deleteSsaname3(LegacyTable.CLIENT_PHONETIC.getName(), primaryKey, "C");
       upperCaseTables.deleteClientUc(primaryKey);
       externalInterfaceTables.createExtInterForDelete(primaryKey, LegacyTable.CLIENT.getName());
       return new gov.ca.cwds.rest.api.domain.cms.Client(persistedClient, true);

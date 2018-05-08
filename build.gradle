@@ -19,7 +19,6 @@ plugins {
     id 'com.github.jk1.dependency-license-report' version '0.3.14'
 }
 
-
 apply plugin: 'maven-publish'
 apply plugin: 'docker'
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -31,7 +30,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 
 project.ext {
     apiVersion = '0.7.1'
-    coreApiVersion = '1.6.4_756-RC'
+    coreApiVersion = '1.6.4_758-RC'
     cwdsModelVersion = '0.6.4_515-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
@@ -301,8 +300,7 @@ task libLicenseReportFiles(type: Copy){
     include "licenses.txt"
 }
 
-task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders,
-                                 libLicenseReportFiles ] ){
+task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders, libLicenseReportFiles] ){
 }
 
 task copyConfig(type: Copy) {
