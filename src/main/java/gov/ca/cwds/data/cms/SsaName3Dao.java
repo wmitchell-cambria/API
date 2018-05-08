@@ -61,7 +61,7 @@ public class SsaName3Dao {
    * @param client client
    */
   public void clientSsaname3(String crudOperation, Client client) {
-    callStoredProc(LegacyTable.CLINET_PHONETIC.getName(), crudOperation, client.getId(), "C",
+    callStoredProc(LegacyTable.CLIENT_PHONETIC.getName(), crudOperation, client.getId(), "C",
         client.getFirstName(), client.getMiddleName(), client.getLastName(), " ", " ", s,
         client.getLastUpdatedTime(), client.getLastUpdatedId());
   }
@@ -71,7 +71,7 @@ public class SsaName3Dao {
    * @param otherClientName other client name object
    */
   public void otherClientSsaname3(String crudOperation, OtherClientName otherClientName) {
-    callStoredProc(LegacyTable.CLINET_PHONETIC.getName(), crudOperation,
+    callStoredProc(LegacyTable.CLIENT_PHONETIC.getName(), crudOperation,
         otherClientName.getThirdId(), "N", otherClientName.getFirstName(),
         otherClientName.getMiddleName(), otherClientName.getLastName(), " ", " ", s,
         otherClientName.getLastUpdatedTime(), otherClientName.getLastUpdatedId());
