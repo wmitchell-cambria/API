@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -250,7 +249,7 @@ public class Participant extends ReportingDomain implements Request, Response {
     this.ssn = ssn;
     this.primaryLanguage = primaryLanguage;
     this.secondaryLanguage = secondaryLanguage;
-    this.approximateAge = StringUtils.isNotBlank(approximateAge) ? approximateAge : "0";
+    this.approximateAge = approximateAge;
     this.approximateAgeUnits = approximateAgeUnits;
     this.roles = roles;
     this.addresses = addresses;
