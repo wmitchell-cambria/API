@@ -7,6 +7,7 @@ import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -54,11 +55,22 @@ public class HOIScreeningService
   @Inject
   AuthorizationService authorizationService;
 
+  private Comparator<HOIScreening> screeningsComparator;
+
   /**
    * Construct the object
    */
-  public HOIScreeningService() {
+  HOIScreeningService() {
     super();
+    screeningsComparator = (s1, s2) -> {
+      if (s2.getStartDate() == null) {
+        return 1;
+      } else if (s1.getStartDate() == null) {
+        return -1;
+      } else {
+        return s2.getStartDate().compareTo(s1.getStartDate());
+      }
+    };
   }
 
   /**
@@ -128,8 +140,7 @@ public class HOIScreeningService
   }
 
   Set<HOIScreening> buildHoiScreenings(HOIScreeningData hsd) {
-    Set<HOIScreening> screenings =
-        new TreeSet<>((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate()));
+    Set<HOIScreening> screenings = new TreeSet<>(screeningsComparator);
     for (ScreeningEntity screeningEntity : hsd.getScreeningEntities()) {
       /*
        * NOTE: When we want to enable authorizations for screening history, we can add following
