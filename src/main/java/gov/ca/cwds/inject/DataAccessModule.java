@@ -1,9 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.ns.AddressesDao;
-import gov.ca.cwds.data.ns.AgencyDao;
-import gov.ca.cwds.data.ns.AllegationIntakeDao;
-import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,6 +59,9 @@ import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AddressDao;
+import gov.ca.cwds.data.ns.AddressesDao;
+import gov.ca.cwds.data.ns.AgencyDao;
+import gov.ca.cwds.data.ns.AllegationIntakeDao;
 import gov.ca.cwds.data.ns.EthnicityDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.IntakeLovDao;
@@ -77,6 +76,7 @@ import gov.ca.cwds.data.ns.PersonPhoneDao;
 import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
+import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
@@ -204,8 +204,7 @@ public class DataAccessModule extends AbstractModule {
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
-      gov.ca.cwds.data.persistence.ns.Person.class,
-      gov.ca.cwds.data.persistence.ns.Address.class,
+      gov.ca.cwds.data.persistence.ns.Person.class, gov.ca.cwds.data.persistence.ns.Address.class,
       gov.ca.cwds.data.persistence.ns.Addresses.class,
       gov.ca.cwds.data.persistence.ns.Allegation.class,
       gov.ca.cwds.data.persistence.ns.AllegationEntity.class,
@@ -231,8 +230,7 @@ public class DataAccessModule extends AbstractModule {
       gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
       gov.ca.cwds.data.persistence.ns.Ethnicity.class,
       gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
-      gov.ca.cwds.data.persistence.ns.PersonRace.class,
-      gov.ca.cwds.data.persistence.ns.Race.class,
+      gov.ca.cwds.data.persistence.ns.PersonRace.class, gov.ca.cwds.data.persistence.ns.Race.class,
       gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningAddressEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class).build();
@@ -503,7 +501,8 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @Named("elasticsearch.daos")
-  public Map<String, ElasticsearchDao> provideElasticSearchDaos(ApiConfiguration apiConfiguration) {
+  public synchronized Map<String, ElasticsearchDao> provideElasticSearchDaos(
+      ApiConfiguration apiConfiguration) {
     if (clients == null) {
       provideElasticsearchClients(apiConfiguration);
     }
