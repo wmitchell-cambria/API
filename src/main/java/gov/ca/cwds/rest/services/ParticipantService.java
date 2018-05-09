@@ -34,6 +34,7 @@ import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
+import gov.ca.cwds.rest.business.rules.R00834AgeUnitRestriction;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.business.rules.R04466ClientSensitivityIndicator;
 import gov.ca.cwds.rest.messages.MessageBuilder;
@@ -180,9 +181,14 @@ public class ParticipantService implements CrudsService {
       updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
     }
 
-    processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
-        clientId);
+    Client client = this.clientService.find(clientId);
+    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
+    r00834AgeUnitRestriction.execute();
+    String ageNumber = r00834AgeUnitRestriction.getAge();
+    String agePeriodCode = r00834AgeUnitRestriction.getAgeUnits();
 
+    processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
+        clientId, ageNumber, agePeriodCode);
     /*
      * determine other participant/roles attributes relating to CWS/CMS allegation
      */
@@ -235,7 +241,7 @@ public class ParticipantService implements CrudsService {
 
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
       String referralId, MessageBuilder messageBuilder, Participant incomingParticipant,
-      String clientId) {
+      String clientId, String ageNumber, String agePeriodCode) {
     boolean dispositionCode =
         new R00824SetDispositionCode(screeningToReferral, incomingParticipant).isValid();
     boolean staffPersonAddedIndicator =
@@ -245,10 +251,7 @@ public class ParticipantService implements CrudsService {
         ParticipantValidator.selfReported(incomingParticipant), staffPersonAddedIndicator,
         dispositionCode ? ASSESMENT : "", referralId, clientId,
         screeningToReferral.getIncidentCounty(), LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE,
-        StringUtils.isNotBlank(incomingParticipant.getApproximateAge())
-            ? Short.parseShort(incomingParticipant.getApproximateAge())
-            : 0,
-        incomingParticipant.getApproximateAgeUnits());
+        StringUtils.isNotBlank(ageNumber) ? Short.parseShort(ageNumber) : 0, agePeriodCode);
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
     try {
