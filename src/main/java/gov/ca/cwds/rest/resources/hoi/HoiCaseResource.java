@@ -61,7 +61,7 @@ public class HoiCaseResource {
    * @param clientIds - clientIds
    * @return the hoi cases
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),

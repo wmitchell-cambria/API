@@ -31,14 +31,11 @@ public class ReporterDao extends BaseDaoImpl<Reporter> {
    * @return - list of Reporters
    */
   public Reporter[] findInvestigationReportersByReferralId(String referralId) {
-
+    @SuppressWarnings("unchecked")
     Query<Reporter> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(
             "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId")
         .setParameter("referralId", referralId);
     return query.list().toArray(new Reporter[0]);
-
   }
-
-
 }
