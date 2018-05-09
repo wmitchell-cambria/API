@@ -58,9 +58,10 @@
     "client_staff_person_added":false,
     "reporter_confidential_waiver": false,
     "reporter_employer_name": "Employer Name",
-    "person_id" : 12345,
     "screening_id" : 12345,
     "limited_access_code": "N",
+    "approximate_age": "12",
+    "approximate_age_units": "Y",
     "roles" : [ "Victim" ],
     "addresses" : [ {
       "legacy_source_table" : "",

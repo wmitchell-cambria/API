@@ -6,30 +6,26 @@ import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
 
 /**
- * Logical representation of a Referral
+ * Logical representation of a Referral in PostgreSQL.
  * 
  * @author CWDS API Team
  */
 public class PostedCmsNSReferral extends DomainObject implements Response {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   private Referral referral;
   private Person person;
-
 
   /**
    * @param referral - PostedReferral
    * @param person - PostedPerson
    */
   public PostedCmsNSReferral(PostedReferral referral, PostedPerson person) {
-
     super();
     this.referral = referral;
     this.person = person;
   }
-
 
   /**
    * @return the referral
@@ -38,21 +34,12 @@ public class PostedCmsNSReferral extends DomainObject implements Response {
     return referral;
   }
 
-
   /**
    * @return the person
    */
   public Person getPerson() {
     return person;
   }
-
-
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
 
   @Override
   public int hashCode() {
@@ -62,12 +49,6 @@ public class PostedCmsNSReferral extends DomainObject implements Response {
     return PRIME * result + ((person == null) ? 0 : person.hashCode());
   }
 
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -96,7 +77,5 @@ public class PostedCmsNSReferral extends DomainObject implements Response {
     }
     return true;
   }
-
-
 
 }

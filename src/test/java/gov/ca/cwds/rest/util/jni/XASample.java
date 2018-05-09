@@ -199,11 +199,10 @@ public class XASample {
           .executeUpdate();
 
       // Run DML on connection 2.
-      conn2
-          .prepareStatement(
-              // "update CWSINT.CLIENT_T c set c.BR_FAC_NM = 'conn 2' where c.IDENTIFIER =
-              // 'AaiU7IW0Rt'")
-              "update CWSNS1.ALLGTN_T c set c.LOC_DSC = 'test 6' where c.IDENTIFIER = 'AAABG3EMNL'")
+      conn2.prepareStatement(
+          // "update CWSINT.CLIENT_T c set c.BR_FAC_NM = 'conn 2' where c.IDENTIFIER =
+          // 'AaiU7IW0Rt'")
+          "update CWSNS1.ALLGTN_T c set c.LOC_DSC = 'test 6' where c.IDENTIFIER = 'AAABG3EMNL'")
           .executeUpdate();
 
       // Now end the distributed transaction on the two connections.

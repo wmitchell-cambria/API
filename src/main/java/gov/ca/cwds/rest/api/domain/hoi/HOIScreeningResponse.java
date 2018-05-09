@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModel;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * {@link DomainObject} representing an HOIScreening List response
@@ -55,5 +56,10 @@ public class HOIScreeningResponse extends ReportingDomain implements Response {
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 }

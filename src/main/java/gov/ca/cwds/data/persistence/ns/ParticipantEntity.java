@@ -1,14 +1,12 @@
 package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_LIST_BY_SCREENING_ID;
+import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_PARTICIPANTS_BY_SCREENING_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import gov.ca.cwds.Identifiable;
-import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
-import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import java.util.Arrays;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,12 +16,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.Identifiable;
+import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.ns.papertrail.HasPaperTrail;
+import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 
 /**
  * {@link PersistentObject} representing Participant.
@@ -33,27 +37,30 @@ import org.hibernate.annotations.Type;
 @SuppressWarnings("serial")
 @NamedQuery(name = FIND_LEGACY_ID_LIST_BY_SCREENING_ID,
     query = "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
+@NamedQuery(name = FIND_PARTICIPANTS_BY_SCREENING_IDS,
+    query = "FROM ParticipantEntity WHERE screeningId IN :screeningIds")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findByScreeningId",
+    query = "FROM ParticipantEntity WHERE screeningId = :screeningId)")
 @Entity
 @Table(name = "participants")
 public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String> {
 
   public static final String FIND_LEGACY_ID_LIST_BY_SCREENING_ID =
       "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId";
+  public static final String FIND_PARTICIPANTS_BY_SCREENING_IDS =
+      "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findByScreeningIds";
 
   @Id
   @Column(name = "id")
-  @GenericGenerator(
-      name = "participant_id",
+  @GenericGenerator(name = "participant_id",
       strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-      parameters = {
-          @org.hibernate.annotations.Parameter(
-              name = "sequence_name", value = "participants_id_seq")
-      }
-  )
+      parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name",
+          value = "participants_id_seq")})
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participant_id")
   private String id;
 
   @Column(name = "date_of_birth")
+  @Type(type = "date")
   private Date dateOfBirth;
 
   @Column(name = "first_name")
@@ -129,12 +136,10 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     updateFrom(participantIntakeApi);
   }
 
-  public ParticipantEntity(String id, Date dateOfBirth, String firstName,
-      String gender, String lastName, String ssn,
-      ScreeningEntity screeningEntity, String legacyId, String[] roles,
-      String[] languages, String middleName, String nameSuffix,
-      String races, String ethnicity, String legacySourceTable,
-      Boolean sensitive, Boolean sealed, String approximateAge,
+  public ParticipantEntity(String id, Date dateOfBirth, String firstName, String gender,
+      String lastName, String ssn, ScreeningEntity screeningEntity, String legacyId, String[] roles,
+      String[] languages, String middleName, String nameSuffix, String races, String ethnicity,
+      String legacySourceTable, Boolean sensitive, Boolean sealed, String approximateAge,
       String approximateAgeUnits) {
     this.id = id;
     this.dateOfBirth = dateOfBirth;
@@ -164,8 +169,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     gender = participantIntakeApi.getGender();
     lastName = participantIntakeApi.getLastName();
     ssn = participantIntakeApi.getSsn();
-    screeningId = participantIntakeApi.getScreeningId() == null ? null
-        : String.valueOf(participantIntakeApi.getScreeningId());
+    screeningId = participantIntakeApi.getScreeningId();
     legacyId = participantIntakeApi.getLegacyId();
     roles = participantIntakeApi.getRoles().toArray(new String[0]);
     languages = participantIntakeApi.getLanguages().toArray(new String[0]);
@@ -186,6 +190,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     return id;
   }
 
+  @Override
   public String getId() {
     return id;
   }
@@ -225,15 +230,17 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   public String[] getRoles() {
     if (roles == null) {
       return new String[0];
+    } else {
+      return Arrays.copyOf(roles, roles.length);
     }
-    return Arrays.copyOf(roles, roles.length);
   }
 
   public String[] getLanguages() {
     if (languages == null) {
       return new String[0];
+    } else {
+      return Arrays.copyOf(languages, languages.length);
     }
-    return Arrays.copyOf(languages, languages.length);
   }
 
   public String getMiddleName() {
@@ -272,6 +279,94 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
     return approximateAgeUnits;
   }
 
+  public void setScreeningId(String screeningId) {
+    this.screeningId = screeningId;
+  }
+
+  public void setDateOfBirth(Date dateOfBirth) {
+    this.dateOfBirth = freshDate(dateOfBirth);
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setSsn(String ssn) {
+    this.ssn = ssn;
+  }
+
+  public ScreeningEntity getScreeningEntity() {
+    return screeningEntity;
+  }
+
+  public void setScreeningEntity(ScreeningEntity screeningEntity) {
+    this.screeningEntity = screeningEntity;
+  }
+
+  public void setLegacyId(String legacyId) {
+    this.legacyId = legacyId;
+  }
+
+  public void setRoles(String[] roles) {
+    if (roles == null) {
+      this.roles = new String[0];
+    } else {
+      this.roles = Arrays.copyOf(roles, roles.length);
+    }
+  }
+
+  public void setLanguages(String[] languages) {
+    if (languages == null) {
+      this.languages = new String[0];
+    } else {
+      this.languages = Arrays.copyOf(languages, languages.length);
+    }
+  }
+
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
+  }
+
+  public void setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
+  }
+
+  public void setRaces(String races) {
+    this.races = races;
+  }
+
+  public void setEthnicity(String ethnicity) {
+    this.ethnicity = ethnicity;
+  }
+
+  public void setLegacySourceTable(String legacySourceTable) {
+    this.legacySourceTable = legacySourceTable;
+  }
+
+  public void setSensitive(Boolean sensitive) {
+    this.sensitive = sensitive;
+  }
+
+  public void setSealed(Boolean sealed) {
+    this.sealed = sealed;
+  }
+
+  public void setApproximateAge(String approximateAge) {
+    this.approximateAge = approximateAge;
+  }
+
+  public void setApproximateAgeUnits(String approximateAgeUnits) {
+    this.approximateAgeUnits = approximateAgeUnits;
+  }
+
   /**
    * {@inheritDoc}
    *
@@ -290,5 +385,9 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }

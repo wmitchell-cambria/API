@@ -121,4 +121,11 @@ public class CrossReportService implements
     }
   }
 
+  /**
+   * @return the riCrossReport
+   */
+  public RICrossReport getRiCrossReport() {
+    return riCrossReport;
+  }
+
 }

@@ -76,5 +76,4 @@ public class ScreeningSummaryResource {
     return typedResourceDelegate.get(id);
   }
 
-
 }

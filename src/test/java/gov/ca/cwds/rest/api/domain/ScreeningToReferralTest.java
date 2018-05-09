@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.CrossReportResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
@@ -168,9 +169,8 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithValidSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validDomainScreeningToReferral.json"),
-        ScreeningToReferral.class);
+    ScreeningToReferral toValidate =
+        new ScreeningToReferralResourceBuilder().createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -221,9 +221,9 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithNullAllegationsFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/nullAllegations.json"),
-        ScreeningToReferral.class);
+    Set<Allegation> allegatiopns = null;
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegatiopns).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
@@ -232,9 +232,9 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithEmptyAllegationsFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/emptyAllegations.json"),
-        ScreeningToReferral.class);
+    Set<Allegation> allegatiopns = new HashSet<>();
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegatiopns).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
@@ -243,18 +243,17 @@ public class ScreeningToReferralTest {
 
   @Test
   public void equalsHashCodeWork() throws Exception {
-    // EqualsVerifier.forClass(ScreeningToReferral.class).suppress(Warning.NONFINAL_FIELDS).verify();
-    ScreeningToReferral expected = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/emptyAllegations.json"),
-        ScreeningToReferral.class);
+    Set<Allegation> allegations = new HashSet<>();
+    ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
+        .setAllegations(allegations).createScreeningToReferral();
     assertThat(expected.hashCode(), is(not(0)));
   }
 
   @Test
   public void testWithEmptyCrossReportFail() throws Exception {
-    ScreeningToReferral toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/emptyCrossReport.json"),
-            ScreeningToReferral.class);
+    Set<CrossReport> crossReports = new HashSet<>();
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setCrossReports(crossReports).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -262,9 +261,10 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithNullCrossReportFail() throws Exception {
-    ScreeningToReferral toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/nullCrossReport.json"),
-            ScreeningToReferral.class);
+    CrossReport crossReport = null;
+    Set<CrossReport> crossReports = new HashSet<>(Arrays.asList(crossReport));
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setCrossReports(crossReports).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -272,9 +272,14 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithMultipleCrossReportsSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/validMultipleCrossReports.json"),
-        ScreeningToReferral.class);
+    CrossReport crossReport =
+        new CrossReportResourceBuilder().setId("ABC147852").createCrossReport();
+    CrossReport crossReport1 =
+        new CrossReportResourceBuilder().setId("ABC147851").createCrossReport();
+    Set<CrossReport> crossReports = new HashSet<>(Arrays.asList(crossReport, crossReport1));
+
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setCrossReports(crossReports).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -283,9 +288,8 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testWithInvalidIncidentDateFormatFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/invalidIncidentDateFormat.json"),
-        ScreeningToReferral.class);
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setIncidentDate("12-07-1992").createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
@@ -295,10 +299,8 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testBlankLegacySourceTableSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/blankLegacySourceTable.json"),
-        ScreeningToReferral.class);
-
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setLegacySourceTable("").createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -306,10 +308,8 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testNullLegacySourceTableSuccess() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/valid/nullLegacySourceTable.json"),
-        ScreeningToReferral.class);
-
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setLegacySourceTable(null).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -328,8 +328,7 @@ public class ScreeningToReferralTest {
   @Test
   public void testWithEmptyLegacyReferralIdSuccess() throws Exception {
     ScreeningToReferral toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/emptyReferralId.json"),
-            ScreeningToReferral.class);
+        new ScreeningToReferralResourceBuilder().setReferralId("").createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -338,8 +337,7 @@ public class ScreeningToReferralTest {
   @Test
   public void testWithNullLegacyReferralIdSuccess() throws Exception {
     ScreeningToReferral toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/nullReferralId.json"),
-            ScreeningToReferral.class);
+        new ScreeningToReferralResourceBuilder().setReferralId(null).createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
@@ -357,9 +355,8 @@ public class ScreeningToReferralTest {
 
   @Test
   public void testLegacyIdTooLongFail() throws Exception {
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/legacyIdTooLong.json"),
-        ScreeningToReferral.class);
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
+        .setReferralId("pouhG568F11").createScreeningToReferral();
     Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
         validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());

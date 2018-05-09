@@ -1,14 +1,17 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
+
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * {@link PersistentObject} representing IntakeLOVCode.
@@ -17,9 +20,15 @@ import org.hibernate.annotations.NamedQuery;
  */
 @Entity
 @Table(name = "intake_lov_codes")
-@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes",
-    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN (:intakeCodes)")
+@NamedQuery(
+    name = "gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity.findIntakeLOVCodesByIntakeCodes",
+    query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN :intakeCodes")
 public class IntakeLOVCodeEntity implements PersistentObject {
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "cat_id")

@@ -40,6 +40,13 @@ public class RequestExecutionContextImplTest extends AbstractShiroTest {
     when(principalCollection.asList()).thenReturn(list);
     when(mockSubject.getPrincipals()).thenReturn(principalCollection);
     setSubject(mockSubject);
+
+    RequestExecutionContextImpl.startRequest();
+    RequestExecutionContext actual = RequestExecutionContext.instance();
+  }
+
+  public static void startRequest() {
+    RequestExecutionContextImpl.startRequest();
   }
 
   @Test

@@ -119,6 +119,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     // before DAO's, entities, session factories, etc.
     // Without succumbing to convoluted Guice listeners, "assisted injection", or statics, this is
     // the best we can do.
+    // BETTER: inject a **delegate** with all dependencies.
     final PaperTrailDao paperTrailDao = InjectorHolder.INSTANCE.getInstance(PaperTrailDao.class);
     applicationModule.getDataAccessModule().getPaperTrailInterceptor()
         .setPaperTrailDao(paperTrailDao);

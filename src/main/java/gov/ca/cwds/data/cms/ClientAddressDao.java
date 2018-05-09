@@ -45,12 +45,12 @@ public class ClientAddressDao extends CrudsDaoImpl<ClientAddress> {
     List<ClientAddress> clientAddresses = new ArrayList<>();
     if (addressId != null && clientId != null) {
       try {
-        Query query = this.getSessionFactory().getCurrentSession()
+        final Query<ClientAddress> query = this.getSessionFactory().getCurrentSession()
             .getNamedQuery("gov.ca.cwds.data.persistence.cms.ClientAddress.findByAddressAndClient")
             .setParameter("addressId", addressId).setParameter("clientId", clientId);
         clientAddresses.addAll(query.list());
       } catch (Exception e) {
-        StringBuilder message = new StringBuilder();
+        final StringBuilder message = new StringBuilder();
         message.append("Unable to find ClientAddress for address id ");
         message.append(addressId);
         message.append(" and client id ");
@@ -59,6 +59,7 @@ public class ClientAddressDao extends CrudsDaoImpl<ClientAddress> {
         throw new ServiceException(e);
       }
     }
+
     return clientAddresses;
   }
 

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.AddressUtils;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -349,7 +350,7 @@ public class Reporter extends ReportingDomain implements Request, Response {
      * exception to enter the streetNumber.
      */
     if (address != null) {
-      zipCodeString = address.getZip();
+      zipCodeString = AddressUtils.defaultIfBlank(address.getZip());
       city = address.getCity();
       stateCodeType = address.getState().shortValue();
       int index;
@@ -375,12 +376,13 @@ public class Reporter extends ReportingDomain implements Request, Response {
       updated = participant.getLegacyDescriptor().getLastUpdated();
     }
 
-    Boolean feedbackRequiredInd = isMandatedReporter ? Boolean.TRUE:Boolean.FALSE;
+    Boolean feedbackRequiredInd = isMandatedReporter ? Boolean.TRUE : Boolean.FALSE;
     return new Reporter(updated, "", city, DEFAULT_CODE, DEFAULT_CODE,
         participant.isReporterConfidentialWaiver(), "", participant.getReporterEmployerName(), "",
-        feedbackRequiredInd, participant.getFirstName(), participant.getLastName(), isMandatedReporter, 0,
-        DEFAULT_LONG, participant.getMiddleName(), "", DEFAULT_LONG, 0, stateCodeType,
-        streetName, streetNumber, "", zipCodeString, referralId, "", DEFAULT_CODE, countyCode);
+        feedbackRequiredInd, participant.getFirstName(), participant.getLastName(),
+        isMandatedReporter, 0, DEFAULT_LONG, participant.getMiddleName(), "", DEFAULT_LONG, 0,
+        stateCodeType, streetName, streetNumber, "", zipCodeString, referralId, "", DEFAULT_CODE,
+        countyCode);
   }
 
   /**

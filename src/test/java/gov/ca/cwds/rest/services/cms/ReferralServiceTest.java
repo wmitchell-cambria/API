@@ -7,16 +7,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.data.persistence.cms.Assignment;
-import gov.ca.cwds.fixture.AssignmentEntityBuilder;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -34,10 +33,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.Assignment;
 import gov.ca.cwds.data.persistence.cms.LongText;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
+import gov.ca.cwds.fixture.AssignmentEntityBuilder;
+import gov.ca.cwds.fixture.CmsDocumentResourceBuilder;
+import gov.ca.cwds.fixture.DrmsDocumentResourceBuilder;
+import gov.ca.cwds.fixture.DrmsDocumentTemplateResourceBuilder;
 import gov.ca.cwds.fixture.LongTextEntityBuilder;
 import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.ReferralResourceBuilder;
@@ -46,6 +51,9 @@ import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
+import gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate;
 import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedReferral;
@@ -91,6 +99,11 @@ public class ReferralServiceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  /**
+   * Initialize system code cache
+   */
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
@@ -106,15 +119,16 @@ public class ReferralServiceTest {
     drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
     addressService = mock(AddressService.class);
     longTextService = mock(LongTextService.class);
-    StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51")
-        .build();
+    StaffPerson staffPerson =
+        new StaffPersonEntityBuilder().setId("q1p").setCountyCode("51").build();
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("21");
 
     riReferral = mock(RIReferral.class);
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     referralDomain = new ReferralResourceBuilder().setPrimaryContactStaffPersonId("q1p")
         .setCountySpecificCode("51").build();
@@ -134,7 +148,7 @@ public class ReferralServiceTest {
   @Test
   public void testFindReturnsCorrectEntity() throws Exception {
     Referral expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"), Referral.class);
+        .readValue(fixture("fixtures/domain/legacy/Referral/valid.json"), Referral.class);
 
     // #145948067: the Referral domain bean doesn't store the primary key???
     final String key = "1234567ABC";
@@ -194,8 +208,8 @@ public class ReferralServiceTest {
     when(referralDao.update(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
         .thenReturn(referral);
 
-    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
-        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
+    when(assignmentService.findReferralFirstAssignment(any(String.class)))
+        .thenReturn(buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
 
     Object retval = referralService.update("1234567ABC", expected);
     assertThat(retval.getClass(), is(Referral.class));
@@ -209,8 +223,8 @@ public class ReferralServiceTest {
   public void testUpdateThrowsServiceException() {
     Referral referralRequest = new ReferralResourceBuilder().build();
 
-    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
-        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
+    when(assignmentService.findReferralFirstAssignment(any(String.class)))
+        .thenReturn(buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
 
     when(referralDao.update(any())).thenThrow(EntityNotFoundException.class);
 
@@ -237,7 +251,7 @@ public class ReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.Referral toCreate =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", referralDomain, "0XA");
 
-    Referral request = MAPPER.readValue(fixture("fixtures/domain/legacy/Referral/valid/valid.json"),
+    Referral request = MAPPER.readValue(fixture("fixtures/domain/legacy/Referral/valid.json"),
         Referral.class);
 
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
@@ -399,8 +413,8 @@ public class ReferralServiceTest {
           return true;
         });
 
-    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
-        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
+    when(assignmentService.findReferralFirstAssignment(any(String.class)))
+        .thenReturn(buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00"));
 
     referralService.update("1234567ABC", request);
     assertThat(isLaCountyTrigger, is(true));
@@ -429,9 +443,10 @@ public class ReferralServiceTest {
     PostedLongText postedLongText = new PostedLongText(longTextEntity);
     when(longTextService.create(any())).thenReturn(postedLongText);
 
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     Referral referralCreated = referralService.createReferralWithDefaults(screeningToReferral,
         dateStarted, timeStarted, mockMessageBuilder);
@@ -448,9 +463,10 @@ public class ReferralServiceTest {
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral = new ReferralEntityBuilder().build();
     when(referralDao.find(referralId)).thenReturn(savedReferral);
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     MessageBuilder messageBuilder = new MessageBuilder();
     String response = referralService.createCmsReferralFromScreening(screeningToReferral,
@@ -467,9 +483,10 @@ public class ReferralServiceTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setReferralId(nonExistingReferralId).createScreeningToReferral();
 
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     referralService.createCmsReferralFromScreening(screeningToReferral, dateStarted, timeStarted,
         mockMessageBuilder);
@@ -497,9 +514,10 @@ public class ReferralServiceTest {
     PostedLongText postedLongText = new PostedLongText(longTextEntity);
     when(longTextService.create(any())).thenReturn(postedLongText);
 
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral =
         new ReferralEntityBuilder().setId("1234567890").setPrimaryContactStaffPersonId("q1p")
@@ -537,9 +555,10 @@ public class ReferralServiceTest {
     PostedLongText postedLongText = new PostedLongText(longTextEntity);
     when(longTextService.create(any())).thenReturn(postedLongText);
 
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     gov.ca.cwds.data.persistence.cms.Referral savedReferral =
         new ReferralEntityBuilder().setId("1234567890").setPrimaryContactStaffPersonId("q1p")
@@ -589,8 +608,8 @@ public class ReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.Referral referral =
         new gov.ca.cwds.data.persistence.cms.Referral("1234567ABC", domainReferral, "ABC");
 
-    when(assignmentService.findReferralFirstAssignment(any(String.class))).thenReturn(
-        buildMockAssignment("1999-01-10", "15:11:00", "1999-01-15", "16:10:00"));
+    when(assignmentService.findReferralFirstAssignment(any(String.class)))
+        .thenReturn(buildMockAssignment("1999-01-10", "15:11:00", "1999-01-15", "16:10:00"));
 
     when(referralDao.update(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
         .thenReturn(referral);
@@ -601,21 +620,24 @@ public class ReferralServiceTest {
   // R04611 - the Referral Start date/time can not exceed the End Date and can not equal or exceed
   // End Time of the first assignment
   @Test
-  public void testR04611ReferralValidation () {
+  public void testR04611ReferralValidation() {
     Referral domainReferral = new ReferralResourceBuilder().build();
 
     // Referral earlier date
-    Assignment firstAssignment = buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00");
+    Assignment firstAssignment =
+        buildMockAssignment("2017-01-02", "15:11:45", "2017-01-04", "16:00:00");
     boolean isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
     assertThat(isValid, is(true));
 
     // Referral same date, earlier time
-    firstAssignment = buildMockAssignment(DEFAULT_REFERRAL_RECEIVED_DATE, "17:15:45", "2017-01-04", "16:00:00");
+    firstAssignment =
+        buildMockAssignment(DEFAULT_REFERRAL_RECEIVED_DATE, "17:15:45", "2017-01-04", "16:00:00");
     isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
     assertThat(isValid, is(true));
 
     // Referral same date, same time
-    firstAssignment = buildMockAssignment(DEFAULT_REFERRAL_RECEIVED_DATE, "00:00:00", DEFAULT_REFERRAL_RECEIVED_DATE, DEFAULT_REFERRAL_RECEIVED_TIME);
+    firstAssignment = buildMockAssignment(DEFAULT_REFERRAL_RECEIVED_DATE, "00:00:00",
+        DEFAULT_REFERRAL_RECEIVED_DATE, DEFAULT_REFERRAL_RECEIVED_TIME);
     isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
     assertThat(isValid, is(false));
 
@@ -623,5 +645,48 @@ public class ReferralServiceTest {
     firstAssignment = buildMockAssignment("1999-01-10", "15:11:45", "1999-01-15", "16:00:00");
     isValid = referralService.isReferralStartDateTimeValid(domainReferral, firstAssignment);
     assertThat(isValid, is(false));
+  }
+
+  @Test
+  public void shouldReturnCreateDefaultSreenerNarrativeForNewReferral() {
+    String referralId = "";
+    StaffPerson staffPerson =
+        new StaffPersonEntityBuilder().setId("0X5").setCountyCode("99").build();
+    when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
+    ScreeningToReferral screeningToReferral =
+        new ScreeningToReferralResourceBuilder().setReferralId(referralId).setIncidentCounty("99")
+            .setAssigneeStaffId("0X5").createScreeningToReferral();
+
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new ReferralEntityBuilder().setId("ABC0987654").build();
+    when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
+        .thenReturn(referral);
+
+    MessageBuilder messageBuilder = new MessageBuilder();
+    LongText longTextEntity = new LongTextEntityBuilder().setId("1234567890").build();
+    PostedLongText postedLongText = new PostedLongText(longTextEntity);
+    when(longTextService.create(any())).thenReturn(postedLongText);
+
+    Address address = new AddressResourceBuilder().createAddress();
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
+        .thenReturn(address);
+
+    DrmsDocumentTemplate drmsDocument = new DrmsDocumentTemplateResourceBuilder().build();
+    when(drmsDocumentTemplateService.findScreenerNarrativeTemplateNs(any(Short.class)))
+        .thenReturn(drmsDocument);
+
+    CmsDocument cmsDocument = new CmsDocumentResourceBuilder().build();
+    when(cmsDocumentService.find(any(String.class))).thenReturn(cmsDocument);
+    when(cmsDocumentService.create(any())).thenReturn(cmsDocument);
+
+    DrmsDocument document = new DrmsDocumentResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.DrmsDocument persistedDocument =
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("1234567890", document, "0X5",
+            new Date());
+    PostedDrmsDocument postedId = new PostedDrmsDocument(persistedDocument);
+    when(drmsDocumentService.create(any(DrmsDocument.class))).thenReturn(postedId);
+    referralService.createCmsReferralFromScreening(screeningToReferral, "01-30-2019", timeStarted,
+        messageBuilder);
+    verify(drmsDocumentService, times(1)).create(any());
   }
 }

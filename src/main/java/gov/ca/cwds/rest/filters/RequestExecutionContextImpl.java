@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.EnumMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,10 +21,22 @@ import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
  */
 class RequestExecutionContextImpl implements RequestExecutionContext {
 
+  private static final PerryUserIdentity DEFAULT_IDENTITY;
+
+  static {
+    PerryUserIdentity pui = null;
+    final String staffId = System.getProperty("DEFAULT_FERB_STAFF_ID");
+    if (StringUtils.isNotBlank(staffId)) {
+      pui = new PerryUserIdentity();
+      pui.setStaffId(staffId.trim());
+    }
+    DEFAULT_IDENTITY = pui;
+  }
+
   /**
    * Context parameters
    */
-  private Map<Parameter, Object> contextParameters = new EnumMap<> (Parameter.class);
+  private Map<Parameter, Object> contextParameters = new EnumMap<>(Parameter.class);
 
   /**
    * Private constructor
@@ -67,6 +80,10 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   public String getUserId() {
     String userId = null;
     PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
+    if (userIdentity == null) {
+      userIdentity = DEFAULT_IDENTITY;
+    }
+
     if (userIdentity != null) {
       userId = userIdentity.getUser();
     }
@@ -82,12 +99,15 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   public String getStaffId() {
     String staffId = null;
     PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
+    if (userIdentity == null) {
+      userIdentity = DEFAULT_IDENTITY;
+    }
+
     if (userIdentity != null) {
       staffId = userIdentity.getStaffId();
     }
     return staffId;
   }
-
 
   /**
    * Get request start time if stored
@@ -102,10 +122,12 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   /**
    * Servlet filter marks the start of a web request. This method is only accessible by the filters
    * package.
-   * 
    */
   static void startRequest() {
     PerryUserIdentity userIdentity = StaffPersonIdRetriever.getPerryUserIdentity();
+    if (userIdentity == null) {
+      userIdentity = DEFAULT_IDENTITY;
+    }
     RequestExecutionContextRegistry.register(new RequestExecutionContextImpl(userIdentity));
   }
 
@@ -130,4 +152,5 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 }

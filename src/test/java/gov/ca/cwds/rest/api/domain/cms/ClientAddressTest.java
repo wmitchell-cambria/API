@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
@@ -29,16 +28,9 @@ import io.dropwizard.testing.junit.ResourceTestRule;
  */
 public class ClientAddressTest {
 
-  private static final ReporterResource mockedReporterResource = mock(ReporterResource.class);
-
   @SuppressWarnings("javadoc")
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  @SuppressWarnings("javadoc")
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedReporterResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 

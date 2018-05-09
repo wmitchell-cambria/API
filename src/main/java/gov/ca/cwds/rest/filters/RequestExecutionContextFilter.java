@@ -53,15 +53,15 @@ public class RequestExecutionContextFilter implements Filter {
       final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
       RequestExecutionContextImpl.startRequest();
 
-      Date requestStartTime =
+      final Date requestStartTime =
           (Date) RequestExecutionContext.instance().get(Parameter.REQUEST_START_TIME);
-      String requestStartTimeStr = DomainChef.cookTimestamp(requestStartTime);
+      final String requestStartTimeStr = DomainChef.cookTimestamp(requestStartTime);
       LOGGER.info("started request at {}", requestStartTimeStr);
 
       try {
         chain.doFilter(httpServletRequest, httpServletResponse);
       } finally {
-        RequestExecutionContextImpl.stopRequest();
+        RequestExecutionContextImpl.stopRequest(); // mark request as "done", no matter what happens
       }
     }
   }

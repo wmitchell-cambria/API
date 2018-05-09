@@ -29,7 +29,7 @@ public class FerbSessionFactoryFactory<T extends EmptyInterceptor> extends Sessi
   /**
    * Preferred constructor. Construct with chosen interceptor.
    * 
-   * @param interceptor
+   * @param interceptor chosen Hibernate interceptor
    */
   public FerbSessionFactoryFactory(T interceptor) {
     super();

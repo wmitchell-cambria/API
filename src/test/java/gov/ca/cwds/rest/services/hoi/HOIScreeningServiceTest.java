@@ -9,8 +9,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,8 +26,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.Response;
-
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,23 +39,19 @@ import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.fixture.ParticipantEntityBuilder;
 import gov.ca.cwds.fixture.ScreeningEntityBuilder;
-import gov.ca.cwds.fixture.StaffPersonResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIPersonResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIReporterResourceBuilder;
 import gov.ca.cwds.fixture.hoi.HOIScreeningBuilder;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
-import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.hoi.HOIPerson;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
-import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOISocialWorker;
 import gov.ca.cwds.rest.api.domain.investigation.CmsRecordDescriptor;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import gov.ca.cwds.rest.resources.StaffPersonResource;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 
@@ -72,19 +73,25 @@ public class HOIScreeningServiceTest {
     screeningDao = mock(ScreeningDao.class);
     IntakeLOVCodeDao intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
     LegacyDescriptorDao legacyDescriptorDao = mock(LegacyDescriptorDao.class);
-    StaffPersonResource staffPersonResource = mock(StaffPersonResource.class);
+    StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
+
+    ParticipantDao participantDao = mock(ParticipantDao.class);
+    when(participantDao.findByScreeningIds(any(Set.class))).thenReturn(mockParticipants());
 
     Map<String, LegacyDescriptorEntity> participantDescriptors = new HashMap<>();
     participantDescriptors.put(DEFAULT_PERSON_ID, mockLegacyDescriptorEntity(DEFAULT_PERSON_ID));
-    participantDescriptors.put(DEFAULT_REPORTER_ID, mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
+    participantDescriptors
+        .put(DEFAULT_REPORTER_ID, mockLegacyDescriptorEntity(DEFAULT_REPORTER_ID));
     when(legacyDescriptorDao.findParticipantLegacyDescriptors(any(Set.class)))
         .thenReturn(participantDescriptors);
 
-    StaffPerson mockStaffPerson = new StaffPersonResourceBuilder().build();
-    when(staffPersonResource.get(DEFAULT_ASSIGNEE_STAFF_ID))
-        .thenReturn(Response.ok(mockStaffPerson).build());
+    StaffPerson mockStaffPerson = new StaffPersonEntityBuilder().setId(DEFAULT_ASSIGNEE_STAFF_ID)
+        .setFirstName("b").setLastName("d").setNameSuffix("g").build();
+    Map<String, StaffPerson> staffPersonMap = new HashMap<>();
+    staffPersonMap.put(mockStaffPerson.getId(), mockStaffPerson);
+    when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersonMap);
+
     HOIPersonFactory hoiPersonFactory = new HOIPersonFactory();
-    hoiPersonFactory.staffPersonResource = staffPersonResource;
 
     IntakeLOVCodeEntity intakeLOVCodeEntity = new IntakeLOVCodeEntity();
     intakeLOVCodeEntity.setLgSysId(1101L);
@@ -102,8 +109,10 @@ public class HOIScreeningServiceTest {
 
     hoiScreeningService = new HOIScreeningService();
     hoiScreeningService.screeningDao = screeningDao;
+    hoiScreeningService.participantDao = participantDao;
     hoiScreeningService.legacyDescriptorDao = legacyDescriptorDao;
     hoiScreeningService.intakeLOVCodeDao = intakeLOVCodeDao;
+    hoiScreeningService.staffPersonDao = staffPersonDao;
     hoiScreeningService.hoiScreeningFactory = hoiScreeningFactory;
     hoiScreeningService.authorizationService = authorizationService;
   }
@@ -112,14 +121,13 @@ public class HOIScreeningServiceTest {
   public void findReturnsExpectedAndSortedHOIScreenings() {
     HOIScreeningResponse expectedResponse = createExpectedResponse();
 
-    Set<String> clientIds = new HashSet<>();
+    Collection<String> clientIds = new HashSet<>();
     clientIds.add("1");
     when(screeningDao.findScreeningsByClientIds(clientIds))
         .thenReturn(mockScreeningEntityList(null));
 
-    HOIRequest hoiScreeningRequest = new HOIRequest();
-    hoiScreeningRequest.setClientIds(Stream.of("1").collect(Collectors.toSet()));
-    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiScreeningRequest);
+    HOIRequest hoiRequest = new HOIRequest(Stream.of("1").collect(Collectors.toSet()));
+    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiRequest);
     assertThat(actualResponse, is(expectedResponse));
 
     Iterator<HOIScreening> actualScreenings = actualResponse.getScreenings().iterator();
@@ -160,28 +168,39 @@ public class HOIScreeningServiceTest {
   }
 
   private Set<ScreeningEntity> mockScreeningEntityList(String accessRestriction) {
-    ParticipantEntity participant1 =
-        new ParticipantEntityBuilder().setId(DEFAULT_PERSON_ID).build();
-
     ScreeningEntity screening1 = new ScreeningEntityBuilder().setId("223")
         .setStartedAt("2017-09-25").setEndedAt("2017-10-01").setIncidentCounty("sacramento")
         .setName(null).setScreeningDecision("promote to referral")
-        .setScreeningDecisionDetail("drug counseling").addParticipant(participant1).build();
+        .setScreeningDecisionDetail("drug counseling").build();
     screening1.setAccessRestrictions(accessRestriction);
-
-    ParticipantEntity reporter = new ParticipantEntityBuilder().setId(DEFAULT_REPORTER_ID)
-        .setFirstName("Alec").setLastName("Nite").setRoles(new String[]{"Mandated Reporter"})
-        .setNameSuffix("Jr.").build();
 
     ScreeningEntity screening2 = new ScreeningEntityBuilder().setId("224")
         .setStartedAt("2017-11-30").setEndedAt("2017-12-10").setIncidentCounty("sacramento")
         .setName(null).setScreeningDecision("promote to referral")
-        .setScreeningDecisionDetail("drug counseling").addParticipant(reporter).build();
+        .setScreeningDecisionDetail("drug counseling").build();
     screening2.setAccessRestrictions(accessRestriction);
 
     Set<ScreeningEntity> result = new HashSet<>();
     result.add(screening1);
     result.add(screening2);
+    return result;
+  }
+
+  private Map<String, Set<ParticipantEntity>> mockParticipants() {
+    ParticipantEntity participant = new ParticipantEntityBuilder().setId(DEFAULT_PERSON_ID).build();
+    ParticipantEntity reporter = new ParticipantEntityBuilder().setId(DEFAULT_REPORTER_ID)
+        .setFirstName("Alec").setLastName("Nite").setRoles(new String[]{"Mandated Reporter"})
+        .setNameSuffix("Jr.").build();
+
+    Set<ParticipantEntity> participants1 = new HashSet<>();
+    participants1.add(participant);
+
+    Set<ParticipantEntity> participants2 = new HashSet<>();
+    participants2.add(reporter);
+
+    Map<String, Set<ParticipantEntity>> result = new HashMap<>();
+    result.put("223", participants1);
+    result.put("224", participants2);
     return result;
   }
 
@@ -206,5 +225,10 @@ public class HOIScreeningServiceTest {
 
     return new LegacyDescriptor(cmsRecordDescriptor.getId(), cmsRecordDescriptor.getUiId(), null,
         cmsRecordDescriptor.getTableName(), cmsRecordDescriptor.getTableDescription());
+  }
+
+  @Test(expected = NotImplementedException.class)
+  public void handleRequestNotImplemented() {
+    hoiScreeningService.handleRequest(new HOIScreening());
   }
 }

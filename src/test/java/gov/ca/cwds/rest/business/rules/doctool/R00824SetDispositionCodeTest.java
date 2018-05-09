@@ -73,7 +73,7 @@ public class R00824SetDispositionCodeTest {
     ReferralClient referralClient = ReferralClient.createWithDefault(Boolean.FALSE, Boolean.FALSE,
         dispositionCode ? ASSESMENT : "", "1234567ABC", "2345678ABC",
         LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
-        LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
+        LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE, (short) 12, "Y");
     assertThat(referralClient.getDispositionCode(), is(equalTo(ASSESMENT)));
 
   }
@@ -92,7 +92,7 @@ public class R00824SetDispositionCodeTest {
     ReferralClient referralClient = ReferralClient.createWithDefault(Boolean.FALSE, Boolean.FALSE,
         dispositionCode ? ASSESMENT : "", "1234567ABC", "2345678ABC",
         LegacyDefaultValues.DEFAULT_COUNTY_SPECIFIC_CODE,
-        LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
+        LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE, (short) 12, "Y");
     assertThat(referralClient.getDispositionCode(), is(equalTo("")));
 
   }

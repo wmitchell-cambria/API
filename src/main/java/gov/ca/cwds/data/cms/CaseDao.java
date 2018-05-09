@@ -2,7 +2,10 @@ package gov.ca.cwds.data.cms;
 
 import java.util.Collection;
 
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
 
@@ -30,17 +33,17 @@ public class CaseDao extends CrudsDaoImpl<CmsCase> {
   }
 
   /**
-   * Find by Victim Client Ids
+   * Find by Client Ids
    * 
-   * @param clientIds - the victim client Ids
-   * @return all the cases for all the clients
+   * @param clientIds - the client Ids
+   * @return map with all the cases for all the clients
    */
-  @SuppressWarnings("unchecked")
-  public CmsCase[] findByVictimClientIds(Collection<String> clientIds) {
+  public Map<String, CmsCase> findByClientIds(Collection<String> clientIds) {
+    @SuppressWarnings("unchecked")
     final Query<CmsCase> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.CmsCase.findByVictimClientIds");
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.CmsCase.findByClientIds");
     query.setParameterList("clientIds", clientIds, StringType.INSTANCE);
-    return query.list().toArray(new CmsCase[0]);
+    return query.list().stream().collect(Collectors.toMap(CmsCase::getId, c -> c));
   }
 
   /**
@@ -49,10 +52,11 @@ public class CaseDao extends CrudsDaoImpl<CmsCase> {
    * @param clientId - the victim client Id
    * @return all cases for all related client including given client id
    */
-  @SuppressWarnings("unchecked")
   public CmsCase[] findAllRelatedByVictimClientId(String clientId) {
-    final Query<CmsCase> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId");
+    @SuppressWarnings("unchecked")
+    final NativeQuery<CmsCase> query =
+        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
+            "gov.ca.cwds.data.persistence.cms.CmsCase.findAllRelatedByVictimClientId");
     query.setParameter("clientId", clientId, StringType.INSTANCE);
     return query.list().toArray(new CmsCase[0]);
   }

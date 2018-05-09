@@ -36,7 +36,6 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.core.Api;
-import gov.ca.cwds.rest.resources.ParticipantResource;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -55,7 +54,6 @@ public class ParticipantTest {
   private long id = 5432;
   private String legacySourceTable = "CLIENT_T";
   private String clientId = "1234567ABC";
-  private long personId = 12345;
   private long screeningId = 12345;
   private String firstName = "John";
   private String middleName = "T.";
@@ -68,16 +66,14 @@ public class ParticipantTest {
   private String reporterEmployerName = "Employer Name";
   private boolean clientStaffPersonAdded = false;
   private String sensitivityIndicator = "N";
+  private String approximateAge = "12";
+  private String approximateAgeUnits = "Y";
   private Set<String> roles = new HashSet<>();
   private Set<Address> addresses = new HashSet<>();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_PARTICIPANTS + "/";
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private Validator validator;
-
-  private static final ParticipantResource mockedParticipantResource =
-      mock(ParticipantResource.class);
 
   List<Short> racecodes = new ArrayList<>();
   List<Short> hispaniccodes = new ArrayList<>();
@@ -87,11 +83,7 @@ public class ParticipantTest {
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedParticipantResource).build();
-
-  @Before
+   @Before
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
@@ -104,9 +96,6 @@ public class ParticipantTest {
         new Address("", "", "123 First St", "San Jose", 1828, "94321", 32, legacyDescriptor);
     addresses.add(address);
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-
-    when(mockedParticipantResource.create(eq(validParticipant)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 
   }
 
@@ -132,11 +121,6 @@ public class ParticipantTest {
     assertThat(serialized, is(expected));
   }
 
-  // @Test
-  // public void testEqualsHashCodeWorks() {
-  // EqualsVerifier.forClass(Participant.class).suppress(Warning.NONFINAL_FIELDS).verify();
-  // }
-
   @Test
   public void testEmptyConstructor() throws Exception {
     Participant empty = new Participant();
@@ -151,8 +135,9 @@ public class ParticipantTest {
   public void testConstructorUsingDomain() throws Exception {
     Participant domain = new Participant(id, legacySourceTable, clientId, new LegacyDescriptor(),
         firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
-        secondaryLanguage, personId, screeningId, reporterConfidentialWaiver, reporterEmployerName,
-        clientStaffPersonAdded, sensitivityIndicator, roles, addresses, raceAndEthnicity);
+        secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
+        clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
+        addresses, raceAndEthnicity);
 
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getLegacySourceTable(), is(equalTo(legacySourceTable)));
@@ -165,6 +150,12 @@ public class ParticipantTest {
     assertThat(domain.getGender(), is(equalTo(gender)));
     assertThat(domain.getDateOfBirth(), is(equalTo(dateOfBirth)));
     assertThat(domain.getSsn(), is(equalTo(ssn)));
+    assertThat(domain.getPrimaryLanguage(), is(equalTo(primaryLanguage)));
+    assertThat(domain.getSecondaryLanguage(), is(equalTo(secondaryLanguage)));
+    assertThat(domain.getSensitivityIndicator(), is(equalTo(sensitivityIndicator)));
+    assertThat(domain.getApproximateAge(), is(equalTo(approximateAge)));
+    assertThat(domain.getApproximateAgeUnits(), is(equalTo(approximateAgeUnits)));
+    assertThat(domain.isClientStaffPersonAdded(), is(equalTo(clientStaffPersonAdded)));
     assertThat(domain.isReporterConfidentialWaiver(), is(equalTo(reporterConfidentialWaiver)));
     assertThat(domain.getReporterEmployerName(), is(equalTo(reporterEmployerName)));
     assertThat(domain.getRoles(), is(equalTo(roles)));
@@ -194,24 +185,20 @@ public class ParticipantTest {
       Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
       assertEquals(errorMessage, 1, violations.size());
     });
-
   }
 
   @Test
   public void testBlankLegacySourceTableSuccess() throws Exception {
     Participant toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/participant/valid/blankLegacySourceTable.json"),
-            Participant.class);
-
+        new ParticipantResourceBuilder().setLegacySourceTable("").createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
 
   @Test
   public void testNullLegacySourceTableSuccess() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/valid/nullLegacySourceTable.json"), Participant.class);
-
+    Participant toValidate =
+        new ParticipantResourceBuilder().setLegacySourceTable(null).createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -227,17 +214,14 @@ public class ParticipantTest {
 
   @Test
   public void testWithEmptyClientIdSuccess() throws Exception {
-
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/valid/validEmptyClientId.json"), Participant.class);
+    Participant toValidate = new ParticipantResourceBuilder().setLegacyId("").createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
 
   @Test
   public void testWithNullClientIdSuccess() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/valid/nullClientId.json"), Participant.class);
+    Participant toValidate = new ParticipantResourceBuilder().setLegacyId(null).createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(0, constraintViolations.size());
   }
@@ -252,8 +236,8 @@ public class ParticipantTest {
 
   @Test
   public void testLegacyIdTooLongFail() throws Exception {
-    Participant toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/participant/invalid/legacyIdTooLong.json"), Participant.class);
+    Participant toValidate =
+        new ParticipantResourceBuilder().setLegacyId("lkjghsgss333").createParticipant();
     Set<ConstraintViolation<Participant>> constraintViolations = validator.validate(toValidate);
     assertEquals(1, constraintViolations.size());
     assertEquals("size must be between 0 and 10",
@@ -348,16 +332,34 @@ public class ParticipantTest {
     Participant participant =
         new ParticipantResourceBuilder().setLegacyDescriptor(null).createParticipant();
     assertNotNull(participant.getLegacyDescriptor());
-
   }
 
   private Participant createParticipantWithRoles(Set<String> roles) {
     return createParticipant(roles);
-
   }
 
   private Participant validParticipant() {
     return createParticipant(roles);
+  }
+
+  @Test
+  public void shouldNotHaveValidationErrorForValidAgeCodes() {
+    List<String> acceptableAgeCodes = Arrays.asList("Y", "M", "W", "D");
+    acceptableAgeCodes.forEach(ageCode -> {
+      Participant participant =
+          new ParticipantResourceBuilder().setApproximateAgeUnits(ageCode).createParticipant();
+      String errorMessage = "Expected no validation error for gender value: " + ageCode;
+      Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
+      assertEquals(errorMessage, 0, violations.size());
+    });
+  }
+
+  @Test
+  public void shouldHaveValidationErrorsForInvaldAgeCodes() {
+    Participant participant =
+        new ParticipantResourceBuilder().setApproximateAgeUnits("Z").createParticipant();
+    Set<ConstraintViolation<Participant>> violations = validator.validate(participant);
+    assertEquals(1, violations.size());
   }
 
   private Participant createParticipant(Set<String> roles) {
@@ -365,9 +367,9 @@ public class ParticipantTest {
     try {
       validParticipant = new Participant(id, legacySourceTable, clientId, new LegacyDescriptor(),
           firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
-          secondaryLanguage, personId, screeningId, reporterConfidentialWaiver,
-          reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, roles, addresses,
-          raceAndEthnicity);
+          secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
+          clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
+          addresses, raceAndEthnicity);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -376,4 +378,3 @@ public class ParticipantTest {
   }
 
 }
-

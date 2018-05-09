@@ -30,12 +30,13 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on {@link Client}
+ * Business layer object to work on {@link Client}.
  * 
  * @author CWDS API Team
  */
 public class ClientService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.Client, gov.ca.cwds.rest.api.domain.cms.Client> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
   private ClientDao clientDao;
@@ -82,7 +83,6 @@ public class ClientService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Client find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.find(primaryKey);
     if (persistedClient != null) {
       return new gov.ca.cwds.rest.api.domain.cms.Client(persistedClient, true);
@@ -90,12 +90,13 @@ public class ClientService implements
     return null;
   }
 
-  /*
+  /**
    * This method is the representation of postedCmsReferral to find the existing client
+   * 
+   * @param primaryKey client key
+   * @return {@link PostedClient} if found else null
    */
-  @SuppressWarnings("javadoc")
   public PostedClient findInboundId(Serializable primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.find(primaryKey);
     if (persistedClient != null) {
       return new PostedClient(persistedClient, true);
@@ -112,7 +113,7 @@ public class ClientService implements
   public gov.ca.cwds.rest.api.domain.cms.Client delete(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.Client persistedClient = clientDao.delete(primaryKey);
     if (persistedClient != null) {
-      ssaname3Dao.deleteSsaname3(LegacyTable.CLINET_PHONETIC.getName(), primaryKey, "C");
+      ssaname3Dao.deleteSsaname3(LegacyTable.CLIENT_PHONETIC.getName(), primaryKey, "C");
       upperCaseTables.deleteClientUc(primaryKey);
       externalInterfaceTables.createExtInterForDelete(primaryKey, LegacyTable.CLIENT.getName());
       return new gov.ca.cwds.rest.api.domain.cms.Client(persistedClient, true);
@@ -136,10 +137,10 @@ public class ClientService implements
           RequestExecutionContext.instance().getRequestStartTime());
       validateByRuleR04966(managed);
       executeRuleR04880(managed);
-
       managed = clientDao.create(managed);
+
       // checking the staffPerson county code
-      StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
+      final StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
       createDownStreamEntity(managed, staffperson);
 
       return new PostedClient(managed, false);
@@ -191,6 +192,7 @@ public class ClientService implements
       LOGGER.info("client not found : {}", client);
       throw new ServiceException(e);
     }
+
     return savedEntity;
   }
 
@@ -202,7 +204,7 @@ public class ClientService implements
   }
 
   private void executeRuleR04880(Client managed) {
-    R04880EstimatedDOBCodeSetting r04880Rule = new R04880EstimatedDOBCodeSetting(managed);
-    r04880Rule.execute();
+    new R04880EstimatedDOBCodeSetting(managed).execute();
   }
+
 }

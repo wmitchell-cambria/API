@@ -41,7 +41,7 @@ public class PostedAddress extends Address {
   }
 
   /**
-   * Constructor
+   * Copy constructor
    * 
    * @param address The persisted address
    */
@@ -49,6 +49,18 @@ public class PostedAddress extends Address {
     super(address);
     assert address.getId() != null;
     this.id = address.getId();
+  }
+
+  /**
+   * Copy constructor
+   * 
+   * @param addr The persisted address
+   */
+  public PostedAddress(gov.ca.cwds.data.persistence.ns.Addresses addr) {
+    super(new gov.ca.cwds.data.persistence.ns.Address(Long.valueOf(addr.getId()),
+        addr.getStreetAddress(), addr.getCity(), "1828", addr.getZip(), addr.getType()));
+    assert addr.getId() != null;
+    this.id = Long.parseLong(addr.getId());
   }
 
   /**

@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.util.IdGenerator;
 
 /**
- * Business layer object to work on {@link StaffPerson}
+ * Business layer object to work on {@link StaffPerson}.
  * 
  * @author CWDS API Team
  */

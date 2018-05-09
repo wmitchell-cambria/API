@@ -16,7 +16,7 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Logical representation of a CmsNSReferral
+ * Logical representation of a CmsNSReferral.
  * 
  * @author CWDS API Team
  */

@@ -18,7 +18,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ScreeningServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Screening;
-
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,7 +58,6 @@ public class ScreeningResource {
    * Create a {@link Screening}.
    *
    * @param screening - screening
-   * 
    * @return The {@link Response}
    */
   @UnitOfWork(value = "ns")
@@ -81,9 +79,7 @@ public class ScreeningResource {
    * Update a {@link Screening}.
    * 
    * @param id The id
-   *
    * @param screening the screening
-   *
    * @return The {@link Response}
    */
   @UnitOfWork(value = "ns")

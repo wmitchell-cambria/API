@@ -1,0 +1,130 @@
+{
+  "id": "${screening_id}",
+  "referral_id": "1234567890",
+  "name": "dfsf",
+  "reference": "GBA10B",
+  "screening_decision": "promote_to_referral",
+  "screening_decision_detail": "3_days",
+  "assignee": "Testing CWDS - State of California",
+  "assignee_staff_id": "0X5",
+  "started_at": "2018-03-29",
+  "ended_at": "2018-03-30",
+  "additional_information": "add",
+  "incident_county": "99",
+  "incident_date": "2018-03-29",
+  "indexable": false,
+  "location_type": "Child's Home",
+  "communication_method": "phone",
+  "access_restrictions": "acc",
+  "restrictions_rationale": "res",
+  "report_narrative": "tsrgdhr",
+  "safety_alerts": [
+    "Dangerous Environment",
+    "Hostile"
+  ],
+  "safety_information": "saf",
+  "cross_reports": [
+    {
+      "id": "${cross_report_id}",
+      "method": "Child Abuse Form",
+      "legacy_source_table": "CRSS_RPT",
+      "legacy_id": "9FVrmIT00c",
+      "filed_out_of_state": false,
+      "inform_date": "2018-03-29",
+      "county_id": "1101",
+      "agencies": [
+        {
+          "id": "${agency1_id}",
+          "type": "DISTRICT_ATTORNEY"
+        },
+        {
+          "id": "${agency2_id}",
+          "type": "LAW_ENFORCEMENT"
+        }
+      ]
+    }
+  ],
+  "incident_address": {
+    "messages": [],
+    "id": "${address_id}",
+    "legacy_id": "79VrmIT00c",
+    "legacy_source_table": "ADDRS_T",
+    "street_address": "erfsgd",
+    "type": "Other",
+    "city": "Sacramento",
+    "state": "CA",
+    "zip": "95833"
+  },
+  "allegations": [
+    {
+      "id": "${allegation_id}",
+      "victim_person_id": 42,
+      "perpetrator_person_id": 43,
+      "types": [
+        "General Neglect",
+        "Physical Abuse"
+      ]
+    }
+  ],
+  "participants": [
+    {
+      "id": "${participant_id}",
+      "screening_id": "${screening_id}",
+      "legacy_source_table": "CLIENT_T",
+      "legacy_id": "6YtTyyc0ND",
+      "first_name": "john",
+      "last_name": "Curteis",
+      "gender": "male",
+      "ssn": "456-47-8798",
+      "date_of_birth": "2002-11-15",
+      "roles": [
+        "Victim"
+      ],
+      "addresses": [
+        {
+          "id": "${participant_address_id}",
+          "messages": [],
+          "legacy_id": "79VrmIT00c",
+          "legacy_source_table": "ADDRS_T",
+          "type": "Other",
+          "street_address": "erfsgd101",
+          "city": "Sacramento",
+          "state": "CA",
+          "zip": "95833"
+        }
+      ],
+      "races": [
+        {
+          "race": "White",
+          "race_detail": null
+        }
+      ],
+      "ethnicity": {
+        "hispanic_latino_origin": "No",
+        "ethnicity_detail": []
+      },
+      "middle_name": "T",
+      "name_suffix": "Jr",
+      "approximate_age": "12",
+      "approximate_age_units": "year",
+      "languages": [
+        "English"
+      ],
+      "phone_numbers": [
+        {
+          "id": ${participant_phone_number_id},
+          "number": "9660007290"
+        }
+      ],
+      "sealed": false,
+      "sensitive": false,
+      "legacy_descriptor": {
+        "legacy_id": "3FVrmIT00c",
+        "legacy_ui_id": "0184-6135-8268-9000038",
+        "legacy_last_updated": "1997-08-27T10:16:08.264-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    }
+  ]
+}

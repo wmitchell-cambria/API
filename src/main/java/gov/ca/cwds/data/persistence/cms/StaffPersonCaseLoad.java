@@ -29,6 +29,18 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @Table(name = "STFCSLDT")
 public class StaffPersonCaseLoad extends CmsPersistentObject {
 
+  @Id
+  @Column(name = "FKCASE_LDT", length = CMS_ID_LEN)
+  private String fkCaseLoad;
+
+  @Id
+  @Column(name = "FKSTFPERST", length = 3)
+  private String fkStaffPerson;
+
+  @Id
+  @Column(name = "THIRD_ID", length = CMS_ID_LEN)
+  private String thirdId;
+
   @Column(name = "CNTY_SPFCD")
   private String countyCode;
 
@@ -36,19 +48,9 @@ public class StaffPersonCaseLoad extends CmsPersistentObject {
   @Column(name = "END_DT")
   private Date endDate;
 
-  @Column(name = "FKCASE_LDT", length = CMS_ID_LEN)
-  private String fkCaseLoad;
-
-  @Column(name = "FKSTFPERST", length = 3)
-  private String fkStaffPerson;
-
   @Type(type = "date")
   @Column(name = "START_DT")
   private Date startDate;
-
-  @Id
-  @Column(name = "THIRD_ID", length = CMS_ID_LEN)
-  private String thirdId;
 
   @SuppressWarnings("javadoc")
   public StaffPersonCaseLoad() {

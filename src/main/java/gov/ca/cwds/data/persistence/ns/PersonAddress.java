@@ -23,7 +23,7 @@ import gov.ca.cwds.data.ns.NsPersistentObject;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "person_address")
+@Table(name = "participant_addresses")
 @AssociationOverrides({
     @AssociationOverride(name = "personAddressId.person",
         joinColumns = @JoinColumn(name = "person_id")),

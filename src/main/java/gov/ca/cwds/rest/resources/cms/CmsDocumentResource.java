@@ -68,7 +68,7 @@ public class CmsDocumentResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

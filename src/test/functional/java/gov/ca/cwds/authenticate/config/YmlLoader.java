@@ -5,6 +5,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import gov.ca.cwds.config.CwdsAuthenticationClientConfig;
+import gov.ca.cwds.config.User;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 /**

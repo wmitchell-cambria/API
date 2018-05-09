@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -33,7 +34,7 @@ import io.swagger.annotations.ApiResponses;
  * Annotations</a> and
  * <a href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
  * Annotations</a>
- * 
+ *
  * @author CWDS API Team
  */
 @Api(value = RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT)
@@ -46,7 +47,7 @@ public class HoiReferralResource {
 
   /**
    * Constructor.
-   * 
+   *
    * @param hoiReferralService - hoiReferralService
    */
   @Inject
@@ -56,7 +57,7 @@ public class HoiReferralResource {
 
   /**
    * Finds an referrals HOI by client ids.
-   * 
+   *
    * @param clientIds - clientIds
    * @return the hoi referrals
    */
@@ -66,11 +67,11 @@ public class HoiReferralResource {
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
   @ApiOperation(value = "Find referrals history of involvement by clientId",
-      response = HOIReferral[].class, code = 200)
+      response = HOIReferral[].class)
   public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") List<String> clientIds) {
-    gov.ca.cwds.rest.api.Response clients =
-        hoiReferralService.findHoiReferralByClientIds(clientIds);
+    gov.ca.cwds.rest.api.Response clients = hoiReferralService
+        .handleFind(new HOIRequest(clientIds));
     return new ResponseConverter().withDataResponse(clients);
   }
 

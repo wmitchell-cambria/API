@@ -22,7 +22,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 
 /**
- * Hibernate DAO for DB2 Stored Procedure.
+ * Hibernate DAO for DB2 stored procedure that calls soundex SSA Name3 and saves to the client
+ * phonetic tables .
  * 
  * @author CWDS API Team
  * @see CmsSessionFactory
@@ -60,7 +61,7 @@ public class SsaName3Dao {
    * @param client client
    */
   public void clientSsaname3(String crudOperation, Client client) {
-    callStoredProc(LegacyTable.CLINET_PHONETIC.getName(), crudOperation, client.getId(), "C",
+    callStoredProc(LegacyTable.CLIENT_PHONETIC.getName(), crudOperation, client.getId(), "C",
         client.getFirstName(), client.getMiddleName(), client.getLastName(), " ", " ", s,
         client.getLastUpdatedTime(), client.getLastUpdatedId());
   }
@@ -70,7 +71,7 @@ public class SsaName3Dao {
    * @param otherClientName other client name object
    */
   public void otherClientSsaname3(String crudOperation, OtherClientName otherClientName) {
-    callStoredProc(LegacyTable.CLINET_PHONETIC.getName(), crudOperation,
+    callStoredProc(LegacyTable.CLIENT_PHONETIC.getName(), crudOperation,
         otherClientName.getThirdId(), "N", otherClientName.getFirstName(),
         otherClientName.getMiddleName(), otherClientName.getLastName(), " ", " ", s,
         otherClientName.getLastUpdatedTime(), otherClientName.getLastUpdatedId());

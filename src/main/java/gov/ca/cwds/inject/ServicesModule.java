@@ -19,6 +19,9 @@ import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspect;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -53,7 +56,6 @@ import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
-import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
@@ -77,11 +79,11 @@ public class ServicesModule extends AbstractModule {
    */
   public static class UnitOfWorkInterceptor implements org.aopalliance.intercept.MethodInterceptor {
 
+    UnitOfWorkAwareProxyFactory proxyFactory;
+
     @Inject
     @CmsHibernateBundle
     HibernateBundle<ApiConfiguration> cmsHibernateBundle;
-
-    UnitOfWorkAwareProxyFactory proxyFactory;
 
     @Inject
     @NsHibernateBundle
@@ -90,7 +92,6 @@ public class ServicesModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-
       proxyFactory =
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
@@ -98,6 +99,53 @@ public class ServicesModule extends AbstractModule {
         aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
+        return result;
+      } catch (Exception e) {
+        aspect.onError();
+        throw e;
+      } finally {
+        aspect.onFinish();
+      }
+    }
+
+  }
+
+  /**
+   * AOP method interception for Ferb annotation {@link XAUnitOfWork}. Automatically manages
+   * Hibernate sessions and XA transactions.
+   * 
+   * <p>
+   * NEXT: switch *all* data sources to XA and change all resources to use {@link XAUnitOfWork}
+   * instead of {@link UnitOfWork}.
+   * </p>
+   * 
+   * @author CWDS API Team
+   * @see XAUnitOfWorkAspect
+   */
+  public static class XAUnitOfWorkInterceptor
+      implements org.aopalliance.intercept.MethodInterceptor {
+
+    XAUnitOfWorkAwareProxyFactory proxyFactory;
+
+    @Inject
+    @XaCmsHibernateBundle
+    FerbHibernateBundle xaCmsHibernateBundle;
+
+    @Inject
+    @XaNsHibernateBundle
+    FerbHibernateBundle xaNsHibernateBundle;
+
+    @Override
+    public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
+      proxyFactory =
+          UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
+      final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
+      try {
+        LOGGER.info("Before XA annotation");
+        aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
+        final Object result = mi.proceed();
+        aspect.afterEnd();
+        LOGGER.info("After XA annotation");
         return result;
       } catch (Exception e) {
         aspect.onError();
@@ -152,19 +200,23 @@ public class ServicesModule extends AbstractModule {
     bind(InvolvementHistoryService.class);
     bind(HOICaseService.class);
     bind(AuthorizationService.class);
-    bind(HoiUsingClientIdService.class);
 
+    // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
     requestInjection(interceptor);
+
+    // Enable AOP for Ferb @XAUnitOfWork.
+    final XAUnitOfWorkInterceptor xaInterceptor = new XAUnitOfWorkInterceptor();
+    bindInterceptor(Matchers.any(), Matchers.annotatedWith(XAUnitOfWork.class), xaInterceptor);
+    requestInjection(xaInterceptor);
 
     final Properties p = new Properties();
     p.setProperty("something", "Some String");
     Names.bindProperties(binder(), p);
 
-    // @Singleton does not work with DropWizard Guice. :-(
+    // @Singleton does not work with DropWizard Guice.
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
-
   }
 
   /**
@@ -221,5 +273,4 @@ public class ServicesModule extends AbstractModule {
     LOGGER.debug("provide syscode serializer");
     return new CmsSystemCodeSerializer(systemCodeCache);
   }
-
 }

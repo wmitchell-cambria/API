@@ -48,10 +48,10 @@ import gov.ca.cwds.rest.api.domain.investigation.contact.ContactReferralRequest;
 import gov.ca.cwds.rest.resources.AddressResource;
 import gov.ca.cwds.rest.resources.ApplicationResource;
 import gov.ca.cwds.rest.resources.ParticipantIntakeApiResource;
-import gov.ca.cwds.rest.resources.ParticipantResource;
 import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ScreeningDashboardResource;
+import gov.ca.cwds.rest.resources.ScreeningIntakeResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
@@ -60,25 +60,11 @@ import gov.ca.cwds.rest.resources.SwaggerResource;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedServiceBackedResourceDelegate;
 import gov.ca.cwds.rest.resources.auth.AuthorizationResource;
-import gov.ca.cwds.rest.resources.cms.AllegationPerpetratorHistoryResource;
-import gov.ca.cwds.rest.resources.cms.AllegationResource;
-import gov.ca.cwds.rest.resources.cms.AssignmentResource;
-import gov.ca.cwds.rest.resources.cms.ChildClientResource;
 import gov.ca.cwds.rest.resources.cms.ClientCollateralResource;
-import gov.ca.cwds.rest.resources.cms.ClientRelationshipResource;
-import gov.ca.cwds.rest.resources.cms.ClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocReferralClientResource;
 import gov.ca.cwds.rest.resources.cms.CmsDocumentResource;
 import gov.ca.cwds.rest.resources.cms.CmsNSReferralResource;
-import gov.ca.cwds.rest.resources.cms.CmsReferralResource;
-import gov.ca.cwds.rest.resources.cms.CrossReportResource;
-import gov.ca.cwds.rest.resources.cms.DrmsDocumentResource;
 import gov.ca.cwds.rest.resources.cms.GovernmentOrganizationResource;
-import gov.ca.cwds.rest.resources.cms.LongTextResource;
-import gov.ca.cwds.rest.resources.cms.ReferralClientResource;
-import gov.ca.cwds.rest.resources.cms.ReferralResource;
-import gov.ca.cwds.rest.resources.cms.ReporterResource;
-import gov.ca.cwds.rest.resources.cms.StaffPersonResource;
 import gov.ca.cwds.rest.resources.contact.DeliveredServiceResource;
 import gov.ca.cwds.rest.resources.hoi.HoiCaseResource;
 import gov.ca.cwds.rest.resources.hoi.HoiReferralResource;
@@ -123,7 +109,6 @@ import gov.ca.cwds.rest.services.contact.DeliveredService;
 import gov.ca.cwds.rest.services.hoi.HOICaseService;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
-import gov.ca.cwds.rest.services.hoi.HoiUsingClientIdService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.AllegationListService;
 import gov.ca.cwds.rest.services.investigation.ClientsRelationshipsService;
@@ -139,7 +124,6 @@ import gov.ca.cwds.rest.services.investigation.contact.ContactService;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ResourcesModule extends AbstractModule {
 
   /**
@@ -154,29 +138,15 @@ public class ResourcesModule extends AbstractModule {
     bind(ApplicationResource.class);
     bind(SwaggerResource.class);
     bind(AddressResource.class);
-    bind(ParticipantResource.class);
     bind(ParticipantIntakeApiResource.class);
     bind(PersonResource.class);
     bind(ScreeningResource.class);
+    bind(ScreeningIntakeResource.class);
     bind(ScreeningDashboardResource.class);
-    bind(AllegationResource.class);
-    bind(ClientResource.class);
     bind(CmsDocReferralClientResource.class);
     bind(CmsDocumentResource.class);
     bind(CmsNSReferralResource.class);
-    bind(CmsReferralResource.class);
-    bind(ReferralClientResource.class);
-    bind(ReferralResource.class);
-    bind(ReporterResource.class);
-    bind(StaffPersonResource.class);
     bind(ScreeningToReferralResource.class);
-    bind(LongTextResource.class);
-    bind(AllegationPerpetratorHistoryResource.class);
-    bind(CrossReportResource.class);
-    bind(ChildClientResource.class);
-    bind(DrmsDocumentResource.class);
-    bind(AssignmentResource.class);
-    bind(ClientRelationshipResource.class);
     bind(ClientCollateralResource.class);
     bind(gov.ca.cwds.rest.resources.StaffPersonResource.class);
     bind(DeliveredServiceResource.class);
@@ -511,14 +481,6 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(InvolvementHistoryService.class));
-  }
-
-  @Provides
-  @HOIUsingClientIdServiceBackedResource
-  public TypedResourceDelegate<String, InvolvementHistory> hoiUsingClientIdServiceBackedResource(
-      Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(HoiUsingClientIdService.class));
   }
 
   @Provides

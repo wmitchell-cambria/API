@@ -1,5 +1,6 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
 import gov.ca.cwds.rest.ApiConfiguration;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
@@ -12,12 +13,14 @@ public class UnitOfWorkModule {
 
   private static UnitOfWorkAwareProxyFactory proxyFactory;
 
+  private static XAUnitOfWorkAwareProxyFactory xaProxyFactory;
+
   private UnitOfWorkModule() {
 
   }
 
   /**
-   * @param bundles the hibernate bundle
+   * @param bundles the Hibernate bundles
    * @return the proxyFactory
    */
   @SuppressWarnings("unchecked")
@@ -27,6 +30,14 @@ public class UnitOfWorkModule {
       proxyFactory = new UnitOfWorkAwareProxyFactory(bundles);
     }
     return proxyFactory;
+  }
+
+  public static XAUnitOfWorkAwareProxyFactory getXAUnitOfWorkProxyFactory(
+      FerbHibernateBundle... bundles) {
+    if (xaProxyFactory == null) {
+      xaProxyFactory = new XAUnitOfWorkAwareProxyFactory(bundles);
+    }
+    return xaProxyFactory;
   }
 
 }

@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522794936828-1">
+    <insert tableName="cross_reports">
+      <column name="id" value="9"/>
+      <column name="screening_id" value="52"/>
+      <column name="created_at" valueDate="2018-03-30 16:16:55.693959"/>
+      <column name="updated_at" valueDate="2018-03-30 16:16:55.693959"/>
+      <column name="legacy_id" value="9FVrmIT00c"/>
+      <column name="legacy_source_table" value="CRSS_RPT"/>
+      <column name="communication_method" value="Child Abuse Form"/>
+      <column name="inform_date" valueDate="2018-03-29"/>
+      <column name="county_id" value="1101"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

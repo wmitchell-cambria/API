@@ -1,35 +1,34 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import gov.ca.cwds.data.CmsSystemCodeDeserializer;
-import gov.ca.cwds.data.SystemCodeSerializer;
-import gov.ca.cwds.data.persistence.PersistentObject;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.Type;
+import static gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
-import static gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import gov.ca.cwds.data.CmsSystemCodeDeserializer;
+import gov.ca.cwds.data.SystemCodeSerializer;
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * {@link PersistentObject} Class representing an DrmsDocumentTemplate.
  *
  * @author Intake Team 4
  */
-@NamedQuery(
-  name = NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY,
-  query =
-      "FROM DrmsDocumentTemplate WHERE applicationContextType = :applicationContextType "
-          + "AND (govermentEntityType = :govermentEntityType OR govermentEntityType = 0) "
-          + "AND  inactive = 'N'"
-)
-@SuppressWarnings("serial")
+@NamedQuery(name = NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY,
+    query = "FROM DrmsDocumentTemplate WHERE applicationContextType = :applicationContextType "
+        + "AND (govermentEntityType = :govermentEntityType OR govermentEntityType = 0) "
+        + "AND  inactive = 'N'")
 @Entity
 @Table(name = "DOCTMPLT")
 @JsonPropertyOrder(alphabetic = true)
@@ -38,7 +37,8 @@ public class DrmsDocumentTemplate implements PersistentObject {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY = "gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.findByApplicationContext";
+  public static final String NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY =
+      "gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.findByApplicationContext";
 
   @Id
   @Column(name = "THIRD_ID", length = 10)
@@ -81,33 +81,31 @@ public class DrmsDocumentTemplate implements PersistentObject {
   @Column(name = "TRNS_TYPE", length = 1)
   private String transactionType;
 
-
   /**
    * Default constructor
    *
    * Required for Hibernate.
    */
-  public DrmsDocumentTemplate() {
-  }
+  public DrmsDocumentTemplate() {}
 
   /**
    * Convenience constructor.
    *
    * @param thirdId template identifier
    * @param applicationContextType applicationContextType
-   * @param documentDOSFilePrefixName  documentDOSFilePrefixName
-   * @param governmentEntityType  govermentEntityType
-   * @param cmsDocumentId  cmsDocumentId
-   * @param inactive  inactive
-   * @param languageType  languageType
-   * @param lastUpdatedTime  lastUpdatedTime
-   * @param titleName  titleName
-   * @param transactionType  transactionType
-   *
+   * @param documentDOSFilePrefixName documentDOSFilePrefixName
+   * @param governmentEntityType govermentEntityType
+   * @param cmsDocumentId cmsDocumentId
+   * @param inactive inactive
+   * @param languageType languageType
+   * @param lastUpdatedTime lastUpdatedTime
+   * @param titleName titleName
+   * @param transactionType transactionType
    */
-  public DrmsDocumentTemplate(String thirdId, Short applicationContextType, String documentDOSFilePrefixName,
-                              Short governmentEntityType, String cmsDocumentId, String inactive, Short languageType,
-                              Date lastUpdatedTime, String titleName, String transactionType) {
+  public DrmsDocumentTemplate(String thirdId, Short applicationContextType,
+      String documentDOSFilePrefixName, Short governmentEntityType, String cmsDocumentId,
+      String inactive, Short languageType, Date lastUpdatedTime, String titleName,
+      String transactionType) {
     this.thirdId = thirdId;
     this.applicationContextType = applicationContextType;
     this.documentDOSFilePrefixName = documentDOSFilePrefixName;
@@ -120,15 +118,15 @@ public class DrmsDocumentTemplate implements PersistentObject {
     this.transactionType = transactionType;
   }
 
-
   /**
    * Constructor using domain
    *
    * @param drmsDocumentTemplate The domain object to construct this object from
    * @param lastUpdatedTime the time when this object is last updated
    */
-  public DrmsDocumentTemplate(gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate drmsDocumentTemplate,
-                              Date lastUpdatedTime) {
+  public DrmsDocumentTemplate(
+      gov.ca.cwds.rest.api.domain.cms.DrmsDocumentTemplate drmsDocumentTemplate,
+      Date lastUpdatedTime) {
     this.thirdId = drmsDocumentTemplate.getThirdId();
     this.applicationContextType = drmsDocumentTemplate.getApplicationContextType();
     this.documentDOSFilePrefixName = drmsDocumentTemplate.getDocumentDOSFilePrefixName();
@@ -140,8 +138,6 @@ public class DrmsDocumentTemplate implements PersistentObject {
     this.lastUpdatedTime = new Date(lastUpdatedTime.getTime());
   }
 
-
-
   /**
    * {@inheritDoc}
    *
@@ -151,7 +147,6 @@ public class DrmsDocumentTemplate implements PersistentObject {
   public String getPrimaryKey() {
     return getThirdId();
   }
-
 
   /**
    * @return the

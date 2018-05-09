@@ -1,12 +1,16 @@
 package gov.ca.cwds.rest.api.domain.investigation;
 
 import java.io.Serializable;
+
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.rest.api.domain.DomainObject;
@@ -21,9 +25,9 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"related_person_first_name", "related_person_last_name", "related_person_name_suffix",
-    "index_person_relationship", "relationship_context", "related_person_relationship",
-    "legacy_description"})
+@JsonPropertyOrder({"related_person_first_name", "related_person_last_name",
+    "related_person_name_suffix", "index_person_relationship", "relationship_context",
+    "related_person_relationship", "legacy_description"})
 public final class RelationshipTo implements Serializable {
 
   /**
@@ -73,12 +77,14 @@ public final class RelationshipTo implements Serializable {
   }
 
   /**
-   * @param relatedFirstName - related persons first name
-   * @param relatedLastName - related persons last name
+   * @param relatedFirstName - related person's first name
+   * @param relatedLastName - related person's last name
+   * @param relatedNameSuffix - name suffix of related person
    * @param relationshipToPerson - relation of owning person
    * @param relationshipContext - context information
    * @param relatedPersonRelationship - relation to owning person
-   * @param cmsRecordDescriptor - The record descriptor containing meta data about legacy information
+   * @param cmsRecordDescriptor - The record descriptor containing meta data about legacy
+   *        information
    */
   public RelationshipTo(String relatedFirstName, String relatedLastName, String relatedNameSuffix,
       String relationshipToPerson, String relationshipContext, String relatedPersonRelationship,
@@ -102,16 +108,12 @@ public final class RelationshipTo implements Serializable {
    * @param relatedPersonRelationship - relation to owning person
    * @param clientId - The Client this relationship pertains too
    */
-  public RelationshipTo(String relatedFirstName, String relatedLastName,
-      String relatedNameSuffix, String relationshipToPerson, String relationshipContext,
-      String relatedPersonRelationship, String clientId) {
-    this(relatedFirstName,
-            relatedLastName,
-            relatedNameSuffix,
-            relationshipToPerson,
-            relationshipContext,
-            relatedPersonRelationship,
-            CmsRecordUtils.createLegacyDescriptor(clientId,LegacyTable.CLIENT_RELATIONSHIP));
+  public RelationshipTo(String relatedFirstName, String relatedLastName, String relatedNameSuffix,
+      String relationshipToPerson, String relationshipContext, String relatedPersonRelationship,
+      String clientId) {
+    this(relatedFirstName, relatedLastName, relatedNameSuffix, relationshipToPerson,
+        relationshipContext, relatedPersonRelationship,
+        CmsRecordUtils.createLegacyDescriptor(clientId, LegacyTable.CLIENT_RELATIONSHIP));
   }
 
   /**

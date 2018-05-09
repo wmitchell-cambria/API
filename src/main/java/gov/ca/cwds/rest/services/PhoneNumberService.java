@@ -14,11 +14,12 @@ import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.PostedPhoneNumber;
 
 /**
- * Business layer object to work on {@link PhoneNumber}
+ * Business layer object to work on {@link PhoneNumber}.
  * 
  * @author CWDS API Team
  */
 public class PhoneNumberService implements CrudsService {
+
   private PhoneNumberDao phoneNumberDao;
 
   /**

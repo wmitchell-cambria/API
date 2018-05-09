@@ -1,9 +1,6 @@
 package gov.ca.cwds.rest.business.rules;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,10 +10,14 @@ import org.joda.time.DateTime;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.Participant;
-import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.util.ParticipantUtils;
 import gov.ca.cwds.rest.validation.VictimAgeRestriction;
 
+/**
+ * @author CWDS API team
+ *
+ */
 public class R00786VictimAgeRestriction
     implements ConstraintValidator<VictimAgeRestriction, ScreeningToReferral> {
 
@@ -25,6 +26,14 @@ public class R00786VictimAgeRestriction
    */
   public static final int MAX_VICTIM_AGE_YEARS = 18;
 
+  /**
+   * DAYS, WEEKS, MONTHS, YEARS
+   */
+  private static final String DAYS = "D";
+  private static final String WEEKS = "W";
+  private static final String MONTHS = "M";
+  private static final String YEARS = "Y";
+
   /*
    * (non-Javadoc)
    * 
@@ -32,7 +41,7 @@ public class R00786VictimAgeRestriction
    */
   @Override
   public void initialize(VictimAgeRestriction constraintAnnotation) {
-    //No initialization currently needed apparently.
+    // No initialization currently needed apparently.
   }
 
   /*
@@ -44,7 +53,8 @@ public class R00786VictimAgeRestriction
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims = getVictims(screening.getParticipants());
+    Collection<Participant> victims =
+        ParticipantUtils.getVictims(screening.getParticipants());
 
     if (!victims.isEmpty()) {
       // Referral receive timestamp
@@ -71,20 +81,6 @@ public class R00786VictimAgeRestriction
     return valid;
   }
 
-  private Collection<Participant> getVictims(Collection<Participant> participants) {
-    List<Participant> victims = new ArrayList<>();
-
-    if (participants != null) {
-      for (Participant participant : participants) {
-        Set<String> roles = participant.getRoles();
-        if (roles != null && roles.contains(Role.VICTIM_ROLE.getType())) {
-          victims.add(participant);
-        }
-      }
-    }
-    return victims;
-  }
-
   private boolean isVictimOverAge(Participant victim, DateTime victimOverAgeDate) {
     boolean overage = false;
     String dobStr = victim.getDateOfBirth();
@@ -95,11 +91,20 @@ public class R00786VictimAgeRestriction
       if (dob.isBefore(victimOverAgeDate)) {
         overage = true;
       }
-    } else {
-      // check if victim age is provided and it is not over 18.
-      // At this time, victim's age is not provided in payload
+    } else if (StringUtils.isNotBlank(victim.getApproximateAge())
+        && StringUtils.isNotBlank(victim.getApproximateAgeUnits())) {
+      int age = Integer.parseInt(victim.getApproximateAge());
+      String ageUnits = victim.getApproximateAgeUnits();
+      if (YEARS.equalsIgnoreCase(ageUnits)) {
+        return age > MAX_VICTIM_AGE_YEARS;
+      } else if (MONTHS.equalsIgnoreCase(ageUnits)) {
+        return age / 12 > MAX_VICTIM_AGE_YEARS;
+      } else if (WEEKS.equalsIgnoreCase(ageUnits)) {
+        return age / 54 > MAX_VICTIM_AGE_YEARS;
+      } else if (DAYS.equalsIgnoreCase(ageUnits)) {
+        return age / 365 > MAX_VICTIM_AGE_YEARS;
+      }
     }
-
     return overage;
   }
 }

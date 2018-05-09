@@ -5,6 +5,7 @@ import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
@@ -165,7 +166,7 @@ public class ReferralClient extends ReportingDomain implements Request, Response
     this.clientId = clientId;
     this.dispositionClosureDescription = dispositionClosureDescription;
     this.ageNumber = ageNumber;
-    this.agePeriodCode = agePeriodCode;
+    this.agePeriodCode = StringUtils.isNotBlank(agePeriodCode) ? agePeriodCode : "";
     this.countySpecificCode = countySpecificCode;
     this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
     this.alcoholIndicator = alcoholIndicator;
@@ -206,13 +207,15 @@ public class ReferralClient extends ReportingDomain implements Request, Response
    * @param clientId - clientId
    * @param countyCode - countyCode
    * @param approvalCode - approvalCode
+   * @param ageNumber - ageNumber
+   * @param agePeriodCode - agePeriodCode
    * @return the referralClient
    */
   public static ReferralClient createWithDefault(Boolean selfReported,
       Boolean staffPersonAddedIndicator, String dispositionCode, String referralId, String clientId,
-      String countyCode, short approvalCode) {
+      String countyCode, short approvalCode, Short ageNumber, String agePeriodCode) {
     return new ReferralClient("", approvalCode, DEFAULT_CODE, dispositionCode, "", selfReported,
-        staffPersonAddedIndicator, referralId, clientId, "", DEFAULT_CODE, "", countyCode,
+        staffPersonAddedIndicator, referralId, clientId, "", ageNumber, agePeriodCode, countyCode,
         Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
   }
 

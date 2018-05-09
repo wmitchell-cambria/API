@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -39,14 +38,8 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class AddressTest {
 
-  private static final ReporterResource mockedReporterResource = mock(ReporterResource.class);
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedReporterResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

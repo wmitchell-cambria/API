@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceException;
@@ -24,7 +25,7 @@ import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
- * {@link PersistentObject} representing a Client Address
+ * {@link PersistentObject} representing a Client Address.
  * 
  * @author CWDS API Team
  */
@@ -53,12 +54,12 @@ public class ClientAddress extends BaseClientAddress {
    * referral records.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
 
   /**
-   * referential integrity check.
+   * Referential integrity check.
    * <p>
    * Doesn't actually load the data. Just checks the existence of the parent address, client and
    * referral records.

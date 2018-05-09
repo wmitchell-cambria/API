@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,7 +20,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.hoi.HOIScreeningService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,7 +47,7 @@ public class HoiScreeningResource {
 
   /**
    * Constructor.
-   * 
+   *
    * @param hoiScreeningService - hoiScreeningService
    */
   @Inject
@@ -57,11 +57,10 @@ public class HoiScreeningResource {
 
   /**
    * Finds history of involvement by screening id.
-   * 
+   *
    * @param clientIds - clientIds
    * @return the hoi screenings
    */
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
@@ -70,11 +69,9 @@ public class HoiScreeningResource {
       response = HOIScreeningResponse.class)
   public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") List<String> clientIds) {
-    gov.ca.cwds.rest.api.Response clients =
-        hoiScreeningService.findHoiScreeningsByClientIds(clientIds);
+    gov.ca.cwds.rest.api.Response clients = hoiScreeningService
+        .handleFind(new HOIRequest(clientIds));
     return new ResponseConverter().withDataResponse(clients);
   }
-
-
 
 }

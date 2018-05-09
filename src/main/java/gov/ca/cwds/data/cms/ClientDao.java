@@ -1,8 +1,8 @@
 package gov.ca.cwds.data.cms;
 
 import gov.ca.cwds.data.persistence.cms.BaseClient;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
 
@@ -38,8 +38,8 @@ public class ClientDao extends BaseDaoImpl<Client> {
    * @param ids Set of Client id-s
    * @return map where key is a Client id and value is a Client itself
    */
-  @SuppressWarnings("unchecked")
-  public Map<String, Client> findClientsByIds(Set<String> ids) {
+  public Map<String, Client> findClientsByIds(Collection<String> ids) {
+    @SuppressWarnings("unchecked")
     final Query<Client> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(constructNamedQueryName("findByIds")).setParameter("ids", ids);
     return query.list().stream().collect(Collectors.toMap(BaseClient::getId, c -> c));

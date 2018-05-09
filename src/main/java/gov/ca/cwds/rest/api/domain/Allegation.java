@@ -21,12 +21,17 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @ApiModel("nsAllegation")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Allegation extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("id")
+  @ApiModelProperty(example = "1")
+  private String id;
+
   @JsonProperty("legacy_source_table")
-  @ApiModelProperty(required = true, value = "Legacy Source Table", example = "ALLGTN_T")
+  @ApiModelProperty(value = "Legacy Source Table", example = "ALLGTN_T")
   private String legacySourceTable;
 
   @JsonProperty("legacy_id")
@@ -35,15 +40,15 @@ public class Allegation extends ReportingDomain implements Request, Response {
   private String legacyId;
 
   @JsonProperty("victim_person_id")
-  @ApiModelProperty(required = true, value = "id of victim", example = "12345")
+  @ApiModelProperty(value = "id of victim", example = "12345")
   private long victimPersonId;
 
   @JsonProperty("perpetrator_person_id")
-  @ApiModelProperty(required = true, value = "id of perpatrator", example = "12345")
+  @ApiModelProperty(value = "id of perpatrator", example = "12345")
   private long perpetratorPersonId;
 
   @JsonProperty("non_protecting_parent")
-  @ApiModelProperty(required = true, value = "Non protecting parent Code", example = "U",
+  @ApiModelProperty(value = "Non protecting parent Code", example = "U",
       allowableValues = "U, P, Y, N")
   @OneOf(value = {"U", "P", "Y", "N"})
   @Size(max = 1)
@@ -61,6 +66,13 @@ public class Allegation extends ReportingDomain implements Request, Response {
   private String county;
 
   /**
+   * default constructor
+   */
+  public Allegation() {
+    // default
+  }
+
+  /**
    * @param legacySourceTable - legacy source table
    * @param legacyId - legacy Id
    * @param victimPersonId - Person Id of victim
@@ -68,17 +80,42 @@ public class Allegation extends ReportingDomain implements Request, Response {
    * @param type - Injury Harm type
    * @param county = County
    */
-  public Allegation(@JsonProperty("legacy_source_table") String legacySourceTable,
-      @JsonProperty("legacy_id") String legacyId,
-      @JsonProperty("victim_person_id") long victimPersonId,
-      @JsonProperty("perpetrator_person_id") long perpetratorPersonId,
-      @JsonProperty("type") Short type, @JsonProperty("county") String county) {
+  public Allegation(String legacySourceTable, String legacyId, long victimPersonId,
+      long perpetratorPersonId, Short type, String county) {
     super();
     this.legacySourceTable = legacySourceTable;
     this.legacyId = legacyId;
     this.victimPersonId = victimPersonId;
     this.perpetratorPersonId = perpetratorPersonId;
     this.type = type;
+    this.county = county;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setVictimPersonId(long victimPersonId) {
+    this.victimPersonId = victimPersonId;
+  }
+
+  public void setPerpetratorPersonId(long perpetratorPersonId) {
+    this.perpetratorPersonId = perpetratorPersonId;
+  }
+
+  public String getNonProtectingParent() {
+    return nonProtectingParent;
+  }
+
+  public void setType(Short type) {
+    this.type = type;
+  }
+
+  public void setCounty(String county) {
     this.county = county;
   }
 

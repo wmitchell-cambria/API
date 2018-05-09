@@ -43,6 +43,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AddressResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -59,7 +60,6 @@ public class AddressResource {
    * Finds an address by id.
    * 
    * @param id The id
-   * 
    * @return The response
    */
   @UnitOfWork(value = "ns")
@@ -75,10 +75,9 @@ public class AddressResource {
   }
 
   /**
-   * Delete an address
+   * Delete an address.
    * 
    * @param id The id of the {@link Address}
-   * 
    * @return {@link Response}
    */
   @UnitOfWork(value = "ns")
@@ -96,7 +95,6 @@ public class AddressResource {
    * Create an {@link Address}
    * 
    * @param address The {@link Address}
-   * 
    * @return The {@link Response}
    */
   @UnitOfWork(value = "ns")
@@ -114,14 +112,13 @@ public class AddressResource {
   }
 
   /**
-   * Update an {@link Address}
+   * Update an {@link Address}. Update both DB2 and Postgres using XA transactions.
    *
-   * @param id the id
-   * @param address {@link Address}
-   *
+   * @param id - the id
+   * @param address - {@link Address}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  // @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -130,13 +127,13 @@ public class AddressResource {
       @ApiResponse(code = 406, message = "Accept Header not supported"),
       @ApiResponse(code = 422, message = "Unable to validate Address")})
   @Consumes(value = MediaType.APPLICATION_JSON)
-  @ApiOperation(hidden = true, value = "Update Address", code = HttpStatus.SC_OK,
-      response = Object.class)
+  @ApiOperation(hidden = false, value = "Update Address", code = HttpStatus.SC_OK,
+      response = PostedAddress.class)
   public Response update(
       @PathParam("id") @ApiParam(required = true, name = "id",
           value = "The id of the Address to update") long id,
-      @ApiParam(hidden = true) Address address) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+      @ApiParam(hidden = false, required = true) Address address) {
+    return resourceDelegate.update(id, address);
   }
 
 }

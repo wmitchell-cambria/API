@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.rest.api.ApiException;
@@ -29,6 +30,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.StaffPerson.findByIds",
+    query = "FROM StaffPerson WHERE id IN :ids")
 @Entity
 @Table(name = "STFPERST")
 public class StaffPerson extends CmsPersistentObject {

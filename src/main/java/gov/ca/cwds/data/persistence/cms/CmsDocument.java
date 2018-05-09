@@ -20,6 +20,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
@@ -55,6 +57,7 @@ public class CmsDocument extends CmsPersistentObject {
   @Column(name = "DOC_DATE")
   private Date docDate;
 
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainChef.TIME_FORMAT)
   @Type(type = "time")
   @Column(name = "DOC_TIME")
   private Date docTime;

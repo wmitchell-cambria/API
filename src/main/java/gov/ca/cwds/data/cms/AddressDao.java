@@ -9,13 +9,14 @@ import gov.ca.cwds.data.persistence.cms.Address;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
 /**
- * Hibernate DAO for DB2
+ * Hibernate DAO for DB2.
  * 
  * @author CWDS API Team
  * @see CmsSessionFactory
  * @see SessionFactory
  */
 public class AddressDao extends BaseDaoImpl<Address> {
+
   /**
    * Constructor
    * 

@@ -9,7 +9,7 @@ import gov.ca.cwds.data.persistence.ns.PersonEthnicity;
 import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
- * PersonEthnicity Dao
+ * PersonEthnicity Dao.
  * 
  * @author CWDS API Team
  */

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.IntakeLovDao;
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.domain.IntakeLovEntry;
 import gov.ca.cwds.rest.api.domain.IntakeLovResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
@@ -15,14 +16,11 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
  * @author CWDS API Team
  */
 public class IntakeLovService
-    extends SimpleResourceService<String, IntakeLovEntry, IntakeLovResponse> {
+    extends SimpleResourceService<String, IntakeLovEntry, IntakeLovResponse> implements ApiMarker {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
-  private IntakeLovDao dao;
+  private transient IntakeLovDao dao;
 
   /**
    * Constructor

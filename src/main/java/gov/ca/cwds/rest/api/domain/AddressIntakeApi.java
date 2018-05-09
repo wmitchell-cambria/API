@@ -2,17 +2,19 @@ package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * {@link DomainObject} representing an address
@@ -26,8 +28,7 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
-  @ApiModelProperty(required = true, readOnly = false, value = "Id",
-      example = "28")
+  @ApiModelProperty(required = true, readOnly = false, value = "Id", example = "28")
   private String id;
 
   @JsonProperty("legacy_id")
@@ -69,6 +70,13 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   private LegacyDescriptor legacyDescriptor;
 
   /**
+   * Default Constructor.
+   */
+  public AddressIntakeApi() {
+    // no-opt
+  }
+
+  /**
    * Constructor
    *
    * @param legacySourceTable - the legacy source table name
@@ -80,16 +88,13 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    * @param type the address type
    * @param legacyDescriptor - legacyDescriptor
    */
-  @JsonCreator
-  public AddressIntakeApi(
-      @JsonProperty("legacy_source_table") String legacySourceTable,
-      @JsonProperty("legacy_id") String addressId,
-      @JsonProperty("street_address") String streetAddress,
-      @JsonProperty("city") String city,
-      @JsonProperty("state") String state,
-      @JsonProperty("zip") String zip,
-      @JsonProperty("type") String type,
-      @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor) {
+  @SuppressWarnings("squid:S00107")
+  public AddressIntakeApi(String legacySourceTable,
+      String addressId,
+      String streetAddress,  String city,
+      String state, String zip,
+      String type,
+      LegacyDescriptor legacyDescriptor) {
     super();
     this.legacySourceTable = legacySourceTable;
     this.legacyId = addressId;
@@ -130,6 +135,26 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
    */
   public String getType() {
     return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setStreetAddress(String streetAddress) {
+    this.streetAddress = streetAddress;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public void setZip(String zip) {
+    this.zip = zip;
   }
 
   /**

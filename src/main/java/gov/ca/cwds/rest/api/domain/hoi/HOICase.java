@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.api.domain.hoi;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class HOICase extends ApiObjectIdentity
-    implements ApiTypedIdentifier<String>, Request, Comparable<HOICase>, Comparator<HOICase> {
+public class HOICase extends ApiObjectIdentity implements ApiTypedIdentifier<String>, Request {
 
 
   private static final long serialVersionUID = 1L;
@@ -205,16 +203,6 @@ public class HOICase extends ApiObjectIdentity
    */
   public void setLegacyDescriptor(LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
-  }
-
-  @Override
-  public int compare(HOICase o1, HOICase o2) {
-    return o2.getStartDate().compareTo(o1.getStartDate());
-  }
-
-  @Override
-  public int compareTo(HOICase o) {
-    return compare(this, o);
   }
 
   @Override

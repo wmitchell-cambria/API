@@ -1,14 +1,17 @@
 package gov.ca.cwds.data.ns;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
-import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * Participant Phone Numbers DAO
@@ -27,7 +30,7 @@ public class ParticipantPhoneNumbersDao extends CrudsDaoImpl<ParticipantPhoneNum
     super(sessionFactory);
   }
 
-  public Set<ParticipantPhoneNumbers> findByParticipantId(String participantId){
+  public Set<ParticipantPhoneNumbers> findByParticipantId(String participantId) {
     final Query<ParticipantPhoneNumbers> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(ParticipantPhoneNumbers.PARTICIPANT_PHONE_NUMBERS_BY_PARTICIPANT_ID)
         .setParameter(ParticipantPhoneNumbers.PARAM_PARTICIPANT_ID, participantId);
@@ -36,7 +39,6 @@ public class ParticipantPhoneNumbersDao extends CrudsDaoImpl<ParticipantPhoneNum
 
   @Override
   public ParticipantPhoneNumbers create(ParticipantPhoneNumbers object) {
-
     object.setCreatedAt(new Date());
     object.setUpdatedAt(object.getCreatedAt());
     return super.create(object);

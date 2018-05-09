@@ -9,23 +9,23 @@ import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 @SuppressWarnings("javadoc")
 public class CmsCrossReportResourceBuilder {
   String thirdId = "";
-  Short crossReportMethodType = 0;
+  Short crossReportMethodType = 2095;
   Boolean filedOutOfStateIndicator = false;
   Boolean governmentOrgCrossRptIndicatorVar = false;
   String informTime = "";
   String recipientBadgeNumber = "";
   Integer recipientPhoneExtensionNumber = 0;
   Long recipientPhoneNumber = 0L;
-  String informDate = "";
+  String informDate = "2017-10-01";
   String recipientPositionTitleDesc = "";
   String referenceNumber = "";
-  String referralId = "";
+  String referralId = "1234567ABC";
   String lawEnforcementId = null;
-  String staffPersonId = "";
+  String staffPersonId = "0X5";
   String description = "";
   String recipientName = "";
   String outStateLawEnforcementAddr = "";
-  String countySpecificCode = "";
+  String countySpecificCode = "20";
   Boolean lawEnforcementIndicator = false;
   Boolean outStateLawEnforcementIndicator = false;
   Boolean satisfyCrossReportIndicator = false;

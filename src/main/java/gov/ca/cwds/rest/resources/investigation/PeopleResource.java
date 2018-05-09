@@ -42,6 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(MediaType.APPLICATION_JSON)
 
 public class PeopleResource {
+
   private TypedResourceDelegate<String, People> typedResourceDelegate;
 
   /**

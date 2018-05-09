@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
@@ -21,11 +22,15 @@ public final class HOIScreeningFactory {
   /**
    * @param screeningEntity NS ScreeningEntity
    * @param countyIntakeLOVCodeEntity NS IntakeLOVCodeEntity
+   * @param participantLegacyDescriptors map where key is a participant Id and value is a
+   * LegacyDescriptorEntity
+   * @param staffPerson CMS StaffPerson entity corresponding to the screeningEntity.assigneeStaffId
    * @return HOIScreening
    */
   HOIScreening buildHOIScreening(ScreeningEntity screeningEntity,
       IntakeLOVCodeEntity countyIntakeLOVCodeEntity,
-      Map<String, LegacyDescriptorEntity> participantLegacyDescriptors) {
+      Map<String, LegacyDescriptorEntity> participantLegacyDescriptors,
+      StaffPerson staffPerson) {
     HOIScreening result = new HOIScreening(screeningEntity);
 
     if (countyIntakeLOVCodeEntity != null) {
@@ -36,8 +41,8 @@ public final class HOIScreeningFactory {
 
     if (screeningEntity.getParticipants() != null) {
       for (ParticipantEntity participantEntity : screeningEntity.getParticipants()) {
-        HOIPerson participant = hoiPersonFactory
-            .buildHOIPerson(participantEntity, participantLegacyDescriptors);
+        HOIPerson participant = hoiPersonFactory.buildHOIPerson(participantEntity,
+            participantLegacyDescriptors.get(participantEntity.getId()));
         result.getAllPeople().add(participant);
 
         if (result.getReporter() == null) {
@@ -47,9 +52,8 @@ public final class HOIScreeningFactory {
       }
     }
 
-    if (screeningEntity.getAssigneeStaffId() != null) {
-      result.setAssignedSocialWorker(
-          hoiPersonFactory.buildHOISocialWorker(screeningEntity.getAssigneeStaffId()));
+    if (staffPerson != null) {
+      result.setAssignedSocialWorker(hoiPersonFactory.buildHOISocialWorker(staffPerson));
     }
 
     return result;

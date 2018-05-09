@@ -98,18 +98,17 @@ public final class Relationship extends ReportingDomain implements Request, Resp
     super();
   }
 
-
   /**
    * @param id - id
    * @param dateOfBirth - date of birth
-   * @param firstName - first anme
+   * @param firstName - first name
    * @param middleName - middle name
    * @param lastName - last name
    * @param suffixName - suffix
    * @param sensitive - sensitive data
    * @param sealed - sealed data
    * @param cmsRecordDescriptor - CMS record description
-   * @param relatedTo - people realated to this person
+   * @param relatedTo - people related to this person
    */
   public Relationship(String id, @Date(format = "yyyy-MM-dd", required = false) String dateOfBirth,
       String firstName, String middleName, String lastName, String suffixName, Boolean sensitive,
@@ -150,9 +149,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
     this.cmsRecordDescriptor =
         CmsRecordUtils.createLegacyDescriptor(client.getId(), LegacyTable.CLIENT);
     this.relatedTo = relationships;
-
   }
-
 
   /**
    * @return id

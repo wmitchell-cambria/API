@@ -1,15 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CMSNSREFERRAL;
-import gov.ca.cwds.inject.CmsNSReferralServiceBackedResource;
-import gov.ca.cwds.rest.api.domain.cms.CmsNSReferral;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -27,9 +18,19 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.inject.CmsNSReferralServiceBackedResource;
+import gov.ca.cwds.rest.api.domain.cms.CmsNSReferral;
+import gov.ca.cwds.rest.resources.ResourceDelegate;
+import io.dropwizard.hibernate.UnitOfWork;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 
 /**
- * Implementation of {@link CmsReferralResource}.
+ * Implementation of {@link CmsNSReferralResource}.
  * 
  * @author CWDS API Team
  */
@@ -38,6 +39,7 @@ import com.google.inject.Inject;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CmsNSReferralResource {
+
   private ResourceDelegate resourceDelegate;
 
   /**
@@ -46,7 +48,8 @@ public class CmsNSReferralResource {
    * @param resourceDelegate The resourceDelegate to delegate to.
    */
   @Inject
-  public CmsNSReferralResource(@CmsNSReferralServiceBackedResource ResourceDelegate resourceDelegate) {
+  public CmsNSReferralResource(
+      @CmsNSReferralServiceBackedResource ResourceDelegate resourceDelegate) {
     this.resourceDelegate = resourceDelegate;
   }
 
@@ -95,7 +98,7 @@ public class CmsNSReferralResource {
    * 
    * @return The {@link Response}
    */
-  // @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "cms")
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -129,9 +132,11 @@ public class CmsNSReferralResource {
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(hidden = true, value = "Update CmsNSReferral", code = HttpStatus.SC_NO_CONTENT,
       response = Object.class)
-  public Response update(@PathParam("id") @ApiParam(required = true, name = "id",
-      value = "The id of the CmsReferral to update") String id,
+  public Response update(
+      @PathParam("id") @ApiParam(required = true, name = "id",
+          value = "The id of the CmsReferral to update") String id,
       @Valid @ApiParam(hidden = false) CmsNSReferral cmsNsReferral) {
     return Response.status(HttpStatus.SC_NOT_IMPLEMENTED).build();
   }
+
 }

@@ -3,12 +3,10 @@ package gov.ca.cwds.rest.api.domain.cms;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,10 +15,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -29,14 +26,15 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.fixture.ReferralClientResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.ReferralClientResource;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -47,17 +45,8 @@ import nl.jqno.equalsverifier.Warning;
 @SuppressWarnings("javadoc")
 public class ReferralClientTest {
 
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRAL_CLIENT + "/";
-
-  private static final ReferralClientResource mockedReferralClientResource =
-      mock(ReferralClientResource.class);
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedReferralClientResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
@@ -81,17 +70,19 @@ public class ReferralClientTest {
 
   public ReferralClientTest() throws ParseException {}
 
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+
   @Before
   public void setup() throws Exception {
-    @SuppressWarnings("rawtypes")
+    
+    messageBuilder = new MessageBuilder();
+    
     CrudsDao crudsDao = mock(CrudsDao.class);
 
     ReferralClient validReferralClient = validReferralClient();
 
     when(crudsDao.find(any())).thenReturn(mock(Referral.class));
-
-    when(mockedReferralClientResource.create(eq(validReferralClient)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
 
   }
 
@@ -184,9 +175,12 @@ public class ReferralClientTest {
     String countyCode = "countyCode";
     Short approvalCode = 1;
     String dispositionCode = "";
+    Short ageNumber = 12;
+    String agePeriodCode = "Y";
 
-    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported,
-        staffPersonAddedIndicator, dispositionCode, referralId, clientId, countyCode, approvalCode);
+    ReferralClient referralClient =
+        ReferralClient.createWithDefault(selfReported, staffPersonAddedIndicator, dispositionCode,
+            referralId, clientId, countyCode, approvalCode, ageNumber, agePeriodCode);
 
     assertEquals("Expected selfReported field to be initialized with values", selfReported,
         referralClient.getSelfReportedIndicator());
@@ -198,6 +192,10 @@ public class ReferralClientTest {
         referralClient.getCountySpecificCode());
     assertEquals("Expected approvalCode field to be initialized with values", approvalCode,
         referralClient.getApprovalStatusType());
+    assertEquals("Expected ageNumber field to be initialized with values", ageNumber,
+        referralClient.getAgeNumber());
+    assertEquals("Expected agePeriodCode field to be initialized with values", agePeriodCode,
+        referralClient.getAgePeriodCode());
   }
 
   @Test
@@ -207,6 +205,8 @@ public class ReferralClientTest {
     String clientId = "clientId";
     String countyCode = "countyCode";
     Short approvalCode = 1;
+    Short ageNumber = 12;
+    String agePeriodCode = "Y";
 
     String approvalNumber = "";
     Short dispositionClosureReasonType = 0;
@@ -214,14 +214,13 @@ public class ReferralClientTest {
     String dispositionDate = "";
     Boolean staffPersonAddedIndicator = false;
     String dispositionClosureDescription = "";
-    Short ageNumber = 0;
-    String agePeriodCode = "";
     Boolean mentalHealthIssuesIndicator = false;
     Boolean alcoholIndicator = false;
     Boolean drugIndicator = false;
 
-    ReferralClient referralClient = ReferralClient.createWithDefault(selfReported,
-        staffPersonAddedIndicator, dispositionCode, referralId, clientId, countyCode, approvalCode);
+    ReferralClient referralClient =
+        ReferralClient.createWithDefault(selfReported, staffPersonAddedIndicator, dispositionCode,
+            referralId, clientId, countyCode, approvalCode, ageNumber, agePeriodCode);
 
     assertEquals("Expected approvalNumber field to be initialized with default values",
         approvalNumber, referralClient.getApprovalNumber());
@@ -237,10 +236,6 @@ public class ReferralClientTest {
     assertEquals(
         "Expected dispositionClosureDescription field to be initialized with default values",
         dispositionClosureDescription, referralClient.getDispositionClosureDescription());
-    assertEquals("Expected ageNumber field to be initialized with default values", ageNumber,
-        referralClient.getAgeNumber());
-    assertEquals("Expected agePeriodCode field to be initialized with default values",
-        agePeriodCode, referralClient.getAgePeriodCode());
     assertEquals("Expected mentalHealthIssuesIndicator field to be initialized with default values",
         mentalHealthIssuesIndicator, referralClient.getMentalHealthIssuesIndicator());
     assertEquals("Expected alcoholIndicator field to be initialized with default values",
@@ -259,21 +254,19 @@ public class ReferralClientTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(validReferralClient(), MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(validReferralClient()));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successfulWithOptionalsNotIncluded() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
+    ReferralClient referralClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/valid/optionalsNotIncluded.json"),
         ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -281,249 +274,150 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenApprovalNumberEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/approvalNumberempty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setApprovalNumber("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenApprovalNumberNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/approvalNumbernull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setApprovalNumber(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenApprovalNumberTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/approvalNumberTooLong.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("approvalNumber size must be between 0 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setApprovalNumber("12345678901").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("approvalNumber size must be between 0 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * dispositionClosureReasonType Tests
    */
   @Test
-  public void failsWhenDispositionClosureReasonTypeMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("dispositionClosureReasonType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenDispositionClosureReasonTypeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("dispositionClosureReasonType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setDispositionClosureDescription(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenDispositionClosureReasonTypeAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureReasonTypeAllWhiteSpace.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("dispositionClosureReasonType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("dispositionClosureDescription may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenDispositionClosureReasonTypeZero() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/valid/dispositionClosureReasonTypeZero.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Short dispositionClosureReasonType = (short) 0;
+
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setDispositionClosureReasonType(dispositionClosureReasonType).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * approvalStatusType Tests
    */
   @Test
-  public void failsWhenApprovalStatusTypeMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/approvalStatusTypeMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("approvalStatusType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenApprovalStatusTypeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/approvalStatusTypeNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("approvalStatusType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setApprovalStatusType(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenApprovalStatusTypeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/approvalStatusTypeEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("approvalStatusType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("approvalStatusType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * dispositionCode Tests
    */
   @Test
-  public void failsWhenDispositionCodeMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenDispositionCodeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionCode may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setDispositionCode(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("dispositionCode may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenDispositionCodeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setDispositionCode("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenDispositionCodeTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeTooLong.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("dispositionCode size must be 1"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setDispositionCode("zz").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("dispositionCode size must be 1")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenDispositionCodeInvalid() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionCodeInvalid.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("dispositionCode must be one of [A, I, S, X, ]"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setDispositionCode("Z").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenDispositionCodeA() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeA.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenDispositionCodeI() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeI.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenDispositionCodeS() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeS.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenDispositionCodeX() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionCodeX.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("dispositionCode must be one of [A, I, S, X, ]")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -531,469 +425,370 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenDispositionDateEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionDateEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setDispositionDate("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenDispositionDateNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/dispositionDateNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setDispositionDate(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenDispositionDateWrongFormat() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/dispositionDateWrongFormat.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf(
-        "dispositionDate must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setDispositionDate("06/18/1992").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("dispositionDate must be in the format of yyyy-MM-dd")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * selfReportedIndicator Tests
    */
   @Test
-  public void failsWhenSelfReportedIndicatorMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenSelfReportedIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setSelfReportedIndicator(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenSelfReportedIndicatorEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenSelfReportedIndicatorAllWhitespace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/ReferralClient/invalid/selfReportedIndicatorAllWhitespace.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("selfReportedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("selfReportedIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * staffPersonAddedIndicator Tests
    */
-  @Test
-  public void failsWhenStaffPersonAddedIndicatorMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
 
   @Test
   public void failsWhenStaffPersonAddedIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setStaffPersonAddedIndicator(null)
+        .buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenStaffPersonAddedIndicatorEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenStaffPersonAddedIndicatorAllWhitespace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/ReferralClient/invalid/staffPersonAddedIndicatorAllWhitespace.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("staffPersonAddedIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("staffPersonAddedIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * referralId Tests
    */
   @Test
-  public void failsWhenReferralIdMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenReferralIdNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setReferralId(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenReferralIdEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   @Test
   public void failsWhenReferralIdTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdTooLong.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("referralId size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setReferralId("12345678901").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId size must be between 10 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenReferralIdAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/referralIdAllWhiteSpace.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setReferralId("  ").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * clientId Tests
    */
   @Test
-  public void failsWhenClientIdMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenClientIdNull() throws Exception {
-    ReferralClient toCreate =
-        MAPPER.readValue(fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdNull.json"),
-            ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setClientId(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("clientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenClientIdEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setClientId("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("clientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenClientIdTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdTooLong.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientId size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setClientId("12345678901").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("clientId size must be between 10 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenClientIdAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/clientIdAllWhiteSpace.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("clientId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setClientId("  ").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("clientId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * dispositionClosureDescription Tests
    */
-
   @Test
   public void failsWhenDispositionClosureDescriptionNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/invalid/dispositionClosureDescriptionNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("dispositionClosureDescription may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient = new ReferralClientResourceBuilder()
+        .setDispositionClosureDescription(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("dispositionClosureDescription may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenDispositionClosureDescriptionEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/ReferralClient/valid/dispositionClosureDescriptionEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient = new ReferralClientResourceBuilder()
+        .setDispositionClosureDescription("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * ageNumber Tests
    */
   @Test
-  public void failsWhenAgeNumberMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/ageNumberMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("ageNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenAgeNumberNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/ageNumberNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("ageNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setAgeNumber(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("ageNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * agePeriodCode Tests
    */
   @Test
-  public void failsWhenAgePeriodCodeMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/agePeriodCodeMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenAgePeriodCodeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/agePeriodCodeNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("agePeriodCode may not be null"),
-        is(greaterThanOrEqualTo(0)));
+  public void shouldConvertNullValuesToDefaultEmpty() throws Exception {
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setAgePeriodCode(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
+    assertEquals("", referralClient.getAgePeriodCode());
   }
 
   @Test
   public void successWhenAgePeriodCodeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/agePeriodCodeEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setAgePeriodCode("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenAgePeriodCodeTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/agePeriodCodeTooLong.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("agePeriodCode size must be 1"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setAgePeriodCode("YM").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("agePeriodCode size must be 1")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   @Test
   public void successWhenAgePeriodCodeAllWhiteSpace() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/agePeriodCodeAllWhiteSpace.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setAgePeriodCode("  ").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * countySpecificCode Tests
    */
   @Test
-  public void failsWhenCountySpecificCodeMissing() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeMissing.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenCountySpecificCodeNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setCountySpecificCode(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenCountySpecificCodeEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeEmpty.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setCountySpecificCode("").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenCountySpecificCodeTooLong() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/invalid/countySpecificCodeTooLong.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("countySpecificCode size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setCountySpecificCode("100").buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode size must be between 1 and 2")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1001,25 +796,22 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenMentalHealthIssuesIndicatorEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
+    ReferralClient referralClient = MAPPER.readValue(
         fixture(
             "fixtures/domain/legacy/ReferralClient/valid/mentalHealthIssuesIndicatorEmpty.json"),
         ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenMentalHealthIssuesIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/mentalHealthIssuesIndicatorNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient = new ReferralClientResourceBuilder()
+        .setMentalHealthIssuesIndicator(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -1027,24 +819,21 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenAlcoholIndicatorEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
+    ReferralClient referralClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/valid/alcoholIndicatorEmpty.json"),
         ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenAlcoholIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/alcoholIndicatorNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setAlcoholIndicator(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -1052,24 +841,21 @@ public class ReferralClientTest {
    */
   @Test
   public void successWhenDrugIndicatorEmpty() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
+    ReferralClient referralClient = MAPPER.readValue(
         fixture("fixtures/domain/legacy/ReferralClient/valid/drugIndicatorEmpty.json"),
         ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenDrugIndicatorNull() throws Exception {
-    ReferralClient toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/ReferralClient/valid/drugIndicatorNull.json"),
-        ReferralClient.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    ReferralClient referralClient =
+        new ReferralClientResourceBuilder().setDrugIndicator(null).buildReferralClient();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(referralClient));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*

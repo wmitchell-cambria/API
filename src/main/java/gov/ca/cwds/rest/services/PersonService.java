@@ -35,8 +35,7 @@ import gov.ca.cwds.rest.api.domain.Race;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * Business layer object to work on {@link Person} and
- * {@link gov.ca.cwds.data.persistence.ns.Person}
+ * Business layer object to work on {@link Person} and {@link Person}.
  * 
  * @author CWDS API Team
  */
@@ -55,26 +54,19 @@ public class PersonService implements CrudsService {
   private PersonEthnicityDao personEthnicityDao;
 
   /**
-   * Constructor
+   * Constructor.
    * 
-   * @param personDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Person}
-   *        objects.
-   * @param personAddressDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.PersonAddress}
-   * @param addressDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Address}
-   * @param personPhoneDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.PersonPhone}
-   * @param phoneNumberDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.PhoneNumber}
-   * @param personLanguageDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.PersonLanguage}
-   * @param languageDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Language}
-   * @param personRaceDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.PersonRace}
-   * @param raceDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Race}
-   * @param personEthnicityDao The {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.ns.PersonEthnicity}
-   * @param ethnicityDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.ns.Ethnicity}
+   * @param personDao The {@link Dao} handling {@link Person} objects.
+   * @param personAddressDao The {@link Dao} handling {@link PersonAddress}
+   * @param addressDao The {@link Dao} handling {@link Address}
+   * @param personPhoneDao The {@link Dao} handling {@link PersonPhone}
+   * @param phoneNumberDao The {@link Dao} handling {@link PhoneNumber}
+   * @param personLanguageDao The {@link Dao} handling {@link PersonLanguage}
+   * @param languageDao The {@link Dao} handling {@link Language}
+   * @param personRaceDao The {@link Dao} handling {@link PersonRace}
+   * @param raceDao The {@link Dao} handling {@link Race}
+   * @param personEthnicityDao The {@link Dao} handling {@link PersonEthnicity}
+   * @param ethnicityDao The {@link Dao} handling {@link Ethnicity}
    */
   @Inject
   public PersonService(PersonDao personDao, PersonAddressDao personAddressDao,
@@ -118,7 +110,8 @@ public class PersonService implements CrudsService {
   @UnitOfWork(value = "ns")
   public PostedPerson create(Request request) {
     assert request instanceof Person;
-    Person person = (Person) request;
+    final Person person = (Person) request;
+
     gov.ca.cwds.data.persistence.ns.Person managedPerson =
         new gov.ca.cwds.data.persistence.ns.Person(person, null, null);
     managedPerson = personDao.create(managedPerson);
@@ -143,8 +136,6 @@ public class PersonService implements CrudsService {
   }
 
   /**
-   * <strong>NOT IMPLEMENTED! REQUIRED BY {@link CrudsService}!</strong> {@inheritDoc}
-   * 
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)
    */
@@ -152,7 +143,7 @@ public class PersonService implements CrudsService {
   public Response update(final Serializable primaryKey, Request request) {
     assert primaryKey instanceof Long;
     assert request instanceof Person;
-    Person person = (Person) request;
+    final Person person = (Person) request;
     gov.ca.cwds.data.persistence.ns.Person managedPerson =
         new gov.ca.cwds.data.persistence.ns.Person(person, null, null);
     managedPerson = personDao.update(managedPerson);

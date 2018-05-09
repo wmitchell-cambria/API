@@ -6,8 +6,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-
+import java.util.List;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,14 +31,17 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
-import gov.ca.cwds.rest.resources.cms.ReporterResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -50,16 +55,8 @@ import nl.jqno.equalsverifier.Warning;
 public class ReporterTest {
 
   private static final int NOT_FOUND = -1;
-  private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REPORTER + "/";
-
-  private static final ReporterResource mockedReporterResource = mock(ReporterResource.class);
-
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-  @ClassRule
-  public static final ResourceTestRule resources =
-      ResourceTestRule.builder().addResource(mockedReporterResource).build();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,16 +95,12 @@ public class ReporterTest {
   private String reporterEmployerName = "Employer Name";
   private boolean clientStaffPersonAdded = true;
   private String sensitivityIndicator = "R";
+  private MessageBuilder messageBuilder;
+  private Validator validator;
 
   @Before
-  public void setup() throws Exception {
-    @SuppressWarnings("rawtypes")
-    CrudsDao crudsDao = mock(CrudsDao.class);
-    when(crudsDao.find(any())).thenReturn(mock(gov.ca.cwds.data.persistence.cms.Reporter.class));
-    Reporter validReporter = validReporter();
-
-    when(mockedReporterResource.create(eq(validReporter)))
-        .thenReturn(Response.status(Response.Status.NO_CONTENT).entity(null).build());
+  public void setup() throws Exception {   
+    messageBuilder = new MessageBuilder();
   }
 
   /*
@@ -232,12 +225,14 @@ public class ReporterTest {
     String lastName = "lastName";
     String employerName = "Employer Name";
     boolean confidentialityWaver = true;
+    String approximateAge = "12";
+    String approximateAgeUnits = "Y";
     String suffix = "";
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), firstName, middleName, lastName, suffix, "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, approximateAge,
+        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     String countyCode = "countyCode";
     Short stateCode = new Short("0");
@@ -300,11 +295,13 @@ public class ReporterTest {
     String middleName = "middleName";
     String lastName = "lastName";
     String suffix = "jr";
+    String approximateAge = "12";
+    String approximateAgeUnits = "Y";
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), firstName, middleName, lastName, "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, approximateAge,
+        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     String countyCode = "countyCode";
     Short stateCode = new Short("0");
@@ -353,9 +350,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -377,9 +374,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -400,9 +397,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -424,9 +421,9 @@ public class ReporterTest {
 
     Participant participant = new Participant(5L, "legacy_source_table", "legacy_client_id",
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
-        "date_of_birth", primaryLanguage, secondaryLanguage, 7L, 8L, reporterConfidentialWaiver,
-        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, new HashSet<>(),
-        new HashSet<>(), raceAndEthnicity);
+        "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
+        reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -456,14 +453,14 @@ public class ReporterTest {
   @Test
   public void serializesToJSON() throws Exception {
     final String expected = MAPPER.writeValueAsString(MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class));
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class));
 
     assertThat(MAPPER.writeValueAsString(validReporter()), is(equalTo(expected)));
   }
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"),
+    assertThat(MAPPER.readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"),
         Reporter.class), is(equalTo(validReporter())));
   }
 
@@ -472,12 +469,10 @@ public class ReporterTest {
    */
   @Test
   public void successfulWithValid() throws Exception {
-    Reporter toCreate = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -487,48 +482,43 @@ public class ReporterTest {
    */
   @Test
   public void testStreetNameNotCityNameFails() throws Exception {
-    Reporter toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/Reporter/invalid/_classLevel/streetNameProvidedAndCityNameNot.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"cityName is required since streetName is set\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setStreetName("test street").setCityName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("cityName is required since streetName is set")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void testStreetNameAndCityNameSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/streetNameAndCityName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetName("test street").setCityName("test city").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testNotStreetNameNotCityNameSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/notStreetNameNotCityName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+  public void testNotStreetNoAndCityNameSuccess() throws Exception {
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("").setCityName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testNotStreetNameAndCityNameSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/NotStreetNameAndCityName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetName("").setCityName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -540,48 +530,43 @@ public class ReporterTest {
    */
   @Test
   public void testStreetNumberNotStreetNameFails() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid//streetNumberNotStreetName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"streetName is required since streetNumber is set\"]}")));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("test street").setStreetName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("streetName is required since streetNumber is set")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   @Test
   public void testStreetNumberAndStreetNameSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/streetNumberAndStreetName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("number").setStreetName("test street name").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testNotStreetNumberNotStreetNameSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/notStreetNumberNotStreetName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("").setStreetName("test street name").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testStreetNameNotStreetNumberSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/StreetNameNotStreetNumber.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("").setStreetName("test street name").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -594,49 +579,27 @@ public class ReporterTest {
    */
   @Test
   public void testLawEnforcementIdAndEmployerNameFails() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/LawEnforcementIdAndEmployerName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class), is(equalTo(
-        "{\"errors\":[\"Properties [employerName, lawEnforcementId] are mutually exclusive but multiple values are set\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setLawEnforcementId("Y").setEmployerName("test name").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("Properties [employerName, lawEnforcementId] are mutually exclusive but multiple values are set")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void testLawEnforcementIdNotEmployerNameNotSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/notLawEnforcementIdNotEmployerName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-
-  }
-
-  @Test
-  public void testLawEnforcementIdNullEmployerNameSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/lawEnforcementIdNullEmployerName.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void testLawEnforcementIdEmployerNameNotSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/lawEnforcementIdEmployerNameNot.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setLawEnforcementId("Y").setEmployerName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
@@ -649,264 +612,139 @@ public class ReporterTest {
    */
   @Test
   public void testBadgeNumberTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/badgeNumberTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"badgeNumber size must be less than or equal to 6\"]}")));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setBadgeNumber("1234567").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void testBadgeNumberNotLawEnforcementIdFails() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/badgeNumberNotLawEnforcementId.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"badgeNumber can only be set if lawEnforcementId is set\"]}")));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("badgeNumber size must be less than or equal to 6")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void testBadgeNumberEmptyLawEnforcementIdSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/badgeNumberEmptyLawEnforcementId.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setBadgeNumber("").setLawEnforcementId("12345").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testBadgeNumberEmptySuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/badgeNumberEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void testBadgeNumberMissingSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/badgeNumberMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setBadgeNumber("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void testBadgeNumberNullSuccess() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/badgeNumberNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setBadgeNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * cityName Tests
    */
   @Test
-  public void successWhenCityNameMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/cityNameMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"cityName may not be null\"]}")));
-  }
-
-  @Test
   public void successWhenCityNameNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/cityNameNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"cityName may not be null\"]}")));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setCityName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenCityNameEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/cityNameEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("cityName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
-
   @Test
   public void failsWhenCityNameTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/cityNameTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"cityName size must be less than or equal to 20\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setCityName("123456789012345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("cityName size must be less than or equal to 20")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * colltrClientRptrReltnshpType Tests
    */
   @Test
-  public void failsWhenColltrClientRptrReltnshpTypeMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/colltrClientRptrReltnshpTypemissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("colltrClientRptrReltnshpType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenColltrClientRptrReltnshpTypeNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/colltrClientRptrReltnshpTypeNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("colltrClientRptrReltnshpType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setColltrClientRptrReltnshpType(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenColltrClientRptrReltnshpTypeAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/Reporter/invalid/colltrClientRptrReltnshpTypeAllWhiteSpace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("colltrClientRptrReltnshpType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("colltrClientRptrReltnshpType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * communicationMethodType Tests
    */
   @Test
-  public void failsWhenCommunicationMethodTypeMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/communicationMethodTypeMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("communicationMethodType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenCommunicationMethodTypeNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/communicationMethodTypeNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("communicationMethodType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setCommunicationMethodType(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenCommunicationMethodTypeAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/communicationMethodTypeAllWhiteSpace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("communicationMethodType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("communicationMethodType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * confidentialWaiverIndicator Tests
    */
   @Test
-  public void failsWhenConfidentialWaiverIndicatorMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/confidentialWaiverIndicatorMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenConfidentialWaiverIndicatorNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/confidentialWaiverIndicatorNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setConfidentialWaiverIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenConfidentialWaiverIndicatorEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/confidentialWaiverIndicatorEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenConfidentialWaiverIndicatorAllWhitespace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/Reporter/invalid/confidentialWaiverIndicatorAllWhitespace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("confidentialWaiverIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("confidentialWaiverIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -914,1035 +752,717 @@ public class ReporterTest {
    */
   @Test
   public void successWhenDrmsMandatedRprtrFeedbackEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/drmsMandatedRprtrFeedbackEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setDrmsMandatedRprtrFeedback("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void successWhenDrmsMandatedRprtrFeedbackNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/drmsMandatedRprtrFeedbackNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setDrmsMandatedRprtrFeedback(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenDrmsMandatedRprtrFeedbackTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/drmsMandatedRprtrFeedbackTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class)
-            .indexOf("drmsMandatedRprtrFeedback size must be between 0 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setDrmsMandatedRprtrFeedback("12345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("drmsMandatedRprtrFeedback size must be between 0 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * employerName Tests
    */
   @Test
-  public void successWhenEmployerNameValid() throws Exception {
-    Reporter toCreate = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
   public void testEmployerNameNullFails() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/employerNameNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    // System.out.println(response.readEntity(String.class));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"employerName may not be null\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setEmployerName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("employerName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenEmployerNameTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/employerNameTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"employerName size must be less than or equal to 35\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setEmployerName("1234567890123456789012345678901234567890").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("employerName size must be less than or equal to 35")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * feedbackDate Tests
    */
   @Test
-  public void successWhenFeedbackDateEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/feedbackDateEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
   public void successWhenFeedbackDateNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/feedbackDateNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setFeedbackDate(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
+ }
 
   @Test
   public void failsWhenFeedbackDateWrongFormat() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackDateWrongFormat.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("feedbackDate must be in the format of yyyy-MM-dd"), is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setFeedbackDate("01-10-2018").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("feedbackDate must be in the format of yyyy-MM-dd")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * feedbackRequiredIndicator Tests
    */
   @Test
-  public void failsWhenFeedbackRequiredIndicatorMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackRequiredIndicatorMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenFeedbackRequiredIndicatorNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackRequiredIndicatorNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setFeedbackRequiredIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("feedbackRequiredIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  @Test
-  public void failsWhenFeedbackRequiredIndicatorEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/feedbackRequiredIndicatorEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenFeedbackRequiredIndicatorAllWhitespace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/feedbackRequiredIndicatorAllWhitespace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("feedbackRequiredIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
 
   /*
    * firstName Tests
    */
   @Test
-  public void failsWhenFirstNameMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/firstNameMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenFirstNameNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/firstNameNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setFirstName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("firstName may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenFirstNameEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/firstNameEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("firstName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setFirstName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("firstName may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenFirstNameTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/firstNameTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("firstName size must be between 1 and 20"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setFirstName("123456789012345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenFirstNameAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/firstNameAllWhiteSpace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("firstName size must be between 1 and 20")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * lastName Tests
    */
   @Test
-  public void failsWhenLastNameMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/lastNameMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenLastNameNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/lastNameNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setLastName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("lastName may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenLastNameEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/lastNameEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lastName may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setLastName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void successWhenLastNameAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/lastNameAllWhiteSpace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("lastName may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenLastNameTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/lastNameTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lastName size must be between 1 and 25"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setLastName("12345678901234567890123456").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("lastName size must be between 1 and 25")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * mandatedReporterIndicator Tests
    */
   @Test
-  public void failsWhenMandatedReporterIndicatorMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/mandatedReporterIndicatorMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenMandatedReporterIndicatorNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/mandatedReporterIndicatorNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setMandatedReporterIndicator(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenMandatedReporterIndicatorEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/mandatedReporterIndicatorEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
-  public void failsWhenMandatedReporterIndicatorAllWhitespace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture(
-            "fixtures/domain/legacy/Reporter/invalid/mandatedReporterIndicatorAllWhitespace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("mandatedReporterIndicator may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("mandatedReporterIndicator may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * messagePhoneExtensionNumber Tests
    */
   @Test
-  public void failsWhenMessagePhoneExtensionNumberMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/messagePhoneExtensionNumberMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenMessagePhoneExtensionNumberNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/messagePhoneExtensionNumberNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+  Reporter reporter = new ReporterResourceBuilder().setMessagePhoneExtensionNumber(null).build();
+  validator = Validation.buildDefaultValidatorFactory().getValidator();
+  messageBuilder.addDomainValidationError(validator.validate(reporter));
+  Boolean theErrorDetected = false;
 
-  @Test
-  public void failWhenMessagePhoneExtensionNumberAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(fixture(
-        "fixtures/domain/legacy/Reporter/invalid/messagePhoneExtensionNumberAllWhiteSpace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("messagePhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+  List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+  for (ErrorMessage message : validationErrors) {
+    System.out.println(message.getMessage());
+    if (message.getMessage().equals("messagePhoneExtensionNumber may not be null")) {
+      theErrorDetected = true;
+    }
+  }
+  assertThat(theErrorDetected, is(true));
   }
 
   /*
    * messagePhoneNumber Tests
    */
   @Test
-  public void failsWhenMessagePhoneNumberMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/messagePhoneNumberMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("messagePhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenMessagePhoneNumberNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/messagePhoneNumberNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("messagePhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setMessagePhoneNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void failsWhenMessagePhoneNumberEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/messagePhoneNumberEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("messagePhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("messagePhoneNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * middleInitialName Tests
    */
   @Test
-  public void successWhenMiddleInitialNameMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/middleInitialNameMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
   public void successWhenMiddleInitialNameEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/middleInitialNameEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setMiddleInitialName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenMiddleInitialNameTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/middleInitialNameTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("middleInitialName size must be between 0 and 1"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setMiddleInitialName("AA").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("middleInitialName size must be between 0 and 1")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenMiddleInitialNameAllWhiteSpace() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/middleInitialNameTAllWhiteSpace.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setMiddleInitialName(" ").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   /*
    * namePrefixDescription Tests
    */
   @Test
-  public void failsWhenNamePrefixDescriptionMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/namePrefixDescriptionMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("namePrefixDescription may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenNamePrefixDescriptionNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/namePrefixDescriptionNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("namePrefixDescription may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setNamePrefixDescription(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("namePrefixDescription may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenNamePrefixDescriptionEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/namePrefixDescriptionEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setNamePrefixDescription("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenNamePrefixDescriptionTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/namePrefixDescriptionTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf(
-        "namePrefixDescription size must be between 0 and 6"), is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setNamePrefixDescription("1234567").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("namePrefixDescription size must be between 0 and 6")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
+   }
 
   /*
    * primaryPhoneNumber Tests
    */
   @Test
-  public void failsWhenPrimaryPhoneNumberMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/primaryPhoneNumberMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("primaryPhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenPrimaryPhoneNumberNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/primaryPhoneNumberNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("primaryPhoneNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setPrimaryPhoneNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("primaryPhoneNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * primaryPhoneExtensionNumber Tests
    */
   @Test
-  public void failsWhenPrimaryPhoneExtensionNumberMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/primaryPhoneExtensionNumberMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("primaryPhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenPrimaryPhoneExtensionNumberNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/primaryPhoneExtensionNumberNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("primaryPhoneExtensionNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setPrimaryPhoneExtensionNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("primaryPhoneExtensionNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * stateCodeType Tests
    */
   @Test
-  public void failsWhenStateCodeTypeMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/stateCodeTypeMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("stateCodeType may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenStateCodeTypeNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/stateCodeTypeNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("stateCodeType may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setStateCodeType(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+      System.out.println(message.getMessage());
+      if (message.getMessage().equals("stateCodeType may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * streetName Tests
    */
   @Test
-  public void failureWhenStreetNameMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/streetNameMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetName may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failureWhenStreetNameNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/streetNameNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetName may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetName(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("streetName may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenStreetNameEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/streetNameEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetName("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenStreetNameTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/streetNameTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"streetName size must be less than or equal to 40\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setStreetName("12345678901234567890123456789012345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("streetName size must be less than or equal to 40")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * streetNumber Tests
    */
   @Test
-  public void failWhenStreetNumberMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/streetNumberMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failWhenStreetNumberNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/streetNumberNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("streetNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("streetNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void successWhenStreetNumberEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/streetNumberEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenStreetNumberTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/streetNumberTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class),
-        is(equalTo("{\"errors\":[\"streetNumber size must be less than or equal to 10\"]}")));
+    Reporter reporter = new ReporterResourceBuilder().setStreetNumber("12345678901").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("streetNumber size must be less than or equal to 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * suffixTitleDescription Tests
    */
   @Test
-  public void failsWhenSuffixTitleDescriptionMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/suffixTitleDescriptionMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("suffixTitleDescription may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenSuffixTitleDescriptionNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/suffixTitleDescriptionNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("suffixTitleDescription may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
+    Reporter reporter = new ReporterResourceBuilder().setSuffixTitleDescription(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
 
-  @Test
-  public void sucessWhenSuffixTitleDescriptionEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/suffixTitleDescriptionEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void failsWhenSuffixTitleDescriptionTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/suffixTitleDescriptionTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf(
-        "suffixTitleDescription size must be between 0 and 4"), is(greaterThanOrEqualTo(0)));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("suffixTitleDescription may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * Zipcode tests
    */
   @Test
-  public void failsWhenZipcodeMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipcode may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenZipcodeNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipcode may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setZipcode(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("zipcode may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
-  @Test
-  public void successWhenZipcodeTooShort() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeTooShort.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
-  public void successWhenZipcodeTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  // @Test
-  // public void failsWhenZipcodeNonDigits() throws Exception {
-  // Reporter toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Reporter/invalid/zipcodeNonDigits.json"), Reporter.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(422)));
-  // String message = response.readEntity(String.class);
-  // System.out.print(message);
-  // assertThat(response.readEntity(String.class),
-  // is(equalTo("{\"errors\":[\"zipcode must be 5 digits\"]}")));
-  // }
-  //
-  // @Test
-  // public void successWhenZipcodeFiveDigits() throws Exception {
-  // Reporter toCreate = MAPPER.readValue(
-  // fixture("fixtures/domain/legacy/Reporter/valid/zipcode/fiveDigits.json"), Reporter.class);
-  // Response response =
-  // resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-  // .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-  // assertThat(response.getStatus(), is(equalTo(204)));
-  // }
 
   /*
    * referralId Tests
    */
   @Test
-  public void failsWhenReferralIdMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/referralIdMissing.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenReferralIdNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/referralIdNull.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setReferralId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenReferralIdEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/referralIdEmpty.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("referralId may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setReferralId("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenReferralIdTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/referralIdTooLong.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(
-        response.readEntity(String.class).indexOf("referralId size must be between 10 and 10"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setReferralId("1234567ABCD").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId size must be between 10 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * lawEnforcementId Tests
    */
   @Test
-  public void successWhenLawEnforcementIdValid() throws Exception {
-    Reporter toCreate = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    String message = response.readEntity(String.class);
-    System.out.print(message);
-    assertThat(response.getStatus(), is(equalTo(204)));
-  }
-
-  @Test
   public void successWhenLawEnforcementNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/valid/lawEnforcementIdLawEnforcementNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(204)));
+    Reporter reporter = new ReporterResourceBuilder().setLawEnforcementId(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
   public void failsWhenLawEnforcementIdTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/lawEnforcementIdTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("lawEnforcementId size must be 10"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setLawEnforcementId("1234567ABCD").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("lawEnforcementId size must be 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * zipSuffixNumber Tests
    */
   @Test
-  public void failsWhenZipSuffixNumberMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/zipSuffixNumberMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipSuffixNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenZipSuffixNumberNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/zipSuffixNumberNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("zipSuffixNumber may not be null"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setZipSuffixNumber(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("zipSuffixNumber may not be null")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
    * countySpecificCode Tests
    */
   @Test
-  public void failsWhenCountySpecificCodeMissing() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/countySpecificCodeMissing.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
-  }
-
-  @Test
   public void failsWhenCountySpecificCodeNull() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/countySpecificCodeNull.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setCountySpecificCode(null).build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenCountySpecificCodeEmpty() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/countySpecificCodeEmpty.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class).indexOf("countySpecificCode may not be empty"),
-        is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setCountySpecificCode("").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
   public void failsWhenCountySpecificCodeTooLong() throws Exception {
-    Reporter toCreate = MAPPER.readValue(
-        fixture("fixtures/domain/legacy/Reporter/invalid/countySpecificCodeTooLong.json"),
-        Reporter.class);
-    Response response =
-        resources.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
-            .post(Entity.entity(toCreate, MediaType.APPLICATION_JSON));
-    assertThat(response.getStatus(), is(equalTo(422)));
-    assertThat(response.readEntity(String.class)
-        .indexOf("countySpecificCode size must be between 1 and 2"), is(greaterThanOrEqualTo(0)));
+    Reporter reporter = new ReporterResourceBuilder().setCountySpecificCode("123").build();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(reporter));
+    Boolean theErrorDetected = false;
+
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("countySpecificCode size must be between 1 and 2")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   /*
@@ -1951,7 +1471,7 @@ public class ReporterTest {
   private Reporter validReporter() throws JsonParseException, JsonMappingException, IOException {
 
     Reporter validReporter = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Reporter/valid/valid.json"), Reporter.class);
+        .readValue(fixture("fixtures/domain/legacy/Reporter/valid.json"), Reporter.class);
     return validReporter;
 
   }

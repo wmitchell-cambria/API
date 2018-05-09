@@ -231,7 +231,8 @@ public class ScreeningToReferralResourceBuilder {
     return this;
   }
 
-  public ScreeningToReferralResourceBuilder setCurrentLocationOfChildren(String currentLocationOfChildren) {
+  public ScreeningToReferralResourceBuilder setCurrentLocationOfChildren(
+      String currentLocationOfChildren) {
     this.currentLocationOfChildren = currentLocationOfChildren;
     return this;
   }

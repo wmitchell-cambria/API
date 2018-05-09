@@ -126,13 +126,13 @@ public class ParticipantService implements CrudsService {
         // next participant
         continue;
       }
-      String genderCode = "";
+      String sexAtBirth = "";
       if (!incomingParticipant.getGender().isEmpty()) {
-        genderCode = incomingParticipant.getGender().toUpperCase().substring(0, 1);
+        sexAtBirth = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
       Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
       processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
-          clientParticipants, incomingParticipant, genderCode, roles);
+          clientParticipants, incomingParticipant, sexAtBirth, roles);
     } // next participant
 
     return clientParticipants;
@@ -140,7 +140,7 @@ public class ParticipantService implements CrudsService {
 
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
-      Participant incomingParticipant, String genderCode, Set<String> roles) {
+      Participant incomingParticipant, String sexAtBirth, Set<String> roles) {
     /**
      * process the roles of this participant
      */
@@ -154,7 +154,7 @@ public class ParticipantService implements CrudsService {
 
       } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
         saveClient(screeningToReferral, dateStarted, referralId, messageBuilder, clientParticipants,
-            incomingParticipant, genderCode, role);
+            incomingParticipant, sexAtBirth, role);
       }
       clientParticipants.addParticipant(incomingParticipant);
     } // next role
@@ -167,13 +167,13 @@ public class ParticipantService implements CrudsService {
 
   private void saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
       String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
-      Participant incomingParticipant, String genderCode, String role) {
+      Participant incomingParticipant, String sexAtBirth, String role) {
     String clientId;
 
     boolean newClient = StringUtils.isBlank(incomingParticipant.getLegacyId());
     if (newClient) {
       clientId = createNewClient(screeningToReferral, dateStarted, messageBuilder,
-          incomingParticipant, genderCode);
+          incomingParticipant, sexAtBirth);
     } else {
       // legacy Id passed - check for existence in CWS/CMS - no update yet
       clientId = incomingParticipant.getLegacyId();
@@ -244,8 +244,11 @@ public class ParticipantService implements CrudsService {
     ReferralClient referralClient = ReferralClient.createWithDefault(
         ParticipantValidator.selfReported(incomingParticipant), staffPersonAddedIndicator,
         dispositionCode ? ASSESMENT : "", referralId, clientId,
-        screeningToReferral.getIncidentCounty(), LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE);
-
+        screeningToReferral.getIncidentCounty(), LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE,
+        StringUtils.isNotBlank(incomingParticipant.getApproximateAge())
+            ? Short.parseShort(incomingParticipant.getApproximateAge())
+            : 0,
+        incomingParticipant.getApproximateAgeUnits());
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
     try {
@@ -297,8 +300,8 @@ public class ParticipantService implements CrudsService {
 
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
-          incomingParticipant.getGender(), primaryRaceCode, unableToDetermineCode,
-          hispanicUnableToDetermineCode, hispanicOriginCode);
+          incomingParticipant.getGender(), incomingParticipant.getSsn(), primaryRaceCode,
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
@@ -328,7 +331,7 @@ public class ParticipantService implements CrudsService {
   }
 
   private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      MessageBuilder messageBuilder, Participant incomingParticipant, String genderCode) {
+      MessageBuilder messageBuilder, Participant incomingParticipant, String sexAtBirth) {
     String clientId;
 
     List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
@@ -337,7 +340,7 @@ public class ParticipantService implements CrudsService {
     boolean childClientIndicatorVar =
         new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
 
-    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, genderCode,
+    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, sexAtBirth,
         primaryRaceCode, childClientIndicatorVar);
 
     /*

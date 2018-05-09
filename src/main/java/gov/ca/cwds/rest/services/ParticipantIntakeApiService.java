@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -252,6 +253,10 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
 
     return addressIntakeApiSetPosted;
+  }
+
+  public List<ParticipantEntity> getByScreeningId(String screeningId) {
+    return participantDao.getByScreeningId(screeningId);
   }
 
   private static class AddressesWrapper {

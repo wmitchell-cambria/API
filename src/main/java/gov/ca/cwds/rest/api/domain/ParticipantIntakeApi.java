@@ -3,27 +3,32 @@ package gov.ca.cwds.rest.api.domain;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+
+import gov.ca.cwds.rest.util.FerbDateUtils;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * {@link DomainObject} representing a Participant.
@@ -79,19 +84,18 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   private Date dateOfBirth;
 
   @JsonProperty("approximate_age")
-  @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age",
-      example = "25")
+  @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age", example = "25")
   private String approximateAge;
 
   @JsonProperty("approximate_age_units")
   @OneOf(value = {"days", "weeks", "months", "years"})
-  @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age Units", example = "years",
-      allowableValues = "days, weeks, months, years")
+  @ApiModelProperty(required = false, readOnly = false, value = "Approximate Age Units",
+      example = "years", allowableValues = "days, weeks, months, years")
   private String approximateAgeUnits;
 
   @JsonProperty("languages")
-  @ApiModelProperty(required = false, readOnly = false, dataType = "java.util.List",
-      value = "", example = "American Sign Language", notes = "The Participant's Languages")
+  @ApiModelProperty(required = false, readOnly = false, dataType = "java.util.List", value = "",
+      example = "American Sign Language", notes = "The Participant's Languages")
   private Set<String> languages;
 
   @JsonProperty("legacy_id")
@@ -107,9 +111,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
 
   /*
-   * Workafoung for fields containing raw json
-   * races
-   * ethnicity
+   * Workafoung for fields containing raw json races ethnicity
    *
    */
   @ApiModelProperty(required = true, readOnly = false, value = "Races",
@@ -122,13 +124,13 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   @JsonProperty("screening_id")
   @ApiModelProperty(required = false, readOnly = false, value = "Screening Id", example = "12345")
-  private Long screeningId;
+  private String screeningId;
 
   @Valid
   @JsonProperty("roles")
   @ApiModelProperty(required = true, readOnly = false, value = "Role of participant",
       dataType = "java.util.List", example = "['Victim', 'Mandated Reporter']")
-  private Set<String> roles;
+  private Set<String> roles = new HashSet<>();
 
   @Valid
   @ApiModelProperty(dataType = "List[gov.ca.cwds.rest.api.domain.AddressIntakeApi]")
@@ -138,7 +140,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @Valid
   @ApiModelProperty(dataType = "List[gov.ca.cwds.rest.api.domain.PhoneNumber]")
   @JsonProperty("phone_numbers")
-  private Set<gov.ca.cwds.rest.api.domain.PhoneNumber> phoneNumbers;
+  private Set<gov.ca.cwds.rest.api.domain.PhoneNumber> phoneNumbers = new HashSet<>();
 
   @JsonProperty("sealed")
   @ApiModelProperty(required = false, readOnly = false, value = "sealed", example = "true")
@@ -171,35 +173,34 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param firstName The first Name
    * @param middleName The middle Name
    * @param lastName The last Name
-   * @param nameSuffix The participants suffix Name
-   * @param gender The gender
-   * @param dateOfBirth The date Of Birth
+   * @param nameSuffix participant's suffix Name
+   * @param gender participant's gender
+   * @param approximateAge - guesstimate age
+   * @param approximateAgeUnits - years or months/weeks for infants
+   * @param dateOfBirth date of birth
+   * @param languages - languages spoken
    * @param ssn The social security number
    * @param roles The roles of the participant
    * @param addresses The addresses of the participant
+   * @param phoneNumbers take a guess
+   * @param sealed true if sealed
+   * @param sensitive true if sensitive
    */
-  @JsonCreator
-  public ParticipantIntakeApi(@JsonProperty("id") String id,
-      @JsonProperty("legacy_source_table") String legacySourceTable,
-      @JsonProperty("legacy_client_id") String clientId,
-      @JsonProperty("legacy_descriptor") LegacyDescriptor legacyDescriptor,
-      @JsonProperty("first_name") String firstName,
-      @JsonProperty("middle_name") String middleName,
-      @JsonProperty("last_name") String lastName,
-      @JsonProperty("name_suffix") String nameSuffix,
-      @JsonProperty("gender") String gender,
-      @JsonProperty("approximate_age") String approximateAge,
-      @JsonProperty("approximate_age_units") String approximateAgeUnits,
-      @JsonProperty("ssn") String ssn,
-      @JsonProperty("date_of_birth") Date dateOfBirth,
-      @JsonProperty("languages") Set<String> languages,
-      @JsonProperty("screening_id") Long screeningId,
-      @JsonProperty("roles") Set<String> roles,
-      @JsonProperty("addresses") Set<AddressIntakeApi> addresses,
-      @JsonProperty("phone_numbers") Set<PhoneNumber> phoneNumbers,
-      @JsonProperty("seales") Boolean sealed,
-      @JsonProperty("sensitive") Boolean sensitive
-  ) {
+  @SuppressWarnings("squid:S00107")
+  public ParticipantIntakeApi(String id,
+      String legacySourceTable,
+      String clientId,
+      LegacyDescriptor legacyDescriptor,
+      String firstName, String middleName,
+      String lastName, String nameSuffix,
+      String gender, String approximateAge,
+      String approximateAgeUnits,
+      String ssn, Date dateOfBirth,
+      Set<String> languages,
+      String screeningId, Set<String> roles,
+      Set<AddressIntakeApi> addresses,
+      Set<PhoneNumber> phoneNumbers,
+      Boolean sealed, Boolean sensitive) {
     super();
     this.id = id;
     this.firstName = firstName;
@@ -221,14 +222,14 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.phoneNumbers = phoneNumbers;
     this.sealed = sealed;
     this.sensitive = sensitive;
-
-
   }
 
   /**
+   * Copy constructor.
    *
-   * @param participantEntity
+   * @param participantEntity participant to copy from
    */
+  @SuppressWarnings("squid:S00107")
   public ParticipantIntakeApi(ParticipantEntity participantEntity) {
     super();
     this.id = participantEntity.getId();
@@ -247,18 +248,16 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.legacySourceTable = participantEntity.getLegacySourceTable();
     this.races = participantEntity.getRaces();
     this.ethnicity = participantEntity.getEthnicity();
-    this.screeningId = participantEntity.getScreeningId() == null ? null : Long.valueOf(participantEntity.getScreeningId());
+    this.screeningId = participantEntity.getScreeningId();
     this.sealed = participantEntity.getSealed();
     this.sensitive = participantEntity.getSensitive();
-
-
   }
 
-  /*
-   * Workafoung for fields containing raw json to embed into/extract from generated json
-   * races
-   * ethnicity
+  /**
+   * Work-around for fields containing raw JSON to embed into/extract from generated JSON races
+   * ethnicity.
    *
+   * @return JSON race codes
    */
   @JsonRawValue
   public String getRaces() {
@@ -287,7 +286,6 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   public void setEthnicityRaw(JsonNode jsonNode) {
     setEthnicity(jsonNode.toString());
   }
-
 
   /**
    * @return id
@@ -356,6 +354,70 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     return lastName;
   }
 
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public void setSsn(String ssn) {
+    this.ssn = ssn;
+  }
+
+  public void setDateOfBirth(Date dateOfBirth) {
+    this.dateOfBirth = FerbDateUtils.freshDate(dateOfBirth);
+  }
+
+  public void setApproximateAge(String approximateAge) {
+    this.approximateAge = approximateAge;
+  }
+
+  public void setApproximateAgeUnits(String approximateAgeUnits) {
+    this.approximateAgeUnits = approximateAgeUnits;
+  }
+
+  public void setLanguages(Set<String> languages) {
+    this.languages = languages;
+  }
+
+  public void setScreeningId(String screeningId) {
+    this.screeningId = screeningId;
+  }
+
+  public void setRoles(Set<String> roles) {
+    this.roles = roles;
+  }
+
+  public Boolean getSealed() {
+    return sealed;
+  }
+
+  public void setSealed(Boolean sealed) {
+    this.sealed = sealed;
+  }
+
+  public Boolean getSensitive() {
+    return sensitive;
+  }
+
+  public void setSensitive(Boolean sensitive) {
+    this.sensitive = sensitive;
+  }
+
   /**
    * @return the middleName
    */
@@ -381,7 +443,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * @return the screeningId
    */
-  public Long getScreeningId() {
+  public String getScreeningId() {
     return screeningId;
   }
 

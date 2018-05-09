@@ -36,7 +36,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.util.CmsRecordUtils;
 
 /**
- * Business layer object to work on Investigation People
+ * Business layer object to work on Investigation People.
  * 
  * @author CWDS API Team
  */
@@ -200,25 +200,25 @@ public class PeopleService implements TypedCrudsService<String, People, Response
     }
     return new RaceAndEthnicity(client, raceCodes, hispanicCodes);
   }
-  
-  private static void addRaceAndEthnicity(Short codeId,
-    final List<Short> raceCodes,
-    final List<Short> hispanicCodes) {	
-	if (codeId != null && codeId != 0) {	
-	  boolean isHispanicCode = false;
 
-	  final SystemCode systemCode = SystemCodeCache.global().getSystemCode(codeId);
-	  if (systemCode != null) {
-		// if OTHER_CD is '02' and not Caribbean race - then put in hispanic codes array
-		isHispanicCode = (HISPANIC_CODE_OTHER_ID.equals(systemCode.getOtherCd()) && (!CARIBBEAN_RACE_CODE.equals(systemCode.getSystemId())));
-	  }
+  private static void addRaceAndEthnicity(Short codeId, final List<Short> raceCodes,
+      final List<Short> hispanicCodes) {
+    if (codeId != null && codeId != 0) {
+      boolean isHispanicCode = false;
 
-	  if (isHispanicCode) {
-		hispanicCodes.add(codeId);
-	  } else {
-		raceCodes.add(codeId);
-		}
-	}
+      final SystemCode systemCode = SystemCodeCache.global().getSystemCode(codeId);
+      if (systemCode != null) {
+        // if OTHER_CD is '02' and not Caribbean race - then put in hispanic codes array
+        isHispanicCode = (HISPANIC_CODE_OTHER_ID.equals(systemCode.getOtherCd())
+            && (!CARIBBEAN_RACE_CODE.equals(systemCode.getSystemId())));
+      }
+
+      if (isHispanicCode) {
+        hispanicCodes.add(codeId);
+      } else {
+        raceCodes.add(codeId);
+      }
+    }
   }
 
   /**

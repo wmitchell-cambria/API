@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Oleg Korneychuk (generated)" id="1522795001668-1">
+    <insert tableName="participant_phone_numbers">
+      <column name="id" value="101"/>
+      <column name="participant_id" value="42"/>
+      <column name="phone_number_id" value="242"/>
+      <column name="created_at" valueDate="2018-03-28 22:47:04.869985"/>
+      <column name="updated_at" valueDate="2018-03-28 22:47:04.869985"/>
+    </insert>
+    <insert tableName="participant_phone_numbers">
+      <column name="id" value="102"/>
+      <column name="participant_id" value="43"/>
+      <column name="phone_number_id" value="243"/>
+      <column name="created_at" valueDate="2018-03-28 22:54:38.465215"/>
+      <column name="updated_at" valueDate="2018-03-28 22:54:38.465215"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

@@ -16,9 +16,10 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQuery;
 
 import gov.ca.cwds.data.ns.NsPersistentObject;
+import gov.ca.cwds.rest.api.domain.AddressUtils;
 
 /**
- * {@link NsPersistentObject} representing an Address
+ * {@link NsPersistentObject} representing an Address.
  * 
  * @author CWDS API Team
  */
@@ -27,7 +28,7 @@ import gov.ca.cwds.data.ns.NsPersistentObject;
     query = "FROM Address WHERE lastUpdatedTime > :after")
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "address")
+@Table(name = "addresses")
 public class Address extends NsPersistentObject {
 
   @Id
@@ -50,7 +51,6 @@ public class Address extends NsPersistentObject {
 
   @Column(name = "address_type_id")
   private String type;
-
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "personAddressId.address")
   private Set<PersonAddress> personAddress = new HashSet<>();
@@ -98,7 +98,7 @@ public class Address extends NsPersistentObject {
     this.streetAddress = address.getStreetAddress();
     this.city = address.getCity();
     this.state = address.getState() != null ? address.getState().toString() : null;
-    this.zip = address.getZip();
+    this.zip = AddressUtils.defaultIfBlank(address.getZip());
     this.type = address.getType() != null ? address.getType().toString() : null;
   }
 
@@ -159,6 +159,34 @@ public class Address extends NsPersistentObject {
    */
   public Set<PersonAddress> getPersonAddress() {
     return personAddress;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
+
+  public void setStreetAddress(String streetAddress) {
+    this.streetAddress = streetAddress;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setPersonAddress(Set<PersonAddress> personAddress) {
+    this.personAddress = personAddress;
   }
 
 }

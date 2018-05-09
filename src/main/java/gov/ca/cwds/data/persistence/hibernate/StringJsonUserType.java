@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
@@ -19,7 +20,7 @@ public class StringJsonUserType implements UserType {
    */
   @Override
   public int[] sqlTypes() {
-    return new int[]{Types.JAVA_OBJECT};
+    return new int[] {Types.JAVA_OBJECT};
   }
 
   /**
@@ -40,9 +41,7 @@ public class StringJsonUserType implements UserType {
    */
   @Override
   public boolean equals(Object x, Object y) {
-
     if (x == null) {
-
       return y == null;
     }
 
@@ -54,7 +53,6 @@ public class StringJsonUserType implements UserType {
    */
   @Override
   public int hashCode(Object x) {
-
     return x.hashCode();
   }
 
@@ -64,7 +62,7 @@ public class StringJsonUserType implements UserType {
    *
    * @param rs a JDBC result set
    * @param names the column names
-   * @param owner the containing entity  @return Object
+   * @param owner the containing entity @return Object
    */
   @Override
   public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session,
@@ -105,7 +103,6 @@ public class StringJsonUserType implements UserType {
    */
   @Override
   public Object deepCopy(Object value) {
-
     return value;
   }
 
