@@ -27,6 +27,8 @@ public enum CalendarEnum {
   }
 
   /**
+   * getName.
+   * 
    * @return the name
    */
   public String getName() {
@@ -34,6 +36,8 @@ public enum CalendarEnum {
   }
 
   /**
+   * getDescription.
+   * 
    * @return the description
    */
   public String getDescription() {
