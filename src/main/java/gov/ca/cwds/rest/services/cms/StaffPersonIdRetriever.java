@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services.cms;
 import java.io.IOException;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -61,6 +62,8 @@ public class StaffPersonIdRetriever {
       Object currentPrincipal = principalCount > 1 ? principals.get(1) : null;
 
       perryUserIdentity = getCurrentPrincipal(currentPrincipal);
+      LOGGER.info("======= current user {} has following principals {}", currentUser, principalCollection.asList().stream().collect(
+          Collectors.joining(",")));
     } else {
       LOGGER.warn("======= current user has no principals for {}", currentUser);
     }

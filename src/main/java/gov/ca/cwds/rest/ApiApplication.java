@@ -2,6 +2,7 @@ package gov.ca.cwds.rest;
 
 import java.util.EnumSet;
 
+import java.util.Map;
 import javax.servlet.DispatcherType;
 
 import org.slf4j.Logger;
@@ -125,6 +126,12 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
         .setPaperTrailDao(paperTrailDao);
     LOGGER.info("PaperTrailInterceptor: {}",
         applicationModule.getDataAccessModule().getPaperTrailInterceptor());
+
+    Map<String, String> env = System.getenv();
+    for (String envName : env.keySet()) {
+      LOGGER.info("******************* environment variables ***********************************");
+      LOGGER.info("{}={}",envName, env.get(envName));
+    }
   }
 
   private void upgradeNsDb(ApiConfiguration configuration) {

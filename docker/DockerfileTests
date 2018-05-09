@@ -1,0 +1,19 @@
+FROM gradle
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV APP_PATH /ferb
+ENV GRADLE_USER_HOME ${APP_PATH}/gradle_dependencies
+
+USER root
+RUN mkdir $APP_PATH
+RUN mkdir ${GRADLE_USER_HOME}
+WORKDIR $APP_PATH
+
+COPY . $APP_PATH
+
+COPY docker/ferb-test/config/testConfig.yml ${APP_PATH}/config/myTestConfig.yml
+COPY build/gradle /ferb/gradle_dependencies
+
+RUN ./gradlew build -x test -x functionalQATest --gradle-user-home=/ferb/gradle_dependencies --refresh-dependencies
+
+ENTRYPOINT ["./gradlew", "--gradle-user-home=/ferb/gradle_dependencies", "--info", "--rerun-tasks", "functionalQATest"]
