@@ -10,8 +10,21 @@ import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.business.RuleAction;
 
 /**
+ * 
+ * R - 00834 Age Unit Restriction
+ * <p>
+ * Rule Text<br>
+ * If the CLIENT has a value for BIRTH DATE and Estimated_DOB_Code is N, <br>
+ * then DOB, Age and Age Unit will be displayed and Age/ Age Unit may not be changed. Otherwise DOB
+ * will be blank and Age and Age Unit will be displayed and editable. <br>
+ * <p>
+ * Access Logic
+ * <p>
+ * If CLIENT.BIRTH_DATE is not blank and CLIENT.ESTIMATED_DOB_CODE = 'N', <br>
+ * then calculate and disable cboAgeUnit and txtAge, else enable cboAgeUnit and txtAge
+ * <p>
+ * 
  * @author CWDS API Team
- *
  */
 public class R00834AgeUnitRestriction implements RuleAction {
 
