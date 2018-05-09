@@ -58,16 +58,16 @@ public class R00834AgeUnitRestriction implements RuleAction {
   private void calculateAgeByDob(long noOfDays) {
     if (noOfDays > 365) {
       age = Long.toString(noOfDays / 365);
-      ageUnits = "Y";
+      ageUnits = CalendarEnum.YEARS.getName();
     } else if (noOfDays > 30) {
       age = Long.toString(noOfDays / 30);
-      ageUnits = "M";
+      ageUnits = CalendarEnum.MONTHS.getName();
     } else if (noOfDays > 7) {
       age = Long.toString(noOfDays / 7);
-      ageUnits = "W";
+      ageUnits = CalendarEnum.WEEKS.getName();
     } else if (noOfDays > 1) {
       age = Long.toString(noOfDays);
-      ageUnits = "D";
+      ageUnits = CalendarEnum.DAYS.getName();
     }
   }
 
