@@ -273,13 +273,13 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       deleteBlobs(primaryKey);
       if (managed != null) {
         retval = new CmsDocument(managed);
-        String base64Doc = dao.decompressDoc(managed);
-        retval.setBase64Blob(base64Doc);
+        retval.setBase64Blob(dao.decompressDoc(managed));
       }
     } catch (Exception e) {
       LOGGER.error("FAILED TO DELETE DOCUMENT MAIN: {}", e.getMessage(), e);
       throw new ServiceException("FAILED TO DELETE DOCUMENT MAIN: {" + primaryKey + "}", e);
     }
+
     return retval;
   }
 }
