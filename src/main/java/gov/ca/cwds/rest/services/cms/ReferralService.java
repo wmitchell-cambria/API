@@ -297,7 +297,7 @@ public class ReferralService implements
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
       MessageBuilder strsMessageBuilder) {
-    String longTextId = generateReportNarrative(screeningToReferral, strsMessageBuilder);
+    String longTextId = generateScreenerAlert(screeningToReferral, strsMessageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, strsMessageBuilder);
     String currentLocationOfChildrenLongTextId =
@@ -389,14 +389,11 @@ public class ReferralService implements
     return RequestExecutionContext.instance().getStaffId();
   }
 
-  private String generateReportNarrative(ScreeningToReferral screeningToReferral,
-      MessageBuilder messageBuilder) {
+ private String generateScreenerAlert(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder) {
     String longTextId = null;
-    if (screeningToReferral.getReportNarrative() != null
-        && !screeningToReferral.getReportNarrative().isEmpty()) {
+    if (screeningToReferral.getAlertInformation() != null && !screeningToReferral.getAlertInformation().isEmpty()) {
       try {
-        longTextId = createLongText(screeningToReferral.getIncidentCounty(),
-            screeningToReferral.getReportNarrative(), messageBuilder);
+        longTextId = createLongText(screeningToReferral.getIncidentCounty(), screeningToReferral.getAlertInformation(), messageBuilder);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -404,7 +401,7 @@ public class ReferralService implements
     }
     return longTextId;
   }
-
+  
   private String generateResponseRationalText(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     String longTextId = null;

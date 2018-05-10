@@ -37,7 +37,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.CrossReportResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.core.Api;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -48,14 +52,10 @@ public class ScreeningToReferralTest {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRALS + "/";;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   public static final String SACRAMENTO_COUNTY_CODE = "34";
-  private Validator validator;
-
 
   private static final ScreeningToReferralResource mockedScreeningToReferralResource =
       mock(ScreeningToReferralResource.class);
 
-  private String agencyType = "Law enforcement";
-  private String agencyName = "Sacramento County Sheriff Deparment";
   private Integer method = 2095; // "electronic report";
   private String informDate = "2017-03-15";
   private Set<Participant> participants = new HashSet<Participant>();
@@ -77,12 +77,17 @@ public class ScreeningToReferralTest {
 
   private Short responseTime = (short) 1520;
 
+  private MessageBuilder messageBuilder;
+  private Validator validator;
+
   @ClassRule
   public static final ResourceTestRule resources =
       ResourceTestRule.builder().addResource(mockedScreeningToReferralResource).build();
 
   @Before
   public void setup() {
+    messageBuilder = new MessageBuilder();
+    
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
@@ -115,7 +120,7 @@ public class ScreeningToReferralTest {
    * Serialization and deserialization
    */
   @Test
-  public void serializesToJSON() throws Exception {
+  public void shouldSerializeToJSON() throws Exception {
 
     Address address = validAddress();
     Participant participant = validParticipant();
@@ -125,13 +130,15 @@ public class ScreeningToReferralTest {
     crossReports.add(crossReport);
     Allegation allegation = validAllegation();
     allegations.add(allegation);
+    SafetyAlerts safetyAlerts = new SafetyAlerts();
 
     String expected = MAPPER.writeValueAsString(new ScreeningToReferral(id, "", "",
         "2016-08-03T01:00:00.000Z", SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home",
         communicationMethod, currentLocationOfChildren, "The Rocky Horror Show",
         "Narrative 123 test", "123ABC", responseTime, "2016-08-03T01:00:00.000Z", "Michael Bastow",
         "0X5", "addtional information", "Screening Descision", "Detail", approvalStatus,
-        familyAwarness, filedWithLawEnforcement, responsibleAgency, "S", "", "23", null, address,
+        familyAwarness, filedWithLawEnforcement, responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(),
+        safetyAlerts.getAlertInformation(), address,
         participants, crossReports, allegations));
 
     String serialized = MAPPER.writeValueAsString(
@@ -140,8 +147,22 @@ public class ScreeningToReferralTest {
     assertThat(serialized, is(expected));
   }
 
+  @Test 
+  public void shouldSerializeToJSONwhenSafetyAlertsIncluded() throws Exception {
+    SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
+    String expected = MAPPER.writeValueAsString(new ScreeningToReferralResourceBuilder()
+        .setSafetyAlerts(safetyAlerts.getAlerts())
+        .setSafetyAlertInformationn(safetyAlerts.getAlertInformation())
+        .createScreeningToReferral());
+
+    String serialized = MAPPER.writeValueAsString(
+        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validWithSafetyAlert.json"),
+            ScreeningToReferral.class));
+    assertThat(serialized, is(expected));  
+  }
+  
   @Test
-  public void deserializesFromJSON() throws Exception {
+  public void shouldDeserializeFromJSON() throws Exception {
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
     Address address = validAddress();
     Participant participant = validParticipant();
@@ -151,94 +172,110 @@ public class ScreeningToReferralTest {
     crossReports.add(crossReport);
     Allegation allegation = validAllegation();
     allegations.add(allegation);
+    SafetyAlerts safetyAlerts = new SafetyAlerts();
 
     ScreeningToReferral expected = new ScreeningToReferral(id, "", "", "2016-08-03T01:00:00.000Z",
         SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home", communicationMethod,
         currentLocationOfChildren, "The Rocky Horror Show", "Narrative 123 test", "123ABC",
         responseTime, "2016-08-03T01:00:00.000Z", "Michael Bastow", "0X5", "addtional information",
         "Screening Descision", "Detail", approvalStatus, familyAwarness, filedWithLawEnforcement,
-        responsibleAgency, "S", "", "23", null, address, participants, crossReports, allegations);
+        responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(), safetyAlerts.getAlertInformation(),
+        address, participants, crossReports, allegations);
 
     ScreeningToReferral serialized =
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),
             ScreeningToReferral.class);
 
     assertThat(serialized, is(expected));
-
   }
-
+  
   @Test
-  public void testWithValidSuccess() throws Exception {
+  public void shouldValidateWithValid() throws Exception {
     ScreeningToReferral toValidate =
         new ScreeningToReferralResourceBuilder().createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithNullParticipantsFail() throws Exception {
-
-    ScreeningToReferral toValidate = MAPPER.readValue(
-        fixture("fixtures/domain/ScreeningToReferral/invalid/nullParticipants.json"),
-        ScreeningToReferral.class);
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(2, constraintViolations.size());
-    // assertEquals("may not be empty", constraintViolations.iterator().next().getMessage());
-    // String[] expectedMessages =
-    // {"may not be empty", "must contain a Victim, Perpetrator, and Reporter"};
-    // Iterator itr = constraintViolations.iterator();
-    // String[] actualMessages = {((ConstraintViolation) itr.next()).getMessage(),
-    // ((ConstraintViolation) itr.next()).getMessage()};
-    // Arrays.sort(expectedMessages);
-    // Arrays.sort(actualMessages);
-    // assertArrayEquals(expectedMessages, actualMessages);
+  public void shouldPassWithMissingSafetyAlerts() throws Exception {
+    ScreeningToReferral toValidate =
+        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/missingSafetyAlerts.json"),
+            ScreeningToReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
+  }
+  
+  @Test
+  public void shouldFailWithNullParticipants() throws Exception {
+    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder().setParticipants(null).createScreeningToReferral();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("participants may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
-  public void testWithEmptyParticipantsFail() throws Exception {
+  public void shouldFailWithEmptyParticipants() throws Exception {
     ScreeningToReferral toValidate = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/invalid/emptyParticipants.json"),
         ScreeningToReferral.class);
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(2, constraintViolations.size());
-    // assertEquals("may not be empty", constraintViolations.iterator().next().getMessage());
-    // String[]actualMessages = null;
-    // String[] expectedMessages = {"may not be empty"};
-    // Iterator itr = constraintViolations.iterator();
-    // if (itr.hasNext()){
-    // actualMessages = {
-    // ((ConstraintViolation) itr.next()).getMessage(),
-    // ((ConstraintViolation) itr.next()).getMessage()
-    // };
-    // }
-    // Arrays.sort(expectedMessages);
-    // Arrays.sort(actualMessages);
-    // assertArrayEquals(expectedMessages, actualMessages);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("participants may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
-  public void testWithNullAllegationsFail() throws Exception {
+  public void shouldFailWithNullAllegations() throws Exception {
     Set<Allegation> allegatiopns = null;
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setAllegations(allegatiopns).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("may not be empty", constraintViolations.iterator().next().getMessage());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("allegations may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
-  public void testWithEmptyAllegationsFail() throws Exception {
+  public void shouldFailWithEmptyAllegations() throws Exception {
     Set<Allegation> allegatiopns = new HashSet<>();
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setAllegations(allegatiopns).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("may not be empty", constraintViolations.iterator().next().getMessage());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("allegations may not be empty")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -250,28 +287,28 @@ public class ScreeningToReferralTest {
   }
 
   @Test
-  public void testWithEmptyCrossReportFail() throws Exception {
+  public void shouldPassWithEmptyCrossReport() throws Exception {
     Set<CrossReport> crossReports = new HashSet<>();
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setCrossReports(crossReports).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithNullCrossReportFail() throws Exception {
+  public void shouldPassWithNullCrossReport() throws Exception {
     CrossReport crossReport = null;
     Set<CrossReport> crossReports = new HashSet<>(Arrays.asList(crossReport));
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setCrossReports(crossReports).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithMultipleCrossReportsSuccess() throws Exception {
+  public void shouldPassWithMultipleCrossReports() throws Exception {
     CrossReport crossReport =
         new CrossReportResourceBuilder().setId("ABC147852").createCrossReport();
     CrossReport crossReport1 =
@@ -280,43 +317,48 @@ public class ScreeningToReferralTest {
 
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setCrossReports(crossReports).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
-
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithInvalidIncidentDateFormatFail() throws Exception {
+  public void shouldFailWithInvalidIncidentDateFormat() throws Exception {
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setIncidentDate("12-07-1992").createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("must be in the format of yyyy-MM-dd",
-        constraintViolations.iterator().next().getMessage());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("incidentDate must be in the format of yyyy-MM-dd")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
-  public void testBlankLegacySourceTableSuccess() throws Exception {
+  public void shouldPassBlankLegacySourceTable() throws Exception {
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setLegacySourceTable("").createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testNullLegacySourceTableSuccess() throws Exception {
+  public void shouldPassNullLegacySourceTable() throws Exception {
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setLegacySourceTable(null).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testMissingLegacySourceTableSuccess() throws Exception {
+  public void shouldPassWithMissingLegacySourceTable() throws Exception {
     ScreeningToReferral toValidate = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/missingLegacySourceTable.json"),
         ScreeningToReferral.class);
@@ -326,66 +368,75 @@ public class ScreeningToReferralTest {
   }
 
   @Test
-  public void testWithEmptyLegacyReferralIdSuccess() throws Exception {
+  public void shouldPassWithEmptyLegacyReferralId() throws Exception {
     ScreeningToReferral toValidate =
         new ScreeningToReferralResourceBuilder().setReferralId("").createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithNullLegacyReferralIdSuccess() throws Exception {
+  public void shouldPassWithNullLegacyReferralId() throws Exception {
     ScreeningToReferral toValidate =
         new ScreeningToReferralResourceBuilder().setReferralId(null).createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithMissingLegacyReferralIdSuccess() throws Exception {
+  public void shouldPassWithMissingLegacyReferralId() throws Exception {
     ScreeningToReferral toValidate = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/missingReferralId.json"),
         ScreeningToReferral.class);
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testLegacyIdTooLongFail() throws Exception {
+  public void shouldFailWhenReferralIdTooLong() throws Exception {
     ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder()
         .setReferralId("pouhG568F11").createScreeningToReferral();
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(1, constraintViolations.size());
-    assertEquals("size must be between 0 and 10",
-        constraintViolations.iterator().next().getMessage());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("referralId size must be between 0 and 10")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
-  public void testWithoutPerpetratorParticipantSuccess() throws Exception {
+  public void shouldPassWithoutPerpetratorParticipant() throws Exception {
     ScreeningToReferral toValidate = MAPPER.readValue(
         fixture("fixtures/domain/ScreeningToReferral/valid/withoutPerpetratorParticipant.json"),
         ScreeningToReferral.class);
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(toValidate);
-    assertEquals(0, constraintViolations.size());
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(toValidate));
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
   @Test
-  public void testWithInvalidCountySpecificCodeFails() throws Exception {
+  public void shouldFailWithInvalidCountySpecificCode() throws Exception {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setIncidentCounty("XX").createScreeningToReferral();
-
-    Set<ConstraintViolation<ScreeningToReferral>> constraintViolations =
-        validator.validate(screeningToReferral);
-
-    assertEquals(1, constraintViolations.size());
-    assertEquals("must be a valid logical id code for category GVR_ENTC",
-        constraintViolations.iterator().next().getMessage());
-
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(screeningToReferral));
+    Boolean theErrorDetected = false;
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+//      System.out.println(message.getMessage());
+      if (message.getMessage().equals("incidentCounty must be a valid logical id code for category GVR_ENTC")) {
+        theErrorDetected = true;
+      }
+    }
+    assertThat(theErrorDetected, is(true));
   }
 
   @Test
@@ -535,24 +586,6 @@ public class ScreeningToReferralTest {
         .setLimitedAccessCode(null).createScreeningToReferral();
     assertFalse("Expected access to not be limited", screeningToReferral.isAccessLimited());
 
-  }
-
-  private ScreeningToReferral validScreeningToReferral() {
-    ScreeningToReferral str = null;
-    try {
-      str = MAPPER.readValue(
-          fixture("fixtures/domain/ScreeningToReferral/valid/validDomainScreeningToReferral.json"),
-          ScreeningToReferral.class);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-      return null;
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-      return null;
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return str;
   }
 
   private Address validAddress() {

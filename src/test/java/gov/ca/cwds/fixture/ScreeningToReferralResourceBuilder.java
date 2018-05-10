@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
-import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 
 /**
  * 
@@ -25,28 +25,31 @@ public class ScreeningToReferralResourceBuilder {
   private long id = 1L;
   private String referralId = "";
   private String legacySourceTable = "";
-  private String endedAt = DomainChef.cookDate(new Date());
+//  private String endedAt = DomainChef.cookDate(new Date());
+  private String endedAt = "2016-08-03T01:00:00.000Z";
   private String incidentCounty = "34";
-  private String incidentDate = DomainChef.cookDate(new Date());
+//  private String incidentDate = DomainChef.cookDate(new Date());
+  private String incidentDate = "2016-08-02";
   private String locationType = "Foster Home";
   private Short communicationMethod = 409;
-  private String currentLocationOfChildren = "Location of the child";
+  private String currentLocationOfChildren = "current location of children";
   private String name = "The Rocky Horror Show";
   private String reportNarrative = "Narrative 123 test";
   private String reference = "123ABC";
-  private Short responseTime = 1516;
-  private String startedAt = dateTimeFormat.format(new Date());
+  private Short responseTime = 1520;
+//  private String startedAt = dateTimeFormat.format(new Date());
+  private String startedAt = "2016-08-03T01:00:00.000Z";
   private String assignee = "Michael Bastow";
   private String assigneeStaffId = "0X5";
-  private String additionalInformation = "additional information about the referral";
-  private String screeningDecision = "Response time";
+  private String additionalInformation = "addtional information";
+  private String screeningDecision = "Screening Descision";
   private String screeningDecisionDetail = "Detail";
   private int approvalStatus = 118;
   private boolean familyAwareness = false;
   private boolean filedWithLawEnforcement = false;
   private String responsibleAgency = "C";
   private Short injuryHarmCategory = 2178;
-  private String limitedAccessCode = "N";
+  private String limitedAccessCode = "S";
   private String limitedAccessDescription = "";
   private String limitedAccessAgency = "23";
   private Date limitedAccessDate = null;
@@ -54,20 +57,22 @@ public class ScreeningToReferralResourceBuilder {
   private Set<Participant> participants;
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports;
   private Set<gov.ca.cwds.rest.api.domain.Allegation> allegations;
-
+  private SafetyAlerts safetyAlerts;
+ 
   public ScreeningToReferralResourceBuilder() {
     address = new AddressResourceBuilder().createAddress();
-    Participant victim = new ParticipantResourceBuilder().setGender("M").createVictimParticipant();
-    Participant perp = new ParticipantResourceBuilder().setGender("F").createPerpParticipant();
+    Participant victim = new ParticipantResourceBuilder().setFirstName("Victim").setGender("M").createVictimParticipant();
+    Participant perp = new ParticipantResourceBuilder().setFirstName("Perpetrator").setGender("F").createPerpParticipant();
     Participant reporter =
-        new ParticipantResourceBuilder().setGender("M").createReporterParticipant();
+        new ParticipantResourceBuilder().setFirstName("Reporter").setGender("F").createReporterParticipant();
     this.participants = new HashSet<>(Arrays.asList(victim, perp, reporter));
     gov.ca.cwds.rest.api.domain.CrossReport crossReport =
         new CrossReportResourceBuilder().createCrossReport();
     this.crossReports = new HashSet<>(Arrays.asList(crossReport));
     gov.ca.cwds.rest.api.domain.Allegation allegation =
-        new AllegationResourceBuilder().setInjuryHarmType(injuryHarmCategory).createAllegation();
+        new AllegationResourceBuilder().setInjuryHarmType(injuryHarmCategory).setPerpetratorPersonId(2).createAllegation();
     this.allegations = new HashSet<>(Arrays.asList(allegation));
+    safetyAlerts = new SafetyAlerts();
 
   }
 
@@ -173,6 +178,14 @@ public class ScreeningToReferralResourceBuilder {
 
   public Short getInjuryHarmCategory() {
     return injuryHarmCategory;
+  }
+  
+  public String getSafetyAlertInformation() {
+    return safetyAlerts.getAlertInformation();
+  }
+  
+  public Set<String> getAlerts() {
+    return safetyAlerts.getAlerts();
   }
 
   public gov.ca.cwds.rest.api.domain.Address getAddress() {
@@ -356,6 +369,16 @@ public class ScreeningToReferralResourceBuilder {
     return this;
   }
 
+  public ScreeningToReferralResourceBuilder setSafetyAlertInformationn(String safetyAlertInformation) {
+    this.safetyAlerts.setAlertInformation(safetyAlertInformation);
+    return this;
+  }
+  
+  public ScreeningToReferralResourceBuilder setSafetyAlerts(Set<String> safetyAlerts) {
+    this.safetyAlerts.setAlerts(safetyAlerts);
+    return this;
+  }
+
   public ScreeningToReferralResourceBuilder setAddress(
       gov.ca.cwds.rest.api.domain.Address address) {
     this.address = address;
@@ -385,7 +408,9 @@ public class ScreeningToReferralResourceBuilder {
         reportNarrative, reference, responseTime, startedAt, assignee, assigneeStaffId,
         additionalInformation, screeningDecision, screeningDecisionDetail, approvalStatus,
         familyAwareness, filedWithLawEnforcement, responsibleAgency, limitedAccessCode,
-        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, address, participants,
+        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, safetyAlerts.getAlerts(), 
+        safetyAlerts.getAlertInformation(),
+        address, participants,
         crossReports, allegations);
   }
 }

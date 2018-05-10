@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 
@@ -58,6 +59,8 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
    * @param limitedAccessDescription - description of sensitivity
    * @param limitedAccessAgency - agency that set sensitivity
    * @param limitedAccessDate - date that sensitivity was set
+   * @param alerts - alerts
+   * @param alertInformation - alertInformation
    * @param address - address of referral
    * @param participants - participants of the referral
    * @param crossReports - cross reports
@@ -71,14 +74,15 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
       String screeningDecision, String screeningDecisionDetail, int approvalStatus,
       boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
       String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
-      java.util.Date limitedAccessDate, Address address, Set<Participant> participants,
+      java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
+      Address address, Set<Participant> participants,
       Set<CrossReport> crossReports, Set<Allegation> allegations) {
     super(id, legacySourceTable, referralId, endedAt, incidentCounty, incidentDate, locationType,
         communicationMethod, currentLocationOfChildren, name, reportNarrative, reference,
         responseTime, startedAt, assignee, assigneeStaffId, additionalInformation,
         screeningDecision, screeningDecisionDetail, approvalStatus, familyAwareness,
         filedWithLawEnforcement, responsibleAgency, limitedAccessCode, limitedAccessDescription,
-        limitedAccessAgency, limitedAccessDate, address, participants, crossReports, allegations);
+        limitedAccessAgency, limitedAccessDate, alerts, alertInformation, address, participants, crossReports, allegations);
   }
 
   /**
@@ -103,7 +107,8 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
         referral.getApprovalStatus(), referral.isFamilyAwareness(),
         referral.isFiledWithLawEnforcement(), referral.getResponsibleAgency(),
         referral.getLimitedAccessCode(), referral.getLimitedAccessDescription(),
-        referral.getLimitedAccessAgency(), referral.getLimitedAccessDate(), referral.getAddress(),
+        referral.getLimitedAccessAgency(), referral.getLimitedAccessDate(), 
+        referral.getAlerts(), referral.getAlertInformation(), referral.getAddress(),
         resultParticipants, resultCrossReports, resultAllegations);
   }
 }
