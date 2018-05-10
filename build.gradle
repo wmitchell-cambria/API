@@ -379,7 +379,7 @@ task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
 }
 
 task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest,
-                          pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest ) {
+                          pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest] ) {
    doLast {
 	 println 'Published'
    }
