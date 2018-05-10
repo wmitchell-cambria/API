@@ -181,14 +181,8 @@ public class ParticipantService implements CrudsService {
       updateClient(screeningToReferral, messageBuilder, incomingParticipant, clientId);
     }
 
-    Client client = this.clientService.find(clientId);
-    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
-    r00834AgeUnitRestriction.execute();
-    String ageNumber = r00834AgeUnitRestriction.getAge();
-    String agePeriodCode = r00834AgeUnitRestriction.getAgeUnits();
-
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
-        clientId, ageNumber, agePeriodCode);
+        clientId);
     /*
      * determine other participant/roles attributes relating to CWS/CMS allegation
      */
@@ -241,7 +235,7 @@ public class ParticipantService implements CrudsService {
 
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
       String referralId, MessageBuilder messageBuilder, Participant incomingParticipant,
-      String clientId, String ageNumber, String agePeriodCode) {
+      String clientId) {
     boolean dispositionCode =
         new R00824SetDispositionCode(screeningToReferral, incomingParticipant).isValid();
     boolean staffPersonAddedIndicator =
@@ -251,7 +245,15 @@ public class ParticipantService implements CrudsService {
         ParticipantValidator.selfReported(incomingParticipant), staffPersonAddedIndicator,
         dispositionCode ? ASSESMENT : "", referralId, clientId,
         screeningToReferral.getIncidentCounty(), LegacyDefaultValues.DEFAULT_APPROVAL_STATUS_CODE,
-        StringUtils.isNotBlank(ageNumber) ? Short.parseShort(ageNumber) : 0, agePeriodCode);
+        StringUtils.isNotBlank(incomingParticipant.getApproximateAge())
+            ? Short.parseShort(incomingParticipant.getApproximateAge())
+            : 0,
+        incomingParticipant.getApproximateAgeUnits());
+
+    Client client = this.clientService.find(clientId);
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
+    r00834AgeUnitRestriction.execute();
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
     try {

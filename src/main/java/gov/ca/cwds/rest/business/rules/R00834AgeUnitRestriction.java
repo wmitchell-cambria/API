@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.Client;
+import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.business.RuleAction;
 
 /**
@@ -29,14 +30,17 @@ import gov.ca.cwds.rest.business.RuleAction;
 public class R00834AgeUnitRestriction implements RuleAction {
 
   private Client client;
+  private ReferralClient referralClient;
   private String age;
   private String ageUnits;
 
   /**
    * @param client - client
+   * @param referralClient - referralClient
    */
-  public R00834AgeUnitRestriction(Client client) {
+  public R00834AgeUnitRestriction(Client client, ReferralClient referralClient) {
     this.client = client;
+    this.referralClient = referralClient;
   }
 
   @Override
@@ -51,8 +55,9 @@ public class R00834AgeUnitRestriction implements RuleAction {
       long noOfDays = TimeUnit.DAYS.convert(creationDate.getTime() - birthDate.getTime(),
           TimeUnit.MILLISECONDS);
       calculateAgeByDob(noOfDays);
+      referralClient.setAgeNumber(Short.parseShort(age));
+      referralClient.setAgePeriodCode(ageUnits);
     }
-
   }
 
   private void calculateAgeByDob(long noOfDays) {
@@ -69,20 +74,6 @@ public class R00834AgeUnitRestriction implements RuleAction {
       age = Long.toString(noOfDays);
       ageUnits = CalendarEnum.DAYS.getName();
     }
-  }
-
-  /**
-   * @return the age
-   */
-  public String getAge() {
-    return age;
-  }
-
-  /**
-   * @return the ageUnits
-   */
-  public String getAgeUnits() {
-    return ageUnits;
   }
 
 }

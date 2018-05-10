@@ -8,7 +8,9 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 
 import gov.ca.cwds.fixture.ClientResourceBuilder;
+import gov.ca.cwds.fixture.ReferralClientResourceBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Client;
+import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.business.rules.R00834AgeUnitRestriction;
 
 /**
@@ -23,10 +25,13 @@ public class R00834AgeUnitRestrictionTest {
   @Test
   public void TestClientDObisNull() {
     Client client = new ClientResourceBuilder().setBirthDate(null).setEstimatedDobCode("Y").build();
-    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setAgeNumber(null)
+        .setAgePeriodCode(null).buildReferralClient();
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
     r00834AgeUnitRestriction.execute();
-    assertThat(r00834AgeUnitRestriction.getAge(), is(nullValue()));
-    assertThat(r00834AgeUnitRestriction.getAgeUnits(), is(nullValue()));
+    assertThat(referralClient.getAgeNumber(), is(nullValue()));
+    assertThat(referralClient.getAgePeriodCode(), is(equalTo("")));
   }
 
   /**
@@ -36,10 +41,13 @@ public class R00834AgeUnitRestrictionTest {
   public void TestWhenAgeAndAgeUnitSetYears() {
     Client client = new ClientResourceBuilder().setBirthDate("2005-05-07").setEstimatedDobCode("N")
         .setCreationDate("2018-05-07").build();
-    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setAgeNumber(null)
+        .setAgePeriodCode(null).buildReferralClient();
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
     r00834AgeUnitRestriction.execute();
-    assertThat(r00834AgeUnitRestriction.getAge(), is(equalTo("13")));
-    assertThat(r00834AgeUnitRestriction.getAgeUnits(), is(equalTo("Y")));
+    assertThat(referralClient.getAgeNumber(), is(equalTo((short) 13)));
+    assertThat(referralClient.getAgePeriodCode(), is(equalTo("Y")));
   }
 
   /**
@@ -49,10 +57,13 @@ public class R00834AgeUnitRestrictionTest {
   public void TestWhenAgeAndAgeUnitSetMonths() {
     Client client = new ClientResourceBuilder().setBirthDate("2017-12-07").setEstimatedDobCode("N")
         .setCreationDate("2018-05-07").build();
-    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setAgeNumber(null)
+        .setAgePeriodCode(null).buildReferralClient();
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
     r00834AgeUnitRestriction.execute();
-    assertThat(r00834AgeUnitRestriction.getAge(), is(equalTo("5")));
-    assertThat(r00834AgeUnitRestriction.getAgeUnits(), is(equalTo("M")));
+    assertThat(referralClient.getAgeNumber(), is(equalTo((short) 5)));
+    assertThat(referralClient.getAgePeriodCode(), is(equalTo("M")));
   }
 
   /**
@@ -62,10 +73,13 @@ public class R00834AgeUnitRestrictionTest {
   public void TestWhenAgeAndAgeUnitSetWeeks() {
     Client client = new ClientResourceBuilder().setBirthDate("2018-04-10").setEstimatedDobCode("N")
         .setCreationDate("2018-05-07").build();
-    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setAgeNumber(null)
+        .setAgePeriodCode(null).buildReferralClient();
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
     r00834AgeUnitRestriction.execute();
-    assertThat(r00834AgeUnitRestriction.getAge(), is(equalTo("3")));
-    assertThat(r00834AgeUnitRestriction.getAgeUnits(), is(equalTo("W")));
+    assertThat(referralClient.getAgeNumber(), is(equalTo((short) 3)));
+    assertThat(referralClient.getAgePeriodCode(), is(equalTo("W")));
   }
 
   /**
@@ -75,10 +89,13 @@ public class R00834AgeUnitRestrictionTest {
   public void TestWhenAgeAndAgeUnitSetDays() {
     Client client = new ClientResourceBuilder().setBirthDate("2018-05-01").setEstimatedDobCode("N")
         .setCreationDate("2018-05-07").build();
-    R00834AgeUnitRestriction r00834AgeUnitRestriction = new R00834AgeUnitRestriction(client);
+    ReferralClient referralClient = new ReferralClientResourceBuilder().setAgeNumber(null)
+        .setAgePeriodCode(null).buildReferralClient();
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
     r00834AgeUnitRestriction.execute();
-    assertThat(r00834AgeUnitRestriction.getAge(), is(equalTo("6")));
-    assertThat(r00834AgeUnitRestriction.getAgeUnits(), is(equalTo("D")));
+    assertThat(referralClient.getAgeNumber(), is(equalTo((short) 6)));
+    assertThat(referralClient.getAgePeriodCode(), is(equalTo("D")));
   }
 
 }
