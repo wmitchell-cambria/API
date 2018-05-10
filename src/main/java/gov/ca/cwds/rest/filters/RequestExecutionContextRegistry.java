@@ -9,7 +9,7 @@ public class RequestExecutionContextRegistry {
 
   private static final ThreadLocal<RequestExecutionContext> pegged = new ThreadLocal<>();
 
-  // TODO: Create callback registry for stop and start.
+  // Create callback registry for stop and start.
 
   /**
    * Register RequestExecutionContext with ThreadLocal
