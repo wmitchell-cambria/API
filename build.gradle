@@ -16,8 +16,9 @@ plugins {
     id 'application'
     id 'net.ltgt.apt' version '0.9'
     id "org.sonarqube" version "2.2.1"
-    id 'com.github.jk1.dependency-license-report' version '0.3.14'
 }
+
+apply plugin: 'com.github.jk1.dependency-license-report'
 
 apply plugin: 'maven-publish'
 apply plugin: 'docker'
@@ -282,25 +283,34 @@ sonarqube {
   }
 }
 
+import com.github.jk1.license.render.*
 licenseReport {
-    renderer = new CWDSReportRenderer()
+    renderers = [new XmlReportRenderer(), new CwdsCsvReportRenderer(), new InventoryHtmlReportRenderer()]
+    excludeGroups = ['gov.ca.cwds.api.libs']
 }
 
+
+def licenceFolder = 'build/reports/dependency-license'
 task libLicenceFolders(type: Copy){
-    from 'build/reports/dependency-license'
+    from licenceFolder
     into 'legal/licenses'
-    exclude "licenses.html"
-    exclude "licenses.txt"
+    exclude "index.html"
+    exclude "index.xml"
+    exclude "licenses.csv"
 }
 
 task libLicenseReportFiles(type: Copy){
-    from 'build/reports/dependency-license'
+    from licenceFolder
     into 'legal'
-    include "licenses.html"
-    include "licenses.txt"
+    include "index.html"
+    include "index.xml"
+    include "licenses.csv"
 }
 
-task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders, libLicenseReportFiles] ){
+
+task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders,
+                                 libLicenseReportFiles ] ){
+    println ("\n\n License files are generated in : ${licenceFolder}")
 }
 
 task copyConfig(type: Copy) {
@@ -320,286 +330,59 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
     tagVersion = version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
 }
 
+task createFunctionalTestDockerImage (type:Exec, dependsOn: shadowJar) {
+  //commandLine 'docker',  'build',  '-t',  'cwds/api-functional-test', '-f', 'DockerfileIntegrationTest', '.'
+  commandLine 'docker', 'build', '--file', 'docker/DockerfileTests',  '-t', 'cwds/api-functional-test', '.'
+}
+
 task createIntegrationTestDockerImage (type:Exec, dependsOn: shadowJar) {
-    commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileTests', '.'
 }
 
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
   commandLine 'docker',  'build',  '-t',  'cwds/api', '-f', 'Dockerfile', '.'
 }
 
+task tagFunctionalTestDockerImage(type:Exec, dependsOn: createFunctionalTestDockerImage) {
+    commandLine 'docker',  'tag',  'cwds/api-functional-test',  "cwds/api-functional-test:$dockerTag"
+}
+
 task tagIntegrationTestDockerImage(type:Exec, dependsOn: createIntegrationTestDockerImage) {
-    commandLine 'docker',  'tag',  'cwds/api-integration-test',  "cwds/api-integration-test:$dockerTag"
+  commandLine 'docker',  'tag',  'cwds/api-integration-test',  "cwds/api-integration-test:$dockerTag"
 }
 
 task tagDockerImage(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'tag',  'cwds/api',  "cwds/api:$dockerTag"
 }
 
+task pushFunctionalTestDockerLatest(type:Exec, dependsOn: createFunctionalTestDockerImage) {
+  commandLine 'docker',  'push',  'cwds/api-functional-test:latest'
+}
+
 task pushIntegrationTestDockerLatest(type:Exec, dependsOn: createIntegrationTestDockerImage) {
-    commandLine 'docker',  'push',  'cwds/api-integration-test:latest'
+  commandLine 'docker',  'push',  'cwds/api-integration-test:latest'
 }
 
 task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'push',  'cwds/api:latest'
 }
 
+task pushFunctionalTestDockerVersionTagged(type:Exec, dependsOn: tagFunctionalTestDockerImage) {
+  commandLine 'docker',  'push',  "cwds/api-functional-test:$dockerTag"
+}
+
 task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagIntegrationTestDockerImage) {
-    commandLine 'docker',  'push',  "cwds/api-integration-test:$dockerTag"
+  commandLine 'docker',  'push',  "cwds/api-integration-test:$dockerTag"
 }
 
 task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
   commandLine 'docker',  'push',  "cwds/api:$dockerTag"
 }
 
-task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest, pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest]) {
-   doLast { 
+task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest,
+                          pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest,
+                          pushFunctionalTestDockerVersionTagged, pushFunctionalTestDockerLatest]) {
+   doLast {
 	 println 'Published'
    }
-}
-
-//==================================================================================================
-// Custom Groovy classes for Licence Reports.
-// Move to own classes outside of build.
-import org.gradle.api.Project;
-import com.github.jk1.license.License;
-import com.github.jk1.license.LicenseReportPlugin;
-import com.github.jk1.license.ManifestData;
-import com.github.jk1.license.ModuleData;
-import com.github.jk1.license.PomData;
-import com.github.jk1.license.ProjectData;
-import com.github.jk1.license.render.ReportRenderer;
-
-public class CWDSReportRenderer implements ReportRenderer {
-
-    @Override
-    void render(ProjectData data) {
-        new CWDSTextReportRenderer().render(data)
-        new CWDSHtmlReportRenderer().render(data)
-
-    }
-}
-public class CWDSTextReportRenderer implements ReportRenderer {
-
-  private Project project
-  private LicenseReportPlugin.LicenseReportExtension config
-  private File output
-  private int counter
-  private String fileName
-
-  CWDSTextReportRenderer(String filename = 'licenses.txt'){
-      this.fileName = filename
-  }
-  public void render(ProjectData data) {
-        project = data.project
-        config = project.licenseReport
-        output = new File(config.outputDir, fileName)
-        output.text = """
-================================================================
-       Dependency License Report for $project.name ${if (!'unspecified'.equals(project.version))
-            project.version else ''}
-================================================================
-"""
-      output doLast "\n\n"
-        printDependencies(data)
-        output doLast """
-This report was generated at ${new Date()}.
-"""
-    }
-
-    private void printDependencies(ProjectData data) {
-        data.allDependencies.sort().each {
-            printDependency(it)
-        }
-    }
-
-    private String printDependency(ModuleData data) {
-        boolean projectUrlDone = false
-        if (data.name) output doLast "License Name: $data.name "
-        if (data.version) output doLast " Version: $data.version\n\n"
-
-        if (data.poms.isEmpty() && data.manifests.isEmpty()) {
-            output doLast "No license information found\n\n"
-            return
-        }
-
-        if (!data.manifests.isEmpty() && !data.poms.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            PomData pomData = data.poms.first()
-            if (manifest.url && pomData.projectUrl && manifest.url == pomData.projectUrl) {
-                output doLast "Project URL: $manifest.url\n\n"
-                projectUrlDone = true
-            }
-        }
-
-        if (!data.manifests.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            if (manifest.url && !projectUrlDone) {
-                output doLast "Manifest Project URL: $manifest.url\n\n"
-            }
-            if (manifest.license) {
-                if (manifest.license.startsWith("http")) {
-                    output doLast "Manifest license URL: $manifest.license\n\n"
-                } else if (manifest.hasPackagedLicense) {
-                    output doLast "Packaged License File: $manifest.license\n\n"
-                } else {
-                    output doLast "Manifest License: $manifest.license (Not packaged)\n\n"
-                }
-            }
-        }
-
-        if (!data.poms.isEmpty()) {
-            PomData pomData = data.poms.first()
-            if (pomData.projectUrl && !projectUrlDone) {
-                output doLast "POM Project URL: $pomData.projectUrl\n\n"
-            }
-            if (pomData.licenses) {
-                pomData.licenses.each { License license ->
-                    output doLast "POM License: $license.name"
-                    if (license.url) {
-                        if (license.url.startsWith("http")) {
-                            output doLast " - $license.url\n\n"
-                        } else {
-                            output doLast "License: $license.url\n\n"
-                        }
-                    }
-                }
-            }
-        }
-        if (!data.licenseFiles.isEmpty() && !data.licenseFiles.first().files.isEmpty()) {
-            output doLast 'Embedded license: '
-            output doLast "\n\n"
-            output doLast data.licenseFiles.first().files.collect({ "                    " +
-                    "****************************************\n\n \t\t\t$it\n\n" + new
-                    File("$config.outputDir/$it").text + "\n"}).join('')
-        }
-        output doLast
-                "\n\n================================================================================\n\n"
-    }
-}
-
-
-import com.github.jk1.license.LicenseReportPlugin.LicenseReportExtension
-class CWDSHtmlReportRenderer implements ReportRenderer {
-
-    private Project project
-    private LicenseReportExtension config
-    private File output
-    private int counter
-    private String fileName
-    private String libLicenseUrl
-
-    CWDSHtmlReportRenderer(String libLicenseUrl = "licenses",String fileName = 'licenses.html') {
-        this.fileName = fileName
-        this.libLicenseUrl = libLicenseUrl
-    }
-
-    public void render(ProjectData data) {
-        project = data.project
-        config = project.licenseReport
-        output = new File(config.outputDir, fileName)
-        output.text = """
-<html>
-<head>
-<title>Dependency License Report for $project.name</title>
-<style>
-    table, th, td { border: 1px solid black; }
-</style>
-<head>
-<body>
-<h1>Dependency License Report for $project.name ${if (!'unspecified'.equals(project.version)) project.version else ''}</h1>
-"""
-        printDependencies(data)
-        output doLast """
-<hr />
-<p id="timestamp">This report was generated at <em>${new Date()}</em>.</p>
-</body>
-</html>
-"""
-    }
-
-    private void printDependencies(ProjectData data) {
-        output doLast "<table >"
-        output doLast "<hr><th>name</th><th>project url</th><th>license</th>" +
-                       "<th>Embeded License</th></hr>"
-        data.allDependencies.sort().each {
-            output doLast "<tr>"
-            printDependency(it)
-            output doLast "</tr>"
-        }
-        output doLast "</table>"
-    }
-
-    private String printDependency(ModuleData data) {
-        boolean projectUrlDone = false
-        String name = ""
-        String urls = ""
-        String licenses = ""
-        name += "<p><strong> ${++counter}.</strong> "
-        if (data.name) name += "$data.name "
-        name += "</p>"
-
-        if (data.poms.isEmpty() && data.manifests.isEmpty()) {
-            name += "<p><strong>No license information found</strong></p>"
-        }
-
-        if (!data.manifests.isEmpty() && !data.poms.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            PomData pomData = data.poms.first()
-            if (manifest.url && pomData.projectUrl && manifest.url == pomData.projectUrl) {
-                urls += "<p> <code><a href=\"$manifest.url\">$manifest.url</a></code></p>"
-                projectUrlDone = true
-            }
-        }
-
-        if (!data.manifests.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            if (manifest.url && !projectUrlDone) {
-                urls += "<p> <code><a href=\"$manifest.url\">$manifest.url</a></code></p>"
-            }
-            if (manifest.license) {
-                if (manifest.license.startsWith("http")) {
-                    licenses += "<p><strong>Manifest license URL:</strong> <a href=\"$manifest.license\">$manifest.license</a></p>"
-                } else if (manifest.hasPackagedLicense) {
-                    licenses += "<p><strong>Manifest license URL:</strong> <a href=\"$manifest.url\">$manifest.license</a></p>"
-                } else {
-                    licenses += "<p><strong>Manifest license URL:</strong>$manifest.license (Not packaged)</p>"
-                }
-            }
-        }
-
-        if (!data.poms.isEmpty()) {
-            PomData pomData = data.poms.first()
-            if (pomData.projectUrl && !projectUrlDone) {
-                urls += "<p> <code><a href=\"$pomData.projectUrl\">$pomData.projectUrl</a></code></p>"
-            }
-            if (pomData.licenses) {
-                pomData.licenses.each { License license ->
-                    licenses += "<p><strong>POM License: $license.name</strong>"
-                    if (license.url) {
-                        if (license.url.startsWith("http")) {
-                            licenses += " - <a href=\"$license.url\">$license.url</a>"
-                        } else {
-                            licenses += "<p> $license.url</p>"
-                        }
-                    }
-                }
-            }
-        }
-
-        output doLast "<td>$name</td>"
-        output doLast "<td>$urls</td>"
-        output doLast "<td>$licenses</td>"
-
-        output doLast "<td>"
-        if (!data.licenseFiles.isEmpty() && !data.licenseFiles.first().files.isEmpty()) {
-            output doLast '<p>'
-            output doLast data.licenseFiles.first().files.collect({ "<a " +
-                    "href=\"$libLicenseUrl/$it\">$it</a>" +
-                    " " +
-                    "" }).join('')
-            output doLast '</p>'
-        }
-        output doLast "</td>"
-    }
 }
