@@ -1,13 +1,15 @@
 package gov.ca.cwds.rest.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
@@ -16,7 +18,6 @@ import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.Type;
 
 /**
  * {@link DomainObject} representing a screening.
@@ -31,49 +32,40 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   @JsonProperty("id")
   @Size(min = 1, max = 50)
-  @ApiModelProperty(value = "Screening ID",
-      example = "ABC1234568")
+  @ApiModelProperty(value = "Screening ID", example = "ABC1234568")
   private String id;
 
   @JsonProperty("referral_id")
   @Size(min = 10, max = 10)
-  @ApiModelProperty(value = "Referral ID",
-      example = "ABC1234568")
+  @ApiModelProperty(value = "Referral ID", example = "ABC1234568")
   private String referralId;
 
   @JsonProperty("name")
-  @ApiModelProperty(value = "Screening Name",
-      example = "Some Screening name")
+  @ApiModelProperty(value = "Screening Name", example = "Some Screening name")
   private String name;
 
   @JsonProperty("reference")
-  @ApiModelProperty(value = "Screening Reference",
-      example = "Screening Reference")
+  @ApiModelProperty(value = "Screening Reference", example = "Screening Reference")
   private String reference;
 
   @JsonProperty("screening_decision")
-  @ApiModelProperty(value = "Screening Decision",
-      example = "Screening Decision")
+  @ApiModelProperty(value = "Screening Decision", example = "Screening Decision")
   private String screeningDecision;
 
   @JsonProperty("screening_decision_detail")
-  @ApiModelProperty(value = "Screening Decision Detail",
-      example = "Screening Decision Detail")
+  @ApiModelProperty(value = "Screening Decision Detail", example = "Screening Decision Detail")
   private String screeningDecisionDetail;
 
   @JsonProperty("assignee")
-  @ApiModelProperty(value = "Screening Assignee",
-      example = "Screening Assignee")
+  @ApiModelProperty(value = "Screening Assignee", example = "Screening Assignee")
   private String assignee;
 
   @JsonProperty("assignee_staff_id")
-  @ApiModelProperty(value = "Screening Assignee Id",
-      example = "con")
+  @ApiModelProperty(value = "Screening Assignee Id", example = "con")
   private String assigneeStaffId;
 
   @JsonProperty("started_at")
-  @ApiModelProperty(value = "Screening Start Date",
-      example = "1992-06-18")
+  @ApiModelProperty(value = "Screening Start Date", example = "1992-06-18")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @Date(format = "yyyy-MM-dd")
   private String startedAt;
@@ -104,6 +96,10 @@ public class Screening extends ReportingDomain implements Request, Response {
   @JsonProperty("location_type")
   @ApiModelProperty(value = "Location Type", example = "Child's Home")
   private String locationType;
+
+  @JsonProperty("current_location_of_children")
+  @ApiModelProperty(value = "Location Of Children", example = "Home with father mother")
+  private String currentLocationOfChildren;
 
   @JsonProperty("communication_method")
   @ApiModelProperty(value = "Communication Method", example = "email")
@@ -397,6 +393,22 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   public void setParticipantIntakeApis(Set<ParticipantIntakeApi> participantIntakeApis) {
     this.participantIntakeApis = participantIntakeApis;
+  }
+
+
+
+  /**
+   * @return the currentLocationOfChildren
+   */
+  public String getCurrentLocationOfChildren() {
+    return currentLocationOfChildren;
+  }
+
+  /**
+   * @param currentLocationOfChildren the currentLocationOfChildren to set
+   */
+  public void setCurrentLocationOfChildren(String currentLocationOfChildren) {
+    this.currentLocationOfChildren = currentLocationOfChildren;
   }
 
   /**
