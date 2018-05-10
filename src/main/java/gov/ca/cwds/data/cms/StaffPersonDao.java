@@ -37,12 +37,12 @@ public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
    * @return map where key is a StaffPerson id and value is a StaffPerson itself
    */
   public Map<String, StaffPerson> findByIds(Collection<String> ids) {
-    @SuppressWarnings("unchecked")
-    final Query<StaffPerson> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(constructNamedQueryName("findByIds")).setParameter("ids", ids);
     if (ids == null || ids.isEmpty()) {
       return new HashMap<>();
     }
+    @SuppressWarnings("unchecked")
+    final Query<StaffPerson> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(constructNamedQueryName("findByIds")).setParameter("ids", ids);
     return query.list().stream().collect(Collectors.toMap(StaffPerson::getId, s -> s));
   }
 

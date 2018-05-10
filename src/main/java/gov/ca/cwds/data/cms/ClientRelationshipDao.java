@@ -71,13 +71,13 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
    */
   public Map<String, Collection<ClientRelationship>> findByPrimaryClientIds(
       Collection<String> clientIds) {
+    if (clientIds == null || clientIds.isEmpty()) {
+      return new HashMap<>();
+    }
     @SuppressWarnings("unchecked") final Query<ClientRelationship> query = this.getSessionFactory()
         .getCurrentSession()
         .getNamedQuery(FIND_CLIENT_RELATIONSHIPS_BY_PRIMARY_CLIENT_IDS);
     query.setParameter("clientIds", clientIds);
-    if (clientIds == null || clientIds.isEmpty()) {
-      return new HashMap<>();
-    }
     Map<String, Collection<ClientRelationship>> relationships = new HashMap<>(clientIds.size());
     for (ClientRelationship rel : query.list()) {
       if (!relationships.containsKey(rel.getPrimaryClientId())) {
@@ -94,13 +94,13 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
    */
   public Map<String, Collection<ClientRelationship>> findBySecondaryClientIds(
       Collection<String> clientIds) {
+    if (clientIds == null || clientIds.isEmpty()) {
+      return new HashMap<>();
+    }
     @SuppressWarnings("unchecked") final Query<ClientRelationship> query = this.getSessionFactory()
         .getCurrentSession()
         .getNamedQuery(FIND_CLIENT_RELATIONSHIPS_BY_SECONDARY_CLIENT_IDS);
     query.setParameter("clientIds", clientIds);
-    if (clientIds == null || clientIds.isEmpty()) {
-      return new HashMap<>();
-    }
     Map<String, Collection<ClientRelationship>> relationships = new HashMap<>(clientIds.size());
     for (ClientRelationship rel : query.list()) {
       if (!relationships.containsKey(rel.getSecondaryClientId())) {

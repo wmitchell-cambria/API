@@ -34,6 +34,7 @@ import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
+import gov.ca.cwds.rest.business.rules.R00834AgeUnitRestriction;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.business.rules.R04466ClientSensitivityIndicator;
 import gov.ca.cwds.rest.messages.MessageBuilder;
@@ -182,7 +183,6 @@ public class ParticipantService implements CrudsService {
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
         clientId);
-
     /*
      * determine other participant/roles attributes relating to CWS/CMS allegation
      */
@@ -249,6 +249,11 @@ public class ParticipantService implements CrudsService {
             ? Short.parseShort(incomingParticipant.getApproximateAge())
             : 0,
         incomingParticipant.getApproximateAgeUnits());
+
+    Client client = this.clientService.find(clientId);
+    R00834AgeUnitRestriction r00834AgeUnitRestriction =
+        new R00834AgeUnitRestriction(client, referralClient);
+    r00834AgeUnitRestriction.execute();
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
     try {
