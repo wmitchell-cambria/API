@@ -26,14 +26,6 @@ public class R00786VictimAgeRestriction
    */
   public static final int MAX_VICTIM_AGE_YEARS = 18;
 
-  /**
-   * DAYS, WEEKS, MONTHS, YEARS
-   */
-  private static final String DAYS = "D";
-  private static final String WEEKS = "W";
-  private static final String MONTHS = "M";
-  private static final String YEARS = "Y";
-
   /*
    * (non-Javadoc)
    * 
@@ -53,8 +45,7 @@ public class R00786VictimAgeRestriction
   @Override
   public boolean isValid(ScreeningToReferral screening, ConstraintValidatorContext context) {
     boolean valid = true;
-    Collection<Participant> victims =
-        ParticipantUtils.getVictims(screening.getParticipants());
+    Collection<Participant> victims = ParticipantUtils.getVictims(screening.getParticipants());
 
     if (!victims.isEmpty()) {
       // Referral receive timestamp
@@ -95,13 +86,13 @@ public class R00786VictimAgeRestriction
         && StringUtils.isNotBlank(victim.getApproximateAgeUnits())) {
       int age = Integer.parseInt(victim.getApproximateAge());
       String ageUnits = victim.getApproximateAgeUnits();
-      if (YEARS.equalsIgnoreCase(ageUnits)) {
+      if (CalendarEnum.YEARS.getName().equalsIgnoreCase(ageUnits)) {
         return age > MAX_VICTIM_AGE_YEARS;
-      } else if (MONTHS.equalsIgnoreCase(ageUnits)) {
+      } else if (CalendarEnum.MONTHS.getName().equalsIgnoreCase(ageUnits)) {
         return age / 12 > MAX_VICTIM_AGE_YEARS;
-      } else if (WEEKS.equalsIgnoreCase(ageUnits)) {
+      } else if (CalendarEnum.WEEKS.getName().equalsIgnoreCase(ageUnits)) {
         return age / 54 > MAX_VICTIM_AGE_YEARS;
-      } else if (DAYS.equalsIgnoreCase(ageUnits)) {
+      } else if (CalendarEnum.DAYS.getName().equalsIgnoreCase(ageUnits)) {
         return age / 365 > MAX_VICTIM_AGE_YEARS;
       }
     }
