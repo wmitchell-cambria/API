@@ -55,7 +55,7 @@ public class R00834AgeUnitRestriction implements RuleAction {
       long noOfDays = TimeUnit.DAYS.convert(creationDate.getTime() - birthDate.getTime(),
           TimeUnit.MILLISECONDS);
       calculateAgeByDob(noOfDays);
-      referralClient.setAgeNumber(Short.parseShort(age));
+      referralClient.setAgeNumber(Short.valueOf(age));
       referralClient.setAgePeriodCode(ageUnits);
     }
   }
