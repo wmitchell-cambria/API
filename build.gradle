@@ -331,7 +331,6 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
 }
 
 task createFunctionalTestDockerImage (type:Exec, dependsOn: shadowJar) {
-  //commandLine 'docker',  'build',  '-t',  'cwds/api-functional-test', '-f', 'DockerfileIntegrationTest', '.'
   commandLine 'docker', 'build', '--file', 'docker/DockerfileTests',  '-t', 'cwds/api-functional-test', '.'
 }
 
@@ -380,8 +379,7 @@ task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
 }
 
 task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest,
-                          pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest,
-                          pushFunctionalTestDockerVersionTagged, pushFunctionalTestDockerLatest]) {
+                          pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest ) {
    doLast {
 	 println 'Published'
    }
