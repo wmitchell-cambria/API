@@ -25,6 +25,7 @@
       <column name="user_county_code" value="-2"/>
       <column name="restrictions_date" valueDate="2018-03-26"/>
       <column name="indexable" value="false"/>
+      <column name="curr_loc_of_children" value="Home with father mother"/>
     </insert>
   </changeSet>
 </databaseChangeLog>

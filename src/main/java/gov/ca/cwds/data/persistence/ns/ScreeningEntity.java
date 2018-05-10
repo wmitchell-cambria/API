@@ -2,7 +2,6 @@ package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -43,14 +42,10 @@ public class ScreeningEntity implements PersistentObject {
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screenings_id_seq")
-  @GenericGenerator(
-      name = "screenings_id_seq",
+  @GenericGenerator(name = "screenings_id_seq",
       strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
-      parameters = {
-          @org.hibernate.annotations.Parameter(
-              name = "sequence_name", value = "screenings_id_seq")
-      }
-  )
+      parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name",
+          value = "screenings_id_seq")})
   private String id;
 
   @Column(name = "reference")
@@ -123,6 +118,9 @@ public class ScreeningEntity implements PersistentObject {
 
   @Column(name = "indexable")
   private Boolean indexable;
+
+  @Column(name = "curr_loc_of_children")
+  private String currentLocationOfChildren;
 
   @HashCodeExclude
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
@@ -304,6 +302,21 @@ public class ScreeningEntity implements PersistentObject {
 
   public void setIndexable(Boolean indexable) {
     this.indexable = indexable;
+  }
+
+
+  /**
+   * @return the currentLocationOfChildren
+   */
+  public String getCurrentLocationOfChildren() {
+    return currentLocationOfChildren;
+  }
+
+  /**
+   * @param currentLocationOfChildren the currentLocationOfChildren to set
+   */
+  public void setCurrentLocationOfChildren(String currentLocationOfChildren) {
+    this.currentLocationOfChildren = currentLocationOfChildren;
   }
 
   /**

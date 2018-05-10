@@ -14,6 +14,7 @@
   "incident_date": "2018-03-29",
   "indexable": false,
   "location_type": "Child's Home",
+  "current_location_of_children": "Home with father mother",
   "communication_method": "phone",
   "access_restrictions": "acc",
   "restrictions_rationale": "res",
