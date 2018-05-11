@@ -8,7 +8,7 @@ import gov.ca.cwds.rest.api.domain.GovernmentAgency;
  */
 public class GovernmentAgencyResourceBuilder {
 
-  String id = "ABC1234567";
+  String id = "Ad4ATcY00E";
   String type = "LAW_ENFORCEMENT";
 
   /**

@@ -332,6 +332,20 @@ public class ReferralClient extends ReportingDomain implements Request, Response
   }
 
   /**
+   * @param ageNumber - ageNumber
+   */
+  public void setAgeNumber(Short ageNumber) {
+    this.ageNumber = ageNumber;
+  }
+
+  /**
+   * @param agePeriodCode - agePeriodCode
+   */
+  public void setAgePeriodCode(String agePeriodCode) {
+    this.agePeriodCode = agePeriodCode;
+  }
+
+  /**
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()

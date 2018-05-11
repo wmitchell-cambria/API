@@ -254,8 +254,8 @@ public class Address extends ReportingDomain implements Request, Response {
      * respective columns. If the streetAddress is entered only words, it will throw a validation
      * exception to enter the streetNumber.
      */
-    String streetNumber = null;
-    String streetName = null;
+    String streetNumber = "";
+    String streetName = "";
     int index;
     if ((index = address.getStreetAddress().indexOf(' ')) > 0) {
       streetNumber = address.getStreetAddress().substring(0, index);

@@ -16,7 +16,6 @@ import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
  * @author CWDS API team
- *
  */
 public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
 
@@ -37,15 +36,14 @@ public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
    * @return map where key is an intake code and value is an IntakeLOVCodeEntity
    */
   public Map<String, IntakeLOVCodeEntity> findIntakeLOVCodesByIntakeCodes(Set<String> intakeCodes) {
-    @SuppressWarnings("unchecked")
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
-        .setParameter("intakeCodes", intakeCodes);
-    if (intakeCodes != null && !intakeCodes.isEmpty()) {
-      return query.list().stream()
-          .collect(Collectors.toMap(IntakeLOVCodeEntity::getIntakeCode, c -> c));
-    } else {
+    if (intakeCodes == null || intakeCodes.isEmpty()) {
       return new HashMap<>();
     }
+    @SuppressWarnings("unchecked") final Query<IntakeLOVCodeEntity> query = this.getSessionFactory()
+        .getCurrentSession()
+        .getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
+        .setParameter("intakeCodes", intakeCodes);
+    return query.list().stream()
+        .collect(Collectors.toMap(IntakeLOVCodeEntity::getIntakeCode, c -> c));
   }
 }

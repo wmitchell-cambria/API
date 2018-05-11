@@ -238,6 +238,7 @@ public class ParticipantServiceTest {
     when(foundClient.getLastUpdatedTime()).thenReturn(modifiedLastUpdateDate);
 
     PostedClient createdClient = mock(PostedClient.class);
+
     when(createdClient.getId()).thenReturn("LEGACYIDXX");
     when(clientService.find(eq(victimClientLegacyId))).thenReturn(foundClient);
     when(clientService.create(any())).thenReturn(createdClient);
@@ -444,7 +445,7 @@ public class ParticipantServiceTest {
 
     assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
 
-    verify(clientService, never()).find(any());
+    verify(clientService, times(1)).find(any());
     verify(clientService, times(1)).create(any());
 
   }

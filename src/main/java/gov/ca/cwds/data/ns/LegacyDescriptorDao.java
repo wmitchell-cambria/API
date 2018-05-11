@@ -82,6 +82,9 @@ public class LegacyDescriptorDao extends CrudsDaoImpl<LegacyDescriptorEntity> {
 
   private Map<String, LegacyDescriptorEntity> findLegacyDescriptors(Set<String> describableIds,
       String describableType) {
+    if (describableIds == null || describableIds.isEmpty()) {
+      return new HashMap<>();
+    }
     Set<Long> longDescribableIds =
         describableIds.stream().map(Long::valueOf).collect(Collectors.toSet());
     @SuppressWarnings("unchecked")
@@ -89,11 +92,7 @@ public class LegacyDescriptorDao extends CrudsDaoImpl<LegacyDescriptorEntity> {
         .getNamedQuery(LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_IDS_AND_TYPE)
         .setParameter("describableIds", longDescribableIds)
         .setParameter("describableType", describableType);
-    if (!describableIds.isEmpty()) {
-      return query.list().stream()
-          .collect(Collectors.toMap(d -> String.valueOf(d.getDescribableId().longValue()), d -> d));
-    } else {
-      return new HashMap<>();
-    }
+    return query.list().stream()
+        .collect(Collectors.toMap(d -> String.valueOf(d.getDescribableId().longValue()), d -> d));
   }
 }

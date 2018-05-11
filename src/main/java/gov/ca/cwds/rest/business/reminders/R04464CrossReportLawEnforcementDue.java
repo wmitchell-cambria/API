@@ -29,8 +29,8 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
  * <p>
  * BUSINESS RULE: "R - 04464" - TICKLE for Cross Report for Law Enforcement Due
  * 
- * If the Allegation typs is not a general Neglect and substantial risk, crossReport and reporter
- * doesnt have a lawEnforcement Id. Then create this reminder.
+ * If the Allegation types is not a general Neglect and substantial risk, crossReport and reporter
+ * doesn't have a lawEnforcement Id. Then create this reminder.
  * <p>
  * 
  * @author CWDS API Team
