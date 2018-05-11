@@ -47,7 +47,7 @@
          "legacy_table_description": null
       },
     "first_name" : "John",
-    "middle_name" : "T.",
+    "middle_name" : "T",
     "last_name" : "Smith",
     "name_suffix" : "",
     "gender" : "M",
@@ -104,7 +104,7 @@
     "legacy_id" : "1234567ABC",
     "victim_person_id" : 5432,
     "perpetrator_person_id" : 2,
-    "type" : 2179,
-    "county" : "Sacramento"
+    "type" : 2178,
+    "county" : "34"
   } ]
 }

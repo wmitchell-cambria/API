@@ -88,7 +88,6 @@ public class ParticipantTest {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-    Participant validParticipant = this.validParticipant();
     roles.add("Victim");
     racecodes.add((short) 841);
     hispaniccodes.add((short) 3164);
@@ -104,7 +103,9 @@ public class ParticipantTest {
    */
   @Test
   public void serializesToJSON() throws Exception {
-    String expected = MAPPER.writeValueAsString(validParticipant());
+    
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
+    String expected = MAPPER.writeValueAsString(participant);
 
     String serialized = MAPPER.writeValueAsString(MAPPER
         .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class));
@@ -114,11 +115,15 @@ public class ParticipantTest {
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    Participant expected = this.validParticipant();
-
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
+ 
     Participant serialized = MAPPER
         .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class);
-    assertThat(serialized, is(expected));
+    
+    String p = MAPPER.writeValueAsString(participant);
+    String e = MAPPER.writeValueAsString(serialized);
+    
+    assertThat(serialized, is(participant));
   }
 
   @Test
@@ -335,10 +340,6 @@ public class ParticipantTest {
   }
 
   private Participant createParticipantWithRoles(Set<String> roles) {
-    return createParticipant(roles);
-  }
-
-  private Participant validParticipant() {
     return createParticipant(roles);
   }
 

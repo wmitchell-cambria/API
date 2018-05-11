@@ -35,7 +35,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.fixture.AddressResourceBuilder;
+import gov.ca.cwds.fixture.AllegationResourceBuilder;
 import gov.ca.cwds.fixture.CrossReportResourceBuilder;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
@@ -117,18 +120,25 @@ public class ScreeningToReferralTest {
   }
 
   /*
-   * Serialization and deserialization
+   * Serialize
    */
   @Test
   public void shouldSerializeToJSON() throws Exception {
 
-    Address address = validAddress();
-    Participant participant = validParticipant();
+    Address address = new AddressResourceBuilder().createAddress();
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
     participants.add(participant);
     CrossReport crossReport = new CrossReport("", "", "", filedOutOfState, method, informDate,
         countyId, Sets.newHashSet());
     crossReports.add(crossReport);
-    Allegation allegation = validAllegation();
+    Short injuryHarmType = 2178;
+    Allegation allegation = new AllegationResourceBuilder()
+        .setLegacySourceTable("ALLGTN_T")
+        .setLegacyId("1234567ABC")
+        .setPerpetratorPersonId(2)
+        .setInjuryHarmType(injuryHarmType)
+        .createAllegation();
+//    Allegation allegation = validAllegation();
     allegations.add(allegation);
     SafetyAlerts safetyAlerts = new SafetyAlerts();
 
@@ -149,10 +159,13 @@ public class ScreeningToReferralTest {
 
   @Test 
   public void shouldSerializeToJSONwhenSafetyAlertsIncluded() throws Exception {
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
+    participants.add(participant);
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
     String expected = MAPPER.writeValueAsString(new ScreeningToReferralResourceBuilder()
         .setSafetyAlerts(safetyAlerts.getAlerts())
         .setSafetyAlertInformationn(safetyAlerts.getAlertInformation())
+        .setParticipants(participants)
         .createScreeningToReferral());
 
     String serialized = MAPPER.writeValueAsString(
@@ -164,16 +177,23 @@ public class ScreeningToReferralTest {
   @Test
   public void shouldDeserializeFromJSON() throws Exception {
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-    Address address = validAddress();
-    Participant participant = validParticipant();
+    Address address = new AddressResourceBuilder().createAddress();
+    Participant participant = this.validParticipant();
     participants.add(participant);
     CrossReport crossReport = new CrossReport("", "", "", filedOutOfState, method, informDate,
         countyId, Sets.newHashSet());
     crossReports.add(crossReport);
-    Allegation allegation = validAllegation();
+//    Allegation allegation = validAllegation();
+    Short injuryHarmType = 2178;
+    Allegation allegation = new AllegationResourceBuilder()
+        .setLegacySourceTable("ALLGTN_T")
+        .setLegacyId("1234567ABC")
+        .setPerpetratorPersonId(2)
+        .setInjuryHarmType(injuryHarmType)
+        .createAllegation();
     allegations.add(allegation);
     SafetyAlerts safetyAlerts = new SafetyAlerts();
-
+    
     ScreeningToReferral expected = new ScreeningToReferral(id, "", "", "2016-08-03T01:00:00.000Z",
         SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home", communicationMethod,
         currentLocationOfChildren, "The Rocky Horror Show", "Narrative 123 test", "123ABC",
@@ -182,11 +202,14 @@ public class ScreeningToReferralTest {
         responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(), safetyAlerts.getAlertInformation(),
         address, participants, crossReports, allegations);
 
-    ScreeningToReferral serialized =
+    ScreeningToReferral deserialized =
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),
             ScreeningToReferral.class);
 
-    assertThat(serialized, is(expected));
+//    String serializedExpected = MAPPER.writeValueAsString(expected);
+//    String sericalizedUnserialized = MAPPER.writeValueAsString(deserialized);
+    
+    assertThat(deserialized, is(expected));
   }
   
   @Test
@@ -586,26 +609,6 @@ public class ScreeningToReferralTest {
         .setLimitedAccessCode(null).createScreeningToReferral();
     assertFalse("Expected access to not be limited", screeningToReferral.isAccessLimited());
 
-  }
-
-  private Address validAddress() {
-
-    try {
-      Address validAddress =
-          MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class);
-
-      return validAddress;
-
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-      return null;
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-      return null;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return null;
-    }
   }
 
   private Participant validParticipant() {

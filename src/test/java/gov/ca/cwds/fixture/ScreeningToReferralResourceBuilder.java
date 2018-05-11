@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
@@ -25,10 +24,8 @@ public class ScreeningToReferralResourceBuilder {
   private long id = 1L;
   private String referralId = "";
   private String legacySourceTable = "";
-//  private String endedAt = DomainChef.cookDate(new Date());
   private String endedAt = "2016-08-03T01:00:00.000Z";
   private String incidentCounty = "34";
-//  private String incidentDate = DomainChef.cookDate(new Date());
   private String incidentDate = "2016-08-02";
   private String locationType = "Foster Home";
   private Short communicationMethod = 409;
@@ -37,7 +34,6 @@ public class ScreeningToReferralResourceBuilder {
   private String reportNarrative = "Narrative 123 test";
   private String reference = "123ABC";
   private Short responseTime = 1520;
-//  private String startedAt = dateTimeFormat.format(new Date());
   private String startedAt = "2016-08-03T01:00:00.000Z";
   private String assignee = "Michael Bastow";
   private String assigneeStaffId = "0X5";
@@ -61,16 +57,27 @@ public class ScreeningToReferralResourceBuilder {
  
   public ScreeningToReferralResourceBuilder() {
     address = new AddressResourceBuilder().createAddress();
-    Participant victim = new ParticipantResourceBuilder().setFirstName("Victim").setGender("M").createVictimParticipant();
-    Participant perp = new ParticipantResourceBuilder().setFirstName("Perpetrator").setGender("F").createPerpParticipant();
+    Participant victim = new ParticipantResourceBuilder()
+        .setFirstName("Victim")
+        .setGender("M")
+        .createVictimParticipant();
+    Participant perp = new ParticipantResourceBuilder()
+        .setFirstName("Perpetrator")
+        .setGender("F")
+        .createPerpParticipant();
     Participant reporter =
-        new ParticipantResourceBuilder().setFirstName("Reporter").setGender("F").createReporterParticipant();
+        new ParticipantResourceBuilder()
+        .setFirstName("Reporter")
+        .setGender("F")
+        .createReporterParticipant();
     this.participants = new HashSet<>(Arrays.asList(victim, perp, reporter));
     gov.ca.cwds.rest.api.domain.CrossReport crossReport =
         new CrossReportResourceBuilder().createCrossReport();
     this.crossReports = new HashSet<>(Arrays.asList(crossReport));
     gov.ca.cwds.rest.api.domain.Allegation allegation =
-        new AllegationResourceBuilder().setInjuryHarmType(injuryHarmCategory).setPerpetratorPersonId(2).createAllegation();
+        new AllegationResourceBuilder()
+        .setInjuryHarmType(injuryHarmCategory)
+        .createAllegation();
     this.allegations = new HashSet<>(Arrays.asList(allegation));
     safetyAlerts = new SafetyAlerts();
 

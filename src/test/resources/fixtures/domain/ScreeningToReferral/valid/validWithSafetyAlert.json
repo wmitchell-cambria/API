@@ -36,9 +36,9 @@
   },
   "participants" : [ {
     "id" : 5432,
-    "legacy_source_table" : "",
-    "legacy_id" : "",
-    "first_name" : "Victim",
+    "legacy_source_table" : "CLIENT_T",
+    "legacy_id" : "1234567ABC",
+    "first_name" : "John",
     "last_name" : "Smith",
     "gender" : "M",
     "ssn" : "123456789",
@@ -74,10 +74,10 @@
       "legacy_table_name" : null,
       "legacy_table_description" : null
     },
-    "middle_name" : "S",
-    "name_suffix" : "Jr.",
-    "primary_language" : 1271,
-    "secondary_language" : 1253,
+    "middle_name" : "T",
+    "name_suffix" : "",
+    "primary_language" : 1253,
+    "secondary_language" : 1271,
     "screening_id" : 12345,
     "reporter_confidential_waiver" : false,
     "reporter_employer_name" : "Employer Name",
@@ -85,109 +85,7 @@
     "limited_access_code" : "N",
     "approximate_age" : "12",
     "approximate_age_units" : "Y"
-  }, {
-    "id" : 5432,
-    "legacy_source_table" : "",
-    "legacy_id" : "",
-    "first_name" : "Perpetrator",
-    "last_name" : "Smith",
-    "gender" : "F",
-    "ssn" : "123456789",
-    "date_of_birth" : "2001-03-15",
-    "roles" : [ "Perpetrator" ],
-    "addresses" : [ {
-      "legacy_source_table" : "",
-      "legacy_id" : "",
-      "street_address" : "123 First St",
-      "city" : "San Jose",
-      "state" : 1828,
-      "zip" : "94321",
-      "type" : 32,
-      "legacy_descriptor" : {
-        "legacy_id" : null,
-        "legacy_ui_id" : null,
-        "legacy_last_updated" : null,
-        "legacy_table_name" : null,
-        "legacy_table_description" : null
-      }
-    } ],
-    "race_ethnicity" : {
-      "race_codes" : [ 841 ],
-      "unable_to_determine_code" : "A",
-      "hispanic_codes" : [ 3164 ],
-      "hispanic_origin_code" : "X",
-      "hispanic_unable_to_determine_code" : "A"
-    },
-    "legacy_descriptor" : {
-      "legacy_id" : null,
-      "legacy_ui_id" : null,
-      "legacy_last_updated" : null,
-      "legacy_table_name" : null,
-      "legacy_table_description" : null
-    },
-    "middle_name" : "S",
-    "name_suffix" : "Jr.",
-    "primary_language" : 1271,
-    "secondary_language" : 1253,
-    "screening_id" : 12345,
-    "reporter_confidential_waiver" : false,
-    "reporter_employer_name" : "Employer Name",
-    "client_staff_person_added" : false,
-    "limited_access_code" : "N",
-    "approximate_age" : "12",
-    "approximate_age_units" : "Y"
-  }, {
-    "id" : 5432,
-    "legacy_source_table" : "",
-    "legacy_id" : "",
-    "first_name" : "Reporter",
-    "last_name" : "Smith",
-    "gender" : "F",
-    "ssn" : "123456789",
-    "date_of_birth" : "2001-03-15",
-    "roles" : [ "Non-mandated Reporter" ],
-    "addresses" : [ {
-      "legacy_source_table" : "",
-      "legacy_id" : "",
-      "street_address" : "123 First St",
-      "city" : "San Jose",
-      "state" : 1828,
-      "zip" : "94321",
-      "type" : 32,
-      "legacy_descriptor" : {
-        "legacy_id" : null,
-        "legacy_ui_id" : null,
-        "legacy_last_updated" : null,
-        "legacy_table_name" : null,
-        "legacy_table_description" : null
-      }
-    } ],
-    "race_ethnicity" : {
-      "race_codes" : [ 841 ],
-      "unable_to_determine_code" : "A",
-      "hispanic_codes" : [ 3164 ],
-      "hispanic_origin_code" : "X",
-      "hispanic_unable_to_determine_code" : "A"
-    },
-    "legacy_descriptor" : {
-      "legacy_id" : null,
-      "legacy_ui_id" : null,
-      "legacy_last_updated" : null,
-      "legacy_table_name" : null,
-      "legacy_table_description" : null
-    },
-    "middle_name" : "S",
-    "name_suffix" : "Jr.",
-    "primary_language" : 1271,
-    "secondary_language" : 1253,
-    "screening_id" : 12345,
-    "reporter_confidential_waiver" : false,
-    "reporter_employer_name" : "Employer Name",
-    "client_staff_person_added" : false,
-    "limited_access_code" : "N",
-    "approximate_age" : "12",
-    "approximate_age_units" : "Y"
-  } ],
+  }],
   "cross_reports" : [ {
     "id" : "",
     "legacy_source_table" : "",
@@ -206,7 +104,7 @@
     "legacy_source_table" : "",
     "legacy_id" : "",
     "victim_person_id" : 5432,
-    "perpetrator_person_id" : 2,
+    "perpetrator_person_id" : 0,
     "non_protecting_parent" : null,
     "type" : 2178,
     "county" : "34"

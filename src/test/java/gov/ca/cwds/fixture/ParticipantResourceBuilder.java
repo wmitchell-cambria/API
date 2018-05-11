@@ -17,19 +17,19 @@ import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 public class ParticipantResourceBuilder {
 
   long id = 5432;
-  String legacySourceTable = "";
-  String legacyId = "";
+  String legacySourceTable = "CLIENT_T";
+  String legacyId = "1234567ABC";
   LegacyDescriptor legacyDescriptor = null;
   long screeningId = 12345;
   String firstName = "John";
-  String middleName = "S";
+  String middleName = "T";
   String lastName = "Smith";
-  String suffix = "Jr.";
+  String suffix = "";
   String gender = "M";
   String dateOfBirth = "2001-03-15";
   String ssn = "123456789";
-  Short primaryLanguage = 1271;
-  Short secondaryLanguage = 1253;
+  Short primaryLanguage = 1253;
+  Short secondaryLanguage = 1271;
   boolean reporterConfidentialWaiver = false;
   String reporterEmployerName = "Employer Name";
   String sensitivityIndicator = "N";
@@ -39,6 +39,28 @@ public class ParticipantResourceBuilder {
   Set<String> roles;
   Set<gov.ca.cwds.rest.api.domain.Address> addresses;
   RaceAndEthnicity raceAndEthnicity;
+
+  /**
+   * 
+   */
+  public ParticipantResourceBuilder() {
+    this.roles = new HashSet<>(Arrays.asList("Victim"));
+    List<Short> racecodes = new ArrayList<>();
+    List<Short> hispaniccodes = new ArrayList<>();
+    racecodes.add((short) 841);
+    hispaniccodes.add((short) 3164);
+    RaceAndEthnicity raceAndEthnicity =
+        new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");
+    this.raceAndEthnicity = raceAndEthnicity;
+
+    gov.ca.cwds.rest.api.domain.Address address = new AddressResourceBuilder()
+        .setStreetAddress("123 First St")
+        .setCity("San Jose")
+        .setState(1828)
+        .setZip("94321")
+        .createAddress();
+    this.addresses = new HashSet<>(Arrays.asList(address));
+  }
 
   /**
    * @param id - id
@@ -238,24 +260,6 @@ public class ParticipantResourceBuilder {
       Set<gov.ca.cwds.rest.api.domain.Address> addresses) {
     this.addresses = addresses;
     return this;
-  }
-
-  /**
-   * 
-   */
-  public ParticipantResourceBuilder() {
-    this.roles = new HashSet<>(Arrays.asList("Victim"));
-    List<Short> racecodes = new ArrayList<>();
-    List<Short> hispaniccodes = new ArrayList<>();
-    racecodes.add((short) 841);
-    hispaniccodes.add((short) 3164);
-    RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");
-    this.raceAndEthnicity = raceAndEthnicity;
-
-    gov.ca.cwds.rest.api.domain.Address address = new AddressResourceBuilder()
-        .setStreetAddress("123 First St").setCity("San Jose").setZip("94321").createAddress();
-    this.addresses = new HashSet<>(Arrays.asList(address));
   }
 
   /**
