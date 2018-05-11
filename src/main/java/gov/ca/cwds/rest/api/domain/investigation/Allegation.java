@@ -116,9 +116,9 @@ public class Allegation extends ReportingDomain implements Response {
     super();
     this.allegationType = persistedAllocation.getAllegationType();
     this.dispositionType = persistedAllocation.getAllegationDispositionType();
-    this.victim = new AllegationPerson(persistedAllocation.getVictimClients());
-    if (persistedAllocation.getPerpetratorClients() != null) {
-      this.perpetrator = new AllegationPerson(persistedAllocation.getPerpetratorClients());
+    this.victim = new AllegationPerson(persistedAllocation.getVictim());
+    if (persistedAllocation.getPerpetrator() != null) {
+      this.perpetrator = new AllegationPerson(persistedAllocation.getPerpetrator());
     }
 
     this.createdByScreener = Boolean.FALSE;

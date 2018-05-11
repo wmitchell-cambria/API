@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.data.persistence.cms.Referral.FIND_REFERRALS_BY_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,11 +42,14 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
+@NamedQuery(name = FIND_REFERRALS_BY_IDS, query = "FROM Referral WHERE id IN :ids")
 @Entity
 @Table(name = "REFERL_T")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Referral extends CmsPersistentObject implements AccessLimitationAware {
+
+  public static final String FIND_REFERRALS_BY_IDS = "gov.ca.cwds.data.persistence.cms.Referral.findByIds";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
@@ -222,19 +227,19 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JoinColumn(name = "FKADDRS_T", nullable = true, updatable = false, insertable = false)
   private Address addresses;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<Allegation> allegations = new HashSet<>();
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<CrossReport> crossReports = new HashSet<>();
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "IDENTIFIER")
   private Reporter reporter;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<ReferralClient> referralClients = new HashSet<>();
 
@@ -244,39 +249,39 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERST", nullable = false, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERS0", nullable = true, updatable = false, insertable = false)
   private StaffPerson staffPerson0;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral riReferral;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "ALGDSC_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "ER_REF_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument1;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "INVSTG_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument2;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "CHILOC_TXT", nullable = true, updatable = false, insertable = false)
   private LongText longText;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "RSP_RTNTXT", nullable = true, updatable = false, insertable = false)
   private LongText longText1;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "SCN_NT_TXT", nullable = true, updatable = false, insertable = false)
   private LongText longText2;
 
@@ -914,6 +919,13 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   }
 
   /**
+   * @param allegations - allegations
+   */
+  public void setAllegations(Set<Allegation> allegations) {
+    this.allegations = allegations;
+  }
+
+  /**
    * @return the crossReport
    */
   public Set<CrossReport> getCrossReports() {
@@ -925,6 +937,13 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    */
   public Reporter getReporter() {
     return reporter;
+  }
+
+  /**
+   * @param reporter - reporter
+   */
+  public void setReporter(Reporter reporter) {
+    this.reporter = reporter;
   }
 
   /**
