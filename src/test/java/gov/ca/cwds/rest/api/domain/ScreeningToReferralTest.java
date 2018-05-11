@@ -183,7 +183,6 @@ public class ScreeningToReferralTest {
     CrossReport crossReport = new CrossReport("", "", "", filedOutOfState, method, informDate,
         countyId, Sets.newHashSet());
     crossReports.add(crossReport);
-//    Allegation allegation = validAllegation();
     Short injuryHarmType = 2178;
     Allegation allegation = new AllegationResourceBuilder()
         .setLegacySourceTable("ALLGTN_T")
@@ -206,9 +205,6 @@ public class ScreeningToReferralTest {
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),
             ScreeningToReferral.class);
 
-//    String serializedExpected = MAPPER.writeValueAsString(expected);
-//    String sericalizedUnserialized = MAPPER.writeValueAsString(deserialized);
-    
     assertThat(deserialized, is(expected));
   }
   
@@ -617,25 +613,6 @@ public class ScreeningToReferralTest {
       Participant validParticipant = MAPPER
           .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class);
       return validParticipant;
-
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-      return null;
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-      return null;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  private Allegation validAllegation() {
-
-    try {
-      Allegation validAllegation = MAPPER
-          .readValue(fixture("fixtures/domain/Allegation/valid/valid.json"), Allegation.class);
-      return validAllegation;
 
     } catch (JsonParseException e) {
       e.printStackTrace();

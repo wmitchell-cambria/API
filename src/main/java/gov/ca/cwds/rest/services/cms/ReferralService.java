@@ -297,7 +297,7 @@ public class ReferralService implements
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
       MessageBuilder strsMessageBuilder) {
-    String longTextId = generateScreenerAlert(screeningToReferral, strsMessageBuilder);
+    String screenerAlertLongTextId = generateScreenerAlert(screeningToReferral, strsMessageBuilder);
     String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, strsMessageBuilder);
     String currentLocationOfChildrenLongTextId =
@@ -334,7 +334,7 @@ public class ReferralService implements
         screeningToReferral.isFamilyAwareness(), govEnt, screeningToReferral.getName(), dateStarted,
         timeStarted, screeningToReferral.getResponseTime(),
         referredToResourceType ? NOT_REFERRED : 0, allegesAbuseOccurredAtAddressId,
-        firstResponseDeterminedByStaffPersonId(), longTextId,
+        firstResponseDeterminedByStaffPersonId(), screenerAlertLongTextId,
         screeningToReferral.getIncidentCounty(), (short) screeningToReferral.getApprovalStatus(),
         screeningToReferral.getAssigneeStaffId(), responseRationalLongTextId,
         screeningToReferral.getResponsibleAgency(), screeningToReferral.getLimitedAccessCode(),
