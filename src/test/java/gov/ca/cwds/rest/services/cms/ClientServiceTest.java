@@ -1,13 +1,12 @@
 package gov.ca.cwds.rest.services.cms;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,8 +32,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.CountyOwnershipDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
@@ -57,7 +54,6 @@ import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * @author CWDS API Team
@@ -65,7 +61,6 @@ import io.dropwizard.jackson.Jackson;
  */
 @SuppressWarnings("javadoc")
 public class ClientServiceTest {
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private ClientService clientService;
   private ClientDao clientDao;
   private StaffPersonDao staffpersonDao;
@@ -153,12 +148,9 @@ public class ClientServiceTest {
   @Test
   public void testUpdateReturnsCorrectEntity() throws Exception {
     String id = "Aaeae9r0F4";
-    Client expected = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
-
+    Client expected = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client client =
         new gov.ca.cwds.data.persistence.cms.Client(id, expected, "ABC", new Date());
-
     when(clientDao.find("ABC1234567")).thenReturn(client);
     when(clientDao.update(any())).thenReturn(client);
 
@@ -169,8 +161,7 @@ public class ClientServiceTest {
   @Test
   public void testUpdateThrowsExceptionWhenNotFound() throws Exception {
     try {
-      Client clientRequest = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+      Client clientRequest = new ClientResourceBuilder().build();
 
       Address address = new AddressResourceBuilder().createAddress();
       RaceAndEthnicity raceAndEthnicity =
@@ -195,14 +186,11 @@ public class ClientServiceTest {
   @Test
   public void testCreateReturnsPostedClass() throws Exception {
     String id = "Aaeae9r0F4";
-    Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+    Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
-
     Client request = new Client(toCreate, false);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class))).thenReturn(toCreate);
-
     Response response = clientService.create(request);
     assertThat(response.getClass(), is(PostedClient.class));
   }
@@ -210,13 +198,10 @@ public class ClientServiceTest {
   @Test
   public void testFindInboundIdReturnsExisting() throws Exception {
     String id = "Aaeae9r0F4";
-    Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+    Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
-
     when(clientDao.find(any(String.class))).thenReturn(toCreate);
-
     PostedClient postedClient = clientService.findInboundId("Aaeae9r0F4");
     assertThat(postedClient.getExistingClientId(), is(equalTo("Aaeae9r0F4")));
 
@@ -225,11 +210,8 @@ public class ClientServiceTest {
   @Test
   public void reporterServiceCreateThrowsEntityExistsException() throws Exception {
     try {
-      Client clientRequest = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
-
+      Client clientRequest = new ClientResourceBuilder().build();
       when(clientDao.create(any())).thenThrow(EntityExistsException.class);
-
       clientService.create(clientRequest);
     } catch (Exception e) {
       assertEquals(e.getClass(), ServiceException.class);
@@ -239,14 +221,11 @@ public class ClientServiceTest {
   @Test
   public void testCreateReturnsNonNull() throws Exception {
     String id = "Aaeae9r0F4";
-    Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+    Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
-
     Client request = new Client(toCreate, false);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class))).thenReturn(toCreate);
-
     PostedClient postedClient = clientService.create(request);
     assertThat(postedClient, is(notNullValue()));
   }
@@ -255,14 +234,11 @@ public class ClientServiceTest {
   @Test
   public void testCreateReturnsCorrectEntity() throws Exception {
     String id = "Aaeae9r0F4";
-    Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+    Client clientDomain = new ClientResourceBuilder().build();
     gov.ca.cwds.data.persistence.cms.Client toCreate =
         new gov.ca.cwds.data.persistence.cms.Client(id, clientDomain, "q1p", new Date());
-
     Client request = new Client(toCreate, false);
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class))).thenReturn(toCreate);
-
     PostedClient expected = new PostedClient(toCreate, false);
     PostedClient returned = clientService.create(request);
     assertThat(returned, is(expected));
@@ -271,14 +247,11 @@ public class ClientServiceTest {
   @Test
   public void testCreateNullIDError() throws Exception {
     try {
-      Client clientDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+      Client clientDomain = new ClientResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.Client toCreate =
           new gov.ca.cwds.data.persistence.cms.Client(null, clientDomain, "ABC", new Date());
-
       when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
           .thenReturn(toCreate);
-
     } catch (ServiceException e) {
       assertEquals("Client ID cannot be empty", e.getMessage());
     }
@@ -287,16 +260,12 @@ public class ClientServiceTest {
 
   @Test
   public void testCreateEmptyIDError() throws Exception {
-
     try {
-      Client clientDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+      Client clientDomain = new ClientResourceBuilder().build();
       gov.ca.cwds.data.persistence.cms.Client toCreate =
           new gov.ca.cwds.data.persistence.cms.Client("    ", clientDomain, "ABC", new Date());
-
       when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
           .thenReturn(toCreate);
-
     } catch (ServiceException e) {
       assertEquals("Client ID cannot be empty", e.getMessage());
     }
@@ -308,11 +277,9 @@ public class ClientServiceTest {
    */
   @Test
   public void createReturnsGeneratedId() throws Exception {
-    Client clientDomain = MAPPER
-        .readValue(fixture("fixtures/domain/legacy/Client/serviceValid.json"), Client.class);
+    Client clientDomain = new ClientResourceBuilder().build();
     when(clientDao.create(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Client>() {
-
           @Override
           public gov.ca.cwds.data.persistence.cms.Client answer(InvocationOnMock invocation)
               throws Throwable {

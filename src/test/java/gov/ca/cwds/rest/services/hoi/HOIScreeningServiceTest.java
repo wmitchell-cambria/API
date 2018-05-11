@@ -3,7 +3,10 @@ package gov.ca.cwds.rest.services.hoi;
 import static gov.ca.cwds.fixture.ParticipantEntityBuilder.DEFAULT_PERSON_ID;
 import static gov.ca.cwds.fixture.ParticipantEntityBuilder.DEFAULT_REPORTER_ID;
 import static gov.ca.cwds.fixture.ScreeningEntityBuilder.DEFAULT_ASSIGNEE_STAFF_ID;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -91,8 +95,6 @@ public class HOIScreeningServiceTest {
     staffPersonMap.put(mockStaffPerson.getId(), mockStaffPerson);
     when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersonMap);
 
-    HOIPersonFactory hoiPersonFactory = new HOIPersonFactory();
-
     IntakeLOVCodeEntity intakeLOVCodeEntity = new IntakeLOVCodeEntity();
     intakeLOVCodeEntity.setLgSysId(1101L);
     intakeLOVCodeEntity.setIntakeCode("sacramento");
@@ -103,7 +105,7 @@ public class HOIScreeningServiceTest {
         .thenReturn(intakeLOVCodeEntityMap);
 
     HOIScreeningFactory hoiScreeningFactory = new HOIScreeningFactory();
-    hoiScreeningFactory.hoiPersonFactory = hoiPersonFactory;
+    hoiScreeningFactory.hoiPersonFactory = new HOIPersonFactory();
 
     AuthorizationService authorizationService = mock(AuthorizationService.class);
 
@@ -124,22 +126,40 @@ public class HOIScreeningServiceTest {
     Collection<String> clientIds = new HashSet<>();
     clientIds.add("1");
     when(screeningDao.findScreeningsByClientIds(clientIds))
-        .thenReturn(mockScreeningEntityList(null));
+        .thenReturn(mockScreeningEntityList(null, false));
 
     HOIRequest hoiRequest = new HOIRequest(Stream.of("1").collect(Collectors.toSet()));
     HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiRequest);
     assertThat(actualResponse, is(expectedResponse));
 
-    Iterator<HOIScreening> actualScreenings = actualResponse.getScreenings().iterator();
-    Iterator<HOIScreening> expectedScreenings = expectedResponse.getScreenings().iterator();
-    while (actualScreenings.hasNext()) {
-      HOIScreening actualScreening = actualScreenings.next();
-      HOIScreening expectedScreening = expectedScreenings.next();
+    Iterator<HOIScreening> actualScreeningsIterator = actualResponse.getScreenings().iterator();
+    Iterator<HOIScreening> expectedScreeningsIterator = expectedResponse.getScreenings().iterator();
+    while (actualScreeningsIterator.hasNext()) {
+      HOIScreening actualScreening = actualScreeningsIterator.next();
+      HOIScreening expectedScreening = expectedScreeningsIterator.next();
       assertThat(actualScreening.getAllPeople(), is(expectedScreening.getAllPeople()));
       assertThat(actualScreening.getReporter(), is(expectedScreening.getReporter()));
       assertThat(actualScreening.getAssignedSocialWorker(),
           is(expectedScreening.getAssignedSocialWorker()));
     }
+  }
+
+  @Test
+  public void screeningsWithNullStartDateAreSortedToTop() {
+    Collection<String> clientIds = new HashSet<>();
+    clientIds.add("1");
+    when(screeningDao.findScreeningsByClientIds(clientIds))
+        .thenReturn(mockScreeningEntityList(null, true));
+
+    HOIRequest hoiRequest = new HOIRequest(Stream.of("1").collect(Collectors.toSet()));
+    HOIScreeningResponse actualResponse = hoiScreeningService.handleFind(hoiRequest);
+    Set<HOIScreening> actualScreenings = actualResponse.getScreenings();
+    assertThat(actualScreenings, CoreMatchers.is(notNullValue()));
+    assertThat(actualScreenings.size(), equalTo(2));
+
+    Iterator<HOIScreening> actualScreeningsIterator = actualScreenings.iterator();
+    assertThat(actualScreeningsIterator.next().getStartDate(), CoreMatchers.is(nullValue()));
+    assertThat(actualScreeningsIterator.next().getStartDate(), CoreMatchers.is(notNullValue()));
   }
 
   private HOIScreeningResponse createExpectedResponse() {
@@ -167,7 +187,7 @@ public class HOIScreeningServiceTest {
     return new HOIScreeningResponse(screenings);
   }
 
-  private Set<ScreeningEntity> mockScreeningEntityList(String accessRestriction) {
+  private Set<ScreeningEntity> mockScreeningEntityList(String accessRestriction, boolean testNullDates) {
     ScreeningEntity screening1 = new ScreeningEntityBuilder().setId("223")
         .setStartedAt("2017-09-25").setEndedAt("2017-10-01").setIncidentCounty("sacramento")
         .setName(null).setScreeningDecision("promote to referral")
@@ -175,7 +195,8 @@ public class HOIScreeningServiceTest {
     screening1.setAccessRestrictions(accessRestriction);
 
     ScreeningEntity screening2 = new ScreeningEntityBuilder().setId("224")
-        .setStartedAt("2017-11-30").setEndedAt("2017-12-10").setIncidentCounty("sacramento")
+        .setStartedAt(testNullDates ? null : "2017-11-30")
+        .setEndedAt(testNullDates ? null : "2017-12-10").setIncidentCounty("sacramento")
         .setName(null).setScreeningDecision("promote to referral")
         .setScreeningDecisionDetail("drug counseling").build();
     screening2.setAccessRestrictions(accessRestriction);

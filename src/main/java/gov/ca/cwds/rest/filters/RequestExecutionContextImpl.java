@@ -122,7 +122,6 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   /**
    * Servlet filter marks the start of a web request. This method is only accessible by the filters
    * package.
-   * 
    */
   static void startRequest() {
     PerryUserIdentity userIdentity = StaffPersonIdRetriever.getPerryUserIdentity();
