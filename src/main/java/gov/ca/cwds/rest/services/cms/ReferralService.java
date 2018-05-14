@@ -389,15 +389,14 @@ public class ReferralService implements
     return RequestExecutionContext.instance().getStaffId();
   }
 
-  private String generateScreenerAlert(ScreeningToReferral screenToRef, MessageBuilder mb) {
+  private String generateScreenerAlert(ScreeningToReferral screening, MessageBuilder mb) {
     String longTextId = null;
-    if (screenToRef.getAlertInformation() != null && !screenToRef.getAlertInformation().isEmpty()) {
+    if (screening.getAlertInformation() != null && !screening.getAlertInformation().isEmpty()) {
       try {
-        longTextId = createLongText(screenToRef.getIncidentCounty(), 
-            screenToRef.getAlertInformation(), mb);
+        longTextId = createLongText(screening.getIncidentCounty(), 
+            screening.getAlertInformation(), mb);
       } catch (ServiceException e) {
-        String message = e.getMessage();
-        mb.addMessageAndLog(message, e, LOGGER);
+        mb.addMessageAndLog(e.getMessage(), e, LOGGER);
       }
     }
     return longTextId;
