@@ -655,7 +655,8 @@ public class ReferralServiceTest {
     when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
     ScreeningToReferral screeningToReferral =
         new ScreeningToReferralResourceBuilder().setReferralId(referralId).setIncidentCounty("99")
-            .setAssigneeStaffId("0X5").createScreeningToReferral();
+            .setAssigneeStaffId("0X5")
+            .createScreeningToReferral();
 
     gov.ca.cwds.data.persistence.cms.Referral referral =
         new ReferralEntityBuilder().setId("ABC0987654").build();
@@ -688,5 +689,142 @@ public class ReferralServiceTest {
     referralService.createCmsReferralFromScreening(screeningToReferral, "01-30-2019", timeStarted,
         messageBuilder);
     verify(drmsDocumentService, times(1)).create(any());
+  }
+  
+  @Test
+  public void shouldSetScreenerNoteTextWhenSafeAlertInformationProvided() throws Exception {
+    String referralId = "";
+
+//    mock the create of the Referral row
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new ReferralEntityBuilder().setId("1234567ABC").build();
+    when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
+        .thenReturn(referral);
+    
+//    mock the three dummy DRMS document generation
+    DrmsDocument document = new DrmsDocumentResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.DrmsDocument persistedDocument =
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("2345678ABC", document, "0X5",
+            new Date());
+    PostedDrmsDocument postedId = new PostedDrmsDocument(persistedDocument);
+    when(drmsDocumentService.create(any(DrmsDocument.class))).thenReturn(postedId);
+ 
+//    mock the longText service
+    LongText longTextEntity = new LongTextEntityBuilder().setId("3456789ABC").build();
+    PostedLongText postedLongText = new PostedLongText(longTextEntity);
+    when(longTextService.create(any())).thenReturn(postedLongText);
+
+//  create a screening to referral with safety alert information
+    ScreeningToReferral screeningToReferral =
+        new ScreeningToReferralResourceBuilder().setReferralId(referralId).setIncidentCounty("99")
+            .setAssigneeStaffId("0X5")
+            .setSafetyAlertInformationn("test safety alert information to screener alerts").createScreeningToReferral();
+    
+//    mock the Address service
+    Address address = new AddressResourceBuilder().createAddress();
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
+        .thenReturn(address);
+    
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
+
+    Referral createdReferral = referralService.createReferralWithDefaults(screeningToReferral,
+        dateStarted, timeStarted, mockMessageBuilder);
+    
+    assertEquals("Expected screener alert", "3456789ABC", createdReferral.getScreenerNoteText());
+  }
+  
+  @Test
+  public void shouldNotSetScreenerNoteTextWhenNoSafeAlertInformationProvided() throws Exception {    
+    String referralId = "";
+
+//    mock the create of the Referral row
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new ReferralEntityBuilder().setId("1234567ABC").build();
+    when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
+        .thenReturn(referral);
+    
+//    mock the three dummy DRMS document generation
+    DrmsDocument document = new DrmsDocumentResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.DrmsDocument persistedDocument =
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("2345678ABC", document, "0X5",
+            new Date());
+    PostedDrmsDocument postedId = new PostedDrmsDocument(persistedDocument);
+    when(drmsDocumentService.create(any(DrmsDocument.class))).thenReturn(postedId);
+ 
+//    mock the longText service
+    LongText longTextEntity = new LongTextEntityBuilder().setId("3456789ABC").build();
+    PostedLongText postedLongText = new PostedLongText(longTextEntity);
+    when(longTextService.create(any())).thenReturn(postedLongText);
+
+//  create a screening to referral with safety alert information
+    ScreeningToReferral screeningToReferral =
+        new ScreeningToReferralResourceBuilder().setReferralId(referralId).setIncidentCounty("99")
+            .setAssigneeStaffId("0X5")
+            .setSafetyAlertInformationn("").createScreeningToReferral();
+    
+//    mock the Address service
+    Address address = new AddressResourceBuilder().createAddress();
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
+        .thenReturn(address);
+    
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
+
+    Referral createdReferral = referralService.createReferralWithDefaults(screeningToReferral,
+        dateStarted, timeStarted, mockMessageBuilder);
+    
+    assertEquals("Expected no screener alert", null, createdReferral.getScreenerNoteText());
+  }
+  
+  @Test
+  public void shouldNotSetScreenerNoteTextWhenReportNarrativeProvided() throws Exception {    
+    String referralId = "";
+ 
+//    mock the create of the Referral row
+    gov.ca.cwds.data.persistence.cms.Referral referral =
+        new ReferralEntityBuilder().setId("1234567ABC").build();
+    when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))
+        .thenReturn(referral);
+    
+//    mock the three dummy DRMS document generation
+    DrmsDocument document = new DrmsDocumentResourceBuilder().build();
+    gov.ca.cwds.data.persistence.cms.DrmsDocument persistedDocument =
+        new gov.ca.cwds.data.persistence.cms.DrmsDocument("2345678ABC", document, "0X5",
+            new Date());
+    PostedDrmsDocument postedId = new PostedDrmsDocument(persistedDocument);
+    when(drmsDocumentService.create(any(DrmsDocument.class))).thenReturn(postedId);
+ 
+//    mock the longText service
+    LongText longTextEntity = new LongTextEntityBuilder().setId("3456789ABC").build();
+    PostedLongText postedLongText = new PostedLongText(longTextEntity);
+    when(longTextService.create(any())).thenReturn(postedLongText);
+
+//  create a screening to referral with safety alert information
+    ScreeningToReferral screeningToReferral =
+        new ScreeningToReferralResourceBuilder().setReferralId(referralId).setIncidentCounty("99")
+            .setAssigneeStaffId("0X5")
+            .setSafetyAlertInformationn("")
+            .setReportNarrative("test the report narrative")
+            .createScreeningToReferral();
+    
+//    mock the Address service
+    Address address = new AddressResourceBuilder().createAddress();
+    when(addressService.createAddressFromScreening(eq(screeningToReferral), any()))
+        .thenReturn(address);
+    
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
+
+    Referral createdReferral = referralService.createReferralWithDefaults(screeningToReferral,
+        dateStarted, timeStarted, mockMessageBuilder);
+    
+    assertEquals("Expected no screener alert", null, createdReferral.getScreenerNoteText());
   }
 }

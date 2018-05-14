@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
+import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 
 public class PostedScreeningToReferralTest {
 
@@ -17,7 +18,7 @@ public class PostedScreeningToReferralTest {
     Set<Participant> resultParticipants = new HashSet<>();
     Set<CrossReport> resultCrossReports = new HashSet<>();
     Set<Allegation> resultAllegations = new HashSet<>();
-    ScreeningToReferral referral = createScreeningReferral();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder().createScreeningToReferral();
 
     PostedScreeningToReferral postedReferral = PostedScreeningToReferral.createWithDefaults(
         referralId, referral, resultParticipants, resultCrossReports, resultAllegations);
@@ -75,24 +76,11 @@ public class PostedScreeningToReferralTest {
 
     String referalTableName = "REFERL_T";
 
-    ScreeningToReferral referral = createScreeningReferral();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder().createScreeningToReferral();
     PostedScreeningToReferral postedReferral = PostedScreeningToReferral.createWithDefaults(
         referralId, referral, resultParticipants, resultCrossReports, resultAllegations);
 
     assertEquals("expected Referral Table Name default field to have initialized value",
         referalTableName, postedReferral.getLegacySourceTable());
-  }
-
-  private ScreeningToReferral createScreeningReferral() {
-    Short responseTime = (short) 1516;
-    Short communicationMethod = 409;
-
-    return new ScreeningToReferral(1235, "sourcetable", "referralId", "endedAt",
-        SACRAMENTO_COUNTY_CODE, "incidentDate", "locationType", communicationMethod,
-        "currentLocationOfChildren", "name", "reportNarrative", "reference", responseTime,
-        "startedAt", "assignee", "0X5", "additionalInformation", "screeningDecision",
-        "screeningDecisionDetail", 118, false, false, "C", "N", "", "", null,
-        new Address(new gov.ca.cwds.data.persistence.ns.Address()), new HashSet(), new HashSet(),
-        new HashSet());
   }
 }

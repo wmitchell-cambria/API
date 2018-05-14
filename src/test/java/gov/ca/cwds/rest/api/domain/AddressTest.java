@@ -82,7 +82,7 @@ public class AddressTest {
 
   @Test
   public void equalsHashCodeWork() throws Exception {
-    Address domain = this.validAddress();
+    Address domain = new AddressResourceBuilder().createAddress();
     assertThat(domain.hashCode(), is(not(0)));
   }
 
@@ -210,7 +210,6 @@ public class AddressTest {
     assertEquals(0, constraintViolations.size());
   }
 
-
   @Test
   public void testNullLegacyIdSuccess() throws Exception {
     Address toValidate = new AddressResourceBuilder().setLegacyId(null).createAddress();
@@ -244,23 +243,4 @@ public class AddressTest {
     assertThat(domain.getLegacyDescriptor(), is(equalTo(newLegacyDescriptor)));
   }
 
-  private Address validAddress() {
-
-    try {
-      Address validAddress =
-          MAPPER.readValue(fixture("fixtures/domain/address/valid/valid.json"), Address.class);
-
-      return validAddress;
-
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-      return null;
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-      return null;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
 }
