@@ -31,16 +31,20 @@ public class R00834AgeUnitRestriction implements RuleAction {
 
   private Client client;
   private ReferralClient referralClient;
+  private String dateStarted;
   private String age;
   private String ageUnits;
 
   /**
    * @param client - client
    * @param referralClient - referralClient
+   * @param dateStarted - dateStarted
    */
-  public R00834AgeUnitRestriction(Client client, ReferralClient referralClient) {
+  public R00834AgeUnitRestriction(Client client, ReferralClient referralClient,
+      String dateStarted) {
     this.client = client;
     this.referralClient = referralClient;
+    this.dateStarted = dateStarted;
   }
 
   @Override
@@ -48,12 +52,12 @@ public class R00834AgeUnitRestriction implements RuleAction {
     if (client == null) {
       return;
     }
-    Date creationDate = DomainChef.uncookDateString(client.getCreationDate());
+    Date startDate = DomainChef.uncookDateString(dateStarted);
     if (StringUtils.isNotBlank(client.getBirthDate())
         && client.getEstimatedDobCode().contains("N")) {
       Date birthDate = DomainChef.uncookDateString(client.getBirthDate());
-      long noOfDays = TimeUnit.DAYS.convert(creationDate.getTime() - birthDate.getTime(),
-          TimeUnit.MILLISECONDS);
+      long noOfDays =
+          TimeUnit.DAYS.convert(startDate.getTime() - birthDate.getTime(), TimeUnit.MILLISECONDS);
       calculateAgeByDob(noOfDays);
       referralClient.setAgeNumber(Short.valueOf(age));
       referralClient.setAgePeriodCode(ageUnits);

@@ -182,7 +182,7 @@ public class ParticipantService implements CrudsService {
     }
 
     processReferralClient(screeningToReferral, referralId, messageBuilder, incomingParticipant,
-        clientId);
+        clientId, dateStarted);
     /*
      * determine other participant/roles attributes relating to CWS/CMS allegation
      */
@@ -235,7 +235,7 @@ public class ParticipantService implements CrudsService {
 
   private ReferralClient processReferralClient(ScreeningToReferral screeningToReferral,
       String referralId, MessageBuilder messageBuilder, Participant incomingParticipant,
-      String clientId) {
+      String clientId, String dateStarted) {
     boolean dispositionCode =
         new R00824SetDispositionCode(screeningToReferral, incomingParticipant).isValid();
     boolean staffPersonAddedIndicator =
@@ -252,7 +252,7 @@ public class ParticipantService implements CrudsService {
 
     Client client = this.clientService.find(clientId);
     R00834AgeUnitRestriction r00834AgeUnitRestriction =
-        new R00834AgeUnitRestriction(client, referralClient);
+        new R00834AgeUnitRestriction(client, referralClient, dateStarted);
     r00834AgeUnitRestriction.execute();
     messageBuilder.addDomainValidationError(validator.validate(referralClient));
 
