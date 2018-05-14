@@ -142,7 +142,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
       String legacySourceTable, Boolean sensitive, Boolean sealed, String approximateAge,
       String approximateAgeUnits) {
     this.id = id;
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = freshDate(dateOfBirth);
     this.firstName = firstName;
     this.gender = gender;
     this.lastName = lastName;

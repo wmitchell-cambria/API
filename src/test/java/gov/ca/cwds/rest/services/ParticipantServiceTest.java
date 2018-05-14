@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Validation;
@@ -48,6 +49,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.messages.MessageBuilder;
@@ -107,13 +109,19 @@ public class ParticipantServiceTest {
    */
   @Before
   public void setup() {
-    defaultVictim = new ParticipantResourceBuilder().createVictimParticipant();
+    defaultVictim = new ParticipantResourceBuilder()
+        .setLegacyId("")
+        .createVictimParticipant();
     defaultReporter = new ParticipantResourceBuilder()
-        .setRoles((new HashSet<>(Arrays.asList("Mandated Reporter")))).createReporterParticipant();
-    defaultMandatedReporter = new ParticipantResourceBuilder().createReporterParticipant();
-
-    defaultPerpetrator = new ParticipantResourceBuilder().createPerpParticipant();
-
+        .setRoles((new HashSet<>(Arrays.asList("Mandated Reporter"))))
+        .setLegacyId("")
+        .createReporterParticipant();
+    defaultMandatedReporter = new ParticipantResourceBuilder()
+        .setLegacyId("")
+        .createReporterParticipant();
+    defaultPerpetrator = new ParticipantResourceBuilder()
+        .setLegacyId("")
+        .createPerpParticipant();
 
     clientService = mock(ClientService.class);
     gov.ca.cwds.data.persistence.cms.Client savedEntityClient =
@@ -248,7 +256,9 @@ public class ParticipantServiceTest {
   @Test
   public void shouldFailWhenVictimHasIncompatiableRoles_AnonymousVictim() throws Exception {
     Participant reporterVictim = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Victim"))).createParticipant();
+        .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Victim")))
+        .setLegacyId("")
+        .createParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(reporterVictim, defaultPerpetrator));
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
@@ -256,6 +266,10 @@ public class ParticipantServiceTest {
 
     participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
         messageBuilder);
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+      System.out.println(message.getMessage());
+    }
 
     assertEquals("Expected only one error to have been recorded",
         messageBuilder.getMessages().size(), 1);
@@ -374,7 +388,9 @@ public class ParticipantServiceTest {
   @Test
   public void shouldSaveReporterIfAddressIsNull() throws Exception {
 
-    Participant reporter = new ParticipantResourceBuilder().createReporterParticipant();
+    Participant reporter = new ParticipantResourceBuilder()
+        .setLegacyId("")
+        .createReporterParticipant();
     reporter.setAddresses(null);
     Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, defaultVictim));
 
@@ -382,7 +398,6 @@ public class ParticipantServiceTest {
         .setParticipants(participants).createScreeningToReferral();
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-
     assertEquals("Expected no error to have been recorded", messageBuilder.getMessages().size(), 0);
   }
 
@@ -390,9 +405,12 @@ public class ParticipantServiceTest {
   @Test
   public void testMultipleVictimSuccess() throws Exception {
     Participant victim1 =
-        new ParticipantResourceBuilder().setFirstName("Sally").createVictimParticipant();
+        new ParticipantResourceBuilder().setFirstName("Sally")
+        .setLegacyId("")
+        .createVictimParticipant();
     Participant victim2 =
-        new ParticipantResourceBuilder().setFirstName("Fred").createVictimParticipant();
+        new ParticipantResourceBuilder().setFirstName("Fred")
+        .setLegacyId("").createVictimParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(victim1, victim2, defaultReporter, defaultVictim));
     int numberOfClientsThatAreNotReporters = 3;
@@ -413,7 +431,11 @@ public class ParticipantServiceTest {
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.SELF_REPORTED_ROLE.getType());
     Participant selfReporter =
-        new ParticipantResourceBuilder().setFirstName("Sally").setRoles(roles).createParticipant();
+        new ParticipantResourceBuilder()
+        .setFirstName("Sally")
+        .setRoles(roles)
+        .setLegacyId("")
+        .createParticipant();
     Set<Participant> participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -435,7 +457,11 @@ public class ParticipantServiceTest {
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
     Participant selfReporter =
-        new ParticipantResourceBuilder().setFirstName("Sally").setRoles(roles).createParticipant();
+        new ParticipantResourceBuilder()
+        .setFirstName("Sally")
+        .setRoles(roles)
+        .setLegacyId("")
+        .createParticipant();
     Set<Participant> participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -497,9 +523,9 @@ public class ParticipantServiceTest {
     when(clientService.find(existingPerpId)).thenReturn(foundPerp);
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "Jr.", "M", "123456789",
+    verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "", "M", "123456789",
         (short) 841, "A", "A", "X");
-    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "Jr.", "M", "123456789",
+    verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "", "M", "123456789",
         (short) 841, "A", "A", "X");
     verify(clientService).update(eq(existingPerpId), any());
   }
@@ -508,17 +534,22 @@ public class ParticipantServiceTest {
   @Test
   public void shouldReturnErrorMessageWhenUnableToSaveClient() throws Exception {
     String existingPerpId = "1234567ABC";
-    RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
     Participant reporter =
-        new ParticipantResourceBuilder().setFirstName("Barney").setLastName("Rubble")
-            .setRoles(new HashSet<>(Arrays.asList("Non-mandated Reporter"))).createParticipant();
+        new ParticipantResourceBuilder().setFirstName("Barney")
+        .setLastName("Rubble")
+        .setRoles(new HashSet<>(Arrays.asList("Non-mandated Reporter")))
+        .createParticipant();
     LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     reporter.setLegacyDescriptor(descriptor);
-    Participant perp = new ParticipantResourceBuilder().setLegacyId(existingPerpId)
-        .setFirstName("Fred").setLastName("Flintsone")
-        .setRoles(new HashSet<>(Arrays.asList("Perpetrator"))).createParticipant();
-    Participant victim = new ParticipantResourceBuilder().createVictimParticipant();
+    Participant perp = new ParticipantResourceBuilder()
+        .setLegacyId(existingPerpId)
+        .setFirstName("Fred")
+        .setLastName("Flintsone")
+        .setRoles(new HashSet<>(Arrays.asList("Perpetrator")))
+        .createParticipant();
+    Participant victim = new ParticipantResourceBuilder()
+        .setLegacyId("")
+        .createVictimParticipant();
     descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     perp.setLegacyDescriptor(descriptor);
     Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, perp, victim));
@@ -560,30 +591,8 @@ public class ParticipantServiceTest {
         message);
   }
 
-  // @Test
-  // public void shouldApplySensitivityIndicatorFromReferralWhenSavingNewClient() {
-  // Set<Participant> participants =
-  // new HashSet<>(Arrays.asList(defaultVictim, defaultReporter, defaultPerpetrator));
-  //
-  // ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-  // .setLimitedAccessCode("S").setParticipants(participants).createScreeningToReferral();
-  //
-  // PostedClient createdClient = mock(PostedClient.class);
-  // when(clientService.create(any())).thenReturn(createdClient);
-  //
-  // ArgumentCaptor<Client> clientArgCaptor = ArgumentCaptor.forClass(Client.class);
-  //
-  // participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-  //
-  // verify(clientService, times(2)).create(clientArgCaptor.capture());
-  // assertEquals("Expected client to have sensitivty indicator applied",
-  // referral.getLimitedAccessCode(), clientArgCaptor.getValue().getSensitivityIndicator());
-  // }
-
   @Test
   public void shouldApplySensitivityIndicatorFromClientWhenSavingNewClient() {
-    Participant victim =
-        new ParticipantResourceBuilder().setSensitivityIndicator("S").createVictimParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultVictim, defaultReporter, defaultPerpetrator));
 
@@ -603,61 +612,4 @@ public class ParticipantServiceTest {
         clientArgCaptor.getValue().getSensitivityIndicator());
   }
 
-  // @Test
-  // public void shouldApplySensitivityIndicatorFromReferralWhenUpdatingClient() {
-  // String victimClientLegacyId = "ABC123DSAF";
-  //
-  // LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
-  // Participant victim = new ParticipantResourceBuilder().setLegacyId(victimClientLegacyId)
-  // .setLegacyDescriptor(descriptor).createParticipant();
-  // Set<Participant> participants =
-  // new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
-  //
-  // ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-  // .setLimitedAccessCode("S").setParticipants(participants).createScreeningToReferral();
-  //
-  // Client foundClient = mock(Client.class);
-  // when(foundClient.getLastUpdatedTime()).thenReturn(modifiedLastUpdateDate);
-  //
-  // PostedClient createdClient = mock(PostedClient.class);
-  // when(createdClient.getId()).thenReturn("LEGACYIDXX");
-  // when(clientService.find(eq(victimClientLegacyId))).thenReturn(foundClient);
-  // when(clientService.create(any())).thenReturn(createdClient);
-  //
-  // Client updatedClient = mock(Client.class);
-  // when(clientService.update(eq(victimClientLegacyId), any())).thenReturn(updatedClient);
-  //
-  // participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-  //
-  // verify(foundClient).applySensitivityIndicator(eq(referral.getLimitedAccessCode()));
-  // }
-
-  // @Test
-  // public void shouldApplySensitivityIndicatorFromClientWhenUpdatingClient() {
-  // String victimClientLegacyId = "ABC123DSAF";
-  //
-  // LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
-  // Participant victim = new ParticipantResourceBuilder().setSensitivityIndicator("R")
-  // .setLegacyId(victimClientLegacyId).setLegacyDescriptor(descriptor).createParticipant();
-  // Set<Participant> participants =
-  // new HashSet<>(Arrays.asList(victim, defaultReporter, defaultPerpetrator));
-  //
-  // ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-  // .setLimitedAccessCode("N").setParticipants(participants).createScreeningToReferral();
-  //
-  // Client foundClient = mock(Client.class);
-  // when(foundClient.getLastUpdatedTime()).thenReturn(modifiedLastUpdateDate);
-  //
-  // PostedClient createdClient = mock(PostedClient.class);
-  // when(createdClient.getId()).thenReturn("LEGACYIDXX");
-  // when(clientService.find(eq(victimClientLegacyId))).thenReturn(foundClient);
-  // when(clientService.create(any())).thenReturn(createdClient);
-  //
-  // Client updatedClient = mock(Client.class);
-  // when(clientService.update(eq(victimClientLegacyId), any())).thenReturn(updatedClient);
-  //
-  // participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-  //
-  // verify(foundClient, times(1)).applySensitivityIndicator(eq(victim.getSensitivityIndicator()));
-  // }
-}
+ }

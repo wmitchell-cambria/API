@@ -17,7 +17,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.validation.AtRiskAllegation;
@@ -35,11 +34,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"id", "legacySourceTable", "referralId", "endedAt", "incidentCounty",
-    "incidentDate", "locationType", "communicationMethod", "currentLocationOfChildren", "email",
-    "name", "reportNarrative", "reference", "responseTime", "startedAt", "assignee",
-    "assigneeStaffId", "additionalInformation", "screeningDecision", "screeningDecisionDetail",
-    "address", "participants", "crossReports", "allegations"})
 @VictimAgeRestriction
 @ValidVictimBirth
 public class ScreeningToReferral extends ReportingDomain implements Request {
@@ -212,6 +206,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private java.util.Date limitedAccessDate;
 
+  @JsonProperty("alerts")
+  @ApiModelProperty(required = false, readOnly = false, value = "Safety Alert Type")
+  private Set<String> alerts;
+
+  @JsonProperty("alert_information")
+  @ApiModelProperty(required = false, readOnly = false, value = "Alert Information")
+  private String alertInformation;
+
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   @Valid
@@ -268,6 +270,8 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param limitedAccessDescription - limitedAccessDescription
    * @param limitedAccessAgency - limitedAccessAgency
    * @param limitedAccessDate - limitedAccessDate
+   * @param alerts - alerts
+   * @param alertInformation - alertInformation
    * @param address - address associated with participants
    * @param participants - participants associated with this screening
    * @param crossReports - Cross Report
@@ -281,8 +285,9 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
       String screeningDecision, String screeningDecisionDetail, int approvalStatus,
       boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
       String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
-      java.util.Date limitedAccessDate, Address address, Set<Participant> participants,
-      Set<CrossReport> crossReports, Set<Allegation> allegations) {
+      java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
+      Address address, Set<Participant> participants, Set<CrossReport> crossReports,
+      Set<Allegation> allegations) {
     super();
     this.id = id;
     this.referralId = referralId;
@@ -311,6 +316,8 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.limitedAccessDescription = limitedAccessDescription;
     this.limitedAccessAgency = limitedAccessAgency;
     this.limitedAccessDate = freshDate(limitedAccessDate);
+    this.alerts = alerts;
+    this.alertInformation = alertInformation;
     this.address = address;
     this.participants = participants;
     this.crossReports = crossReports;
@@ -430,14 +437,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return addtional infoma
+   * @return additional information
    */
   public String getAdditionalInformation() {
     return additionalInformation;
   }
 
   /**
-   * @return - screening decio
+   * @return - screening decision
    */
   public String getScreeningDecision() {
     return screeningDecision;
@@ -465,7 +472,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return crossreport filed with Law Enforecement
+   * @return filedWithLawEnforcement filed with Law Enforcement
    */
   public boolean isFiledWithLawEnforcement() {
     return filedWithLawEnforcement;
@@ -509,6 +516,31 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    */
   public java.util.Date getLimitedAccessDate() {
     return freshDate(limitedAccessDate);
+  }
+
+  /**
+   * @return - set of safety alert types
+   */
+  public Set<String> getAlerts() {
+    return alerts;
+  }
+
+  /**
+   * @param alerts - Set of alert codes
+   */
+  public void setAlerts(Set<String> alerts) {
+    this.alerts = alerts;
+  }
+
+  /**
+   * @return - alert information
+   */
+  public String getAlertInformation() {
+    return alertInformation;
+  }
+
+  public void setAlertInformation(String alertInformation) {
+    this.alertInformation = alertInformation;
   }
 
   @SuppressWarnings("javadoc")
