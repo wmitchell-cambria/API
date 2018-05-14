@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.submit;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -85,13 +86,15 @@ public class TransformScreening {
     Set<CrossReport> crossReports = new TransformCrossReports().transform(s.getCrossReports(),
         nsCodeToNsLovMap, cmsSysIdToNsLovMap);
 
+    Set<String> alerts = new HashSet<>(); // Need to map this field
+    String alertInformation = null; // Need to map this field
     return new ScreeningToReferral(id, legacySourceTable, referralId, endedAt, incidentCounty,
         incidentDate, locationType, communicationMethodSysId, currentLocationOfChildren, name,
         reportNarrative, reference, responseTimeSysId, startedAt, assignee, assigneeStaffId,
         additionalInformation, screeningDecision, screeningDecisionDetail, approvalStatus,
         familyAwareness, filedWithLawEnforcement, responsibleAgency, limitedAccessCode,
-        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, address, participants,
-        crossReports, allegations);
+        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, alerts, alertInformation,
+        address, participants, crossReports, allegations);
   }
 
 
