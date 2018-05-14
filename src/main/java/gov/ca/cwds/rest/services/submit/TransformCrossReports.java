@@ -20,13 +20,16 @@ public class TransformCrossReports {
   public Set<CrossReport> transform(Set<CrossReportIntake> crossReportsIntake,
       Map<String, IntakeLov> nsLovMap, Map<String, IntakeLov> cmsSysIdToNsLovMap) {
     Set<CrossReport> crossReports = new HashSet<>();
-    for (CrossReportIntake ci : crossReportsIntake) {
-      Integer method = StringUtils.isNotBlank(ci.getMethod())
-          ? nsLovMap.get(ci.getMethod()).getLegacySystemCodeId().intValue()
-          : 0;
-      String county = cmsSysIdToNsLovMap.get(ci.getCountyId()).getLegacyLogicalCode();
-      crossReports.add(new CrossReport(ci.getId(), ci.getLegacySourceTable(), ci.getLegacyId(),
-          true, method, ci.getInformDate(), county, ci.getAgencies()));
+    for (CrossReportIntake nsCrossReport : crossReportsIntake) {
+      Integer method = StringUtils.isNotBlank(nsCrossReport.getMethod())
+          ? nsLovMap.get(nsCrossReport.getMethod()).getLegacySystemCodeId().intValue()
+          : null;
+      String county = StringUtils.isNotBlank(nsCrossReport.getCountyId())
+          ? cmsSysIdToNsLovMap.get(nsCrossReport.getCountyId()).getLegacyLogicalCode()
+          : null;
+      crossReports.add(new CrossReport(nsCrossReport.getId(), nsCrossReport.getLegacySourceTable(),
+          nsCrossReport.getLegacyId(), nsCrossReport.isFiledOutOfState(), method,
+          nsCrossReport.getInformDate(), county, nsCrossReport.getAgencies()));
     }
     return crossReports;
 
