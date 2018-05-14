@@ -26,7 +26,6 @@ public class TransformAddress {
     return new Address(addressIntake.getLegacySourceTable(), addressIntake.getLegacyId(),
         addressIntake.getStreetAddress(), addressIntake.getCity(), state, addressIntake.getZip(),
         type, addressIntake.getLegacyDescriptor());
-
   }
 
 }
