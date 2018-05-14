@@ -1,25 +1,20 @@
 package gov.ca.cwds.rest.services.cms;
 
 import static java.lang.Math.min;
-
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 import javax.xml.bind.DatatypeConverter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
@@ -389,11 +384,14 @@ public class ReferralService implements
     return RequestExecutionContext.instance().getStaffId();
   }
 
- private String generateScreenerAlert(ScreeningToReferral screeningToReferral, MessageBuilder messageBuilder) {
+  private String generateScreenerAlert(ScreeningToReferral screeningToReferral,
+      MessageBuilder messageBuilder) {
     String longTextId = null;
-    if (screeningToReferral.getAlertInformation() != null && !screeningToReferral.getAlertInformation().isEmpty()) {
+    if (screeningToReferral.getAlertInformation() != null
+        && !screeningToReferral.getAlertInformation().isEmpty()) {
       try {
-        longTextId = createLongText(screeningToReferral.getIncidentCounty(), screeningToReferral.getAlertInformation(), messageBuilder);
+        longTextId = createLongText(screeningToReferral.getIncidentCounty(),
+            screeningToReferral.getAlertInformation(), messageBuilder);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -401,7 +399,7 @@ public class ReferralService implements
     }
     return longTextId;
   }
-  
+
   private String generateResponseRationalText(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     String longTextId = null;

@@ -1,13 +1,10 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
-import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 
@@ -82,7 +79,8 @@ public class PostedScreeningToReferral extends ScreeningToReferral implements Re
         responseTime, startedAt, assignee, assigneeStaffId, additionalInformation,
         screeningDecision, screeningDecisionDetail, approvalStatus, familyAwareness,
         filedWithLawEnforcement, responsibleAgency, limitedAccessCode, limitedAccessDescription,
-        limitedAccessAgency, limitedAccessDate, alerts, alertInformation, address, participants, crossReports, allegations);
+        limitedAccessAgency, limitedAccessDate, alerts, alertInformation, address, 
+        participants, crossReports, allegations);
   }
 
   /**
