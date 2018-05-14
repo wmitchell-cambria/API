@@ -36,10 +36,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"id", "legacySourceTable", "referralId", "endedAt", "incidentCounty",
-  "incidentDate", "locationType", "communicationMethod", "currentLocationOfChildren", "email",
-  "name", "reportNarrative", "reference", "responseTime", "startedAt", "assignee",
-  "assigneeStaffId", "additionalInformation", "screeningDecision", "screeningDecisionDetail",
-  "alerts", "alertInformation", "address", "participants", "crossReports", "allegations"})
+    "incidentDate", "locationType", "communicationMethod", "currentLocationOfChildren", "email",
+    "name", "reportNarrative", "reference", "responseTime", "startedAt", "assignee",
+    "assigneeStaffId", "additionalInformation", "screeningDecision", "screeningDecisionDetail",
+    "alerts", "alertInformation", "address", "participants", "crossReports", "allegations"})
 @VictimAgeRestriction
 @ValidVictimBirth
 public class ScreeningToReferral extends ReportingDomain implements Request {
@@ -54,24 +54,24 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
 
   @JsonProperty("legacy_source_table")
   @ApiModelProperty(required = false, readOnly = false, value = "Legacy Table",
-  example = "REFERL_T")
+      example = "REFERL_T")
   private String legacySourceTable;
 
   @JsonProperty("legacy_id")
   @ApiModelProperty(required = true, readOnly = false, value = "Legacy Referral Id",
-  example = "ABC1234567")
+      example = "ABC1234567")
   @Size(max = CMS_ID_LEN)
   private String referralId;
 
   @JsonProperty("ended_at")
   @ApiModelProperty(required = false, readOnly = false, value = "Screening end date/time",
-  example = "2016-08-03T01:00:00.000Z")
+      example = "2016-08-03T01:00:00.000Z")
   private String endedAt;
 
   @JsonProperty("incident_county")
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false,
-  value = "County with primary assignment responsibility for Referral", example = "34")
+      value = "County with primary assignment responsibility for Referral", example = "34")
   @ValidLogicalId(required = true, category = SystemCodeCategoryId.COUNTY_CODE)
   private String incidentCounty;
 
@@ -79,64 +79,64 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @JsonProperty("incident_date")
   @ApiModelProperty(required = false, readOnly = false, value = "Incident date",
-  example = "2015-01-13")
+      example = "2015-01-13")
   private String incidentDate;
 
   @JsonProperty("location_type")
   @ApiModelProperty(required = true, readOnly = false, value = "Location Type",
-  example = "foster home")
+      example = "foster home")
   @Size(max = 75)
   private String locationType;
 
   @JsonProperty("communication_method")
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Communication Method",
-  allowableValues = "$ID:CMM_MTHC", example = "409")
+      allowableValues = "$ID:CMM_MTHC", example = "409")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.COMMUNICATION_METHOD)
   private Short communicationMethod;
 
   @JsonProperty("current_location_of_children")
   @ApiModelProperty(required = false, readOnly = false, value = "location of the child",
-  example = "At the school")
+      example = "At the school")
   @Size(max = 254)
   private String currentLocationOfChildren;
 
   @JsonProperty("name")
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false, value = "Title/Name of referral",
-  example = "a referral name")
+      example = "a referral name")
   @Size(max = 35)
   private String name;
 
   @JsonProperty("report_narrative")
   @ApiModelProperty(required = false, readOnly = false, value = "Report Narrative",
-  example = "On the evening of...")
+      example = "On the evening of...")
   @Size(max = 254)
   private String reportNarrative;
 
   @JsonProperty("reference")
   @ApiModelProperty(required = false, readOnly = false, value = "Referrence",
-  example = "reference WXTSKD")
+      example = "reference WXTSKD")
   @Size(max = 50)
   private String reference;
 
   @JsonProperty("response_time")
   @NotNull
   @ApiModelProperty(required = true, readOnly = false, value = "Referral Response Type",
-  example = "1520")
+      example = "1520")
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.REFERRAL_RESPONSE)
   private Short responseTime;
 
   @JsonProperty("started_at")
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false, value = "Date/time incident started",
-  example = "2016-08-03T01:00:00.000Z")
+      example = "2016-08-03T01:00:00.000Z")
   private String startedAt;
 
   @JsonProperty("assignee")
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false, value = "Assigned social worker",
-  example = "Mich Bastow")
+      example = "Mich Bastow")
   @Size(max = 50)
   private String assignee;
 
@@ -148,42 +148,42 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
 
   @JsonProperty("additional_information")
   @ApiModelProperty(required = false, readOnly = false, value = "Additional Information",
-  example = "more information about this referral")
+      example = "more information about this referral")
   @Size(max = 50)
   private String additionalInformation;
 
   @JsonProperty("screening_decision")
   @NotEmpty
   @ApiModelProperty(required = true, readOnly = false, value = "Screening Decision",
-  example = "Response time")
+      example = "Response time")
   @Size(max = 50)
   private String screeningDecision;
 
   @JsonProperty("screening_decision_detail")
   @ApiModelProperty(required = false, readOnly = false, value = "Screening decision detail",
-  example = "decision detail")
+      example = "decision detail")
   @Size(max = 1500)
   private String screeningDecisionDetail;
 
   @JsonProperty("approval_status")
   @ValidSystemCodeId(required = false, category = SystemCodeCategoryId.APPROVAL_STATUS_TYPE)
   @ApiModelProperty(required = false, readOnly = false, value = "Status of the approval",
-  example = "118")
+      example = "118")
   private int approvalStatus;
 
   @JsonProperty("family_awareness")
   @ApiModelProperty(required = false, readOnly = false, value = "Family is aware of referral",
-  example = "true")
+      example = "true")
   private boolean familyAwareness;
 
   @JsonProperty("filed_with_law_enforcement")
   @ApiModelProperty(required = false, readOnly = false,
-  value = "Filed Cross Report with Law Enforcement", example = "N")
+      value = "Filed Cross Report with Law Enforcement", example = "N")
   private boolean filedWithLawEnforcement;
 
   @JsonProperty("responsible_agency")
   @ApiModelProperty(required = false, readOnly = false, value = "Responsible Agency Code",
-  example = "C", allowableValues = "C, P, O, A, S, I, K, M")
+      example = "C", allowableValues = "C, P, O, A, S, I, K, M")
   @OneOf(value = {"C", "P", "O", "A", "S", "I", "K", "M"})
   @Size(max = 1)
   private String responsibleAgency;
@@ -197,18 +197,18 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonProperty("limited_access_description")
   @Size(max = 254)
   @ApiModelProperty(required = false, readOnly = false, value = "limited access description",
-  example = "Some text describing the limited access")
+      example = "Some text describing the limited access")
   private String limitedAccessDescription;
 
   @JsonProperty("limited_access_agency")
   @ApiModelProperty(required = false, readOnly = false, value = "40", example = "The user county")
   @ValidLogicalId(required = false, category = SystemCodeCategoryId.COUNTY_CODE, ignoreable = true,
-  ignoredValue = "")
+      ignoredValue = "")
   private String limitedAccessAgency;
 
   @JsonProperty("limited_access_date")
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-  example = "2000-01-01")
+      example = "2000-01-01")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private java.util.Date limitedAccessDate;
 
@@ -291,9 +291,9 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
       String screeningDecision, String screeningDecisionDetail, int approvalStatus,
       boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
       String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
-      java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation, 
-      Address address, Set<Participant> participants,
-      Set<CrossReport> crossReports, Set<Allegation> allegations) {
+      java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
+      Address address, Set<Participant> participants, Set<CrossReport> crossReports,
+      Set<Allegation> allegations) {
     super();
     this.id = id;
     this.referralId = referralId;

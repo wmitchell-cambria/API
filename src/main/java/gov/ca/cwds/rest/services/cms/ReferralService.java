@@ -1,20 +1,25 @@
 package gov.ca.cwds.rest.services.cms;
 
 import static java.lang.Math.min;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 import javax.xml.bind.DatatypeConverter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
@@ -384,17 +389,15 @@ public class ReferralService implements
     return RequestExecutionContext.instance().getStaffId();
   }
 
-  private String generateScreenerAlert(ScreeningToReferral screeningToReferral,
-      MessageBuilder messageBuilder) {
+  private String generateScreenerAlert(ScreeningToReferral screenToRef, MessageBuilder mb) {
     String longTextId = null;
-    if (screeningToReferral.getAlertInformation() != null
-        && !screeningToReferral.getAlertInformation().isEmpty()) {
+    if (screenToRef.getAlertInformation() != null && !screenToRef.getAlertInformation().isEmpty()) {
       try {
-        longTextId = createLongText(screeningToReferral.getIncidentCounty(),
-            screeningToReferral.getAlertInformation(), messageBuilder);
+        longTextId = createLongText(screenToRef.getIncidentCounty(), 
+            screenToRef.getAlertInformation(), mb);
       } catch (ServiceException e) {
         String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+        mb.addMessageAndLog(message, e, LOGGER);
       }
     }
     return longTextId;
