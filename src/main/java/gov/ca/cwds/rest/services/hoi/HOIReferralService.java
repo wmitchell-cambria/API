@@ -30,11 +30,10 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
- * This service handle request from the user to get all the referral involved for the client given.
+ * This service handles user requests to fetch all the clients' referrals.
  * <p>
  * 
  * @author CWDS API Team
- *
  */
 public class HOIReferralService
     extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
