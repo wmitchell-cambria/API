@@ -49,7 +49,7 @@ public class TransformAddressTest {
     Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
         "Springfield", 1828, "93838", 28, legacyDescriptor);
 
-    Address actual = new TransformAddress().transform(intakeApi, nsCodeToNsLovMap);
+    Address actual = new AddressTransformer().transform(intakeApi, nsCodeToNsLovMap);
     assertEquals(actual, expected);
   }
 

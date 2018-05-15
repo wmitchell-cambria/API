@@ -76,7 +76,7 @@ public class ScreeningSubmitService implements CrudsService {
       }
     }
 
-    ScreeningToReferral screeningToReferral = new TransformScreening().transform(screening, staffId,
+    ScreeningToReferral screeningToReferral = new ScreeningTransformer().transform(screening, staffId,
         userCountyCode, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
 
     ScreeningToReferral str =

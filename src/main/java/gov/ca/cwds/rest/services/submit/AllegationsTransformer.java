@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.api.domain.AllegationIntake;
  * 
  * @author CWDS API Team
  */
-public class TransformAllegations {
+public class AllegationsTransformer {
 
   public Set<Allegation> transform(Set<AllegationIntake> allegationsIntake,
       Map<String, IntakeLov> nsCodeToNsLovMap) {

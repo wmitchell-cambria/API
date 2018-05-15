@@ -20,7 +20,7 @@ import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
  * 
  * @author CWDS API Team
  */
-public class TransformParticipants {
+public class ParticipantsTransformer {
 
   public Set<Participant> transform(Set<ParticipantIntakeApi> participantsIntake,
       Map<String, IntakeLov> nsCodeToNsLovMap) {
@@ -34,7 +34,7 @@ public class TransformParticipants {
     for (ParticipantIntakeApi p : participantsIntake) {
       Set<Address> addresses = new HashSet<>();
       for (AddressIntakeApi addressIntake : p.getAddresses()) {
-        addresses.add(new TransformAddress().transform(addressIntake, nsCodeToNsLovMap));
+        addresses.add(new AddressTransformer().transform(addressIntake, nsCodeToNsLovMap));
       }
       String gender = getGender(p.getGender());
       Long pid = (long) Integer.parseInt(p.getId());

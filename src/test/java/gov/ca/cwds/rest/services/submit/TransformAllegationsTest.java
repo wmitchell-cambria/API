@@ -59,7 +59,7 @@ public class TransformAllegationsTest {
     Allegation allegation = new AllegationResourceBuilder().createAllegation();
     Set<AllegationIntake> nsAllegations = Stream.of(allegationIntake).collect(Collectors.toSet());
     Set<Allegation> expected = Stream.of(allegation).collect(Collectors.toSet());
-    Set<Allegation> actual = new TransformAllegations().transform(nsAllegations, nsCodeToNsLovMap);
+    Set<Allegation> actual = new AllegationsTransformer().transform(nsAllegations, nsCodeToNsLovMap);
 
     assertEquals(actual, expected);
   }
@@ -69,7 +69,7 @@ public class TransformAllegationsTest {
     allegationIntake.setTypes(new HashSet<String>());
     Set<AllegationIntake> nsAllegations = Stream.of(allegationIntake).collect(Collectors.toSet());
     Set<Allegation> expected = new HashSet<Allegation>();
-    Set<Allegation> actual = new TransformAllegations().transform(nsAllegations, nsCodeToNsLovMap);
+    Set<Allegation> actual = new AllegationsTransformer().transform(nsAllegations, nsCodeToNsLovMap);
 
     assertEquals(actual, expected);
   }

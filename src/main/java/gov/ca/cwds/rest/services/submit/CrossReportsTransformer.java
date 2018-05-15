@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.api.domain.CrossReportIntake;
  * 
  * @author CWDS API Team
  */
-public class TransformCrossReports {
+public class CrossReportsTransformer {
 
   public Set<CrossReport> transform(Set<CrossReportIntake> crossReportsIntake,
       Map<String, IntakeLov> nsLovMap, Map<String, IntakeLov> cmsSysIdToNsLovMap) {

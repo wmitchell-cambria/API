@@ -76,7 +76,7 @@ public class TransformCrossReportsTest {
         Stream.of(crossReportIntake).collect(Collectors.toSet());
     Set<CrossReport> expected = Stream.of(crossReport).collect(Collectors.toSet());
     Set<CrossReport> actual =
-        new TransformCrossReports().transform(nsCrossReports, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+        new CrossReportsTransformer().transform(nsCrossReports, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
     assertEquals(actual, expected);
   }
 
@@ -93,7 +93,7 @@ public class TransformCrossReportsTest {
         Stream.of(crossReportIntake).collect(Collectors.toSet());
     Set<CrossReport> expected = Stream.of(crossReport).collect(Collectors.toSet());
     Set<CrossReport> actual =
-        new TransformCrossReports().transform(nsCrossReports, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+        new CrossReportsTransformer().transform(nsCrossReports, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
     assertEquals(actual, expected);
   }
 
@@ -111,7 +111,7 @@ public class TransformCrossReportsTest {
         Stream.of(crossReportIntake).collect(Collectors.toSet());
     Set<CrossReport> expected = Stream.of(crossReport).collect(Collectors.toSet());
     Set<CrossReport> actual =
-        new TransformCrossReports().transform(nsCrossReports, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+        new CrossReportsTransformer().transform(nsCrossReports, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
     assertEquals(actual, expected);
   }
 }

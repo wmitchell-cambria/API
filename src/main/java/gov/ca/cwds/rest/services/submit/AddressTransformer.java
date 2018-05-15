@@ -13,7 +13,7 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
  * 
  * @author CWDS API Team
  */
-public class TransformAddress {
+public class AddressTransformer {
 
   public Address transform(AddressIntakeApi addressIntake,
       Map<String, IntakeLov> nsCodeToNsLovMap) {
