@@ -17,6 +17,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.validation.AtRiskAllegation;
@@ -34,6 +35,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
+@JsonPropertyOrder({"id", "legacy_source_table",  "legacy_id", "ended_at", "incident_county",
+  "incident_date", "location_type", "communication_method", "current_location_of_children",
+  "name", "report_narrative", "reference", "response_time", "started_at", "assignee",
+  "assignee_staff_id", "additional_information", "screening_decision",
+  "screening_decision_detail", "approval_status", "family_awareness", 
+  "filed_with_law_enforcement", "responsible_agency", "limited_access_code",
+  "limited_access_description", "limited_access_agency", "limited_access_date",
+  "alerts", "alert_information", "address", "participants", "cross_reports", "allegations"})
 @VictimAgeRestriction
 @ValidVictimBirth
 public class ScreeningToReferral extends ReportingDomain implements Request {
