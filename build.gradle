@@ -335,7 +335,7 @@ task createFunctionalTestDockerImage (type:Exec, dependsOn: shadowJar) {
 }
 
 task createIntegrationTestDockerImage (type:Exec, dependsOn: shadowJar) {
-  commandLine 'docker',  'build',  '-t',  'cwds/api-functional-test', '-f', 'DockerfileIntegrationTest', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
 }
 
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
