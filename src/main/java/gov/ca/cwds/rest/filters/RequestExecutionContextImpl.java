@@ -72,7 +72,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Get user id if stored.
+   * Get user id, if stored.
    * 
    * @return The user id
    */
@@ -91,7 +91,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Get staff id if stored.
+   * Get staff id, if stored.
    * 
    * @return The staff id
    */
@@ -110,7 +110,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Get request start time if stored
+   * Get request start time, if stored.
    * 
    * @return The request start time
    */
@@ -132,7 +132,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Perform cleanup after request completion
+   * Perform cleanup after request completion.
    */
   static void stopRequest() {
     RequestExecutionContextRegistry.remove();

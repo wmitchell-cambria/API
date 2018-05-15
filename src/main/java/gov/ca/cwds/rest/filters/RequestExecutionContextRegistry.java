@@ -12,9 +12,9 @@ public class RequestExecutionContextRegistry {
   // Create callback registry for stop and start.
 
   /**
-   * Register RequestExecutionContext with ThreadLocal
+   * Register RequestExecutionContext on the current thread with ThreadLocal.
    * 
-   * @param requestExecutionContext
+   * @param requestExecutionContext request context for this thread
    */
   static void register(RequestExecutionContext requestExecutionContext) {
     pegged.set(requestExecutionContext);

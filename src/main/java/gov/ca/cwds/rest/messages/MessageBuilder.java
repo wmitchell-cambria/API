@@ -15,8 +15,9 @@ import gov.ca.cwds.rest.exception.IssueDetailsCreator;
 import gov.ca.cwds.rest.exception.IssueType;
 
 /**
+ * Facility to relay errors in persistence and service layers back to a domain response.
+ * 
  * @author CWDS API Team
- *
  */
 public class MessageBuilder {
 

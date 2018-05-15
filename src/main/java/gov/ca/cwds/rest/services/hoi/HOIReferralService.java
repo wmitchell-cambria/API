@@ -87,13 +87,12 @@ public class HOIReferralService
   }
 
   private HOIReferral createHOIReferral(ReferralClient referralClient) {
-    Referral referral = referralClient.getReferral();
+    final Referral referral = referralClient.getReferral();
+    final StaffPerson staffPerson = referral.getStaffPerson();
+    final Reporter reporter = referral.getReporter();
+    final Role role = fetchForReporterRole(referral, referralClient, reporter);
 
-    StaffPerson staffPerson = referral.getStaffPerson();
-    Reporter reporter = referral.getReporter();
-    Role role = fetchForReporterRole(referral, referralClient, reporter);
-
-    Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
+    final Map<Allegation, List<Client>> allegationMap = fetchForAllegation(referral);
     return new HOIReferralFactory().createHOIReferral(referral, staffPerson, reporter,
         allegationMap, role);
   }
@@ -104,9 +103,26 @@ public class HOIReferralService
     return Arrays.asList(referralClients);
   }
 
+  /**
+   * SNAP-49: Production: no HOI shown for client.
+   * 
+   * <p>
+   * Sometimes Cases or Referrals link to clients that the current is user is not authorized to
+   * view, either due to sealed/sensitivity restriction, county access privileges, or a short-coming
+   * with an the authorization rule. The the client authorizer throws an UnauthorizedException, then
+   * skip that client and move on. Don't bomb all History of Involvement because the user is not
+   * authorized to view a client's half-sister's foster sibling. Really.
+   * </p>
+   * 
+   * @param clientIds client keys to authorize
+   */
   private void authorizeClients(Collection<String> clientIds) {
     for (String clientId : clientIds) {
-      authorizeClient(clientId);
+      try {
+        authorizeClient(clientId);
+      } catch (Exception e) {
+        // TODO: handle exception
+      }
     }
   }
 

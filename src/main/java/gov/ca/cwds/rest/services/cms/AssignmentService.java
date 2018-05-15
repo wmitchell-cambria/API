@@ -57,7 +57,7 @@ public class AssignmentService implements
   private ReferralDao referralDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
-  private MessageBuilder messageBuilder;
+  private MessageBuilder messageBuilder; // not thread-safe, cannot re-use across requests
 
   private Validator validator;
 
