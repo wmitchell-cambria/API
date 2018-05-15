@@ -23,6 +23,7 @@ import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
@@ -48,6 +49,8 @@ public class HOIReferralService
   private AuthorizationService authorizationService;
 
   /**
+   * Preferred constructor.
+   * 
    * @param clientDao - clientDao
    * @param referralClientDao - referralClientDao
    * @param authorizationService - authorizationService
@@ -108,7 +111,7 @@ public class HOIReferralService
   }
 
   /**
-   * SNAP-49: Production: no HOI shown for client.
+   * SNAP-49: HOI not shown for client.
    * 
    * <p>
    * Sometimes Cases or Referrals link to clients that the current is user is not authorized to
@@ -125,8 +128,9 @@ public class HOIReferralService
       try {
         authorizeClient(clientId);
       } catch (Exception e) {
-        final String msg = String.format("Not authorized to view client id %s", clientId);
-        RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, LOGGER);
+        final String msg = String.format("NOT AUTHORIZED TO VIEW CLIENT ID %s", clientId);
+        RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, LOGGER,
+            ErrorType.CLIENT_AUTHORIZATION_WARNING);
       }
     }
   }
